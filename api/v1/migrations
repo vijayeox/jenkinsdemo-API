@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [[ $# < 1 ]]; then
+    echo "usage :- migrations <command>"
+    echo "commands supported are -"
+    echo "	generate"
+    echo "	latest"
+    echo "	up-to-date"
+    echo "	status [--show-versions]"
+    echo "	execute YYYYMMDDHHMMSS [--write-sql] [--dry-run] [--up] [--down] [--query-time]"
+    echo "	migrate <version> [--write-sql] [--dry-run] [--query-time] [--allow-no-migration]"
+    echo "		version -  The version number (YYYYMMDDHHMMSS) or alias (first, prev, next, latest) to migrate to. [default: "latest"]"
+    echo "	version <version> [--add] [--delete] [--all] [--range-from[=RANGE-FROM]] [--range-to[=RANGE-TO]]"
+    echo "		version -  The version to add or delete" 
+    exit 1
+fi
+
+vendor/bin/doctrine-migrations migrations:$* --db-configuration migration-db.php --configuration Migrations.yml 

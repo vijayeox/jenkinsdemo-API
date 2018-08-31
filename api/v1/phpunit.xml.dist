@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="All Tests">
+            <directory>./module/Metaform/test</directory>
+            <directory>./module/Field/test</directory>
+            <directory>./module/Auth/test</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
