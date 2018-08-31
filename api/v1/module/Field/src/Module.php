@@ -10,6 +10,8 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
+use Oxzion\Model\Entity\Field;
+use Oxzion\Model\Table\FieldTable;
 
 class Module implements ConfigProviderInterface
 {
@@ -33,14 +35,14 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Model\FieldTable::class => function($container) {
-                    $tableGateway = $container->get(Model\FieldTableGateway::class);
-                    return new Model\FieldTable($tableGateway);
+                FieldTable::class => function($container) {
+                    $tableGateway = $container->get(FieldTableGateway::class);
+                    return new FieldTable($tableGateway);
                 },
-                Model\FieldTableGateway::class => function ($container) {
+                FieldTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Field());
+                    $resultSetPrototype->setArrayObjectPrototype(new Field());
                     return new TableGateway('fields', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
@@ -52,7 +54,6 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\FieldController::class => function($container) {
                     return new Controller\FieldController(
-                        $container->get(Model\FieldTable::class),
                         $container->get('FieldLogger')
                     );
                 },

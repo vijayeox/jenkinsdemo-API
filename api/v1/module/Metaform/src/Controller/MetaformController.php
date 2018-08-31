@@ -9,8 +9,8 @@ use Oxzion\Controller\AbstractApiController;
 class MetaformController extends AbstractApiController
 {
 
-	public function __construct(MetaformTable $table, Logger $log){
-		parent::__construct($table, $log, __CLASS__, Metaform::class);
+	public function __construct(Logger $log){
+		parent::__construct($log, __CLASS__,new Metaform);
 		$this->setIdentifierName('formId');
 	}
 
