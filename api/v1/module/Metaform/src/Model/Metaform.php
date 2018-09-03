@@ -1,272 +1,100 @@
 <?php
 namespace Metaform\Model;
 
-use Oxzion\Model\Model;
+use Oxzion\Model\Entity;
 
-class Metaform extends Model{
-	public $id;
-    public $name;
-    public $description;
-    public $sequence;
-    public $nextsequence;
-    public $htmltext;
-//  public $modulename;
-    public $orgid;
-    public $moduleid;
-    public $canhaveparent;
+class Metaform extends Entity{
+	protected $data = array(
+		'id' => null,
+		'name' => null,
+		'description' => null,
+		'sequence' => null,
+		'nextsequence' => null,
+		'htmltext' => null,
+//        'modulename' => null,
+		'orgid' => null,
+		'moduleid' => null,
+		'canhaveparent' => null,
         //@ bug  #370659 
-    public $makeparentmandatory;
-    public $canhavecategory; //@BUG 14773
-    public $canhaveattachment;
-    public $canhavespreadsheet;
-    public $canhidetime; //@Bug 372810
-    public $canhavewriteaccess;
-    public $canhavereadaccess;
-    public $canhaveemail;
-    public $canhavedigitalsign;
-    public $canassign;
-    public $canassigngroup;
-    public $canmultiassign; //@BUG 14638
-    public $onlyadmincancreate;
-    public $statusfield;
-    public $emailfields;
-    public $startdatefield;
-    public $nextactiondatefield;
-    public $enddatefield;
-    public $printfields;
-    public $defaultassigngroup;
-    public $can_create_duplicate;
-    public $nodelete;
-    public $assignedtoview;
-    public $hidecost;
-    public $hidestarpoints;
-    public $assignedtofromdefaultgroup;
-    public $statuslist;
-    public $statuslistcolor;
-    public $hidetags;
-    public $hideleveldifference;
-    public $showallassignedgroup;
-    public $showallownergroup;
-    public $canhavekra;
-    public $kracategories;
-    public $krasubcategories;
-    public $type;
-    public $wizard_id;
-    public $customcreate;
-    public $customview;
-    public $disable_mupdate;
-    public $disable_inlineedit;
-    public $discussionStartCount; //@Bug 55005 Comment count
-    public $allow_moderator;
-    public $disable_calendar;
-    public $can_have_map;
-    public $reffield1;
-    public $reffield2;
-    public $reffield3;
-    public $reffield4;
-    public $reffield5;
-    public $template;
-    public $canvas;
-    public $formdeleteaccess;
-    public $defaultgroupaccess;
-    public $nextactiondatediff;
-    public $enddatediff;
-    public $category;
-    public $can_have_dyn_info_view;
-    public $can_have_quick_edit;
-    public $can_have_assignments;
-    public $can_have_spreadsheet;
-    public $can_have_workrelated;
-    public $can_have_comments;
-    public $can_have_like;
-    public $can_have_message;
-    public $can_have_edit; 
-    public $can_have_convert;
-    public $can_have_lockrecord;
-    public $can_have_stickynotes;
-    public $can_have_logofactivities;
-    public $can_have_pm;
-    public $can_have_copyURL;
-    public $can_have_print;
-    public $ownerassignedcanedit;
-    public $cancopywizardvalues;
-
-    public function exchangeArray($data){
-    	$this->id = !empty($data['id']) ? $data['id'] : 0;
-    	$this->name = !empty($data['name']) ? $data['name'] : null;
-    	$this->description = !empty($data['description']) ? $data['description'] : null;
-		$this->sequence = !empty($data['sequence']) ? $data['sequence'] : null;
-		$this->nextsequence = !empty($data['nextsequence']) ? $data['nextsequence'] : null;
-		$this->htmltext = !empty($data['htmltext']) ? $data['htmltext'] : null;
-		$this->orgid = !empty($data['orgid']) ? $data['orgid'] : null;
-		$this->moduleid = !empty($data['moduleid']) ? $data['moduleid'] : null;
-		$this->canhaveparent = !empty($data['canhaveparent']) ? $data['canhaveparent'] : null;
-		$this->makeparentmandatory = !empty($data['makeparentmandatory']) ? $data['makeparentmandatory'] : null;
-		$this->canhavecategory  = !empty($data['canhavecategory']) ? $data['canhavecategory'] : null;
-		$this->canhaveattachment = !empty($data['canhaveattachment']) ? $data['canhaveattachment'] : null;
-		$this->canhavespreadsheet = !empty($data['canhavespreadsheet']) ? $data['canhavespreadsheet'] : null;
-		$this->canhidetime  = !empty($data['canhidetime']) ? $data['canhidetime'] : null;
-		$this->canhavewriteaccess = !empty($data['canhavewriteaccess']) ? $data['canhavewriteaccess'] : null;
-		$this->canhavereadaccess = !empty($data['canhavereadaccess']) ? $data['canhavereadaccess'] : null;
-		$this->canhaveemail = !empty($data['canhaveemail']) ? $data['canhaveemail'] : null;
-		$this->canhavedigitalsign = !empty($data['canhavedigitalsign']) ? $data['canhavedigitalsign'] : null;
-		$this->canassign = !empty($data['canassign']) ? $data['canassign'] : null;
-		$this->canassigngroup = !empty($data['canassigngroup']) ? $data['canassigngroup'] : null;
-		$this->canmultiassign  = !empty($data['canmultiassign']) ? $data['canmultiassign'] : null;
-		$this->onlyadmincancreate = !empty($data['onlyadmincancreate']) ? $data['onlyadmincancreate'] : null;
-		$this->statusfield = !empty($data['statusfield']) ? $data['statusfield'] : null;
-		$this->emailfields = !empty($data['emailfields']) ? $data['emailfields'] : null;
-		$this->startdatefield = !empty($data['startdatefield']) ? $data['startdatefield'] : null;
-		$this->nextactiondatefield = !empty($data['nextactiondatefield']) ? $data['nextactiondatefield'] : null;
-		$this->enddatefield = !empty($data['enddatefield']) ? $data['enddatefield'] : null;
-		$this->printfields = !empty($data['printfields']) ? $data['printfields'] : null;
-		$this->defaultassigngroup = !empty($data['defaultassigngroup']) ? $data['defaultassigngroup'] : null;
-		$this->can_create_duplicate = !empty($data['can_create_duplicate']) ? $data['can_create_duplicate'] : null;
-		$this->nodelete = !empty($data['nodelete']) ? $data['nodelete'] : null;
-		$this->assignedtoview = !empty($data['assignedtoview']) ? $data['assignedtoview'] : null;
-		$this->hidecost = !empty($data['hidecost']) ? $data['hidecost'] : null;
-		$this->hidestarpoints = !empty($data['hidestarpoints']) ? $data['hidestarpoints'] : null;
-		$this->assignedtofromdefaultgroup = !empty($data['assignedtofromdefaultgroup']) ? $data['assignedtofromdefaultgroup'] : null;
-		$this->statuslist = !empty($data['statuslist']) ? $data['statuslist'] : null;
-		$this->statuslistcolor = !empty($data['statuslistcolor']) ? $data['statuslistcolor'] : null;
-		$this->hidetags = !empty($data['hidetags']) ? $data['hidetags'] : null;
-		$this->hideleveldifference = !empty($data['hideleveldifference']) ? $data['hideleveldifference'] : null;
-		$this->showallassignedgroup = !empty($data['showallassignedgroup']) ? $data['showallassignedgroup'] : null;
-		$this->showallownergroup = !empty($data['showallownergroup']) ? $data['showallownergroup'] : null;
-		$this->canhavekra = !empty($data['canhavekra']) ? $data['canhavekra'] : null;
-		$this->kracategories = !empty($data['kracategories']) ? $data['kracategories'] : null;
-		$this->krasubcategories = !empty($data['krasubcategories']) ? $data['krasubcategories'] : null;
-		$this->type = !empty($data['type']) ? $data['type'] : null;
-		$this->wizard_id = !empty($data['wizard_id']) ? $data['wizard_id'] : null;
-		$this->customcreate = !empty($data['customcreate']) ? $data['customcreate'] : null;
-		$this->customview = !empty($data['customview']) ? $data['customview'] : null;
-		$this->disable_mupdate = !empty($data['disable_mupdate']) ? $data['disable_mupdate'] : null;
-		$this->disable_inlineedit = !empty($data['disable_inlineedit']) ? $data['disable_inlineedit'] : null;
-		$this->discussionStartCount  = !empty($data['discussionStartCount']) ? $data['discussionStartCount'] : null;
-		$this->allow_moderator = !empty($data['allow_moderator']) ? $data['allow_moderator'] : null;
-		$this->disable_calendar = !empty($data['disable_calendar']) ? $data['disable_calendar'] : null;
-		$this->can_have_map = !empty($data['can_have_map']) ? $data['can_have_map'] : null;
-		$this->reffield1 = !empty($data['reffield1']) ? $data['reffield1'] : null;
-		$this->reffield2 = !empty($data['reffield2']) ? $data['reffield2'] : null;
-		$this->reffield3 = !empty($data['reffield3']) ? $data['reffield3'] : null;
-		$this->reffield4 = !empty($data['reffield4']) ? $data['reffield4'] : null;
-		$this->reffield5 = !empty($data['reffield5']) ? $data['reffield5'] : null;
-		$this->template = !empty($data['template']) ? $data['template'] : null;
-		$this->canvas = !empty($data['canvas']) ? $data['canvas'] : null;
-		$this->formdeleteaccess = !empty($data['formdeleteaccess']) ? $data['formdeleteaccess'] : null;
-		$this->defaultgroupaccess = !empty($data['defaultgroupaccess']) ? $data['defaultgroupaccess'] : null;
-		$this->nextactiondatediff = !empty($data['nextactiondatediff']) ? $data['nextactiondatediff'] : null;
-		$this->enddatediff = !empty($data['enddatediff']) ? $data['enddatediff'] : null;
-		$this->category = !empty($data['category']) ? $data['category'] : null;
-		$this->can_have_dyn_info_view = !empty($data['can_have_dyn_info_view']) ? $data['can_have_dyn_info_view'] : null;
-		$this->can_have_quick_edit = !empty($data['can_have_quick_edit']) ? $data['can_have_quick_edit'] : null;
-		$this->can_have_assignments = !empty($data['can_have_assignments']) ? $data['can_have_assignments'] : null;
-		$this->can_have_spreadsheet = !empty($data['can_have_spreadsheet']) ? $data['can_have_spreadsheet'] : null;
-		$this->can_have_workrelated = !empty($data['can_have_workrelated']) ? $data['can_have_workrelated'] : null;
-		$this->can_have_comments = !empty($data['can_have_comments']) ? $data['can_have_comments'] : null;
-		$this->can_have_like = !empty($data['can_have_like']) ? $data['can_have_like'] : null;
-		$this->can_have_message = !empty($data['can_have_message']) ? $data['can_have_message'] : null;
-		$this->can_have_edit  = !empty($data['can_have_edit']) ? $data['can_have_edit'] : null;
-		$this->can_have_convert = !empty($data['can_have_convert']) ? $data['can_have_convert'] : null;
-		$this->can_have_lockrecord = !empty($data['can_have_lockrecord']) ? $data['can_have_lockrecord'] : null;
-		$this->can_have_stickynotes = !empty($data['can_have_stickynotes']) ? $data['can_have_stickynotes'] : null;
-		$this->can_have_logofactivities = !empty($data['can_have_logofactivities']) ? $data['can_have_logofactivities'] : null;
-		$this->can_have_pm = !empty($data['can_have_pm']) ? $data['can_have_pm'] : null;
-		$this->can_have_copyURL = !empty($data['can_have_copyURL']) ? $data['can_have_copyURL'] : null;
-		$this->can_have_print = !empty($data['can_have_print']) ? $data['can_have_print'] : null;
-		$this->ownerassignedcanedit = !empty($data['ownerassignedcanedit']) ? $data['ownerassignedcanedit'] : null;
-		$this->cancopywizardvalues = !empty($data['cancopywizardvalues']) ? $data['cancopywizardvalues'] : null;
-
-    }
-
-    public function toArray(){
-    	$data = array();
-    	$data['id'] = $this->id;
-    	$data['name'] = $this->name;
-    	$data['description'] = $this->description;
-    	$data['sequence'] = $this->sequence;
-		$data['nextsequence'] = $this->nextsequence;
-		$data['htmltext'] = $this->htmltext;
-		$data['orgid'] = $this->orgid;
-		$data['moduleid'] = $this->moduleid;
-		$data['canhaveparent'] = $this->canhaveparent;
-		$data['makeparentmandatory'] = $this->makeparentmandatory;
-		$data['canhavecategory'] = $this->canhavecategory ;
-		$data['canhaveattachment'] = $this->canhaveattachment;
-		$data['canhavespreadsheet'] = $this->canhavespreadsheet;
-		$data['canhidetime'] = $this->canhidetime ;
-		$data['canhavewriteaccess'] = $this->canhavewriteaccess;
-		$data['canhavereadaccess'] = $this->canhavereadaccess;
-		$data['canhaveemail'] = $this->canhaveemail;
-		$data['canhavedigitalsign'] = $this->canhavedigitalsign;
-		$data['canassign'] = $this->canassign;
-		$data['canassigngroup'] = $this->canassigngroup;
-		$data['canmultiassign'] = $this->canmultiassign ;
-		$data['onlyadmincancreate'] = $this->onlyadmincancreate;
-		$data['statusfield'] = $this->statusfield;
-		$data['emailfields'] = $this->emailfields;
-		$data['startdatefield'] = $this->startdatefield;
-		$data['nextactiondatefield'] = $this->nextactiondatefield;
-		$data['enddatefield'] = $this->enddatefield;
-		$data['printfields'] = $this->printfields;
-		$data['defaultassigngroup'] = $this->defaultassigngroup;
-		$data['can_create_duplicate'] = $this->can_create_duplicate;
-		$data['nodelete'] = $this->nodelete;
-		$data['assignedtoview'] = $this->assignedtoview;
-		$data['hidecost'] = $this->hidecost;
-		$data['hidestarpoints'] = $this->hidestarpoints;
-		$data['assignedtofromdefaultgroup'] = $this->assignedtofromdefaultgroup;
-		$data['statuslist'] = $this->statuslist;
-		$data['statuslistcolor'] = $this->statuslistcolor;
-		$data['hidetags'] = $this->hidetags;
-		$data['hideleveldifference'] = $this->hideleveldifference;
-		$data['showallassignedgroup'] = $this->showallassignedgroup;
-		$data['showallownergroup'] = $this->showallownergroup;
-		$data['canhavekra'] = $this->canhavekra;
-		$data['kracategories'] = $this->kracategories;
-		$data['krasubcategories'] = $this->krasubcategories;
-		$data['type'] = $this->type;
-		$data['wizard_id'] = $this->wizard_id;
-		$data['customcreate'] = $this->customcreate;
-		$data['customview'] = $this->customview;
-		$data['disable_mupdate'] = $this->disable_mupdate;
-		$data['disable_inlineedit'] = $this->disable_inlineedit;
-		$data['discussionStartCount'] = $this->discussionStartCount ;
-		$data['allow_moderator'] = $this->allow_moderator;
-		$data['disable_calendar'] = $this->disable_calendar;
-		$data['can_have_map'] = $this->can_have_map;
-		$data['reffield1'] = $this->reffield1;
-		$data['reffield2'] = $this->reffield2;
-		$data['reffield3'] = $this->reffield3;
-		$data['reffield4'] = $this->reffield4;
-		$data['reffield5'] = $this->reffield5;
-		$data['template'] = $this->template;
-		$data['canvas'] = $this->canvas;
-		$data['formdeleteaccess'] = $this->formdeleteaccess;
-		$data['defaultgroupaccess'] = $this->defaultgroupaccess;
-		$data['nextactiondatediff'] = $this->nextactiondatediff;
-		$data['enddatediff'] = $this->enddatediff;
-		$data['category'] = $this->category;
-		$data['can_have_dyn_info_view'] = $this->can_have_dyn_info_view;
-		$data['can_have_quick_edit'] = $this->can_have_quick_edit;
-		$data['can_have_assignments'] = $this->can_have_assignments;
-		$data['can_have_spreadsheet'] = $this->can_have_spreadsheet;
-		$data['can_have_workrelated'] = $this->can_have_workrelated;
-		$data['can_have_comments'] = $this->can_have_comments;
-		$data['can_have_like'] = $this->can_have_like;
-		$data['can_have_message'] = $this->can_have_message;
-		$data['can_have_edit'] = $this->can_have_edit ;
-		$data['can_have_convert'] = $this->can_have_convert;
-		$data['can_have_lockrecord'] = $this->can_have_lockrecord;
-		$data['can_have_stickynotes'] = $this->can_have_stickynotes;
-		$data['can_have_logofactivities'] = $this->can_have_logofactivities;
-		$data['can_have_pm'] = $this->can_have_pm;
-		$data['can_have_copyURL'] = $this->can_have_copyURL;
-		$data['can_have_print'] = $this->can_have_print;
-		$data['ownerassignedcanedit'] = $this->ownerassignedcanedit;
-		$data['cancopywizardvalues'] = $this->cancopywizardvalues;
-		
-		return $data;
-
-    }
+		'makeparentmandatory' => null,
+        'canhavecategory' => null, //@BUG 14773
+        'canhaveattachment' => null,
+        'canhavespreadsheet' => null,
+        'canhidetime' => null, //@Bug 372810
+        'canhavewriteaccess' => null,
+        'canhavereadaccess' => null,
+        'canhaveemail' => null,
+        'canhavedigitalsign' => null,
+        'canassign' => null,
+        'canassigngroup' => null,
+        'canmultiassign' => null, //@BUG 14638
+        'onlyadmincancreate' => null,
+        'statusfield' => null,
+        'emailfields' => null,
+        'startdatefield' => null,
+        'nextactiondatefield' => null,
+        'enddatefield' => null,
+        'printfields' => null,
+        'defaultassigngroup' => null,
+        'can_create_duplicate' => null,
+        'nodelete' => null,
+        'assignedtoview' => null,
+        'hidecost' => null,
+        'hidestarpoints' => null,
+        'assignedtofromdefaultgroup' => null,
+        'statuslist' => null,
+        'statuslistcolor' => null,
+        'hidetags' => null,
+        'hideleveldifference' => null,
+        'showallassignedgroup' => null,
+        'showallownergroup' => null,
+        'canhavekra' => null,
+        'kracategories' => NULL,
+        'krasubcategories' => NULL,
+        'type' => null,
+        'wizard_id' => null,
+        'customcreate' => null,
+        'customview' => null,
+        'disable_mupdate' => null,
+        'disable_inlineedit' => null,
+        'discussionStartCount' => null, //@Bug 55005 Comment count
+        'allow_moderator' => null,
+        'disable_calendar' => null,
+        'can_have_map' => null,
+        'reffield1' => null,
+        'reffield2' => null,
+        'reffield3' => null,
+        'reffield4' => null,
+        'reffield5' => null,
+        'template' => null,
+        'canvas' => null,
+        'formdeleteaccess' => null,
+        'defaultgroupaccess' => null,
+        'nextactiondatediff' => null,
+        'enddatediff' => null,
+        'category' => null,
+        'can_have_dyn_info_view' => null,
+        'can_have_quick_edit' => null,
+        'can_have_assignments' => null,
+        'can_have_spreadsheet' => null,
+        'can_have_workrelated' => null,
+        'can_have_comments' => null,
+        'can_have_like' => null,
+        'can_have_message' => null,
+        'can_have_edit'  => null,
+        'can_have_convert' => null,
+        'can_have_lockrecord' => null,
+        'can_have_stickynotes' => null,
+        'can_have_logofactivities' => null,
+        'can_have_pm' => null,
+        'can_have_copyURL' => null,
+        'can_have_print' => null,
+        'ownerassignedcanedit' => null,
+        'cancopywizardvalues' => null,
+        'fieldview' => null,
+        'resetbigfields'=>1,
+        'savecopybtn'=>1,
+        'savenewbtn'=>1,
+        'savealertbtn'=>1
+    );
 }

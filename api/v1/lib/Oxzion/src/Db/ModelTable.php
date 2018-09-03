@@ -74,5 +74,39 @@ abstract class ModelTable {
     public function getLastInsertValue(){
         return $this->lastInsertValue;
     }
+    
+    
+    public function getDatabyParams($fieldarray, $where=null, $sortby=null, $groupby=null, $limit=null,$offset=0, $join=array()){
+        $select = $this->tableGateway->select();
+        $select->from($this->tableGateway,$fieldarray);
+        if(!empty($join)){
+            foreach ($join as $key => $value) {
+                $joinmethod = ($value['joinmethod']) ? $value['joinmethod'] : 'join';
+                $select->$joinmethod($value['jointable'], $value['condition'], $value['joinfields']);
+            }
+        }
+        if($where){
+            $select->where($where);
+        }
+        if($sortby){
+            $select->order($sortby);
+        }
+        if($groupby){
+            $select->group($groupby);
+        }
+        if($limit){
+            $select->limit($limit,$offset);
+        }
+        try{
+            $rows = $this->tableGateway->fetchAll($select);
+        } catch (Exception $e) {
+            echo $select."\n";
+            echo "<pre>";debug_print_backtrace();
+            echo "\n<pre>";print_r($e->getMessage());
+            exit();
+        }
+        if (empty($rows)) { return null; }
+        return $rows->toArray();
+    }
 
 }
