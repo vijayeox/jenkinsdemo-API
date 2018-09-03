@@ -1,6 +1,6 @@
 <?php
 
-namespace Avatar;
+namespace Metaform;
 
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
@@ -10,16 +10,17 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
-use Oxzion\Model\Table\AvatarTable;
-use Oxzion\Model\Entity\Avatar;
 
-class Module implements ConfigProviderInterface {
+class Module implements ConfigProviderInterface
+{
 
-    public function getConfig() {
+    public function getConfig()
+    {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e) {
+    public function onBootstrap(MvcEvent $e)
+    {
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -27,6 +28,7 @@ class Module implements ConfigProviderInterface {
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatchError'), 0);
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onRenderError'), 0);
     }
+
     public function getServiceConfig()
     {
         return [
@@ -38,15 +40,23 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
-                Controller\AvatarController::class => function($container) {
-                    return new Controller\AvatarController($container->get('AvatarLogger'));
+                Controller\MetaformController::class => function($container) {
+                    return new Controller\MetaformController(
+                        $container->get(Model\MetaformTable::class),
+                        $container->get('MetaformLogger')
+                    );
                 },
-                Controller\GroupController::class => function($container) {
-                    return new Controller\GroupController($container->get('AvatarLogger'));
+                Controller\MetafieldController::class => function($container) {
+                    return new Controller\MetafieldController(
+                        $container->get(Model\MetafieldTable::class),
+                        $container->get('MetaformLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
                 },
             ],
         ];
     }
+
     public function onDispatchError($e)
     {
         return ErrorHandler::getJsonModelError($e);

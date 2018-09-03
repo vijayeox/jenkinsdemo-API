@@ -66,6 +66,10 @@
             "Application\\": "module/Application/src/",
             "Metaform\\": "module/Metaform/src/",
             "Field\\": "module/Field/src/",
+            "Announcement\\": "module/Announcement/src/",
+            "User\\": "module/User/src/",
+            "Group\\": "module/Group/src/",
+            "Organization\\": "module/Organization/src/",
             "Auth\\": "module/Auth/src/"
         }
     },
@@ -74,6 +78,10 @@
             "ApplicationTest\\": "module/Application/test/",
             "MetaformTest\\": "module/Metaform/test/",
             "FieldTest\\": "module/Field/test/",
+            "AnnouncementTest\\": "module/Announcement/test/",
+            "UserTest\\": "module/User/test/",
+            "GroupTest\\": "module/Group/test/",
+            "OrganizationTest\\": "module/Organization/test/",
             "AuthTest\\" : "module/Auth/test"
         }
     },
