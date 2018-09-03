@@ -7,6 +7,7 @@ use RuntimeException;
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
  */
+defined ( 'APPLICATION_PATH' ) || define ( 'APPLICATION_PATH', realpath ( dirname ( __FILE__ ) . '/../application' ) );
 chdir(dirname(__DIR__));
 
 error_reporting(E_ALL);

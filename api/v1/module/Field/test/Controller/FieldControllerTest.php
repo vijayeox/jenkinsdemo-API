@@ -3,7 +3,7 @@ namespace Field;
 
 use Field\Controller\FieldController;
 use Zend\Stdlib\ArrayUtils;
-use Field\Model\Field;
+use Oxzion\Model\Entity\Field;
 use Oxzion\Test\ControllerTest;
 
 class FieldControllerTest extends ControllerTest{
