@@ -22,7 +22,7 @@ return [
         ],
     ],
     'log' => [
-        'AvatarLogger' => [
+        'UserLogger' => [
             'writers' => [
                 'stream' => [
                     'name' => 'stream',

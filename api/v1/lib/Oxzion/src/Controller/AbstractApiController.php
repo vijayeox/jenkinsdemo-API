@@ -4,33 +4,26 @@ namespace Oxzion\Controller;
 
 use Zend\EventManager\EventManagerInterface;
 use Zend\Log\Logger;
-use Oxzion\Model\Table\AvatarTable;
-use Oxzion\Model\Entity\Avatar;
-use Zend\Db\Sql\Sql;
 
 abstract class AbstractApiController extends AbstractApiControllerHelper{
-	protected $table;
+    protected $table;
     protected $log;
     protected $logClass;
     protected $modelClass;
     protected $parentId;
-    protected $username;
-    protected $currentAvatarObj;
     
-    public function __construct(Logger $log, $logClass, $modelClass, $parentId = null){
+    public function __construct($table, Logger $log, $logClass, $modelClass, $parentId = null){
+        $this->table = $table;
         $this->log = $log;
         $this->logClass = $logClass;
         $this->modelClass = $modelClass;
-        if($modelClass){
-            $this->table = $modelClass->tableGateway;
-        }
         $this->parentId = $parentId;
     }
 
     protected function validate($model){
         return new ValidationResult(ValidationResult::SUCCESS);
     }
-    public function getParentFilter(){
+    private function getParentFilter(){
         $filter = null;
         if(!is_null($this->parentId)){
             $pid = $this->params()->fromRoute()[$this->parentId];
@@ -60,14 +53,10 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         if ($jwtToken) {
             $token = $jwtToken;
             $tokenPayload = $this->decodeJwtToken($token);
-            $tokenArray = json_decode(json_encode($tokenPayload),true);
-            if(is_array($tokenArray)){
-                $this->username = $tokenArray['data']['username'];
-                $this->setCurrentUser($this->username);
-                if (is_object($tokenPayload)) {
-                    return;
-                }
+            if (is_object($tokenPayload)) {
+                return;
             }
+
             $jsonModel = $this->getErrorResponse($tokenPayload, 400); 
             
         } else {
@@ -78,28 +67,13 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         $response->setContent($jsonModel->serialize());
         return $response;
     }
-    protected function setCurrentUser($username){
-        $avatarTable = new Avatar();
-        $sql = new Sql($avatarTable->tableGateway->getAdapter());
-        $select = $sql->select()
-        ->from('avatars')
-        ->where(array('username = "'.(string)$username.'"'));
-        $selectString = $sql->getSqlStringForSqlObject($select);
-        $results = $avatarTable->tableGateway->getAdapter()->query($selectString, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE)->toArray();
-        $this->currentAvatarObj = new Avatar($results[0]);
-    }
 
     
     //GET /{controller}/{id]
     public function get($id){
         $this->log->info($this->logClass . ": get for id - $id");
         $filter = $this->getParentFilter();
-        $id = (int) $id;
-        if(is_null($filter)){
-            $filter = array();
-        }
-        $filter['id'] = $id;
-        $form = $this->table->select($filter);
+        $form = $this->table->get($id, $filter);
         if(is_null($form)){
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
@@ -108,18 +82,18 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
 
     //GET /{controller}
     public function getList(){
-    	$this->log->info($this->logClass . ": getList");
+        $this->log->info($this->logClass . ": getList");
         $filter = $this->getParentFilter();
-        $result = $this->table->select($filter);
-    	$data = array();
+        $result = $this->table->fetchAll($filter);
+        $data = array();
 
-    	while ($result->valid()) {
+        while ($result->valid()) {
             $value = $result->current();
-    		$data[] = $value->toArray();
+            $data[] = $value->toArray();
             $result->next();
-    	}
+        }
 
-    	return $this->getSuccessResponseWithData($data);
+        return $this->getSuccessResponseWithData($data);
     }
 
     //POST /controller 
@@ -142,7 +116,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         $id = $this->table->getLastInsertValue();
         $form->id = $id;
         return $this->getSuccessResponseWithData($form->toArray(), 201);
-	
+    
     }
 
     //PUT /controller/{id} 
@@ -157,13 +131,13 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
             $data[$this->parentId] = $filter[$this->parentId];
         }
         $obj = new $this->modelClass;
-    	$obj->exchangeArray($data);
+        $obj->exchangeArray($data);
         $obj->id = $id;
         $validationResult = $this->validate($obj);
         if(! $validationResult->isValid()){
             return $this->getErrorResponse($validationResult->getMessage(), 404, $data);
         }
-    	$count = $this->table->save($obj);
+        $count = $this->table->save($obj);
         if($count == 0){
             return $this->getFailureResponse("Failed to update data for id - $id", $data);
         }

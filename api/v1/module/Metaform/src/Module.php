@@ -33,9 +33,30 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
+                Model\MetaformTable::class => function($container) {
+                    $tableGateway = $container->get(Model\MetaformTableGateway::class);
+                    return new Model\MetaformTable($tableGateway);
+                },
+                Model\MetaformTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Metaform());
+                    return new TableGateway('metaforms', $dbAdapter, null, $resultSetPrototype);
+                },
+                Model\MetafieldTable::class => function($container) {
+                    $tableGateway = $container->get(Model\MetafieldTableGateway::class);
+                    return new Model\MetafieldTable($tableGateway);
+                },
+                Model\MetafieldTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Metafield());
+                    return new TableGateway('metafields', $dbAdapter, null, $resultSetPrototype);
+                },
             ],
         ];
     }
+
     public function getControllerConfig()
     {
         return [

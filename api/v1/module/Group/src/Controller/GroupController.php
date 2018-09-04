@@ -10,6 +10,6 @@ class GroupController extends AbstractApiController {
 
     public function __construct(GroupTable $table, Logger $log){
 		parent::__construct($table, $log, __CLASS__, Group::class);
-		$this->setIdentifierName('formId');
+		$this->setIdentifierName('groupId');
 	}
 }

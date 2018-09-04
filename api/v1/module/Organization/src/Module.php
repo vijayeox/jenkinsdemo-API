@@ -10,8 +10,6 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
-use Oxzion\Model\Entity\Organization;
-use Oxzion\Model\Table\OrganizationTable;
 
 class Module implements ConfigProviderInterface {
 
@@ -48,8 +46,9 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
-                Controller\OrganizationsController::class => function($container) {
-                    return new Controller\OrganizationsController($container->get('OrganizationLogger'));
+                Controller\OrganizationController::class => function($container) {
+                    return new Controller\OrganizationController(
+                        $container->get(Model\OrganizationTable::class),$container->get('OrganizationLogger'));
                 },
             ],
         ];

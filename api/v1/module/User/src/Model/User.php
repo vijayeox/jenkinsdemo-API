@@ -2,7 +2,7 @@
 namespace User\Model;
 use Oxzion\Model\Entity;
 
-class Avatar extends Entity{
+class User extends Entity{
 
     protected $data = array(
         'id' => NULL,

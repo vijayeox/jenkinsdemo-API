@@ -1,6 +1,6 @@
 <?php
 
-namespace Oxzion\Model\Entity;
+namespace Organization\Model;
 use Oxzion\Model\Entity;
 
 class Organization extends Entity{

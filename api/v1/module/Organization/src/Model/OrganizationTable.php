@@ -1,5 +1,5 @@
 <?php
-namespace Oxzion\Model\Table;
+namespace Organization\Model;
 
 use Oxzion\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;
