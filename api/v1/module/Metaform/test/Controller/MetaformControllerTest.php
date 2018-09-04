@@ -7,7 +7,7 @@ use Metaform\Model\Metaform;
 use Oxzion\Test\ControllerTest;
 
 class MetaformControllerTest extends ControllerTest{
-	public function setUp()
+    public function setUp()
     {
         $configOverrides = [include __DIR__ . '/../../../../config/autoload/global.php'];
 
@@ -23,19 +23,19 @@ class MetaformControllerTest extends ControllerTest{
     }
 
     public function testGetList(){
-    	$data = $this->getMockGatewayData(Model\MetaformTableGateway::class, Model\Metaform::class);
+        $data = $this->getMockGatewayData(Model\MetaformTableGateway::class, Model\Metaform::class);
         $metaformTableGateway = $data['mock'];
         $resultSet = $data['resultSet'];
         $metaform = new Metaform();
-    	$metaform->exchangeArray(['id' => 122, 'name' => 'Sample1']);
-    	$metaform1 = new Metaform();
-    	$metaform1->exchangeArray(['id' => 123, 'name' => 'Sample2']);
+        $metaform->exchangeArray(['id' => 122, 'name' => 'Sample1']);
+        $metaform1 = new Metaform();
+        $metaform1->exchangeArray(['id' => 123, 'name' => 'Sample2']);
         $resultSet->initialize([$metaform, $metaform1]);
-    	$metaformTableGateway->expects($this->once())
-			    ->method('select')
-			    ->will($this->returnValue($resultSet));
-    	$this->dispatch('/metaform', 'GET');
-    	$this->assertResponseStatusCode(200);
+        $metaformTableGateway->expects($this->once())
+                ->method('select')
+                ->will($this->returnValue($resultSet));
+        $this->dispatch('/metaform', 'GET');
+        $this->assertResponseStatusCode(200);
         $this->assertModuleName('metaform');
         $this->assertControllerName(MetaformController::class); // as specified in router's controller name alias
         $this->assertControllerClass('MetaformController');

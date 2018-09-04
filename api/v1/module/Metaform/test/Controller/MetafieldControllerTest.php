@@ -10,7 +10,7 @@ use Zend\Db\Adapter\Platform\Mysql;
 use Zend\Db\Adapter\Adapter;
 
 class MetafieldControllerTest extends ControllerTest{
-	public function setUp()
+    public function setUp()
     {
         $configOverrides = [include __DIR__ . '/../../../../config/autoload/global.php'];
 
@@ -24,20 +24,20 @@ class MetafieldControllerTest extends ControllerTest{
     }
 
     public function testGetList(){
-    	$data = $this->getMockGatewayData(Model\MetafieldTableGateway::class, Model\Metafield::class);
+        $data = $this->getMockGatewayData(Model\MetafieldTableGateway::class, Model\Metafield::class);
         $metafieldTableGateway = $data['mock'];
         $resultSet = $data['resultSet'];
         $metafield = new Metafield();
-    	$metafield->exchangeArray(['id' => 122, 'name' => 'Sample1', 'sequence' => 1]);
-    	$metafield1 = new Metafield();
-    	$metafield1->exchangeArray(['id' => 123, 'name' => 'Sample2', 'sequence' => 2]);
+        $metafield->exchangeArray(['id' => 122, 'name' => 'Sample1', 'sequence' => 1]);
+        $metafield1 = new Metafield();
+        $metafield1->exchangeArray(['id' => 123, 'name' => 'Sample2', 'sequence' => 2]);
         $resultSet->initialize([$metafield, $metafield1]);
-    	$metafieldTableGateway->expects($this->once())
-			    ->method('select')
+        $metafieldTableGateway->expects($this->once())
+                ->method('select')
                 ->with(['formId' => 111])
-			    ->will($this->returnValue($resultSet));
-    	$this->dispatch('/metaform/111/metafield', 'GET');
-    	$this->assertResponseStatusCode(200);
+                ->will($this->returnValue($resultSet));
+        $this->dispatch('/metaform/111/metafield', 'GET');
+        $this->assertResponseStatusCode(200);
         $this->assertModuleName('metaform');
         $this->assertControllerName(MetafieldController::class); // as specified in router's controller name alias
         $this->assertControllerClass('MetafieldController');

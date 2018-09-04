@@ -29,7 +29,7 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
-                 Model\OrganizationTable::class => function($container) {
+                Model\OrganizationTable::class => function($container) {
                     $tableGateway = $container->get(Model\OrganizationTableGateway::class);
                     return new Model\OrganizationTable($tableGateway);
                 },

@@ -10,7 +10,7 @@ use Zend\Log\Processor\RequestId;
 return [
     'router' => [
         'routes' => [
-            'organizations' => [
+            'organization' => [
                 'type'    => Segment::class,
                 'options' => [
                 'route'    => '/organization[/:orgId]',

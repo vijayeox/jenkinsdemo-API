@@ -3,11 +3,11 @@ namespace Field;
 
 use Field\Controller\FieldController;
 use Zend\Stdlib\ArrayUtils;
-use Oxzion\Model\Entity\Field;
+use Field\Model\Field;
 use Oxzion\Test\ControllerTest;
 
 class FieldControllerTest extends ControllerTest{
-	public function setUp()
+    public function setUp()
     {
         $configOverrides = [include __DIR__ . '/../../../../config/autoload/global.php'];
 
@@ -25,15 +25,15 @@ class FieldControllerTest extends ControllerTest{
         $fieldTableGateway = $data['mock'];
         $resultSet = $data['resultSet'];
         $field = new Field();
-    	$field->exchangeArray(['id' => 122, 'name' => 'Sample1']);
-    	$field1 = new Field();
-    	$field1->exchangeArray(['id' => 123, 'name' => 'Sample2']);
+        $field->exchangeArray(['id' => 122, 'name' => 'Sample1']);
+        $field1 = new Field();
+        $field1->exchangeArray(['id' => 123, 'name' => 'Sample2']);
         $resultSet->initialize([$field, $field1]);
-    	$fieldTableGateway->expects($this->once())
-			    ->method('select')
-			    ->will($this->returnValue($resultSet));
+        $fieldTableGateway->expects($this->once())
+                ->method('select')
+                ->will($this->returnValue($resultSet));
         $this->dispatch('/field', 'GET');
-    	$this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(200);
         $this->assertModuleName('field');
         $this->assertControllerName(FieldController::class); // as specified in router's controller name alias
         $this->assertControllerClass('FieldController');

@@ -10,7 +10,7 @@ use Zend\Log\Processor\RequestId;
 return [
     'router' => [
         'routes' => [
-            'alerts' => [
+            'announcements' => [
                 'type'    => Segment::class,
                 'options' => [
                 'route'    => '/announcement[/:announcementId]',

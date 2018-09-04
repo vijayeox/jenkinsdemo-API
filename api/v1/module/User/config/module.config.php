@@ -10,10 +10,10 @@ use Zend\Log\Processor\RequestId;
 return [
     'router' => [
         'routes' => [
-            'avatars' => [
+            'user' => [
                 'type'    => Segment::class,
                 'options' => [
-                'route'    => '/avatar[/:avatarId]',
+                'route'    => '/user[/:userId]',
                 'defaults' => [
                         'controller' => Controller\UserController::class
                     ],
@@ -28,7 +28,7 @@ return [
                     'name' => 'stream',
                     'priority' => \Zend\Log\Logger::ALERT,
                     'options' => [
-                        'stream' => __DIR__ . '/../../../logs/avatar.log',
+                        'stream' => __DIR__ . '/../../../logs/user.log',
                             'formatter' => [
                                 'name' => \Zend\Log\Formatter\Simple::class,
                                 'options' => [

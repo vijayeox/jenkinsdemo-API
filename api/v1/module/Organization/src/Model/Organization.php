@@ -1,5 +1,4 @@
 <?php
-
 namespace Organization\Model;
 use Oxzion\Model\Entity;
 
@@ -8,12 +7,12 @@ class Organization extends Entity{
     protected $data = array(
         'id' => NULL,
         'name' => NULL,
-        'address' => NULL,
-        'city' => NULL,
-        'state' => NULL,
-        'zip' => NULL,
-        'logo' => NULL,
-        'defaultgroupid' => NULL,
+        'address' => "NA",
+        'city' => "NA",
+        'state' => "NA",
+        'zip' => "NA",
+        'logo' => "NA",
+        'defaultgroupid' => 0,
         'statusbox' => 'Matrix|MyKRA|StarPoints|Alerts',
         'labelfile' => NULL,
         'messagecount' => '200',

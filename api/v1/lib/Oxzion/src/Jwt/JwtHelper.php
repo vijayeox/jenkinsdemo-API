@@ -9,7 +9,7 @@ class JwtHelper {
     	$tokenId = base64_encode(openssl_random_pseudo_bytes(32));
     	$issuedAt   = time();
 	    $notBefore  = $issuedAt; 
-	    $expire     = $notBefore + 3600; // Adding 3600 seconds
+	    $expire     = $notBefore + 72000; // Adding 3600 seconds
 	    $data = [
 			        'iat'  => $issuedAt,  
 			        'jti'  => $tokenId,   
@@ -40,7 +40,6 @@ class JwtHelper {
 			return false;
 		}
 		$secretKey = base64_decode($jwtKey);
-	    
 		return JWT::decode($token, $secretKey, [$jwtAlgo]);
 	}
 }
