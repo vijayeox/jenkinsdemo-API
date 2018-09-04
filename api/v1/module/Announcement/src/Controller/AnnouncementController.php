@@ -2,8 +2,8 @@
 namespace Announcement\Controller;
 
 use Zend\Log\Logger;
-use Oxzion\Model\Entity\Announcement;
-use Oxzion\Model\Table\AnnouncementTable;
+use Announcement\Model\AnnouncementTable;
+use Announcement\Model\Announcement;
 use Oxzion\Controller\AbstractApiController;
 
 class AnnouncementController extends AbstractApiController {

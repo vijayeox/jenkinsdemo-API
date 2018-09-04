@@ -10,8 +10,6 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
-use Oxzion\Model\Table\AlertTable;
-use Oxzion\Model\Entity\Alert;
 
 class Module implements ConfigProviderInterface {
 
@@ -37,8 +35,8 @@ class Module implements ConfigProviderInterface {
                 Model\AnnouncementTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\AnnouncementTable());
-                    return new TableGateway('announcement', $dbAdapter, null, $resultSetPrototype);
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Announcement());
+                    return new TableGateway('announcements', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];
@@ -48,7 +46,8 @@ class Module implements ConfigProviderInterface {
         return [
             'factories' => [
                 Controller\AnnouncementController::class => function($container) {
-                    return new Controller\AnnouncementController($container->get('AnnouncementLogger'));
+                    return new Controller\AnnouncementController(
+                        $container->get(Model\AnnouncementTable::class),$container->get('AnnouncementLogger'));
                 },
             ],
         ];
