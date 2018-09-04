@@ -80,7 +80,7 @@ You can also run composer from the image. The container environment is named
 "zf", so you will pass that value to `docker-compose run`:
 
 ```bash
-$ docker-compose run zf composer install
+$ docker-compose run --net=host zf composer install
 ```
 
 ## Web server setup
