@@ -8,12 +8,12 @@ use Zend\Log\Filter\Priority;
 use Zend\Log\Processor\RequestId;
 
 return [
-	'router' => [
+    'router' => [
         'routes' => [
             'field' => [
                 'type'    => Segment::class,
                 'options' => [
-                	'route'    => '/field[/:id]',
+                    'route'    => '/field[/:id]',
                     'defaults' => [
                         'controller' => Controller\FieldController::class
                     ],

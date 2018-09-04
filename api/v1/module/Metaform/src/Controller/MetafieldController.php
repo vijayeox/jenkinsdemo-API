@@ -15,11 +15,11 @@ class MetafieldController extends AbstractApiController
 {
 	private $dbAdapter;
 
-	public function __construct(Logger $log, AdapterInterface $dbAdapter){
-		parent::__construct($log, __CLASS__, Metafield::class, 'formId');
+	public function __construct(MetafieldTable $table, Logger $log, AdapterInterface $dbAdapter){
+		parent::__construct($table, $log, __CLASS__, Metafield::class, 'formId');
 		$this->dbAdapter = $dbAdapter;
 	}
-
+	
 	protected function validate($model){
 		$sql    = new Sql($this->dbAdapter);
 		$select = $sql->select();
@@ -35,4 +35,5 @@ class MetafieldController extends AbstractApiController
 
 		return new ValidationResult(ValidationResult::SUCCESS);
 	}
+
 }

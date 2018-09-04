@@ -1,17 +1,9 @@
 <?php
 namespace Oxzion\Model;
 
-use Oxzion\Model\Entity;
 use Oxzion\Model\Model;
-use Oxzion\Db\Config;
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\TableGateway\TableGatewayInterface;
-use Oxzion\Db\ModelTable;
-use Zend\Db\Sql\Sql;
 
-abstract class Entity{
+abstract class Entity extends Model{
     protected $data = array();
 
     public function __construct() {

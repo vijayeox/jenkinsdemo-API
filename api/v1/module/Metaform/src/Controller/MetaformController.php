@@ -1,12 +1,10 @@
 <?php
-
 namespace Metaform\Controller;
 
 use Zend\Log\Logger;
 use Metaform\Model\Metaform;
 use Metaform\Model\MetaformTable;
 use Oxzion\Controller\AbstractApiController;
-
 
 class MetaformController extends AbstractApiController
 {
@@ -15,6 +13,5 @@ class MetaformController extends AbstractApiController
 		parent::__construct($table, $log, __CLASS__, Metaform::class);
 		$this->setIdentifierName('formId');
 	}
-
 
 }
