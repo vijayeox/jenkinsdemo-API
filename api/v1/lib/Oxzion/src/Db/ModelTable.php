@@ -3,16 +3,17 @@
 namespace Oxzion\Db;
 
 use Zend\Db\TableGateway\TableGatewayInterface;
-use Oxzion\Model\Model;
+use Oxzion\Model\Entity;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 
 abstract class ModelTable {
     protected $tableGateway;
+    protected $adapter;
 
     private $lastInsertValue;
 
-    abstract public function save(Model $data);
+    abstract public function save(Entity $data);
 
     public function __construct(TableGatewayInterface $tableGateway) {
         $this->tableGateway = $tableGateway;
@@ -73,6 +74,11 @@ abstract class ModelTable {
 
     public function getLastInsertValue(){
         return $this->lastInsertValue;
+    }
+    public function queryExecute($select,$sql){
+        $selectString = $sql->getSqlStringForSqlObject($select);
+        $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);
+        return $results->toArray();
     }
 
 }

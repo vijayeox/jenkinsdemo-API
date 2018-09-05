@@ -1,9 +1,7 @@
 <?php
 namespace Oxzion\Model;
 
-use Oxzion\Model\Model;
-
-abstract class Entity extends Model{
+abstract class Entity{
     protected $data = array();
 
     public function __construct() {

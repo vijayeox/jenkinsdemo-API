@@ -20,30 +20,9 @@ class AnnouncementController extends AbstractApiController {
     }
     
     public function getList() {
-//        $params = $this->params()->fromRoute();
-//        $type = $params['type'];
-//        echo "Check<pre/>";
-//        print_r($params);
-//        exit;
-//        $avatar = $this->currentAvatarObj;
-//        echo "<pre/>";
-//        print_r($avatar);
-//        exit;
-        $getAnnoucements = $this->getAnnouncements("436", Array("1463", "333", "912"));
-        if (is_null($getAnnoucements)) {
-//            return $this->getErrorResponse("Entity not found for id - $avatar->id", 404);
-        }
-        return $this->getSuccessResponseWithData($getAnnoucements);
+       $params = $this->params()->fromRoute();
+        return $this->getSuccessResponseWithData($this->table->getAnnouncements("436", Array("1463", "333", "912")));
     }
 
-    public function getAnnouncements($avatar, $avatarGroupList) {
-		$sql    = new Sql($this->dbAdapter);
-		$select = $sql->select();
-        $select->from('ox_announcement')
-                ->columns(array("*"))
-                ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', Array("*"))
-                ->where(array('ox_announcement_group_mapper.group_id' => $avatarGroupList));
-        return $data = Query::queryExecute($select,$sql,$this->dbAdapter);
-    }
 
 }

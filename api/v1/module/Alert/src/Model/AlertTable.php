@@ -4,7 +4,7 @@ namespace Alert\Model;
 
 use Oxzion\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;
-use Oxzion\Model\Model;
+use Oxzion\Model\Entity;
 
 class AlertTable extends ModelTable {
 
@@ -12,7 +12,7 @@ class AlertTable extends ModelTable {
         parent::__construct($tableGateway);
     }
 
-    public function save(Model $data) {
+    public function save(Entity $data) {
         return $this->internalSave($data->toArray());
     }
 

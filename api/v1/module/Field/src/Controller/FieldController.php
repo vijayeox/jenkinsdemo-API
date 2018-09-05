@@ -11,5 +11,4 @@ class FieldController extends AbstractApiController
 	public function __construct(FieldTable $table, Logger $log){
 		parent::__construct($table, $log, __CLASS__, Field::class);
 	}
-
 }

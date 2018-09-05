@@ -31,7 +31,8 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
         $this->assertMatchedRouteName('announcement');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertResponseHeaderContains('content-type', 'applicatio
+            n/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
