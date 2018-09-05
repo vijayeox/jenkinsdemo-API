@@ -4,9 +4,13 @@ namespace Oxzion\Db;
 
 use Zend\Db\TableGateway\TableGatewayInterface;
 use Oxzion\Model\Model;
+use Zend\Db\Adapter\Adapter;
+use Zend\Db\Sql\Sql;
 
 abstract class ModelTable {
     protected $tableGateway;
+    protected $sql;
+    protected $adapter;
 
     private $lastInsertValue;
 
@@ -14,6 +18,8 @@ abstract class ModelTable {
 
     public function __construct(TableGatewayInterface $tableGateway) {
         $this->tableGateway = $tableGateway;
+        $this->adapter = $this->tableGateway->getAdapter();
+        $this->sql = new Sql($this->adapter);
     }
 
     private function init(){
@@ -60,19 +66,22 @@ abstract class ModelTable {
         return $this->tableGateway->update($data, ['id' => $id]);
     }
 
-    public function delete($id, array $filter = null)
-    {
+    public function delete($id, array $filter = null) {
         $this->init();
         if(is_null($filter)){
             $filter = array();
         }
         $filter['id'] = $id;
-        
         return $this->tableGateway->delete($filter);
     }
 
     public function getLastInsertValue(){
         return $this->lastInsertValue;
+    }
+    public function queryExecute($select){
+        $selectString = $this->sql->getSqlStringForSqlObject($select);
+        $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);
+        return $results->toArray();
     }
 
 }
