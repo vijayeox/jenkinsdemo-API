@@ -8,13 +8,12 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20180717113006 extends AbstractMigration
-{
+class Version20180717113006 extends AbstractMigration {
+
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema)
-    {
+    public function up(Schema $schema) {
         $sql = "CREATE TABLE fields ( 
                     `id` Int( 11 ) AUTO_INCREMENT NOT NULL,
                     `name` VarChar( 100 ) NOT NULL,
@@ -36,7 +35,7 @@ class Version20180717113006 extends AbstractMigration
                     `category` VarChar( 1000 ) NOT NULL DEFAULT '1',
                     PRIMARY KEY ( `id` ) )
                 ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
-        $this->addSql($sql);        
+        $this->addSql($sql);
         $this->addSql("ALTER TABLE fields ADD UNIQUE INDEX ix_name (name)");
         $sql = "INSERT INTO fields (`name`, `text`, `columnname`, `helpertext`, 
                                     `type`,`options`, `color`, `regexpvalidator`,
@@ -56,9 +55,9 @@ class Version20180717113006 extends AbstractMigration
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema)
-    {
+    public function down(Schema $schema) {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql("DROP TABLE fields");
     }
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Local Configuration Override
  *
@@ -12,10 +13,10 @@
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-$host = '172.16.1.101';
-$db = 'stephen';
-$username = 'stephen321!';
-$password = 'stephenox';
+$host = '61.12.69.67';
+$db = 'stephenox';
+$username = 'stephen';
+$password = 'stephen321!';
 
 return [
 	'db' => [

@@ -25,13 +25,14 @@ abstract class Entity extends Model{
 
         if (array_key_exists($key, $this->data)) {
             if ($this->parsedata) {
-     //               return VA_Service_Utils::parseInstanceExpression ($this->data[$key]);
-         }   else {
+     			//return VA_Service_Utils::parseInstanceExpression ($this->data[$key]);
+            }   
+            else {
                     return $this->data[$key];
-        }
+            }
 
+        }
     }
-}
 
     public function __isset($key) {
         return (array_key_exists($key, $this->data)) ? isset($this->data[$key]) : false;
