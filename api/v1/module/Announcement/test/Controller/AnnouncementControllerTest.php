@@ -30,7 +30,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcements');
+        $this->assertMatchedRouteName('announcement');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -56,7 +56,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcements');
+        $this->assertMatchedRouteName('announcement');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -77,7 +77,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcements');
+        $this->assertMatchedRouteName('announcement');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -103,7 +103,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcements');
+        $this->assertMatchedRouteName('announcement');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -128,7 +128,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcements');
+        $this->assertMatchedRouteName('announcement');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -141,7 +141,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $announcement = new Model\Announcement();
         $announcement->exchangeArray(['id' => 122, 'name' => 'Test Announcement 1']);
         $resultSet->initialize([$announcement]);
-        $data = ['name' => 'Test Announcement 2', 'text' => 'Test Announcement Description'];
+        $data = ['name' => 'Test Announcement 2', 'description' => 'Test Announcement Description'];
         $obj = new Model\Announcement();
         $obj->exchangeArray($data);
         $obj->id = 122;
@@ -159,13 +159,13 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcements');
+        $this->assertMatchedRouteName('announcement');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], $obj->id);
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['text'], $data['text']);
+        $this->assertEquals($content['data']['description'], $data['description']);
         
     }
 
@@ -176,7 +176,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $announcement = new Model\Announcement();
         $announcement->exchangeArray(['id' => 122, 'name' => 'Test Announcement 1']);
         $resultSet->initialize([]);
-        $data = ['name' => 'Test Announcement 2', 'text' => 'Test Announcement Description'];
+        $data = ['name' => 'Test Announcement 2', 'description' => 'Test Announcement Description'];
         $obj = new Model\Announcement();
         $obj->exchangeArray($data);
         $obj->id = 122;
@@ -190,7 +190,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcements');
+        $this->assertMatchedRouteName('announcement');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -203,7 +203,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $announcement = new Model\Announcement();
         $announcement->exchangeArray(['id' => 122, 'name' => 'Test Announcement 1']);
         $resultSet->initialize([$announcement]);
-        $data = ['name' => 'Test Announcement 2', 'text' => 'Test Announcement Description'];
+        $data = ['name' => 'Test Announcement 2', 'description' => 'Test Announcement Description'];
         $obj = new Model\Announcement();
         $obj->exchangeArray($data);
         $obj->id = 122;
@@ -221,12 +221,12 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcements');
+        $this->assertMatchedRouteName('announcement');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['text'], $data['text']);
+        $this->assertEquals($content['data']['description'], $data['description']);
     }
 
     public function testDelete(){
@@ -241,7 +241,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcements');
+        $this->assertMatchedRouteName('announcement');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -259,7 +259,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcements');
+        $this->assertMatchedRouteName('announcement');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');        

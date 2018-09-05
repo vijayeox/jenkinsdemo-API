@@ -48,7 +48,8 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\AnnouncementController::class => function($container) {
                     return new Controller\AnnouncementController(
-                            $container->get(Model\AnnouncementTable::class), $container->get('AnnouncementLogger'));
+                            $container->get(Model\AnnouncementTable::class), $container->get('AnnouncementLogger'),
+                        $container->get(AdapterInterface::class));
                 },
             ],
         ];

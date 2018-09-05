@@ -9,8 +9,6 @@ use Zend\Db\Sql\Sql;
 
 abstract class ModelTable {
     protected $tableGateway;
-    protected $sql;
-    protected $adapter;
 
     private $lastInsertValue;
 
@@ -18,8 +16,6 @@ abstract class ModelTable {
 
     public function __construct(TableGatewayInterface $tableGateway) {
         $this->tableGateway = $tableGateway;
-        $this->adapter = $this->tableGateway->getAdapter();
-        $this->sql = new Sql($this->adapter);
     }
 
     private function init(){
@@ -77,11 +73,6 @@ abstract class ModelTable {
 
     public function getLastInsertValue(){
         return $this->lastInsertValue;
-    }
-    public function queryExecute($select){
-        $selectString = $this->sql->getSqlStringForSqlObject($select);
-        $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);
-        return $results->toArray();
     }
 
 }
