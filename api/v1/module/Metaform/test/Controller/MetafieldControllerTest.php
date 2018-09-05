@@ -110,7 +110,7 @@ class MetafieldControllerTest extends ControllerTest{
         $obj = new Metafield();
         $obj->exchangeArray($data);
         $obj->formId = 111;
-        $resultSet->initialize($obj->toArray());
+        $resultSet->initialize([$obj->toArray()]);
         $metafieldTableGateway->expects($this->once())
                 ->method('insert')
                 ->with($obj->toArray())
@@ -153,7 +153,7 @@ class MetafieldControllerTest extends ControllerTest{
         $obj = new Metafield();
         $obj->exchangeArray($data);
         $obj->formId = 111;
-        $resultSet->initialize($obj->toArray());
+        $resultSet->initialize([$obj->toArray()]);
         $fieldData = new ResultSet(ResultSet::TYPE_ARRAY);
         $fieldData->initialize([]);
         $mockData = $this->getMockDbObject();

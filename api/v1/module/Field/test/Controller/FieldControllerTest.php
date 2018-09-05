@@ -101,7 +101,7 @@ class FieldControllerTest extends ControllerTest{
         $data = ['name' => 'Sample1'];
         $obj = new Field();
         $obj->exchangeArray($data);
-        $resultSet->initialize($obj->toArray());
+        $resultSet->initialize([$obj->toArray()]);
         $fieldTableGateway->expects($this->once())
                 ->method('insert')
                 ->with($obj->toArray())
