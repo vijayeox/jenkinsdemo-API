@@ -11,10 +11,10 @@
  * file.
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
-$host = '61.12.69.67';
-$db = 'stephenox';
-$username = 'stephen';
-$password = 'stephen321!';
+$host = 'localhost';
+$db = 'oxzion_prod';
+$username = 'root';
+$password = '';
 
 
 
