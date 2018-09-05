@@ -6,7 +6,6 @@ use Zend\Router\Http\Literal;
 use Zend\Log\Formatter\Simple;
 use Zend\Log\Filter\Priority;
 use Zend\Log\Processor\RequestId;
-use Oxzion\Encryption\Crypto;
 
 return [
 	'router' => [
