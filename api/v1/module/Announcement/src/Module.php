@@ -25,6 +25,7 @@ class Module implements ConfigProviderInterface {
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatchError'), 0);
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onRenderError'), 0);
     }
+
     public function getServiceConfig() {
         return [
             'factories' => [
@@ -36,29 +37,29 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Announcement());
-                    return new TableGateway('announcements', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_announcement', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];
     }
-    public function getControllerConfig()
-    {
+
+    public function getControllerConfig() {
         return [
             'factories' => [
                 Controller\AnnouncementController::class => function($container) {
                     return new Controller\AnnouncementController(
-                        $container->get(Model\AnnouncementTable::class),$container->get('AnnouncementLogger'));
+                            $container->get(Model\AnnouncementTable::class), $container->get('AnnouncementLogger'));
                 },
             ],
         ];
     }
-    public function onDispatchError($e)
-    {
+
+    public function onDispatchError($e) {
         return ErrorHandler::getJsonModelError($e);
     }
 
-    public function onRenderError($e)
-    {
+    public function onRenderError($e) {
         return ErrorHandler::getJsonModelError($e);
     }
+
 }

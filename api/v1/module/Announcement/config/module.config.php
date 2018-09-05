@@ -1,4 +1,5 @@
 <?php
+
 namespace Announcement;
 
 use Zend\Log\Logger;
@@ -10,12 +11,12 @@ use Zend\Log\Processor\RequestId;
 return [
     'router' => [
         'routes' => [
-            'announcements' => [
-                'type'    => Segment::class,
+            'announcement' => [
+                'type' => Segment::class,
                 'options' => [
-                'route'    => '/announcement[/:announcementId]',
-                'defaults' => [
-                        'controller' => Controller\AnnouncementController::class
+                    'route' => '/announcement[/:announcementId]',
+                    'defaults' => [
+                        'controller' => Controller\AnnouncementController::class,
                     ],
                 ],
             ],
@@ -29,26 +30,26 @@ return [
                     'priority' => \Zend\Log\Logger::ALERT,
                     'options' => [
                         'stream' => __DIR__ . '/../../../logs/announcement.log',
-                            'formatter' => [
-                                'name' => \Zend\Log\Formatter\Simple::class,
-                                'options' => [
-                                    'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%','dateTimeFormat' => 'c',
-                                    ],
-                                ],
-                            'filters' => [
-                                'priority' => \Zend\Log\Logger::INFO,],
+                        'formatter' => [
+                            'name' => \Zend\Log\Formatter\Simple::class,
+                            'options' => [
+                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
                             ],
                         ],
-                    ],
-                    'processors' => [
-                        'requestid' => [
-                            'name' => \Zend\Log\Processor\RequestId::class,],
-                        ],
+                        'filters' => [
+                            'priority' => \Zend\Log\Logger::INFO,],
                     ],
                 ],
-                'view_manager' => [
-                // We need to set this up so that we're allowed to return JSON
-                // responses from our controller.
-                    'strategies' => ['ViewJsonStrategy',],
-                ],
-            ];
+            ],
+            'processors' => [
+                'requestid' => [
+                    'name' => \Zend\Log\Processor\RequestId::class,],
+            ],
+        ],
+    ],
+    'view_manager' => [
+        // We need to set this up so that we're allowed to return JSON
+        // responses from our controller.
+        'strategies' => ['ViewJsonStrategy',],
+    ],
+];
