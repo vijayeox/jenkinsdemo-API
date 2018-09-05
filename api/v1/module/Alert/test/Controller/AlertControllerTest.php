@@ -33,7 +33,7 @@ class AlertControllerTest extends ControllerTest {
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
-        $this->assertMatchedRouteName('alerts');
+        $this->assertMatchedRouteName('alert');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -60,7 +60,7 @@ class AlertControllerTest extends ControllerTest {
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
-        $this->assertMatchedRouteName('alerts');
+        $this->assertMatchedRouteName('alert');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -82,7 +82,7 @@ class AlertControllerTest extends ControllerTest {
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
-        $this->assertMatchedRouteName('alerts');
+        $this->assertMatchedRouteName('alert');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -109,7 +109,7 @@ class AlertControllerTest extends ControllerTest {
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
-        $this->assertMatchedRouteName('alerts');
+        $this->assertMatchedRouteName('alert');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -135,7 +135,7 @@ class AlertControllerTest extends ControllerTest {
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
-        $this->assertMatchedRouteName('alerts');
+        $this->assertMatchedRouteName('alert');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -167,7 +167,7 @@ class AlertControllerTest extends ControllerTest {
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
-        $this->assertMatchedRouteName('alerts');
+        $this->assertMatchedRouteName('alert');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -197,7 +197,7 @@ class AlertControllerTest extends ControllerTest {
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
-        $this->assertMatchedRouteName('alerts');
+        $this->assertMatchedRouteName('alert');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -228,7 +228,7 @@ class AlertControllerTest extends ControllerTest {
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
-        $this->assertMatchedRouteName('alerts');
+        $this->assertMatchedRouteName('alert');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -248,7 +248,7 @@ class AlertControllerTest extends ControllerTest {
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
-        $this->assertMatchedRouteName('alerts');
+        $this->assertMatchedRouteName('alert');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -266,7 +266,7 @@ class AlertControllerTest extends ControllerTest {
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
-        $this->assertMatchedRouteName('alerts');
+        $this->assertMatchedRouteName('alert');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
