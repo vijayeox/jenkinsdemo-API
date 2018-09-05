@@ -46,7 +46,8 @@
             "User\\": "module/User/src/",
             "Group\\": "module/Group/src/",
             "Organization\\": "module/Organization/src/",
-            "Auth\\": "module/Auth/src/"
+            "Auth\\": "module/Auth/src/",
+            "Widget\\": "module/Widget/src/"
         }
     },
     "autoload-dev": {

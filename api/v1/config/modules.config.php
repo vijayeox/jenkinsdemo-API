@@ -18,4 +18,5 @@ return [
 	'User',
 	'Group',
 	'Organization',
+	'Widget'
 ];
