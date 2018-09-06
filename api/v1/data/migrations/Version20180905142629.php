@@ -24,11 +24,10 @@ class Version20180905142629 extends AbstractMigration
             `defaultheight` INT NOT NULL , 
             `applicationguid` VARCHAR( 250 ) NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB");        
 
-        $this->addSql("CREATE TABLE ox_avatar_widget ( 
+        $this->addSql("CREATE TABLE ox_user_widget ( 
             `id` INT NOT NULL AUTO_INCREMENT , 
-            `avatarid` INT NOT NULL , 
+            `userid` INT NOT NULL , 
             `widgetid` INT NOT NULL , 
-            `screenid` INT NOT NULL , 
             `width` INT NOT NULL , 
             `height` INT NOT NULL , 
             `column` INT NOT NULL , 
@@ -47,7 +46,7 @@ class Version20180905142629 extends AbstractMigration
     public function down(Schema $schema)
     {
         $this->addSql("DROP TABLE ox_widget");
-        $this->addSql("DROP TABLE ox_avatar_widget");
+        $this->addSql("DROP TABLE ox_user_widget");
         $this->addSql("DROP TABLE ox_org_widget");
 
     }
