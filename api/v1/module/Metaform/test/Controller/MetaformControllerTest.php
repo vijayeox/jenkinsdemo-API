@@ -103,7 +103,7 @@ class MetaformControllerTest extends ControllerTest{
         $data = ['name' => 'Sample1'];
         $obj = new Metaform();
         $obj->exchangeArray($data);
-        $resultSet->initialize($obj->toArray());
+        $resultSet->initialize([$obj->toArray()]);
         $metaformTableGateway->expects($this->once())
                 ->method('insert')
                 ->with($obj->toArray())

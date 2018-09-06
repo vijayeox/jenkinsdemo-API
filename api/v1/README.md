@@ -80,7 +80,17 @@ You can also run composer from the image. The container environment is named
 "zf", so you will pass that value to `docker-compose run`:
 
 ```bash
-$ docker-compose run --net=host zf composer install
+$ docker-compose run v1_zf_1 composer install
+```
+
+To run tests using the mysql database running on your machine run the following command
+```bash
+$ docker run --network="host" -it -v $(pwd):/var/www v1_zf vendor/bin/phpunit
+```
+
+To connect to the container shell you can run the following command
+```bash
+$ docker run --network="host" -it -v $(pwd):/var/www v1_zf bash
 ```
 
 ## Web server setup

@@ -1,14 +1,18 @@
 <?php
 namespace Oxzion\Model;
 
-abstract class Entity{
+use Countable;
+
+abstract class Entity implements Countable{
     protected $data = array();
 
     public function __construct() {
         // $this->import($data);
     }
 
-
+    public function count(){
+        return 1;
+    }
     public function __set($key, $val) {
         if (array_key_exists($key, $this->data)) {
             $this->data[$key] = ($val === '') ? NULL : $val;

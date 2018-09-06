@@ -90,7 +90,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $data = ['name' => 'Test Announcement'];
         $obj = new Model\Announcement();
         $obj->exchangeArray($data);
-        $resultSet->initialize($obj->toArray());
+        $resultSet->initialize([$obj->toArray()]);
         $announcementTableGateway->expects($this->once())
                 ->method('insert')
                 ->with($obj->toArray())
