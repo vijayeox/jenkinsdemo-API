@@ -88,7 +88,7 @@ To run tests using the mysql database running on your machine run the following 
 For Linux
 $ docker run --network="host" -it -v $(pwd):/var/www v1_zf vendor/bin/phpunit
 For Windows
-$ docker run --network="host" -it -v $(cd):/var/www v1_zf vendor/bin/phpunit
+$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf vendor/bin/phpunit
 ```
 
 
@@ -97,7 +97,7 @@ To connect to the container shell you can run the following command
 For Linux
 $ docker run --network="host" -it -v $(pwd):/var/www v1_zf bash
 For Windows
-$ docker run --network="host" -it -v $(cd):/var/www v1_zf bash
+$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf bash
 ```
 
 ## Web server setup
