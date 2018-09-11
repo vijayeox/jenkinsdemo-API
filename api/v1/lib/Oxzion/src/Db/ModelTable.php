@@ -17,6 +17,7 @@ abstract class ModelTable {
 
     public function __construct(TableGatewayInterface $tableGateway) {
         $this->tableGateway = $tableGateway;
+        $this->adapter = $tableGateway->getAdapter();
     }
 
     private function init(){
@@ -51,13 +52,16 @@ abstract class ModelTable {
         }
 
         if ( is_null($id) || $id === 0 || empty($id)) {
-            $rows = $this->tableGateway->insert($data);
-            $rows = $rows->current();
-            if(!isset($rows)){
-                return 0;
+            try {
+                $rows = $this->tableGateway->insert($data);
+                if(!isset($rows)){
+                    return 0;
+                }
+                $this->lastInsertValue = $this->tableGateway->getLastInsertValue();
+                return $rows;
+            } catch (Exception $e){
+                return $e->getMessage();
             }
-            $this->lastInsertValue = $this->tableGateway->getLastInsertValue();
-            return count($rows);
         }
 
         return $this->tableGateway->update($data, ['id' => $id]);

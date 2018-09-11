@@ -1,0 +1,18 @@
+ox_announcement:
+  -
+    id: 1
+    name: "Announcement 1"
+    org_id: 1
+  -
+    id: 2
+    name: "Announcement 2"
+    org_id: 1
+ox_announcement_group_mapper:
+  -
+    id: 1
+    announcement_id: 1
+    group_id: 3
+  -
+    id: 2
+    announcement_id: 2
+    group_id: 3

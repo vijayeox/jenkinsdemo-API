@@ -18,10 +18,22 @@ class AnnouncementController extends AbstractApiController {
         $this->setIdentifierName('announcementId');
 		$this->dbAdapter = $dbAdapter;
     }
+    public function create($data){
+        $data['org_id'] = $this->currentUser->getOrgId();
+        return parent::create($data);
+    }
     
     public function getList() {
        $params = $this->params()->fromRoute();
-        return $this->getSuccessResponseWithData($this->table->getAnnouncements("436", Array("1463", "333", "912")));
+//        $type = $params['type'];
+//        echo "Check<pre/>";
+//        print_r($params);
+//        exit;
+//        $avatar = $this->currentAvatarObj;
+//        echo "<pre/>";
+//        print_r($avatar);
+//        exit;
+        return $this->getSuccessResponseWithData($this->table->getAnnouncements($this->currentUser->id, array_column($this->currentUser->getGroups(),'id')));
     }
 
 

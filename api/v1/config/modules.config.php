@@ -6,6 +6,7 @@
  * This should be an array of module namespaces used in the application.
  */
 return [
+    'Zend\Serializer',
 	'Zend\Log',
 	'Zend\Db',
 	'Zend\Router',

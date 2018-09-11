@@ -23,10 +23,6 @@ class AuthController extends AbstractApiControllerHelper
     //POST 
 	public function authAction(){
 		$data = $this->request->getPost()->toArray();
-		// if(! is_array($data)){
-
-		// }
-		$key = $this->request->getHeaders()->get('x-apikey');
 		//TODO validate apikey
 		$crypto = new Crypto();
 		$this->authAdapter->setIdentity($data['username']);

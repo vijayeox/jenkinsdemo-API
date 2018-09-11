@@ -7,21 +7,41 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Jwt\JwtHelper;
+use PHPUnit\DbUnit\TestCaseTrait;
 
-class ControllerTest extends AbstractHttpControllerTestCase{
+abstract class ControllerTest extends AbstractHttpControllerTestCase{
+    use TestCaseTrait;
     protected $jwtToken = array();
+    static private $pdo = null;
 
+    // only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
+    private $conn = null;
+
+    final public function getConnection()
+    {
+        if ($this->conn === null) {
+            if (self::$pdo == null) {
+                self::$pdo = new \PDO( $GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'] );
+            }
+            $this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
+        }
+
+        return $this->conn;
+    }
+    abstract function getDataSet();
+    
 	protected function getMockGatewayData($name, $modelClass){
 		$originalTableGateway = $this->getApplicationServiceLocator()->get($name);
 		$dbAdapter = $originalTableGateway->getAdapter();
 		$table = $originalTableGateway->getTable();
 		$resultSetPrototype = new ResultSet();
         $resultSetPrototype->setArrayObjectPrototype(new $modelClass);
-                    
+                
 	    $mockTableGateway = $this->getMockObject('\Zend\Db\TableGateway\TableGateway', array($table, $dbAdapter, null, $resultSetPrototype));
 	    $this->setService($name, $mockTableGateway);
 	    return ['mock' => $mockTableGateway, 'resultSet' => $resultSetPrototype];
     }
+
 
     protected function getMockDbObject(){
     	$dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);

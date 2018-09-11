@@ -18,8 +18,6 @@ class AuthControllerTest extends ControllerTest{
             include __DIR__ . '/../../../../config/application.config.php',
             $configOverrides
         ));
-
-        parent::setUp();
     }
 
     public function testAuthentication(){

@@ -5,6 +5,7 @@ namespace Application;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
+use Application\Service\UserContainer;
 
 return [
     'router' => [
@@ -50,6 +51,13 @@ return [
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',
+        ],
+    ],
+    'service_manager' => [
+        'factories' => [
+            'user_container' => function($sm){
+                return new UserContainer();
+            }
         ],
     ],
 ];

@@ -4,6 +4,9 @@ namespace Oxzion\Controller;
 
 use Zend\EventManager\EventManagerInterface;
 use Zend\Log\Logger;
+use User\Model\UserTable;
+use Zend\Db\Sql\Sql;
+use Oxzion\Service\UserService;
 
 abstract class AbstractApiController extends AbstractApiControllerHelper{
     protected $table;
@@ -11,6 +14,8 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
     protected $logClass;
     protected $modelClass;
     protected $parentId;
+    protected $username;
+    protected $currentUser;
     
     public function __construct($table, Logger $log, $logClass, $modelClass, $parentId = null){
         $this->table = $table;
@@ -19,6 +24,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         $this->modelClass = $modelClass;
         $this->parentId = $parentId;
     }
+
 
     protected function validate($model){
         return new ValidationResult(ValidationResult::SUCCESS);
@@ -53,10 +59,13 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         if ($jwtToken) {
             $token = $jwtToken;
             $tokenPayload = $this->decodeJwtToken($token);
-            if (is_object($tokenPayload)) {
-                return;
+            $tokenArray = json_decode(json_encode($tokenPayload),true);
+            if(is_array($tokenArray)){
+                $this->currentUser = new UserService($tokenArray['data']['username'],$config);
+                if (is_object($tokenPayload)) {
+                    return;
+                }
             }
-
             $jsonModel = $this->getErrorResponse($tokenPayload, 400); 
             
         } else {
@@ -105,17 +114,21 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         }
         $form = new $this->modelClass;
         $form->exchangeArray($data);
-        $validationResult = $this->validate($form);
-        if(! $validationResult->isValid()){
-            return $this->getErrorResponse($validationResult->getMessage(), 404, $data);
+        try {
+            $validationResult = $this->validate($form);
+            if(! $validationResult->isValid()){
+                return $this->getErrorResponse($validationResult->getMessage(), 404, $data);
+            }
+            $count = $this->table->save($form);
+            if($count == 0){
+                return $this->getFailureResponse("Failed to create a new entity", $data);
+            }
+            $id = $this->table->getLastInsertValue();
+            $form->id = $id;
+            return $this->getSuccessResponseWithData($form->toArray(), 201);
+        } catch(Exception $e){
+            return $this->getFailureResponse("Failed to create a new entity", $e->getMessage());
         }
-        $count = $this->table->save($form);
-        if($count == 0){
-            return $this->getFailureResponse("Failed to create a new entity", $data);
-        }
-        $id = $this->table->getLastInsertValue();
-        $form->id = $id;
-        return $this->getSuccessResponseWithData($form->toArray(), 201);
     
     }
 

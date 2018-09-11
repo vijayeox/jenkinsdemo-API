@@ -5,6 +5,7 @@ use Field\Controller\FieldController;
 use Zend\Stdlib\ArrayUtils;
 use Field\Model\Field;
 use Oxzion\Test\ControllerTest;
+        $resultSetPrototype = new ResultSet();
 
 class FieldControllerTest extends ControllerTest{
     public function setUp()

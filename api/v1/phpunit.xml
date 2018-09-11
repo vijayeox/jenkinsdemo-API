@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true">
+    <php>
+        <var name="DB_DSN" value="mysql:dbname=stephenox;host=61.12.69.67" />
+        <var name="DB_USER" value="stephen" />
+        <var name="DB_PASSWD" value="stephen321!" />
+        <var name="DB_DBNAME" value="stephenox" />
+    </php>
     <testsuites>
         <testsuite name="All Tests">
-            <directory>./module/Metaform/test</directory>
-            <directory>./module/Field/test</directory>
-            <directory>./module/Auth/test</directory>
+            <!-- <directory>./module/Metaform/test</directory> -->
+            <!-- <directory>./module/Field/test</directory> -->
+            <!-- <directory>./module/Auth/test</directory> -->
             <directory>./module/Announcement/test</directory>
-            <directory>./module/User/test</directory>
-            <directory>./module/Organization/test</directory>
+            <!-- <directory>./module/User/test</directory> -->
+            <!-- <directory>./module/Organization/test</directory> -->
         </testsuite>
     </testsuites>
 </phpunit>
