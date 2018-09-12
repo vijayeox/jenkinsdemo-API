@@ -65,9 +65,11 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         if ($jwtToken) {
             $token = $jwtToken;
             $tokenPayload = $this->decodeJwtToken($token);
-            if($tokenPayload->data->username){
-                $this->events->trigger('Authorized', null, ["username"=>$tokenPayload->data->username,"authContext"=>$event->getApplication()->getServiceManager()->get(UserService::class)]);
                 if (is_object($tokenPayload)) {
+            if($tokenPayload->data && $tokenPayload->data->username){
+                $this->currentUser = new UserService($tokenPayload->data->username,$config);
+					//TODO remove the UserService here instead raise an event for successful 
+                    //authentication and load the user details in the autoContext object 
                     return;
                 }
             }
