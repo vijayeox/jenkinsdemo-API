@@ -9,22 +9,24 @@ class UserService {
 	private $cacheStorage;
 	protected $userInfo = array();
 	protected $groupsArray = array();
-	public $id;
-	public $orgId;
+	private $id;
+	private $orgId;
 	protected $config;
 
-	public function __construct($userName,$config){
+	public function __construct($config){
 		$this->config = $config;
 		$this->cacheStorage = new CacheService();
-		$this->userName = $userName;
-		if($cacheData = $this->cacheStorage->get($userName)){
+	}
+	public function setUserName($username){
+		$this->userName = $username;
+		if($cacheData = $this->cacheStorage->get($this->userName)){
 			$data = $cacheData;
 		} else {
-			$data = $this->retrieveUserInfoFromDb($userName);
+			$data = $this->retrieveUserInfoFromDb($this->userName);
 		}
 		$this->setUserInfo($data);
 	}
-	public function retrieveUserInfoFromDb($userName){
+	protected function retrieveUserInfoFromDb($userName){
 		$dbAdapter = new Adapter($this->config['db']);
 		$sql = new Sql($dbAdapter);
 		$select = $sql->select()
@@ -44,7 +46,7 @@ class UserService {
 		$this->cacheStorage->set($this->userName."_groups",$this->getGroupsDB());
 		return $this->groupsArray;
 	}
-	protected function getGroupsDB(){
+	private function getGroupsDB(){
 		$dbAdapter = new Adapter($this->config['db']);
 		$sql = new Sql($dbAdapter);
 		$select = $sql->select()
@@ -65,6 +67,9 @@ class UserService {
 	}
 	public function getUserInfo(){
 		return $this->userInfo;
+	}
+	public function getId(){
+		return $this->id;
 	}
 	public function getOrgId(){
 		$data = $this->userInfo;

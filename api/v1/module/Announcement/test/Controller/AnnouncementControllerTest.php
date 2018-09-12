@@ -27,7 +27,7 @@ class AnnouncementControllerTest extends ControllerTest{
         return new YamlDataSet(dirname(__FILE__)."/../Dataset/Announcement.yml");
     }
     public function testGetList(){
-        $this->initAuthToken('testUser');
+        $this->initAuthToken('bharatg');
         $this->dispatch('/announcement', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Announcement');
@@ -44,7 +44,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
     }
     public function testGet(){
-        $this->initAuthToken('testUser');
+        $this->initAuthToken('bharatg');
         $this->dispatch('/announcement/1', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Announcement');
@@ -58,7 +58,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['name'], 'Announcement 1');
     }
     public function testGetNotFound(){
-        $this->initAuthToken('testUser');
+        $this->initAuthToken('bharatg');
         $this->dispatch('/announcement/64', 'GET');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Announcement');
@@ -72,7 +72,7 @@ class AnnouncementControllerTest extends ControllerTest{
     public function testCreate(){
         $data = ['name' => 'Test Announcement'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_announcement'));
-        $this->initAuthToken('testUser');
+        $this->initAuthToken('bharatg');
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -88,7 +88,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_announcement'));
     }
     // public function testCreateFailure(){
-    //     $this->initAuthToken('testUser');
+    //     $this->initAuthToken('bharatg');
     //     $data = [];
     //     $this->setJsonContent(json_encode($data));
     //     $this->dispatch('/announcement', 'POST', null);
@@ -104,7 +104,7 @@ class AnnouncementControllerTest extends ControllerTest{
     // }
     // public function testUpdate(){
     //     $data = ['name' => 'Test Announcement 2', 'description' => 'Test Announcement Description'];
-    //     $this->initAuthToken('testUser');
+    //     $this->initAuthToken('bharatg');
     //     $this->setJsonContent(json_encode($data));
     //     $this->dispatch('/announcement/122', 'PUT', null);
     //     $this->assertResponseStatusCode(200);
@@ -123,7 +123,7 @@ class AnnouncementControllerTest extends ControllerTest{
 
     public function testUpdateNotFound(){
         $data = ['name' => 'Test Announcement 2', 'description' => 'Test Announcement Description'];
-        $this->initAuthToken('testUser');
+        $this->initAuthToken('bharatg');
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement/122', 'PUT', null);
         $this->assertResponseStatusCode(404);
@@ -137,7 +137,7 @@ class AnnouncementControllerTest extends ControllerTest{
     }
 
     // public function testUpdateFailure(){
-    //     $this->initAuthToken('testUser');
+    //     $this->initAuthToken('bharatg');
     //     $data = ['name' => 'Test Announcement 2', 'description' => 'Test Announcement Description'];
     //     $this->setJsonContent(json_encode($data));
     //     $this->dispatch('/announcement/122', 'PUT', null);
@@ -154,7 +154,7 @@ class AnnouncementControllerTest extends ControllerTest{
     // }
 
     // public function testDelete(){
-    //     $this->initAuthToken('testUser');
+    //     $this->initAuthToken('bharatg');
     //     $this->dispatch('/announcement/122', 'DELETE');
     //     $this->assertResponseStatusCode(200);
     //     $this->assertModuleName('Announcement');
@@ -167,7 +167,7 @@ class AnnouncementControllerTest extends ControllerTest{
     // }
 
     public function testDeleteNotFound(){
-        $this->initAuthToken('testUser');
+        $this->initAuthToken('bharatg');
         $this->dispatch('/announcement/122', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Announcement');

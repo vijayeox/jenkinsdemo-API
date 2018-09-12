@@ -19,7 +19,10 @@ class AnnouncementController extends AbstractApiController {
 		$this->dbAdapter = $dbAdapter;
     }
     public function create($data){
-        $data['org_id'] = $this->currentUser->getOrgId();
+        $data['org_id'] = $this->authContext->getOrgId();
+        // if(isset($data['group_id'])){
+            
+        // }
         return parent::create($data);
     }
     
@@ -33,7 +36,7 @@ class AnnouncementController extends AbstractApiController {
 //        echo "<pre/>";
 //        print_r($avatar);
 //        exit;
-        return $this->getSuccessResponseWithData($this->table->getAnnouncements($this->currentUser->id, array_column($this->currentUser->getGroups(),'id')));
+        return $this->getSuccessResponseWithData($this->table->getAnnouncements($this->authContext->getId(), array_column($this->authContext->getGroups(),'id')));
     }
 
 

@@ -6,38 +6,26 @@ use Auth\Controller\AuthController;
 use Oxzion\Test\ControllerTest;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
 use Zend\Authentication\Result;
+use PHPUnit\DbUnit\TestCaseTrait;
+use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Stdlib\ArrayUtils;
 
 
 class AuthControllerTest extends ControllerTest{
-	public function setUp()
-    {
-        $configOverrides = [];
-
-        $this->setApplicationConfig(ArrayUtils::merge(
-            include __DIR__ . '/../../../../config/application.config.php',
-            $configOverrides
-        ));
+    static private $pdo = null;
+    // only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
+    private $conn = null;
+	public function setUp() : void{
+        $configOverrides = [include __DIR__ . '/../../../../config/autoload/global.php'];
+        $this->setApplicationConfig(ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php',$configOverrides));
+        parent::setUp();
+    }
+    public function getDataSet() {
+        return new YamlDataSet(dirname(__FILE__)."/../Dataset/User.yml");
     }
 
     public function testAuthentication(){
-    	$mockAuthAdapter = $this->getMockObject(AuthAdapter::class);
-    	$authAdapter = $this->getApplicationServiceLocator()->get(AuthAdapter::class);
-    	$this->setService(AuthAdapter::class, $mockAuthAdapter);
-    	$data = ['username' => 'testUser', 'password' => 'password'];
-    	$result = new Result(
-                    Result::SUCCESS, 
-                    $data['username'], 
-                    ['Authenticated successfully.']);
-    	$mockAuthAdapter->expects($this->once())
-			    ->method('setIdentity')
-			    ->with($data['username']);
-		$mockAuthAdapter->expects($this->once())
-			    ->method('setCredential')
-			    ->with($data['password']);
-		$mockAuthAdapter->expects($this->once())
-                ->method('authenticate')
-                ->will($this->returnValue($result));
+    	$data = ['username' => 'bharatg', 'password' => 'password'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -52,23 +40,7 @@ class AuthControllerTest extends ControllerTest{
     }
 
     public function testAuthenticationFail(){
-    	$mockAuthAdapter = $this->getMockObject(AuthAdapter::class);
-    	$authAdapter = $this->getApplicationServiceLocator()->get(AuthAdapter::class);
-    	$this->setService(AuthAdapter::class, $mockAuthAdapter);
-    	$data = ['username' => 'testUser', 'password' => 'password'];
-    	$result = new Result(
-                    Result::FAILURE, 
-                    $data['username'], 
-                    ['Authenticated Failed.']);
-    	$mockAuthAdapter->expects($this->once())
-			    ->method('setIdentity')
-			    ->with($data['username']);
-		$mockAuthAdapter->expects($this->once())
-			    ->method('setCredential')
-			    ->with($data['password']);
-		$mockAuthAdapter->expects($this->once())
-                ->method('authenticate')
-                ->will($this->returnValue($result));
+    	$data = ['username' => 'rakshith', 'password' => 'password'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');

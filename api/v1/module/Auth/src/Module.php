@@ -10,6 +10,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
+use Oxzion\Service\UserService;
 
 class Module implements ConfigProviderInterface {
 
@@ -28,6 +29,10 @@ class Module implements ConfigProviderInterface {
     public function getServiceConfig() {
         return [
             'factories' => [
+                UserService::class => function($container) {
+                    $config = $container->get('config');
+                    return new UserService($config);
+                },
                 AuthAdapter::class => function($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new AuthAdapter($dbAdapter,'avatars','username','password','MD5(SHA1(?))');

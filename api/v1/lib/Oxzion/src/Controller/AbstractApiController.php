@@ -15,7 +15,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
     protected $modelClass;
     protected $parentId;
     protected $username;
-    protected $currentUser;
+    protected $authContext;
     
     public function __construct($table, Logger $log, $logClass, $modelClass, $parentId = null){
         $this->table = $table;
@@ -46,6 +46,12 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
     {
         parent::setEventManager($events);
         $events->attach('dispatch', array($this, 'checkAuthorization'), 10);
+        $events->attach('Authorized', array($this, 'createAuthContext'), 11);
+    }
+    public function createAuthContext($event){
+        $params = $event->getParams();
+        $this->authContext = $params['authContext'];
+        $this->authContext->setUserName($params['username']);
     }
 
     public function checkAuthorization($event)
@@ -60,7 +66,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
             $token = $jwtToken;
             $tokenPayload = $this->decodeJwtToken($token);
             if($tokenPayload->data->username){
-                $this->currentUser = new UserService($tokenPayload->data->username,$config);
+                $this->events->trigger('Authorized', null, ["username"=>$tokenPayload->data->username,"authContext"=>$event->getApplication()->getServiceManager()->get(UserService::class)]);
                 if (is_object($tokenPayload)) {
                     return;
                 }
