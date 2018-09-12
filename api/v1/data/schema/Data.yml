@@ -1,0 +1,189 @@
+avatars:
+-
+  id: 1
+  gamelevel: ""
+  username: "bharatg"
+  password: "1619d7adc23f4f633f11014d2f22b7d8"
+  name: "Bharat"
+  role: "employee"
+  orgid: 1
+  email: ""
+  emailnotify: "Active"
+  sentinel: "On"
+  status: "Active"
+  alertsacknowledged: 1
+  pollsacknowledged: 1
+  statusbox: "Matrix|Leaderboard|Alerts"
+  cluster: 0
+  open_new_tab: 0
+  listtoggle: 0
+  defaultmatrixid: 0
+  lastactivity: 0
+  locked: 0
+  org_role_id: 1
+  in_game: 0
+  mission_link: ""
+  timezone: "Asia/Kolkata"
+  inmail_label: "2=>Comment|3=>Observer|4=>Personal"
+-
+  id: 2
+  gamelevel: ""
+  username: "karan"
+  password: "1619d7adc23f4f633f11014d2f22b7d8"
+  name: "Karan"
+  role: "employee"
+  orgid: 1
+  email: ""
+  emailnotify: "Active"
+  sentinel: "On"
+  status: "Active"
+  alertsacknowledged: 1
+  pollsacknowledged: 1
+  statusbox: "Matrix|Leaderboard|Alerts"
+  cluster: 0
+  open_new_tab: 0
+  listtoggle: 0
+  defaultmatrixid: 0
+  lastactivity: 0
+  locked: 0
+  org_role_id: 1
+  in_game: 0
+  mission_link: ""
+  timezone: "Asia/Kolkata"
+  inmail_label: "2=>Comment|3=>Observer|4=>Personal"
+organizations:
+-
+  id: 1
+  name: "Vantage Agora Inc."
+  address: "23811 Chagrin Blvd, Ste 244"
+  city: "Beachwood"
+  state: "OH"
+  zip: 44122
+  logo: "logo_header_for_club.png"
+  defaultgroupid: 69
+  statusbox: ""
+  labelfile: "en"
+  messagecount: 200
+  languagefile: "en"
+  orgtype: 1
+  flash_msg: 1
+  email: "Active"
+  themes: 1
+  formview: 1
+  assign_followuplimit: 10
+  insurelearn: 0
+  reset_password: 51
+  status: "Active"
+groups:
+-
+  id: 1
+  name: "Lions"
+  orgid: 1
+  managerid: 1
+  assigntomanager: 0
+  power_users: 0
+  type: 0
+  hiddentopicons: 0
+  hidetiles: 0
+  hidewall: 0
+  hideannouncement: 0
+  hideleaderboard: 0
+  status: "Active"
+-
+  id: 2
+  name: "Tigers"
+  orgid: 1
+  managerid: 2
+  assigntomanager: 0
+  power_users: 0
+  type: 0
+  hiddentopicons: 0
+  hidetiles: 0
+  hidewall: 0
+  hideannouncement: 0
+  hideleaderboard: 0
+  status: "Active"
+groups_avatars:
+-
+  id: 1
+  groupid: 1
+  avatarid: 1
+-
+  id: 2
+  groupid: 1
+  avatarid: 2
+-
+  id: 3
+  groupid: 2
+  avatarid: 2
+modules:
+-
+  id: 1
+  name: "Tasks"
+  description: "Assignments"
+  sequence: 2
+  htmltext: "task html text"
+  type: "standard"
+  viewtype: "list"
+  customname: "task"
+  email: "Active"
+  appcolor: "HotPink"
+  helppdf: "task"
+-
+  id: 2
+  name: "RCA"
+  description: "Root Cause Analysis"
+  sequence: 4
+  htmltext: "RCA"
+  type: "standard"
+  viewtype: "list"
+  customname: "RCA"
+  email: "Active"
+  appcolor: "BlueViolet"
+  helppdf: "RCA"
+orgs_modules:
+-
+  id: 1
+  orgid: 1
+  moduleid: 1
+  email: "Active"
+groups_modules:
+-
+  id: 1
+  groupid: 1
+  moduleid: 2
+modulecategories:
+-
+  id: 1
+  name: "Collaboration"
+  color: "#69BDC3"
+  sequence: 1
+  orgid: 1
+-
+  id: 2
+  name: "Verification"
+  color: "#69BDC3"
+  sequence: 2
+  orgid: 1
+module_map_category:
+-
+  id: 1
+  orgid: 1
+  moduleid: 1
+  categoryid: 1
+-
+  id: 2
+  orgid: 1
+  moduleid: 2
+  categoryid: 2
+avatar_flags:
+-
+  id: 1
+  avatarid: 1
+  flag: "email_notify"
+  value: 0
+-
+  id: 2
+  avatarid: 1
+  flag: "sentinal"
+  value: 0
