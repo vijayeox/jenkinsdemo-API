@@ -59,9 +59,8 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         if ($jwtToken) {
             $token = $jwtToken;
             $tokenPayload = $this->decodeJwtToken($token);
-            $tokenArray = json_decode(json_encode($tokenPayload),true);
-            if(is_array($tokenArray)){
-                $this->currentUser = new UserService($tokenArray['data']['username'],$config);
+            if($tokenPayload->data->username){
+                $this->currentUser = new UserService($tokenPayload->data->username,$config);
                 if (is_object($tokenPayload)) {
                     return;
                 }
