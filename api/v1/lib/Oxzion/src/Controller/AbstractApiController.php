@@ -62,7 +62,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
             if (is_object($tokenPayload)) {
                 if($tokenPayload->data && $tokenPayload->data->username){
                     //TODO remove the UserService here instead raise an event for successful 
-                    //authentication and load the user details in the autoContext object
+                    //authentication and load the user details in the autoContext object 
                     $this->currentUser = new UserService($tokenPayload->data->username,$config);
                     return;
                 }
