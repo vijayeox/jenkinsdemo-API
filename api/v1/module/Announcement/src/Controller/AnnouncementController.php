@@ -12,31 +12,29 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 
 class AnnouncementController extends AbstractApiController {
-	private $dbAdapter;
+
     public function __construct(AnnouncementTable $table, Logger $log, AdapterInterface $dbAdapter) {
         parent::__construct($table, $log, __CLASS__, Announcement::class);
         $this->setIdentifierName('announcementId');
-		$this->dbAdapter = $dbAdapter;
     }
     public function create($data){
-        $data['org_id'] = $this->authContext->getOrgId();
-        // if(isset($data['group_id'])){
-            
-        // }
-        return parent::create($data);
+        $response = $this->table->createAnnouncement($data,$this->authContext);
+        if(isset($response['error'])){
+            return $this->getErrorResponse($response['response'],$response['statusCode'], $response['data']);
+        }
+        return $this->getSuccessResponseWithData($response['data'],$response['statusCode']);
     }
     
     public function getList() {
        $params = $this->params()->fromRoute();
-//        $type = $params['type'];
-//        echo "Check<pre/>";
-//        print_r($params);
-//        exit;
-//        $avatar = $this->currentAvatarObj;
-//        echo "<pre/>";
-//        print_r($avatar);
-//        exit;
         return $this->getSuccessResponseWithData($this->table->getAnnouncements($this->authContext->getId(), array_column($this->authContext->getGroups(),'id')));
+    }
+    public function delete($id){
+        $response = $this->table->deleteAnnouncement($id,$this->authContext);
+        if(isset($response['error'])){
+            return $this->getErrorResponse($response['response'],$response['statusCode'], $response['data']);
+        }
+        return $this->getSuccessResponse();
     }
 
 

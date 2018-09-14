@@ -1,0 +1,13 @@
+avatars:
+  -
+    id: 1
+    name: "Bharat"
+    username: "bharatg"
+    password: "1619d7adc23f4f633f11014d2f22b7d8"
+    orgid: 1
+  -
+    id: 2
+    name: "Karan"
+    orgid: 1
+    username: "karan"
+    password: "1619d7adc23f4f633f11014d2f22b7d8"

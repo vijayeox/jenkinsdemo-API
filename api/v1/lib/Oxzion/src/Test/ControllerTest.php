@@ -8,6 +8,7 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Jwt\JwtHelper;
 use PHPUnit\DbUnit\TestCaseTrait;
+use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
 abstract class ControllerTest extends AbstractHttpControllerTestCase{
     use TestCaseTrait;
@@ -16,6 +17,7 @@ abstract class ControllerTest extends AbstractHttpControllerTestCase{
 
     // only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
     private $conn = null;
+    protected $dataSet;
 
     final public function getConnection()
     {
@@ -25,8 +27,10 @@ abstract class ControllerTest extends AbstractHttpControllerTestCase{
             }
             $this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
         }
-
         return $this->conn;
+    }
+    protected function initDataSet(){
+        return $this->dataSet = new YamlDataSet(dirname(__FILE__)."/../../../../data/schema/Data.yml");
     }
     abstract function getDataSet();
     

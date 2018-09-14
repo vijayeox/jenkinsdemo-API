@@ -84,5 +84,8 @@ abstract class ModelTable {
         $results = $this->adapter->query($selectString, Adapter::QUERY_MODE_EXECUTE);
         return $results->toArray();
     }
+    public function getSqlObject(){
+        return (new Sql($this->adapter));
+    }
 
 }

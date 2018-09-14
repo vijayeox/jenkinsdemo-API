@@ -11,8 +11,8 @@ ox_announcement_group_mapper:
   -
     id: 1
     announcement_id: 1
-    group_id: 3
+    group_id: 1
   -
     id: 2
     announcement_id: 2
-    group_id: 3
+    group_id: 1

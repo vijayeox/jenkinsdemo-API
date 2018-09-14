@@ -50,8 +50,10 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
     }
     public function createAuthContext($event){
         $params = $event->getParams();
-        $this->authContext = $params['authContext'];
+        $this->authContext = $params['event']->getApplication()->getServiceManager()->get(UserService::class);
+        // $this->authContext = $params['authContext'];
         $this->authContext->setUserName($params['username']);
+        return;
     }
 
     public function checkAuthorization($event)
@@ -66,12 +68,12 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
             $token = $jwtToken;
             $tokenPayload = $this->decodeJwtToken($token);
                 if (is_object($tokenPayload)) {
-            if($tokenPayload->data && $tokenPayload->data->username){
-                $this->currentUser = new UserService($tokenPayload->data->username,$config);
-					//TODO remove the UserService here instead raise an event for successful 
-                    //authentication and load the user details in the autoContext object 
-                    return;
-                }
+                    if($tokenPayload->data && $tokenPayload->data->username){
+                        $this->events->trigger('Authorized', null, ["username"=>$tokenPayload->data->username,'event'=>$event]);
+					   //TODO remove the UserService here instead raise an event for successful 
+                        //authentication and load the user details in the autoContext object 
+                        return;
+                    }
             }
             $jsonModel = $this->getErrorResponse($tokenPayload, 400); 
             
