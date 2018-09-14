@@ -6,7 +6,11 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\Log\Logger;
 use User\Model\UserTable;
 use Zend\Db\Sql\Sql;
-use Oxzion\Service\UserService;
+use Oxzion\Auth\AuthConstants;
+use Zend\Mvc\MvcEvent;
+use Oxzion\Utils\ValidationResult;
+use Oxzion\Auth\AuthSuccessListener;
+
 
 abstract class AbstractApiController extends AbstractApiControllerHelper{
     protected $table;
@@ -15,7 +19,6 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
     protected $modelClass;
     protected $parentId;
     protected $username;
-    protected $authContext;
     
     public function __construct($table, Logger $log, $logClass, $modelClass, $parentId = null){
         $this->table = $table;
@@ -42,24 +45,14 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         return $filter;
     }
 
-     public function setEventManager(EventManagerInterface $events)
+    public function setEventManager(EventManagerInterface $events)
     {
         parent::setEventManager($events);
-        $events->attach('dispatch', array($this, 'checkAuthorization'), 10);
-        $events->attach('Authorized', array($this, 'createAuthContext'), 11);
+        $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'checkAuthorization'), 10);
     }
-    public function createAuthContext($event){
-        $params = $event->getParams();
-        $this->authContext = $params['event']->getApplication()->getServiceManager()->get(UserService::class);
-        // $this->authContext = $params['authContext'];
-        $this->authContext->setUserName($params['username']);
-        return;
-    }
-
+    
     public function checkAuthorization($event)
     {
-        //if(true)
-        //    return;
         $request = $event->getRequest();
         $response = $event->getResponse();
         $config = $event->getApplication()->getServiceManager()->get('Config');
@@ -69,10 +62,9 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
             $tokenPayload = $this->decodeJwtToken($token);
                 if (is_object($tokenPayload)) {
                     if($tokenPayload->data && $tokenPayload->data->username){
-                        $this->events->trigger('Authorized', null, ["username"=>$tokenPayload->data->username,'event'=>$event]);
-					   //TODO remove the UserService here instead raise an event for successful 
-                        //authentication and load the user details in the autoContext object 
-                        return;
+                        $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
+                        $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username]);
+					    return;
                     }
             }
             $jsonModel = $this->getErrorResponse($tokenPayload, 400); 
