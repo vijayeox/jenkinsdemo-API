@@ -18,6 +18,13 @@ $db = 'stephenox';
 $username = 'stephen';
 $password = 'stephen321!';
 
+if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
+    $host = '127.0.0.1';
+    $db = "va_test";
+    $username = "user";
+    $password = "'password";
+}
+
 return [
 	'db' => [
     	'driver' => 'Pdo_Mysql',
