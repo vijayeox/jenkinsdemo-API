@@ -10,7 +10,6 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
-use Oxzion\Service\UserService;
 
 class Module implements ConfigProviderInterface {
 
@@ -30,9 +29,9 @@ class Module implements ConfigProviderInterface {
     public function getServiceConfig() {
         return [
             'factories' => [
-                UserService::class => function($container) {
-                    $config = $container->get('config');
-                    return new UserService($config);
+                Service\AnnouncementService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\AnnouncementService($container->get('config'), $dbAdapter, $container->get(Model\AnnouncementTable::class));
                 },
                 Model\AnnouncementTable::class => function($container) {
                     $tableGateway = $container->get(Model\AnnouncementTableGateway::class);
@@ -53,7 +52,7 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\AnnouncementController::class => function($container) {
                     return new Controller\AnnouncementController(
-                            $container->get(Model\AnnouncementTable::class), $container->get('AnnouncementLogger'),
+                            $container->get(Model\AnnouncementTable::class), $container->get(Service\AnnouncementService::class), $container->get('AnnouncementLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],
