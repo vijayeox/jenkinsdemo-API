@@ -33,6 +33,10 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
+                UserService::class => function($container) {
+                    $config = $container->get('config');
+                    return new UserService($config);
+                },
                 Model\ScreenTable::class => function($container) {
                     $tableGateway = $container->get(Model\ScreenTableGateway::class);
                     return new Model\ScreenTable($tableGateway);

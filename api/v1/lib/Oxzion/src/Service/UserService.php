@@ -35,13 +35,14 @@ class UserService {
 		->where(array('username = "'.(string)$userName.'"'))->limit(1);
 		$results = $dbAdapter->query($sql->getSqlStringForSqlObject($select), \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE)->toArray()[0];
 		$this->cacheStorage->set($userName,$results);
-		$this->id = $results['id'];
-		$this->orgId = $results['orgid'];
 		return $results;
 	}
 	private function setUserInfo($data){
 		$this->userInfo = $data;
+		$this->id = $data['id'];
+		$this->orgId = $data['orgid'];
 	}
+	
 	private function setGroups(){
 		$this->cacheStorage->set($this->userName."_groups",$this->getGroupsDB());
 		return $this->groupsArray;

@@ -20,9 +20,11 @@ class ScreenwidgetController extends AbstractApiController
 		$this->setIdentifierName('id');
     }
     
-    public function screenAction() {
+    public function getList() {
         $params = $this->params()->fromRoute();
-
-    }
+        
+        $data=$this->table->fetchAll(['userid' => $this->authContext->getId(),'screenid' =>$params['screenId']])->toArray();
+        return $this->getSuccessResponseWithData($data);
+     }
 
 }
