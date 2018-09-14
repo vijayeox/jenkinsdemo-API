@@ -1,6 +1,7 @@
 <?php
 namespace Oxzion\Model;
 
+use Oxzion\Utils\ValidationResult;
 use Countable;
 
 abstract class Entity implements Countable{
@@ -56,10 +57,13 @@ abstract class Entity implements Countable{
         return $data;
     }
 
-    public function validate($data) {
-        $data = $this->_convert($data);
-        return true;
+    /**
+     * This method should be overridden by base classes to perform field level validations 
+     * this method should throw ValidationException if there are any errors
+     */
+    public function validate(){
     }
+
     public function import($data) {
         foreach ($data as $key => $val) {
             $this->__set($key, $val);
