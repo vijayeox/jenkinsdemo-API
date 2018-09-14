@@ -19,6 +19,5 @@ return [
 	'User',
 	'Group',
 	'Organization',
-	'Widget',
-	'Screen'
+	'Widget'
 ];
