@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+$_ENV['ENV'] = 'test';
+$_SERVER['argv'] = array('vendor/bin/doctrine-migrations', 'migrations:migrate', '-n', '--db-configuration', 'migration-db.php', '--configuration', '/Migrations.yml');
+
+require_once __DIR__.'/vendor/autoload.php';
+require __DIR__ .'/config/autoload/local.php';
+
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
+
+$helperSet = new HelperSet();
+$helperSet->set(new QuestionHelper(), 'question');
+
+$cli = \Doctrine\DBAL\Migrations\Tools\Console\ConsoleRunner::createApplication($helperSet);
+$cli->setAutoExit(false);
+$code = $cli->run();
+if($code == 0){
+    $_SERVER['argv'] = array();
+    include __DIR__ . '/vendor/bin/phpunit';
+}
+?>
