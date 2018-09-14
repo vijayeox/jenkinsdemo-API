@@ -5,34 +5,64 @@ namespace Announcement\Controller;
 use Zend\Log\Logger;
 use Announcement\Model\AnnouncementTable;
 use Announcement\Model\Announcement;
+use Announcement\Service\AnnouncementService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Utils\Query;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
+use Oxzion\ValidationException;
 
 class AnnouncementController extends AbstractApiController {
+    private $announcementService;
 
-    public function __construct(AnnouncementTable $table, Logger $log, AdapterInterface $dbAdapter) {
+    public function __construct(AnnouncementTable $table, AnnouncementService $announcementService, Logger $log, AdapterInterface $dbAdapter) {
         parent::__construct($table, $log, __CLASS__, Announcement::class);
         $this->setIdentifierName('announcementId');
+        $this->announcementService = $announcementService;
     }
+
+    /**
+    *   $data should be in the following JSON format
+    *   {
+    *       'id' : integer,
+    *       'name' : string,
+    *       'org_id' : integer,
+    *       'status' : string,
+    *       'description' : string,
+    *       'start_date' : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *       'end_date' : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *       'media_type' : string,
+    *       'media_location' : string,
+    *       'groups' : [
+    *                       {'id' : integer}.
+    *                       ....multiple 
+    *                  ],
+    *   }
+    *
+    *
+    */
     public function create($data){
-        $response = $this->table->createAnnouncement($data,$this->authContext);
-        if(isset($response['error'])){
-            return $this->getErrorResponse($response['response'],$response['statusCode'], $response['data']);
+        try{
+            $count = $this->announcementService->createAnnouncement($data);
+        }catch(ValidationException $e){
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
         }
-        return $this->getSuccessResponseWithData($response['data'],$response['statusCode']);
+        if($count == 0){
+            return $this->getFailureResponse("Failed to create a new entity", $data);
+        }
+        return $this->getSuccessResponseWithData($data,200);
     }
     
     public function getList() {
-       $params = $this->params()->fromRoute();
-        return $this->getSuccessResponseWithData($this->table->getAnnouncements($this->authContext->getId(), array_column($this->authContext->getGroups(),'id')));
+        $result = $this->announcementService->getAnnouncements();
+        return $this->getSuccessResponseWithData($result);
     }
     public function delete($id){
-        $response = $this->table->deleteAnnouncement($id,$this->authContext);
-        if(isset($response['error'])){
-            return $this->getErrorResponse($response['response'],$response['statusCode'], $response['data']);
+        $response = $this->announcementService->deleteAnnouncement($id);
+        if($response == 0){
+            return $this->getErrorResponse("Announcement not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
     }

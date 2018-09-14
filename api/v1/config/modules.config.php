@@ -11,6 +11,7 @@ return [
 	'Zend\Db',
 	'Zend\Router',
 	'Zend\Validator',
+	'Oxzion',
 	'Application',
 	'Auth',
 	'Metaform',
