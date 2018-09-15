@@ -2,7 +2,6 @@
 namespace Announcement;
 
 use Announcement\Controller\AnnouncementController;
-use Zend\Stdlib\ArrayUtils;
 use Announcement\Model;
 use Oxzion\Test\ControllerTest;
 use Oxzion\Db\ModelTable;
@@ -13,11 +12,9 @@ use Zend\Db\Adapter\Adapter;
 
 
 class AnnouncementControllerTest extends ControllerTest{
-    static private $pdo = null;
-
+    
     public function setUp() : void{
-        $configOverrides = [include __DIR__ . '/../../../../config/autoload/global.php'];
-        $this->setApplicationConfig(ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php',$configOverrides));
+        $this->loadConfig();
         parent::setUp();
     }   
     public function getDataSet() {

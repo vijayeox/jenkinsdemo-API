@@ -8,7 +8,6 @@ use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapte
 use Zend\Authentication\Result;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
-use Zend\Stdlib\ArrayUtils;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 
 class AuthControllerTest extends ControllerTest{
@@ -16,8 +15,7 @@ class AuthControllerTest extends ControllerTest{
     // only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
     private $conn = null;
 	public function setUp() : void{
-        $configOverrides = [include __DIR__ . '/../../../../config/autoload/global.php'];
-        $this->setApplicationConfig(ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php',$configOverrides));
+        $this->loadConfig();
         parent::setUp();
     }
     public function getDataSet() {

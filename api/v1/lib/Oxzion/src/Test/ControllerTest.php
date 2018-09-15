@@ -8,6 +8,7 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Jwt\JwtHelper;
 use PHPUnit\DbUnit\TestCaseTrait;
+use Zend\Stdlib\ArrayUtils;
 
 abstract class ControllerTest extends AbstractHttpControllerTestCase{
     use TestCaseTrait;
@@ -17,13 +18,22 @@ abstract class ControllerTest extends AbstractHttpControllerTestCase{
     // only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
     private $conn = null;
     
+    protected function loadConfig(){
+        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/autoload/global.php', include __DIR__ . '/../../../../config/autoload/local.php');
+        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php',$configOverrides);
+
+        $this->setApplicationConfig($configOverrides);
+    }
+
     final public function getConnection()
     {
         if ($this->conn === null) {
             if (self::$pdo == null) {
-                self::$pdo = new \PDO( $GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'] );
+                $config = $this->getApplicationConfig();
+                $config = $config['db'];
+                self::$pdo = new \PDO( $config['dsn'], $config['username'], $config['password'] );
             }
-            $this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
+            $this->conn = $this->createDefaultDBConnection(self::$pdo, $config['database']);
         }
         return $this->conn;
     }
@@ -56,8 +66,8 @@ abstract class ControllerTest extends AbstractHttpControllerTestCase{
         if(!isset($this->jwtToken[$username])){
             $data = JwtHelper::getTokenPayload($username);
             $config = $this->getApplicationConfig();
-            $jwtKey = $config[0]['jwtKey'];
-            $jwtAlgo = $config[0]['jwtAlgo'];      
+            $jwtKey = $config['jwtKey'];
+            $jwtAlgo = $config['jwtAlgo'];      
             $token = JwtHelper::generateJwtToken($data, $jwtKey, $jwtAlgo);
             $this->jwtToken[$username] = $token;
         }else{

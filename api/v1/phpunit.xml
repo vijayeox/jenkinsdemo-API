@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true">
-    <php>
-        <var name="DB_DSN" value="mysql:dbname=oxapi;host=61.12.69.67" />
-        <var name="DB_USER" value="bharath" />
-        <var name="DB_PASSWD" value="bharath321!" />
-        <var name="DB_DBNAME" value="oxapi" />
-    </php>
     <testsuites>
         <testsuite name="All Tests">
             <!-- <directory>./module/Metaform/test</directory> -->
