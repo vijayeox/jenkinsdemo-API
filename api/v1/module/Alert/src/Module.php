@@ -9,6 +9,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
+use Oxzion\Service\UserService;
 use Oxzion\Error\ErrorHandler;
 
 class Module implements ConfigProviderInterface {
@@ -29,6 +30,10 @@ class Module implements ConfigProviderInterface {
     public function getServiceConfig() {
         return [
             'factories' => [
+                UserService::class => function($container) {
+                    $config = $container->get('config');
+                    return new UserService($config);
+                },
                 Model\AlertTable::class => function($container) {
                     $tableGateway = $container->get(Model\AlertTableGateway::class);
                     return new Model\AlertTable($tableGateway);

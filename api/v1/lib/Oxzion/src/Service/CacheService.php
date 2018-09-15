@@ -6,9 +6,7 @@ class CacheService{
 	private $supportedDatatypes;
 	private $ttl=3600;
 	private $adapter = 'filesystem';
-	private static $instance;
-
-	private function __construct(){
+	public function __construct(){
 		$this->cache = StorageFactory::factory(
 			array(
 				'adapter'=>array(
@@ -20,15 +18,6 @@ class CacheService{
 			));
 		$this->supportedDatatypes = $this->cache->getCapabilities()->getSupportedDatatypes();
 	}
-
-	public static function getInstance(){
-		if(!isset(self::$instance)){
-			self::$instance = new CacheService();
-		}
-
-		return self::$instance;
-	}
-
 	public function set($key,$object){
 		if($this->supportedDatatypes['object']){
 			$this->cache->setItem($key, $object);

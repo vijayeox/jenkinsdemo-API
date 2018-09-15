@@ -6,7 +6,7 @@ use Screen\Model\Screen;
 use Screen\Model\ScreenTable;
 
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Utils\ValidationResult;
+use Oxzion\Controller\ValidationResult;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\View\Model\JsonModel;
 use Zend\Db\Sql\Sql;
