@@ -1,80 +1,57 @@
 <?php
 namespace Oxzion\Service;
 use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
 use Oxzion\Service\CacheService;
+use Oxzion\Service\AbstractService;
 
-class UserService {
-	private $userName;
-	private $cacheStorage;
-	protected $userInfo = array();
-	protected $groupsArray = array();
-	private $id;
-	private $orgId;
-	protected $config;
+class UserService extends AbstractService{
+	
+	private $cacheService;
+	const GROUPS = '_groups';
 
-	public function __construct($config){
-		$this->config = $config;
-		$this->cacheStorage = new CacheService();
+	public function __construct($config, $dbAdapter){
+		parent::__construct($config, $dbAdapter);
+		$this->cacheService = CacheService::getInstance();
+		
 	}
-	public function setUserName($username){
-		$this->userName = $username;
-		if($cacheData = $this->cacheStorage->get($this->userName)){
-			$data = $cacheData;
-		} else {
-			$data = $this->retrieveUserInfoFromDb($this->userName);
+	
+	public function getUserContextDetails($userName){
+		if($results = $this->cacheService->get($userName)){
+			return $results;
 		}
-		$this->setUserInfo($data);
-	}
-	protected function retrieveUserInfoFromDb($userName){
-		$dbAdapter = new Adapter($this->config['db']);
-		$sql = new Sql($dbAdapter);
+		$sql = $this->getSqlObject();
 		$select = $sql->select()
 		->from('avatars')
         ->columns(array('id','name','orgid'))
 		->where(array('username = "'.(string)$userName.'"'))->limit(1);
-		$results = $dbAdapter->query($sql->getSqlStringForSqlObject($select), \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE)->toArray()[0];
-		$this->cacheStorage->set($userName,$results);
+		$results = $this->executeQuery($select);
+		$results = $results->toArray();
+		if(count($results) > 0){
+			$results = $results[0];
+		}
+		$this->cacheService->set($userName,$results);
 		return $results;
 	}
-	private function setUserInfo($data){
-		$this->userInfo = $data;
-		$this->id = $data['id'];
-		$this->orgId = $data['orgid'];
-	}
 	
-	private function setGroups(){
-		$this->cacheStorage->set($this->userName."_groups",$this->getGroupsDB());
-		return $this->groupsArray;
-	}
-	private function getGroupsDB(){
-		$dbAdapter = new Adapter($this->config['db']);
-		$sql = new Sql($dbAdapter);
+	
+	private function getGroupsFromDb($username){
+		$sql = $this->getSqlObject();
 		$select = $sql->select()
 		->from('groups_avatars')
         ->columns(array())
         ->join('groups', 'groups.id = groups_avatars.groupid')
         ->where(array('groups_avatars.avatarid' => $this->id));
-		$selectString = $sql->getSqlStringForSqlObject($select);
-		return $this->groupsArray = $dbAdapter->query($selectString, \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE)->toArray();
+		return $this->executeQuery($select)->toArray();
 	}
-	public function getGroups(){
-		if($groupData = $this->cacheStorage->get($this->userName."_groups")){
+	public function getGroups($username){
+		if($groupData = $this->cacheService->get($userName.GROUPS)){
 			$data = $groupData;
 		} else {
-			$data = $this->setGroups();
+			$data = $this->getGroupsFromDb($username);
+			$this->cacheService->set($this->userName.GROUPS, $data);
 		}
 		return $data;
 	}
-	public function getUserInfo(){
-		return $this->userInfo;
-	}
-	public function getId(){
-		return $this->id;
-	}
-	public function getOrgId(){
-		$data = $this->userInfo;
-		return $data['orgid'];
-	}
+	
 }
 ?>
