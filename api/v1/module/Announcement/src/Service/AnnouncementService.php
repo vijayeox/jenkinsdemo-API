@@ -16,7 +16,7 @@ class AnnouncementService extends AbstractService{
         $this->table = $table;
     }
 
-    public function createAnnouncement($data){
+    public function createAnnouncement(&$data){
         $form = new Announcement();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
@@ -33,8 +33,8 @@ class AnnouncementService extends AbstractService{
                 $this->rollback();
                 return 0;
             }
-            $id = $this->getLastInsertValue();
-            $form->id = $id;
+            $id = $this->table->getLastInsertValue();
+            $data['id'] = $id;
             if(isset($data['groups'])){
                 $affected = $this->insertAnnouncementForGroup($id,$data['groups']);
                 if($affected != count($data['groups'])) {
@@ -62,7 +62,7 @@ class AnnouncementService extends AbstractService{
             if($result->getAffectedRows() == 0){
                 break;
             }
-            $rowsAffected++;
+            $rowsAffected++;            
         }
         return $rowsAffected;
     }
