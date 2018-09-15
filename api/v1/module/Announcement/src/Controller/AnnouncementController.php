@@ -59,6 +59,18 @@ class AnnouncementController extends AbstractApiController {
         $result = $this->announcementService->getAnnouncements();
         return $this->getSuccessResponseWithData($result);
     }
+    public function update($id, $data){
+        try{
+            $count = $this->announcementService->updateAnnouncement($id,$data);
+        }catch(ValidationException $e){
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if($count == 0){
+            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        }
+        return $this->getSuccessResponseWithData($data,200);
+    }
     public function delete($id){
         $response = $this->announcementService->deleteAnnouncement($id);
         if($response == 0){

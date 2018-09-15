@@ -79,15 +79,14 @@ class AnnouncementControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['org_id'], 1);
         $this->assertEquals($content['data']['status'], $data['status']);
         $this->assertEquals($content['data']['startdate'], $data['startdate']);
         $this->assertEquals($content['data']['enddate'], $data['enddate']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_announcement'));
     }
-    public function testCreateFailure(){
+    public function testCreateWithOutNameFailure(){
         $this->initAuthToken('bharatg');
-        $data = ['name' => 'Test Announcement','groups'=>array(array('id'=>1),array('id'=>2)),'status'=>1,'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
+        $data = ['groups'=>array(array('id'=>1),array('id'=>2)),'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement', 'POST', null);
         $this->assertResponseStatusCode(404);
@@ -98,10 +97,11 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['data']['errors']['name'], 'required');
     }
     public function testUpdate(){
-        $data = ['id'=>1,'name' => 'Test Announcement 2', 'description' => 'Test Announcement Description'];
+        $data = ['name' => 'Test Announcement','groups'=>array(array('id'=>1),array('id'=>2)),'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
         $this->initAuthToken('bharatg');
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement/1', 'PUT', null);
@@ -113,13 +113,13 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], $data['id']);
+        $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['description'], $data['description']);
     }
 
     public function testUpdateNotFound(){
-        $data = ['name' => 'Test Announcement 2', 'description' => 'Test Announcement Description'];
+        $data = ['name' => 'Test Announcement','groups'=>array(array('id'=>1),array('id'=>2)),'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
         $this->initAuthToken('bharatg');
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement/122', 'PUT', null);
@@ -132,23 +132,40 @@ class AnnouncementControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-
-    // public function testUpdateFailure(){
-    //     $this->initAuthToken('bharatg');
-    //     $data = ['name' => 'Test Announcement 2', 'description' => 'Test Announcement Description'];
-    //     $this->setJsonContent(json_encode($data));
-    //     $this->dispatch('/announcement/122', 'PUT', null);
-    //     $this->assertResponseStatusCode(200);
-    //     $this->assertModuleName('Announcement');
-    //     $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
-    //     $this->assertControllerClass('AnnouncementController');
-    //     $this->assertMatchedRouteName('announcement');
-    //     $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error');
-    //     $this->assertEquals($content['data']['name'], $data['name']);
-    //     $this->assertEquals($content['data']['description'], $data['description']);
-    // }
+    public function testAddGroupUpdate(){
+        $data = ['name' => 'Test Announcement','groups'=>array(array('id'=>1),array('id'=>2)),'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
+        $this->initAuthToken('bharatg');
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/announcement/1', 'PUT', null);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcement');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['description'], $data['description']);
+    }
+    public function testRemoveGroupUpdate(){
+        $data = ['name' => 'Test Announcement','groups'=>array(array('id'=>2)),'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
+        $this->initAuthToken('bharatg');
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/announcement/1', 'PUT', null);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcement');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['description'], $data['description']);
+    }
 
     public function testDelete(){
         $this->initAuthToken('bharatg');

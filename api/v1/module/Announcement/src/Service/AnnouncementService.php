@@ -38,7 +38,7 @@ class AnnouncementService extends AbstractService{
             if(isset($data['groups'])){
                 $affected = $this->insertAnnouncementForGroup($id,$data['groups']);
                 if($affected != count($data['groups'])) {
-                    $this->rollback;
+                    $this->rollback();
                     return 0;
                 }
             } else {
@@ -46,17 +46,100 @@ class AnnouncementService extends AbstractService{
             }
             $this->commit();
         }catch(Exception $e){
+            // print_r($e);exit;
             $this->rollback();
+            return 0;
         }
 
         return $count;
+    }
+    public function updateAnnouncement($id,&$data){
+        $obj = $this->table->get($id,array());
+        if(is_null($obj)){
+            return 0;
+        }
+        $originalArray = $obj->toArray();
+        $data['org_id'] = $originalArray['org_id'];
+        $data['created_date'] = $originalArray['created_date'];
+        $data['created_id'] = $originalArray['created_id'];
+        $form = new Announcement();
+        $data['id'] = $id;
+        $form->exchangeArray($data);
+        $form->validate();
+        $this->beginTransaction();
+        $count = 0;
+        try{
+            $count = $this->table->save($form);
+            if($count == 0){
+                $this->rollback();
+                return 0;
+            }
+            $data['id'] = $id;
+            if(isset($data['groups'])){
+                $groupsUpdated = $this->updateGroups($id,$data['groups']);
+                if(!$groupsUpdated) {
+                    $this->rollback();
+                    return 0;
+                }
+            } else {
+                //TODO handle this case properly
+            }
+            $this->commit();
+        }catch(Exception $e){
+            // print_r($e);exit;
+            $this->rollback();
+            return 0;
+        }
+        return $count;
+    }
+
+    protected function updateGroups($announcementId,$groups){
+        $oldGroups = array_column($this->getGroupsByAnnouncement($announcementId), 'group_id');
+        $newGroups = array_column($groups,'id');
+        $groupsAdded = array_diff($newGroups,$oldGroups);
+        $groupsRemoved = array_diff($oldGroups,$newGroups);
+        $insertGroups = array();
+        foreach ($groupsAdded as $key => $value) {
+            $insertGroups[$key]['id'] = $value;
+        }
+        $result['insert'] = $this->insertAnnouncementForGroup($announcementId,$insertGroups);
+        if($result['insert']!=count($groupsAdded)){
+            return 0;
+        }
+        $result['delete'] = $this->deleteGroupsByAnnouncement($announcementId,$groupsRemoved);
+        if($result['delete']!=count($groupsRemoved)){
+            return 0;
+        }
+        return 1;
+    }
+    protected function deleteGroupsByAnnouncement($announcementId,$groupIdList){
+        $rowsAffected = 0;
+        foreach ($groupIdList as $key => $groupId) {
+            $sql = $this->getSqlObject();
+            $delete = $sql->delete('ox_announcement_group_mapper');
+            $delete->where(['announcement_id' => $announcementId,'group_id' => $groupId]);
+            $result = $this->executeUpdate($delete);
+            if($result->getAffectedRows() == 0){
+                break;
+            }
+            $rowsAffected++; 
+        }
+        return $rowsAffected;
+    }
+    protected function getGroupsByAnnouncement($announcementId){
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_announcement_group_mapper')
+        ->columns(array("group_id","announcement_id"))
+        ->where(array('ox_announcement_group_mapper.announcement_id' => $announcementId));
+        return $this->executeQuery($select)->toArray();
     }
     protected function insertAnnouncementForGroup($announcementId, $groups){
         $rowsAffected = 0;
         foreach ($groups as $key => $id) {
             $sql = $this->getSqlObject();
             $insert = $sql->insert('ox_announcement_group_mapper');
-            $data = array('group_id'=>$id,'announcement_id'=>$announcementId);
+            $data = array('group_id'=>$id['id'],'announcement_id'=>$announcementId);
             $insert->values($data);
             $result = $this->executeUpdate($insert);
             if($result->getAffectedRows() == 0){
@@ -66,6 +149,7 @@ class AnnouncementService extends AbstractService{
         }
         return $rowsAffected;
     }
+
 
     public function deleteAnnouncement($id){
         $this->beginTransaction();
