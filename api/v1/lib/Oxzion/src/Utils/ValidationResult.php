@@ -1,6 +1,6 @@
 <?php
 
-namespace Oxzion\Controller;
+namespace Oxzion\Utils;
 
 
 class ValidationResult {
