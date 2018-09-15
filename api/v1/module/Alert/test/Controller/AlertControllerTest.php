@@ -10,8 +10,7 @@ use Oxzion\Test\ControllerTest;
 class AlertControllerTest extends ControllerTest {
 
     public function setUp() {
-        $configOverrides = [include __DIR__ . '/../../../../config/autoload/global.php'];
-        $this->setApplicationConfig(ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php', $configOverrides));
+        $this->loadConfig();
         parent::setUp();
         $this->initAuthToken('testUser');
     }
