@@ -23,19 +23,19 @@ class Announcement extends Entity {
 
     public function validate(){
         $errors = array();
-        if($data['name'] === null){
+        if($this->data['name'] === null){
             $errors["name"] = 'required';
         }
-        if($data['org_id'] === null) {
+        if($this->data['org_id'] === null) {
             $errors["org_id"] = 'required';   
         }
-        if($data['status'] === null) {
-            $errors["status"] = 'required';   
+        if($this->data['status'] === null) {
+            $errors["status"] = 'required';  
         }
-        if($data['start_date'] === null) {
+        if($this->data['start_date'] === null) {
             $errors["start_date"] = 'required';   
         }
-        if($data['end_date'] === null) {
+        if($this->data['end_date'] === null) {
             $errors["end_date"] = 'required';   
         }
 

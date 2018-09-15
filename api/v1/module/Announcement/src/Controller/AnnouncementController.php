@@ -52,7 +52,7 @@ class AnnouncementController extends AbstractApiController {
         if($count == 0){
             return $this->getFailureResponse("Failed to create a new entity", $data);
         }
-        return $this->getSuccessResponseWithData($data,200);
+        return $this->getSuccessResponseWithData($data,201);
     }
     
     public function getList() {

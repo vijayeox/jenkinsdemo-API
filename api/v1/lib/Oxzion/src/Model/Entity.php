@@ -25,7 +25,6 @@ abstract class Entity implements Countable{
     }
     
     public function __get($key) {
-
         if (array_key_exists($key, $this->data)) {
             if ($this->parsedata) {
      			//return VA_Service_Utils::parseInstanceExpression ($this->data[$key]);
@@ -73,16 +72,6 @@ abstract class Entity implements Countable{
 
     public function toArray() {
         return $this->data;
-    }
-
-    protected function _convert($data) {
-        if (is_array($data)) {
-            return $data;
-        } elseif (is_object($data)) {
-            return (array) $data;
-        } else {
-            throw new Exception('Data must be array or object');
-        }
     }
     
     public function exchangeArray($data) {

@@ -20,10 +20,9 @@ class AnnouncementService extends AbstractService{
         $form = new Announcement();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
-        if($data['start_date'] == null){
-            //TODO set start_date to today
-        }
-        //TODO set createdDate 
+        $data['start_date'] = $data['start_date']?$data['start_date']:date('Y-m-d H:i:s');
+        $data['status'] = $data['status']?$data['status']:1;
+        $data['end_date'] = $data['end_date']?$data['end_date']:date('Y-m-d H:i:s',strtotime("+7 day"));
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
@@ -99,10 +98,9 @@ class AnnouncementService extends AbstractService{
         $select = $sql->select();
         $select->from('ox_announcement')
                 ->columns(array("*"))
-                ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array(),'left')
-                ->join('groups_avatars', 'ox_announcement_group_mapper.group_id = groups_avatars.groupid')
+                ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
+                ->join('groups_avatars', 'ox_announcement_group_mapper.group_id = groups_avatars.groupid',array('groupid','avatarid'),'left')
                 ->where(array('groups_avatars.avatarid' => $userId));
-
         return $this->executeQuery($select)->toArray();
     }
 }

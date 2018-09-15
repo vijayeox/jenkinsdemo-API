@@ -65,7 +65,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'error');
     }
     public function testCreate(){
-        $data = ['name' => 'Test Announcement','group_id'=>'1,2','org_id'=>1];
+        $data = ['name' => 'Test Announcement','groups'=>array(array('id'=>1),array('id'=>2)),'status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_announcement'));
         $this->initAuthToken('bharatg');
         $this->setJsonContent(json_encode($data));
@@ -79,15 +79,18 @@ class AnnouncementControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['org_id'], $data['org_id']);
+        $this->assertEquals($content['data']['org_id'], 1);
+        $this->assertEquals($content['data']['status'], $data['status']);
+        $this->assertEquals($content['data']['startdate'], $data['startdate']);
+        $this->assertEquals($content['data']['enddate'], $data['enddate']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_announcement'));
     }
     public function testCreateFailure(){
         $this->initAuthToken('bharatg');
-        $data = ['name' => 'Test Announcement','org_id'=>1];
+        $data = ['name' => 'Test Announcement','groups'=>array(array('id'=>1),array('id'=>2)),'status'=>1,'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement', 'POST', null);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(404);
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');

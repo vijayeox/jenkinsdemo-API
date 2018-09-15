@@ -17,7 +17,7 @@ class AnnouncementTable extends ModelTable {
         $data = $data->toArray();
         $data['status'] = $data['status']?$data['status']:1;
         $data['start_date'] = $data['start_date']?$data['start_date']:date('Y-m-d H:i:s');
-        $data['end_date'] = $data['end_date']?$data['end_date']:date('Y-m-d H:i:s');
+        $data['end_date'] = $data['end_date']?$data['end_date']:date('Y-m-d H:i:s',strtotime("+7 day"));
     	return $this->internalSave($data);
     }
     
