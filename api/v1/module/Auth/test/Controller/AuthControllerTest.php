@@ -9,7 +9,7 @@ use Zend\Authentication\Result;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Stdlib\ArrayUtils;
-
+use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 
 class AuthControllerTest extends ControllerTest{
     static private $pdo = null;
@@ -21,7 +21,7 @@ class AuthControllerTest extends ControllerTest{
         parent::setUp();
     }
     public function getDataSet() {
-        return new YamlDataSet(dirname(__FILE__)."/../Dataset/User.yml");
+        return new DefaultDataSet();
     }
 
     public function testAuthentication(){
