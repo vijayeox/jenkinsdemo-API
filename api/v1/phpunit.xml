@@ -4,7 +4,7 @@
         <testsuite name="All Tests">
             <!-- <directory>./module/Metaform/test</directory> -->
             <!-- <directory>./module/Field/test</directory> -->
-            <directory>./module/Auth/test</directory>
+            <!-- <directory>./module/Auth/test</directory> -->
             <directory>./module/Announcement/test</directory>
             <!-- <directory>./module/User/test</directory> -->
             <!-- <directory>./module/Organization/test</directory> -->
