@@ -33,6 +33,7 @@ class Version20180905142629 extends AbstractMigration
             `id` INT NOT NULL AUTO_INCREMENT , 
             `userid` INT NOT NULL , 
             `widgetid` INT NOT NULL , 
+            `screenid` INT NOT NULL , 
             `width` INT NOT NULL , 
             `height` INT NOT NULL , 
             `column` INT NOT NULL , 

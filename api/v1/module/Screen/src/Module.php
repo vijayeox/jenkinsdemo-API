@@ -33,10 +33,6 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                UserService::class => function($container) {
-                    $config = $container->get('config');
-                    return new UserService($config);
-                },
                 Model\ScreenTable::class => function($container) {
                     $tableGateway = $container->get(Model\ScreenTableGateway::class);
                     return new Model\ScreenTable($tableGateway);
@@ -57,6 +53,14 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Screenwidget());
                     return new TableGateway('ox_screen_widget', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\ScreenService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ScreenService($container->get('config'), $dbAdapter, $container->get(Model\ScreenTable::class));
+                },
+                Service\ScreenwidgetService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ScreenwidgetService($container->get('config'), $dbAdapter, $container->get(Model\ScreenwidgetTable::class));
+                },
             ],
         ];
     }
@@ -66,11 +70,11 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\ScreenController::class => function($container) {
                     return new Controller\ScreenController(
-                        $container->get(Model\ScreenTable::class),$container->get('ScreenLogger'));
+                        $container->get(Model\ScreenTable::class),$container->get(Service\ScreenService::class),$container->get('ScreenLogger'));
                 },
                 Controller\ScreenwidgetController::class => function($container) {
                     return new Controller\ScreenwidgetController(
-                        $container->get(Model\ScreenwidgetTable::class),$container->get('ScreenLogger'));
+                        $container->get(Model\ScreenwidgetTable::class),$container->get(Service\ScreenwidgetService::class),$container->get('ScreenLogger'));
                 },
             ],
         ];
