@@ -5,7 +5,7 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\ResultSet\ResultSet;
 
 class AbstractService{
-    private $config;
+    protected $config;
     private $dbAdapter;
     private $sql;
 
@@ -15,6 +15,9 @@ class AbstractService{
         if($dbAdapter){
             $this->sql = new Sql($this->dbAdapter);
         }
+    }
+    protected function moveTempFile($file,$location){
+        FileService::renameFile($this->config['DATA_FOLDER']."temp/".$file,$location);
     }
 
     protected function beginTransaction(){

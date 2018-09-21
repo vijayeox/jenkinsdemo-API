@@ -38,7 +38,9 @@ class Announcement extends Entity {
         if($this->data['end_date'] === null) {
             $errors["end_date"] = 'required';   
         }
-
+        if($this->data['media_location'] === null) {
+            $errors["media_location"] = 'required';   
+        }
         if(count($errors) > 0){
             $validationException = new ValidationException();
             $validationException->setErrors($errors);
