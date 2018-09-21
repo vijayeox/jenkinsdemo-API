@@ -33,4 +33,20 @@ class ScreenwidgetController extends AbstractApiController
       return $this->getSuccessResponseWithData($result);
   }
 
+  public function create($data){
+    try{
+        $params = $this->params()->fromRoute();
+        $data['screenid'] = $params['screenId'];  
+        $count = $this->screenwidgetService->createWidget($data);
+    }catch(ValidationException $e){
+        $response = ['data' => $data, 'errors' => $e->getErrors()];
+        return $this->getErrorResponse("Validation Errors",404, $response);
+    }
+    if($count == 0){
+        return $this->getFailureResponse("Failed to create a new entity", $data);
+    }
+    return $this->getSuccessResponseWithData($data,201);
+}
+
+
 }

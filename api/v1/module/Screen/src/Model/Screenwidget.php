@@ -14,4 +14,23 @@ class Screenwidget extends Entity{
         'column' => null , 
         'row' => null
     );
+
+    public function validate(){
+        $errors = array();
+        if($this->data['userid'] === null){
+            $errors["userid"] = 'required';
+        }
+        if($this->data['screenid'] === null) {
+            $errors["screenid"] = 'required';   
+        }
+        if($this->data['widgetid'] === null) {
+            $errors["widgetid"] = 'required';  
+        }
+
+        if(count($errors) > 0){
+            $validationException = new ValidationException();
+            $validationException->setErrors($errors);
+            throw $validationException;
+        }
+    }
 }

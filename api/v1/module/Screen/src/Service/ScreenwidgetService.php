@@ -21,5 +21,32 @@ class ScreenwidgetService extends AbstractService{
             $data=$this->table->fetchAll(['userid' => AuthContext::get(AuthConstants::USER_ID),'screenid' =>$screenId])->toArray();
             return $data;
     }
+
+
+    public function createWidget(&$data){
+        $form = new Screenwidget();
+        if (!isset($data['userid'])) {
+            $data['userid']=AuthContext::get(AuthConstants::USER_ID);
+        }
+        $form->exchangeArray($data);
+        $form->validate();
+        $this->beginTransaction();
+        $count = 0;
+        try{
+            $count = $this->table->save($form);
+            if($count == 0){
+                $this->rollback();
+                return 0;
+            }
+            $this->commit();
+        }catch(Exception $e){
+            // print_r($e);exit;
+            $this->rollback();
+            return 0;
+        }
+
+        return $count;
+    }
+    
 }
 ?>
