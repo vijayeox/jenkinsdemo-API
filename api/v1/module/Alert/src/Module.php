@@ -29,6 +29,10 @@ class Module implements ConfigProviderInterface {
     public function getServiceConfig() {
         return [
             'factories' => [
+                Service\AlertService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\AlertService($container->get('config'), $dbAdapter, $container->get(Model\AlertTable::class));
+                },
                 Model\AlertTable::class => function($container) {
                     $tableGateway = $container->get(Model\AlertTableGateway::class);
                     return new Model\AlertTable($tableGateway);
@@ -48,7 +52,13 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\AlertController::class => function($container) {
                     return new Controller\AlertController(
-                            $container->get(Model\AlertTable::class), $container->get('AlertLogger'));
+                            $container->get(Model\AlertTable::class), $container->get(Service\AlertService::class), $container->get('AlertLogger'),
+                        $container->get(AdapterInterface::class));
+                },
+                Controller\AlertAcceptController::class => function($container) {
+                    return new Controller\AlertAcceptController(
+                            $container->get(Model\AlertTable::class), $container->get(Service\AlertService::class), $container->get('AlertLogger'),
+                        $container->get(AdapterInterface::class));
                 },
             ],
         ];

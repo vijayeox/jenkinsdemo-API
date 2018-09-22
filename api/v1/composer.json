@@ -47,6 +47,7 @@
             "Metaform\\": "module/Metaform/src/",
             "Field\\": "module/Field/src/",
             "Announcement\\": "module/Announcement/src/",
+            "Alert\\": "module/Alert/src/",
             "User\\": "module/User/src/",
             "Group\\": "module/Group/src/",
             "Organization\\": "module/Organization/src/",

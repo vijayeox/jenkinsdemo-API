@@ -16,6 +16,7 @@ return [
 	'Oxzion',
 	'Application',
 	'Auth',
+	'Alert',
 	'Metaform',
 	'Field',
 	'Announcement',
