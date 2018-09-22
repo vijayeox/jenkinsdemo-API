@@ -4684,19 +4684,6 @@ AUTO_INCREMENT = 1;
 -- -------------------------------------------------------------
 -- ---------------------------------------------------------
 
-
--- CREATE TABLE "ox_alert_group_mapper" --------------------
--- CREATE TABLE "ox_alert_group_mapper" ------------------------
-CREATE TABLE `ox_alert_group_mapper` ( 
-	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`alert_id` Int( 11 ) NOT NULL,
-	`group_id` Int( 11 ) NOT NULL,
-	PRIMARY KEY ( `id` ) )
-CHARACTER SET = latin1
-COLLATE = latin1_swedish_ci
-ENGINE = InnoDB
-AUTO_INCREMENT = 1;
--- -------------------------------------------------------------
 -- ---------------------------------------------------------
 
 
