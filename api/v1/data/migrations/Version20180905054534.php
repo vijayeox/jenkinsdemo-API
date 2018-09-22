@@ -45,7 +45,6 @@ class Version20180905054534 extends AbstractMigration {
                 `announcement_id` INT NOT NULL,
                 `group_id` INT NOT NULL,
                 PRIMARY KEY (`id`));");
-        
         $this->addSql("CREATE TABLE `user_alert_verfication` (
                 `id` INT NOT NULL AUTO_INCREMENT,
                 `user_id` INT NOT NULL,
@@ -53,6 +52,9 @@ class Version20180905054534 extends AbstractMigration {
                 `status` TINYINT NOT NULL DEFAULT 0,
                 PRIMARY KEY (`id`));
               ");
+
+        $this->addSql("ALTER TABLE `ox_announcement_group_mapper` ADD UNIQUE `announcement_mapper` (`group_id`, `announcement_id`);");
+        $this->addSql("ALTER TABLE `user_alert_verfication` ADD UNIQUE `user_alert` (`user_id`, `alert_id`);");
     }
 
     /**
