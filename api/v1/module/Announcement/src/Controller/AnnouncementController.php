@@ -8,11 +8,7 @@ use Announcement\Model\Announcement;
 use Announcement\Service\AnnouncementService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Utils\Query;
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Sql;
 use Oxzion\ValidationException;
-use Zend\InputFilter\Input;
 
 class AnnouncementController extends AbstractApiController {
     private $announcementService;
