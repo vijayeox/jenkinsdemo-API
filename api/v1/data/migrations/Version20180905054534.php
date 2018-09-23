@@ -52,8 +52,9 @@ class Version20180905054534 extends AbstractMigration {
                 `status` TINYINT NOT NULL DEFAULT 0,
                 PRIMARY KEY (`id`));
               ");
-
+        $this->addSql("ALTER TABLE `ox_announcement` ADD UNIQUE `orgIndex` (`id`, `org_id`);");
         $this->addSql("ALTER TABLE `ox_announcement_group_mapper` ADD UNIQUE `announcement_mapper` (`group_id`, `announcement_id`);");
+        $this->addSql("ALTER TABLE `ox_announcement` ADD UNIQUE `created_index` (`id`, `created_id`);");
         $this->addSql("ALTER TABLE `user_alert_verfication` ADD UNIQUE `user_alert` (`user_id`, `alert_id`);");
     }
 
@@ -65,7 +66,7 @@ class Version20180905054534 extends AbstractMigration {
         $this->addSql("DROP TABLE ox_announcement");
         $this->addSql("DROP TABLE ox_announcement_group_mapper");
         $this->addSql("DROP TABLE ox_alert");
-        $this->addSql("DROP TABLE avatar_alert_verfication");
+        $this->addSql("DROP TABLE user_alert_verfication");
     }
 
 }
