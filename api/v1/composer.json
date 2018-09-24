@@ -32,7 +32,8 @@
         "zendframework/zend-mail": "^2.10",
         "zendframework/zend-servicemanager": "^3.3",
         "zendframework/zend-cache": "^2.8",
-        "zendframework/zend-serializer": "^2.9"
+        "zendframework/zend-serializer": "^2.9",
+        "zendframework/zend-inputfilter": "^2.8"
     },
     "require-dev" : {
         "phpunit/phpunit": "^7",
@@ -46,12 +47,14 @@
             "Metaform\\": "module/Metaform/src/",
             "Field\\": "module/Field/src/",
             "Announcement\\": "module/Announcement/src/",
+            "Alert\\": "module/Alert/src/",
             "User\\": "module/User/src/",
             "Group\\": "module/Group/src/",
             "Organization\\": "module/Organization/src/",
             "Auth\\": "module/Auth/src/",
             "Widget\\": "module/Widget/src/",
-            "Screen\\": "module/Screen/src/"
+            "Screen\\": "module/Screen/src/",
+            "Attachment\\":"module/Attachment/src/"
         }
     },
     "autoload-dev": {

@@ -36,8 +36,6 @@ class Version20180905054534 extends AbstractMigration {
                 `org_id` INT NOT NULL,
                 `status` TINYINT(4) NOT NULL DEFAULT 1,
                 `description` TEXT NOT NULL,
-                `start_date` DATETIME NOT NULL,
-                `end_date` DATETIME NOT NULL,
                 `created_date` DATETIME NOT NULL,
                 `created_id` INT NOT NULL,
                 PRIMARY KEY (`id`));");
@@ -47,14 +45,17 @@ class Version20180905054534 extends AbstractMigration {
                 `announcement_id` INT NOT NULL,
                 `group_id` INT NOT NULL,
                 PRIMARY KEY (`id`));");
-        
-        $this->addSql("CREATE TABLE `avatar_alert_verfication` (
+        $this->addSql("CREATE TABLE `user_alert_verfication` (
                 `id` INT NOT NULL AUTO_INCREMENT,
-                `avatar_id` INT NOT NULL,
+                `user_id` INT NOT NULL,
                 `alert_id` INT NOT NULL,
                 `status` TINYINT NOT NULL DEFAULT 0,
                 PRIMARY KEY (`id`));
               ");
+        $this->addSql("ALTER TABLE `ox_announcement` ADD UNIQUE `orgIndex` (`id`, `org_id`);");
+        $this->addSql("ALTER TABLE `ox_announcement_group_mapper` ADD UNIQUE `announcement_mapper` (`group_id`, `announcement_id`);");
+        $this->addSql("ALTER TABLE `ox_announcement` ADD UNIQUE `created_index` (`id`, `created_id`);");
+        $this->addSql("ALTER TABLE `user_alert_verfication` ADD UNIQUE `user_alert` (`user_id`, `alert_id`);");
     }
 
     /**
@@ -65,7 +66,7 @@ class Version20180905054534 extends AbstractMigration {
         $this->addSql("DROP TABLE ox_announcement");
         $this->addSql("DROP TABLE ox_announcement_group_mapper");
         $this->addSql("DROP TABLE ox_alert");
-        $this->addSql("DROP TABLE avatar_alert_verfication");
+        $this->addSql("DROP TABLE user_alert_verfication");
     }
 
 }

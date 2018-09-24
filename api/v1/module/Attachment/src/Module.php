@@ -1,6 +1,6 @@
 <?php
 
-namespace Alert;
+namespace Attachment;
 
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
@@ -29,19 +29,9 @@ class Module implements ConfigProviderInterface {
     public function getServiceConfig() {
         return [
             'factories' => [
-                Service\AlertService::class => function($container){
+                Service\AttachmentService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AlertService($container->get('config'), $dbAdapter, $container->get(Model\AlertTable::class));
-                },
-                Model\AlertTable::class => function($container) {
-                    $tableGateway = $container->get(Model\AlertTableGateway::class);
-                    return new Model\AlertTable($tableGateway);
-                },
-                Model\AlertTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Alert());
-                    return new TableGateway('ox_alert', $dbAdapter, null, $resultSetPrototype);
+                    return new Service\AttachmentService($container->get('config'), $dbAdapter);
                 },
             ],
         ];
@@ -50,9 +40,8 @@ class Module implements ConfigProviderInterface {
     public function getControllerConfig() {
         return [
             'factories' => [
-                Controller\AlertController::class => function($container) {
-                    return new Controller\AlertController(
-                            $container->get(Model\AlertTable::class), $container->get(Service\AlertService::class), $container->get('AlertLogger'),
+                Controller\AttachmentController::class => function($container) {
+                    return new Controller\AttachmentController($container->get(Service\AttachmentService::class), $container->get('AttachmentLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],

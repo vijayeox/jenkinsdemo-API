@@ -5,17 +5,28 @@ use Oxzion\Service\AbstractService;
 use Announcement\Model\AnnouncementTable;
 use Announcement\Model\Announcement;
 use Oxzion\Auth\AuthContext;
+use Oxzion\Service\FileService;
 use Oxzion\Auth\AuthConstants;
+use Oxzion\File\FileConstants;
+use Oxzion\ValidationException;
 use Exception;
 
 class AnnouncementService extends AbstractService{
+    const ANNOUNCEMENT_FOLDER = "/announcements/";
+
     private $table;
 
     public function __construct($config, $dbAdapter, AnnouncementTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
-
+    protected function getAnnouncementFolder($id){
+        return $this->config['DATA_FOLDER']."organization/".AuthContext::get(AuthConstants::ORG_ID).self::ANNOUNCEMENT_FOLDER.$id;
+    }
+    public function getFileName($file){
+        $fileName = explode('-', $file,2);
+        return $fileName[1];
+    }
     public function createAnnouncement(&$data){
         $form = new Announcement();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -23,6 +34,16 @@ class AnnouncementService extends AbstractService{
         $data['start_date'] = $data['start_date']?$data['start_date']:date('Y-m-d H:i:s');
         $data['status'] = $data['status']?$data['status']:1;
         $data['end_date'] = $data['end_date']?$data['end_date']:date('Y-m-d H:i:s',strtotime("+7 day"));
+        $data['created_date'] = date('Y-m-d H:i:s');
+        if(isset($data['file'])){
+            $file = $data['file'];
+            $data['media_location'] = $this->getFileName($data['file']);
+            unset($data['file']);
+        }
+        if(isset($data['groups'])){
+            $groups = json_decode($data['groups'],true);
+            unset($data['groups']);
+        }
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
@@ -35,22 +56,20 @@ class AnnouncementService extends AbstractService{
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
-            if(isset($data['groups'])){
-                $affected = $this->insertAnnouncementForGroup($id,$data['groups']);
-                if($affected != count($data['groups'])) {
+            if(isset($groups)){
+                $affected = $this->insertAnnouncementForGroup($id,$groups);
+                if(is_string($groups) && $affected != count($groups)) {
                     $this->rollback();
                     return 0;
                 }
-            } else {
-                //TODO handle this case properly
             }
             $this->commit();
+            FileService::renameFile($this->config['DATA_FOLDER']."temp/".$file,$this->getAnnouncementFolder($id)."/".$data['media_location']);
         }catch(Exception $e){
-            // print_r($e);exit;
+            // print_r($e->getMessage());exit;
             $this->rollback();
             return 0;
         }
-
         return $count;
     }
     public function updateAnnouncement($id,&$data){
@@ -59,11 +78,18 @@ class AnnouncementService extends AbstractService{
             return 0;
         }
         $originalArray = $obj->toArray();
-        $data['org_id'] = $originalArray['org_id'];
-        $data['created_date'] = $originalArray['created_date'];
-        $data['created_id'] = $originalArray['created_id'];
         $form = new Announcement();
+        $data = array_merge($originalArray, $data);
         $data['id'] = $id;
+        if(isset($data['groups'])){
+            $groups = json_decode($data['groups'],true);
+            unset($data['groups']);
+        }
+        if(isset($data['file'])){
+            $file = $data['file'];
+            $data['media_location'] = $this->getFileName($data['file']);
+            unset($data['file']);
+        }
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
@@ -76,7 +102,7 @@ class AnnouncementService extends AbstractService{
             }
             $data['id'] = $id;
             if(isset($data['groups'])){
-                $groupsUpdated = $this->updateGroups($id,$data['groups']);
+                $groupsUpdated = $this->updateGroups($id,$groups);
                 if(!$groupsUpdated) {
                     $this->rollback();
                     return 0;
@@ -84,9 +110,11 @@ class AnnouncementService extends AbstractService{
             } else {
                 //TODO handle this case properly
             }
+            if(isset($file)){
+                $this->moveTempFile($file,$this->getAnnouncementFolder($id)."/".$data['media_location']);
+            }
             $this->commit();
         }catch(Exception $e){
-            // print_r($e);exit;
             $this->rollback();
             return 0;
         }
@@ -107,7 +135,7 @@ class AnnouncementService extends AbstractService{
             return 0;
         }
         $result['delete'] = $this->deleteGroupsByAnnouncement($announcementId,$groupsRemoved);
-        if($result['delete']!=count($groupsRemoved)){
+        if($result['delete']!=count($groupsRemoved)||count($groupsRemoved)==0){
             return 0;
         }
         return 1;
@@ -120,7 +148,7 @@ class AnnouncementService extends AbstractService{
             $delete->where(['announcement_id' => $announcementId,'group_id' => $groupId]);
             $result = $this->executeUpdate($delete);
             if($result->getAffectedRows() == 0){
-                break;
+            break;
             }
             $rowsAffected++; 
         }
@@ -177,14 +205,13 @@ class AnnouncementService extends AbstractService{
     }
 
     public function getAnnouncements() {
-        $userId = AuthContext::get(AuthConstants::USER_ID);
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_announcement')
                 ->columns(array("*"))
                 ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
                 ->join('groups_avatars', 'ox_announcement_group_mapper.group_id = groups_avatars.groupid',array('groupid','avatarid'),'left')
-                ->where(array('groups_avatars.avatarid' => $userId));
+                ->where(array('groups_avatars.avatarid' => AuthContext::get(AuthConstants::USER_ID)));
         return $this->executeQuery($select)->toArray();
     }
 }
