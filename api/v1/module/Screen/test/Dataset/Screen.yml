@@ -1,10 +1,10 @@
 ox_screen:
   -
     id: 1
-    name: "Announcement"
+    name: "Dashboard"
   -
     id: 2
-    name: "Assignments"
+    name: "Profile"
 
 ox_screen_widget:
   -

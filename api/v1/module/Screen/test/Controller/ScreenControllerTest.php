@@ -22,7 +22,7 @@ class ScreenControllerTest extends ControllerTest{
         return $dataset;
     }
     public function testGetList(){
-        $this->initAuthToken('bharatg');
+        $this->initAuthToken($this->authUserName);
         $this->dispatch('/screen', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Screen');
@@ -34,9 +34,9 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['id'], 1);
-        $this->assertEquals($content['data'][0]['name'], 'Announcement');
+        $this->assertEquals($content['data'][0]['name'], 'Dashboard');
         $this->assertEquals($content['data'][1]['id'], 2);
-        $this->assertEquals($content['data'][1]['name'], 'Assignments');
+        $this->assertEquals($content['data'][1]['name'], 'Profile');
     }
 
     public function testGetScreenWidgetList() {
@@ -77,7 +77,7 @@ class ScreenControllerTest extends ControllerTest{
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
-        $this->assertEquals($content['data']['name'], 'Announcement');
+        $this->assertEquals($content['data']['name'], 'Dashboard');
     }
     public function testGetNotFound(){
         $this->initAuthToken($this->authUserName);

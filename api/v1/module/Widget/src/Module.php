@@ -39,6 +39,10 @@ class Module implements ConfigProviderInterface {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Widget());
                     return new TableGateway('ox_widget', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\WidgetService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\WidgetService($container->get('config'), $dbAdapter, $container->get(Model\WidgetTable::class));
+                },
             ],
         ];
     }
@@ -48,7 +52,7 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\WidgetController::class => function($container) {
                     return new Controller\WidgetController(
-                        $container->get(Model\WidgetTable::class),$container->get('WidgetLogger'));
+                        $container->get(Model\WidgetTable::class),$container->get(Service\WidgetService::class),$container->get('WidgetLogger'));
                 },
             ],
         ];
