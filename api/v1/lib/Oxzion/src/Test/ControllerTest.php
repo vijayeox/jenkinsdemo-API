@@ -12,6 +12,9 @@ use Zend\Stdlib\ArrayUtils;
 
 abstract class ControllerTest extends AbstractHttpControllerTestCase{
     use TestCaseTrait;
+    protected $authUserName='bharatg'; //TODO Need to put as global setup
+    protected $authUserId=1;
+
     protected $jwtToken = array();
     static private $pdo = null;
 
@@ -83,6 +86,7 @@ abstract class ControllerTest extends AbstractHttpControllerTestCase{
         $headers = $request->getHeaders();
         $headers->addHeaderLine('Authorization', 'Bearer '.$token);
     }
+
     protected function getMockObject($class, array $constructorArgs = null){
     	$mock = $this->getMockBuilder($class);
     	if(!is_null($constructorArgs)){

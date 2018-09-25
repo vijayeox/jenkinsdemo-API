@@ -1,0 +1,26 @@
+ox_widget:
+  -
+    id: 1
+    name: "Announcement"
+    defaultheight: 3
+    defaultwidth: 2
+  -
+    id: 2
+    name: "Assignments"
+    defaultheight: 4
+    defaultwidth: 3
+  -
+    id: 3
+    name: "Followups"
+    defaultheight: 2
+    defaultwidth: 3
+
+ox_org_widget:
+  -
+    id: 1
+    orgid: 1
+    widgetid: 1
+  -
+    id: 2
+    orgid: 1
+    widgetid: 3

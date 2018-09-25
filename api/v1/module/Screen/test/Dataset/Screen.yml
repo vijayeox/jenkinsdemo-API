@@ -1,0 +1,45 @@
+ox_screen:
+  -
+    id: 1
+    name: "Dashboard"
+  -
+    id: 2
+    name: "Profile"
+
+ox_screen_widget:
+  -
+    id: 1
+    screenid: 1
+    userid: 1
+    widgetid: 1
+    width: 3 
+    height: 2
+    column: 1
+    row: 2
+  -
+    id: 2
+    screenid: 1
+    userid: 1
+    widgetid: 2
+    width: 2 
+    height: 3
+    column: 2
+    row: 3
+  -
+    id: 3
+    screenid: 1
+    userid: 2
+    widgetid: 2
+    width: 2 
+    height: 2
+    column: 4
+    row: 1
+  -
+    id: 4
+    screenid: 2
+    userid: 1
+    widgetid: 1
+    width: 1 
+    height: 3
+    column: 4
+    row: 3
