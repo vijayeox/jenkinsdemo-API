@@ -44,6 +44,9 @@ return [
             ],
         ],
     ],
+    'AlertPrivilege' => [
+        'privilege' =>"ALERT",
+    ],
     'log' => [
         'AlertLogger' => [
             'writers' => [

@@ -22,6 +22,9 @@ return [
             ],
         ],
     ],
+    'AnnouncementPrivilege' => [
+        'privilege' =>"ANNOUNCEMENT",
+    ],
     'log' => [
         'AnnouncementLogger' => [
             'writers' => [

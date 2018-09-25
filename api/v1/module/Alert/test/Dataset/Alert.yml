@@ -27,3 +27,19 @@ user_alert_verfication:
     alert_id: 2
     user_id: 1
     status: 1
+ox_priveleges:
+-
+  id: 2
+  name: "ALERT"
+  permissions_allowed: 15
+ox_role_privelege:
+-
+  id: 1
+  role_id: 1
+  privelege_name: "ALERT"
+  permissions: 15
+-
+  id: 2
+  role_id: 2
+  privelege_name: "ALERT"
+  permissions: 1

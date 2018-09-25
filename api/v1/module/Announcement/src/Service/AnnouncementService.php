@@ -7,7 +7,6 @@ use Announcement\Model\Announcement;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Service\FileService;
 use Oxzion\Auth\AuthConstants;
-use Oxzion\File\FileConstants;
 use Oxzion\ValidationException;
 use Exception;
 
@@ -148,7 +147,7 @@ class AnnouncementService extends AbstractService{
             $delete->where(['announcement_id' => $announcementId,'group_id' => $groupId]);
             $result = $this->executeUpdate($delete);
             if($result->getAffectedRows() == 0){
-            break;
+                break;
             }
             $rowsAffected++; 
         }
@@ -213,6 +212,10 @@ class AnnouncementService extends AbstractService{
                 ->join('groups_avatars', 'ox_announcement_group_mapper.group_id = groups_avatars.groupid',array('groupid','avatarid'),'left')
                 ->where(array('groups_avatars.avatarid' => AuthContext::get(AuthConstants::USER_ID)));
         return $this->executeQuery($select)->toArray();
+    }
+
+    protected function moveTempFile($file,$location){
+        FileService::renameFile($this->config['DATA_FOLDER']."temp/".$file,$location);
     }
 }
 ?>

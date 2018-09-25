@@ -11,11 +11,11 @@
  * file.
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
-$host = 'localhost';
-$db = 'oxzion_prod';
-$username = 'root';
-$password = '';
 
+    $host = '127.0.0.1';
+    $db = "oxapi";
+    $username = "root";
+    $password = "";
 
 
 return [
@@ -35,6 +35,7 @@ return [
         'user'=>'elastic',
         'password'=>'hvqr9799/'
     ],
+    'DATA_FOLDER'=>__DIR__.'/../../data/uploads/',
     'salt' => 'arogAegatnaVOfficeBack123',
     'jwtKey' => 'l7Hnf6TGMYTy6eP7oyyWNG1MGay1T39/If495vwYBhS2j6OOHlMKhSf3qADPlWwkHQ6h3tjP2klI0kvKPltvVA==',
     'jwtAlgo' => 'HS512',

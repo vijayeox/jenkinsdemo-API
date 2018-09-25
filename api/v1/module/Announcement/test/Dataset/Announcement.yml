@@ -16,3 +16,19 @@ ox_announcement_group_mapper:
     id: 2
     announcement_id: 2
     group_id: 1
+ox_priveleges:
+-
+  id: 1
+  name: "ANNOUNCEMENT"
+  permissions_allowed: 15
+ox_role_privelege:
+-
+  id: 1
+  role_id: 1
+  privelege_name: "ANNOUNCEMENT"
+  permissions: 15
+-
+  id: 2
+  role_id: 2
+  privelege_name: "ANNOUNCEMENT"
+  permissions: 1

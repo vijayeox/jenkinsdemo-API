@@ -18,3 +18,12 @@ insert into groups_avatars (id, groupid, avatarid)
 values (2, 1, 2);
 insert into groups_avatars (id, groupid, avatarid)
 values (3, 2, 2);
+
+INSERT INTO ox_roles (id, name, description) values
+(1, 'EMPLOYEE', NULL),
+(2, 'EMPLOYEE2', NULL);
+
+INSERT INTO ox_role_user (user_id, role_id) values
+(1, 1),
+(1, 2),
+(2, 2);

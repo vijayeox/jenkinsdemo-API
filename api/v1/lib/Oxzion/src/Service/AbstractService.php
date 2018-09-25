@@ -16,9 +16,6 @@ class AbstractService{
             $this->sql = new Sql($this->dbAdapter);
         }
     }
-    protected function moveTempFile($file,$location){
-        FileService::renameFile($this->config['DATA_FOLDER']."temp/".$file,$location);
-    }
 
     protected function beginTransaction(){
         $this->dbAdapter->getDriver()->getConnection()->beginTransaction();

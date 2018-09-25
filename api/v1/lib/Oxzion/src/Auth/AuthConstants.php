@@ -7,5 +7,6 @@ class AuthConstants{
     const ORG_ID = "orgId";
     const USERNAME = 'username';
     const NAME = 'name';
+    const ROLES = 'roles';
 }
 ?>
