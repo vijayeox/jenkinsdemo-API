@@ -15,15 +15,15 @@ final class Version20180922175932 extends AbstractMigration
 		$this->addSql("CREATE TABLE `ox_priveleges` (
 			`id` int(32) NOT NULL,
 			`name` varchar(250) NOT NULL,
-			`permissions_allowed` varchar(32) NOT NULL COMMENT '1=>READ|2=>CREATE|4=>Write|8=>Delete as Sum Ex:15=C+W+R+D'
-			`org_id` int(32) NOT NULL,
+			`permissions_allowed` varchar(32) NOT NULL COMMENT '1=>READ|2=>CREATE|4=>Write|8=>Delete as Sum Ex:15=C+W+R+D',
+			`org_id` int(32) NOT NULL
 		) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 
 		$this->addSql("CREATE TABLE IF NOT EXISTS `ox_roles` (
 			`id` int(32) NOT NULL,
 			`name` varchar(100) NOT NULL,
-			`description` text
-			`org_id` int(32) NOT NULL,
+			`description` text,
+			`org_id` int(32) NOT NULL
 		) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 
 		$this->addSql("CREATE TABLE IF NOT EXISTS `ox_role_privelege` (
@@ -31,7 +31,7 @@ final class Version20180922175932 extends AbstractMigration
 			`role_id` int(32) NOT NULL,
 			`privelege_name` varchar(100) NOT NULL,
 			`permissions` int(32) NOT NULL,
-			`org_id` int(32) NOT NULL,
+			`org_id` int(32) NOT NULL
 		) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 
 		$this->addSql("CREATE TABLE IF NOT EXISTS `ox_role_user` (
@@ -57,9 +57,7 @@ final class Version20180922175932 extends AbstractMigration
 		$this->addSql("ALTER TABLE `ox_role_privelege`
 			MODIFY `id` int(32) NOT NULL AUTO_INCREMENT;");
 
-		$this->addSql("ALTER TABLE `ox_role_privelege` ADD UNIQUE `role_privelege` (`role_name`, `privelege_id`,`org_id`);");
-
-		$this->addSql("ALTER TABLE `ox_role_user` ADD UNIQUE `role_user` (`user_id`, `role_id`,`org_id`);");
+		$this->addSql("ALTER TABLE `ox_role_privelege` ADD UNIQUE `role_privelege` (`role_id`, `privelege_name`,`org_id`);");
 
         $this->addSql("INSERT INTO ox_roles (`name`) SELECT distinct Upper(`role`) from avatars");
 
