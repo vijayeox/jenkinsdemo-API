@@ -8,6 +8,7 @@ use Zend\Log\Logger;
 use User\Model\UserTable;
 use Zend\Db\Sql\Sql;
 use Oxzion\Auth\AuthConstants;
+use Oxzion\Security\SecurityManager;
 use Zend\Mvc\MvcEvent;
 use Oxzion\Utils\ValidationResult;
 use Oxzion\Auth\AuthSuccessListener;
@@ -51,20 +52,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
     {
         parent::setEventManager($events);
         $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'checkAuthorization'), 100);
-        $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'checkAccess'), 90);
-    }
-    public function checkAccess($event){
-        $response = $event->getResponse();
-        $userService = $event->getApplication()->getServiceManager()->get(UserService::class);
-        $granted = $userService->hasPermission($event);
-        if(!$granted){
-            $jsonModel = $this->getErrorResponse("You have no Access to this API", 401);
-            $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
-            $response->setContent($jsonModel->serialize());
-            return $response;
-        } else {
-            return;
-        }
+        $events->attach(MvcEvent::EVENT_DISPATCH, array(SecurityManager::getInstance(), 'checkAccess'), 90);
     }
     public function checkAuthorization($event)
     {
@@ -79,7 +67,6 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
                     if($tokenPayload->data && $tokenPayload->data->username){
                         $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
                         $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username]);
-                        $this->events->trigger('access_control',null,['event'=>$event]);
 					    return;
                     }
             }
@@ -186,6 +173,4 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
 
         return $this->getSuccessResponse();
     }
-
-   
 }

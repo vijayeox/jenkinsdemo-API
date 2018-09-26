@@ -2,6 +2,7 @@
 namespace Screen;
 
 use Screen\Controller\ScreenController;
+use Screen\Controller\ScreenwidgetController;
 use Screen\Model;
 use Oxzion\Test\ControllerTest;
 use Oxzion\Db\ModelTable;
@@ -22,7 +23,7 @@ class ScreenControllerTest extends ControllerTest{
         return $dataset;
     }
     public function testGetList(){
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->dispatch('/screen', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Screen');
@@ -40,11 +41,11 @@ class ScreenControllerTest extends ControllerTest{
     }
 
     public function testGetScreenWidgetList() {
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->dispatch('/screen/1/widget', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Screen');
-    //    $this->assertControllerName(ScreenwidgetController::class); // as specified in router's controller name alias
+        $this->assertControllerName(ScreenwidgetController::class); // as specified in router's controller name alias
         $this->assertControllerClass('ScreenwidgetController');
         $this->assertMatchedRouteName('screenwidget');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
@@ -66,7 +67,7 @@ class ScreenControllerTest extends ControllerTest{
     }
 
     public function testGet(){
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->dispatch('/screen/1', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Screen');
@@ -80,7 +81,7 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['name'], 'Dashboard');
     }
     public function testGetNotFound(){
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->dispatch('/screen/9999', 'GET');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Screen');
@@ -94,7 +95,7 @@ class ScreenControllerTest extends ControllerTest{
     public function testCreate(){
         $data = ['name' => 'Test Screen'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_screen'));
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/screen', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -112,19 +113,19 @@ class ScreenControllerTest extends ControllerTest{
     public function testScreenwidgetCreate(){
         $data = ['widgetid' =>10,'width'=>3,'height'=>2,'row'=>1,'column'=>3];
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_screen_widget'));
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/screen/1/widget', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('Screen');
-     //   $this->assertControllerName(ScreenController::class); // as specified in router's controller name alias
+        $this->assertControllerName(ScreenwidgetController::class); // as specified in router's controller name alias
         $this->assertControllerClass('ScreenwidgetController');
-     //   $this->assertMatchedRouteName('screen');
+        $this->assertMatchedRouteName('screenwidget');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['screenid'], 1);
-        $this->assertEquals($content['data']['userid'], $this->authUserId);
+        $this->assertEquals($content['data']['userid'], $this->fullAccessUserId);
         $this->assertEquals($content['data']['widgetid'], 10);
         $this->assertEquals($content['data']['width'], 3);
         $this->assertEquals($content['data']['height'], 2);
@@ -137,7 +138,7 @@ class ScreenControllerTest extends ControllerTest{
 
     public function testUpdate(){
         $data = ['name' => 'Test Screen'];
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/screen/1', 'PUT', null);
         $this->assertResponseStatusCode(200);
@@ -154,7 +155,7 @@ class ScreenControllerTest extends ControllerTest{
 
     public function testUpdateNotFound(){
         $data = ['name' => 'Test Screen'];
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/screen/99999', 'PUT', null);
         $this->assertResponseStatusCode(404);
@@ -168,7 +169,7 @@ class ScreenControllerTest extends ControllerTest{
     }
 
     public function testDelete(){
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->dispatch('/screen/2', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Screen');
@@ -181,7 +182,7 @@ class ScreenControllerTest extends ControllerTest{
     }
 
     public function testDeleteNotFound(){
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->dispatch('/screen/99999', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Screen');

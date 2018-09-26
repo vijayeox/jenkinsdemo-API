@@ -17,6 +17,14 @@ return [
                     'route' => '/alert[/:alertId]',
                     'defaults' => [
                         'controller' => Controller\AlertController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_ANNOUNCEMENT_WRITE',
+                            'post'=> 'MANAGE_ANNOUNCEMENT_WRITE',
+                            'delete'=> 'MANAGE_ANNOUNCEMENT_WRITE',
+                            'get'=> 'MANAGE_ANNOUNCEMENT_READ',
+                            'getList'=> 'MANAGE_ANNOUNCEMENT_READ',
+                        ],
                     ],
                 ],
             ],
@@ -43,9 +51,6 @@ return [
                 ],
             ],
         ],
-    ],
-    'AlertPrivilege' => [
-        'privilege' =>"ALERT",
     ],
     'log' => [
         'AlertLogger' => [

@@ -22,7 +22,7 @@ class WidgetControllerTest extends ControllerTest{
         return $dataset;
     }
     public function testGetList(){
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->dispatch('/widget', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Widget');
@@ -46,7 +46,7 @@ class WidgetControllerTest extends ControllerTest{
 
 
     public function testGet(){
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->dispatch('/widget/1', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Widget');
@@ -61,7 +61,7 @@ class WidgetControllerTest extends ControllerTest{
     }
 
     public function testGetNotFound(){
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->dispatch('/widget/9999', 'GET');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Widget');
@@ -75,7 +75,7 @@ class WidgetControllerTest extends ControllerTest{
     public function testCreate(){
         $data = ['name' => 'Test Widget','defaultheight' =>5,'defaultwidth'=>1,'applicationguid'=>'abcd1234'];
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_Widget'));
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/widget', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -95,7 +95,7 @@ class WidgetControllerTest extends ControllerTest{
 
     public function testUpdate(){
         $data = ['name' => 'Test Widget Update'];
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/widget/1', 'PUT', null);
         $this->assertResponseStatusCode(200);
@@ -112,7 +112,7 @@ class WidgetControllerTest extends ControllerTest{
 
     public function testUpdateNotFound(){
         $data = ['name' => 'Test Widget'];
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/widget/99999', 'PUT', null);
         $this->assertResponseStatusCode(404);
@@ -126,7 +126,7 @@ class WidgetControllerTest extends ControllerTest{
     }
 
     public function testDelete(){
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->dispatch('/widget/2', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Widget');
@@ -139,7 +139,7 @@ class WidgetControllerTest extends ControllerTest{
     }
 
     public function testDeleteNotFound(){
-        $this->initAuthToken($this->authUserName);
+        $this->initAuthToken($this->fullAccessUser);
         $this->dispatch('/widget/99999', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Widget');

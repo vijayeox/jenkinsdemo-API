@@ -5,6 +5,7 @@ namespace Oxzion\Controller;
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\JsonModel;
 use Oxzion\Jwt\JwtHelper;
+use Oxzion\Error\ErrorHandler;
 
 abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
@@ -85,15 +86,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     }
     protected function getErrorResponse($message, $code = 200, array $data = null){
         $this->response->setStatusCode($code);
-        $payload = ['status' => 'error'];
-        if(! is_null($message)){
-            $payload['message'] = $message;
-        }
-        if(! is_null($data)){
-            $payload['data'] = (array) $data;
-        }
-
-        return new JsonModel($payload);
+        return ErrorHandler::buildErrorJson($message,$data);
     }
 
     protected function getConfig(){

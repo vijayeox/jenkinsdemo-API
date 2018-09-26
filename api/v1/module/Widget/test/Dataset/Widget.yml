@@ -24,3 +24,19 @@ ox_org_widget:
     id: 2
     orgid: 1
     widgetid: 3
+ox_priveleges:
+-
+  id: 1
+  name: "WIDGET"
+  permissions_allowed: 15
+ox_role_privelege:
+-
+  id: 1
+  role_id: 1
+  privelege_name: "WIDGET"
+  permissions: 15
+-
+  id: 2
+  role_id: 2
+  privelege_name: "WIDGET"
+  permissions: 1

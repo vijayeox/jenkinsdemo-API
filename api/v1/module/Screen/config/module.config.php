@@ -15,7 +15,14 @@ return [
                 'options' => [
                     'route'    => '/screen[/:screenId]',
                     'defaults' => [
-                        'controller' => Controller\ScreenController::class
+                        'controller' => Controller\ScreenController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'SCREEN_WRITE',
+                            'post'=> 'SCREEN_WRITE',
+                            'delete'=> 'SCREEN_WRITE',
+                            'get'=> 'SCREEN_READ',
+                        ],
                     ],
                 ],
             ],
@@ -24,7 +31,14 @@ return [
                 'options' => [
                     'route' => '/screen/:screenId/widget[/:id]',
                     'defaults' => [
-                        'controller' => Controller\ScreenwidgetController::class
+                        'controller' => Controller\ScreenwidgetController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'SCREEN_WRITE',
+                            'post'=> 'SCREEN_WRITE',
+                            'delete'=> 'SCREEN_WRITE',
+                            'get'=> 'SCREEN_READ',
+                        ],
                     ],
                 ],
             ],

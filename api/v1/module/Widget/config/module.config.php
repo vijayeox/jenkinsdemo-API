@@ -15,7 +15,14 @@ return [
                 'options' => [
                 	'route'    => '/widget[/:widgetId]',
                     'defaults' => [
-                        'controller' => Controller\WidgetController::class
+                        'controller' => Controller\WidgetController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'WIDGET_WRITE',
+                            'post'=> 'WIDGET_WRITE',
+                            'delete'=> 'WIDGET_WRITE',
+                            'get'=> 'WIDGET_READ',
+                        ],
                     ],
                 ],
             ],            

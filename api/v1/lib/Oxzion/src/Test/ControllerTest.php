@@ -12,8 +12,8 @@ use Zend\Stdlib\ArrayUtils;
 
 abstract class ControllerTest extends AbstractHttpControllerTestCase{
     use TestCaseTrait;
-    protected $authUserName='bharatg'; //TODO Need to put as global setup
-    protected $authUserId=1;
+    protected $fullAccessUser='bharatg'; //TODO Need to put as global setup
+    protected $fullAccessUserId=1;
 
     protected $jwtToken = array();
     static private $pdo = null;

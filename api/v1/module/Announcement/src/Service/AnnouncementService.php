@@ -30,9 +30,9 @@ class AnnouncementService extends AbstractService{
         $form = new Announcement();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['start_date'] = $data['start_date']?$data['start_date']:date('Y-m-d H:i:s');
+        $data['start_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d H:i:s');
         $data['status'] = $data['status']?$data['status']:1;
-        $data['end_date'] = $data['end_date']?$data['end_date']:date('Y-m-d H:i:s',strtotime("+7 day"));
+        $data['end_date'] = isset($data['end_date'])?$data['end_date']:date('Y-m-d H:i:s',strtotime("+7 day"));
         $data['created_date'] = date('Y-m-d H:i:s');
         if(isset($data['file'])){
             $file = $data['file'];

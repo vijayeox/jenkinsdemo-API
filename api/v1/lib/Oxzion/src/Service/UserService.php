@@ -34,47 +34,7 @@ class UserService extends AbstractService{
 		}
 		$this->cacheService->set($userName,$results);
 		return $results;
-	}
-	public function hasPermission($e){
-        $request = $e->getRequest();
-		$controllerName = $e->getRouteMatch()->getParam('controller', null);
-        $moduleName = explode("\\", $controllerName);
-		$actionName = $e->getRouteMatch()->getParam('action', null);
-		//TODO Rules for custom Actions
-		if(isset($actionName)){
-
-		}
-        $api_permission = $this->getPermission(strtolower($request->getMethod()));
-		$config = $e->getApplication()->getServiceManager()->get('Config');
-		$roles = AuthContext::get(AuthConstants::ROLES);
-		$requiredAccess = $config[$moduleName[0]."Privilege"]['privilege']."_".$api_permission;
-		if (in_array($requiredAccess, $roles)) {
-			return 1;
-		}
-		return 0;
-	}
-	private function getPermission($method){
-		if(isset($method)){
-			switch ($method) {
-				case 'post':
-					return "CREATE";
-					break;
-				case 'put':
-					return "WRITE";
-					break;
-				case 'get':
-					return "READ";
-					break;
-				case 'delete':
-					return "DELETE";
-					break;
-				default:
-					return "READ";
-					break;
-			}
-		}
-	}
-	
+	}	
 	
 	private function getGroupsFromDb($userName){
 		$sql = $this->getSqlObject();
@@ -113,39 +73,23 @@ class UserService extends AbstractService{
         $results = $this->executeQuery($select)->toArray();
         $permissions = array();
         foreach ($results as $key => $value) {
-        	$permissions[] = implode($this->addPermissions($value['privelege_name'],$value['permissions']),",");
+        	$permissions = array_merge($permissions,$this->addPermissions($value['privelege_name'],$value['permissions']));
         }
-		return array_unique(explode(",",implode($permissions, ",")));
+		return array_unique($permissions);
 	}
 	public function addPermissions($privelegeName,$permission){
 		$permissionArray = array();
-		switch (true) {
-			case ($permission == 1):
-				$permissionArray[] = $privelegeName."_".'READ';
-				break;
-			case $permission >= 2 && $permission <= 3 :
-				$permissionArray[] = $privelegeName."_".'READ';
-				$permissionArray[] = $privelegeName."_".'CREATE';
-				break;
-			case $permission >= 4 && $permission <= 7 :
-				$permissionArray[] = $privelegeName."_".'READ';
-				$permissionArray[] = $privelegeName."_".'CREATE';
-				$permissionArray[] = $privelegeName."_".'WRITE';
-				break;
-			case $permission >= 8 && $permission <= 14 :
-				$permissionArray[] = $privelegeName."_".'READ';
-				$permissionArray[] = $privelegeName."_".'CREATE';
-				$permissionArray[] = $privelegeName."_".'WRITE';
-				break;
-			case 15:
-				$permissionArray[] = $privelegeName."_".'READ';
-				$permissionArray[] = $privelegeName."_".'CREATE';
-				$permissionArray[] = $privelegeName."_".'WRITE';
-				$permissionArray[] = $privelegeName."_".'DELETE';
-				break;
-			default:
-				$permissionArray[] = $privelegeName."_".'READ';
-				break;
+		if (($permission & 1) != 0){
+			$permissionArray[] = $privelegeName."_".'READ';
+		}
+		if(($permission & 2) != 0 ){
+			$permissionArray[] = $privelegeName."_".'WRITE';
+		}
+		if(($permission & 4) != 0  ){
+			$permissionArray[] = $privelegeName."_".'CREATE';
+		}
+		if(($permission & 8) != 0) {
+			$permissionArray[] = $privelegeName."_".'DELETE';
 		}
 		return $permissionArray;
 	}

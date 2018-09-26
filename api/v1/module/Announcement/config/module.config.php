@@ -17,13 +17,17 @@ return [
                     'route' => '/announcement[/:announcementId]',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'ANNOUNCEMENT_WRITE',
+                            'post'=> 'ANNOUNCEMENT_WRITE',
+                            'delete'=> 'ANNOUNCEMENT_WRITE',
+                            'get'=> 'ANNOUNCEMENT_READ',
+                        ],
                     ],
                 ],
             ],
         ],
-    ],
-    'AnnouncementPrivilege' => [
-        'privilege' =>"ANNOUNCEMENT",
     ],
     'log' => [
         'AnnouncementLogger' => [
