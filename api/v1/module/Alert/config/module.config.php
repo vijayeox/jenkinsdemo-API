@@ -19,11 +19,11 @@ return [
                         'controller' => Controller\AlertController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_ANNOUNCEMENT_WRITE',
-                            'post'=> 'MANAGE_ANNOUNCEMENT_WRITE',
-                            'delete'=> 'MANAGE_ANNOUNCEMENT_WRITE',
-                            'get'=> 'MANAGE_ANNOUNCEMENT_READ',
-                            'getList'=> 'MANAGE_ANNOUNCEMENT_READ',
+                            'put'=> 'ALERT_WRITE',
+                            'post'=> 'ALERT_WRITE',
+                            'delete'=> 'ALERT_WRITE',
+                            'get'=> 'ALERT_READ',
+                            'decline'=>'ALERT_READ',
                         ],
                     ],
                 ],
@@ -35,7 +35,11 @@ return [
                     'defaults' => [
                         'controller' => Controller\AlertController::class,
                         'action' => 'accept',
-                        'method'=>'post'
+                        'method'=>'post',
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'accept'=>'ALERT_READ',
+                        ],
                     ],
                 ],
             ],
@@ -46,7 +50,11 @@ return [
                     'defaults' => [
                         'controller' => Controller\AlertController::class,
                         'action' => 'decline',
-                        'method'=>'post'
+                        'method'=>'post',
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'decline'=>'ALERT_READ',
+                        ],
                     ],
                 ],
             ],

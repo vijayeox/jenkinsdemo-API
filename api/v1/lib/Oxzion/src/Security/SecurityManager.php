@@ -17,17 +17,25 @@ class SecurityManager{
 	}
 	public function checkAccess($e){
 		$accessName = $e->getRouteMatch()->getParam('access', null);
-        $api_permission = $accessName[strtolower($e->getRequest()->getMethod())];
-		if(!$this->isGranted($api_permission)){
-			$response = $e->getResponse();
-			$response->setStatusCode(401);
-            $jsonModel = ErrorHandler::buildErrorJson("You have no Access to this API");
-            $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
-            $response->setContent($jsonModel->serialize());
-            return $response;
-        } else {
-            return;
-        }
+		$actionName = $e->getRouteMatch()->getParam('action', null);
+		if(isset($actionName)){
+			$api_permission = $accessName[$actionName];
+		} else {
+        	$api_permission = $accessName[strtolower($e->getRequest()->getMethod())];
+		}
+		if(isset($accessName)){
+			if(!$this->isGranted($api_permission)){
+				$response = $e->getResponse();
+				$response->setStatusCode(401);
+				$jsonModel = ErrorHandler::buildErrorJson("You have no Access to this API");
+				$response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+				$response->setContent($jsonModel->serialize());
+				return $response;
+			} else {
+				return;
+			}
+		}
+		return;
 	}
 	/**
 	* @param: privelege Array|String

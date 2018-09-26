@@ -16,7 +16,7 @@ final class Version20180922175932 extends AbstractMigration
 			`id` int(32) NOT NULL,
 			`name` varchar(250) NOT NULL,
 			`permissions_allowed` varchar(32) NOT NULL COMMENT '1=>READ|2=>CREATE|4=>Write|8=>Delete as Sum Ex:15=C+W+R+D',
-			`org_id` int(32) NOT NULL
+			`org_id` int(32)
 		) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
 
 		$this->addSql("CREATE TABLE IF NOT EXISTS `ox_roles` (
