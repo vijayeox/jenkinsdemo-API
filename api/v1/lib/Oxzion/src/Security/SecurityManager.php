@@ -38,15 +38,15 @@ class SecurityManager{
 		return;
 	}
 	/**
-	* @param: privelege Array|String
+	* @param: privilege Array|String
 	* Return : Boolean 0|1 for Granted
 	*/
-	public function isGranted($privelege){
+	public function isGranted($privilege){
 		$roles = AuthContext::get(AuthConstants::ROLES);
-		if (is_string($privelege) && in_array($privelege, $roles)) {
+		if (is_string($privilege) && in_array($privilege, $roles)) {
 			return 1;
-		} else if(is_array($privelege)){
-			foreach ($privelege as $value) {
+		} else if(is_array($privilege)){
+			foreach ($privilege as $value) {
 				if(in_array($value, $roles)){
 					return 1;
 				}

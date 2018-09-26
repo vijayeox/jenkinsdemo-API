@@ -65,31 +65,31 @@ class UserService extends AbstractService{
 	private function getPrivelegesFromDb($userId){
 		$sql = $this->getSqlObject();
 		$select = $sql->select()
-		->from('ox_role_privelege')
-        ->columns(array('privelege_name','permissions'))
-        ->join('ox_roles', 'ox_roles.id = ox_role_privelege.id',array())
+		->from('ox_role_privilege')
+        ->columns(array('privilege_name','permissions'))
+        ->join('ox_roles', 'ox_roles.id = ox_role_privilege.id',array())
         ->join('ox_role_user', 'ox_roles.id = ox_role_user.role_id',array())
         ->where(array('ox_role_user.user_id' => $userId));
         $results = $this->executeQuery($select)->toArray();
         $permissions = array();
         foreach ($results as $key => $value) {
-        	$permissions = array_merge($permissions,$this->addPermissions($value['privelege_name'],$value['permissions']));
+        	$permissions = array_merge($permissions,$this->addPermissions($value['privilege_name'],$value['permissions']));
         }
 		return array_unique($permissions);
 	}
-	public function addPermissions($privelegeName,$permission){
+	public function addPermissions($privilegeName,$permission){
 		$permissionArray = array();
 		if (($permission & 1) != 0){
-			$permissionArray[] = $privelegeName."_".'READ';
+			$permissionArray[] = $privilegeName."_".'READ';
 		}
 		if(($permission & 2) != 0 ){
-			$permissionArray[] = $privelegeName."_".'WRITE';
+			$permissionArray[] = $privilegeName."_".'WRITE';
 		}
 		if(($permission & 4) != 0  ){
-			$permissionArray[] = $privelegeName."_".'CREATE';
+			$permissionArray[] = $privilegeName."_".'CREATE';
 		}
 		if(($permission & 8) != 0) {
-			$permissionArray[] = $privelegeName."_".'DELETE';
+			$permissionArray[] = $privilegeName."_".'DELETE';
 		}
 		return $permissionArray;
 	}
