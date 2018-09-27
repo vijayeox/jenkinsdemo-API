@@ -7,7 +7,7 @@ insert into avatars (id, gamelevel, username, password, name, role, orgid, email
 values (2, "", "karan", "1619d7adc23f4f633f11014d2f22b7d8", "Karan", "employee", 1, "", "Active", "On", "Active", 1, 1, "Matrix|Leaderboard|Alerts", 0, 0, 0, 0, 0, 0, 1, 0, "", "Asia/Kolkata", "2=>Comment|3=>Observer|4=>Personal");
 
 insert into avatars (id, gamelevel, username, password, name, role, orgid, email, emailnotify, sentinel, status, alertsacknowledged, pollsacknowledged, statusbox, cluster, open_new_tab, listtoggle, defaultmatrixid, lastactivity, locked, org_role_id, in_game, mission_link, timezone, inmail_label)
-values (2, "", "rakshith", "1619d7adc23f4f633f11014d2f22b7d8", "Rakshith", "manager", 1, "", "Active", "On", "Active", 1, 1, "Matrix|Leaderboard|Alerts", 0, 0, 0, 0, 0, 0, 1, 0, "", "Asia/Kolkata", "2=>Comment|3=>Observer|4=>Personal");
+values (3, "", "rakshith", "1619d7adc23f4f633f11014d2f22b7d8", "Rakshith", "manager", 1, "", "Active", "On", "Active", 1, 1, "Matrix|Leaderboard|Alerts", 0, 0, 0, 0, 0, 0, 1, 0, "", "Asia/Kolkata", "2=>Comment|3=>Observer|4=>Personal");
 
 insert into groups (id, name, orgid, managerid, assigntomanager, power_users, type, hiddentopicons, hidetiles, hidewall, hideannouncement, hideleaderboard, status)
 values (1, "Lions", 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, "Active");

@@ -43,19 +43,3 @@ ox_screen_widget:
     height: 3
     column: 4
     row: 3
-ox_privileges:
--
-  id: 1
-  name: "SCREEN"
-  permissions_allowed: 15
-ox_role_privilege:
--
-  id: 1
-  role_id: 1
-  privilege_name: "SCREEN"
-  permissions: 15
--
-  id: 2
-  role_id: 2
-  privilege_name: "SCREEN"
-  permissions: 1
