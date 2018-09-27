@@ -18,10 +18,10 @@ return [
                         'controller' => Controller\WidgetController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
-                            'put'=> 'WIDGET_WRITE',
-                            'post'=> 'WIDGET_WRITE',
-                            'delete'=> 'WIDGET_WRITE',
-                            'get'=> 'WIDGET_READ',
+                            'put'=> 'MANAGE_WIDGET_WRITE',
+                            'post'=> 'MANAGE_WIDGET_WRITE',
+                            'delete'=> 'MANAGE_WIDGET_WRITE',
+                            'get'=> 'MANAGE_WIDGET_READ',
                         ],
                     ],
                 ],

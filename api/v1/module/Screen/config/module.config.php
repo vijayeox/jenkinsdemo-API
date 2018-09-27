@@ -18,10 +18,10 @@ return [
                         'controller' => Controller\ScreenController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
-                            'put'=> 'SCREEN_WRITE',
-                            'post'=> 'SCREEN_WRITE',
-                            'delete'=> 'SCREEN_WRITE',
-                            'get'=> 'SCREEN_READ',
+                            'put'=> 'MANAGE_SCREEN_WRITE',
+                            'post'=> 'MANAGE_SCREEN_WRITE',
+                            'delete'=> 'MANAGE_SCREEN_WRITE',
+                            'get'=> 'MANAGE_SCREEN_READ',
                         ],
                     ],
                 ],
@@ -34,10 +34,10 @@ return [
                         'controller' => Controller\ScreenwidgetController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
-                            'put'=> 'SCREEN_WRITE',
-                            'post'=> 'SCREEN_WRITE',
-                            'delete'=> 'SCREEN_WRITE',
-                            'get'=> 'SCREEN_READ',
+                            'put'=> 'MANAGE_SCREEN_WRITE',
+                            'post'=> 'MANAGE_SCREEN_WRITE',
+                            'delete'=> 'MANAGE_SCREEN_WRITE',
+                            'get'=> 'MANAGE_SCREEN_READ',
                         ],
                     ],
                 ],
