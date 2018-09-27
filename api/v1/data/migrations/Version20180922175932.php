@@ -29,7 +29,7 @@ final class Version20180922175932 extends AbstractMigration
 		$this->addSql("CREATE TABLE IF NOT EXISTS `ox_role_privilege` (
 			`id` int(32) NOT NULL,
 			`role_id` int(32) NOT NULL,
-			`privilege_name` varchar(100) NOT NULL,
+			`privilege_id` varchar(100) NOT NULL,
 			`permission` int(32) NOT NULL,
 			`org_id` int(32) NOT NULL
 		) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
@@ -57,7 +57,7 @@ final class Version20180922175932 extends AbstractMigration
 		$this->addSql("ALTER TABLE `ox_role_privilege`
 			MODIFY `id` int(32) NOT NULL AUTO_INCREMENT;");
 
-		$this->addSql("ALTER TABLE `ox_role_privilege` ADD UNIQUE `role_privilege` (`role_id`, `privilege_name`,`org_id`);");
+		$this->addSql("ALTER TABLE `ox_role_privilege` ADD UNIQUE `role_privilege` (`role_id`, `privilege_id`,`org_id`);");
 
         $this->addSql("INSERT INTO ox_role (`name`) SELECT distinct Upper(`role`) from avatars");
 
@@ -69,14 +69,14 @@ final class Version20180922175932 extends AbstractMigration
         $this->addSql("INSERT INTO ox_privilege (id, name,permission_allowed) values (2, 'MANAGE_ALERT',3);");
         $this->addSql("INSERT INTO ox_privilege (id, name,permission_allowed) values (3, 'MANAGE_SCREEN',3);");
         $this->addSql("INSERT INTO ox_privilege (id, name,permission_allowed) values (4, 'MANAGE_WIDGET',3);");
-        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (1,1, 'MANAGE_ANNOUNCEMENT',3);");
-        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (2,2, 'MANAGE_ANNOUNCEMENT',1);");
-        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (3,1, 'MANAGE_ALERT',3);");
-        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (4,2, 'MANAGE_ALERT',1);");
-        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (5,1, 'MANAGE_SCREEN',3);");
-        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (6,2, 'MANAGE_SCREEN',1);");
-        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (7,1, 'MANAGE_WIDGET',3);");
-        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (8,2, 'MANAGE_WIDGET',1);");
+        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_id,permission) values (1,1, 1,3);");
+        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_id,permission) values (2,2, 1,1);");
+        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_id,permission) values (3,1, 2,3);");
+        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_id,permission) values (4,2, 2,1);");
+        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_id,permission) values (5,1, 3,3);");
+        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_id,permission) values (6,2, 3,1);");
+        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_id,permission) values (7,1, 4,3);");
+        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_id,permission) values (8,2, 4,1);");
 	}
 
 	public function down(Schema $schema) : void
