@@ -38,7 +38,7 @@ class AuthControllerTest extends ControllerTest{
     }
 
     public function testAuthenticationFail(){
-    	$data = ['username' => 'rakshith', 'password' => 'password'];
+    	$data = ['username' => 'mehul', 'password' => 'password'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');

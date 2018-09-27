@@ -12,7 +12,6 @@ use Zend\Db\Adapter\Adapter;
 use Oxzion\Service\FileService;
 
 class AnnouncementControllerTest extends ControllerTest{
-    public $dummyUser = 'karan';
     
     public function setUp() : void{
         $this->loadConfig();
@@ -41,7 +40,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
     public function testGetList(){
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -54,7 +53,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
     }
     public function testGet(){
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement/1', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -64,14 +63,14 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['name'], 'Announcement 1');
     }
     public function testGetNotFound(){
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement/64', 'GET');
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
     public function testCreate(){
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->createDummyFile();
         $data = ['name' => 'Test Announcement','groups'=>'[{"id":1},{"id":2}]','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day")),'file'=>'test-oxzionlogo.png'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_announcement'));
@@ -90,7 +89,7 @@ class AnnouncementControllerTest extends ControllerTest{
     public function testFileValidation(){
         $data = ['name' => 'Test Announcement','groups'=>'[{"id":1}]','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_announcement'));
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement', 'POST', null);
         $this->assertResponseStatusCode(404);
@@ -101,7 +100,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['errors']['media_location'], 'required');
     }
     public function testCreateWithOutNameFailure(){
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->createDummyFile();
         $data = ['groups'=>'[{"id":1},{"id":2}]','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
         $this->setJsonContent(json_encode($data));
@@ -114,7 +113,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
     public function testCreateAccess(){
-        $this->initAuthToken($this->dummyUser);
+        $this->initAuthToken($this->employeeUser);
         $this->createDummyFile();
         $data = ['name' => 'Test Announcement','groups'=>'[{"id":1},{"id":2}]','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
         $this->setJsonContent(json_encode($data));
@@ -132,7 +131,7 @@ class AnnouncementControllerTest extends ControllerTest{
     public function testUpdate(){
         $data = ['name' => 'Test Announcement','groups'=>'[{"id":1}]','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day")),'file'=>'test-oxzionlogo.png'];
         $this->createDummyFile();
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement/1', 'PUT', null);
         $this->assertResponseStatusCode(200);
@@ -146,7 +145,7 @@ class AnnouncementControllerTest extends ControllerTest{
     public function testUpdateRestricted(){
         $data = ['name' => 'Test Announcement','groups'=>'[{"id":1}]','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day")),'file'=>'test-oxzionlogo.png'];
         $this->createDummyFile();
-        $this->initAuthToken($this->dummyUser);
+        $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement/1', 'PUT', null);
         $this->assertResponseStatusCode(401);
@@ -163,7 +162,7 @@ class AnnouncementControllerTest extends ControllerTest{
     public function testUpdateNotFound(){
         $data = ['name' => 'Test Announcement','groups'=>'[{"id":1},{"id":2}]','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day"))];
         $this->createDummyFile();
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement/122', 'PUT', null);
         $this->assertResponseStatusCode(404);
@@ -173,7 +172,7 @@ class AnnouncementControllerTest extends ControllerTest{
     }
     public function testAddGroupUpdate(){
         $data = ['name' => 'Test Announcement','groups'=>'[{"id":1},{"id":2}]','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day")),'file'=>'test-oxzionlogo.png'];
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->createDummyFile();
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement/1', 'PUT', null);
@@ -188,7 +187,7 @@ class AnnouncementControllerTest extends ControllerTest{
     public function testRemoveGroupUpdate(){
         $data = ['name' => 'Test Announcement','groups'=>'[{"id":2}]','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day")),'file'=>'test-oxzionlogo.png'];
         $this->createDummyFile();
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement/1', 'PUT', null);
         $this->assertResponseStatusCode(200);
@@ -201,7 +200,7 @@ class AnnouncementControllerTest extends ControllerTest{
     }
 
     public function testDelete(){
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement/2', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -210,7 +209,7 @@ class AnnouncementControllerTest extends ControllerTest{
     }
 
     public function testDeleteNotFound(){
-        $this->initAuthToken($this->fullAccessUser);
+        $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement/122', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
