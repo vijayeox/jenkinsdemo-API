@@ -74,7 +74,7 @@ class WidgetControllerTest extends ControllerTest{
     }
     public function testCreate(){
         $data = ['name' => 'Test Widget','defaultheight' =>5,'defaultwidth'=>1,'applicationguid'=>'abcd1234'];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_Widget'));
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_widget'));
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/widget', 'POST', null);
@@ -89,7 +89,7 @@ class WidgetControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['defaultheight'], $data['defaultheight']);
         $this->assertEquals($content['data']['defaultwidth'], $data['defaultwidth']);
-        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_Widget'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_widget'));
     }
 
 
