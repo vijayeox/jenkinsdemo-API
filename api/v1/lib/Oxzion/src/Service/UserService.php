@@ -66,8 +66,7 @@ class UserService extends AbstractService{
 		$sql = $this->getSqlObject();
 		$select = $sql->select()
 		->from('ox_role_privilege')
-        ->columns(array('permission'))
-        ->join('ox_privilege', 'ox_privilege.id = ox_role_privilege.privilege_id',array('privilege_name'=>'name'))
+        ->columns(array('privilege_name','permission'))
         ->join('ox_user_role', 'ox_role_privilege.role_id = ox_user_role.role_id',array())
         ->where(array('ox_user_role.user_id' => $userId));
         $results = $this->executeQuery($select)->toArray();
