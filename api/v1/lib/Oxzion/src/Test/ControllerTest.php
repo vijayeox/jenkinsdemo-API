@@ -15,6 +15,9 @@ abstract class ControllerTest extends AbstractHttpControllerTestCase{
     protected $adminUser='bharatg'; //TODO Need to put as global setup
     protected $adminUserId=1;
     protected $employeeUser = 'karan';
+    protected $employeeUserId=2;
+    protected $managerUser = 'rakshith';
+    protected $managerUserId=3;
 
     protected $jwtToken = array();
     static private $pdo = null;
