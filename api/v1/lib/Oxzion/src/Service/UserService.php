@@ -57,23 +57,22 @@ class UserService extends AbstractService{
 	private function getRolesFromDb($userId){
 		$sql = $this->getSqlObject();
 		$select = $sql->select()
-		->from('ox_role_user')
+		->from('ox_user_role')
         ->columns(array('role_id'))
-        ->where(array('ox_role_user.user_id' => $userId));
+        ->where(array('ox_user_role.user_id' => $userId));
 		return $this->executeQuery($select)->toArray();
 	}
 	private function getPrivelegesFromDb($userId){
 		$sql = $this->getSqlObject();
 		$select = $sql->select()
 		->from('ox_role_privilege')
-        ->columns(array('privilege_name','permissions'))
-        ->join('ox_roles', 'ox_roles.id = ox_role_privilege.id',array())
-        ->join('ox_role_user', 'ox_roles.id = ox_role_user.role_id',array())
-        ->where(array('ox_role_user.user_id' => $userId));
+        ->columns(array('privilege_name','permission'))
+        ->join('ox_user_role', 'ox_role_privilege.role_id = ox_user_role.role_id',array())
+        ->where(array('ox_user_role.user_id' => $userId));
         $results = $this->executeQuery($select)->toArray();
         $permissions = array();
         foreach ($results as $key => $value) {
-        	$permissions = array_merge($permissions,$this->addPermissions($value['privilege_name'],$value['permissions']));
+        	$permissions = array_merge($permissions,$this->addPermissions($value['privilege_name'],$value['permission']));
         }
 		return array_unique($permissions);
 	}
