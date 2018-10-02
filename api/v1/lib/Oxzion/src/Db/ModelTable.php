@@ -88,4 +88,8 @@ abstract class ModelTable {
         return (new Sql($this->adapter));
     }
 
+    public function getTableGateway() {
+        return $this->tableGateway;
+    }
+
 }

@@ -19,7 +19,7 @@ ox_screen_widget:
   -
     id: 2
     screenid: 1
-    userid: 1
+    userid: 2
     widgetid: 2
     width: 2 
     height: 3
@@ -29,7 +29,7 @@ ox_screen_widget:
     id: 3
     screenid: 1
     userid: 2
-    widgetid: 2
+    widgetid: 1
     width: 2 
     height: 2
     column: 4

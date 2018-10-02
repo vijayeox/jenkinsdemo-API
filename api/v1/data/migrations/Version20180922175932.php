@@ -76,7 +76,10 @@ final class Version20180922175932 extends AbstractMigration
         $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (5,1, 'MANAGE_SCREEN',3);");
         $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (6,2, 'MANAGE_SCREEN',1);");
         $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (7,1, 'MANAGE_WIDGET',3);");
-        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (8,2, 'MANAGE_WIDGET',1);");
+		$this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (8,2, 'MANAGE_WIDGET',1);");
+		$this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (9,1, 'MANAGE_SCREENWIDGET',3);");
+        $this->addSql("INSERT INTO ox_role_privilege (id, role_id,privilege_name,permission) values (10,2, 'MANAGE_SCREENWIDGET',3);");
+
 	}
 
 	public function down(Schema $schema) : void

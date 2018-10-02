@@ -40,11 +40,49 @@ class ScreenwidgetService extends AbstractService{
             }
             $this->commit();
         }catch(Exception $e){
-            // print_r($e);exit;
             $this->rollback();
             return 0;
         }
 
+        return $count;
+    }
+
+    public function updateWidget(&$data) {
+        $form = new Screenwidget();
+        if (!isset($data['userid'])) {
+            $data['userid']=AuthContext::get(AuthConstants::USER_ID);
+        }
+        $form->exchangeArray($data);
+        $form->validate();
+        $this->beginTransaction();
+        $count = 0;
+        try{
+            $tableGateway = $this->table->getTableGateway();
+            $count=$tableGateway->update($data, ['userid'=>$data['userid'],'screenid' => $data['screenid'],'widgetid' => $data['widgetid']]);
+            $this->commit();
+        }catch(Exception $e){
+            $this->rollback();
+            return 0;
+        }
+        return $count;
+    }
+    public function deleteWidget(&$data) {
+        $form = new Screenwidget();
+        if (!isset($data['userid'])) {
+            $data['userid']=AuthContext::get(AuthConstants::USER_ID);
+        }
+        $form->exchangeArray($data);
+        $form->validate();
+        $this->beginTransaction();
+        $count = 1;
+        try{
+            $tableGateway = $this->table->getTableGateway();
+            $count=$tableGateway->delete(['userid'=>$data['userid'],'screenid' => $data['screenid'],'widgetid' => $data['widgetid']]);
+            $this->commit();
+        }catch(Exception $e){
+            $this->rollback();
+            return 0;
+        }
         return $count;
     }
     
