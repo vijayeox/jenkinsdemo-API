@@ -71,9 +71,13 @@ abstract class ModelTable {
         $this->init();
         if(is_null($filter)){
             $filter = array();
+            $filter['id'] = $id;  // You cannot have a filter and an id. If there is filter, then id is irrelavant. 
         }
-        $filter['id'] = $id;
         return $this->tableGateway->delete($filter);
+    }
+
+    public function update(array $data, array $filter) { 
+            return $this->tableGateway->update($data,$filter);
     }
 
     public function getLastInsertValue(){

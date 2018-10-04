@@ -57,8 +57,7 @@ class ScreenwidgetService extends AbstractService{
         $this->beginTransaction();
         $count = 0;
         try{
-            $tableGateway = $this->table->getTableGateway();
-            $count=$tableGateway->update($data, ['userid'=>$data['userid'],'screenid' => $data['screenid'],'widgetid' => $data['widgetid']]);
+            $count=$this->table->update($data, ['userid'=>$data['userid'],'screenid' => $data['screenid'],'widgetid' => $data['widgetid']]);
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -66,6 +65,7 @@ class ScreenwidgetService extends AbstractService{
         }
         return $count;
     }
+    
     public function deleteWidget(&$data) {
         $form = new Screenwidget();
         if (!isset($data['userid'])) {
@@ -76,8 +76,7 @@ class ScreenwidgetService extends AbstractService{
         $this->beginTransaction();
         $count = 1;
         try{
-            $tableGateway = $this->table->getTableGateway();
-            $count=$tableGateway->delete(['userid'=>$data['userid'],'screenid' => $data['screenid'],'widgetid' => $data['widgetid']]);
+            $count=$this->table->delete(null,['userid'=>$data['userid'],'screenid' => $data['screenid'],'widgetid' => $data['widgetid']]);
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
