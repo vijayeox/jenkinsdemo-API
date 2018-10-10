@@ -12,10 +12,10 @@
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-    $host = '127.0.0.1';
-    $db = "oxapi";
-    $username = "root";
-    $password = "";
+$host = '61.12.69.67';
+$db = 'rakshithapi';
+$username = 'rakshith';
+$password = '7zet3os!';
 
 
 return [

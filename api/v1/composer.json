@@ -54,7 +54,8 @@
             "Auth\\": "module/Auth/src/",
             "Widget\\": "module/Widget/src/",
             "Screen\\": "module/Screen/src/",
-            "Attachment\\":"module/Attachment/src/"
+            "Attachment\\":"module/Attachment/src/",
+            "App\\":"module/App/src/"
         }
     },
     "autoload-dev": {
