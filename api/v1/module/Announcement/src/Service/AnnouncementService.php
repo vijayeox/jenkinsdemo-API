@@ -5,9 +5,9 @@ use Oxzion\Service\AbstractService;
 use Announcement\Model\AnnouncementTable;
 use Announcement\Model\Announcement;
 use Oxzion\Auth\AuthContext;
-use Oxzion\Service\FileService;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
+use Zend\Db\Sql\Expression;
 use Exception;
 
 class AnnouncementService extends AbstractService{
@@ -19,13 +19,6 @@ class AnnouncementService extends AbstractService{
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
-    protected function getAnnouncementFolder($id){
-        return $this->config['DATA_FOLDER']."organization/".AuthContext::get(AuthConstants::ORG_ID).self::ANNOUNCEMENT_FOLDER.$id;
-    }
-    public function getFileName($file){
-        $fileName = explode('-', $file,2);
-        return $fileName[1];
-    }
     public function createAnnouncement(&$data){
         $form = new Announcement();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -34,11 +27,6 @@ class AnnouncementService extends AbstractService{
         $data['status'] = $data['status']?$data['status']:1;
         $data['end_date'] = isset($data['end_date'])?$data['end_date']:date('Y-m-d H:i:s',strtotime("+7 day"));
         $data['created_date'] = date('Y-m-d H:i:s');
-        if(isset($data['file'])){
-            $file = $data['file'];
-            $data['media_location'] = $this->getFileName($data['file']);
-            unset($data['file']);
-        }
         if(isset($data['groups'])){
             $groups = json_decode($data['groups'],true);
             unset($data['groups']);
@@ -63,9 +51,7 @@ class AnnouncementService extends AbstractService{
                 }
             }
             $this->commit();
-            FileService::renameFile($this->config['DATA_FOLDER']."temp/".$file,$this->getAnnouncementFolder($id)."/".$data['media_location']);
         }catch(Exception $e){
-            // print_r($e->getMessage());exit;
             $this->rollback();
             return 0;
         }
@@ -83,11 +69,6 @@ class AnnouncementService extends AbstractService{
         if(isset($data['groups'])){
             $groups = json_decode($data['groups'],true);
             unset($data['groups']);
-        }
-        if(isset($data['file'])){
-            $file = $data['file'];
-            $data['media_location'] = $this->getFileName($data['file']);
-            unset($data['file']);
         }
         $form->exchangeArray($data);
         $form->validate();
@@ -108,9 +89,6 @@ class AnnouncementService extends AbstractService{
                 }
             } else {
                 //TODO handle this case properly
-            }
-            if(isset($file)){
-                $this->moveTempFile($file,$this->getAnnouncementFolder($id)."/".$data['media_location']);
             }
             $this->commit();
         }catch(Exception $e){
@@ -208,14 +186,28 @@ class AnnouncementService extends AbstractService{
         $select = $sql->select();
         $select->from('ox_announcement')
                 ->columns(array("*"))
+                ->join('ox_attachment', 'ox_announcement.media = ox_attachment.uuid', array('media'=>'path'),'left')
                 ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
                 ->join('groups_avatars', 'ox_announcement_group_mapper.group_id = groups_avatars.groupid',array('groupid','avatarid'),'left')
-                ->where(array('groups_avatars.avatarid' => AuthContext::get(AuthConstants::USER_ID)));
+                ->where(array('groups_avatars.avatarid' => AuthContext::get(AuthConstants::USER_ID)))
+                ->group(array('ox_announcement.id'));
         return $this->executeQuery($select)->toArray();
     }
-
-    protected function moveTempFile($file,$location){
-        FileService::renameFile($this->config['DATA_FOLDER']."temp/".$file,$location);
+    public function getAnnouncement($id) {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_announcement')
+        ->columns(array("*"))
+        ->join('ox_attachment', 'ox_announcement.media = ox_attachment.uuid', array('media'=>'path'),'left')
+        ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
+        ->join('groups_avatars', 'ox_announcement_group_mapper.group_id = groups_avatars.groupid',array('groupid','avatarid'),'left')
+        ->where(array('ox_announcement.id' => $id))
+        ->group(array('ox_announcement.id'));
+        $response = $this->executeQuery($select)->toArray();
+        if(count($response)==0){
+            return 0;
+        }
+        return $response[0];
     }
 }
 ?>

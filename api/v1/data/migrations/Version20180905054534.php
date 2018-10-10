@@ -26,7 +26,7 @@ class Version20180905054534 extends AbstractMigration {
                 `created_date` DATETIME NOT NULL,
                 `created_id` INT NOT NULL,
                 `media_type` VARCHAR(2000) NULL,
-                `media_location` VARCHAR(2000) NULL,
+                `media` VARCHAR(2000) NULL,
                 PRIMARY KEY (`id`))
               COMMENT = 'Table to store the list of all announcement for the organization';");
 

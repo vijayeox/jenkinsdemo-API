@@ -14,9 +14,16 @@ return [
             'attachment' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/attachment',
+                    'route' => '/attachment[/:attachmentId]',
                     'defaults' => [
                         'controller' => Controller\AttachmentController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_ATTACHMENT_WRITE',
+                            'post'=> 'MANAGE_ATTACHMENT_WRITE',
+                            'delete'=> 'MANAGE_ATTACHMENT_WRITE',
+                            'get'=> 'MANAGE_ATTACHMENT_READ',
+                        ],
                     ],
                 ],
             ],

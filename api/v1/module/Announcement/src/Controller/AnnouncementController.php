@@ -76,6 +76,13 @@ class AnnouncementController extends AbstractApiController {
         }
         return $this->getSuccessResponse();
     }
+    public function get($id){
+        $result = $this->announcementService->getAnnouncement($id);
+        if($result == 0){
+            return $this->getErrorResponse("Announcement not found", 404, ['id' => $id]);
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
 
 
 }

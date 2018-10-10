@@ -18,6 +18,7 @@ abstract class ControllerTest extends AbstractHttpControllerTestCase{
     protected $employeeUserId=2;
     protected $managerUser = 'rakshith';
     protected $managerUserId=3;
+    protected $testOrgId=1;
 
     protected $jwtToken = array();
     static private $pdo = null;

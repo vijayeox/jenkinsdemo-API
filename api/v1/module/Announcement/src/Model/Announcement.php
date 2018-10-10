@@ -18,7 +18,7 @@ class Announcement extends Entity {
         'created_date' => 0,
         'created_id' => 0,
         'media_type' => NULL,
-        'media_location' => NULL
+        'media' => NULL
     );
 
     public function validate(){
@@ -38,8 +38,8 @@ class Announcement extends Entity {
         if($this->data['end_date'] === null) {
             $errors["end_date"] = 'required';   
         }
-        if($this->data['media_location'] === null) {
-            $errors["media_location"] = 'required';   
+        if($this->data['media'] === null) {
+            $errors["media"] = 'required';   
         }
         if(count($errors) > 0){
             $validationException = new ValidationException();
