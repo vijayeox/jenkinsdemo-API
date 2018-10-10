@@ -1,6 +1,7 @@
 <?php
 namespace Screen\Model;
 use Oxzion\Model\Entity;
+use Oxzion\ValidationException;
 
 class Screenwidget extends Entity{
 

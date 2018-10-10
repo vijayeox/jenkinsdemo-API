@@ -27,16 +27,14 @@ class ScreenwidgetController extends AbstractApiController
     }
     
 
-  public function getList() {
-      $params = $this->params()->fromRoute();
-      $result = $this->screenwidgetService->getWidgets($params['screenId']);
-      return $this->getSuccessResponseWithData($result);
+  public function getWidgetsAction() {
+    $params = $this->params()->fromRoute();
+    $result = $this->screenwidgetService->getWidgets($params['screenId']);
+    return $this->getSuccessResponseWithData($result);
   }
 
   public function create($data){
     try{
-        $params = $this->params()->fromRoute();
-        $data['screenid'] = $params['screenId'];  
         $count = $this->screenwidgetService->createWidget($data);
     }catch(ValidationException $e){
         $response = ['data' => $data, 'errors' => $e->getErrors()];
@@ -48,38 +46,21 @@ class ScreenwidgetController extends AbstractApiController
     return $this->getSuccessResponseWithData($data,201);
 }
 
-public function update($id, $data){
-    try{
-        $params = $this->params()->fromRoute();
-        $data['screenid'] = $params['screenId'];
-        $data['widgetid'] = $id;  
-        $count = $this->screenwidgetService->updateWidget($data);
-    }catch(ValidationException $e){
-        $response = ['data' => $data, 'errors' => $e->getErrors()];
-        return $this->getErrorResponse("Validation Errors",404, $response);
-    }
-    if($count == 0){
-        return $this->getFailureResponse("Failed to update  entity", $data);
-    }
-    return $this->getSuccessResponseWithData($data,200);
-}
+// public function update($id, $data){
+//     try{
+//         $count = $this->screenwidgetService->update($id,$data);
+//     }catch(ValidationException $e){
+//         $response = ['data' => $data, 'errors' => $e->getErrors()];
+//         return $this->getErrorResponse("Validation Errors",404, $response);
+//     }
+//     if($count == 0){
+//         return $this->getErrorResponse("Entity not found for id - $id", 404);
+//     }
+//     return $this->getSuccessResponseWithData($data,200);
+// }
 
-
-public function delete($id){
-    try{
-        $data = array();
-        $params = $this->params()->fromRoute();
-        $data['screenid'] = $params['screenId'];
-        $data['widgetid'] = $id;  
-        $count = $this->screenwidgetService->deleteWidget($data);
-    }catch(ValidationException $e){
-        $response = ['data' => $data, 'errors' => $e->getErrors()];
-        return $this->getErrorResponse("Validation Errors",404, $response);
-    }
-    if($count == 0){
-        return $this->getFailureResponse("Failed to delete entity", $data);
-    }
-    return $this->getSuccessResponseWithData($data,200);
+public function getList(){
+    return;
 }
 
 }
