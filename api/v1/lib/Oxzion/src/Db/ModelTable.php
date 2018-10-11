@@ -30,16 +30,15 @@ abstract class ModelTable {
 
     public function get($id, array $filter = null){
         $this->init();
-        $id = (int) $id;
         if(is_null($filter)){
             $filter = array();
         }
 
-        $filter['id'] = $id;
+        $filter['id'] = (int) $id;
         $rowset = $this->tableGateway->select($filter);
 
         $row = $rowset->current();
-        
+
         return $row;
     }
 

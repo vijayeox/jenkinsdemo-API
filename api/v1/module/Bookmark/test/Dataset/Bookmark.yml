@@ -1,0 +1,13 @@
+links:
+  -
+    id: 1
+    name: "Bookmark 1"
+    org_id: 1
+    avatar_id: 2
+    url: https://oxzion.com
+  -
+    id: 2
+    name: "Bookmark 2"
+    org_id: 1
+    avatar_id: 2
+    url: https://google.com

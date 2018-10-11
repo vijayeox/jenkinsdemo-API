@@ -54,7 +54,8 @@
             "Auth\\": "module/Auth/src/",
             "Widget\\": "module/Widget/src/",
             "Screen\\": "module/Screen/src/",
-            "Attachment\\":"module/Attachment/src/"
+            "Attachment\\":"module/Attachment/src/",
+            "Bookmark\\":"module/Bookmark/src/"
         }
     },
     "autoload-dev": {
@@ -66,7 +67,8 @@
             "UserTest\\": "module/User/test/",
             "GroupTest\\": "module/Group/test/",
             "OrganizationTest\\": "module/Organization/test/",
-            "AuthTest\\" : "module/Auth/test"
+            "AuthTest\\" : "module/Auth/test",
+            "BookmarkTest\\" : "module/Bookmark/test"
         }
     },
     "extra": [],

@@ -23,12 +23,12 @@ abstract class Entity implements Countable{
     public function setParseData($val) {
         $this->parsedata=$val;
     }
-    
+
     public function __get($key) {
         if (array_key_exists($key, $this->data)) {
             if ($this->parsedata) {
      			//return VA_Service_Utils::parseInstanceExpression ($this->data[$key]);
-            }   
+            }
             else {
                     return $this->data[$key];
             }
@@ -57,7 +57,7 @@ abstract class Entity implements Countable{
     }
 
     /**
-     * This method should be overridden by base classes to perform field level validations 
+     * This method should be overridden by base classes to perform field level validations
      * this method should throw ValidationException if there are any errors
      */
     public function validate(){
@@ -73,10 +73,10 @@ abstract class Entity implements Countable{
     public function toArray() {
         return $this->data;
     }
-    
+
     public function exchangeArray($data) {
-        foreach ($data as $key => $value)
-        {
+        // $this->data = array_intersect_key($this->data, $data);
+        foreach ($data as $key => $value) {
             if (!array_key_exists($key, $this->data)) {
                 continue;//throw new \Exception("$key field does not exist in " . __CLASS__);
             }
