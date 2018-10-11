@@ -8,10 +8,13 @@ use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
+use PHPUnit\DbUnit\DataSet\DefaultDataSet;
+use Oxzion\Service\FileService;
 
 
 class AttachmentControllerTest extends ControllerTest{
     
+    // public $testFile = array('name'=>'oxzionlogo.png','tmp_name'=>__DIR__."/../files/oxzionlogo.png",'type'=>'image/png','size'=>sizeof(__DIR__."/../files/oxzionlogo.png"),'error'=>0);
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
@@ -20,9 +23,13 @@ class AttachmentControllerTest extends ControllerTest{
         return new DefaultDataSet();
     }
     
-    public function testCreate(){
+    public function testAnnouncementCreate(){
         $this->initAuthToken('bharatg');
-        $data = file_get_contents(__DIR__."/../files/oxzionlogo.png");
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/announcements/";
+        FileService::createDirectory($tempFolder);
+        copy(__DIR__."/../files/oxzionlogo.png", $tempFolder."oxzionlogo.png");
+        $data = array('type'=>'ANNOUNCEMENT','files'=>array(array('extension'=>'png','uuid'=>'test','file_name'=>'oxzionlogo')));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/attachment', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -33,10 +40,6 @@ class AttachmentControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['status'], $data['status']);
-        $this->assertEquals($content['data']['startdate'], $data['startdate']);
-        $this->assertEquals($content['data']['enddate'], $data['enddate']);
+        $this->assertEquals($content['data']['filename'][0], $data['files'][0]['uuid']);
     }
-    
 }

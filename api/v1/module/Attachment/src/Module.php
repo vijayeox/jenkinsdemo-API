@@ -31,7 +31,17 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Service\AttachmentService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AttachmentService($container->get('config'), $dbAdapter);
+                    return new Service\AttachmentService($container->get('config'), $dbAdapter, $container->get(Model\AttachmentTable::class));
+                },
+                Model\AttachmentTable::class => function($container) {
+                    $tableGateway = $container->get(Model\AttachmentTableGateway::class);
+                    return new Model\AttachmentTable($tableGateway);
+                },
+                Model\AttachmentTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Attachment());
+                    return new TableGateway('ox_attachment', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];
@@ -41,7 +51,8 @@ class Module implements ConfigProviderInterface {
         return [
             'factories' => [
                 Controller\AttachmentController::class => function($container) {
-                    return new Controller\AttachmentController($container->get(Service\AttachmentService::class), $container->get('AttachmentLogger'),
+                    return new Controller\AttachmentController(
+                            $container->get(Model\AttachmentTable::class),$container->get(Service\AttachmentService::class), $container->get('AttachmentLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],

@@ -34,10 +34,10 @@ return [
                         'controller' => Controller\ScreenwidgetController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_SCREEN_WRITE',
-                            'post'=> 'MANAGE_SCREEN_WRITE',
-                            'delete'=> 'MANAGE_SCREEN_WRITE',
-                            'get'=> 'MANAGE_SCREEN_READ',
+                            'put'=> 'MANAGE_SCREENWIDGET_WRITE',
+                            'post'=> 'MANAGE_SCREENWIDGET_WRITE',
+                            'delete'=> 'MANAGE_SCREENWIDGET_WRITE',
+                            'get'=> 'MANAGE_SCREENWIDGET_READ',
                         ],
                     ],
                 ],
