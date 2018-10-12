@@ -217,7 +217,7 @@ class ScreenControllerTest extends ControllerTest{
 
     public function testScreenwidgetDelete(){
         $this->initAuthToken($this->employeeUser);
-        $this->dispatch('/screenwidget/1', 'DELETE');
+        $this->dispatch('/screenwidget/2', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Screen');
         $this->assertControllerName(ScreenwidgetController::class); // as specified in router's controller name alias

@@ -6,7 +6,7 @@ use Screen\Model\ScreenwidgetTable;
 use Screen\Model\Screenwidget;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
-use Exception;
+use Oxzion\ValidationException;
 
 class ScreenwidgetService extends AbstractService{
     private $table;
@@ -46,12 +46,51 @@ class ScreenwidgetService extends AbstractService{
 
         return $count;
     }
-    //public function update($id){
-    //    $obj = $this->table->get($id,array());
-    //    print_r($obj);exit;
-   // }
+    
+    public function update($id,&$data){
+        $form = new Screenwidget();
+        $obj = $this->table->get($id,array());
+        if ($obj->userid!=AuthContext::get(AuthConstants::USER_ID)) {
+            $validationException = new ValidationException();
+            $validationException->setErrors(['userid' => 'Access Denied. Invalid Userid']);
+            throw $validationException;
+        }
+        $form->exchangeArray($data);
+        $form->validate();
+        $this->beginTransaction();
+        $count = 0;
+        try{
+            $count = $this->table->save($form);
+            if($count == 0){
+                $this->rollback();
+                return 0;
+            }
+            $this->commit();
+        }catch(Exception $e){
+            $this->rollback();
+            return 0;
+        }
+        return $count;
+    }
 
-
+    public function delete($id) {
+        
+        $obj = $this->table->get($id,array());
+        if ($obj) {
+            if ($obj->userid!=AuthContext::get(AuthConstants::USER_ID)) {
+                $validationException = new ValidationException();
+                $validationException->setErrors(['userid' => 'Access Denied. Invalid Userid']);
+                throw $validationException;
+            }
+            try{
+                $this->table->delete($id);
+                return 1;
+            }catch(Exception $e){
+                return 0;
+            }
+            return 0;
+        }
+    }
     
 }
 ?>
