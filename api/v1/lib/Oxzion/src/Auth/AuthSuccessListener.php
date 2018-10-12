@@ -16,7 +16,7 @@ class AuthSuccessListener{
                 AuthContext::put(AuthConstants::USER_ID,  $result['id']);
                 AuthContext::put(AuthConstants::NAME,  $result['name']);
                 AuthContext::put(AuthConstants::ORG_ID, $result['orgid']);
-                AuthContext::put(AuthConstants::ROLES,$this->userService->getPriveleges($result['id']));
+                AuthContext::put(AuthConstants::PRIVILEGES,$this->userService->getPriveleges($result['id']));
             }
         }
     }

@@ -22,7 +22,6 @@ class Module {
                     return new Service\UserService($config, $dbAdapter);
                 },
             ],
-            
         ];
     }
     /**
@@ -36,5 +35,4 @@ class Module {
         ];
     }
 
-    
 }

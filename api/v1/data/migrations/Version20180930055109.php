@@ -23,7 +23,8 @@ final class Version20180930055109 extends AbstractMigration
 			`org_id` int(32) NOT NULL,
 			`created_date` DATETIME DEFAULT CURRENT_TIMESTAMP
 		) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
-
+        $this->addSql("INSERT INTO ox_privilege (name,permission_allowed) values ('MANAGE_ATTACHMENT',15);");
+        $this->addSql("INSERT INTO ox_role_privilege (role_id,privilege_name,permission) values (1, 'MANAGE_ATTACHMENT',3);");
     }
 
     public function down(Schema $schema) : void

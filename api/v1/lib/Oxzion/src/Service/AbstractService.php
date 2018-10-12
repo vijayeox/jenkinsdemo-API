@@ -40,7 +40,7 @@ class AbstractService{
     protected function executeUpdate($query){
         $statement = $this->sql->prepareStatementForSqlObject($query);
         return $statement->execute();
-    } 
+    }
 
     protected function executeQuery($query){
         $statement = $this->sql->prepareStatementForSqlObject($query);

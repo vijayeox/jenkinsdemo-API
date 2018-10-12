@@ -25,5 +25,6 @@ return [
 	'Organization',
 	'Widget',
 	'Screen',
-	'Attachment'
+	'Attachment',
+	'Bookmark'
 ];

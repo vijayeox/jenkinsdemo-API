@@ -10,6 +10,7 @@
             <directory>./module/Announcement/test</directory>
             <directory>./module/Widget/test</directory>
             <directory>./module/Alert/test</directory>
+            <directory>./module/Bookmark/test</directory>
             <!-- <directory>./module/User/test</directory> -->
             <!-- <directory>./module/Organization/test</directory> -->
         </testsuite>
