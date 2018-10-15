@@ -72,7 +72,7 @@ abstract class ControllerTest extends AbstractHttpControllerTestCase{
         
         
         if(!isset($this->jwtToken[$username])){
-            $data = JwtHelper::getTokenPayload($username);
+            $data = JwtHelper::getTokenPayload($username,$this->testOrgId);
             $config = $this->getApplicationConfig();
             $jwtKey = $config['jwtKey'];
             $jwtAlgo = $config['jwtAlgo'];      

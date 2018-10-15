@@ -5,20 +5,12 @@ namespace Oxzion\Jwt;
 use Firebase\JWT\JWT;
 
 class JwtHelper {
-	public static function getTokenPayload($username){
+	public static function getTokenPayload($username,$orgId){
     	$tokenId = base64_encode(openssl_random_pseudo_bytes(32));
     	$issuedAt   = time();
 	    $notBefore  = $issuedAt; 
 	    $expire     = $notBefore + 72000; // Adding 3600 seconds
-	    $data = [
-			        'iat'  => $issuedAt,  
-			        'jti'  => $tokenId,   
-			        'nbf'  => $notBefore, 
-			        'exp'  => $expire,    
-			        'data' => [           
-			            'username' => $username
-			        ]
-			    ];
+	    $data = ['iat'  => $issuedAt,'jti'  => $tokenId,'nbf'  => $notBefore,'exp'  => $expire,'data' => ['username' => $username,'orgId' => $orgId]];
 		return $data;	    
     }
 
