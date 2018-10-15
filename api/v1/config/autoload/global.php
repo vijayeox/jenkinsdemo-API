@@ -18,6 +18,14 @@ $username = 'rakshith';
 $password = '7zet3os!';
 
 
+if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
+    $host = '61.12.69.67';
+    $db = 'oxapi';
+    $username = 'bharath';
+    $password = 'bharath321!';
+
+}
+
 return [
     'db' => [
     	'driver' => 'Pdo_Mysql',

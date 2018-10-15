@@ -67,7 +67,8 @@
             "UserTest\\": "module/User/test/",
             "GroupTest\\": "module/Group/test/",
             "OrganizationTest\\": "module/Organization/test/",
-            "AuthTest\\" : "module/Auth/test"
+            "AuthTest\\" : "module/Auth/test",
+            "AppTest\\" : "module/App/test"
         }
     },
     "extra": [],

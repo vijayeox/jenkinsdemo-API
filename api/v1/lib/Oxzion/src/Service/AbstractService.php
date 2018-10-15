@@ -4,7 +4,7 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Sql;
 use Zend\Db\ResultSet\ResultSet;
 
-class AbstractService{
+class AbstractService {
     protected $config;
     private $dbAdapter;
     private $sql;
@@ -50,6 +50,29 @@ class AbstractService{
         $resultSet->initialize($result);
         return $resultSet;
     }
+
+    protected function executeQueryString($query){
+        $statement = $this->sql->prepareStatementForSqlObject($query);
+        $result = $statement->execute();
+        // build result set
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        return $resultSet;
+    }
+
+/**
+Query builder: Code that combines the required parameter to build the query.
+Author: Rakshith
+Function Name: executeQuerywithParams()
+*/
+    public function executeQuerywithParams($queryString, $where = NULL, $group = NULL, $order = NULL, $limit = NULL) { //Passing the required parameter to the query statement
+       $adapter = $this->getAdapter();
+       $query_string = $queryString . " " . $where . " " . $group . " " . $order . " " . $limit; //Combining all the parameters required to build the query statement. We will add more fields to this in the future if required.
+       $statement = $adapter->query($query_string); 
+       $result = $statement->execute();
+       $resultSet = new ResultSet();
+       return $resultSet->initialize($result);
+   }   
 
 }
 ?>

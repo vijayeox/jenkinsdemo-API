@@ -48,7 +48,7 @@ class AlertController extends AbstractApiController {
         }
         return $this->getSuccessResponseWithData($data,200);
     }
-    public function delete($id){
+    public function delete($id) {
         $response = $this->alertService->deleteAlert($id);
         if($response == 0){
             return $this->getErrorResponse("Announcement not found", 404, ['id' => $id]);
@@ -64,6 +64,7 @@ class AlertController extends AbstractApiController {
         }
         return $this->getSuccessResponse();
     }
+    
     public function declineAction() {
         $params = $this->params()->fromRoute();
         $count = $this->alertService->updateAlertStatus(0,$params[$this->getIdentifierName()]);
