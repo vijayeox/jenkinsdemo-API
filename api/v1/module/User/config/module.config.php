@@ -15,7 +15,14 @@ return [
                 'options' => [
                 'route'    => '/user[/:userId]',
                 'defaults' => [
-                        'controller' => Controller\UserController::class
+                        'controller' => Controller\UserController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_USER_WRITE',
+                            'post'=> 'MANAGE_USER_WRITE',
+                            'delete'=> 'MANAGE_USER_WRITE',
+                            'get'=> 'MANAGE_USER_READ',
+                        ],
                     ],
                 ],
             ],

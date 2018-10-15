@@ -29,6 +29,10 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
+                Service\UserService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\UserService($container->get('config'), $dbAdapter, $container->get(Model\UserTable::class));
+                },
                 Model\UserTable::class => function($container) {
                     $tableGateway = $container->get(Model\UserTableGateway::class);
                     return new Model\UserTable($tableGateway);
@@ -48,8 +52,8 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\UserController::class => function($container) {
                     return new Controller\UserController(
-                        $container->get(Model\UserTable::class),
-                        $container->get('UserLogger'),
+                        $container->get(Model\UserTable::class), 
+                        $container->get('UserLogger'),$container->get(Service\UserService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

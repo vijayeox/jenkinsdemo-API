@@ -8,9 +8,11 @@ use Oxzion\Model\Entity;
 class UserTable extends ModelTable {
 	public function __construct(TableGatewayInterface $tableGateway) {
         parent::__construct($tableGateway);
+        $this->tableGateway = $tableGateway;
     }
 
     public function save(Entity $data){
-    	return $this->internalSave($data->toArray());
+        $data = $data->toArray();
+    	return $this->internalSave($data);
     }
 }
