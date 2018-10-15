@@ -13,7 +13,7 @@ return [
             'screen' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/screen[/:screenId]',
+                    'route'    => '/screen[/:id]',
                     'defaults' => [
                         'controller' => Controller\ScreenController::class,
                         'access'=>[
@@ -26,10 +26,25 @@ return [
                     ],
                 ],
             ],
+            'widgetlist' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/screen/:screenId/widget',
+                    'defaults' => [
+                        'controller' => Controller\ScreenwidgetController::class,
+                        'action' => 'getWidgets',
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'getWidgets'=> 'MANAGE_SCREENWIDGET_READ',
+                        ],
+                    ],
+                ],
+            ],
+
             'screenwidget' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/screen/:screenId/widget[/:id]',
+                    'route' => '/screenwidget[/:id]',
                     'defaults' => [
                         'controller' => Controller\ScreenwidgetController::class,
                         'access'=>[

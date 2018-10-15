@@ -47,7 +47,7 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertModuleName('Screen');
         $this->assertControllerName(ScreenwidgetController::class); // as specified in router's controller name alias
         $this->assertControllerClass('ScreenwidgetController');
-        $this->assertMatchedRouteName('screenwidget');
+        $this->assertMatchedRouteName('widgetlist');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -80,6 +80,7 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], 'Dashboard');
+
     }
 
     public function testGetNotFound(){
@@ -113,11 +114,11 @@ class ScreenControllerTest extends ControllerTest{
     }
 
     public function testScreenwidgetCreate(){
-        $data = ['widgetid' =>10,'width'=>3,'height'=>2,'row'=>1,'column'=>3];
+        $data = ['widgetid' =>10,'screenid'=>1,'width'=>3,'height'=>2,'row'=>1,'column'=>3];
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_screen_widget'));
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/screen/1/widget', 'POST', null);
+        $this->dispatch('/screenwidget', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('Screen');
         $this->assertControllerName(ScreenwidgetController::class); // as specified in router's controller name alias
@@ -164,10 +165,10 @@ class ScreenControllerTest extends ControllerTest{
     }
 
     public function testScreenwidgetUpdate(){
-        $data = ['width'=>3,'height'=>2,'row'=>1,'column'=>3];
+        $data = ['screenid'=>1,'widgetid'=>2,'userid'=>2,'width'=>3,'height'=>2,'row'=>1,'column'=>3];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/screen/1/widget/1', 'PUT', null);
+        $this->dispatch('/screenwidget/2', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Screen');
         $this->assertControllerName(ScreenwidgetController::class); // as specified in router's controller name alias
@@ -178,7 +179,7 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['screenid'], 1);
         $this->assertEquals($content['data']['userid'], $this->employeeUserId);
-        $this->assertEquals($content['data']['widgetid'], 1);
+        $this->assertEquals($content['data']['widgetid'], 2);
         $this->assertEquals($content['data']['width'], 3);
         $this->assertEquals($content['data']['height'], 2);
         $this->assertEquals($content['data']['column'], 3);
@@ -216,7 +217,7 @@ class ScreenControllerTest extends ControllerTest{
 
     public function testScreenwidgetDelete(){
         $this->initAuthToken($this->employeeUser);
-        $this->dispatch('/screen/1/widget/1', 'DELETE');
+        $this->dispatch('/screenwidget/2', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Screen');
         $this->assertControllerName(ScreenwidgetController::class); // as specified in router's controller name alias
