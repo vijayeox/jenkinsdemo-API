@@ -66,7 +66,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
                 if (is_object($tokenPayload)) {
                     if($tokenPayload->data && $tokenPayload->data->username){
                         $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
-                        $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username]);
+                        $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username,AuthConstants::ORG_ID => $tokenPayload->data->orgId]);
 					    return;
                     }
             }

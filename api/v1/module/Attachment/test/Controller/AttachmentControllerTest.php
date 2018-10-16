@@ -29,7 +29,7 @@ class AttachmentControllerTest extends ControllerTest{
         $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/announcements/";
         FileService::createDirectory($tempFolder);
         copy(__DIR__."/../files/oxzionlogo.png", $tempFolder."oxzionlogo.png");
-        $data = array('type'=>'ANNOUNCEMENT','files'=>array(array('ext'=>'png','uuid'=>'test','file_name'=>'oxzionlogo')));
+        $data = array('type'=>'ANNOUNCEMENT','files'=>array(array('extension'=>'png','uuid'=>'test','file_name'=>'oxzionlogo')));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/attachment', 'POST', null);
         $this->assertResponseStatusCode(201);

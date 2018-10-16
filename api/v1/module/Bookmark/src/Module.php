@@ -1,6 +1,6 @@
 <?php
 
-namespace User;
+namespace Bookmark;
 
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
@@ -25,48 +25,46 @@ class Module implements ConfigProviderInterface {
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatchError'), 0);
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onRenderError'), 0);
     }
-    public function getServiceConfig()
-    {
+
+    public function getServiceConfig() {
         return [
             'factories' => [
-                Service\UserService::class => function($container){
+                Service\BookmarkService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\UserService($container->get('config'), $dbAdapter, $container->get(Model\UserTable::class));
+                    return new Service\BookmarkService($container->get('config'), $dbAdapter, $container->get(Model\BookmarkTable::class));
                 },
-                Model\UserTable::class => function($container) {
-                    $tableGateway = $container->get(Model\UserTableGateway::class);
-                    return new Model\UserTable($tableGateway);
+                Model\BookmarkTable::class => function($container) {
+                    $tableGateway = $container->get(Model\BookmarkTableGateway::class);
+                    return new Model\BookmarkTable($tableGateway);
                 },
-                Model\UserTableGateway::class => function ($container) {
+                Model\BookmarkTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\User());
-                    return new TableGateway('avatars', $dbAdapter, null, $resultSetPrototype);
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Bookmark());
+                    return new TableGateway('links', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];
     }
-    public function getControllerConfig()
-    {
+
+    public function getControllerConfig() {
         return [
             'factories' => [
-                Controller\UserController::class => function($container) {
-                    return new Controller\UserController(
-                        $container->get(Model\UserTable::class), 
-                        $container->get('UserLogger'),$container->get(Service\UserService::class),
-                        $container->get(AdapterInterface::class)
-                    );
+                Controller\BookmarkController::class => function($container) {
+                    return new Controller\BookmarkController(
+                            $container->get(Model\BookmarkTable::class), $container->get(Service\BookmarkService::class), $container->get('BookmarkLogger'),
+                        $container->get(AdapterInterface::class));
                 },
             ],
         ];
     }
-    public function onDispatchError($e)
-    {
+
+    public function onDispatchError($e) {
         return ErrorHandler::getJsonModelError($e);
     }
 
-    public function onRenderError($e)
-    {
+    public function onRenderError($e) {
         return ErrorHandler::getJsonModelError($e);
     }
+
 }

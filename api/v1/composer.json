@@ -55,6 +55,7 @@
             "Widget\\": "module/Widget/src/",
             "Screen\\": "module/Screen/src/",
             "Attachment\\":"module/Attachment/src/",
+            "Bookmark\\":"module/Bookmark/src/",
             "App\\":"module/App/src/"
         }
     },
@@ -68,6 +69,7 @@
             "GroupTest\\": "module/Group/test/",
             "OrganizationTest\\": "module/Organization/test/",
             "AuthTest\\" : "module/Auth/test",
+            "BookmarkTest\\" : "module/Bookmark/test",
             "AppTest\\" : "module/App/test"
         }
     },

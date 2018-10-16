@@ -54,8 +54,8 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
         return $tokenPayload;
     }
-    protected function getTokenPayload($username){
-    	return JwtHelper::getTokenPayload($username);
+    protected function getTokenPayload($username,$orgId){
+    	return JwtHelper::getTokenPayload($username,$orgId);
     }
 
     protected function generateJwtToken($payload){

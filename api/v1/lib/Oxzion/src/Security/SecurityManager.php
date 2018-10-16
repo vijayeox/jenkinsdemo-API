@@ -42,7 +42,7 @@ class SecurityManager{
 	* Return : Boolean 0|1 for Granted
 	*/
 	public function isGranted($privilege){
-		$roles = AuthContext::get(AuthConstants::ROLES);
+		$roles = AuthContext::get(AuthConstants::PRIVILEGES);
 		if (is_string($privilege) && in_array($privilege, $roles)) {
 			return 1;
 		} else if(is_array($privilege)){

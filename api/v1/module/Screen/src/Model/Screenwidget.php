@@ -1,6 +1,8 @@
 <?php
 namespace Screen\Model;
 use Oxzion\Model\Entity;
+use Oxzion\ValidationException;
+use Oxzion\Auth\AuthContext;
 
 class Screenwidget extends Entity{
 
@@ -26,6 +28,7 @@ class Screenwidget extends Entity{
         if($this->data['widgetid'] === null) {
             $errors["widgetid"] = 'required';  
         }
+        
 
         if(count($errors) > 0){
             $validationException = new ValidationException();

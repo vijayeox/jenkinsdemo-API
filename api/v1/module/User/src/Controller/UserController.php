@@ -68,10 +68,13 @@ class UserController extends AbstractApiController {
         return $this->getSuccessResponseWithData($data,201);
     }
 
-
-/*
-We need to be passing org_id or group_id or both to this. Otherwise it wouldn't make sense anywhere. Right? I am going to pass both of them and if the id is there we will query by that id.
-*/
+    public function get($id){
+        $result = $this->userService->getUser($id);
+        if($result == 0){
+            return $this->getErrorResponse("Failed to find User",404, $response);
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
 
     public function getList() {
         $result = $this->userService->getUsers();
@@ -83,7 +86,7 @@ We need to be passing org_id or group_id or both to this. Otherwise it wouldn't 
             $count = $this->userService->updateUser($id,$data);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors",406, $response);
         }
         if($count == 0){
             return $this->getErrorResponse("Entity not found for id - $id", 404);
@@ -91,9 +94,14 @@ We need to be passing org_id or group_id or both to this. Otherwise it wouldn't 
         return $this->getSuccessResponseWithData($data,200);
     }
     public function delete($id){
-        $response = $this->userService->deleteUser($id);
+        try{
+            $response = $this->userService->deleteUser($id);
+        }catch(ValidationException $e){
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",406, $response);
+        }
         if($response == 0){
-            return $this->getErrorResponse("User not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
         return $this->getSuccessResponse();
     }

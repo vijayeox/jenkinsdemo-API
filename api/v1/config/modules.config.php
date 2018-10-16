@@ -26,5 +26,6 @@ return [
 	'Widget',
 	'Screen',
 	'Attachment',
+	'Bookmark',
 	'App'
 ];

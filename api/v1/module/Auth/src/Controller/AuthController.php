@@ -8,16 +8,18 @@ use Oxzion\Encryption\Crypto;
 use Zend\View\Model\JsonModel;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
 use Firebase\JWT\JWT;
+use Auth\Service\AuthService;
 
 class AuthController extends AbstractApiControllerHelper
 {
 	private $authAdapter;
 	private $log;
+	private $authService;
 	
-	public function __construct(AuthAdapter $authAdapter, Logger $log){
+	public function __construct(AuthAdapter $authAdapter,AuthService $authService, Logger $log){
 		$this->authAdapter = $authAdapter;
 		$this->log = $log;
-		
+		$this->authService = $authService;
     }
 
     //POST 
@@ -29,14 +31,18 @@ class AuthController extends AbstractApiControllerHelper
 		$this->authAdapter->setCredential($data['password']);
 		$result = $this->authAdapter->authenticate();
 		if($result->isValid()){
-			return $this->getJwt($data['username']);
+			if(isset($data['org_id'])){
+				return $this->getJwt($data['username'],$data['org_id']);
+			} else {
+				return $this->getJwt($data['username'],$this->authService->getUserOrg($data['username']));
+			}
 		}else{
 			return $this->getFailureResponse("Authentication Failure - Invalid username or password");
 		}
 	}
 	
-	private function getJwt($username){
-		$data = $this->getTokenPayload($username);
+	private function getJwt($userName,$orgId){
+		$data = $this->getTokenPayload($userName,$orgId);
 		$jwt = $this->generateJwtToken($data);
 	    return $this->getSuccessResponseWithData(['jwt' => $jwt]);
 	}
