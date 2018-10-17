@@ -90,6 +90,14 @@ $ docker run --network="host" -it -v $(pwd):/var/www v1_zf ./phpunit
 For Windows
 $ docker run --network="host" -it -v ${PWD}:/var/www v1_zf ./phpunit
 ```
+To run Documentation Generator on your machine run the following command
+This will create the Documentation in a new folder "Doc" which will have an index.html file which contains the list of subpages across the features
+```bash
+For Linux
+$ docker run --network="host" -it -v $(pwd):/var/www v1_zf phpdoc
+For Windows
+$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf phpdoc
+```
 
 
 To connect to the container shell you can run the following command

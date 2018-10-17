@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor>
+    <parser>
+        <default-package-name>OX Zion API Document</default-package-name>
+        <target>build</target>
+    </parser>
+    <transformer>
+        <target>Doc</target>
+    </transformer>
+    <files>
+        <directory>module</directory>
+        <ignore>*/test/*</ignore>
+        <ignore>*/config/*</ignore>
+        <ignore>*/src/Module.php</ignore>
+    </files>
+    <plugins>
+        <plugin path="Core" />
+    </plugins>
+    <transformations>
+        <template name="responsive-twig" />
+    </transformations>
+</phpdocumentor>
