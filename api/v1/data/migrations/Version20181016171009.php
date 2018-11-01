@@ -18,6 +18,7 @@ final class Version20181016171009 extends AbstractMigration
             `name` VARCHAR(250) NOT NULL ,
             `orgid` INT(64) NOT NULL ,
             `formid` INT(32) NOT NULL ,
+            `status` INT(11) NOT NULL ,
             `data` TEXT NOT NULL ,
             `created_by` INT(32) NOT NULL DEFAULT '1',
             `modified_by` INT(32) ,
@@ -29,21 +30,21 @@ final class Version20181016171009 extends AbstractMigration
             `fieldid` VARCHAR(250) NOT NULL , 
             `fieldvalue` TEXT  NULL , 
             `orgid` INT NOT NULL ) ENGINE = InnoDB;");
-        $this->addSql("INSERT INTO `ox_file` (`id`,`uuid`, `name`, `orgid`, `formid`, `created_by`, `modified_by`, `date_created`,`date_modified`) SELECT `id`,UUID() , `name`, `orgid`, `formid`, `createdid`, `modifiedid`,  `date_created`, `date_modified` from instanceforms");
+        $this->addSql("INSERT INTO `ox_file` (`id`,`uuid`, `name`, `orgid`, `formid`,`status`, `created_by`, `modified_by`, `date_created`,`date_modified`) SELECT `id`,UUID() , `name`, `orgid`, `formid`,`status`, `createdid`, `modifiedid`,  `date_created`, `date_modified` from instanceforms");
         $this->addSql("CREATE TABLE  IF NOT EXISTS `ox_form` ( 
             `id` INT NOT NULL AUTO_INCREMENT ,
             `uuid` varchar(128) NOT NULL ,
             `name` VARCHAR(500) NOT NULL ,
             `description` VARCHAR(500) ,
             `orgid` INT NOT NULL ,
-            `type` VARCHAR(500) ,
+            `statuslist` TEXT NULL ,
             `template` TEXT NULL ,
             `created_by` INT(32) NOT NULL DEFAULT '1',
             `modified_by` INT(32) ,
             `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
             `date_modified`  DATETIME ,
             PRIMARY KEY (`id`)) ENGINE = InnoDB;");
-        $this->addSql("INSERT INTO `ox_form` (`id`,`uuid`, `name`, `description`, `orgid`,`type`) SELECT `id`,UUID() , `name`, `description`, `orgid`,`type` from `metaforms`");
+        $this->addSql("INSERT INTO `ox_form` (`id`,`uuid`, `name`, `description`,`statuslist`, `orgid`) SELECT `id`,UUID() , `name`, `description`, `statuslist`,`orgid` from `metaforms`");
         $this->addSql("CREATE TABLE  IF NOT EXISTS `ox_field` ( 
             `id` INT(32) NOT NULL AUTO_INCREMENT ,
             `uuid` VARCHAR(128) NOT NULL ,
@@ -105,7 +106,7 @@ final class Version20181016171009 extends AbstractMigration
             $this->connection->executeUpdate("UPDATE `ox_field` SET `options` = '".$optionsArray."' WHERE `id` = ".$field['id'].";");
         }
         echo "Finished Cleaning Up Options Array"."\n";
-        $forms = $this->connection->executeQuery("SELECT id,orgid from metaforms ORDER BY `id` ASC");
+        $forms = $this->connection->executeQuery("SELECT id,statuslist,orgid from ox_form ORDER BY `id` ASC");
         $columns = $this->connection->executeQuery("SELECT COLUMN_NAME FROM `information_schema`.`COLUMNS` WHERE TABLE_NAME = 'instanceforms' and TABLE_SCHEMA = 'oxapi' and COLUMN_NAME NOT IN('id','uuid', 'name', 'orgid', 'formid', 'createdid', 'modifiedid', 'date_created','date_modified')");
         $columnarray = $columns->fetchAll();
         foreach ($forms->fetchAll() as $key => $form) {
@@ -119,6 +120,23 @@ final class Version20181016171009 extends AbstractMigration
                 'required'=> 1,
                 'sequence'=> 1,
             ));
+            if($form['statuslist']){
+                echo "Setting Form  Status Fields :".$form['id']."\n";
+                $statusArray = $this->convertOptionsArray($form['statuslist']);
+                $this->connection->executeUpdate("UPDATE `ox_form` SET `statuslist` = '".$statusArray."' WHERE `id` = ".$form['id'].";");
+            } else {
+                $status = $this->connection->executeQuery("SELECT statusvalue,statusname from metastatus WHERE formid=".$form['id']." AND orgid=".$form['orgid']);
+                $statusArray = $status->fetchAll();
+                if($statusArray){
+                    $statusOptions = array();
+                    foreach ($statusArray as $key => $value) {
+                        $statusOptions[$value['statusvalue']] = $value['statusname'];
+                    }
+                    $statusJson = json_encode(array('data'=>$statusOptions));
+                    $this->connection->executeUpdate("UPDATE `ox_form` SET `statuslist` = '".$statusJson."' WHERE `id` = ".$form['id'].";");
+                }
+            }
+            echo "Setting Column Names for Form :".$form['id']."\n";
             foreach ($columnarray as $k => $column) {
                 $field = array();
                 $fields = $this->connection->executeQuery("SELECT id,name FROM metafields WHERE formid=".$form['id']." AND columnname='".$column['COLUMN_NAME']."'");
