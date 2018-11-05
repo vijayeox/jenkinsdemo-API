@@ -25,10 +25,14 @@ class Module implements ConfigProviderInterface {
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatchError'), 0);
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onRenderError'), 0);
     }
-    public function getServiceConfig()
-    {
+
+    public function getServiceConfig() {
         return [
             'factories' => [
+                Service\GroupService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\GroupService($container->get('config'), $dbAdapter, $container->get(Model\GroupTable::class));
+                },
                 Model\GroupTable::class => function($container) {
                     $tableGateway = $container->get(Model\GroupTableGateway::class);
                     return new Model\GroupTable($tableGateway);
@@ -37,29 +41,30 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Group());
-                    return new TableGateway('groups', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_group', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];
     }
-    public function getControllerConfig()
-    {
+
+    public function getControllerConfig() {
         return [
             'factories' => [
                 Controller\GroupController::class => function($container) {
                     return new Controller\GroupController(
-                        $container->get(Model\GroupTable::class),$container->get('GroupLogger'));
+                        $container->get(Model\GroupTable::class), $container->get(Service\GroupService::class), $container->get('GroupLogger'),
+                        $container->get(AdapterInterface::class));
                 },
             ],
         ];
     }
-    public function onDispatchError($e)
-    {
+
+    public function onDispatchError($e) {
         return ErrorHandler::getJsonModelError($e);
     }
 
-    public function onRenderError($e)
-    {
+    public function onRenderError($e) {
         return ErrorHandler::getJsonModelError($e);
     }
+
 }

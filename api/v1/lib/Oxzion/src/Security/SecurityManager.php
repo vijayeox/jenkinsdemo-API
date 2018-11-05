@@ -23,6 +23,7 @@ class SecurityManager{
 		} else {
         	$api_permission = $accessName[strtolower($e->getRequest()->getMethod())];
 		}
+		// print_r($accessName);exit;
 		if(isset($accessName)){
 			if(!$this->isGranted($api_permission)){
 				$response = $e->getResponse();

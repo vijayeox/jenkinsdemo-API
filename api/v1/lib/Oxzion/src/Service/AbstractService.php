@@ -66,8 +66,9 @@ Author: Rakshith
 Function Name: executeQuerywithParams()
 */
     public function executeQuerywithParams($queryString, $where = NULL, $group = NULL, $order = NULL, $limit = NULL) { //Passing the required parameter to the query statement
-       $adapter = $this->getAdapter();
+     $adapter = $this->getAdapter();
        $query_string = $queryString . " " . $where . " " . $group . " " . $order . " " . $limit; //Combining all the parameters required to build the query statement. We will add more fields to this in the future if required.
+       // echo $query_string;exit;
        $statement = $adapter->query($query_string); 
        $result = $statement->execute();
        $resultSet = new ResultSet();

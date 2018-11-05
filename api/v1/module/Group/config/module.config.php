@@ -1,4 +1,5 @@
 <?php
+
 namespace Group;
 
 use Zend\Log\Logger;
@@ -13,42 +14,63 @@ return [
             'groups' => [
                 'type'    => Segment::class,
                 'options' => [
-                'route'    => '/group[/:groupId]',
-                'defaults' => [
-                        'controller' => Controller\GroupController::class
+                    'route'    => '/group[/:groupId]',
+                    'defaults' => [
+                        'controller' => Controller\GroupController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_GROUP_WRITE',
+                            'post'=> 'MANAGE_GROUP_WRITE',
+                            'delete'=> 'MANAGE_GROUP_WRITE',
+                            'get'=> 'MANAGE_GROUP_READ',
+                        ],
                     ],
                 ],
             ],
-        ],
-    ],
-    'log' => [
-        'GroupLogger' => [
-            'writers' => [
-                'stream' => [
-                    'name' => 'stream',
-                    'priority' => \Zend\Log\Logger::ALERT,
-                    'options' => [
-                        'stream' => __DIR__ . '/../../../logs/group.log',
-                            'formatter' => [
-                                'name' => \Zend\Log\Formatter\Simple::class,
-                                'options' => [
-                                    'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%','dateTimeFormat' => 'c',
-                                    ],
-                                ],
-                            'filters' => [
-                                'priority' => \Zend\Log\Logger::INFO,],
-                            ],
+            'groupsUser' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/group/user/:userId',
+                    'defaults' => [
+                        'controller' => Controller\GroupController::class,
+                        'method' => 'get',
+                        'action' => 'getGroupsforUser',
+                        'access' => [
+                            'getGroupsforUser'=>'MANAGE_GROUP_WRITE'
+                       ],
+                   ],
+               ],
+           ],
+       ],
+   ],
+   'log' => [
+    'GroupLogger' => [
+        'writers' => [
+            'stream' => [
+                'name' => 'stream',
+                'priority' => \Zend\Log\Logger::ALERT,
+                'options' => [
+                    'stream' => __DIR__ . '/../../../logs/group.log',
+                    'formatter' => [
+                        'name' => \Zend\Log\Formatter\Simple::class,
+                        'options' => [
+                            'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%','dateTimeFormat' => 'c',
                         ],
                     ],
-                    'processors' => [
-                        'requestid' => [
-                            'name' => \Zend\Log\Processor\RequestId::class,],
-                        ],
+                    'filters' => [
+                        'priority' => \Zend\Log\Logger::INFO,],
                     ],
                 ],
-                'view_manager' => [
+            ],
+            'processors' => [
+                'requestid' => [
+                    'name' => \Zend\Log\Processor\RequestId::class,],
+                ],
+            ],
+        ],
+        'view_manager' => [
                 // We need to set this up so that we're allowed to return JSON
                 // responses from our controller.
-                    'strategies' => ['ViewJsonStrategy',],
-                ],
-            ];
+            'strategies' => ['ViewJsonStrategy',],
+        ],
+    ];
