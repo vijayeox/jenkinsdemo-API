@@ -27,7 +27,7 @@ class BookmarkController extends AbstractApiController {
             return $this->getErrorResponse("Validation Errors",404, $response);
         }
         if($count == 0){
-            return $this->getFailureResponse("Failed to create a new entity", $data);
+            return $this->getFailureResponse("Failed to create a new Bookmark", $data);
         }
         return $this->getSuccessResponseWithData($data,201);
     }
@@ -44,7 +44,7 @@ class BookmarkController extends AbstractApiController {
             return $this->getErrorResponse("Validation Errors",404, $response);
         }
         if($count == 0){
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+            return $this->getErrorResponse("Bookmark not found for id - $id", 404);
         }
         return $this->getSuccessResponseWithData($data,200);
     }
