@@ -27,6 +27,5 @@ return [
 	'Screen',
 	'Attachment',
 	'Bookmark',
-	'App',
-	'Leaderboard'
+	'App'
 ];
