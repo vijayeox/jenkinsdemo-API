@@ -33,8 +33,7 @@ class AnnouncementController extends AbstractApiController {
     *       'media_type' : string,
     *       'media_location' : string,
     *       'groups' : [
-    *                       {'id' : integer}.
-    *                       ....multiple 
+    *                       {'id' : integer}.....multiple 
     *                  ],
     *   }
     *

@@ -1,8 +1,8 @@
 <?php
-namespace App;
+namespace LeaderBoard;
 
-use App\Controller\AppController;
-use App\Model;
+use LeaderBoard\Controller\LeaderBoardController;
+use LeaderBoard\Model;
 use Oxzion\Test\ControllerTest;
 use Oxzion\Db\ModelTable;
 use PHPUnit\DbUnit\TestCaseTrait;
@@ -11,7 +11,7 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 
 
-class AppControllerTest extends ControllerTest {
+class LeaderBoardControllerTest extends ControllerTest {
 
     public function setUp() : void {
         $this->loadConfig();
@@ -19,20 +19,20 @@ class AppControllerTest extends ControllerTest {
     }
 
     public function getDataSet() {
-        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/App.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/LeaderBoard.yml");
         return $dataset;
     }
 
     protected function setDefaultAsserts() {
-        $this->assertModuleName('App');
-        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AppController');
+        $this->assertModuleName('LeaderBoard');
+        $this->assertControllerName(LeaderBoardController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('LeaderBoardController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    public function testinstallAppForOrg() { // Testing to create a new app
+    public function testinstallLeaderBoardForOrg() { // Testing to create a new app
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test App', 'uuid'=> '2323423423', 'description'=>'Desc', 'type' => 1, 'logo'=>'app1.png', 'date_created' => '0000-00-00 00:00:00', 'date_modified'=>'0000-00-00 00:00:00'];
+        $data = ['name' => 'Test LeaderBoard', 'uuid'=> '2323423423', 'description'=>'Desc', 'type' => 1, 'logo'=>'app1.png', 'date_created' => '0000-00-00 00:00:00', 'date_modified'=>'0000-00-00 00:00:00'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_app'));
         $this->dispatch('/app/1/appinstall', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -40,7 +40,7 @@ class AppControllerTest extends ControllerTest {
         $this->assertMatchedRouteName('appinstall');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
 
-        $this->assertEquals($content['data']['name'], 'Test App');
+        $this->assertEquals($content['data']['name'], 'Test LeaderBoard');
         $this->assertEquals($content['data']['uuid'], '2323423423');
         $this->assertEquals($content['data']['description'], "Desc");
         $this->assertEquals($content['data']['type'], 1);
