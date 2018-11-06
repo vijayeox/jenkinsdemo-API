@@ -44,8 +44,9 @@
         "psr-4": {
             "Oxzion\\": "lib/Oxzion/src/",
             "Application\\": "module/Application/src/",
-            "Metaform\\": "module/Metaform/src/",
+            "Form\\": "module/Form/src/",
             "Field\\": "module/Field/src/",
+            "File\\": "module/File/src/",
             "Announcement\\": "module/Announcement/src/",
             "Alert\\": "module/Alert/src/",
             "User\\": "module/User/src/",
@@ -63,9 +64,10 @@
     "autoload-dev": {
         "psr-4": {
             "ApplicationTest\\": "module/Application/test/",
-            "MetaformTest\\": "module/Metaform/test/",
+            "FormTest\\": "module/Form/test/",
             "FieldTest\\": "module/Field/test/",
             "AnnouncementTest\\": "module/Announcement/test/",
+            "FileTest\\": "module/File/test/",
             "UserTest\\": "module/User/test/",
             "GroupTest\\": "module/Group/test/",
             "OrganizationTest\\": "module/Organization/test/",

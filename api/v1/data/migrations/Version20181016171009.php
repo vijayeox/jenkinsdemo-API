@@ -24,7 +24,7 @@ final class Version20181016171009 extends AbstractMigration
             `modified_by` INT(32) ,
             `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
             `date_modified`  DATETIME ) ENGINE = InnoDB;");
-        $this->addSql("CREATE TABLE  IF NOT EXISTS `ox_file_attributes` ( 
+        $this->addSql("CREATE TABLE  IF NOT EXISTS `ox_file_attribute` ( 
             `id` INT(32) NOT NULL AUTO_INCREMENT  PRIMARY KEY, 
             `fileid` INT(64) NOT NULL , 
             `fieldid` VARCHAR(250) NOT NULL , 
@@ -49,8 +49,9 @@ final class Version20181016171009 extends AbstractMigration
             `id` INT(32) NOT NULL AUTO_INCREMENT ,
             `uuid` VARCHAR(128) NOT NULL ,
             `name` VARCHAR(250) NOT NULL ,
-            `text` VARCHAR(500) NOT NULL ,
+            `text` VARCHAR(500),
             `formid` VARCHAR(128) NOT NULL ,
+            `orgid` INT(32)  NOT NULL ,
             `data_type` VARCHAR(32) NOT NULL ,
             `options` VARCHAR(1000) ,
             `dependson` VARCHAR(50) ,
@@ -66,7 +67,7 @@ final class Version20181016171009 extends AbstractMigration
             `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
             `date_modified`  DATETIME, 
             PRIMARY KEY (`id`)) ENGINE = InnoDB;");
-        $this->addSql("INSERT INTO `ox_field` (`id`, `uuid`, `name`, `text`, `formid`, `data_type`, `options`, `dependson`, `required`, `readonly`, `expression`,`validationtext`,  `helpertext`, `sequence`) SELECT `metafields`.`id`,UUID() ,`metafields`.`name`, `metafields`.`text`, `ox_form`.`id`, `metafields`.`type`, `options`, `dependson`, `required`, `readonly`, `expression`,`validationtext` , `helpertext`, `sequence` from `metafields` inner join `ox_form` on `ox_form`.`id` = `metafields`.`formid`");
+        // $this->addSql("INSERT INTO `ox_field` (`id`, `uuid`, `name`, `text`, `formid`, `data_type`, `options`, `dependson`, `required`, `readonly`, `expression`,`validationtext`,  `helpertext`, `sequence`) SELECT `metafields`.`id`,UUID() ,`metafields`.`name`, `metafields`.`text`, `ox_form`.`id`, `metafields`.`type`, `options`, `dependson`, `required`, `readonly`, `expression`,`validationtext` , `helpertext`, `sequence` from `metafields` inner join `ox_form` on `ox_form`.`id` = `metafields`.`formid`");
         $this->addSql("CREATE TABLE  IF NOT EXISTS `ox_metafield` ( 
             `id` Int( 11 ) AUTO_INCREMENT NOT NULL ,
             `name` VarChar( 100 ) NOT NULL ,
@@ -83,19 +84,25 @@ final class Version20181016171009 extends AbstractMigration
             `date_modified`  DATETIME, 
             PRIMARY KEY ( `id` ) )
             ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8");
-        $this->addSql("INSERT INTO ox_metafield (`name`, `text`,`orgid`, `helpertext`, 
-            `data_type`,`options`,`validationtext`,`expression`) 
-            SELECT distinct mf.`name`, `text`,`metaforms`.`orgid`, `helpertext`,`mf`.`type`, `options`,validationtext, expression from metafields mf inner join `metaforms` ON `metaforms`.`id`=`mf`.`formid` ");
-        $this->addSql("DROP TABLE fields");
+        // $this->addSql("INSERT INTO ox_metafield (`name`, `text`,`orgid`, `helpertext`, `data_type`,`options`,`validationtext`,`expression`)  SELECT distinct mf.`name`, `text`,`metaforms`.`orgid`, `helpertext`,`mf`.`type`, `options`,validationtext, expression from metafields mf inner join `metaforms` ON `metaforms`.`id`=`mf`.`formid` ");
+        // $this->addSql("DROP TABLE fields");
         $this->addSql("ALTER TABLE `ox_file` ADD UNIQUE `fileIndex` (`id`);");
         $this->addSql("ALTER TABLE `ox_field` ADD UNIQUE `field_id` (`id`);");
-        $this->addSql("ALTER TABLE `ox_file_attributes` ADD UNIQUE `fileIdIndex` (`id`);");
+        $this->addSql("ALTER TABLE `ox_file_attribute` ADD UNIQUE `fileIdIndex` (`id`);");
         $this->addSql("ALTER TABLE `ox_form` ADD UNIQUE `formId` (`id`);");
-        $this->addSql("CREATE TRIGGER before_insert_oxfield BEFORE INSERT ON ox_field FOR EACH ROW SET new.uuid = uuid()");
-        $this->addSql("CREATE TRIGGER before_insert_oxform BEFORE INSERT ON ox_form FOR EACH ROW SET new.uuid = uuid()");
-        $this->addSql("CREATE TRIGGER before_insert_oxfile BEFORE INSERT ON ox_file FOR EACH ROW SET new.uuid = uuid()");
+        $this->addSql("CREATE TRIGGER  IF NOT EXISTS before_insert_oxfield BEFORE INSERT ON ox_field FOR EACH ROW SET new.uuid = uuid()");
+        $this->addSql("CREATE TRIGGER IF NOT EXISTS before_insert_oxform BEFORE INSERT ON ox_form FOR EACH ROW SET new.uuid = uuid()");
+        $this->addSql("CREATE TRIGGER IF NOT EXISTS before_insert_oxfile BEFORE INSERT ON ox_file FOR EACH ROW SET new.uuid = uuid()");
+        $this->addSql("INSERT INTO `ox_form` (`id`, `uuid`, `name`, `description`, `orgid`, `statuslist`, `template`, `created_by`, `modified_by`, `date_created`, `date_modified`) VALUES (NULL, '', 'Task', 'Basic Task Form', '1', '[{1:\"In Progress\"},{2:\"Completed\"}]', NULL, '1', NULL, CURRENT_TIMESTAMP, NULL);");
+        $this->addSql("INSERT INTO `ox_field` (`id`, `uuid`, `name`, `text`, `formid`, `data_type`, `options`, `dependson`, `default_value`, `required`, `readonly`, `expression`, `validationtext`, `helpertext`, `sequence`, `created_by`, `modified_by`, `date_created`, `date_modified`) VALUES (NULL, '', 'priority', 'Priority', '1', 'select', '[{1:\"Low\"},{2:\"Medium\"},{3:\"High\"}]', NULL, NULL, '1', NULL, NULL, NULL, NULL, '1', '1', NULL, CURRENT_TIMESTAMP, NULL);");
+        $this->addSql("INSERT INTO ox_privilege (name,permission_allowed) values ('MANAGE_FILE',15);");
+        $this->addSql("INSERT INTO ox_role_privilege (role_id,privilege_name,permission) values (1, 'MANAGE_FILE',15);");
+        $this->addSql("INSERT INTO ox_privilege (name,permission_allowed) values ('MANAGE_FORM',15);");
+        $this->addSql("INSERT INTO ox_role_privilege (role_id,privilege_name,permission) values (1, 'MANAGE_FORM',15);");
+        $this->addSql("INSERT INTO ox_privilege (name,permission_allowed) values ('MANAGE_FIELD',15);");
+        $this->addSql("INSERT INTO ox_role_privilege (role_id,privilege_name,permission) values (1, 'MANAGE_FIELD',15);");
     }
-    public function postUp(Schema $schema) {
+    public function forUsageInFuture(Schema $schema) {
         echo "\n";
         echo "Running Migrations"."\n";
         $fieldoptions = $this->connection->executeQuery("SELECT id,options from ox_field WHERE `options` IS NOT NULL AND `options` <> '' ORDER BY `id` ASC");
@@ -143,7 +150,7 @@ final class Version20181016171009 extends AbstractMigration
                 if($field = $fields->fetchAll()){
                     echo $field[0]['id']."\n";
                     echo "Inserting Column :".$column['COLUMN_NAME']."\n";
-                    $insertQuery = $this->connection->executeUpdate("INSERT INTO ox_file_attributes (`fileid`, `fieldid`, `orgid`, `fieldvalue`)
+                    $insertQuery = $this->connection->executeUpdate("INSERT INTO ox_file_attribute (`fileid`, `fieldid`, `orgid`, `fieldvalue`)
                     SELECT `id`, '".$field[0]['id']."', `orgid`, `".$column['COLUMN_NAME']."`
                     FROM instanceforms WHERE formid=".$form['id'].";");
                     echo $insertQuery." Completed"."\n";
@@ -203,7 +210,7 @@ final class Version20181016171009 extends AbstractMigration
                         }
                         $fieldId = $this->connection->lastInsertId();
                         echo "Added field ".$column['COLUMN_NAME']." with field Id ".$fieldId."\n";
-                        $insertQuery = $this->connection->executeUpdate("INSERT INTO ox_file_attributes (`fileid`, `fieldid`, `orgid`, `fieldvalue`)
+                        $insertQuery = $this->connection->executeUpdate("INSERT INTO ox_file_attribute (`fileid`, `fieldid`, `orgid`, `fieldvalue`)
                             SELECT `id`, '".$fieldId."', `orgid`, `".$column['COLUMN_NAME']."`
                             FROM instanceforms WHERE formid=".$form['id'].";");
                         echo $insertQuery." Completed"."\n";
@@ -285,6 +292,6 @@ final class Version20181016171009 extends AbstractMigration
         $this->addSql("DROP TABLE ox_metafield");
         $this->addSql("DROP TABLE ox_field");
         $this->addSql("DROP TABLE ox_file");
-        $this->addSql("DROP TABLE ox_file_attributes");
+        $this->addSql("DROP TABLE ox_file_attribute");
     }
 }

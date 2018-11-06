@@ -71,6 +71,8 @@ abstract class ModelTable {
         if(is_null($filter)){
             $filter = array();
             $filter['id'] = $id;  // You cannot have a filter and an id. If there is filter, then id is irrelavant. 
+        } else {
+            $filter['id'] = $id;
         }
         return $this->tableGateway->delete($filter);
     }

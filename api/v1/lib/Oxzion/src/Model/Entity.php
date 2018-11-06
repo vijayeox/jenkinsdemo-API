@@ -94,7 +94,6 @@ abstract class Entity implements Countable{
                 $errors[$data] = 'required';
             }
         }
-
         if (count($errors) > 0) {
             $validationException = new ValidationException();
             $validationException->setErrors($errors);
