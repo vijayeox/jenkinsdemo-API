@@ -1,0 +1,23 @@
+ox_group:
+  -
+        id: 1
+        name: 'Test Group'
+        parent_id: 0
+        org_id: 1
+        manager_id: 436
+        description: 'Description Test Data'
+        logo: 'grp1.png'
+        cover_photo: 'grp1.png'
+        type: 1
+        status: 'Active'
+  -
+        id: 2
+        name: 'Test Group Once Again'
+        parent_id: 0
+        org_id: 1
+        manager_id: 436
+        description: 'Description for the second test cases'
+        logo: 'grp2.png'
+        cover_photo: 'grp2.png'
+        type: 1
+        status: 'Active'

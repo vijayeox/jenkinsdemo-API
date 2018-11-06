@@ -2,6 +2,7 @@
 namespace Oxzion\Model;
 
 use Oxzion\Utils\ValidationResult;
+use Oxzion\ValidationException;
 use Countable;
 
 abstract class Entity implements Countable{
@@ -30,7 +31,7 @@ abstract class Entity implements Countable{
      			//return VA_Service_Utils::parseInstanceExpression ($this->data[$key]);
             }
             else {
-                    return $this->data[$key];
+                return $this->data[$key];
             }
 
         }
@@ -61,6 +62,7 @@ abstract class Entity implements Countable{
      * this method should throw ValidationException if there are any errors
      */
     public function validate(){
+
     }
 
     public function import($data) {
@@ -81,6 +83,22 @@ abstract class Entity implements Countable{
                 continue;//throw new \Exception("$key field does not exist in " . __CLASS__);
             }
             $this->data[$key] = $value;
+        }
+    }
+
+//This function is to check if the data passed through the post command has NULL, "" and empty Value. If it has any of these then an error message is shown
+    public function validateWithParams($dataArray) {
+        $errors = array();
+        foreach($dataArray as $data) {
+            if ($this->data[$data] === null || $this->data[$data] === "" || empty($this->data[$data])) {
+                $errors[$data] = 'required';
+            }
+        }
+
+        if (count($errors) > 0) {
+            $validationException = new ValidationException();
+            $validationException->setErrors($errors);
+            throw $validationException;
         }
     }
 }

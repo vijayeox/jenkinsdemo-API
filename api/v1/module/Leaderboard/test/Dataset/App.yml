@@ -1,0 +1,19 @@
+ox_app:
+  -
+    id: 1
+    name: "App 1"
+    uuid: 1
+    description: "App 1 description"
+    type: 1
+    logo: "app_va.png"
+    date_created: 2018-10-10 16:02:06
+    date_modified: 2018-10-10 16:02:06
+  -
+    id: 2
+    name: "App 1"
+    uuid: 1
+    description: "App 2 description"
+    type: 1
+    logo: "app_va.png"
+    date_created: 2018-10-10 16:02:06
+    date_modified: 2018-10-10 16:02:06

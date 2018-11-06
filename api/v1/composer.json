@@ -56,7 +56,8 @@
             "Screen\\": "module/Screen/src/",
             "Attachment\\":"module/Attachment/src/",
             "Bookmark\\":"module/Bookmark/src/",
-            "App\\":"module/App/src/"
+            "App\\":"module/App/src/",
+            "Leaderboard\\":"module/Leaderboard/src/"
         }
     },
     "autoload-dev": {
@@ -70,7 +71,8 @@
             "OrganizationTest\\": "module/Organization/test/",
             "AuthTest\\" : "module/Auth/test",
             "BookmarkTest\\" : "module/Bookmark/test",
-            "AppTest\\" : "module/App/test"
+            "AppTest\\" : "module/App/test",
+            "LeaderboardTest\\" : "module/Leaderboard/test"
         }
     },
     "extra": [],

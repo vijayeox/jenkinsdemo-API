@@ -57,7 +57,7 @@ class AnnouncementService extends AbstractService{
         }
         return $count;
     }
-    public function updateAnnouncement($id,&$data){
+    public function updateAnnouncement($id,&$data) {
         $obj = $this->table->get($id,array());
         if(is_null($obj)){
             return 0;
