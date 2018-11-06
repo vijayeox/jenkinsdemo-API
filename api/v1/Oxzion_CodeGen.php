@@ -67,9 +67,7 @@ class Oxzion_CodeGen
         } else {
             echo "\nNotice: $configFile does not exist\n";
         }
-
         echo "\n\nWARNING: please backup your existing code!!!\n\n";
-
         do {
             $moduleName = $this->prompt("Enter module name: ");
         } while ('' === $moduleName);
@@ -100,7 +98,7 @@ class Oxzion_CodeGen
             $this->generateMapper($table);
             $controllers[] = $this->generateController($table);
             $this->generateTestController($table);
-            $serviceConfigArray[] = $this->getServiceConfigCode($table);
+            $serviceConfigArray[] = $this->getServiceConfigCode($table,$this->moduleName);
             $controllerConfigArray[] = $this->getControllerConfig($table,$this->moduleName);
         }
         $ModuleCode = $this->getModuleCode(implode('', $serviceConfigArray),implode('', $controllerConfigArray)
@@ -367,10 +365,10 @@ CONFIG;
      * @param TableObject $table
      * @return string
      */
-    protected function getServiceConfigCode(TableObject $table)
+    protected function getServiceConfigCode(TableObject $table,$moduleName)
     {
         $tableName = $table->getName();
-
+        $serviceName = $moduleName."Service";
         $modelName = $this->toCamelCase($tableName);
         $gateWay = ucwords($tableName).'TableGateway';
         $table = ucwords($modelName).'Table';
@@ -378,6 +376,10 @@ CONFIG;
         Model\\$table::class => function(\$container) {
             \$tableGateway = \$container->get(Model\\$gateWay::class);
             return new Model\\$table(\$tableGateway);
+        },
+        Service\\$serviceName::class => function(\$container){
+            \$dbAdapter = \$container->get(AdapterInterface::class);
+            return new Service\\$serviceName(\$container->get('config'), \$dbAdapter, \$container->get(Model\\$table::class));
         },
         Model\\$gateWay::class => function (\$container) {
             \$dbAdapter = \$container->get(AdapterInterface::class);
@@ -407,6 +409,42 @@ return <<<CODE
 CODE;
         }
 
+    /**
+     *
+     * @param TableObject $table
+     */
+    protected function generateService(TableObject $table){
+        $modelName = $this->toCamelCase($table->getName());
+        $modelTableName = $modelName."Table";
+        $code = <<<SERVICE
+<?php
+namespace $this->moduleName\Service;
+
+use Oxzion\Service\AbstractService;
+use $this->moduleName\Model\\$modelTableName;
+use $this->moduleName\Model\\$this->moduleName;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\ValidationException;
+use Exception;
+
+class $modelTableName extends AbstractService {
+     private \$table;
+
+    public function __construct(\$config, \$dbAdapter, $modelTableName \$table){
+        parent::__construct(\$config, \$dbAdapter);
+        \$this->table = \$table;
+    }
+}
+SERVICE;
+        $filename = sprintf(
+            '%s/module/%s/src/Service/%s.php',
+            $this->workingDir,
+            $this->moduleName,
+            $modelTableName
+        );
+        $this->writeFile($filename, $code, false, true);
+    }
     /**
      *
      * @param TableObject $table
