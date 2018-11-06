@@ -1,23 +1,23 @@
-organizations:
+ox_organization:
 -
   id: 1
-  name: "Vantage Agora Inc."
+  name: "Cleveland Cavaliers"
   address: "23811 Chagrin Blvd, Ste 244"
   city: "Beachwood"
   state: "OH"
   zip: 44122
-  logo: "logo_header_for_club.png"
-  defaultgroupid: 69
-  statusbox: ""
+  logo: "cavslogo.png"
   labelfile: "en"
-  messagecount: 200
   languagefile: "en"
-  orgtype: 1
-  flash_msg: 1
-  email: "Active"
-  themes: 1
-  formview: 1
-  assign_followuplimit: 10
-  insurelearn: 0
-  reset_password: 51
+  status: "Active"
+-
+  id: 2
+  name: "Golden State Warriors"
+  address: "California"
+  city: "Oakland"
+  state: "OH"
+  zip: 44122
+  logo: "gswlogo.png"
+  labelfile: "en"
+  languagefile: "en"
   status: "Active"
