@@ -19,13 +19,20 @@ class FieldService extends AbstractService{
     }
     public function createField($formId,&$data){
         $form = new Field();
-        $data['formid'] = $formId;
-        $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['form_id'] = $formId;
+        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['date_modified'] = date('Y-m-d H:i:s');
-        $data['sequence'] = isset($data['sequence'])?$this->checkSequenceExists($formId,$data['sequence']):$this->getSequenceByForm($formId)+1;
+        if(isset($data['sequence'])){
+            $sequenceExist = $this->checkSequenceExists($formId,$data['sequence']);
+            if($sequenceExist){
+                $data['sequence'] = $this->getSequenceByForm($formId)+1;
+            }
+        } else {
+            $data['sequence'] = $this->getSequenceByForm($formId)+1;
+        }
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
@@ -95,7 +102,7 @@ class FieldService extends AbstractService{
         $this->beginTransaction();
         $count = 0;
         try{
-            $count = $this->table->delete($id, ['orgid' => AuthContext::get(AuthConstants::ORG_ID),'formid'=>$formId]);
+            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID),'form_id'=>$formId]);
             if($count == 0){
                 $this->rollback();
                 return 0;
@@ -113,7 +120,7 @@ class FieldService extends AbstractService{
         $select = $sql->select();
         $select->from('ox_field')
                 ->columns(array("*"))
-                ->where(array('orgid' => AuthContext::get(AuthConstants::ORG_ID),'formid'=>$formId));
+                ->where(array('org_id' => AuthContext::get(AuthConstants::ORG_ID),'form_id'=>$formId));
         return $this->executeQuery($select)->toArray();
     }
     public function getField($formId,$id) {
@@ -121,7 +128,7 @@ class FieldService extends AbstractService{
         $select = $sql->select();
         $select->from('ox_field')
         ->columns(array("*"))
-        ->where(array('id' => $id,'ox_field.orgid' => AuthContext::get(AuthConstants::ORG_ID),'formid'=>$formId));
+        ->where(array('id' => $id,'ox_field.org_id' => AuthContext::get(AuthConstants::ORG_ID),'form_id'=>$formId));
         $response = $this->executeQuery($select)->toArray();
         if(count($response)==0){
             return 0;
@@ -133,16 +140,20 @@ class FieldService extends AbstractService{
         $select = $sql->select();
         $select->from('ox_field')
                 ->columns(array('MAX' => new \Zend\Db\Sql\Expression("MAX(sequence)")))
-                ->where(array('orgid' => AuthContext::get(AuthConstants::ORG_ID),'formid'=>$formId));
+                ->where(array('org_id' => AuthContext::get(AuthConstants::ORG_ID),'form_id'=>$formId));
         $result = $this->executeQuery($select)->toArray();
-        return $result[0]['MAX'];
+        if(count($result)>0){
+            return $result[0]['MAX'];
+        } else {
+            return 1;
+        }
     }
     private function checkSequenceExists($formId,$sequence){
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_field')
                 ->columns(array('sequence'))
-                ->where(array('orgid' => AuthContext::get(AuthConstants::ORG_ID),'formid'=>$formId,'sequence'=>$sequence));
+                ->where(array('org_id' => AuthContext::get(AuthConstants::ORG_ID),'form_id'=>$formId,'sequence'=>$sequence));
         $result = $this->executeQuery($select)->toArray();
         if(count($result)>0){
             return 0;
@@ -154,7 +165,7 @@ class FieldService extends AbstractService{
         $select = $sql->select();
         $select->from('ox_field')
                 ->columns(array('name'))
-                ->where(array('orgid' => AuthContext::get(AuthConstants::ORG_ID),'name'=>$fieldName));
+                ->where(array('org_id' => AuthContext::get(AuthConstants::ORG_ID),'name'=>$fieldName));
         $result = $this->executeQuery($select)->toArray();
         if(count($result)>0){
             return 1;

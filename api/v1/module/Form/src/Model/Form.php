@@ -10,7 +10,7 @@ class Form extends Entity{
         'uuid'=>NULL,
         'name'=>NULL,
         'description'=>NULL,
-        'orgid'=>NULL,
+        'org_id'=>NULL,
         'statuslist'=>NULL,
         'template'=>NULL,
         'created_by'=>NULL,
@@ -19,7 +19,7 @@ class Form extends Entity{
         'date_modified'=>NULL,
     );
     public function validate(){
-        $required = array('name','orgid','statuslist');
+        $required = array('name','org_id','statuslist');
         $this->validateWithParams($required);
     }
 }

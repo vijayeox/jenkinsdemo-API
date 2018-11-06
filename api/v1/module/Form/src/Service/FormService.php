@@ -19,7 +19,7 @@ class FormService extends AbstractService{
 
     public function createForm(&$data){
         $form = new Form();
-        $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -92,7 +92,7 @@ class FormService extends AbstractService{
         $this->beginTransaction();
         $count = 0;
         try{
-            $count = $this->table->delete($id, ['orgid' => AuthContext::get(AuthConstants::ORG_ID)]);
+            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
             if($count == 0){
                 $this->rollback();
                 return 0;
@@ -110,7 +110,7 @@ class FormService extends AbstractService{
         $select = $sql->select();
         $select->from('ox_form')
                 ->columns(array("*"))
-                ->where(array('ox_form.orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+                ->where(array('ox_form.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
         return $this->executeQuery($select)->toArray();
     }
     public function getForm($id) {
@@ -118,7 +118,7 @@ class FormService extends AbstractService{
         $select = $sql->select();
         $select->from('ox_form')
         ->columns(array("*"))
-        ->where(array('ox_form.id' => $id,'ox_form.orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+        ->where(array('ox_form.id' => $id,'ox_form.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
         $response = $this->executeQuery($select)->toArray();
         if(count($response)==0){
             return 0;

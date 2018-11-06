@@ -8,7 +8,7 @@ class Metafield extends Entity{
 	protected $data = array(
 		'id'=>0,
 		'name'=>NULL,
-		'orgid'=>NULL,
+		'org_id'=>NULL,
 		'text'=>NULL,
 		'data_type'=>NULL,
 		'options'=>NULL,
@@ -21,7 +21,7 @@ class Metafield extends Entity{
 		'date_modified'=>NULL,
 	);
 	public function validate(){
-        $required = array('name','orgid','formid','data_type','sequence');
+        $required = array('name','org_id','formid','data_type','sequence');
         $this->validateWithParams($required);
     }
 }
