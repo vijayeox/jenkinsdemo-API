@@ -3,6 +3,7 @@ namespace Oxzion\Service;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Sql;
 use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Adapter\ParameterContainer;
 
 class AbstractService {
     protected $config;
@@ -73,6 +74,49 @@ Function Name: executeQuerywithParams()
        $resultSet = new ResultSet();
        return $resultSet->initialize($result);
    }   
+
+   /**
+    * multiInsertOrUpdate: Insert or update Multiple rows as one query
+    * @param array $tableName Table name to Insert fields into
+    * @param array $data Insert array(array('field_name' => 'field_value'), array('field_name' => 'field_value_new'))
+    * @param array $excludedColumns For excluding update columns array('field_name1', 'field_name2')
+    * @return bool
+    */
+
+   public function multiInsertOrUpdate($tableName,array $data, array $excludedColumns){
+        $sqlStringTemplate = 'INSERT INTO %s (%s) VALUES %s ON DUPLICATE KEY UPDATE %s';
+        $adapter = $this->getAdapter();
+        $driver = $adapter->getDriver();
+        $platform = $adapter->getPlatform();
+        $parameterContainer = new ParameterContainer();
+        $statementContainer = $adapter->createStatement();
+        $statementContainer->setParameterContainer($parameterContainer);
+        /* add columns they should be updated */
+        foreach ($data[0] as $column => $value) {
+            if (false === array_search($column, $excludedColumns)) {
+                $updateQuotedValue[] = ($platform->quoteIdentifier($column)) . '=' . ('VALUES(' . ($platform->quoteIdentifier($column)) . ')');
+            }
+        }
+        /* Preparation insert data */
+        $insertQuotedValue = [];
+        $insertQuotedColumns = [];
+        $i = 0;
+        foreach ($data as $insertData) {
+            $fieldName = 'field'.++$i.'_';
+            $oneValueData = [];
+            $insertQuotedColumns = [];
+            foreach ($insertData as $column => $value) {
+                $oneValueData[] = $driver->formatParameterName($fieldName . $column);
+                $insertQuotedColumns[] = $platform->quoteIdentifier($column);
+                $parameterContainer->offsetSet($fieldName . $column, $value);
+            }
+            $insertQuotedValue[] = '(' . implode(',', $oneValueData) . ')';
+        }
+        /* Preparation sql query */
+        $query = sprintf($sqlStringTemplate,$tableName,implode(',', $insertQuotedColumns),implode(',', array_values($insertQuotedValue)),implode(',', array_values($updateQuotedValue)));
+        $statementContainer->setSql($query);
+        return $statementContainer->execute();
+    }
 
 }
 ?>
