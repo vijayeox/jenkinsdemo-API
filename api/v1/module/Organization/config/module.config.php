@@ -13,9 +13,16 @@ return [
             'organization' => [
                 'type'    => Segment::class,
                 'options' => [
-                'route'    => '/organization[/:orgId]',
-                'defaults' => [
-                        'controller' => Controller\OrganizationController::class
+                    'route'    => '/organization[/:orgId]',
+                    'defaults' => [
+                        'controller' => Controller\OrganizationController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_ORGANIZATION_WRITE',
+                            'post'=> 'MANAGE_ORGANIZATION_WRITE',
+                            'delete'=> 'MANAGE_ORGANIZATION_WRITE',
+                            'get'=> 'MANAGE_ORGANIZATION_READ',
+                        ],
                     ],
                 ],
             ],
@@ -29,26 +36,26 @@ return [
                     'priority' => \Zend\Log\Logger::ALERT,
                     'options' => [
                         'stream' => __DIR__ . '/../../../logs/organization.log',
-                            'formatter' => [
-                                'name' => \Zend\Log\Formatter\Simple::class,
-                                'options' => [
-                                    'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%','dateTimeFormat' => 'c',
-                                    ],
-                                ],
-                            'filters' => [
-                                'priority' => \Zend\Log\Logger::INFO,],
+                        'formatter' => [
+                            'name' => \Zend\Log\Formatter\Simple::class,
+                            'options' => [
+                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%','dateTimeFormat' => 'c',
                             ],
                         ],
-                    ],
-                    'processors' => [
-                        'requestid' => [
-                            'name' => \Zend\Log\Processor\RequestId::class,],
+                        'filters' => [
+                            'priority' => \Zend\Log\Logger::INFO,],
                         ],
                     ],
                 ],
-                'view_manager' => [
+                'processors' => [
+                    'requestid' => [
+                        'name' => \Zend\Log\Processor\RequestId::class,],
+                    ],
+                ],
+            ],
+            'view_manager' => [
                 // We need to set this up so that we're allowed to return JSON
                 // responses from our controller.
-                    'strategies' => ['ViewJsonStrategy',],
-                ],
-            ];
+                'strategies' => ['ViewJsonStrategy',],
+            ],
+        ];

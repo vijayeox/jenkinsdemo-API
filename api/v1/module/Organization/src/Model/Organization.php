@@ -6,25 +6,19 @@ class Organization extends Entity{
 
     protected $data = array(
         'id' => NULL,
-        'name' => "Organization",
-        'address' => "NA",
-        'city' => "NA",
-        'state' => "NA",
-        'zip' => "NA",
-        'logo' => "NA",
-        'defaultgroupid' => 0,
-        'statusbox' => 'Matrix|MyKRA|StarPoints|Alerts',
+        'name' => NULL,
+        'address' => NULL,
+        'city' => NULL,
+        'state' => NULL,
+        'zip' => NULL,
+        'logo' => NULL,
         'labelfile' => NULL,
-        'messagecount' => 200,
         'languagefile' => 'en',
-        'orgtype' => 0,
-        'flash_msg' => 0,
-        'email' => 'Active',
-        'themes' => 0,
-        'formview' => 0,
-        'assign_followuplimit' => 10,
-        'insurelearn' => 0,
-        'reset_password' => 0,
+        'theme' => 0,
         'status' => 'Active'
     );
+    public function validate(){
+        $required = array('name','logo','status');
+        $this->validateWithParams($required);
+    }
 }

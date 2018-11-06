@@ -29,6 +29,10 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
+                Service\OrganizationService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\OrganizationService($container->get('config'), $dbAdapter, $container->get(Model\OrganizationTable::class));
+                },
                 Model\OrganizationTable::class => function($container) {
                     $tableGateway = $container->get(Model\OrganizationTableGateway::class);
                     return new Model\OrganizationTable($tableGateway);
@@ -37,7 +41,7 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Organization());
-                    return new TableGateway('organizations', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_organization', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];
@@ -48,7 +52,8 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\OrganizationController::class => function($container) {
                     return new Controller\OrganizationController(
-                        $container->get(Model\OrganizationTable::class),$container->get('OrganizationLogger'));
+                            $container->get(Model\OrganizationTable::class), $container->get(Service\OrganizationService::class), $container->get('OrganizationLogger'),
+                        $container->get(AdapterInterface::class));
                 },
             ],
         ];
