@@ -2,28 +2,28 @@ ox_form:
   -
     id: 1
     name: "Test Form 1"
-    orgid: 1
+    org_id: 1
     description: "Form Description"
   -
     id: 2
     name: "Test Form 2"
-    orgid: 1
+    org_id: 1
     description: "Form Description"
 ox_field:
   -
     id: 1
     name: "field1"
-    formid: 1
+    form_id: 1
     data_type: "integer"
-    orgid: 1
+    org_id: 1
     required: 1
     sequence: 1
   -
     id: 2
     name: "field2"
-    formid: 1
+    form_id: 1
     data_type: "integer"
-    orgid: 1
+    org_id: 1
     required: 1
     sequence: 2
 ox_metafield:
@@ -31,45 +31,45 @@ ox_metafield:
     id: 1
     name: "field1"
     data_type: "integer"
-    orgid: 1
+    org_id: 1
   -
     id: 2
     name: "field2"
     data_type: "integer"
-    orgid: 1
+    org_id: 1
 ox_file:
   -
     id: 1
     name: "Test Task 1"
-    orgid: 1
-    formid: 1
+    org_id: 1
+    form_id: 1
   -
     id: 2
     name: "Test Task  2"
-    orgid: 1
-    formid: 1
+    org_id: 1
+    form_id: 1
 ox_file_attribute:
   -
     id: 1
     fileid: 1
-    orgid: 1
+    org_id: 1
     fieldvalue: 1
     fieldid: 1
   -
     id: 2
     fileid: 1
-    orgid: 1
+    org_id: 1
     fieldvalue: 1
     fieldid: 2
   -
     id: 3
     fileid: 1
-    orgid: 1
+    org_id: 1
     fieldvalue: 2
     fieldid: 2
   -
     id: 4
     fileid: 2
-    orgid: 1
+    org_id: 1
     fieldvalue: 2
     fieldid: 2

@@ -18,7 +18,7 @@ class FileService extends AbstractService{
     }
     public function createFile(&$data){
         $form = new File();
-        $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -36,7 +36,7 @@ class FileService extends AbstractService{
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
-            $validFields = $this->checkFields($data['formid'],$fields,$data['orgid'],$id);
+            $validFields = $this->checkFields($data['form_id'],$fields,$data['org_id'],$id);
             if($validFields){
                 $this->multiInsertOrUpdate('ox_file_attribute',$validFields,['id']);
             }
@@ -75,7 +75,7 @@ class FileService extends AbstractService{
                 $this->rollback();
                 return 0;
             }
-            $validFields = $this->checkFields($data['formid'],$fields,$data['orgid'],$id);
+            $validFields = $this->checkFields($data['form_id'],$fields,$data['org_id'],$id);
             if($validFields){
                 $this->multiInsertOrUpdate('ox_file_attribute',$validFields,['id']);
             }
@@ -99,7 +99,7 @@ class FileService extends AbstractService{
     public function deleteFile($id){
     $count = 0;
         try{
-            $count = $this->table->delete($id, ['orgid' => AuthContext::get(AuthConstants::ORG_ID)]);
+            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
             if($count == 0){
                 return 0;
             }
@@ -114,12 +114,12 @@ class FileService extends AbstractService{
         // $select = $sql->select()
         //         ->from('ox_file')
         //         ->columns(array("*"))
-        //         ->where(array('ox_file.orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+        //         ->where(array('ox_file.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
         // $result = $this->executeQuery($select)->toArray();
         return array();
     }
     public function getFile($id){
-        $obj = $this->table->get($id,array('orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+        $obj = $this->table->get($id,array('org_id' => AuthContext::get(AuthConstants::ORG_ID)));
         if($obj){
             $fileArray = $obj->toArray(); 
             $sql = $this->getSqlObject();
@@ -127,7 +127,7 @@ class FileService extends AbstractService{
             ->from('ox_file_attribute')
             ->columns(array("*"))
             ->join('ox_field', 'ox_file_attribute.fieldid = ox_field.id', array('fieldname'=>'name'),'left')
-            ->where(array('ox_file_attribute.orgid' => AuthContext::get(AuthConstants::ORG_ID),'ox_file_attribute.fileid' => $id));
+            ->where(array('ox_file_attribute.org_id' => AuthContext::get(AuthConstants::ORG_ID),'ox_file_attribute.fileid' => $id));
             $result = $this->executeQuery($select)->toArray();
             foreach ($result as $key => $value) {
                 $fileArray[$value['fieldname']] = $value['fieldvalue'];
@@ -142,7 +142,7 @@ class FileService extends AbstractService{
         $select = $sql->select();
         $select->from('ox_field')
         ->columns(array("*"))
-        ->where(array('ox_field.formid' => $formId,'ox_field.orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+        ->where(array('ox_field.form_id' => $formId,'ox_field.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
         $fields = $this->executeQuery($select)->toArray();
         $keyValueFields = array();
         $i=0;
@@ -167,7 +167,7 @@ class FileService extends AbstractService{
             }
             $keyValueFields[$i]['fieldvalue'] = $fieldData[$field['name']];
             $keyValueFields[$i]['fieldid'] = $field['id'];
-            $keyValueFields[$i]['orgid'] = $orgId;
+            $keyValueFields[$i]['org_id'] = $orgId;
             $keyValueFields[$i]['fileid'] = $fileId;
             $i++;
         }

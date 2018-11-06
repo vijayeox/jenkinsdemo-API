@@ -9,8 +9,8 @@ class File extends Entity {
 	protected $data = array(
 		'id'=>0 ,
 		'name' => NULL,
-		'orgid' => NULL,
-		'formid' => NULL,
+		'org_id' => NULL,
+		'form_id' => NULL,
         'status' =>NULL,
 		'created_by' => NULL,
 		'modified_by' => NULL,
@@ -20,7 +20,7 @@ class File extends Entity {
     protected $attributes = array();
 
     public function validate(){
-        $required = array('name','orgid','formid','status');
+        $required = array('name','org_id','form_id','status');
         $this->validateWithParams($required);
     }
 }

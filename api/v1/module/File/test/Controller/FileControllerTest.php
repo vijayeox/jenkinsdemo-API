@@ -68,7 +68,7 @@ class FileControllerTest extends ControllerTest{
     }
     public function testCreate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test File','status'=>1,'field1'=>1,'field2'=>1,'formid'=>1];
+        $data = ['name' => 'Test File','status'=>1,'field1'=>1,'field2'=>1,'form_id'=>1];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_file'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/file', 'POST', null);
@@ -84,7 +84,7 @@ class FileControllerTest extends ControllerTest{
     }
     public function testCreateWithOutNameFailure(){
         $this->initAuthToken($this->adminUser);
-        $data = ['status'=>1,'field1'=>1,'field2'=>1,'formid'=>1];
+        $data = ['status'=>1,'field1'=>1,'field2'=>1,'form_id'=>1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/file', 'POST', null);
         $this->assertResponseStatusCode(404);
@@ -105,11 +105,11 @@ class FileControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation Errors');
-        $this->assertEquals($content['data']['errors']['formid'], 'required');
+        $this->assertEquals($content['data']['errors']['form_id'], 'required');
     }
     public function testCreateAccess(){
         $this->initAuthToken($this->employeeUser);
-        $data = ['name' => 'Test File','status'=>1,'field1'=>1,'field2'=>1,'formid'=>1];
+        $data = ['name' => 'Test File','status'=>1,'field1'=>1,'field2'=>1,'form_id'=>1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/file', 'POST', null);
         $this->assertResponseStatusCode(401);
@@ -152,7 +152,7 @@ class FileControllerTest extends ControllerTest{
     }
 
     public function testUpdateNotFound(){
-        $data = ['name' => 'Test File','status'=>1,'field1'=>1,'field2'=>1,'formid'=>1];
+        $data = ['name' => 'Test File','status'=>1,'field1'=>1,'field2'=>1,'form_id'=>1];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/file/122', 'PUT', null);
