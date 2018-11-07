@@ -21,6 +21,10 @@ class Module {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\UserService($config, $dbAdapter);
                 },
+                Service\ElasticService::class => function($container) {
+                    $config = $container->get('config');
+                    return new Service\ElasticService($config);
+                },
             ],
         ];
     }

@@ -33,7 +33,8 @@
         "zendframework/zend-servicemanager": "^3.3",
         "zendframework/zend-cache": "^2.8",
         "zendframework/zend-serializer": "^2.9",
-        "zendframework/zend-inputfilter": "^2.8"
+        "zendframework/zend-inputfilter": "^2.8",
+		"elasticsearch/elasticsearch": "~5.0"
     },
     "require-dev" : {
         "phpunit/phpunit": "^7",
@@ -57,7 +58,8 @@
             "Screen\\": "module/Screen/src/",
             "Attachment\\":"module/Attachment/src/",
             "Bookmark\\":"module/Bookmark/src/",
-            "App\\":"module/App/src/"
+            "App\\":"module/App/src/",
+			"Mlet\\":"module/Mlet/src"
         }
     },
     "autoload-dev": {

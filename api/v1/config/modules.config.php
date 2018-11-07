@@ -27,5 +27,6 @@ return [
 	'Screen',
 	'Attachment',
 	'Bookmark',
-	'App'
+	'App',
+	'Mlet'
 ];
