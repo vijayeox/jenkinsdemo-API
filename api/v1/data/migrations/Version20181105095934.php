@@ -13,7 +13,7 @@ final class Version20181105095934 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("CREATE TABLE `ox_group` (
+        $this->addSql("CREATE TABLE IF NOT EXISTS `ox_group` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `name` varchar(20000) CHARACTER SET utf8 NOT NULL,
 			  `parent_id` int(11) NOT NULL,
@@ -33,12 +33,24 @@ final class Version20181105095934 extends AbstractMigration
 			  KEY `status` (`status`)
 			) ENGINE=MyISAM AUTO_INCREMENT=1835 DEFAULT CHARSET=latin1");
 
+
+
+        $this->addSql("CREATE TABLE IF NOT EXISTS `ox_user_group` (
+			  `id` int(11) NOT NULL AUTO_INCREMENT,
+			  `group_id` int(11) NOT NULL,
+			  `avatar_id` int(11) NOT NULL,
+			  PRIMARY KEY (`id`),
+			  KEY `avatarid` (`avatar_id`)
+			) ENGINE=MyISAM AUTO_INCREMENT=1008271 DEFAULT CHARSET=latin1;
+			SELECT * FROM rakshithapi.ox_user_group;");
+
     }
 
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql("DROP TABLE ox_group");
+        $this->addSql("DROP TABLE ox_user_group");
 
     }
 }
