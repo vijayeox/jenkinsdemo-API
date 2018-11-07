@@ -1,4 +1,5 @@
 <?php
+
 namespace User;
 
 use Zend\Log\Logger;
@@ -13,15 +14,30 @@ return [
             'user' => [
                 'type'    => Segment::class,
                 'options' => [
-                'route'    => '/user[/:userId]',
-                'defaults' => [
+                    'route'    => '/user[/:userId]',
+                    'defaults' => [
                         'controller' => Controller\UserController::class,
-                        'access'=>[
+                        'access'=> [
                             // SET ACCESS CONTROL
                             'put'=> 'MANAGE_USER_WRITE',
                             'post'=> 'MANAGE_USER_WRITE',
                             'delete'=> 'MANAGE_USER_WRITE',
                             'get'=> 'MANAGE_USER_READ',
+                        ],
+                    ],
+                ],
+            ],
+            'userManager' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/user/[:userId]/manager/[:managerId]',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'get',
+                        'action' => 'assignManagerToUser',
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'assignManagerToUser' => 'MANAGE_USER_WRITE'
                         ],
                     ],
                 ],

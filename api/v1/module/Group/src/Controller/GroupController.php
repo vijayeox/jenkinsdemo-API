@@ -64,4 +64,15 @@ class GroupController extends AbstractApiController {
         }
         return $this->getSuccessResponse();
     }
+
+    
+    public function assignManagerToUserAction() {
+        try {
+            $response = $this->userService->deleteUser($id);
+        } catch(ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",406, $response);
+        }
+
+    }
 }

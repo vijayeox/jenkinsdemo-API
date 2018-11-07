@@ -18,7 +18,7 @@ use Zend\Db\Adapter\AdapterInterface;
 class UserController extends AbstractApiController {
 
 	private $dbAdapter;
-	public function __construct(UserTable $table, Logger $log, UserService $userService){
+	public function __construct(UserTable $table, Logger $log, UserService $userService) {
 		parent::__construct($table, $log, __CLASS__, User::class);
 		$this->setIdentifierName('userId');
 		$this->userService = $userService;
@@ -45,10 +45,10 @@ class UserController extends AbstractApiController {
     *
     */
 
-	public function create($data){
-        try{
+     public function create($data) {
+        try {
             $count = $this->userService->createUser($data);
-        }catch(ValidationException $e){
+        } catch(ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             /*
         	PLease see the html error codes. https://www.restapitutorial.com/httpstatuscodes.html
@@ -58,7 +58,7 @@ class UserController extends AbstractApiController {
             return $this->getErrorResponse("Validation Errors",406, $response);
         }
 
-        if($count == 0){
+        if($count == 0) {
             return $this->getFailureResponse("Failed to create a new user", $data);
         }
         /*
@@ -68,9 +68,9 @@ class UserController extends AbstractApiController {
         return $this->getSuccessResponseWithData($data,201);
     }
 
-    public function get($id){
+    public function get($id) {
         $result = $this->userService->getUser($id);
-        if($result == 0){
+        if ($result == 0) {
             return $this->getErrorResponse("Failed to find User",404, $response);
         }
         return $this->getSuccessResponseWithData($result);
@@ -81,30 +81,32 @@ class UserController extends AbstractApiController {
         return $this->getSuccessResponseWithData($result);
     }
 
-    public function update($id, $data){
-        try{
+    public function update($id, $data) {
+        try {
             $count = $this->userService->updateUser($id,$data);
-        }catch(ValidationException $e){
+        } catch(ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",406, $response);
         }
-        if($count == 0){
+        if($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
         return $this->getSuccessResponseWithData($data,200);
     }
-    public function delete($id){
-        try{
+
+    public function delete($id) {
+        try {
             $response = $this->userService->deleteUser($id);
-        }catch(ValidationException $e){
+        } catch(ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",406, $response);
         }
-        if($response == 0){
+        if($response == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
         return $this->getSuccessResponse();
     }
+
 
 
 
