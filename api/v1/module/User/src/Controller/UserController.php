@@ -107,6 +107,38 @@ class UserController extends AbstractApiController {
         return $this->getSuccessResponse();
     }
 
+    
+    public function assignManagerToUserAction() {
+        $params = $this->params()->fromRoute();
+        // print_r($params);exit;
+        try {
+            $response = $this->userService->assignManagerToUser($params['userId'], $params['managerId']);
+            if($response == 0) {
+                return $this->getErrorResponse("Entity not found", 404);
+            }
+            return $this->getSuccessResponse();
+        } catch(ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",406, $response);
+        }
+
+    }
+
+    public function removeManagerForUserAction() {
+        $params = $this->params()->fromRoute();
+        try {
+            $response = $this->userService->removeManagerForUser($params['userId'], $params['managerId']);
+            if($response == 0) {
+                return $this->getErrorResponse("Entity not found for id - $id", 404);
+            }
+            return $this->getSuccessResponse();
+        } catch(ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",406, $response);
+        }
+
+    }
+
 
 
 

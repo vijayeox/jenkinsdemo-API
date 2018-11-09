@@ -27,17 +27,32 @@ return [
                     ],
                 ],
             ],
-            'userManager' => [
+            'assignUserManager' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/user/[:userId]/manager/[:managerId]',
+                    'route'    => '/user/:userId/assign/:managerId',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
-                        'method' => 'get',
+                        'method' => 'GET',
                         'action' => 'assignManagerToUser',
                         'access'=>[
                             // SET ACCESS CONTROL
-                            'assignManagerToUser' => 'MANAGE_USER_WRITE'
+                            'assignManagerToUser' => 'MANAGE_USER_WRITE',
+                        ],
+                    ],
+                ],
+            ],
+            'removeUserManager' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/user/:userId/remove/:managerId',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'DELETE',
+                        'action' => 'removeManagerForUser',
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'removeManagerForUser' => 'MANAGE_USER_WRITE',
                         ],
                     ],
                 ],

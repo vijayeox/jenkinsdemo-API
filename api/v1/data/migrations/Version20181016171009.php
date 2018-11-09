@@ -93,9 +93,9 @@ final class Version20181016171009 extends AbstractMigration
         $this->addSql("ALTER TABLE `ox_file_attribute` ADD INDEX `fieldIdFileIdIndex` (`id`, `fileid`);");
         $this->addSql("ALTER TABLE `ox_form` ADD UNIQUE `formId` (`id`);");
         $this->addSql("ALTER TABLE `ox_form` ADD INDEX `oxFormIndex` (`id`, `created_by`, `modified_by`, `org_id`);");
-        $this->addSql("CREATE TRIGGER  IF NOT EXISTS before_insert_oxfield BEFORE INSERT ON ox_field FOR EACH ROW SET new.uuid = uuid()");
-        $this->addSql("CREATE TRIGGER IF NOT EXISTS before_insert_oxform BEFORE INSERT ON ox_form FOR EACH ROW SET new.uuid = uuid()");
-        $this->addSql("CREATE TRIGGER IF NOT EXISTS before_insert_oxfile BEFORE INSERT ON ox_file FOR EACH ROW SET new.uuid = uuid()");
+        $this->addSql("CREATE TRIGGER  before_insert_oxfield BEFORE INSERT ON ox_field FOR EACH ROW SET new.uuid = uuid()");
+        $this->addSql("CREATE TRIGGER before_insert_oxform BEFORE INSERT ON ox_form FOR EACH ROW SET new.uuid = uuid()");
+        $this->addSql("CREATE TRIGGER before_insert_oxfile BEFORE INSERT ON ox_file FOR EACH ROW SET new.uuid = uuid()");
         $this->addSql("INSERT INTO `ox_form` (`id`, `uuid`, `name`, `description`, `org_id`, `statuslist`, `template`, `created_by`, `modified_by`, `date_created`, `date_modified`) VALUES (NULL, '', 'Task', 'Basic Task Form', '1', '[{1:\"In Progress\"},{2:\"Completed\"}]', NULL, '1', NULL, CURRENT_TIMESTAMP, NULL);");
         $this->addSql("INSERT INTO `ox_field` (`id`, `uuid`, `name`, `text`, `form_id`, `data_type`, `options`, `dependson`, `default_value`, `required`, `readonly`, `expression`, `validationtext`, `helpertext`, `sequence`, `created_by`, `modified_by`, `date_created`, `date_modified`) VALUES (NULL, '', 'priority', 'Priority', '1', 'select', '[{1:\"Low\"},{2:\"Medium\"},{3:\"High\"}]', NULL, NULL, '1', NULL, NULL, NULL, NULL, '1', '1', NULL, CURRENT_TIMESTAMP, NULL);");
         $this->addSql("INSERT INTO ox_privilege (name,permission_allowed) values ('MANAGE_FILE',15);");
