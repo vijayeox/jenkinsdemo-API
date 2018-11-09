@@ -31,7 +31,7 @@ final class Version20181105095934 extends AbstractMigration
 			  PRIMARY KEY (`id`),
 			  KEY `orgid` (`orgid`),
 			  KEY `status` (`status`)
-			) ENGINE=MyISAM AUTO_INCREMENT=1835 DEFAULT CHARSET=latin1");
+			) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=latin1");
 
 
 
@@ -41,7 +41,7 @@ final class Version20181105095934 extends AbstractMigration
 			  `avatar_id` int(11) NOT NULL,
 			  PRIMARY KEY (`id`),
 			  KEY `avatarid` (`avatar_id`)
-			) ENGINE=MyISAM AUTO_INCREMENT=1008271 DEFAULT CHARSET=latin1;
+			) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
 			SELECT * FROM rakshithapi.ox_user_group;");
 
     }
