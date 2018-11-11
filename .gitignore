@@ -1,4 +1,5 @@
 /api/v1/vendor
 **composer.lock
 **/logs
-**rakshith.txt
+.gradle
+build
