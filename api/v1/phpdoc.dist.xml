@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdocumentor>
+    <title><![CDATA[OX Zion API Document]]></title>
     <parser>
         <default-package-name>OX Zion API Document</default-package-name>
         <target>build</target>
@@ -9,8 +10,11 @@
     </transformer>
     <files>
         <directory>module</directory>
+        <ignore>*/Application/*</ignore>
         <ignore>*/test/*</ignore>
         <ignore>*/config/*</ignore>
+        <ignore>*/Model/*</ignore>
+        <ignore>*/Service/*</ignore>
         <ignore>*/src/Module.php</ignore>
     </files>
     <plugins>
@@ -18,5 +22,6 @@
     </plugins>
     <transformations>
         <template name="responsive-twig" />
+        <template name="checkstyle"/>
     </transformations>
 </phpdocumentor>
