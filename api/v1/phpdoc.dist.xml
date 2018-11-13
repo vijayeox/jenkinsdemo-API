@@ -6,7 +6,7 @@
         <target>build</target>
     </parser>
     <transformer>
-        <target>Doc</target>
+        <target>public/Doc</target>
     </transformer>
     <files>
         <directory>module</directory>
