@@ -18,64 +18,79 @@ use Oxzion\ValidationException;
 class ScreenwidgetController extends AbstractApiController
 {
 	private $dbAdapter;
-  private $screenwidgetService;
+    private $screenwidgetService;
 
-	public function __construct(ScreenwidgetTable $table,ScreenwidgetService $screenwidgetService, Logger $log){
-		parent::__construct($table, $log, __CLASS__, Screenwidget::class);
-    $this->screenwidgetService=$screenwidgetService;
-    $this->setIdentifierName('id');
-    
+    /**
+    * @ignore __construct
+    */
+    public function __construct(ScreenwidgetTable $table,ScreenwidgetService $screenwidgetService, Logger $log){
+      parent::__construct($table, $log, __CLASS__, Screenwidget::class);
+      $this->screenwidgetService=$screenwidgetService;
+      $this->setIdentifierName('id');
     }
-    
 
-  public function getWidgetsAction() {
-    $params = $this->params()->fromRoute();
-    $result = $this->screenwidgetService->getWidgets($params['screenId']);
-    return $this->getSuccessResponseWithData($result);
-  }
+    public function getWidgetsAction() {
+        $params = $this->params()->fromRoute();
+        $result = $this->screenwidgetService->getWidgets($params['screenId']);
+        return $this->getSuccessResponseWithData($result);
+    }
 
-  public function create($data){
-    try{
-        $count = $this->screenwidgetService->createWidget($data);
-    }catch(ValidationException $e){
-        $response = ['data' => $data, 'errors' => $e->getErrors()];
+    public function create($data){
+        try{
+            $count = $this->screenwidgetService->createWidget($data);
+        }catch(ValidationException $e){
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if($count == 0){
+            return $this->getFailureResponse("Failed to create a new entity", $data);
+        }
+        return $this->getSuccessResponseWithData($data,201);
+    }
+
+    public function update($id, $data){
+        try{
+            $count = $this->screenwidgetService->update($id, $data);
+        }catch(ValidationException $e){
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
         return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if($count == 0){
+            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        }
+        return $this->getSuccessResponseWithData($data,200);
     }
-    if($count == 0){
-        return $this->getFailureResponse("Failed to create a new entity", $data);
+    /**
+    * DELETE Widget API
+    * @api
+    * @link /screenwidget[/:screenwidgetId]
+    * @method DELETE
+    * @param $id ID of Widget to Delete
+    * @return array $data 
+    * @return array Returns a JSON Response with Status Code and Created Widget.
+    */
+    public function delete($id) {
+        try{
+            $count = $this->screenwidgetService->delete($id);
+        }catch(ValidationException $e){
+            $response = ['id' => $id, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if($count == 0){
+            return $this->getErrorResponse("Delete failed for id $id", 404);
+        }
+        return $this->getSuccessResponse();
     }
-    return $this->getSuccessResponseWithData($data,201);
-}
-
- public function update($id, $data){
-     try{
-         $count = $this->screenwidgetService->update($id, $data);
-     }catch(ValidationException $e){
-         $response = ['data' => $data, 'errors' => $e->getErrors()];
-         return $this->getErrorResponse("Validation Errors",404, $response);
-     }
-     if($count == 0){
-         return $this->getErrorResponse("Entity not found for id - $id", 404);
-     }
-     return $this->getSuccessResponseWithData($data,200);
- }
-
-public function delete($id) {
-    try{
-        $count = $this->screenwidgetService->delete($id);
-    }catch(ValidationException $e){
-        $response = ['id' => $id, 'errors' => $e->getErrors()];
-        return $this->getErrorResponse("Validation Errors",404, $response);
+    /**
+    * GET List Screen Widget API
+    * @api
+    * @link /screenwidget
+    * @method GET
+    * @return array $dataget list of Screen Widgets
+    */
+    public function getList(){
+        $params = $this->params()->fromRoute();
+        $result = $this->screenwidgetService->getWidgets($params['screenId']);
+        return $this->getSuccessResponseWithData($result);
     }
-    if($count == 0){
-        return $this->getErrorResponse("Delete failed for id $id", 404);
-    }
-    return $this->getSuccessResponse();
-}
-
-
-public function getList(){
-    return;
-}
-
 }

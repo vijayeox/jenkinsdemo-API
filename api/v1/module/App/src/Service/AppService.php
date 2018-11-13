@@ -14,13 +14,24 @@ use Exception;
 class AppService extends AbstractService{
 
     private $table;
-
+    /**
+     * @ignore __construct
+     */
     public function __construct($config, $dbAdapter, AppTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
 
-    public function getApps($event) {
+    /**
+    * GET List App Service
+    * @method getApps
+    * @return array $data get list of Apps by User
+    * <code>
+    * {
+    * }
+    * </code>
+    */
+    public function getApps() {
         $queryString = "Select ap.id, ap.name, ap.uuid, ap.description, ap.type, ap.logo, ap.date_created, ap.date_modified from ox_app as ap 
         left join ox_app_registry as ar on ap.id = ar.app_id
         left join ox_role_privilege as rp on ar.app_id = rp.app_id";
@@ -30,6 +41,17 @@ class AppService extends AbstractService{
         return $resultSet->toArray();
     }
 
+    /**
+    * Create App Service
+    * @method installAppForOrg
+    * @param array $data Array of elements as shown</br>
+    * <code>
+    * </code>
+    * @return array Returns a JSON Response with Status Code and Created App.</br>
+    * <code> status : "success|error",
+    *        data : array Created App Object
+    * </code>
+    */
     public function installAppForOrg($data) {
         $form = new App();
         $data['uuid'] = uniqid();
@@ -68,7 +90,7 @@ class AppService extends AbstractService{
         return $count;
     }
 
-    public function createAppRegistry($data) {
+    private function createAppRegistry($data) {
         $sql = $this->getSqlObject();
 //Code to check if the app is already registered for the organization
         $queryString = "select * from ox_app_registry ";
@@ -89,7 +111,7 @@ class AppService extends AbstractService{
 
 // I am not doing anything here because we dont know how the app installation process will be when we do that, so I am creating a place holder to use for the future.
 // The purpose of this function is to give permission and privileges to the app that is getting istalled in the OS
-    public function createAppPrivileges($data) {
+    private function createAppPrivileges($data) {
         $sql = $this->getSqlObject();
         $select = $sql->update('ox_role_privilege')->set($data)
         ->where(array('ox_role_privilege.alert_id' => $data['alert_id'],'ox_role_privilege.user_id' => $data['user_id']));

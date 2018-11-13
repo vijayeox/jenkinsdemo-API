@@ -1,5 +1,7 @@
 <?php
-
+/**
+* File Api
+*/
 namespace File\Controller;
 
 use Zend\Log\Logger;
@@ -10,10 +12,17 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
-
+/**
+ * File Controller
+ */
 class FileController extends AbstractApiController {
+    /**
+    * @var FileService Instance of File Service
+    */
     private $fileService;
-
+    /**
+    * @ignore __construct
+    */
     public function __construct(FileTable $table, FileService $fileService, Logger $log, AdapterInterface $dbAdapter) {
         parent::__construct($table, $log, __CLASS__, File::class);
         $this->setIdentifierName('fileId');
@@ -21,15 +30,19 @@ class FileController extends AbstractApiController {
     }
 
     /**
-    *   $data should be in the following JSON format
-    *   {
-    *       'groups' : [
-    *                       {'id' : integer}.
-    *                       ....multiple 
-    *                  ],
-    *   }
-    *
-    *
+    * Create File API
+    * @api
+    * @link /file
+    * @method POST
+    * @param array $data Array of elements as shown
+    * <code> {
+    *               id : integer,
+    *               name : string,
+    *               status : string,
+    *               formid : integer,
+    *               Fields from Form
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created File.
     */
     public function create($data){
         try{
@@ -43,10 +56,25 @@ class FileController extends AbstractApiController {
         }
         return $this->getSuccessResponseWithData($data,201);
     }
-    
+    /**
+    * GET List File API
+    * @api
+    * @link /file
+    * @method GET
+    * @return array Returns a JSON Response with Error Message.
+    */
     public function getList() {
-        return $this->getErrorResponse("Method Not Found",405);
+        return $this->getInvalidMethod();
     }
+    /**
+    * Update File API
+    * @api
+    * @link /file[/:fileId]
+    * @method PUT
+    * @param array $id ID of File to update 
+    * @param array $data 
+    * @return array Returns a JSON Response with Status Code and Created File.
+    */
     public function update($id, $data){
         try{
             $count = $this->fileService->updateFile($id,$data);
@@ -59,6 +87,14 @@ class FileController extends AbstractApiController {
         }
         return $this->getSuccessResponseWithData($data,200);
     }
+    /**
+    * Delete File API
+    * @api
+    * @link /file[/:fileId]
+    * @method DELETE
+    * @param $id ID of File to Delete
+    * @return array success|failure response
+    */
     public function delete($id){
         $response = $this->fileService->deleteFile($id);
         if($response == 0){
@@ -66,6 +102,15 @@ class FileController extends AbstractApiController {
         }
         return $this->getSuccessResponse();
     }
+    /**
+    * GET File API
+    * @api
+    * @link /file[/:fileId]
+    * @method GET
+    * @param $id ID of File
+    * @return array $data 
+    * @return array Returns a JSON Response with Status Code and Created File.
+    */
     public function get($id){
         $result = $this->fileService->getFile($id);
         if($result == 0){

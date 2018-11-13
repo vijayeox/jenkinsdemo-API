@@ -16,13 +16,21 @@ class MletController extends AbstractApiController
 {
 	private $dbAdapter;
 	private $mletService;
-
+    /**
+    * @ignore __construct
+    */
 	public function __construct(MletTable $table,MletService $mletService,Logger $log){
 		parent::__construct($table, $log, __CLASS__, Mlet::class);
 		$this->mletService=$mletService;
 		$this->setIdentifierName('mletId');
 	}
-
+ 	/**
+    * GET List Mlet API
+    * @api
+    * @link /mlet
+    * @method GET
+    * @return array Returns a JSON Response list of Mlet based on Access.
+    */
 	public function getList() {
 		$params = $this->params()->fromRoute();
 		$result = $this->mletService->getMlets();

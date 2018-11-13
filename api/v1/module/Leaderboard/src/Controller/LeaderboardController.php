@@ -13,6 +13,9 @@ use Oxzion\ValidationException;
 class LeaderboardController extends AbstractApiController {
 
     private $appService;
+    /**
+    * @ignore __construct
+    */
     public function __construct(LeaderboardTable $table, LeaderboardService $appService, Logger $log, AdapterInterface $dbAdapter) {
         parent::__construct($table, $log, __CLASS__, Leaderboard::class);
         $this->setIdentifierName('leaderboardId');

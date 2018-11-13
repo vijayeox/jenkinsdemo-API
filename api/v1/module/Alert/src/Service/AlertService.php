@@ -11,13 +11,31 @@ use Exception;
 
 class AlertService extends AbstractService{
     const ANNOUNCEMENT_FOLDER = "/announcements/";
-
+    /**
+    * @ignore ANNOUNCEMENT_FOLDER
+    */
     private $table;
-
+    /**
+    * @ignore __construct
+    */
     public function __construct($config, $dbAdapter, AlertTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
+    /**
+    * Create Alert Service
+    * @param array $data Array of elements as shown</br>
+    * <code> name : string,
+    *        status : string,
+    *        description : string,
+    *        start_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *        media_type : string,
+    *        media_location : string,
+    *        groups : [{'id' : integer}.....multiple*],
+    * </code>
+    * @return integer 0|$id of Alert Created
+    */
     public function createAlert(&$data){
         $form = new Alert();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -61,6 +79,27 @@ class AlertService extends AbstractService{
             return $id;
         }
     }
+    /**
+    * Update Alert
+    * @method PUT
+    * @param integer $id ID of Alert to update 
+    * @param array $data Data Array as Follows:
+    * @throws  Exception
+    * <code>
+    * {
+    *  integer id,
+    *  string name,
+    *  string status,
+    *  string description,
+    *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *  string media_type,
+    *  string media_location,
+    *  groups : [{'id' : integer}.....multiple]
+    * }
+    * </code>
+    * @return array Returns the Created Alert.
+    */
     public function updateAlert($id,&$data){
         $obj = $this->table->get($id,array());
         if(is_null($obj)){
@@ -87,8 +126,11 @@ class AlertService extends AbstractService{
         }
         return $id;
     }
-
-
+    /**
+    * Delete Alert
+    * @param integer $id ID of Alert to Delete
+    * @return int 0=>Failure | $id;
+    */
     public function deleteAlert($id){
         $this->beginTransaction();
         $count = 0;
@@ -112,7 +154,23 @@ class AlertService extends AbstractService{
         }
         return $count;
     }
-
+    /**
+    * GET List Alert
+    * @method GET
+    * @return array $dataget list of Alerts by User
+    * <code></br>
+    * {
+    *  string name,
+    *  string status,
+    *  string description,
+    *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *  string media_type,
+    *  string media_location,
+    *  groups : [{'id' : integer}.....multiple]
+    * }
+    * </code>
+    */
     public function getAlerts() {
         $sql = $this->getSqlObject();
         $select = $sql->select()

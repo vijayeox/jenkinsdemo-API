@@ -88,6 +88,9 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         $this->response->setStatusCode($code);
         return ErrorHandler::buildErrorJson($message,$data);
     }
+    protected function getInvalidMethod(){
+        return $this->getErrorResponse("Method Not Found",405);
+    }
 
     protected function getConfig(){
     	if(! isset($this->config)){

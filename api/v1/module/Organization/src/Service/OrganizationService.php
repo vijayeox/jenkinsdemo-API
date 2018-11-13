@@ -11,12 +11,25 @@ use Zend\Db\Sql\Expression;
 use Exception;
 
 class OrganizationService extends AbstractService{
-
+    /**
+    * @ignore __construct
+    */
     public function __construct($config, $dbAdapter, OrganizationTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
-
+    /**
+    * Create Organization Service
+    * @method createOrganization
+    * @param array $data Array of elements as shown
+    * <code> {
+    *               id : integer,
+    *               name : string,
+    *               logo : string,
+    *               status : String(Active|Inactive),
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created Organization.
+    */
     public function createOrganization(&$data){
         $form = new Organization();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -50,6 +63,13 @@ class OrganizationService extends AbstractService{
         }
         return $count;
     }
+    /**
+    * Update Organization API
+    * @method updateOrganization
+    * @param array $id ID of Organization to update 
+    * @param array $data 
+    * @return array Returns a JSON Response with Status Code and Created Organization.
+    */
     public function updateOrganization($id,&$data){
         $obj = $this->table->get($id,array());
         if(is_null($obj)){
@@ -85,8 +105,13 @@ class OrganizationService extends AbstractService{
         }
         return $count;
     }
-
-
+    /**
+    * Delete Organization Service
+    * @method deleteOrganization
+    * @link /organization[/:orgId]
+    * @param $id ID of Organization to Delete
+    * @return array success|failure response
+    */
     public function deleteOrganization($id){
         $this->beginTransaction();
         $count = 0;
@@ -104,6 +129,19 @@ class OrganizationService extends AbstractService{
         return $count;
     }
 
+    /**
+    * GET Organization Service
+    * @method getOrganization
+    * @param $id ID of Organization to Delete
+    * @return array $data 
+    * <code> {
+    *               id : integer,
+    *               name : string,
+    *               logo : string,
+    *               status : String(Active|Inactive),
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created Organization.
+    */
     public function getOrganization($id) {
         $sql = $this->getSqlObject();
         $select = $sql->select();

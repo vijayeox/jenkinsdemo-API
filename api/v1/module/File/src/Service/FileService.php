@@ -11,11 +11,27 @@ use Zend\Db\Sql\Expression;
 use Exception;
 
 class FileService extends AbstractService{
-
+    /**
+    * @ignore __construct
+    */
     public function __construct($config, $dbAdapter, FileTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
+
+    /**
+    * Create File Service
+    * @method createFile
+    * @param array $data Array of elements as shown
+    * <code> {
+    *               id : integer,
+    *               name : string,
+    *               status : string,
+    *               formid : integer,
+    *               Fields from Form
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created File.
+    */
     public function createFile(&$data){
         $form = new File();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -55,6 +71,13 @@ class FileService extends AbstractService{
         }
         return $count;
     }
+    /**
+    * Update File Service
+    * @method updateFile
+    * @param array $id ID of File to update 
+    * @param array $data 
+    * @return array Returns a JSON Response with Status Code and Created File.
+    */
     public function updateFile($id,&$data){
         $obj = $this->table->get($id,array());
         if(is_null($obj)){
@@ -96,6 +119,12 @@ class FileService extends AbstractService{
         return $id;
     }
 
+    /**
+    * Delete File Service
+    * @method deleteFile
+    * @param $id ID of File to Delete
+    * @return array success|failure response
+    */
     public function deleteFile($id){
     $count = 0;
         try{
@@ -109,6 +138,11 @@ class FileService extends AbstractService{
         return $count;
     }
 
+    /**
+    * GET List File Service
+    * @method GET
+    * @return array Returns a JSON Response with Error Message.
+    */
     public function getFiles() {
         // $sql = $this->getSqlObject();
         // $select = $sql->select()
@@ -118,6 +152,14 @@ class FileService extends AbstractService{
         // $result = $this->executeQuery($select)->toArray();
         return array();
     }
+
+    /**
+    * GET File Service
+    * @method getFile
+    * @param $id ID of File
+    * @return array $data 
+    * @return array Returns a JSON Response with Status Code and Created File.
+    */
     public function getFile($id){
         $obj = $this->table->get($id,array('org_id' => AuthContext::get(AuthConstants::ORG_ID)));
         if($obj){
@@ -136,6 +178,9 @@ class FileService extends AbstractService{
         }
         return 0;
     }
+    /**
+    * @ignore checkFields
+    */
     protected function checkFields($formId,$fieldData,$orgId,$fileId){
         $required = array();
         $sql = $this->getSqlObject();

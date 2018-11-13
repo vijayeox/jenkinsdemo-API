@@ -11,9 +11,17 @@ use Exception;
 
 class AuthService extends AbstractService{
 
+    /**
+    * @ignore __construct
+    */
     public function __construct($config, $dbAdapter){
         parent::__construct($config, $dbAdapter);
     }
+    /**
+    * Get User's Organization
+    * @param string $username Username of user to Login
+    * @return integer orgid of the user
+    */
     public function getUserOrg($username){
         $sql = $this->getSqlObject();
         $select = $sql->select();

@@ -14,22 +14,61 @@ use Exception;
 class UserService extends AbstractService{
     const USER_FOLDER = "/users/";
 
+    /**
+    * @ignore table
+    */
     private $table;
 
+    /**
+    * @ignore __construct
+    */
     public function __construct($config, $dbAdapter, UserTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
 
+    /**
+    * @ignore getUserFolder
+    */
     protected function getUserFolder($id){
         return $this->config['DATA_FOLDER']."organization/".AuthContext::get(AuthConstants::ORG_ID).self::USER_FOLDER.$id;
     }
 
-    public function getFileName($file){
+    /**
+    * @ignore getFileName
+    */
+    protected function getFileName($file){
         $fileName = explode('-', $file,2);
         return $fileName[1];
     }
 
+    /**
+    * @method createUser
+    * @param array $data Array of elements as shown</br>
+    * <code> 
+    *        gamelevel : string,
+    *        username : string,
+    *        password : string,
+    *        firstname : string,
+    *        lastname : string,
+    *        name : string,
+    *        role : string,
+    *        email : string,
+    *        status : string,
+    *        dob : string,
+    *        designation : string,
+    *        sex : string,
+    *        managerid : string,
+    *        cluster : string,
+    *        level : string,
+    *        org_role_id : string,
+    *        doj : string
+    * </code>
+    * @return array Returns a JSON Response with Status Code and Created User.</br>
+    * <code> status : "success|error",
+    *        data : array Created User Object
+    * </code>
+    */
     public function createUser(&$data){
         $form = new User();
         $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -54,6 +93,31 @@ class UserService extends AbstractService{
         return $count;
     }
 
+    /**
+    * @method updateUser
+    * @param array $id ID of User to update 
+    * @param array $data 
+    * <code> 
+    *        gamelevel : string,
+    *        username : string,
+    *        password : string,
+    *        firstname : string,
+    *        lastname : string,
+    *        name : string,
+    *        role : string,
+    *        email : string,
+    *        status : string,
+    *        dob : string,
+    *        designation : string,
+    *        sex : string,
+    *        managerid : string,
+    *        cluster : string,
+    *        level : string,
+    *        org_role_id : string,
+    *        doj : string
+    * </code>
+    * @return array Returns a JSON Response with Status Code and Created User.
+    */
     public function updateUser($id,&$data){
         $obj = $this->table->get($id,array());
         if(is_null($obj)){
@@ -83,6 +147,12 @@ class UserService extends AbstractService{
         return $count;
     }
 
+    /**
+    * Delete User Service
+    * @method deleteUser
+    * @param $id ID of User to Delete
+    * @return array success|failure response
+    */
     public function deleteUser($id){
         $obj = $this->table->get($id,array());
         if(is_null($obj)){
@@ -97,6 +167,13 @@ class UserService extends AbstractService{
         return $result;
     }
 
+    /**
+    * GET List User API
+    * @api
+    * @link /user
+    * @method GET
+    * @return array $dataget list of Users
+    */
     public function getUsers($group_id=NULL) {
         $sql = $this->getSqlObject();
         $select = $sql->select();
@@ -110,6 +187,13 @@ class UserService extends AbstractService{
         return $this->executeQuery($select)->toArray();
     }
 
+    /**
+    * GET User Service
+    * @method  getUser
+    * @param $id ID of User to View
+    * @return array $data 
+    * @return array Returns a JSON Response with Status Code and Created User.
+    */
     public function getUser($id) {
         $sql = $this->getSqlObject();
         $select = $sql->select();
@@ -124,6 +208,12 @@ class UserService extends AbstractService{
         }
     }
 
+    /**
+    * @method assignManagerToUser
+    * @param $id ID of User to assign a manager
+    * @param $id ID of User to set as Manager
+    * @return array success|failure response
+    */
     public function assignManagerToUser($userId, $managerId) {
         $queryString = "Select user_id, manager_id from ox_user_manager";
         $where = "where user_id = " . $userId . " and manager_id = " . $managerId;
@@ -144,6 +234,12 @@ class UserService extends AbstractService{
         }
     }
 
+    /**
+    * @method removeManagerForUser
+    * @param $id ID of User to remove a manager
+    * @param $id ID of User to remove as Manager
+    * @return array success|failure response
+    */
     public function removeManagerForUser($userId, $managerId) {
         $sql = $this->getSqlObject();
         $delete = $sql->delete('ox_user_manager');

@@ -10,19 +10,30 @@ use Oxzion\ValidationException;
 use Exception;
 
 class BookmarkService extends AbstractService{
-
+    /**
+    * @ignore table
+    */
     private $table;
 
+    /**
+    * @ignore __construct
+    */
     public function __construct($config, $dbAdapter, BookmarkTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
-
-    public function preDispatch($value='')
-    {
-        echo "<pre>";print_r(func_get_args());exit();
-    }
-
+    /**
+    * Create Bookmark Service
+    * @api
+    * @method createBookmark
+    * @param array $data Array of elements as shown
+    * <code> {
+    *               id : integer,
+    *               name : string,
+    *               url : string,
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created Bookmark.
+    */
     public function createBookmark(&$data){
         $form = new Bookmark();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -42,6 +53,13 @@ class BookmarkService extends AbstractService{
         return $count;
     }
 
+    /**
+    * Update Bookmark Service
+    * @method updateBookmark
+    * @param array $id ID of Bookmark to update 
+    * @param array $data 
+    * @return array Returns a JSON Response with Status Code and Created Bookmark.
+    */
     public function updateBookmark($id,&$data){
         $obj = $this->table->get($id,array());
         if(is_null($obj)){
@@ -59,6 +77,12 @@ class BookmarkService extends AbstractService{
         return $id;
     }
 
+    /**
+    * Delete Bookmark Service
+    * @method deleteBookmark
+    * @param $id ID of Bookmark to Delete
+    * @return array success|failure response
+    */
     public function deleteBookmark($id){
         $count = 0;
         try{
@@ -72,6 +96,11 @@ class BookmarkService extends AbstractService{
         return $count;
     }
 
+    /**
+    * GET List Bookmark Service
+    * @method getBookmarks
+    * @return array Returns a JSON Response with Array of Bookmarks
+    */
     public function getBookmarks() {
         $sql = $this->getSqlObject();
         $select = $sql->select()

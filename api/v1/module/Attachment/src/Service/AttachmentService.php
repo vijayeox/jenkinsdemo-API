@@ -12,6 +12,9 @@ use Exception;
 
 class AttachmentService extends AbstractService{
     private $table;
+    /**
+    * @ignore __construct
+    */
     public function __construct($config, $dbAdapter, AttachmentTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -25,7 +28,6 @@ class AttachmentService extends AbstractService{
      *  @param files Array of files to upload
      *  @return JSON array of filenames
      */
-
     public function upload($data,$files){
         $fileArray = array();
         $i = 0;
@@ -48,6 +50,9 @@ class AttachmentService extends AbstractService{
         }
         return $fileArray;
     }
+    /**
+    * @ignore constructAttachment
+    */
     protected function constructAttachment($data,$file){
         if(isset($file['name'])){
             $uniqueId = uniqid();
@@ -72,6 +77,23 @@ class AttachmentService extends AbstractService{
         FileService::storeFile($file,$folderPath);
         return $data['uuid'];
     }
+    /**
+    * GET Attachment Service
+    * @method GET
+    * @param $id ID of Attachment to Delete
+    * @return array $data 
+    * <code>
+    * {
+    *  integer id,
+    *  string file_name,
+    *  integer extension,
+    *  string uuid,
+    *  string type,
+    *  dateTime path Full Path of File,
+    * }
+    * </code>
+    * @return array Returns a JSON Response with Status Code and Created Attachment.
+    */
     public function getAttachment($id){
         $sql = $this->getSqlObject();
         $select = $sql->select();
@@ -81,6 +103,9 @@ class AttachmentService extends AbstractService{
         $result = $this->executeQuery($select)->toArray();
         return $result;
     }
+    /**
+    * @ignore constructPath
+    */
     private function constructPath($type){
         $baseFolder = $this->config['DATA_FOLDER'];
         switch ($type) {

@@ -1,6 +1,8 @@
 <?php
 namespace Form\Controller;
-
+/**
+* Field Api
+*/
 use Zend\Log\Logger;
 use Form\Model\Field;
 use Form\Model\FieldTable;
@@ -9,23 +11,35 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\View\Model\JsonModel;
-
+/**
+ * Field Controller
+ */
 class FieldController extends AbstractApiController
 {
+    /**
+    * @ignore fieldService
+    */
     private $fieldService;
-
+    /**
+    * @ignore __construct
+    */
 	public function __construct(FieldTable $table, FieldService $fieldService, Logger $log, AdapterInterface $dbAdapter) {
 		parent::__construct($table, $log, __CLASS__, Field::class);
 		$this->setIdentifierName('id');
 		$this->fieldService = $fieldService;
 	}
-
-	/**
-    *   $data should be in the following JSON format
-    *   {
-    *   }
-    *
-    *
+    /**
+    * Create Field API
+    * @api
+    * @link /field
+    * @method POST
+    * @param array $data Array of elements as shown
+    * <code> {
+    *               id : integer,
+    *               name : string,
+    *               formid : integer,
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created Field.
     */
     public function create($data){
         $formId = $this->params()->fromRoute()['formId'];
@@ -41,11 +55,27 @@ class FieldController extends AbstractApiController
         return $this->getSuccessResponseWithData($data,201);
     }
     
+    /**
+    * GET List Fields API
+    * @api
+    * @link /field
+    * @method GET
+    * @return array Returns a JSON Response list of fields based on Form id.
+    */
     public function getList() {
         $formId = $this->params()->fromRoute()['formId'];
         $result = $this->fieldService->getFields($formId);
         return $this->getSuccessResponseWithData($result);
     }
+    /**
+    * Update Field API
+    * @api
+    * @link /field[/:fieldId]
+    * @method PUT
+    * @param array $id ID of Field to update 
+    * @param array $data 
+    * @return array Returns a JSON Response with Status Code and Created Field.
+    */
     public function update($id, $data){
         try{
             $count = $this->fieldService->updateField($id,$data);
@@ -58,6 +88,14 @@ class FieldController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($data,200);
     }
+    /**
+    * Delete Field API
+    * @api
+    * @link /field[/:fieldId]
+    * @method DELETE
+    * @param $id ID of Field to Delete
+    * @return array success|failure response
+    */
     public function delete($id){
         $formId = $this->params()->fromRoute()['formId'];
         $response = $this->fieldService->deleteField($formId,$id);
@@ -66,6 +104,15 @@ class FieldController extends AbstractApiController
         }
         return $this->getSuccessResponse();
     }
+    /**
+    * GET Field API
+    * @api
+    * @link /field[/:fieldId]
+    * @method GET
+    * @param $id ID of Field
+    * @return array $data 
+    * @return array Returns a JSON Response with Status Code and Created Field.
+    */
     public function get($id){
         $formId = $this->params()->fromRoute()['formId'];
         $result = $this->fieldService->getField($formId,$id);

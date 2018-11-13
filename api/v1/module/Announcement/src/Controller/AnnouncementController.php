@@ -1,4 +1,7 @@
 <?php
+/**
+ * Announcement Api
+ */
 
 namespace Announcement\Controller;
 
@@ -10,34 +13,41 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
-
+/**
+ * Announcement Controller
+ */
 class AnnouncementController extends AbstractApiController {
+    /**
+    * @var AnnouncementService Instance of Announcement Service
+    */
     private $announcementService;
-
+    /**
+    * @ignore __construct
+    */
     public function __construct(AnnouncementTable $table, AnnouncementService $announcementService, Logger $log, AdapterInterface $dbAdapter) {
         parent::__construct($table, $log, __CLASS__, Announcement::class);
         $this->setIdentifierName('announcementId');
         $this->announcementService = $announcementService;
     }
-
     /**
-    *   $data should be in the following JSON format
-    *   {
-    *       'id' : integer,
-    *       'name' : string,
-    *       'org_id' : integer,
-    *       'status' : string,
-    *       'description' : string,
-    *       'start_date' : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss),
-    *       'end_date' : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
-    *       'media_type' : string,
-    *       'media_location' : string,
-    *       'groups' : [
-    *                       {'id' : integer}.....multiple 
-    *                  ],
-    *   }
-    *
-    *
+    * Create Announcement API
+    * @api
+    * @link /announcement
+    * @method POST
+    * @param array $data Array of elements as shown</br>
+    * <code> name : string,
+    *        status : string,
+    *        description : string,
+    *        start_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *        media_type : string,
+    *        media_location : string,
+    *        groups : [{'id' : integer}.....multiple*],
+    * </code>
+    * @return array Returns a JSON Response with Status Code and Created Announcement.</br>
+    * <code> status : "success|error",
+    *        data : array Created Announcement Object
+    * </code>
     */
     public function create($data) {
         try{
@@ -51,11 +61,51 @@ class AnnouncementController extends AbstractApiController {
         }
         return $this->getSuccessResponseWithData($data,201);
     }
-    
+    /**
+    * GET List Announcement API
+    * @api
+    * @link /announcement
+    * @method GET
+    * @return array $dataget list of Announcements by User
+    * <code>
+    * {
+    *  string name,
+    *  string status,
+    *  string description,
+    *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *  string media_type,
+    *  string media_location,
+    *  groups : [{'id' : integer}.....multiple]
+    * }
+    * </code>
+    */
     public function getList() {
         $result = $this->announcementService->getAnnouncements();
         return $this->getSuccessResponseWithData($result);
     }
+    /**
+    * Update Announcement API
+    * @api
+    * @link /announcement[/:announcementId]
+    * @method PUT
+    * @param array $id ID of Announcement to update 
+    * @param array $data 
+    * <code>
+    * {
+    *  integer id,
+    *  string name,
+    *  string status,
+    *  string description,
+    *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *  string media_type,
+    *  string media_location,
+    *  groups : [{'id' : integer}.....multiple]
+    * }
+    * </code>
+    * @return array Returns a JSON Response with Status Code and Created Announcement.
+    */
     public function update($id, $data) {
         try{
             $count = $this->announcementService->updateAnnouncement($id,$data);
@@ -68,6 +118,14 @@ class AnnouncementController extends AbstractApiController {
         }
         return $this->getSuccessResponseWithData($data,200);
     }
+    /**
+    * Delete Announcement API
+    * @api
+    * @link /announcement[/:announcementId]
+    * @method DELETE
+    * @param $id ID of Announcement to Delete
+    * @return array success|failure response
+    */
     public function delete($id) {
         $response = $this->announcementService->deleteAnnouncement($id);
         if($response == 0) {
@@ -75,6 +133,28 @@ class AnnouncementController extends AbstractApiController {
         }
         return $this->getSuccessResponse();
     }
+    /**
+    * GET Announcement API
+    * @api
+    * @link /announcement[/:announcementId]
+    * @method GET
+    * @param $id ID of Announcement to Delete
+    * @return array $data 
+    * <code>
+    * {
+    *  integer id,
+    *  string name,
+    *  integer org_id,
+    *  string status,
+    *  string description,
+    *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *  string media_type,
+    *  string media_location
+    * }
+    * </code>
+    * @return array Returns a JSON Response with Status Code and Created Announcement.
+    */
     public function get($id) {
         $result = $this->announcementService->getAnnouncement($id);
         if($result == 0) {

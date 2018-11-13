@@ -9,16 +9,39 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
-
+/**
+ * Announcement Service
+ */
 class AnnouncementService extends AbstractService{
+    /**
+    * @ignore ANNOUNCEMENT_FOLDER
+    */
     const ANNOUNCEMENT_FOLDER = "/announcements/";
-
+    /**
+    * @ignore table
+    */
     private $table;
-
+    /**
+    * @ignore __construct
+    */
     public function __construct($config, $dbAdapter, AnnouncementTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
+    /**
+    * Create Announcement Service
+    * @param array $data Array of elements as shown</br>
+    * <code> name : string,
+    *        status : string,
+    *        description : string,
+    *        start_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *        media_type : string,
+    *        media_location : string,
+    *        groups : [{'id' : integer}.....multiple*],
+    * </code>
+    * @return integer 0|$id of Announcement Created
+    */
     public function createAnnouncement(&$data){
         $form = new Announcement();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -57,6 +80,27 @@ class AnnouncementService extends AbstractService{
         }
         return $count;
     }
+    /**
+    * Update Announcement
+    * @method PUT
+    * @param integer $id ID of Announcement to update 
+    * @param array $data Data Array as Follows:
+    * @throws  Exception
+    * <code>
+    * {
+    *  integer id,
+    *  string name,
+    *  string status,
+    *  string description,
+    *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *  string media_type,
+    *  string media_location,
+    *  groups : [{'id' : integer}.....multiple]
+    * }
+    * </code>
+    * @return array Returns the Created Announcement.
+    */
     public function updateAnnouncement($id,&$data) {
         $obj = $this->table->get($id,array());
         if(is_null($obj)){
@@ -97,7 +141,9 @@ class AnnouncementService extends AbstractService{
         }
         return $count;
     }
-
+    /**
+    * @ignore updateGroups
+    */
     protected function updateGroups($announcementId,$groups){
         $oldGroups = array_column($this->getGroupsByAnnouncement($announcementId), 'group_id');
         $newGroups = array_column($groups,'id');
@@ -117,6 +163,9 @@ class AnnouncementService extends AbstractService{
         }
         return 1;
     }
+    /**
+    * @ignore deleteGroupsByAnnouncement
+    */
     protected function deleteGroupsByAnnouncement($announcementId,$groupIdList){
         $rowsAffected = 0;
         foreach ($groupIdList as $key => $groupId) {
@@ -131,6 +180,9 @@ class AnnouncementService extends AbstractService{
         }
         return $rowsAffected;
     }
+    /**
+    * @ignore getGroupsByAnnouncement
+    */
     protected function getGroupsByAnnouncement($announcementId){
         $sql = $this->getSqlObject();
         $select = $sql->select();
@@ -139,6 +191,9 @@ class AnnouncementService extends AbstractService{
         ->where(array('ox_announcement_group_mapper.announcement_id' => $announcementId));
         return $this->executeQuery($select)->toArray();
     }
+    /**
+    * @ignore insertAnnouncementForGroup
+    */
     protected function insertAnnouncementForGroup($announcementId, $groups){
         $rowsAffected = 0;
         foreach ($groups as $key => $id) {
@@ -154,8 +209,11 @@ class AnnouncementService extends AbstractService{
         }
         return $rowsAffected;
     }
-
-
+    /**
+    * Delete Announcement
+    * @param integer $id ID of Announcement to Delete
+    * @return int 0=>Failure | $id;
+    */
     public function deleteAnnouncement($id){
         $this->beginTransaction();
         $count = 0;
@@ -177,10 +235,25 @@ class AnnouncementService extends AbstractService{
         }catch(Exception $e){
             $this->rollback();
         }
-        
         return $count;
     }
-
+    /**
+    * GET List Announcement
+    * @method GET
+    * @return array $dataget list of Announcements by User
+    * <code></br>
+    * {
+    *  string name,
+    *  string status,
+    *  string description,
+    *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *  string media_type,
+    *  string media_location,
+    *  groups : [{'id' : integer}.....multiple]
+    * }
+    * </code>
+    */
     public function getAnnouncements() {
         $sql = $this->getSqlObject();
         $select = $sql->select();
@@ -193,6 +266,23 @@ class AnnouncementService extends AbstractService{
                 ->group(array('ox_announcement.id'));
         return $this->executeQuery($select)->toArray();
     }
+    /**
+    * GET Announcement
+    * @param integer $id ID of the Announcement
+    * @return array $dataget list of Announcements by User
+    * <code></br>
+    * {
+    *  string name,
+    *  string status,
+    *  string description,
+    *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
+    *  string media_type,
+    *  string media_location,
+    *  groups : [{'id' : integer}.....multiple]
+    * }
+    * </code>
+    */
     public function getAnnouncement($id) {
         $sql = $this->getSqlObject();
         $select = $sql->select();
