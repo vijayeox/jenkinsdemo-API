@@ -12,14 +12,14 @@
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-$host = 'localhost';
+$host = '54.163.190.135';
 $db = 'oxzionapi';
 $username = 'root';
 $password = 'oxzion';
 
 
 if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
-    $host = 'localhost';
+    $host = '54.163.190.135';
     $db = 'oxzionapi';
     $username = 'root';
     $password = 'oxzion';
