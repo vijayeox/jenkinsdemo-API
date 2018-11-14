@@ -17,7 +17,7 @@ final class Version20181105095934 extends AbstractMigration
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `name` varchar(20000) CHARACTER SET utf8 NOT NULL,
 			  `parent_id` int(11) NOT NULL,
-			  `orgid` int(11) NOT NULL,
+			  `org_id` int(11) NOT NULL,
 			  `manager_id` int(11) NOT NULL,
 			  `description` mediumtext,
 			  `logo` varchar(20) DEFAULT NULL,
