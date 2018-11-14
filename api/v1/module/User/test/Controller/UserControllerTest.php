@@ -9,7 +9,6 @@ use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
-use Oxzion\Service\FileService;
 
 class UserControllerTest extends ControllerTest{
 

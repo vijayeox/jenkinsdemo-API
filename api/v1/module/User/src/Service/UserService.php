@@ -5,7 +5,7 @@ use Oxzion\Service\AbstractService;
 use User\Model\UserTable;
 use User\Model\User;
 use Oxzion\Auth\AuthContext;
-use Oxzion\Service\FileService;
+use Oxzion\Utils\FileUtils;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\File\FileConstants;
 use Oxzion\ValidationException;

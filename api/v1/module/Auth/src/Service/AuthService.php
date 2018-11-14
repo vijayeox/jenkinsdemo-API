@@ -3,7 +3,7 @@ namespace Auth\Service;
 
 use Oxzion\Service\AbstractService;
 use Oxzion\Auth\AuthContext;
-use Oxzion\Service\FileService;
+use Oxzion\Utils\FileUtils;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\File\FileConstants;
 use Oxzion\ValidationException;
