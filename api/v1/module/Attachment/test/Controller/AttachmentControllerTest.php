@@ -9,7 +9,7 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
-use Oxzion\Service\FileService;
+use Oxzion\Utils\FileUtils;
 
 
 class AttachmentControllerTest extends ControllerTest{
@@ -27,7 +27,7 @@ class AttachmentControllerTest extends ControllerTest{
         $this->initAuthToken('bharatg');
         $config = $this->getApplicationConfig();
         $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/announcements/";
-        FileService::createDirectory($tempFolder);
+        FileUtils::createDirectory($tempFolder);
         copy(__DIR__."/../files/oxzionlogo.png", $tempFolder."oxzionlogo.png");
         $data = array('type'=>'ANNOUNCEMENT','files'=>array(array('extension'=>'png','uuid'=>'test','file_name'=>'oxzionlogo')));
         $this->setJsonContent(json_encode($data));

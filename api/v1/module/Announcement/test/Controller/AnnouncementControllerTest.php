@@ -9,7 +9,7 @@ use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
-use Oxzion\Service\FileService;
+use Oxzion\Utils\FileUtils;
 
 class AnnouncementControllerTest extends ControllerTest{
     
@@ -25,12 +25,12 @@ class AnnouncementControllerTest extends ControllerTest{
     protected function tearDown() : void {
         $config = $this->getApplicationConfig();
         $announcementsFolder = $config['DATA_FOLDER']."organization/1/announcements";
-        FileService::deleteDirectoryContents($announcementsFolder);
+        FileUtils::deleteDirectoryContents($announcementsFolder);
     }
     protected function createDummyFile(){
         $config = $this->getApplicationConfig();
         $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/announcements/temp/";
-        FileService::createDirectory($tempFolder);
+        FileUtils::createDirectory($tempFolder);
         copy(dirname(__FILE__)."/../files/test-oxzionlogo.png", $tempFolder."test-oxzionlogo.png");
     }
     protected function setDefaultAsserts(){

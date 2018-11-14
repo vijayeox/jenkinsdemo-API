@@ -8,7 +8,7 @@ use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
-use Oxzion\Service\FileService;
+use Oxzion\Utils\FileUtils;
 
 class FormControllerTest extends ControllerTest{
     
@@ -24,7 +24,7 @@ class FormControllerTest extends ControllerTest{
     protected function tearDown() : void {
         $config = $this->getApplicationConfig();
         $formsFolder = $config['DATA_FOLDER']."organization/1/forms";
-        FileService::deleteDirectoryContents($formsFolder);
+        FileUtils::deleteDirectoryContents($formsFolder);
     }
     protected function setDefaultAsserts(){
         $this->assertModuleName('Form');

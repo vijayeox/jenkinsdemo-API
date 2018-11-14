@@ -2,7 +2,7 @@
 namespace Attachment\Service;
 
 use Oxzion\Service\AbstractService;
-use Oxzion\Service\FileService;
+use Oxzion\Utils\FileUtils;
 use Oxzion\ValidationException;
 use Attachment\Model\AttachmentTable;
 use Attachment\Model\Attachment;
@@ -74,7 +74,7 @@ class AttachmentService extends AbstractService{
         $form->validate();
         $count = $this->table->save($form);
         $id = $this->table->getLastInsertValue();
-        FileService::storeFile($file,$folderPath);
+        FileUtils::storeFile($file,$folderPath);
         return $data['uuid'];
     }
     /**
