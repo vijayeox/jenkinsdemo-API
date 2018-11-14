@@ -31,8 +31,3 @@ values (5, 2, 2);
 insert into groups_avatars (id, groupid, avatarid)
 values (6, 2, 3);
 
-INSERT INTO `ox_group` (`id`, `name`, `parent_id`, `org_id`, `manager_id`, `description`, `logo`, `cover_photo`, `type`, `status`, `date_created`, `date_modified`, `created_id`, `modified_id`) VALUES ('1368', 'OX ZIon HR', '0', '1', '435', 'Please enter the des', 'NULL', 'NULL', '1', 'Active', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '0');
-INSERT INTO `ox_group` (`id`, `name`, `parent_id`, `org_id`, `manager_id`, `description`, `logo`, `cover_photo`, `type`, `status`, `date_created`, `date_modified`, `created_id`, `modified_id`) VALUES ('1369', 'Dogs', '0', '1', '400', '<p>York Client</p>\n', 'NULL', 'NULL', '0', 'Active', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0', '0');
-
-INSERT INTO `ox_user_group` (`id`, `group_id`, `avatar_id`) VALUES ('', '1368', '436');
-INSERT INTO `ox_user_group` (`group_id`, `avatar_id`) VALUES ('1368', '436');
