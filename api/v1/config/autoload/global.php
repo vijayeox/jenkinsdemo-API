@@ -12,14 +12,14 @@
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-$host = '61.12.69.67';
+$host = '172.16.1.118';
 $db = 'rakshithapi';
 $username = 'rakshith';
 $password = '7zet3os!';
 
 
-if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
-    $host = '61.12.69.67';
+if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
+    $host = '172.16.1.118';
     $db = 'rakshithapi_test';
     $username = 'rakshith';
     $password = '7zet3os!';
@@ -34,7 +34,7 @@ return [
     	'password' => $password,
     	'dsn' => 'mysql:dbname=' . $db . ';host=' . $host . ';charset=utf8;',
     ],
-    'elasticsearch' =>[
+    'elasticsearch' => [
         'serveraddress'=>'dataocean.oxzion.com',
         'port'=>'9200',
         'scheme'=>'http',

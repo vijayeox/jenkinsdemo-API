@@ -33,7 +33,7 @@ return [
                     'route'    => '/group/user/:userId',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
-                        'method' => 'get',
+                        'method' => 'GET',
                         'action' => 'getGroupsforUser',
                         'access' => [
                             'getGroupsforUser'=>'MANAGE_GROUP_WRITE'
