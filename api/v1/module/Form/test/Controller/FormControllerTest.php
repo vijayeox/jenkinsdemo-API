@@ -65,7 +65,7 @@ class FormControllerTest extends ControllerTest{
     }
     public function testCreate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Form 1','statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]'];
+        $data = ['name' => 'Test Form 1','app_id'=>1,'statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_form'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/form', 'POST', null);
@@ -81,7 +81,7 @@ class FormControllerTest extends ControllerTest{
     }
     public function testCreateWithOutNameFailure(){
         $this->initAuthToken($this->adminUser);
-        $data = ['statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]'];
+        $data = ['app_id'=>1,'statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/form', 'POST', null);
         $this->assertResponseStatusCode(404);
@@ -91,10 +91,22 @@ class FormControllerTest extends ControllerTest{
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
+    public function testCreateWithOutAppFailure(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Test Form 1','statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/form', 'POST', null);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['data']['errors']['app_id'], 'required');
+    }
 
     public function testCreateAccess(){
         $this->initAuthToken($this->employeeUser);
-        $data = ['name' => 'Test Form 1','statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]'];
+        $data = ['name' => 'Test Form 1','app_id'=>1,'statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/form', 'POST', null);
         $this->assertResponseStatusCode(401);
@@ -108,7 +120,7 @@ class FormControllerTest extends ControllerTest{
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
     public function testUpdate(){
-        $data = ['name' => 'Test Form 1','statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]','field1'=>1,'field2'=>2];
+        $data = ['name' => 'Test Form 1','app_id'=>1,'statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]','field1'=>1,'field2'=>2];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/form/1', 'PUT', null);
@@ -121,7 +133,7 @@ class FormControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['field2'], $data['field2']);
     }
     public function testUpdateRestricted(){
-        $data = ['name' => 'Test Form 1','statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]'];
+        $data = ['name' => 'Test Form 1','app_id'=>1,'statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]'];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/form/1', 'PUT', null);
@@ -137,7 +149,7 @@ class FormControllerTest extends ControllerTest{
     }
 
     public function testUpdateNotFound(){
-        $data = ['name' => 'Test Form 1','statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]'];
+        $data = ['name' => 'Test Form 1','app_id'=>1,'statuslist'=>'[{"data":[{"1":"assigned"},{2:"In progress"},{3:"Completed"}]}]'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/form/122', 'PUT', null);

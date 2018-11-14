@@ -7,6 +7,7 @@ use Oxzion\ValidationException;
 class Form extends Entity{
 	protected $data = array(
         'id'=>0,
+        'app_id'=>0,
         'uuid'=>NULL,
         'name'=>NULL,
         'description'=>NULL,
@@ -19,7 +20,7 @@ class Form extends Entity{
         'date_modified'=>NULL,
     );
     public function validate(){
-        $required = array('name','org_id','statuslist');
+        $required = array('app_id','name','org_id','statuslist');
         $this->validateWithParams($required);
     }
 }

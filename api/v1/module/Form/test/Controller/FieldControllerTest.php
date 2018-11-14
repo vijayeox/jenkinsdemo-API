@@ -72,7 +72,7 @@ class FieldControllerTest extends ControllerTest{
 
     public function testCreate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'field3','required'=>1,'sequence'=>1,'data_type'=>'text'];
+        $data = ['name' => 'field3','app_id'=>1,'required'=>1,'sequence'=>1,'data_type'=>'text'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/form/1/field', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -90,7 +90,7 @@ class FieldControllerTest extends ControllerTest{
     }
     public function testCreateWithOutSequence(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'field4','required'=>1,'data_type'=>'text'];
+        $data = ['name' => 'field4','app_id'=>1,'required'=>1,'data_type'=>'text'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/form/1/field', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -110,7 +110,7 @@ class FieldControllerTest extends ControllerTest{
 
     public function testCreateFormNameExists(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name'=>'field1','required'=>1,'sequence'=>1,'data_type'=>'text'];
+        $data = ['name'=>'field1','app_id'=>1,'required'=>1,'sequence'=>1,'data_type'=>'text'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/form/1/field', 'POST', null);
         $this->assertResponseStatusCode(404);
