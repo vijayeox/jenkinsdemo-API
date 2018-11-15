@@ -7,8 +7,7 @@ use Oxzion\ValidationException;
 class Field extends Entity{
 	protected $data = array(
 		'id'=>0,
-		'uuid'=>NULL,
-        'app_id'=>0,
+		'app_id'=>0,
 		'name'=>NULL,
 		'org_id'=>NULL,
 		'text'=>NULL,

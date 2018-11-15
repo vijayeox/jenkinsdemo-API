@@ -8,7 +8,6 @@ class Form extends Entity{
 	protected $data = array(
         'id'=>0,
         'app_id'=>0,
-        'uuid'=>NULL,
         'name'=>NULL,
         'description'=>NULL,
         'org_id'=>NULL,
