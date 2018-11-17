@@ -153,7 +153,7 @@ class UserControllerTest extends ControllerTest{
 
     public function testassignManagerToUser() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user/436/assign/4799', 'GET');
+        $this->dispatch('/user/1/assign/2', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('assignUserManager');
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -164,7 +164,7 @@ class UserControllerTest extends ControllerTest{
 
     public function testassignUserExists() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user/436/assign/456', 'GET');
+        $this->dispatch('/user/1/assign/3', 'GET');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts('assignUserManager');
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -174,7 +174,7 @@ class UserControllerTest extends ControllerTest{
 
     public function testremoveManagerToUser() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user/436/remove/456', 'delete', null);
+        $this->dispatch('/user/1/remove/3', 'delete', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('removeUserManager');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
