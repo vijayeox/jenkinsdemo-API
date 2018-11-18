@@ -5,9 +5,9 @@
 namespace File\Controller;
 
 use Zend\Log\Logger;
-use File\Model\FileTable;
-use File\Model\File;
-use File\Service\FileService;
+use Oxzion\Model\FileTable;
+use Oxzion\Model\File;
+use Oxzion\Service\FileService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;

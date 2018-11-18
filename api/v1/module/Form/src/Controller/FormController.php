@@ -4,9 +4,9 @@ namespace Form\Controller;
 * Form Api
 */
 use Zend\Log\Logger;
-use Form\Model\Form;
-use Form\Model\FormTable;
-use Form\Service\FormService;
+use Oxzion\Model\Form;
+use Oxzion\Model\FormTable;
+use Oxzion\Service\FormService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;

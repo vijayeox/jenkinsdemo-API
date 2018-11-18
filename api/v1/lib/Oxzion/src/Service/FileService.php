@@ -1,9 +1,8 @@
 <?php
-namespace File\Service;
+namespace Oxzion\Service;
 
-use Oxzion\Service\AbstractService;
-use File\Model\FileTable;
-use File\Model\File;
+use Oxzion\Model\FileTable;
+use Oxzion\Model\File;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
@@ -55,6 +54,9 @@ class FileService extends AbstractService{
             $validFields = $this->checkFields($data['form_id'],$fields,$data['org_id'],$id);
             if($validFields){
                 $this->multiInsertOrUpdate('ox_file_attribute',$validFields,['id']);
+            } else {
+                $this->rollback();
+                return 0;
             }
             $this->commit();
         }catch(Exception $e){

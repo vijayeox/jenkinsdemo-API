@@ -10,6 +10,10 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
+use Oxzion\Model\FormTable;
+use Oxzion\Model\FieldTable;
+use Oxzion\Service\FieldService;
+use Oxzion\Service\FormService;
 
 class Module implements ConfigProviderInterface
 {
@@ -33,34 +37,7 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Service\FormService::class => function($container){
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\FormService($container->get('config'), $dbAdapter, $container->get(Model\FormTable::class));
-                },
-                Service\FieldService::class => function($container){
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\FieldService($container->get('config'), $dbAdapter, $container->get(Model\FieldTable::class));
-                },
-                Model\FormTable::class => function($container) {
-                    $tableGateway = $container->get(Model\FormTableGateway::class);
-                    return new Model\FormTable($tableGateway);
-                },
-                Model\FormTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Form());
-                    return new TableGateway('ox_form', $dbAdapter, null, $resultSetPrototype);
-                },
-                Model\FieldTable::class => function($container) {
-                    $tableGateway = $container->get(Model\FieldTableGateway::class);
-                    return new Model\FieldTable($tableGateway);
-                },
-                Model\FieldTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Field());
-                    return new TableGateway('ox_field', $dbAdapter, null, $resultSetPrototype);
-                },
+                
             ],
         ];
     }
@@ -71,14 +48,14 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\FormController::class => function($container) {
                     return new Controller\FormController(
-                        $container->get(Model\FormTable::class),$container->get(Service\FormService::class),
+                        $container->get(FormTable::class),$container->get(FormService::class),
                         $container->get('FormLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
                 Controller\FieldController::class => function($container) {
                     return new Controller\FieldController(
-                        $container->get(Model\FieldTable::class),$container->get(Service\FieldService::class),
+                        $container->get(FieldTable::class),$container->get(FieldService::class),
                         $container->get('FormLogger'),
                         $container->get(AdapterInterface::class)
                     );

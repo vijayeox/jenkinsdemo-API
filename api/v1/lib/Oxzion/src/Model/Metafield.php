@@ -1,7 +1,6 @@
 <?php
-namespace Form\Model;
+namespace Oxzion\Model;
 
-use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
 class Metafield extends Entity{

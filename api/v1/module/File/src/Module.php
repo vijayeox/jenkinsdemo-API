@@ -30,20 +30,6 @@ class Module implements ConfigProviderInterface {
     public function getServiceConfig() {
         return [
             'factories' => [
-                Service\FileService::class => function($container){
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\FileService($container->get('config'), $dbAdapter, $container->get(Model\FileTable::class));
-                },
-                Model\FileTable::class => function($container) {
-                    $tableGateway = $container->get(Model\FileTableGateway::class);
-                    return new Model\FileTable($tableGateway);
-                },
-                Model\FileTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\File());
-                    return new TableGateway('ox_file', $dbAdapter, null, $resultSetPrototype);
-                },
             ],
         ];
     }
@@ -53,7 +39,7 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\FileController::class => function($container) {
                     return new Controller\FileController(
-                            $container->get(Model\FileTable::class), $container->get(Service\FileService::class), $container->get('FileLogger'),
+                            $container->get(\Oxzion\Model\FileTable::class), $container->get(\Oxzion\Service\FileService::class), $container->get('FileLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],

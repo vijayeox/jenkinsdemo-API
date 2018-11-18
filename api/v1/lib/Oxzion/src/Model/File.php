@@ -1,8 +1,6 @@
 <?php
 
-namespace File\Model;
-
-use Oxzion\Model\Entity;
+namespace Oxzion\Model;
 
 class File extends Entity {
 

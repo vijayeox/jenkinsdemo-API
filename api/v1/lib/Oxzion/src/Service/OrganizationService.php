@@ -1,25 +1,36 @@
 <?php
-namespace Form\Service;
+namespace Oxzion\Service;
 
-use Oxzion\Service\AbstractService;
-use Form\Model\FormTable;
-use Form\Model\Form;
+use Oxzion\Model\OrganizationTable;
+use Oxzion\Model\Organization;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
 
-class FormService extends AbstractService{
-
-    public function __construct($config, $dbAdapter, FormTable $table){
+class OrganizationService extends AbstractService{
+    /**
+    * @ignore __construct
+    */
+    public function __construct($config, $dbAdapter, OrganizationTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
-
-    public function createForm(&$data){
-        $form = new Form();
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+    /**
+    * Create Organization Service
+    * @method createOrganization
+    * @param array $data Array of elements as shown
+    * <code> {
+    *               id : integer,
+    *               name : string,
+    *               logo : string,
+    *               status : String(Active|Inactive),
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created Organization.
+    */
+    public function createOrganization(&$data){
+        $form = new Organization();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -51,13 +62,20 @@ class FormService extends AbstractService{
         }
         return $count;
     }
-    public function updateForm($id,&$data){
+    /**
+    * Update Organization API
+    * @method updateOrganization
+    * @param array $id ID of Organization to update 
+    * @param array $data 
+    * @return array Returns a JSON Response with Status Code and Created Organization.
+    */
+    public function updateOrganization($id,&$data){
         $obj = $this->table->get($id,array());
         if(is_null($obj)){
             return 0;
         }
-        $file = $obj->toArray();
-        $form = new Form();
+        $org = $obj->toArray();
+        $form = new Organization();
         $changedArray = array_merge($obj->toArray(),$data);
         $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $changedArray['date_modified'] = date('Y-m-d H:i:s');
@@ -86,13 +104,18 @@ class FormService extends AbstractService{
         }
         return $count;
     }
-
-
-    public function deleteForm($id){
+    /**
+    * Delete Organization Service
+    * @method deleteOrganization
+    * @link /organization[/:orgId]
+    * @param $id ID of Organization to Delete
+    * @return array success|failure response
+    */
+    public function deleteOrganization($id){
         $this->beginTransaction();
         $count = 0;
         try{
-            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
+            $count = $this->table->delete($id);
             if($count == 0){
                 $this->rollback();
                 return 0;
@@ -105,20 +128,25 @@ class FormService extends AbstractService{
         return $count;
     }
 
-    public function getForms() {
+    /**
+    * GET Organization Service
+    * @method getOrganization
+    * @param $id ID of Organization to Delete
+    * @return array $data 
+    * <code> {
+    *               id : integer,
+    *               name : string,
+    *               logo : string,
+    *               status : String(Active|Inactive),
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created Organization.
+    */
+    public function getOrganization($id) {
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $select->from('ox_form')
-                ->columns(array("*"))
-                ->where(array('ox_form.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
-        return $this->executeQuery($select)->toArray();
-    }
-    public function getForm($id) {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_form')
+        $select->from('ox_organization')
         ->columns(array("*"))
-        ->where(array('ox_form.id' => $id,'ox_form.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+        ->where(array('ox_organization.id' => $id));
         $response = $this->executeQuery($select)->toArray();
         if(count($response)==0){
             return 0;

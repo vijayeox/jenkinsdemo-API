@@ -1,10 +1,9 @@
 <?php
-namespace Form\Service;
+namespace Oxzion\Service;
 
-use Oxzion\Service\AbstractService;
-use Form\Model\FieldTable;
-use Form\Model\Field;
-use Form\Model\Metafield;
+use Oxzion\Model\FieldTable;
+use Oxzion\Model\Field;
+use Oxzion\Model\Metafield;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;

@@ -1,6 +1,6 @@
 <?php
-namespace User\Model;
-use Oxzion\Model\Entity;
+namespace Oxzion\Model;
+
 use Oxzion\ValidationException;
 
 class User extends Entity{

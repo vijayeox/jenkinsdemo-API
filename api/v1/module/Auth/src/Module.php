@@ -9,6 +9,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
+use Oxzion\Service\UserService;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
 
 class Module implements ConfigProviderInterface {
@@ -32,10 +33,6 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new AuthAdapter($dbAdapter,'avatars','username','password','MD5(SHA1(?))');
                 },
-                Service\AuthService::class => function($container){
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AuthService($container->get('config'), $dbAdapter);
-                },
             ],
         ];
     }
@@ -45,7 +42,7 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\AuthController::class => function($container) {
                     return new Controller\AuthController(
-                        $container->get(AuthAdapter::class),$container->get(Service\AuthService::class),
+                        $container->get(AuthAdapter::class),$container->get(UserService::class),
                         $container->get('AuthLogger')
                     );
                 },

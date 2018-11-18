@@ -10,6 +10,8 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
+use Oxzion\Model\UserTable;
+use Oxzion\Service\UserService;
 
 class Module implements ConfigProviderInterface {
 
@@ -29,20 +31,6 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
-                Service\UserService::class => function($container){
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\UserService($container->get('config'), $dbAdapter, $container->get(Model\UserTable::class));
-                },
-                Model\UserTable::class => function($container) {
-                    $tableGateway = $container->get(Model\UserTableGateway::class);
-                    return new Model\UserTable($tableGateway);
-                },
-                Model\UserTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\User());
-                    return new TableGateway('avatars', $dbAdapter, null, $resultSetPrototype);
-                },
             ],
         ];
     }
@@ -52,8 +40,8 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\UserController::class => function($container) {
                     return new Controller\UserController(
-                        $container->get(Model\UserTable::class), 
-                        $container->get('UserLogger'),$container->get(Service\UserService::class),
+                        $container->get(UserTable::class), 
+                        $container->get('UserLogger'),$container->get(UserService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

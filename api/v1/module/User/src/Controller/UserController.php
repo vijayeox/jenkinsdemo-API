@@ -2,9 +2,9 @@
 namespace User\Controller;
 
 use Zend\Log\Logger;
-use User\Model\User;
-use User\Model\UserTable;
-use User\Service\UserService;
+use Oxzion\Model\User;
+use Oxzion\Model\UserTable;
+use Oxzion\Service\UserService;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationResult;
 use Oxzion\ValidationException;

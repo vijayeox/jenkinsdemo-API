@@ -1,12 +1,11 @@
 <?php
 
-namespace Form\Model;
+namespace Oxzion\Model;
 
 use Oxzion\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;
-use Oxzion\Model\Entity;
 
-class MetafielddTable extends ModelTable {
+class FormTable extends ModelTable {
 
 	public function __construct(TableGatewayInterface $tableGateway) {
         parent::__construct($tableGateway);

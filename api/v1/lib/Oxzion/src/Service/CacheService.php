@@ -1,6 +1,8 @@
 <?php
 namespace Oxzion\Service;
+
 use Zend\Cache\StorageFactory;
+
 class CacheService{
 	protected $cache;
 	private $supportedDatatypes;

@@ -81,8 +81,8 @@ class ElasticService{
 				$result['attachment'] = $this->FilterDataByEntity($this->getIndex($params['entity']), $searchconfig);
 			}
 		}
-		return $result;
-    }
+		return $result
+;    }
     
 	protected function getFieldsList(&$searchconfig,$entity){
 		if($entity=='instanceforms'){

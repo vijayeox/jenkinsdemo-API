@@ -8,7 +8,7 @@ use Oxzion\Encryption\Crypto;
 use Zend\View\Model\JsonModel;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
 use Firebase\JWT\JWT;
-use Auth\Service\AuthService;
+use Oxzion\Service\UserService;
 
 class AuthController extends AbstractApiControllerHelper
 {
@@ -21,17 +21,17 @@ class AuthController extends AbstractApiControllerHelper
     */
 	private $log;
     /**
-    * @ignore authService
+    * @ignore userService
     */
-	private $authService;
+	private $userService;
 	
     /**
     * @ignore __construct
     */
-	public function __construct(AuthAdapter $authAdapter,AuthService $authService, Logger $log){
+	public function __construct(AuthAdapter $authAdapter,UserService $userService, Logger $log){
 		$this->authAdapter = $authAdapter;
 		$this->log = $log;
-		$this->authService = $authService;
+		$this->userService = $userService;
     }
 
     /**
@@ -60,7 +60,7 @@ class AuthController extends AbstractApiControllerHelper
 			if(isset($data['org_id'])){
 				return $this->getJwt($data['username'],$data['org_id']);
 			} else {
-				return $this->getJwt($data['username'],$this->authService->getUserOrg($data['username']));
+				return $this->getJwt($data['username'],$this->userService->getUserOrg($data['username']));
 			}
 		}else{
 			return $this->getFailureResponse("Authentication Failure - Invalid username or password");

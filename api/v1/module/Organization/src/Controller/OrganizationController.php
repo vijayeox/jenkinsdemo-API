@@ -2,12 +2,12 @@
 namespace Organization\Controller;
 
 use Zend\Log\Logger;
-use Organization\Model\Organization;
-use Organization\Model\OrganizationTable;
-use Organization\Service\OrganizationService;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
+use Oxzion\Model\Organization;
+use Oxzion\Model\OrganizationTable;
+use Oxzion\Service\OrganizationService;
 
 class OrganizationController extends AbstractApiController {
 
