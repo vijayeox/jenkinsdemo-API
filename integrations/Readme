@@ -1,0 +1,6 @@
+
+To build the docker container
+$ docker build -t oxint .
+
+To run the docker container
+$ docker run --network="host" -it oxint

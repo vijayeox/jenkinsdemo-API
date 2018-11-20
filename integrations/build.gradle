@@ -1,0 +1,49 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.1.0.RELEASE')
+    }
+}
+
+/*plugins{
+    id "org.springframework.boot" 
+}*/
+apply plugin:"groovy"
+apply plugin:"eclipse"
+apply plugin:"idea"
+apply plugin: 'io.spring.dependency-management'
+
+ext['groovy.version'] = '2.5.4'
+group "com.oxzion"
+version "1.0.0"
+jar{
+    baseName = 'integration'
+    version = '1.0.0'
+}
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.boot:spring-boot-dependencies:2.0.2.RELEASE'
+    }
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.5.4'
+    compile("org.springframework.boot:spring-boot-starter")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    compile 'org.apache.camel:camel-spring-boot:2.22.2'
+    compile 'org.apache.camel:camel-groovy:2.22.2'
+    runtime 'mysql:mysql-connector-java:5.1.47'
+    compile 'org.apache.camel:camel-jpa:2.22.2'
+    compile 'org.apache.camel:camel-sql:2.22.2'
+
+}
