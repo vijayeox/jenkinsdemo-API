@@ -30,11 +30,9 @@ class AttachmentService extends AbstractService{
      */
     public function upload($data,$files){
         $fileArray = array();
-        $i = 0;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         if(isset($data['type'])){
-            $count = 0;
             $fileArray = array();
             if(isset($files)){
                 foreach ($files as  $file) {
