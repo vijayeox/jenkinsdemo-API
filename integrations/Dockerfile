@@ -2,12 +2,8 @@ FROM openjdk:8u181-jre-alpine3.8
 
 ARG VERSION=7.9.0
 ARG DISTRO=tomcat
-ARG SNAPSHOT=false
 
-ARG EE=false
-ARG USER
-ARG PASSWORD
-
+ARG TOMCAT_PORT=8090
 RUN apk add --no-cache \
         bash \
         ca-certificates \
@@ -39,7 +35,7 @@ RUN MYSQL_VERSION=$(xmlstarlet sel -t -v //_:version.mysql /tmp/pom.xml) \
 
 # remove default CATALINA_OPTS from environment settings
 RUN echo "" > /camunda/bin/setenv.sh
-
+RUN xmlstarlet ed --inplace -u "//Connector[@protocol='HTTP/1.1']/@port" -v ${TOMCAT_PORT} /camunda/conf/server.xml
 RUN rm -f /tmp/camunda-${DISTRO}.sh \
     && rm -f /tmp/camunda.tar.gz
 
