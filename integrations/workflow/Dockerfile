@@ -42,9 +42,9 @@ RUN rm -f /tmp/camunda-${DISTRO}.sh \
 
 ENV CAMUNDA_VERSION=${VERSION}
 ENV DB_DRIVER=com.mysql.jdbc.Driver
-ENV DB_URL=jdbc:mysql://localhost/process-engine
+ENV DB_URL=jdbc:mysql://172.16.1.55/process-engine
 ENV DB_USERNAME=root
-ENV DB_PASSWORD=password
+ENV DB_PASSWORD=
 ENV DB_CONN_MAXACTIVE=20
 ENV DB_CONN_MINIDLE=5
 ENV DB_CONN_MAXIDLE=20
@@ -55,7 +55,7 @@ ENV TZ=UTC
 ENV DEBUG=false
 ENV JAVA_OPTS="-Xmx768m -XX:MaxMetaspaceSize=256m"
 
-EXPOSE 8080 8000
+EXPOSE 8090 8000
 
 RUN addgroup -g 1000 -S camunda && \
     adduser -u 1000 -S camunda -G camunda -h /camunda -s /bin/bash -D camunda
@@ -68,5 +68,3 @@ WORKDIR /camunda
 
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["./camunda.sh"]
-
-
