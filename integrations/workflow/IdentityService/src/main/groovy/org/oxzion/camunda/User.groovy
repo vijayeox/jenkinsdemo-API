@@ -1,4 +1,4 @@
-package com.camunda
+package org.oxzion.camunda
 
 class User implements org.camunda.bpm.engine.identity.User {
     private String userId

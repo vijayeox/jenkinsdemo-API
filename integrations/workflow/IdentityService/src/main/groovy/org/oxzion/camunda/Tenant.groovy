@@ -1,4 +1,4 @@
-package com.camunda
+package org.oxzion.camunda
 
 class Tenant implements org.camunda.bpm.engine.identity.Tenant {
 

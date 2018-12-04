@@ -2,17 +2,6 @@ apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'idea'
 
-jar {
-    baseName = 'your_project_name'
-    version =  '0.1.0'
-    manifest {
-        attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"),
-                "Build-Jdk": System.getProperty("java.version"),
-                "Built-By": System.getProperty("user.name"),
-                "Created-By": "Gradle",
-        )
-    }
-}
 group 'camunda'
 version '1.0-SNAPSHOT'
 
@@ -28,8 +17,17 @@ dependencies {
         exclude group: 'org.apache.commons', module: 'commons-email'
     }
     compile("org.camunda.bpm:camunda-engine-spring:7.9.0")
-    compile("org.camunda.bpm:camunda-engine-identity:7.9.0")
     compile("org.camunda.bpm:camunda-engine-rest:7.9.0:classes")
     compile("org.camunda.bpm.webapp:camunda-webapp:7.9.0:classes")
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar {
+    baseName = 'identity_plugin'
+    manifest {
+        attributes("Build-Time": new Date().format("yyyy-MM-dd HH:mm:ss"),
+                "Built-By": "Bharat Gogineni",
+                "Created-By": "Bharat Gogineni",
+        )
+    }
 }

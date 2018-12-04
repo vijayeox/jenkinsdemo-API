@@ -18,6 +18,8 @@ RUN apk add --no-cache \
 
 COPY camunda-tomcat.sh /tmp/
 
+COPY ./IdentityService/dist/identity_plugin.jar /camunda/lib/
+
 ARG NEXUS="https://app.camunda.com/nexus/service/local/artifact/maven/redirect"
 RUN wget --progress=bar:force:noscroll -O /tmp/camunda.tar.gz "${NEXUS}?r=camunda-bpm&g=org.camunda.bpm.${DISTRO}&a=camunda-bpm-${DISTRO}&v=${VERSION}&p=tar.gz"
 
@@ -35,6 +37,9 @@ RUN MYSQL_VERSION=$(xmlstarlet sel -t -v //_:version.mysql /tmp/pom.xml) \
 
 # remove default CATALINA_OPTS from environment settings
 RUN echo "" > /camunda/bin/setenv.sh
+
+COPY bpm-platform.xml /camunda/conf/
+
 RUN xmlstarlet ed --inplace -u "//Connector[@protocol='HTTP/1.1']/@port" -v ${TOMCAT_PORT} /camunda/conf/server.xml
 RUN rm -f /tmp/camunda-${DISTRO}.sh \
     && rm -f /tmp/camunda.tar.gz
@@ -43,6 +48,7 @@ RUN rm -f /tmp/camunda-${DISTRO}.sh \
 ENV CAMUNDA_VERSION=${VERSION}
 ENV DB_DRIVER=com.mysql.jdbc.Driver
 ENV DB_URL=jdbc:mysql://172.16.1.55/process-engine
+ENV BASE_DB_URL=jdbc:mysql://172.16.1.55/oxapi
 ENV DB_USERNAME=root
 ENV DB_PASSWORD=
 ENV DB_CONN_MAXACTIVE=20

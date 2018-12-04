@@ -1,4 +1,4 @@
-package com.camunda
+package org.oxzion.camunda
 
 class Group implements org.camunda.bpm.engine.identity.Group{
     private String groupId
