@@ -12,22 +12,28 @@
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-$host = '54.163.190.135';
-$db = 'oxzionapi';
-$username = 'root';
-$password = 'oxzion';
+$host = '172.16.1.118';
+$db = 'rakshithapi_test';
+$username = 'rakshith';
+$password = '7zet3os!';
 
 
-if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
-    $host = '54.163.190.135';
-    $db = 'oxzionapi';
-    $username = 'root';
-    $password = 'oxzion';
-
+if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
+    $host = '172.16.1.118';
+    $db = 'rakshithapi_test';
+    $username = 'rakshith';
+    $password = '7zet3os!';
+} else if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'appinstall') {
+    echo "Installation Mode";exit;
+    $host = '172.16.1.118';
+    $db = 'rakshithapi_app';
+    $username = 'rakshith';
+    $password = '7zet3os!'; 
 }
 
 return [
     'db' => [
+        'host' => $host,
     	'driver' => 'Pdo_Mysql',
     	'database' => $db,
     	'username' => $username,

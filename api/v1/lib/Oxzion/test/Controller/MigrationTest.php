@@ -44,7 +44,7 @@ class MigrationTest extends ServiceTest {
         $testCase = $migrationObject->initDB($data);
         $config = $this->getApplicationConfig();
         $config = $config['db'];
-        $config['dsn'] = 'mysql:dbname=' . $config['database'] . ';host=172.16.1.118;charset=utf8;username=' .$config["username"] . ';password='.$config["password"];
+        $config['dsn'] = 'mysql:dbname=' . $config['database'] . ';host=' . $config['host'] . ';charset=utf8;username=' .$config["username"] . ';password='.$config["password"];
         $adapter = new Adapter($config);
         $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' .$database . '"';
         $statement = $adapter->query($sqlQuery);
@@ -89,7 +89,7 @@ class MigrationTest extends ServiceTest {
         );
         $database = $data['appName'] . "___" . $data['UUID'];
         $dbConfig = $config['db'];
-        $dbConfig['dsn'] = 'mysql:dbname=' . $database . ';host=172.16.1.118;charset=utf8;username=' .$config["username"] . ';password='.$config["password"];
+        $dbConfig['dsn'] = 'mysql:dbname=' . $database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' .$dbConfig["username"] . ';password='.$dbConfig["password"];
         $adapter = new Adapter($dbConfig);
         $dataSet = array_diff(scandir(dirname(__FILE__) ."/../Migration/"), array(".", ".."));
         $migrationFolder = dirname(__FILE__) ."/../Migration/";
@@ -117,7 +117,7 @@ class MigrationTest extends ServiceTest {
         );
         $database = $data['appName'] . "___" . $data['UUID'];
         $dbConfig = $config['db'];
-        $dbConfig['dsn'] = 'mysql:dbname=' . $dbConfig['database'] . ';host=172.16.1.118;charset=utf8;username=' .$config["username"] . ';password='.$config["password"];
+        $dbConfig['dsn'] = 'mysql:dbname=' . $dbConfig['database'] . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' .$dbConfig["username"] . ';password='.$dbConfig["password"];
         $adapter = new Adapter($dbConfig);
         $dataSet = array_diff(scandir(dirname(__FILE__) ."/../Migration/"), array(".", ".."));
         $migrationFolder = dirname(__FILE__) ."/../Migration/";

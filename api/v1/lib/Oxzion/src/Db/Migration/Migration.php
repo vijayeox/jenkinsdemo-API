@@ -15,7 +15,7 @@ class Migration extends AbstractService {
         $this->database = $database;
         $this->config = $config;
         $config = $config['db'];
-        $config['dsn'] = 'mysql:dbname=' . $config['db']['database'] . ';host=172.16.1.118;charset=utf8;username='.$config["db"]["username"].';password='.$config["db"]["password"].'';
+        $config['dsn'] = 'mysql:dbname=' . $config['database'] . ';host=' . $config['host'] . ';charset=utf8;username='.$config["username"].';password='.$config["password"].'';
         $adapter = new Adapter($config);
         parent::__construct($config, $adapter);
     }
@@ -48,7 +48,6 @@ class Migration extends AbstractService {
             $this->rollback();
             return 0;
         }
-        exit;
     }
 
     private function checkDB() {
@@ -62,7 +61,7 @@ class Migration extends AbstractService {
     private function insertAppVersion($data) {
         //The code to add the app version information to the table, after it is been installed into the OXZion system.        
         $config = $this->config;
-        $config['dsn'] = 'mysql:dbname='.$this->database.';host=172.16.1.118;charset=utf8;username='.$this->config["username"].';password='.$this->config["password"];
+        $config['dsn'] = 'mysql:dbname='.$this->database.';host=' . $this->config['host'] . ';charset=utf8;username='.$this->config["username"].';password='.$this->config["password"];
         $adapter = new Adapter($config);
 
 //Code to create the migration table once the app is installed to the system.
@@ -85,7 +84,7 @@ class Migration extends AbstractService {
             $checkDb = $this->checkDB($data);
             if (($checkDb == 1)) {
                 $config = $this->config;
-                $config['dsn'] = 'mysql:dbname=' . $this->database . ';host=172.16.1.118;charset=utf8;username=' . $this->config["username"] . ';password=' . $this->config["password"];
+                $config['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $this->config['host'] . ';charset=utf8;username=' . $this->config["username"] . ';password=' . $this->config["password"];
                 $adapter = new Adapter($config);
                 sort($fileList);
                 foreach($fileList as $files) {
