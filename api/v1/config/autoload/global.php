@@ -12,17 +12,17 @@
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-$host = '172.16.1.118';
-$db = 'rakshithapi_test';
-$username = 'rakshith';
-$password = '7zet3os!';
+$host = '34.192.157.77';
+$db = 'oxzionapi';
+$username = 'root';
+$password = 'oxzion';
 
 
 if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
-    $host = '172.16.1.118';
-    $db = 'rakshithapi_test';
-    $username = 'rakshith';
-    $password = '7zet3os!';
+    $host = '34.192.157.77';
+    $db = 'oxzionapi';
+    $username = 'root';
+    $password = 'oxzion';
 } else if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'appinstall') {
     echo "Installation Mode";exit;
     $host = '172.16.1.118';
