@@ -21,8 +21,10 @@ class WorkflowTest extends ControllerTest{
     public function getDataSet() {
         if(enableCamunda==1){
             $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/Workflow.yml");
+            return $dataset;
+        } else {
+            return new PHPUnit\DbUnit\DataSet\DefaultDataSet();
         }
-        return $dataset;
     }
     public function testDeploymentProcess(){
       $workflowFactory = WorkflowFactory::getInstance();
