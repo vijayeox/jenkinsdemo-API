@@ -34,12 +34,14 @@
         "zendframework/zend-cache": "^2.8",
         "zendframework/zend-serializer": "^2.9",
         "zendframework/zend-inputfilter": "^2.8",
-		"elasticsearch/elasticsearch": "~5.0"
+		"elasticsearch/elasticsearch": "~5.0",
+        "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev" : {
         "phpunit/phpunit": "^7",
         "zendframework/zend-test": "^3.2",
-        "phpunit/dbunit": "^4"
+        "phpunit/dbunit": "^4",
+        "mockery/mockery": "^1.2"
     },
     "autoload": {
         "psr-4": {
@@ -59,7 +61,8 @@
             "Attachment\\":"module/Attachment/src/",
             "Bookmark\\":"module/Bookmark/src/",
             "App\\":"module/App/src/",
-			"Mlet\\":"module/Mlet/src"
+			"Mlet\\":"module/Mlet/src",
+            "Workflow\\":"module/Workflow/src"
         }
     },
     "autoload-dev": {
@@ -75,7 +78,9 @@
             "AuthTest\\" : "module/Auth/test",
             "BookmarkTest\\" : "module/Bookmark/test",
             "AppTest\\" : "module/App/test",
-            "Migration\\" : "lib/Oxzion/Test/Migration"
+            "Migration\\" : "lib/Oxzion/Test/Migration",
+            "WorkflowTest\\" : "library/Oxzion/test/WorkflowTest"
+
         }
     },
     "extra": [],

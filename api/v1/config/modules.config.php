@@ -28,5 +28,5 @@ return [
 	'Attachment',
 	'Bookmark',
 	'App',
-	'Mlet'
+	'Workflow'
 ];

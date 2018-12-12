@@ -7,14 +7,10 @@
       <change beforePath="$PROJECT_DIR$/../../api/v1/config/modules.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../api/v1/config/modules.config.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../api/v1/lib/Oxzion/src/Module.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../api/v1/lib/Oxzion/src/Module.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../api/v1/lib/Oxzion/src/Test/ControllerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../api/v1/lib/Oxzion/src/Test/ControllerTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../api/v1/module/Announcement/src/Model/AnnouncementTable.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../api/v1/module/Announcement/src/Model/AnnouncementTable.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../api/v1/phpunit.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../api/v1/phpunit.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Readme" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../camunda-tomcat.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/groovy/com/oxzion/Application.groovy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/main/resources/application.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../workflow/IdentityService/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../workflow/IdentityService/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../workflow/IdentityService/dist/identity_plugin.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../workflow/IdentityService/dist/identity_plugin.jar" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -41,8 +37,10 @@
     <session id="1884522207">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.open.time.8" value="1" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -56,7 +54,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/Application.groovy">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
@@ -71,7 +69,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
+            <state relative-caret-position="697">
               <caret line="41" column="48" selection-start-line="41" selection-start-column="42" selection-end-line="41" selection-end-column="48" />
             </state>
           </provider>
@@ -92,11 +90,11 @@
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="95" column="63" lean-forward="true" selection-start-line="95" selection-start-column="63" selection-end-line="95" selection-end-column="63" />
+            <state relative-caret-position="1598">
+              <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -472,10 +470,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1987" />
-    <option name="y" value="146" />
-    <option name="width" value="1400" />
-    <option name="height" value="1000" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -483,7 +481,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -548,11 +546,11 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543490833972" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543591754831" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
@@ -602,10 +600,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="105" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19515885" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20469083" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -615,7 +613,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3295082" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.21800433" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -665,7 +663,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
+        <state relative-caret-position="697">
           <caret line="41" column="48" selection-start-line="41" selection-start-column="42" selection-end-line="41" selection-end-column="48" />
         </state>
       </provider>
@@ -681,8 +679,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="95" column="63" lean-forward="true" selection-start-line="95" selection-start-column="63" selection-end-line="95" selection-end-column="63" />
+        <state relative-caret-position="1598">
+          <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
         </state>
       </provider>
     </entry>

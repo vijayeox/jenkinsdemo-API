@@ -33,7 +33,7 @@ abstract class ControllerTest extends AbstractHttpControllerTestCase{
         $this->setApplicationConfig($configOverrides);
     }
 
-    final public function getConnection()
+    public function getConnection()
     {
         if ($this->conn === null) {
             if (self::$pdo == null) {

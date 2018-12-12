@@ -92,6 +92,9 @@ class Module {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\User());
                     return new TableGateway('avatars', $dbAdapter, null, $resultSetPrototype);
                 },
+                Workflow\WorkflowFactory::class => function ($container){
+                    return Workflow\WorkflowFactory::getInstance(); 
+                }
             ],
         ];
     }
