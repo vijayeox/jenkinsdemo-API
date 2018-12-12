@@ -10,22 +10,13 @@ use Oxzion\Workflow\Camunda\ProcessManagerImpl;
 use Oxzion\Utils\RestClient;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use Mockery;
+use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-class WorkflowTest extends ControllerTest{
-    use TestCaseTrait;
+class WorkflowTest extends AbstractHttpControllerTestCase{
+    // use TestCaseTrait;
     static private $pdo = null;
     public function setUp() : void{
-        $this->loadConfig();
         parent::setUp();
-    }
-
-    public function getDataSet() {
-        if(enableCamunda==0){
-            return new DefaultDataSet();
-        } else {
-            $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/Workflow.yml");
-            return $dataset;
-        }
     }
 
     public function testDeploymentProcess(){
