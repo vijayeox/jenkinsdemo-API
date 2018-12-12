@@ -19,7 +19,9 @@ class WorkflowTest extends ControllerTest{
         parent::setUp();
     }   
     public function getDataSet() {
-        $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/Workflow.yml");
+        if(enableCamunda==1){
+            $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/Workflow.yml");
+        }
         return $dataset;
     }
     public function testDeploymentProcess(){
