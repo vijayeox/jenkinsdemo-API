@@ -22,20 +22,6 @@ class WorkflowTest extends ControllerTest{
         $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/Workflow.yml");
         return $dataset;
     }
-    public function getConnection() {
-        if ($this->conn === null) {
-            if (self::$pdo == null) {
-                $config = $this->getApplicationConfig();
-                $config = $config['db'];
-                $originalDbName = $config['database'];
-                $config['database'] = $this->processEngineDb;
-                $config['dsn'] = str_replace($originalDbName, $this->processEngineDb, $config['dsn']);
-                self::$pdo = new \PDO( $config['dsn'], $config['username'], $config['password'] );
-            }
-            $this->conn = $this->createDefaultDBConnection(self::$pdo, $config['database']);
-        }
-        return $this->conn;
-    }
     public function testDeploymentProcess(){
       $workflowFactory = WorkflowFactory::getInstance();
       $processManager  = $workflowFactory->getProcessManager();
