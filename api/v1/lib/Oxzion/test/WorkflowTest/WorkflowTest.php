@@ -1,13 +1,8 @@
 <?php
 namespace WorkflowTest;
-use Oxzion\Test\ControllerTest;
-use Oxzion\Workflow\ProcessManager;
+
 use Oxzion\Workflow\WorkflowFactory;
-use PHPUnit\DbUnit\DataSet\YamlDataSet;
-use Oxzion\Workflow\Camunda\Config;
-use Oxzion\Workflow\Camunda\ProcessManagerImpl;
 use Oxzion\Utils\RestClient;
-use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use Mockery;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
