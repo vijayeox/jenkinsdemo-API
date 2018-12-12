@@ -3,7 +3,6 @@ namespace WorkflowTest;
 use Oxzion\Test\ControllerTest;
 use Oxzion\Workflow\ProcessManager;
 use Oxzion\Workflow\WorkflowFactory;
-use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Oxzion\Workflow\Camunda\Config;
 use Oxzion\Workflow\Camunda\ProcessManagerImpl;
@@ -13,7 +12,6 @@ use Mockery;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 class WorkflowTest extends AbstractHttpControllerTestCase{
-    // use TestCaseTrait;
     static private $pdo = null;
     public function setUp() : void{
         parent::setUp();
@@ -32,36 +30,31 @@ class WorkflowTest extends AbstractHttpControllerTestCase{
         $this->assertNotEquals(0, $data);
         $deploymentId = $data['id'];
         if(enableCamunda==0){
-            $mockRestClient = Mockery::mock('RestClient');
-            $mockRestClient->expects('post')->with('process-definition/key/Process_1/tenant-id/1/start',null)->once()->andReturn(json_encode(array('definitionId'=>12321)));
-            $processManager->setRestClient($mockRestClient);
+            $mockRestClient->expects('post')->with('process-definition/key/Process_1/tenant-id/1/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
+            $processEngine->setRestClient($mockRestClient);
         }
         $processStart = $processEngine->startProcess('Process_1',1);
         $definitionId = $processStart['definitionId'];
         $this->assertNotEquals(0, $definitionId);
         if(enableCamunda==0){
-            $mockRestClient = Mockery::mock('RestClient');
-            $mockRestClient->expects('get')->with('process-definition/12321',null)->once()->andReturn(json_encode(array('key'=>'Process_1')));
-            $processManager->setRestClient($mockRestClient);
+            $mockRestClient->expects('get')->with('process-definition/12321')->once()->andReturn(json_encode(array('key'=>'Process_1')));
+            $processEngine->setRestClient($mockRestClient);
         }
         $processDef = $processEngine->getProcessDefinition($definitionId,1);
         $this->assertEquals($processDef['key'],'Process_1');
         if(enableCamunda==0){
-            $mockRestClient = Mockery::mock('RestClient');
             $mockRestClient->expects('delete')->with('process-definition/12321')->once()->andReturn(0);
-            $processManager->setRestClient($mockRestClient);
+            $processEngine->setRestClient($mockRestClient);
         }
         $processDel = $processEngine->stopProcess($definitionId);
         $this->assertEquals($processDel, 1);
         if(enableCamunda==0){
-            $mockRestClient = Mockery::mock('RestClient');
             $mockRestClient->expects('get')->with('deployment/'.$deploymentId)->once()->andReturn(json_encode(array('id'=>$deploymentId)));
             $processManager->setRestClient($mockRestClient);
         }
         $getResponse = $processManager->get($deploymentId);
         $this->assertEquals($getResponse['id'], $deploymentId);
         if(enableCamunda==0){
-            $mockRestClient = Mockery::mock('RestClient');
             $mockRestClient->expects('delete')->with('deployment/'.$deploymentId)->once()->andReturn(0);
             $processManager->setRestClient($mockRestClient);
         }

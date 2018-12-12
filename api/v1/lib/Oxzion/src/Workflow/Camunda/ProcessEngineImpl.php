@@ -6,12 +6,12 @@ use Oxzion\Utils\RestClient;
 
 class ProcessEngineImpl implements ProcessEngine {
 	private $restClient;
-  public function __construct(){
-    $this->restClient = new RestClient(Config::ENGINE_URL);
-  }
-  public function setRestClient($restClient){
-    $this->restClient = $restClient;
-  }
+	public function __construct(){
+		$this->restClient = new RestClient(Config::ENGINE_URL);
+	}
+	public function setRestClient($restClient){
+		$this->restClient = $restClient;
+	}
 
 	public function getProcessDefinition($id){
 		$query = 'process-definition/'.$id;
