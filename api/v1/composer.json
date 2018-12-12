@@ -78,7 +78,7 @@
             "AuthTest\\" : "module/Auth/test",
             "BookmarkTest\\" : "module/Bookmark/test",
             "AppTest\\" : "module/App/test",
-            "Migration\\" : "lib/Oxzion/Test/Migration",
+            "Migration\\" : "lib/Oxzion/test/Migration",
             "WorkflowTest\\" : "library/Oxzion/test/WorkflowTest"
 
         }
