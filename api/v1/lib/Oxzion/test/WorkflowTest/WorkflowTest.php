@@ -19,11 +19,11 @@ class WorkflowTest extends ControllerTest{
         parent::setUp();
     }   
     public function getDataSet() {
-        if(enableCamunda==1){
+        if(enableCamunda==0){
+            return new \PHPUnit\DbUnit\DataSet\DefaultDataSet();
+        } else {
             $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/Workflow.yml");
             return $dataset;
-        } else {
-            return new \PHPUnit\DbUnit\DataSet\DefaultDataSet();
         }
     }
     public function testDeploymentProcess(){
