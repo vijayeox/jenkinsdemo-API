@@ -23,7 +23,7 @@ class WorkflowTest extends ControllerTest{
             $dataset = new YamlDataSet(dirname(__FILE__)."/Dataset/Workflow.yml");
             return $dataset;
         } else {
-            return new PHPUnit\DbUnit\DataSet\DefaultDataSet();
+            return new \PHPUnit\DbUnit\DataSet\DefaultDataSet();
         }
     }
     public function testDeploymentProcess(){
