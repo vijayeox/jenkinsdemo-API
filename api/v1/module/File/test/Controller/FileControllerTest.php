@@ -22,11 +22,6 @@ class FileControllerTest extends ControllerTest{
         return $dataset;
     }
 
-    protected function tearDown() : void {
-        $config = $this->getApplicationConfig();
-        $filesFolder = $config['DATA_FOLDER']."organization/1/files";
-        FileUtils::deleteDirectoryContents($filesFolder);
-    }
     protected function createDummyFile(){
         $config = $this->getApplicationConfig();
         $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/files/temp/";

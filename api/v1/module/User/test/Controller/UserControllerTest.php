@@ -20,9 +20,6 @@ class UserControllerTest extends ControllerTest{
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/User.yml");
         return $dataset;
     }
-    public function tearDown(): void{
-        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/User.yml");
-    }
 
     protected function setDefaultAsserts($router = "user"){
         $this->assertModuleName('User');

@@ -21,11 +21,6 @@ class FormControllerTest extends ControllerTest{
         return $dataset;
     }
 
-    protected function tearDown() : void {
-        $config = $this->getApplicationConfig();
-        $formsFolder = $config['DATA_FOLDER']."organization/1/forms";
-        FileUtils::deleteDirectoryContents($formsFolder);
-    }
     protected function setDefaultAsserts(){
         $this->assertModuleName('Form');
         $this->assertControllerName(FormController::class); // as specified in router's controller name alias

@@ -21,11 +21,6 @@ class OrganizationControllerTest extends ControllerTest{
         return $dataset;
     }
 
-    protected function tearDown() : void {
-        $config = $this->getApplicationConfig();
-        $organizationsFolder = $config['DATA_FOLDER']."organization/1/organizations";
-        FileUtils::deleteDirectoryContents($organizationsFolder);
-    }
     protected function setDefaultAsserts(){
         $this->assertModuleName('Organization');
         $this->assertControllerName(OrganizationController::class); // as specified in router's controller name alias
