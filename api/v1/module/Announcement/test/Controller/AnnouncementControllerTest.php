@@ -22,11 +22,6 @@ class AnnouncementControllerTest extends ControllerTest{
         return $dataset;
     }
 
-    protected function tearDown() : void {
-        $config = $this->getApplicationConfig();
-        $announcementsFolder = $config['DATA_FOLDER']."organization/1/announcements";
-        FileUtils::deleteDirectoryContents($announcementsFolder);
-    }
     protected function createDummyFile(){
         $config = $this->getApplicationConfig();
         $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/announcements/temp/";

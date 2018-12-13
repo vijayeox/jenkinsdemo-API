@@ -4,13 +4,9 @@ namespace WorkflowTest;
 use Oxzion\Workflow\WorkflowFactory;
 use Oxzion\Utils\RestClient;
 use Mockery;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use PHPUnit\Framework\TestCase;
 
-class WorkflowTest extends AbstractHttpControllerTestCase{
-    static private $pdo = null;
-    public function setUp() : void{
-        parent::setUp();
-    }
+class WorkflowTest extends TestCase{
 
     public function testDeploymentProcess(){
         $workflowFactory = WorkflowFactory::getInstance();
