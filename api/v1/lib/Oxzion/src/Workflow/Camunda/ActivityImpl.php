@@ -2,6 +2,7 @@
 namespace Oxzion\Workflow\Camunda;
 
 use Oxzion\Workflow\Activity;
+use Oxzion\Utils\RestClient;
 
 class ActivityImpl implements Activity {
 	private $restClient;
@@ -15,33 +16,75 @@ class ActivityImpl implements Activity {
 	}
 
 	public function getActivity($activityId){
-		return $this->restClient->get("task/".$activityId);
+		try {
+			$response =  $this->restClient->get("task/".$activityId);
+			$result = json_decode($response,true);
+			return $result;
+		} catch(Exception $e){
+			return array();
+		}
 	}
 
 	public function getActivitiesByUser($userId){
-		return $this->restClient->post('task', array("assignee"=>$userId));
+		try {
+			$response =  $this->restClient->post('task', array("assignee"=>$userId));
+			$result = json_decode($response,true);
+			return $result;
+		} catch(Exception $e){
+			return array();
+		}
 	}
 
-	public function claimActivity($activityId,$parameterArray){
+	public function claimActivity($activityId,$userId){
 		$query = 'task/'.$activityId.'/claim';
-		return $this->restClient->post($query, $parameterArray);
+		try {
+			$response =  $this->restClient->post($query, array('userId'=>$userId));
+			$result = json_decode($response,true);
+			return $result;
+		} catch(Exception $e){
+			return 0;
+		}
 	}
-	public function unclaimActivity($activityId){
+	public function unclaimActivity($activityId,$userId){
 		$query = 'task/'.$activityId.'/unclaim';
-		return $this->restClient->post($query);
+		try {
+			$response =  $this->restClient->post($query, array('userId'=>$userId));
+			$result = json_decode($response,true);
+			return $result;
+		} catch(Exception $e){
+			return 0;
+		}
 	}
-	public function completeActivity($activityId,$parameterArray){
+	public function completeActivity($activityId,$parameterArray=array()){
 		$query = 'task/'.$activityId.'/complete';
-		return $this->restClient->post($query,$parameterArray);
+		try {
+			$response =  $this->restClient->post($query,$parameterArray);
+			$result = json_decode($response,true);
+			return $result;
+		} catch(Exception $e){
+			return 0;
+		}
 	}
 	
-	public function resolveActivity($id,$parameterArray){
+	public function resolveActivity($id,$parameterArray=array()){
 		$query = 'task/'.$id.'/resolve';
-		return $this->restClient->post($query,$parameterArray);
+		try {
+			$response =  $this->restClient->post($query,$parameterArray);
+			$result = json_decode($response,true);
+			return $result;
+		} catch(Exception $e){
+			return 0;
+		}
 	}
 
 	public function getActivitiesByGroup($groupId){
-		return $this->restClient->post('task', array("candidateGroup"=>$groupId));
+		try {
+			$response =  $this->restClient->post('task', array("candidateGroup"=>$groupId));
+			$result = json_decode($response,true);
+			return $result;
+		} catch(Exception $e){
+			return array();
+		}
 	}
 
 	public function saveActivityData($activityId,$parameterArray){

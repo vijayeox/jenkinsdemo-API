@@ -7,9 +7,9 @@ interface Activity{
 
 	public function getActivitiesByUser($userId);
 
-	public function claimActivity($activityId,$parameterArray);
+	public function claimActivity($activityId,$userId);
 
-	public function unclaimActivity($activityId);
+	public function unclaimActivity($activityId,$userId);
 
 	public function completeActivity($activityId,$parameterArray);
 

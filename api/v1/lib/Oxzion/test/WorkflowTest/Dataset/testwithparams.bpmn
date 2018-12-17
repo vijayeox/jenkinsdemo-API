@@ -9,12 +9,8 @@
       <bpmn:incoming>SequenceFlow_0d3bw0c</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:task id="Task_17rgw1i" name="Call goku">
-      <bpmn:incoming>SequenceFlow_1pk5hac</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0l7n86f</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1n6ezq0</bpmn:outgoing>
-    </bpmn:task>
-    <bpmn:task id="Task_1x5o4fq" name="Check Priority">
-      <bpmn:incoming>SequenceFlow_16uiunl</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1pk5hac</bpmn:outgoing>
     </bpmn:task>
     <bpmn:startEvent id="StartEvent_1" name="Task Created">
       <bpmn:outgoing>SequenceFlow_16uiunl</bpmn:outgoing>
@@ -22,7 +18,16 @@
     <bpmn:sequenceFlow id="SequenceFlow_16uiunl" sourceRef="StartEvent_1" targetRef="Task_1x5o4fq" />
     <bpmn:sequenceFlow id="SequenceFlow_1n6ezq0" sourceRef="Task_17rgw1i" targetRef="Task_1e6t68o" />
     <bpmn:sequenceFlow id="SequenceFlow_0d3bw0c" sourceRef="Task_1e6t68o" targetRef="EndEvent_0yv0na3" />
-    <bpmn:sequenceFlow id="SequenceFlow_1pk5hac" sourceRef="Task_1x5o4fq" targetRef="Task_17rgw1i" />
+    <bpmn:sequenceFlow id="SequenceFlow_1pk5hac" sourceRef="Task_1x5o4fq" targetRef="IntermediateThrowEvent_0b81sms" />
+    <bpmn:userTask id="Task_1x5o4fq" name="Check Priority" camunda:assignee="2">
+      <bpmn:incoming>SequenceFlow_16uiunl</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1pk5hac</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:intermediateThrowEvent id="IntermediateThrowEvent_0b81sms">
+      <bpmn:incoming>SequenceFlow_1pk5hac</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0l7n86f</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0l7n86f" sourceRef="IntermediateThrowEvent_0b81sms" targetRef="Task_17rgw1i" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
@@ -44,9 +49,6 @@
           <dc:Bounds x="272" y="431" width="64" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Task_1x5o4fq_di" bpmnElement="Task_1x5o4fq">
-        <dc:Bounds x="480" y="366" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_17rgw1i_di" bpmnElement="Task_17rgw1i">
         <dc:Bounds x="970" y="366" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -61,6 +63,16 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1pk5hac_di" bpmnElement="SequenceFlow_1pk5hac">
         <di:waypoint x="580" y="406" />
+        <di:waypoint x="743" y="406" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_0trvapc_di" bpmnElement="Task_1x5o4fq">
+        <dc:Bounds x="480" y="366" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="IntermediateThrowEvent_0b81sms_di" bpmnElement="IntermediateThrowEvent_0b81sms">
+        <dc:Bounds x="743" y="388" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0l7n86f_di" bpmnElement="SequenceFlow_0l7n86f">
+        <di:waypoint x="779" y="406" />
         <di:waypoint x="970" y="406" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

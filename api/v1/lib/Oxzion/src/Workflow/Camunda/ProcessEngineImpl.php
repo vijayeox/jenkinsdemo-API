@@ -44,7 +44,7 @@ class ProcessEngineImpl implements ProcessEngine {
 	}
 
 	public function stopProcess($id){
-		$query = 'process-definition/'.$id;
+		$query = 'process-definition/'.$id."?cascade=true";
 		return $this->restClient->delete($query)?0:1;
 	}
 

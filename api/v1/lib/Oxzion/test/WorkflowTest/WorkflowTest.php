@@ -34,8 +34,123 @@ class WorkflowTest extends TestCase{
         $processDef = $processEngine->getProcessDefinition($definitionId,1);
         $this->assertEquals($processDef['key'],'Process_1');
         if(enableCamunda==0){
-            $mockRestClient->expects('delete')->with('process-definition/12321')->once()->andReturn(0);
+            $mockRestClient->expects('delete')->with('process-definition/12321?cascade=true')->once()->andReturn(0);
             $processEngine->setRestClient($mockRestClient);
+        }
+        $processDel = $processEngine->stopProcess($definitionId);
+        $this->assertEquals($processDel, 1);
+        if(enableCamunda==0){
+            $mockRestClient->expects('get')->with('deployment/'.$deploymentId)->once()->andReturn(json_encode(array('id'=>$deploymentId)));
+            $processManager->setRestClient($mockRestClient);
+        }
+        $getResponse = $processManager->get($deploymentId);
+        $this->assertEquals($getResponse['id'], $deploymentId);
+        if(enableCamunda==0){
+            $mockRestClient->expects('delete')->with('deployment/'.$deploymentId)->once()->andReturn(0);
+            $processManager->setRestClient($mockRestClient);
+        }
+        $delete = $processManager->remove($deploymentId);
+        $this->assertEquals($delete, 1);
+    }
+
+    public function testAssigneeProcess(){
+        $workflowFactory = WorkflowFactory::getInstance();
+        $processManager = $workflowFactory->getProcessManager();
+        $processEngine = $workflowFactory->getProcessEngine();
+        $activityManager = $workflowFactory->getActivity();
+        if(enableCamunda==0){
+            $mockRestClient = Mockery::mock('RestClient');
+            $mockRestClient->expects('postMultiPart')->with("deployment/create",array("deployment-name"=>'TestProcess1',"tenant-id"=>1),array(__DIR__."/Dataset/testwithparams.bpmn"))->once()->andReturn(json_encode(array('id'=>1,'name'=>"TestProcess1","tenantId"=>1)));
+            $processManager->setRestClient($mockRestClient);
+        }
+        $data = $processManager->deploy(1,'TestProcess1',array(__DIR__."/Dataset/testwithparams.bpmn"));
+        $this->assertNotEquals(0, $data);
+        $deploymentId = $data['id'];
+        if(enableCamunda==0){
+            $mockRestClient->expects('post')->with('process-definition/key/Process_1/tenant-id/1/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
+            $processEngine->setRestClient($mockRestClient);
+        }
+        $processStart = $processEngine->startProcess('Process_1',1);
+        $definitionId = $processStart['definitionId'];
+        $this->assertNotEquals(0, $definitionId);
+        if(enableCamunda==0){
+            $mockRestClient->expects('post')->withArgs(array('task', array("assignee"=>2)))->once()->andReturn(json_encode(array('id'=>123321)));
+            $activityManager->setRestClient($mockRestClient);
+        }
+        $activityList = $activityManager->getActivitiesByUser(2);
+        $this->assertNotEquals(0, count($activityList));
+        if(enableCamunda==0){
+            $mockRestClient->expects('delete')->with('deployment/'.$deploymentId)->once()->andReturn(0);
+            $processManager->setRestClient($mockRestClient);
+        }
+        $delete = $processManager->remove($deploymentId);
+        $this->assertEquals($delete, 1);
+    }
+    public function testAssignGroupProcess(){
+        $workflowFactory = WorkflowFactory::getInstance();
+        $processManager = $workflowFactory->getProcessManager();
+        $processEngine = $workflowFactory->getProcessEngine();
+        $activityManager = $workflowFactory->getActivity();
+        if(enableCamunda==0){
+            $mockRestClient = Mockery::mock('RestClient');
+            $mockRestClient->expects('postMultiPart')->with("deployment/create",array("deployment-name"=>'TestProcess1',"tenant-id"=>1),array(__DIR__."/Dataset/testAssigntoGroup.bpmn"))->once()->andReturn(json_encode(array('id'=>1,'name'=>"TestProcess1","tenantId"=>1)));
+            $processManager->setRestClient($mockRestClient);
+        }
+        $data = $processManager->deploy(1,'TestProcess1',array(__DIR__."/Dataset/testAssigntoGroup.bpmn"));
+        $this->assertNotEquals(0, $data);
+        $deploymentId = $data['id'];
+        if(enableCamunda==0){
+            $mockRestClient->expects('post')->with('process-definition/key/Process_2/tenant-id/1/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
+            $processEngine->setRestClient($mockRestClient);
+        }
+        $processStart = $processEngine->startProcess('Process_2',1);
+        $definitionId = $processStart['definitionId'];
+        $processId = $processStart['id'];
+        // print_r($processStart);exit;
+        $this->assertNotEquals(0, $definitionId);
+        if(enableCamunda==0){
+            $mockRestClient->expects('post')->with('task',array('candidateGroup'=>1))->once()->andReturn(json_encode(array(array('id'=>12321))));
+            $activityManager->setRestClient($mockRestClient);
+        }
+        $activityList = $activityManager->getActivitiesByGroup(1);
+        $this->assertNotEquals(0, count($activityList));
+        $activityId = end($activityList)['id'];
+        if(enableCamunda==0){
+            $mockRestClient->expects('post')->withArgs(array('task/12321/claim', array('userId'=>1)))->once()->andReturn(json_encode(array('id'=>12321)));
+            $activityManager->setRestClient($mockRestClient);
+        }
+        $claimActivityResponse = $activityManager->claimActivity($activityId,1);
+        if(enableCamunda==0){
+            $mockRestClient->expects('get')->with('task/12321')->once()->andReturn(json_encode(array('assignee'=>1)));
+            $activityManager->setRestClient($mockRestClient);
+        }
+        $activityInfo = $activityManager->getActivity($activityId);
+        $this->assertEquals(1, $activityInfo['assignee']);
+        if(enableCamunda==0){
+            $mockRestClient->expects('post')->withArgs(array('task/12321/resolve',array()))->once()->andReturn(json_encode(array()));
+            $activityManager->setRestClient($mockRestClient);
+        }
+        $activityManager->resolveActivity($activityId);
+        if(enableCamunda==0){
+            $mockRestClient->expects('get')->with('task/12321')->once()->andReturn(json_encode(array('delegationState'=>'RESOLVED')));
+            $activityManager->setRestClient($mockRestClient);
+        }
+        $resolveActivityInfo = $activityManager->getActivity($activityId);
+        $this->assertEquals($resolveActivityInfo['delegationState'],'RESOLVED');
+        if(enableCamunda==0){
+            $mockRestClient->expects('post')->withArgs(array('task/12321/unclaim', array('userId'=>1)))->once()->andReturn(json_encode(array('id'=>12321)));
+            $activityManager->setRestClient($mockRestClient);
+        }
+        $unclaimActivityResponse = $activityManager->unclaimActivity($activityId,1);
+        if(enableCamunda==0){
+            $mockRestClient->expects('get')->with('task/12321')->once()->andReturn(json_encode(array('assignee'=>NULL)));
+            $activityManager->setRestClient($mockRestClient);
+        }
+        $activityInfo = $activityManager->getActivity($activityId);
+        $this->assertNotEquals(1, $activityInfo['assignee']);
+        if(enableCamunda==0){
+            $mockRestClient->expects('delete')->with('process-definition/12321?cascade=true')->once()->andReturn(0);
+            $activityManager->setRestClient($mockRestClient);
         }
         $processDel = $processEngine->stopProcess($definitionId);
         $this->assertEquals($processDel, 1);
