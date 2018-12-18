@@ -1,5 +1,4 @@
 <?php
-
 namespace Group\Model;
 
 use Oxzion\Db\ModelTable;
@@ -17,7 +16,4 @@ class GroupTable extends ModelTable {
         $data = $data->toArray();
     	return $this->internalSave($data);
     }
-    
-    
-    
 }

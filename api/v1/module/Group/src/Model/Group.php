@@ -1,12 +1,10 @@
 <?php
-
 namespace Group\Model;
 
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
 class Group extends Entity {
-
     protected $data = array(
         'id' => 0,
         'name'=> 0,
@@ -24,10 +22,8 @@ class Group extends Entity {
         'modified_id' => 0
     );
 
-
     public function validate() {
         $dataArray = Array("name", "parent_id", "manager_id", "type", "status", "date_modified");
         $this->validateWithParams($dataArray);
     }
-        
 }
