@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+
+<?php
+$_ENV['ENV'] = 'appinstall';
+require __DIR__ .'/lib/Oxzion/src/Db/Migration/Migration.php';
+use Oxzion\Db\Migration\Migration;
+
+
+$data = Array (
+	"appName" => 'Task',
+	'UUID' => 342342,
+	'version' => '3.0.1.0'
+);
+
+$migrate = new Migration();
+$migrate->createDB($data);
