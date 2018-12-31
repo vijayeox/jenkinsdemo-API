@@ -5,6 +5,7 @@ use Zend\Log\Logger;
 use Oxzion\Model\User;
 use Oxzion\Model\UserTable;
 use Oxzion\Service\UserService;
+use Oxzion\Service\GroupController;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationResult;
 use Oxzion\ValidationException;
@@ -213,7 +214,57 @@ class UserController extends AbstractApiController {
 
     }
 
+    public function addusertogroupAction() {
+        $params = $this->params()->fromRoute();
+        $id =$params['userId'];
+        $groupId =$params['groupId'];
+        try {
+            $response = $this->userService->addusertogroup($params['userId'],$params['groupId']);
+             if($response == 0) {
+                return $this->getErrorResponse("Entity not found for id -$id", 404);
+            }
+            elseif($response == 2) {
+                return $this->getErrorResponse("Entity not found for groupId -$groupId", 404);
+            }
+            elseif($response == 3) {
+                return $this->getErrorResponse("Entity exists and therefore unable to add", 404);
+            }
+            return $this->getSuccessResponse();
+        } catch(ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",406, $response);
+        }
+    }
 
+    public function addusertoprojectAction() {
+        $params = $this->params()->fromRoute();
+        try {
+            $response = $this->userService->addusertoproject($params['userId'],$params['projectId']);
+             if($response == 0) {
+                return $this->getErrorResponse("Entity not found for id", 404);
+            }
+            return $this->getSuccessResponse();
+        } catch(ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",406, $response);
+        }
+    }
+
+    public function removeUserFromProjectAction() {
+        $params = $this->params()->fromRoute();
+        $id =$params['userId'];
+        $projectId =$params['projectId'];
+        try {
+            $response = $this->userService->removeUserFromProject($id,$projectId);
+             if($response == 0) {
+                return $this->getErrorResponse("Entity not found for id - $id and projectid - $projectId", 404);
+            }
+            return $this->getSuccessResponse();
+        } catch(ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",406, $response);
+        }
+    }
 
 
 

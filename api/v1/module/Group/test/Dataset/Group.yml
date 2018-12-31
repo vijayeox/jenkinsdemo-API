@@ -21,3 +21,12 @@ ox_group:
         cover_photo: 'grp2.png'
         type: 1
         status: 'Active'
+ox_user_group:
+  -      
+    id: 1
+    group_id: 1
+    avatar_id: 1
+  -
+    id: 2
+    group_id: 1
+    avatar_id: 2

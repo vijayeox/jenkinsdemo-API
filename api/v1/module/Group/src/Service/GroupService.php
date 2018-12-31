@@ -20,7 +20,7 @@ class GroupService extends AbstractService {
     }
 
     public function getGroupsforUser($userId) {
-    $queryString = "Select usr_grp.id, usr_grp.avatar_id, usr_grp.group_id, grp.name, grp.manager_id, grp.parent_id from ox_user_group as usr_grp 
+    $queryString = "select usr_grp.id, usr_grp.avatar_id, usr_grp.group_id, grp.name, grp.manager_id, grp.parent_id from ox_user_group as usr_grp 
         left join ox_group as grp on usr_grp.group_id = grp.id";
     $where = "where avatar_id = " . $userId;
     $order = "order by grp.name";
@@ -94,5 +94,64 @@ class GroupService extends AbstractService {
             $this->rollback();
         }
         return $count;
+    }
+
+    public function getuserlist($id) {
+        $queryString = "select id from ox_group";
+        $order = "order by ox_group.id";
+        $resultSet_temp = $this->executeQuerywithParams($queryString, null, null, $order)->toArray();
+        $resultSet=array_map('current', $resultSet_temp);
+        if(in_array($id, $resultSet)) {
+            $query = "select avatar_id from ox_user_group";
+            $where = "where group_id =".$id;
+            $order = "order by ox_user_group.group_id";
+            $resultSet_User = $this->executeQuerywithParams($query, $where, null, $order)->toArray();
+            return $resultSet_User;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public function saveUser($id,$data) {
+        $avatar_id = array();
+        $userArray=json_decode($data['userid'],true);
+
+        $query = "select id from avatars";
+        $order = "order by avatars.id";
+        $resultSet_User_temp = $this->executeQuerywithParams($query, null, null, $order)->toArray();
+        $resultSet_User=array_map('current', $resultSet_User_temp);
+
+        if($userArray){
+            $storeData = array();
+            $queryString = "select avatar_id from ox_user_group";
+            $id_group_array = $this->executeQuerywithParams($queryString)->toArray();
+            if($id_group_array) {
+                $userSingleArray = array_map('current', $userArray);
+                $avatar_id = array_column($id_group_array, 'avatar_id');
+                if((count(array_diff($userSingleArray, $avatar_id))!=0)&&(count(array_intersect($userSingleArray, $resultSet_User))==count($userSingleArray))) {
+                    $sql = $this->getSqlObject();
+                    $delete = $sql->delete('ox_user_group');
+                    $result = $this->executeUpdate($delete);
+                    foreach ($userArray as $key => $value) {
+                        $storeData[] = array('group_id'=>$id,'avatar_id'=>$value['id']);
+                    }
+                    $queryString =$this->multiInsertOrUpdate('ox_user_group',$storeData,array());
+                }
+                else {
+                    return -1;
+                }
+            }
+            else {
+                foreach ($userArray as $key => $value) {
+                    $storeData[] = array('group_id'=>$id,'avatar_id'=>$value['id']);
+                }
+                $queryString =$this->multiInsertOrUpdate('ox_user_group',$storeData,array());
+            }
+        }
+        else{
+            return 0;
+        }
+        return 1;
     }
 }

@@ -57,6 +57,66 @@ return [
                     ],
                 ],
             ],
+            'addUserToAGroup' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/user/:userId/addusertogroup/:groupId',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'addusertogroup',
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'addusertogroup' => 'MANAGE_USER_WRITE',
+                        ],
+                    ],
+                ],
+            ],
+            'removeUserFromGroup' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/user/:userId/removeuserfromgroup',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'DELETE',
+                        'action' => 'removeUserFromGroup',
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'removeUserFromGroup' => 'MANAGE_USER_WRITE',
+                        ],
+                    ],
+                ],
+            ],
+            'addUserToProject' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/user/:userId/addusertoproject/:projectId',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'addUserToProject',
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'addUserToProject' => 'MANAGE_USER_WRITE',
+                        ],
+                    ],
+                ],
+            ],
+            'removeUserFromProject' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/user/:userId/removeuserfromproject/:projectId',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'DELETE',
+                        'action' => 'removeUserFromProject',
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'removeUserFromProject' => 'MANAGE_USER_WRITE',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

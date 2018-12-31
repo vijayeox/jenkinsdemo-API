@@ -177,4 +177,40 @@ class UserControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
+
+    public function testaddusertogroup() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/3/addusertogroup/1', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('addUserToAGroup');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testAddUserToGroupWithExistingGroup() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/1/addusertogroup/1', 'POST');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts('addUserToAGroup');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testaddusertoproject() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/3/addusertoproject/1', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('addUserToProject');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testAddUserToProjectWithExistingProject() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/3/addusertoproject/1', 'POST');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts('addUserToProject');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 }

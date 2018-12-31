@@ -60,13 +60,14 @@ class UserService extends AbstractService{
 		return $results;
 	}	
 	
-	private function getGroupsFromDb($userName){
+	public function getGroupsFromDb($id){
 		$sql = $this->getSqlObject();
 		$select = $sql->select()
-		->from('groups_avatars')
-        ->columns(array())
-        ->join('groups', 'groups.id = groups_avatars.groupid')
-        ->where(array('groups_avatars.avatarid' => $this->id));
+		->from('ox_group')
+        ->columns(array('id','name'))
+        ->join('ox_user_group', 'ox_user_group.group_id = ox_group.id', array())
+        ->where(array('ox_user_group.avatar_id' => $id));
+        //echo "<pre>";print_r($this->executeQuery($select)->toArray());exit();
 		return $this->executeQuery($select)->toArray();
 	}
 	public function getGroups($userName){
@@ -299,8 +300,14 @@ class UserService extends AbstractService{
         ->columns(array("*"))
         ->where(array('avatars.orgid' => AuthContext::get(AuthConstants::ORG_ID),'avatars.id' => $id));
         $response = $this->executeQuery($select)->toArray();
-        if(isset($response[0])){
-            return $response[0];
+        if(!$response) {
+            return 0;
+        }
+        $result = $response[0];
+        $groups = $this->getGroupsFromDb($id);
+        $result['group'] = $groups;
+        if(isset($result)){
+            return $result;
         } else {
             return 0;
         }
@@ -347,6 +354,96 @@ class UserService extends AbstractService{
             return $result;
         }
         return 1;
+    }
+
+    public function addusertogroup($userid,$groupid) {
+        $sql = $this->getSqlObject();
+        $queryString = "select id from avatars";
+        $where = "where id =".$userid;
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
+        if($resultSet) {
+            $query = "select id from groups";
+            $where = "where id =".$groupid;
+            $result = $this->executeQuerywithParams($query, $where, null, null);
+            if($result) {
+                $query = "select id from ox_user_group";
+                $where = "where avatar_id =".$userid;
+                $notexist_result = $this->executeQuerywithParams($query, $where, null, null)->toArray();
+                if(!$notexist_result){
+                    $data = array(array('avatar_id' => $userid, 'group_id' => $groupid));
+                    $result_update = $this->multiInsertOrUpdate('ox_user_group',$data,array());
+                    if($result_update->getAffectedRows() == 0) {
+                        return $result_update;
+                    }
+                    return 1;
+                }
+                else {
+                    return 3;
+                }
+            }
+            else {
+                return 2;
+            }
+        }
+        return 0;
+    }   
+
+    public function addusertoproject($userid,$projectid) {
+        $sql = $this->getSqlObject();
+        $queryString = "select id from avatars";
+        $where = "where id =".$userid;
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
+        if($resultSet) {
+            $query = "select id from ox_project";
+            $where = "where id=".$projectid;
+            $result = $this->executeQuerywithParams($query, $where, null, null);
+            if($result) {
+                $query = "select * from ox_user_project";
+                $where = "where user_id =".$userid." and project_id =".$projectid;
+                $endresult = $this->executeQuerywithParams($query, $where, null, null)->toArray();
+                    if(!$endresult) {
+                        $data = array(array('user_id' => $userid, 'project_id' => $projectid));
+                        $result_update = $this->multiInsertOrUpdate('ox_user_project',$data,array());
+                        if($result_update->getAffectedRows() == 0) {
+                            return $result_update;
+                        }
+                        return 1;
+                    }
+                }
+            }
+        return 0;
+    } 
+
+    public function removeUserFromGroup($userid) {
+        $sql = $this->getSqlObject();
+        $queryString = "select avatar_id from ox_user_group";
+        $where = "where avatar_id =".$userid;
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, null)->toArray();
+        if(!empty($resultSet)) {
+            $delete = $sql->delete('ox_user_group');
+            $delete->where(['avatar_id' => $userid]);
+            $result = $this->executeUpdate($delete);
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public function removeUserFromProject($userid,$projectid) {
+        $sql = $this->getSqlObject();
+        $queryString = "select user_id from ox_user_project";
+        $where = "where user_id =".$userid." and project_id =".$projectid;
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, null)->toArray();
+        if(!empty($resultSet)) {
+            $delete = $sql->delete('ox_user_project');
+            $delete->where(['user_id' => $userid,'project_id' =>$projectid]);
+            $result = $this->executeUpdate($delete);
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 }
 ?>

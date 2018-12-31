@@ -103,4 +103,59 @@ class GroupController extends AbstractApiController {
         }
         return $this->getSuccessResponse();
     }
+    
+     /**
+    * Save users in a Group API
+    * @api
+    * @link /group/:groupid/save
+    * @method Post
+    * @param json object of userid
+    * @return array $dataget list of groups by User
+    * <code>status : "success|error",
+    *       data : all user id's passed back in json format
+    * </code>
+    */
+    public function saveUserAction() {
+        $params = $this->params()->fromRoute();
+        $id=$params[$this->getIdentifierName()];
+        $data = $this->params()->fromPost();
+        try {
+            $count = $this->groupService->saveUser($params[$this->getIdentifierName()],$data);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if($count == 0) {
+            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        }
+        elseif ($count == -1) {
+        	return $this->getErrorResponse("Users exist", 404);
+        }
+        return $this->getSuccessResponseWithData($data,200);
+    }
+
+    /**
+    * GET all users in a particular Group API
+    * @api
+    * @link /group/:groupid/getusers
+    * @method GET
+    * @return array $dataget list of groups by User
+    * <code>status : "success|error",
+    *       data : all user id's in the group passed back in json format
+    * </code>
+    */
+    public function getuserlistAction() {
+    	$params = $this->params()->fromRoute();
+        $id=$params[$this->getIdentifierName()];
+        try {
+            $count = $this->groupService->getuserlist($params[$this->getIdentifierName()]);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if($count == 0) {
+            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        }
+        return $this->getSuccessResponseWithData($count,200);
+    }
 }

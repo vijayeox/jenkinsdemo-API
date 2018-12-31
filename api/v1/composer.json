@@ -61,8 +61,9 @@
             "Screen\\": "module/Screen/src/",
             "Attachment\\":"module/Attachment/src/",
             "Bookmark\\":"module/Bookmark/src/",
+            "Project\\":"module/Project/src/",
             "App\\":"module/App/src/",
-			"Mlet\\":"module/Mlet/src"
+			"Mlet\\":"module/Mlet/src/"
         }
     },
     "autoload-dev": {
@@ -75,13 +76,12 @@
             "UserTest\\": "module/User/test/",
             "GroupTest\\": "module/Group/test/",
             "OrganizationTest\\": "module/Organization/test/",
-            "AuthTest\\" : "module/Auth/test",
-            "BookmarkTest\\" : "module/Bookmark/test",
-            "AppTest\\" : "module/App/test",
-            "Migration\\" : "lib/Oxzion/test/Migration",
-            "WorkflowTest\\" : "lib/Oxzion/test/WorkflowTest"
-
-        }
+            "AuthTest\\" : "module/Auth/test/",
+            "BookmarkTest\\" : "module/Bookmark/test/",
+            "ProjectTest\\":"module/Project/test/",
+            "AppTest\\" : "module/App/test/",
+            "MigrationTest\\" : "lib/Oxzion/Test/Migration/"
+			"WorkflowTest\\" : "lib/Oxzion/test/WorkflowTest"        }
     },
     "extra": [],
     "scripts": {

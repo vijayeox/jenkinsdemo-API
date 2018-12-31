@@ -162,4 +162,49 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'error');
     }
 
+    public function testsaveuser() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/group/1/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+    }
+
+    public function testsaveuserwithoutuser() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/group/1/save','POST'); 
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error'); 
+    }
+
+    public function testsaveusernotfound() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/group/1/save','POST',array('userid' => '[{"id":1},{"id":23}]')); 
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testgetuserlist() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/group/1/getusers','GET'); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+    }
+
+    public function testgetuserlistNotFound() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/group/64/getusers','GET'); 
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error'); 
+    }
+
 }

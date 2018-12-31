@@ -15,7 +15,7 @@
             <directory>./module/Organization/test</directory>
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
-            <directory>./module/Group/test</directory>
+            <directory>./module/Project/test</directory>
             <directory>./lib/Oxzion/test</directory>
             <directory>./lib/Oxzion/test/WorkflowTest</directory>
         </testsuite>

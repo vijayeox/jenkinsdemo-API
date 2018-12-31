@@ -41,6 +41,34 @@ return [
                    ],
                ],
            ],
+           'getusers' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/group/:groupId/getusers',
+                    'defaults' => [
+                        'controller' => Controller\GroupController::class,
+                        'method' => 'GET',
+                        'action' => 'getuserlist',
+                        'access' => [
+                            'getuserlist'=>'MANAGE_GROUP_WRITE'
+                       ],
+                   ],
+               ],
+           ],
+           'saveusers' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/group/:groupId/save',
+                    'defaults' => [
+                        'controller' => Controller\GroupController::class,
+                        'method' => 'POST',
+                        'action' => 'saveUser',
+                        'access' => [
+                            'saveUser'=>'MANAGE_GROUP_WRITE'
+                       ],
+                   ],
+               ],
+           ],
        ],
    ],
    'log' => [
