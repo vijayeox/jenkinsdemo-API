@@ -1,7 +1,8 @@
 <?php
 namespace Oxzion\Model;
 
-use Oxzion\Db\ModelTable;
+use Bos\Db\ModelTable;
+use Bos\Model\Entity;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
 class UserTable extends ModelTable {

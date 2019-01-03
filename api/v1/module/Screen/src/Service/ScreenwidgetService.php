@@ -1,11 +1,11 @@
 <?php
 namespace Screen\Service;
 
-use Oxzion\Service\AbstractService;
+use Bos\Service\AbstractService;
 use Screen\Model\ScreenwidgetTable;
 use Screen\Model\Screenwidget;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
+use Bos\Auth\AuthContext;
+use Bos\Auth\AuthConstants;
 use Oxzion\ValidationException;
 
 class ScreenwidgetService extends AbstractService{

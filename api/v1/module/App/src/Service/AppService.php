@@ -1,14 +1,14 @@
 <?php
 namespace App\Service;
 
-use Oxzion\Service\AbstractService;
+use Bos\Service\AbstractService;
 use App\Model\AppTable;
 use App\Model\App;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
-use Oxzion\ValidationException;
+use Bos\Auth\AuthContext;
+use Bos\Auth\AuthConstants;
+use Bos\ValidationException;
 use Zend\Db\ResultSet\ResultSet;
-use Oxzion\Service\UserService;
+use Bos\Service\UserService;
 use Exception;
 
 class AppService extends AbstractService{
@@ -76,7 +76,6 @@ class AppService extends AbstractService{
             $appData['app_id'] = $id;
             $appData['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
             // $this->createAppRegistry($appData); //Create App Registry
-
 //Adding more data to the array to pass it to the role_privilege table
             $appData['role_id'] = 1;
             $appData['privilege_name'] = "MANAGE_APP";

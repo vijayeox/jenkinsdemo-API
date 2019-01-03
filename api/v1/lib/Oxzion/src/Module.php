@@ -26,18 +26,18 @@ class Module {
                     $config = $container->get('config');
                     return new Service\ElasticService($config);
                 },
-                Service\FileService::class => function($container){
+                \Bos\Service\FileService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\FileService($container->get('config'), $dbAdapter, $container->get(Model\FileTable::class));
+                    return new \Bos\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Bos\Model\FileTable::class));
                 },
-                Model\FileTable::class => function($container) {
-                    $tableGateway = $container->get(Model\FileTableGateway::class);
-                    return new Model\FileTable($tableGateway);
+                \Bos\Model\FileTable::class => function($container) {
+                    $tableGateway = $container->get(\Bos\Model\FileTableGateway::class);
+                    return new \Bos\Model\FileTable($tableGateway);
                 },
-                Model\FileTableGateway::class => function ($container) {
+                \Bos\Model\FileTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\File());
+                    $resultSetPrototype->setArrayObjectPrototype(new \Bos\Model\File());
                     return new TableGateway('ox_file', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\FormService::class => function($container){

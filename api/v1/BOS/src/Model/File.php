@@ -1,6 +1,6 @@
 <?php
 
-namespace Oxzion\Model;
+namespace Bos\Model;
 
 class File extends Entity {
 

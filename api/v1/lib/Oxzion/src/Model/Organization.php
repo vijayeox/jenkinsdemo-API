@@ -1,6 +1,7 @@
 <?php
 namespace Oxzion\Model;
 
+use Bos\Model\Entity;
 class Organization extends Entity{
 
     protected $data = array(

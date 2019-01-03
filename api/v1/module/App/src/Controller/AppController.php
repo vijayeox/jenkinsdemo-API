@@ -8,7 +8,7 @@ use App\Model\App;
 use App\Service\AppService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 
 class AppController extends AbstractApiController {
     /**

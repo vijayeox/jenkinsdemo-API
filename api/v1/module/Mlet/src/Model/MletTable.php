@@ -1,9 +1,9 @@
 <?php
 namespace Mlet\Model;
 
-use Oxzion\Db\ModelTable;
+use Bos\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;
-use Oxzion\Model\Entity;
+use Bos\Model\Entity;
 
 class MletTable extends ModelTable {
 	public function __construct(TableGatewayInterface $tableGateway) {

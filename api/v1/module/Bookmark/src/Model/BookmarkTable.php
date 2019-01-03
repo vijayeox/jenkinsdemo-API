@@ -2,9 +2,9 @@
 
 namespace Bookmark\Model;
 
-use Oxzion\Db\ModelTable;
+use Bos\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;
-use Oxzion\Model\Entity;
+use Bos\Model\Entity;
 
 class BookmarkTable extends ModelTable {
 

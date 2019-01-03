@@ -11,7 +11,7 @@ use Announcement\Model\Announcement;
 use Announcement\Service\AnnouncementService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 use Zend\InputFilter\Input;
 /**
  * Announcement Controller

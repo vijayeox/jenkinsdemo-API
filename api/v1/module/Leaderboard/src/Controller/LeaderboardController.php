@@ -8,7 +8,7 @@ use Leaderboard\Model\Leaderboard;
 use Leaderboard\Service\LeaderboardService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 
 class LeaderboardController extends AbstractApiController {
 

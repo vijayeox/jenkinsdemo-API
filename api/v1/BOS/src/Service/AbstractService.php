@@ -1,5 +1,5 @@
 <?php
-namespace Oxzion\Service;
+namespace Bos\Service;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Sql;
 use Zend\Db\ResultSet\ResultSet;

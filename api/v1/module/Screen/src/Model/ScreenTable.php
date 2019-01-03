@@ -1,9 +1,9 @@
 <?php
 namespace Screen\Model;
 
-use Oxzion\Db\ModelTable;
+use Bos\Db\ModelTable;
+use Bos\Model\Entity;
 use Zend\Db\TableGateway\TableGatewayInterface;
-use Oxzion\Model\Entity;
 
 class ScreenTable extends ModelTable {
 	public function __construct(TableGatewayInterface $tableGateway) {

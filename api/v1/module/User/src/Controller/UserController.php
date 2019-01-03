@@ -8,7 +8,7 @@ use Oxzion\Service\UserService;
 use Oxzion\Service\GroupController;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationResult;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 use Zend\View\Model\JsonModel;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
@@ -250,7 +250,7 @@ class UserController extends AbstractApiController {
         }
     }
 
-    public function removeUserFromProjectAction() {
+    public function removeuserfromprojectAction() {
         $params = $this->params()->fromRoute();
         $id =$params['userId'];
         $projectId =$params['projectId'];
@@ -265,7 +265,4 @@ class UserController extends AbstractApiController {
             return $this->getErrorResponse("Validation Errors",406, $response);
         }
     }
-
-
-
 }

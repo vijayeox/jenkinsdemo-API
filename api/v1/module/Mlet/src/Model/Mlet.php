@@ -1,6 +1,6 @@
 <?php
 namespace Mlet\Model;
-use Oxzion\Model\Entity;
+use Bos\Model\Entity;
 
 class Mlet extends Entity{
 

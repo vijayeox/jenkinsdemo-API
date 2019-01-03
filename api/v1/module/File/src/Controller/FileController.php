@@ -5,12 +5,12 @@
 namespace File\Controller;
 
 use Zend\Log\Logger;
-use Oxzion\Model\FileTable;
-use Oxzion\Model\File;
-use Oxzion\Service\FileService;
+use Bos\Model\FileTable;
+use Bos\Model\File;
+use Bos\Service\FileService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 use Zend\InputFilter\Input;
 /**
  * File Controller

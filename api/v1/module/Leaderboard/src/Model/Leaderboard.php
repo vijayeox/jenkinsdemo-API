@@ -3,7 +3,7 @@
 namespace Leaderboard\Model;
 
 use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 
 class Leaderboard extends Entity {
 

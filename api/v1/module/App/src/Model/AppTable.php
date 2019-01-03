@@ -2,9 +2,9 @@
 
 namespace App\Model;
 
-use Oxzion\Db\ModelTable;
+use Bos\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;
-use Oxzion\Model\Entity;
+use Bos\Model\Entity;
 
 class AppTable extends ModelTable {
 

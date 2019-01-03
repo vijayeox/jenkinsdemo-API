@@ -18,6 +18,7 @@ class UserControllerTest extends ControllerTest{
 
     public function getDataSet() {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/User.yml");
+        $dataset->addYamlFile(dirname(__FILE__)."/../Dataset/Project.yml");
         return $dataset;
     }
 
@@ -31,10 +32,11 @@ class UserControllerTest extends ControllerTest{
     
     public function testCreate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'John Holt','status'=>'1','dob'=>date('Y-m-d H:i:s', strtotime("-50 year")),'doj'=>date('Y-m-d H:i:s'),'icon'=>'test-oxzionlogo.png', 'managerid' =>'471', 'firstname' =>'John', 'lastname' => 'Holt', 'username' => 'johnh', 'password' => 'welcome2oxzion', 'designation' => 'CEO', 'level' => '7', 'cluster' => 'Management', 'location' => 'USA','gamelevel'=>'Wanna be','email'=>'harshva.com','sex'=>'M','listtoggle'=>1,'mission_link'=>'test'];
+        $data = ['name' => 'John Holt','status'=>'1','dob'=>date('Y-m-d H:i:s', strtotime("-50 year")),'doj'=>date('Y-m-d H:i:s'),'icon'=>'test-oxzionlogo.png', 'managerid' =>'471', 'firstname' =>'John', 'lastname' => 'Holt', 'username' => 'johnh', 'password' => 'welcome2oxzion', 'designation' => 'CEO', 'level' => '7', 'cluster' => 'Management', 'location' => 'USA','gamelevel'=>'Wanna be','email'=>'harshva.com','sex'=>'M','role'=>'employee','listtoggle'=>1,'mission_link'=>'test'];
         $this->assertEquals(3, $this->getConnection()->getRowCount('avatars'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user', 'POST', null);
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -182,7 +184,7 @@ class UserControllerTest extends ControllerTest{
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/3/addusertogroup/1', 'POST');
         $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('addUserToAGroup');
+        $this->setDefaultAsserts('addusertogroup');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -191,7 +193,7 @@ class UserControllerTest extends ControllerTest{
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/1/addusertogroup/1', 'POST');
         $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts('addUserToAGroup');
+        $this->setDefaultAsserts('addusertogroup');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
@@ -199,17 +201,18 @@ class UserControllerTest extends ControllerTest{
     public function testaddusertoproject() {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/3/addusertoproject/1', 'POST');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('addUserToProject');
+        $this->setDefaultAsserts('addusertoproject');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
     public function testAddUserToProjectWithExistingProject() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user/3/addusertoproject/1', 'POST');
+        $this->dispatch('/user/1/addusertoproject/1', 'POST');
         $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts('addUserToProject');
+        $this->setDefaultAsserts('addusertoproject');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }

@@ -1,11 +1,11 @@
 <?php
 namespace Widget\Service;
 
-use Oxzion\Service\AbstractService;
+use Bos\Service\AbstractService;
+use Bos\Auth\AuthContext;
+use Bos\Auth\AuthConstants;
 use Widget\Model\WidgetTable;
 use Widget\Model\Widget;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
 use Exception;
 
 class WidgetService extends AbstractService{

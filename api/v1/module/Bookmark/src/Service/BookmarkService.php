@@ -1,12 +1,12 @@
 <?php
 namespace Bookmark\Service;
 
-use Oxzion\Service\AbstractService;
+use Bos\Service\AbstractService;
 use Bookmark\Model\BookmarkTable;
 use Bookmark\Model\Bookmark;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
-use Oxzion\ValidationException;
+use Bos\Auth\AuthContext;
+use Bos\Auth\AuthConstants;
+use Bos\ValidationException;
 use Exception;
 
 class BookmarkService extends AbstractService{

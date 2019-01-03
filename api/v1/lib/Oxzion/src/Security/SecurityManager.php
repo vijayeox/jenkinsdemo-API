@@ -1,8 +1,8 @@
 <?php
 
 namespace Oxzion\Security;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
+use Bos\Auth\AuthContext;
+use Bos\Auth\AuthConstants;
 use Oxzion\Error\ErrorHandler;
 
 class SecurityManager{

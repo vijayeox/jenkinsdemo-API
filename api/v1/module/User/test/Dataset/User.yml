@@ -1,7 +1,7 @@
 avatars:
 -
   id: 1
-  gamelevel: ""
+  gamelevel: "WannaBee"
   username: "bharatg"
   password: "1619d7adc23f4f633f11014d2f22b7d8"
   firstname: "Bharat"
@@ -15,7 +15,7 @@ avatars:
   level: "AVATARBEE"
   managerid: 1
   designation: "IT ANALYST"
-  email: ""
+  email: "test@va.com"
   emailnotify: "Active"
   sentinel: "On"
   status: "Active"
@@ -35,7 +35,7 @@ avatars:
   inmail_label: "2=>Comment|3=>Observer|4=>Personal"
 -
   id: 2
-  gamelevel: ""
+  gamelevel: "WannaBee"
   username: "karan"
   password: "1619d7adc23f4f633f11014d2f22b7d8"
   firstname: "Karan"
@@ -49,7 +49,7 @@ avatars:
   level: "AVATARBEE"
   managerid: 1
   designation: "IT ANALYST"
-  email: ""
+  email: "test@va.com"
   emailnotify: "Active"
   sentinel: "On"
   status: "Active"
@@ -69,7 +69,7 @@ avatars:
   inmail_label: "2=>Comment|3=>Observer|4=>Personal"
 -
   id: 3
-  gamelevel: ""
+  gamelevel: "WannaBee"
   username: "rakshith"
   password: "1619d7adc23f4f633f11014d2f22b7d8"
   firstname: "Rakshith"
@@ -83,7 +83,7 @@ avatars:
   level: "AVATARBEE"
   managerid: 1
   designation: "IT ANALYST"
-  email: ""
+  email: "test@va.com"
   emailnotify: "Active"
   sentinel: "On"
   status: "Active"

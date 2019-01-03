@@ -2,6 +2,7 @@
 namespace Oxzion\Model;
 
 use Oxzion\ValidationException;
+use Bos\Model\Entity;
 
 class Field extends Entity{
 	protected $data = array(

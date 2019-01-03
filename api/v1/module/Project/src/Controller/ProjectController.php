@@ -8,7 +8,7 @@ use Project\Model\ProjectTable;
 use Project\Model\Project;
 use Project\Service\ProjectService;
 use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 use Zend\InputFilter\Input;
 
 class ProjectController extends AbstractApiController {	

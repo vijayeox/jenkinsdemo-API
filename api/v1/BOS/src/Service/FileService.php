@@ -1,12 +1,11 @@
 <?php
-namespace Oxzion\Service;
+namespace Bos\Service;
 
 use Bos\Model\FileTable;
 use Bos\Model\File;
 use Bos\Auth\AuthContext;
 use Bos\Auth\AuthConstants;
 use Bos\ValidationException;
-use Zend\Db\Sql\Expression;
 use Exception;
 
 class FileService extends AbstractService{
@@ -61,7 +60,7 @@ class FileService extends AbstractService{
             $this->commit();
         }catch(Exception $e){
             switch (get_class ($e)) {
-             case "Bos\ValidationException" :
+             case "Oxzion\ValidationException" :
                 $this->rollback();
                 throw $e;
                 break;
@@ -108,7 +107,7 @@ class FileService extends AbstractService{
         }catch(Exception $e){
             print_r($e->getMessage());exit;
             switch (get_class ($e)) {
-             case "Bos\ValidationException" :
+             case "Oxzion\ValidationException" :
                 $this->rollback();
                 throw $e;
                 break;

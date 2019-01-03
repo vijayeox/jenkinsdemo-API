@@ -2,8 +2,8 @@
 
 namespace Oxzion\Workflow\Camunda;
 
-use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
+use Bos\Model\Entity;
+use Bos\ValidationException;
 
 class Process extends Entity {
 

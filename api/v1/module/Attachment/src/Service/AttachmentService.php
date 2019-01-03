@@ -1,13 +1,13 @@
 <?php
 namespace Attachment\Service;
 
-use Oxzion\Service\AbstractService;
+use Bos\Service\AbstractService;
 use Oxzion\Utils\FileUtils;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 use Attachment\Model\AttachmentTable;
 use Attachment\Model\Attachment;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
+use Bos\Auth\AuthContext;
+use Bos\Auth\AuthConstants;
 use Exception;
 
 class AttachmentService extends AbstractService{

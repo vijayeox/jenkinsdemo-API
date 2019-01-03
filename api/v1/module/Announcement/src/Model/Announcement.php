@@ -2,8 +2,8 @@
 
 namespace Announcement\Model;
 
-use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
+use Bos\Model\Entity;
+use Bos\ValidationException;
 
 class Announcement extends Entity {
 
@@ -22,29 +22,7 @@ class Announcement extends Entity {
     );
 
     public function validate(){
-        $errors = array();
-        if($this->data['name'] === null){
-            $errors["name"] = 'required';
-        }
-        if($this->data['org_id'] === null) {
-            $errors["org_id"] = 'required';   
-        }
-        if($this->data['status'] === null) {
-            $errors["status"] = 'required';  
-        }
-        if($this->data['start_date'] === null) {
-            $errors["start_date"] = 'required';   
-        }
-        if($this->data['end_date'] === null) {
-            $errors["end_date"] = 'required';   
-        }
-        if($this->data['media'] === null) {
-            $errors["media"] = 'required';   
-        }
-        if(count($errors) > 0){
-            $validationException = new ValidationException();
-            $validationException->setErrors($errors);
-            throw $validationException;
-        }
+        $required = array('name','org_id','status','start_date','end_date','media');
+        $this->validateWithParams($required);
     }
 }

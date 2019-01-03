@@ -10,7 +10,7 @@ use Bookmark\Model\Bookmark;
 use Bookmark\Service\BookmarkService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 
 class BookmarkController extends AbstractApiController {
     /**

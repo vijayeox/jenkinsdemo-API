@@ -2,9 +2,8 @@
 namespace File;
 
 use File\Controller\FileController;
-use File\Model;
 use Oxzion\Test\ControllerTest;
-use Oxzion\Db\ModelTable;
+use Bos\Db\ModelTable;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;

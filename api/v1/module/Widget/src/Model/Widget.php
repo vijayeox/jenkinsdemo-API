@@ -1,6 +1,6 @@
 <?php
 namespace Widget\Model;
-use Oxzion\Model\Entity;
+use Bos\Model\Entity;
 
 class Widget extends Entity{
 

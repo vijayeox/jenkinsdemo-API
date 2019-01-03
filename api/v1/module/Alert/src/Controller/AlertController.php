@@ -10,7 +10,7 @@ use Alert\Model\Alert;
 use Alert\Service\AlertService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 
 class AlertController extends AbstractApiController {
     /**

@@ -2,8 +2,10 @@
 namespace Oxzion\Service;
 
 use Zend\Db\Sql\Sql;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
+use Bos\Auth\AuthContext;
+use Bos\Auth\AuthConstants;
+use Bos\Service\AbstractService;
+use Bos\ValidationException;
 use Oxzion\Model\User;
 
 class UserService extends AbstractService{

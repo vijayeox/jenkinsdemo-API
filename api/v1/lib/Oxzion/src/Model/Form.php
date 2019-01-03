@@ -1,7 +1,8 @@
 <?php
 namespace Oxzion\Model;
 
-use Oxzion\ValidationException;
+use Bos\ValidationException;
+use Bos\Model\Entity;
 
 class Form extends Entity{
 	protected $data = array(

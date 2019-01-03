@@ -2,8 +2,8 @@
 
 namespace Bookmark\Model;
 
-use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
+use Bos\Model\Entity;
+use Bos\ValidationException;
 
 class Bookmark extends Entity {
 

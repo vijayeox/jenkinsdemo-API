@@ -7,10 +7,10 @@ use Zend\EventManager\Event;
 use Zend\Log\Logger;
 use User\Model\UserTable;
 use Zend\Db\Sql\Sql;
-use Oxzion\Auth\AuthConstants;
+use Bos\Auth\AuthConstants;
 use Oxzion\Security\SecurityManager;
 use Zend\Mvc\MvcEvent;
-use Oxzion\Utils\ValidationResult;
+use Bos\Utils\ValidationResult;
 use Oxzion\Auth\AuthSuccessListener;
 use Oxzion\Service\UserService;
 

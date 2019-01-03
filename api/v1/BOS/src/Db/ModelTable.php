@@ -1,9 +1,9 @@
 <?php
 
-namespace Oxzion\Db;
+namespace Bos\Db;
 
 use Zend\Db\TableGateway\TableGatewayInterface;
-use Oxzion\Model\Entity;
+use Bos\Model\Entity;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 

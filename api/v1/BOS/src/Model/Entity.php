@@ -1,8 +1,8 @@
 <?php
-namespace Oxzion\Model;
+namespace Bos\Model;
 
-use Oxzion\Utils\ValidationResult;
-use Oxzion\ValidationException;
+use Bos\Utils\ValidationResult;
+use Bos\ValidationException;
 use Countable;
 
 abstract class Entity implements Countable{

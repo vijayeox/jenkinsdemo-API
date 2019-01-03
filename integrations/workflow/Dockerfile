@@ -21,6 +21,7 @@ COPY camunda-tomcat.sh /tmp/
 COPY ./IdentityService/dist/identity_plugin.jar /camunda/lib/
 
 ARG NEXUS="https://app.camunda.com/nexus/service/local/artifact/maven/redirect"
+
 RUN wget --progress=bar:force:noscroll -O /tmp/camunda.tar.gz "${NEXUS}?r=camunda-bpm&g=org.camunda.bpm.${DISTRO}&a=camunda-bpm-${DISTRO}&v=${VERSION}&p=tar.gz"
 
 # Unpack distro to /camunda directory
@@ -47,8 +48,10 @@ RUN rm -f /tmp/camunda-${DISTRO}.sh \
 
 ENV CAMUNDA_VERSION=${VERSION}
 ENV DB_DRIVER=com.mysql.jdbc.Driver
-ENV DB_URL=jdbc:mysql://172.16.1.55/process-engine
-ENV BASE_DB_URL=jdbc:mysql://172.16.1.55/oxapi
+ENV DB_URL=jdbc:mysql://172.16.1.80/process-engine
+ENV BASE_DB_URL=jdbc:mysql://172.16.1.80/oxapi
+ENV BASE_DB_USERNAME=root
+ENV BASE_DB_PASSWORD=
 ENV DB_USERNAME=root
 ENV DB_PASSWORD=
 ENV DB_CONN_MAXACTIVE=20

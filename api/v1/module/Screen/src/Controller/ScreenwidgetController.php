@@ -13,7 +13,7 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 
 class ScreenwidgetController extends AbstractApiController
 {

@@ -1,7 +1,7 @@
 <?php
 namespace Oxzion\Model;
 
-use Oxzion\ValidationException;
+use Bos\Model\Entity;
 
 class User extends Entity{
 
@@ -63,62 +63,7 @@ class User extends Entity{
     );
 
     public function validate(){
-       $errors = array();
-        if($this->data['gamelevel'] === null) {
-            $errors["gamelevel"] = 'required';   
-        }
-        if($this->data['username'] === null) {
-            $errors["username"] = 'required';  
-        }
-        if($this->data['password'] === null) {
-            $errors["password"] = 'required';   
-        }
-        if($this->data['firstname'] === null) {
-            $errors["firstname"] = 'required';   
-        }
-        if($this->data['lastname'] === null) {
-            $errors["lastname"] = 'required';   
-        }
-        if($this->data['name'] === null) {
-            $errors["name"] = 'required';   
-        }
-        if($this->data['role'] === null) {
-            $errors["role"] = 'required';   
-        }
-        if($this->data['email'] === null) {
-            $errors["email"] = 'required';   
-        }
-        if($this->data['status'] === null) {
-            $errors["status"] = 'required';   
-        }
-        if($this->data['dob'] === null) {
-            $errors["dob"] = 'required';   
-        }
-        if($this->data['designation'] === null) {
-            $errors["designation"] = 'required';   
-        }
-        if($this->data['sex'] === null) {
-            $errors["sex"] = 'required';   
-        }
-        if($this->data['managerid'] === null) {
-            $errors["managerid"] = 'required';   
-        }
-        if($this->data['cluster'] === null) {
-            $errors["cluster"] = 'required';   
-        }
-        if($this->data['level'] === null) {
-            $errors["level"] = 'required';   
-        }
-        if($this->data['org_role_id'] === null) {
-            $errors["org_role_id"] = 'required';   
-        }
-        if($this->data['doj'] === null) {
-            $errors["doj"] = 'required';   
-        }
-        if(count($errors) > 0){
-            $validationException = new ValidationException();
-            $validationException->setErrors($errors);
-            throw $validationException;
-        }
+        $required = array('gamelevel','username','password','firstname','lastname','name','role','email','status','dob','designation','sex','managerid','level','org_role_id','doj');
+        $this->validateWithParams($required);
     }
 }

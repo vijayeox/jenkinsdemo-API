@@ -6,7 +6,7 @@ use Leaderboard\Model\LeaderboardTable;
 use Leaderboard\Model\Leaderboard;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
-use Oxzion\ValidationException;
+use Bos\ValidationException;
 use Zend\Db\ResultSet\ResultSet;
 use Oxzion\Service\UserService;
 use Exception;
