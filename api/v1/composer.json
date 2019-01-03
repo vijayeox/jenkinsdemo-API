@@ -80,7 +80,7 @@
             "BookmarkTest\\" : "module/Bookmark/test/",
             "ProjectTest\\":"module/Project/test/",
             "AppTest\\" : "module/App/test/",
-            "MigrationTest\\" : "lib/Oxzion/Test/Migration/"
+            "MigrationTest\\" : "lib/Oxzion/Test/Migration/",
 			"WorkflowTest\\" : "lib/Oxzion/test/WorkflowTest"        }
     },
     "extra": [],
