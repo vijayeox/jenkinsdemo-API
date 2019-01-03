@@ -123,12 +123,15 @@ class Migration extends AbstractService {
                 }
 
 //Code to add the new column org_id to the table that is created
-                $columnResult = $adapter->query("SELECT DISTINCT table_name FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME NOT IN ('ox_app_org_id') AND TABLE_SCHEMA = '" . $this->database . "' and table_name NOT LIKE 'ox_app_migration_version'");
+                $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . $this->database . "' and table_name NOT LIKE 'ox_app_migration_version'");
                 $resultSet1 = $columnResult->execute();
                 while($resultSet1->next()) {
                     $resultTableName = $resultSet1->current();
-                    $tableResult = $adapter->query("ALTER TABLE " . $resultTableName['table_name'] . " ADD `ox_app_org_id` INT(11) NOT NULL");
-                    $tableResult->execute();
+                    $columnList = explode(",", $resultTableName['column_list']);
+                    if(!in_array('ox_app_org_id', $columnList)) {
+                        $tableResult = $adapter->query("ALTER TABLE " . $resultTableName['TABLE_NAME'] . " ADD `ox_app_org_id` INT(11) NOT NULL");
+                        $tableResult->execute();
+                    }
                 }
 
                 if (!empty($versionArray)) {
