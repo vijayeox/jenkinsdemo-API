@@ -41,7 +41,8 @@ class PersistenceTest extends ServiceTest {
             'description' => "New Task",
             'process_id' => 2
         );
-        $insertQuery = "INSERT INTO ox_timesheet (`id`, `name`, `client_id`, `description`, `process_id`, `date_created`) VALUES (1, 'Task1', 1, 'New Task', 2, '2019-01-02 12:00:00')";
+        $insertQuery = "INSERT INTO ox_timesheet (`id`, `name`, `client_id`, `description`, `process_id`, `date_created`) 
+VALUES (1, 'Task1', 1, 'New Task', 2, '2019-01-02 12:00:00')";
         $this->data['query'] =  $insertQuery;
         $persistenceObject->insertQuery($this->data);
         $dbConfig = $config['db'];
@@ -74,7 +75,6 @@ class PersistenceTest extends ServiceTest {
             'description' => "New Task",
             'process_id' => 2
         );
-
         $insertQuery = "INSERT INTO ox_timesheet (`name`, `client_id`, `description`, `process_id`, `date_created`)
           SELECT `ox_timesheet`.`name`, `ox_timesheet`.`client_id`, `ox_timesheet`.`description`, `ox_timesheet`.`process_id`, `ox_timesheet`.`date_created` FROM ox_timesheet LEFT JOIN 
           ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id";
