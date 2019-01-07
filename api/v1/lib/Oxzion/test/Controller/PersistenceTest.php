@@ -191,9 +191,9 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
         $dbConfig['dsn'] = 'mysql:dbname=' . $database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' .$dbConfig["appuser"] . ';password='.$dbConfig["password"];
         $adapter = new Adapter($dbConfig);
         $selectData = Array (
-            'name' => "Task2",
+            'name' => "Updated Task",
             'client_id' => 1,
-            'description' => "Changed the description",
+            'description' => "New Task",
             'process_id' => 2
         );
         $statement1 = $adapter->query("Select * from ox_timesheet where id = 1");
@@ -201,6 +201,7 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
         while($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
+//        print_r($tableFieldName);exit;
         $this->assertEquals($tableFieldName[0]['id'], 1);
         $this->assertEquals($tableFieldName[0]['name'], $selectData['name']);
         $this->assertEquals($tableFieldName[0]['client_id'], $selectData['client_id']);

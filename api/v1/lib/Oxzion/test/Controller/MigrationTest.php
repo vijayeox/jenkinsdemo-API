@@ -44,7 +44,7 @@ class MigrationTest extends ServiceTest {
         $testCase = $migrationObject->initDB($data);
         $config = $this->getApplicationConfig();
         $config = $config['db'];
-        $config['dsn'] = 'mysql:dbname=' . $config['database'] . ';host=' . $config['host'] . ';charset=utf8;username=' .$config["username"] . ';password='.$config["password"];
+        $config['dsn'] = 'mysql:dbname=' . $database . ';host=' . $config['host'] . ';charset=utf8;username=' .$config["username"] . ';password='.$config["password"];
         $adapter = new Adapter($config);
         $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' .$database . '"';
         $statement = $adapter->query($sqlQuery);
@@ -59,12 +59,10 @@ class MigrationTest extends ServiceTest {
         }
         $this->assertEquals(1, $value);
         $this->assertEquals($tableFieldName[0]['Field'], "id");
-        $this->assertEquals($tableFieldName[1]['Field'], "app_id");
-        $this->assertEquals($tableFieldName[2]['Field'], "app_name");
-        $this->assertEquals($tableFieldName[3]['Field'], "version_number");
-        $this->assertEquals($tableFieldName[4]['Field'], "org_id");
-        $this->assertEquals($tableFieldName[5]['Field'], "date_created");
-        $this->assertEquals($tableFieldName[6]['Field'], "date_modified");
+        $this->assertEquals($tableFieldName[1]['Field'], "version_number");
+        $this->assertEquals($tableFieldName[2]['Field'], "date_created");
+        $this->assertEquals($tableFieldName[3]['Field'], "date_modified");
+        $this->assertEquals($tableFieldName[4]['Field'], "description");
     }
 
 
