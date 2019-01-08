@@ -27,6 +27,36 @@ return [
                     ],
                 ],
             ],
+            'comment' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/file/:fileId/comment[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\CommentController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_COMMENT_WRITE',
+                            'post'=> 'MANAGE_COMMENT_WRITE',
+                            'delete'=> 'MANAGE_COMMENT_WRITE',
+                            'get'=> 'MANAGE_COMMENT_READ',
+                        ],
+                    ],
+                ],
+            ],
+            'commentchild' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/file/:fileId/comment/:id/getchildlist',
+                    'defaults' => [
+                        'controller' => Controller\CommentController::class,
+                        'method' => 'GET',
+                        'action' => 'getChildList',
+                        'access' => [
+                            'getChildList'=>'MANAGE_PROJECT_WRITE'
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

@@ -12,6 +12,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Bos\Model\FileTable;
+use Bos\Model\CommentTable;
 
 class Module implements ConfigProviderInterface {
 
@@ -41,6 +42,11 @@ class Module implements ConfigProviderInterface {
                 Controller\FileController::class => function($container) {
                     return new Controller\FileController(
                             $container->get(FileTable::class), $container->get(\Bos\Service\FileService::class), $container->get('FileLogger'),
+                        $container->get(AdapterInterface::class));
+                },
+                Controller\CommentController::class => function($container) {
+                    return new Controller\CommentController(
+                            $container->get(CommentTable::class), $container->get(\Bos\Service\CommentService::class), $container->get('FileLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],
