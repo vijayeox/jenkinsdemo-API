@@ -65,7 +65,7 @@
             "Bookmark\\":"module/Bookmark/src/",
             "App\\":"module/App/src/",
             "Project\\":"module/Project/src/",
-            "Mlet\\":"module/Mlet/src/"
+            "Search\\":"module/Search/src/"
         }
     },
     "autoload-dev": {

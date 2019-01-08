@@ -108,7 +108,11 @@ class Module {
                 },
                 Workflow\WorkflowFactory::class => function ($container){
                     return Workflow\WorkflowFactory::getInstance(); 
-                }
+                },
+                Search\SearchFactory::class => function($container) {
+                    $config = $container->get('config');
+                    return new Search\SearchFactory($config);
+                },
             ],
         ];
     }

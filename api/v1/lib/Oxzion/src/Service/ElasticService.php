@@ -1,7 +1,9 @@
 <?php
 namespace Oxzion\Service;
 
-use ElasticSearch\ElasticClient;
+use Elasticsearch\Client;
+use Elasticsearch\ClientBuilder;
+
 ini_set("memory_limit", -1);
 class ElasticService{
 	private $avatarobj;
@@ -9,14 +11,23 @@ class ElasticService{
 	private $type;
 	private $core;
 	private $onlyaggs;
-
+	private $config;
+	private $client;
 
 	public function __construct($config){
-		
-		$this->elasticaddress = $config['elasticsearch']['serveraddress'];
-		$this->type = $config['elasticsearch']['type'];
+		$this->config = $config;
+        $clientsettings = array();        
+		$clientsettings['host'] = $config['elasticsearch']['serveraddress'];
+		$clientsettings['user'] = $config['elasticsearch']['user'];
+		$clientsettings['pass'] = $config['elasticsearch']['password'];
+		$clientsettings['type'] = $config['elasticsearch']['type'];
+		$clientsettings['port'] = $config['elasticsearch']['port'];
+		$clientsettings['scheme'] = $config['elasticsearch']['scheme'];
 		$this->core = $config['elasticsearch']['core'];
+		$this->type = $config['elasticsearch']['type'];
+		$this->client= ClientBuilder::create()->setHosts(array($clientsettings))->build();
 	}
+
 	
 	public function getSettings() {
 		return array('index'=>$this->core,'type'=>$this->type);
@@ -36,9 +47,15 @@ class ElasticService{
 			$results = array('data'=>$result_obj['aggregations']['value']['value']);
 			
 		} else {
-			$results = array('data'=>$result_obj['hits']['total']);;
+			$results = array('data'=>$result_obj['hits']['total']);
 		}
 		return $results;
+	}
+
+	public function getSearchResults($entity,$body,$source,$start,$pagesize) {
+		$params = array('index'=>$this->core.'_'.$entity,'type'=>$this->type,'body'=>$body,"_source"=>$source,'from'=>$start?$start:0,"size"=>$pagesize);
+		$result = $this->search($params);
+		return $result;
 	}
 
 	public function FilterWithParams($params){
@@ -554,13 +571,15 @@ class ElasticService{
 	}
 
 	public 	function search($q){
-		$client = ElasticClient::createClient();
-		if (VA_Logic_Session::isDebug()) {  echo '<pre>';print_r($q);echo '</pre>';}
-		if (VA_Logic_Session::isDebug()) {  echo '<pre>';print_r(json_encode($q));echo '</pre>';}
 	//	 echo '<pre>';print_r($q);echo '</pre>'; exit;
 	//	 echo '<pre>';print_r($client->search($q));echo '</pre>';exit;
-		return $client->search($q);
+		return $this->client->search($q);
 
+	}
+
+	public function index($entity,$params) {
+		$params['index']=$this->core.'_'.$entity;
+		return $this->client->index($params);
 	}
 }
 ?>
