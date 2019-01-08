@@ -37,7 +37,8 @@
         "elasticsearch/elasticsearch": "~5.0",
         "guzzlehttp/guzzle": "~6.0",
         "oxzion/bos":"~1.0",
-        "greenlion/php-sql-parser": "^4.1.2"
+        "greenlion/php-sql-parser": "^4.1.2",
+        "nelexa/zip": "dev-master"
     },
     "require-dev" : {
         "phpunit/phpunit": "^7",
