@@ -57,6 +57,22 @@ return [
                     ],
                 ],
             ],
+            'subscriber' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/file/:fileId/subscriber[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\SubscriberController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_COMMENT_WRITE',
+                            'post'=> 'MANAGE_COMMENT_WRITE',
+                            'delete'=> 'MANAGE_COMMENT_WRITE',
+                            'get'=> 'MANAGE_COMMENT_READ',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [
