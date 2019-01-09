@@ -50,9 +50,10 @@ class AppControllerTest extends ControllerTest {
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_app'));
     }
 
-    public function testCreateWithoutaRequiredField() { // Testing to create a new app
+    public function testCreateWithoutRequiredField()
+    { // Testing to create a new app
         $this->initAuthToken($this->adminUser);
-        $data = ['uuid'=> '2323423423', 'description'=>'Desc', 'type' => 1, 'date_created' => '0000-00-00 00:00:00', 'date_modified'=>'0000-00-00 00:00:00'];
+        $data = ['uuid' => '2323423423', 'description' => 'Desc', 'type' => 1, 'date_created' => '0000-00-00 00:00:00', 'date_modified' => '0000-00-00 00:00:00'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_app'));
         $this->dispatch('/app/1/appinstall', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -62,6 +63,16 @@ class AppControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['name'], 'required');
+    }
+
+    public function getDataFromDeploymentDescriptorUsingYML() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/appdeployyml', 'GET', null);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('appdeployyml');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        print_r($content);exit;
     }
 
 }

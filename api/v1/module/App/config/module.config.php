@@ -48,7 +48,7 @@ return [
             'appdeployxml' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/appdeployxml',
+                    'route' => '/app/appdeployxml',
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'getDataFromDeploymentDescriptorUsingXML',
@@ -59,7 +59,7 @@ return [
             'appdeployyml' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/appdeployyml',
+                    'route' => '/app/appdeployyml',
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'getDataFromDeploymentDescriptorUsingYML',
@@ -70,7 +70,7 @@ return [
             'appupload' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/appupload',
+                    'route' => '/app/appupload',
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'appUpload',
