@@ -64,15 +64,4 @@ class AppControllerTest extends ControllerTest {
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
-
-    public function getDataFromDeploymentDescriptorUsingYML() {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/appdeployyml', 'GET', null);
-        $this->assertResponseStatusCode(201);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('appdeployyml');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        print_r($content);exit;
-    }
-
 }
