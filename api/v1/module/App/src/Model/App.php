@@ -10,7 +10,6 @@ class App extends Entity {
     protected $data = array(
         'id' => 0,  
         'name' => NULL,  
-        'uuid' => NULL,  
         'description' => NULL,
         'type' => NULL,  
         'logo' => NULL,  
@@ -22,9 +21,6 @@ class App extends Entity {
         $errors = array();
         if($this->data['name'] === null){
             $errors["name"] = 'required';
-        }
-        if($this->data['uuid'] === null) {
-            $errors["uuid"] = 'required';   
         }
         if($this->data['type'] === null) {
             $errors["type"] = 'required';  
