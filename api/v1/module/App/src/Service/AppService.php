@@ -274,6 +274,7 @@ class AppService extends AbstractService {
         }
         //Code to add the default privilege to the app installed.
         $appPrivileges = $this->applyAppPrivilege($ymlArray['config'], $app);
+
         if($appPrivileges === 0) {
 //            return $this->getErrorResponse("App Privileges could not be set, please check your application and try again!");
             return 0;
