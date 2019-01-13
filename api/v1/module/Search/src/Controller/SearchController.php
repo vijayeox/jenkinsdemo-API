@@ -26,8 +26,9 @@ class SearchController extends AbstractApiController
 
 	public function create($data){
         try{
-            $searchEngine = $this->searchFactory->getSearchEngine();
-            $result = $searchEngine->search($data);
+            $searchEngine = $this->searchFactory->getSearchEngine();        
+            $app_id =  (isset($data['app_id'])) ? $data['app_id']:null;
+            $result = $searchEngine->search($data,$app_id);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);

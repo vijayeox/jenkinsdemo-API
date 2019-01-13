@@ -52,8 +52,8 @@ class ElasticService{
 		return $results;
 	}
 
-	public function getSearchResults($entity,$body,$source,$start,$pagesize) {
-		$params = array('index'=>$this->core.'_'.$entity,'type'=>$this->type,'body'=>$body,"_source"=>$source,'from'=>$start?$start:0,"size"=>$pagesize);
+	public function getSearchResults($index,$body,$source,$start,$pagesize) {
+		$params = ['index'=>$index,'type'=>$this->type,'body'=>$body,"_source"=>$source,'from'=>$start?$start:0,"size"=>$pagesize];
 		$result = $this->search($params);
 		return $result;
 	}
@@ -571,14 +571,13 @@ class ElasticService{
 	}
 
 	public 	function search($q){
-	//	 echo '<pre>';print_r($q);echo '</pre>'; exit;
-	//	 echo '<pre>';print_r($client->search($q));echo '</pre>';exit;
 		return $this->client->search($q);
-
 	}
 
-	public function index($entity,$params) {
-		$params['index']=$this->core.'_'.$entity;
+	public function index($index,$body) {
+		$params['index']=$index;
+		$params['type']=$this->type;
+		$params['body']=$body;
 		return $this->client->index($params);
 	}
 }

@@ -1,12 +1,11 @@
 <?php
 namespace Oxzion\Search;
 
-interface SearchEngine
+interface Indexer
 {
     public function __construct($config);
 
-    public function search($parameters,$app_id);
-
+    public function index($parameters,$app_id,$type);
 
 }
 ?>
