@@ -45,6 +45,39 @@ return [
                     ],
                 ],
             ],
+            'appdeployxml' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/appdeployxml',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'getDataFromDeploymentDescriptorUsingXML',
+                        'method' => 'get'
+                    ],
+                ],
+            ],
+            'appdeployyml' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/appdeployyml',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'getDataFromDeploymentDescriptorUsingYML',
+                        'method' => 'get'
+                    ],
+                ],
+            ],
+            'appupload' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/appupload',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'appUpload',
+                        'method' => 'post'
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

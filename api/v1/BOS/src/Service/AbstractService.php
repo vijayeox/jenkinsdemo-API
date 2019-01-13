@@ -70,7 +70,7 @@ Function Name: executeQuerywithParams()
        //Passing the required parameter to the query statement
        $adapter = $this->getAdapter();
        $query_string = $queryString . " " . $where . " " . $group . " " . $order . " " . $limit; //Combining all the parameters required to build the query statement. We will add more fields to this in the future if required.
-       // echo $query_string;exit;
+//        echo $query_string;exit;
        $statement = $adapter->query($query_string); 
        $result = $statement->execute();
        $resultSet = new ResultSet();

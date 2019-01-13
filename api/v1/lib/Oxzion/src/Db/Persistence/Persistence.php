@@ -177,7 +177,6 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
                             }
                         }
                     }
-
                     $parsedArray = $this->getReferenceClause($parsedArray, $key, $updateArray, $tableArrayList, "UPDATE");
                 }
             }

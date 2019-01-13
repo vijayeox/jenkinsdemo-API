@@ -13,6 +13,7 @@ use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Bos\Model\FileTable;
 use Bos\Model\CommentTable;
+use Bos\Model\SubscriberTable;
 
 class Module implements ConfigProviderInterface {
 
@@ -47,6 +48,11 @@ class Module implements ConfigProviderInterface {
                 Controller\CommentController::class => function($container) {
                     return new Controller\CommentController(
                             $container->get(CommentTable::class), $container->get(\Bos\Service\CommentService::class), $container->get('FileLogger'),
+                        $container->get(AdapterInterface::class));
+                },
+                Controller\SubscriberController::class => function($container) {
+                    return new Controller\SubscriberController(
+                            $container->get(SubscriberTable::class), $container->get(\Bos\Service\SubscriberService::class), $container->get('FileLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],

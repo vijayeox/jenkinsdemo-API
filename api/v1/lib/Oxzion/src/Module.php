@@ -34,6 +34,10 @@ class Module {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new \Bos\Service\CommentService($container->get('config'), $dbAdapter, $container->get(\Bos\Model\CommentTable::class));
                 },
+                \Bos\Service\SubscriberService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new \Bos\Service\SubscriberService($container->get('config'), $dbAdapter, $container->get(\Bos\Model\SubscriberTable::class));
+                },
                 \Bos\Model\FileTable::class => function($container) {
                     $tableGateway = $container->get(\Bos\Model\FileTableGateway::class);
                     return new \Bos\Model\FileTable($tableGateway);
@@ -41,6 +45,10 @@ class Module {
                 \Bos\Model\CommentTable::class => function($container) {
                     $tableGateway = $container->get(\Bos\Model\CommentTableGateway::class);
                     return new \Bos\Model\CommentTable($tableGateway);
+                },
+                \Bos\Model\SubscriberTable::class => function($container) {
+                    $tableGateway = $container->get(\Bos\Model\SubscriberTableGateway::class);
+                    return new \Bos\Model\SubscriberTable($tableGateway);
                 },
                 \Bos\Model\FileTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -53,6 +61,12 @@ class Module {
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new \Bos\Model\Comment());
                     return new TableGateway('ox_comment', $dbAdapter, null, $resultSetPrototype);
+                },
+                \Bos\Model\SubscriberTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new \Bos\Model\Subscriber());
+                    return new TableGateway('ox_subscriber', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\FormService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);

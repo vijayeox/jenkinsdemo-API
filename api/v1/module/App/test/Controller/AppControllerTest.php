@@ -3,6 +3,7 @@ namespace App;
 
 use App\Controller\AppController;
 use App\Model;
+use App\Module;
 use Oxzion\Test\ControllerTest;
 use Oxzion\Db\ModelTable;
 use PHPUnit\DbUnit\TestCaseTrait;
@@ -50,9 +51,9 @@ class AppControllerTest extends ControllerTest {
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_app'));
     }
 
-    public function testCreateWithoutaRequiredField() { // Testing to create a new app
+    public function testCreateWithoutRequiredField() { // Testing to create a new app
         $this->initAuthToken($this->adminUser);
-        $data = ['uuid'=> '2323423423', 'description'=>'Desc', 'type' => 1, 'date_created' => '0000-00-00 00:00:00', 'date_modified'=>'0000-00-00 00:00:00'];
+        $data = ['uuid' => '2323423423', 'description' => 'Desc', 'type' => 1, 'date_created' => '0000-00-00 00:00:00', 'date_modified' => '0000-00-00 00:00:00'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_app'));
         $this->dispatch('/app/1/appinstall', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -63,5 +64,4 @@ class AppControllerTest extends ControllerTest {
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
-
 }
