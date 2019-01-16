@@ -35,16 +35,15 @@ class SearchEngineImpl implements SearchEngine
             } else {
                 $body['query']['bool']['filter'] = ['term' => ['org_id' => $orgid]];
             }
-
-            $body['query']['bool']['should'] = ["multi_match" => ["fields" => ['id^6', 'name^4', 'desc_raw^0.1', 'assignedto^2', 'createdby^2'], "query" => $text, "fuzziness" => "AUTO"]];
+            $body['query']['bool']['should'] = ["multi_match" => ["fields" => ['display_id^6', 'name^4', 'status^0.1', 'modified_by^2', 'created_by^2'], "query" => $text, "fuzziness" => "AUTO"]];
             $body['highlight'] = ['order' => 'score', "require_field_match" => 'true', 'fields' => ["*" => ['force_source' => false, "pre_tags" => ["<b class='highlight'>"], "post_tags" => ["</b>"], 'number_of_fragments' => 3, 'fragment_size' => 100]], 'encoder' => 'html'];
             $body['min_score'] = "0.5";
-            $source = ['id', 'name', 'statusname', 'createdby', 'assignedto', 'date_created', 'date_modified'];
+            $source = ['display_id', 'name', 'status', 'created_by', 'date_created','modified_by','date_modified'];
             $data = $elasticService->getSearchResults($index, $body, $source, $start, $pagesize);
+            return $data;
         } catch (Exception $e) {
-            throw e;
+            throw new Exception($e->getMessage());
         }
-        return $data;
     }
 }
 ?>

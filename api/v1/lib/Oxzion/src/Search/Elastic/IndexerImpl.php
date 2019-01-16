@@ -14,16 +14,28 @@ class IndexerImpl implements Indexer {
     }
 
 
-    public function index($body,$app_id,$type){
+    public function index($app_id,$id,$type,$body){
         try {
-            $orgid = AuthContext::get(AuthConstants::ORG_ID);
+            $org_id = AuthContext::get(AuthConstants::ORG_ID);
+            $body['org_id']=$org_id;
             $body['type']=$type;
-            $body['org_id']=$orgid;
             $index = $app_id;
-            $elasticService = new ElasticService($this->config);       
-            $response = $elasticService->index($index,$body);
+            $elasticService = new ElasticService($this->config);    
+            $response = $elasticService->index($index,$id,$body);
+            return ['result'=>1,'response'=>$response];
         } catch (Exception $e) {
-            throw e;
+            return 0;
+        }
+    }
+
+    public function  delete($app_id,$id) {
+         try {
+            $elasticService = new ElasticService($this->config);       
+            $index = $app_id;
+            $response = $elasticService->delete($index,$id);
+            return ['result'=>1,'response'=>$response];
+        } catch (Exception $e) {
+            return 0;
         }
     }
 

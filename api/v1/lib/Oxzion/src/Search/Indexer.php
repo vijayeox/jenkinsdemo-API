@@ -3,9 +3,10 @@ namespace Oxzion\Search;
 
 interface Indexer
 {
-    public function __construct($config);
 
-    public function index($parameters,$app_id,$type);
+    public function index($app_id,$id,$type,$body);
+
+    public function delete($app_id,$id);
 
 }
 ?>

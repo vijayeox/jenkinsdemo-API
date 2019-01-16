@@ -574,11 +574,21 @@ class ElasticService{
 		return $this->client->search($q);
 	}
 
-	public function index($index,$body) {
+	public function index($index,$id,$body) {
 		$params['index']=$index;
+		$params['id']=$id;
 		$params['type']=$this->type;
 		$params['body']=$body;
 		return $this->client->index($params);
 	}
+
+	public function delete($index,$id) {
+		if ($id=='all') {
+			$this->client->indices()->delete(['index'=>$index]);
+		} else {
+			$this->client->delete(['index'=>$index,'type'=>$this->type,'id'=>$id]);
+		}
+	}
+
 }
 ?>

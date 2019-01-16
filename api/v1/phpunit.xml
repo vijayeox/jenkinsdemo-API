@@ -17,11 +17,13 @@
             <directory>./module/File/test</directory> 
             <directory>./module/Form/test</directory>
             <directory>./module/Group/test</directory>
-            <directory>./lib/Oxzion/test</directory>
+            <directory>./module/Search/test</directory>
+            <directory>./lib/Oxzion/test</directory>            
             <directory>./lib/Oxzion/test/WorkflowTest</directory> 
         </testsuite>
     </testsuites>
     <php>
         <const name="enableCamunda" value="0"/>
+        <const name="enableElastic" value="0"/>
     </php>
 </phpunit>
