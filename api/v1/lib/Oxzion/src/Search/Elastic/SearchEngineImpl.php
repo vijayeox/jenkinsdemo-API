@@ -7,15 +7,11 @@ use Oxzion\Service\ElasticService;
 use Bos\Auth\AuthContext;
 use Bos\Auth\AuthConstants;
 
-class SearchEngineImpl implements SearchEngine
-{
+class SearchEngineImpl implements SearchEngine {
     private $config;
-    public function __construct($config)
-    {
+    public function __construct($config) {
         $this->config = $config;
     }
-
-
 
     public function search($parameters, $app_id)
     {
@@ -45,5 +41,6 @@ class SearchEngineImpl implements SearchEngine
             throw new Exception($e->getMessage());
         }
     }
+
 }
 ?>

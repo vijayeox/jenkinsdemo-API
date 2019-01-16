@@ -4,9 +4,7 @@ const minimize = mode === 'production';
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {
-  DefinePlugin
-} = webpack;
+const {DefinePlugin} = webpack;
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const npm = require('./package.json');
 const plugins = [];
@@ -47,13 +45,8 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'src/client/index.ejs'),
-      favicon: path.resolve(__dirname, 'src/client/favicon.png'),
+      favicon: path.resolve(__dirname, 'src/client/OXZion.png'),
       title: 'OS.js'
-    }),
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jquery: "jQuery",
-      "window.jQuery": "jquery"
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css'
@@ -61,11 +54,14 @@ module.exports = {
     ...plugins
   ],
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.(svg|png|jpe?g|gif|webp)$/,
-        use: [{
-          loader: 'file-loader'
-        }]
+        use: [
+          {
+            loader: 'file-loader'
+          }
+        ]
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
@@ -95,20 +91,6 @@ module.exports = {
             }
           }
         ]
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader'
-        }
-      },
-      {
-        test: /\.js$/,
-        enforce: 'pre',
-        use: {
-          loader: 'source-map-loader'
-        }
       }
     ]
   }

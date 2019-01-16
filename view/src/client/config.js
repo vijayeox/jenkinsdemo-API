@@ -35,7 +35,6 @@
 
 module.exports = {
   auth: {
-    url: "http://localhost/auth",
     ui: {
       title: 'Welcome to OX ZION'
     }

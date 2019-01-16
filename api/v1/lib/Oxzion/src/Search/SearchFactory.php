@@ -24,5 +24,4 @@ class SearchFactory
     public function getIndexer() {
         return new Elastic\IndexerImpl($this->config);
     }
-
 }
