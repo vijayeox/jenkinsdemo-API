@@ -21,5 +21,7 @@ class SearchFactory
         return new Elastic\SearchEngineImpl($this->config);
     }
 
-
+    public function getIndexer() {
+        return new Elastic\IndexerImpl($this->config);
+    }
 }

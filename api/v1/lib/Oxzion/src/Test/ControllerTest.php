@@ -10,30 +10,16 @@ use Oxzion\Jwt\JwtHelper;
 use PHPUnit\DbUnit\TestCaseTrait;
 use Zend\Stdlib\ArrayUtils;
 
-abstract class ControllerTest extends AbstractHttpControllerTestCase{
+
+abstract class ControllerTest extends MainControllerTest{
     use TestCaseTrait;
-    protected $adminUser='bharatg'; //TODO Need to put as global setup
-    protected $adminUserId=1;
-    protected $employeeUser = 'karan';
-    protected $employeeUserId=2;
-    protected $managerUser = 'rakshith';
-    protected $managerUserId=3;
-    protected $testOrgId=1;
+	static private $pdo = null;
+	// only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
+	private $conn = null;
 
-    protected $jwtToken = array();
-    static private $pdo = null;
-
-    // only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
-    private $conn = null;
-    
-    protected function loadConfig(){
-        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/autoload/global.php', include __DIR__ . '/../../../../config/autoload/local.php');
-        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php',$configOverrides);
-
-        $this->setApplicationConfig($configOverrides);
-    }
-
-    public function getConnection()
+    abstract function getDataSet();
+	
+	public function getConnection()
     {
         if ($this->conn === null) {
             if (self::$pdo == null) {
@@ -45,9 +31,7 @@ abstract class ControllerTest extends AbstractHttpControllerTestCase{
         }
         return $this->conn;
     }
-    
-    abstract function getDataSet();
-    
+	
 	protected function getMockGatewayData($name, $modelClass){
 		$originalTableGateway = $this->getApplicationServiceLocator()->get($name);
 		$dbAdapter = $originalTableGateway->getAdapter();
@@ -68,51 +52,5 @@ abstract class ControllerTest extends AbstractHttpControllerTestCase{
     	return ['mock' => $mockDbAdapter, 'dbAdapter' => $dbAdapter];
     }
 
-    private function getJwtToken($username){
-        
-        
-        if(!isset($this->jwtToken[$username])){
-            $data = JwtHelper::getTokenPayload($username,$this->testOrgId);
-            $config = $this->getApplicationConfig();
-            $jwtKey = $config['jwtKey'];
-            $jwtAlgo = $config['jwtAlgo'];      
-            $token = JwtHelper::generateJwtToken($data, $jwtKey, $jwtAlgo);
-            $this->jwtToken[$username] = $token;
-        }else{
-            $token = $this->jwtToken[$username];    
-        }
 
-        return $token;
-    }
-
-    protected function initAuthToken($username){
-        $token = $this->getJwtToken($username);
-        $request = $this->getRequest();
-        $headers = $request->getHeaders();
-        $headers->addHeaderLine('Authorization', 'Bearer '.$token);
-    }
-
-    protected function getMockObject($class, array $constructorArgs = null){
-    	$mock = $this->getMockBuilder($class);
-    	if(!is_null($constructorArgs)){
-    		$mock = $mock->setConstructorArgs($constructorArgs);
-    	}else{
-    		$mock->disableOriginalConstructor();
-    	}
-
-	    return $mock->getMock();
-	}
-
-	protected function setService($name, $obj){
-		$container = $this->getApplicationServiceLocator();
-	    $container->setAllowOverride(true);        
-	    $container->setService($name, $obj);
-	}
-
-    protected function setJsonContent($jsonData){
-    	$request = $this->getRequest();
-    	$headers = $request->getHeaders();
-        $headers->addHeaderLine('content-type', 'application/json');
-    	$request->setContent($jsonData);
-    }
 }

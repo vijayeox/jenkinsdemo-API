@@ -577,9 +577,26 @@ class ElasticService{
 
 	}
 
+<<<<<<< HEAD
+	public function index($index,$id,$body) {
+		$params['index']=$index;
+		$params['id']=$id;
+		$params['type']=$this->type;
+		$params['body']=$body;
+=======
 	public function index($entity,$params) {
 		$params['index']=$this->core.'_'.$entity;
+>>>>>>> 468b4ac1d73402a05d9233178c0fc79f92e45865
 		return $this->client->index($params);
 	}
+
+	public function delete($index,$id) {
+		if ($id=='all') {
+			$this->client->indices()->delete(['index'=>$index]);
+		} else {
+			$this->client->delete(['index'=>$index,'type'=>$this->type,'id'=>$id]);
+		}
+	}
+
 }
 ?>
