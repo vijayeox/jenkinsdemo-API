@@ -40,7 +40,7 @@ class SearchControllerTest extends MainControllerTest{
         $id = $body['id'];
         AuthContext::put(AuthConstants::ORG_ID, $body['org_id']);
         $return=$indexer->index($app_id,$id,$type,$body);
-        $this->assertEquals($return['result'],1);
+        $this->assertEquals($return['result'],"created");
     }
 
     public function testIndex(){
@@ -56,7 +56,7 @@ class SearchControllerTest extends MainControllerTest{
         $this->assertIndex($indexer,$body[4]);
     }
 
-    public function testSearch(){
+    public function testAllSearch(){
         if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');        
         }
@@ -65,7 +65,41 @@ class SearchControllerTest extends MainControllerTest{
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/search', 'POST', null);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content,0);
+        $this->assertEquals($content['status'],'success');
+        $this->assertEquals($content['data']['result']['hits']['total'],2);
+        $this->assertEquals($content['data']['result']['hits']['hits'][0]['_source']['name'],'test document');
+        $this->assertEquals($content['data']['result']['hits']['hits'][1]['_source']['name'],'west document');
+
+    }
+
+    public function testAppSearchMultipe(){
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');        
+        }
+        $data = ['searchtext' => 'Document','app_id' => '1_test'];
+        $this->initAuthToken($this->employeeUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/search', 'POST', null);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'],'success');
+        $this->assertEquals($content['data']['result']['hits']['total'],3);
+        $this->assertEquals($content['data']['result']['hits']['hits'][0]['_source']['name'],'testing document');
+        $this->assertEquals($content['data']['result']['hits']['hits'][1]['_source']['name'],'test document');
+        $this->assertEquals($content['data']['result']['hits']['hits'][2]['_source']['name'],'different document');
+    }
+
+    public function testAppSearchSingle(){
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');        
+        }
+        $data = ['searchtext' => 'Test','app_id' => '1_test'];
+        $this->initAuthToken($this->employeeUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/search', 'POST', null);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'],'success');
+        $this->assertEquals($content['data']['result']['hits']['total'],1);
+        $this->assertEquals($content['data']['result']['hits']['hits'][0]['_source']['name'],'test document');
     }
 
     public function testDelete() {
@@ -75,8 +109,8 @@ class SearchControllerTest extends MainControllerTest{
         $indexer = $this->searchFactory->getIndexer();
         $return1=$indexer->delete('1_test','all');
         $return2=$indexer->delete('2_test','all');
-        $this->assertEquals($return1['result'],1);
-        $this->assertEquals($return2['result'],1);
+        $this->assertEquals($return1['acknowledged'],1);
+        $this->assertEquals($return2['acknowledged'],1);
     }
 
   

@@ -34,7 +34,7 @@ ox_search:
     app_id: 2_test
     id: 4
     display_id: app2_1
-    name: test document
+    name: west document
     created_by: John Doe
     modified_by: Jane Doe
     date_created: 2018-10-01

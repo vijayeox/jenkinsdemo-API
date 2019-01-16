@@ -38,7 +38,7 @@ class SearchEngineImpl implements SearchEngine {
             $data = $elasticService->getSearchResults($index, $body, $source, $start, $pagesize);
             return $data;
         } catch (Exception $e) {
-            throw new Exception($e->getMessage());
+            throw new Exception("Error performing Elastic Search", 0, $e);
         }
     }
 

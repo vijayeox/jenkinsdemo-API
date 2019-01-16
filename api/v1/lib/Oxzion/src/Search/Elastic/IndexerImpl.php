@@ -22,9 +22,9 @@ class IndexerImpl implements Indexer {
             $index = $app_id;
             $elasticService = new ElasticService($this->config);    
             $response = $elasticService->index($index,$id,$body);
-            return ['result'=>1,'response'=>$response];
+            return $response;
         } catch (Exception $e) {
-            return 0;
+            throw new Exception("Could not Perform Elastic Index", 0, $e);
         }
     }
 
@@ -33,9 +33,9 @@ class IndexerImpl implements Indexer {
             $elasticService = new ElasticService($this->config);       
             $index = $app_id;
             $response = $elasticService->delete($index,$id);
-            return ['result'=>1,'response'=>$response];
+            return $response;
         } catch (Exception $e) {
-            return 0;
+            throw new Exception("Could not Delete Elastic Index", 0, $e);
         }
     }
 
