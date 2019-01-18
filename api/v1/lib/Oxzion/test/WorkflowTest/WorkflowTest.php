@@ -180,7 +180,7 @@ class WorkflowTest extends TestCase{
         $this->assertEquals($data[0]['fields'][0]['text'],'New Field');
         $this->assertEquals($data[0]['fields'][0]['data_type'],'string');
         $this->assertEquals($data[0]['start_form'],'StartEvent_1');
-        $this->assertEquals(count($data[1]['fields']),1);
+        $this->assertEquals(count($data[1]['fields']),3);
         $this->assertEquals($data[0]['form']['name'],'UserTask_1');
         $this->assertEquals($data[0]['form']['app_id'],1);
         $this->assertEquals($data[1]['fields'][0]['name'],'a_val');
