@@ -44,7 +44,7 @@ class WorkflowService extends AbstractService{
     	$fileName = $file['name'];
     	FileUtils::storeFile($file,$workFlowStorageFolder);
     	$formList = $this->processManager->parseBPMN($workFlowStorageFolder."/".$fileName,$data['app_id']);
-    	$formIdArray = array();
+    	$startFormId = array();
     	$workFlowList = array();
         $workFlowFormIds = array();
     	foreach ($formList as $form) {
@@ -62,6 +62,9 @@ class WorkflowService extends AbstractService{
     			$formResult = $this->formService->createForm($formData);
     			$formIdArray[] = $formData['id'];
     			$deployedProcess = $this->processManager->deploy(AuthContext::get(AuthConstants::ORG_ID),$data['name'],array($file));
+                if(isset($form['form']['start_form'])){
+                    $startFormId = $form['form']['start_form'];
+                }
     			$processIds[] = $formData['process_id'];
     			if($formResult && $workFlow){
     				if(!$this->generateFields($form['fields'],$formData['id'])) {
@@ -78,7 +81,7 @@ class WorkflowService extends AbstractService{
     			return 0;
     		}
     	}
-        $data = array('app_id'=>$data['app_id'],'name'=>$file['name'],'process_ids'=>json_encode(array_unique($processIds)),'form_ids'=>json_encode(array_unique($formIdArray)),'file'=>$workFlowStorageFolder.$file['name']);
+        $data = array('app_id'=>$data['app_id'],'name'=>$file['name'],'process_ids'=>json_encode(array_unique($processIds)),'form_id'=>$startFormId,'file'=>$workFlowStorageFolder.$file['name']);
         $workFlow = $this->addWorkflow($data);
     	return $workFlow?$workFlow:0;
     }
@@ -152,8 +155,6 @@ class WorkflowService extends AbstractService{
     	} else {
     		return 0;
     	}
-    } 
-
-    
+    }    
 }
 ?>

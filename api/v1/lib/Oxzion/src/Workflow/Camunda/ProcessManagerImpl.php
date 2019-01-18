@@ -37,7 +37,18 @@ public function parseBPMN($file,$appId){
   $formArray = array();
   $i=0;
   foreach ($document->getElementsByTagNameNs(Config::bpmnSpec, 'process') as $element) {
-    $elementList = $document->getElementsByTagNameNs(Config::bpmnSpec, 'userTask');
+    $startEventList = $element->getElementsByTagNameNs(Config::bpmnSpec, 'startEvent');
+    $startFormId = $startEventList->item(0)->getAttribute('id');
+    $startForm = $startEventList->item(0)->getElementsByTagNameNS(Config::camundaSpec,'formData');
+    if($startForm){
+      $fieldArray = array();
+      $formArray[$i]['form'] = $this->generateForm($startEventList->item(0),$appId,$element->getAttribute('id'));
+      $fields = $startEventList->item(0)->getElementsByTagNameNS(Config::camundaSpec,'formField');
+      $formArray[$i]['fields'] = $this->generateFields($fieldArray,$fields,$appId);
+      $formArray[$i]['start_form'] = $startEventList->item(0)->getAttribute('id');
+      $i++;
+    }
+    $elementList = $element->getElementsByTagNameNs(Config::bpmnSpec, 'userTask');
     foreach ($elementList as $task) {
       $fieldArray = array();
       $formArray[$i]['form'] = $this->generateForm($task,$appId,$element->getAttribute('id'));
