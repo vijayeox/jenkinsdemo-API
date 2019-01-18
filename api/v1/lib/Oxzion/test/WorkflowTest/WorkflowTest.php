@@ -173,12 +173,13 @@ class WorkflowTest extends TestCase{
         $processManager = $workflowFactory->getProcessManager();
         $processEngine = $workflowFactory->getProcessEngine();
         $data = $processManager->parseBPMN(__DIR__."/Dataset/ScriptTaskTest.bpmn",'1');
-        $this->assertEquals($data[0]['form']['name'],'UserTask_1');
+        $this->assertEquals($data[0]['form']['name'],'StartEvent_1');
         $this->assertEquals($data[0]['form']['app_id'],1);
         $this->assertEquals(count($data[0]['fields']),3);
-        $this->assertEquals($data[0]['fields'][0]['name'],'a_val');
-        $this->assertEquals($data[0]['fields'][0]['text'],'A Value');
-        $this->assertEquals($data[0]['fields'][0]['constraints'],'[{"name":"required","config":"true"}]');
+        $this->assertEquals($data[0]['fields'][0]['name'],'FormField_3oot72p');
+        $this->assertEquals($data[0]['fields'][0]['text'],'New Field');
+        $this->assertEquals($data[0]['fields'][0]['data_type'],'string');
+        $this->assertEquals($data[0]['start_form'],'StartEvent_1');
         $this->assertEquals(count($data[0]['fields']),3);
         $this->assertNotEquals(0, $data);
     }
