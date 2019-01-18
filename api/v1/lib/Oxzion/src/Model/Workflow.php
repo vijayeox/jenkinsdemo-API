@@ -7,12 +7,13 @@ class Workflow extends Entity{
     protected $data = array(
         'id' => NULL,
         'name' => NULL,
-        'process_id' => NULL,
+        'process_ids' => NULL,
         'app_id' => NULL,
-        'form_id' => NULL
+        'form_ids' => NULL,
+        'file'=>NULL
     );
     public function validate(){
-        $required = array('name','process_id','app_id');
+        $required = array('name','app_id');
         $this->validateWithParams($required);
     }
 } 
