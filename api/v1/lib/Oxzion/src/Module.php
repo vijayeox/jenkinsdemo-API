@@ -123,6 +123,20 @@ class Module {
                 Workflow\WorkflowFactory::class => function ($container){
                     return Workflow\WorkflowFactory::getInstance(); 
                 },
+                Model\WorkflowTable::class => function($container) {
+                    $tableGateway = $container->get(Model\WorkflowTableGateway::class);
+                    return new Model\WorkflowTable($tableGateway);
+                },
+                Model\WorkflowTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Organization());
+                    return new TableGateway('ox_organization', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\WorkflowService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\WorkflowService($container->get('config'), $dbAdapter, $container->get(Model\WorkflowTable::class));
+                },
                 Search\SearchFactory::class => function($container) {
                     $config = $container->get('config');
                     return new Search\SearchFactory($config);
