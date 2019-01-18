@@ -16,7 +16,8 @@ final class Version20190109101830 extends AbstractMigration
 			`date_modified`  DATETIME, PRIMARY KEY (`id`)) ENGINE = InnoDB;");
         $this->addSql("INSERT INTO ox_privilege (name,permission_allowed) values ('MANAGE_WORKFLOW',15);");
         $this->addSql("INSERT INTO ox_role_privilege (role_id,privilege_name,permission) values (1, 'MANAGE_WORKFLOW',15);");
-        $this->addSql("ALTER TABLE `ox_form` ADD `process_id` VARCHAR(128) NULL AFTER `name`;");
+        $this->addSql("ALTER TABLE `ox_form` ADD `task_id` VARCHAR(128) NULL AFTER `name`;");
+        $this->addSql("ALTER TABLE `ox_form` ADD `process_id` VARCHAR(128) NULL AFTER `task_id`;");
         $this->addSql("ALTER TABLE `ox_field` ADD `constraints` TEXT NULL AFTER `options`;");
         $this->addSql("ALTER TABLE `ox_field` ADD `properties` TEXT NULL AFTER `constraints`;");
 
