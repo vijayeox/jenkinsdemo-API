@@ -14,6 +14,8 @@ class Field extends Entity{
 		'form_id'=>NULL,
 		'data_type'=>NULL,
 		'options'=>NULL,
+		'constraints'=>NULL,
+		'properties'=>NULL,
 		'dependson'=>NULL,
 		'required'=>NULL,
 		'readonly'=>NULL,

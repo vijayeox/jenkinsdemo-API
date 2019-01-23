@@ -207,12 +207,12 @@ class AppService extends AbstractService {
      * @return array|int
      */
     public function insertAppDetail($appData) {
-        if(!empty($appData['app-name'])) {
-            $formData['name'] = $appData['app-name'];
-            $formData['description'] = $appData['app-description'];
-            $formData['logo'] = $appData['app-logo'];
+        if(!empty($appData['name'])) {
+            $formData['name'] = $appData['name'];
+            $formData['description'] = $appData['description'];
+            $formData['logo'] = $appData['logo'];
             $formData['app_id'] = $appData['app-id'];
-            $formData['type'] = $appData['app-type'];
+            $formData['type'] = $appData['type'];
         }
         try {
             $id = $this->installAppForOrg($formData);

@@ -10,6 +10,8 @@ class Form extends Entity{
         'app_id'=>0,
         'name'=>NULL,
         'description'=>NULL,
+        'task_id'=>NULL,
+        'process_id'=>NULL,
         'org_id'=>NULL,
         'statuslist'=>NULL,
         'template'=>NULL,
