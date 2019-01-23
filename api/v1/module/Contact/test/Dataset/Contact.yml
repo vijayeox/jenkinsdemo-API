@@ -1,0 +1,27 @@
+ox_contact:
+  -
+    id: 1
+    user_id: 2
+    first_name: Karan S
+    last_name: Agarwal
+    phone_1: 09383883922
+    phone_2: 7813773883
+    email: karan@myvamla.com
+    company_name: Vantage Agora
+    address_1: Banashankri 2nd Stage
+    address_2: Bangalore
+    country: India
+    org_id: 1
+  -
+    id: 2
+    user_id: 1
+    first_name: Bharat G
+    last_name: Gogineni
+    phone_1: 9829838883
+    phone_2: 8928829056
+    email: bharatg@myvamla.com
+    company_name: Vantage Agora
+    address_1: Indiranagar
+    address_2: Bangalore
+    country: India
+    org_id: 2
