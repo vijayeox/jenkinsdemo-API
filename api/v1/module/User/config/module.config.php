@@ -132,6 +132,17 @@ return [
                     ],
                 ],
             ],
+            'userSearch' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/usersearch',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'userSearch'
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

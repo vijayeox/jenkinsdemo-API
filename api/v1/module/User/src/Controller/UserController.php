@@ -305,4 +305,28 @@ class UserController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
     }
+
+    /**
+     * Code to searches for list of friends for the logged in user and then searches for all the other people from the organization
+     * @api
+     * @link /user/:userId/usersearch
+     * @method userSearch
+     * @param $id ID of User
+     * @return Json Array of Friends and Other employees from the organization
+     */
+
+    public function userSearchAction()
+    {
+        $data = $this->params()->fromPost();
+        try {
+            $result = $this->userService->getUserBySearchName($data['searchVal']);
+            if ($result == null || empty($result)) {
+                return $this->getErrorResponse("No results found for " . $data['searchVal']);
+            }
+            return $this->getSuccessResponseWithData($result);
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        }
+    }
 }
