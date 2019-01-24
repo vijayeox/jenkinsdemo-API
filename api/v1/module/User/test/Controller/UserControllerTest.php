@@ -14,7 +14,7 @@ class UserControllerTest extends ControllerTest{
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
-    }   
+    }
 
     public function getDataSet() {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/User.yml");
@@ -29,7 +29,7 @@ class UserControllerTest extends ControllerTest{
         $this->assertMatchedRouteName($router);
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
-    
+
     public function testCreate(){
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'John Holt','status'=>'1','dob'=>date('Y-m-d H:i:s', strtotime("-50 year")),'doj'=>date('Y-m-d H:i:s'),'icon'=>'test-oxzionlogo.png', 'managerid' =>'471', 'firstname' =>'John', 'lastname' => 'Holt', 'username' => 'johnh', 'password' => 'welcome2oxzion', 'designation' => 'CEO', 'level' => '7', 'cluster' => 'Management', 'location' => 'USA','gamelevel'=>'Wanna be','email'=>'harshva.com','sex'=>'M','role'=>'employee','listtoggle'=>1,'mission_link'=>'test'];
@@ -71,7 +71,7 @@ class UserControllerTest extends ControllerTest{
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
-    
+
     public function testGetList(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user', 'GET');
@@ -147,7 +147,7 @@ class UserControllerTest extends ControllerTest{
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');        
+        $this->assertEquals($content['status'], 'error');
     }
 
     public function testassignManagerToUser() {
@@ -216,4 +216,22 @@ class UserControllerTest extends ControllerTest{
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
+
+    public function testUserLoginToken() {
+        $this->initAuthToken($this->managerUser);
+        $this->dispatch('/user/usertoken', 'get');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('userToken');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+//    public function testUserLoginTokenNoAccess() {
+//        $this->initAuthToken($this->noUser);
+//        $this->dispatch('/user/usertoken', 'get');
+//        $this->assertResponseStatusCode(401);
+//        $this->setDefaultAsserts('userToken');
+//        $content = json_decode($this->getResponse()->getContent(), true);
+//        $this->assertEquals($content['status'], 'error');
+//    }
 }

@@ -89,7 +89,7 @@ class UserService extends AbstractService{
         ->where(array('ox_user_role.user_id' => $userId));
 		return $this->executeQuery($select)->toArray();
 	}
-	private function getPrivelegesFromDb($userId){
+	private function getPrivilegesFromDb($userId){
 		$sql = $this->getSqlObject();
 		$select = $sql->select()
 		->from('ox_role_privilege')
@@ -119,11 +119,11 @@ class UserService extends AbstractService{
 		}
 		return $permissionArray;
 	}
-	public function getPriveleges($userId){
-		// if($roleData = $this->cacheService->get($userId.PRIVELEGES)){
+	public function getPrivileges($userId){
+		// if($roleData = $this->cacheService->get($userId.PRIVILEGES)){
 			// $data = $roleData;
 		// } else {
-			$data = $this->getPrivelegesFromDb($userId);
+			$data = $this->getPrivilegesFromDb($userId);
 			// $this->cacheService->set($userId.PERMISSIONS, $data);
 		// }
 		return $data;
