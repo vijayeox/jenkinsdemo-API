@@ -12,30 +12,30 @@ return [
     'router' => [
         'routes' => [
             'user' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/user[/:userId]',
+                    'route' => '/user[/:userId]',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
-                        'access'=> [
+                        'access' => [
                             // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_USER_WRITE',
-                            'post'=> 'MANAGE_USER_WRITE',
-                            'delete'=> 'MANAGE_USER_WRITE',
-                            'get'=> 'MANAGE_USER_READ',
+                            'put' => 'MANAGE_USER_WRITE',
+                            'post' => 'MANAGE_USER_WRITE',
+                            'delete' => 'MANAGE_USER_WRITE',
+                            'get' => 'MANAGE_USER_READ',
                         ],
                     ],
                 ],
             ],
             'assignUserManager' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/user/:userId/assign/:managerId',
+                    'route' => '/user/:userId/assign/:managerId',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'GET',
                         'action' => 'assignManagerToUser',
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
                             'assignManagerToUser' => 'MANAGE_USER_WRITE',
                         ],
@@ -43,14 +43,14 @@ return [
                 ],
             ],
             'removeUserManager' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/user/:userId/remove/:managerId',
+                    'route' => '/user/:userId/remove/:managerId',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'DELETE',
                         'action' => 'removeManagerForUser',
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
                             'removeManagerForUser' => 'MANAGE_USER_WRITE',
                         ],
@@ -58,14 +58,14 @@ return [
                 ],
             ],
             'addUserToGroup' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/user/:userId/addusertogroup/:groupId',
+                    'route' => '/user/:userId/addusertogroup/:groupId',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
                         'action' => 'addusertogroup',
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
                             'addusertogroup' => 'MANAGE_USER_WRITE',
                         ],
@@ -73,14 +73,14 @@ return [
                 ],
             ],
             'removeUserFromGroup' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/user/:userId/removeuserfromgroup',
+                    'route' => '/user/:userId/removeuserfromgroup',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'DELETE',
                         'action' => 'removeuserfromgroup',
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
                             'removeuserfromgroup' => 'MANAGE_USER_WRITE',
                         ],
@@ -88,14 +88,14 @@ return [
                 ],
             ],
             'addUserToProject' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/user/:userId/addusertoproject/:projectId',
+                    'route' => '/user/:userId/addusertoproject/:projectId',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
                         'action' => 'addusertoproject',
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
                             'addusertoproject' => 'MANAGE_USER_WRITE',
                         ],
@@ -103,16 +103,31 @@ return [
                 ],
             ],
             'removeUserFromProject' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/user/:userId/removeuserfromproject/:projectId',
+                    'route' => '/user/:userId/removeuserfromproject/:projectId',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'DELETE',
                         'action' => 'removeuserfromproject',
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
                             'removeuserfromproject' => 'MANAGE_USER_WRITE',
+                        ],
+                    ],
+                ],
+            ],
+            'userToken' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/usertoken',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'get',
+                        'action' => 'userLoginToken',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            'userLoginToken' => 'MANAGE_USER_READ',
                         ],
                     ],
                 ],
@@ -127,26 +142,26 @@ return [
                     'priority' => \Zend\Log\Logger::ALERT,
                     'options' => [
                         'stream' => __DIR__ . '/../../../logs/user.log',
-                            'formatter' => [
-                                'name' => \Zend\Log\Formatter\Simple::class,
-                                'options' => [
-                                    'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%','dateTimeFormat' => 'c',
-                                    ],
-                                ],
-                            'filters' => [
-                                'priority' => \Zend\Log\Logger::INFO,],
+                        'formatter' => [
+                            'name' => \Zend\Log\Formatter\Simple::class,
+                            'options' => [
+                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
                             ],
                         ],
-                    ],
-                    'processors' => [
-                        'requestid' => [
-                            'name' => \Zend\Log\Processor\RequestId::class,],
-                        ],
+                        'filters' => [
+                            'priority' => \Zend\Log\Logger::INFO,],
                     ],
                 ],
-                'view_manager' => [
-                // We need to set this up so that we're allowed to return JSON
-                // responses from our controller.
-                    'strategies' => ['ViewJsonStrategy',],
-                ],
-            ];
+            ],
+            'processors' => [
+                'requestid' => [
+                    'name' => \Zend\Log\Processor\RequestId::class,],
+            ],
+        ],
+    ],
+    'view_manager' => [
+        // We need to set this up so that we're allowed to return JSON
+        // responses from our controller.
+        'strategies' => ['ViewJsonStrategy',],
+    ],
+];

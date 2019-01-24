@@ -120,7 +120,7 @@ class UserService extends AbstractService{
 		return $permissionArray;
 	}
 	public function getPrivileges($userId){
-		// if($roleData = $this->cacheService->get($userId.PRIVELEGES)){
+		// if($roleData = $this->cacheService->get($userId.PRIVILEGES)){
 			// $data = $roleData;
 		// } else {
 			$data = $this->getPrivilegesFromDb($userId);

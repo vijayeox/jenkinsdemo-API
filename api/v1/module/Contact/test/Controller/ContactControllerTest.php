@@ -27,19 +27,10 @@ class ContactControllerTest extends ControllerTest
         return $dataset;
     }
 
-    protected function setDefaultAsserts()
-    {
-        $this->assertModuleName('Contact');
-        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ContactController');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-    }
-
-//Testing to see if the Create Contact function is working as intended if all the value passed are correct.
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['user_id' => '3', 'first_name' => "Raks", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'phone_2' => '9092992992', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India', 'owner_id' => 3, 'org_id' =>'1'];
+        $data = ['user_id' => '3', 'first_name' => "Raks", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'phone_2' => '9092992992', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India', 'owner_id' => 3, 'org_id' => '1'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_contact'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact', 'POST', $data);
@@ -62,7 +53,18 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_contact'));
     }
 
+//Testing to see if the Create Contact function is working as intended if all the value passed are correct.
+
+    protected function setDefaultAsserts()
+    {
+        $this->assertModuleName('Contact');
+        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ContactController');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+    }
+
 //Test Case to check the errors when the required field is not selected. Here I removed the parent_id field from the list.
+
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
