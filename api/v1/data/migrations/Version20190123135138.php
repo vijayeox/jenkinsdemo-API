@@ -13,8 +13,7 @@ final class Version20190123135138 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `ox_app` ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC);
-  ");
+        $this->addSql("ALTER TABLE `ox_app` ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC);");
     }
 
     public function down(Schema $schema) : void
