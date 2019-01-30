@@ -493,8 +493,8 @@ class UserService extends AbstractService
             ->join('ox_app_registry', 'ox_app_registry.app_id = ox_app.id', array(), 'left')
             ->join('ox_role_privilege', 'ox_role_privilege.app_id = ox_app.id', array(), 'left')
             ->join('ox_user_role', 'ox_user_role.role_id = ox_role_privilege.role_id', array(), 'left')
-            ->where(array('ox_app_registry.org_id = '. $orgId))
-            ->where(array('ox_user_role.role_id NOT IN (' .  $userRole . ')'))
+            ->where(array('ox_app_registry.org_id = ' . $orgId))
+            ->where(array('ox_user_role.role_id NOT IN (' . $userRole . ')'))
             ->order(array('ox_app.name'));
         $result1 = array_column($this->executeQuery($select1)->toArray(), 'id');
 
@@ -503,7 +503,7 @@ class UserService extends AbstractService
         $select2->from('ox_app')
             ->columns(array("id"))
             ->join('ox_app_registry', 'ox_app_registry.app_id = ox_app.id', array(), 'left')
-            ->where(array('ox_app_registry.org_id <> '. $orgId))
+            ->where(array('ox_app_registry.org_id <> ' . $orgId))
             ->order(array('ox_app.name'));
         $result2 = array_column($this->executeQuery($select2)->toArray(), 'id');
         //Code to get the difference of the two array
@@ -542,8 +542,31 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select()
             ->from('avatars')
-            ->columns(array('id', 'firstname', 'lastname'))
+            ->columns(array('id', 'firstname', 'lastname'))// Instead of getting the id from the userTable,
+            // we need to get the UUID. Once UUID is added to the table we need to make that change
             ->where(array('firstname LIKE "%' . $searchVal . '%" OR lastname LIKE "%' . $searchVal . '%"'));
         return $result = $this->executeQuery($select)->toArray();
+    }
+
+    public function getUserDetailsbyUserName($userName) {
+        $whereCondition = "username = '" . $userName . "'";
+        $columnList = array('*');
+        return $userDetail = $this->getUserContextDetailsByParams($whereCondition, $columnList);
+    }
+
+    public function getUserContextDetailsByParams($whereCondition, $columnList)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select()
+            ->from('avatars')
+            ->columns($columnList)
+            ->where(array($whereCondition))
+            ->limit(1);
+        $results = $this->executeQuery($select);
+        $results = $results->toArray();
+        if (count($results) > 0) {
+            $results = $results[0];
+        }
+        return $results;
     }
 }

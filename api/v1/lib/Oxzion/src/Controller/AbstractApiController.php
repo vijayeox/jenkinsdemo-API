@@ -13,17 +13,21 @@ use Zend\Mvc\MvcEvent;
 use Bos\Utils\ValidationResult;
 use Oxzion\Auth\AuthSuccessListener;
 use Oxzion\Service\UserService;
+use Oxzion\Service\UserTokenService;
+use Bos\Auth\AuthContext;
 
 
-abstract class AbstractApiController extends AbstractApiControllerHelper{
+abstract class AbstractApiController extends AbstractApiControllerHelper
+{
     protected $table;
     protected $log;
     protected $logClass;
     protected $modelClass;
     protected $parentId;
     protected $username;
-    
-    public function __construct($table, Logger $log, $logClass, $modelClass, $parentId = null){
+
+    public function __construct($table, Logger $log, $logClass, $modelClass, $parentId = null)
+    {
         $this->table = $table;
         $this->log = $log;
         $this->logClass = $logClass;
@@ -32,18 +36,21 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
     }
 
 
-    protected function validate($model){
+    protected function validate($model)
+    {
         return new ValidationResult(ValidationResult::SUCCESS);
     }
-    private function getParentFilter(){
+
+    private function getParentFilter()
+    {
         $filter = null;
-        if(!is_null($this->parentId)){
+        if (!is_null($this->parentId)) {
             $pid = $this->params()->fromRoute()[$this->parentId];
 
             if ($pid !== false) {
                 $filter = [$this->parentId => $pid];
             }
-        
+
         }
         return $filter;
     }
@@ -54,6 +61,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'checkAuthorization'), 100);
         $events->attach(MvcEvent::EVENT_DISPATCH, array(SecurityManager::getInstance(), 'checkAccess'), 90);
     }
+
     public function checkAuthorization($event)
     {
         $request = $event->getRequest();
@@ -63,17 +71,33 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         if ($jwtToken) {
             $token = $jwtToken;
             $tokenPayload = $this->decodeJwtToken($token);
-                if (is_object($tokenPayload)) {
-                    if($tokenPayload->data && $tokenPayload->data->username){
-                        $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
-                        $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username,AuthConstants::ORG_ID => $tokenPayload->data->orgId]);
-					    return;
-                    }
+            if (is_object($tokenPayload)) {
+                if ($tokenPayload->data && $tokenPayload->data->username) {
+                    $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
+                    $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username, AuthConstants::ORG_ID => $tokenPayload->data->orgId]);
+                    $data = $this->getTokenPayload($tokenPayload->data->username, $tokenPayload->data->orgId);
+                    $this->generateJwtToken($data);
+                    return;
+                }
+            } else if (is_array($tokenPayload) && $tokenPayload['Error'] === 'Expired token') {
+                $UserService = $this->getEvent()->getApplication()->getServiceManager()->get(UserService::class);
+                $userDetail = $UserService->getUserDetailsbyUserName($tokenPayload['username']);
+
+                $UserTokenService = $this->getEvent()->getApplication()->getServiceManager()->get(UserTokenService::class);
+                $userTokenInfo = $UserTokenService->checkExpiredTokenInfo(Array('id' => $userDetail['id']));
+                if (!empty($userTokenInfo)) {
+                    $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
+                    $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload['username'], AuthConstants::ORG_ID => $tokenPayload['orgId']]);
+                    $data = $this->getTokenPayload($tokenPayload['username'], $tokenPayload['orgId']);
+                    $jwt = $this->generateJwtToken($data);
+                    $response->getHeaders()->addHeaderLine('Authorization', 'Bearer ' . $jwt);
+                    return;
+                }
             }
-            $jsonModel = $this->getErrorResponse($tokenPayload, 400); 
-            
+            $jsonModel = $this->getErrorResponse($tokenPayload, 400);
+
         } else {
-            $jsonModel = $this->getErrorResponse($config['authRequiredText'], 401); 
+            $jsonModel = $this->getErrorResponse($config['authRequiredText'], 401);
         }
 
         $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
@@ -81,20 +105,22 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
         return $response;
     }
 
-    
+
     //GET /{controller}/{id]
-    public function get($id){
+    public function get($id)
+    {
         $this->log->info($this->logClass . ": get for id - $id");
         $filter = $this->getParentFilter();
         $form = $this->table->get($id, $filter);
-        if(is_null($form)){
+        if (is_null($form)) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
         return $this->getSuccessResponseWithData($form->toArray());
     }
 
     //GET /{controller}
-    public function getList(){
+    public function getList()
+    {
         $this->log->info($this->logClass . ": getList");
         $filter = $this->getParentFilter();
         $result = $this->table->fetchAll($filter);
@@ -110,64 +136,67 @@ abstract class AbstractApiController extends AbstractApiControllerHelper{
     }
 
     //POST /controller 
-    public function create($data){
+    public function create($data)
+    {
         $this->log->info($this->logClass . ": create - ");
         $filter = $this->getParentFilter();
-        if(!is_null($filter)){
+        if (!is_null($filter)) {
             $data[$this->parentId] = $filter[$this->parentId];
         }
         $form = new $this->modelClass;
         $form->exchangeArray($data);
         try {
             $validationResult = $this->validate($form);
-            if(! $validationResult->isValid()){
+            if (!$validationResult->isValid()) {
                 return $this->getErrorResponse($validationResult->getMessage(), 404, $data);
             }
             $count = $this->table->save($form);
-            if($count == 0){
+            if ($count == 0) {
                 return $this->getFailureResponse("Failed to create a new entity", $data);
             }
             $id = $this->table->getLastInsertValue();
             $form->id = $id;
             return $this->getSuccessResponseWithData($form->toArray(), 201);
-        } catch(Exception $e){
+        } catch (Exception $e) {
             return $this->getFailureResponse("Failed to create a new entity", $e->getMessage());
         }
-    
+
     }
 
     //PUT /controller/{id} 
-    public function update($id, $data){
+    public function update($id, $data)
+    {
         $this->log->info($this->logClass . ": update for id - $id ");
         $filter = $this->getParentFilter();
         $obj = $this->table->get($id, $filter);
-        if(is_null($obj)){
+        if (is_null($obj)) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
-        if(!is_null($filter)){
+        if (!is_null($filter)) {
             $data[$this->parentId] = $filter[$this->parentId];
         }
         $obj = new $this->modelClass;
         $obj->exchangeArray($data);
         $obj->id = $id;
         $validationResult = $this->validate($obj);
-        if(! $validationResult->isValid()){
+        if (!$validationResult->isValid()) {
             return $this->getErrorResponse($validationResult->getMessage(), 404, $data);
         }
         $count = $this->table->save($obj);
-        if($count == 0){
+        if ($count == 0) {
             return $this->getFailureResponse("Failed to update data for id - $id", $data);
         }
-        
+
         return $this->getSuccessResponseWithData($obj->toArray());
     }
 
     //DELETE /{controller}/{id}
-    public function delete($id){
+    public function delete($id)
+    {
         $this->log->info($this->logClass . ": delete for id - $id");
         $filter = $this->getParentFilter();
         $count = $this->table->delete($id, $filter);
-        if($count == 0){
+        if ($count == 0) {
             return $this->getErrorResponse("No entity found for id - $id", 404);
         }
 
