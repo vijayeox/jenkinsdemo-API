@@ -1,9 +1,11 @@
 {
   "type": "application",
-  "name": "OXAnnouncements",
+  "name": "Announcements",
   "category": null,
   "icon" : "icon.png",
   "server": "server.js",
+  "autostart": true,
+  "singleton": true,
   "title": {
     "en_EN": "Announcements"
   },
