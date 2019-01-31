@@ -139,4 +139,17 @@ class ContactController extends AbstractApiController
         return $this->getSuccessResponseWithData($result);
     }
 
+    public function getContactListWithLimitAction()
+    {
+        $data = $this->params()->fromPost();
+        $result = $this->contactService->getContactWithParams($data);
+        if($result['status'] === 'error') {
+            return $this->getErrorResponse("Offset cannot be greater then the Limit!", 400, $data);
+        }
+        if ($result == null || empty($result)) {
+            return $this->getErrorResponse("There are no contacts in your organization!");
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
+
 }

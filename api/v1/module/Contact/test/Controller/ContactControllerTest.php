@@ -27,6 +27,16 @@ class ContactControllerTest extends ControllerTest
         return $dataset;
     }
 
+
+    protected function setDefaultAsserts()
+    {
+        $this->assertModuleName('Contact');
+        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ContactController');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+    }
+
+//Testing to see if the Create Contact function is working as intended if all the value passed are correct.
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
@@ -51,16 +61,6 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['country'], $data['country']);
         $this->assertEquals($content['data']['owner_id'], $data['owner_id']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_contact'));
-    }
-
-//Testing to see if the Create Contact function is working as intended if all the value passed are correct.
-
-    protected function setDefaultAsserts()
-    {
-        $this->assertModuleName('Contact');
-        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('ContactController');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
 //Test Case to check the errors when the required field is not selected. Here I removed the parent_id field from the list.
@@ -168,6 +168,39 @@ class ContactControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testGetContactListWithLimit()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['offset' => '0', 'limit' => '100', 'orderFieldName' => 'first_name', 'order' => 'asc', 'searchVal' => 'kar',
+        ];
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_contact'));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/contact/list', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('contactlist');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+
+    /*Code to test when the offset value is greater than the limit.*/
+    public function testGetContactListWithLimitAndOffsetGreater()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['offset' => '10', 'limit' => '2', 'orderFieldName' => 'first_name', 'order' => 'asc', 'searchVal' => 'kar',
+        ];
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_contact'));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/contact/list', 'POST', $data);
+        $this->assertResponseStatusCode(400);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('contactlist');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Offset cannot be greater then the Limit!');
     }
 
 }

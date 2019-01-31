@@ -42,6 +42,21 @@ return [
                     ],
                 ],
             ],
+            'contactList' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/contact/list',
+                    'defaults' => [
+                        'controller' => Controller\ContactController::class,
+                        'action' => 'getContactListWithLimit',
+                        'method' => 'post',
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'getContactListWithLimit'=> 'MANAGE_CONTACT_READ',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

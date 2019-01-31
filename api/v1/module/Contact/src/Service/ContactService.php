@@ -111,4 +111,24 @@ class ContactService extends AbstractService
         return $resultSet->toArray();
     }
 
+
+    public function getContactWithParams($data)
+    {
+        $offset = ($data['offset'] === '' || $data['offset'] === null) ? "0" : $data['offset'];
+        $limit = ($data['limit'] === '' || $data['limit'] === null) ? "10" : $data['limit'];
+        if($offset > $limit) {
+            return Array('status'=>'error', 'data'=> $data);
+        }
+        $fieldName = ($data['orderFieldName'] === '' || $data['orderFieldName'] === null) ? 'first_name' : $data['orderFieldName'];
+        $orderParam = ($data['order'] === '' || $data['order'] === null) ? "asc" : $data['order']; // asc or desc
+        $searchVal = (string)$data['searchVal'];
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $queryString = "select * from ox_contact";
+        $where = 'where org_id = ' . $orgId . ' and (first_name LIKE "%'. $searchVal .'%" OR last_name LIKE "%'. $searchVal .'%")';
+        $order = "order by ". $fieldName ." ". $orderParam;
+        $limit = "limit " . $offset . ", " . $limit . "";
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order, $limit);
+        return $resultSet->toArray();
+    }
+
 }
