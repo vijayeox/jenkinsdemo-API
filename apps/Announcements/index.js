@@ -14,7 +14,7 @@ const register = (core, args, options, metadata) => {
   const proc = core.make('osjs/application', {args, options, metadata});
 
   // Create  a new Window instance
-  proc.createWindow({
+    proc.createWindow({
     id: 'annoucementsWindow',
     title: metadata.title.en_EN,
     icon: proc.resource(icon),
@@ -23,6 +23,33 @@ const register = (core, args, options, metadata) => {
   })
     .on('destroy', () => proc.destroy())
     .render($content => ReactDOM.render(<Slider  args = {core} />, $content));
+
+
+    const win = (proc) => {
+        proc.createWindow({
+        id: 'annoucementsWindow',
+        title: metadata.title.en_EN,
+        icon: proc.resource(icon),
+        dimension: {width: 700, height: 400},
+        position: {left: 700, top: 200}
+      })
+        .on('destroy', () => proc.destroy())
+        .render($content => ReactDOM.render(<Slider  args = {core} />, $content));
+    }
+
+
+   if (core.has('osjs/tray')) {
+    const tray = core.make('osjs/tray').create({
+      icon: proc.resource(metadata.icon),
+    }, (ev) => {
+      core.make('osjs/contextmenu').show({
+        position: ev,
+        menu: [
+          {label: 'Show', onclick: () => win(proc)}
+        ]
+      });
+    });
+  }
 
   // Creates a new WebSocket connection (see server.js)
   //const sock = proc.socket('/socket');
