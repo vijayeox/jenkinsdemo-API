@@ -1,0 +1,17 @@
+{
+  "type": "application",
+  "name": "OXAnnouncements",
+  "category": null,
+  "icon" : "icon.png",
+  "server": "server.js",
+  "title": {
+    "en_EN": "Announcements"
+  },
+  "description": {
+    "en_EN": "Announcements"
+  },
+  "files": [
+    "main.js",
+    "main.css"
+  ]
+}
