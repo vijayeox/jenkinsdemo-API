@@ -1,49 +1,40 @@
 buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.1.0.RELEASE')
-    }
+	ext {
+		springBootVersion = '2.1.2.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
 }
 
-/*plugins{
-    id "org.springframework.boot" 
-}*/
-apply plugin:"groovy"
-apply plugin:"eclipse"
-apply plugin:"idea"
+apply plugin: 'groovy'
+apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-ext['groovy.version'] = '2.5.4'
-group "com.oxzion"
-version "1.0.0"
-jar{
-    baseName = 'integration'
-    version = '1.0.0'
-}
+group = 'com.oxzion'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
 repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-dependencyManagement {
-    imports {
-        mavenBom 'org.springframework.boot:spring-boot-dependencies:2.0.2.RELEASE'
-    }
+	mavenCentral()
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.5.4'
-    compile("org.springframework.boot:spring-boot-starter")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-    compile 'org.apache.camel:camel-spring-boot:2.22.2'
-    compile 'org.apache.camel:camel-groovy:2.22.2'
-    runtime 'mysql:mysql-connector-java:5.1.47'
-    compile 'org.apache.camel:camel-jpa:2.22.2'
-    compile 'org.apache.camel:camel-sql:2.22.2'
-
+	implementation 'org.springframework.boot:spring-boot-starter-activemq'
+	compile group: 'org.codehaus.groovy', name: 'groovy-json', version: '2.5.5'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+	implementation 'org.apache.camel:camel-spring-boot-starter:2.23.1'
+	implementation 'org.springframework.boot:spring-boot-starter-quartz'
+	implementation 'org.codehaus.groovy:groovy'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	compile group: 'org.apache.activemq', name: 'activemq-camel', version: '5.15.8'
+	compile group: 'org.apache.camel', name: 'camel-jms', version: '2.23.1'
+	compile group: 'org.apache.camel', name: 'camel-mail', version: '2.23.1'
+	compile group: 'org.apache.activemq', name: 'activemq-camel', version: '5.15.8'
+    compile group: 'org.apache.camel', name: 'camel-websocket', version: '2.23.1'
+    compile group: 'org.apache.camel', name: 'camel-ahc-ws', version: '2.23.1'
 }

@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8089d78b-59b2-4231-ac6a-263f935b1cf0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../api/v1/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../api/v1/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../api/v1/config/autoload/global.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../api/v1/config/autoload/global.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../api/v1/config/modules.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../api/v1/config/modules.config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../api/v1/lib/Oxzion/src/Module.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../api/v1/lib/Oxzion/src/Module.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../api/v1/lib/Oxzion/src/Test/ControllerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/../../api/v1/lib/Oxzion/src/Test/ControllerTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../api/v1/phpunit.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../api/v1/phpunit.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../workflow/IdentityService/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../workflow/IdentityService/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../workflow/IdentityService/dist/identity_plugin.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../workflow/IdentityService/dist/identity_plugin.jar" afterDir="false" />
-    </list>
+    <list default="true" id="8089d78b-59b2-4231-ac6a-263f935b1cf0" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -37,17 +27,62 @@
     <session id="1884522207">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="3" />
           <entry key="project.open.time.0" value="1" />
+          <entry key="project.open.time.11" value="1" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.79" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Groovy" value="2" />
-          <entry key="XML" value="4" />
-          <entry key="YAML" value="1" />
+          <entry key="Bat" value="1" />
+          <entry key="CLASS" value="2" />
+          <entry key="Groovy" value="3" />
+          <entry key="PLAIN_TEXT" value="3" />
+          <entry key="Properties" value="2" />
+          <entry key="XML" value="7" />
+          <entry key="YAML" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Groovy" value="150" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="-601159370">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.16" value="1" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.48" value="1" />
+          <entry key="project.open.time.8" value="1" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="5" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Bat" value="1" />
+          <entry key="Groovy" value="11" />
+          <entry key="JAVA" value="23" />
+          <entry key="PLAIN_TEXT" value="3" />
+          <entry key="Properties" value="3" />
+          <entry key="XML" value="12" />
+          <entry key="YAML" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Groovy" value="1713" />
+          <entry key="JAVA" value="3" />
+          <entry key="Properties" value="88" />
+          <entry key="XML" value="54" />
+          <entry key="YAML" value="328" />
         </counts>
       </usages-collector>
     </session>
@@ -55,51 +90,129 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/Application.groovy">
+        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/SendSmtpMail.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="22" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="22" />
+            <state relative-caret-position="408">
+              <caret line="36" column="8" selection-start-line="36" selection-start-column="8" selection-end-line="36" selection-end-column="8" />
               <folding>
-                <element signature="e#19#86#0" expanded="true" />
+                <element signature="e#27#57#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
+        <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/WebSocket.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="41" column="48" selection-start-line="41" selection-start-column="42" selection-end-line="41" selection-end-column="48" />
+            <state relative-caret-position="442">
+              <caret line="26" column="10" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
+              <folding>
+                <element signature="e#27#57#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.idea/gradle.xml">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/mail.properties">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1598">
-              <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
+            <state relative-caret-position="389">
+              <caret line="37" selection-start-line="37" selection-end-line="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="451">
+              <caret line="38" column="58" selection-start-line="38" selection-start-column="58" selection-end-line="38" selection-end-column="58" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-websocket/2.23.1/1dfb97f7183ec3edc15fd03871663908e2ce8fb6/camel-websocket-2.23.1-sources.jar!/org/apache/camel/component/websocket/WebsocketConstants.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="23" column="45" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-websocket/2.23.1/1dfb97f7183ec3edc15fd03871663908e2ce8fb6/camel-websocket-2.23.1-sources.jar!/org/apache/camel/component/websocket/WebsocketEndpoint.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="195" selection-start-line="195" selection-end-line="195" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-core/2.23.1/500dafb2f83aa10455c6ad0a31f84916e2ffb096/camel-core-2.23.1-sources.jar!/org/apache/camel/Producer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="46">
+              <caret line="33" column="30" selection-start-line="33" selection-start-column="30" selection-end-line="33" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-websocket/2.23.1/1dfb97f7183ec3edc15fd03871663908e2ce8fb6/camel-websocket-2.23.1-sources.jar!/org/apache/camel/component/websocket/WebsocketComponent.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="179">
+              <caret line="138" column="45" selection-start-line="138" selection-start-column="45" selection-end-line="138" selection-end-column="45" />
+              <folding>
+                <element signature="e#26509#26510#0" expanded="true" />
+                <element signature="e#26541#26542#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/application.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>boot</find>
+      <find>camel-mail</find>
+      <find>content</find>
+      <find>getConnection</find>
+      <find>start</find>
+      <find>doStart()</find>
+      <find>public</find>
+      <find>createEndpoint</find>
+      <find>producer</find>
+    </findStrings>
+    <replaceStrings>
+      <replace />
+    </replaceStrings>
+    <dirStrings>
+      <dir>C:\oxzion3.0\integrations\camel\src\main\resources\camel</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
@@ -151,18 +264,9 @@
                 <option name="name" value="buildDependents" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="cleanEclipseClasspath" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Displays the sub-projects of root project 'camel'." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="projects" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Cleans all Eclipse files." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="cleanEclipse" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Assembles main classes." />
@@ -180,10 +284,6 @@
                 <option name="name" value="buildEnvironment" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="cleanEclipseProject" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Generates Gradle wrapper files." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="wrapper" />
@@ -199,14 +299,14 @@
                 <option name="name" value="javadoc" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Assembles an executable jar archive containing the main classes and their dependencies." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="bootJar" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="description" value="Compiles the test Groovy source." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="compileTestGroovy" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Generates the Eclipse classpath file." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="eclipseClasspath" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Assembles a jar archive containing the main classes." />
@@ -234,10 +334,6 @@
                 <option name="name" value="tasks" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="cleanEclipseJdt" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Initializes a new Gradle build." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="init" />
@@ -251,6 +347,11 @@
                 <option name="description" value="Displays the dependency management declared in root project 'camel'." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="dependencyManagement" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Runs this project as a Spring Boot application." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="bootRun" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Compiles main Java source." />
@@ -293,11 +394,6 @@
                 <option name="name" value="dependencies" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Generates all Eclipse files." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="eclipse" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Processes test resources." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="processTestResources" />
@@ -308,11 +404,6 @@
                 <option name="name" value="help" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Generates the Eclipse JDT settings file." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="eclipseJdt" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="description" value="Assembles and tests this project." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="build" />
@@ -321,11 +412,6 @@
                 <option name="description" value="Assembles and tests this project and all projects it depends on." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="buildNeeded" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Generates the Eclipse project file." />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="eclipseProject" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Displays the properties of root project 'camel'." />
@@ -339,9 +425,10 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="3085413068816" />
+        <entry key="$PROJECT_DIR$" value="3097488964720" />
         <entry key="$PROJECT_DIR$/.gradle" value="0" />
-        <entry key="$PROJECT_DIR$/build.gradle" value="3725599450" />
+        <entry key="$PROJECT_DIR$/build.gradle" value="3104936051" />
+        <entry key="$PROJECT_DIR$/settings.gradle" value="580268187" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -356,18 +443,18 @@
                       <ExternalModuleBuildClasspathPojo>
                         <option name="entries">
                           <list>
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-gradle-plugin/2.1.0.RELEASE/1fed802dfe5680a1d10627c430d351e8ed3ffe21/spring-boot-gradle-plugin-2.1.0.RELEASE-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-loader-tools/2.1.0.RELEASE/b7b07edaae47f829d5d88b388eaf02c465adf41/spring-boot-loader-tools-2.1.0.RELEASE-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-gradle-plugin/2.1.2.RELEASE/50b06c9a002c5a3662c05acf0f3490b415a01ba7/spring-boot-gradle-plugin-2.1.2.RELEASE-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-loader-tools/2.1.2.RELEASE/7f873ab80770110bf59acb9e507dc0e262b5d990/spring-boot-loader-tools-2.1.2.RELEASE-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.spring.gradle/dependency-management-plugin/1.0.6.RELEASE/d6c42859b24b62034b2a5e0db5ea12c688493d48/dependency-management-plugin-1.0.6.RELEASE-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/5.1.2.RELEASE/4dec566dccc17e1973aada5847fcbf5ad01046e9/spring-core-5.1.2.RELEASE-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/5.1.4.RELEASE/8be9ed31f0ad503c96cdbd3063ae4a6f418239c/spring-core-5.1.4.RELEASE-sources.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-compress/1.18/a25b942b99fde2cc2913ab39ad34abc0df4f5eb9/commons-compress-1.18-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jcl/5.1.2.RELEASE/4f16a4df95fc152d71c9f334abb1f676ac3ec725/spring-jcl-5.1.2.RELEASE-sources.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-gradle-plugin/2.1.0.RELEASE/da29bcfa10d5e31fd81b02d9f6c02cb8c61b3674/spring-boot-gradle-plugin-2.1.0.RELEASE.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-loader-tools/2.1.0.RELEASE/a32bf0b0084f0a5540d5167a76e278f8b593e9ef/spring-boot-loader-tools-2.1.0.RELEASE.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jcl/5.1.4.RELEASE/be34a24c2a607b5c95cddd7e12d25b492946798e/spring-jcl-5.1.4.RELEASE-sources.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-gradle-plugin/2.1.2.RELEASE/ecf646efe06b1add812228ad239f8f83ece618fc/spring-boot-gradle-plugin-2.1.2.RELEASE.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-loader-tools/2.1.2.RELEASE/3b3d0ae550b5c6442d020f7e27531e3ac066f5d4/spring-boot-loader-tools-2.1.2.RELEASE.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.spring.gradle/dependency-management-plugin/1.0.6.RELEASE/c7118365d75bca698892b5df1e683b8d6d6b87bb/dependency-management-plugin-1.0.6.RELEASE.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/5.1.2.RELEASE/b9b00d4075c92761cfd4e527e0bdce1931b4f3dc/spring-core-5.1.2.RELEASE.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/5.1.4.RELEASE/e7d2ad03a50ebff117a6efe2e0e3f15946d0768a/spring-core-5.1.4.RELEASE.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-compress/1.18/1191f9f2bc0c47a8cce69193feb1ff0a8bcb37d5/commons-compress-1.18.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jcl/5.1.2.RELEASE/f0d7165b6cfb90356da4f25b14a6437fdef1ec8a/spring-jcl-5.1.2.RELEASE.jar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jcl/5.1.4.RELEASE/f5a25caae583905203959abf35fdd1ab7a8f2c37/spring-jcl-5.1.4.RELEASE.jar" />
                           </list>
                         </option>
                         <option name="path" value="$PROJECT_DIR$" />
@@ -469,6 +556,33 @@
       </map>
     </option>
   </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/SMTPSender.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/oxzion/resources/routes.fxml" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/oxzion/resources/smtp_route.properties" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/oxzion/Application.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/SendMailWithAttachments.groovy" />
+        <option value="$PROJECT_DIR$/src/main/resources/camel/mailRoute.xml" />
+        <option value="$PROJECT_DIR$/src/main/resources/camel-routes.xml" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/oxzion/MailAttachmentProcessor.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/camel/smtproute.xml" />
+        <option value="$PROJECT_DIR$/src/main/resources/routes/smtproute.xml" />
+        <option value="$PROJECT_DIR$/src/main/resources/camel/camelContext.xml" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/MailAttachmentProcessor.groovy" />
+        <option value="$PROJECT_DIR$/src/main/resources/META-INF/spring/camel-context.xml" />
+        <option value="$PROJECT_DIR$/src/main/resources/mail.properties" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/SendSmtpMail.groovy" />
+        <option value="$PROJECT_DIR$/src/main/resources/camel-context.xml" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/TestWebSocket.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/DefaultWebsocket.groovy" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/WebSocket.groovy" />
+        <option value="$PROJECT_DIR$/src/main/resources/application.yml" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
@@ -481,7 +595,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -492,18 +605,12 @@
             <path>
               <item name="camel" type="b2602c69:ProjectViewProjectNode" />
               <item name="camel" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name=".idea" type="462c0819:PsiDirectoryNode" />
+              <item name=".gradle" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="camel" type="b2602c69:ProjectViewProjectNode" />
               <item name="camel" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="gradle" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="camel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="camel" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="gradle" type="462c0819:PsiDirectoryNode" />
-              <item name="wrapper" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="camel" type="b2602c69:ProjectViewProjectNode" />
@@ -536,23 +643,37 @@
               <item name="camel" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="groovy" type="462c0819:PsiDirectoryNode" />
+              <item name="oxzion" type="462c0819:PsiDirectoryNode" />
+              <item name="routes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="camel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="camel" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543591754831" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1548958031574" />
+    <property name="last_opened_file_path" value="D:/Users/Goku/Downloads/camel-websocket-master (1)" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\oxzion3.0\integrations\camel\src\main\resources\routes" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -603,7 +724,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20469083" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2217484" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -613,15 +734,15 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.21800433" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.21800433" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.329718" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Build" order="10" />
+      <window_info anchor="bottom" id="Build" order="10" weight="0.329718" />
       <window_info anchor="bottom" id="Messages" order="11" />
       <window_info anchor="bottom" id="Docker" order="12" show_stripe_button="false" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -644,45 +765,328 @@
     </ignored-roots>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/resources/application.yml">
+    <entry file="file://$PROJECT_DIR$/out/production/resources/application.yml" />
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="7" selection-end-column="7" />
+        <state relative-caret-position="1666">
+          <caret line="98" column="13" selection-start-line="98" selection-start-column="13" selection-end-line="98" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/Application.groovy">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot/2.0.2.RELEASE/spring-boot-2.0.2.RELEASE.jar!/org/springframework/boot/SpringApplication.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="22" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="22" />
-          <folding>
-            <element signature="e#19#86#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="102">
+          <caret line="59" column="13" selection-start-line="59" selection-start-column="13" selection-end-line="59" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="41" column="48" selection-start-line="41" selection-start-column="42" selection-end-line="41" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/gradle.xml">
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/SMTPSender.groovy" />
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/resources/routes.fxml" />
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/resources/smtp_route.properties" />
+    <entry file="file://$PROJECT_DIR$/out/production/classes/com/oxzion/Application.class" />
+    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+    <entry file="file://$PROJECT_DIR$/.idea/gradle.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1598">
-          <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
+        <state relative-caret-position="238">
+          <caret line="14" column="14" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/SendMailWithAttachments.groovy" />
+    <entry file="file://$PROJECT_DIR$/src/main/resources/camel/mailRoute.xml" />
+    <entry file="file://$PROJECT_DIR$/src/main/resources/camel-routes.xml" />
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/Rar$DIa0.297/SendSmtpMail.java" />
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-core/2.23.1/500dafb2f83aa10455c6ad0a31f84916e2ffb096/camel-core-2.23.1-sources.jar!/org/apache/camel/component/properties/PropertiesComponent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="301" column="16" selection-start-line="301" selection-start-column="16" selection-end-line="301" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.sun.mail/javax.mail/1.6.2/f74a1213edad69087c1f8829ca7c68adcce35942/javax.mail-1.6.2-sources.jar!/com/sun/mail/smtp/SMTPTransport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="2329" column="33" selection-start-line="2329" selection-start-column="17" selection-end-line="2329" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-mail/2.23.1/7bee730fc1fd497c771bfb1639c5317434a096cc/camel-mail-2.23.1-sources.jar!/org/apache/camel/component/mail/MailProducer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-core/2.23.1/500dafb2f83aa10455c6ad0a31f84916e2ffb096/camel-core-2.23.1-sources.jar!/org/apache/camel/util/AsyncProcessorConverterHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="60" selection-start-line="60" selection-end-line="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-core/2.23.1/500dafb2f83aa10455c6ad0a31f84916e2ffb096/camel-core-2.23.1-sources.jar!/org/apache/camel/impl/ProducerCache.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="444" selection-start-line="444" selection-end-line="444" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-core/2.23.1/500dafb2f83aa10455c6ad0a31f84916e2ffb096/camel-core-2.23.1-sources.jar!/org/apache/camel/processor/SendProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="172" selection-start-line="172" selection-end-line="172" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-core/2.23.1/500dafb2f83aa10455c6ad0a31f84916e2ffb096/camel-core-2.23.1-sources.jar!/org/apache/camel/ProducerTemplate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-204">
+          <caret line="419" column="9" selection-start-line="419" selection-start-column="9" selection-end-line="419" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/routes/smtproute.xml" />
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-core/2.23.1/500dafb2f83aa10455c6ad0a31f84916e2ffb096/camel-core-2.23.1-sources.jar!/org/apache/camel/impl/DefaultCamelContext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="2931" lean-forward="true" selection-start-line="2931" selection-end-line="2931" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/camel/camelContext.xml" />
+    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/spring/camel-context.xml" />
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/MailAttachmentProcessor.groovy" />
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/MailAttachmentProcessor.java" />
+    <entry file="file://$PROJECT_DIR$/gradlew">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="559">
+          <caret line="157" column="9" selection-start-line="157" selection-start-column="9" selection-end-line="157" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/settings.gradle" />
+    <entry file="file://$PROJECT_DIR$/src/main/resources/camelContext.xml" />
+    <entry file="file://$PROJECT_DIR$/gradlew.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="72" column="35" selection-start-line="72" selection-start-column="35" selection-end-line="72" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/Application.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+          <folding>
+            <element signature="e#20#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/camel-context.xml" />
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/TestWebSocket.groovy" />
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/DefaultWebsocket.groovy" />
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-websocket/2.23.1/1dfb97f7183ec3edc15fd03871663908e2ce8fb6/camel-websocket-2.23.1-sources.jar!/org/apache/camel/component/websocket/DefaultWebsocket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="41" column="11" selection-start-line="41" selection-start-column="11" selection-end-line="41" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-websocket/2.23.1/1dfb97f7183ec3edc15fd03871663908e2ce8fb6/camel-websocket-2.23.1-sources.jar!/org/apache/camel/component/websocket/WebsocketEndpoint.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="195" selection-start-line="195" selection-end-line="195" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-core/2.23.1/500dafb2f83aa10455c6ad0a31f84916e2ffb096/camel-core-2.23.1-sources.jar!/org/apache/camel/Producer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="33" column="30" selection-start-line="33" selection-start-column="30" selection-end-line="33" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-core/2.23.1/500dafb2f83aa10455c6ad0a31f84916e2ffb096/camel-core-2.23.1-sources.jar!/org/apache/camel/support/ServiceSupport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="75" column="35" lean-forward="true" selection-start-line="75" selection-start-column="35" selection-end-line="75" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-websocket/2.23.1/1dfb97f7183ec3edc15fd03871663908e2ce8fb6/camel-websocket-2.23.1-sources.jar!/org/apache/camel/component/websocket/WebsocketComponent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="138" column="45" selection-start-line="138" selection-start-column="45" selection-end-line="138" selection-end-column="45" />
+          <folding>
+            <element signature="e#26509#26510#0" expanded="true" />
+            <element signature="e#26541#26542#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.eclipse.jetty.websocket/websocket-servlet/9.4.14.v20181114/9ba6cc5e71a0b5bbfe41d74481d97653cfbcf533/websocket-servlet-9.4.14.v20181114-sources.jar!/org/eclipse/jetty/websocket/servlet/WebSocketServlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="536">
+          <caret line="136" column="21" lean-forward="true" selection-start-line="136" selection-start-column="21" selection-end-line="136" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-websocket/2.23.1/1dfb97f7183ec3edc15fd03871663908e2ce8fb6/camel-websocket-2.23.1-sources.jar!/org/apache/camel/component/websocket/WebsocketComponentServlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="25" column="49" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-websocket/2.23.1/1dfb97f7183ec3edc15fd03871663908e2ce8fb6/camel-websocket-2.23.1-sources.jar!/org/apache/camel/component/websocket/WebsocketProducerConsumer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="23" column="26" lean-forward="true" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-core/2.23.1/500dafb2f83aa10455c6ad0a31f84916e2ffb096/camel-core-2.23.1-sources.jar!/org/apache/camel/Service.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="30" column="9" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-websocket/2.23.1/1dfb97f7183ec3edc15fd03871663908e2ce8fb6/camel-websocket-2.23.1-sources.jar!/org/apache/camel/component/websocket/WebsocketConstants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="23" column="45" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="451">
+          <caret line="38" column="58" selection-start-line="38" selection-start-column="58" selection-end-line="38" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/mail.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/application.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/WebSocket.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" column="10" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
+          <folding>
+            <element signature="e#27#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/com/oxzion/routes/SendSmtpMail.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="36" column="8" selection-start-line="36" selection-start-column="8" selection-end-line="36" selection-end-column="8" />
+          <folding>
+            <element signature="e#27#57#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>groovy-2.4.16</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>camel</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
