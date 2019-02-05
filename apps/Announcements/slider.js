@@ -59,7 +59,7 @@ class Slider extends React.Component {
     
     // call to api using wrapper
     let helper = this.core.make('oxzion/restClient');
-    let announ = await helper.request('v1','http://jenkins.oxzion.com:8080/announcement', {}, 'get' );
+    let announ = await helper.request('v1',this.core.config('announcements.url'), {}, 'get' );
     console.log(announ);
     return announ;
   }
