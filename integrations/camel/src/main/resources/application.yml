@@ -1,5 +1,26 @@
-camunda:
-  bpm:
-    admin-user:
-      id: demo
-      password: demo
+server:
+  port: 8085
+spring:
+  activemq:
+    broker-url: tcp://172.26.21.225:61616
+    user: admin
+    password: admin
+smtp:
+  host: localhost
+  port: 25
+  username: bharatgoku@gmail.com
+  password: goku7569
+  from:
+    email: bharatgoku@gmail.com
+contentType: text/html
+camel:
+  component:
+    enabled: true
+    websocket:
+      enabled: true
+      host: localhost
+      port: 8081
+websocket:
+  port: 8081
+  host: localhost
+  channel: notification

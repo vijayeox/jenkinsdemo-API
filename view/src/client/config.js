@@ -35,21 +35,24 @@
 
 module.exports = {
   auth: {
-    url: "http://localhost/auth",
+    url: "/auth",
     ui: {
-      title: 'Welcome to OX ZION',
+      title: 'Welcome to OX Zion',
       logo: {
         position: 'top',
         src: require('./assets/images/OXZion.png')
       }
     }
   },
+  wrapper: {
+      url: "http://jenkins.oxzion.com:8080",
+  },
   desktop: {
     settings: {
       font: "Century Gothic",
       background: {
-        src: require('./assets/images/OX_Background.png'),
-        color: '#000',
+        src: require('./assets/images/OX_UnderConstruction.png'),
+        color: '#452767',
         style: 'cover'
       }
     }
