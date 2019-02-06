@@ -21,6 +21,11 @@ class ContactService extends AbstractService
         $this->table = $table;
     }
 
+    /**
+     * @param $data
+     * @return int|string
+     *
+     */
     public function createContact(&$data)
     {
         $form = new Contact();
@@ -42,7 +47,6 @@ class ContactService extends AbstractService
             $data['id'] = $id;
             $this->commit();
         } catch (Exception $e) {
-            $this->rollback();
             return 0;
         }
         return $count;
@@ -110,5 +114,4 @@ class ContactService extends AbstractService
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         return $resultSet->toArray();
     }
-
 }
