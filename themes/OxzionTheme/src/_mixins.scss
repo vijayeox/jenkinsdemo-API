@@ -29,7 +29,7 @@
  */
 
 @mixin shadowed {
-  box-shadow: 0 0 $base-margin rgba(0, 0, 0, 0.5);
+  box-shadow: 0 11px $base-margin rgba(0, 0, 0, 0.5);
 }
 
 @mixin focusable {
@@ -44,7 +44,6 @@
 
 @mixin panel {
   @include shadowed;
-
   background: $panel-background;
   color: $panel-foreground;
 }
@@ -87,7 +86,6 @@
 }
 
 @mixin window-button($from, $to) {
-  background: $from;
   background: linear-gradient(to bottom, $from 0%, $to 100%);
 }
 

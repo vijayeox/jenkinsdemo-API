@@ -33,47 +33,7 @@
 // This is where you add all your dependent styles and override any
 // OS.js defaults.
 //
-/*!
-* OS.js - JavaScript Cloud/Web Desktop Platform
-*
-* Copyright (c) 2011-2019, Anders Evenrud <andersevenrud@gmail.com>
-* All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-*
-* 1. Redistributions of source code must retain the above copyright notice, this
-*    list of conditions and the following disclaimer
-* 2. Redistributions in binary form must reproduce the above copyright notice,
-*    this list of conditions and the following disclaimer in the documentation
-*    and/or other materials provided with the distribution
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-* ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-* (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-* LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
-* @author  Anders Evenrud <andersevenrud@gmail.com>
-* @licence Simplified BSD License
-*/
 
-//
-// This is the client base stylesheet.
-// This is where you add all your dependent styles and override any
-// OS.js defaults.
-//
-
-// @import "~typeface-roboto/index.css";
-// @import "~@osjs/client/dist/main.css";
-// @import "~@osjs/gui/dist/main.css";
-// @import "~@osjs/dialogs/dist/main.css";
-// @import "~@osjs/panels/dist/main.css";
 @import "./src/variables";
 @import "./src/mixins";
 @import "./src/core";
@@ -87,17 +47,9 @@ html {
 width: 100%;
 height: 100%;
 }
-.osjs-root {
-    font-size:15px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-size: cover;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-image: url('./src/images/OX_UnderConstruction.png') !important;
-  }
+.osjs-root{
+font-size:15px;
+}
 ::-webkit-scrollbar {
 width: 1.5em;
 }
@@ -131,23 +83,28 @@ margin-right: 0;
 
 & > div {
 width: 100%;
-height: 2.2em;
+height: 2.5em;
 background-position: 50% 50%;
 background-repeat: no-repeat;
 }
 
 &:hover > div {
-background-color: lighten($window-background, 30%);
+-webkit-transition: all 200ms ease-in;
+-webkit-transform: scale(1.2);
+-ms-transition: all 200ms ease-in;
+-ms-transform: scale(1.2);   
+-moz-transition: all 200ms ease-in;
+-moz-transform: scale(1.2);
+transition: all 200ms ease-in;
+transform: scale(1.2);
 }
 
 &[data-action=maximize] > div {
 background-image: url('./src/images/maximize.png');
-background-color: white;
 }
 
 &[data-action=minimize] > div {
 background-image: url('./src/images/minimize.png');
-background-color: white;
 }
 
 &[data-action=close] {
@@ -174,18 +131,19 @@ max-width: calc(100% - #{$base-margin / 10});
 
 .osjs-window-title {
 padding: $base-margin / 2;
+padding-left:0;
+font-size: 17px;
 }
 
 .osjs-window-icon {
 padding: $base-margin / 2;
-margin-right: $base-margin /  2;
 }
 
 .osjs-gui-menu {
 ul {
 background-color: #452767;
 border: 1px solid #000;
-color: white;
+color: #white;
 }
 
 li:hover > div > span {
@@ -203,13 +161,13 @@ background-color: #d7d7d7;
 .osjs-gui-button {
 & > button {
 // Fallback
-    background-color: #010101;
+background-color: #010101;
 }
 }
 .osjs-gui-button > button {
-    background: #010101;
-    border: 1px solid #fff;
-    color: #ffffff;
+background: #010101;
+border: 1px solid #fff;
+color: #ffffff;
 }
 .osjs-gui-tabs-header>div{
 background-color:#452767;
@@ -226,13 +184,34 @@ width: 1.5em;
 height: 1.5em;
 }
 .osjs-panel-item[data-name=windows] > div{
-    border: 1px solid #3a3535;
-	background-color:#452767;
+border: 2px solid #333;
+background-color:#fff;
+color: #000;
+border-radius:10px;
 }
 .osjs-panel .osjs-panel-item--icon > img{
-    height: 2.2em;
-	background-color:#452767;
+height: 2.2em;
 }
 .osjs-gui-menu ul>li{
- padding:2px;   
+padding:2px;   
+}
+.osjs-panel-item--clickable:hover img {
+-webkit-transition: all 200ms ease-in;
+-webkit-transform: scale(1.5);
+-ms-transition: all 200ms ease-in;
+-ms-transform: scale(1.5);   
+-moz-transition: all 200ms ease-in;
+-moz-transform: scale(1.5);
+transition: all 200ms ease-in;
+transform: scale(1.5);
+}
+.osjs-panel{
+height:3.5em;
+min-height:3.5em;
+}
+.osjs-panel .osjs-panel-item--icon{
+margin: 2px;
+}
+.osjs-window-header {
+min-height: 2.5em;
 }
