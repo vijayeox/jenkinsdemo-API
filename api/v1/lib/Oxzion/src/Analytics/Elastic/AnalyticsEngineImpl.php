@@ -17,13 +17,15 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
     public function runQuery($appId,$type,$parameters)
     {
         try {
+			$orgId = AuthContext::get(AuthConstants::ORG_ID);
 			if ($type) {
 				$parameters['Filter-type']=$type;
 			}
             $query = $this->formatQuery($parameters);
             $elasticService = new ElasticService($this->config);
-            $data = $elasticService->getQueryResults($appId,$query);
-            return $data;
+			$data = $elasticService->getQueryResults($orgId,$appId,$query);
+			$finalresult = $this->flattenResult($data,$query);
+            return $finalresult;
         } catch (Exception $e) {
             throw new Exception("Error performing Elastic Search", 0, $e);
         }
@@ -59,7 +61,11 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 		$aggregates = array();
 		if ($parameters['group']) {
 			$parameters['frequency'] = 4;  //frequency 4 is to override time frequecy by group
-			$group = $parameters['group'];
+			if (is_array($parameters['group'])) {
+				$group = $parameters['group'];
+			} else {
+				$group = explode(',',$parameters['group']);
+			}
 		}
 		$aggregates[$operation[0]] = strtolower($field);
 		if ($parameters['frequency'] != 4) {
@@ -81,7 +87,6 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 		if (!isset($parameters['skipdate']) && $datetype)
 			$range[$datetype] = $startdate . "/" . $enddate;
 
-		$timesheetStatus = new VA_Model_TimesheetStatus();
 		foreach ($parameters as $key => $value) {
 			if (strstr($key, 'Filter')) {
 
@@ -141,7 +146,63 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			$returnarray['sort'] = $parameters['sort'];
 		}
 		return $returnarray;
-    }
+	}
+	
+
+	public function flattenmultigroups(&$finalresult,$result,$config,$count,$index,$key='',$grouplist=array()){
+		$operation = explode('_',$config['operation']);
+		if ($index==$count) {
+			foreach($result as $data) {
+				if ($operation[0]=='count') {
+					$value = $data['doc_count'];
+				} else {
+					$value = $data['value']['value'];
+				}
+				$finalresult[] = array('name'=>$key.' - '.$data['key'],'value'=>$value,'grouplist'=>array_merge ($grouplist,array($data['key'])));
+			}
+		} else {
+			foreach($result as $data) {
+				$groupname = 'groupdata'.$index;
+				$keytemp = ($key) ? $key.' - '.$data['key']:$data['key'];
+				$grouplisttemp = array_merge($grouplist,array($data['key']));
+				$this->flattenmultigroups($finalresult,$data['groupdata'.(string)$index]['buckets'],$config,$count,$index+1,$keytemp,$grouplisttemp);
+			}
+			
+		}
+	}
+
+	public function flattenResult($result,$config){
+		$finalresult = array();
+		$operation = explode('_',$config['operation']);
+		$qtrtranslate = array('Jan'=>'Q1','Apr'=>'Q2','Jul'=>'Q3','Oct'=>'Q4');
+		if (isset($config['group'])) {
+			if (count($config['group'])==1) {
+				foreach($result['data'] as $data ) {
+					if (substr($config['group'][0],0,7)=='period-') {
+						$name = $data['key_as_string'];
+						if ($config['group'][0]=='period-quarter') {
+						   $month = substr($name,0,3);	
+						   $name=$qtrtranslate[$month].substr($name,3);
+						}
+
+					} else {
+						$name = $data['key'];
+					}
+					if ($operation[0]=='count') {
+						$value = $data['doc_count'];
+					} else {
+						$value = $data['value']['value'];
+					}
+					$finalresult[]=array('name'=>$name,'value'=>$value,'grouplist'=>$config['group'][0]);
+				}
+			} else {
+				$this->flattenmultigroups($finalresult,$result['data'],$config,count($config['group'])-1,0);
+			}
+		} else {
+			$finalresult[] = array('name'=>$config['field'],'value'=>$result['data']);
+		}
+		return $finalresult;
+	}
 
 }
 ?>

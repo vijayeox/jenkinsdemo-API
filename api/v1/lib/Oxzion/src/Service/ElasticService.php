@@ -58,7 +58,7 @@ class ElasticService{
 		return $result;
 	}
 
-	public function getQueryResults($appId,$params) {
+	public function getQueryResults($orgId,$appId,$params) {
 		$searchconfig['fields'] = $params['fields'];
 		$searchconfig['start'] = $params['start'];
 		$searchconfig['pagesize'] = $params['pagesize'];
@@ -68,25 +68,26 @@ class ElasticService{
 		$searchconfig['aggregates'] = $params['aggregates'];
 		$searchconfig['sort'] = $params['sort'];
 		$searchconfig['select'] = $params['select'];
-		$result = $this->filterData($appId,$params);
+		$result = $this->filterData($orgId,$appId,$params);
 		return $result;
 
 	}
 
 
 
-	public function filterData($appId,$searchconfig) {
+	public function filterData($orgId,$appId,$searchconfig) {
 		$boolfilter = array();
-		$tmpfilter = $this->getFilters($searchconfig);
+		$tmpfilter = $this->getFilters($searchconfig,$orgId);
 		if ($tmpfilter) {
 			$boolfilterquery['query']['bool']['filter'] = array($tmpfilter);
 		}
+		
 		if(isset($searchconfig['select'])){
 			$boolfilterquery['_source'] = $searchconfig['select'];
 		} 
-		$pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:499999;
+		$pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:10000;
 		if($searchconfig['aggregates']) {
-			if (isset($searchconfig['select'])) {
+			if (!isset($searchconfig['select'])) {
 				$pagesize=0;
 			}
 			$aggs=$this->getAggregate($searchconfig['aggregates'],$boolfilterquery,$entity);		
@@ -124,7 +125,7 @@ class ElasticService{
 	protected function getGroups($searchconfig,&$boolfilterquery,$aggs){
 
 		$grouparray=null;
-		$size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize']:499999;
+		$size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize']:10000;
 		for($i= count($searchconfig['group'])-1;$i>=0;$i--) {
 			$grouptext=$searchconfig['group'][$i];			
 			if (substr($grouptext,0,7)=="period-") {
@@ -183,13 +184,16 @@ class ElasticService{
 		if (key($aggregates)=='count_distinct') {
 			$aggs = array('value'=>array("cardinality"=>array("field"=>$aggregates[key($aggregates)])));
 		} else if (key($aggregates)!="count") {
-				$aggs = array('value'=>array(key($aggregates)=>array("script"=>array("inline"=>"try { return Float.parseFloat(doc['".$aggregates[key($aggregates)].".keyword'].value); } catch (NumberFormatException e) { return 0; }"))));
+			//	$aggs = array('value'=>array(key($aggregates)=>array("script"=>array("inline"=>"try { return Float.parseFloat(doc['".$aggregates[key($aggregates)].".keyword'].value); } catch (NumberFormatException e) { return 0; }"))));
+				$aggs = array('value'=>array(key($aggregates)=>array('field'=>$aggregates[key($aggregates)])));
+
 		}
 		return $aggs;
 	}
 
 
-	protected function getFilters($searchconfig) {
+	protected function getFilters($searchconfig,$orgId) {
+		$mustquery[] = ['term' => ['org_id' => $orgId]];
 		if (isset($searchconfig['aggregates'])) {
 			$aggregates= $searchconfig['aggregates'];
 			if($aggregates){
@@ -214,6 +218,12 @@ class ElasticService{
 					}
 				}
 			}
+		}
+		if($searchconfig['range']){
+			$daterange = $searchconfig['range'][key($searchconfig['range'])];
+			$dates = explode("/", $daterange);
+			$mustquery[] = array('range'=>array(key($searchconfig['range'])=>array("gte"=>$dates[0],"lte"=>$dates[1],"format"=>"yyyy-MM-dd")));
+
 		}
 		return $mustquery;
 
@@ -257,9 +267,11 @@ class ElasticService{
 	}
 
 	public 	function search($q){
-	//	 echo '<pre>';print_r($q);echo '</pre>'; exit;
-	//	 echo '<pre>';print_r($client->search($q));echo '</pre>';exit;
-		return $this->client->search($q);
+	//	 echo '<pre>';print_r(json_encode($q));echo '</pre>'; 
+
+		 $data= $this->client->search($q);
+	//	 echo '<pre>';print_r($data);echo '</pre>';
+		 return $data;
 
 	}
 
