@@ -20,7 +20,10 @@ const register = (core, args, options, metadata) => {
         title: metadata.title.en_EN,
         icon: proc.resource(icon),
         dimension: {width: 700, height: 400},
-        position: {left: 700, top: 200}
+        position: {left: 700, top: 200}, 
+        attributes : {
+          visibility: 'restricted'
+        }
       }).render($content => ReactDOM.render(<Slider  args = {core} />, $content));
     }
 
@@ -28,7 +31,7 @@ const register = (core, args, options, metadata) => {
     const getAnnouncements = 
     async () => {
         let helper = core.make('oxzion/restClient');
-        let announ = await helper.request('v1',core.config('announcements.url'), {}, 'get' );
+        let announ = await helper.request('v1','/announcement', {}, 'get' );
         console.log(announ);
         return announ;
     };
