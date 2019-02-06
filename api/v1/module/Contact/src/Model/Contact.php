@@ -29,7 +29,7 @@ class Contact extends Entity
 
     public function validate()
     {
-        $dataArray = array("first_name", "phone_1", "email", "address_1", "owner_id", "org_id");
+        $dataArray = array("first_name", "owner_id", "org_id");
         $this->validateWithParams($dataArray);
     }
 }

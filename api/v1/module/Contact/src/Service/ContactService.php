@@ -25,7 +25,7 @@ class ContactService extends AbstractService
     {
         $form = new Contact();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $data['owner_id'] = ($data['owner_id']) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
+        $data['owner_id'] = (isset($data['owner_id'])) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $form->exchangeArray($data);
