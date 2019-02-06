@@ -14,7 +14,7 @@ return [
             'user' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user[/:userId]',
+                    'route' => '/user[/:userId][/type][/:typeId]',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'access' => [

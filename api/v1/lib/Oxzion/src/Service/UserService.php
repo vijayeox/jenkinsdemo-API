@@ -11,7 +11,6 @@ use Oxzion\Utils\ArrayUtils;
 
 class UserService extends AbstractService
 {
-
     const GROUPS = '_groups';
     const ROLES = '_roles';
     const USER_FOLDER = "/users/";
@@ -177,8 +176,9 @@ class UserService extends AbstractService
             return 0;
         }
         if ($this->getErrorCode != 0) {
-            if ($this->getErrorCode == 1)
+            if ($this->getErrorCode == 1) {
                 $this->getFailureResponse("User already exists", 404, $data);
+            }
             return 0;
         }
         $id = $this->table->getLastInsertValue();
@@ -270,7 +270,7 @@ class UserService extends AbstractService
      * @method GET
      * @return array $dataget list of Users
      */
-    public function getUsers($group_id = NULL)
+    public function getUsers($group_id = null)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
@@ -305,6 +305,33 @@ class UserService extends AbstractService
         $result = $response[0];
         $groups = $this->getGroupsFromDb($id);
         $result['group'] = $groups;
+        if (isset($result)) {
+            return $result;
+        } else {
+            return 0;
+        }
+    }
+
+
+    /**
+     * GET User Service
+     * @method  getUserWithMinimumDetails
+     * @param $id ID of User to View
+     * @return array with minumum information required to use for the User.
+     * @return array Returns a JSON Response with Status Code and Created User.
+     */
+    public function getUserWithMinimumDetails($id)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('avatars')
+            ->columns(array('username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone'))
+            ->where(array('avatars.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'avatars.id' => $id));
+        $response = $this->executeQuery($select)->toArray();
+        if (!$response) {
+            return 0;
+        }
+        $result = $response[0];
         if (isset($result)) {
             return $result;
         } else {
@@ -520,5 +547,3 @@ class UserService extends AbstractService
         return $result = $this->executeQuery($select)->toArray();
     }
 }
-
-?>
