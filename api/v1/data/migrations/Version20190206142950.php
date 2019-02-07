@@ -15,8 +15,8 @@ final class Version20190206142950 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
 
         $this->addSql("CREATE TABLE IF NOT EXISTS `ox_contact_audit_log` (
-  `id` int(11) NOT NULL,,
-  `action` varchar(100) DEFAULT NULL
+  `id` int(11) NOT NULL,
+  `action` varchar(100) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) DEFAULT NULL COMMENT '	',
