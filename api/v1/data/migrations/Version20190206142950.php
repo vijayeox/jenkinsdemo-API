@@ -38,14 +38,28 @@ final class Version20190206142950 extends AbstractMigration
   `other` TEXT DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;");
 
-        $this->addSql("CREATE TRIGGER `ox_contact_insert` after insert on `ox_contact`
-                    for each row begin insert into `ox_contact_audit_log` (`id`, `action`, `user_id`, `first_name`, `last_name`, `phone_1`, `phone_list`, `email`, `email_list`,`company_name`, `address_1`, `address_2`, `country`, `owner_id`, `org_id`, `created_id`, `date_created`, `date_modified`, `modified_id`, `other`) values (new.`id`, 'update', new.`user_id`, new.`first_name`, new.`last_name`, new.`phone_1`, new.`phone_list`, new.`email`, new.`email_list`, new.`company_name`, new.`address_1`, new.`address_2`, new.`country`, new.`owner_id`, new.`org_id`, new.`created_id`, new.`date_created`, new.`date_modified`, new.`modified_id`, new.`other`);");
-
-
-        $this->addSql("CREATE TRIGGER `ox_contact_update` after update on `ox_contact`
+        $this->addSql("delimiter #
+create trigger `ox_contact_insert` after insert on `ox_contact`
 for each row
 begin
-  insert into `ox_contact_audit_log` (`id`, `action`, `user_id`, `first_name`, `last_name`, `phone_1`, `phone_list`, `email`, `email_list`, `company_name`, `address_1`, `address_2`, `country`, `owner_id`, `org_id`, `created_id`, `date_created`, `date_modified`, `modified_id`, `other`) values (new.`id`, 'update', new.`user_id`, new.`first_name`, new.`last_name`, new.`phone_1`, new.`phone_list`, new.`email`, new.`email_list`, new.`company_name`, new.`address_1`, new.`address_2`, new.`country`, new.`owner_id`, new.`org_id`, new.`created_id`, new.`date_created`, new.`date_modified`, new.`modified_id`, new.`other`);");
+  insert into `ox_contact_audit_log` (`id`, `action`, `user_id`, `first_name`, `last_name`, `phone_1`, `phone_list`, `email`, `email_list`,`company_name`, `address_1`, `address_2`, `country`, `owner_id`, `org_id`, `created_id`, `date_created`, `date_modified`, `modified_id`, `other`) values (new.`id`, 'update', new.`user_id`, new.`first_name`, new.`last_name`, new.`phone_1`, new.`phone_list`, new.`email`, new.`email_list`, new.`company_name`, new.`address_1`, new.`address_2`, new.`country`, new.`owner_id`, new.`org_id`, new.`created_id`, new.`date_created`, new.`date_modified`, new.`modified_id`, new.`other`);
+end#");
+
+
+        $this->addSql("delimiter #
+create trigger `ox_contact_update` after update on `ox_contact`
+for each row
+begin
+  insert into `ox_contact_audit_log` (`id`, `action`, `user_id`, `first_name`, `last_name`, `phone_1`, `phone_list`, `email`, `email_list`, `company_name`, `address_1`, `address_2`, `country`, `owner_id`, `org_id`, `created_id`, `date_created`, `date_modified`, `modified_id`, `other`) values (new.`id`, 'update', new.`user_id`, new.`first_name`, new.`last_name`, new.`phone_1`, new.`phone_list`, new.`email`, new.`email_list`, new.`company_name`, new.`address_1`, new.`address_2`, new.`country`, new.`owner_id`, new.`org_id`, new.`created_id`, new.`date_created`, new.`date_modified`, new.`modified_id`, new.`other`);
+end#");
+
+        $this->addSql("DELIMITER#
+create trigger ox_contact_delete after delete ON ox_contact 
+for each row
+begin
+   -- Insert record into audit table
+   insert into `ox_contact_audit_log` (`id`, `action`, `user_id`, `first_name`, `last_name`, `phone_1`, `phone_list`, `email`, `email_list`,`company_name`, `address_1`, `address_2`, `country`, `owner_id`, `org_id`, `created_id`, `date_created`, `date_modified`, `modified_id`, `other`) values (old.`id`, 'delete', old.`user_id`, old.`first_name`, old.`last_name`, old.`phone_1`, old.`phone_list`, old.`email`, old.`email_list`, old.`company_name`, old.`address_1`, old.`address_2`, old.`country`, old.`owner_id`, old.`org_id`, old.`created_id`, old.`date_created`, old.`date_modified`, old.`modified_id`, old.`other`)
+end#");
 
 
     }
