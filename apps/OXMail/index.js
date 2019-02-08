@@ -29,6 +29,7 @@
  */
 import {name as applicationName} from './metadata.json';
 
+let baseUrl = "http://localhost"; 
 const createIframe = (bus, proc, win, cb) => {
   const iframe = document.createElement('iframe');
   iframe.style.width = '100%';
@@ -45,7 +46,7 @@ const createIframe = (bus, proc, win, cb) => {
     win.on('blur', () => ref.blur());
 
     // Create message sending wrapper
-    const sendMessage = msg => ref.postMessage(msg, window.location.href);
+    const sendMessage = msg => ref.postMessage(msg, baseUrl);
 
     // After connection is established, this handler will process
     // all events coming from iframe.
@@ -53,13 +54,25 @@ const createIframe = (bus, proc, win, cb) => {
       console.warn('[Application', 'Iframe sent', data);
       bus.emit(data.method, sendMessage, ...data.args);
     });
-
     cb(sendMessage);
   });
 
   return iframe;
 };
-
+const makeApiCall = function(core, params) {
+    return (async() => {
+      var caller =  core.make('oxzion/restClient');
+      var res = await caller.request(params.version, params.action, {data: params.data}, params.method);
+      if(res != null && res.status == 'success'){
+          return Promise.resolve(res); 
+      }else if(res != null && res.status != 'success'){
+          console.log('login failed.');
+          return Promise.reject(new Error(res.message));
+      }else {
+        return Promise.reject(new Error(res.message));
+      }
+    })();
+}
 // Creates the internal callback function when OS.js launches an application
 // Note the first argument is the 'name' taken from your metadata.json file
 OSjs.make('osjs/packages').register('OXMail', (core, args, options, metadata) => {
@@ -72,24 +85,25 @@ OSjs.make('osjs/packages').register('OXMail', (core, args, options, metadata) =>
   });
  
   // Create  a new Window instance
-  proc.createWindow({
+  const win = proc.createWindow({
     id: 'OXMailApplicationWindow',
     icon: proc.resource(proc.metadata.icon),
     title: metadata.title.en_EN,
-    attributes:{maximizable: false},
-    dimension: {width: 400, height: 400},
-    position: {left: 200, top: 400}
+    attributes:{state:{maximized:true}},
+    // dimension: {width: 400, height: 400},
+    // position: {left: 200, top: 0}
   })
     .on('destroy', () => proc.destroy())
     // .on('init', () => ref.maximize())
     .render(($content, win) => {
-      win.maximize();
       
+    win.maximize();
+    win.attributes.maximizable = false;
       // Create a new bus for our messaging
       const bus = core.make('osjs/event-handler', 'OXMailApplicationWindow');
       const user = core.make('osjs/auth').user();
       // Get path to iframe content
-      const src = proc.resource('http://localhost/rainloop/oxindex.php?username=' + user.username);
+      const src = proc.resource(baseUrl+'/rainloop/oxindex.php?username=' + user.username);
 
       // Create DOM element
       const iframe = createIframe(bus, proc, win, send => {
@@ -107,10 +121,25 @@ OSjs.make('osjs/packages').register('OXMail', (core, args, options, metadata) =>
 
       // Finally set the source and attach
       iframe.src = src;
+      bus.on("contact", (callback, params) => {
+        console.log(params);
+        makeApiCall(core, params).then( (res) => {
+          callback({method : 'contact', params : params, data : res.data});
+        
+        }).catch((err) => {
+          callback({method: "contact", params : params, error: err.message});
+        })
+        
+      });
+      
 
       // Attach
       $content.appendChild(iframe);
+      
     });
 
+    
   return proc;
+  
 });
+
