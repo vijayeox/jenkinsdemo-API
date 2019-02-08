@@ -66,7 +66,8 @@
       "App\\": "module/App/src/",
       "Project\\": "module/Project/src/",
       "Search\\": "module/Search/src/",
-      "Contact\\": "module/Contact/src/"
+      "Contact\\": "module/Contact/src/",
+      "Resource\\": "module/Resource/src/"
     }
   },
   "autoload-dev": {
@@ -75,6 +76,7 @@
       "FormTest\\": "module/Form/test/",
       "FieldTest\\": "module/Field/test/",
       "AnnouncementTest\\": "module/Announcement/test/",
+      "ResourceTest\\": "module/Resource/test/",
       "FileTest\\": "module/File/test/",
       "UserTest\\": "module/User/test/",
       "GroupTest\\": "module/Group/test/",
