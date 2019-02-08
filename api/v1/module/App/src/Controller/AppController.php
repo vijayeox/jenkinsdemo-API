@@ -52,7 +52,7 @@ class AppController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($returnData['data'] === '0') {
-            return $this->getFailureResponse("Failed to create a new App", $returnData);
+            return $this->getErrorResponse("Failed to create a new App", 404, $returnData);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }

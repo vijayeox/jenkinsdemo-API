@@ -59,7 +59,7 @@ class AppControllerTest extends ControllerTest
         $data = ['name' => 'App 1', 'uuid' => '2323423423', 'description' => 'Desc', 'type' => 1, 'logo' => 'app1.png', 'date_created' => '0000-00-00 00:00:00', 'date_modified' => '0000-00-00 00:00:00'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_app'));
         $this->dispatch('/app/1/appinstall', 'POST', $data);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('appinstall');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
