@@ -1,4 +1,4 @@
-/*!
+/*
  * OS.js - JavaScript Cloud/Web Desktop Platform
  *
  * Copyright (c) 2011-2019, Anders Evenrud <andersevenrud@gmail.com>
@@ -28,50 +28,4 @@
  * @licence Simplified BSD License
  */
 
-//
-// This is the client configuration tree.
-// https://manual.os-js.org/v3/config/#client
-//
-
-module.exports = {
-  auth: {
-    ui: {
-      title: 'Welcome to OX Zion',
-      logo: {
-        position: 'top',
-        src: require('./assets/images/OXZion.png')
-      }
-    }
-  },
-  wrapper: {
-      url: "http://jenkins.oxzion.com:8080/",
-  },
-  desktop: {
-    settings: {
-      theme: "OxzionTheme",
-      icons: "oxzioniconpack",
-      font: "Century Gothic",
-      background: {
-        src: require('./assets/images/OX_UnderConstruction.png'),
-        color: '#452767',
-        style: 'cover'
-      }
-    }
-  },
-  vfs: {
-    mountpoints: [{
-      name: 'temp',
-      label: 'Temporary Files',
-      adapter: 'system', // You can leave this out as 'system' is default
-      attributes: {}
-     }]
-   },
-  application: {
-    categories: {
-      development: {
-        label: 'LBL_APP_CAT_DEVELOPMENT',
-        icon: 'applications-development'
-      }
-    }
-  }
-};
+import './index.scss';
