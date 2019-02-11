@@ -27,6 +27,21 @@ return [
                     ],
                 ],
             ],
+            'loggedInUser' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/me[/type][/:typeId]',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'GET',
+                        'action' => 'getUserDetail',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            'getUserDetail' => 'MANAGE_USER_READ',
+                        ],
+                    ],
+                ],
+            ],
             'assignUserManager' => [
                 'type' => Segment::class,
                 'options' => [

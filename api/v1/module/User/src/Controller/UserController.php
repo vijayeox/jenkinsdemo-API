@@ -98,19 +98,26 @@ class UserController extends AbstractApiController
     public function get($id)
     {
         $params = $this->params()->fromRoute();
-        $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
-        if ($type === 'a') {
-            $result = $this->userService->getUser($id);
-        } else if ($type === 'm') {
-            $result = $this->userService->getUserWithMinimumDetails($id);
-        } else {
-            $result = $this->userService->getUserWithMinimumDetails($id); // Currently using the minimum information
-            // for the user. When we get another condition then we will use tem
-        }
-        if ($result == 0) {
-            return $this->getErrorResponse("Failed to find User", 404, array('userid' => $params['userId']));
-        }
-        return $this->getSuccessResponseWithData($result);
+        return $this->getUserInfo($id, $params);
+    }
+
+    /**
+     * GET User API
+     * @api
+     * @link /user[/:userId]
+     * @method GET
+     * @param $id ID of User to Delete
+     * @return array $data
+     * @return array Returns a JSON Response with Status Code and Created User.
+     * @Route Info: (a=>All Fields, m=>Minimum Fields, d=>Detailed); In future we are planning to add "Detailed" type
+     * with more fields to load.
+     */
+    public function getUserDetailAction()
+    {
+        $id = AuthContext::get(AuthConstants::USER_ID);
+        $params = $this->params()->fromRoute();
+        return $this->getUserInfo($id, $params);
+
     }
 
     /**
@@ -339,5 +346,26 @@ class UserController extends AbstractApiController
             $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
+    }
+
+    /**
+     * @param $id
+     * @param $params
+     * @return JsonModel
+     */
+    private function getUserInfo($id, $params) {
+        $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
+        if ($type === 'a') {
+            $result = $this->userService->getUser($id);
+        } else if ($type === 'm') {
+            $result = $this->userService->getUserWithMinimumDetails($id);
+        } else {
+            $result = $this->userService->getUserWithMinimumDetails($id); // Currently using the minimum information
+            // for the user. When we get another condition then we will use tem
+        }
+        if ($result == 0) {
+            return $this->getErrorResponse("Failed to find User", 404, $result);
+        }
+        return $this->getSuccessResponseWithData($result);
     }
 }
