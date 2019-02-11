@@ -305,10 +305,10 @@ class UserController extends AbstractApiController
             $result['userName'] = $this->userService->getUserNameFromAuth(); // Code to get the username from AuthConstant
             $result['blackListedApps'] = $this->userService->getAppsWithoutAccessForUser();
             if ($result['userName'] == null || empty($result['userName'])) {
-                return $this->getErrorResponse("Not able to get the Username! Please check with the Administrator");
+                return $this->getSuccessResponse("Not able to get the Username! Please check with the Administrator");
             }
             if ($result['blackListedApps'] == null || empty($result['blackListedApps'])) {
-                return $this->getErrorResponse("Not able to get the BlackListed Apps!");
+                return $this->getSuccessResponse("Not able to get the BlackListed Apps!");
             }
             return $this->getSuccessResponseWithData($result);
         } catch (ValidationException $e) {

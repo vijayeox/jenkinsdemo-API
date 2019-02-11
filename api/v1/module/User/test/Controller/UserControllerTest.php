@@ -219,7 +219,7 @@ class UserControllerTest extends ControllerTest{
    }
 
    public function testUserLoginToken() {
-       $this->initAuthToken($this->managerUser);
+       $this->initAuthToken($this->adminUser);
        $this->dispatch('/user/usertoken', 'get');
        $this->assertResponseStatusCode(200);
        $this->setDefaultAsserts('userToken');

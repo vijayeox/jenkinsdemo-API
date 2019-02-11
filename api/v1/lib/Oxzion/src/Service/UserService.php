@@ -479,6 +479,9 @@ class UserService extends AbstractService
         return $userName = AuthContext::get(AuthConstants::USERNAME);
     }
 
+    /**
+     * @return \Oxzion\Utils\Array
+     */
     public function getAppsWithoutAccessForUser()
     {
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
@@ -489,12 +492,13 @@ class UserService extends AbstractService
         //Code to get the name for which the logged in user has access to for the organization
         $select1 = $sql->select();
         $select1->from('ox_app')
-            ->columns(array("name"))
+            ->columns(array("id", "name"))
             ->join('ox_app_registry', 'ox_app_registry.app_id = ox_app.id', array(), 'left')
             ->join('ox_role_privilege', 'ox_role_privilege.app_id = ox_app.id', array(), 'left')
             ->join('ox_user_role', 'ox_user_role.role_id = ox_role_privilege.role_id', array(), 'left')
             ->where(array('ox_app_registry.org_id = ' . $orgId))
-            ->where(array('ox_user_role.role_id NOT IN (' . $userRole . ')'))
+            ->where(array('ox_user_role.role_id IN (' . $userRole . ')'))
+            ->group(array('ox_app.name'))
             ->order(array('ox_app.name'));
         $result1 = array_column($this->executeQuery($select1)->toArray(), 'id');
 
@@ -503,7 +507,7 @@ class UserService extends AbstractService
         $select2->from('ox_app')
             ->columns(array("id"))
             ->join('ox_app_registry', 'ox_app_registry.app_id = ox_app.id', array(), 'left')
-            ->where(array('ox_app_registry.org_id <> ' . $orgId))
+            ->where(array('ox_app_registry.org_id = ' . $orgId))
             ->order(array('ox_app.name'));
         $result2 = array_column($this->executeQuery($select2)->toArray(), 'id');
         //Code to get the difference of the two array
@@ -527,6 +531,10 @@ class UserService extends AbstractService
         return $fileName[1];
     }
 
+    /**
+     * @param $userId
+     * @return array
+     */
     private function getRolesFromDb($userId)
     {
         $sql = $this->getSqlObject();
@@ -537,6 +545,10 @@ class UserService extends AbstractService
         return $this->executeQuery($select)->toArray();
     }
 
+    /**
+     * @param $searchVal
+     * @return array
+     */
     public function getUserBySearchName($searchVal)
     {
         $sql = $this->getSqlObject();
@@ -548,12 +560,22 @@ class UserService extends AbstractService
         return $result = $this->executeQuery($select)->toArray();
     }
 
-    public function getUserDetailsbyUserName($userName) {
+    /**
+     * @param $userName
+     * @return array|\Zend\Db\ResultSet\ResultSet
+     */
+    public function getUserDetailsbyUserName($userName)
+    {
         $whereCondition = "username = '" . $userName . "'";
         $columnList = array('*');
         return $userDetail = $this->getUserContextDetailsByParams($whereCondition, $columnList);
     }
 
+    /**
+     * @param $whereCondition
+     * @param $columnList
+     * @return array|\Zend\Db\ResultSet\ResultSet
+     */
     public function getUserContextDetailsByParams($whereCondition, $columnList)
     {
         $sql = $this->getSqlObject();
