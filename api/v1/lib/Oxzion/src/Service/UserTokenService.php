@@ -28,7 +28,11 @@ class UserTokenService extends AbstractService
     public function getRefreshTokenPayload($userDetail, $dataSalt)
     {
         $count = 0;
-        $refreshTokenPeriod = $this->config['db']['refreshTokenPeriod'];
+        if(isset($this->config['db']['refreshTokenPeriod'])){
+            $refreshTokenPeriod = $this->config['db']['refreshTokenPeriod'];
+        } else {
+            $refreshTokenPeriod = 1;
+        }
         try {
             $date = strtotime(Date("Y-m-d H:i:s"));
             if ($userDetail['id'] === null || $userDetail['id'] === '') {
