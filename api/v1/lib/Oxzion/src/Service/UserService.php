@@ -300,7 +300,7 @@ class UserService extends AbstractService
             ->where(array('avatars.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'avatars.id' => $id));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
-            return 0;
+            return $response[0];
         }
         $result = $response[0];
         $groups = $this->getGroupsFromDb($id);
@@ -329,7 +329,7 @@ class UserService extends AbstractService
             ->where(array('avatars.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'avatars.id' => $id));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
-            return 0;
+            return $response[0];
         }
         $result = $response[0];
         if (isset($result)) {
