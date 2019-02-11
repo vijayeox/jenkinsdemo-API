@@ -108,7 +108,7 @@ class UserController extends AbstractApiController
             // for the user. When we get another condition then we will use tem
         }
         if ($result == 0) {
-            return $this->getErrorResponse("Failed to find User", 404, $result);
+            return $this->getErrorResponse("Failed to find User", 404, array('userid' => $params['userId']));
         }
         return $this->getSuccessResponseWithData($result);
     }
