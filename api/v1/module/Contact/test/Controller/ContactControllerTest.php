@@ -30,7 +30,7 @@ class ContactControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['user_id' => '3', 'first_name' => "Raks", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'phone_2' => '9092992992', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India', 'owner_id' => 3, 'org_id' => '1'];
+        $data = ['user_id' => '3', 'first_name' => "Raks", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India', 'owner_id' => 3, 'org_id' => '1'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_contact'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact', 'POST', $data);
@@ -43,7 +43,6 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['first_name'], $data['first_name']);
         $this->assertEquals($content['data']['last_name'], $data['last_name']);
         $this->assertEquals($content['data']['phone_1'], $data['phone_1']);
-        $this->assertEquals($content['data']['phone_2'], $data['phone_2']);
         $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals($content['data']['company_name'], $data['company_name']);
         $this->assertEquals($content['data']['address_1'], $data['address_1']);
@@ -68,7 +67,7 @@ class ContactControllerTest extends ControllerTest
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'phone_2' => '9092992992', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India', 'owner_id' => 3];
+        $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India', 'owner_id' => 3];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_contact'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact', 'POST', $data);
@@ -83,7 +82,7 @@ class ContactControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['user_id' => '3', 'first_name' => "Rakshith", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'phone_2' => '9092992992', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'US', 'owner_id' => 3];
+        $data = ['user_id' => '3', 'first_name' => "Rakshith", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'US', 'owner_id' => 3];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact/1', 'PUT', null);
@@ -96,7 +95,6 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['first_name'], $data['first_name']);
         $this->assertEquals($content['data']['last_name'], $data['last_name']);
         $this->assertEquals($content['data']['phone_1'], $data['phone_1']);
-        $this->assertEquals($content['data']['phone_2'], $data['phone_2']);
         $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals($content['data']['company_name'], $data['company_name']);
         $this->assertEquals($content['data']['address_1'], $data['address_1']);
@@ -107,7 +105,7 @@ class ContactControllerTest extends ControllerTest
 
     public function testUpdateNotFound()
     {
-        $data = ['first_name' => "Rakshith", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'phone_2' => '9092992992', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'US', 'owner_id' => 3];
+        $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'US', 'owner_id' => 3];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact/10000', 'PUT', null);
