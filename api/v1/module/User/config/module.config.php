@@ -158,6 +158,17 @@ return [
                     ],
                 ],
             ],
+            'changePassword' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/:userId/changepassword',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'changePassword'
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

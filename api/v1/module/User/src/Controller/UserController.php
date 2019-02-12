@@ -353,7 +353,8 @@ class UserController extends AbstractApiController
      * @param $params
      * @return JsonModel
      */
-    private function getUserInfo($id, $params) {
+    private function getUserInfo($id, $params)
+    {
         $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
         if ($type === 'a') {
             $result = $this->userService->getUser($id);
@@ -368,5 +369,24 @@ class UserController extends AbstractApiController
             return $this->getErrorResponse("Failed to find User", 404, $response);
         }
         return $this->getSuccessResponseWithData($result);
+    }
+
+    public function changePasswordAction()
+    {
+        $data = $this->params()->fromPost();
+        $user = $this->params()->fromRoute();
+        $userDetail = $this->userService->getUser($user['userId']);
+        $oldPassword = md5(sha1($data['old_password']));
+        $newPassword = md5(sha1($data['new_password']));
+        $confirmPassword = md5(sha1($data['confirm_password']));
+
+        if (($oldPassword == $userDetail['password']) && ($newPassword == $confirmPassword)) {
+            $formData = array('id' => $userDetail['id'], 'password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null);
+            $result = $this->update($userDetail['id'], $formData);
+            return $this->getSuccessResponse("Password changed successfully!");
+        } else {
+            $response = ['id' => $userDetail['id']];
+            return $this->getErrorResponse("Failed to Update Password", 404, $response);
+        }
     }
 }
