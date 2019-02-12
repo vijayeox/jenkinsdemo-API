@@ -11,6 +11,7 @@ use Oxzion\Utils\ArrayUtils;
 
 class UserService extends AbstractService
 {
+
     const GROUPS = '_groups';
     const ROLES = '_roles';
     const USER_FOLDER = "/users/";
@@ -176,9 +177,8 @@ class UserService extends AbstractService
             return 0;
         }
         if ($this->getErrorCode != 0) {
-            if ($this->getErrorCode == 1) {
+            if ($this->getErrorCode == 1)
                 $this->getFailureResponse("User already exists", 404, $data);
-            }
             return 0;
         }
         $id = $this->table->getLastInsertValue();
@@ -270,7 +270,7 @@ class UserService extends AbstractService
      * @method GET
      * @return array $dataget list of Users
      */
-    public function getUsers($group_id = null)
+    public function getUsers($group_id = NULL)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
@@ -300,38 +300,11 @@ class UserService extends AbstractService
             ->where(array('avatars.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'avatars.id' => $id));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
-            return $response[0];
+            return 0;
         }
         $result = $response[0];
         $groups = $this->getGroupsFromDb($id);
         $result['group'] = $groups;
-        if (isset($result)) {
-            return $result;
-        } else {
-            return 0;
-        }
-    }
-
-
-    /**
-     * GET User Service
-     * @method  getUserWithMinimumDetails
-     * @param $id ID of User to View
-     * @return array with minumum information required to use for the User.
-     * @return array Returns a JSON Response with Status Code and Created User.
-     */
-    public function getUserWithMinimumDetails($id)
-    {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('avatars')
-            ->columns(array('username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone'))
-            ->where(array('avatars.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'avatars.id' => $id));
-        $response = $this->executeQuery($select)->toArray();
-        if (!$response) {
-            return $response[0];
-        }
-        $result = $response[0];
         if (isset($result)) {
             return $result;
         } else {
@@ -479,9 +452,6 @@ class UserService extends AbstractService
         return $userName = AuthContext::get(AuthConstants::USERNAME);
     }
 
-    /**
-     * @return \Oxzion\Utils\Array
-     */
     public function getAppsWithoutAccessForUser()
     {
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
@@ -492,13 +462,12 @@ class UserService extends AbstractService
         //Code to get the name for which the logged in user has access to for the organization
         $select1 = $sql->select();
         $select1->from('ox_app')
-            ->columns(array("id", "name"))
+            ->columns(array("name"))
             ->join('ox_app_registry', 'ox_app_registry.app_id = ox_app.id', array(), 'left')
             ->join('ox_role_privilege', 'ox_role_privilege.app_id = ox_app.id', array(), 'left')
             ->join('ox_user_role', 'ox_user_role.role_id = ox_role_privilege.role_id', array(), 'left')
-            ->where(array('ox_app_registry.org_id = ' . $orgId))
-            ->where(array('ox_user_role.role_id IN (' . $userRole . ')'))
-            ->group(array('ox_app.name'))
+            ->where(array('ox_app_registry.org_id = '. $orgId))
+            ->where(array('ox_user_role.role_id NOT IN (' .  $userRole . ')'))
             ->order(array('ox_app.name'));
         $result1 = array_column($this->executeQuery($select1)->toArray(), 'id');
 
@@ -507,7 +476,7 @@ class UserService extends AbstractService
         $select2->from('ox_app')
             ->columns(array("id"))
             ->join('ox_app_registry', 'ox_app_registry.app_id = ox_app.id', array(), 'left')
-            ->where(array('ox_app_registry.org_id = ' . $orgId))
+            ->where(array('ox_app_registry.org_id <> '. $orgId))
             ->order(array('ox_app.name'));
         $result2 = array_column($this->executeQuery($select2)->toArray(), 'id');
         //Code to get the difference of the two array
@@ -531,10 +500,6 @@ class UserService extends AbstractService
         return $fileName[1];
     }
 
-    /**
-     * @param $userId
-     * @return array
-     */
     private function getRolesFromDb($userId)
     {
         $sql = $this->getSqlObject();
@@ -545,50 +510,15 @@ class UserService extends AbstractService
         return $this->executeQuery($select)->toArray();
     }
 
-    /**
-     * @param $searchVal
-     * @return array
-     */
     public function getUserBySearchName($searchVal)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select()
             ->from('avatars')
-            ->columns(array('id', 'firstname', 'lastname'))// Instead of getting the id from the userTable,
-            // we need to get the UUID. Once UUID is added to the table we need to make that change
+            ->columns(array('id', 'firstname', 'lastname'))
             ->where(array('firstname LIKE "%' . $searchVal . '%" OR lastname LIKE "%' . $searchVal . '%"'));
         return $result = $this->executeQuery($select)->toArray();
     }
-
-    /**
-     * @param $userName
-     * @return array|\Zend\Db\ResultSet\ResultSet
-     */
-    public function getUserDetailsbyUserName($userName)
-    {
-        $whereCondition = "username = '" . $userName . "'";
-        $columnList = array('*');
-        return $userDetail = $this->getUserContextDetailsByParams($whereCondition, $columnList);
-    }
-
-    /**
-     * @param $whereCondition
-     * @param $columnList
-     * @return array|\Zend\Db\ResultSet\ResultSet
-     */
-    public function getUserContextDetailsByParams($whereCondition, $columnList)
-    {
-        $sql = $this->getSqlObject();
-        $select = $sql->select()
-            ->from('avatars')
-            ->columns($columnList)
-            ->where(array($whereCondition))
-            ->limit(1);
-        $results = $this->executeQuery($select);
-        $results = $results->toArray();
-        if (count($results) > 0) {
-            $results = $results[0];
-        }
-        return $results;
-    }
 }
+
+?>

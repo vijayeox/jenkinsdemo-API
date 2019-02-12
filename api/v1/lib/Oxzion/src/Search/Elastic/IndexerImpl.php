@@ -14,21 +14,12 @@ class IndexerImpl implements Indexer {
     }
 
 
-    public function index($appId,$id,$type,$body,$fieldTypeAarray=null){
+    public function index($app_id,$id,$type,$body){
         try {
             $org_id = AuthContext::get(AuthConstants::ORG_ID);
             $body['org_id']=$org_id;
             $body['type']=$type;
-            $index = $appId;
-            if ($fieldTypeAarray) {
-                foreach($body as $key=>$value) {
-                    if (isset($fieldTypeAarray[$key])) {
-                        if ($fieldTypeAarray[$key]=='date'){
-                            $body[$key] = DateTime::createFromFormat("yyyy/MM/dd HH:mm:ss",$value);
-                        }
-                    }
-                }
-            }    
+            $index = $app_id;
             $elasticService = new ElasticService($this->config);    
             $response = $elasticService->index($index,$id,$body);
             return $response;
@@ -37,10 +28,10 @@ class IndexerImpl implements Indexer {
         }
     }
 
-    public function  delete($appId,$id) {
+    public function  delete($app_id,$id) {
          try {
             $elasticService = new ElasticService($this->config);       
-            $index = $appId;
+            $index = $app_id;
             $response = $elasticService->delete($index,$id);
             return $response;
         } catch (Exception $e) {

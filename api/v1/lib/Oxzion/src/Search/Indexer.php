@@ -4,9 +4,9 @@ namespace Oxzion\Search;
 interface Indexer
 {
 
-    public function index($appId,$id,$type,$body);
+    public function index($app_id,$id,$type,$body);
 
-    public function delete($appId,$id);
+    public function delete($app_id,$id);
 
 }
 ?>
