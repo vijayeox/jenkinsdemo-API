@@ -22,7 +22,7 @@ class ContactController extends AbstractApiController
      */
     public function __construct(ContactTable $table, ContactService $contactService, Logger $log, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __class__, Contact::class);
+        parent::__construct($table, $log, __CLASS__, Contact::class);
         $this->setIdentifierName('contactId');
         $this->contactService = $contactService;
     }
@@ -124,18 +124,18 @@ class ContactController extends AbstractApiController
     public function getList()
     {
         $result = $this->contactService->getContactByOwnerId();
-        // if ($result == null || empty($result)) {
-        //     return $this->getErrorResponse("There is nothing in your contact list!");
-        // }
+        if ($result == null || empty($result)) {
+            return $this->getErrorResponse("There is nothing in your contact list!");
+        }
         return $this->getSuccessResponseWithData($result);
     }
 
     public function getContactListByOrgAction()
     {
         $result = $this->contactService->getContactByOrgId();
-        // if ($result == null || empty($result)) {
-        //     return $this->getErrorResponse("There are no contacts in your organization!");
-        // }
+        if ($result == null || empty($result)) {
+            return $this->getErrorResponse("There are no contacts in your organization!");
+        }
         return $this->getSuccessResponseWithData($result);
     }
 

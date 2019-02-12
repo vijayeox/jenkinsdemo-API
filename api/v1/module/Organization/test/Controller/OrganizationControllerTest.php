@@ -31,15 +31,11 @@ class OrganizationControllerTest extends ControllerTest{
     public function testGetList(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization', 'GET');
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(405);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['id'], 1);
-        $this->assertEquals($content['data'][0]['name'], 'Cleveland Cavaliers');
-        $this->assertEquals($content['data'][1]['id'], 2);
-        $this->assertEquals($content['data'][1]['name'], 'Golden State Warriors');
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Method Not Found');
     }
     public function testGet(){
         $this->initAuthToken($this->adminUser);

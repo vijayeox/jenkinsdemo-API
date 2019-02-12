@@ -44,16 +44,18 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         }
         $jwtKey = $config['jwtKey'];
         $jwtAlgo = $config['jwtAlgo'];
-        $decodeToken = JwtHelper::decodeJwtToken($token, $jwtKey, $jwtAlgo);
-        return $decodeToken;
-    }
+        
+        try {
+        	$decodeToken = JwtHelper::decodeJwtToken($token, $jwtKey, $jwtAlgo);
+            $tokenPayload = $decodeToken;
+        } catch (\Exception $e) {
+            $tokenPayload = $e->getMessage();
+        }
 
+        return $tokenPayload;
+    }
     protected function getTokenPayload($username,$orgId){
     	return JwtHelper::getTokenPayload($username,$orgId);
-    }
-
-    protected function getRefreshTokenPayload($username,$orgId){
-    	return JwtHelper::getRefreshTokenPayload($username,$orgId);
     }
 
     protected function generateJwtToken($payload){

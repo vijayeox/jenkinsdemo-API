@@ -10,7 +10,7 @@ ox_app:
     date_modified: 2018-10-10 16:02:06
   -
     id: 2
-    name: "App 2"
+    name: "App 1"
     uuid: 1
     description: "App 2 description"
     type: 1

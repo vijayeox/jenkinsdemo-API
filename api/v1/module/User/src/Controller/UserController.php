@@ -25,7 +25,7 @@ class UserController extends AbstractApiController
      */
     public function __construct(UserTable $table, Logger $log, UserService $userService)
     {
-        parent::__construct($table, $log, __class__, User::class);
+        parent::__construct($table, $log, __CLASS__, User::class);
         $this->setIdentifierName('userId');
         $this->userService = $userService;
     }
@@ -70,7 +70,7 @@ class UserController extends AbstractApiController
         	PLease see the html error codes. https://www.restapitutorial.com/httpstatuscodes.html
         	Not found = 406
         	While this is not exactly not found we don't have a better HTML error code for create.
-             */
+       		*/
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
 
@@ -80,7 +80,7 @@ class UserController extends AbstractApiController
         /*
         PLease see the html error codes. https://www.restapitutorial.com/httpstatuscodes.html
         Successful create = 201
-         */
+        */
         return $this->getSuccessResponseWithData($data, 201);
     }
 
@@ -92,32 +92,14 @@ class UserController extends AbstractApiController
      * @param $id ID of User to Delete
      * @return array $data
      * @return array Returns a JSON Response with Status Code and Created User.
-     * @Route Info: (a=>All Fields, m=>Minimum Fields, d=>Detailed); In future we are planning to add "Detailed" type
-     * with more fields to load.
      */
     public function get($id)
     {
-        $params = $this->params()->fromRoute();
-        return $this->getUserInfo($id, $params);
-    }
-
-    /**
-     * GET User API
-     * @api
-     * @link /user[/:userId]
-     * @method GET
-     * @param $id ID of User to Delete
-     * @return array $data
-     * @return array Returns a JSON Response with Status Code and Created User.
-     * @Route Info: (a=>All Fields, m=>Minimum Fields, d=>Detailed); In future we are planning to add "Detailed" type
-     * with more fields to load.
-     */
-    public function getUserDetailAction()
-    {
-        $id = AuthContext::get(AuthConstants::USER_ID);
-        $params = $this->params()->fromRoute();
-        return $this->getUserInfo($id, $params);
-
+        $result = $this->userService->getUser($id);
+        if ($result == 0) {
+            return $this->getErrorResponse("Failed to find User", 404, $response);
+        }
+        return $this->getSuccessResponseWithData($result);
     }
 
     /**
@@ -312,10 +294,10 @@ class UserController extends AbstractApiController
             $result['userName'] = $this->userService->getUserNameFromAuth(); // Code to get the username from AuthConstant
             $result['blackListedApps'] = $this->userService->getAppsWithoutAccessForUser();
             if ($result['userName'] == null || empty($result['userName'])) {
-                return $this->getSuccessResponse("Not able to get the Username! Please check with the Administrator");
+                return $this->getErrorResponse("Not able to get the Username! Please check with the Administrator");
             }
             if ($result['blackListedApps'] == null || empty($result['blackListedApps'])) {
-                return $this->getSuccessResponse("Not able to get the BlackListed Apps!");
+                return $this->getErrorResponse("Not able to get the BlackListed Apps!");
             }
             return $this->getSuccessResponseWithData($result);
         } catch (ValidationException $e) {
@@ -346,27 +328,5 @@ class UserController extends AbstractApiController
             $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
-    }
-
-    /**
-     * @param $id
-     * @param $params
-     * @return JsonModel
-     */
-    private function getUserInfo($id, $params) {
-        $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
-        if ($type === 'a') {
-            $result = $this->userService->getUser($id);
-        } else if ($type === 'm') {
-            $result = $this->userService->getUserWithMinimumDetails($id);
-        } else {
-            $result = $this->userService->getUserWithMinimumDetails($id); // Currently using the minimum information
-            // for the user. When we get another condition then we will use tem
-        }
-        if ($result == 0) {
-            $response = ['id' => $id];
-            return $this->getErrorResponse("Failed to find User", 404, $response);
-        }
-        return $this->getSuccessResponseWithData($result);
     }
 }

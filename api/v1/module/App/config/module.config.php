@@ -2,7 +2,11 @@
 
 namespace App;
 
+use Zend\Log\Logger;
 use Zend\Router\Http\Segment;
+use Zend\Log\Formatter\Simple;
+use Zend\Log\Filter\Priority;
+use Zend\Log\Processor\RequestId;
 
 return [
     'router' => [
@@ -13,12 +17,12 @@ return [
                     'route' => '/app[/:appId]',
                     'defaults' => [
                         'controller' => Controller\AppController::class,
-                        'access' => [
+                        'access' =>[
                             // SET ACCESS CONTROL
-                            'put' => 'MANAGE_APP_WRITE',
-                            'post' => 'MANAGE_APP_WRITE',
-                            'delete' => 'MANAGE_APP_DELETE',
-                            'get' => 'VIEW_APP_READ',
+                            'put'=> 'MANAGE_APP_WRITE',
+                            'post'=> 'MANAGE_APP_WRITE',
+                            'delete'=> 'MANAGE_APP_DELETE',
+                            'get'=> 'VIEW_APP_READ',
                         ],
                     ],
                 ],
@@ -92,18 +96,18 @@ return [
                         ],
                         'filters' => [
                             'priority' => \Zend\Log\Logger::INFO,],
+                        ],
+                    ],
+                ],
+                'processors' => [
+                    'requestid' => [
+                        'name' => \Zend\Log\Processor\RequestId::class,],
                     ],
                 ],
             ],
-            'processors' => [
-                'requestid' => [
-                    'name' => \Zend\Log\Processor\RequestId::class,],
-            ],
-        ],
-    ],
-    'view_manager' => [
+            'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
-    ],
-];
+                'strategies' => ['ViewJsonStrategy',],
+            ],
+        ];

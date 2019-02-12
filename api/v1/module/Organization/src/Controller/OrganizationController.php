@@ -54,8 +54,7 @@ class OrganizationController extends AbstractApiController {
     * @return array Returns a JSON Response with Invalid Method/
     */
 	public function getList() {
-        $result = $this->orgService->getOrganizations();
-        return $this->getSuccessResponseWithData($result);
+		return $this->getInvalidMethod();
 	}
     /**
     * Update Organization API
