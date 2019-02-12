@@ -21,16 +21,11 @@ class ContactService extends AbstractService
         $this->table = $table;
     }
 
-    /**
-     * @param $data
-     * @return int|string
-     *
-     */
     public function createContact(&$data)
     {
         $form = new Contact();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $data['owner_id'] = (isset($data['owner_id'])) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
+        $data['owner_id'] = ($data['owner_id']) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $form->exchangeArray($data);
@@ -47,6 +42,7 @@ class ContactService extends AbstractService
             $data['id'] = $id;
             $this->commit();
         } catch (Exception $e) {
+            $this->rollback();
             return 0;
         }
         return $count;
@@ -114,4 +110,5 @@ class ContactService extends AbstractService
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         return $resultSet->toArray();
     }
+
 }

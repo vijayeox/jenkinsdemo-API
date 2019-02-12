@@ -141,21 +141,6 @@ class Module {
                     $config = $container->get('config');
                     return new Search\SearchFactory($config);
                 },
-                Service\UserTokenService::class => function($container) {
-                    $config = $container->get('config');
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\UserTokenService($config, $dbAdapter, $container->get(Model\UserTokenTable::class));
-                },
-                Model\UserTokenTable::class => function($container) {
-                    $tableGateway = $container->get(Model\UserTokenTableGateway::class);
-                    return new Model\UserTokenTable($tableGateway);
-                },
-                Model\UserTokenTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\UserToken());
-                    return new TableGateway('ox_user_refresh_token', $dbAdapter, null, $resultSetPrototype);
-                },
             ],
         ];
     }

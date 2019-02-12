@@ -4,10 +4,8 @@ namespace Oxzion\Analytics;
 class AnalyticsFactory
 {
     private static $instance;
-    protected $config;
 
-    public function __construct($config) {
-        $this->config=$config;    
+    protected function __construct() {
     }
 
     public static function getInstance() {
@@ -17,8 +15,8 @@ class AnalyticsFactory
         return self::$instance;
     }
 
-    public function getAnalyticsEngine() {
-        return new Elastic\AnalyticsEngineImpl($this->config);
+    public static function getAnalyticsEngine() {
+        return new Elastic\AnalyticsEngine();
     }
 
 

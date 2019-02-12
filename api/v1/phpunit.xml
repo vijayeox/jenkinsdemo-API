@@ -21,7 +21,6 @@
             <directory>./lib/Oxzion/test</directory>
             <directory>./lib/Oxzion/test/WorkflowTest</directory>
             <directory>./module/Contact/test</directory>
-            <directory>./module/Resource/test</directory>
         </testsuite>
     </testsuites>
     <php>

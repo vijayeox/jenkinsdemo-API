@@ -13,23 +13,23 @@ class SearchEngineImpl implements SearchEngine {
         $this->config = $config;
     }
 
-    public function search($parameters, $appId)
+    public function search($parameters, $app_id)
     {
         try {
             $elasticService = new ElasticService($this->config);
             $text = $parameters['searchtext'];
             $pagesize = (isset($parameters['pagesize'])) ? $parameters['pagesize'] : 25;
             $start = (isset($parameters['start'])) ? $parameters['start'] : 0;
-            $index = ($appId) ? $appId : '_all';
-            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+            $index = ($app_id) ? $app_id : '_all';
+            $orgid = AuthContext::get(AuthConstants::ORG_ID);
             $body = array();
             if (isset($parameters['type'])) {
                 $body['query']['bool']['filter']['must'] = [
-                    ['term' => ['org_id' => $orgId]],
+                    ['term' => ['org_id' => $orgid]],
                     ['term' => ['type' => $type]]
                 ];
             } else {
-                $body['query']['bool']['filter'] = ['term' => ['org_id' => $orgId]];
+                $body['query']['bool']['filter'] = ['term' => ['org_id' => $orgid]];
             }
             $body['query']['bool']['should'] = ["multi_match" => ["fields" => ['display_id^6', 'name^4', 'status^0.1', 'modified_by^2', 'created_by^2'], "query" => $text, "fuzziness" => "AUTO"]];
             $body['highlight'] = ['order' => 'score', "require_field_match" => 'true', 'fields' => ["*" => ['force_source' => false, "pre_tags" => ["<b class='highlight'>"], "post_tags" => ["</b>"], 'number_of_fragments' => 3, 'fragment_size' => 100]], 'encoder' => 'html'];

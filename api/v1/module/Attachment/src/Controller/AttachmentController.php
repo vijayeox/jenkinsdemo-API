@@ -53,11 +53,7 @@ class AttachmentController extends AbstractApiController {
         $files = $this->params()->fromFiles('files');
         $filesList = array();
         try{
-            if($files['name']){
-                $filesList = $this->attachmentService->upload($data,array($files));
-            } else {
-                $filesList = $this->attachmentService->upload($data,$files);
-            }
+            $filesList = $this->attachmentService->upload($data,$files);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
