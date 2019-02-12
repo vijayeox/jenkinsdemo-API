@@ -14,7 +14,7 @@ return [
             'user' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user[/:userId]',
+                    'route' => '/user[/:userId][/type][/:typeId]',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'access' => [
@@ -23,6 +23,21 @@ return [
                             'post' => 'MANAGE_USER_WRITE',
                             'delete' => 'MANAGE_USER_WRITE',
                             'get' => 'MANAGE_USER_READ',
+                        ],
+                    ],
+                ],
+            ],
+            'loggedInUser' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/me[/type][/:typeId]',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'GET',
+                        'action' => 'getUserDetail',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            'getUserDetail' => 'MANAGE_USER_READ',
                         ],
                     ],
                 ],

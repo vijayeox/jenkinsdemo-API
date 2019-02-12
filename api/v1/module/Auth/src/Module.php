@@ -10,6 +10,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Service\UserService;
+use Oxzion\Service\UserTokenService;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
 
 class Module implements ConfigProviderInterface {
@@ -42,8 +43,10 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\AuthController::class => function($container) {
                     return new Controller\AuthController(
-                        $container->get(AuthAdapter::class),$container->get(UserService::class),
-                        $container->get('AuthLogger')
+                        $container->get(AuthAdapter::class),
+                        $container->get(UserService::class),
+                        $container->get('AuthLogger'),
+                        $container->get(UserTokenService::class)
                     );
                 },
             ],

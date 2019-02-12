@@ -5,23 +5,27 @@ ox_contact:
     first_name: Karan S
     last_name: Agarwal
     phone_1: 09383883922
-    phone_2: 7813773883
+    phone_list: '{"data":["8399547885"," 7899290200"," 123123122445"]}'
     email: karan@myvamla.com
+    email_list: '{"data":["raks@va.com"," asas@ox.com"]}'
     company_name: Vantage Agora
     address_1: Banashankri 2nd Stage
     address_2: Bangalore
     country: India
     org_id: 1
+    other: ''
   -
     id: 2
     user_id: 1
     first_name: Bharat G
     last_name: Gogineni
     phone_1: 9829838883
-    phone_2: 8928829056
+    phone_list: '{"data":["8399547885"," 7899290200"," 123123122445"]}'
     email: bharatg@myvamla.com
+    email_list: '{"data":["raks@va.com"," asas@ox.com"]}'
     company_name: Vantage Agora
     address_1: Indiranagar
     address_2: Bangalore
     country: India
     org_id: 2
+    other: ''

@@ -154,5 +154,25 @@ class OrganizationService extends AbstractService{
         }
         return $response[0];
     }
+    /**
+    * GET Organization Service
+    * @method getOrganizations
+    * @return array $data 
+    * <code> {
+    *               id : integer,
+    *               name : string,
+    *               logo : string,
+    *               status : String(Active|Inactive),
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created Organization.
+    */
+    public function getOrganizations() {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_organization')
+        ->columns(array("*"));
+        $response = $this->executeQuery($select)->toArray();
+        return $response;
+    }
 }
 ?>
