@@ -7,14 +7,15 @@ use Bos\ValidationException;
 
 class Contact extends Entity
 {
-    protected $data = array (
+    protected $data = array(
         'id' => 0,
         'user_id' => null,
         'first_name' => 0,
         'last_name' => null,
-        'phone_1' => 0,
-        'phone_2' => null,
-        'email' => 0,
+        'phone_1' => null,
+        'phone_list' => null,
+        'email' => null,
+        'email_list' => null,
         'company_name' => null,
         'address_1' => 0,
         'address_2' => null,
@@ -23,12 +24,14 @@ class Contact extends Entity
         'org_id' => 0,
         'created_id' => 0,
         'date_created' => 0,
-        'date_modified' => null
+        'date_modified' => null,
+        'modified_id' => null,
+        'other' => null
     );
 
     public function validate()
     {
-        $dataArray = Array("first_name", "phone_1", "email", "address_1", "owner_id", "org_id");
+        $dataArray = array("first_name", "owner_id", "org_id");
         $this->validateWithParams($dataArray);
     }
 }
