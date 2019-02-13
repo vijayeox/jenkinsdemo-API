@@ -60,6 +60,7 @@ class User extends Entity{
         'doj' => NULL,
         'password_reset_date' => NULL,
         'otp' => NULL,
+        'preferences' => NULL,
     );
 
     public function validate(){
