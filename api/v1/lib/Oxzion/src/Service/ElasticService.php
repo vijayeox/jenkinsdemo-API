@@ -86,12 +86,12 @@ class ElasticService{
 			$boolfilterquery['_source'] = $searchconfig['select'];
 		} 
 		$pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:10000;
-		if($searchconfig['aggregates']) {
+		if(!empty($searchconfig['aggregates'])) {
 			if (!isset($searchconfig['select'])) {
 				$pagesize=0;
 			}
-			$aggs=$this->getAggregate($searchconfig['aggregates'],$boolfilterquery,$entity);		
-			if($searchconfig['group']) {
+			$aggs=$this->getAggregate($searchconfig['aggregates'],$boolfilterquery,$entity);	
+			if($searchconfig['group'] && !empty($searchconfig['group'])) {
 				$this->getGroups($searchconfig,$boolfilterquery,$aggs);
 			} else {
 				if($aggs){
@@ -111,12 +111,15 @@ class ElasticService{
 			} else {
 				$results = array('data'=>$result_obj['aggregations']['value']['value']);
 			}
+			$results['type']='group';
 		} else {
 			$results = array();
+
 			foreach($result_obj['hits']['hits'] as $key=>$value){
-				$results['data']['response']['docs'][$key] = $value['_source'];
-				$results['data']['response']['docs'][$key]['id'] = $value['_source']['_id'];
+				$results['data'][$key] = $value['_source'];
+			//	$results['data'][$key]['id'] = $value['_source']['_id'];
 			}
+			$results['type']='list';
 		}
 		return $results;
 	}
@@ -194,11 +197,9 @@ class ElasticService{
 
 	protected function getFilters($searchconfig,$orgId) {
 		$mustquery[] = ['term' => ['org_id' => $orgId]];
-		if (isset($searchconfig['aggregates'])) {
+		if (!empty($searchconfig['aggregates'])) {
 			$aggregates= $searchconfig['aggregates'];
-			if($aggregates){
-					$mustquery[] = array('exists'=>array('field'=>$aggregates[key($aggregates)]));
-			}
+			$mustquery[] = array('exists'=>array('field'=>$aggregates[key($aggregates)]));
 		}
 		if($searchconfig['filter']){
 			foreach ($searchconfig['filter'] as $key => $value) {
@@ -267,6 +268,7 @@ class ElasticService{
 	}
 
 	public 	function search($q){
+
 	//	 echo '<pre>';print_r(json_encode($q));echo '</pre>'; 
 
 		 $data= $this->client->search($q);

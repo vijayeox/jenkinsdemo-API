@@ -23,9 +23,15 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			}
             $query = $this->formatQuery($parameters);
             $elasticService = new ElasticService($this->config);
-			$data = $elasticService->getQueryResults($orgId,$appId,$query);
-			$finalresult = $this->flattenResult($data,$query);
-            return $finalresult;
+			$result = $elasticService->getQueryResults($orgId,$appId,$query);
+			if ($result['type']=='group') {
+				$result['data'] = $this->flattenResult($result,$query);
+			} else {
+				$result['list'] = $query['select'];
+				$result['displaylist'] = $query['displaylist'];
+			}
+			return $result;
+			
         } catch (Exception $e) {
             throw new Exception("Error performing Elastic Search", 0, $e);
         }
@@ -66,8 +72,8 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			} else {
 				$group = explode(',',$parameters['group']);
 			}
-		}
-		$aggregates[$operation[0]] = strtolower($field);
+		} 
+		if ($field) { $aggregates[$operation[0]] = strtolower($field); }
 		if ($parameters['frequency'] != 4) {
 			switch ($parameters['frequency']) {
 				case 1:
@@ -134,10 +140,10 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 						if(strpos($v, "=")!==false){
 							$listitem = explode("=", $v);
 							$returnarray['select'][] = $listitem[0];
-							$returnarray['listfields'][] = $listitem[1];
+							$returnarray['displaylist'][] = $listitem[1];
 						} else {
 							$returnarray['select'][] = $v;
-							$returnarray['listfields'][] = $v;
+							$returnarray['displaylist'][] = $v;
 						}
 					}
 				}	
