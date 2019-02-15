@@ -174,5 +174,38 @@ class OrganizationService extends AbstractService{
         $response = $this->executeQuery($select)->toArray();
         return $response;
     }
+
+    public function addUserToOrg($userId, $organizationId)
+    {
+        $sql = $this->getSqlObject();
+        $queryString = "select id from avatars";
+        $where = "where id =" . $userId;
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
+        if ($resultSet) {
+            $query = "select id from ox_organization";
+            $where = "where id=" . $organizationId;
+            $result = $this->executeQuerywithParams($query, $where, null, null);
+            if ($result) {
+                $query = "select * from ox_user_org";
+                $where = "where user_id =" . $userId . " and org_id =" . $organizationId;
+                $endresult = $this->executeQuerywithParams($query, $where, null, null)->toArray();
+                if (!$endresult) {
+                    $data = array(array('user_id' => $userId, 'org_id' => $organizationId));
+                    $result_update = $this->multiInsertOrUpdate('ox_user_org', $data, array());
+                    if ($result_update->getAffectedRows() == 0) {
+                        return $result_update;
+                    }
+                    return 1;
+                }
+                else {
+                    return 3;
+                }
+            }
+            else {
+                return 2;
+            }    
+        }
+        return 0;
+    }
 }
 ?>

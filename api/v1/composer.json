@@ -65,6 +65,7 @@
       "Bookmark\\": "module/Bookmark/src/",
       "App\\": "module/App/src/",
       "Project\\": "module/Project/src/",
+      "Role\\": "module/Role/src/",
       "Search\\": "module/Search/src/",
       "Contact\\": "module/Contact/src/",
       "Resource\\": "module/Resource/src/"
@@ -80,6 +81,7 @@
       "FileTest\\": "module/File/test/",
       "UserTest\\": "module/User/test/",
       "GroupTest\\": "module/Group/test/",
+      "RoleTest\\": "module/Role/test/",
       "OrganizationTest\\": "module/Organization/test/",
       "AuthTest\\": "module/Auth/test",
       "BookmarkTest\\": "module/Bookmark/test",

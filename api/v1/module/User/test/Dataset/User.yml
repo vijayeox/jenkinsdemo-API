@@ -106,3 +106,10 @@ ox_user_manager:
     id: 1
     user_id: 1
     manager_id: 3
+ox_user_org :
+  -
+    user_id: 1
+    org_id: 1
+  -
+    user_id: 2
+    org_id: 1       

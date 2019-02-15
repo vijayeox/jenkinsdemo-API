@@ -152,7 +152,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'error');        
     }
 
-    public function testsaveuser() {
+    public function testSaveUser() {
     	$this->initAuthToken($this->adminUser);
     	$this->dispatch('/project/1/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
     	$this->assertResponseStatusCode(200);
@@ -161,7 +161,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'success'); 
     }
 
-    public function testsaveuserwithoutuser() {
+    public function testSaveUserWithoutUser() {
     	$this->initAuthToken($this->adminUser);
     	$this->dispatch('/project/1/save','POST'); 
     	$this->assertResponseStatusCode(404);
@@ -170,7 +170,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'error'); 
     }
 
-    public function testsaveusernotfound() {
+    public function testSaveUserNotFound() {
     	$this->initAuthToken($this->adminUser);
     	$this->dispatch('/project/1/save','POST',array('userid' => '[{"id":1},{"id":23}]')); 
     	$this->assertResponseStatusCode(404);
@@ -179,7 +179,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testgetListOfUsers() {
+    public function testGetListOfUsers() {
     	$this->initAuthToken($this->adminUser);
     	$this->dispatch('/project/1/getusers','GET'); 
     	$this->assertResponseStatusCode(200);
@@ -188,7 +188,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'success'); 
     }
 
-    public function testgetListOfUsersNotFound() {
+    public function testGetListOfUsersNotFound() {
     	$this->initAuthToken($this->adminUser);
     	$this->dispatch('/project/64/getusers','GET'); 
     	$this->assertResponseStatusCode(404);

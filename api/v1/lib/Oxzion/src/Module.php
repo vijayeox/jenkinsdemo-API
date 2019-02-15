@@ -30,6 +30,10 @@ class Module {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new \Bos\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Bos\Model\FileTable::class));
                 },
+                Service\RoleService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\RoleService($container->get('config'), $dbAdapter, $container->get(Model\RoleTable::class));
+                },
                 \Bos\Service\CommentService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new \Bos\Service\CommentService($container->get('config'), $dbAdapter, $container->get(\Bos\Model\CommentTable::class));
@@ -41,6 +45,10 @@ class Module {
                 \Bos\Model\FileTable::class => function($container) {
                     $tableGateway = $container->get(\Bos\Model\FileTableGateway::class);
                     return new \Bos\Model\FileTable($tableGateway);
+                },
+                Model\RoleTable::class => function($container) {
+                    $tableGateway = $container->get(Model\RoleTableGateway::class);
+                    return new Model\RoleTable($tableGateway);
                 },
                 \Bos\Model\CommentTable::class => function($container) {
                     $tableGateway = $container->get(\Bos\Model\CommentTableGateway::class);
@@ -55,6 +63,12 @@ class Module {
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new \Bos\Model\File());
                     return new TableGateway('ox_file', $dbAdapter, null, $resultSetPrototype);
+                },
+                Model\RoleTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Role());
+                    return new TableGateway('ox_role', $dbAdapter, null, $resultSetPrototype);
                 },
                 \Bos\Model\CommentTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);

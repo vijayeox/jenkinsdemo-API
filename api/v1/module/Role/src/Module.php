@@ -1,6 +1,6 @@
 <?php
 
-namespace User;
+namespace Role;
 
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
@@ -10,9 +10,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
-use Oxzion\Model\UserTable;
 use Oxzion\Model\RoleTable;
-use Oxzion\Service\UserService;
 use Oxzion\Service\RoleService;
 
 class Module implements ConfigProviderInterface {
@@ -40,10 +38,10 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
-                Controller\UserController::class => function($container) {
-                    return new Controller\UserController(
-                        $container->get(UserTable::class), 
-                        $container->get('UserLogger'),$container->get(UserService::class),
+                Controller\RoleController::class => function($container) {
+                    return new Controller\RoleController(
+                        $container->get(RoleTable::class),$container->get(RoleService::class), 
+                        $container->get('RoleLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

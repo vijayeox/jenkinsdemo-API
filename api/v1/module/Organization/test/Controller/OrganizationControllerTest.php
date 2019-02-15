@@ -21,11 +21,11 @@ class OrganizationControllerTest extends ControllerTest{
         return $dataset;
     }
 
-    protected function setDefaultAsserts(){
+    protected function setDefaultAsserts($router = "Organization"){
         $this->assertModuleName('Organization');
         $this->assertControllerName(OrganizationController::class); // as specified in router's controller name alias
         $this->assertControllerClass('OrganizationController');
-        $this->assertMatchedRouteName('organization');
+        $this->assertMatchedRouteName($router);
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
     public function testGetList(){
@@ -159,4 +159,35 @@ class OrganizationControllerTest extends ControllerTest{
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');        
     }
+
+    public function testAddUserToOrganization()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/2/adduser/3', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('addUserToOrganization');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testAddUserToOrganizationWithSameData()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/1/adduser/2', 'POST');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts('addUserToOrganization');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');        
+    }
+
+    public function testAddUserToOrganizationWithDifferentUser()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/1/adduser/3', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('addUserToOrganization');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
 }
