@@ -73,7 +73,16 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 				$group = explode(',',$parameters['group']);
 			}
 		} 
-		if ($field) { $aggregates[$operation[0]] = strtolower($field); }
+		if ($field) { 
+			$aggregates[$operation[0]] = strtolower($field); 
+		} 
+		else {
+				if (!isset($parameters['list'])) {
+					if (!empty($group)) {
+						$aggregates[$operation[0]] = strtolower($group[0]); 				
+				}
+			}
+		}
 		if ($parameters['frequency'] != 4) {
 			switch ($parameters['frequency']) {
 				case 1:
@@ -156,10 +165,10 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 	
 
 	public function flattenmultigroups(&$finalresult,$result,$config,$count,$index,$key='',$grouplist=array()){
-		$operation = explode('_',$config['operation']);
+		$operation = key($config['aggregates']);
 		if ($index==$count) {
 			foreach($result as $data) {
-				if ($operation[0]=='count') {
+				if ($operation=='count') {
 					$value = $data['doc_count'];
 				} else {
 					$value = $data['value']['value'];
@@ -179,7 +188,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 
 	public function flattenResult($result,$config){
 		$finalresult = array();
-		$operation = explode('_',$config['operation']);
+		$operation = key($config['aggregates']);
 		$qtrtranslate = array('Jan'=>'Q1','Apr'=>'Q2','Jul'=>'Q3','Oct'=>'Q4');
 		if (isset($config['group'])) {
 			if (count($config['group'])==1) {
@@ -194,7 +203,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 					} else {
 						$name = $data['key'];
 					}
-					if ($operation[0]=='count') {
+					if ($operation=='count') {
 						$value = $data['doc_count'];
 					} else {
 						$value = $data['value']['value'];

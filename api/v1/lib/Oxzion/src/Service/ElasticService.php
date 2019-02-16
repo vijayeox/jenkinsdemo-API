@@ -103,22 +103,22 @@ class ElasticService{
 		$boolfilterquery['explain'] = true;
 		$params = array('index'=>$appId,'type'=>$this->type,'body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>$searchconfig['start']?$searchconfig['start']:0,"size"=>$pagesize);
 		$result_obj = $this->search($params);
-		if (!isset($searchconfig['select'])) {
-			if ($searchconfig['group']) {
+			if ($searchconfig['group'] && !isset($searchconfig['select'])) {
 				$results = array('data'=>$result_obj['aggregations']['groupdata']['buckets']);
-			} else if(key($searchconfig['aggregates'])=='count'){
+				$results['type']='group';
+			} else if(key($searchconfig['aggregates'])=='count' && !isset($searchconfig['select'])){
 				$results = array('data'=>$result_obj['hits']['total']);
-			} else {
+				$results['type']='value';
+			} else if (isset($result_obj['aggregations'])){
 				$results = array('data'=>$result_obj['aggregations']['value']['value']);
-			}
-			$results['type']='group';
-		} else {
-			$results = array();
+				$results['type']='value';
+			}  else {
+				$results = array();
 
-			foreach($result_obj['hits']['hits'] as $key=>$value){
-				$results['data'][$key] = $value['_source'];
-			//	$results['data'][$key]['id'] = $value['_source']['_id'];
-			}
+				foreach($result_obj['hits']['hits'] as $key=>$value){
+					$results['data'][$key] = $value['_source'];
+				//	$results['data'][$key]['id'] = $value['_source']['_id'];
+				}
 			$results['type']='list';
 		}
 		return $results;
@@ -269,7 +269,7 @@ class ElasticService{
 
 	public 	function search($q){
 
-	//	 echo '<pre>';print_r(json_encode($q));echo '</pre>'; 
+	//	 echo '<pre>';print_r($q);echo '</pre>'; 
 
 		 $data= $this->client->search($q);
 	//	 echo '<pre>';print_r($data);echo '</pre>';
