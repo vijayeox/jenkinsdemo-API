@@ -23,11 +23,6 @@ if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
     $db = 'oxzionapi';
     $username = 'root';
     $password = 'oxzion';
-} else if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'appinstall') {
-    $host = '172.16.1.118';
-    $db = 'rakshithapi_app';
-    $username = 'rakshith';
-    $password = '7zet3os!'; 
 }
 
 return [
