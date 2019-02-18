@@ -29,6 +29,9 @@ module.exports = {
     minimize,
   },
   plugins: [
+    new CopyWebpackPlugin([
+      'hicon.png'
+    ]),
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[id].css'
@@ -36,8 +39,7 @@ module.exports = {
     ...plugins
   ],
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.(sa|sc|c)ss$/,
         exclude: /(node_modules|bower_components)/,
         use: [

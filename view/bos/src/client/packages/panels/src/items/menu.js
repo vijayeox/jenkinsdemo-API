@@ -28,7 +28,7 @@
  * @licence Simplified BSD License
  */
 
-import { h } from 'hyperapp';
+import {h} from 'hyperapp';
 import PanelItem from '../panel-item';
 import * as languages from '../locales';
 
@@ -59,9 +59,6 @@ const makeCategory = (category, core) => {
   captionDiv.append(categoryLabel);
   categoryDiv.appendChild(captionDiv);
   categoryDiv = makeAppList(category, categoryDiv, core);
-  if(category.data && category.data.action === 'logout') {
-    categoryDiv.onclick = core.make('osjs/auth').logout();
-  }
   return categoryDiv;
 };
 const getRandomColor = () => {
@@ -93,7 +90,7 @@ const makeAppList = (category, categoryDiv, core) => {
       captionDiv.append(appLabel);
       appDiv.appendChild(icon);
       appDiv.appendChild(captionDiv);
-      appDiv.onclick = function() { core.run(appItem.data.name); };
+      appDiv.onclick = function() { core.run(appItem.data.name);document.getElementById('appmenu').classList.remove('appmenu-visible'); };
       appListDiv.appendChild(appDiv);
     }
     categoryDiv.appendChild(appListDiv);
@@ -111,7 +108,7 @@ const makeTree = (core, __, metadata) => {
 
     if (!categories[cat]) {
       categories[cat] = {
-        icon: found.icon ? { name: found.icon } : defaultIcon,
+        icon: found.icon ? {name: found.icon} : defaultIcon,
         label: getCategory(locale, found.label),
         items: []
       };
@@ -130,18 +127,10 @@ const makeTree = (core, __, metadata) => {
     categories[k].items.sort(sortBy(sortByLabel));
   });
 
-  const system = [{
-    icon: defaultIcon,
-    label: __('LBL_LOG_OUT'),
-    data: {
-      action: 'logOut'
-    }
-  }];
-
   const sorted = Object.values(categories);
   sorted.sort(sortBy(sortByLabel));
 
-  return [...sorted, ...system];
+  return [...sorted];
 };
 
 /**
@@ -175,17 +164,9 @@ export default class MenuPanelItem extends PanelItem {
     const _ = this.core.make('osjs/locale').translate;
     const __ = this.core.make('osjs/locale').translatable(languages);
 
-    const logout = async (save) => {
-      if (save) {
-        await this.core.make('osjs/session').save();
-      }
-
-      this.core.make('osjs/auth').logout();
-    };
     const addSearch = (searchDiv, input) => {
       let  filter, items, i;
       filter = input.value.toUpperCase();
-      console.log(filter);
       items = document.getElementsByClassName('appcaption');
       for (i = 0; i < items.length; i++) {
         if (items[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
@@ -207,7 +188,6 @@ export default class MenuPanelItem extends PanelItem {
     const onclick = (ev) => {
       const packages = this.core.make('osjs/packages').getPackages(m => (!m.type || m.type === 'application'));
       let appArray = makeTree(this.core, __, [].concat(packages));
-      console.log(appArray);
       let appmenuElement = document.getElementById('appmenu');
       appmenuElement.innerHTML = '';
       let appBarDiv = document.createElement('div');
@@ -256,12 +236,10 @@ export default class MenuPanelItem extends PanelItem {
         oncreate: el => this.attachKeybindings(el),
         className: 'osjs-panel-item--clickable osjs-panel-item--icon'
       }, [
-          h('img', {
-            src: menuIcon,
-            alt: _('LBL_MENU')
-          })//,
-          //h('span', {}, _('LBL_MENU'))
-        ])
+        h('img', {
+          src: menuIcon,
+          alt: _('LBL_MENU')
+        })])
     ]);
   }
 

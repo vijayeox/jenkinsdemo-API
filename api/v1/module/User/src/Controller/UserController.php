@@ -244,14 +244,21 @@ class UserController extends AbstractApiController
         }
 
     }
-
-    public function addusertogroupAction()
+    /**
+     * Add User To Group API
+     * @api
+     * @link /user/:userId/addusertogroup/:groupId'
+     * @method POST
+     * @param $id and $groupid that adds a particular user to a group
+     * @return array success|failure response
+     */
+    public function addUserToGroupAction()
     {
         $params = $this->params()->fromRoute();
         $id = $params['userId'];
         $groupId = $params['groupId'];
         try {
-            $response = $this->userService->addusertogroup($params['userId'], $params['groupId']);
+            $response = $this->userService->addUserToGroup($params['userId'], $params['groupId']);
             if ($response == 0) {
                 return $this->getErrorResponse("Entity not found for id -$id", 404);
             } elseif ($response == 2) {
@@ -266,11 +273,19 @@ class UserController extends AbstractApiController
         }
     }
 
-    public function addusertoprojectAction()
+    /**
+     * Add User To Project API
+     * @api
+     * @link /user/:userId/addusertoproject/:projectId'
+     * @method POST
+     * @param $id and $groupid that adds a particular user to a project
+     * @return array success|failure response
+     */
+    public function addUserToProjectAction()
     {
         $params = $this->params()->fromRoute();
         try {
-            $response = $this->userService->addusertoproject($params['userId'], $params['projectId']);
+            $response = $this->userService->addUserToProject($params['userId'], $params['projectId']);
             if ($response == 0) {
                 return $this->getErrorResponse("Entity not found for id", 404);
             }
@@ -281,7 +296,15 @@ class UserController extends AbstractApiController
         }
     }
 
-    public function removeuserfromprojectAction()
+    /**
+     * Remove User from Project API
+     * @api
+     * @link /user/:userId/removeuserfromproject/:projectId'
+     * @method POST
+     * @param $id and $groupid that removes a particular user to a project
+     * @return array success|failure response
+     */
+    public function removeUserFromProjectAction()
     {
         $params = $this->params()->fromRoute();
         $id = $params['userId'];
@@ -387,6 +410,34 @@ class UserController extends AbstractApiController
         } else {
             $response = ['id' => $userDetail['id']];
             return $this->getErrorResponse("Failed to Update Password", 404, $response);
+        }
+    }
+     /**
+     * Add User To Organization API
+     * @api
+     * @link /user/:userId/organization/:organizationId'
+     * @method POST
+     * @param $id and $groupid that adds a particular user to a organization
+     * @return array success|failure response
+     */
+    public function addOrganizationToUserAction() 
+    {
+        $params = $this->params()->fromRoute();
+        $id = $params['userId'];
+        $organizationId = $params['organizationId'];
+        try {
+            $response = $this->userService->addUserToOrg($params['userId'], $params['organizationId']);
+            if ($response == 0) {
+                return $this->getErrorResponse("Entity not found for id -$id", 404);
+            } elseif ($response == 2) {
+                return $this->getErrorResponse("Entity not found for organizationid -$organizationId", 404);
+            } elseif ($response == 3) {
+                return $this->getErrorResponse("Entity exists and therefore unable to add", 404);
+            }
+            return $this->getSuccessResponse();
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 406, $response);
         }
     }
 }

@@ -79,10 +79,25 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
-                        'action' => 'addusertogroup',
+                        'action' => 'addUserToGroup',
                         'access' => [
                             // SET ACCESS CONTROL
-                            'addusertogroup' => 'MANAGE_USER_WRITE',
+                            'addUserToGroup' => 'MANAGE_USER_WRITE',
+                        ],
+                    ],
+                ],
+            ],
+            'addOrganizationToUser' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/:userId/organization/:organizationId',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'addOrganizationToUser',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            'addOrganizationToUser' => 'MANAGE_USER_WRITE',
                         ],
                     ],
                 ],
@@ -94,10 +109,10 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'DELETE',
-                        'action' => 'removeuserfromgroup',
+                        'action' => 'removeUserFromGroup',
                         'access' => [
                             // SET ACCESS CONTROL
-                            'removeuserfromgroup' => 'MANAGE_USER_WRITE',
+                            'removeUserFromGroup' => 'MANAGE_USER_WRITE',
                         ],
                     ],
                 ],
@@ -109,10 +124,10 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
-                        'action' => 'addusertoproject',
+                        'action' => 'addUserToProject',
                         'access' => [
                             // SET ACCESS CONTROL
-                            'addusertoproject' => 'MANAGE_USER_WRITE',
+                            'addUserToProject' => 'MANAGE_USER_WRITE',
                         ],
                     ],
                 ],
@@ -124,10 +139,10 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'DELETE',
-                        'action' => 'removeuserfromproject',
+                        'action' => 'removeUserFromProject',
                         'access' => [
                             // SET ACCESS CONTROL
-                            'removeuserfromproject' => 'MANAGE_USER_WRITE',
+                            'removeUserFromProject' => 'MANAGE_USER_WRITE',
                         ],
                     ],
                 ],

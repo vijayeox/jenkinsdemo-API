@@ -10,7 +10,7 @@ class AnalyticsFactory
         $this->config=$config;    
     }
 
-    public static function getInstance() {
+    public function getInstance() {
         if (self::$instance === null) {
             self::$instance = new AnalyticsFactory();
         }

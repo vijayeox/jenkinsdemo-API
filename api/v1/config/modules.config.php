@@ -21,6 +21,7 @@ return [
     'Form',
     'Announcement',
     'User',
+    'Role',
     'Project',
     'Group',
     'Organization',

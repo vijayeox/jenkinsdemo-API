@@ -11,7 +11,9 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Model\UserTable;
+use Oxzion\Model\RoleTable;
 use Oxzion\Service\UserService;
+use Oxzion\Service\RoleService;
 
 class Module implements ConfigProviderInterface {
 

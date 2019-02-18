@@ -21,3 +21,10 @@ ox_organization:
   labelfile: "en"
   languagefile: "en"
   status: "Active"
+ox_user_org :
+  -
+    user_id: 1
+    org_id: 1
+  -
+    user_id: 2
+    org_id: 1 

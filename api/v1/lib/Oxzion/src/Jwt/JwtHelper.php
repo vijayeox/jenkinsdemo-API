@@ -12,7 +12,7 @@ class JwtHelper
         $tokenId = base64_encode(openssl_random_pseudo_bytes(32));
         $issuedAt = time();
         $notBefore = $issuedAt;
-        $expire = $notBefore + 30; // Adding 3600 seconds
+        $expire = $notBefore + 72000; // Adding 3600 seconds
         $data = ['iat' => $issuedAt, 'jti' => $tokenId, 'nbf' => $notBefore, 'exp' => $expire, 'data' => ['username' => $username, 'orgId' => $orgId]];
         return $data;
     }

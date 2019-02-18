@@ -26,6 +26,21 @@ return [
                     ],
                 ],
             ],
+            'addUserToOrganization' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/organization/:orgId/adduser/:userId',
+                    'defaults' => [
+                        'controller' => Controller\OrganizationController::class,
+                        'method' => 'POST',
+                        'action' => 'addUserToOrganization',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            'addUserToOrganization' => 'MANAGE_USER_WRITE',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

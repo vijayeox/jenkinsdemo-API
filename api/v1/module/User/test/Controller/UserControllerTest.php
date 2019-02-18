@@ -167,7 +167,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testassignManagerToUser()
+    public function testAssignManagerToUser()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/1/assign/2', 'GET');
@@ -179,7 +179,7 @@ class UserControllerTest extends ControllerTest
     }
 
 
-    public function testassignUserExists()
+    public function testAssignUserExists()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/1/assign/3', 'GET');
@@ -190,7 +190,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals(1, $this->getConnection()->getRowCount('ox_user_manager'));
     }
 
-    public function testremoveManagerToUser()
+    public function testRemoveManagerToUser()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/1/remove/3', 'delete', null);
@@ -200,7 +200,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testaddusertogroup()
+    public function testAddUserToGroup()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/3/addusertogroup/2', 'POST');
@@ -220,7 +220,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testaddusertoproject()
+    public function testAddUserToProject()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/3/addusertoproject/1', 'POST');
@@ -330,4 +330,34 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
+    public function testaddOrganizationToUser()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/3/organization/2', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('addOrganizationToUser');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testaddOrganizationToUserWithSameData()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/2/organization/1', 'POST');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts('addOrganizationToUser');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');        
+    }
+
+    public function testaddOrganizationToUserWithDifferentOrganization()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/1/organization/2', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('addOrganizationToUser');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+    
 }
