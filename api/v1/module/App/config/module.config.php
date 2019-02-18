@@ -18,7 +18,7 @@ return [
                             'put' => 'MANAGE_APP_WRITE',
                             'post' => 'MANAGE_APP_WRITE',
                             'delete' => 'MANAGE_APP_DELETE',
-                            'get' => 'VIEW_APP_READ',
+                            'get' => 'MANAGE_APP_READ',
                         ],
                     ],
                 ],
