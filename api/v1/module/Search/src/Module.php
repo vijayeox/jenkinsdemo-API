@@ -11,6 +11,8 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Search\SearchFactory;
+use Oxzion\Search\SearchEngine;
+
 
 class Module implements ConfigProviderInterface {
 
@@ -33,7 +35,7 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\SearchController::class => function($container) {
                     return new Controller\SearchController(
-                        $container->get(\Oxzion\Search\SearchFactory::class),$container->get('SearchLogger'));
+                        $container->get(\Oxzion\Search\SearchEngine::class),$container->get('SearchLogger'));
                 },
             ],
         ];

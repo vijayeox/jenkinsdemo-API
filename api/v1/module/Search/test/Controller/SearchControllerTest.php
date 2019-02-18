@@ -8,7 +8,8 @@ use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
-use Oxzion\Search\SearchFactory;
+use Oxzion\Search\SearchEngine;
+use Oxzion\Search\Indexer;
 use Oxzion\Search;
 use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
 use Oxzion\Test\MainControllerTest;
@@ -25,7 +26,6 @@ class SearchControllerTest extends MainControllerTest{
         parent::setUp();
         $this->setSearchData();
         $config = $this->getApplicationConfig();
-        $this->searchFactory = new SearchFactory($config);   
     }   
     
 
@@ -47,13 +47,14 @@ class SearchControllerTest extends MainControllerTest{
         if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');        
         }
-        $indexer = $this->searchFactory->getIndexer();
+        $indexer = $this->getApplicationServiceLocator()->get(Indexer::class);
         $body = $this->dataset['ox_search'];
         $this->assertIndex($indexer,$body[0]);
         $this->assertIndex($indexer,$body[1]);
         $this->assertIndex($indexer,$body[2]);
         $this->assertIndex($indexer,$body[3]);
         $this->assertIndex($indexer,$body[4]);
+        sleep(1);
     }
 
     public function testAllSearch(){
@@ -106,7 +107,7 @@ class SearchControllerTest extends MainControllerTest{
         if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');        
         }
-        $indexer = $this->searchFactory->getIndexer();
+        $indexer = $this->getApplicationServiceLocator()->get(Indexer::class);
         $return1=$indexer->delete('1_test','all');
         $return2=$indexer->delete('2_test','all');
         $this->assertEquals($return1['acknowledged'],1);

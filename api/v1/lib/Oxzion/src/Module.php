@@ -151,10 +151,6 @@ class Module {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\WorkflowService($container->get('config'), $dbAdapter, $container->get(Model\WorkflowTable::class));
                 },
-                Search\SearchFactory::class => function($container) {
-                    $config = $container->get('config');
-                    return new Search\SearchFactory($config);
-                },
                 Service\UserTokenService::class => function($container) {
                     $config = $container->get('config');
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -170,6 +166,18 @@ class Module {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\UserToken());
                     return new TableGateway('ox_user_refresh_token', $dbAdapter, null, $resultSetPrototype);
                 },
+                Analytics\AnalyticsEngine::class => function ($container) {
+                    $config = $container->get('config');
+                    return new Analytics\Elastic\AnalyticsEngineImpl($config);
+                },
+                Search\SearchEngine::class => function ($container) {
+                    $config = $container->get('config');
+                    return new Search\Elastic\SearchEngineImpl($config);
+                },
+                Search\Indexer::class => function ($container) {
+                    $config = $container->get('config');
+                    return new Search\Elastic\IndexerImpl($config);
+                }
             ],
         ];
     }

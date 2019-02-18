@@ -10,25 +10,25 @@ use Zend\View\Model\JsonModel;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Search\SearchFactory;
+use Oxzion\Search\SearchEngine;
 
 class SearchController extends AbstractApiController
 {
 	private $dbAdapter;
-	private $searchFactory;
+	private $searchEngine;
     /**
     * @ignore __construct
     */
-	public function __construct(SearchFactory $searchFactory,Logger $log){
+	public function __construct(SearchEngine $searchEngine,Logger $log){
 		parent::__construct(null, $log, __CLASS__, null);
-		$this->searchFactory=$searchFactory;
+		$this->searchEngine=$searchEngine;
 	}
 
 
 	public function create($data){
         try{
-            $searchEngine = $this->searchFactory->getSearchEngine();
             $app_id = (isset($data['app_id']))?$data['app_id']:null;
-            $result = $searchEngine->search($data,$app_id);
+            $result = $this->searchEngine->search($data,$app_id);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
