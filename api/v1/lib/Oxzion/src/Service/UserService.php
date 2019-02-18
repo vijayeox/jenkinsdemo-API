@@ -325,7 +325,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('avatars')
-            ->columns(array('username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone','dob','doj','country','website','about','sex','interest','address','icon'))
+            ->columns(array('id','username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone','dob','doj','country','website','about','sex','interest','address','icon'))
             ->where(array('avatars.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'avatars.id' => $id));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
