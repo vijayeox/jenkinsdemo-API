@@ -15,6 +15,7 @@ avatars:
   level: "AVATARBEE"
   managerid: 1
   designation: "IT ANALYST"
+  country: "Germany"
   phone: +93-1234567891
   email: "test@va.com"
   emailnotify: "Active"
@@ -43,6 +44,7 @@ avatars:
   lastname: "Agarwal"
   name: "Karan Agarwal"
   role: "employee"
+  country: "Ghana"
   orgid: 1
   dob: "1991-02-28 00:00:00"
   doj: "1991-02-28 00:00:00"
@@ -78,6 +80,7 @@ avatars:
   lastname: "Amin"
   name: "Rakshith Amin"
   role: "manager"
+  country: "India"
   orgid: 1
   dob: "1991-02-28 00:00:00"
   doj: "1991-02-28 00:00:00"
