@@ -15,6 +15,7 @@ avatars:
   level: "AVATARBEE"
   managerid: 1
   designation: "IT ANALYST"
+  phone: +93-1234567891
   email: "test@va.com"
   emailnotify: "Active"
   sentinel: "On"
@@ -49,6 +50,7 @@ avatars:
   level: "AVATARBEE"
   managerid: 1
   designation: "IT ANALYST"
+  phone: +93-1234567891
   email: "test@va.com"
   emailnotify: "Active"
   sentinel: "On"
@@ -83,6 +85,7 @@ avatars:
   level: "AVATARBEE"
   managerid: 1
   designation: "IT ANALYST"
+  phone: +93-1234567891
   email: "test@va.com"
   emailnotify: "Active"
   sentinel: "On"
