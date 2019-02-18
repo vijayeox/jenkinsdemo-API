@@ -330,7 +330,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testaddOrganizationToUser()
+    public function testAddOrganizationToUser()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/3/organization/2', 'POST');
@@ -340,7 +340,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testaddOrganizationToUserWithSameData()
+    public function testAddOrganizationToUserWithSameData()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/2/organization/1', 'POST');
@@ -350,12 +350,46 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');        
     }
 
-    public function testaddOrganizationToUserWithDifferentOrganization()
+    public function testAddOrganizationToUserWithDifferentOrganization()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/1/organization/2', 'POST');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addOrganizationToUser');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testLoggedInUser()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/me/m', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('loggedInUser');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testLoggedInUserAccess()
+    {
+        $this->initAuthToken($this->employeeUser);
+        $this->dispatch('/user/me/m', 'GET');
+        $this->assertResponseStatusCode(401);
+        $this->assertModuleName('User');
+        $this->assertControllerName(UserController::class); // as specified in router's controller n
+        $this->assertControllerClass('UserController');
+        $this->assertMatchedRouteName('loggedInUser');
+        $this->assertResponseHeaderContains('content-type', 'application/json');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testLoggedInUserCompleteDetails()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/me/a', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('loggedInUser');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }

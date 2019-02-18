@@ -6,6 +6,8 @@ use Oxzion\Model\User;
 use Oxzion\Model\UserTable;
 use Oxzion\Service\UserService;
 use Oxzion\Service\GroupController;
+use Bos\Auth\AuthContext;
+use Bos\Auth\AuthConstants;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationResult;
 use Bos\ValidationException;
