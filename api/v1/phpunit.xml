@@ -14,6 +14,7 @@
             <directory>./module/Organization/test</directory>
             <directory>./module/Alert/test</directory>
             <directory>./module/User/test</directory>
+            <directory>./module/Email/test</directory>
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
             <directory>./module/Group/test</directory>

@@ -68,6 +68,7 @@
       "Role\\": "module/Role/src/",
       "Search\\": "module/Search/src/",
       "Contact\\": "module/Contact/src/",
+      "Email\\": "module/Email/src/",
       "Resource\\": "module/Resource/src/"
     }
   },
@@ -89,6 +90,7 @@
       "Migration\\": "lib/Oxzion/test/Migration",
       "WorkflowTest\\": "lib/Oxzion/test/WorkflowTest",
       "ProjectTest\\": "lib/Oxzion/test/ProjectTest",
+      "EmailTest\\": "lib/Oxzion/test/EmailTest",
       "ContactTest\\": "module/Contact/test/"
     }
   },
