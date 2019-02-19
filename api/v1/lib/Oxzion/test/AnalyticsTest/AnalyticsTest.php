@@ -8,9 +8,8 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Analytics\AnalyticsEngine;
-use Oxzion\Analytics\AnalyticsFactory;
-use Oxzion\Search\SearchFactory;
 use Oxzion\Search;
+use Oxzion\Search\Indexer;
 use Oxzion\Analytics;
 use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
 use Oxzion\Test\MainControllerTest;
@@ -29,8 +28,6 @@ class AnalyticsTest extends MainControllerTest{
         $this->setSearchData();
         
         $config = $this->getApplicationConfig();
-        $this->searchFactory = new SearchFactory($config);   
-        $this->analyticsFactory = new AnalyticsFactory($config);  
         $this->setupData(); 
         sleep (1) ;
     }   
@@ -51,7 +48,7 @@ class AnalyticsTest extends MainControllerTest{
 
     public function setupData(){
         if(enableElastic!=0){ 
-            $indexer = $this->searchFactory->getIndexer();
+            $indexer=  $this->getApplicationServiceLocator()->get(Indexer::class);
             $dataset = $this->dataset['ox_analysis'];
             foreach($dataset as $body) {
                 $this->createIndex($indexer,$body);
@@ -65,7 +62,7 @@ class AnalyticsTest extends MainControllerTest{
             $this->markTestSkipped('Only Integration Test');        
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
-        $ae = $this->analyticsFactory->getAnalyticsEngine();
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['group'=>'created_by','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test',null,$parameters);
         $results = $results['data'];
@@ -82,7 +79,7 @@ class AnalyticsTest extends MainControllerTest{
             $this->markTestSkipped('Only Integration Test');        
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
-        $ae = $this->analyticsFactory->getAnalyticsEngine();
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['group'=>'created_by,category','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test',null,$parameters);
         $results = $results['data'];
@@ -99,7 +96,7 @@ class AnalyticsTest extends MainControllerTest{
             $this->markTestSkipped('Only Integration Test');        
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
-        $ae = $this->analyticsFactory->getAnalyticsEngine();
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['group'=>'created_by,category','field'=>'amount','operation'=>'count','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test',null,$parameters);
         $results = $results['data'];
@@ -116,7 +113,7 @@ class AnalyticsTest extends MainControllerTest{
             $this->markTestSkipped('Only Integration Test');        
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
-        $ae = $this->analyticsFactory->getAnalyticsEngine();
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['field'=>'amount','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created','list'=>'name,created_by,category'];
         $results = $ae->runQuery('11_test',null,$parameters);
         $results = $results['data'];
@@ -130,7 +127,7 @@ class AnalyticsTest extends MainControllerTest{
             $this->markTestSkipped('Only Integration Test');        
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
-        $ae = $this->analyticsFactory->getAnalyticsEngine();
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['operation'=>'sum','field'=>'amount','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test',null,$parameters);
         $results = $results['data'];
@@ -142,7 +139,7 @@ class AnalyticsTest extends MainControllerTest{
             $this->markTestSkipped('Only Integration Test');        
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
-        $ae = $this->analyticsFactory->getAnalyticsEngine();
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test',null,$parameters);
         $results = $results['data'];
@@ -155,7 +152,7 @@ class AnalyticsTest extends MainControllerTest{
             $this->markTestSkipped('Only Integration Test');        
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
-        $ae = $this->analyticsFactory->getAnalyticsEngine();
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['group'=>'created_by','operation'=>'count','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test',null,$parameters);
         $results = $results['data'];
@@ -169,7 +166,7 @@ class AnalyticsTest extends MainControllerTest{
     {
          parent::tearDown();
          if(enableElastic!=0){                
-            $indexer = $this->searchFactory->getIndexer();
+            $indexer=  $this->getApplicationServiceLocator()->get(Indexer::class);
             $return1=$indexer->delete('11_test','all');
             $return2=$indexer->delete('12_test','all');
         }    
