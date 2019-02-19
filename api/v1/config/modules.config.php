@@ -32,5 +32,6 @@ return [
     'App',
     'Search',
     'Contact',
-    'Resource'
+    'Resource',
+    'Email'
 ];
