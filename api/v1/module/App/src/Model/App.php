@@ -10,25 +10,20 @@ class App extends Entity {
     protected $data = array(
         'id' => 0,  
         'name' => NULL,  
+        'uuid' => 0,
         'description' => NULL,
         'type' => NULL,  
-        'logo' => NULL,  
+        'logo' => "default_app.png",  
+        'category' => NULL,
         'date_created' => NULL,  
-        'date_modified' => NULL
+        'date_modified' => NULL,
+        'created_by' => NULL,
+        'modified_by' => NULL,
+        'isdeleted' => false
     );
     
     public function validate(){
-        $errors = array();
-        if($this->data['name'] === null){
-            $errors["name"] = 'required';
-        }
-        if($this->data['type'] === null) {
-            $errors["type"] = 'required';  
-        }
-        if(count($errors) > 0){
-            $validationException = new ValidationException();
-            $validationException->setErrors($errors);
-            throw $validationException;
-        }
+        $dataArray = Array("name", "type", "category","uuid","date_created","created_by");
+        $this->validateWithParams($dataArray);
     }
 }

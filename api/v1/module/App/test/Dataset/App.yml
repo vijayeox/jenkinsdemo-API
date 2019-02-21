@@ -6,14 +6,37 @@ ox_app:
     description: "App 1 description"
     type: 1
     logo: "app_va.png"
+    category: "EXAMPLE_CATEGORY"
     date_created: 2018-10-10 16:02:06
     date_modified: 2018-10-10 16:02:06
+    created_by: 1
+    modified_by: 1
+    isdeleted: 0
   -
     id: 2
     name: "App 2"
-    uuid: 1
+    uuid: 2
     description: "App 2 description"
     type: 1
     logo: "app_va.png"
+    category: "EXAMPLE_CATEGORY"
     date_created: 2018-10-10 16:02:06
     date_modified: 2018-10-10 16:02:06
+    created_by: 1
+    modified_by: 1
+    isdeleted: 0
+ox_app_registry:
+-
+    id: 1
+    app_id: 1
+    org_id: 1
+    date_created: 2018-10-10 16:02:06
+    date_modified: 2018-10-10 16:02:06
+    start_options: "json object"
+-
+    id: 2
+    app_id: 2
+    org_id: 1
+    date_created: 2018-10-10 16:02:06
+    date_modified: 2018-10-10 16:02:06
+    start_options: "json object"

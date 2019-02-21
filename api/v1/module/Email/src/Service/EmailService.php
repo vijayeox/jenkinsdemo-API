@@ -24,8 +24,7 @@ class EmailService extends AbstractService {
 		$form = new Email();
         if($data['password'])
             $data['password'] = TwoWayEncryption::encrypt($data['password']);
-        if($data['userid'])
-            $data['userid'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['userid'] = AuthContext::get(AuthConstants::USER_ID);
         $form->exchangeArray($data);
 		$form->validate();
 		$this->beginTransaction();
