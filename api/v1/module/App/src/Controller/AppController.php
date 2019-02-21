@@ -28,66 +28,106 @@ class AppController extends AbstractApiController
         $this->setIdentifierName('appId');
         $this->appService = $appService;
     }
-
+    
     /**
-     * Create App API
-     * @api
-     * @link /app/installAppForOrg
-     * @method POST
-     * @param array $data Array of elements as shown</br>
-     * <code>
-     * </code>
-     * @return array Returns a JSON Response with Status Code and Created App.</br>
-     * <code> status : "success|error",
-     *        data : array Created App Object
-     * </code>
-     */
-    public function installAppForOrgAction()
+    * Create App API
+    * @api
+    * @link /app
+    * @method POST
+    * @param array $data Array of elements as shown</br>
+    * <code> name : string,
+             description : string,
+    * </code>
+    * @return array Returns a JSON Response with Status Code and Created App.</br>
+    * <code> status : "success|error",
+    *        data : {
+                int id,
+                string name,
+                int uuid,
+                string description,
+                string type,
+                string logo,
+                string category,
+                datetime date_created,
+                datetime date_modified,
+                int created_by,
+                int modified_by,
+                int isdeleted
+    }
+    * </code>
+    */
+    public function create($data)
     {
         $data = $this->params()->fromPost();
         try {
-            $returnData = $this->appService->installAppForOrg($data);
-        } catch (ValidationException $e) {
+            $count = $this->appService->installAppForOrg($data);
+        } catch(ValidationException $e) {   
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getErrorResponse("Validation Errors",404, $response);
         }
-        if ($returnData['data'] === '0') {
-            return $this->getErrorResponse("Failed to create a new App", 404, $returnData);
+        if($count == 0) {
+            return $this->getFailureResponse("Failed to create a new entity", $data);
         }
-        return $this->getSuccessResponseWithData($data, 201);
+        return $this->getSuccessResponseWithData($data,201);
     }
 
     /**
-     * GET List App API
-     * @api
-     * @link /app
-     * @method GET
-     * @return array $data get list of Apps by User
-     * <code>
-     * {
-     * }
-     * </code>
-     */
+    * GET List App API
+    * @api
+    * @link /app
+    * @method GET
+    * @return array $dataget list of Apps by User
+    * <code>status : "success|error",
+    *       data :  {
+                    string name,
+                    int uuid,
+                    string description,
+                    string type,
+                    string logo,
+                    string category,
+                    datetime date_created,
+                    datetime date_modified,
+                    int created_by,
+                    int modified_by,
+                    int isdeleted,
+                    int org_id,
+                    string start_options
+                    }
+    * </code>
+    */
     public function getList()
     {
         $result = $this->appService->getApps();
+        if($result == 0||empty($result)) {
+            return $this->getErrorResponse("No File found", 404);
+        }
         return $this->getSuccessResponseWithData($result);
     }
-
-    /**
-     * Update App API
-     * @api
-     * @link /app[/:appId]
-     * @method PUT
-     * @param array $id ID of App to update
-     * @param array $data
-     * <code>
-     * {
-     *
-     * }
-     * </code>
-     * @return array Returns a JSON Response with Status Code and Created App.
-     */
+     /**
+    * Update App API
+    * @api
+    * @link /app[/:appId]
+    * @method PUT
+    * @param array $id ID of App to update 
+    * @param array $data 
+    * <code> status : "success|error",
+    *       "data": {
+                int id,
+                string name,
+                int uuid,
+                string description,
+                string type,
+                string logo,
+                string category,
+                datetime date_created,
+                datetime date_modified,
+                int created_by,
+                int modified_by,
+                int isdeleted
+    }
+    * </code>
+    * @return array Returns a JSON Response with Status Code and Created App.
+    */
     public function update($id, $data)
     {
         try {
@@ -101,7 +141,6 @@ class AppController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
-
     /**
      * Delete App API
      * @api
@@ -119,6 +158,37 @@ class AppController extends AbstractApiController
         return $this->getSuccessResponse();
     }
 
+    /**
+    * GET App API
+    * @api
+    * @link /app/appid
+    * @method GET
+    * @return array $dataget of Apps by User
+    * <code>status : "success|error",
+    *       data :  {
+                    string name,
+                    int uuid,
+                    string description,
+                    string type,
+                    string logo,
+                    string category,
+                    datetime date_created,
+                    datetime date_modified,
+                    int created_by,
+                    int modified_by,
+                    int isdeleted,
+                    int org_id,
+                    string start_options
+                    }
+    * </code>
+    */
+    public function get($id) {
+        $response = $this->appService->getApp($id);
+        if ($response == 0||empty($response)) {
+            return $this->getErrorResponse("App not found", 404, ['id' => $id]);
+        }
+        return $this->getSuccessResponseWithData($response);
+    }
     /**
      * Upload the app from the UI and extracting the zip file in a folder that will start the installation of app.
      * @api

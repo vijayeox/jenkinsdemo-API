@@ -17,18 +17,14 @@ class AppService extends AbstractService
 {
 
     private $table;
-    private $formService;
     protected $config;
 
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, FormService $formService)
-    {
+   public function __construct($config, $dbAdapter, AppTable $table) {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
-        $this->formService = $formService;
-        $this->config = $config;
     }
 
     /**
@@ -42,15 +38,22 @@ class AppService extends AbstractService
      */
     public function getApps()
     {
-        $queryString = "Select ap.id, ap.name, ap.uuid, ap.description, ap.type, ap.logo, ap.date_created, ap.date_modified from ox_app as ap 
-        left join ox_app_registry as ar on ap.id = ar.app_id
-        left join ox_role_privilege as rp on ar.app_id = rp.app_id";
-        $where = "where rp.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " and rp.role_id IN (12)";
-        $group = "group by rp.app_id";
+        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.isdeleted,ar.org_id,ar.start_options from ox_app as ap 
+        left join ox_app_registry as ar on ap.id = ar.app_id";
+        $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID)." AND ap.isdeleted!=1";
+        $group = "group by ap.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, $group);
         return $resultSet->toArray();
     }
 
+    public function getApp($id)
+    {
+        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.isdeleted,ar.org_id,ar.start_options from ox_app as ap 
+        left join ox_app_registry as ar on ap.id = ar.app_id";
+        $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID)." AND ap.isdeleted!=1 AND ap.id =".$id;
+        $resultSet = $this->executeQuerywithParams($queryString, $where);
+        return $resultSet->toArray();
+    }
     /**
      * Create App Service
      * @method installAppForOrg
@@ -65,29 +68,82 @@ class AppService extends AbstractService
     public function installAppForOrg($data)
     {
         $form = new App();
-        $data['logo'] = $data['logo'] ? $data['logo'] : "default_app.png";
+        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['date_modified'] = date('Y-m-d H:i:s');
+        $data['isdeleted'] = 0;
+        $data['uuid'] = uniqid();
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
         $count = 0;
         try {
             $count = $this->table->save($form);
-            if ($count == 0) {
+            if($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $id = $this->table->getLastInsertValue();
+            $data['id'] = $id;
             $this->commit();
-        } catch (Exception $e) {
-            $returnData = Array('status' => 'Error', 'data' => '0', 'message' => $e->getMessage());
+        } catch(Exception $e) {
             $this->rollback();
-            return $returnData;
+            return 0;
         }
-        return $returnData = Array('status' => 'Success', 'data' => $id);
+        return $count;
     }
 
+    public function updateApp($id, &$data) {
+        $obj = $this->table->get($id,array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        $form = new App();
+        $data = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
+        $data['id'] = $id;
+        $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['date_modified'] = date('Y-m-d H:i:s');
+        $form->exchangeArray($data);
+        $form->validate();
+        $count = 0;
+        try {
+            $count = $this->table->save($form);
+            if($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+        } catch(Exception $e) {
+            $this->rollback();
+            return 0;
+        }
+        return $count;
+    }
+
+    public function deleteApp($id) {
+        $obj = $this->table->get($id,array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        $form = new App();
+        $data = $obj->toArray();
+        $data['id'] = $id;
+        $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['date_modified'] = date('Y-m-d H:i:s');
+        $data['isdeleted'] = 1;
+        $form->exchangeArray($data);
+        $form->validate();
+        $count = 0;
+        try {
+            $count = $this->table->save($form);
+            if($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+        } catch(Exception $e) {
+            $this->rollback();
+            return 0;
+        }
+        return $count;
+    }
 
     private function createAppRegistry($data)
     {

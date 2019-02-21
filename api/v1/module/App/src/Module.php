@@ -31,7 +31,7 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Service\AppService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class), $container->get(\Oxzion\Service\FormService::class));
+                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class));
                 },
                 Model\AppTable::class => function($container) {
                     $tableGateway = $container->get(Model\AppTableGateway::class);
