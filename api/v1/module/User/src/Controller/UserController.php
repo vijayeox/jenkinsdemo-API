@@ -400,7 +400,8 @@ class UserController extends AbstractApiController
     {
         $data = $this->params()->fromPost();
         $user = $this->params()->fromRoute();
-        $userDetail = $this->userService->getUser($user['userId']);
+        $userId = AuthContext::get(AuthConstants::USER_ID);
+        $userDetail = $this->userService->getUser($userId);
         $oldPassword = md5(sha1($data['old_password']));
         $newPassword = md5(sha1($data['new_password']));
         $confirmPassword = md5(sha1($data['confirm_password']));

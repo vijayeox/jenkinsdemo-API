@@ -176,7 +176,7 @@ return [
             'changePassword' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user/:userId/changepassword',
+                    'route' => '/user/me/changepassword',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
