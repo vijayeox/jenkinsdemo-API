@@ -286,7 +286,7 @@ class UserControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['old_password' => 'password', 'new_password' => 'welcome', 'confirm_password' => 'welcome'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/1/changepassword', 'POST', $data);
+        $this->dispatch('/user/me/changepassword', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('changepassword');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -299,7 +299,7 @@ class UserControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['old_password' => 'wrongPassword', 'new_password' => 'welcome', 'confirm_password' => 'welcome'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/1/changepassword', 'POST', $data);
+        $this->dispatch('/user/me/changepassword', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts('changepassword');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -311,7 +311,7 @@ class UserControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['old_password' => 'password', 'new_password' => 'welcome', 'confirm_password' => 'wrongConfirmPassword'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/1/changepassword', 'POST', $data);
+        $this->dispatch('/user/me/changepassword', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts('changepassword');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -323,7 +323,7 @@ class UserControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['old_password' => 'wrongPassword', 'new_password' => 'wrongNewPassword', 'confirm_password' => 'wrongConfirmPassword'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/1/changepassword', 'POST', $data);
+        $this->dispatch('/user/me/changepassword', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts('changepassword');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
