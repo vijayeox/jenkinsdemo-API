@@ -131,7 +131,7 @@ class AppController extends AbstractApiController
     public function update($id, $data)
     {
         try {
-            $count = $this->appService->    ($id, $data);
+            $count = $this->appService->updateApp($id, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
