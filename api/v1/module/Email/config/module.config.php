@@ -4,6 +4,7 @@ namespace Email;
 
 use Zend\Log\Logger;
 use Zend\Router\Http\Segment;
+use Zend\Router\Http\Method;
 use Zend\Log\Formatter\Simple;
 use Zend\Log\Filter\Priority;
 use Zend\Log\Processor\RequestId;
@@ -23,6 +24,48 @@ return [
                             'post' => 'MANAGE_EMAIL_CREATE',
                             'delete' => 'MANAGE_EMAIL_DELETE',
                             'get' => 'MANAGE_EMAIL_READ',
+                        ],
+                    ],
+                ],
+            ],
+            'emailDefault' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/email/:emailId/default',
+                    'defaults' => [
+                        'controller' => Controller\EmailController::class,
+                        'method' => 'GET',
+                        'action' => 'emailDefault',
+                        'access' => [
+                            'emailDefault'=>'MANAGE_PROJECT_WRITE'
+                        ],
+                    ],
+                ],
+            ],
+            'deleteEmail' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/email/deletemail',
+                    'defaults' => [
+                        'controller' => Controller\EmailController::class,
+                        'method' => 'POST',
+                        'action' => 'deleteEmail',
+                        'access' => [
+                            'deleteEmail'=>'MANAGE_PROJECT_WRITE'
+                        ],
+                    ],
+                ],
+            ],
+            'updateEmail' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/email/update/:address',
+                    'defaults' => [
+                        'controller' => Controller\EmailController::class,
+                        'method' => 'PUT',
+                        'action' => 'updateEmail',
+                        'access' => [
+                            'updateEmail'=>'MANAGE_PROJECT_WRITE'
                         ],
                     ],
                 ],

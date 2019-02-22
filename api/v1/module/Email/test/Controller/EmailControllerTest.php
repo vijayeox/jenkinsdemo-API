@@ -84,7 +84,7 @@ class EmailControllerTest extends ControllerTest {
         $data = ['email' => 'brianmp@myvamla.com'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/email/1', 'PUT', null);
+        $this->dispatch('/email/update/bharatg@myvamla.com', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -96,29 +96,54 @@ class EmailControllerTest extends ControllerTest {
         $data = ['email' => 'brianmp@myvamla.com'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/email/64', 'PUT', null);
-        $this->assertResponseStatusCode(404);
+        $this->dispatch('/email/update/brianmp@gmail.com', 'PUT', null);
+        $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['password'], null);
     }
 
     public function testDelete(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/email/2', 'DELETE');
+        $data = ['email' => 'bharatg@myvamla.com'];
+        $this->assertEquals(2, $this->getConnection()->getRowCount('email_setting_user'));
+        $this->dispatch('/email/deletemail', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(1, $this->getConnection()->getRowCount('email_setting_user'));
     }
 
     public function testDeleteNotFound(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/email/24783', 'DELETE');
-        $content = json_decode($this->getResponse()->getContent(), true);
+        $data = ['email' => 'brianmp@myvamla.com'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/email', 'POST', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');        
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Validation Errors');   
     }
+
+    public function testEmailDefault() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/email/1/default', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['email'], 'bharatg@myvamla.com');
+    }
+
+    public function testEmailDefaultNotFound() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/email/64', 'GET');
+        $this->assertResponseStatusCode(404);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
 }

@@ -3,7 +3,6 @@ email_setting_user:
     id: 1
     userid: 1
     email: 'bharatg@myvamla.com'
-    username: 'bharatg@myvamla.com'
     password: 'EvExzooo7Ww=::5a1e01e327abfa333487ea6719ccfda6'
     host: 'box3053.bluehost.com'
     isdefault: true
@@ -11,7 +10,6 @@ email_setting_user:
     id: 2
     userid: 2
     email: 'rakshith@gmail.com'
-    username: 'rakshith'
     password: 'EvExzooo7Ww=::5a1e01e327abfa333487ea6719ccfda6'
     host: 'google.com'
     isdefault: true

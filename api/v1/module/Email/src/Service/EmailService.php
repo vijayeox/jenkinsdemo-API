@@ -25,6 +25,7 @@ class EmailService extends AbstractService {
         if($data['password'])
             $data['password'] = TwoWayEncryption::encrypt($data['password']);
         $data['userid'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['host'] = substr($data['email'], strpos($data['email'], "@") + 1);
         $form->exchangeArray($data);
 		$form->validate();
 		$this->beginTransaction();
@@ -72,7 +73,7 @@ class EmailService extends AbstractService {
         return $count;
     }
 
-    public function deleteEmail($id) {
+    public function deleteEmailAccount($id) {
     	$count = 0;
         try{
             $count = $this->table->delete($id);
@@ -87,7 +88,7 @@ class EmailService extends AbstractService {
 
     public function getEmailAccountsByUserId() {
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $queryString = "select id,userid,email,username,host,isdefault from email_setting_user";
+        $queryString = "select id,userid,email,host,isdefault from email_setting_user";
         $where = "where email_setting_user.userid = " . $userId; 
         $order = "order by email_setting_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
@@ -96,11 +97,113 @@ class EmailService extends AbstractService {
 
     public function getEmailAccountByUserId($id) {
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $queryString = "select id,userid,email,username,host,isdefault from email_setting_user";
+        $queryString = "select id,userid,email,host,isdefault from email_setting_user";
         $where = "where email_setting_user.userid = " . $userId." AND email_setting_user.id =".$id; 
         $order = "order by email_setting_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         return $resultSet->toArray();
     }
+
+    public function emailDefault($id) {
+        $userId = AuthContext::get(AuthConstants::USER_ID);
+        $queryString = "select email from avatars";
+        $where ="where id = ".$userId;
+        $resultSet = $this->executeQuerywithParams($queryString, $where)->toArray();
+        $email = array_column($resultSet, 'email');
+
+        $queryString = "select * from email_setting_user";
+        $where = "where userid = ".$userId;
+        $order = "order by id";
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order)->toArray();
+
+        $storeData = array();
+        $obj = $this->table->get($id,array());
+        if (is_null($obj)) 
+            return 0;
+        else
+            $obj = $obj->toArray();
+        foreach ($resultSet as $key => $value) {
+            if($value['email']==$email[0]){
+                $obj['isdefault'] = 1;
+                $storeData[] = $obj;
+            }
+        }
+        if($storeData)
+            $query =$this->multiInsertOrUpdate('email_setting_user',$storeData,array());
+        else
+            return 0;
+
+        $queryString = "select id,userid,email,host,isdefault from email_setting_user";
+        $where = "where email_setting_user.userid = " . $userId; 
+        $order = "order by email_setting_user.id";
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+        return $resultSet->toArray();
+    }
+
+    public function deleteEmail(&$data) {
+        $validationException = new ValidationException();
+        $error = array();
+        $id = 0;
+        if($data['email']) {
+            $userId = AuthContext::get(AuthConstants::USER_ID);
+            $queryString = "select id,email from email_setting_user";
+            $where = "where userid = ".$userId;
+            $order = "order by id";
+            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+            if($resultSet) {
+                $emailList = array_column($resultSet->toArray(),'email','id');
+                foreach ($emailList as $key => $value) {
+                    if($data['email']==$value)
+                        $id = $key;
+                }
+            }
+
+            if($id) {
+                $response = $this->deleteEmailAccount($id);
+                return array($response);
+            }
+            else{
+                return 0;
+            }
+        }
+        else {
+            $error[$data] = 'required';
+            $validationException->setErrors($error);
+            throw $validationException;
+        }
+    }
     
+    public function updateEmail($email,$data) {
+        $validationException = new ValidationException();
+        $error = array();
+        $id = 0;
+        if($email) {
+            $userId = AuthContext::get(AuthConstants::USER_ID);
+            $queryString = "select id,email from email_setting_user";
+            $where = "where userid = ".$userId;
+            $order = "order by id";
+            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+            if($resultSet) {
+                $emailList = array_column($resultSet->toArray(),'email','id');
+                foreach ($emailList as $key => $value) {
+                    if($email==$value)
+                        $id = $key;
+                }
+            }
+            if(isset($data['email'])){
+                $data['host'] = substr($data['email'], strpos($data['email'], "@") + 1);
+            }
+
+            if($id) {
+                $response = $this->updateEmailAccount($id,$data);
+                return array($response);
+            }
+            else{
+                $data['password'] = null;
+                return $data;
+            }
+
+        }
+        return 0;
+    }
 }

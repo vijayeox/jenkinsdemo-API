@@ -86,26 +86,8 @@ class EmailController extends AbstractApiController {
         unset($data['password']);
     	return $this->getSuccessResponseWithData($data,201);
     }
-     /**
-    * Update Email API
-    * @api
-    * @link /email[/:emailId]
-    * @method PUT
-    * @param array $id ID of Email to update 
-    * @param array $data 
-    * <code> status : "success|error",
-    *        data : {
-                    string email,
-                    string username,
-                    string host,
-                    integer isdefault,
-                    integer userid,
-                    integer id
-                    }
-    * </code>
-    * @return array Returns a JSON Response with Status Code and Created Email.
-    */
-    public function update($id, $data) {
+    
+    /*public function update($id, $data) {
     	try {
     		$count = $this->emailService->updateEmailAccount($id, $data);
     	} catch (ValidationException $e) {
@@ -117,22 +99,15 @@ class EmailController extends AbstractApiController {
     		return $this->getErrorResponse("Entity not found for id - $id", 404);
     	}
     	return $this->getSuccessResponseWithData($data,200);
-    }
-    /**
-    * Delete Email API
-    * @api
-    * @link /email[/:emailId]
-    * @method DELETE
-    * @param $id ID of Email to Delete
-    * @return array success|failure response
-    */
-    public function delete($id) {
+    }*/
+    
+    /*public function delete($id) {
     	$response = $this->emailService->deleteEmail($id);
     	if($response == 0) {
 		return $this->getErrorResponse("Email not found", 404, ['id' => $id]);
     	}
     	return $this->getSuccessResponse();
-    }
+    }*/
     /**
     * GET List Email API
     * @api
@@ -153,6 +128,88 @@ class EmailController extends AbstractApiController {
     public function getList(){
         $result = $this->emailService->getEmailAccountsByUserId();
         return $this->getSuccessResponseWithData($result);
+    }
+
+    /**
+    * GET default email API
+    * @api
+    * @link /email/:emailId/default
+    * @method get
+    * @param json object of userid
+    * @return array $dataget list of default emails 
+    * <code>status : "success|error",
+    *       data : all default email data passed back in json format
+    * </code>
+    */
+    public function emailDefaultAction() {
+        $id = $this->params()->fromRoute()['emailId'];
+        try {
+            $responseData = $this->emailService->emailDefault($id);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if($responseData == 0) {
+            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        }
+        return $this->getSuccessResponseWithData($responseData,200);
+    }
+
+    /**
+    * Delete Email API
+    * @api
+    * @link /email[/:emailId]
+    * @method DELETE
+    * @param $id ID of Email to Delete
+    * @return array success|failure response
+    */
+    public function deleteEmailAction() {
+        $data = $this->params()->fromPost();
+        try {
+            $responseData = $this->emailService->deleteEmail($data);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if($responseData == 0) {
+            return $this->getErrorResponse("Entity not found", 404);
+        }
+        return $this->getSuccessResponseWithData($responseData,200);
+    }
+
+     /**
+    * Update Email API
+    * @api
+    * @link /email[/:emailId]
+    * @method PUT
+    * @param array $id ID of Email to update 
+    * @param array $data 
+    * <code> status : "success|error",
+    *        data : {
+                    string email,
+                    string username,
+                    string host,
+                    integer isdefault,
+                    integer userid,
+                    integer id
+                    }
+    * </code>
+    * @return array Returns a JSON Response with Status Code and Created Email.
+    */
+    public function updateEmailAction() {
+        $request = $this->getRequest();
+        $data = $this->processBodyContent($request);
+        $email = $this->params()->fromRoute()['address'];
+        try {
+            $responseData = $this->emailService->updateEmail($email,$data);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if($responseData == 0) {
+            return $this->getErrorResponse("Entity not found", 404);
+        }
+        return $this->getSuccessResponseWithData($responseData,200);
     }
 
 }
