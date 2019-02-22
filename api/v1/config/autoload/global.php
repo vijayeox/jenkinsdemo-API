@@ -28,11 +28,11 @@ if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
 return [
     'db' => [
         'host' => $host,
-    	'driver' => 'Pdo_Mysql',
-    	'database' => $db,
-    	'username' => $username,
-    	'password' => $password,
-    	'dsn' => 'mysql:dbname=' . $db . ';host=' . $host . ';charset=utf8;',
+        'driver' => 'Pdo_Mysql',
+        'database' => $db,
+        'username' => $username,
+        'password' => $password,
+        'dsn' => 'mysql:dbname=' . $db . ';host=' . $host . ';charset=utf8;',
     ],
     'elasticsearch' => [
         'serveraddress'=>'dataocean.oxzion.com',
@@ -48,4 +48,5 @@ return [
     'jwtKey' => 'l7Hnf6TGMYTy6eP7oyyWNG1MGay1T39/If495vwYBhS2j6OOHlMKhSf3qADPlWwkHQ6h3tjP2klI0kvKPltvVA==',
     'jwtAlgo' => 'HS512',
     'authRequiredText' => 'Authentication Required',
+    'refreshTokenPeriod' => '7',
 ];
