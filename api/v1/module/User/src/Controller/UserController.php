@@ -166,15 +166,15 @@ class UserController extends AbstractApiController
     public function update($id, $data)
     {
         try {
-            $count = $this->userService->updateUser($id, $data);
+            $response = $this->userService->updateUser($id, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
-        if ($count == 0) {
+        if ($response == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
-        return $this->getSuccessResponseWithData($data, 200);
+        return $this->getSuccessResponseWithData($response, 200);
     }
 
     /**

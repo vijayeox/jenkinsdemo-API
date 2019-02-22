@@ -219,22 +219,18 @@ class UserService extends AbstractService
             return 0;
         }
         $form = new User();
-        $data = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
-        $data['id'] = $id;
-        $form->exchangeArray($data);
+        $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
+        $userdata['id'] = $id;
+        $form->exchangeArray($userdata);
         $form->validate();
         $count = 0;
         try {
-            $count = $this->table->save($form);
-            if($count == 0) {
-                $this->rollback();
-                return 0;
-            }
+            $this->table->save($form);
         } catch(Exception $e) {
             $this->rollback();
             return 0;
         }
-        return $count;
+        return $form->toArray();
     }
 
     /**
