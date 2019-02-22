@@ -214,28 +214,23 @@ class UserService extends AbstractService
      */
     public function updateUser($id, &$data)
     {
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->get($id,array());
         if (is_null($obj)) {
             return 0;
         }
-        $originalArray = $obj->toArray();
         $form = new User();
-        $data = array_merge($originalArray, $data);
+        $data = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $data['id'] = $id;
-
         $form->exchangeArray($data);
         $form->validate();
-        $this->beginTransaction();
         $count = 0;
         try {
             $count = $this->table->save($form);
-            if ($count == 0) {
+            if($count == 0) {
                 $this->rollback();
                 return 0;
             }
-            $data['id'] = $id;
-            $this->commit();
-        } catch (Exception $e) {
+        } catch(Exception $e) {
             $this->rollback();
             return 0;
         }
