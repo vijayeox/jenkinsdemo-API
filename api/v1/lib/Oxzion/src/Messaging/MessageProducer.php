@@ -5,7 +5,7 @@ class MessageProducer{
 	private static $instance = null;
 	private $client;
 	private function __construct(){
-		$this->client = new CLient();
+		$this->client = new Client();
 	}
 
 	public static function getInstance(){
