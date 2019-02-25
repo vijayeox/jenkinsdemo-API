@@ -105,9 +105,8 @@ class EmailControllerTest extends ControllerTest {
 
     public function testDelete(){
         $this->initAuthToken($this->adminUser);
-        $data = ['email' => 'bharatg@myvamla.com'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('email_setting_user'));
-        $this->dispatch('/email/deletemail', 'POST', $data);
+        $this->dispatch('/email/delete/bharatg@myvamla.com', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -117,14 +116,12 @@ class EmailControllerTest extends ControllerTest {
 
     public function testDeleteNotFound(){
         $this->initAuthToken($this->adminUser);
-        $data = ['email' => 'brianmp@myvamla.com'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/email', 'POST', null);
+        $this->dispatch('/email/delete/brianmp@myvamla.com', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');   
+        $this->assertEquals($content['message'], 'Entity not found');   
     }
 
     public function testEmailDefault() {

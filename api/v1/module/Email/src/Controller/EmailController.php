@@ -164,9 +164,9 @@ class EmailController extends AbstractApiController {
     * @return array success|failure response
     */
     public function deleteEmailAction() {
-        $data = $this->params()->fromPost();
+        $email = $this->params()->fromRoute()['address'];
         try {
-            $responseData = $this->emailService->deleteEmail($data);
+            $responseData = $this->emailService->deleteEmail($email);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
