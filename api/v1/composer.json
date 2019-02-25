@@ -1,5 +1,5 @@
 {
-  "name": "oxzion",
+  "name": "oxzion/bos",
   "description": "Oxzion's Http APIs",
   "type": "project",
   "license": "BSD-3-Clause",
@@ -91,7 +91,8 @@
       "WorkflowTest\\": "lib/Oxzion/test/WorkflowTest",
       "ProjectTest\\": "lib/Oxzion/test/ProjectTest",
       "EmailTest\\": "lib/Oxzion/test/EmailTest",
-      "ContactTest\\": "module/Contact/test/"
+      "ContactTest\\": "module/Contact/test/",
+      "MessageTest\\": "lib/Oxzion/test/MessageTest"
     }
   },
   "extra": [],
