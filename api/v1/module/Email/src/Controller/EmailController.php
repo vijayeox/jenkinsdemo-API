@@ -75,7 +75,7 @@ class EmailController extends AbstractApiController {
     public function create($data) {
     	$data = $this->params()->fromPost();
     	try {
-    		$count = $this->emailService->createEmailAccount($data);
+    		$count = $this->emailService->createOrUpdateEmailAccount($data);
     	} catch(ValidationException $e) {	
     		$response = ['data' => $data, 'errors' => $e->getErrors()];
     		return $this->getErrorResponse("Validation Errors",404, $response);

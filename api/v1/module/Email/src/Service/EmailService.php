@@ -20,11 +20,48 @@ class EmailService extends AbstractService {
 		$this->table = $table;
 	}
 
-	public function createEmailAccount(&$data) {
+	public function createOrUpdateEmailAccount(&$data) {
 		$form = new Email();
+        $userId =$data['userid'] = AuthContext::get(AuthConstants::USER_ID);
+        if($data['email']) {
+            $queryString = "select id,email from email_setting_user";
+            $where = "where userid = ".$userId;
+            $order = "order by id";
+            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+            if($resultSet){
+                $emailList = array_column($resultSet->toArray(),'email','id');
+                foreach ($emailList as $key => $value) {
+                    if($data['email']==$value){
+                        $id = $key;
+                        $obj = $this->table->get($id,array());
+                        if (is_null($obj)) {
+                            return 0;
+                        }
+                        $data = array_merge($obj->toArray(), $data);
+                        $data['id'] = $id;
+                        $data['userid'] = $userId;
+                        if($data['password'])
+                            $data['password'] = TwoWayEncryption::encrypt($data['password']);
+                        $form->exchangeArray($data);
+                        $form->validate();
+                        $count = 0;
+                        try {
+                            $count = $this->table->save($form);
+                            if($count == 0) {
+                                $this->rollback();
+                                return 0;
+                            }
+                        } catch(Exception $e) {
+                            $this->rollback();
+                            return 0;
+                        }
+                        return $count;
+                    }
+                }
+            }
+        }
         if($data['password'])
             $data['password'] = TwoWayEncryption::encrypt($data['password']);
-        $data['userid'] = AuthContext::get(AuthConstants::USER_ID);
         $data['host'] = substr($data['email'], strpos($data['email'], "@") + 1);
         $form->exchangeArray($data);
 		$form->validate();

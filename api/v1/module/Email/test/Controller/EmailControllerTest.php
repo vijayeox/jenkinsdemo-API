@@ -81,11 +81,11 @@ class EmailControllerTest extends ControllerTest {
     }
         
     public function testUpdate() {
-        $data = ['email' => 'brianmp@myvamla.com'];
+        $data = ['email' => 'bharatg@myvamla.com','password' => 'password1'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/email/update/bharatg@myvamla.com', 'PUT', null);
-        $this->assertResponseStatusCode(200);
+        $this->dispatch('/email', 'POST', $data);
+        $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -96,11 +96,11 @@ class EmailControllerTest extends ControllerTest {
         $data = ['email' => 'brianmp@myvamla.com'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/email/update/brianmp@gmail.com', 'PUT', null);
-        $this->assertResponseStatusCode(200);
+        $this->dispatch('/email', 'POST', $data);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['password'], null);
+        $this->assertEquals($content['status'], 'error');
     }
 
     public function testDelete(){
