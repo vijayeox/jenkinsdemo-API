@@ -591,7 +591,7 @@ class UserService extends AbstractService
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
         if ($resultSet) {
             $query = "select id from ox_organization";
-            $where = "where id=" . $organizationId;
+            $where = "where id=" . $organizationId." AND status = 'Active' ";
             $result = $this->executeQuerywithParams($query, $where, null, null);
             if ($result) {
                 $query = "select * from ox_user_org";

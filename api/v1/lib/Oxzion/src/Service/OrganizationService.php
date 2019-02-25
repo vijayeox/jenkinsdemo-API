@@ -36,6 +36,7 @@ class OrganizationService extends AbstractService{
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['date_modified'] = date('Y-m-d H:i:s');
+        $data['status'] = "Active";
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
@@ -113,20 +114,17 @@ class OrganizationService extends AbstractService{
     * @return array success|failure response
     */
     public function deleteOrganization($id){
-        $this->beginTransaction();
-        $count = 0;
-        try{
-            $count = $this->table->delete($id);
-            if($count == 0){
-                $this->rollback();
-                return 0;
-            }
-            $this->commit();
-        }catch(Exception $e){
-            $this->rollback();
+        $obj = $this->table->get($id, array());
+        if (is_null($obj)) {
+            return 0;
         }
-        
-        return $count;
+        $originalArray = $obj->toArray();
+        $form = new Organization();
+        $originalArray['status'] = 'Inactive';
+        $form->exchangeArray($originalArray);
+        $form->validate();
+        $result = $this->table->save($form);
+        return $result;
     }
 
     /**
@@ -147,7 +145,7 @@ class OrganizationService extends AbstractService{
         $select = $sql->select();
         $select->from('ox_organization')
         ->columns(array("*"))
-        ->where(array('ox_organization.id' => $id));
+        ->where(array('ox_organization.id' => $id,'status' => "Active" ));
         $response = $this->executeQuery($select)->toArray();
         if(count($response)==0){
             return 0;
@@ -170,7 +168,8 @@ class OrganizationService extends AbstractService{
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_organization')
-        ->columns(array("*"));
+        ->columns(array("*"))
+        ->where(array('status' => "Active"));
         $response = $this->executeQuery($select)->toArray();
         return $response;
     }
@@ -183,7 +182,7 @@ class OrganizationService extends AbstractService{
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
         if ($resultSet) {
             $query = "select id from ox_organization";
-            $where = "where id=" . $organizationId;
+            $where = "where id=" . $organizationId." AND status = 'Active' ";
             $result = $this->executeQuerywithParams($query, $where, null, null);
             if ($result) {
                 $query = "select * from ox_user_org";
