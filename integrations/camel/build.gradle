@@ -37,4 +37,5 @@ dependencies {
 	compile group: 'org.apache.activemq', name: 'activemq-camel', version: '5.15.8'
     compile group: 'org.apache.camel', name: 'camel-websocket', version: '2.23.1'
     compile group: 'org.apache.camel', name: 'camel-ahc-ws', version: '2.23.1'
+    compile group: 'org.apache.camel', name: 'camel-http4', version: '2.23.1'
 }
