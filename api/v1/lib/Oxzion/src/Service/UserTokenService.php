@@ -46,7 +46,7 @@ class UserTokenService extends AbstractService
                     $data['expiry_date'] = Date("Y-m-d H:i:s", strtotime("+$refreshTokenPeriod day", $date));
                     $data['salt'] = $checkToken[0]['salt'];
                 } else {
-                    $data['id'] = $userDetail['id'];
+                    $data['id'] = $userInfo[0]['id'];
                     $data['expiry_date'] = Date("Y-m-d H:i:s", strtotime("+$refreshTokenPeriod day", $date));
                     $data['salt'] = $dataSalt;
                 }
