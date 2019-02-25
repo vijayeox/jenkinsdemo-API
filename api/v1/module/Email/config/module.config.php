@@ -45,10 +45,10 @@ return [
             'deleteEmail' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/email/deletemail',
+                    'route'    => '/email/delete/:address',
                     'defaults' => [
                         'controller' => Controller\EmailController::class,
-                        'method' => 'POST',
+                        'method' => 'DELETE',
                         'action' => 'deleteEmail',
                         'access' => [
                             'deleteEmail'=>'MANAGE_PROJECT_WRITE'

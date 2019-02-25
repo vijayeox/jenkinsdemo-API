@@ -140,11 +140,11 @@ class EmailService extends AbstractService {
         return $resultSet->toArray();
     }
 
-    public function deleteEmail(&$data) {
+    public function deleteEmail($email) {
         $validationException = new ValidationException();
         $error = array();
         $id = 0;
-        if($data['email']) {
+        if($email) {
             $userId = AuthContext::get(AuthConstants::USER_ID);
             $queryString = "select id,email from email_setting_user";
             $where = "where userid = ".$userId;
@@ -153,24 +153,16 @@ class EmailService extends AbstractService {
             if($resultSet) {
                 $emailList = array_column($resultSet->toArray(),'email','id');
                 foreach ($emailList as $key => $value) {
-                    if($data['email']==$value)
+                    if($email==$value)
                         $id = $key;
                 }
             }
-
             if($id) {
                 $response = $this->deleteEmailAccount($id);
                 return array($response);
             }
-            else{
-                return 0;
-            }
         }
-        else {
-            $error[$data] = 'required';
-            $validationException->setErrors($error);
-            throw $validationException;
-        }
+        return 0;
     }
     
     public function updateEmail($email,$data) {
