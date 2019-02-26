@@ -64,7 +64,7 @@ class AttachmentService extends AbstractService{
             $data['file_name'] = $file['file_name'];
             $data['extension'] = $file['extension'];
         }
-        $folderPath = $this->constructPath($data['type']);
+        $folderPath = basename($this->constructPath($data['type']));
         $form = new Attachment();
         $data['created_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d H:i:s');
         $data['path'] = $folderPath.$data['file_name'].".".$data['extension'];
