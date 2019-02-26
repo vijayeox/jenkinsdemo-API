@@ -259,7 +259,6 @@ class AnnouncementService extends AbstractService{
         $select = $sql->select();
         $select->from('ox_announcement')
                 ->columns(array("*"))
-                ->join('ox_attachment', 'ox_announcement.media = ox_attachment.uuid', array('media'=>'path'),'left')
                 ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
                 ->join('groups_avatars', 'ox_announcement_group_mapper.group_id = groups_avatars.groupid',array('groupid','avatarid'),'left')
                 ->where(array('groups_avatars.avatarid' => AuthContext::get(AuthConstants::USER_ID)))
