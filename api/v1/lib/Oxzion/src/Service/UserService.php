@@ -176,9 +176,6 @@ class UserService extends AbstractService
             return 0;
         }
         if ($this->getErrorCode != 0) {
-            if ($this->getErrorCode == 1) {
-                $this->getFailureResponse("User already exists", 404, $data);
-            }
             return 0;
         }
         $id = $this->table->getLastInsertValue();

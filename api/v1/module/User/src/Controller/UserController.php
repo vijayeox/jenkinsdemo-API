@@ -187,14 +187,9 @@ class UserController extends AbstractApiController
      */
     public function delete($id)
     {
-        try {
-            $response = $this->userService->deleteUser($id);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        }
-        if ($response == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        $response = $this->userService->deleteUser($id);
+        if($response == 0){
+            return $this->getErrorResponse("User not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
     }
