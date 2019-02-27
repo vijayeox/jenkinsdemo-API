@@ -54,6 +54,9 @@ FOR EACH ROW INSERT INTO `ox_contact_audit_log` (`id`, `action`, `user_id`, `fir
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql("DROP TRIGGER `ox_contact_insert`");
+        $this->addSql("DROP TRIGGER `ox_contact_update`");
+        $this->addSql("DROP TRIGGER `ox_contact_delete`");
 
     }
 }
