@@ -415,7 +415,7 @@ class UserController extends AbstractApiController
      * @api
      * @link /user/:userId/organization/:organizationId'
      * @method POST
-     * @param $id and $groupid that adds a particular user to a organization
+     * @param $id and $orgid that adds a particular user to a organization
      * @return array success|failure response
      */
     public function addOrganizationToUserAction() 
@@ -437,5 +437,23 @@ class UserController extends AbstractApiController
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
+    }
+
+    /**
+    * GET User Access API
+    * @api
+    * @link /user/me/access'
+    * @method GET
+    * @return JsonModel
+    */
+    public function getUserAppsAndPrivilegesAction() {
+        $params = $this->params()->fromRoute();
+        try {
+            $responseData = $this->userService->getUserAppsAndPrivileges();
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        return $this->getSuccessResponseWithData($responseData,200);
     }
 }

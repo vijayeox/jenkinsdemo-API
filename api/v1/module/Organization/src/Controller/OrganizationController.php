@@ -99,7 +99,7 @@ class OrganizationController extends AbstractApiController {
     * @api
     * @link /organization[/:orgId]
     * @method GET
-    * @param $id ID of Organization to Delete
+    * @param array $dataget of Organization 
     * @return array $data 
     * <code> {
     *               id : integer,
@@ -116,6 +116,15 @@ class OrganizationController extends AbstractApiController {
 		}
 		return $this->getSuccessResponseWithData($result);
 	}
+
+    /**
+     * Add User To Organization API
+     * @api
+     * @link /user/:userId/organization/:organizationId'
+     * @method POST
+     * @param $id and $orgid that adds a particular user to a organization
+     * @return array success|failure response
+     */
 
     public function addUserToOrganizationAction() 
     {
