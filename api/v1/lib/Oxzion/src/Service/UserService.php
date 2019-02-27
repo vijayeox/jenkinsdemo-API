@@ -612,4 +612,18 @@ class UserService extends AbstractService
         }
         return 0;
     }
+
+    public function getUserAppsAndPrivileges() {
+        $privilege = AuthContext::get(AuthConstants::PRIVILEGES);
+        foreach ($privilege as $key => $value) {
+            $privilege[$key] = strtolower($value);
+            $privilege[$key] = ucfirst($privilege[$key]);
+            $privilege[$key] = implode('_', array_map('ucfirst', explode('_', $privilege[$key])));
+            $privilege[$key] = str_replace('_', '',$privilege[$key]);
+            $privilege[$key] = 'priv'.$privilege[$key].':true';
+        }
+        $blackListedApps = $this->getAppsWithoutAccessForUser();
+        $responseArray = Array('privilege' => $privilege, 'blackListedApps' => $blackListedApps);
+        return $responseArray;
+    }
 }

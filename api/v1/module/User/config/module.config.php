@@ -57,6 +57,21 @@ return [
                     ],
                 ],
             ],
+            'getUserAppsAndPrivileges' => [
+               'type' => Segment::class,
+               'options' => [
+                   'route' => '/user/me/access',
+                   'defaults' => [
+                       'controller' => Controller\UserController::class,
+                       'method' => 'GET',
+                       'action' => 'getUserAppsAndPrivileges',
+                       'access' => [
+                           // SET ACCESS CONTROL
+                           'getUserAppsAndPrivileges' => 'MANAGE_USER_WRITE',
+                        ],
+                    ],
+                ],
+            ],
             'removeUserManager' => [
                 'type' => Segment::class,
                 'options' => [
