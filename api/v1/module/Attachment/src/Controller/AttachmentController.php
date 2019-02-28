@@ -27,7 +27,7 @@ class AttachmentController extends AbstractApiController {
     * @ignore __construct
     */
     public function __construct(AttachmentTable $table,AttachmentService $attachmentService, Logger $log, AdapterInterface $dbAdapter) {
-         parent::__construct($table, $log, __CLASS__, AttachmentService::class);
+         parent::__construct($table, $log, __CLASS__, AttachmentController::class);
         $this->attachmentService = $attachmentService;
         $this->setIdentifierName('attachmentId');
     }
