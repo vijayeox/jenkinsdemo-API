@@ -52,5 +52,14 @@ abstract class ControllerTest extends MainControllerTest{
     	return ['mock' => $mockDbAdapter, 'dbAdapter' => $dbAdapter];
     }
 
+    /**
+     * Get the service manager of the application object
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public function getApplicationServiceLocator()
+    {
+        return $this->getApplication()->getServiceManager();
+    }
+
 
 }
