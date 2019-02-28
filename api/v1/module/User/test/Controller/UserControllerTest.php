@@ -38,8 +38,8 @@ class UserControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'John Holt', 'status' => '1', 'dob' => date('Y-m-d H:i:s', strtotime("-50 year")), 'doj' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt', 'username' => 'johnh', 'password' => 'welcome2oxzion', 'designation' => 'CEO', 'level' => '7', 'cluster' => 'Management', 'location' => 'USA', 'gamelevel' => 'Wanna be', 'email' => 'harshva.com', 'sex' => 'M', 'role' => 'employee', 'listtoggle' => 1, 'mission_link' => 'test'];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('avatars'));
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt', 'password' => 'welcome2oxzion', 'designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male'];
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_user'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user', 'POST', null);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -50,34 +50,21 @@ class UserControllerTest extends ControllerTest
         $this->assertNotEmpty($content['data']['id']);
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
-        $this->assertEquals($content['data']['dob'], $data['dob']);
-        $this->assertEquals($content['data']['doj'], $data['doj']);
-        $this->assertEquals($content['data']['icon'], $data['icon']);
-        $this->assertEquals($content['data']['managerid'], $data['managerid']);
-        $this->assertEquals($content['data']['firstname'], $data['firstname']);
-        $this->assertEquals($content['data']['lastname'], $data['lastname']);
-        $this->assertEquals($content['data']['username'], $data['username']);
-        $this->assertEquals($content['data']['email'], $data['email']);
-        $this->assertEquals($content['data']['cluster'], $data['cluster']);
-        $this->assertEquals($content['data']['level'], $data['level']);
-        $this->assertEquals($content['data']['cluster'], $data['cluster']);
-        $this->assertEquals($content['data']['location'], $data['location']);
-        $this->assertEquals(4, $this->getConnection()->getRowCount('avatars'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_user'));
     }
 
-    public function testCreateWithOutNameFailure()
+    public function testCreateWithOutPasswordFailure()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['status' => '1', 'dob' => date('Y-m-d H:i:s', strtotime("-50 year")), 'doj' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt', 'username' => 'johnh', 'password' => 'welcome2oxzion', 'designation' => 'CEO', 'level' => '7', 'cluster' => 'Management', 'location' => 'USA', 'gamelevel' => 'Wanna be', 'email' => 'harshva.com', 'sex' => 'M', 'listtoggle' => 1, 'mission_link' => 'test'];
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt', 'designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user', 'POST', null);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation Errors');
-        $this->assertEquals($content['data']['errors']['name'], 'required');
+        $this->assertEquals($content['data']['errors']['password'], 'required');
     }
 
     public function testGetList()
@@ -94,7 +81,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['id'], 2);
         $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
         $this->assertEquals($content['data'][2]['id'], 3);
-        $this->assertEquals($content['data'][2]['name'], 'Rakshith Amin');
+        $this->assertEquals($content['data'][2]['name'], 'rakshith amin');
     }
 
     public function testGet()
@@ -119,10 +106,9 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-
     public function testUpdate()
     {
-        $data = ['name' => 'John Holt', 'status' => '1', 'dob' => date('Y-m-d H:i:s', strtotime("-50 year")), 'doj' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt', 'username' => 'johnh', 'password' => 'welcome2oxzion', 'designation' => 'CEO', 'level' => '7', 'cluster' => 'Management', 'location' => 'USA', 'gamelevel' => 'Wanna be', 'email' => 'harshva.com', 'sex' => 'M', 'listtoggle' => 1, 'mission_link' => 'test'];
+        $data = ['name' => 'John Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/1', 'PUT', null);
@@ -137,7 +123,7 @@ class UserControllerTest extends ControllerTest
 
     public function testUpdateNotFound()
     {
-        $data = ['name' => 'Test User', 'groups' => '[{"id":1},{"id":2}]', 'status' => 1, 'start_date' => date('Y-m-d H:i:s'), 'end_date' => date('Y-m-d H:i:s', strtotime("+7 day"))];
+        $data = ['name' => 'Test User'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/122', 'PUT', null);

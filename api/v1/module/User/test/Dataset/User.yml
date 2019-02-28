@@ -1,112 +1,64 @@
-avatars:
+ox_user:
 -
   id: 1
-  gamelevel: "WannaBee"
   username: "bharatg"
   password: "1619d7adc23f4f633f11014d2f22b7d8"
   firstname: "Bharat"
   lastname: "Gogineni"
-  name: "Bharat Gogineni"
-  role: "admin"
   orgid: 1
-  dob: "1991-02-28 00:00:00"
-  doj: "1991-02-28 00:00:00"
-  sex: "Male"
-  level: "AVATARBEE"
+  date_of_birth: "1991-02-28 00:00:00"
+  date_of_join: "1991-02-28 00:00:00"
+  gender: "Male"
   managerid: 1
   designation: "IT ANALYST"
   country: "Germany"
   phone: +93-1234567891
   email: "bharatg@myvamla.com"
-  emailnotify: "Active"
-  sentinel: "On"
   status: "Active"
-  alertsacknowledged: 1
-  pollsacknowledged: 1
-  statusbox: "Matrix|Leaderboard|Alerts"
-  cluster: 0
-  open_new_tab: 0
-  listtoggle: 0
-  defaultmatrixid: 0
-  lastactivity: 0
-  locked: 0
-  org_role_id: 1
   in_game: 0
-  mission_link: ""
   timezone: "United States/New York"
-  inmail_label: "2=>Comment|3=>Observer|4=>Personal"
+  date_created: 2018-11-11 07:25:06
+  created_by: 1
 -
   id: 2
-  gamelevel: "WannaBee"
   username: "karan"
   password: "1619d7adc23f4f633f11014d2f22b7d8"
   firstname: "Karan"
   lastname: "Agarwal"
-  name: "Karan Agarwal"
-  role: "employee"
   country: "Ghana"
   orgid: 1
-  dob: "1991-02-28 00:00:00"
-  doj: "1991-02-28 00:00:00"
-  sex: "Male"
-  level: "AVATARBEE"
+  date_of_birth: "1991-02-28 00:00:00"
+  date_of_join: "1991-02-28 00:00:00"
+  gender: "Male"
   managerid: 1
   designation: "IT ANALYST"
   phone: +93-1234567891
   email: "test@va.com"
-  emailnotify: "Active"
-  sentinel: "On"
   status: "Active"
-  alertsacknowledged: 1
-  pollsacknowledged: 1
-  statusbox: "Matrix|Leaderboard|Alerts"
-  cluster: 0
-  open_new_tab: 0
-  listtoggle: 0
-  defaultmatrixid: 0
-  lastactivity: 0
-  locked: 0
-  org_role_id: 1
   in_game: 0
-  mission_link: ""
   timezone: "Asia/Kolkata"
-  inmail_label: "2=>Comment|3=>Observer|4=>Personal"
+  date_created: 2018-11-11 07:25:06
+  created_by: 1
 -
   id: 3
-  gamelevel: "WannaBee"
   username: "rakshith"
   password: "1619d7adc23f4f633f11014d2f22b7d8"
-  firstname: "Rakshith"
-  lastname: "Amin"
-  name: "Rakshith Amin"
-  role: "manager"
-  country: "India"
+  firstname: "rakshith"
+  lastname: "amin"
+  country: "Ghana"
   orgid: 1
-  dob: "1991-02-28 00:00:00"
-  doj: "1991-02-28 00:00:00"
-  sex: "Male"
-  level: "AVATARBEE"
+  date_of_birth: "1991-02-28 00:00:00"
+  date_of_join: "1991-02-28 00:00:00"
+  gender: "Male"
   managerid: 1
   designation: "IT ANALYST"
   phone: +93-1234567891
   email: "test@va.com"
-  emailnotify: "Active"
-  sentinel: "On"
   status: "Active"
-  alertsacknowledged: 1
-  pollsacknowledged: 1
-  statusbox: "Matrix|Leaderboard|Alerts"
-  cluster: 0
-  open_new_tab: 0
-  listtoggle: 0
-  defaultmatrixid: 0
-  lastactivity: 0
-  locked: 0
-  org_role_id: 1
   in_game: 0
-  mission_link: ""
   timezone: "Asia/Kolkata"
-  inmail_label: "2=>Comment|3=>Observer|4=>Personal"
+  date_created: 2018-11-11 07:25:06
+  created_by: 1
 ox_user_manager: 
   -
     id: 1

@@ -7,7 +7,7 @@
             <directory>./module/Screen/test</directory>
             <directory>./module/Announcement/test</directory>
             <directory>./module/Widget/test</directory>
-            <directory>./module/Project/test</directory>
+            <directory>./module/Project/test</directory> 
             <directory>./module/Role/test</directory>
             <directory>./module/App/test</directory>
             <directory>./module/Bookmark/test</directory>
@@ -24,6 +24,7 @@
             <directory>./module/Contact/test</directory>
             <directory>./module/Resource/test</directory>
             <directory>./lib/Oxzion/test/AnalyticsTest</directory>
+            <directory>./module/Callback/test</directory>
             <directory>./module/Privilege/test</directory>
         </testsuite>
     </testsuites>

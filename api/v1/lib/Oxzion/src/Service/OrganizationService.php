@@ -177,7 +177,7 @@ class OrganizationService extends AbstractService{
     public function addUserToOrg($userId, $organizationId)
     {
         $sql = $this->getSqlObject();
-        $queryString = "select id from avatars";
+        $queryString = "select id from ox_user";
         $where = "where id =" . $userId;
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
         if ($resultSet) {

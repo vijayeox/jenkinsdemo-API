@@ -33,8 +33,8 @@ class SubscriberService extends AbstractService {
 		$form = new Subscriber();
     //Additional fields that are needed for the create 
         $id = $data['user_id'];
-        $query = "select id from avatars";
-        $order = "order by avatars.id";
+        $query = "select id from ox_user";
+        $order = "order by ox_user.id";
         $resultSet_User_temp = $this->executeQuerywithParams($query, null, null, $order)->toArray();
         $resultSet_User=array_map('current', $resultSet_User_temp);
 		$data['file_id'] = $fileid;
@@ -75,8 +75,8 @@ class SubscriberService extends AbstractService {
 			return 0;
 		}
         $user_id = $data['user_id'];
-        $query = "select id from avatars";
-        $order = "order by avatars.id";
+        $query = "select id from ox_user";
+        $order = "order by ox_user.id";
         $resultSet_User_temp = $this->executeQuerywithParams($query, null, null, $order)->toArray();
         $resultSet_User=array_map('current', $resultSet_User_temp);
         if(!in_array($user_id, $resultSet_User)) {

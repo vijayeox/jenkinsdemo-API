@@ -32,7 +32,7 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 AuthAdapter::class => function($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new AuthAdapter($dbAdapter,'avatars','username','password','MD5(SHA1(?))');
+                    return new AuthAdapter($dbAdapter,'ox_user','username','password','MD5(SHA1(?))');
                 },
             ],
         ];

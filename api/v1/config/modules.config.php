@@ -34,5 +34,6 @@ return [
     'Contact',
     'Resource',
     'Email',
-    'Privilege'
+    'Privilege',
+    'Callback'
 ];

@@ -202,4 +202,8 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
 
         return $this->getSuccessResponse();
     }
+
+    protected function getConfig(){
+        return $this->getEvent()->getApplication()->getServiceManager()->get('Config');
+    }
 }

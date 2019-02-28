@@ -43,6 +43,10 @@ return [
         'user'=>'elastic',
         'password'=>'hvqr9799/'
     ],
+    'chat' => [
+        'chatServerUrl' => 'http://localhost:8065/',
+        'authToken' => ''
+    ],
     'DATA_FOLDER'=>__DIR__.'/../../data/uploads/',
     'salt' => 'arogAegatnaVOfficeBack123',
     'jwtKey' => 'l7Hnf6TGMYTy6eP7oyyWNG1MGay1T39/If495vwYBhS2j6OOHlMKhSf3qADPlWwkHQ6h3tjP2klI0kvKPltvVA==',

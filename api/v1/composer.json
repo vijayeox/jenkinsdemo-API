@@ -70,7 +70,8 @@
       "Contact\\": "module/Contact/src/",
       "Email\\": "module/Email/src/",
       "Resource\\": "module/Resource/src/",
-      "Privilege\\": "module/Privilege/src/"
+      "Privilege\\": "module/Privilege/src/",
+      "Callback\\": "module/Callback/src/"
     }
   },
   "autoload-dev": {
@@ -94,7 +95,8 @@
       "EmailTest\\": "lib/Oxzion/test/EmailTest",
       "ContactTest\\": "module/Contact/test/",
       "MessageTest\\": "lib/Oxzion/test/MessageTest",
-      "PrivilegeTest\\": "module/Privilege/test/"
+      "PrivilegeTest\\": "module/Privilege/test/",
+      "ChatCallbackTest\\": "module/Callback/test/"
     }
   },
   "extra": [],

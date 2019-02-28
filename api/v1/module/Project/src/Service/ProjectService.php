@@ -150,8 +150,8 @@ class ProjectService extends AbstractService {
             $resultSet_temp = $this->executeQuerywithParams($queryString, $where, null, $order)->toArray();
             $resultSet=array_map('current', $resultSet_temp);
             //Check if user id exists
-            $query = "select id from avatars";
-            $order = "order by avatars.id";
+            $query = "select id from ox_user";
+            $order = "order by ox_user.id";
             $resultSet_User_temp = $this->executeQuerywithParams($query, null, null, $order)->toArray();
             $resultSet_User=array_map('current', $resultSet_User_temp);
 
