@@ -33,5 +33,6 @@ return [
     'Search',
     'Contact',
     'Resource',
-    'Email'
+    'Email',
+    'Privilege'
 ];

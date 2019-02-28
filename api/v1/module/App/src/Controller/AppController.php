@@ -103,6 +103,7 @@ class AppController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($result);
     }
+    
      /**
     * Update App API
     * @api
