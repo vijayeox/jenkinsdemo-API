@@ -9,9 +9,11 @@ class AbstractService {
     protected $config;
     private $dbAdapter;
     private $sql;
+    protected $log;
 
-    protected function __construct($config, $dbAdapter){
+    protected function __construct($config, $dbAdapter,$log=null){
         $this->config = $config;
+        $this->log = $log;
         $this->dbAdapter = $dbAdapter;
         if($dbAdapter){
             $this->sql = new Sql($this->dbAdapter);
