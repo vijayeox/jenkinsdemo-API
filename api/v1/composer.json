@@ -69,7 +69,8 @@
       "Search\\": "module/Search/src/",
       "Contact\\": "module/Contact/src/",
       "Email\\": "module/Email/src/",
-      "Resource\\": "module/Resource/src/"
+      "Resource\\": "module/Resource/src/",
+      "Callback\\": "module/Callback/src/"
     }
   },
   "autoload-dev": {
@@ -92,7 +93,8 @@
       "ProjectTest\\": "lib/Oxzion/test/ProjectTest",
       "EmailTest\\": "lib/Oxzion/test/EmailTest",
       "ContactTest\\": "module/Contact/test/",
-      "MessageTest\\": "lib/Oxzion/test/MessageTest"
+      "MessageTest\\": "lib/Oxzion/test/MessageTest",
+      "ChatCallbackTest\\": "module/Callback/test/"
     }
   },
   "extra": [],
@@ -109,4 +111,4 @@
     "serve": "php -S 0.0.0.0:8080 -t public public/index.php",
     "test": "phpunit"
   }
-}
+}   
