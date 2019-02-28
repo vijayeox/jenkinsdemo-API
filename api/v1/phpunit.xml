@@ -24,10 +24,12 @@
             <directory>./module/Contact/test</directory>
             <directory>./module/Resource/test</directory>
             <directory>./lib/Oxzion/test/AnalyticsTest</directory>
+            <directory>./module/Callback/test</directory>
         </testsuite>
     </testsuites>
     <php>
         <const name="enableCamunda" value="0"/>
         <const name="enableElastic" value="0"/>
+        <const name="enableMattermost" value="0"/>
     </php>
 </phpunit>
