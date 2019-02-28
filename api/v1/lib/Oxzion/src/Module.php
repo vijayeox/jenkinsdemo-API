@@ -132,7 +132,7 @@ class Module {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\User());
-                    return new TableGateway('avatars', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_user', $dbAdapter, null, $resultSetPrototype);
                 },
                 Workflow\WorkflowFactory::class => function ($container){
                     return Workflow\WorkflowFactory::getInstance(); 

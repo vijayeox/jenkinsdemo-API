@@ -40,9 +40,9 @@ class UserService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $select->from('avatars')
+        $select->from('ox_user')
             ->columns(array("orgid"))
-            ->where(array('avatars.username' => $username));
+            ->where(array('ox_user.username' => $username));
         $response = $this->executeQuery($select)->toArray();
         return $response[0]['orgid'];
     }
@@ -54,7 +54,7 @@ class UserService extends AbstractService
         }
         $sql = $this->getSqlObject();
         $select = $sql->select()
-            ->from('avatars')
+            ->from('ox_user')
             ->columns(array('id', 'name', 'orgid'))
             ->where(array('username = "' . (string)$userName . '"'))->limit(1);
         $results = $this->executeQuery($select);
@@ -165,22 +165,28 @@ class UserService extends AbstractService
     {
         $form = new User();
         $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
-        $data['avatar_date_created'] = date('Y-m-d H:i:s');
-        $data['uuid'] = uniqid();
+        $data['date_created'] = date('Y-m-d H:i:s');
+        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        if(isset($data['password'])) {
+            $data['password'] = md5(sha1($data['password']));
+        }
         $form->exchangeArray($data);
         $form->validate();
-
+        $this->beginTransaction();
         $count = 0;
-        $count = $this->table->save($form);
-        if ($count == 0) {
+        try {
+            $count = $this->table->save($form);
+            if($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+            $id = $this->table->getLastInsertValue();
+            $data['id'] = $id;
+            $this->commit();
+        } catch(Exception $e) {
+            $this->rollback();
             return 0;
         }
-        if ($this->getErrorCode != 0) {
-            return 0;
-        }
-        $id = $this->table->getLastInsertValue();
-        $data['id'] = $id;
-        // @@TODO $this->sendEmail();
         return $count;
     }
 
@@ -218,6 +224,8 @@ class UserService extends AbstractService
         $form = new User();
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $userdata['id'] = $id;
+        $userdata['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
+        $userdata['date_modified'] = date('Y-m-d H:i:s');
         $form->exchangeArray($userdata);
         $form->validate();
         $count = 0;
@@ -245,6 +253,8 @@ class UserService extends AbstractService
         $originalArray = $obj->toArray();
         $form = new User();
         $originalArray['status'] = 'Inactive';
+        $originalArray['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
+        $originalArray['date_modified'] = date('Y-m-d H:i:s');
         $form->exchangeArray($originalArray);
         $form->validate();
         $result = $this->table->save($form);
@@ -262,12 +272,12 @@ class UserService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $select->from('avatars')
+        $select->from('ox_user')
             ->columns(array("*"))
-            ->where(array('avatars.orgid' => AuthContext::get(AuthConstants::ORG_ID)));
+            ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'status' => 'Active'));
         if ($group_id) {
-            $select->join('groups_avatars', 'avatars.id = groups_avatars.avatarid', array('groupid', 'avatarid'), 'left')
-                ->where(array('groups_avatars.groupid' => $group_id));
+            $select->join('groups_ox_user', 'ox_user.id = groups_ox_user.avatarid', array('groupid', 'avatarid'), 'left')
+                ->where(array('groups_ox_user.groupid' => $group_id));
         }
         return $this->executeQuery($select)->toArray();
     }
@@ -283,9 +293,9 @@ class UserService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $select->from('avatars')
+        $select->from('ox_user')
             ->columns(array("*"))
-            ->where(array('avatars.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'avatars.id' => $id));
+            ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
             return $response[0];
@@ -300,7 +310,6 @@ class UserService extends AbstractService
         }
     }
 
-
     /**
      * GET User Service
      * @method  getUserWithMinimumDetails
@@ -312,9 +321,9 @@ class UserService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $select->from('avatars')
-            ->columns(array('id','username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone','dob','doj','country','website','about','sex','interest','address','icon'))
-            ->where(array('avatars.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'avatars.id' => $id));
+        $select->from('ox_user')
+            ->columns(array('id','username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone','date_of_birth','date_of_join','country','website','about','gender','interest','address','icon'))
+            ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id,'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
             return $response[0];
@@ -375,8 +384,8 @@ class UserService extends AbstractService
     public function addUserToGroup($userid, $groupid)
     {
         $sql = $this->getSqlObject();
-        $queryString = "select id from avatars";
-        $where = "where id =" . $userid;
+        $queryString = "select id from ox_user";
+        $where = "where id =" . $userid." and status='Active'";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
         if ($resultSet) {
             $query = "select id from groups";
@@ -406,8 +415,8 @@ class UserService extends AbstractService
     public function addUserToProject($userid, $projectid)
     {
         $sql = $this->getSqlObject();
-        $queryString = "select id from avatars";
-        $where = "where id =" . $userid;
+        $queryString = "select id from ox_user";
+        $where = "where id =" . $userid." and status='Active'";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
         if ($resultSet) {
             $query = "select id from ox_project";
@@ -541,7 +550,7 @@ class UserService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $select = $sql->select()
-            ->from('avatars')
+            ->from('ox_user')
             ->columns(array('id', 'firstname', 'lastname'))// Instead of getting the id from the userTable,
             // we need to get the UUID. Once UUID is added to the table we need to make that change
             ->where(array('firstname LIKE "%' . $searchVal . '%" OR lastname LIKE "%' . $searchVal . '%"'));
@@ -568,7 +577,7 @@ class UserService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $select = $sql->select()
-            ->from('avatars')
+            ->from('ox_user')
             ->columns($columnList)
             ->where(array($whereCondition))
             ->limit(1);
@@ -583,7 +592,7 @@ class UserService extends AbstractService
     public function addUserToOrg($userId, $organizationId)
     {
         $sql = $this->getSqlObject();
-        $queryString = "select id from avatars";
+        $queryString = "select id from ox_user";
         $where = "where id =" . $userId;
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
         if ($resultSet) {

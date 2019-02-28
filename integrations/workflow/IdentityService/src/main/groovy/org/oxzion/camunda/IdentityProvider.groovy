@@ -25,7 +25,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
     org.camunda.bpm.engine.identity.User findUserById(String userId) {Class.forName(DB_DRIVER).newInstance()
         Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
         Statement st = con.createStatement()
-        String statement = 'select id,firstname,lastname,email,password from avatars where id = "'+userId+'"'
+        String statement = 'select id,firstname,lastname,email,password from ox_user where id = "'+userId+'"'
         ResultSet rs = st.executeQuery(statement)
         if(rs.next()) {
             return new User(rs.getString("id"),rs.getString("email"),rs.getString("firstname"),rs.getString("lastname"),rs.getString("password"))
@@ -78,7 +78,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         if(query.getTenantId() != null || query.tenantId)
             statement = "select id,name,type from groups where orgid = '${query.getTenantId()}' ${orderByPart}"
         if(query.getUserId() !=null)
-            statement = "select groups.id,groups.name,groups.type FROM groups LEFT JOIN groups_avatars ON groups.id=groups_avatars.groupid WHERE groups_avatars.avatarid='"+query.getUserId()+"' "+orderByPart
+            statement = "select groups.id,groups.name,groups.type FROM groups LEFT JOIN groups_ox_user ON groups.id=groups_ox_user.groupid WHERE groups_ox_user.avatarid='"+query.getUserId()+"' "+orderByPart
         ResultSet rs = st.executeQuery(statement)
         ArrayList<Group> groups =  new ArrayList<Group>()
         while (rs.next()) {
@@ -124,36 +124,36 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         Statement st = con.createStatement()
         println(query.asc())
         try {
-            String statement = "select id,firstname,lastname,email,password from avatars"
-            String orderByPart = "ORDER BY avatars.id"
+            String statement = "select id,firstname,lastname,email,password from ox_user"
+            String orderByPart = "ORDER BY ox_user.id"
             if(query.orderByUserEmail())
-                orderByPart = "ORDER BY avatars.email"
+                orderByPart = "ORDER BY ox_user.email"
             if(query.orderByUserFirstName())
-                orderByPart = "ORDER BY avatars.firstname"
+                orderByPart = "ORDER BY ox_user.firstname"
             if(query.orderByUserLastName())
-                orderByPart = "ORDER BY avatars.lastname"
+                orderByPart = "ORDER BY ox_user.lastname"
             if(query.orderByUserId())
-                orderByPart = "ORDER BY avatars.id"
+                orderByPart = "ORDER BY ox_user.id"
             if(query.getId() != null)
-                statement = "select id,firstname,lastname,email,password from avatars where id=${query.getId()} ${orderByPart}"
+                statement = "select id,firstname,lastname,email,password from ox_user where id=${query.getId()} ${orderByPart}"
             if(query.getIds() != null)
-                statement = "select id,firstname,lastname,email,password from avatars where id in (${query.getIds()}) orderByPart}"
+                statement = "select id,firstname,lastname,email,password from ox_user where id in (${query.getIds()}) orderByPart}"
             if(query.getFirstName() != null)
-                statement = "select id,firstname,lastname,email,password from avatars where firstname='${query.getFirstName()}' ${orderByPart}"
+                statement = "select id,firstname,lastname,email,password from ox_user where firstname='${query.getFirstName()}' ${orderByPart}"
             if(query.getFirstNameLike() != null)
-                statement = "select id,firstname,lastname,email,password from avatars where firstname like'%${query.getFirstName()}%' ${orderByPart}"
+                statement = "select id,firstname,lastname,email,password from ox_user where firstname like'%${query.getFirstName()}%' ${orderByPart}"
             if(query.getLastName() != null)
-                statement = "select id,firstname,lastname,email,password from avatars where lastname='${query.getLastName()}' ${orderByPart}"
+                statement = "select id,firstname,lastname,email,password from ox_user where lastname='${query.getLastName()}' ${orderByPart}"
             if(query.getLastNameLike() != null)
-                statement = "select id,firstname,lastname,email,password from avatars where lastname like'%${query.getLastName()}%' ${orderByPart}"
+                statement = "select id,firstname,lastname,email,password from ox_user where lastname like'%${query.getLastName()}%' ${orderByPart}"
             if(query.getEmail() != null)
-                statement = "select id,firstname,lastname,email,password from avatars where email='${query.getEmail()}' ${orderByPart}"
+                statement = "select id,firstname,lastname,email,password from ox_user where email='${query.getEmail()}' ${orderByPart}"
             if(query.getEmailLike() != null)
-                statement = "select id,firstname,lastname,email,password from avatars where email like '%${query.getEmail()}%' ${orderByPart}"
+                statement = "select id,firstname,lastname,email,password from ox_user where email like '%${query.getEmail()}%' ${orderByPart}"
             if(query.getGroupId() != null)
-                statement = "select id,firstname,lastname,email,password FROM avatars LEFT JOIN groups_avatars ON avatars.id=groups_avatars.avatarid WHERE groups_avatars.groupid=${query.getGroupId()} ${orderByPart}"
+                statement = "select id,firstname,lastname,email,password FROM ox_user LEFT JOIN groups_ox_user ON ox_user.id=groups_ox_user.avatarid WHERE groups_ox_user.groupid=${query.getGroupId()} ${orderByPart}"
             if(query.getTenantId() != null)
-                statement = "select id,firstname,lastname,email,password FROM avatars WHERE orgid=${query.getTenantId()} ${orderByPart}"
+                statement = "select id,firstname,lastname,email,password FROM ox_user WHERE orgid=${query.getTenantId()} ${orderByPart}"
             ResultSet rs = st.executeQuery(statement)
             ArrayList<User> users = new ArrayList<User>()
             while(rs.next()) {

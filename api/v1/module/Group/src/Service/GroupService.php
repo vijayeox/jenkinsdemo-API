@@ -117,8 +117,8 @@ class GroupService extends AbstractService {
         $avatar_id = array();
         $userArray=json_decode($data['userid'],true);
 
-        $query = "select id from avatars";
-        $order = "order by avatars.id";
+        $query = "select id from ox_user";
+        $order = "order by ox_user.id";
         $resultSet_User_temp = $this->executeQuerywithParams($query, null, null, $order)->toArray();
         $resultSet_User=array_map('current', $resultSet_User_temp);
 

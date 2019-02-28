@@ -343,7 +343,6 @@ class UserController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
     }
-
     /**
      * Code to searches for list of friends for the logged in user and then searches for all the other people from the organization
      * @api
@@ -375,16 +374,22 @@ class UserController extends AbstractApiController
      */
     private function getUserInfo($id, $params)
     {
-        $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
-        if ($type === 'a') {
-            $result = $this->userService->getUser($id);
-        } else if ($type === 'm') {
-            $result = $this->userService->getUserWithMinimumDetails($id);
-        } else {
+        try{
+            $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
+            if ($type === 'a') {
+                $result = $this->userService->getUser($id);
+            } else if ($type === 'm') {
+                $result = $this->userService->getUserWithMinimumDetails($id);
+            } else {
             $result = $this->userService->getUserWithMinimumDetails($id); // Currently using the minimum information
             // for the user. When we get another condition then we will use tem
+            }
         }
-        if ($result == 0) {
+        catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if (($result == 0)||(empty($result))) {
             $response = ['id' => $id];
             return $this->getErrorResponse("Failed to find User", 404, $response);
         }
