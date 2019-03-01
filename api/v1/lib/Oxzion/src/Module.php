@@ -177,6 +177,11 @@ class Module {
                 Search\Indexer::class => function ($container) {
                     $config = $container->get('config');
                     return new Search\Elastic\IndexerImpl($config);
+                },
+                Service\ProfilePictureService::class => function($container) {
+                    $config = $container->get('config');
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ProfilePictureService($config, $dbAdapter);
                 }
             ],
         ];

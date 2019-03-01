@@ -35,6 +35,12 @@ class FileUtils{
 		}
         return $file['name'];
 	}
+
+	static public function copy($src, $destFile, $destDirectory){
+		self::createDirectory($destDirectory);
+		copy($src, $destDirectory.$destFile);
+	}
+	
 	static public function renameFile($source,$destination){
 		self::createDirectory(str_replace(basename($destination),"",$destination));
 		return rename($source, $destination);
@@ -72,5 +78,9 @@ class FileUtils{
             throw new \Exception('Could not Delete File: ' . error_get_last());
 		}
 	}
+
+	static public function fileExists($fileName){
+		return file_exists($fileName);
+	} 
 }
 ?>

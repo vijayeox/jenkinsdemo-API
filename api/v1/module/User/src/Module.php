@@ -14,6 +14,7 @@ use Oxzion\Model\UserTable;
 use Oxzion\Model\RoleTable;
 use Oxzion\Service\UserService;
 use Oxzion\Service\RoleService;
+use Oxzion\Service\ProfilePictureService;
 
 class Module implements ConfigProviderInterface {
 
@@ -33,6 +34,8 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
+                
+                
             ],
         ];
     }
@@ -44,6 +47,13 @@ class Module implements ConfigProviderInterface {
                     return new Controller\UserController(
                         $container->get(UserTable::class), 
                         $container->get('UserLogger'),$container->get(UserService::class),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\ProfilePictureController::class => function($container) {
+                    return new Controller\ProfilePictureController(
+                        $container->get(ProfilePictureService::class),
+                        $container->get('UserLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
