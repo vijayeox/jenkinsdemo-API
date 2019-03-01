@@ -1,0 +1,28 @@
+ox_email_domain:
+-
+    id: 1
+    name: 'Test Server'
+    imap_server: 'Test Server'
+    imap_port: '90'
+    imap_secure: '90'
+    imap_short_login: '2'
+    smtp_server: 'testing'
+    smtp_port: '99'
+    smtp_secure: 'securing1'
+    smtp_short_login: 'short_name'
+    smtp_auth: 'auth'
+    smtp_use_php_mail: 'No'
+
+-
+    id: 2
+    name: 'Test Server2'
+    imap_server: 'Test Server2'
+    imap_port: '90'
+    imap_secure: '90'
+    imap_short_login: '2'
+    smtp_server: 'testing2'
+    smtp_port: '99'
+    smtp_secure: 'securing2'
+    smtp_short_login: 'short_name2'
+    smtp_auth: 'auth'
+    smtp_use_php_mail: 'No'

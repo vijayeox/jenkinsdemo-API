@@ -11,13 +11,16 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 
-class Module implements ConfigProviderInterface {
+class Module implements ConfigProviderInterface
+{
 
-    public function getConfig() {
+    public function getConfig()
+    {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e) {
+    public function onBootstrap(MvcEvent $e)
+    {
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -26,14 +29,15 @@ class Module implements ConfigProviderInterface {
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onRenderError'), 0);
     }
 
-    public function getServiceConfig() {
+    public function getServiceConfig()
+    {
         return [
             'factories' => [
-                Service\EmailService::class => function($container){
+                Service\EmailService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\EmailService($container->get('config'), $dbAdapter, $container->get(Model\EmailTable::class));
                 },
-                Model\EmailTable::class => function($container) {
+                Model\EmailTable::class => function ($container) {
                     $tableGateway = $container->get(Model\EmailTableGateway::class);
                     return new Model\EmailTable($tableGateway);
                 },
@@ -43,27 +47,49 @@ class Module implements ConfigProviderInterface {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Email());
                     return new TableGateway('email_setting_user', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\DomainService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\DomainService($container->get('config'), $dbAdapter, $container->get(Model\DomainTable::class));
+                },
+                Model\DomainTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\DomainTableGateway::class);
+                    return new Model\DomainTable($tableGateway);
+                },
+                Model\DomainTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Domain());
+                    return new TableGateway('ox_email_domain', $dbAdapter, null, $resultSetPrototype);
+                },
             ],
         ];
     }
 
-    public function getControllerConfig() {
+    public function getControllerConfig()
+    {
         return [
             'factories' => [
-                Controller\EmailController::class => function($container) {
+                Controller\EmailController::class => function ($container) {
                     return new Controller\EmailController(
-                            $container->get(Model\EmailTable::class), $container->get(Service\EmailService::class), $container->get('EmailLogger'),
+                        $container->get(Model\EmailTable::class), $container->get(Service\EmailService::class), $container->get('EmailLogger'),
+                        $container->get(AdapterInterface::class));
+                },
+                Controller\DomainController::class => function ($container) {
+                    return new Controller\DomainController(
+                        $container->get(Model\DomainTable::class), $container->get(Service\DomainService::class), $container->get('DomainLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],
         ];
     }
 
-    public function onDispatchError($e) {
+    public function onDispatchError($e)
+    {
         return ErrorHandler::getJsonModelError($e);
     }
 
-    public function onRenderError($e) {
+    public function onRenderError($e)
+    {
         return ErrorHandler::getJsonModelError($e);
     }
 

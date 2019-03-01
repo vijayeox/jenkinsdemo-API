@@ -29,43 +29,59 @@ return [
                 ],
             ],
             'emailDefault' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/email/:emailId/default',
+                    'route' => '/email/:emailId/default',
                     'defaults' => [
                         'controller' => Controller\EmailController::class,
                         'method' => 'GET',
                         'action' => 'emailDefault',
                         'access' => [
-                            'emailDefault'=>'MANAGE_PROJECT_WRITE'
+                            'emailDefault' => 'MANAGE_PROJECT_WRITE'
                         ],
                     ],
                 ],
             ],
             'deleteEmail' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/email/delete/:address',
+                    'route' => '/email/delete/:address',
                     'defaults' => [
                         'controller' => Controller\EmailController::class,
                         'method' => 'DELETE',
                         'action' => 'deleteEmail',
                         'access' => [
-                            'deleteEmail'=>'MANAGE_PROJECT_WRITE'
+                            'deleteEmail' => 'MANAGE_PROJECT_WRITE'
                         ],
                     ],
                 ],
             ],
             'updateEmail' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/email/update/:address',
+                    'route' => '/email/update/:address',
                     'defaults' => [
                         'controller' => Controller\EmailController::class,
                         'method' => 'PUT',
                         'action' => 'updateEmail',
                         'access' => [
-                            'updateEmail'=>'MANAGE_PROJECT_WRITE'
+                            'updateEmail' => 'MANAGE_PROJECT_WRITE'
+                        ],
+                    ],
+                ],
+            ],
+            'Domain' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/domain[/:domainId]',
+                    'defaults' => [
+                        'controller' => Controller\DomainController::class,
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            'put' => 'MANAGE_DOMAIN_WRITE',
+                            'post' => 'MANAGE_DOMAIN_CREATE',
+                            'delete' => 'MANAGE_DOMAIN_DELETE',
+                            'get' => 'MANAGE_DOMAIN_READ',
                         ],
                     ],
                 ],
@@ -80,6 +96,29 @@ return [
                     'priority' => \Zend\Log\Logger::ALERT,
                     'options' => [
                         'stream' => __DIR__ . '/../../../logs/email.log',
+                        'formatter' => [
+                            'name' => \Zend\Log\Formatter\Simple::class,
+                            'options' => [
+                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
+                            ],
+                        ],
+                        'filters' => [
+                            'priority' => \Zend\Log\Logger::INFO,],
+                    ],
+                ],
+            ],
+            'processors' => [
+                'requestid' => [
+                    'name' => \Zend\Log\Processor\RequestId::class,],
+            ],
+        ],
+        'DomainLogger' => [
+            'writers' => [
+                'stream' => [
+                    'name' => 'stream',
+                    'priority' => \Zend\Log\Logger::ALERT,
+                    'options' => [
+                        'stream' => __DIR__ . '/../../../logs/domain.log',
                         'formatter' => [
                             'name' => \Zend\Log\Formatter\Simple::class,
                             'options' => [
