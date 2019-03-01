@@ -29,6 +29,7 @@
         </testsuite>
     </testsuites>
     <php>
+        <ini name="memory_limit" value="256M" />
         <const name="enableCamunda" value="0"/>
         <const name="enableElastic" value="0"/>
         <const name="enableMattermost" value="0"/>
