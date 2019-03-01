@@ -7,35 +7,26 @@ version: "3.7"
 #making sevices
 services:
         #First service app
-       chat:
-               build:
-                       #location of Dockerfile
-                       
-                       context: ./mattermost
-                       
-                       network: "host"
-                       
-                       #name of the dockerfile
-                       
-                       dockerfile: Dockerfile
-                       
-                       #using ports is not compatible when network_mode="host"
-                       
-               network_mode: "host"
-
-               volumes: 
-                      - "./mattermost:/mattermost" 
-                       #adding metadata to the resulting image using Docker labels.
-               labels:
-                       com.oxapp.description: "Chat App"
-        #second app                           
+        chat:
+                build:
+                        #location of Dockerfile
+                        context: ./mattermost
+                        network: "host"
+                        #name of the dockerfile
+                        dockerfile: Dockerfile
+                network_mode: "host"
+                volumes:
+                        - "./mattermost:/mattermost"
+                labels:
+                        com.oxapp.description: "Chat App"
+        #second app
         mail:
                 build:
                         context: ./rainloop
                         dockerfile: Dockerfile
                 ports:
                         - "8075:80"
-                labels:  
+                labels:
                         com.example.description: "Mailing App"
         #third app
         activemq:
@@ -43,8 +34,5 @@ services:
                         context: ./activemq
                         dockerfile: Dockerfile
                 network_mode: "host"
-                labels:  
+                labels:
                         com.oxapp.description: "Apache Activemq"
-                                
-                                
- 
