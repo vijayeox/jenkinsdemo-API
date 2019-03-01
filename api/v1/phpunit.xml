@@ -31,5 +31,6 @@
     <php>
         <const name="enableCamunda" value="0"/>
         <const name="enableElastic" value="0"/>
+        <const name="enableMattermost" value="0"/>
     </php>
 </phpunit>
