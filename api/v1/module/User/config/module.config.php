@@ -4,6 +4,7 @@ namespace User;
 
 use Zend\Log\Logger;
 use Zend\Router\Http\Segment;
+use Zend\Router\Http\Method;
 use Zend\Log\Formatter\Simple;
 use Zend\Log\Filter\Priority;
 use Zend\Log\Processor\RequestId;
@@ -196,6 +197,28 @@ return [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
                         'action' => 'changePassword'
+                    ],
+                ],
+            ],
+            'profilePicture' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/profile/:profileId',
+                    'defaults' => [
+                        'controller' => Controller\ProfilePictureController::class,
+                        'method' => 'GET',
+                        'action' => 'profile'
+                    ],
+                ],
+            ],
+            'updateProfile' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/user/profile',
+                    'defaults' => [
+                        'controller' => Controller\ProfilePictureController::class,
+                        'method' => 'POST',
+                        'action' => 'update'
                     ],
                 ],
             ],
