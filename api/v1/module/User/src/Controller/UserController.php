@@ -381,8 +381,7 @@ class UserController extends AbstractApiController
             } else if ($type === 'm') {
                 $result = $this->userService->getUserWithMinimumDetails($id);
             } else {
-            $result = $this->userService->getUserWithMinimumDetails($id); // Currently using the minimum information
-            // for the user. When we get another condition then we will use tem
+                $result = $this->userService->getUserWithMinimumDetails($id);
             }
         }
         catch (ValidationException $e) {

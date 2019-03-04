@@ -76,6 +76,15 @@ class UserService extends AbstractService
         }
         return $data;
     }
+    public function getActiveOrganization($id)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select()
+            ->from('ox_organization')
+            ->columns(array('id', 'name'))
+            ->where(array('ox_organization.org_id' => $id));
+        return $this->executeQuery($select)->toArray();
+    }
 
     public function getGroupsFromDb($id)
     {
@@ -303,6 +312,8 @@ class UserService extends AbstractService
         $result = $response[0];
         $groups = $this->getGroupsFromDb($id);
         $result['group'] = $groups;
+        $result['organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
+        $result['privileges'] = $this->getPrivileges(AuthContext::get(AuthConstants::USER_ID));
         if (isset($result)) {
             return $result;
         } else {
