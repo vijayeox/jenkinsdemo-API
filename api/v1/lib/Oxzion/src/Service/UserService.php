@@ -82,7 +82,7 @@ class UserService extends AbstractService
         $select = $sql->select()
             ->from('ox_organization')
             ->columns(array('id', 'name'))
-            ->where(array('ox_organization.org_id' => $id));
+            ->where(array('ox_organization.id' => $id));
         return $this->executeQuery($select)->toArray();
     }
 
