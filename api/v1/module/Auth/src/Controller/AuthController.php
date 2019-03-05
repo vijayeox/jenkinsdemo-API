@@ -72,18 +72,43 @@ class AuthController extends AbstractApiControllerHelper
         }
     }
 
+    public function refreshtokenAction(){
+        $data = $this->request->getPost()->toArray();
+        $tokenPayload = $this->decodeJwtToken($data['jwt']);
+        // print_r($data['jwt']);
+        if (is_array($tokenPayload)) {
+            $userDetail = $this->userService->getUserDetailsbyUserName($tokenPayload['username']);
+            $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($data['refresh_token']);
+            // print_r($data); 
+            // print_r($userTokenInfo);
+            if (!empty($userTokenInfo)) {
+                $dataJwt = $this->getTokenPayload($tokenPayload['username'], $tokenPayload['orgId']);
+                $jwt = $this->generateJwtToken($data);
+                $refreshToken = $this->userTokenService->generateRefreshToken($userDetail, $this->getRefreshTokenPayload());
+                return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken]);
+                
+            }else{
+                return $this->getErrorResponse("Refresh Token Expired", 404, array());
+            }
+        }else{
+                return $this->getErrorResponse("Invalid JWT Token", 404, array());
+        }
+
+    }
+
     /**
      * @ignore getJwt
      */
     private function getJwt($userName, $orgId)
     {
         $dataJwt = $this->getTokenPayload($userName, $orgId);
-        $dataSalt = $this->getRefreshTokenPayload($userName, $orgId); //Generating a encrypted value for our refreshToken
-        //Based on the username entered during login, we get the UserDetails and pass it to the getRefreshTokenPayload
-        //along with the encrypted information.
         $userDetail = $this->userService->getUserDetailsbyUserName($userName);
-        $this->userTokenService->getRefreshTokenPayload($userDetail, $dataSalt);
+        $refreshToken = $this->userTokenService->generateRefreshToken($userDetail, $this->getRefreshTokenPayload());
         $jwt = $this->generateJwtToken($dataJwt);
-        return $this->getSuccessResponseWithData(['jwt' => $jwt]);
+        if($refreshToken != 0){
+            return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken]);
+        } else {
+            return $this->getErrorResponse("Login Error", 405, array());
+        }
     }
 }

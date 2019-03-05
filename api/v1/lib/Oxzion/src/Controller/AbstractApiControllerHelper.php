@@ -9,17 +9,17 @@ use Oxzion\Error\ErrorHandler;
 
 abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
-	private $config;
+    private $config;
 
-	/**
+    /**
      * Check Request object have Authorization token or not 
      * @param type $request
      * @return type String
      */
     public function findJwtToken($request)
     {
-    	$jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';
-    	if ($jwtToken) {
+        $jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';
+        if ($jwtToken) {
             $jwtToken = trim(trim($jwtToken, "Bearer"), " ");
             return $jwtToken;
         }
@@ -49,21 +49,21 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     }
 
     protected function getTokenPayload($username,$orgId){
-    	return JwtHelper::getTokenPayload($username,$orgId);
+        return JwtHelper::getTokenPayload($username,$orgId);
     }
 
-    protected function getRefreshTokenPayload($username,$orgId){
-    	return JwtHelper::getRefreshTokenPayload($username,$orgId);
+    protected function getRefreshTokenPayload(){
+        return JwtHelper::getRefreshTokenPayload();
     }
 
     protected function generateJwtToken($payload){
-    	$config = $this->getConfig();
+        $config = $this->getConfig();
         $jwtKey = $config['jwtKey'];
-        $jwtAlgo = $config['jwtAlgo'];	    
+        $jwtAlgo = $config['jwtAlgo'];      
         return JwtHelper::generateJwtToken($payload, $jwtKey, $jwtAlgo);
     }
 
-	protected function getSuccessResponseWithData(array $data, $code = 200){
+    protected function getSuccessResponseWithData(array $data, $code = 200){
         return $this->getSuccessResponse(null, $code, $data);
     }
     protected function getSuccessResponse($message = null, $code = 200, array $data = null){
@@ -91,11 +91,11 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     }
 
     protected function getConfig(){
-    	if(! isset($this->config)){
-			$this->config = $this->getEvent()->getApplication()->getServiceManager()->get('Config');
-		}
+        if(! isset($this->config)){
+            $this->config = $this->getEvent()->getApplication()->getServiceManager()->get('Config');
+        }
 
-		return $this->config;
-    	
+        return $this->config;
+        
     }
 }

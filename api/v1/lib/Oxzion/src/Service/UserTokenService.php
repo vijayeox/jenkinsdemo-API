@@ -25,9 +25,7 @@ class UserTokenService extends AbstractService
         $this->config = $config;
     }
 
-    public function getRefreshTokenPayload($userDetail, $dataSalt)
-    {
-        $count = 0;
+    public function generateRefreshToken($userDetail,$dataSalt){
         if(isset($this->config['db']['refreshTokenPeriod'])){
             $refreshTokenPeriod = $this->config['db']['refreshTokenPeriod'];
         } else {
@@ -39,51 +37,38 @@ class UserTokenService extends AbstractService
                 return 0;
             }
             $userInfo = $this->checkUserInfo($userDetail);
-            if ($userInfo) {
-                $checkToken = $this->checkExpiredTokenInfo($userDetail);
-                if (!empty($checkToken) && $checkToken !== null) {
-                    $data['id'] = $checkToken[0]['id'];
-                    $data['expiry_date'] = Date("Y-m-d H:i:s", strtotime("+$refreshTokenPeriod day", $date));
-                    $data['salt'] = $checkToken[0]['salt'];
-                } else {
-                    $data['id'] = $userInfo[0]['id'];
-                    $data['expiry_date'] = Date("Y-m-d H:i:s", strtotime("+$refreshTokenPeriod day", $date));
-                    $data['salt'] = $dataSalt;
-                }
-            } else {
+            if(!isset($userInfo[0])){
                 $data['expiry_date'] = Date("Y-m-d H:i:s", strtotime("+$refreshTokenPeriod day", $date));
                 $data['salt'] = $dataSalt;
-            }
-            $form = new UserToken();
-            $data['user_id'] = $userDetail['id'];
-            $data['date_created'] = Date("Y-m-d H:i:s");
-            $data['date_modified'] = Date("Y-m-d H:i:s");
-            $form->exchangeArray($data);
-            $form->validate();
-            $count = $this->table->save($form);
-            if ($count == 0) {
-                return 0;
+                $data['user_id'] = $userDetail['id'];
+                $data['date_created'] = Date("Y-m-d H:i:s");
+                $data['date_modified'] = Date("Y-m-d H:i:s");
+                $form = new UserToken();
+                $form->exchangeArray($data);
+                $form->validate();
+                $count = $this->table->save($form);
+                if ($count == 0) {
+                    return 0;
+                }
+                return $dataSalt;
+            } else {
+                return $userInfo[0]['salt'];
             }
         } catch (Exception $e) {
             return 0;
         }
-        return $count;
     }
-
-    public function checkUserInfo($userDetail)
-    {
-        //Code to check if the User already has a refresh token. Only if he does not have it then we need to add it.
-        $queryString = "select * from ox_user_refresh_token";
+    
+    protected function checkUserInfo($userDetail) {
+         $queryString = "select * from ox_user_refresh_token";
         $where = "where user_id = " . $userDetail['id'] . "";
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $queryResult = $resultSet->toArray();
     }
 
-    public function checkExpiredTokenInfo($userDetail)
-    {
-        //Code to check if the User already has a refresh token. Only if he does not have it then we need to add it.
+    public function checkExpiredTokenInfo($refreshtoken) {
         $queryString = "select * from ox_user_refresh_token";
-        $where = "where user_id = " . $userDetail['id'] . " and expiry_date > now()";
+        $where = "where salt = '".$refreshtoken."' and expiry_date > now()";
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $queryResult = $resultSet->toArray();
     }

@@ -79,20 +79,6 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
                     $this->generateJwtToken($data);
                     return;
                 }
-            } else if (is_array($tokenPayload) && $tokenPayload['Error'] === 'Expired token') {
-                $UserService = $this->getEvent()->getApplication()->getServiceManager()->get(UserService::class);
-                $userDetail = $UserService->getUserDetailsbyUserName($tokenPayload['username']);
-
-                $UserTokenService = $this->getEvent()->getApplication()->getServiceManager()->get(UserTokenService::class);
-                $userTokenInfo = $UserTokenService->checkExpiredTokenInfo(Array('id' => $userDetail['id']));
-                if (!empty($userTokenInfo)) {
-                    $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
-                    $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload['username'], AuthConstants::ORG_ID => $tokenPayload['orgId']]);
-                    $data = $this->getTokenPayload($tokenPayload['username'], $tokenPayload['orgId']);
-                    $jwt = $this->generateJwtToken($data);
-                    $response->getHeaders()->addHeaderLine('Authorization', 'Bearer ' . $jwt);
-                    return;
-                }
             }
             $jsonModel = $this->getErrorResponse($tokenPayload, 400);
 

@@ -3,20 +3,33 @@ namespace Auth;
 
 use Zend\Log\Logger;
 use Zend\Router\Http\Literal;
+use Zend\Router\Http\Segment;
 use Zend\Log\Formatter\Simple;
 use Zend\Log\Filter\Priority;
 use Zend\Log\Processor\RequestId;
 
 return [
-	'router' => [
+    'router' => [
         'routes' => [
             'auth' => [
                 'type'    => Literal::class,
                 'options' => [
-                	'route'    => '/auth',
+                    'route'    => '/auth',
                     'defaults' => [
                         'controller' => Controller\AuthController::class,
                         'action' => 'auth',
+                        'method' => 'post'
+                    ],
+                ],
+            ],
+            'refreshtoken' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/refreshtoken',
+                    'defaults' => [
+                        'controller' => Controller\AuthController::class,
+                        'action' => 'refreshtoken',
+                        'method' => 'post'
                     ],
                 ],
             ],
