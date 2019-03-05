@@ -86,6 +86,20 @@ return [
                     ],
                 ],
             ],
+            'deleteDomain' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/domain/delete/:name',
+                    'defaults' => [
+                        'controller' => Controller\DomainController::class,
+                        'method' => 'DELETE',
+                        'action' => 'deleteDomain',
+//                        'access' => [
+//                            'deleteEmail' => 'MANAGE_DOMAIN_CREATE'
+//                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

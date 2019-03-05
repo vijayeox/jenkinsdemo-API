@@ -69,4 +69,27 @@ class DomainController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
 
+    /**
+     * Delete Domain API
+     * @api
+     * @link /domain/delete/:name
+     * @method DELETE
+     * @param $id ID of Domain to Delete
+     * @return array success|failure response
+     */
+    public function deleteDomainAction()
+    {
+        $domain = $this->params()->fromRoute()['name'];
+        try {
+            $responseData = $this->domainService->deleteDomain($domain);
+        } catch (ValidationException $e) {
+            $response = ['data' => $domain, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        if ($responseData == 0) {
+            return $this->getErrorResponse("Entity not found", 404);
+        }
+        return $this->getSuccessResponseWithData($responseData, 200);
+    }
+
 }
