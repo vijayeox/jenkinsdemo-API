@@ -1,0 +1,13 @@
+{
+  "Job": {
+    "callback": {
+      "url": "",
+      "topic": ""
+    },
+    "data": {
+      "username": "",
+      "password": ""
+    }
+  },
+  "schedule": ""
+}
