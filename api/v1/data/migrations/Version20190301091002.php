@@ -19,7 +19,7 @@ final class Version20190301091002 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("CREATE TABLE `ox_email_domain` (
+        $this->addSql("CREATE TABLE IF NOT EXISTS `ox_email_domain` (
                   `id` int(11) NOT NULL AUTO_INCREMENT,
                   `uuid` varchar(45) DEFAULT NULL,
                   `name` varchar(1000) NOT NULL,
