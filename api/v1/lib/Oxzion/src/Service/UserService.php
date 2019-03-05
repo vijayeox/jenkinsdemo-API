@@ -314,6 +314,7 @@ class UserService extends AbstractService
         $result['group'] = $groups;
         $result['organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
         $result['privileges'] = $this->getPrivileges(AuthContext::get(AuthConstants::USER_ID));
+        $result['preferences'] = json_decode($response[0]['preferences']);
         if (isset($result)) {
             return $result;
         } else {
@@ -333,13 +334,14 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_user')
-            ->columns(array('id','username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone','date_of_birth','date_of_join','country','website','about','gender','interest','address','icon'))
+            ->columns(array('id','username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone','date_of_birth','date_of_join','country','website','about','gender','interest','address','icon','preferences'))
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id,'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
             return $response[0];
         }
         $result = $response[0];
+        $result['preferences'] = json_decode($response[0]['preferences']);
         if (isset($result)) {
             return $result;
         } else {
