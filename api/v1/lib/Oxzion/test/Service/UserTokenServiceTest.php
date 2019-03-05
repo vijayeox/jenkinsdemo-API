@@ -29,8 +29,9 @@ class UserTokenServiceTest extends ServiceTest
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $table = $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTokenTable::class);
         $userTokenService = new UserTokenService($config, $dbAdapter, $table);
-        $content = $userTokenService->getRefreshTokenPayload($data, $salt);
-        $this->assertEquals(1, $content);
+        $content = $userTokenService->generateRefreshToken($data, $salt);
+        // the salt value comes from refresh token test data
+        $this->assertEquals("5940264875c7e2a6f120969.43960974", $content);
     }
 
     public function testGetRefreshTokenPayloadWithUnknownUserName()
@@ -41,7 +42,7 @@ class UserTokenServiceTest extends ServiceTest
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $table = $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTokenTable::class);
         $userTokenService = new UserTokenService($config, $dbAdapter, $table);
-        $content = $userTokenService->getRefreshTokenPayload($data, $salt);
+        $content = $userTokenService->generateRefreshToken($data, $salt);
         $this->assertEquals(0, $content);
     }
 }

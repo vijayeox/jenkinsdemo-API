@@ -17,7 +17,7 @@ class JwtHelper
         return $data;
     }
 
-    public static function getRefreshTokenPayload ($username, $orgId) {
+    public static function getRefreshTokenPayload () {
         $salt = uniqid(mt_rand(), true);
         return $salt;
     }
@@ -47,7 +47,7 @@ class JwtHelper
         } catch (ExpiredException $e){
             $tks = explode('.', $token);
             list($headb64, $bodyb64, $cryptob64) = $tks;
-            $payload = JWT::jsonDecode(JWT::urlsafeB64Decode($bodyb64));
+            $payload = json_decode(JWT::urlsafeB64Decode($bodyb64),false);
             return array('username'=>$payload->data->username, 'orgId'=> $payload->data->orgId, 'Error'=>$e->getMessage());
         }
         return $decodedToken;
