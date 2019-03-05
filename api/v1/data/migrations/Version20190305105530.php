@@ -14,7 +14,8 @@ final class Version20190305105530 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `ox_email_domain` 
-            ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC);
+CHANGE COLUMN `name` `name` VARCHAR(100) NOT NULL ,
+ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC);
         ");
 
     }
