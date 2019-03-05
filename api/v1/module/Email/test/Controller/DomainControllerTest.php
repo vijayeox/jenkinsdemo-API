@@ -128,7 +128,7 @@ class DomainControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Wrong Server'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/domain', 'POST', null);
+        $this->dispatch('/domain', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
