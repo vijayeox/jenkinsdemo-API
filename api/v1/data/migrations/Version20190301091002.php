@@ -40,10 +40,7 @@ final class Version20190301091002 extends AbstractMigration
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
             ");
-
         $this->addSql("INSERT INTO `ox_role_privilege` (`role_id`, `privilege_name`, `permission`) VALUES ('1', 'MANAGE_DOMAIN', '15')");
-
         $this->addSql("CREATE TRIGGER  domain_uuid_before_insert BEFORE INSERT ON ox_email_domain FOR EACH ROW SET new.uuid = uuid();");
-
     }
 }
