@@ -55,7 +55,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select()
             ->from('ox_user')
-            ->columns(array('id', 'name', 'orgid'))
+            ->columns(array('id', 'name' , 'uuid' , 'orgid'))
             ->where(array('username = "' . (string)$userName . '"'))->limit(1);
         $results = $this->executeQuery($select);
         $results = $results->toArray();
@@ -307,7 +307,7 @@ class UserService extends AbstractService
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
-            return $response[0];
+             return $response[0];
         }
         $result = $response[0];
         $groups = $this->getGroupsFromDb($id);
@@ -334,7 +334,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_user')
-            ->columns(array('id','username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone','date_of_birth','date_of_join','country','website','about','gender','interest','address','icon','preferences'))
+            ->columns(array('id','uuid','username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone','date_of_birth','date_of_join','country','website','about','gender','interest','address','icon','preferences'))
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id,'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {

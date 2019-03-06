@@ -8,5 +8,6 @@ class AuthConstants{
     const USERNAME = 'username';
     const NAME = 'name';
     const PRIVILEGES = 'privileges';
+    const USER_UUID = 'userUuid';
 }
 ?>
