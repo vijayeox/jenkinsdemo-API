@@ -23,7 +23,7 @@ class Group extends Entity {
     );
 
     public function validate() {
-        $dataArray = Array("name", "parent_id", "manager_id", "type", "status", "date_modified");
+        $dataArray = Array("name", "manager_id", "type", "status", "date_modified");
         $this->validateWithParams($dataArray);
     }
 }
