@@ -525,7 +525,7 @@ class UserService extends AbstractService
     public function getUserContextDetailsByParams($whereCondition, $columnList)
     {
         $sql = $this->getSqlObject();
-        $select = $sql->select("*")
+        $select = $sql->select()
             ->from('ox_user')
             ->columns($columnList)
             ->where(array($whereCondition))

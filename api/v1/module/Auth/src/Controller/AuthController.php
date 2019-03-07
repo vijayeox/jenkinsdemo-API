@@ -70,7 +70,7 @@ class AuthController extends AbstractApiControllerHelper
             $this->authAdapter->setCredential($data['password']);
             $result = $this->authAdapter->authenticate();
         }
-        elseif (isset($data['apikey'])&&isset($data['orgid'])) {
+        elseif (isset($data['apikey'])) {
             $apiSecret = array_column($this->getApiSecret($data['apikey']),'secret');
             if(!empty($apiSecret)){
             $this->apiAdapter->setIdentity($data['apikey']);
@@ -85,8 +85,8 @@ class AuthController extends AbstractApiControllerHelper
                 if (isset($data['username'])&&isset($data['password'])) {
                     return $this->getJwt($data['username'], $this->userService->getUserOrg($data['username']));
                 }
-                elseif (isset($data['apikey'])&&isset($data['orgid'])) {
-                    return $this->getApiJwt($data['apikey'],$data['orgid']);
+                elseif (isset($data['apikey'])) {
+                    return $this->getApiJwt($data['apikey']);
                 }
             }
         
@@ -163,9 +163,9 @@ class AuthController extends AbstractApiControllerHelper
             return $this->getErrorResponse("Invalid JWT Token", 404);
         }
     }
-    private function getApiJwt($apiKey,$orgid)
+    private function getApiJwt($apiKey)
     {
-        $data = ['apikey' => $apiKey, 'orgid' => $orgid];
+        $data = ['apikey' => $apiKey];
         $dataJwt = $this->getTokenPayload($data);
         $jwt = $this->generateJwtToken($dataJwt);
         if($jwt)
