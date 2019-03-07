@@ -205,9 +205,7 @@ return [
                 'options' => [
                     'route' => '/user/profile/:profileId',
                     'defaults' => [
-                        'controller' => Controller\ProfilePictureController::class,
-                        'method' => 'GET',
-                        'action' => 'profile'
+                        'controller' => Controller\ProfilePictureDownloadController::class
                     ],
                 ],
             ],

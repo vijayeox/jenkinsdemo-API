@@ -39,6 +39,9 @@ class ProfilePictureService extends AbstractService{
         return $folder.$this->profilePic;
     }
 
+
+    
+
     /**
      * createUpload
      *
@@ -48,14 +51,14 @@ class ProfilePictureService extends AbstractService{
      *  @return JSON array of filenames
     */
     public function uploadProfilepicture($file){
-        $id = AuthContext::get(AuthConstants::USER_ID);
+        $id = AuthContext::get(AuthConstants::USER_UUID);
 
         if(isset($file)){
+
             $destFile = $this->getProfilePicturePath($id,true);
-            move_uploaded_file($file, $destFile);
+
             // move_uploaded_file($file, $destFile);
-            // print_r($file);
-            // return $file;
+            file_put_contents($destFile, $file);
         }
     }
 }

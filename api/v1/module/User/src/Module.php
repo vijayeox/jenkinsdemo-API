@@ -57,6 +57,13 @@ class Module implements ConfigProviderInterface {
                         $container->get(AdapterInterface::class)
                     );
                 },
+                 Controller\ProfilePictureDownloadController::class => function($container) {
+                    return new Controller\ProfilePictureDownloadController(
+                        $container->get(ProfilePictureService::class),
+                        $container->get('UserLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
             ],
         ];
     }
