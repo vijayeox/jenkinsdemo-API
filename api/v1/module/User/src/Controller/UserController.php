@@ -15,6 +15,7 @@ use Zend\View\Model\JsonModel;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface;
+use Email\Service\EmailService;
 
 
 class UserController extends AbstractApiController
@@ -25,11 +26,12 @@ class UserController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(UserTable $table, Logger $log, UserService $userService)
+    public function __construct(UserTable $table, Logger $log, UserService $userService, AdapterInterface $adapterInterface, EmailService $emailService)
     {
-        parent::__construct($table, $log, __class__, User::class);
+        parent::__construct($table, $log, __class__, User::class, EmailService::class);
         $this->setIdentifierName('userId');
         $this->userService = $userService;
+        $this->emailService = $emailService;
     }
 
     /**
@@ -104,6 +106,33 @@ class UserController extends AbstractApiController
     }
 
     /**
+     * @param $id
+     * @param $params
+     * @return JsonModel
+     */
+    private function getUserInfo($id, $params)
+    {
+        try {
+            $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
+            if ($type === 'a') {
+                $result = $this->userService->getUser($id);
+            } else if ($type === 'm') {
+                $result = $this->userService->getUserWithMinimumDetails($id);
+            } else {
+                $result = $this->userService->getUserWithMinimumDetails($id);
+            }
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        if (($result == 0) || (empty($result))) {
+            $response = ['id' => $id];
+            return $this->getErrorResponse("Failed to find User", 404, $response);
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
+
+    /**
      * GET User API
      * @api
      * @link /user[/:userId]
@@ -136,48 +165,6 @@ class UserController extends AbstractApiController
     }
 
     /**
-     * Update User API
-     * @api
-     * @link /user[/:userId]
-     * @method PUT
-     * @param array $id ID of User to update
-     * @param array $data
-     * <code>
-     *        gamelevel : string,
-     *        username : string,
-     *        password : string,
-     *        firstname : string,
-     *        lastname : string,
-     *        name : string,
-     *        role : string,
-     *        email : string,
-     *        status : string,
-     *        dob : string,
-     *        designation : string,
-     *        sex : string,
-     *        managerid : string,
-     *        cluster : string,
-     *        level : string,
-     *        org_role_id : string,
-     *        doj : string
-     * </code>
-     * @return array Returns a JSON Response with Status Code and Created User.
-     */
-    public function update($id, $data)
-    {
-        try {
-            $response = $this->userService->updateUser($id, $data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        }
-        if ($response == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
-        }
-        return $this->getSuccessResponseWithData($response, 200);
-    }
-
-    /**
      * Delete User API
      * @api
      * @link /user[/:userId]
@@ -188,7 +175,7 @@ class UserController extends AbstractApiController
     public function delete($id)
     {
         $response = $this->userService->deleteUser($id);
-        if($response == 0){
+        if ($response == 0) {
             return $this->getErrorResponse("User not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
@@ -241,6 +228,7 @@ class UserController extends AbstractApiController
         }
 
     }
+
     /**
      * Add User To Group API
      * @api
@@ -343,6 +331,7 @@ class UserController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
     }
+
     /**
      * Code to searches for list of friends for the logged in user and then searches for all the other people from the organization
      * @api
@@ -367,34 +356,6 @@ class UserController extends AbstractApiController
         }
     }
 
-    /**
-     * @param $id
-     * @param $params
-     * @return JsonModel
-     */
-    private function getUserInfo($id, $params)
-    {
-        try{
-            $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
-            if ($type === 'a') {
-                $result = $this->userService->getUser($id);
-            } else if ($type === 'm') {
-                $result = $this->userService->getUserWithMinimumDetails($id);
-            } else {
-                $result = $this->userService->getUserWithMinimumDetails($id);
-            }
-        }
-        catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
-        }
-        if (($result == 0)||(empty($result))) {
-            $response = ['id' => $id];
-            return $this->getErrorResponse("Failed to find User", 404, $response);
-        }
-        return $this->getSuccessResponseWithData($result);
-    }
-
     public function changePasswordAction()
     {
         $data = $this->params()->fromPost();
@@ -414,7 +375,50 @@ class UserController extends AbstractApiController
             return $this->getErrorResponse("Failed to Update Password", 404, $response);
         }
     }
-     /**
+
+    /**
+     * Update User API
+     * @api
+     * @link /user[/:userId]
+     * @method PUT
+     * @param array $id ID of User to update
+     * @param array $data
+     * <code>
+     *        gamelevel : string,
+     *        username : string,
+     *        password : string,
+     *        firstname : string,
+     *        lastname : string,
+     *        name : string,
+     *        role : string,
+     *        email : string,
+     *        status : string,
+     *        dob : string,
+     *        designation : string,
+     *        sex : string,
+     *        managerid : string,
+     *        cluster : string,
+     *        level : string,
+     *        org_role_id : string,
+     *        doj : string
+     * </code>
+     * @return array Returns a JSON Response with Status Code and Created User.
+     */
+    public function update($id, $data)
+    {
+        try {
+            $response = $this->userService->updateUser($id, $data);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        }
+        if ($response == 0) {
+            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        }
+        return $this->getSuccessResponseWithData($response, 200);
+    }
+
+    /**
      * Add User To Organization API
      * @api
      * @link /user/:userId/organization/:organizationId'
@@ -422,7 +426,7 @@ class UserController extends AbstractApiController
      * @param $id and $orgid that adds a particular user to a organization
      * @return array success|failure response
      */
-    public function addOrganizationToUserAction() 
+    public function addOrganizationToUserAction()
     {
         $params = $this->params()->fromRoute();
         $id = $params['userId'];
@@ -444,20 +448,21 @@ class UserController extends AbstractApiController
     }
 
     /**
-    * GET User Access API
-    * @api
-    * @link /user/me/access'
-    * @method GET
-    * @return JsonModel
-    */
-    public function getUserAppsAndPrivilegesAction() {
+     * GET User Access API
+     * @api
+     * @link /user/me/access'
+     * @method GET
+     * @return JsonModel
+     */
+    public function getUserAppsAndPrivilegesAction()
+    {
         $params = $this->params()->fromRoute();
         try {
             $responseData = $this->userService->getUserAppsAndPrivileges();
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        return $this->getSuccessResponseWithData($responseData,200);
+        return $this->getSuccessResponseWithData($responseData, 200);
     }
 }

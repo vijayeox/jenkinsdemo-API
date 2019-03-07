@@ -7,8 +7,11 @@ use Bos\Service\AbstractService;
 use Bos\ValidationException;
 use Email\Model\Email;
 use Email\Model\EmailTable;
-use Exception;
 use Oxzion\Encryption\TwoWayEncryption;
+use Oxzion\Encryption\Crypto;
+use TheSeer\Tokenizer\Exception;
+use Zend\Mail;
+use Zend\Mail\Message;
 
 class EmailService extends AbstractService
 {
@@ -243,5 +246,29 @@ class EmailService extends AbstractService
             return 0;
         }
         return $count;
+    }
+
+    public function sendUserEmail($userData)
+    {
+        $baseFolder = $this->config['DATA_FOLDER'];
+        $mainBody = "
+            <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
+                <img src= " . $baseFolder . "'http://localhost:8081/79435fed1e7159c4c558a8192ac97fe0.png' class='CToWUd' height='35'>
+            </div>
+            <div style='line-height: 24px'>Dear " . $userData->firstname . ", </br/>
+                OX Zion has created a new ID for you, <br/>Details are below: <br/>
+                URL: <a href='http://localhost:8081' >Click here to Login! </a> <br/>
+                UserName: " . $userData->username . " <br/>
+                Password: " . $userData->password . " <br/>
+            </div>";
+
+        $mail = new Message();
+        $mail->setBody($mainBody);
+        $mail->setFrom('admin@oxzion.com', 'OX Zion Admin');
+        $mail->addTo($userData->email, $userData->firstname . " " . $userData->lastname);
+        $mail->setSubject($userData->firstname . ', You login details for OX Zion!');
+        $transport = new Mail\Transport\Sendmail();
+        $transport->send($mail);
+        return 1;
     }
 }

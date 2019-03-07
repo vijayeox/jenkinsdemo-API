@@ -15,6 +15,7 @@ use Oxzion\Model\RoleTable;
 use Oxzion\Service\UserService;
 use Oxzion\Service\RoleService;
 use Oxzion\Service\ProfilePictureService;
+use Email\Service\EmailService;
 
 class Module implements ConfigProviderInterface {
 
@@ -34,7 +35,10 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
-                
+                UserService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new UserService($container->get('config'), $dbAdapter, $container->get(UserTable::class), $container->get(EmailService::class));
+                },
                 
             ],
         ];
@@ -46,8 +50,10 @@ class Module implements ConfigProviderInterface {
                 Controller\UserController::class => function($container) {
                     return new Controller\UserController(
                         $container->get(UserTable::class), 
-                        $container->get('UserLogger'),$container->get(UserService::class),
-                        $container->get(AdapterInterface::class)
+                        $container->get('UserLogger'),
+                        $container->get(UserService::class),
+                        $container->get(AdapterInterface::class),
+                        $container->get(EmailService::class)
                     );
                 },
                 Controller\ProfilePictureController::class => function($container) {

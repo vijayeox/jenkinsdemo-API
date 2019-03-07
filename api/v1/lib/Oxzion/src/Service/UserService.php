@@ -8,6 +8,7 @@ use Bos\Service\AbstractService;
 use Bos\ValidationException;
 use Oxzion\Model\User;
 use Oxzion\Utils\ArrayUtils;
+use Email\Service\EmailService;
 
 class UserService extends AbstractService
 {
@@ -21,14 +22,16 @@ class UserService extends AbstractService
      * @ignore table
      */
     private $table;
+    private $emailService;
 
-    public function __construct($config, $dbAdapter, $table = null)
+    public function __construct($config, $dbAdapter, $table = null, EmailService $emailService)
     {
         parent::__construct($config, $dbAdapter);
         $this->cacheService = CacheService::getInstance();
         if ($table) {
             $this->table = $table;
         }
+        $this->emailService = $emailService;
     }
 
     /**
@@ -55,7 +58,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select()
             ->from('ox_user')
-            ->columns(array('id', 'name' , 'uuid' , 'orgid'))
+            ->columns(array('id', 'name', 'uuid', 'orgid'))
             ->where(array('username = "' . (string)$userName . '"'))->limit(1);
         $results = $this->executeQuery($select);
         $results = $results->toArray();
@@ -76,15 +79,6 @@ class UserService extends AbstractService
         }
         return $data;
     }
-    public function getActiveOrganization($id)
-    {
-        $sql = $this->getSqlObject();
-        $select = $sql->select()
-            ->from('ox_organization')
-            ->columns(array('id', 'name'))
-            ->where(array('ox_organization.id' => $id));
-        return $this->executeQuery($select)->toArray();
-    }
 
     public function getGroupsFromDb($id)
     {
@@ -96,51 +90,6 @@ class UserService extends AbstractService
             ->where(array('ox_user_group.avatar_id' => $id));
         //echo "<pre>";print_r($this->executeQuery($select)->toArray());exit();
         return $this->executeQuery($select)->toArray();
-    }
-
-    public function getPrivileges($userId)
-    {
-        // if($roleData = $this->cacheService->get($userId.PRIVILEGESS)){
-        // $data = $roleData;
-        // } else {
-        $data = $this->getPrivilegesFromDb($userId);
-        // $this->cacheService->set($userId.PERMISSIONS, $data);
-        // }
-        return $data;
-    }
-
-    private function getPrivilegesFromDb($userId)
-    {
-        $sql = $this->getSqlObject();
-        $select = $sql->select()
-            ->from('ox_role_privilege')
-            ->columns(array('privilege_name', 'permission'))
-            ->join('ox_user_role', 'ox_role_privilege.role_id = ox_user_role.role_id', array())
-            ->where(array('ox_user_role.user_id' => $userId));
-        $results = $this->executeQuery($select)->toArray();
-        $permissions = array();
-        foreach ($results as $key => $value) {
-            $permissions = array_merge($permissions, $this->addPermissions($value['privilege_name'], $value['permission']));
-        }
-        return array_unique($permissions);
-    }
-
-    public function addPermissions($privilegeName, $permission)
-    {
-        $permissionArray = array();
-        if (($permission & 1) != 0) {
-            $permissionArray[] = $privilegeName . "_" . 'READ';
-        }
-        if (($permission & 2) != 0) {
-            $permissionArray[] = $privilegeName . "_" . 'WRITE';
-        }
-        if (($permission & 4) != 0) {
-            $permissionArray[] = $privilegeName . "_" . 'CREATE';
-        }
-        if (($permission & 8) != 0) {
-            $permissionArray[] = $privilegeName . "_" . 'DELETE';
-        }
-        return $permissionArray;
     }
 
     /**
@@ -173,29 +122,27 @@ class UserService extends AbstractService
     public function createUser(&$data)
     {
         $form = new User();
-        $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['orgid'] = (isset($data['orgid']) ? $data['orgid'] : AuthContext::get(AuthConstants::ORG_ID));
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        if(isset($data['password'])) {
+        $tmpPwd = $data['password'];
+        if (isset($data['password'])) {
             $data['password'] = md5(sha1($data['password']));
         }
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
         $count = 0;
-        try {
-            $count = $this->table->save($form);
-            if($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
-            $this->commit();
-        } catch(Exception $e) {
+        $count = $this->table->save($form);
+        if ($count == 0) {
             $this->rollback();
             return 0;
         }
+        $id = $this->table->getLastInsertValue();
+        $data['id'] = $id;
+        $form->password = $tmpPwd;
+        $this->emailService->sendUserEmail($form);
+        $this->commit();
         return $count;
     }
 
@@ -226,7 +173,7 @@ class UserService extends AbstractService
      */
     public function updateUser($id, &$data)
     {
-        $obj = $this->table->get($id,array());
+        $obj = $this->table->get($id, array());
         if (is_null($obj)) {
             return 0;
         }
@@ -240,7 +187,7 @@ class UserService extends AbstractService
         $count = 0;
         try {
             $this->table->save($form);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             return 0;
         }
@@ -307,7 +254,7 @@ class UserService extends AbstractService
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
-             return $response[0];
+            return $response[0];
         }
         $result = $response[0];
         $groups = $this->getGroupsFromDb($id);
@@ -322,6 +269,61 @@ class UserService extends AbstractService
         }
     }
 
+    public function getActiveOrganization($id)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select()
+            ->from('ox_organization')
+            ->columns(array('id', 'name'))
+            ->where(array('ox_organization.id' => $id));
+        return $this->executeQuery($select)->toArray();
+    }
+
+    public function getPrivileges($userId)
+    {
+        // if($roleData = $this->cacheService->get($userId.PRIVILEGESS)){
+        // $data = $roleData;
+        // } else {
+        $data = $this->getPrivilegesFromDb($userId);
+        // $this->cacheService->set($userId.PERMISSIONS, $data);
+        // }
+        return $data;
+    }
+
+    private function getPrivilegesFromDb($userId)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select()
+            ->from('ox_role_privilege')
+            ->columns(array('privilege_name', 'permission'))
+            ->join('ox_user_role', 'ox_role_privilege.role_id = ox_user_role.role_id', array())
+            ->where(array('ox_user_role.user_id' => $userId));
+        $results = $this->executeQuery($select)->toArray();
+        $permissions = array();
+        foreach ($results as $key => $value) {
+            $permissions = array_merge($permissions, $this->addPermissions($value['privilege_name'], $value['permission']));
+        }
+        return array_unique($permissions);
+    }
+
+    public function addPermissions($privilegeName, $permission)
+    {
+        $permissionArray = array();
+        if (($permission & 1) != 0) {
+            $permissionArray[] = $privilegeName . "_" . 'READ';
+        }
+        if (($permission & 2) != 0) {
+            $permissionArray[] = $privilegeName . "_" . 'WRITE';
+        }
+        if (($permission & 4) != 0) {
+            $permissionArray[] = $privilegeName . "_" . 'CREATE';
+        }
+        if (($permission & 8) != 0) {
+            $permissionArray[] = $privilegeName . "_" . 'DELETE';
+        }
+        return $permissionArray;
+    }
+
     /**
      * GET User Service
      * @method  getUserWithMinimumDetails
@@ -334,8 +336,8 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_user')
-            ->columns(array('id','uuid','username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone','date_of_birth','date_of_join','country','website','about','gender','interest','address','icon','preferences'))
-            ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id,'status' => 'Active'));
+            ->columns(array('id', 'uuid', 'username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone', 'date_of_birth', 'date_of_join', 'country', 'website', 'about', 'gender', 'interest', 'address', 'icon', 'preferences'))
+            ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
             return $response[0];
@@ -398,7 +400,7 @@ class UserService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $queryString = "select id from ox_user";
-        $where = "where id =" . $userid." and status='Active'";
+        $where = "where id =" . $userid . " and status='Active'";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
         if ($resultSet) {
             $query = "select id from groups";
@@ -429,7 +431,7 @@ class UserService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $queryString = "select id from ox_user";
-        $where = "where id =" . $userid." and status='Active'";
+        $where = "where id =" . $userid . " and status='Active'";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
         if ($resultSet) {
             $query = "select id from ox_project";
@@ -490,6 +492,99 @@ class UserService extends AbstractService
     }
 
     /**
+     * @param $searchVal
+     * @return array
+     */
+    public function getUserBySearchName($searchVal)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select()
+            ->from('ox_user')
+            ->columns(array('id', 'firstname', 'lastname'))// Instead of getting the id from the userTable,
+            // we need to get the UUID. Once UUID is added to the table we need to make that change
+            ->where(array('firstname LIKE "%' . $searchVal . '%" OR lastname LIKE "%' . $searchVal . '%"'));
+        return $result = $this->executeQuery($select)->toArray();
+    }
+
+    /**
+     * @param $userName
+     * @return array|\Zend\Db\ResultSet\ResultSet
+     */
+    public function getUserDetailsbyUserName($userName)
+    {
+        $whereCondition = "username = '" . $userName . "'";
+        $columnList = array('*');
+        return $userDetail = $this->getUserContextDetailsByParams($whereCondition, $columnList);
+    }
+
+    /**
+     * @param $whereCondition
+     * @param $columnList
+     * @return array|\Zend\Db\ResultSet\ResultSet
+     */
+    public function getUserContextDetailsByParams($whereCondition, $columnList)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select("*")
+            ->from('ox_user')
+            ->columns($columnList)
+            ->where(array($whereCondition))
+            ->limit(1);
+        $results = $this->executeQuery($select);
+        $results = $results->toArray();
+        if (count($results) > 0) {
+            $results = $results[0];
+        }
+        return $results;
+    }
+
+    public function addUserToOrg($userId, $organizationId)
+    {
+        $sql = $this->getSqlObject();
+        $queryString = "select id from ox_user";
+        $where = "where id =" . $userId;
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
+        if ($resultSet) {
+            $query = "select id from ox_organization";
+            $where = "where id=" . $organizationId . " AND status = 'Active' ";
+            $result = $this->executeQuerywithParams($query, $where, null, null);
+            if ($result) {
+                $query = "select * from ox_user_org";
+                $where = "where user_id =" . $userId . " and org_id =" . $organizationId;
+                $endresult = $this->executeQuerywithParams($query, $where, null, null)->toArray();
+                if (!$endresult) {
+                    $data = array(array('user_id' => $userId, 'org_id' => $organizationId));
+                    $result_update = $this->multiInsertOrUpdate('ox_user_org', $data, array());
+                    if ($result_update->getAffectedRows() == 0) {
+                        return $result_update;
+                    }
+                    return 1;
+                } else {
+                    return 3;
+                }
+            } else {
+                return 2;
+            }
+        }
+        return 0;
+    }
+
+    public function getUserAppsAndPrivileges()
+    {
+        $privilege = AuthContext::get(AuthConstants::PRIVILEGES);
+        foreach ($privilege as $key => $value) {
+            $privilege[$key] = strtolower($value);
+            $privilege[$key] = ucfirst($privilege[$key]);
+            $privilege[$key] = implode('_', array_map('ucfirst', explode('_', $privilege[$key])));
+            $privilege[$key] = str_replace('_', '', $privilege[$key]);
+            $privilege[$key] = 'priv' . $privilege[$key] . ':true';
+        }
+        $blackListedApps = $this->getAppsWithoutAccessForUser();
+        $responseArray = Array('privilege' => $privilege, 'blackListedApps' => $blackListedApps);
+        return $responseArray;
+    }
+
+    /**
      * @return \Oxzion\Utils\Array
      */
     public function getAppsWithoutAccessForUser()
@@ -525,23 +620,6 @@ class UserService extends AbstractService
     }
 
     /**
-     * @ignore getUserFolder
-     */
-    protected function getUserFolder($id)
-    {
-        return $this->config['DATA_FOLDER'] . "organization/" . AuthContext::get(AuthConstants::ORG_ID) . self::USER_FOLDER . $id;
-    }
-
-    /**
-     * @ignore getFileName
-     */
-    protected function getFileName($file)
-    {
-        $fileName = explode('-', $file, 2);
-        return $fileName[1];
-    }
-
-    /**
      * @param $userId
      * @return array
      */
@@ -556,96 +634,19 @@ class UserService extends AbstractService
     }
 
     /**
-     * @param $searchVal
-     * @return array
+     * @ignore getUserFolder
      */
-    public function getUserBySearchName($searchVal)
+    protected function getUserFolder($id)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select()
-            ->from('ox_user')
-            ->columns(array('id', 'firstname', 'lastname'))// Instead of getting the id from the userTable,
-            // we need to get the UUID. Once UUID is added to the table we need to make that change
-            ->where(array('firstname LIKE "%' . $searchVal . '%" OR lastname LIKE "%' . $searchVal . '%"'));
-        return $result = $this->executeQuery($select)->toArray();
+        return $this->config['DATA_FOLDER'] . "organization/" . AuthContext::get(AuthConstants::ORG_ID) . self::USER_FOLDER . $id;
     }
 
     /**
-     * @param $userName
-     * @return array|\Zend\Db\ResultSet\ResultSet
+     * @ignore getFileName
      */
-    public function getUserDetailsbyUserName($userName)
+    protected function getFileName($file)
     {
-        $whereCondition = "username = '" . $userName . "'";
-        $columnList = array('*');
-        return $userDetail = $this->getUserContextDetailsByParams($whereCondition, $columnList);
-    }
-
-    /**
-     * @param $whereCondition
-     * @param $columnList
-     * @return array|\Zend\Db\ResultSet\ResultSet
-     */
-    public function getUserContextDetailsByParams($whereCondition, $columnList)
-    {
-        $sql = $this->getSqlObject();
-        $select = $sql->select()
-            ->from('ox_user')
-            ->columns($columnList)
-            ->where(array($whereCondition))
-            ->limit(1);
-        $results = $this->executeQuery($select);
-        $results = $results->toArray();
-        if (count($results) > 0) {
-            $results = $results[0];
-        }
-        return $results;
-    }
-
-    public function addUserToOrg($userId, $organizationId)
-    {
-        $sql = $this->getSqlObject();
-        $queryString = "select id from ox_user";
-        $where = "where id =" . $userId;
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
-        if ($resultSet) {
-            $query = "select id from ox_organization";
-            $where = "where id=" . $organizationId." AND status = 'Active' ";
-            $result = $this->executeQuerywithParams($query, $where, null, null);
-            if ($result) {
-                $query = "select * from ox_user_org";
-                $where = "where user_id =" . $userId . " and org_id =" . $organizationId;
-                $endresult = $this->executeQuerywithParams($query, $where, null, null)->toArray();
-                if (!$endresult) {
-                    $data = array(array('user_id' => $userId, 'org_id' => $organizationId));
-                    $result_update = $this->multiInsertOrUpdate('ox_user_org', $data, array());
-                    if ($result_update->getAffectedRows() == 0) {
-                        return $result_update;
-                    }
-                    return 1;
-                }
-                else {
-                    return 3;
-                }
-            }
-            else {
-                return 2;
-            }    
-        }
-        return 0;
-    }
-
-    public function getUserAppsAndPrivileges() {
-        $privilege = AuthContext::get(AuthConstants::PRIVILEGES);
-        foreach ($privilege as $key => $value) {
-            $privilege[$key] = strtolower($value);
-            $privilege[$key] = ucfirst($privilege[$key]);
-            $privilege[$key] = implode('_', array_map('ucfirst', explode('_', $privilege[$key])));
-            $privilege[$key] = str_replace('_', '',$privilege[$key]);
-            $privilege[$key] = 'priv'.$privilege[$key].':true';
-        }
-        $blackListedApps = $this->getAppsWithoutAccessForUser();
-        $responseArray = Array('privilege' => $privilege, 'blackListedApps' => $blackListedApps);
-        return $responseArray;
+        $fileName = explode('-', $file, 2);
+        return $fileName[1];
     }
 }
