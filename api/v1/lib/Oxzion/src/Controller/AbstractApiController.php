@@ -15,7 +15,7 @@ use Oxzion\Auth\AuthSuccessListener;
 use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
 use Bos\Auth\AuthContext;
-
+use Exception;
 
 abstract class AbstractApiController extends AbstractApiControllerHelper
 {
@@ -69,16 +69,25 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
         $config = $event->getApplication()->getServiceManager()->get('Config');
         $jwtToken = $this->findJwtToken($request);
         if ($jwtToken) {
-            $token = $jwtToken;
-            $tokenPayload = $this->decodeJwtToken($token);
-            if (is_object($tokenPayload)) {
-                if ($tokenPayload->data && $tokenPayload->data->username) {
-                    $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
-                    $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username, AuthConstants::ORG_ID => $tokenPayload->data->orgId]);
-                    return;
+            try {
+                $token = $jwtToken;
+                $tokenPayload = $this->decodeJwtToken($token);
+                if (is_object($tokenPayload)) {
+                    if ($tokenPayload->data && $tokenPayload->data->username) {
+                        $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
+                        $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username, AuthConstants::ORG_ID => $tokenPayload->data->orgId]);
+                        // $data = $this->getTokenPayload($tokenPayload->data->username, $tokenPayload->data->orgId);
+                        // $this->generateJwtToken($data);
+                        return;
+                    }
+                }else if($tokenPayload['orgId']){
+                    unset($tokenPayload['orgId']);
                 }
+                $jsonModel = $this->getErrorResponse($tokenPayload, 400);
             }
-            $jsonModel = $this->getErrorResponse($tokenPayload, 400);
+            catch (Exception $e) {
+                return $this->getErrorResponse("Token Invalid. Please login again.", 401);
+            }
 
         } else {
             $jsonModel = $this->getErrorResponse($config['authRequiredText'], 401);

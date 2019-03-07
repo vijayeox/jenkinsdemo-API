@@ -33,6 +33,17 @@ return [
                     ],
                 ],
             ],
+            'validatetoken' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/validatetoken',
+                    'defaults' => [
+                        'controller' => Controller\AuthController::class,
+                        'action' => 'validatetoken',
+                        'method' => 'post'
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

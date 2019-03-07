@@ -7,9 +7,9 @@ use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Encryption\Crypto;
 use Zend\View\Model\JsonModel;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
-use Firebase\JWT\JWT;
 use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
+use Exception;
 
 class AuthController extends AbstractApiControllerHelper
 {
@@ -74,26 +74,33 @@ class AuthController extends AbstractApiControllerHelper
 
     public function refreshtokenAction(){
         $data = $this->request->getPost()->toArray();
-        $tokenPayload = $this->decodeJwtToken($data['jwt']);
-        // print_r($data['jwt']);
-        if (is_array($tokenPayload)) {
-            $userDetail = $this->userService->getUserDetailsbyUserName($tokenPayload['username']);
-            $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($data['refresh_token']);
-            // print_r($data); 
-            // print_r($userTokenInfo);
-            if (!empty($userTokenInfo)) {
-                $dataJwt = $this->getTokenPayload($tokenPayload['username'], $tokenPayload['orgId']);
-                $jwt = $this->generateJwtToken($data);
-                $refreshToken = $this->userTokenService->generateRefreshToken($userDetail, $this->getRefreshTokenPayload());
-                return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken]);
-                
-            }else{
-                return $this->getErrorResponse("Refresh Token Expired", 404, array());
+        
+        try{
+            if(isset($data['jwt'])){
+                $tokenPayload = $this->decodeJwtToken($data['jwt']);
+                // print_r($tokenPayload);
+                if (is_array($tokenPayload) || is_object($tokenPayload)) {
+                    $uname = isset($tokenPayload->data->username)? $tokenPayload->data->username:$tokenPayload['username'] ;
+                    $orgId = isset($tokenPayload->data->orgId)? $tokenPayload->data->orgId: $tokenPayload['orgId'];
+                    $userDetail = $this->userService->getUserDetailsbyUserName($uname);   
+                    $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($orgId);
+                    if (!empty($userTokenInfo)) {
+                        $dataJwt = $this->getTokenPayload($uname, $orgId);
+                        $jwt = $this->generateJwtToken($dataJwt);
+                        $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
+                        return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken]);
+                    } else{
+                        return $this->getErrorResponse("Refresh Token Expired", 404);
+                    }
+                } else{
+                        return $this->getErrorResponse("JWT Token Error", 404);
+                }
+            } else {
+                return $this->getErrorResponse("JWT Token Not Found", 404);
             }
-        }else{
-                return $this->getErrorResponse("Invalid JWT Token", 404, array());
+        } catch (Exception $e) {
+            return $this->getErrorResponse("Invalid JWT Token", 404);
         }
-
     }
 
     /**
@@ -103,12 +110,35 @@ class AuthController extends AbstractApiControllerHelper
     {
         $dataJwt = $this->getTokenPayload($userName, $orgId);
         $userDetail = $this->userService->getUserDetailsbyUserName($userName);
-        $refreshToken = $this->userTokenService->generateRefreshToken($userDetail, $this->getRefreshTokenPayload());
+        $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
         $jwt = $this->generateJwtToken($dataJwt);
         if($refreshToken != 0){
             return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken]);
         } else {
             return $this->getErrorResponse("Login Error", 405, array());
         }
+    }
+
+    public function validatetokenAction(){
+        $data = $this->request->getPost()->toArray();
+        try{
+            if(isset($data['jwt'])) {
+                $tokenPayload = $this->decodeJwtToken($data['jwt']);
+                if(is_array($tokenPayload) && !is_object($tokenPayload)) {
+                    if($tokenPayload['Error'] == 'Expired token') {
+                        return $this->getErrorResponse("Token Expired");    
+                    } else {
+                        return $this->getErrorResponse("Token Invalid");
+                    } 
+                } else{
+                    return $this->getSuccessResponse("Token Valid");
+                }
+            } else {
+                    return $this->getErrorResponse("JWT Token Not Found", 404);
+            }    
+        } catch (Exception $e) {
+            return $this->getErrorResponse("Invalid JWT Token", 404);
+        }
+        
     }
 }
