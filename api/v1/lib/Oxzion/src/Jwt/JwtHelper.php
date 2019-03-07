@@ -17,10 +17,6 @@ class JwtHelper
         return $data;
     }
 
-    public static function getRefreshTokenPayload () {
-        $salt = uniqid(mt_rand(), true);
-        return $salt;
-    }
 
     public static function generateJwtToken($payload, $jwtKey, $jwtAlgo)
     {
