@@ -14,6 +14,10 @@ class AuthContext{
         $context = self::getContext();
         return $context[$key];
     }
+    public static function getAll(){
+        $context = self::getContext();
+        return $context;
+    }
 
     private static function getContext(){
         if(!isset($_REQUEST[self::CONTEXT_KEY])){

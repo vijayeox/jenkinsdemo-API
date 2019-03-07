@@ -4,6 +4,7 @@ namespace Auth;
 
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
+use Auth\Service\AuthService;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
@@ -11,7 +12,8 @@ use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
-use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
+use Auth\Adapter\LoginAdapter as AuthAdapter;
+use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as ApiAdapter;
 
 class Module implements ConfigProviderInterface {
 
@@ -30,9 +32,17 @@ class Module implements ConfigProviderInterface {
     public function getServiceConfig() {
         return [
             'factories' => [
-                AuthAdapter::class => function($container) {
+                Adapter\LoginAdapter::class => function($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new AuthAdapter($dbAdapter,'ox_user','username','password','MD5(SHA1(?))');
+                    return new Adapter\LoginAdapter($dbAdapter,'ox_user','username','password','MD5(SHA1(?))');
+                },
+                ApiAdapter::class => function($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new ApiAdapter($dbAdapter,'ox_api_key','api_key','secret');
+                },
+                Service\AuthService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\AuthService($container->get('config'), $dbAdapter);
                 },
             ],
         ];
@@ -43,10 +53,12 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\AuthController::class => function($container) {
                     return new Controller\AuthController(
-                        $container->get(AuthAdapter::class),
+                        $container->get(Adapter\LoginAdapter::class),
+                        $container->get(ApiAdapter::class),
                         $container->get(UserService::class),
                         $container->get('AuthLogger'),
-                        $container->get(UserTokenService::class)
+                        $container->get(UserTokenService::class),
+                        $container->get(Service\AuthService::class)
                     );
                 },
             ],

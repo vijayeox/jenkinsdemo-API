@@ -15,7 +15,7 @@ use Oxzion\Auth\AuthSuccessListener;
 use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
 use Bos\Auth\AuthContext;
-use Exception;
+
 
 abstract class AbstractApiController extends AbstractApiControllerHelper
 {
@@ -73,13 +73,18 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
                 $token = $jwtToken;
                 $tokenPayload = $this->decodeJwtToken($token);
                 if (is_object($tokenPayload)) {
-                    if ($tokenPayload->data && $tokenPayload->data->username) {
+                    if ($tokenPayload->data && isset($tokenPayload->data->username)) {
                         $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
                         $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username, AuthConstants::ORG_ID => $tokenPayload->data->orgId]);
                         // $data = $this->getTokenPayload($tokenPayload->data->username, $tokenPayload->data->orgId);
                         // $this->generateJwtToken($data);
                         return;
                     }
+                    if($tokenPayload->data && isset($tokenPayload->data->apikey)) {
+                    $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
+                    $authSuccessListener->loadUserDetails([AuthConstants::API_KEY => $tokenPayload->data->apikey,AuthConstants::ORG_ID => $tokenPayload->data->orgid]);
+                    return;
+                }
                 }else if($tokenPayload['orgId']){
                     unset($tokenPayload['orgId']);
                 }

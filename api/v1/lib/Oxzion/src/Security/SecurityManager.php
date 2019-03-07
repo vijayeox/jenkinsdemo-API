@@ -23,6 +23,9 @@ class SecurityManager{
 		} else {
         	$api_permission = $accessName[strtolower($e->getRequest()->getMethod())];
 		}
+		if(AuthContext::get(AuthConstants::API_KEY)) {
+			return;
+		}
 		// print_r($accessName);exit;
 		if(isset($accessName)){
 			if(!$this->isGranted($api_permission)){

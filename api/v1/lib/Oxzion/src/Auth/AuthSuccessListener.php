@@ -21,6 +21,10 @@ class AuthSuccessListener{
                 AuthContext::put(AuthConstants::ORG_ID, $result['orgid']);
                 AuthContext::put(AuthConstants::USER_UUID, $result['uuid']);
                 AuthContext::put(AuthConstants::PRIVILEGES,$this->userService->getPrivileges($result['id']));
+                AuthContext::put(AuthConstants::API_KEY,null);
+            }
+            elseif($key == AuthConstants::API_KEY){
+                AuthContext::put(AuthConstants::API_KEY, $value);
             }
         }
     }

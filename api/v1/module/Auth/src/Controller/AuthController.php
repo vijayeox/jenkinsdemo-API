@@ -2,11 +2,14 @@
 
 namespace Auth\Controller;
 
+use Auth\Service\AuthService;
 use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Encryption\Crypto;
 use Zend\View\Model\JsonModel;
-use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthAdapter;
+use Auth\Adapter\LoginAdapter as AuthAdapter;
+use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as ApiAdapter;
+use Firebase\JWT\JWT;
 use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
 use Exception;
@@ -17,6 +20,7 @@ class AuthController extends AbstractApiControllerHelper
      * @ignore authAdapter
      */
     private $authAdapter;
+    private $apiAdapter;
     /**
      * @ignore log
      */
@@ -26,16 +30,19 @@ class AuthController extends AbstractApiControllerHelper
      */
     private $userService;
     private $userTokenService;
+    private $authService;
 
     /**
      * @ignore __construct
      */
-    public function __construct(AuthAdapter $authAdapter, UserService $userService, Logger $log, UserTokenService $userTokenService)
+    public function __construct(AuthAdapter $authAdapter,ApiAdapter $apiAdapter, UserService $userService, Logger $log, UserTokenService $userTokenService, AuthService $authService)
     {
         $this->authAdapter = $authAdapter;
+        $this->apiAdapter = $apiAdapter;
         $this->log = $log;
         $this->userService = $userService;
         $this->userTokenService = $userTokenService;
+        $this->authService = $authService;
     }
 
     /**
@@ -58,18 +65,33 @@ class AuthController extends AbstractApiControllerHelper
     {
         $data = $this->request->getPost()->toArray();
         $crypto = new Crypto();
-        $this->authAdapter->setIdentity($data['username']);
-        $this->authAdapter->setCredential($data['password']);
-        $result = $this->authAdapter->authenticate();
-        if ($result->isValid()) {
-            if (isset($data['org_id'])) {
-                return $this->getJwt($data['username'], $data['org_id']);
-            } else {
-                return $this->getJwt($data['username'], $this->userService->getUserOrg($data['username']));
-            }
-        } else {
-            return $this->getFailureResponse("Authentication Failure - Invalid username or password");
+        if(isset($data['username'])&&isset($data['password'])) {
+            $this->authAdapter->setIdentity($data['username']);
+            $this->authAdapter->setCredential($data['password']);
+            $result = $this->authAdapter->authenticate();
         }
+        elseif (isset($data['apikey'])&&isset($data['orgid'])) {
+            $apiSecret = array_column($this->getApiSecret($data['apikey']),'secret');
+            if(!empty($apiSecret)){
+            $this->apiAdapter->setIdentity($data['apikey']);
+            $this->apiAdapter->setCredential($apiSecret[0]);
+            $result = $this->apiAdapter->authenticate();
+            }
+            else {
+                return $this->getErrorResponse("Authentication Failure - Incorrect Api Key",404);
+            }
+        }
+            if ($result->isValid()) {
+                if (isset($data['username'])&&isset($data['password'])) {
+                    return $this->getJwt($data['username'], $this->userService->getUserOrg($data['username']));
+                }
+                elseif (isset($data['apikey'])&&isset($data['orgid'])) {
+                    return $this->getApiJwt($data['apikey'],$data['orgid']);
+                }
+            }
+        
+        else 
+            return $this->getErrorResponse("Authentication Failure - Incorrect data specified",404);
     }
 
     public function refreshtokenAction(){
@@ -80,7 +102,7 @@ class AuthController extends AbstractApiControllerHelper
                 $tokenPayload = $this->decodeJwtToken($data['jwt']);
                 // print_r($tokenPayload);
                 if (is_array($tokenPayload) || is_object($tokenPayload)) {
-                    $uname = isset($tokenPayload->data->username)? $tokenPayload->data->username:$tokenPayload['username'] ;
+                    $uname = isset($tokenPayload->data->userName)? $tokenPayload->data->userName:$tokenPayload['username'] ;
                     $orgId = isset($tokenPayload->data->orgId)? $tokenPayload->data->orgId: $tokenPayload['orgId'];
                     $userDetail = $this->userService->getUserDetailsbyUserName($uname);   
                     $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($orgId);
@@ -108,7 +130,8 @@ class AuthController extends AbstractApiControllerHelper
      */
     private function getJwt($userName, $orgId)
     {
-        $dataJwt = $this->getTokenPayload($userName, $orgId);
+        $data = ['userName' => $userName, 'orgId' => $orgId];
+        $dataJwt = $this->getTokenPayload($data);
         $userDetail = $this->userService->getUserDetailsbyUserName($userName);
         $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
         $jwt = $this->generateJwtToken($dataJwt);
@@ -139,6 +162,20 @@ class AuthController extends AbstractApiControllerHelper
         } catch (Exception $e) {
             return $this->getErrorResponse("Invalid JWT Token", 404);
         }
-        
+    }
+    private function getApiJwt($apiKey,$orgid)
+    {
+        $data = ['apikey' => $apiKey, 'orgid' => $orgid];
+        $dataJwt = $this->getTokenPayload($data);
+        $jwt = $this->generateJwtToken($dataJwt);
+        if($jwt)
+            return $this->getSuccessResponseWithData(['jwt'=>$jwt]);
+        else
+            return $this->getErrorResponse("Invalid JWT Token", 404, array());
+    }
+
+    public function getApiSecret($apiKey) {
+         $apiSecret = $this->authService->getApiSecret($apiKey);
+         return $apiSecret;
     }
 }

@@ -11,17 +11,6 @@ use Zend\Log\Processor\RequestId;
 return [
     'router' => [
         'routes' => [
-            'auth' => [
-                'type'    => Literal::class,
-                'options' => [
-                    'route'    => '/auth',
-                    'defaults' => [
-                        'controller' => Controller\AuthController::class,
-                        'action' => 'auth',
-                        'method' => 'post'
-                    ],
-                ],
-            ],
             'refreshtoken' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -29,6 +18,17 @@ return [
                     'defaults' => [
                         'controller' => Controller\AuthController::class,
                         'action' => 'refreshtoken',
+                        'method' => 'post'
+                    ],
+                ],
+            ],
+            'auth' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/auth',
+                    'defaults' => [
+                        'controller' => Controller\AuthController::class,
+                        'action' => 'auth',
                         'method' => 'post'
                     ],
                 ],

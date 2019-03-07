@@ -44,7 +44,7 @@ class AuthControllerTest extends ControllerTest{
     public function testAuthenticationFail(){
         $data = ['username' => 'mehul', 'password' => 'password'];
         $this->dispatch('/auth', 'POST', $data);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
         $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AuthController');
@@ -52,7 +52,7 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Authentication Failure - Invalid username or password');
+        $this->assertEquals($content['message'], 'Authentication Failure - Incorrect data specified');
         // $this->reset();
     }
 
@@ -71,6 +71,35 @@ class AuthControllerTest extends ControllerTest{
         $this->assertNotEquals($content['data']['refresh_token'], '6456365665c809d01693770.52543401');
         // $this->reset();
         
+    }
+
+    public function testAuthenticationByApiKey(){
+        $data = ['apikey' => '0cb6fd4c-40a5-11e9-a30d-1c1b0d785c98', 'orgid' => '1'];
+        $this->dispatch('/auth', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('auth');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(is_null($content['data']['jwt']), false);
+
+    }
+
+    public function testAuthenticationFailByApiKey(){
+        $data = ['apikey' => '0cb6fd4c-40a5-11e9-a30d-1c1b0d785x36', 'orgid' => '1'];
+        $this->dispatch('/auth', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('auth');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+                
     }
 
     public function testRefreshValidUser(){
