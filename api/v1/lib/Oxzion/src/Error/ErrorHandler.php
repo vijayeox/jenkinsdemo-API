@@ -48,9 +48,13 @@ class ErrorHandler {
 
         $errorJson = array(
             'message'   => 'An error occurred during execution; please try again later.',
-            'error'     => $error,
-            'exception' => $exceptionJson,
         );
+        
+        if(isset($_ENV['ENV']) && strtolower($_ENV['ENV']) != 'production'){
+            $errorJson['error'] = $error;
+            $errorJson['exception'] = $exceptionJson;
+        }
+        
         if ($error == 'error-router-no-match') {
             $errorJson['message'] = 'Resource not found.';
         }
