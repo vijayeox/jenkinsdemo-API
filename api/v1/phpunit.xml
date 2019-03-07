@@ -2,9 +2,9 @@
 <phpunit colors="true">
     <testsuites>
         <testsuite name="All Tests">
-            <!-- <directory>./module/Attachment/test</directory> -->
+            <directory>./module/Attachment/test</directory>
             <directory>./module/Auth/test</directory>
-            <!-- <directory>./module/Screen/test</directory>
+            <directory>./module/Screen/test</directory>
             <directory>./module/Announcement/test</directory>
             <directory>./module/Widget/test</directory>
             <directory>./module/Project/test</directory> 
@@ -25,7 +25,7 @@
             <directory>./module/Resource/test</directory>
             <directory>./lib/Oxzion/test/AnalyticsTest</directory>
             <directory>./module/Callback/test</directory>
-            <directory>./module/Privilege/test</directory> -->
+            <directory>./module/Privilege/test</directory>
         </testsuite>
     </testsuites>
     <php>
