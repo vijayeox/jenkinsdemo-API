@@ -82,7 +82,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
                     }
                     if($tokenPayload->data && isset($tokenPayload->data->apikey)) {
                     $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
-                    $authSuccessListener->loadUserDetails([AuthConstants::API_KEY => $tokenPayload->data->apikey);
+                    $authSuccessListener->loadUserDetails([AuthConstants::API_KEY => $tokenPayload->data->apikey]);
                     return;
                 }
                 }else if($tokenPayload['orgId']){
