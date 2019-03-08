@@ -36,9 +36,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper {
         $file = $this->profilepictureService->getProfilePicturePath($id);
         if(FileUtils::fileExists($file) != 1){
              $file = $this->profilepictureService->getProfilePicturePath(null);
-             // print $file;
          }
-     
         if (!headers_sent()) {
             header('Content-Type: image/png');
             header("Content-Transfer-Encoding: Binary"); 

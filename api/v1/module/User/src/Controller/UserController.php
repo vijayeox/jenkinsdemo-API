@@ -148,7 +148,6 @@ class UserController extends AbstractApiController
         $id = AuthContext::get(AuthConstants::USER_ID);
         $params = $this->params()->fromRoute();
         return $this->getUserInfo($id, $params);
-
     }
 
     /**
@@ -354,6 +353,40 @@ class UserController extends AbstractApiController
             $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
+    }
+
+    /**
+     * @param $id
+     * @param $params
+     * @return JsonModel
+     */
+    private function getUserInfo($id, $params)
+    {
+        try{
+            $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
+            if ($type === 'a') {
+                $result = $this->userService->getUser($id);
+            } else if ($type === 'm') {
+                $result = $this->userService->getUserWithMinimumDetails($id);
+            } else {
+                $result = $this->userService->getUserWithMinimumDetails($id);
+            }
+            if(isset($result)){
+                $baseUrl = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'];
+                $icon = $result['icon'];
+                $result['icon'] = $baseUrl."/user/profile/".$result["uuid"];
+            
+            }
+        }
+        catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if (($result == 0)||(empty($result))) {
+            $response = ['id' => $id];
+            return $this->getErrorResponse("Failed to find User", 404, $response);
+        }
+        return $this->getSuccessResponseWithData($result);
     }
 
     public function changePasswordAction()
