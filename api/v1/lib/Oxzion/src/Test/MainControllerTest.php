@@ -45,16 +45,14 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     {
 
         if (!isset($this->jwtToken[$username])) {
-            $data = JwtHelper::getTokenPayload($username, $this->testOrgId);
+            $data = JwtHelper::getTokenPayload(['username'=>$username,'orgid' => $this->testOrgId]);
             $config = $this->getApplicationConfig();
             $jwtKey = $config['jwtKey'];
             $jwtAlgo = $config['jwtAlgo'];
             $token = JwtHelper::generateJwtToken($data, $jwtKey, $jwtAlgo);
-            $this->jwtToken[$username] = $token;
         } else {
             $token = $this->jwtToken[$username];
         }
-
         return $token;
     }
 
