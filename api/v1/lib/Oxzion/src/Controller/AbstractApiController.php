@@ -88,7 +88,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
                 }else if($tokenPayload['orgId']){
                     unset($tokenPayload['orgId']);
                 }
-                $jsonModel = $this->getErrorResponse($tokenPayload, 400);
+                $jsonModel = $this->getErrorResponse("Token Invalid.", 400);
             }
             catch (Exception $e) {
                 return $this->getErrorResponse("Token Invalid. Please login again.", 401);
