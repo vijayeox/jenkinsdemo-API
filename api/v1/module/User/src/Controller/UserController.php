@@ -106,33 +106,6 @@ class UserController extends AbstractApiController
     }
 
     /**
-     * @param $id
-     * @param $params
-     * @return JsonModel
-     */
-    private function getUserInfo($id, $params)
-    {
-        try {
-            $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
-            if ($type === 'a') {
-                $result = $this->userService->getUser($id);
-            } else if ($type === 'm') {
-                $result = $this->userService->getUserWithMinimumDetails($id);
-            } else {
-                $result = $this->userService->getUserWithMinimumDetails($id);
-            }
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        if (($result == 0) || (empty($result))) {
-            $response = ['id' => $id];
-            return $this->getErrorResponse("Failed to find User", 404, $response);
-        }
-        return $this->getSuccessResponseWithData($result);
-    }
-
-    /**
      * GET User API
      * @api
      * @link /user[/:userId]
