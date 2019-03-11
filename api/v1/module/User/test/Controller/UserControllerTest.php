@@ -41,7 +41,7 @@ class UserControllerTest extends ControllerTest
         $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt', 'password' => 'welcome2oxzion', 'designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male'];
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_user'));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user', 'POST', null);
+        $this->dispatch('/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();

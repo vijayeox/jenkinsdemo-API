@@ -268,7 +268,7 @@ class EmailService extends AbstractService
         $mail->addTo($userData->email, $userData->firstname . " " . $userData->lastname);
         $mail->setSubject($userData->firstname . ', You login details for OX Zion!');
         $transport = new Mail\Transport\Sendmail();
-        $transport->send($mail);
+//        $transport->send($mail);
         return 1;
     }
 }

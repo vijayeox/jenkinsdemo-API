@@ -49,6 +49,7 @@ ox_field:
     org_id: 1
     required: 1
     sequence: 2
+
 ox_metafield:
   -
     id: 1
@@ -60,17 +61,23 @@ ox_metafield:
     name: "field2"
     data_type: "integer"
     org_id: 1
+
 ox_file:
   -
-    id: 1
+    id: 3
     name: "Test Task 1"
     org_id: 1
     form_id: 1
+    status: "Active"
+    data: "new data"
   -
-    id: 2
+    id: 4
     name: "Test Task  2"
     org_id: 1
     form_id: 1
+    status: "Active"
+    data: "new data"
+
 ox_file_attribute:
   -
     id: 1

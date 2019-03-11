@@ -141,7 +141,7 @@ class UserService extends AbstractService
         $id = $this->table->getLastInsertValue();
         $data['id'] = $id;
         $form->password = $tmpPwd;
-        $this->emailService->sendUserEmail($form);
+//        $this->emailService->sendUserEmail($form); C
         $this->commit();
         return $count;
     }

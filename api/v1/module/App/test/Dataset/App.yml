@@ -2,7 +2,7 @@ ox_app:
   -
     id: 1
     name: "App 1"
-    uuid: 1
+    uuid: "5c822d497f44d"
     description: "App 1 description"
     type: 1
     logo: "app_va.png"
@@ -15,7 +15,7 @@ ox_app:
   -
     id: 2
     name: "App 2"
-    uuid: 2
+    uuid: "5c822d497f44a"
     description: "App 2 description"
     type: 1
     logo: "app_va.png"

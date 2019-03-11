@@ -160,7 +160,7 @@ class ContactControllerTest extends ControllerTest
 
     public function testgetcontactByOrg()
     {
-        $this->initAuthToken($this->managerUser);
+        $this->initAuthToken($this->adminUser);
         $this->dispatch('/contact/org', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();

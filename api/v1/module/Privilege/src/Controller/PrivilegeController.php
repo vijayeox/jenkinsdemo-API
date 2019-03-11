@@ -56,7 +56,7 @@ class PrivilegeController extends AbstractApiController
             return $this->getFailureResponse("No Privileges to show, there is something wrong with your request");
         }
         if ($result == null || empty($result)) {
-            return $this->getErrorResponse("There is nothing in your privilege list!");
+            return $this->getErrorResponse("There is nothing in your privilege list!", 404, ['id' => $appId]);
         }
         return $this->getSuccessResponseWithData($result);
     }
