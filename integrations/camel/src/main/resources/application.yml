@@ -24,3 +24,4 @@ websocket:
   port: 8081
   host: localhost
   channel: notification
+apikey: 0cb6fd4c-40a5-11e9-a30d-1c1b0d785c98
