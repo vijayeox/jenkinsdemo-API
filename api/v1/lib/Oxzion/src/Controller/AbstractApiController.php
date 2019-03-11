@@ -75,14 +75,14 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
                 if (is_object($tokenPayload)) {
                     if ($tokenPayload->data && isset($tokenPayload->data->username)) {
                         $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
-                        $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username, AuthConstants::ORG_ID => $tokenPayload->data->orgid]);
+                        $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username, AuthConstants::ORG_ID => $tokenPayload->data->orgId]);
                         return;
                     }
                     if($tokenPayload->data && isset($tokenPayload->data->apikey)) {
-                    $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
-                    $authSuccessListener->loadUserDetails([AuthConstants::API_KEY => $tokenPayload->data->apikey]);
-                    return;
-                }
+                        $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
+                        $authSuccessListener->loadUserDetails([AuthConstants::API_KEY => $tokenPayload->data->apikey]);
+                        return;
+                    }
                 }else if($tokenPayload['orgId']){
                     unset($tokenPayload['orgId']);
                 }
