@@ -81,7 +81,7 @@ class AuthController extends AbstractApiControllerHelper
                 return $this->getErrorResponse("Authentication Failure - Incorrect Api Key",404);
             }
         }
-        if($result) {
+        if(isset($result)) {
             if ($result->isValid()) {
                 if (isset($data['username'])&&isset($data['password'])) {
                     return $this->getJwt($data['username'], $this->userService->getUserOrg($data['username']));
