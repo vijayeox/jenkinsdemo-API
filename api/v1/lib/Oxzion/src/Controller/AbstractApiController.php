@@ -83,8 +83,8 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
                         $authSuccessListener->loadUserDetails([AuthConstants::API_KEY => $tokenPayload->data->apikey]);
                         return;
                     }
-                }else if($tokenPayload['orgId']){
-                    unset($tokenPayload['orgId']);
+                }else if($tokenPayload['orgid']){
+                    unset($tokenPayload['orgid']);
                 }
                 $jsonModel = $this->getErrorResponse("Token Invalid.", 400);
             }
