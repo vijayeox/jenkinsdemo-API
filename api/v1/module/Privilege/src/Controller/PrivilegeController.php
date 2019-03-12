@@ -4,14 +4,13 @@ namespace Privilege\Controller;
 /**
  * Privilege Api
  */
-use Zend\Log\Logger;
+use Bos\ValidationException;
+use Oxzion\Controller\AbstractApiController;
 use Privilege\Model\Privilege;
 use Privilege\Model\PrivilegeTable;
 use Privilege\Service\PrivilegeService;
-use Oxzion\Controller\AbstractApiController;
-use Bos\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
-use Zend\InputFilter\Input;
+use Zend\Log\Logger;
 
 /**
  * Privilege Controller

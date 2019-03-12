@@ -3,6 +3,7 @@ namespace Oxzion\Service;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Test\ServiceTest;
+use Email\Service\EmailService;
 
 class UserServiceTest extends ServiceTest {
 
@@ -21,10 +22,11 @@ class UserServiceTest extends ServiceTest {
         $config = $this->getApplicationConfig();
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $table = $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTable::class);
-        $userService = new UserService($config, $dbAdapter, $table);
+        $email = $this->getApplicationServiceLocator()->get(EmailService::class);
+        $userService = new UserService($config, $dbAdapter, $table, $email);
         return $userService;
     }
-    public function testGetPriileges(){
+    public function testGetPrivileges(){
         $userService = $this->getUserService();
         $data = $userService->getPrivileges(1);
         $this->assertEquals(isset($data), true);
