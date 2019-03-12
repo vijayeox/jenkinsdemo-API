@@ -2,13 +2,9 @@
 namespace App;
 
 use App\Controller\AppController;
-use Oxzion\Test\ControllerTest;
 use App\Model;
-use PHPUnit\DbUnit\TestCaseTrait;
+use Oxzion\Test\ControllerTest;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
-use Oxzion\Utils\FileUtils;
 
 
 class AppControllerTest extends ControllerTest
@@ -26,6 +22,22 @@ class AppControllerTest extends ControllerTest
         return $dataset;
     }
 
+    public function testGetList()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+//        print_r($content);exit;?
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][0]['uuid'], '5c822d497f44d');
+        $this->assertEquals($content['data'][0]['name'], 'App 1');
+        $this->assertEquals($content['data'][1]['uuid'], '5c822d497f44a');
+        $this->assertEquals($content['data'][1]['name'], 'App 2');
+    }
+
     protected function setDefaultAsserts()
     {
         $this->assertModuleName('App');
@@ -34,39 +46,31 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    public function testGetList(){
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['uuid'], 1);
-        $this->assertEquals($content['data'][0]['name'], 'App 1');
-        $this->assertEquals($content['data'][1]['uuid'], 2);
-        $this->assertEquals($content['data'][1]['name'], 'App 2');
-    }
-    public function testGet(){
+    public function testGet()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/1', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], 1);
+        $this->assertEquals($content['data'][0]['uuid'], '5c822d497f44d');
         $this->assertEquals($content['data'][0]['name'], 'App 1');
     }
-    public function testGetNotFound(){
+
+    public function testGetNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/64', 'GET');
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-    public function testCreate(){
+
+    public function testCreate()
+    {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'App 3','type' => 2, 'category' => 'EXAMPLE_CATEGORY'];
+        $data = ['name' => '5c822d497f44n', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_app'));
         $this->dispatch('/app', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -76,7 +80,9 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_app'));
     }
-    public function testCreateWithOutTextFailure(){
+
+    public function testCreateWithOutTextFailure()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['org_id' => 4];
         $this->setJsonContent(json_encode($data));
@@ -89,11 +95,12 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
 
-    public function testCreateAccess() {
-        $this->initAuthToken($this->employeeUser);
-        $data = ['name' => 'App 3','type' => 2, 'category' => 'EXAMPLE_CATEGORY'];
+    public function testCreateAccess()
+    {
+        $this->initAuthToken($this->employeeUserId);
+        $data = ['name' => '5c822d497f44n', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app', 'POST', null);
+        $this->dispatch('/app', 'POST', $data);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class); // as specified in router's controller name alias
@@ -104,9 +111,10 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
-        
-    public function testUpdate() {
-        $data = ['name' => 'App New Name'];
+
+    public function testUpdate()
+    {
+        $data = ['name' => '5c822d497f44u', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1', 'PUT', null);
@@ -117,11 +125,12 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
     }
 
-    public function testUpdateRestricted() {
-        $data = ['name' => 'App New Name'];
-        $this->initAuthToken($this->employeeUser);
+    public function testUpdateRestricted()
+    {
+        $data = ['name' => '5c822d497f44u', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
+        $this->initAuthToken($this->employeeUserId);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1', 'PUT', null);
+        $this->dispatch('/app/1', 'PUT', $data);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class); // as specified in router's controller name alias
@@ -132,9 +141,10 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
-    
-    public function testUpdateNotFound(){
-        $data = ['name' => 'App New Name'];
+
+    public function testUpdateNotFound()
+    {
+        $data = ['name' => '5c822d497f44u', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/64', 'PUT', null);
@@ -144,7 +154,8 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testDelete(){
+    public function testDelete()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/2', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -153,13 +164,14 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testDeleteNotFound(){
+    public function testDeleteNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/24783', 'DELETE');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');        
+        $this->assertEquals($content['status'], 'error');
     }
 }
