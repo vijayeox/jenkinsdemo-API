@@ -111,7 +111,10 @@ class ProjectService extends AbstractService {
     	return $resultSet->toArray();
     }
     public function getUserList($id) {
-        $queryString = "SELECT ox_user.id,ox_user.name FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id where ox_project.id = ".$id." AND ox_project.isdeleted!=1 ";
+        if(!isset($id)) {
+            return 0;
+        }
+        $queryString = "SELECT ox_user.id,ox_user.name FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id where ox_project.id = ".$id." AND ox_project.isdeleted!=1";
         $order = "order by ox_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, null , null, $order)->toArray();
         return $resultSet?$resultSet:0;
@@ -147,6 +150,7 @@ class ProjectService extends AbstractService {
             if((in_array($project_id, $resultSet))&&(count(array_intersect($userSingleArray, $resultSet_User))==count($userSingleArray))) {
                 $sql = $this->getSqlObject();
                 $delete = $sql->delete('ox_user_project');
+                $delete->where(['project_id'=>$project_id]);
                 $result = $this->executeUpdate($delete);
             	$storeData = array();
                 if($userArray){
@@ -156,8 +160,7 @@ class ProjectService extends AbstractService {
                     $userId = AuthContext::get(AuthConstants::USER_ID);
                     $queryString =$this->multiInsertOrUpdate('ox_user_project',$storeData,array());
                 }
-            }
-            else {
+            } else {
                 return 0;
             }
         }
