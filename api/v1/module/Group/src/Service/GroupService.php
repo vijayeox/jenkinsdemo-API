@@ -96,7 +96,7 @@ class GroupService extends AbstractService {
         return $count;
     }
 
-    public function getuserlist($id) {
+    public function getUserList($id) {
         $queryString = "SELECT ox_user.id,ox_user.name FROM oxapi.ox_user left join ox_user_group on ox_user.id = ox_user_group.avatar_id left join ox_group on ox_group.id = ox_user_group.group_id where ox_group.id = ".$id." ";
         $order = "order by ox_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, null, null, $order)->toArray();
