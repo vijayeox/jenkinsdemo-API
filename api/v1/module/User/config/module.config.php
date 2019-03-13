@@ -38,7 +38,6 @@ return [
                         'action' => 'getUserDetail',
                         'access' => [
                             // SET ACCESS CONTROL
-                            'getUserDetail' => 'MANAGE_USER_READ',
                         ],
                     ],
                 ],
