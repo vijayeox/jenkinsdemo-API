@@ -164,7 +164,7 @@ class ProjectController extends AbstractApiController {
     /**
     * GET all users in a particular Project API
     * @api
-    * @link /project/:projectid/getusers
+    * @link /project/:projectid/users
     * @method GET
     * @return array $dataget list of Projects by User
     * <code>status : "success|error",

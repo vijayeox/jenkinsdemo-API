@@ -27,7 +27,7 @@ return [
                     ],
                 ],
             ],
-            'projectuser' => [
+            'projectusersave' => [
                 'type'    => Segment::class,
                 'options' => [
                     'route'    => '/project/:projectId/save',
@@ -41,10 +41,10 @@ return [
                     ],
                 ],
             ],
-            'deleteproject' => [
+            'projectuser' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project/:projectId/getusers',
+                    'route'    => '/project/:projectId/users',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'method' => 'GET',
