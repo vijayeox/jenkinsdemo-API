@@ -356,20 +356,6 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testLoggedInUserAccess()
-    {
-        $this->initAuthToken($this->employeeUser);
-        $this->dispatch('/user/me/m', 'GET');
-        $this->assertResponseStatusCode(401);
-        $this->assertModuleName('User');
-        $this->assertControllerName(UserController::class); // as specified in router's controller n
-        $this->assertControllerClass('UserController');
-        $this->assertMatchedRouteName('loggedInUser');
-        $this->assertResponseHeaderContains('content-type', 'application/json');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
     public function testLoggedInUserCompleteDetails()
     {
         $this->initAuthToken($this->adminUser);
