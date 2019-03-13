@@ -276,7 +276,8 @@ class UserService extends AbstractService
             ->from('ox_organization')
             ->columns(array('id', 'name'))
             ->where(array('ox_organization.id' => $id));
-        return $this->executeQuery($select)->toArray();
+        $result = $this->executeQuery($select)->toArray();
+        return $result[0];
     }
 
     public function getPrivileges($userId)
