@@ -122,6 +122,7 @@ class GroupService extends AbstractService {
                 if((count(array_diff($userSingleArray, $avatar_id))!=0)&&(count(array_intersect($userSingleArray, $resultSet_User))==count($userSingleArray))) {
                     $sql = $this->getSqlObject();
                     $delete = $sql->delete('ox_user_group');
+                    $delete->where(['group_id'=>$id]);
                     $result = $this->executeUpdate($delete);
                     foreach ($userArray as $key => $value) {
                         $storeData[] = array('group_id'=>$id,'avatar_id'=>$value['id']);
