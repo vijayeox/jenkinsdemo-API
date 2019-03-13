@@ -191,7 +191,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testgetuserlist() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/1/getusers','GET'); 
+        $this->dispatch('/group/1/users','GET'); 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -200,7 +200,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testgetuserlistNotFound() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/64/getusers','GET'); 
+        $this->dispatch('/group/64/users','GET'); 
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);

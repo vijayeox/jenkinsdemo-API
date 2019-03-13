@@ -97,20 +97,10 @@ class GroupService extends AbstractService {
     }
 
     public function getuserlist($id) {
-        $queryString = "select id from ox_group";
-        $order = "order by ox_group.id";
-        $resultSet_temp = $this->executeQuerywithParams($queryString, null, null, $order)->toArray();
-        $resultSet=array_map('current', $resultSet_temp);
-        if(in_array($id, $resultSet)) {
-            $query = "select avatar_id from ox_user_group";
-            $where = "where group_id =".$id;
-            $order = "order by ox_user_group.group_id";
-            $resultSet_User = $this->executeQuerywithParams($query, $where, null, $order)->toArray();
-            return $resultSet_User;
-        }
-        else {
-            return 0;
-        }
+        $queryString = "SELECT ox_user.id,ox_user.name FROM oxapi.ox_user left join ox_user_group on ox_user.id = ox_user_group.avatar_id left join ox_group on ox_group.id = ox_user_group.group_id where ox_group.id = ".$id." ";
+        $order = "order by ox_user.id";
+        $resultSet = $this->executeQuerywithParams($queryString, null, null, $order)->toArray();
+        return $resultSet?$resultSet:0;
     }
 
     public function saveUser($id,$data) {

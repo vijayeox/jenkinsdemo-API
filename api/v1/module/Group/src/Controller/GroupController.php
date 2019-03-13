@@ -137,7 +137,7 @@ class GroupController extends AbstractApiController {
     /**
     * GET all users in a particular Group API
     * @api
-    * @link /group/:groupid/getusers
+    * @link /group/:groupid/users
     * @method GET
     * @return array $dataget list of groups by User
     * <code>status : "success|error",
