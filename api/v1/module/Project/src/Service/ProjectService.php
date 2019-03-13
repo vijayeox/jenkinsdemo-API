@@ -111,7 +111,7 @@ class ProjectService extends AbstractService {
     	return $resultSet->toArray();
     }
     public function getUserList($id) {
-        $queryString = "SELECT ox_user.id,ox_user.name FROM oxapi.ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id where ox_project.id = ".$id." AND ox_project.isdeleted!=1 ";
+        $queryString = "SELECT ox_user.id,ox_user.name FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id where ox_project.id = ".$id." AND ox_project.isdeleted!=1 ";
         $order = "order by ox_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, null , null, $order)->toArray();
         return $resultSet?$resultSet:0;
