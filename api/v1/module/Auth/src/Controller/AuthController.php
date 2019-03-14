@@ -107,7 +107,8 @@ class AuthController extends AbstractApiControllerHelper
                     $userDetail = $this->userService->getUserDetailsbyUserName($uname);   
                     $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($orgId);
                     if (!empty($userTokenInfo)) {
-                        $dataJwt = $this->getTokenPayload($uname, $orgId);
+                        $data = ['username' => $uname, 'orgid' => $orgId];
+                        $dataJwt = $this->getTokenPayload($data);
                         $jwt = $this->generateJwtToken($dataJwt);
                         $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
                         return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken]);
