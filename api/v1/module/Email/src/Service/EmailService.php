@@ -271,4 +271,28 @@ class EmailService extends AbstractService
 //        $transport->send($mail);
         return 1;
     }
+
+
+    public function sendPasswordResetEmail($userData)
+    {
+        $baseFolder = $this->config['DATA_FOLDER'];
+        $mainBody = "
+            <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
+                <img src= " . $baseFolder . "'http://localhost:8081/79435fed1e7159c4c558a8192ac97fe0.png' class='CToWUd' height='35'>
+            </div>
+            <div style='line-height: 24px'>Dear " . $userData['firstname'] . ", </br/>
+            <h2>Password Reset Code</h2>
+                You have initiated a password reset request for your OXZion profile <br/><br/>
+                Here is your Code: " . $userData['password_reset_code'] . " <br/>
+                This code is active for the next 30 minutes only! <br/>
+            </div>";
+        $mail = new Message();
+        $mail->setBody($mainBody);
+        $mail->setFrom('admin@oxzion.com', 'OX Zion Admin');
+        $mail->addTo($userData['email'], $userData['firstname'] . " " . $userData['lastname']);
+        $mail->setSubject($userData['firstname'] . ', You login details for OX Zion!');
+        $transport = new Mail\Transport\Sendmail();
+//        $transport->send($mail);
+        return 1;
+    }
 }

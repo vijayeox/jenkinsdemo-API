@@ -1,6 +1,7 @@
 <?php
 namespace Oxzion\Service;
 
+use Oxzion\Utils\BosUtils;
 use Zend\Db\Sql\Sql;
 use Bos\Auth\AuthContext;
 use Bos\Auth\AuthConstants;
@@ -141,7 +142,7 @@ class UserService extends AbstractService
         $id = $this->table->getLastInsertValue();
         $data['id'] = $id;
         $form->password = $tmpPwd;
-//        $this->emailService->sendUserEmail($form); C
+//        $this->emailService->sendUserEmail($form);
         $this->commit();
         return $count;
     }
@@ -648,5 +649,31 @@ class UserService extends AbstractService
     {
         $fileName = explode('-', $file, 2);
         return $fileName[1];
+    }
+
+    public function sendResetPasswordCode($email)
+    {
+        $resetPasswordCode = BosUtils::randomPassword(); // I am using the randomPassword generator to do this since it is similar to a password generation
+        $userId = AuthContext::get(AuthConstants::USER_ID);
+        $userDetails = $this->getUser($userId);
+        if ($email === $userDetails['email']) {
+            $userReset['id'] = $id = $userDetails['id'];
+            $userReset['email'] = $userDetails['email'];
+            $userReset['firstname'] = $userDetails['firstname'];
+            $userReset['lastname'] = $userDetails['lastname'];
+            $userReset['password_reset_code'] = $resetPasswordCode;
+            $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+//            print_r($userReset);exit;
+            //Code to update the password reset and expiration time
+            $userUpdate = $this->updateUser($id, $userReset);
+            if ($userUpdate) {
+                $this->emailService->sendPasswordResetEmail($userReset);
+                return $userReset;
+            }
+            return 0;
+        } else {
+            return 0;
+        }
+
     }
 }

@@ -1,6 +1,9 @@
 <?php
 namespace User\Controller;
 
+use DeepCopy\f007\FooDateTimeZone;
+use Oro\Component\MessageQueue\Transport\Exception\Exception;
+use Zend\Db\Sql\Ddl\Column\Datetime;
 use Zend\Log\Logger;
 use Oxzion\Model\User;
 use Oxzion\Model\UserTable;
@@ -335,7 +338,7 @@ class UserController extends AbstractApiController
      */
     private function getUserInfo($id, $params)
     {
-        try{
+        try {
             $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
             if ($type === 'a') {
                 $result = $this->userService->getUser($id);
@@ -344,18 +347,17 @@ class UserController extends AbstractApiController
             } else {
                 $result = $this->userService->getUserWithMinimumDetails($id);
             }
-            if(isset($result)){
-                $baseUrl = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'];
+            if (isset($result)) {
+                $baseUrl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
                 $icon = $result['icon'];
-                $result['icon'] = $baseUrl."/user/profile/".$result["uuid"];
-            
+                $result['icon'] = $baseUrl . "/user/profile/" . $result["uuid"];
+
             }
-        }
-        catch (ValidationException $e) {
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if (($result == 0)||(empty($result))) {
+        if (($result == 0) || (empty($result))) {
             $response = ['id' => $id];
             return $this->getErrorResponse("Failed to find User", 404, $response);
         }
@@ -471,4 +473,48 @@ class UserController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($responseData, 200);
     }
+
+    public function forgotPasswordAction()
+    {
+        $data = $this->params()->fromPost();
+        $email = $data['email'];
+        try {
+            $responseData = $this->userService->sendResetPasswordCode($email);
+            if ($responseData === 0) {
+                return $this->getErrorResponse("The email entered does not match your profile email", 404);
+            }
+        } catch (Exception $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Something went wrong with password reset, please contact your administrator", 500);
+        }
+        return $this->getSuccessResponseWithData($responseData, 200);
+
+    }
+
+
+    public function updateNewPasswordAction()
+    {
+        $data = $this->params()->fromPost();
+        $userId = AuthContext::get(AuthConstants::USER_ID);
+        $userDetail = $this->userService->getUser($userId);
+        $resetCode = $data['password_reset_code'];
+        $newPassword = md5(sha1($data['new_password']));
+        $confirmPassword = md5(sha1($data['confirm_password']));
+        $date = $userDetail['password_reset_expiry_date'];
+        $now = Date("Y-m-d H:i:s");
+        if ($date < $now) {
+            return $this->getErrorResponse("The password reset code has expired, please try again", 400);
+        } elseif ($resetCode !== $userDetail['password_reset_code']) {
+            return $this->getErrorResponse("You have entered an incorrect code", 400);
+        } else if (($resetCode == $userDetail['password_reset_code']) && ($newPassword == $confirmPassword)) {
+            $formData = array('id' => $userDetail['id'], 'password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null, 'password_reset_code' => null, 'password_reset_expiry_date' => null);
+            $this->update($userDetail['id'], $formData);
+            return $this->getSuccessResponseWithData($data, 200);
+        } else {
+            $response = ['id' => $userDetail['id']];
+            return $this->getErrorResponse("Failed to Update Password", 404, $response);
+        }
+
+    }
+
 }

@@ -3,7 +3,8 @@ namespace Oxzion\Model;
 
 use Bos\Model\Entity;
 
-class User extends Entity{
+class User extends Entity
+{
 
     protected $data = array(
         'id' => NULL,
@@ -39,10 +40,13 @@ class User extends Entity{
         'modified_by' => NULL,
         'date_of_join' => NULL,
         'preferences' => NULL,
+        'password_reset_code' => NULL,
+        'password_reset_expiry_date' => NULL,
     );
 
-    public function validate(){
-        $required = array('username','password','firstname','lastname','email','orgid','status','date_of_birth','designation','gender','managerid','date_of_join','date_created','created_by');
+    public function validate()
+    {
+        $required = array('username', 'password', 'firstname', 'lastname', 'email', 'orgid', 'status', 'date_of_birth', 'designation', 'gender', 'managerid', 'date_of_join', 'date_created', 'created_by');
         $this->validateWithParams($required);
     }
 }

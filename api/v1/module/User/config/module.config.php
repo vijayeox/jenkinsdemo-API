@@ -59,16 +59,16 @@ return [
                 ],
             ],
             'getUserAppsAndPrivileges' => [
-               'type' => Segment::class,
-               'options' => [
-                   'route' => '/user/me/access',
-                   'defaults' => [
-                       'controller' => Controller\UserController::class,
-                       'method' => 'GET',
-                       'action' => 'getUserAppsAndPrivileges',
-                       'access' => [
-                           // SET ACCESS CONTROL
-                           'getUserAppsAndPrivileges' => 'MANAGE_USER_WRITE',
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/me/access',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'GET',
+                        'action' => 'getUserAppsAndPrivileges',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            'getUserAppsAndPrivileges' => 'MANAGE_USER_WRITE',
                         ],
                     ],
                 ],
@@ -210,13 +210,35 @@ return [
                 ],
             ],
             'updateProfile' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/user/profile',
+                    'route' => '/user/profile',
                     'defaults' => [
                         'controller' => Controller\ProfilePictureController::class,
                         'method' => 'POST',
                         'action' => 'update'
+                    ],
+                ],
+            ],
+            'forgotPassword' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/me/forgotpassword',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'forgotPassword'
+                    ],
+                ],
+            ],
+            'updateNewPassword' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/me/updatenewpassword',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'updateNewPassword'
                     ],
                 ],
             ],
