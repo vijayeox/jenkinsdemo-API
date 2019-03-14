@@ -389,5 +389,73 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-    }    
+    }
+
+    public function testForgotPassword()
+    {
+        $this->initAuthToken($this->managerUser);
+        $data = ['email' => 'test@va.com'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/me/forgotpassword', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('forgotpassword');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->resetCode = $content['data']['password_reset_code'];
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['email'], $data['email']);
+    }
+
+    public function testForgotPasswordWrongEmail()
+    {
+        $this->initAuthToken($this->managerUser);
+        $data = ['email' => 'wrongemail@va.com'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/me/forgotpassword', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts('forgotpassword');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'The email entered does not match your profile email');
+    }
+
+    public function testUpdateNewPassword()
+    {
+        $this->initAuthToken($this->managerUser);
+        $data = ['password_reset_code' => "pvAQyJkY", 'new_password' => 'password', 'confirm_password' => 'password'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/me/updatenewpassword', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('updatenewpassword');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['new_password'], $data['new_password']);
+    }
+
+    public function testUpdateNewPasswordWithWrongPassword()
+    {
+        $this->initAuthToken($this->managerUser);
+        $data = ['password_reset_code' => "pvAQyJkY", 'new_password' => 'password', 'confirm_password' => 'wrongpassword'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/me/updatenewpassword', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts('updatenewpassword');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+//        print_r($content);exit;
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], "Failed to Update Password");
+    }
+
+    public function testUpdateNewPasswordWithWrongCode()
+    {
+        $this->initAuthToken($this->managerUser);
+        $data = ['password_reset_code' => "wrongCode", 'new_password' => 'password', 'confirm_password' => 'password'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/me/updatenewpassword', 'POST', $data);
+        $this->assertResponseStatusCode(400);
+        $this->setDefaultAsserts('updatenewpassword');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+//        print_r($content);exit;
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], "You have entered an incorrect code");
+    }
 }
