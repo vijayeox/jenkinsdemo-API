@@ -18,16 +18,20 @@ class SecurityManager{
 	public function checkAccess($e){
 		$accessName = $e->getRouteMatch()->getParam('access', null);
 		$actionName = $e->getRouteMatch()->getParam('action', null);
-		if(isset($actionName)){
+		if(isset($actionName) && !empty($accessName) ){
 			$api_permission = $accessName[$actionName];
 		} else {
-        	$api_permission = $accessName[strtolower($e->getRequest()->getMethod())];
+			if(!empty($accessName)){
+        		$api_permission = $accessName[strtolower($e->getRequest()->getMethod())];
+			} else {
+				$api_permission = NULL;
+			}
 		}
 		if(AuthContext::get(AuthConstants::API_KEY)) {
 			return;
 		}
 		// print_r($accessName);exit;
-		if(isset($accessName)){
+		if(isset($accessName) && $api_permission){
 			if($accessName && !$this->isGranted($api_permission)){
 				$response = $e->getResponse();
 				$response->setStatusCode(401);
