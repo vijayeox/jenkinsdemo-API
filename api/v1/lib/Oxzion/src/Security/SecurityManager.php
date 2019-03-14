@@ -28,7 +28,7 @@ class SecurityManager{
 		}
 		// print_r($accessName);exit;
 		if(isset($accessName)){
-			if(!$this->isGranted($api_permission)){
+			if($accessName && !$this->isGranted($api_permission)){
 				$response = $e->getResponse();
 				$response->setStatusCode(401);
 				$jsonModel = ErrorHandler::buildErrorJson("You have no Access to this API");

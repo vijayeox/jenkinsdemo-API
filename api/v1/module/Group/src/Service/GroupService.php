@@ -96,8 +96,8 @@ class GroupService extends AbstractService {
         return $count;
     }
 
-    public function getuserlist($id) {
-        $queryString = "SELECT ox_user.id,ox_user.name FROM oxapi.ox_user left join ox_user_group on ox_user.id = ox_user_group.avatar_id left join ox_group on ox_group.id = ox_user_group.group_id where ox_group.id = ".$id." ";
+    public function getUserList($id) {
+        $queryString = "SELECT ox_user.id,ox_user.name FROM ox_user left join ox_user_group on ox_user.id = ox_user_group.avatar_id left join ox_group on ox_group.id = ox_user_group.group_id where ox_group.id = ".$id." ";
         $order = "order by ox_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, null, null, $order)->toArray();
         return $resultSet?$resultSet:0;
@@ -122,6 +122,7 @@ class GroupService extends AbstractService {
                 if((count(array_diff($userSingleArray, $avatar_id))!=0)&&(count(array_intersect($userSingleArray, $resultSet_User))==count($userSingleArray))) {
                     $sql = $this->getSqlObject();
                     $delete = $sql->delete('ox_user_group');
+                    $delete->where(['group_id'=>$id]);
                     $result = $this->executeUpdate($delete);
                     foreach ($userArray as $key => $value) {
                         $storeData[] = array('group_id'=>$id,'avatar_id'=>$value['id']);

@@ -110,24 +110,16 @@ class ProjectService extends AbstractService {
     	$resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
     	return $resultSet->toArray();
     }
-
-    public function getListOfUsers($project_id) {
-        $queryString = "select id from ox_project";
-        $order = "order by ox_project.id";
-        $where = "where ox_project.isdeleted!=1";
-        $resultSet_temp = $this->executeQuerywithParams($queryString, $where, null, $order)->toArray();
-        $resultSet=array_map('current', $resultSet_temp);
-        if(in_array($project_id, $resultSet)) {
-            $query = "select user_id from ox_user_project";
-            $where = "where project_id =".$project_id;
-            $order = "order by ox_user_project.user_id";
-            $resultSet_User = $this->executeQuerywithParams($query, $where, null, $order)->toArray();
-            return $resultSet_User;
-        }
-        else {
+    public function getUserList($id) {
+        if(!isset($id)) {
             return 0;
         }
+        $queryString = "SELECT ox_user.id,ox_user.name FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id where ox_project.id = ".$id." AND ox_project.isdeleted!=1";
+        $order = "order by ox_user.id";
+        $resultSet = $this->executeQuerywithParams($queryString, null , null, $order)->toArray();
+        return $resultSet?$resultSet:0;
     }
+
     //Writing this incase we need to get all projects later. Please do not delete - Brian
     /*public function getProject($id) { 
     	$userId = AuthContext::get(AuthConstants::USER_ID);
@@ -158,6 +150,7 @@ class ProjectService extends AbstractService {
             if((in_array($project_id, $resultSet))&&(count(array_intersect($userSingleArray, $resultSet_User))==count($userSingleArray))) {
                 $sql = $this->getSqlObject();
                 $delete = $sql->delete('ox_user_project');
+                $delete->where(['project_id'=>$project_id]);
                 $result = $this->executeUpdate($delete);
             	$storeData = array();
                 if($userArray){
@@ -167,8 +160,7 @@ class ProjectService extends AbstractService {
                     $userId = AuthContext::get(AuthConstants::USER_ID);
                     $queryString =$this->multiInsertOrUpdate('ox_user_project',$storeData,array());
                 }
-            }
-            else {
+            } else {
                 return 0;
             }
         }

@@ -181,7 +181,7 @@ class ProjectControllerTest extends ControllerTest {
 
     public function testGetListOfUsers() {
     	$this->initAuthToken($this->adminUser);
-    	$this->dispatch('/project/1/getusers','GET'); 
+    	$this->dispatch('/project/1/users','GET'); 
     	$this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
     	$content = json_decode($this->getResponse()->getContent(), true);
@@ -190,12 +190,11 @@ class ProjectControllerTest extends ControllerTest {
 
     public function testGetListOfUsersNotFound() {
     	$this->initAuthToken($this->adminUser);
-    	$this->dispatch('/project/64/getusers','GET'); 
+    	$this->dispatch('/project/64/users','GET'); 
     	$this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
     	$content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error'); 
     }
-
 }
 ?>

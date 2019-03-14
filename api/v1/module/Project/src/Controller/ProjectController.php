@@ -164,7 +164,7 @@ class ProjectController extends AbstractApiController {
     /**
     * GET all users in a particular Project API
     * @api
-    * @link /project/:projectid/getusers
+    * @link /project/:projectid/users
     * @method GET
     * @return array $dataget list of Projects by User
     * <code>status : "success|error",
@@ -175,7 +175,7 @@ class ProjectController extends AbstractApiController {
         $params = $this->params()->fromRoute();
         $id=$params[$this->getIdentifierName()];
         try {
-            $count = $this->projectService->getListOfUsers($params[$this->getIdentifierName()]);
+            $count = $this->projectService->getUserList($params[$this->getIdentifierName()]);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);

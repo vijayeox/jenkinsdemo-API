@@ -35,7 +35,7 @@ class PrivilegeController extends AbstractApiController
     /**
      * Get list of all the privileges for the logged in user for a specific app
      * @api
-     * @link /privilege/app/[/:appId]
+     * @link /privilege/app/:appId
      * @method get
      * @param array $data Array of elements as shown
      * <code> {

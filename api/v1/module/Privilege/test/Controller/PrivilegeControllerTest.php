@@ -36,7 +36,7 @@ class PrivilegeControllerTest extends ControllerTest
     public function testGetUserPrivileges()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/privilege/app/5c767e4297115', 'GET');
+        $this->dispatch('/privilege/app/5c828ac595c3f', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('userprivileges');
@@ -50,7 +50,7 @@ class PrivilegeControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/privilege/app/23435WR34APPS', 'GET');
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('userprivileges');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
