@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y zlib1g-dev \
 RUN a2enmod rewrite \
  && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf \
  && sed -i 's!Listen\ 80!Listen\ 8075!g' /etc/apache2/ports.conf \
+ && sed -i 's!VirtualHost\ \*:80!VirtualHost\ \*:8075!g' /etc/apache2/sites-enabled/000-default.conf \
  && mv /var/www/html /var/www/public \
  && curl -sS https://getcomposer.org/installer \
   | php -- --install-dir=/usr/local/bin --filename=composer
@@ -43,6 +44,6 @@ RUN mkdir /integrations \
 
 WORKDIR /integrations
 
-EXPOSE 80
+EXPOSE 80 8075
 
 ENTRYPOINT  ["./docker-entrypoint.sh"]

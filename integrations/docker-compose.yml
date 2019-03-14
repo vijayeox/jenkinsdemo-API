@@ -23,73 +23,77 @@ services:
                 #adding metadata to the resulting image using Docker labels.
                 labels:
                         com.oxapp.description: "Chat App"
-        #second app                           
-        mail:
+        #php apps                           
+        phpapps:
                 build:
-                        context: ./rainloop
+                        context: .
                         dockerfile: Dockerfile
                 #Expose ports, can add multiple
-                ports:
-                          - "8075:80"
-                labels:
-                        com.example.description: "Mailing App"
-        #third app and fourth app(running camel and activemq together)
-        camel:
-                build:
-                        context: ./camel
-                        dockerfile: Dockerfile
-
                 network_mode: "host"
-                labels:
-                        com.oxapp.description: "Apache Activemq/Camel"
-        #fifth app
-        elasticsearch:
-                #Specify the image to start the container from. Can either be a repository/tag or a partial image ID.
-                image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
-                container_name: elasticsearch_654
-                environment:
-                          - http.host=0.0.0.0
-                          - transport.host=0.0.0.0
-                          - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
                 volumes:
-                          - esdata:/usr/share/elasticsearch/data
-                          - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-                ports:
-                          - 9200:9200
-                          - 9300:9300
+                          - "/var/lib/oxzion/rainloop/data:/var/www/public/rainloop/data"
+                          - ".:/integrations"
                 labels:
-                        com.oxapp.description: "Elastic Search"
-                #Override the default ulimits for a container. You can either specify a single limit as an integer or soft/hard limits as a mapping.
-                ulimits:
-                          memlock:
-                                    soft: -1
-                                    hard: -1
-                          nofile:
-                                    soft: 65536
-                                    hard: 65536
-                mem_limit: 2g
-                cap_add:
-                          - IPC_LOCK
-        #part of elastic search
-        kibana:
-                image: docker.elastic.co/kibana/kibana:6.5.4
-                container_name: kibana_654
-                environment:
-                          - SERVER_HOST=0.0.0.0
-                volumes:
-                          - ./kibana.yml:/usr/share/kibana/config/kibana.yml
-                ports:
-                          - 5601:5601
-        #part of elastic search
-        headPlugin:
-                image: mobz/elasticsearch-head:5
-                container_name: head_654
-                ports:
-                          - 9100:9100
+                        com.example.description: "PHP Apps"
+                stdin_open: true
+                tty: true
+        #third app and fourth app(running camel and activemq together)
+#        camel:
+#                build:
+#                        context: ./camel
+#                        dockerfile: Dockerfile
+#
+#                network_mode: "host"
+#                labels:
+#                        com.oxapp.description: "Apache Activemq/Camel"
+#        #fifth app
+#        elasticsearch:
+#                #Specify the image to start the container from. Can either be a repository/tag or a partial image ID.
+#                image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
+#                container_name: elasticsearch_654
+#                environment:
+#                          - http.host=0.0.0.0
+#                          - transport.host=0.0.0.0
+#                          - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+#                volumes:
+#                          - esdata:/usr/share/elasticsearch/data
+#                          - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+#                ports:
+#                          - 9200:9200
+#                          - 9300:9300
+#                labels:
+#                        com.oxapp.description: "Elastic Search"
+#                #Override the default ulimits for a container. You can either specify a single limit as an integer or soft/hard limits #as a mapping.
+#                ulimits:
+#                          memlock:
+#                                    soft: -1
+#                                    hard: -1
+#                          nofile:
+#                                    soft: 65536
+#                                    hard: 65536
+#                mem_limit: 2g
+#                cap_add:
+#                          - IPC_LOCK
+#        #part of elastic search
+#        kibana:
+#                image: docker.elastic.co/kibana/kibana:6.5.4
+#                container_name: kibana_654
+#                environment:
+#                          - SERVER_HOST=0.0.0.0
+#                volumes:
+#                          - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+#                ports:
+#                          - 5601:5601
+#        #part of elastic search
+#        headPlugin:
+#                image: mobz/elasticsearch-head:5
+#                container_name: head_654
+#                ports:
+#                          - 9100:9100
 
-volumes:
-  esdata:
-    driver: local        
+#volumes:
+#  esdata:
+#    driver: local        
                         
              
                                 
