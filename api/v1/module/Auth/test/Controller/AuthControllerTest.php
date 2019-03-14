@@ -132,7 +132,7 @@ class AuthControllerTest extends ControllerTest{
         $rToken = $content['data']['refresh_token'];
         $jToken = $content['data']['jwt'];
         $this->reset();
-        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTE5MzkwODIsImp0aSI6IjE2Nk85VGhYYjkzRXEzaEtlY3M0SmlzMUQ3OGhUUWpaNlo2b3JqNjdYYW89IiwibmJmIjoxNTUxOTM5MDgyLCJleHAiOjE1NTE5MzkwOTIsImRhdGEiOnsidXNlcm5hbWUiOiJiaGFyYXRnIiwib3JnSWQiOiIxIn19.fXkPbGTarLokHlBq8yxsV_UokBt9TN0MJS2rl_MdPdaOfug6j3PjvVPpUcPxikGEZ8SMvBdy1ffInKKr95Oktw', 'refresh_token' => $rToken];
+        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTI1NDc4MDgsImp0aSI6IkNkNzJyeUJnOXZ2M2g0dDZOc2JFell0VGtYaVBKM3Z5YVwvbGx1aWJyTzhVPSIsIm5iZiI6MTU1MjU0NzgwOCwiZXhwIjoxNTUyNTQ3ODE1LCJkYXRhIjp7InVzZXJuYW1lIjoiYmhhcmF0ZyIsIm9yZ2lkIjoiMSJ9fQ.EQoePmb-g9xN0gME6fL8_SSDK7hzwDcmi21qQy-bW5X0RneA03sfv61btb8Q84rL3fM_Ad8UiLyVTgsFU05Pxw', 'refresh_token' => $rToken];
         $this->dispatch('/refreshtoken', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -147,7 +147,7 @@ class AuthControllerTest extends ControllerTest{
     }
 
     public function testRefreshFailRefreshTokenExpired() {
-        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTE3NzI3OTMsImp0aSI6IjRKZjlqT0dkNjVkNlhvQjBBRUhzb0VWd0VBOEZibkFGbjkyT3kzV09sXC9ZPSIsIm5iZiI6MTU1MTc3Mjc5MywiZXhwIjoxNTUxNzcyODIzLCJkYXRhIjp7InVzZXJuYW1lIjoicmFrc2hpdGgiLCJvcmdJZCI6IjEifX0.rYJg5Jyq2_KdXJZjuc4moYY3Zfr1NWXrWN4cemTwNqv-t0NfXIRw7OShsCQRYbCiC6K_5lSeCwDSxdyZFVSLAA', 'refresh_token' => '13273925815c7e2c7930c794.82022621'];
+        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTI1NDc4MDgsImp0aSI6IkNkNzJyeUJnOXZ2M2g0dDZOc2JFell0VGtYaVBKM3Z5YVwvbGx1aWJyTzhVPSIsIm5iZiI6MTU1MjU0NzgwOCwiZXhwIjoxNTUyNTQ3ODE1LCJkYXRhIjp7InVzZXJuYW1lIjoiYmhhcmF0ZyIsIm9yZ2lkIjoiMSJ9fQ.EQoePmb-g9xN0gME6fL8_SSDK7hzwDcmi21qQy-bW5X0RneA03sfv61btb8Q84rL3fM_Ad8UiLyVTgsFU05Pxw', 'refresh_token' => '13273925815c7e2c7930c794.82022621'];
         $this->dispatch('/refreshtoken', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
@@ -161,7 +161,7 @@ class AuthControllerTest extends ControllerTest{
     }
 
     public function testRefreshFailInvalidToken() {
-        $data = ['jwt' => 'eyJ0eXAiOiJKV1QUzUxMiJ9.eyJpYXQiOjE1NTE3NzI3OTMsImp0aSI6IjRKZjlqT0dkNjVkNlhvQjBBRUhzb0VWd0VBOEZibkFGbjkyT3kzV09sXC9ZPSIsIm5iZiI6MTU1MTc3Mjc5MywiZXhwIjoxNTUxNzcyODIzLCJkYXRhIjp7InVzZXJuYW1lIjoicmFrc2hpdGgiLCJvcmdJZCI6IjEifX0.rYJg5Jyq2_KdXJZjuc4moYY3Zfr1NWXrWN4cemTwNqv-t0NfXIRw7OShsCQRYbCiC6K_5lSeCwDSxdyZFVSLAA', 'refresh_token' => '13273925815c7e2c7930c794.82022621'];
+        $data = ['jwt' => 'eyiJKV1QUzUxMiJ9.eyJpYXQiOjE1NTE3NzI3OTMsImp0aSI6IjRKZjlqT0dkNjVkNlhvQjBBRUhzb0VWd0VBOEZibkFGbjkyT3kzV09sXC9ZPSIsIm5iZiI6MTU1MTc3Mjc5MywiZXhwIjoxNTUxNzcyODIzLCJkYXRhIjp7InVzZXJuYW1lIjoicmFrc2hpdGgiLCJvcmdJZCI6IjEifX0.rYJg5Jyq2_KdXJZjuc4moYY3Zfr1NWXrWN4cemTwNqv-t0NfXIRw7OShsCQRYbCiC6K_5lSeCwDSxdyZFVSLAA', 'refresh_token' => '13273925815c7e2c7930c794.82022621'];
         $this->dispatch('/refreshtoken', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
