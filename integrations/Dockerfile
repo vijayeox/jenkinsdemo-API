@@ -18,6 +18,9 @@ RUN docker-php-ext-install json
 RUN docker-php-ext-install iconv
 RUN docker-php-ext-install curl
 RUN docker-php-ext-install dom
+RUN apt-get update -y && apt-get install -y libpng-dev
+RUN docker-php-ext-install gd
+RUN docker-php-ext-install intl
 RUN apt-get update && apt-get install -y zlib1g-dev \
     && docker-php-ext-install zip
 RUN a2enmod rewrite \
@@ -43,6 +46,8 @@ RUN mkdir /integrations \
     && chown -R www-data:www-data /var/www/ 
 
 WORKDIR /integrations
+
+COPY "custom_php.ini" "/usr/local/etc/php/conf.d/custom_php.ini"
 
 EXPOSE 80 8075
 
