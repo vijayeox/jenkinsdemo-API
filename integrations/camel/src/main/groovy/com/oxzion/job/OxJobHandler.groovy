@@ -1,6 +1,5 @@
 package com.oxzion.job
 
-
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import org.quartz.Job
