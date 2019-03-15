@@ -36,6 +36,19 @@ class MletController extends AbstractApiController
 		$result = $this->mletService->getMlets();
 		return $this->getSuccessResponseWithData($result);
 	}
+
+	public function getResultAction() {
+		try{
+			$params = $this->params()->fromRoute();
+			$id=$params[$this->getIdentifierName()];
+			$data = $this->params()->fromPost();
+			$result= $this->mletService->getResult($id,$data);
+		}catch(ValidationException $e){
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        return $this->getSuccessResponseWithData(array("result"=>$result),201);
+	}
   
 
 }
