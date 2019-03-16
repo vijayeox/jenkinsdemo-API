@@ -11,6 +11,7 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\View\Model\JsonModel;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
+use function GuzzleHttp\json_decode;
 
 class MletController extends AbstractApiController
 {
@@ -39,9 +40,12 @@ class MletController extends AbstractApiController
 
 	public function getResultAction() {
 		try{
+			$request = $this->getRequest();
+			$jsondata = $this->getRequest()->getContent();
+			$data = ($jsondata) ? json_decode($jsondata,true):null;
+	//		$data = $this->params()->fromPost(); 
 			$params = $this->params()->fromRoute();
 			$id=$params[$this->getIdentifierName()];
-			$data = $this->params()->fromPost();
 			$result= $this->mletService->getResult($id,$data);
 		}catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];

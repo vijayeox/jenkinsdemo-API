@@ -37,12 +37,13 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Mlet());
-                    return new TableGateway('mletquestions', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_mlet', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\MletService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\MletService($container->get('config'), $dbAdapter, $container->get(Model\MletTable::class));
+                    return new Service\MletService($container->get('config'), $dbAdapter, $container->get(Model\MletTable::class), $container->get(\Oxzion\Analytics\AnalyticsEngine::class));
                 },
+                
             ],
         ];
     }

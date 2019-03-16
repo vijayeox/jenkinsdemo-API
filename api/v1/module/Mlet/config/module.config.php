@@ -10,7 +10,7 @@ use Zend\Log\Processor\RequestId;
 return [
 	'router' => [
         'routes' => [
-            'mletList' => [
+            'mlet' => [
                 'type'    => Segment::class,
                 'options' => [
                 	'route'    => '/mlet[/:mletId]',
