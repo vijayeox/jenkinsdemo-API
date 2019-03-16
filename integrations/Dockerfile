@@ -8,6 +8,7 @@ RUN apt-get update \
  && apt-get install -y libxslt-dev \
  && apt-get install -y git zlib1g-dev \
  && apt-get install -y supervisor \
+ && apt-get install -y unzip \
  && docker-php-ext-install zip \
  && docker-php-ext-install pdo_mysql \
  && docker-php-ext-install xsl \

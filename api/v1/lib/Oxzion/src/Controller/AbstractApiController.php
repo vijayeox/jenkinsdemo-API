@@ -124,14 +124,16 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
 
         while ($result->valid()) {
             $value = $result->current();
-            $data[] = $value->toArray();
+            if(isset($value)){
+              $data[] = $value->toArray();
+            }
             $result->next();
         }
 
         return $this->getSuccessResponseWithData($data);
     }
 
-    //POST /controller 
+    //POST /controller
     public function create($data)
     {
         $this->log->info($this->logClass . ": create - ");
@@ -159,7 +161,7 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
 
     }
 
-    //PUT /controller/{id} 
+    //PUT /controller/{id}
     public function update($id, $data)
     {
         $this->log->info($this->logClass . ": update for id - $id ");

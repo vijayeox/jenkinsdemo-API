@@ -1,6 +1,6 @@
 package com.oxzion.job
 
-
+import com.oxzion.job.JobSchedulerResponse
 import org.quartz.*
 import org.quartz.impl.StdSchedulerFactory
 import org.slf4j.Logger
@@ -19,14 +19,14 @@ class JobSchedulerHelper {
     @Autowired
     private Scheduler scheduler
 
-    void  schedule(Map payload) {
+    def schedule(Map payload) {
 
         try {
 //TODO use the schedule details passed in the
 
             JobDetail jobDetail = buildJobDetail(payload)
             /*Trigger trigger = buildJobTrigger(jobDetail, dateTime);*/
-            if(!jobDetail) {
+            if(jobDetail) {
                 Trigger trigger = newTrigger().forJob(jobDetail)
                         .withIdentity(jobDetail.getKey().getName(), "Job")
                         .withDescription("Job")
@@ -35,6 +35,7 @@ class JobSchedulerHelper {
                 scheduler.scheduleJob(jobDetail, trigger)
                 //Shutdown hook?
             }
+            return jobDetail
             // Grab the Scheduler instance from the Factory
             /*SchedulerFactory schedulerFactory = new StdSchedulerFactory()
             Scheduler scheduler = schedulerFactory.getScheduler()

@@ -54,9 +54,13 @@ export default class DialogContainer extends React.Component {
       "/attachment",
       {
         type: "ANNOUNCEMENT",
-        files: "filePond"
+        files: 'C:\\Users\\VA_User\\Downloads\\batman__dark-wallpaper-1920x1080.jpg'
       },
-      "post"
+      "post",
+      {
+        contentType: false,
+ mimeType: "multipart/form-data",
+      }
     );
     return ancFile;
   }
@@ -99,7 +103,7 @@ export default class DialogContainer extends React.Component {
     if (this.props.formAction == "edit") {
       this.editAnnouncements();
     } else {
-      this.pushData().then(response => {
+      this.pushFile().then(response => {
         var addResponse = response.data.id;
         this.props.action(addResponse);
       });
@@ -108,6 +112,7 @@ export default class DialogContainer extends React.Component {
   };
 
   render() {
+
     return (
       <Validator>
         <Dialog onClose={this.props.cancel}>
@@ -163,16 +168,33 @@ export default class DialogContainer extends React.Component {
                 </div>
               </div>
 
+
               <div className="row">
                 <div className="col s12">
                   <FilePond
+                    server={
+                      {
+                        url:'http://jenkins.oxzion.com:8080/attachment',
+                        process:{
+                          ondata: (fd) => {
+                            fd.append('type', 'ANNOUNCEMENT');
+                            fd.append('files', 'C:\\Users\\VA_User\\Downloads\\batman__dark-wallpaper-1920x1080.jpg');
+                            return fd;
+                          },
+                          method:'POST',
+                          headers: {Authorization:'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTI1NDc3MjAsImp0aSI6IkhiRWR4UEV5aHNRS0hrWDY1eWRidEpMbkdqeHZIbE1jeEZJcStuVHhDMk09IiwibmJmIjoxNTUyNTQ3NzIwLCJleHAiOjE1NTI2MTk3MjAsImRhdGEiOnsidXNlcm5hbWUiOiJiaGFyYXRnIiwib3JnaWQiOiIxIn19.rj0ufa_9iw8NdO4-o3sY5b6rTpOfS9t1bLY8hoA5uR7A6tLMnTY4-2RHI_GebToFY2_rFIvXUDdP0qtn5Alu8A'}
+                        }
+                      }
+                    }
                     allowMultiple={true}
                     labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                    oninit={() => this.handleInit() }
                   />
                 </div>
               </div>
             </form>
           </div>
+
 
           <DialogActionsBar args={this.core}>
             <button className="k-button" onClick={this.props.cancel}>
