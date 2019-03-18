@@ -55,7 +55,7 @@ class AttachmentService extends AbstractService{
         if(isset($file['name'])){
             $uniqueId = uniqid();
             $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-            $data['file_name'] = str_replace(".".$ext, "", $file['name']);
+            $data['file_name'] = $file['name'];
             $data['extension'] = $ext;
             $file['name'] = $data['file_name'];
             $data['uuid'] = $uniqueId;
@@ -67,7 +67,7 @@ class AttachmentService extends AbstractService{
         $folderPath = $this->constructPath($data['type']);
         $form = new Attachment();
         $data['created_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d H:i:s');
-        $path = realpath($folderPath.$data['file_name'].".".$data['extension'])?realpath($folderPath.$data['file_name'].".".$data['extension']):FileUtils::truepath($folderPath.$data['file_name'].".".$data['extension']);
+        $path = realpath($folderPath.$data['file_name'])?realpath($folderPath.$data['file_name']):FileUtils::truepath($folderPath.$data['file_name']);
         $data['path'] = $path;
         $form->exchangeArray($data);
         $form->validate();
