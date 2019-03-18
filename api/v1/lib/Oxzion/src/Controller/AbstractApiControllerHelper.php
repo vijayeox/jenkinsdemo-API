@@ -10,12 +10,17 @@ use Oxzion\Error\ErrorHandler;
 abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
     private $config;
-
+    protected function getBaseUrl() {
+        $baseUrl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
+        return $baseUrl;
+    }
     /**
      * Check Request object have Authorization token or not 
      * @param type $request
      * @return type String
      */
+
+
     public function findJwtToken($request)
     {
         $jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';

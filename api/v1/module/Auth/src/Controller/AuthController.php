@@ -179,4 +179,26 @@ class AuthController extends AbstractApiControllerHelper
          $apiSecret = $this->authService->getApiSecret($apiKey);
          return $apiSecret;
     }
+
+    public function userprofAction(){
+        $data = $this->request->getPost()->toArray();
+        try{
+            if(isset($data["username"])){
+                $username = $data["username"];
+                $res =$this->userService->getUserBaseProfile($username);
+                
+                if($res == 0) {
+                    return $this->getErrorResponse("Invalid User", 404);    
+                } else {
+                    $profilePicUrl = $this->getBaseUrl() . "/user/profile/" . $res["uuid"];
+                    return $this->getSuccessResponseWithData(['username'=> $username,'profileUrl'=>$profilePicUrl]);    
+                }
+            } else {
+                return $this->getErrorResponse("Invalid Request", 404);    
+            } 
+                
+        } catch (Exception $e) {
+            return $this->getErrorResponse("Something went wrong", 404);
+        }
+    }
 }

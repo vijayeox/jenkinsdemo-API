@@ -44,6 +44,17 @@ return [
                     ],
                 ],
             ],
+            'userprof' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/userprof',
+                    'defaults' => [
+                        'controller' => Controller\AuthController::class,
+                        'action' => 'userprof',
+                        'method' => 'post'
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

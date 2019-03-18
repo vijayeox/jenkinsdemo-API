@@ -251,4 +251,62 @@ class AuthControllerTest extends ControllerTest{
         $this->assertEquals($content['message'], 'JWT Token Not Found');   
 
     }
+
+    public function testValidProfileUsername(){
+        $data = ['username'=>'bharatg'];
+        $this->dispatch('/userprof', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('userprof');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['username'],'bharatg');
+        $this->assertContains('user/profile/4a49d85a-45a0-11e9-b58b-b88198a956ff',$content['data']['profileUrl']);   
+    }
+
+    public function testValidProfileEmail(){
+        $data = ['username'=>'bharatg@myvamla.com'];
+        $this->dispatch('/userprof', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('userprof');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['username'],'bharatg@myvamla.com');
+        $this->assertContains('user/profile/4a49d85a-45a0-11e9-b58b-b88198a956ff',$content['data']['profileUrl']);   
+    }
+
+    public function testInvalidProfileEmail(){
+        $data = ['username'=>'bharat@vma.com'];
+        $this->dispatch('/userprof', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('userprof');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Invalid User');
+    }
+
+    public function testInvalidProfileUsername(){
+        $data = ['username'=>'bhara'];
+        $this->dispatch('/userprof', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('userprof');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Invalid User');
+    }
 }

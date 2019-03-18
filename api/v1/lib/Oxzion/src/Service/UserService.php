@@ -354,6 +354,33 @@ class UserService extends AbstractService
     }
 
     /**
+     * GET User Profile
+     * @method  getUserBaseProfile
+     * @param $username USERNAME or EMAIL  of User to View
+     * @return array with base information required to use for the User login.
+     * @return array Returns a JSON Response with Status Code and Existing User data.
+     */
+    public function getUserBaseProfile($username)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_user')
+        ->columns(array('id', 'uuid', 'username', 'firstname', 'lastname', 'name','email'))
+        ->where(array('ox_user.username' => $username,'ox_user.email' => $username),'OR');
+        
+        $response = $this->executeQuery($select)->toArray();
+        if (!$response) {
+            return 0;
+        }
+        $result = $response[0];
+        if (isset($result)) {
+            return $result;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
      * @method assignManagerToUser
      * @param $id ID of User to assign a manager
      * @param $id ID of User to set as Manager

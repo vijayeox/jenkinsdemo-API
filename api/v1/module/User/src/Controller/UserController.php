@@ -348,7 +348,7 @@ class UserController extends AbstractApiController
                 $result = $this->userService->getUserWithMinimumDetails($id);
             }
             if (isset($result)) {
-                $baseUrl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
+                $baseUrl =$this->getBaseUrl();
                 $icon = $result['icon'];
                 $result['icon'] = $baseUrl . "/user/profile/" . $result["uuid"];
 
