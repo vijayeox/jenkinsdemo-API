@@ -138,5 +138,5 @@ class ContactController extends AbstractApiController
         // }
         return $this->getSuccessResponseWithData($result);
     }
-
 }
+

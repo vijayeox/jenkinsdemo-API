@@ -108,10 +108,18 @@ class ContactService extends AbstractService
     public function getContactByOrgId()
     {
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
-        $queryString = "select * from ox_contact";
-        $where = "where org_id = " . $orgId . " ";
-        $order = "order by first_name";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        return $resultSet->toArray();
+        $queryString1 = "select * from ox_contact";
+        $where1 = "where org_id = " . $orgId . "";
+        $order1 = "order by first_name asc";
+        $resultSet1 = $this->executeQuerywithParams($queryString1, $where1, null, $order1);
+
+        //Code to get the list of all the contact information from the user
+        $queryString2 = "Select firstname, lastname, name, email, status, country, date_of_birth, designation, phone, gender, website, timezone, date_of_join from ox_user";
+        $where2 = "where orgid = " . $orgId . "";
+        $order2 = "order by firstname asc";
+        $resultSet2 = $this->executeQuerywithParams($queryString2, $where2, null, $order2);
+
+        return $resultSet = ['myContact' => ($resultSet1->toArray()), 'orgContact' => ($resultSet2->toArray())];
     }
+    
 }

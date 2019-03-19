@@ -165,7 +165,13 @@ class ContactControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
+        // print_r($content);exit;
         $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['myContact'][0]['first_name'], 'Karan S'); 
+        $this->assertEquals($content['data']['myContact'][0]['last_name'], 'Agarwal'); 
+
+        $this->assertEquals($content['data']['orgContact'][0]['firstname'], 'Bharat'); 
+        $this->assertEquals($content['data']['orgContact'][0]['lastname'], 'Gogineni'); 
     }
 
 }
