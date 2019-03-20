@@ -263,8 +263,8 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'],'bharatg');
-        $this->assertContains('user/profile/4a49d85a-45a0-11e9-b58b-b88198a956ff',$content['data']['profileUrl']);   
+        $this->assertEquals($content['data']['username'],'Bharat Gogineni');
+        $this->assertContains('user/profile/b0cb0d3c-496e-11e9-a876-b88198a956ff',$content['data']['profileUrl']);   
     }
 
     public function testValidProfileEmail(){
@@ -278,8 +278,8 @@ class AuthControllerTest extends ControllerTest{
         $this->assertMatchedRouteName('userprof');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'],'bharatg@myvamla.com');
-        $this->assertContains('user/profile/4a49d85a-45a0-11e9-b58b-b88198a956ff',$content['data']['profileUrl']);   
+        $this->assertEquals($content['data']['username'],'Bharat Gogineni');
+        $this->assertContains('user/profile/b0cb0d3c-496e-11e9-a876-b88198a956ff',$content['data']['profileUrl']);   
     }
 
     public function testInvalidProfileEmail(){

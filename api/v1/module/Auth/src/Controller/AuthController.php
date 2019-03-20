@@ -191,7 +191,7 @@ class AuthController extends AbstractApiControllerHelper
                     return $this->getErrorResponse("Invalid User", 404);    
                 } else {
                     $profilePicUrl = $this->getBaseUrl() . "/user/profile/" . $res["uuid"];
-                    return $this->getSuccessResponseWithData(['username'=> $username,'profileUrl'=>$profilePicUrl]);    
+                    return $this->getSuccessResponseWithData(['username'=> $res["name"],'profileUrl'=>$profilePicUrl]);    
                 }
             } else {
                 return $this->getErrorResponse("Invalid Request", 404);    
