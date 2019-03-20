@@ -1,10 +1,11 @@
 package com.oxzion.job
 
+import com.oxzion.activemq.Publisher
+import com.oxzion.activemq.Sender
 import org.quartz.JobDataMap
 import org.quartz.JobExecutionContext
 import org.quartz.JobExecutionException
 import groovy.json.JsonGenerator
-import groovy.json.JsonGenerator.Converter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,26 +19,40 @@ import groovy.json.JsonOutput
 @PropertySource("classpath:oxzion.properties")
 class JobHandler extends QuartzJobBean {
 
+    private static Publisher publisher
+
     @Autowired
-    private Environment env;
+    private Sender sender
+
+    @Autowired
+    private Environment env
     private static final Logger logger = LoggerFactory.getLogger(JobHandler.class)
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         logger.info("Executing Job with key {}", jobExecutionContext.getJobDetail().getKey())
         JobDataMap jobDataMap = jobExecutionContext.getMergedJobDataMap()
+        String urlResponse
         def slurper = new JsonSlurper()
         if (jobDataMap.JobData.job.url) {
             String authresponse = postAuth('apikey='+env.getProperty("apikey"))
             def jwt = slurper.parseText(authresponse)
             if((jobDataMap.JobData.job.data).isEmpty())
-                String get_response = get(jobDataMap.JobData.job.url, "Bearer " + jwt.data.jwt)
+                urlResponse = get(jobDataMap.JobData.job.url, "Bearer " + jwt.data.jwt)
             else{
-                String response = post(jobDataMap.JobData.job.url,"Bearer "+jwt.data.jwt,jobDataMap.JobData.job.data)
+                urlResponse = post(jobDataMap.JobData.job.url,"Bearer "+jwt.data.jwt,jobDataMap.JobData.job.data)
             }
-
+            println(urlResponse)
         }
-
+        if (jobDataMap.JobData.job.topic){
+            def json = JsonOutput.toJson(jobDataMap.JobData.job.data)
+            String data = json.toString()
+           // sender.send(data,jobDataMap.JobData.job.topic)  -- use this for sending jms messages
+            publisher = new Publisher();
+            publisher.create("publisher",jobDataMap.JobData.job.topic)
+            publisher.sendData(data)
+            publisher.closeConnection()
+        }
     }
 
     public String postAuth(String data)
@@ -90,6 +105,5 @@ class JobHandler extends QuartzJobBean {
         }
         postAuth.disconnect()
         return  auth_success_json
-
     }
 }
