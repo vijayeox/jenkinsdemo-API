@@ -19,11 +19,15 @@ RUN docker-php-ext-install json
 RUN docker-php-ext-install iconv
 RUN docker-php-ext-install curl
 RUN docker-php-ext-install dom
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl && docker-php-ext-install imap
 RUN apt-get update -y && apt-get install -y libpng-dev
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install intl
 RUN apt-get update && apt-get install -y zlib1g-dev \
     && docker-php-ext-install zip
+RUN apt-get update && \
+    apt-get install -y libxml2-dev
+RUN docker-php-ext-install soap
 RUN a2enmod rewrite \
  && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf \
  && sed -i 's!Listen\ 80!Listen\ 8075!g' /etc/apache2/ports.conf \
