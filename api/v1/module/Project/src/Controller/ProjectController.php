@@ -159,6 +159,9 @@ class ProjectController extends AbstractApiController {
         if($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
+        if($count == 2) {
+            return $this->getErrorResponse("Enter User Ids", 404);
+        }
         return $this->getSuccessResponseWithData($data,200);
     }
     /**

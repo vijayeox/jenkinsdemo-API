@@ -21,8 +21,7 @@ class ProjectService extends AbstractService {
 
 	public function createProject(&$data) {
 		$form = new Project();
-    //Additional fields that are needed for the create      
-		$data['name'] = $data['name'];
+    //Additional fields that are needed for the create
 		$data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
 		$data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
 		$data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -101,11 +100,11 @@ class ProjectService extends AbstractService {
         }
         return $count;
     }
-    public function getProjectsByUserId() { 
+    public function getProjectsByUserId() {
     	$userId = AuthContext::get(AuthConstants::USER_ID);
-    	$queryString = "select * from ox_project 
+    	$queryString = "select * from ox_project
     	left join ox_user_project on ox_user_project.project_id = ox_project.id";
-    	$where = "where ox_user_project.user_id = " . $userId." AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.isdeleted!=1"; 
+    	$where = "where ox_user_project.user_id = " . $userId." AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.isdeleted!=1";
     	$order = "order by ox_project.id";
     	$resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
     	return $resultSet->toArray();
@@ -121,17 +120,20 @@ class ProjectService extends AbstractService {
     }
 
     //Writing this incase we need to get all projects later. Please do not delete - Brian
-    /*public function getProject($id) { 
+    /*public function getProject($id) {
     	$userId = AuthContext::get(AuthConstants::USER_ID);
-    	$queryString = "select * from ox_project 
+    	$queryString = "select * from ox_project
     	left join ox_user_project on ox_user_project.project_id = ox_project.id";
-    	$where = "where ox_user_project.user_id = " . $userId." AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.id=".$id; 
+    	$where = "where ox_user_project.user_id = " . $userId." AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.id=".$id;
     	$order = "order by ox_project.id";
     	$resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
     	return $resultSet->toArray();
     }*/
 
     public function saveUser($project_id,$data) {
+        if(!isset($data['userid']) || empty($data['userid'])) {
+            return 2;
+        }
     	$userArray=json_decode($data['userid'],true);
         if($userArray){
             $userSingleArray= array_map('current', $userArray);
