@@ -36,36 +36,36 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertControllerClass('ProjectController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
-    // public function testGetList() {
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/project', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals(count($content['data']), 2);
-    //     $this->assertEquals($content['data'][0]['id'], 1);
-    //     $this->assertEquals($content['data'][0]['name'], 'Test Project 1');
-    //     $this->assertEquals($content['data'][1]['id'], 3);
-    //     $this->assertEquals($content['data'][1]['name'], 'Test Project 2');
-    // }
-    // public function testGet() {
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/project/1', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals($content['data']['id'], 1);
-    //     $this->assertEquals($content['data']['name'], 'Test Project 1');
-    // }
-    // public function testGetNotFound() {
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/project/64', 'GET');
-    //     $this->assertResponseStatusCode(404);
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error');
-    // }
+    public function testGetList() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/project', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Test Project 1');
+        $this->assertEquals($content['data'][1]['id'], 3);
+        $this->assertEquals($content['data'][1]['name'], 'Test Project 2');
+    }
+    public function testGet() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/project/1', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['name'], 'Test Project 1');
+    }
+    public function testGetNotFound() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/project/64', 'GET');
+        $this->assertResponseStatusCode(404);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
     public function testCreate() {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Test Project 3','description'=>'Project Description'];
@@ -204,23 +204,23 @@ class ProjectControllerTest extends ControllerTest {
     	$content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-// Check the below 
-    // public function testGetListOfUsers() {
-    // 	$this->initAuthToken($this->adminUser);
-    // 	$this->dispatch('/project/1/users','GET'); 
-    // 	$this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    // 	$content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success'); 
-    // }
 
-    // public function testGetListOfUsersNotFound() {
-    // 	$this->initAuthToken($this->adminUser);
-    // 	$this->dispatch('/project/64/users','GET'); 
-    // 	$this->assertResponseStatusCode(404);
-    //     $this->setDefaultAsserts();
-    // 	$content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error'); 
-    // }
+    public function testGetListOfUsers() {
+    	$this->initAuthToken($this->adminUser);
+    	$this->dispatch('/project/1/users','GET'); 
+    	$this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+    	$content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+    }
+
+    public function testGetListOfUsersNotFound() {
+    	$this->initAuthToken($this->adminUser);
+    	$this->dispatch('/project/64/users','GET'); 
+    	$this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+    	$content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error'); 
+    }
 }
 ?>

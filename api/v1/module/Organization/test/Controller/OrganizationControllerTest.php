@@ -33,20 +33,20 @@ class OrganizationControllerTest extends ControllerTest
 
 //Testing to see if the Create Contact function is working as intended if all the value passed are correct.
 
-    // public function testGetList()
-    // {
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/organization', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals(count($content['data']), 2);
-    //     $this->assertEquals($content['data'][0]['id'], 1);
-    //     $this->assertEquals($content['data'][0]['name'], 'Cleveland Cavaliers');
-    //     $this->assertEquals($content['data'][1]['id'], 2);
-    //     $this->assertEquals($content['data'][1]['name'], 'Golden State Warriors');
-    // }
+    public function testGetList()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Cleveland Cavaliers');
+        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['name'], 'Golden State Warriors');
+    }
 
     protected function setDefaultAsserts()
     {
@@ -56,28 +56,28 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    // public function testGet()
-    // {
-    //     $this->initAuthToken($this->adminUser);
-    //     $mockMessageProducer = $this->getMockMessageProducer();
-    //     $this->dispatch('/organization/1', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals($content['data']['id'], 1);
-    //     $this->assertEquals($content['data']['name'], 'Cleveland Cavaliers');
-    // }
+    public function testGet()
+    {
+        $this->initAuthToken($this->adminUser);
+        $mockMessageProducer = $this->getMockMessageProducer();
+        $this->dispatch('/organization/1', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['name'], 'Cleveland Cavaliers');
+    }
 
-    // public function testGetNotFound()
-    // {
-    //     $this->initAuthToken($this->adminUser);
-    //     $mockMessageProducer = $this->getMockMessageProducer();
-    //     $this->dispatch('/organization/64', 'GET');
-    //     $this->assertResponseStatusCode(404);
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error');
-    // }
+    public function testGetNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $mockMessageProducer = $this->getMockMessageProducer();
+        $this->dispatch('/organization/64', 'GET');
+        $this->assertResponseStatusCode(404);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 
     public function testCreate()
     {
