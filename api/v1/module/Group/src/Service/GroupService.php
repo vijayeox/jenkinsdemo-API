@@ -9,14 +9,24 @@ use Bos\Auth\AuthConstants;
 use Bos\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
+use Oxzion\Messaging\MessageProducer;
+use Oxzion\Service\OrganizationService;
 
 class GroupService extends AbstractService {
 
     private $table;
+    private $organizationService;
 
-    public function __construct($config, $dbAdapter, GroupTable $table) {
+    public function __construct($config, $dbAdapter, GroupTable $table,$organizationService) {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->messageProducer = MessageProducer::getInstance();
+        $this->organizationService = $organizationService;
+    }
+
+    public function setMessageProducer($messageProducer)
+    {
+		$this->messageProducer = $messageProducer;
     }
 
     public function getGroupsforUser($userId) {
@@ -30,6 +40,7 @@ class GroupService extends AbstractService {
 
     public function createGroup(&$data) {
         $form = new Group();   
+        $org = $this->organizationService->getOrganization($data['org_id']);
         $data['name'] = $data['name'] ? $data['name'] : uniqid();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
@@ -53,11 +64,13 @@ class GroupService extends AbstractService {
             $this->rollback();
             return 0;
         }
+        $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $data['name'], 'orgname'=> $org['name'])),'GROUP_ADDED');
         return $count;
     }
 
     public function updateGroup ($id, &$data) {
         $obj = $this->table->get($id,array());
+        $org = $this->organizationService->getOrganization($obj->org_id);
         if (is_null($obj)) {
             return 0;
         }
@@ -80,10 +93,13 @@ class GroupService extends AbstractService {
             $this->rollback();
             return 0;
         }
+        $result = $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])),'GROUP_UPDATED');
         return $count;
     }
 
     public function deleteGroup($id) {
+        $obj = $this->table->get($id,array());
+        $org = $this->organizationService->getOrganization($obj->org_id);
         $count = 0;
         try {
             $count = $this->table->delete($id);
@@ -93,6 +109,7 @@ class GroupService extends AbstractService {
         } catch(Exception $e) {
             $this->rollback();
         }
+        $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'] )),'GROUP_DELETED');
         return $count;
     }
 
@@ -104,10 +121,12 @@ class GroupService extends AbstractService {
     }
 
     public function saveUser($id,$data) {
+        $obj = $this->table->get($id,array());
+        $org = $this->organizationService->getOrganization($id);
         $avatar_id = array();
         $userArray=json_decode($data['userid'],true);
 
-        $query = "select id from ox_user";
+        $query = "select id,username from ox_user";
         $order = "order by ox_user.id";
         $resultSet_User_temp = $this->executeQuerywithParams($query, null, null, $order)->toArray();
         $resultSet_User=array_map('current', $resultSet_User_temp);
@@ -128,8 +147,10 @@ class GroupService extends AbstractService {
                         $storeData[] = array('group_id'=>$id,'avatar_id'=>$value['id']);
                     }
                     $queryString =$this->multiInsertOrUpdate('ox_user_group',$storeData,array());
+                    $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'],'username' => $resultSet_User_temp[1]['username'] )),'USERTOGROUP_ADDED');
                 }
                 else {
+                    //  $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'],'username' => $resultSet_User_temp[1]['username'] )),'USERTOGROUP_FAILURE');
                     return -1;
                 }
             }

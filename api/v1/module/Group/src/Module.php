@@ -10,6 +10,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
+use Oxzion\Service\OrganizationService;
 
 class Module implements ConfigProviderInterface {
 
@@ -31,7 +32,8 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Service\GroupService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\GroupService($container->get('config'), $dbAdapter, $container->get(Model\GroupTable::class));
+                    $orgService = $container->get(OrganizationService::class);
+                    return new Service\GroupService($container->get('config'), $dbAdapter, $container->get(Model\GroupTable::class),$orgService);
                 },
                 Model\GroupTable::class => function($container) {
                     $tableGateway = $container->get(Model\GroupTableGateway::class);

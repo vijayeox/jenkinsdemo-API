@@ -15,7 +15,7 @@ class MessageProducer{
 		return static::$instance;
 	}
 
-	public function sendTopic($message, $topic){
+	public function sendTopic($message, $topic){echo "Test";
 		$this->client->sendMessage('/topic/'.$topic, $message);
 	}
 	public function sendQueue($message, $queue){

@@ -9,13 +9,20 @@ use Bos\Service\AbstractService;
 use Bos\ValidationException;
 use Oxzion\Utils\BosUtils;
 use Zend\Db\Sql\Expression;
-use Oxzion\Service\UserService;
+use Oxzion\Service\OrganizationService;
+use Oxzion\Messaging\MessageProducer;
 use Exception;
 
 class OrganizationService extends AbstractService
 {
 
     private $emailService;
+    private $messageProducer;
+
+    public function setMessageProducer($messageProducer)
+    {
+		$this->messageProducer = $messageProducer;
+    }
 
     /**
      * @ignore __construct
@@ -25,6 +32,7 @@ class OrganizationService extends AbstractService
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->userService = $userService;
+        $this->messageProducer = MessageProducer::getInstance();
     }
 
     /**
@@ -62,8 +70,10 @@ class OrganizationService extends AbstractService
             $data['id'] = $id;
             $this->commit();
         } catch (Exception $e) {
+            $this->rollback();
             return 0;
         }
+        $result = $this->messageProducer->sendTopic(json_encode(array('orgname' => $data['name'], 'status' => 'Active')),'ORGANIZATION_ADDED');
         return $count;
     }
 
@@ -128,14 +138,15 @@ class OrganizationService extends AbstractService
         $form->validate();
         $this->beginTransaction();
         $count = 0;
-        try {
-            $count = $this->table->save($form);
+        try { 
+            $count = $this->table->save($form);    
             if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $this->commit();
-        } catch (Exception $e) {
+        }
+         catch (Exception $e) { 
             switch (get_class($e)) {
                 case "Bos\ValidationException" :
                     $this->rollback();
@@ -146,6 +157,13 @@ class OrganizationService extends AbstractService
                     return 0;
                     break;
             }
+        }
+        
+        if($obj->name != $data['name']){
+            $result = $this->messageProducer->sendTopic(json_encode(array('new_orgname' => $data['name'], 'old_orgname' => $obj->name,'status' => $data['status'])),'ORGANIZATION_UPDATED');
+        }
+        if($data['status'] == 'InActive'){
+            $result = $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name,'status' => $data['status'])),'ORGANIZATION_DELETED');
         }
         return $count;
     }
@@ -169,6 +187,7 @@ class OrganizationService extends AbstractService
         $form->exchangeArray($originalArray);
         $form->validate();
         $result = $this->table->save($form);
+        $this->messageProducer->sendTopic(json_encode(array('orgname' => $originalArray['name'],'status' => $originalArray['status'])),'ORGANIZATION_DELETED');
         return $result;
     }
 
@@ -225,11 +244,11 @@ class OrganizationService extends AbstractService
     public function addUserToOrg($userId, $organizationId)
     {
         $sql = $this->getSqlObject();
-        $queryString = "select id from ox_user";
+        $queryString = "select id,username from ox_user";
         $where = "where id =" . $userId;
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
         if ($resultSet) {
-            $query = "select id from ox_organization";
+            $query = "select id,name from ox_organization";
             $where = "where id=" . $organizationId . " AND status = 'Active' ";
             $result = $this->executeQuerywithParams($query, $where, null, null);
             if ($result) {
@@ -239,11 +258,13 @@ class OrganizationService extends AbstractService
                 if (!$endresult) {
                     $data = array(array('user_id' => $userId, 'org_id' => $organizationId));
                     $result_update = $this->multiInsertOrUpdate('ox_user_org', $data, array());
+                    $result = $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet->toArray()[0]['username'], 'orgname' => $result->toArray()[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ADDED');
                     if ($result_update->getAffectedRows() == 0) {
                         return $result_update;
                     }
                     return 1;
                 } else {
+                    $result = $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet->toArray()[0]['username'], 'orgname' => $result->toArray()[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ALREADYEXISTS');
                     return 3;
                 }
             } else {

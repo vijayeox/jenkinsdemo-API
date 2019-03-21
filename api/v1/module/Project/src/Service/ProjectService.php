@@ -9,14 +9,24 @@ use Bos\Auth\AuthConstants;
 use Bos\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
+use Oxzion\Messaging\MessageProducer;
+use Oxzion\Service\OrganizationService;
 
 class ProjectService extends AbstractService {
 
-	private $table;
+    private $table;
+    private $organizationService;
+    
+    public function setMessageProducer($messageProducer)
+    {
+		$this->messageProducer = $messageProducer;
+    }
 
-	public function __construct($config, $dbAdapter, ProjectTable $table) {
+	public function __construct($config, $dbAdapter, ProjectTable $table, $organizationService) {
 		parent::__construct($config, $dbAdapter);
-		$this->table = $table;
+        $this->table = $table;
+        $this->messageProducer = MessageProducer::getInstance();
+        $this->organizationService = $organizationService;
 	}
 
 	public function createProject(&$data) {
@@ -28,6 +38,7 @@ class ProjectService extends AbstractService {
 		$data['date_created'] = date('Y-m-d H:i:s');
 		$data['date_modified'] = date('Y-m-d H:i:s');
         $data['isdeleted'] = false;
+        $org = $this->organizationService->getOrganization($data['org_id']);
         $form->exchangeArray($data);
 		$form->validate();
 		$this->beginTransaction();
@@ -44,7 +55,8 @@ class ProjectService extends AbstractService {
 		} catch(Exception $e) {
 			$this->rollback();
 			return 0;
-		}
+        }
+        $result = $this->messageProducer->sendTopic(json_encode(array('orgname'=>  $org['name'],'projectname' => $data['name'])),'PROJECT_ADDED');
 		return $count;
 	}
 
@@ -61,6 +73,7 @@ class ProjectService extends AbstractService {
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
+        $org = $this->organizationService->getOrganization($obj->org_id);
         try {
         	$count = $this->table->save($form);
         	if($count == 0) {
@@ -71,6 +84,7 @@ class ProjectService extends AbstractService {
         	$this->rollback();
         	return 0;
         }
+        $result = $this->messageProducer->sendTopic(json_encode(array('orgname'=> $org['name'],'old_projectname' => $obj->toArray()['name'],'new_projectname' => $data['name'])),'PROJECT_UPDATED');
         return $count;
     }
 
@@ -88,6 +102,7 @@ class ProjectService extends AbstractService {
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
+        $org = $this->organizationService->getOrganization($obj->org_id);
         try {
             $count = $this->table->save($form);
             if($count == 0) {
@@ -98,6 +113,7 @@ class ProjectService extends AbstractService {
             $this->rollback();
             return 0;
         }
+        $result = $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $data['name'])),'PROJECT_DELETED');
         return $count;
     }
     public function getProjectsByUserId() {
@@ -138,16 +154,18 @@ class ProjectService extends AbstractService {
         if($userArray){
             $userSingleArray= array_map('current', $userArray);
             //Check if project id exists
-            $queryString = "select id from ox_project";
+            $queryString = "select id,name,org_id from ox_project";
             $order = "order by ox_project.id";
             $where = "where ox_project.isdeleted!=1";
             $resultSet_temp = $this->executeQuerywithParams($queryString, $where, null, $order)->toArray();
             $resultSet=array_map('current', $resultSet_temp);
             //Check if user id exists
-            $query = "select id from ox_user";
+            $query = "select id,username from ox_user";
             $order = "order by ox_user.id";
             $resultSet_User_temp = $this->executeQuerywithParams($query, null, null, $order)->toArray();
             $resultSet_User=array_map('current', $resultSet_User_temp);
+
+            $org = $this->organizationService->getOrganization($resultSet_temp[0]['org_id']);
 
             if((in_array($project_id, $resultSet))&&(count(array_intersect($userSingleArray, $resultSet_User))==count($userSingleArray))) {
                 $sql = $this->getSqlObject();
@@ -161,6 +179,7 @@ class ProjectService extends AbstractService {
                     }
                     $userId = AuthContext::get(AuthConstants::USER_ID);
                     $queryString =$this->multiInsertOrUpdate('ox_user_project',$storeData,array());
+                    $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet_User_temp[0]['username'],'orgname' => $org['name'] ,'projectname' => $resultSet_temp[0]['name'] )),'USERTOPROJECT_ADDEED');
                 }
             } else {
                 return 0;
