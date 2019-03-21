@@ -68,8 +68,8 @@ class GroupControllerTest extends ControllerTest {
         '=>'Description Test Data', 'logo' => 'grp1.png', 'cover_photo'=>'grp1.png', 'type' => 1, 'status' => 'Active'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
-        $mockMessageProducer = $this->getMockMessageProducer();
-        $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Groups 22', 'orgname'=>'Cleveland Cavaliers')),'GROUP_ADDED')->once()->andReturn();
+        // $mockMessageProducer = $this->getMockMessageProducer();
+        // $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Groups 22', 'orgname'=>'Cleveland Cavaliers')),'GROUP_ADDED')->once()->andReturn();
         $this->dispatch('/group', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
@@ -95,7 +95,7 @@ class GroupControllerTest extends ControllerTest {
         '=>'Description Test Data', 'logo' => 'grp1.png', 'cover_photo'=>'grp1.png', 'type' => 1, 'status' => 'Active'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
-        $mockMessageProducer = $this->getMockMessageProducer();
+        // $mockMessageProducer = $this->getMockMessageProducer();
         $this->dispatch('/group', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
@@ -112,8 +112,8 @@ class GroupControllerTest extends ControllerTest {
         '=>'Description Test Data', 'logo' => 'grp1.png', 'cover_photo'=>'grp1.png', 'type' => 1, 'status' => 'Active'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $mockMessageProducer = $this->getMockMessageProducer();
-        $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group', 'orgname'=> 'Cleveland Cavaliers' , 'new_groupname'=> 'Test Create Group')),'GROUP_UPDATED')->once()->andReturn();
+        // $mockMessageProducer = $this->getMockMessageProducer();
+        // $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group', 'orgname'=> 'Cleveland Cavaliers' , 'new_groupname'=> 'Test Create Group')),'GROUP_UPDATED')->once()->andReturn();
         $this->dispatch('/group/1', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -136,7 +136,7 @@ class GroupControllerTest extends ControllerTest {
         '=>'Description Test Data', 'logo' => 'grp1.png', 'cover_photo'=>'grp1.png', 'type' => 1, 'status' => 'Active'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $mockMessageProducer = $this->getMockMessageProducer();
+        // $mockMessageProducer = $this->getMockMessageProducer();
         $this->dispatch('/group/10000', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
@@ -150,7 +150,7 @@ class GroupControllerTest extends ControllerTest {
         '=>'Description Test Data', 'logo' => 'grp1.png', 'cover_photo'=>'grp1.png', 'type' => 1, 'status' => 'Active'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $mockMessageProducer = $this->getMockMessageProducer();
+        // $mockMessageProducer = $this->getMockMessageProducer();
         $this->dispatch('/group/1', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
@@ -161,8 +161,8 @@ class GroupControllerTest extends ControllerTest {
 
     public function testDelete() {
         $this->initAuthToken($this->adminUser);
-        $mockMessageProducer = $this->getMockMessageProducer();
-        $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Cavaliers')),'GROUP_DELETED')->once()->andReturn();
+        // $mockMessageProducer = $this->getMockMessageProducer();
+        // $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Cavaliers')),'GROUP_DELETED')->once()->andReturn();
         $this->dispatch('/group/1', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -173,7 +173,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testDeleteNotFound() {
         $this->initAuthToken($this->adminUser);
-        $mockMessageProducer = $this->getMockMessageProducer();
+        // $mockMessageProducer = $this->getMockMessageProducer();
         $this->dispatch('/group/10000', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
@@ -184,8 +184,8 @@ class GroupControllerTest extends ControllerTest {
 
     public function testsaveuser() {
         $this->initAuthToken($this->adminUser);
-        $mockMessageProducer = $this->getMockMessageProducer();
-        $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Cavaliers','username' => 'karan')),'USERTOGROUP_ADDED')->once()->andReturn();
+        // $mockMessageProducer = $this->getMockMessageProducer();
+        // $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Cavaliers','username' => 'karan')),'USERTOGROUP_ADDED')->once()->andReturn();
         $this->dispatch('/group/1/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -195,7 +195,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testsaveuserwithoutuser() {
         $this->initAuthToken($this->adminUser);
-        $mockMessageProducer = $this->getMockMessageProducer();
+        // $mockMessageProducer = $this->getMockMessageProducer();
         $this->dispatch('/group/1/save','POST'); 
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
@@ -205,8 +205,8 @@ class GroupControllerTest extends ControllerTest {
 
     public function testsaveusernotfound() {
         $this->initAuthToken($this->adminUser);
-        $mockMessageProducer = $this->getMockMessageProducer();
-        $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Cavaliers','username' => 'brian')),'USERTOGROUP_FAILURE')->once()->andReturn();
+        // $mockMessageProducer = $this->getMockMessageProducer();
+        // $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Cavaliers','username' => 'brian')),'USERTOGROUP_FAILURE')->once()->andReturn();
         $this->dispatch('/group/1/save','POST',array('userid' => '[{"id":1},{"id":23}]')); 
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();

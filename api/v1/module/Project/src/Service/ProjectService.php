@@ -56,7 +56,7 @@ class ProjectService extends AbstractService {
 			$this->rollback();
 			return 0;
         }
-        $result = $this->messageProducer->sendTopic(json_encode(array('orgname'=>  $org['name'],'projectname' => $data['name'])),'PROJECT_ADDED');
+        // $result = $this->messageProducer->sendTopic(json_encode(array('orgname'=>  $org['name'],'projectname' => $data['name'])),'PROJECT_ADDED');
 		return $count;
 	}
 
@@ -84,7 +84,7 @@ class ProjectService extends AbstractService {
         	$this->rollback();
         	return 0;
         }
-        $result = $this->messageProducer->sendTopic(json_encode(array('orgname'=> $org['name'],'old_projectname' => $obj->toArray()['name'],'new_projectname' => $data['name'])),'PROJECT_UPDATED');
+        // $result = $this->messageProducer->sendTopic(json_encode(array('orgname'=> $org['name'],'old_projectname' => $obj->toArray()['name'],'new_projectname' => $data['name'])),'PROJECT_UPDATED');
         return $count;
     }
 
@@ -113,7 +113,7 @@ class ProjectService extends AbstractService {
             $this->rollback();
             return 0;
         }
-        $result = $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $data['name'])),'PROJECT_DELETED');
+        // $result = $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $data['name'])),'PROJECT_DELETED');
         return $count;
     }
     public function getProjectsByUserId() {
@@ -179,7 +179,7 @@ class ProjectService extends AbstractService {
                     }
                     $userId = AuthContext::get(AuthConstants::USER_ID);
                     $queryString =$this->multiInsertOrUpdate('ox_user_project',$storeData,array());
-                    $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet_User_temp[0]['username'],'orgname' => $org['name'] ,'projectname' => $resultSet_temp[0]['name'] )),'USERTOPROJECT_ADDEED');
+                    // $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet_User_temp[0]['username'],'orgname' => $org['name'] ,'projectname' => $resultSet_temp[0]['name'] )),'USERTOPROJECT_ADDEED');
                 }
             } else {
                 return 0;

@@ -152,7 +152,7 @@ class UserService extends AbstractService
         $form->password = $tmpPwd;
 //        $this->emailService->sendUserEmail($form);
         $this->commit();
-        $result = $this->messageProducer->sendTopic(json_encode(array('username' => $data['username'] , 'firstname' => $data['firstname'],'password' => $data['password'], 'email' => $data['email'])),'USER_ADDED');
+        // $result = $this->messageProducer->sendTopic(json_encode(array('username' => $data['username'] , 'firstname' => $data['firstname'],'password' => $data['password'], 'email' => $data['email'])),'USER_ADDED');
         return $count;
     }
 
@@ -194,7 +194,7 @@ class UserService extends AbstractService
         $userdata['date_modified'] = date('Y-m-d H:i:s');
         $form->exchangeArray($userdata);
         $form->validate();
-        $result = $this->messageProducer->sendTopic(json_encode(array('username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt', 'password' => 'welcome2oxzion', 'designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male')),'USER_UPDATED');
+        // $result = $this->messageProducer->sendTopic(json_encode(array('username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt', 'password' => 'welcome2oxzion', 'designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male')),'USER_UPDATED');
         $count = 0;
         try {
             $this->table->save($form);
@@ -226,7 +226,7 @@ class UserService extends AbstractService
         $form->exchangeArray($originalArray);
         $form->validate();
         $result = $this->table->save($form);
-        $userResult = $this->messageProducer->sendTopic(json_encode(array('username' => $obj->username ,'orgname' => $org['name'] )),'USER_DELETED');
+        // $userResult = $this->messageProducer->sendTopic(json_encode(array('username' => $obj->username ,'orgname' => $org['name'] )),'USER_DELETED');
         return $result;
     }
 

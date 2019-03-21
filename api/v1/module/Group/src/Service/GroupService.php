@@ -64,7 +64,7 @@ class GroupService extends AbstractService {
             $this->rollback();
             return 0;
         }
-        $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $data['name'], 'orgname'=> $org['name'])),'GROUP_ADDED');
+        // $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $data['name'], 'orgname'=> $org['name'])),'GROUP_ADDED');
         return $count;
     }
 
@@ -93,7 +93,7 @@ class GroupService extends AbstractService {
             $this->rollback();
             return 0;
         }
-        $result = $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])),'GROUP_UPDATED');
+        // $result = $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])),'GROUP_UPDATED');
         return $count;
     }
 
@@ -109,7 +109,7 @@ class GroupService extends AbstractService {
         } catch(Exception $e) {
             $this->rollback();
         }
-        $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'] )),'GROUP_DELETED');
+        // $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'] )),'GROUP_DELETED');
         return $count;
     }
 
@@ -147,7 +147,7 @@ class GroupService extends AbstractService {
                         $storeData[] = array('group_id'=>$id,'avatar_id'=>$value['id']);
                     }
                     $queryString =$this->multiInsertOrUpdate('ox_user_group',$storeData,array());
-                    $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'],'username' => $resultSet_User_temp[1]['username'] )),'USERTOGROUP_ADDED');
+                    // $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'],'username' => $resultSet_User_temp[1]['username'] )),'USERTOGROUP_ADDED');
                 }
                 else {
                     //  $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'],'username' => $resultSet_User_temp[1]['username'] )),'USERTOGROUP_FAILURE');
