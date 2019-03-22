@@ -19,6 +19,8 @@ RUN docker-php-ext-install json
 RUN docker-php-ext-install iconv
 RUN docker-php-ext-install curl
 RUN docker-php-ext-install dom
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install mysqli
 RUN apt-get update -y && apt-get install -y libpng-dev
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install intl
