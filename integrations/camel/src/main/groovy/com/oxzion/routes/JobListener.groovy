@@ -13,7 +13,12 @@ class JobListener {
 
     @Autowired
     JobSchedulerHelper jobHelper
-
+    
+    @RequestMapping(value ="/",method = RequestMethod.GET)
+    String index() {
+        return "Success!!"
+    }
+    
     /**
      *
      *

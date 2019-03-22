@@ -1,0 +1,22 @@
+This dockerfile builds activemq and camel together
+
++++++++++++++++++++++++++++++++
+To build the dockerfile image +
++++++++++++++++++++++++++++++++
+
+$ docker build . --tag camel
+
+++++++++++++++++++++++++++++
+To run the image container +
+++++++++++++++++++++++++++++
+
+$ docker run --network="host" --it v ${PWD}:/workspace/app camel
+
++++++++++++++++++++++++++++++++++
+To run into the container shell +
++++++++++++++++++++++++++++++++++
+
+$ docker run --network="host" -v ${PWD}:/workspace/app -it --entrypoint bash camel 
+
+To verify if activeMq is up browse to http://localhost:8161/
+To verify if scheduler app is up browse to http://localhost:8085/

@@ -1,21 +1,7 @@
-FROM openjdk:8-jdk-alpine as build
-WORKDIR /workspace/app
+FROM xqdocker/ubuntu-openjdk:jdk-8 as build
 
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-copy out out
-COPY src src
-
-RUN ./gradlew bootJar 
-
-FROM openjdk:8-jdk-alpine
-VOLUME /tmp
-ENV REQUIRED_PACKAGES="bash"
-RUN apk add --no-cache $REQUIRED_PACKAGES
-ARG DEPENDENCY=/workspace/app/build
-COPY --from=build ${DEPENDENCY}/libs/camel-0.0.1-SNAPSHOT.jar /app/lib/camel.jar
-COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+ENV REQUIRED_PACKAGES="bash curl" 
+RUN apt-get update && apt-get install -y $REQUIRED_PACKAGES
 
 ENV ACTIVEMQ_VERSION 5.15.6
 ENV ACTIVEMQ apache-activemq-$ACTIVEMQ_VERSION
@@ -38,8 +24,11 @@ RUN tar xzf $ACTIVEMQ-bin.tar.gz -C  /opt && \
     ln -s /opt/$ACTIVEMQ $ACTIVEMQ_HOME && \
     useradd -r -M -d $ACTIVEMQ_HOME activemq && \
     chown -R activemq:activemq /opt/$ACTIVEMQ && \
-    chown -h activemq:activemq $ACTIVEMQ_HOME 
+    chown -h activemq:activemq $ACTIVEMQ_HOME && \
+    mkdir -p /app 
 
 EXPOSE $ACTIVEMQ_TCP $ACTIVEMQ_AMQP $ACTIVEMQ_STOMP $ACTIVEMQ_MQTT $ACTIVEMQ_WS $ACTIVEMQ_UI
+
+WORKDIR /workspace/app
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
