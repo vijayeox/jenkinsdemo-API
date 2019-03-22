@@ -49,6 +49,7 @@ return [
     ],
     'DATA_FOLDER'=>__DIR__.'/../../data/uploads/',
     'APP_UPLOAD_FOLDER' => __DIR__.'/../../data/app',
+    'baseUrl' => 'http://localhost:8080',
     'salt' => 'arogAegatnaVOfficeBack123',
     'jwtKey' => 'l7Hnf6TGMYTy6eP7oyyWNG1MGay1T39/If495vwYBhS2j6OOHlMKhSf3qADPlWwkHQ6h3tjP2klI0kvKPltvVA==',
     'jwtAlgo' => 'HS512',

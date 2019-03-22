@@ -11,8 +11,8 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
     private $config;
     protected function getBaseUrl() {
-        $baseUrl = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
-        return $baseUrl;
+        $config = $this->getConfig();
+        return $config['baseUrl']?$config['baseUrl']:$_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
     }
     /**
      * Check Request object have Authorization token or not 
