@@ -10,6 +10,7 @@ use Bos\ValidationException;
 use Oxzion\Model\User;
 use Oxzion\Utils\ArrayUtils;
 use Email\Service\EmailService;
+//use Oxzion\Search\Elastic\IndexerImpl;
 
 class UserService extends AbstractService
 {
@@ -24,6 +25,7 @@ class UserService extends AbstractService
      */
     private $table;
     private $emailService;
+    protected $config;
 
     public function __construct($config, $dbAdapter, $table = null, EmailService $emailService)
     {
@@ -33,6 +35,7 @@ class UserService extends AbstractService
             $this->table = $table;
         }
         $this->emailService = $emailService;
+        $this->config = $config;
     }
 
     /**
@@ -133,19 +136,33 @@ class UserService extends AbstractService
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
-        $count = 0;
-        $count = $this->table->save($form);
-        if ($count == 0) {
+        try {
+            $count = 0;
+            $count = $this->table->save($form);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+            $id = $this->table->getLastInsertValue();
+            $data['id'] = $id;
+            $form->password = $tmpPwd;
+            //$this->emailService->sendUserEmail($form);
+            //Code to add the user information to the Elastic Search Index
+            //$es = $this->generateUserIndexForElastic($data);
+            $this->commit();
+            return $count;
+        } catch (Exception $e) {
             $this->rollback();
             return 0;
         }
-        $id = $this->table->getLastInsertValue();
-        $data['id'] = $id;
-        $form->password = $tmpPwd;
-//        $this->emailService->sendUserEmail($form);
-        $this->commit();
-        return $count;
     }
+
+//    private function generateUserIndexForElastic($data) {
+//        $elasticIndex = new IndexerImpl($this->config);
+//        $appId = 'user';
+//        $id = $data['id'];
+//       return $elasticIndex->index($appId, $id, 'type', $data);
+//    }
 
     /**
      * @method updateUser
@@ -179,6 +196,7 @@ class UserService extends AbstractService
             return 0;
         }
         $form = new User();
+        unset($data['password']);
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $userdata['id'] = $id;
         $userdata['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
@@ -188,6 +206,7 @@ class UserService extends AbstractService
         }
         $form->exchangeArray($userdata);
         $form->validate();
+        
         $count = 0;
         $this->beginTransaction();
         try {
@@ -370,9 +389,9 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_user')
-        ->columns(array('id', 'uuid', 'username', 'firstname', 'lastname', 'name','email'))
-        ->where(array('ox_user.username' => $username,'ox_user.email' => $username),'OR');
-        
+            ->columns(array('id', 'uuid', 'username', 'firstname', 'lastname', 'name', 'email'))
+            ->where(array('ox_user.username' => $username, 'ox_user.email' => $username), 'OR');
+
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
             return 0;
@@ -422,7 +441,7 @@ class UserService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $delete = $sql->delete('ox_user_manager');
-        $delete->where(['user_id' => $userId, 'manager_id' => $managerId,]);
+        $delete->where(['user_id' => $userId, 'manager_id' => $managerId, ]);
         $result = $this->executeUpdate($delete);
         if ($result->getAffectedRows() == 0) {
             return $result;
@@ -534,7 +553,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select()
             ->from('ox_user')
-            ->columns(array('id', 'firstname', 'lastname'))// Instead of getting the id from the userTable,
+            ->columns(array('id', 'firstname', 'lastname')) // Instead of getting the id from the userTable,
             // we need to get the UUID. Once UUID is added to the table we need to make that change
             ->where(array('firstname LIKE "%' . $searchVal . '%" OR lastname LIKE "%' . $searchVal . '%"'));
         return $result = $this->executeQuery($select)->toArray();
@@ -614,7 +633,7 @@ class UserService extends AbstractService
             $privilege[$key] = 'priv' . $privilege[$key] . ':true';
         }
         $blackListedApps = $this->getAppsWithoutAccessForUser();
-        $responseArray = Array('privilege' => $privilege, 'blackListedApps' => $blackListedApps);
+        $responseArray = array('privilege' => $privilege, 'blackListedApps' => $blackListedApps);
         return $responseArray;
     }
 
@@ -696,7 +715,7 @@ class UserService extends AbstractService
             $userReset['lastname'] = $userDetails['lastname'];
             $userReset['password_reset_code'] = $resetPasswordCode;
             $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
-//            print_r($userReset);exit;
+            //            print_r($userReset);exit;
             //Code to update the password reset and expiration time
             $userUpdate = $this->updateUser($id, $userReset);
             if ($userUpdate) {
@@ -707,6 +726,5 @@ class UserService extends AbstractService
         } else {
             return 0;
         }
-
     }
 }
