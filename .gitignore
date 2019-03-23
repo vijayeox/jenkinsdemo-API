@@ -3,3 +3,7 @@
 **/logs
 /api/v1/build
 /api/v1/Doc
+/integrations/smtp/target/*
+/api/v1/data/uploads/*
+**/.idea/*
+**package-lock.json
