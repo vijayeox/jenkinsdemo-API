@@ -196,7 +196,6 @@ class UserService extends AbstractService
             return 0;
         }
         $form = new User();
-        unset($data['password']);
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $userdata['id'] = $id;
         $userdata['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
