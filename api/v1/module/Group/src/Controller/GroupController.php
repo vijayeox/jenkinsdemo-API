@@ -126,10 +126,10 @@ class GroupController extends AbstractApiController {
             return $this->getErrorResponse("Validation Errors",404, $response);
         }
         if($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+            return $this->getErrorResponse("Entity not found", 404);
         }
-        elseif ($count == -1) {
-        	return $this->getErrorResponse("Users exist", 404);
+        if($count == 2) {
+            return $this->getErrorResponse("Enter User Ids", 404);
         }
         return $this->getSuccessResponseWithData($data,200);
     }

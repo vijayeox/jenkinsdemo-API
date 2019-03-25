@@ -134,5 +134,16 @@ Function Name: executeQuerywithParams()
         $statementContainer->setSql($query);
         return $statementContainer->execute();
     }
+
+    public function runGenericQuery($query){
+        $adapter = $this->getAdapter();
+        $driver = $adapter->getDriver();
+        $platform = $adapter->getPlatform();
+        $parameterContainer = new ParameterContainer();
+        $statementContainer = $adapter->createStatement();
+        $statementContainer->setParameterContainer($parameterContainer);
+        $statementContainer->setSql($query);
+        return $statementContainer->execute();
+    }
 }
  

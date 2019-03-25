@@ -121,49 +121,32 @@ class GroupService extends AbstractService {
     }
 
     public function saveUser($id,$data) {
-        $obj = $this->table->get($id,array());
-        $org = $this->organizationService->getOrganization($id);
-        $avatar_id = array();
+        if(!isset($data['userid']) || empty($data['userid'])) {
+            return 2;
+        }
         $userArray=json_decode($data['userid'],true);
-
-        $query = "select id,username from ox_user";
-        $order = "order by ox_user.id";
-        $resultSet_User_temp = $this->executeQuerywithParams($query, null, null, $order)->toArray();
-        $resultSet_User=array_map('current', $resultSet_User_temp);
-
         if($userArray){
-            $storeData = array();
-            $queryString = "select avatar_id from ox_user_group";
-            $id_group_array = $this->executeQuerywithParams($queryString)->toArray();
-            if($id_group_array) {
-                $userSingleArray = array_map('current', $userArray);
-                $avatar_id = array_column($id_group_array, 'avatar_id');
-                if((count(array_diff($userSingleArray, $avatar_id))!=0)&&(count(array_intersect($userSingleArray, $resultSet_User))==count($userSingleArray))) {
-                    $sql = $this->getSqlObject();
-                    $delete = $sql->delete('ox_user_group');
-                    $delete->where(['group_id'=>$id]);
-                    $result = $this->executeUpdate($delete);
-                    foreach ($userArray as $key => $value) {
-                        $storeData[] = array('group_id'=>$id,'avatar_id'=>$value['id']);
-                    }
-                    $queryString =$this->multiInsertOrUpdate('ox_user_group',$storeData,array());
-                    // $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'],'username' => $resultSet_User_temp[1]['username'] )),'USERTOGROUP_ADDED');
+            $this->beginTransaction();
+            try{
+                $userSingleArray= array_unique(array_map('current', $userArray));
+                $delete = $this->getSqlObject()
+                ->delete('ox_user_group')
+                ->where(['group_id' => $id]);
+                $result = $this->executeQueryString($delete);
+                $query ="Insert into ox_user_group(avatar_id,group_id) (Select ox_user.id, ".$id." AS group_id from ox_user_group right join  ox_user on ox_user_group.avatar_id = ox_user.id where ox_user.id in (".implode(',', $userSingleArray)."))";
+                $resultInsert = $this->runGenericQuery($query);
+                if(count($resultInsert) != count($userArray)){
+                    $this->rollback();
+                    return 0;
                 }
-                else {
-                    //  $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'],'username' => $resultSet_User_temp[1]['username'] )),'USERTOGROUP_FAILURE');
-                    return -1;
-                }
+                $this->commit();
             }
-            else {
-                foreach ($userArray as $key => $value) {
-                    $storeData[] = array('group_id'=>$id,'avatar_id'=>$value['id']);
-                }
-                $queryString =$this->multiInsertOrUpdate('ox_user_group',$storeData,array());
+            catch(Exception $e){
+                $this->rollback();
+                throw $e;
             }
+            return 1;
         }
-        else{
-            return 0;
-        }
-        return 1;
+        return 0;
     }
 }

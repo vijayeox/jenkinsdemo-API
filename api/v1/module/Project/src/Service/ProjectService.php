@@ -11,12 +11,13 @@ use Zend\Db\Sql\Expression;
 use Exception;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\OrganizationService;
+use Doctrine\Migrations\AbstractMigration;
 
 class ProjectService extends AbstractService {
 
     private $table;
     private $organizationService;
-    
+
     public function setMessageProducer($messageProducer)
     {
 		$this->messageProducer = $messageProducer;
@@ -146,49 +147,34 @@ class ProjectService extends AbstractService {
     	return $resultSet->toArray();
     }*/
 
-    public function saveUser($project_id,$data) {
+    public function saveUser($projectId,$data) {
         if(!isset($data['userid']) || empty($data['userid'])) {
             return 2;
         }
     	$userArray=json_decode($data['userid'],true);
         if($userArray){
-            $userSingleArray= array_map('current', $userArray);
-            //Check if project id exists
-            $queryString = "select id,name,org_id from ox_project";
-            $order = "order by ox_project.id";
-            $where = "where ox_project.isdeleted!=1";
-            $resultSet_temp = $this->executeQuerywithParams($queryString, $where, null, $order)->toArray();
-            $resultSet=array_map('current', $resultSet_temp);
-            //Check if user id exists
-            $query = "select id,username from ox_user";
-            $order = "order by ox_user.id";
-            $resultSet_User_temp = $this->executeQuerywithParams($query, null, null, $order)->toArray();
-            $resultSet_User=array_map('current', $resultSet_User_temp);
-
-            $org = $this->organizationService->getOrganization($resultSet_temp[0]['org_id']);
-
-            if((in_array($project_id, $resultSet))&&(count(array_intersect($userSingleArray, $resultSet_User))==count($userSingleArray))) {
-                $sql = $this->getSqlObject();
-                $delete = $sql->delete('ox_user_project');
-                $delete->where(['project_id'=>$project_id]);
-                $result = $this->executeUpdate($delete);
-            	$storeData = array();
-                if($userArray){
-                    foreach ($userArray as $key => $value) {
-                        $storeData[] = array('project_id'=>$project_id,'user_id'=>$value['id']);
-                    }
-                    $userId = AuthContext::get(AuthConstants::USER_ID);
-                    $queryString =$this->multiInsertOrUpdate('ox_user_project',$storeData,array());
-                    // $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet_User_temp[0]['username'],'orgname' => $org['name'] ,'projectname' => $resultSet_temp[0]['name'] )),'USERTOPROJECT_ADDEED');
+            $this->beginTransaction();
+            try{
+                $userSingleArray= array_map('current', $userArray);
+                $delete = $this->getSqlObject()
+                ->delete('ox_user_project')
+                ->where(['project_id' => $projectId]);
+                $result = $this->executeQueryString($delete);
+                $query ="Insert into ox_user_project(user_id,project_id) (Select ox_user.id, ".$projectId." AS project_id from ox_user_project right join  ox_user on ox_user_project.user_id = ox_user.id where ox_user.id in (".implode(',', $userSingleArray)."))";
+                $resultInsert = $this->runGenericQuery($query);
+                if(count($resultInsert) != count($userArray)){
+                    $this->rollback();
+                    return 0;
                 }
-            } else {
-                return 0;
+                $this->commit();
             }
+            catch(Exception $e){
+                $this->rollback();
+                throw $e;
+            }
+            return 1;
         }
-        else {
-                return 0;
-        }
-        return 1;
+        return 0;
     }
 
     /*public function deleteUser($project_id, $data) {
