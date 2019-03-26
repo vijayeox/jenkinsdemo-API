@@ -13,23 +13,20 @@ use Zend\Stdlib\ArrayUtils;
 
 abstract class ControllerTest extends MainControllerTest{
     use TestCaseTrait;
-	static private $pdo = null;
-	// only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
-	private $conn = null;
+	static protected $pdo = null;
+	static protected $connection = null;
 
     abstract function getDataSet();
 	
 	public function getConnection()
     {
-        if ($this->conn === null) {
-            if (self::$pdo == null) {
-                $config = $this->getApplicationConfig();
-                $config = $config['db'];
-                self::$pdo = new \PDO( $config['dsn'], $config['username'], $config['password'] );
-            }
-            $this->conn = $this->createDefaultDBConnection(self::$pdo, $config['database']);
+        if (!isset(static::$pdo)) {
+            $config = $this->getApplicationConfig();
+            $config = $config['db'];
+            static::$pdo = new \PDO($config['dsn'], $config['username'], $config['password'], array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION));
+            static::$connection = $this->createDefaultDBConnection(static::$pdo);
         }
-        return $this->conn;
+        return static::$connection;
     }
 	
 	protected function getMockGatewayData($name, $modelClass){
