@@ -10,7 +10,7 @@ $ docker build . --tag camel
 To run the image container +
 ++++++++++++++++++++++++++++
 
-$ docker run --network="host" --it v ${PWD}:/workspace/app camel
+$ docker run --network="host" -it -v ${PWD}:/workspace/app camel
 
 +++++++++++++++++++++++++++++++++
 To run into the container shell +
