@@ -11,9 +11,6 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 
 class AuthControllerTest extends ControllerTest{
-    static private $pdo = null;
-    // only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
-    private $conn = null;
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
@@ -264,7 +261,7 @@ class AuthControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['username'],'Bharat Gogineni');
-        $this->assertContains('user/profile/b0cb0d3c-496e-11e9-a876-b88198a956ff',$content['data']['profileUrl']);   
+        $this->assertContains('user/profile/',$content['data']['profileUrl']);   
     }
 
     public function testValidProfileEmail(){
@@ -279,7 +276,7 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['username'],'Bharat Gogineni');
-        $this->assertContains('user/profile/b0cb0d3c-496e-11e9-a876-b88198a956ff',$content['data']['profileUrl']);   
+        $this->assertContains('user/profile/',$content['data']['profileUrl']);   
     }
 
     public function testInvalidProfileEmail(){
