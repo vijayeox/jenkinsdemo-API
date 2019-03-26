@@ -21,8 +21,8 @@ final class Version20190225134407 extends AbstractMigration
     	$this->addSql("ALTER TABLE `ox_app_registry` CHANGE `app_id` `app_id` VARCHAR(200) NOT NULL;");
         $this->addSql("INSERT INTO `ox_app` (name,category,uuid) VALUES ('Admin App','EXAMPLE_CATEGORY','$uniqueIdString');");
         $this->addSql("INSERT INTO `ox_app_registry` (org_id,app_id,start_options) VALUES (1,'$uniqueIdString','json_object');");
-        $this->addSql("ALTER TABLE `ox_privilege` CHANGE `app_id` `app_id` VARCHAR(200) NOT NULL;");
-        $this->addSql("ALTER TABLE `ox_role_privilege` CHANGE `app_id` `app_id` VARCHAR(200) NOT NULL;");
+        $this->addSql("ALTER TABLE `ox_privilege` CHANGE `app_id` `app_id` VARCHAR(200) NULL;");
+        $this->addSql("ALTER TABLE `ox_role_privilege` CHANGE `app_id` `app_id` VARCHAR(200) NULL;");
         $this->addSql("UPDATE `ox_privilege` SET `permission_allowed`=3,`app_id`='$uniqueIdString' WHERE `name` LIKE 'MANAGE_USER';");
         $this->addSql("UPDATE `ox_privilege` SET `permission_allowed`=3,`app_id`='$uniqueIdString' WHERE `name` LIKE 'MANAGE_PROJECT';");
         $this->addSql("UPDATE `ox_privilege` SET `app_id`='$uniqueIdString' WHERE `name` LIKE 'MANAGE_ANNOUNCEMENT';");
@@ -53,8 +53,8 @@ final class Version20190225134407 extends AbstractMigration
     	$this->addSql("ALTER TABLE `ox_app_registry` CHANGE `app_id` `app_id` INT(11) NOT NULL;");
     	$this->addSql("DELETE FROM `ox_app` WHERE `name` LIKE 'Admin App' AND `category` LIKE 'EXAMPLE_CATEGORY';");
     	$this->addSql("DELETE FROM `ox_app_registry` WHERE `org_id` =1 AND `app_id` = '$uniqueIdString';");
-    	$this->addSql("ALTER TABLE `ox_privilege` CHANGE `app_id` `app_id` INT(32) NOT NULL;");
-    	$this->addSql("ALTER TABLE `ox_role_privilege` CHANGE `app_id` `app_id` INT(32) NOT NULL;");
+    	$this->addSql("ALTER TABLE `ox_privilege` CHANGE `app_id` `app_id` INT(32)  NULL;");
+    	$this->addSql("ALTER TABLE `ox_role_privilege` CHANGE `app_id` `app_id` INT(32)  NULL;");
     	$this->addSql("UPDATE `ox_privilege` SET `permission_allowed` = 15 , `app_id` = NULL WHERE `name` LIKE 'MANAGE_USER';");
     	$this->addSql("UPDATE `ox_privilege` SET `permission_allowed`= 15,`app_id`= NULL WHERE `name` LIKE 'MANAGE_PROJECT';");
     	$this->addSql("UPDATE `ox_privilege` SET `app_id`= NULL WHERE `name` LIKE 'MANAGE_ANNOUNCEMENT';");

@@ -1,10 +1,12 @@
 ox_user:
 -
   id: 1
+  uuid: "b0cb0d3c-496e-11e9-a876-b88198a956ff"
   username: "bharatg"
   password: "1619d7adc23f4f633f11014d2f22b7d8"
   firstname: "Bharat"
   lastname: "Gogineni"
+  name: "Bharat Gogineni"
   orgid: 1
   date_of_birth: "1991-02-28 00:00:00"
   date_of_join: "1991-02-28 00:00:00"
@@ -21,10 +23,12 @@ ox_user:
   created_by: 1
 -
   id: 2
+  uuid: "bf32cd8c-4faf-11e9-9f12-283a4d5d1bdb"
   username: "karan"
   password: "1619d7adc23f4f633f11014d2f22b7d8"
   firstname: "Karan"
   lastname: "Agarwal"
+  name: "Karan Agarwal"
   country: "Ghana"
   orgid: 1
   date_of_birth: "1991-02-28 00:00:00"
@@ -41,10 +45,12 @@ ox_user:
   created_by: 1
 -
   id: 3
+  uuid: "bf3d5b0e-4faf-11e9-9f12-283a4d5d1bdb"
   username: "rakshith"
   password: "1619d7adc23f4f633f11014d2f22b7d8"
   firstname: "rakshith"
   lastname: "amin"
+  name: "rakshith amin"
   country: "Ghana"
   orgid: 1
   date_of_birth: "1991-02-28 00:00:00"
