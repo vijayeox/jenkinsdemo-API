@@ -260,8 +260,8 @@ class AnnouncementService extends AbstractService{
         $select->from('ox_announcement')
                 ->columns(array("*"))
                 ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
-                ->join('groups_avatars', 'ox_announcement_group_mapper.group_id = groups_avatars.groupid',array('groupid','avatarid'),'left')
-                ->where(array('groups_avatars.avatarid' => AuthContext::get(AuthConstants::USER_ID)))
+                ->join('ox_user_group', 'ox_announcement_group_mapper.group_id = ox_user_group.group_id',array('group_id','avatar_id'),'left')
+                ->where(array('ox_user_group.avatar_id' => AuthContext::get(AuthConstants::USER_ID)))
                 ->group(array('ox_announcement.id'));
         return $this->executeQuery($select)->toArray();
     }
@@ -288,7 +288,7 @@ class AnnouncementService extends AbstractService{
         $select->from('ox_announcement')
         ->columns(array("*"))
         ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
-        ->join('groups_avatars', 'ox_announcement_group_mapper.group_id = groups_avatars.groupid',array('groupid','avatarid'),'left')
+        ->join('ox_user_group', 'ox_announcement_group_mapper.group_id = ox_user_group.group_id',array('group_id','avatar_id'),'left')
         ->where(array('ox_announcement.id' => $id))
         ->group(array('ox_announcement.id'));
         $response = $this->executeQuery($select)->toArray();
