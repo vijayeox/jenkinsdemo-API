@@ -59,15 +59,6 @@ class ElasticService{
 	}
 
 	public function getQueryResults($orgId,$appId,$params) {
-		$searchconfig['fields'] = $params['fields'];
-		$searchconfig['start'] = $params['start'];
-		$searchconfig['pagesize'] = $params['pagesize'];
-		$searchconfig['filter'] = $params['filter'];
-		$searchconfig['range'] = $params['range'];
-		$searchconfig['group'] = $params['group'];
-		$searchconfig['aggregates'] = $params['aggregates'];
-		$searchconfig['sort'] = $params['sort'];
-		$searchconfig['select'] = $params['select'];
 		$result = $this->filterData($orgId,$appId,$params);
 		return $result;
 
@@ -78,19 +69,17 @@ class ElasticService{
 	public function filterData($orgId,$appId,$searchconfig) {
 		$boolfilter = array();
 		$tmpfilter = $this->getFilters($searchconfig,$orgId);
+
 		if ($tmpfilter) {
 			$boolfilterquery['query']['bool']['filter'] = array($tmpfilter);
-		}
-		
-		if(isset($searchconfig['select'])){
-			$boolfilterquery['_source'] = $searchconfig['select'];
-		} 
+		}	
+		$boolfilterquery['_source'] = (isset($searchconfig['select']))?$searchconfig['select']:array('*');
 		$pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:10000;
 		if(!empty($searchconfig['aggregates'])) {
 			if (!isset($searchconfig['select'])) {
 				$pagesize=0;
 			}
-			$aggs=$this->getAggregate($searchconfig['aggregates'],$boolfilterquery,$entity);	
+			$aggs=$this->getAggregate($searchconfig['aggregates'],$boolfilterquery);	
 			if($searchconfig['group'] && !empty($searchconfig['group'])) {
 				$this->getGroups($searchconfig,$boolfilterquery,$aggs);
 			} else {
@@ -101,24 +90,23 @@ class ElasticService{
 			}
 		}
 		$boolfilterquery['explain'] = true;
-		$params = array('index'=>$appId,'type'=>$this->type,'body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>$searchconfig['start']?$searchconfig['start']:0,"size"=>$pagesize);
+		$params = array('index'=>$appId,'type'=>$this->type,'body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
 		$result_obj = $this->search($params);
-			if ($searchconfig['group'] && !isset($searchconfig['select'])) {
-				$results = array('data'=>$result_obj['aggregations']['groupdata']['buckets']);
-				$results['type']='group';
-			} else if(key($searchconfig['aggregates'])=='count' && !isset($searchconfig['select'])){
-				$results = array('data'=>$result_obj['hits']['total']);
-				$results['type']='value';
-			} else if (isset($result_obj['aggregations'])){
-				$results = array('data'=>$result_obj['aggregations']['value']['value']);
-				$results['type']='value';
-			}  else {
-				$results = array();
-
-				foreach($result_obj['hits']['hits'] as $key=>$value){
-					$results['data'][$key] = $value['_source'];
-				//	$results['data'][$key]['id'] = $value['_source']['_id'];
-				}
+		if ($searchconfig['group'] && !isset($searchconfig['select'])) {
+			$results = array('data'=>$result_obj['aggregations']['groupdata']['buckets']);
+			$results['type']='group';
+		} else if(key($searchconfig['aggregates'])=='count' && !isset($searchconfig['select'])){
+			$results = array('data'=>$result_obj['hits']['total']);
+			$results['type']='value';
+		} else if (isset($result_obj['aggregations'])){
+			$results = array('data'=>$result_obj['aggregations']['value']['value']);
+			$results['type']='value';
+		}  else {
+			$results = array();
+			foreach($result_obj['hits']['hits'] as $key=>$value){
+				$results['data'][$key] = $value['_source'];
+			//	$results['data'][$key]['id'] = $value['_source']['_id'];
+			}
 			$results['type']='list';
 		}
 		return $results;
@@ -182,7 +170,7 @@ class ElasticService{
 		}
 		return $query;
 	}
-	protected function getAggregate($aggregates,$filter,$entity){
+	protected function getAggregate($aggregates,$filter){
 		$aggs=null;
 		if (key($aggregates)=='count_distinct') {
 			$aggs = array('value'=>array("cardinality"=>array("field"=>$aggregates[key($aggregates)])));

@@ -39,9 +39,10 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 
 
     private function formatQuery($parameters) {
-		
-		$datetype = $parameters['date_type'];
-		if ($parameters['date-period']) {
+		$range=null;
+		$filter=null;
+		$datetype = (!empty($parameters['date_type']))?$parameters['date_type']:null;
+		if (!empty($parameters['date-period'])) {
 			$period = explode('/', $parameters['date-period']);
 			$startdate = $period[0];
 			$enddate = $period[1];
@@ -49,13 +50,17 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			$startdate = date('Y').'-01-01';
 			$enddate = date('Y').'-12-31';
 		}
-		if (substr(strtolower($parameters['field']), 0, 5) == 'date(') {
-			$parameters['field'] = substr($parameters['field'], 5, -1);
+		if (!empty($parameters['field'])) {
+			if (substr(strtolower($parameters['field']), 0, 5) == 'date(') {
+				$parameters['field'] = substr($parameters['field'], 5, -1);
+			}
+			$field = $parameters['field'];
 		}
+
 		if (!isset($parameters['operation'])) {
 			$parameters['operation'] = 'count';
 		}
-		$field = $parameters['field'];
+
 		$parameters['operation'] = strtolower($parameters['operation']);
 		if ($parameters['operation'] != 'count_distinct') {
 			$operation = explode('_', $parameters['operation']);
@@ -65,8 +70,8 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 
 		$group = array();
 		$aggregates = array();
-		if ($parameters['group']) {
-			$parameters['frequency'] = 4;  //frequency 4 is to override time frequecy by group
+		if (!empty($parameters['group'])) {
+			$parameters['frequency'] = null;  //frequency 4 is to override time frequecy by group
 			if (is_array($parameters['group'])) {
 				$group = $parameters['group'];
 			} else {
@@ -83,18 +88,18 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 				}
 			}
 		}
-		if ($parameters['frequency'] != 4) {
+		if (!empty($parameters['frequency'])) {
 			switch ($parameters['frequency']) {
 				case 1:
-					$group[] = 'period-month';
-					break;
-				case 2:
-					$group[] = 'period-quarter';
-					break;
-				case 3:
 					$group[] = 'period-day';
 					break;
-				case 5:
+				case 2:
+					$group[] = 'period-month';
+					break;
+				case 3:
+					$group[] = 'period-quarter';
+					break;
+				case 4:
 					$group[] = 'period-year';
 					break;
 			}
