@@ -19,6 +19,7 @@ class AnnouncementControllerTest extends ControllerTest{
     }   
     public function getDataSet() {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Announcement.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Group/test/Dataset/Group.yml");
         return $dataset;
     }
 
