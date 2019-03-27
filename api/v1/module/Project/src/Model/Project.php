@@ -20,7 +20,7 @@ class Project extends Entity {
     );
 
     public function validate() {
-        $dataArray = array("name");
+        $dataArray = array("name","description");
         $this->validateWithParams($dataArray);
     }
         

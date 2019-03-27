@@ -35,6 +35,22 @@ class PrivilegeService extends AbstractService
             return $response = ['data' => $appId, 'errors' => $e->getErrors()];
         }
         return $resultSet->toArray();
+    }
 
+    public function getAppId() 
+    {
+        try{
+            $userId = AuthContext::get(AuthConstants::USER_ID);
+            $query = "select ox_role_privilege.app_id from ox_role_privilege 
+                      RIGHT JOIN ox_user_role on ox_role_privilege.role_id = ox_user_role.role_id";
+            $where = "where ox_user_role.user_id = ".$userId." AND ox_role_privilege.privilege_name = 'MANAGE_ROLE'";
+            $resultSet = $this->executeQuerywithParams($query, $where);
+            $appIdArray= $resultSet->toArray();
+            $appId = array_unique(array_column($appIdArray,'app_id'));
+            return $appId;
+        }
+        catch (ValidationException $e) {
+            return 0;
+        }
     }
 }

@@ -9,6 +9,7 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
+use Privilege\Service\PrivilegeService;
 
 
 class PrivilegeControllerTest extends ControllerTest
@@ -36,7 +37,13 @@ class PrivilegeControllerTest extends ControllerTest
     public function testGetUserPrivileges()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/privilege/app/5c828ac595c3f', 'GET');
+        $this->dispatch('/privilege/getappid', 'GET');
+        $this->assertResponseStatusCode(200);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $appId = $content['data'][0];
+        $this->reset();
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/privilege/app/'.$appId, 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('userprivileges');

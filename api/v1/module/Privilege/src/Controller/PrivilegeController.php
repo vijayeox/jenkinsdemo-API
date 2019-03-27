@@ -60,4 +60,13 @@ class PrivilegeController extends AbstractApiController
         return $this->getSuccessResponseWithData($result);
     }
 
+    public function getAppIdAction()
+    {
+        $result = $this->privilegeService->getAppId();
+        if($result == 0){
+            return $this->getFailureResponse("Something went wrong");
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
+
 }

@@ -26,6 +26,20 @@ return [
                     ],
                 ],
             ],
+            'getAppId' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/privilege/getappid',
+                    'defaults' => [
+                        'controller' => Controller\PrivilegeController::class,
+                        'method' => 'GET',
+                        'action' => 'getAppId',
+                        'access' => [
+                            'getAppId'=>'MANAGE_PRIVILEGE_WRITE'
+                        ],
+                    ],
+                ],
+            ],
             'userPrivileges' => [
                 'type' => Segment::class,
                 'options' => [
