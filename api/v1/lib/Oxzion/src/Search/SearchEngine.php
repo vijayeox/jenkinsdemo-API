@@ -7,4 +7,3 @@ interface SearchEngine
     public function search($parameters, $appId);
 
 }
-?>

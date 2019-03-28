@@ -1,15 +1,16 @@
 <?php
 namespace Oxzion\Search\Elastic;
 
-use Oxzion\Search\SearchEngine;
-use Elasticsearch\ClientBuilder;
-use Oxzion\Service\ElasticService;
-use Bos\Auth\AuthContext;
 use Bos\Auth\AuthConstants;
+use Bos\Auth\AuthContext;
+use Oxzion\Search\SearchEngine;
+use Oxzion\Service\ElasticService;
 
-class SearchEngineImpl implements SearchEngine {
+class SearchEngineImpl implements SearchEngine
+{
     private $config;
-    public function __construct($config) {
+    public function __construct($config)
+    {
         $this->config = $config;
     }
 
@@ -18,6 +19,7 @@ class SearchEngineImpl implements SearchEngine {
         try {
             $elasticService = new ElasticService($this->config);
             $text = $parameters['searchtext'];
+            // $type = $parameters['type'];
             $pagesize = (isset($parameters['pagesize'])) ? $parameters['pagesize'] : 25;
             $start = (isset($parameters['start'])) ? $parameters['start'] : 0;
             $index = ($appId) ? $appId : '_all';
@@ -26,15 +28,37 @@ class SearchEngineImpl implements SearchEngine {
             if (isset($parameters['type'])) {
                 $body['query']['bool']['filter']['must'] = [
                     ['term' => ['org_id' => $orgId]],
-                    ['term' => ['type' => $type]]
+                    ['term' => ['type' => $type]],
                 ];
             } else {
                 $body['query']['bool']['filter'] = ['term' => ['org_id' => $orgId]];
             }
-            $body['query']['bool']['should'] = ["multi_match" => ["fields" => ['display_id^6', 'name^4', 'status^0.1', 'modified_by^2', 'created_by^2'], "query" => $text, "fuzziness" => "AUTO"]];
-            $body['highlight'] = ['order' => 'score', "require_field_match" => 'true', 'fields' => ["*" => ['force_source' => false, "pre_tags" => ["<b class='highlight'>"], "post_tags" => ["</b>"], 'number_of_fragments' => 3, 'fragment_size' => 100]], 'encoder' => 'html'];
-            $body['min_score'] = "0.5";
-            $source = ['display_id', 'name', 'status', 'created_by', 'date_created','modified_by','date_modified'];
+            $fieldList = $elasticService->getBoostFields('user');
+            $body['query']['bool']['should'] = [
+                "multi_match" => [
+                    "fields" => $fieldList,
+                    "query" => $text,
+                    "type"=> "best_fields",
+                    "fuzziness" => 'auto',
+                    "prefix_length" => 3,
+                ],
+            ];
+            $body['highlight'] = [
+                'order' => 'score',
+                "require_field_match" => 'true',
+                'fields' => [
+                    "*" => [
+                        'force_source' => false,
+                        "pre_tags" => [
+                            "<b class='highlight'>",
+                        ],
+                        "post_tags" => ["</b>"],
+                        'number_of_fragments' => 3,
+                        'fragment_size' => 100]],
+                'encoder' => 'html',
+            ];
+            $body['min_score'] = "0.1";
+            $source = "*";
             $data = $elasticService->getSearchResults($index, $body, $source, $start, $pagesize);
             return $data;
         } catch (Exception $e) {
@@ -43,4 +67,3 @@ class SearchEngineImpl implements SearchEngine {
     }
 
 }
-?>

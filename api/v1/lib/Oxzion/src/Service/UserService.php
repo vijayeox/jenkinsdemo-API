@@ -1,16 +1,15 @@
 <?php
 namespace Oxzion\Service;
 
-use Oxzion\Utils\BosUtils;
-use Zend\Db\Sql\Sql;
-use Bos\Auth\AuthContext;
 use Bos\Auth\AuthConstants;
+use Bos\Auth\AuthContext;
 use Bos\Service\AbstractService;
-use Bos\ValidationException;
-use Oxzion\Model\User;
-use Oxzion\Utils\ArrayUtils;
 use Email\Service\EmailService;
-//use Oxzion\Search\Elastic\IndexerImpl;
+use Oxzion\Messaging\MessageProducer;
+use Oxzion\Model\User;
+use Oxzion\Search\Elastic\IndexerImpl;
+use Oxzion\Utils\ArrayUtils;
+use Oxzion\Utils\BosUtils;
 
 class UserService extends AbstractService
 {
@@ -36,6 +35,7 @@ class UserService extends AbstractService
         }
         $this->emailService = $emailService;
         $this->config = $config;
+        $this->messageProducer = MessageProducer::getInstance();
     }
 
     /**
@@ -63,7 +63,7 @@ class UserService extends AbstractService
         $select = $sql->select()
             ->from('ox_user')
             ->columns(array('id', 'name', 'uuid', 'orgid'))
-            ->where(array('username = "' . (string)$userName . '"'))->limit(1);
+            ->where(array('username = "' . (string) $userName . '"'))->limit(1);
         $results = $this->executeQuery($select);
         $results = $results->toArray();
         if (count($results) > 0) {
@@ -148,6 +148,7 @@ class UserService extends AbstractService
             $form->password = $tmpPwd;
             //$this->emailService->sendUserEmail($form);
             //Code to add the user information to the Elastic Search Index
+            //$result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
             //$es = $this->generateUserIndexForElastic($data);
             $this->commit();
             return $count;
@@ -157,12 +158,14 @@ class UserService extends AbstractService
         }
     }
 
-//    private function generateUserIndexForElastic($data) {
-//        $elasticIndex = new IndexerImpl($this->config);
-//        $appId = 'user';
-//        $id = $data['id'];
-//       return $elasticIndex->index($appId, $id, 'type', $data);
-//    }
+    private function generateUserIndexForElastic($data)
+    {
+        //    print_r($data);exit;
+        $elasticIndex = new IndexerImpl($this->config);
+        $appId = 'user';
+        $id = $data['id'];
+        return $elasticIndex->index($appId, $id, 'type', $data);
+    }
 
     /**
      * @method updateUser
@@ -200,12 +203,12 @@ class UserService extends AbstractService
         $userdata['id'] = $id;
         $userdata['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $userdata['date_modified'] = date('Y-m-d H:i:s');
-        if(isset($userdata['preferences']) && is_array($userdata['preferences'])){
+        if (isset($userdata['preferences']) && is_array($userdata['preferences'])) {
             $userdata['preferences'] = json_encode($userdata['preferences']);
         }
         $form->exchangeArray($userdata);
         $form->validate();
-        
+
         $count = 0;
         $this->beginTransaction();
         try {
@@ -440,7 +443,7 @@ class UserService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $delete = $sql->delete('ox_user_manager');
-        $delete->where(['user_id' => $userId, 'manager_id' => $managerId, ]);
+        $delete->where(['user_id' => $userId, 'manager_id' => $managerId]);
         $result = $this->executeUpdate($delete);
         if ($result->getAffectedRows() == 0) {
             return $result;
@@ -553,7 +556,7 @@ class UserService extends AbstractService
         $select = $sql->select()
             ->from('ox_user')
             ->columns(array('id', 'firstname', 'lastname')) // Instead of getting the id from the userTable,
-            // we need to get the UUID. Once UUID is added to the table we need to make that change
+        // we need to get the UUID. Once UUID is added to the table we need to make that change
             ->where(array('firstname LIKE "%' . $searchVal . '%" OR lastname LIKE "%' . $searchVal . '%"'));
         return $result = $this->executeQuery($select)->toArray();
     }
