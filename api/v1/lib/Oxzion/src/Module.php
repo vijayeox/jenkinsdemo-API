@@ -182,6 +182,11 @@ class Module {
                     $config = $container->get('config');
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\ProfilePictureService($config, $dbAdapter);
+                },
+                 Service\UserSessionService::class => function($container) {
+                    $config = $container->get('config');
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\UserSessionService($config, $dbAdapter);
                 }
             ],
         ];

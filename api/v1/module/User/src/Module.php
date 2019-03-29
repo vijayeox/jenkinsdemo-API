@@ -16,6 +16,9 @@ use Oxzion\Service\UserService;
 use Oxzion\Service\RoleService;
 use Oxzion\Service\ProfilePictureService;
 use Email\Service\EmailService;
+use Oxzion\Service\UserSessionService;
+
+
 
 class Module implements ConfigProviderInterface {
 
@@ -66,6 +69,13 @@ class Module implements ConfigProviderInterface {
                  Controller\ProfilePictureDownloadController::class => function($container) {
                     return new Controller\ProfilePictureDownloadController(
                         $container->get(ProfilePictureService::class),
+                        $container->get('UserLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\UserSessionController::class => function($container) {
+                    return new Controller\UserSessionController(
+                        $container->get(UserSessionService::class),
                         $container->get('UserLogger'),
                         $container->get(AdapterInterface::class)
                     );

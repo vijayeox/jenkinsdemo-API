@@ -215,7 +215,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\ProfilePictureController::class,
                         'method' => 'POST',
-                        'action' => 'update'
+                        'action' => 'updateProfile'
                     ],
                 ],
             ],
@@ -238,6 +238,28 @@ return [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
                         'action' => 'updateNewPassword'
+                    ],
+                ],
+            ],
+            'getSession' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/me/getsession',
+                    'defaults' => [
+                        'controller' => Controller\UserSessionController::class,
+                        'method' => 'GET',
+                        'action' => 'getSession'
+                    ],
+                ],
+            ],
+            'updateSession' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/me/updatesession',
+                    'defaults' => [
+                        'controller' => Controller\UserSessionController::class,
+                        'method' => 'POST',
+                        'action' => 'updateSession'
                     ],
                 ],
             ],
