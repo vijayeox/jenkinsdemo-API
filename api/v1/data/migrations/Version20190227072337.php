@@ -35,7 +35,7 @@ final class Version20190227072337 extends AbstractMigration
               `modified_id` int(11) DEFAULT NULL,
               `server_info` varchar(1000) DEFAULT NULL,
               `other` TEXT DEFAULT NULL
-            ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;");
+            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;");
 
         $this->addSql("DROP TRIGGER IF EXISTS `ox_contact_insert`");
         $this->addSql("DROP TRIGGER IF EXISTS `ox_contact_update`");
