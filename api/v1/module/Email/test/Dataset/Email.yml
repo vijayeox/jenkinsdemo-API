@@ -4,22 +4,39 @@ email_setting_user:
     userid: 1
     email: 'bharatg@myvamla.com'
     password: 'EvExzooo7Ww=::5a1e01e327abfa333487ea6719ccfda6'
-    host: 'box3053.bluehost.com'
+    host: 'myvamla.com'
     isdefault: true
 -
     id: 2
-    userid: 2
-    email: 'rakshith@gmail.com'
+    userid: 1
+    email: 'bharat@gmail.com'
     password: 'EvExzooo7Ww=::5a1e01e327abfa333487ea6719ccfda6'
-    host: 'google.com'
+    host: 'gmail.com'
     isdefault: true
-email_setting_server:
+ox_email_domain:
   -
-    host: 'box3053.bluehost.com'
-    port: '993'
-    secure: 'ssl'
-    smtp_host: 'box3053.bluehost.com'
+    id: 1
+    name: 'myvamla.com'
+    imap_server: 'box3053.bluehost.com'
+    imap_port: '993'
+    imap_secure: 'ssl'
+    imap_short_login: '2'
+    smtp_server: 'box3053.bluehost.com'
     smtp_port: '465'
-    smtp_username: 'bharatg@myvamla.com'
-    smtp_password: 'EvExzooo7Ww=::5a1e01e327abfa333487ea6719ccfda6'
     smtp_secure: 'ssl'
+    smtp_short_login: 'short_name'
+    smtp_auth: 'auth'
+    smtp_use_php_mail: 'No'
+  -
+    id: 2
+    name: 'gmail.com'
+    imap_server: 'imap.gmail.com'
+    imap_port: '993'
+    imap_secure: 'ssl'
+    imap_short_login: '2'
+    smtp_server: 'smtp.gmail.com'
+    smtp_port: '465'
+    smtp_secure: 'ssl'
+    smtp_short_login: 'short_name'
+    smtp_auth: 'auth'
+    smtp_use_php_mail: 'No'

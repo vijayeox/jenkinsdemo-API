@@ -15,7 +15,6 @@ use Zend\Mail\Message;
 
 class EmailService extends AbstractService
 {
-
     private $table;
 
     public function __construct($config, $dbAdapter, EmailTable $table)
@@ -93,17 +92,17 @@ class EmailService extends AbstractService
     public function getEmailAccountsByUserId()
     {
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $queryString = "select id,userid,email,host,isdefault from email_setting_user";
+        $queryString = "select email_setting_user.id,userid,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
         $where = "where email_setting_user.userid = " . $userId;
         $order = "order by email_setting_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         return $resultSet->toArray();
     }
 
-    public function getEmailAccountByUserId($id)
+    public function getEmailAccountById($id)
     {
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $queryString = "select id,userid,email,host,isdefault from email_setting_user";
+        $queryString = "select email_setting_user.id,userid,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
         $where = "where email_setting_user.userid = " . $userId . " AND email_setting_user.id =" . $id;
         $order = "order by email_setting_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);

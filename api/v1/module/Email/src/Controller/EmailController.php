@@ -45,7 +45,7 @@ class EmailController extends AbstractApiController {
     * </code>
     */
     public function get($id){
-        $result = $this->emailService->getEmailAccountByUserId($id);
+        $result = $this->emailService->getEmailAccountById($id);
         if($result == 0||empty($result)){
             return $this->getErrorResponse("File not found", 404, ['id' => $id]);
         }

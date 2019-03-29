@@ -21,7 +21,7 @@ class DomainControllerTest extends ControllerTest
 
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Domain.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Email.yml");
         return $dataset;
     }
 
@@ -36,17 +36,17 @@ class DomainControllerTest extends ControllerTest
     public function testGetList()
     {
         $data = ['id' => 1,
-            'name' => 'Test Server',
-            'imap_server' => 'Test Server',
-            'imap_port' => '90',
-            'imap_secure' => '90',
-            'imap_short_login' => '2',
-            'smtp_server' => 'testing',
-            'smtp_port' => '99',
-            'smtp_secure' => 'securing1',
-            'smtp_short_login' => 'short_name',
-            'smtp_auth' => 'auth',
-            'smtp_use_php_mail' => 'No',
+            "name"=> 'myvamla.com',
+            "imap_server"=> 'box3053.bluehost.com',
+            "imap_port"=> '993',
+            "imap_secure"=> 'ssl',
+            "imap_short_login"=> '2',
+            "smtp_server"=> 'box3053.bluehost.com',
+            "smtp_port"=> '465',
+            "smtp_secure"=> 'ssl',
+            "smtp_short_login"=> 'short_name',
+            "smtp_auth"=> 'auth',
+            "smtp_use_php_mail"=> 'No'
         ];
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/domain', 'GET');
@@ -63,17 +63,17 @@ class DomainControllerTest extends ControllerTest
     public function testGet()
     {
         $data = ['id' => 1,
-            'name' => 'Test Server',
-            'imap_server' => 'Test Server',
-            'imap_port' => '90',
-            'imap_secure' => '90',
-            'imap_short_login' => '2',
-            'smtp_server' => 'testing',
-            'smtp_port' => '99',
-            'smtp_secure' => 'securing1',
-            'smtp_short_login' => 'short_name',
-            'smtp_auth' => 'auth',
-            'smtp_use_php_mail' => 'No',
+            "name"=> 'myvamla.com',
+            "imap_server"=> 'box3053.bluehost.com',
+            "imap_port"=> '993',
+            "imap_secure"=> 'ssl',
+            "imap_short_login"=> '2',
+            "smtp_server"=> 'box3053.bluehost.com',
+            "smtp_port"=> '465',
+            "smtp_secure"=> 'ssl',
+            "smtp_short_login"=> 'short_name',
+            "smtp_auth"=> 'auth',
+            "smtp_use_php_mail"=> 'No'
         ];
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/domain/1', 'GET');
@@ -99,8 +99,8 @@ class DomainControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = [
-            'name' => 'Test Server 3',
-            'imap_server' => 'Test Server 3',
+            'name' => 'yahoo.com',
+            'imap_server' => 'imap.yahoo.com',
             'imap_port' => '90',
             'imap_secure' => '90',
             'imap_short_login' => '2',

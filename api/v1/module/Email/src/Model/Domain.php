@@ -8,7 +8,6 @@ class Domain extends Entity
 {
     protected $data = array(
         'id' => 0,
-        'uuid' => 0,
         'name' => 0,
         'imap_server' => 0,
         'imap_port' => 0,
