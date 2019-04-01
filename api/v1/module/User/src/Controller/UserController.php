@@ -339,29 +339,54 @@ class UserController extends AbstractApiController
     private function getUserInfo($id, $params)
     {
         try {
-            $type = (isset($params['typeId'])) ? ($params['typeId']) : 'm';
-            if ($type === 'a') {
-                $result = $this->userService->getUser($id);
-            } else if ($type === 'm') {
-                $result = $this->userService->getUserWithMinimumDetails($id);
-            } else {
-                $result = $this->userService->getUserWithMinimumDetails($id);
+            $userInfo = array();
+            $type = (isset($params['type'])) ? ($params['type']) : 'm';
+            if(isset($params['userId']))
+            {
+                $userInfo = $this->userService->getUserWithMinimumDetails($id);
             }
-            if (isset($result)) {
-                $baseUrl =$this->getBaseUrl();
-                $icon = $result['icon'];
-                $result['icon'] = $baseUrl . "/user/profile/" . $result["uuid"];
-
+            else{
+                $options = explode('+', $type);
+                if(in_array('a', $options))
+                {
+                    $pos = array_search('m', $options);
+                    if($pos){
+                        unset($options[$pos]);
+                    }
+                }
+                foreach ($options as $key => $value) {
+                    switch($value) {
+                        case "p":
+                            $userInfo['privileges'] = AuthContext::get(AuthConstants::PRIVILEGES);
+                            break;
+                        case "m":
+                            $userInfo = $this->userService->getUserWithMinimumDetails(AuthContext::get(AuthConstants::USER_ID));
+                            break;
+                        case "a":
+                            $userInfo = $this->userService->getUser(AuthContext::get(AuthConstants::USER_ID));
+                            break;
+                        case "e":
+                            $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId();
+                            break;
+                        case "o":
+                            $userInfo['organization'] = $this->userService->getOrganizationByUserId();
+                            break;
+                        case "ap":
+                            $userInfo['apps'] = $this->userService->getAppsByUserId();
+                            break;
+                    }
+                }
             }
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if (($result == 0) || (empty($result))) {
+        if (($userInfo == 0) || (empty($userInfo))) {
             $response = ['id' => $id];
             return $this->getErrorResponse("Failed to find User", 404, $response);
         }
-        return $this->getSuccessResponseWithData($result);
+        print_r($userInfo);exit;
+        return $this->getSuccessResponseWithData($userInfo);
     }
 
     public function changePasswordAction()

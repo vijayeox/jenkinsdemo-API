@@ -386,8 +386,8 @@ class UserService extends AbstractService
             ->columns(array('id', 'uuid', 'username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone', 'date_of_birth', 'date_of_join', 'country', 'website', 'about', 'gender', 'interest', 'address', 'icon', 'preferences'))
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
-        if (!$response) {
-            return $response[0];
+        if (empty($response)) {
+            return 0;
         }
         $result = $response[0];
         $result['preferences'] = json_decode($response[0]['preferences']);
@@ -747,5 +747,19 @@ class UserService extends AbstractService
         } else {
             return 0;
         }
+    }
+
+    public function getOrganizationByUserId() {
+        $queryO = "Select org.id,org.name,org.address,org.city,org.state,org.zip,org.logo,org.labelfile,org.languagefile,org.status from ox_organization as org LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
+        $where = "where uo.user_id =".AuthContext::get(AuthConstants::USER_ID);
+        $resultSet = $this->executeQuerywithParams($queryO, $where, null, null);
+        return $resultSet->toArray();
+    }
+
+    public function getAppsByUserId() {
+        $queryString = "select ap.name,ap.description,ap.uuid,ap.type,ap.logo,ap.category from ox_app as ap LEFT JOIN ox_role_privilege on ap.uuid=ox_role_privilege.app_id LEFT JOIN ox_user_role on ox_user_role.role_id = ox_role_privilege.role_id";
+        $where = "where ox_role_privilege.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.isdeleted!=1 AND ox_user_role.user_id =".AuthContext::get(AuthConstants::USER_ID);
+        $resultSet = $this->executeQuerywithParams($queryString, $where);
+        return $resultSet->toArray();
     }
 }

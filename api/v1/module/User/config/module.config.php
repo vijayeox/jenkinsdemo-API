@@ -15,7 +15,7 @@ return [
             'user' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user[/:userId][/type][/:typeId]',
+                    'route' => '/user[/:userId][/:type]',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'access' => [
@@ -31,7 +31,7 @@ return [
             'loggedInUser' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user/me[/type][/:typeId]',
+                    'route' => '/user/me[/:type]',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'GET',

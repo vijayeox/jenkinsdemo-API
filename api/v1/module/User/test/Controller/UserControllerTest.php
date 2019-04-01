@@ -392,6 +392,16 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
+    public function testLoggedInUserComboDetails()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/me/a+ap', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('loggedInUser');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
     public function testUserAccess() 
     {
         $this->initAuthToken($this->adminUser);
