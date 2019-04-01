@@ -22,6 +22,7 @@
 
         <testsuite name="Core Fixtures">
             <directory>./lib/Oxzion/test</directory>
+            <directory>./module/Mlet/test</directory>
             <directory>./lib/Oxzion/test/WorkflowTest</directory>
             <directory>./lib/Oxzion/test/AnalyticsTest</directory>
         </testsuite>

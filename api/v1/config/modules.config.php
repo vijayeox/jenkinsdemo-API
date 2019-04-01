@@ -35,5 +35,6 @@ return [
     'Resource',
     'Email',
     'Privilege',
-    'Callback'
+    'Callback',
+    'Mlet'
 ];

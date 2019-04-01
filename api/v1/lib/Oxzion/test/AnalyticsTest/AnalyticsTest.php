@@ -25,11 +25,12 @@ class AnalyticsTest extends MainControllerTest{
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
-        $this->setSearchData();
-        
-        $config = $this->getApplicationConfig();
-        $this->setupData(); 
-        sleep (1) ;
+        if(enableElastic!=0){ 
+            $this->setSearchData();            
+            $config = $this->getApplicationConfig();
+            $this->setupData(); 
+            sleep (1) ;
+        }
     }   
     
 
@@ -47,13 +48,11 @@ class AnalyticsTest extends MainControllerTest{
     }
 
     public function setupData(){
-        if(enableElastic!=0){ 
             $indexer=  $this->getApplicationServiceLocator()->get(Indexer::class);
             $dataset = $this->dataset['ox_analysis'];
             foreach($dataset as $body) {
                 $this->createIndex($indexer,$body);
             }
-        }
     }
 
     
@@ -143,8 +142,7 @@ class AnalyticsTest extends MainControllerTest{
         $parameters = ['date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test',null,$parameters);
         $results = $results['data'];
-        $this->assertEquals(count($results),4);
-        $this->assertEquals(count($results[0]),13);               
+        $this->assertEquals($results,4);
     }
 
     public function testDefaultField() {

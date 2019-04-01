@@ -21,7 +21,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			if ($type) {
 				$parameters['Filter-type']=$type;
 			}
-            $query = $this->formatQuery($parameters);
+			$query = $this->formatQuery($parameters);
             $elasticService = new ElasticService($this->config);
 			$result = $elasticService->getQueryResults($orgId,$appId,$query);
 			if ($result['type']=='group') {
@@ -44,8 +44,8 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 		$datetype = (!empty($parameters['date_type']))?$parameters['date_type']:null;
 		if (!empty($parameters['date-period'])) {
 			$period = explode('/', $parameters['date-period']);
-			$startdate = $period[0];
-			$enddate = $period[1];
+			$startdate = date('Y-m-d', strtotime($period[0]));
+			$enddate =  date('Y-m-d', strtotime($period[1]));
 		} else {
 			$startdate = date('Y').'-01-01';
 			$enddate = date('Y').'-12-31';
@@ -85,6 +85,8 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 				if (!isset($parameters['list'])) {
 					if (!empty($group)) {
 						$aggregates[$operation[0]] = strtolower($group[0]); 				
+				} else {
+						$aggregates[$operation[0]] = '_id';
 				}
 			}
 		}
@@ -106,7 +108,6 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 		}
 		if (!isset($parameters['skipdate']) && $datetype)
 			$range[$datetype] = $startdate . "/" . $enddate;
-
 		foreach ($parameters as $key => $value) {
 			if (strstr($key, 'Filter')) {
 

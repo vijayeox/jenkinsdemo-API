@@ -73,7 +73,8 @@
       "Email\\": "module/Email/src/",
       "Resource\\": "module/Resource/src/",
       "Privilege\\": "module/Privilege/src/",
-      "Callback\\": "module/Callback/src/"
+      "Callback\\": "module/Callback/src/",
+	  "Mlet\\": "module/Mlet/src/"
     }
   },
   "autoload-dev": {
