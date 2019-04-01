@@ -39,7 +39,7 @@ class UserSessionController extends AbstractApiController
             return $this->getSuccessResponseWithData(json_decode($result[0],true),200);
         }
         else{
-            return $this->getSuccessResponse("Session Not Available",200);
+            return $this->getSuccessResponseWithData(array(),200);
         }
 
     }
@@ -65,7 +65,7 @@ class UserSessionController extends AbstractApiController
             return $this->getSuccessResponseWithData(json_decode($data['data'],true), 200);
         }
         else{
-            return $this->getSuccessResponse("Updated",200);
+            return $this->getSuccessResponseWithData(array(),200);
         }
     }
 }
