@@ -3,14 +3,14 @@ email_setting_user:
     id: 1
     userid: 1
     email: 'bharatg@myvamla.com'
-    password: 'EvExzooo7Ww=::5a1e01e327abfa333487ea6719ccfda6'
+    password: 'hib5p1fBRjJwteo=::730652658de3c0c526333c7a792586b9'
     host: 'myvamla.com'
     isdefault: true
 -
     id: 2
     userid: 1
     email: 'bharat@gmail.com'
-    password: 'EvExzooo7Ww=::5a1e01e327abfa333487ea6719ccfda6'
+    password: 'hib5p1fBRjJwteo=::730652658de3c0c526333c7a792586b9'
     host: 'gmail.com'
     isdefault: true
 ox_email_domain:

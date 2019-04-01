@@ -91,22 +91,32 @@ class EmailService extends AbstractService
 
     public function getEmailAccountsByUserId()
     {
+        $accounts = array();
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $queryString = "select email_setting_user.id,userid,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
+        $queryString = "select email_setting_user.id,userid,password,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
         $where = "where email_setting_user.userid = " . $userId;
         $order = "order by email_setting_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        return $resultSet->toArray();
+        foreach ($resultSet->toArray() as $account) {
+            $account['password'] = TwoWayEncryption::decrypt($account['password']);
+            $accounts[] = $account;
+        }
+        return $accounts;
     }
 
     public function getEmailAccountById($id)
     {
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $queryString = "select email_setting_user.id,userid,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
+        $queryString = "select email_setting_user.id,userid,password,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
         $where = "where email_setting_user.userid = " . $userId . " AND email_setting_user.id =" . $id;
         $order = "order by email_setting_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        return $resultSet->toArray();
+        $accounts = array();
+        foreach ($resultSet->toArray() as $account) {
+            $account['password'] = TwoWayEncryption::decrypt($account['password']);
+            $accounts[] = $account;
+        }
+        return $accounts;
     }
 
     public function emailDefault($id)
