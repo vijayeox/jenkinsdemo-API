@@ -192,7 +192,7 @@ class Module {
                     $config = $container->get('config');
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\UserSessionService($config, $dbAdapter);
-                }
+                },
                 Model\EmailTable::class => function ($container) {
                     $tableGateway = $container->get(Model\EmailTableGateway::class);
                     return new Model\EmailTable($tableGateway);
