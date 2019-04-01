@@ -7,3 +7,4 @@
 /api/v1/data/uploads/*
 **/.idea/*
 **package-lock.json
+*.env
