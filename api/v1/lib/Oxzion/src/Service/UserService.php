@@ -4,12 +4,12 @@ namespace Oxzion\Service;
 use Bos\Auth\AuthConstants;
 use Bos\Auth\AuthContext;
 use Bos\Service\AbstractService;
-use Email\Service\EmailService;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Model\User;
 use Oxzion\Search\Elastic\IndexerImpl;
 use Oxzion\Utils\ArrayUtils;
 use Oxzion\Utils\BosUtils;
+use Oxzion\Service\EmailService;
 
 class UserService extends AbstractService
 {
@@ -25,6 +25,12 @@ class UserService extends AbstractService
     private $table;
     private $emailService;
     protected $config;
+    private $messageProducer;
+
+    public function setMessageProducer($messageProducer)
+    {
+		$this->messageProducer = $messageProducer;
+    }
 
     public function __construct($config, $dbAdapter, $table = null, EmailService $emailService)
     {
@@ -151,6 +157,7 @@ class UserService extends AbstractService
             //$result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
             //$es = $this->generateUserIndexForElastic($data);
             $this->commit();
+            $this->messageProducer->sendTopic(json_encode(array('username' => $data['username'] , 'firstname' => $data['firstname'], 'email' => $data['email'])),'USER_ADDED');
             return $count;
         } catch (Exception $e) {
             $this->rollback();
@@ -221,6 +228,16 @@ class UserService extends AbstractService
         return $form->toArray();
     }
 
+    private function getOrg($id){
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_organization')
+            ->columns(array("id", "name"))
+            ->where(array('ox_organization.id' => $id));
+        $response = $this->executeQuery($select)->toArray();
+        return $response[0];        
+    }
+    
     /**
      * Delete User Service
      * @method deleteUser
@@ -230,6 +247,7 @@ class UserService extends AbstractService
     public function deleteUser($id)
     {
         $obj = $this->table->get($id, array());
+        $org = $this->getOrg($obj->orgid);
         if (is_null($obj)) {
             return 0;
         }
@@ -241,6 +259,7 @@ class UserService extends AbstractService
         $form->exchangeArray($originalArray);
         $form->validate();
         $result = $this->table->save($form);
+        $this->messageProducer->sendTopic(json_encode(array('username' => $obj->username ,'orgname' => $org['name'] )),'USER_DELETED');
         return $result;
     }
 

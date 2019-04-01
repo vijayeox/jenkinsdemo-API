@@ -64,7 +64,7 @@ class GroupService extends AbstractService {
             $this->rollback();
             return 0;
         }
-        // $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $data['name'], 'orgname'=> $org['name'])),'GROUP_ADDED');
+        $this->messageProducer->sendTopic(json_encode(array('groupname' => $data['name'], 'orgname'=> $org['name'])),'GROUP_ADDED');
         return $count;
     }
 
@@ -93,7 +93,7 @@ class GroupService extends AbstractService {
             $this->rollback();
             return 0;
         }
-        // $result = $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])),'GROUP_UPDATED');
+        $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])),'GROUP_UPDATED');
         return $count;
     }
 
@@ -109,7 +109,7 @@ class GroupService extends AbstractService {
         } catch(Exception $e) {
             $this->rollback();
         }
-        // $result = $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'] )),'GROUP_DELETED');
+        $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'] )),'GROUP_DELETED');
         return $count;
     }
 
@@ -121,14 +121,25 @@ class GroupService extends AbstractService {
     }
 
     public function saveUser($id,$data) {
+        $obj = $this->table->get($id,array());
+        $org = $this->organizationService->getOrganization($obj->org_id);
         if(!isset($data['userid']) || empty($data['userid'])) {
             return 2;
         }
         $userArray=json_decode($data['userid'],true);
         if($userArray){
+            $userSingleArray= array_unique(array_map('current', $userArray));
+            $queryString = "SELECT ox_user.id, ox_user.username FROM ox_user_group " . 
+                           "inner join ox_user on ox_user.id = ox_user_group.avatar_id ".
+                           "where ox_user_group.group_id = ".$id.
+                           " and ox_user_group.avatar_id not in (".implode(',', $userSingleArray).")";
+            $deletedUser = $this->executeQuerywithParams($queryString)->toArray();
+            $query = "SELECT u.id, u.username, ug.avatar_id FROM ox_user_group ug ".
+                     "right join ox_user u on u.id = ug.avatar_id and ug.group_id = ".$id.
+                     " where u.id in (".implode(',', $userSingleArray).") and ug.avatar_id is null";
+            $insertedUser = $this->executeQuerywithParams($query)->toArray();
             $this->beginTransaction();
             try{
-                $userSingleArray= array_unique(array_map('current', $userArray));
                 $delete = $this->getSqlObject()
                 ->delete('ox_user_group')
                 ->where(['group_id' => $id]);
@@ -144,6 +155,12 @@ class GroupService extends AbstractService {
             catch(Exception $e){
                 $this->rollback();
                 throw $e;
+            }
+            foreach($deletedUser as $key => $value){
+                $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'], 'username' => $value['username'] )),'USERTOGROUP_DELETED');
+            }
+            foreach($insertedUser as $key => $value){
+                $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'], 'username' => $value['username'] )),'USERTOGROUP_ADDED');
             }
             return 1;
         }

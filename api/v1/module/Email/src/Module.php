@@ -10,6 +10,8 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
+use Oxzion\Service\EmailService;
+use Oxzion\Model\EmailTable;
 
 class Module implements ConfigProviderInterface
 {
@@ -33,20 +35,6 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Service\EmailService::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\EmailService($container->get('config'), $dbAdapter, $container->get(Model\EmailTable::class));
-                },
-                Model\EmailTable::class => function ($container) {
-                    $tableGateway = $container->get(Model\EmailTableGateway::class);
-                    return new Model\EmailTable($tableGateway);
-                },
-                Model\EmailTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Email());
-                    return new TableGateway('email_setting_user', $dbAdapter, null, $resultSetPrototype);
-                },
                 Service\DomainService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\DomainService($container->get('config'), $dbAdapter, $container->get(Model\DomainTable::class));
@@ -71,7 +59,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\EmailController::class => function ($container) {
                     return new Controller\EmailController(
-                        $container->get(Model\EmailTable::class), $container->get(Service\EmailService::class), $container->get('EmailLogger'),
+                        $container->get(EmailTable::class), $container->get(EmailService::class), $container->get('EmailLogger'),
                         $container->get(AdapterInterface::class));
                 },
                 Controller\DomainController::class => function ($container) {

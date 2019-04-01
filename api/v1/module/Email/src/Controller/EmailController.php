@@ -4,9 +4,9 @@ namespace Email\Controller;
 
 use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
-use Email\Model\EmailTable;
-use Email\Model\Email;
-use Email\Service\EmailService;
+use Oxzion\Model\EmailTable;
+use Oxzion\Model\Email;
+use Oxzion\Service\EmailService;
 use Zend\Db\Adapter\AdapterInterface;
 use Bos\ValidationException;
 use Zend\InputFilter\Input;

@@ -1,12 +1,12 @@
 <?php
-namespace Email\Service;
+namespace Oxzion\Service;
 
 use Bos\Auth\AuthConstants;
 use Bos\Auth\AuthContext;
 use Bos\Service\AbstractService;
 use Bos\ValidationException;
-use Email\Model\Email;
-use Email\Model\EmailTable;
+use Oxzion\Model\Email;
+use Oxzion\Model\EmailTable;
 use Oxzion\Encryption\TwoWayEncryption;
 use Oxzion\Encryption\Crypto;
 use TheSeer\Tokenizer\Exception;

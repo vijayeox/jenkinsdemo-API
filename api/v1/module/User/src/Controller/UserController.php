@@ -18,7 +18,7 @@ use Zend\View\Model\JsonModel;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface;
-use Email\Service\EmailService;
+use Oxzion\Service\EmailService;
 
 
 class UserController extends AbstractApiController

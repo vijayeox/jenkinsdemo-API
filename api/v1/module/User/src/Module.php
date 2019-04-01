@@ -15,10 +15,8 @@ use Oxzion\Model\RoleTable;
 use Oxzion\Service\UserService;
 use Oxzion\Service\RoleService;
 use Oxzion\Service\ProfilePictureService;
-use Email\Service\EmailService;
+use Oxzion\Service\EmailService;
 use Oxzion\Service\UserSessionService;
-
-
 
 class Module implements ConfigProviderInterface {
 

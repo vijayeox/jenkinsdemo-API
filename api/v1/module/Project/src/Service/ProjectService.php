@@ -57,7 +57,7 @@ class ProjectService extends AbstractService {
 			$this->rollback();
 			return 0;
         }
-        // $result = $this->messageProducer->sendTopic(json_encode(array('orgname'=>  $org['name'],'projectname' => $data['name'])),'PROJECT_ADDED');
+        $this->messageProducer->sendTopic(json_encode(array('orgname'=>  $org['name'],'projectname' => $data['name'])),'PROJECT_ADDED');
 		return $count;
 	}
 
@@ -85,7 +85,7 @@ class ProjectService extends AbstractService {
         	$this->rollback();
         	return 0;
         }
-        // $result = $this->messageProducer->sendTopic(json_encode(array('orgname'=> $org['name'],'old_projectname' => $obj->toArray()['name'],'new_projectname' => $data['name'])),'PROJECT_UPDATED');
+        $this->messageProducer->sendTopic(json_encode(array('orgname'=> $org['name'],'old_projectname' => $obj->toArray()['name'],'new_projectname' => $data['name'])),'PROJECT_UPDATED');
         return $count;
     }
 
@@ -114,7 +114,7 @@ class ProjectService extends AbstractService {
             $this->rollback();
             return 0;
         }
-        // $result = $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $data['name'])),'PROJECT_DELETED');
+        $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $data['name'])),'PROJECT_DELETED');
         return $count;
     }
     public function getProjectsByUserId() {
@@ -148,14 +148,25 @@ class ProjectService extends AbstractService {
     }*/
 
     public function saveUser($projectId,$data) {
+        $obj = $this->table->get($projectId,array());
+        $org = $this->organizationService->getOrganization($obj->org_id);
         if(!isset($data['userid']) || empty($data['userid'])) {
             return 2;
         }
     	$userArray=json_decode($data['userid'],true);
         if($userArray){
+            $userSingleArray= array_map('current', $userArray);
+            $queryString = "SELECT ox_user.id, ox_user.username FROM ox_user_project " . 
+                            "inner join ox_user on ox_user.id = ox_user_project.user_id ".
+                            "where ox_user_project.project_id = ".$projectId.
+                            " and ox_user_project.user_id not in (".implode(',', $userSingleArray).")";
+            $deletedUser = $this->executeQuerywithParams($queryString)->toArray();
+            $query = "SELECT u.id, u.username, up.user_id FROM ox_user_project up ".
+                     "right join ox_user u on u.id = up.user_id and up.project_id = ".$projectId.
+                     " where u.id in (".implode(',', $userSingleArray).") and up.user_id is null";
+            $insertedUser = $this->executeQuerywithParams($query)->toArray();
             $this->beginTransaction();
             try{
-                $userSingleArray= array_map('current', $userArray);
                 $delete = $this->getSqlObject()
                 ->delete('ox_user_project')
                 ->where(['project_id' => $projectId]);
@@ -171,6 +182,12 @@ class ProjectService extends AbstractService {
             catch(Exception $e){
                 $this->rollback();
                 throw $e;
+            }
+            foreach($deletedUser as $key => $value){
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $obj->name,'username' => $value['username'])),'USERTOPROJECT_DELETED');
+            }
+            foreach($insertedUser as $key => $value){
+                 $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $obj->name,'username' => $value['username'])),'USERTOPROJECT_ADDED');
             }
             return 1;
         }

@@ -51,6 +51,7 @@
         <const name="enableCamunda" value="0"/>
         <const name="enableElastic" value="0"/>
         <const name="enableMattermost" value="0"/>
+        <const name="enableActiveMQ" value="0"/>
     </php>
     <listeners>
         <listener class="\MyBuilder\PhpunitAccelerator\TestListener"/>

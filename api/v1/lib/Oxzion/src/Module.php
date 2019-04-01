@@ -20,7 +20,12 @@ class Module {
                 Service\UserService::class => function($container) {
                     $config = $container->get('config');
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\UserService($config, $dbAdapter, $container->get(Model\UserTable::class));
+                    $emailService = $container->get(Service\EmailService::class);
+                    return new Service\UserService($config, $dbAdapter, $container->get(Model\UserTable::class), $emailService);
+                },
+                Service\EmailService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\EmailService($container->get('config'), $dbAdapter, $container->get(Model\EmailTable::class));
                 },
                 Service\ElasticService::class => function($container) {
                     $config = $container->get('config');
@@ -188,6 +193,21 @@ class Module {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\UserSessionService($config, $dbAdapter);
                 }
+                Model\EmailTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\EmailTableGateway::class);
+                    return new Model\EmailTable($tableGateway);
+                },
+                Model\EmailTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Email());
+                    return new TableGateway('email_setting_user', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\EmailService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\EmailService($container->get('config'), $dbAdapter, $container->get(Model\EmailTable::class));
+                },
+                
             ],
         ];
     }

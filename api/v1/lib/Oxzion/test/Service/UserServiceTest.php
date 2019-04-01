@@ -3,7 +3,7 @@ namespace Oxzion\Service;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Test\ServiceTest;
-use Email\Service\EmailService;
+use Oxzion\Service\EmailService;
 
 class UserServiceTest extends ServiceTest {
 

@@ -73,7 +73,7 @@ class OrganizationService extends AbstractService
             $this->rollback();
             return 0;
         }
-        // $result = $this->messageProducer->sendTopic(json_encode(array('orgname' => $data['name'], 'status' => 'Active')),'ORGANIZATION_ADDED');
+        $this->messageProducer->sendTopic(json_encode(array('orgname' => $data['name'], 'status' => 'Active')),'ORGANIZATION_ADDED');
         return $count;
     }
 
@@ -159,12 +159,12 @@ class OrganizationService extends AbstractService
             }
         }
         
-        // if($obj->name != $data['name']){
-        //     $result = $this->messageProducer->sendTopic(json_encode(array('new_orgname' => $data['name'], 'old_orgname' => $obj->name,'status' => $data['status'])),'ORGANIZATION_UPDATED');
-        // }
-        // if($data['status'] == 'InActive'){
-        //     $result = $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name,'status' => $data['status'])),'ORGANIZATION_DELETED');
-        // }
+        if($obj->name != $data['name']){
+            $this->messageProducer->sendTopic(json_encode(array('new_orgname' => $data['name'], 'old_orgname' => $obj->name,'status' => $data['status'])),'ORGANIZATION_UPDATED');
+        }
+        if($data['status'] == 'InActive'){
+            $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name,'status' => $data['status'])),'ORGANIZATION_DELETED');
+        }
         return $count;
     }
 
@@ -187,7 +187,7 @@ class OrganizationService extends AbstractService
         $form->exchangeArray($originalArray);
         $form->validate();
         $result = $this->table->save($form);
-        // $this->messageProducer->sendTopic(json_encode(array('orgname' => $originalArray['name'],'status' => $originalArray['status'])),'ORGANIZATION_DELETED');
+        $this->messageProducer->sendTopic(json_encode(array('orgname' => $originalArray['name'],'status' => $originalArray['status'])),'ORGANIZATION_DELETED');
         return $result;
     }
 
@@ -258,13 +258,13 @@ class OrganizationService extends AbstractService
                 if (!$endresult) {
                     $data = array(array('user_id' => $userId, 'org_id' => $organizationId));
                     $result_update = $this->multiInsertOrUpdate('ox_user_org', $data, array());
-                    // $result = $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet->toArray()[0]['username'], 'orgname' => $result->toArray()[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ADDED');
                     if ($result_update->getAffectedRows() == 0) {
                         return $result_update;
                     }
+                    $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet->toArray()[0]['username'], 'orgname' => $result->toArray()[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ADDED');
                     return 1;
                 } else {
-                    // $result = $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet->toArray()[0]['username'], 'orgname' => $result->toArray()[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ALREADYEXISTS');
+                    $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet->toArray()[0]['username'], 'orgname' => $result->toArray()[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ALREADYEXISTS');
                     return 3;
                 }
             } else {

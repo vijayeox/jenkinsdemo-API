@@ -3,7 +3,7 @@ namespace Email;
 
 use Email\Controller\EmailController;
 use Oxzion\Test\ControllerTest;
-use Email\Model;
+use Oxzion\Model\EmailTable;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;

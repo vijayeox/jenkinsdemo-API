@@ -1,5 +1,5 @@
 <?php
-namespace Email\Model;
+namespace Oxzion\Model;
 
 use Bos\Model\Entity;
 use Bos\ValidationException;
