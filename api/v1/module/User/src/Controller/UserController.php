@@ -385,7 +385,6 @@ class UserController extends AbstractApiController
             $response = ['id' => $id];
             return $this->getErrorResponse("Failed to find User", 404, $response);
         }
-        print_r($userInfo);exit;
         return $this->getSuccessResponseWithData($userInfo);
     }
 
