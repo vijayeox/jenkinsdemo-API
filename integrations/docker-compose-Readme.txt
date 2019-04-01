@@ -16,6 +16,9 @@ FIRST INSTALL DOCKER USING:
 TO BUILD THE DOCKER-COMPOSE FILE:-
 
 "$ docker-compose build" in the same directory of the "YAMLs" file ( use sudo if permission denied) to build.
+
+TO START THE SERVICES:
+"$ docker-compose up
 ====================================================================================================
 
 ++++++++++

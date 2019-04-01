@@ -11,7 +11,7 @@ services:
         chat:
                 build:
                        #location of Dockerfile                       
-                       context: ./mattermost                       
+                       context: ./mattermost/docker                       
                        network: "host"                       
                        #name of the dockerfile                       
                        dockerfile: Dockerfile                    
@@ -26,7 +26,7 @@ services:
         #php apps                           
         phpapps:
                 build:
-                        context: .
+                        context: ./docker
                         dockerfile: Dockerfile
                 #Expose ports, can add multiple
                 network_mode: "host"
@@ -38,15 +38,17 @@ services:
                 stdin_open: true
                 tty: true
         #third app and fourth app(running camel and activemq together)
-#        camel:
-#                build:
-#                        context: ./camel
-#                        dockerfile: Dockerfile
-#
-#                network_mode: "host"
-#                labels:
-#                        com.oxapp.description: "Apache Activemq/Camel"
-#        #fifth app
+        camel:
+                build:
+                        context: ./camel/docker
+                        dockerfile: Dockerfile
+
+                network_mode: "host"
+                volumes:
+                          - "./camel:/workspace/app"
+                labels:
+                        com.oxapp.description: "Apache Activemq/Camel"
+        #fifth app
 #        elasticsearch:
 #                #Specify the image to start the container from. Can either be a repository/tag or a partial image ID.
 #                image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
