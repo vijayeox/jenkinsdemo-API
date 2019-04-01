@@ -1,0 +1,24 @@
+Do the following:
+
+$ sudo mkdir -p /var/lib/oxzion/rainloop/data
+$ chmod 777 /var/lib/oxzion/rainloop/data
+================================================
+To build the docker image 
+
+$ docker build --tag integrations .
+================================================
+Then go back to the integrations folder
+
+$ cd ../
+================================================
+To start the docker container
+
+$ docker run -it --network="host" -v ${PWD}:/integrations -v /var/lib/oxzion/rainloop/data:/var/www/public/rainloop/data integrations
+======================================================================================================================================
+To connect into the docker container's shell
+
+$ docker run -it --network="host" -v ${PWD}:/integrations -v /var/lib/oxzion/rainloop/data:/var/www/public/rainloop/data --entrypoint bash integrations
+======================================================================================================================================
+
+======================================
+Note: "use sudo if permission denied"

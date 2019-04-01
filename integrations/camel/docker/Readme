@@ -7,6 +7,12 @@ To build the dockerfile image +
 $ docker build . --tag camel
 
 ++++++++++++++++++++++++++++
+GO BACK TO /camel DIRECTORY +
+++++++++++++++++++++++++++++
+
+$ cd ../
+
+++++++++++++++++++++++++++++
 To run the image container +
 ++++++++++++++++++++++++++++
 
