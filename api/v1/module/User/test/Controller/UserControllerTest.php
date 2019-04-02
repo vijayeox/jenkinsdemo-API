@@ -379,7 +379,8 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('loggedInUser');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['username'], 'bharatg');
+        $this->assertEquals($content['data']['name'], 'Bharat Gogineni');
     }
 
     public function testLoggedInUserCompleteDetails()
@@ -390,6 +391,8 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('loggedInUser');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['username'], 'bharatg');
+        $this->assertEquals($content['data']['status'], 'Active');
     }
 
     public function testLoggedInUserComboDetails()
@@ -400,6 +403,8 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('loggedInUser');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['apps'][0]['name'], 'App 1');
+        $this->assertEquals($content['data']['status'], 'Active');
     }
 
     public function testUserAccess() 

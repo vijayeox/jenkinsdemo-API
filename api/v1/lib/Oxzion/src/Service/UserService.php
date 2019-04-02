@@ -751,8 +751,8 @@ class UserService extends AbstractService
 
     public function getOrganizationByUserId() {
         $queryO = "Select org.id,org.name,org.address,org.city,org.state,org.zip,org.logo,org.labelfile,org.languagefile,org.status from ox_organization as org LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
-        $where = "where uo.user_id =".AuthContext::get(AuthConstants::USER_ID);
-        $resultSet = $this->executeQuerywithParams($queryO, $where, null, null);
+        $where = "where uo.user_id =".AuthContext::get(AuthConstants::USER_ID)." AND org.status='Active'";
+        $resultSet = $this->executeQuerywithParams($queryO, $where);
         return $resultSet->toArray();
     }
 

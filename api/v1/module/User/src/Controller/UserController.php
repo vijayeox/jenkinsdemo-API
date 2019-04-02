@@ -345,37 +345,43 @@ class UserController extends AbstractApiController
             {
                 $userInfo = $this->userService->getUserWithMinimumDetails($id);
             }
-            else{
+            else
+            {
                 $options = explode('+', $type);
                 if(in_array('a', $options))
                 {
+                    $userInfo = $this->userService->getUser(AuthContext::get(AuthConstants::USER_ID));
                     $pos = array_search('m', $options);
                     if($pos){
                         unset($options[$pos]);
                     }
                 }
+                else
+                {
+                    $userInfo = $this->userService->getUserWithMinimumDetails(AuthContext::get(AuthConstants::USER_ID));
+                }
                 foreach ($options as $key => $value) {
                     switch($value) {
                         case "p":
-                            $userInfo['privileges'] = AuthContext::get(AuthConstants::PRIVILEGES);
-                            break;
-                        case "m":
-                            $userInfo = $this->userService->getUserWithMinimumDetails(AuthContext::get(AuthConstants::USER_ID));
-                            break;
-                        case "a":
-                            $userInfo = $this->userService->getUser(AuthContext::get(AuthConstants::USER_ID));
-                            break;
+                        $userInfo['privileges'] = AuthContext::get(AuthConstants::PRIVILEGES);
+                        break;
                         case "e":
-                            $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId();
-                            break;
+                        $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId();
+                        break;
                         case "o":
-                            $userInfo['organization'] = $this->userService->getOrganizationByUserId();
-                            break;
+                        $userInfo['organization'] = $this->userService->getOrganizationByUserId();
+                        break;
                         case "ap":
-                            $userInfo['apps'] = $this->userService->getAppsByUserId();
-                            break;
+                        $userInfo['apps'] = $this->userService->getAppsByUserId();
+                        break;
                     }
                 }
+                if (isset($userInfo)) {
+                    $baseUrl =$this->getBaseUrl();
+                    $icon = $userInfo['icon'];
+                    $userInfo['icon'] = $baseUrl . "/user/profile/" . $userInfo["uuid"];
+                }
+
             }
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
