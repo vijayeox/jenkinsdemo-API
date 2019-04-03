@@ -36,10 +36,6 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
-                UserService::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new UserService($container->get('config'), $dbAdapter, $container->get(UserTable::class), $container->get(EmailService::class));
-                },
                 
             ],
         ];
@@ -68,7 +64,8 @@ class Module implements ConfigProviderInterface {
                     return new Controller\ProfilePictureDownloadController(
                         $container->get(ProfilePictureService::class),
                         $container->get('UserLogger'),
-                        $container->get(AdapterInterface::class)
+                        $container->get(AdapterInterface::class),
+                        $container->get(UserService::class)
                     );
                 },
                 Controller\UserSessionController::class => function($container) {

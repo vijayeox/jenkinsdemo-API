@@ -81,5 +81,24 @@ namespace User{
             $content = (array)json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'success');          
         }
+
+        public function testProfilePictureWithUsername()
+        {
+            $this->initAuthToken($this->adminUser);
+            $config = $this->getApplicationConfig();
+            $username = "bharatg";
+            $userid="b0cb0d3c-496e-11e9-a876-b88198a956ff";
+            $tempFolder = $config['DATA_FOLDER']."user/".$userid."/";
+            FileUtils::createDirectory($tempFolder);
+            copy(__DIR__."/../files/oxzionlogo.png", $tempFolder."profile.png");       
+            $this->dispatch('/user/profile/username'.$username, 'GET');
+            $this->assertResponseStatusCode(200);
+            $this->assertModuleName('User');
+            $this->assertControllerName(ProfilePictureDownloadController::class); // as specified in router's controller name alias
+            $this->assertControllerClass('ProfilePictureDownloadController');
+            $this->assertMatchedRouteName('profilePicture');
+            $img="profile.png";
+            FileUtils::deleteFile($img,$tempFolder);
+        }
     }
 }

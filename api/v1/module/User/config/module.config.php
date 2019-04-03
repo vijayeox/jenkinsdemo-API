@@ -208,6 +208,16 @@ return [
                     ],
                 ],
             ],
+            'profilePictureByUsername' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/profile/username/:username',
+                    'defaults' => [
+                        'controller' => Controller\ProfilePictureDownloadController::class,
+                        'action' => 'profilePictureByUsername'
+                    ],
+                ],
+            ],
             'updateProfile' => [
                 'type' => Segment::class,
                 'options' => [
