@@ -17,6 +17,8 @@ use Oxzion\Service\RoleService;
 use Oxzion\Service\ProfilePictureService;
 use Oxzion\Service\EmailService;
 use Oxzion\Service\UserSessionService;
+use Project\Service\ProjectService;
+
 
 class Module implements ConfigProviderInterface {
 
@@ -50,7 +52,9 @@ class Module implements ConfigProviderInterface {
                         $container->get('UserLogger'),
                         $container->get(UserService::class),
                         $container->get(AdapterInterface::class),
-                        $container->get(EmailService::class)
+                        $container->get(EmailService::class),
+                        $container->get(ProjectService::class)
+
                     );
                 },
                 Controller\ProfilePictureController::class => function($container) {

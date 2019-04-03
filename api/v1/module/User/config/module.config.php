@@ -273,6 +273,17 @@ return [
                     ],
                 ],
             ],
+            'getuserproject' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/:userId/project',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'GET',
+                        'action' => 'getuserproject'
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

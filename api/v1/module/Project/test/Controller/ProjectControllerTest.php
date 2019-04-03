@@ -38,16 +38,39 @@ class ProjectControllerTest extends ControllerTest {
     }
     public function testGetList() {
         $this->initAuthToken($this->adminUser);
+        $data = ['data' => array([
+            "id" => "1",
+            "name"=> "Test Project 1",
+            "org_id"=>"1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=>"1"
+        ],[
+            "id"=> "3",
+            "name"=> "Test Project 2",
+            "org_id"=>"1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=> "2"
+        ])];
+        $this->setJsonContent(json_encode($data));
         $this->dispatch('/project', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['id'], 1);
-        $this->assertEquals($content['data'][0]['name'], 'Test Project 1');
-        $this->assertEquals($content['data'][1]['id'], 3);
-        $this->assertEquals($content['data'][1]['name'], 'Test Project 2');
+        $this->assertEquals($diff, array());
     }
     public function testGet() {
         $this->initAuthToken($this->adminUser);
@@ -244,6 +267,56 @@ class ProjectControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
     	$content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error'); 
+    }
+
+    public function testGetMyProjectList(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['data' => array([
+            "id" => "1",
+            "name"=> "Test Project 1",
+            "org_id"=>"1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=>"1"
+        ],[
+            "id"=> "3",
+            "name"=> "Test Project 2",
+            "org_id"=>"1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=> "2"
+        ])];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/project/myproject', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('myproject');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $diff=array_diff($data, $content);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($diff, array());
+    }
+    public function testGetMyProjectListWithoutdata()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['data' => array([])];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/project/myproject', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('myproject');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $diff=array_diff($data, $content);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($diff, array());
     }
 }
 ?>

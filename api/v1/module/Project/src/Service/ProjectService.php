@@ -30,6 +30,14 @@ class ProjectService extends AbstractService {
         $this->organizationService = $organizationService;
 	}
 
+    public function getProjectList(){
+        $queryString = "select * from ox_project";
+        $where = "where ox_project.isdeleted!=1";
+        $order = "order by ox_project.id";
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+        return $resultSet->toArray();        
+    }
+
 	public function createProject(&$data) {
 		$form = new Project();
     //Additional fields that are needed for the create
@@ -68,7 +76,6 @@ class ProjectService extends AbstractService {
 		}
 		$form = new Project();
         $data = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
-        $data['id'] = $id;
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $form->exchangeArray($data);
@@ -117,15 +124,26 @@ class ProjectService extends AbstractService {
         $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $data['name'])),'PROJECT_DELETED');
         return $count;
     }
-    public function getProjectsByUserId() {
-    	$userId = AuthContext::get(AuthConstants::USER_ID);
-    	$queryString = "select * from ox_project
-    	left join ox_user_project on ox_user_project.project_id = ox_project.id";
-    	$where = "where ox_user_project.user_id = " . $userId." AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.isdeleted!=1";
-    	$order = "order by ox_project.id";
-    	$resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-    	return $resultSet->toArray();
+
+    public function getProjectsOfUser() {
+            $userId = AuthContext::get(AuthConstants::USER_ID);
+            $queryString = "select * from ox_project
+                left join ox_user_project on ox_user_project.project_id = ox_project.id";
+            $where = "where ox_user_project.user_id = " . $userId." AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.isdeleted!=1";
+            $order = "order by ox_project.id";
+            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+            return $resultSet->toArray();
     }
+
+    public function getProjectsOfUserById($userId) {
+            $queryString = "select * from ox_project
+                left join ox_user_project on ox_user_project.project_id = ox_project.id";
+            $where = "where ox_user_project.user_id = " . $userId." AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.isdeleted!=1";
+            $order = "order by ox_project.id";
+            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+            return $resultSet->toArray();
+    }
+
     public function getUserList($id) {
         if(!isset($id)) {
             return 0;
@@ -171,7 +189,7 @@ class ProjectService extends AbstractService {
                 ->delete('ox_user_project')
                 ->where(['project_id' => $projectId]);
                 $result = $this->executeQueryString($delete);
-                $query ="Insert into ox_user_project(user_id,project_id) (Select ox_user.id, ".$projectId." AS project_id from ox_user_project right join  ox_user on ox_user_project.user_id = ox_user.id where ox_user.id in (".implode(',', $userSingleArray)."))";
+                $query ="Insert into ox_user_project(user_id,project_id) (Select ox_user.id, ".$projectId." AS project_id from ox_user where ox_user.id in (".implode(',', $userSingleArray)."))";
                 $resultInsert = $this->runGenericQuery($query);
                 if(count($resultInsert) != count($userArray)){
                     $this->rollback();

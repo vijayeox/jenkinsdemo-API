@@ -263,6 +263,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
+
+
     public function testUserSearch()
     {
         $this->initAuthToken($this->adminUser);
@@ -305,7 +307,6 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-
     public function testChangePasswordWithWrongOldPassword()
     {
         $this->initAuthToken($this->adminUser);
@@ -341,8 +342,7 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-
-    public function testAddOrganizationToUser()
+   public function testAddOrganizationToUser()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/3/organization/2', 'POST');
@@ -383,7 +383,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], 'Bharat Gogineni');
     }
 
-    public function testLoggedInUserCompleteDetails()
+   public function testLoggedInUserCompleteDetails()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/me/a', 'GET');
@@ -419,7 +419,8 @@ class UserControllerTest extends ControllerTest
         $this->assertNotEmpty($content['data']['blackListedApps']);
     } 
 
-    public function testUserAccessNotFound() {
+
+     public function testUserAccessNotFound() {
         $this->initAuthToken($this->employeeUser);
         $this->dispatch('/user/me/access', 'GET');
         $this->assertResponseStatusCode(401);
@@ -432,7 +433,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testForgotPassword()
+
+     public function testForgotPassword()
     {
         $this->initAuthToken($this->managerUser);
         $data = ['email' => 'test@va.com'];
@@ -446,6 +448,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['email'], $data['email']);
     }
 
+
     public function testForgotPasswordWrongEmail()
     {
         $this->initAuthToken($this->managerUser);
@@ -458,7 +461,6 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'The email entered does not match your profile email');
     }
-
     public function testUpdateNewPassword()
     {
         $this->initAuthToken($this->managerUser);
@@ -486,7 +488,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['message'], "Failed to Update Password");
     }
 
-    public function testUpdateNewPasswordWithWrongCode()
+     public function testUpdateNewPasswordWithWrongCode()
     {
         $this->initAuthToken($this->managerUser);
         $data = ['password_reset_code' => "wrongCode", 'new_password' => 'password', 'confirm_password' => 'password'];
@@ -499,4 +501,57 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], "You have entered an incorrect code");
     }
+
+    
+    public function testGetUserProjectWithdata()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['data' => array([
+            "id" => "1",
+            "name"=> "Test Project 1",
+            "org_id"=>"1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=>"1"
+        ],[
+            "id"=> "3",
+            "name"=> "Test Project 2",
+            "org_id"=>"1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=> "2"
+        ])];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/1/project', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('getuserproject');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $diff=array_diff($data, $content);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($diff, array());
+    }
+    public function testGetUserProjectWithoutdata()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['data' => array([])];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/5/project', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('getuserproject');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $diff=array_diff($data, $content);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($diff, array());
+    }
+
 }

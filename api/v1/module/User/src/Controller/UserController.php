@@ -19,6 +19,8 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Service\EmailService;
+use Project\Service\ProjectService;
+
 
 
 class UserController extends AbstractApiController
@@ -29,12 +31,13 @@ class UserController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(UserTable $table, Logger $log, UserService $userService, AdapterInterface $adapterInterface, EmailService $emailService)
+    public function __construct(UserTable $table, Logger $log, UserService $userService, AdapterInterface $adapterInterface, EmailService $emailService,ProjectService $projectService)
     {
         parent::__construct($table, $log, __class__, User::class, EmailService::class);
         $this->setIdentifierName('userId');
         $this->userService = $userService;
         $this->emailService = $emailService;
+        $this->projectService= $projectService;
     }
 
     /**
@@ -547,4 +550,30 @@ class UserController extends AbstractApiController
 
     }
 
+     /**
+    * GET List Project of Current User API
+    * @api
+    * @link /project
+    * @method GET
+    * @return array $dataget list of Projects by User
+    * <code>status : "success|error",
+    *       data :  {
+                    string name,
+                    string description,
+                    integer orgid,
+                    integer created_by,
+                    integer modified_by,
+                    dateTime date_created (ISO8601 format yyyy-mm-ddThh:mm:ss),
+                    dateTime date_modified (ISO8601 format yyyy-mm-ddThh:mm:ss),
+                    boolean isdeleted,
+                    integer id,
+                    }
+    * </code>
+    */
+    public function getUserProjectAction(){
+        $params = $this->params()->fromRoute();
+        $id=$params['userId'];
+        $result = $this->projectService->getProjectsOfUserById($id);
+        return $this->getSuccessResponseWithData($result);
+    }
 }

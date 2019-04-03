@@ -55,6 +55,20 @@ return [
                     ],
                 ],
             ],
+            'myproject' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/project/myproject',
+                    'defaults' => [
+                        'controller' => Controller\ProjectController::class,
+                        'method' => 'GET',
+                        'action' => 'getListOfMyProject',
+                        'access' => [
+                            'getListOfMyProject'=>'MANAGE_PROJECT_READ'
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

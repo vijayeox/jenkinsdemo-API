@@ -132,7 +132,31 @@ class ProjectController extends AbstractApiController {
     * </code>
     */
     public function getList(){
-        $result = $this->projectService->getProjectsByUserId();
+        $result = $this->projectService->getProjectList();
+        return $this->getSuccessResponseWithData($result);
+    }
+    /**
+    * GET List Project of Current User API
+    * @api
+    * @link /project
+    * @method GET
+    * @return array $dataget list of Projects by User
+    * <code>status : "success|error",
+    *       data :  {
+                    string name,
+                    string description,
+                    integer orgid,
+                    integer created_by,
+                    integer modified_by,
+                    dateTime date_created (ISO8601 format yyyy-mm-ddThh:mm:ss),
+                    dateTime date_modified (ISO8601 format yyyy-mm-ddThh:mm:ss),
+                    boolean isdeleted,
+                    integer id,
+                    }
+    * </code>
+    */
+    public function getListOfMyProjectAction(){
+        $result = $this->projectService->getProjectsOfUser();
         return $this->getSuccessResponseWithData($result);
     }
     /**
