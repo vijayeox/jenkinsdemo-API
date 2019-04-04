@@ -403,7 +403,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('loggedInUser');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['apps'][0]['name'], 'App 1');
+        $this->assertEquals($content['data']['apps'][0]['name'], 'Admin App');
         $this->assertEquals($content['data']['status'], 'Active');
     }
 
