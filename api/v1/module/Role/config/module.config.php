@@ -26,6 +26,20 @@ return [
                     ],
                 ],
             ],
+            'roleprivilege' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/role/:roleId/privilege',
+                    'defaults' => [
+                        'controller' => Controller\RoleController::class,
+                        'method' => 'GET',
+                        'action' => 'roleprivilege',
+                        'access' =>  [
+                            'roleprivilege'=>'MANAGE_ROLE_READ'
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

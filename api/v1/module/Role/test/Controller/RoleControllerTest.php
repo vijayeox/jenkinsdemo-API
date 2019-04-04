@@ -39,6 +39,88 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['data'][1]['id'], 2);
         $this->assertEquals($content['data'][1]['name'], 'MANAGER');
     }
+
+    public function testRolePrivilege(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['data' => array([
+            "id"=> "1",
+            "role_id"=> "1",
+            "privilege_name"=> "MANAGE_ANNOUNCEMENT",
+            "permission"=> "3",
+            "org_id"=> "1",
+            "app_id"=> "5ca5bca3b735a",
+            "name"=> "Admin App"
+        ],
+        [
+            "id"=> "16",
+            "role_id"=> "1",
+            "privilege_name"=> "MANAGE_GROUP",
+            "permission"=> "15",
+            "org_id"=> "1",
+            "app_id"=> "5ca5bca3b735a",
+            "name"=> "Admin App"
+        ],
+        [
+            "id"=> "17",
+            "role_id"=> "1",
+            "privilege_name"=> "MANAGE_ORGANIZATION",
+            "permission"=> "15",
+            "org_id"=> "1",
+            "app_id"=> "5ca5bca3b735a",
+            "name"=> "Admin App"
+        ],
+        [
+            "id"=> "18",
+            "role_id"=> "1",
+            "privilege_name"=> "MANAGE_USER",
+            "permission"=> "15",
+            "org_id"=> "1",
+            "app_id"=> "5ca5bca3b735a",
+            "name"=> "Admin App"
+        ],
+        [
+            "id"=> "19",
+            "role_id"=> "1",
+            "privilege_name"=> "MANAGE_PROJECT",
+            "permission"=> "15",
+            "org_id"=> "1",
+            "app_id"=> "5ca5bca3b735a",
+            "name"=> "Admin App"
+        ],
+        [
+            "id"=> "30",
+            "role_id"=> "1",
+            "privilege_name"=> "MANAGE_ROLE",
+            "permission"=> "3",
+            "org_id"=> "1",
+            "app_id"=> "5ca5bca3b735a",
+            "name"=> "Admin App"
+        ])];
+        $this->dispatch('/role/1/privilege', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Role');
+        $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('RoleController');
+        $this->assertMatchedRouteName('roleprivilege');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $diff=array_diff($data, $content);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($diff, array());
+    }
+
+    public function testRolePrivilegeNotFound(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/role/12345/privilege', 'GET');
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('Role');
+        $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('RoleController');
+        $this->assertMatchedRouteName('roleprivilege');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
+
     public function testGet(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/role/1', 'GET');
