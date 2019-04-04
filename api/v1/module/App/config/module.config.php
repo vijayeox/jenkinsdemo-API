@@ -41,6 +41,17 @@ return [
                     ],
                 ],
             ],
+            'applist' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/a',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'applist',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
             'appdeployxml' => [
                 'type' => Segment::class,
                 'options' => [

@@ -5,9 +5,10 @@ use App\Controller\AppController;
 use App\Model;
 use Oxzion\Test\ControllerTest;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
+use Oxzion\Test\MainControllerTest;
+    
 
-
-class AppControllerTest extends ControllerTest
+class AppControllerTest extends MainControllerTest
 {
 
     public function setUp() : void
@@ -16,26 +17,33 @@ class AppControllerTest extends ControllerTest
         parent::setUp();
     }
 
-    public function getDataSet()
-    {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/App.yml");
-        return $dataset;
-    }
-
     public function testGetList()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app', 'GET');
+        $data = ['data' => array([
+            "name"=> "Admin App",
+            "uuid"=> "5ca49c4abeb47",
+            "description"=> null,
+            "type"=> "2",
+            "logo"=> "app.png",
+            "category"=> "EXAMPLE_CATEGORY",
+            "date_created"=> "2019-04-03 17:13:40",
+            "date_modified"=> "2019-04-03 11:49:16",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "isdeleted"=> "0",
+            "org_id"=> "1",
+            "start_options"=>null
+        ])];
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-//        print_r($content);exit;?
+        $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['uuid'], '5c822d497f44d');
-        $this->assertEquals($content['data'][0]['name'], 'App 1');
-        $this->assertEquals($content['data'][1]['uuid'], '5c822d497f44a');
-        $this->assertEquals($content['data'][1]['name'], 'App 2');
+        $this->assertEquals($diff, array());
     }
 
     protected function setDefaultAsserts()
@@ -54,8 +62,8 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], '5c822d497f44d');
-        $this->assertEquals($content['data'][0]['name'], 'App 1');
+        $this->assertNotEmpty($content['data'][0]['uuid']);
+        $this->assertEquals($content['data'][0]['name'], 'Admin App');
     }
 
     public function testGetNotFound()
@@ -67,18 +75,29 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
+    public function testGetAppList()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/a', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('applist');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => '5c822d497f44n', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_app'));
+        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY'];
         $this->dispatch('/app', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_app'));
     }
 
     public function testCreateWithOutTextFailure()
@@ -114,7 +133,7 @@ class AppControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => '5c822d497f44u', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
+        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1', 'PUT', null);
@@ -127,7 +146,7 @@ class AppControllerTest extends ControllerTest
 
     public function testUpdateRestricted()
     {
-        $data = ['name' => '5c822d497f44u', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
+        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
         $this->initAuthToken($this->employeeUserId);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1', 'PUT', $data);
@@ -144,7 +163,7 @@ class AppControllerTest extends ControllerTest
 
     public function testUpdateNotFound()
     {
-        $data = ['name' => '5c822d497f44u', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
+        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/64', 'PUT', null);

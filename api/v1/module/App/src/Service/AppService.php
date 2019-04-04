@@ -39,19 +39,26 @@ class AppService extends AbstractService
     public function getApps()
     {
         $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.isdeleted,ar.org_id,ar.start_options from ox_app as ap 
-        left join ox_app_registry as ar on ap.id = ar.app_id";
+        left join ox_app_registry as ar on ap.uuid = ar.app_id";
         $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.isdeleted!=1";
-        $group = "group by ap.id";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, $group);
+        $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $resultSet->toArray();
     }
 
     public function getApp($id)
     {
         $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.isdeleted,ar.org_id,ar.start_options from ox_app as ap 
-        left join ox_app_registry as ar on ap.id = ar.app_id";
+        left join ox_app_registry as ar on ap.uuid = ar.app_id";
         $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.isdeleted!=1 AND ap.id =" . $id;
         $resultSet = $this->executeQuerywithParams($queryString, $where);
+        return $resultSet->toArray();
+    }
+
+    public function getAppList(){
+        $queryString = "select * from ox_app";
+        $where = "where ox_app.isdeleted!=1";
+        $order = "order by ox_app.id";
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         return $resultSet->toArray();
     }
 
@@ -95,7 +102,6 @@ class AppService extends AbstractService
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['isdeleted'] = 1;
         $form->exchangeArray($data);
-        $form->validate();
         $count = 0;
         try {
             $count = $this->table->save($form);

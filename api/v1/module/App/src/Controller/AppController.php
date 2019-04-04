@@ -223,6 +223,22 @@ class AppController extends AbstractApiController
     }
 
     /**
+     * GET App API
+     * @api
+     * @link /app/a
+     * @method GET
+     * @return array of Apps 
+     */
+    public function applistAction()
+    {
+        $response = $this->appService->getAppList();
+        if ($response == 0 || empty($response)) {
+            return $this->getErrorResponse("No Apps to display", 404);
+        }
+        return $this->getSuccessResponseWithData($response);
+    }
+
+    /**
      * Deploy App API using YAML File
      * @api
      * @link /app/appdeployyml
