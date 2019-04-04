@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true" >
     <testsuites>
-        <testsuite name="Attachment Fixtures">
+        <testsuite name="Messaging Fixtures Fixtures">
+            <directory>./module/Messaging/test</directory>
+        </testsuite>
+         <testsuite name="Attachment Fixtures">
             <directory>./module/Attachment/test</directory>
             <directory>./module/Resource/test</directory>
         </testsuite>
@@ -45,7 +48,7 @@
         <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
-        </testsuite>
+        </testsuite> 
     </testsuites>
     <php>
         <ini name="memory_limit" value="256M" />

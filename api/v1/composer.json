@@ -1,5 +1,5 @@
 {
-  "name": "oxzion",
+  "name": "oxzion/core",
   "description": "Oxzion's Http APIs",
   "type": "project",
   "license": "BSD-3-Clause",
@@ -74,7 +74,8 @@
       "Resource\\": "module/Resource/src/",
       "Privilege\\": "module/Privilege/src/",
       "Callback\\": "module/Callback/src/",
-	  "Mlet\\": "module/Mlet/src/"
+      "Mlet\\": "module/Mlet/src/",
+      "Messaging\\":"module/Messaging/src/"
     }
   },
   "autoload-dev": {
@@ -99,7 +100,8 @@
       "ContactTest\\": "module/Contact/test/",
       "MessageTest\\": "lib/Oxzion/test/MessageTest",
       "PrivilegeTest\\": "module/Privilege/test/",
-      "ChatCallbackTest\\": "module/Callback/test/"
+      "ChatCallbackTest\\": "module/Callback/test/",
+      "MessagingTest\\":"module/Messaging/test/"
     }
   },
   "extra": [],

@@ -36,5 +36,6 @@ return [
     'Email',
     'Privilege',
     'Callback',
-    'Mlet'
+    'Mlet',
+    'Messaging'
 ];
