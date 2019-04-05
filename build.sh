@@ -11,7 +11,7 @@ BLINK="\e[5m"
 INVERT="\e[7m"
 RESET="\e[0m"
 #checking if no arguments passed. Give error and exit.
-if [[ $# -eq 0 ]] ;
+if [ $# -eq 0 ] ;
 then
     echo -e "${RED}ERROR: argument missing.${RESET}"
     echo -e "$0 : needs an arguments to start."
@@ -23,7 +23,7 @@ fi
 check_dir()
 {
 cd ${OXHOME}
-if [ -d "./build" ];
+if [ -d "./build" ] ;
 then
     echo -e "${RED}Directory build exist!${RESET}"
     echo -e "${YELLOW}Deleting existing build folder to avoid conflict...${RESET}"    
@@ -36,7 +36,7 @@ package()
     cd ${OXHOME}/build
     # zip the contents of the build folder excluding node_modules
     echo -e "${YELLOW}${BLINK}Packaging /build to build.zip${RESET}"
-    if [ -e "../build.zip" ];
+    if [ -e "../build.zip" ] ;
     then
         rm ../build.zip
     fi
