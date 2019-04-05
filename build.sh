@@ -14,8 +14,20 @@ RESET="\e[0m"
 if [ $# -eq 0 ] ;
 then
     echo -e "${RED}ERROR: argument missing.${RESET}"
-    echo -e "$0 : needs an arguments to start."
+    echo -e "$0 : needs an arguments to start. See list below."
     echo -e "Type '$0 --help' or '$0 -h' for more information."
+    echo -e "${BLUEBG}Argument list:${RESET}"
+    echo -e "1. all           -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
+    echo -e "2. api           -${YELLOW}For packaging API.${RESET}"
+    echo -e "3. view          -${YELLOW}For packaging UI/View.${RESET}"
+    echo -e "4. integrations  -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
+    echo -e "5. calendar      -${YELLOW}For packaging Event Calendar.${RESET}"
+	echo -e "6. camel         -${YELLOW}For packaging Apache Camel.${RESET}"
+    echo -e "7. chat          -${YELLOW}For packaging Mattermost Chat.${RESET}"
+    echo -e "8. crm           -${YELLOW}For packaging OroCRM.${RESET}"
+	echo -e "9. mail          -${YELLOW}For packaging Rainloop Mail.${RESET}"
+	echo -e "10. --help or -h -${YELLOW}For help.${RESET}"
+    echo -e "11. list${RESET}         -${YELLOW}For list of options.${RESET}"        
     exit 0
 fi
 #writing functions for different tasks
@@ -42,6 +54,11 @@ package()
     fi
     zip -r ../build.zip . -x *node_modules/\*
     echo -e "${GREEN}Packaging Complete :)${RESET}"
+    #Doing secure copy to dev3 server
+    cd ${OXHOME}
+    echo -e "${BLUEBG}Now Copying ${GREEN}build.zip${RESET}${GREEN} to dev3..${RESET}"
+    scp -i ${HOME}/.ssh/oxzionapi.pem build.zip ubuntu@18.221.154.7:deploy
+    echo -e "${BLUEBG}Copying ${GREEN}build.zip${RESET}${GREEN} to dev3 completed successfully!${RESET}"        
 }
 api()
 {   
