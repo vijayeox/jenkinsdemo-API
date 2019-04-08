@@ -162,6 +162,35 @@ class AnnouncementController extends AbstractApiController {
         }
         return $this->getSuccessResponseWithData($result);
     }
+    /**
+    * GET List of All Announcement API
+    * @api
+    * @link /announcement
+    * @method GET
+    * @return array $dataget list of Announcements
+    */
+    public function announcementListAction() {
+        $result = $this->announcementService->getAnnouncementsList();
+        return $this->getSuccessResponseWithData($result);
+    }
 
+    public function announcementToGroupAction(){
+        $params = $this->params()->fromRoute();
+        $id=$params['announcementId'];
+        $data = $this->params()->fromPost();
+        try{
+            $count = $this->announcementService->insertAnnouncementForGroup($id,$data);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if($count == 0) {
+            return $this->getErrorResponse("Entity not found", 404);
+        }
+        if($count == 2) {
+            return $this->getErrorResponse("Enter Group Ids", 404);
+        }
+        return $this->getSuccessResponseWithData($data,200);
+    }
 
 }

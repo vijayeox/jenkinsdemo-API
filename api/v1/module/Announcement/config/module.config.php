@@ -27,6 +27,28 @@ return [
                     ],
                 ],
             ],
+            'announcementList' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/announcement/a',
+                    'defaults' => [
+                        'controller' => Controller\AnnouncementController::class,
+                        'method' => 'GET',
+                        'action' => 'announcementList'
+                    ],
+                ],
+            ],
+            'announcementToGroup' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/announcement/:announcementId/group',
+                    'defaults' => [
+                        'controller' => Controller\AnnouncementController::class,
+                        'method' => 'POST',
+                        'action' => 'announcementToGroup'
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

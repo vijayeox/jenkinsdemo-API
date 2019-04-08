@@ -194,20 +194,35 @@ class AnnouncementService extends AbstractService{
     /**
     * @ignore insertAnnouncementForGroup
     */
-    protected function insertAnnouncementForGroup($announcementId, $groups){
-        $rowsAffected = 0;
-        foreach ($groups as $key => $id) {
-            $sql = $this->getSqlObject();
-            $insert = $sql->insert('ox_announcement_group_mapper');
-            $data = array('group_id'=>$id['id'],'announcement_id'=>$announcementId);
-            $insert->values($data);
-            $result = $this->executeUpdate($insert);
-            if($result->getAffectedRows() == 0){
-                break;
-            }
-            $rowsAffected++;            
+    public function insertAnnouncementForGroup($announcementId, $groups){
+        if(!isset($groups['groupid']) || empty($groups['groupid'])) {
+            return 2;
         }
-        return $rowsAffected;
+        $groups=json_decode($groups['groupid'],true);
+
+        if($groups){
+            $this->beginTransaction();
+            try{
+                $groupSingleArray= array_unique(array_map('current', $groups));
+                $delete = $this->getSqlObject()
+                ->delete('ox_announcement_group_mapper')
+                ->where(['announcement_id' => $announcementId]);
+                $result = $this->executeQueryString($delete);
+                $query ="Insert into ox_announcement_group_mapper(announcement_id,group_id) Select $announcementId, id from ox_group where ox_group.id in (".implode(',', $groupSingleArray).")";
+                $resultInsert = $this->runGenericQuery($query);
+                if(count($resultInsert) == 0){
+                    $this->rollback();
+                    return 0;
+                }
+                $this->commit();
+            }
+            catch(Exception $e){
+                $this->rollback();
+                throw $e;
+            }
+             return 1; 
+        }
+        return 0;                    
     }
     /**
     * Delete Announcement
@@ -296,6 +311,14 @@ class AnnouncementService extends AbstractService{
             return 0;
         }
         return $response[0];
+    }
+
+    public function getAnnouncementsList(){
+            $queryString = "select * from ox_announcement";
+            $where = "where ox_announcement.org_id = ".AuthContext::get(AuthConstants::ORG_ID);
+            $order = "order by ox_announcement.id";
+            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+            return $resultSet->toArray();
     }
 }
 ?>

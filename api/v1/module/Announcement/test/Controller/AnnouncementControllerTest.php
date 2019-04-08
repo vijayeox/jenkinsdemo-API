@@ -49,6 +49,23 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data'][1]['id'], 2);
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
     }
+
+    public function testGetListofAll(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/announcement/a', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcementList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Announcement 1');
+        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
+    }
+
     public function testGet(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement/1', 'GET');
@@ -83,6 +100,45 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['enddate'], $data['enddate']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_announcement'));
     }
+
+    public function testinsertAnnouncementForGroup(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/announcement/1/group','POST',array('groupid' => '[{"id":1},{"id":2}]')); 
+        $this->assertResponseStatusCode(200);
+         $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcementToGroup');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+    }
+
+    public function testinsertAnnouncementForGroupIdNotFound(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/announcement/1/group','POST',array('groupid' => '[{"id":4},{"id":5}]')); 
+        $this->assertResponseStatusCode(404);
+         $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcementToGroup');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Entity not found'); 
+    }
+
+    public function testinsertAnnouncementForGroupWithoutId(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/announcement/1/group','POST'); 
+        $this->assertResponseStatusCode(404);
+         $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcementToGroup');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error'); 
+        $this->assertEquals($content['message'], 'Enter Group Ids');
+    }
+
     public function testCreateWithOutNameFailure(){
         $this->initAuthToken($this->adminUser);
         $this->createDummyFile();
