@@ -47,12 +47,12 @@ namespace Callback\Service;
                 return $json;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
                 if($forceCreateteam && ($e->getCode()== 404) && (strpos($e->getMessage(),'store.sql_team.get_by_name.app_error'))){
-                    $this->log->info(ChatService::class."Team Doesn't exist, Creting the team");
+                    $this->logger->info(ChatService::class."Team Doesn't exist, Creting the team");
                     $team = $this->createTeam($orgName);
                     $team = json_decode($team['body'],true);
                     return $team;
                 }
-                $this->log->info(ChatService::class."Team Doesn't exist");
+                $this->logger->info(ChatService::class."Team Doesn't exist");
             }
         }
 
@@ -71,7 +71,7 @@ namespace Callback\Service;
                 return json_decode($userData,true);
             }catch (\GuzzleHttp\Exception\ClientException $e) {
                 if($forceCreateUser && ($e->getCode()== 404) && (strpos($e->getMessage(),'store.sql_user.get_by_username.app_error'))){
-                    $this->log->info(ChatService::class."Unable to find an existing account matching your username, hence creating.");
+                    $this->logger->info(ChatService::class."Unable to find an existing account matching your username, hence creating.");
                     $userData = $this->addUser($userName);
                     return $userData;
                 }
@@ -87,7 +87,7 @@ namespace Callback\Service;
             $userData = json_decode($response['body'],true);
             return $userData;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-            $this->log->info(ChatService::class."Username doesn't exist/Username validation failure");
+            $this->logger->info(ChatService::class."Username doesn't exist/Username validation failure");
             }
         }
 
@@ -105,12 +105,12 @@ namespace Callback\Service;
             return $channelData;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
                 if($channelNameflag && ($e->getCode()== 404) && (strpos($e->getMessage(),'store.sql_channel.get_by_name.missing.app_error'))){
-                    $this->log->info(ChatService::class."Channel does not belong to team, hence ceating channel");
+                    $this->logger->info(ChatService::class."Channel does not belong to team, hence ceating channel");
                     $channelData = $this->createChannel($channel,$org);
                     $channelData = json_decode($channelData['body'],true);
                     return $channelData;
                 }
-                $this->log->info(ChatService::class."Channel does not exist");
+                $this->logger->info(ChatService::class."Channel does not exist");
             }
         }
 
@@ -121,7 +121,7 @@ namespace Callback\Service;
             $teamMember = json_decode($response,true);
             return json_decode($response,true);
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->log->info(ChatService::class."User not in Team");
+                $this->logger->info(ChatService::class."User not in Team");
             }
         }
 
@@ -131,13 +131,13 @@ namespace Callback\Service;
             $headers["Content-type"] = "application/json";
             $orgName = $this->sanitizeName($orgName);
             if(empty($orgName)){
-                $this->log->info(ChatService::class." Org Name is missing");
+                $this->logger->info(ChatService::class." Org Name is missing");
                 return;
             }
             $response = $this->restClient->postWithHeader('api/v4/teams', array('name' => $orgName,'display_name' => $orgName,'type' => 'O'),$headers);
             return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->log->info(ChatService::class."A team with that name already exists");
+                $this->logger->info(ChatService::class."A team with that name already exists");
             }
         }
 
@@ -147,18 +147,18 @@ namespace Callback\Service;
             $oldName = $this->sanitizeName($oldName);
             $newName = $this->sanitizeName($newName);
             if(empty($newName)){
-                $this->log->info(ChatService::class."New Team Name is missing");
+                $this->logger->info(ChatService::class."New Team Name is missing");
                 return;
             }
             if(empty($oldName)){
-                $this->log->info(ChatService::class."Old Team Name is missing");
+                $this->logger->info(ChatService::class."Old Team Name is missing");
                 return;
             }
             $json = $this->getTeamByName($oldName);    
             $response = $this->restClient->put('api/v4/teams/'.$json['id'],array('name'=> $newName,'display_name' => $newName,'id'=> $json['id']),$headers);
             return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->log->info(ChatService::class."Org Does not exist");
+                $this->logger->info(ChatService::class."Org Does not exist");
             }
         }
 
@@ -168,13 +168,13 @@ namespace Callback\Service;
             $orgName = $this->sanitizeName($orgName);
             $json = $this->searchTeam($orgName);
             if(empty($json)){
-                $this->log->info(ChatService::class."Org with the given name does not exist");
+                $this->logger->info(ChatService::class."Org with the given name does not exist");
                 return;
             }
             $response = $this->restClient->delete('api/v4/teams/'.$json[0]['id'],array('permanent' => 'false'),$headers);
             return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->log->info(ChatService::class."Org Deletion Failed");
+                $this->logger->info(ChatService::class."Org Deletion Failed");
             }
         }
 
@@ -184,11 +184,11 @@ namespace Callback\Service;
             $orgName = $this->sanitizeName($orgName);
             $headers = $this->getAuthHeader();
             if(empty($user)){
-                $this->log->info(ChatService::class."No User Name Found To Add to team");
+                $this->logger->info(ChatService::class."No User Name Found To Add to team");
                 return;
             }
             if(empty($orgName)){
-                $this->log->info(ChatService::class."No Team Name Found To Add the user");
+                $this->logger->info(ChatService::class."No Team Name Found To Add the user");
                 return;
             }
             // Checking if team exists, if not create team
@@ -200,7 +200,7 @@ namespace Callback\Service;
             $response = json_decode($response['body'],true); 
             return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->log->info(ChatService::class."User Already in team");    
+                $this->logger->info(ChatService::class."User Already in team");    
             }
         }   
         
@@ -210,11 +210,11 @@ namespace Callback\Service;
             $user = $this->sanitizeName($user);
             $org = $this->sanitizeName($org);
             if(empty($user)){
-                $this->log->info(ChatService::class."No User Name Found To Remove from team");
+                $this->logger->info(ChatService::class."No User Name Found To Remove from team");
                 return;
             }
             if(empty($org)){
-                $this->log->info(ChatService::class."No Team Name Found To Remove user");
+                $this->logger->info(ChatService::class."No Team Name Found To Remove user");
                 return;
             }
             $userData = $this->getUserByUsername($user);
@@ -222,18 +222,18 @@ namespace Callback\Service;
             $response = $this->restClient->delete('api/v4/teams/'.$team['id'].'/members/'.$userData['id'],array(),$headers);
             return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->log->info(ChatService::class."User is not in the Team/User Or Team name is missing");    
+                $this->logger->info(ChatService::class."User is not in the Team/User Or Team name is missing");    
             }
         }    
 
         public function createChannel($channel, $org){
             try{
             if(empty($channel)){
-                $this->log->info(ChatService::class."No Channel Name Found To create");
+                $this->logger->info(ChatService::class."No Channel Name Found To create");
                 return;
             }   
             if(empty($org)){
-                $this->log->info(ChatService::class."No Team Name Found To create");
+                $this->logger->info(ChatService::class."No Team Name Found To create");
                 return;
             }
             $team = $org;    
@@ -246,7 +246,7 @@ namespace Callback\Service;
             $response = $this->restClient->postWithHeader('api/v4/channels',array('team_id'=>$team['id'],'name'=>$channel,'display_name'=>$channel,'type'=>'P'),$headers);
             return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->log->info(ChatService::class."Create Channel Failed");    
+                $this->logger->info(ChatService::class."Create Channel Failed");    
         
             }
         }  
@@ -257,18 +257,18 @@ namespace Callback\Service;
             $channel = $this->sanitizeName($channel);
             $org = $this->sanitizeName($org);
             if(empty($channel)){
-                $this->log->info(ChatService::class."Deletion Failed - Channel Name not specified");
+                $this->logger->info(ChatService::class."Deletion Failed - Channel Name not specified");
                 return;
             }
             if(empty($org)){
-                $this->log->info(ChatService::class."Deletion Failed - Team Name not specified");
+                $this->logger->info(ChatService::class."Deletion Failed - Team Name not specified");
                 return; 
             }
             $channelData = $this->getChannelByName($channel, $org);
             $response = $this->restClient->delete('api/v4/channels/'.$channelData['id'],array(),$headers);
             return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->log->info(ChatService::class."Channel/Team Doesn't exist");        
+                $this->logger->info(ChatService::class."Channel/Team Doesn't exist");        
             }
         }
 
@@ -279,18 +279,18 @@ namespace Callback\Service;
             $oldChannel = $this->sanitizeName($oldChannel);
             $newChannel = $this->sanitizeName($newChannel);
             if(empty($oldChannel)){
-                $this->log->info(ChatService::class."No Channel Name specified to Update");
+                $this->logger->info(ChatService::class."No Channel Name specified to Update");
                 return;
             }
             if(empty($newChannel)){
-                $this->log->info(ChatService::class."No Name Found To Update");
+                $this->logger->info(ChatService::class."No Name Found To Update");
                 return;
             }
             $channelData = $this->getChannelByName($oldChannel, $org);
             $response = $this->restClient->put('api/v4/channels/'.$channelData['id'],array('id'=>$channelData['id'],'name'=> $newChannel,'display_name' => $newChannel),$headers);
             return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->log->info(ChatService::class."Update Channel Failed");    
+                $this->logger->info(ChatService::class."Update Channel Failed");    
             }
         }
         
@@ -302,7 +302,7 @@ namespace Callback\Service;
             $org = $this->sanitizeName($org);
                 
             if(empty($user)){
-                $this->log->info(ChatService::class."No User to Add to the channel ");
+                $this->logger->info(ChatService::class."No User to Add to the channel ");
                 return;
             }
             $team = $this->getTeamByName($org,true);
@@ -310,13 +310,13 @@ namespace Callback\Service;
             $userData = $this->getUserByUsername($user,true);
             $teamMember = $this->getTeamMember($userData['id'], $team['id']);
             if(!isset($teamMember['user_id'])){
-                $this->log->info(ChatService::class."User not part of team, adding to the team");
+                $this->logger->info(ChatService::class."User not part of team, adding to the team");
                 $teamMember = $this->addUserToTeam($user, $org);
             }
             $response = $this->restClient->postWithHeader('api/v4/channels/'.$channelData['id'].'/members',array('user_id' => $userData['id']),$headers);
             return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->log->info(ChatService::class."Adding User to channel Failed");    
+                $this->logger->info(ChatService::class."Adding User to channel Failed");    
             }
         }
 
@@ -327,7 +327,7 @@ namespace Callback\Service;
                 $channel = $this->sanitizeName($channel);
                 $org = $this->sanitizeName($org);
                 if(empty($user)){
-                    $this->log->info(ChatService::class."No User Name Found To Remove from the team");
+                    $this->logger->info(ChatService::class."No User Name Found To Remove from the team");
                     return;
                 }
                 $team = $this->getTeamByName($org);
@@ -341,13 +341,13 @@ namespace Callback\Service;
             // User in channel check
                 $channelMember = $this->restClient->get('api/v4/channels/'.$channelData['id'].'/members/'.$userData['id'],array(),$headers);
                 if(!isset($channelMember)){
-                    $this->log->info(ChatService::class."Removal Failed - User not in channel");
+                    $this->logger->info(ChatService::class."Removal Failed - User not in channel");
                     return; 
                 }
                 $response = $this->restClient->delete('api/v4/channels/'.$channelData['id'].'/members/'.$userData['id'],array(),$headers);
                 return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->log->info(ChatService::class."Removing User from channel Failed");    
+                $this->logger->info(ChatService::class."Removing User from channel Failed");    
             }
         }
     }
