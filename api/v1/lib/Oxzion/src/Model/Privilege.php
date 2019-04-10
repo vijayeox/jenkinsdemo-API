@@ -1,6 +1,6 @@
 <?php
 
-namespace Privilege\Model;
+namespace Oxzion\Model;
 
 use Bos\Model\Entity;
 use Bos\ValidationException;
@@ -8,16 +8,25 @@ use Bos\ValidationException;
 class Privilege extends Entity
 {
     protected $data = array(
-        'id' => 0,
+        'id' => null,
         'name' => null,
         'permission_allowed' => 0,
         'org_id' => null,
         'app_id' => null
     );
 
-    public function validate()
-    {
-        $dataArray = array("permission_allowed");
-        $this->validateWithParams($dataArray);
+    public function __construct($data = array()) {
+        if ($data) {
+            $this->exchangeArray($data);
+        }
     }
+
+    public function validate() {
+        $required = array(
+            "permission_allowed"
+        );
+        $this->validateWithParams($required);
+    }
+
 }
+?>
