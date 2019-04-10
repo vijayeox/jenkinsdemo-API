@@ -32,7 +32,7 @@ class AppControllerTest extends MainControllerTest
             "date_modified"=> "2019-04-03 11:49:16",
             "created_by"=> "1",
             "modified_by"=> "1",
-            "isdeleted"=> "0",
+            "status"=> 0,
             "org_id"=> "1",
             "start_options"=>null
         ])];

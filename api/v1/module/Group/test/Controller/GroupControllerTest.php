@@ -65,7 +65,7 @@ class GroupControllerTest extends ControllerTest {
     public function testCreate() {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Groups 22', 'parent_id'=> 9, 'org_id'=>1, 'manager_id' => 436, 'description
-        '=>'Description Test Data', 'logo' => 'grp1.png', 'cover_photo'=>'grp1.png', 'type' => 1, 'status' => 'Active'];
+        '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
@@ -84,8 +84,6 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($content['data']['manager_id'], 436);
         $this->assertEquals($content['data']['description'], $data['description']);
         $this->assertEquals($content['data']['logo'], "grp1.png");
-        $this->assertEquals($content['data']['cover_photo'], "grp1.png");
-        $this->assertEquals($content['data']['type'], 1);
         $this->assertEquals($content['data']['status'], "Active");
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_group'));
     }
@@ -94,7 +92,7 @@ class GroupControllerTest extends ControllerTest {
     public function testCreateWithoutRequiredField() {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Groups 22', 'manager_id' => 436, 'description
-        '=>'Description Test Data', 'logo' => 'grp1.png', 'cover_photo'=>'grp1.png', 'type' => 1, 'status' => 'Active'];
+        '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
@@ -113,7 +111,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testUpdate() {
         $data = ['name' => 'Test Create Group', 'parent_id'=> 9, 'org_id'=>1, 'manager_id' => 436, 'description
-        '=>'Description Test Data', 'logo' => 'grp1.png', 'cover_photo'=>'grp1.png', 'type' => 1, 'status' => 'Active'];
+        '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
@@ -132,14 +130,12 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($content['data']['manager_id'], 436);
         $this->assertEquals($content['data']['description'], "Description Test Data");
         $this->assertEquals($content['data']['logo'], "grp1.png");
-        $this->assertEquals($content['data']['cover_photo'], "grp1.png");
-        $this->assertEquals($content['data']['type'], 1);
         $this->assertEquals($content['data']['status'], "Active");
     }
 
     public function testUpdateNotFound() {
         $data = ['name' => 'Test Create Group', 'org_id'=>1, 'manager_id' => 436, 'description
-        '=>'Description Test Data', 'logo' => 'grp1.png', 'cover_photo'=>'grp1.png', 'type' => 1, 'status' => 'Active'];
+        '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
@@ -155,7 +151,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testUpdateWithoutRequiredField() {
         $data = ['name' => 'Test Create Group', 'org_id'=>1, 'manager_id' => 436, 'description
-        '=>'Description Test Data', 'logo' => 'grp1.png', 'cover_photo'=>'grp1.png', 'type' => 1, 'status' => 'Active'];
+        '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){

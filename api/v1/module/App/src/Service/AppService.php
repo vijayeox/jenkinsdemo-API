@@ -38,25 +38,25 @@ class AppService extends AbstractService
      */
     public function getApps()
     {
-        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.isdeleted,ar.org_id,ar.start_options from ox_app as ap 
+        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap 
         left join ox_app_registry as ar on ap.uuid = ar.app_id";
-        $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.isdeleted!=1";
+        $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.status!=1";
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $resultSet->toArray();
     }
 
     public function getApp($id)
     {
-        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.isdeleted,ar.org_id,ar.start_options from ox_app as ap 
+        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap 
         left join ox_app_registry as ar on ap.uuid = ar.app_id";
-        $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.isdeleted!=1 AND ap.id =" . $id;
+        $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.status!=1 AND ap.id =" . $id;
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $resultSet->toArray();
     }
 
     public function getAppList(){
         $queryString = "select * from ox_app";
-        $where = "where ox_app.isdeleted!=1";
+        $where = "where ox_app.status!=1";
         $order = "order by ox_app.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         return $resultSet->toArray();
@@ -76,6 +76,7 @@ class AppService extends AbstractService
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
+        $this->beginTransaction();
         try {
             $count = $this->table->save($form);
             if ($count == 0) {
@@ -100,9 +101,10 @@ class AppService extends AbstractService
         $data['id'] = $id;
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
-        $data['isdeleted'] = 1;
+        $data['status'] = 1;
         $form->exchangeArray($data);
         $count = 0;
+        $this->beginTransaction();        
         try {
             $count = $this->table->save($form);
             if ($count == 0) {
@@ -258,12 +260,12 @@ class AppService extends AbstractService
         $form = new App();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['isdeleted'] = 0;
+        $data['status'] = 0;
         $data['uuid'] = uniqid();
         $form->exchangeArray($data);
         $form->validate();
-        $this->beginTransaction();
         $count = 0;
+        $this->beginTransaction();
         try {
             $count = $this->table->save($form);
             if ($count == 0) {

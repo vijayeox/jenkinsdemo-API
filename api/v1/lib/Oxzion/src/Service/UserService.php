@@ -800,7 +800,7 @@ class UserService extends AbstractService
 
     public function getAppsByUserId() {
         $queryString = "select ap.name,ap.description,ap.uuid,ap.type,ap.logo,ap.category from ox_app as ap LEFT JOIN ox_role_privilege on ap.uuid=ox_role_privilege.app_id LEFT JOIN ox_user_role on ox_user_role.role_id = ox_role_privilege.role_id";
-        $where = "where ox_role_privilege.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.isdeleted!=1 AND ox_user_role.user_id =".AuthContext::get(AuthConstants::USER_ID);
+        $where = "where ox_role_privilege.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.status!=1 AND ox_user_role.user_id =".AuthContext::get(AuthConstants::USER_ID);
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $resultSet->toArray();
     }

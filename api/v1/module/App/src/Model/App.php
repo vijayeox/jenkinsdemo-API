@@ -19,7 +19,7 @@ class App extends Entity {
         'date_modified' => NULL,
         'created_by' => NULL,
         'modified_by' => NULL,
-        'isdeleted' => false
+        'status' => false
     );
     
     public function validate(){

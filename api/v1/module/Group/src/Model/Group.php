@@ -13,8 +13,6 @@ class Group extends Entity {
         'manager_id' => 0,
         'description' => 0,
         'logo'=> 0,
-        'cover_photo' => 0,
-        'type' => 0,
         'status' => "Active",
         'date_created' => 0,
         'date_modified' => 0,
@@ -23,7 +21,7 @@ class Group extends Entity {
     );
 
     public function validate() {
-        $dataArray = Array("name", "parent_id", "manager_id", "type", "status", "date_modified");
+        $dataArray = Array("name", "parent_id", "manager_id", "status", "date_modified");
         $this->validateWithParams($dataArray);
     }
 }
