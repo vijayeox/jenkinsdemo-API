@@ -136,6 +136,12 @@
     color: #656565 !important;
   }
 
+  .manageIcons{
+   font-size: 1.7em;
+  color: #002C3E;
+  display: block;
+  }
+
   .mainHead {
     margin: 0px;
     width: 100%;
@@ -148,6 +154,8 @@
     position: relative;
     text-align: center;
     padding-bottom: 10%;
+    margin-top: 8%;
+    display: flex;
   }
 
   #pageTitle {

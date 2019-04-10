@@ -5,22 +5,30 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Sql;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\ParameterContainer;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 class AbstractService
 {
     protected $config;
     private $dbAdapter;
     private $sql;
-    protected $log;
+    protected $logger;
 
     protected function __construct($config, $dbAdapter, $log = null)
     {
         $this->config = $config;
-        $this->log = $log;
+        $this->logger = $log;
         $this->dbAdapter = $dbAdapter;
         if ($dbAdapter) {
             $this->sql = new Sql($this->dbAdapter);
         }
+    }
+
+    protected function initLogger($logLocation){
+        $this->logger = new Logger;
+        $writer = new Stream($logLocation);
+        $this->logger->addWriter($writer);        
     }
 
     protected function beginTransaction()

@@ -11,14 +11,18 @@ use Zend\Db\Sql\Expression;
 use Exception;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\OrganizationService;
+use Zend\Log\Logger;
 
 class GroupService extends AbstractService {
 
     private $table;
     private $organizationService;
+    protected $logger;
+
 
     public function __construct($config, $dbAdapter, GroupTable $table,$organizationService) {
         parent::__construct($config, $dbAdapter);
+        parent::initLogger(__DIR__ . '/../../../../logs/group.log');
         $this->table = $table;
         $this->messageProducer = MessageProducer::getInstance();
         $this->organizationService = $organizationService;
@@ -99,6 +103,10 @@ class GroupService extends AbstractService {
 
     public function deleteGroup($id) {
         $obj = $this->table->get($id,array());
+        if (is_null($obj)) {
+            return 0;
+        }
+
         $org = $this->organizationService->getOrganization($obj->org_id);
         $count = 0;
         try {
@@ -122,10 +130,21 @@ class GroupService extends AbstractService {
 
     public function saveUser($id,$data) {
         $obj = $this->table->get($id,array());
+        if (is_null($obj)) {
+            $this->logger->log(Logger::INFO, "Invalid group id - $id");
+            return 0;
+        }
+        
         $org = $this->organizationService->getOrganization($obj->org_id);
+        if ($org['id'] != AuthContext::get(AuthConstants::ORG_ID)) {
+            $this->logger->log(Logger::WARN, "Group $id does not belong to logged in Organization");
+            return 0;
+        }
+        
         if(!isset($data['userid']) || empty($data['userid'])) {
             return 2;
         }
+
         $userArray=json_decode($data['userid'],true);
         if($userArray){
             $userSingleArray= array_unique(array_map('current', $userArray));
@@ -140,13 +159,12 @@ class GroupService extends AbstractService {
             $insertedUser = $this->executeQuerywithParams($query)->toArray();
             $this->beginTransaction();
             try{
-                $delete = $this->getSqlObject()
-                ->delete('ox_user_group')
-                ->where(['group_id' => $id]);
-                $result = $this->executeQueryString($delete);
+                $delete="Delete from ox_user_group where ox_user_group.group_id =".$id. " OR (ox_user_group.group_id !=" .$id. " AND ox_user_group.avatar_id in (".implode(',', $userSingleArray)."))"; 
+                $result = $this->runGenericQuery($delete);
+
                 $query ="Insert into ox_user_group(avatar_id,group_id) (Select ox_user.id, ".$id." AS group_id from ox_user_group right join  ox_user on ox_user_group.avatar_id = ox_user.id where ox_user.id in (".implode(',', $userSingleArray)."))";
                 $resultInsert = $this->runGenericQuery($query);
-                if(count($resultInsert) != count($userArray)){
+                if(count($resultInsert) != count($userSingleArray)){
                     $this->rollback();
                     return 0;
                 }

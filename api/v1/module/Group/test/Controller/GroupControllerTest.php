@@ -227,7 +227,7 @@ class GroupControllerTest extends ControllerTest {
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/group/1/save','POST',array('userid' => '[{"id":1},{"id":23}]')); 
+        $this->dispatch('/group/1/save','POST',array('userid' => '[{"id":1},{"id":2},{"id":23}]')); 
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
