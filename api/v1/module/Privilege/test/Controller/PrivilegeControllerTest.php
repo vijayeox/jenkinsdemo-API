@@ -9,7 +9,7 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
-use Privilege\Service\PrivilegeService;
+use Oxzion\Service\PrivilegeService;
 
 
 class PrivilegeControllerTest extends ControllerTest

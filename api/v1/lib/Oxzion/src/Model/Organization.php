@@ -2,7 +2,7 @@
 namespace Oxzion\Model;
 
 use Bos\Model\Entity;
-class Organization extends Entity{
+class Organization extends Entity {
 
     protected $data = array(
         'id' => NULL,
@@ -17,8 +17,21 @@ class Organization extends Entity{
         'theme' => 0,
         'status' => 'Active'
     );
-    public function validate(){
-        $required = array('name','logo','status');
+
+    public function __construct($data = array()) {
+        if ($data) {
+            $this->exchangeArray($data);
+        }
+    }
+
+    public function validate() {
+        $required = array(
+            'name',
+            'logo',
+            'status'
+        );
         $this->validateWithParams($required);
     }
+
 }
+?>
