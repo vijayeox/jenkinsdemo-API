@@ -2,26 +2,16 @@
 namespace Oxzion\Model;
 
 use Bos\Model\Entity;
-class Role extends Entity {
+class Role extends Entity{
 
     protected $data = array(
         'id' => NULL,
-        'name' => NULL,
+        'name' => 0,
         'org_id' => 0,
         'description' => NULL,
     );
-
-    public function __construct($data = array()) {
-        if ($data) {
-            $this->exchangeArray($data);
-        }
-    }
-
-    public function validate() {
-        $required = array(
-            'name'
-        );
+    public function validate(){
+        $required = array('name');
         $this->validateWithParams($required);
     }
 }
-?>

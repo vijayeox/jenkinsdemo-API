@@ -44,31 +44,9 @@ class User extends Entity
         'password_reset_expiry_date' => NULL,
     );
 
-    public function __construct($data = array()) {
-        if ($data) {
-            $this->exchangeArray($data);
-        }
-    }
-
-    public function validate() {
-        $required = array(
-            'username',
-            'password',
-            'firstname',
-            'lastname',
-            'email',
-            'orgid',
-            'status',
-            'date_of_birth',
-            'designation',
-            'gender',
-            'managerid',
-            'date_of_join',
-            'date_created',
-            'created_by'
-        );
+    public function validate()
+    {
+        $required = array('username', 'password', 'firstname', 'lastname', 'email', 'orgid', 'status', 'date_of_birth', 'designation', 'gender', 'managerid', 'date_of_join', 'date_created', 'created_by');
         $this->validateWithParams($required);
     }
-
 }
-?>

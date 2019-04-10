@@ -4,11 +4,11 @@ namespace Privilege;
 
 use Oxzion\Error\ErrorHandler;
 use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Oxzion\Service\PrivilegeService;
-use Oxzion\Model\PrivilegeTable;
 
 class Module implements ConfigProviderInterface
 {
@@ -32,6 +32,20 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
+                Service\PrivilegeService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\PrivilegeService($container->get('config'), $dbAdapter, $container->get(Model\PrivilegeTable::class));
+                },
+                Model\PrivilegeTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\PrivilegeTableGateway::class);
+                    return new Model\PrivilegeTable($tableGateway);
+                },
+                Model\PrivilegeTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Privilege());
+                    return new TableGateway('ox_privilege', $dbAdapter, null, $resultSetPrototype);
+                },
             ],
         ];
     }
@@ -42,7 +56,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\PrivilegeController::class => function ($container) {
                     return new Controller\PrivilegeController(
-                        $container->get(PrivilegeTable::class), $container->get(PrivilegeService::class), $container->get('PrivilegeLogger'),
+                        $container->get(Model\PrivilegeTable::class), $container->get(Service\PrivilegeService::class), $container->get('PrivilegeLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],

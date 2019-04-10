@@ -36,6 +36,10 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
+                OrganizationService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new OrganizationService($container->get('config'), $dbAdapter, $container->get(OrganizationTable::class), $container->get(UserService::class));
+                },
             ],
         ];
     }

@@ -1,41 +1,37 @@
 <?php
 namespace Oxzion\Service;
 
+use Oxzion\Model\OrganizationTable;
+use Oxzion\Model\Organization;
 use Bos\Auth\AuthContext;
 use Bos\Auth\AuthConstants;
-use Bos\ValidationException;
 use Bos\Service\AbstractService;
-use Oxzion\Model\Organization;
-use Oxzion\Model\OrganizationTable;
+use Bos\ValidationException;
+use Oxzion\Utils\BosUtils;
+use Zend\Db\Sql\Expression;
+use Oxzion\Service\OrganizationService;
 use Oxzion\Messaging\MessageProducer;
+use Exception;
 
 class OrganizationService extends AbstractService
 {
 
-    protected $table;
-    private $userService;
-    private $roleService;
-    protected $modelClass;
+    private $emailService;
     private $messageProducer;
-    private $privilegeService;
-
 
     public function setMessageProducer($messageProducer)
     {
-        $this->messageProducer = $messageProducer;
+		$this->messageProducer = $messageProducer;
     }
 
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, OrganizationTable $table, UserService $userService, RoleService $roleService, PrivilegeService $privilegeService)
+    public function __construct($config, $dbAdapter, OrganizationTable $table, UserService $userService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->userService = $userService;
-        $this->roleService = $roleService;
-        $this->modelClass = new Organization();
-        $this->privilegeService = $privilegeService;
         $this->messageProducer = MessageProducer::getInstance();
     }
 
@@ -53,12 +49,13 @@ class OrganizationService extends AbstractService
      */
     public function createOrganization(&$data)
     {
+        $form = new Organization();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['date_modified'] = date('Y-m-d H:i:s');
-
-        $form = new Organization($data);
+        $data['status'] = "Active";
+        $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
         $count = 0;
@@ -68,28 +65,55 @@ class OrganizationService extends AbstractService
                 $this->rollback();
                 return 0;
             }
-            $form->id = $this->table->getLastInsertValue();
-            $this->setupBasicOrg($form);
+            $id = $this->table->getLastInsertValue();
+            $this->createAdminUserForOrg($form, $id);
+            $data['id'] = $id;
             $this->commit();
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $form->name, 'status' => $form->status)),'ORGANIZATION_ADDED');
         } catch (Exception $e) {
             $this->rollback();
             return 0;
         }
+        $this->messageProducer->sendTopic(json_encode(array('orgname' => $data['name'], 'status' => 'Active')),'ORGANIZATION_ADDED');
         return $count;
     }
 
-    private function setupBasicOrg(Organization $org) {
-        // adding basic roles
-        $returnArray['roles'] = $this->roleService->createBasicRoles($org->id);
 
-        // adding basic privileges
-        $returnArray['privileges'] = $this->privilegeService->createBasicPrivileges($org->id);
-
-        // adding a user
-        $returnArray['user'] = $this->userService->createAdminForOrg($org);
-
-        return true;
+    /**
+     * Create Admin User Service - Once the Organization is created, we need to create a user that can take control of
+     * all the admin related activities for that organization
+     * @method createAdminUserForOrg
+     * @param array $data Array of elements as shown
+     * <code> {
+     *               id : integer,
+     *               name : string,
+     *               logo : string,
+     *               status : String(Active|Inactive),
+     *   } </code>
+     * @return array Returns success response after the user is created successfully.
+     */
+    public function createAdminUserForOrg($data, $orgId)
+    {
+        $userData = [
+            "firstname" => str_replace(' ', '', $data->name),
+            "lastname" => "Adminisrator",
+            "email" => strtolower(str_replace(' ', '', $data->name)) . "@oxzion.com",
+            "company_name" => $data->name,
+            "address_1" => $data->address,
+            "address_2" => $data->city,
+            "country" => "US",
+            "preferences" => "[{ 'create_user' => 'true', 'show_notification' => 'true' }]",
+            "username" => BosUtils::randomUserName($data->name),
+            "date_of_birth" => "1986/01/01",
+            "designation" => "Admin",
+            "orgid" => $orgId,
+            "status" => "Active",
+            "timezone" => "United States/New York",
+            "gender" => "Male",
+            "managerid" => "1",
+            "date_of_join" => Date("Y-m-d"),
+            "password" => BosUtils::randomPassword()
+        ];
+        return $this->userService->createUser($userData);
     }
 
     /**
@@ -114,15 +138,15 @@ class OrganizationService extends AbstractService
         $form->validate();
         $this->beginTransaction();
         $count = 0;
-        try {
-            $count = $this->table->save($form);
+        try { 
+            $count = $this->table->save($form);    
             if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $this->commit();
         }
-         catch (Exception $e) {
+         catch (Exception $e) { 
             switch (get_class($e)) {
                 case "Bos\ValidationException" :
                     $this->rollback();
@@ -134,7 +158,7 @@ class OrganizationService extends AbstractService
                     break;
             }
         }
-
+        
         if($obj->name != $data['name']){
             $this->messageProducer->sendTopic(json_encode(array('new_orgname' => $data['name'], 'old_orgname' => $obj->name,'status' => $data['status'])),'ORGANIZATION_UPDATED');
         }
@@ -217,22 +241,30 @@ class OrganizationService extends AbstractService
         return $response;
     }
 
-    public function addUserToOrg($userId, $organizationId) {
-        if ($user = $this->getDataByParams('ox_user', array('id', 'username'), array('id' => $userId))) {
-            if ($org = $this->getDataByParams('ox_organization', array('id', 'name'), array('id' => $organizationId, 'status' => 'Active'))) {
-                if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))) {
-                    $data = array(array(
-                        'user_id' => $userId,
-                        'org_id' => $organizationId
-                    ));
-                    $result_update = $this->multiInsertOrUpdate('ox_user_org', $data);
+    public function addUserToOrg($userId, $organizationId)
+    {
+        $sql = $this->getSqlObject();
+        $queryString = "select id,username from ox_user";
+        $where = "where id =" . $userId;
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
+        if ($resultSet) {
+            $query = "select id,name from ox_organization";
+            $where = "where id=" . $organizationId . " AND status = 'Active' ";
+            $result = $this->executeQuerywithParams($query, $where, null, null);
+            if ($result) {
+                $query = "select * from ox_user_org";
+                $where = "where user_id =" . $userId . " and org_id =" . $organizationId;
+                $endresult = $this->executeQuerywithParams($query, $where, null, null)->toArray();
+                if (!$endresult) {
+                    $data = array(array('user_id' => $userId, 'org_id' => $organizationId));
+                    $result_update = $this->multiInsertOrUpdate('ox_user_org', $data, array());
                     if ($result_update->getAffectedRows() == 0) {
                         return $result_update;
                     }
-                    $this->messageProducer->sendTopic(json_encode(array('username' => $user[0]['username'], 'orgname' => $org[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ADDED');
+                    $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet->toArray()[0]['username'], 'orgname' => $result->toArray()[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ADDED');
                     return 1;
                 } else {
-                    $this->messageProducer->sendTopic(json_encode(array('username' => $user[0]['username'], 'orgname' => $org[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ALREADYEXISTS');
+                    $this->messageProducer->sendTopic(json_encode(array('username' => $resultSet->toArray()[0]['username'], 'orgname' => $result->toArray()[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ALREADYEXISTS');
                     return 3;
                 }
             } else {
@@ -241,6 +273,6 @@ class OrganizationService extends AbstractService
         }
         return 0;
     }
-
 }
+
 ?>

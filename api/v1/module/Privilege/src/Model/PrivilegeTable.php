@@ -1,5 +1,5 @@
 <?php
-namespace Oxzion\Model;
+namespace Privilege\Model;
 
 use Bos\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;

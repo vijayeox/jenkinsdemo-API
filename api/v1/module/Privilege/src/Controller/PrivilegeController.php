@@ -6,9 +6,9 @@ namespace Privilege\Controller;
  */
 use Bos\ValidationException;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Model\Privilege;
-use Oxzion\Model\PrivilegeTable;
-use Oxzion\Service\PrivilegeService;
+use Privilege\Model\Privilege;
+use Privilege\Model\PrivilegeTable;
+use Privilege\Service\PrivilegeService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Log\Logger;
 
