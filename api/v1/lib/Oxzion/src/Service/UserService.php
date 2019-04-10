@@ -1,30 +1,31 @@
 <?php
 namespace Oxzion\Service;
 
-use Bos\Auth\AuthConstants;
 use Bos\Auth\AuthContext;
-use Bos\Service\AbstractService;
-use Oxzion\Messaging\MessageProducer;
+use Bos\Auth\AuthConstants;
 use Oxzion\Model\User;
-use Oxzion\Search\Elastic\IndexerImpl;
-use Oxzion\Utils\ArrayUtils;
+use Oxzion\Model\UserTable;
 use Oxzion\Utils\BosUtils;
+use Oxzion\Utils\ArrayUtils;
+use Bos\Service\AbstractService;
 use Oxzion\Service\EmailService;
+use Oxzion\Messaging\MessageProducer;
+use Oxzion\Search\Elastic\IndexerImpl;
 
 class UserService extends AbstractService
 {
-    const GROUPS = '_groups';
     const ROLES = '_roles';
+    const GROUPS = '_groups';
     const USER_FOLDER = "/users/";
-    private $cacheService;
     private $id;
+    private $cacheService;
 
     /**
      * @ignore table
      */
-    private $table;
-    private $emailService;
+    protected $table;
     protected $config;
+    private $emailService;
     private $messageProducer;
 
     public function setMessageProducer($messageProducer)
@@ -32,15 +33,12 @@ class UserService extends AbstractService
 		$this->messageProducer = $messageProducer;
     }
 
-    public function __construct($config, $dbAdapter, $table = null, EmailService $emailService)
-    {
+    public function __construct($config, $dbAdapter, UserTable $table = null, EmailService $emailService) {
         parent::__construct($config, $dbAdapter);
-        $this->cacheService = CacheService::getInstance();
-        if ($table) {
-            $this->table = $table;
-        }
-        $this->emailService = $emailService;
+        $this->table = $table;
         $this->config = $config;
+        $this->emailService = $emailService;
+        $this->cacheService = CacheService::getInstance();
         $this->messageProducer = MessageProducer::getInstance();
     }
 
@@ -129,17 +127,16 @@ class UserService extends AbstractService
      *        data : array Created User Object
      * </code>
      */
-    public function createUser(&$data)
-    {
-        $form = new User();
-        $data['orgid'] = (isset($data['orgid']) ? $data['orgid'] : AuthContext::get(AuthConstants::ORG_ID));
+    public function createUser(&$data) {
+        if (!$data['orgid'])
+            $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $tmpPwd = $data['password'];
-        if (isset($data['password'])) {
+        if (isset($data['password']))
             $data['password'] = md5(sha1($data['password']));
-        }
-        $form->exchangeArray($data);
+
+        $form = new User($data);
         $form->validate();
         $this->beginTransaction();
         try {
@@ -149,13 +146,13 @@ class UserService extends AbstractService
                 $this->rollback();
                 return 0;
             }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
+            $form->id = $data['id'] = $this->table->getLastInsertValue();
             $form->password = $tmpPwd;
-            //$this->emailService->sendUserEmail($form);
-            //Code to add the user information to the Elastic Search Index
-            //$result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
-            //$es = $this->generateUserIndexForElastic($data);
+            $this->addUserToOrg($form->id, $form->orgid);
+            // $this->emailService->sendUserEmail($form);
+            // // Code to add the user information to the Elastic Search Index
+            // $result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
+            // $es = $this->generateUserIndexForElastic($data);
             $this->commit();
             $this->messageProducer->sendTopic(json_encode(array('username' => $data['username'] , 'firstname' => $data['firstname'], 'email' => $data['email'])),'USER_ADDED');
             return $count;
@@ -163,6 +160,60 @@ class UserService extends AbstractService
             $this->rollback();
             return 0;
         }
+    }
+
+    public function createAdminForOrg($org) {
+        $data = array(
+            "firstname" => str_replace(' ', '', $org->name),
+            "lastname" => "Adminisrator",
+            "email" => strtolower(str_replace(' ', '', $org->name)) . "@oxzion.com",
+            "company_name" => $org->name,
+            "address_1" => $org->address,
+            "address_2" => $org->city,
+            "country" => "US",
+            "preferences" => "[{ 'create_user' => 'true', 'show_notification' => 'true' }]",
+            "username" => substr($org->name, 0, 4).'admin',
+            "date_of_birth" => date('1960/m/d'),
+            "designation" => "Admin",
+            "orgid" => $org->id,
+            "status" => "Active",
+            "timezone" => "United States/New York",
+            "gender" => "Male",
+            "managerid" => "1",
+            "date_of_join" => Date("Y-m-d"),
+            "password" => BosUtils::randomPassword()
+        );
+        $result = $this->createUser($data);
+        // $this->messageProducer->sendTopic(json_encode(array(
+        //     'username' => $data['username'],
+        //     'firstname' => $data['firstname'],
+        //     'email' => $data['email']
+        // )),'USER_ADDED');
+        $this->addUserRole($data['id'], 'ADMIN');
+        return $result;
+    }
+
+    public function addUserRole($userId, $roleName) {
+        if ($user = $this->getDataByParams('ox_user', array('id', 'org_id'), array('id' => $userId))) {
+            if ($role = $this->getDataByParams('ox_role', array('id'), array('org_id' => $user[0]['org_id'], 'name' => $roleName))) {
+                if (!$this->getDataByParams('ox_user_role', array(), array('user_id' => $userId, 'role_id' => $role[0]['id']))) {
+                    $data = array(array(
+                        'user_id' => $userId,
+                        'role_id' => $role[0]['id']
+                    ));
+                    $result = $this->multiInsertOrUpdate('ox_user_role', $data);
+                    if ($result->getAffectedRows() == 0) {
+                        return $result;
+                    }
+                    return 1;
+                } else {
+                    return 3;
+                }
+            } else {
+                return 2;
+            }
+        }
+        return 0;
     }
 
     private function generateUserIndexForElastic($data)
@@ -235,9 +286,9 @@ class UserService extends AbstractService
             ->columns(array("id", "name"))
             ->where(array('ox_organization.id' => $id));
         $response = $this->executeQuery($select)->toArray();
-        return $response[0];        
+        return $response[0];
     }
-    
+
     /**
      * Delete User Service
      * @method deleteUser
@@ -612,26 +663,17 @@ class UserService extends AbstractService
         return $results;
     }
 
-    public function addUserToOrg($userId, $organizationId)
-    {
-        $sql = $this->getSqlObject();
-        $queryString = "select id from ox_user";
-        $where = "where id =" . $userId;
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
-        if ($resultSet) {
-            $query = "select id from ox_organization";
-            $where = "where id=" . $organizationId . " AND status = 'Active' ";
-            $result = $this->executeQuerywithParams($query, $where, null, null);
-            if ($result) {
-                $query = "select * from ox_user_org";
-                $where = "where user_id =" . $userId . " and org_id =" . $organizationId;
-                $endresult = $this->executeQuerywithParams($query, $where, null, null)->toArray();
-                if (!$endresult) {
-                    $data = array(array('user_id' => $userId, 'org_id' => $organizationId));
-                    $result_update = $this->multiInsertOrUpdate('ox_user_org', $data, array());
-                    if ($result_update->getAffectedRows() == 0) {
+    public function addUserToOrg($userId, $organizationId) {
+        if ($this->getDataByParams('ox_user', array('id'), array('id' => $userId))) {
+            if ($this->getDataByParams('ox_organization', array('id'), array('id' => $organizationId, 'status' => 'Active'))) {
+                if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))) {
+                    $data = array(array(
+                        'user_id' => $userId,
+                        'org_id' => $organizationId
+                    ));
+                    $result_update = $this->multiInsertOrUpdate('ox_user_org', $data);
+                    if ($result_update->getAffectedRows() == 0)
                         return $result_update;
-                    }
                     return 1;
                 } else {
                     return 3;

@@ -1,22 +1,23 @@
 <?php
 namespace Bos\Service;
 
-use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Expression;
 use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Adapter\ParameterContainer;
 
 class AbstractService
 {
-    protected $config;
-    private $dbAdapter;
     private $sql;
     protected $log;
+    protected $config;
+    private $dbAdapter;
 
     protected function __construct($config, $dbAdapter, $log = null)
     {
-        $this->config = $config;
         $this->log = $log;
+        $this->config = $config;
         $this->dbAdapter = $dbAdapter;
         if ($dbAdapter) {
             $this->sql = new Sql($this->dbAdapter);
@@ -41,6 +42,11 @@ class AbstractService
     protected function getSqlObject()
     {
         return $this->sql;
+    }
+
+    protected function ExpressionObject($expression)
+    {
+        return new Expression($expression);
     }
 
     protected function getAdapter()
@@ -75,10 +81,10 @@ class AbstractService
     }
 
     /**
-Query builder: Code that combines the required parameter to build the query.
-Author: Rakshith
-Function Name: executeQuerywithParams()
-*/
+        Query builder: Code that combines the required parameter to build the query.
+        Author: Rakshith
+        Function Name: executeQuerywithParams()
+    */
     public function executeQuerywithParams($queryString, $where = null, $group = null, $order = null, $limit = null)
     {
         //Passing the required parameter to the query statement
@@ -91,6 +97,47 @@ Function Name: executeQuerywithParams()
         return $resultSet->initialize($result);
     }
 
+    public function create(&$data, $commit = true){
+        $this->modelClass->exchangeArray($data);
+        $this->modelClass->validate();
+        $this->beginTransaction();
+        $count = 0;
+        try {
+            $count = $this->table->save($this->modelClass);
+            if($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+            $data['id'] = $this->table->getLastInsertValue();
+            if ($commit)
+                $this->commit();
+        } catch(Exception $e) {
+            $this->rollback();
+            return 0;
+        }
+        return $count;
+    }
+
+    protected function getDataByParams($tableName, $fieldArray = array(), $where = array()) {
+        $select = $this->sql->select($tableName);
+
+        if ($fieldArray)
+            $select->columns($fieldArray);
+
+        if ($where) {
+            if (is_array($where) && array_intersect(array('OR', 'AND', 'or', 'and'), array_keys($where))) {
+                foreach ($where as $op => $cond)
+                    $select->where($cond, strtoupper($op));
+            } else {
+                $select->where($where, 'AND');
+            }
+        }
+        // echo "<pre>";print_r($this->sql->buildSqlString($select));exit();
+        $returnArray = $this->executeQuery($select)->toArray();
+        if (!$returnArray) return null;
+        return $returnArray;
+    }
+
     /**
     * multiInsertOrUpdate: Insert or update Multiple rows as one query
     * @param array $tableName Table name to Insert fields into
@@ -99,7 +146,7 @@ Function Name: executeQuerywithParams()
     * @return bool
     */
 
-    public function multiInsertOrUpdate($tableName, array $data, array $excludedColumns)
+    public function multiInsertOrUpdate($tableName, array $data, array $excludedColumns = array())
     {
         $sqlStringTemplate = 'INSERT INTO %s (%s) VALUES %s ON DUPLICATE KEY UPDATE %s';
         $adapter = $this->getAdapter();
@@ -145,5 +192,6 @@ Function Name: executeQuerywithParams()
         $statementContainer->setSql($query);
         return $statementContainer->execute();
     }
+
 }
- 
+?>
