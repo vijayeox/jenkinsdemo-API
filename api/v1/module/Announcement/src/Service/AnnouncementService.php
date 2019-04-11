@@ -195,11 +195,6 @@ class AnnouncementService extends AbstractService{
     * @ignore insertAnnouncementForGroup
     */
     public function insertAnnouncementForGroup($announcementId, $groups){
-        if(!isset($groups['groupid']) || empty($groups['groupid'])) {
-            return 2;
-        }
-        $groups=json_decode($groups['groupid'],true);
-
         if($groups){
             $this->beginTransaction();
             try{
