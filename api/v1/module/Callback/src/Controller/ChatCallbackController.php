@@ -11,11 +11,13 @@ namespace Callback\Controller;
     class ChatCallbackController extends AbstractApiControllerHelper {
 
         private $chatService;
+        protected $log;
         // /**
         // * @ignore __construct
         // */
         public function __construct(ChatService $chatService, Logger $log) {
-            $this->chatService = $chatService;        
+            $this->chatService = $chatService;  
+            $this->log = $log;      
         }
         
         public function setChatService($chatService){
@@ -24,9 +26,11 @@ namespace Callback\Controller;
 
         public function addOrgAction() {
             $params = $this->params()->fromPost();
-            $response = $this->chatService->createTeam($params['name']);
+            $this->log->info(ChatCallbackController::class.":Organization Add Action- ".json_encode($params));
+            $response = $this->chatService->createTeam($params['orgname']);
             if($response){
-            return $this->getSuccessResponseWithData(json_decode($response['body'],true));
+                $this->log->info(ChatCallbackController::class.":Organization Added");
+                return $this->getSuccessResponseWithData(json_decode($response['body'],true));
             }
             return $this->getErrorResponse("Org Creation Failed", 400);
         }

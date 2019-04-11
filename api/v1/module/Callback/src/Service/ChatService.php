@@ -35,7 +35,7 @@ namespace Callback\Service;
         }
 
         private function sanitizeName($name){
-            return trim(strtolower(preg_replace("/[\ _]/", "-",$name)));
+            return strtolower(trim(preg_replace("/[^A-Za-z0-9\-]/", "",$name)));
         }
 
         private function getTeamByName($orgName,$forceCreateteam=false){
