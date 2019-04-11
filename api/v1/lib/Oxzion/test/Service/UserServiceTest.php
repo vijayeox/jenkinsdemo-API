@@ -1,9 +1,11 @@
 <?php
 namespace Oxzion\Service;
+
 use Zend\Stdlib\ArrayUtils;
-use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Test\ServiceTest;
 use Oxzion\Service\EmailService;
+use Zend\Db\Adapter\AdapterInterface;
+use Oxzion\Service\EmailTemplateService;
 
 class UserServiceTest extends ServiceTest {
 
@@ -17,18 +19,18 @@ class UserServiceTest extends ServiceTest {
         $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php',$configOverrides);
         $this->setApplicationConfig($configOverrides);
     }
-
     private function getUserService(){
-        $config = $this->getApplicationConfig();
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $table = $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTable::class);
-        $email = $this->getApplicationServiceLocator()->get(EmailService::class);
-        $userService = new UserService($config, $dbAdapter, $table, $email);
-        return $userService;
+        return new UserService(
+            $this->getApplicationConfig(),
+            $this->getApplicationServiceLocator()->get(AdapterInterface::class),
+            $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTable::class),
+            $this->getApplicationServiceLocator()->get(EmailService::class),
+            $this->getApplicationServiceLocator()->get(EmailTemplateService::class)
+        );
     }
+
     public function testGetPrivileges(){
-        $userService = $this->getUserService();
-        $data = $userService->getPrivileges(1);
+        $data = $this->getUserService()->getPrivileges(1);
         $this->assertEquals(isset($data), true);
         $this->assertEquals(count($data) > 0, true);
     }

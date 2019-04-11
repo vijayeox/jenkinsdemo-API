@@ -13,7 +13,7 @@ class MessageProducer
         $this->client = new Client();
         $this->logger = new Logger;
         $writer = new Stream(__DIR__ . '/../../../../logs/Messaging.log');
-        $this->logger->addWriter($writer);  
+        $this->logger->addWriter($writer);
     }
 
     public static function getInstance()
@@ -34,7 +34,6 @@ class MessageProducer
     }
     public function sendQueue($message, $queue)
     {
-        
         $this->client->sendMessage('/queue/' . $queue, $message);
     }
 }

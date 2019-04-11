@@ -8,3 +8,5 @@
 **/.idea/*
 **package-lock.json
 *.env
+/api/v1/data/template/cache
+/api/v1/data/template/templates_c

@@ -46,7 +46,8 @@
     "zendframework/zend-test": "^3.2",
     "phpunit/dbunit": "^4",
     "mockery/mockery": "^1.2",
-    "squizlabs/php_codesniffer": "^3.0@dev"
+    "squizlabs/php_codesniffer": "^3.0@dev",
+    "smarty/smarty": "~3.1"
   },
   "autoload": {
     "psr-4": {

@@ -9,6 +9,7 @@ use Oxzion\Utils\BosUtils;
 use Oxzion\Utils\ArrayUtils;
 use Bos\Service\AbstractService;
 use Oxzion\Service\EmailService;
+use Oxzion\Service\EmailTemplateService;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Search\Elastic\IndexerImpl;
 
@@ -18,26 +19,28 @@ class UserService extends AbstractService
     const GROUPS = '_groups';
     const USER_FOLDER = "/users/";
     private $id;
-    private $cacheService;
 
     /**
      * @ignore table
      */
     protected $table;
     protected $config;
+    private $cacheService;
     private $emailService;
     private $messageProducer;
+    private $emailTemplateService;
 
     public function setMessageProducer($messageProducer)
     {
 		$this->messageProducer = $messageProducer;
     }
 
-    public function __construct($config, $dbAdapter, UserTable $table = null, EmailService $emailService) {
+    public function __construct($config, $dbAdapter, UserTable $table = null, EmailService $emailService, EmailTemplateService $emailTemplateService) {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->config = $config;
         $this->emailService = $emailService;
+        $this->emailTemplateService = $emailTemplateService;
         $this->cacheService = CacheService::getInstance();
         $this->messageProducer = MessageProducer::getInstance();
     }
@@ -154,7 +157,11 @@ class UserService extends AbstractService
             // $result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
             // $es = $this->generateUserIndexForElastic($data);
             $this->commit();
-            $this->messageProducer->sendTopic(json_encode(array('username' => $data['username'] , 'firstname' => $data['firstname'], 'email' => $data['email'])),'USER_ADDED');
+            $this->messageProducer->sendTopic(json_encode(array(
+                'username' => $data['username'],
+                'firstname' => $data['firstname'],
+                'email' => $data['email']
+            )),'USER_ADDED');
             return $count;
         } catch (Exception $e) {
             $this->rollback();
@@ -172,7 +179,7 @@ class UserService extends AbstractService
             "address_2" => $org->city,
             "country" => "US",
             "preferences" => "[{ 'create_user' => 'true', 'show_notification' => 'true' }]",
-            "username" => substr($org->name, 0, 4).'admin',
+            "username" => substr(str_replace(' ', '', $org->name), 0, 4).'admin',
             "date_of_birth" => date('1960/m/d'),
             "designation" => "Admin",
             "orgid" => $org->id,
@@ -181,21 +188,23 @@ class UserService extends AbstractService
             "gender" => "Male",
             "managerid" => "1",
             "date_of_join" => Date("Y-m-d"),
-            "password" => BosUtils::randomPassword()
+            "password" => 'Welcome'.substr(str_replace(' ', '', $org->name), 0, 4).$org->id
         );
         $result = $this->createUser($data);
-        // $this->messageProducer->sendTopic(json_encode(array(
-        //     'username' => $data['username'],
-        //     'firstname' => $data['firstname'],
-        //     'email' => $data['email']
-        // )),'USER_ADDED');
+
+        $this->messageProducer->sendTopic(json_encode(array(
+            'To' => $data['email'],
+            'Subject' => $org->name.' created!',
+            'body' => $this->emailTemplateService->getContent('newAdminUser', $data)
+        )),'mail');
+
         $this->addUserRole($data['id'], 'ADMIN');
         return $result;
     }
 
     public function addUserRole($userId, $roleName) {
-        if ($user = $this->getDataByParams('ox_user', array('id', 'org_id'), array('id' => $userId))) {
-            if ($role = $this->getDataByParams('ox_role', array('id'), array('org_id' => $user[0]['org_id'], 'name' => $roleName))) {
+        if ($user = $this->getDataByParams('ox_user', array('id', 'orgid'), array('id' => $userId))) {
+            if ($role = $this->getDataByParams('ox_role', array('id'), array('org_id' => $user[0]['orgid'], 'name' => $roleName))) {
                 if (!$this->getDataByParams('ox_user_role', array(), array('user_id' => $userId, 'role_id' => $role[0]['id']))) {
                     $data = array(array(
                         'user_id' => $userId,
