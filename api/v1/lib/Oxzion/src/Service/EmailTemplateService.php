@@ -67,7 +67,7 @@ class EmailTemplateService extends AbstractService {
 			throw new Exception("Email Template not found!", 1);
 
 		$this->client->assign($data);
-		return $this->client->display($this->templateName);
+		return $this->client->fetch($this->templateName);
 	}
 
 	public function setTemplatePath($templatePath) {

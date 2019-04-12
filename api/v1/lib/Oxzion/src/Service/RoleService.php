@@ -105,12 +105,21 @@ class RoleService extends AbstractService {
         return $resultSet->toArray();
     }
 
-    public function getRolePrivilege($id){
-        $queryString = "select ox_role_privilege.id,ox_role_privilege.role_id, ox_role_privilege.privilege_name,ox_role_privilege.permission,ox_role_privilege.org_id, ox_role_privilege.app_id,ox_app.name from ox_role_privilege,ox_app";
-        $where = "where ox_role_privilege.role_id = ".$id." AND ox_role_privilege.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_role_privilege.app_id = ox_app.uuid";
-        $order = "order by ox_role_privilege.role_id";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        return $resultSet->toArray();
+    public function getRolePrivilege($id) {
+        return $queryString = $this->getDataByParams(
+            array('orp' => 'ox_role_privilege'),
+            array('id', 'role_id', 'privilege_name', 'permission', 'org_id', 'app_id'),
+            array('orp.role_id' => $id, 'orp.org_id' => AuthContext::get(AuthConstants::ORG_ID)),
+            array(
+                array(
+                    'table' => array('op' => 'ox_app'),
+                    'condition' => 'orp.app_id = op.uuid',
+                    'fields' => array('name'),
+                    'joinMethod' => 'left'
+                )
+            ),
+            'orp.role_id ASC'
+        );
     }
 
     public function getRolesByOrgid($orgid) {

@@ -179,7 +179,7 @@ class UserService extends AbstractService
             "address_2" => $org->city,
             "country" => "US",
             "preferences" => "[{ 'create_user' => 'true', 'show_notification' => 'true' }]",
-            "username" => substr(str_replace(' ', '', $org->name), 0, 4).'admin',
+            "username" => substr(strtolower(str_replace(' ', '', $org->name)), 0, 4).'admin',
             "date_of_birth" => date('1960/m/d'),
             "designation" => "Admin",
             "orgid" => $org->id,
@@ -808,9 +808,25 @@ class UserService extends AbstractService
     }
 
     public function getAppsByUserId() {
-        $queryString = "select ap.name,ap.description,ap.uuid,ap.type,ap.logo,ap.category from ox_app as ap LEFT JOIN ox_role_privilege on ap.uuid=ox_role_privilege.app_id LEFT JOIN ox_user_role on ox_user_role.role_id = ox_role_privilege.role_id";
-        $where = "where ox_role_privilege.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.status!=1 AND ox_user_role.user_id =".AuthContext::get(AuthConstants::USER_ID);
-        $resultSet = $this->executeQuerywithParams($queryString, $where);
-        return $resultSet->toArray();
+        return $this->getDataByParams(
+            array('op' => 'ox_app'),
+            array('name', 'description', 'uuid', 'type', 'logo', 'category'),
+            array(
+                'orp.org_id' => AuthContext::get(AuthConstants::ORG_ID),
+                'our.user_id' => AuthContext::get(AuthConstants::USER_ID)
+            ),
+            array(
+                array(
+                    'table' => array('orp' => 'ox_role_privilege'),
+                    'condition' => 'orp.app_id = op.uuid',
+                    'joinMethod' => 'left'
+                ),
+                array(
+                    'table' => array('our' => 'ox_user_role'),
+                    'condition' => 'our.role_id = orp.role_id',
+                    'joinMethod' => 'left'
+                )
+            )
+        );
     }
 }

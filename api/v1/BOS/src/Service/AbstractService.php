@@ -126,7 +126,22 @@ class AbstractService
         return $count;
     }
 
-    protected function getDataByParams($tableName, $fieldArray = array(), $where = array()) {
+    /**
+     * Gets the data by parameters.
+     *
+     * @param      string|array     $tableName   The table name
+     * @param      array            $fieldArray  The field array
+     * @param      array            $where       The where
+     * @param      array            $joins       The joins
+     * @param      string           $sortby      The sortby
+     * @param      array            $groupby     The groupby
+     * @param      integer          $limit       The limit
+     * @param      integer          $offset      The offset
+     * @param      boolean          $debug       flag to print select if needed from any nested function call
+     *
+     * @return     array   The data by parameters.
+     */
+    protected function getDataByParams($tableName, $fieldArray = array(), $where = array(), $joins = array(), $sortby = null, $groupby = array(), $limit = null, $offset = 0, $debug = false) {
         $select = $this->sql->select($tableName);
 
         if ($fieldArray)
@@ -140,9 +155,38 @@ class AbstractService
                 $select->where($where, 'AND');
             }
         }
-        // echo "<pre>";print_r($this->sql->buildSqlString($select));exit();
+
+        /**
+         * Joins.
+         *
+         * @param      string|array     $table          The table name      array(aliasname => tableName)
+         * @param      string           $condition      The field array
+         * @param      array            $fields         The where
+         * @param      string           $joinMethod     The joins           join, left, right
+         */
+        foreach ($joins as $key => $join)
+            $select->join(
+                $join['table'],
+                $join['condition'],
+                ($join['fields']) ? $join['fields'] : array(),
+                ($join['joinMethod']) ? $join['joinMethod'] : 'join'
+            );
+
+        if ($sortby)
+            $select->order($sortby);
+        if ($groupby)
+            $select->group($group);
+        if ($limit)
+            $select->limit($limit);
+        if ($offset)
+            $select->offset($offset);
+
+        if ($debug) {
+            echo "<pre>";print_r($this->sql->buildSqlString($select));exit();
+        }
+
         $returnArray = $this->executeQuery($select)->toArray();
-        if (!$returnArray) return null;
+        if (!$returnArray) return array();
         return $returnArray;
     }
 
