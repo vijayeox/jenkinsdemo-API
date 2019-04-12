@@ -168,8 +168,8 @@ class AbstractService
             $select->join(
                 $join['table'],
                 $join['condition'],
-                ($join['fields']) ? $join['fields'] : array(),
-                ($join['joinMethod']) ? $join['joinMethod'] : 'join'
+                (isset($join['fields'])) ? $join['fields'] : array(),
+                (isset($join['joinMethod'])) ? $join['joinMethod'] : 'join'
             );
 
         if ($sortby)
