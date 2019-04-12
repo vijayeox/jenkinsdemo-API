@@ -29,9 +29,9 @@ class ContactService extends AbstractService
     public function createContact(&$data)
     {
         $form = new Contact();
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['org_id'] = $data['org_id']?$data['org_id']:AuthContext::get(AuthConstants::ORG_ID);
         $data['owner_id'] = (isset($data['owner_id'])) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
-        $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['created_id'] = $data['user_id']?$data['user_id']:AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $form->exchangeArray($data);
         $form->validate();
@@ -47,6 +47,7 @@ class ContactService extends AbstractService
             $data['id'] = $id;
             $this->commit();
         } catch (Exception $e) {
+            print_r($e->getMessage());exit;
             return 0;
         }
         return $count;
@@ -74,6 +75,7 @@ class ContactService extends AbstractService
                 $this->rollback();
                 return 0;
             }
+            $this->messageProducer->sendTopic(json_encode($data),'CONTACT_UPDATED');
         } catch (Exception $e) {
             $this->rollback();
             return 0;
@@ -89,6 +91,7 @@ class ContactService extends AbstractService
             if ($count == 0) {
                 return 0;
             }
+            $this->messageProducer->sendTopic(json_encode($id),'CONTACT_DELETED');
         } catch (Exception $e) {
             $this->rollback();
         }

@@ -644,10 +644,14 @@ class UserService extends AbstractService
      * @param $userName
      * @return array|\Zend\Db\ResultSet\ResultSet
      */
-    public function getUserDetailsbyUserName($userName)
+    public function getUserDetailsbyUserName($userName,$columns = null)
     {
         $whereCondition = "username = '" . $userName . "'";
-        $columnList = array('*');
+        if($columns){
+            $columnList = $columns;
+        } else {
+            $columnList = array('*');
+        }
         return $userDetail = $this->getUserContextDetailsByParams($whereCondition, $columnList);
     }
 

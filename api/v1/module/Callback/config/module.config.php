@@ -10,6 +10,26 @@ use Zend\Log\Processor\RequestId;
 return [
     'router' => [
         'routes' => [
+            'crmaddcontactcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/crm/addcontact',
+                    'defaults' => [
+                        'controller' => Controller\CRMCallbackController::class,
+                        'action' => 'addContact',
+                    ],
+                ],
+            ],
+            'addcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/chat/addorg',
+                    'defaults' => [
+                        'controller' => Controller\ChatCallbackController::class,
+                        'action' => 'addOrg',
+                    ],
+                ],
+            ],
             'addcallback' => [
                 'type'    => Segment::class,
                 'options' => [
