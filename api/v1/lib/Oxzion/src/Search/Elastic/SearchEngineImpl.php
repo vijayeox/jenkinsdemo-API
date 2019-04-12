@@ -5,7 +5,7 @@ use Bos\Auth\AuthConstants;
 use Bos\Auth\AuthContext;
 use Oxzion\Search\SearchEngine;
 use Oxzion\Service\ElasticService;
-
+use Exception;
 class SearchEngineImpl implements SearchEngine
 {
     private $config;
