@@ -35,7 +35,7 @@ class ProspectResearchControllerTest extends MainControllerTest{
         //     }
         // }
 
-        if(enableDiscoverOrg==0){
+        if(enableProspectResearch==0){
             $this->markTestSkipped('Only Integration Test');        
         }
         $data = ['searchtype' => 'scoop','searchpara' => ['companyCriteria' => ['websiteUrls' => array("www.keybank.com")]]];
@@ -44,7 +44,6 @@ class ProspectResearchControllerTest extends MainControllerTest{
         $this->dispatch('/prospectresearch', 'POST', null);
         $apiResponse = $this->getResponse()->getContent();
         $contentArray = json_decode($apiResponse, true);
-
         if ($contentArray["status"] != 'error'){
             // convert json results in content array to array
             foreach ($contentArray["data"]["result"] as $key => $result){
@@ -68,7 +67,7 @@ class ProspectResearchControllerTest extends MainControllerTest{
         //         }
         //     }
         // }
-        if(enableDiscoverOrg==0){
+        if(enableProspectResearch==0){
             $this->markTestSkipped('Only Integration Test');        
         }
         $data = ['searchtype' => 'scoop','searcpara' => ['companyCriteria' => ['websiteUrls' => array("www.keybank.com")]]];
@@ -93,7 +92,7 @@ class ProspectResearchControllerTest extends MainControllerTest{
         //         "departmentId": 10
         //     }
         // }
-        if(enableDiscoverOrg==0){
+        if(enableProspectResearch==0){
             $this->markTestSkipped('Only Integration Test');        
         }
         $data = ['searchtype' => 'orgchart','searchpara' => ['companyId' => '1448','departmentId' => 10]];
@@ -127,7 +126,7 @@ class ProspectResearchControllerTest extends MainControllerTest{
         //         "departmentId": 10
         //     }
         // }
-        if(enableDiscoverOrg==0){
+        if(enableProspectResearch==0){
             $this->markTestSkipped('Only Integration Test');        
         }
         $data = ['searchtype' => 'orgchart','sarchpara' => ['companyId' => '1448','departmentId' => 10]];
@@ -152,7 +151,7 @@ class ProspectResearchControllerTest extends MainControllerTest{
         //         }
         //     }
         // }
-        if(enableDiscoverOrg==0){
+        if(enableProspectResearch==0){
             $this->markTestSkipped('Only Integration Test');        
         }
         $data = ['searchtype' => 'companies','searchpara' => ['companyCriteria' => ['websiteUrls' => array("www.keybank.com")]]];
@@ -187,7 +186,7 @@ class ProspectResearchControllerTest extends MainControllerTest{
         //         }
         //     }
         // }
-        if(enableDiscoverOrg==0){
+        if(enableProspectResearch==0){
             $this->markTestSkipped('Only Integration Test');        
         }
         $data = ['searchtype' => 'companies','searchpaa' => ['companyCriteria' => ['websiteUrls' => array("www.keybank.com")]]];
@@ -211,7 +210,7 @@ class ProspectResearchControllerTest extends MainControllerTest{
         //         "departmentId": 8
         //     }
         // }
-        if(enableDiscoverOrg==0){
+        if(enableProspectResearch==0){
             $this->markTestSkipped('Only Integration Test');        
         }
         $data = ['searchtype' => 'orchart','searchpaa' => ['companyCriteria' => ['websiteUrls' => array("www.keybank.com")]]];

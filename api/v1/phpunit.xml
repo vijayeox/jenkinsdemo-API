@@ -40,22 +40,23 @@
             <directory>./module/Group/test</directory>
             <directory>./module/Contact/test</directory>
             <directory>./module/Privilege/test</directory>
+            <directory>./module/Search/test</directory>
+            <directory>./module/ProspectResearch/test</directory> 
         </testsuite>
 
-        <testsuite name="User Fixtures">
-            <directory>./module/Search/test</directory>
-        </testsuite>
         <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
         </testsuite> 
-    </testsuites>
+    </testsuites> 
     <php>
         <ini name="memory_limit" value="256M" />
         <const name="enableCamunda" value="0"/>
         <const name="enableElastic" value="0"/>
         <const name="enableMattermost" value="0"/>
         <const name="enableActiveMQ" value="0"/>
+        <const name="enableProspectResearch" value="0"/>
+
     </php>
     <listeners>
         <listener class="\MyBuilder\PhpunitAccelerator\TestListener"/>

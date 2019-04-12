@@ -37,5 +37,6 @@ return [
     'Privilege',
     'Callback',
     'Mlet',
-    'Messaging'
+    'Messaging',
+    'ProspectResearch'
 ];

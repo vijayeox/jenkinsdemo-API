@@ -226,6 +226,10 @@ class Module {
                     $config = $container->get('config');
                     return new Search\Elastic\SearchEngineImpl($config);
                 },
+                ProspectResearch\InfoEngine::class => function ($container) {
+                    $config = $container->get('config');
+                    return new ProspectResearch\Discovery\InfoEngineImpl($config);
+                },
                 Search\Indexer::class => function ($container) {
                     $config = $container->get('config');
                     return new Search\Elastic\IndexerImpl($config);
