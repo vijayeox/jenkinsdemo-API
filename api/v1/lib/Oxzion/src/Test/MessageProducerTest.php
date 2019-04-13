@@ -8,7 +8,7 @@ use Oxzion\Messaging\MessageProducer;
 class MessageProducerTest extends TestCase{
     public function testOrganizationCreationUsingTopic(){
         $mp = MessageProducer::getInstance();
-        $mp->sendTopic(json_encode(array('orgname' => 'Cleveland Final', 'status' => 'Active')),'ORGANIZATION_ADDED');
+        $mp->sendTopic(json_encode(array('orgname' => 'Cleveland white', 'status' => 'Active')),'ORGANIZATION_ADDED');
     }
 
     // public function testOrganizationCreationUsingQueue(){

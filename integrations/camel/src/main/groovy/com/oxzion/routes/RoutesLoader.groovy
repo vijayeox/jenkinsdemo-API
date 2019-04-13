@@ -5,13 +5,16 @@ import org.apache.camel.Exchange
 import org.apache.camel.CamelContext
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.impl.DefaultCamelContext
+import org.apache.camel.model.dataformat.JsonLibrary
 import org.springframework.stereotype.Component
 import org.apache.camel.Processor
 import groovy.json.JsonSlurper
 
+import javax.servlet.http.HttpServletRequest
+
 
 @Component
-public class RoutesLoader extends RouteBuilder{
+class RoutesLoader extends RouteBuilder{
     @Override
     void configure() throws Exception {
         println "In RoutesBuilder"
@@ -20,19 +23,16 @@ public class RoutesLoader extends RouteBuilder{
         CamelContext context = new DefaultCamelContext()
         context.addRoutes(new RouteBuilder() {
             @Override
-            public void configure() {
+            void configure() {
                 println routes
                 routes.route.each{route->
                     def definition = from(route.from)
                     .process(new Processor() {
-                    public void process(Exchange exchange) throws Exception {
-                        def jsonSlurper = new JsonSlurper()
-                        def object = jsonSlurper.parseText(exchange.getMessage().getBody() as String)
-                        exchange.getIn().setBody(exchange.getMessage().getBody() as String);
-                        exchange.setProperty(Exchange.CHARSET_NAME, "ISO-8859-1")
-                        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/json")
+                    void process(Exchange exchange) throws Exception {
+                        exchange.getIn().setBody(exchange.getMessage().getBody())
+                        exchange.setProperty(Exchange.CHARSET_NAME, "UTF-8")
+                        exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "application/x-www-form-urlencoded")
                         exchange.getIn().setHeader(Exchange.HTTP_METHOD, "POST")
-                        exchange.getIn().setHeader("Accept", "application/json")
                         println("payload - ${exchange.getMessage().getBody()}")
                     }
                 })
@@ -49,13 +49,14 @@ public class RoutesLoader extends RouteBuilder{
                     // .setHeader(Exchange.HTTP_METHOD,constant("POST"))
                    // .to("log:DEBUG?showBody=true&showHeaders=true")
                     route.to.each{
-                        definition.to(it)
+                        definition.to(it).to("log:DEBUG?showBody=true&showHeaders=true")
                     }
                 }
             }
         })
         context.start()
     }
+
     
     def loadRoutes(){
         String routeLocation = System.getProperty('ROUTE_CONFIG')
@@ -76,7 +77,7 @@ public class RoutesLoader extends RouteBuilder{
             
         }
         println url
-        return new ConfigSlurper().parse(url);
-        
+        return new ConfigSlurper().parse(url)
+
     }
 }
