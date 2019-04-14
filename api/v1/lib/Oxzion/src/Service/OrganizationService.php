@@ -161,7 +161,6 @@ class OrganizationService extends AbstractService
         $form = new Organization();
         $originalArray['status'] = 'Inactive';
         $form->exchangeArray($originalArray);
-        $form->validate();
         $result = $this->table->save($form);
         $this->messageProducer->sendTopic(json_encode(array('orgname' => $originalArray['name'],'status' => $originalArray['status'])),'ORGANIZATION_DELETED');
         return $result;

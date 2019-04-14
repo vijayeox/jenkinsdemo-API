@@ -9,6 +9,8 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Jwt\JwtHelper;
 use PHPUnit\DbUnit\TestCaseTrait;
 use Zend\Stdlib\ArrayUtils;
+use Bos\Transaction\TransactionManager;
+use Zend\Console\Console;
 
 abstract class MainControllerTest extends AbstractHttpControllerTestCase
 {
@@ -24,6 +26,47 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
 
     protected $jwtToken = array();
 
+    /**
+     * Reset the application for isolation
+     */
+    protected function setUp() : void
+    {
+        parent::setUp();
+        $this->setupConnection();
+        $tm = $this->getTransactionManager();
+        $tm->setRollbackOnly(true);
+        $tm->beginTransaction();
+    }
+
+    //this is required to ensure that same connection is used by dbunit and zend db
+    protected function setupConnection(){
+    }
+
+    /**
+     * Restore params
+     */
+    protected function tearDown()
+    {
+        $tm = $this->getTransactionManager();
+        $tm->rollback();
+        parent::tearDown();
+    }
+    /**
+     * Reset the request
+     *
+     * @return AbstractControllerTestCase
+     */
+    public function reset()
+    {
+        //cleanup required to remove the transactionManager
+        parent::reset($keepPersistence);
+        $_REQUEST = [];
+    }
+
+    protected function getTransactionManager(){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        return TransactionManager::getInstance($dbAdapter);
+    }
 
     protected function loadConfig()
     {

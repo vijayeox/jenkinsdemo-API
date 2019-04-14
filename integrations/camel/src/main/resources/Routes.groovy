@@ -1,4 +1,4 @@
-callback.URL = 'http4://localhost:8080'
+callback.URL = 'http4://localhost:80'
 
 routes {
     route = [

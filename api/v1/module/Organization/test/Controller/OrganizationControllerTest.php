@@ -17,7 +17,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->loadConfig();
         parent::setUp();
     }
-
+    
     public function getMockMessageProducer(){
         $organizationService = $this->getApplicationServiceLocator()->get(OrganizationService::class);
         $mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
@@ -41,11 +41,9 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['id'], 1);
         $this->assertEquals($content['data'][0]['name'], 'Cleveland Cavaliers');
-        $this->assertEquals($content['data'][1]['id'], 2);
-        $this->assertEquals($content['data'][1]['name'], 'Golden State Warriors');
     }
 
     protected function setDefaultAsserts()
@@ -81,13 +79,15 @@ class OrganizationControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Cleveland Black', 'logo' => 'logo.png', 'status' => 'Active'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_organization'));
+        $this->assertEquals(1, $this->getConnection()->getRowCount('ox_organization'));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active')),'ORGANIZATION_ADDED')->once()->andReturn();
         }
         $this->dispatch('/organization', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        print_r($content);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
@@ -95,7 +95,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_organization'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_organization'));
     }
 
     public function testCreateWithOutNameFailure()
@@ -194,9 +194,9 @@ class OrganizationControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Golden State Warriors', 'status' => 'Inactive')),'ORGANIZATION_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Cavaliers', 'status' => 'Inactive')),'ORGANIZATION_DELETED')->once()->andReturn();
         }
-        $this->dispatch('/organization/2', 'DELETE');
+        $this->dispatch('/organization/1', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -224,7 +224,7 @@ class OrganizationControllerTest extends ControllerTest
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'rakshith', 'orgname' => 'Golden State Warriors', 'status' => 'Active')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
-        $this->dispatch('/organization/2/adduser/3', 'POST');
+        $this->dispatch('/organization/1/adduser/3', 'POST');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
         $content = json_decode($this->getResponse()->getContent(), true);

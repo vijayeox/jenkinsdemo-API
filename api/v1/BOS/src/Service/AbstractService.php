@@ -8,6 +8,7 @@ use Zend\Log\Writer\Stream;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Adapter\ParameterContainer;
+use Bos\Transaction\TransactionManager;
 
 class AbstractService
 {
@@ -34,17 +35,20 @@ class AbstractService
 
     protected function beginTransaction()
     {
-        $this->dbAdapter->getDriver()->getConnection()->beginTransaction();
+        $transactionManager = TransactionManager::getInstance($this->dbAdapter);
+        $transactionManager->beginTransaction();
     }
 
     protected function commit()
     {
-        $this->dbAdapter->getDriver()->getConnection()->commit();
+        $transactionManager = TransactionManager::getInstance($this->dbAdapter);
+        $transactionManager->commit();
     }
 
     protected function rollback()
     {
-        $this->dbAdapter->getDriver()->getConnection()->rollback();
+        $transactionManager = TransactionManager::getInstance($this->dbAdapter);
+        $transactionManager->rollback();
     }
 
     protected function getSqlObject()

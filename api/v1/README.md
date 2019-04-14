@@ -86,7 +86,7 @@ $ docker-compose run zf composer install
 To run tests using the mysql database running on your machine run the following command
 ```bash
 For Linux
-$ docker run --network="host" -it -v $(pwd):/var/www v1_zf ./phpunit
+$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf ./phpunit
 For Windows
 $ docker run --network="host" -it -v ${PWD}:/var/www v1_zf ./phpunit
 ```

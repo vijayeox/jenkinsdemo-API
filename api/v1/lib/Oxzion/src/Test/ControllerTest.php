@@ -9,6 +9,7 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Jwt\JwtHelper;
 use PHPUnit\DbUnit\TestCaseTrait;
 use Zend\Stdlib\ArrayUtils;
+use PHPUnit\DbUnit\Operation\Factory;
 
 
 abstract class ControllerTest extends MainControllerTest{
@@ -28,7 +29,18 @@ abstract class ControllerTest extends MainControllerTest{
         }
         return static::$connection;
     }
-	
+    
+    //this is required to ensure that same connection is used by dbunit and zend db
+    protected function setupConnection(){
+        $this->getConnection();
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $dbAdapter->getDriver()->getConnection()->setResource(static::$pdo);
+    }
+    protected function getSetUpOperation()
+    {
+        return Factory::NONE();
+    }
+
 	protected function getMockGatewayData($name, $modelClass){
 		$originalTableGateway = $this->getApplicationServiceLocator()->get($name);
 		$dbAdapter = $originalTableGateway->getAdapter();

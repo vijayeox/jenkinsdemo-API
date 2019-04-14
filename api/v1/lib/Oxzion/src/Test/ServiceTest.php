@@ -12,6 +12,7 @@ use Zend\Stdlib\Exception\LogicException;
 use Zend\Stdlib\Parameters;
 use Zend\Stdlib\ResponseInterface;
 use Zend\Uri\Http as HttpUri;
+use Bos\Transaction\TransactionManager;
 
 class ServiceTest extends TestCase
 {
@@ -42,6 +43,44 @@ class ServiceTest extends TestCase
      * @var bool
      */
     protected $traceError = true;
+
+    /**
+     * Reset the application for isolation
+     */
+    protected function setUp()
+    {
+        $this->usedConsoleBackup = Console::isConsole();
+        $this->reset();
+        $tm = $this->getTransactionManager();
+        $tm->setRollbackOnly(true);
+    }
+
+    /**
+     * Restore params
+     */
+    protected function tearDown()
+    {
+        $tm = $this->getTransactionManager();
+        $tm->rollback();
+        Console::overrideIsConsole($this->usedConsoleBackup);
+        // Prevent memory leak
+        $this->reset();
+    }
+    /**
+     * Reset the request
+     *
+     * @return AbstractControllerTestCase
+     */
+    public function reset()
+    {
+        //cleanup required to remove the transactionManager
+        $_REQUEST = [];
+    }
+
+    protected function getTransactionManager(){
+        $dbbAdapter = $this->getApplicationServiceLocator()->get(Zend\Db\Adapter\AdapterInterface::class);
+        return TransactionManager::getInstance($dbAdapter);
+    }
 
     /**
      * Get the trace error flag
@@ -97,7 +136,7 @@ class ServiceTest extends TestCase
     /**
      * Set the application config
      * @param  array                      $applicationConfig
-     * @return AbstractControllerTestCase
+     * @return ServiceTest
      * @throws LogicException
      */
     public function setApplicationConfig($applicationConfig)
