@@ -47,6 +47,10 @@ return [
         'chatServerUrl' => 'http://localhost:8065/',
         'authToken' => ''
     ],
+    'crm' => [
+        'crmServerUrl' => 'http://localhost:8075/crm/public/',
+        'authToken' => ''
+    ],
     'DATA_FOLDER'=>__DIR__.'/../../data/uploads/',
     'APP_UPLOAD_FOLDER' => __DIR__.'/../../data/app',
     'baseUrl' => 'http://localhost:8080',
