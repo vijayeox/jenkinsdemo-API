@@ -1,9 +1,12 @@
 #!/bin/sh
 #Script to build all docker images in oxzion-3.0
+#going back to oxzion3.0 root directory
+cd ../
 #Defining variables for later use
 HOME=${PWD}
 RED="\e[91m"
 GREEN="\e[92m"
+BLUE="\e[34m"
 YELLOW="\e[93m"
 MAGENTA="\e[35m"
 BLUEBG="\e[44m"

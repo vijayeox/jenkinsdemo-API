@@ -1,9 +1,12 @@
 # script to package oxzion3.0 to production build
 #!/bin/sh
+#going back to oxzion3.0 root directory
+cd ../
 #Defining variables for later use
 OXHOME=${PWD}
 RED="\e[91m"
 GREEN="\e[92m"
+BLUE="\e[34m"
 YELLOW="\e[93m"
 MAGENTA="\e[35m"
 BLUEBG="\e[44m"
@@ -27,11 +30,16 @@ then
     echo -e "8. crm           -${YELLOW}For packaging OroCRM.${RESET}"
 	echo -e "9. mail          -${YELLOW}For packaging Rainloop Mail.${RESET}"
 	echo -e "10. --help or -h -${YELLOW}For help.${RESET}"
-    echo -e "11. list${RESET}         -${YELLOW}For list of options.${RESET}"        
+    echo -e "11. list         -${YELLOW}For list of options.${RESET}"
+    echo -e "12. deploy       -${YELLOW}For deploying to production${RESET}"
     exit 0
 fi
 #writing functions for different tasks
 #function checking exiting build dir and deleting it
+deploy()
+{
+    ssh -i ${HOME}/.ssh/oxzionapi.pem ubuntu@dev3.oxzion.com 'cd deploy ; ./deploy.sh ;'
+}
 check_dir()
 {
 cd ${OXHOME}
@@ -56,9 +64,9 @@ package()
     echo -e "${GREEN}Packaging Complete :)${RESET}"
     #Doing secure copy to dev3 server
     cd ${OXHOME}
-    echo -e "${BLUEBG}Now Copying ${GREEN}build.zip${RESET}${GREEN} to dev3..${RESET}"
+    echo -e "${YELLOW}Now Copying ${RED}build.zip${YELLOW} to dev3..${RESET}"
     scp -i ${HOME}/.ssh/oxzionapi.pem build.zip ubuntu@18.221.154.7:deploy
-    echo -e "${BLUEBG}Copying ${GREEN}build.zip${RESET}${GREEN} to dev3 completed successfully!${RESET}"        
+    echo -e "${YELLOW}Copying ${RED}build.zip${YELLOW} to dev3 completed successfully!${RESET}"        
 }
 api()
 {   
@@ -258,7 +266,11 @@ do
 	            echo -e "9. mail          -${YELLOW}For packaging Rainloop Mail.${RESET}"
 	            echo -e "10. --help or -h -${YELLOW}For help.${RESET}"
                 echo -e "11. list${RESET}         -${YELLOW}For list of options.${RESET}"
-                break ;;        
+                echo -e "12. deploy       -${YELLOW}For deploying to production${RESET}"
+                break ;;
+        deploy)
+                deploy
+                break;;
         *)
                 echo -e "${RED}Error : Wrong build option ${YELLOW}'$i'${RESET}"
                 echo -e "Type '$0 --help' or '$0 -h' for more information."
