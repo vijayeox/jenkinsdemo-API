@@ -58,6 +58,7 @@ package()
     echo -e "${YELLOW}${BLINK}Packaging /build to build.zip${RESET}"
     if [ -e "../build.zip" ] ;
     then
+    	echo -e "${RED}'build.zip' exist! Removing it to avoid conflict.${RESET}"
         rm ../build.zip
     fi
     zip -r ../build.zip . -x *node_modules/\*
