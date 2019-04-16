@@ -8,6 +8,7 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Jwt\JwtHelper;
 use PHPUnit\DbUnit\TestCaseTrait;
+use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;
 use Bos\Transaction\TransactionManager;
 use Zend\Console\Console;
@@ -24,7 +25,17 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     protected $noUserId = 0;
     protected $testOrgId = 1;
 
+
     protected $jwtToken = array();
+    /**
+     * @var \Zend\Mvc\ApplicationInterface
+     */
+    protected $application;
+
+    /**
+     * @var array
+     */
+    protected $applicationConfig;
 
     /**
      * Reset the application for isolation
@@ -50,19 +61,9 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $tm = $this->getTransactionManager();
         $tm->rollback();
         parent::tearDown();
-    }
-    /**
-     * Reset the request
-     *
-     * @return AbstractControllerTestCase
-     */
-    public function reset()
-    {
-        //cleanup required to remove the transactionManager
-        parent::reset($keepPersistence);
         $_REQUEST = [];
     }
-
+    
     protected function getTransactionManager(){
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         return TransactionManager::getInstance($dbAdapter);
@@ -125,4 +126,64 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $headers->addHeaderLine('content-type', 'application/json');
         $request->setContent($jsonData);
     }
+     /**
+     * Get the application config
+     * @return array the application config
+     */
+    public function getApplicationConfig()
+    {
+        return $this->applicationConfig;
+    }
+
+    /**
+     * Set the application config
+     * @param  array                      $applicationConfig
+     * @return AbstractControllerTestCase
+     * @throws LogicException
+     */
+    public function setApplicationConfig($applicationConfig)
+    {
+        if (null !== $this->application && null !== $this->applicationConfig) {
+            throw new LogicException(
+                'Application config can not be set, the application is already built'
+            );
+        }
+
+        // do not cache module config on testing environment
+        if (isset($applicationConfig['module_listener_options']['config_cache_enabled'])) {
+            $applicationConfig['module_listener_options']['config_cache_enabled'] = false;
+        }
+        $this->applicationConfig = $applicationConfig;
+
+        return $this;
+    }
+
+    /**
+     * Get the application object
+     * @return \Zend\Mvc\ApplicationInterface
+     */
+    public function getApplication()
+    {
+        if ($this->application) {
+            return $this->application;
+        }
+        $appConfig = $this->applicationConfig;
+        Console::overrideIsConsole($this->getUseConsoleRequest());
+        $this->application = Application::init($appConfig);
+
+        $events = $this->application->getEventManager();
+        $this->application->getServiceManager()->get('SendResponseListener')->detach($events);
+
+        return $this->application;
+    }
+
+    /**
+     * Get the service manager of the application object
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    public function getApplicationServiceLocator()
+    {
+        return $this->getApplication()->getServiceManager();
+    }
+
 }

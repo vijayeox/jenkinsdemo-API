@@ -71,12 +71,7 @@ class ServiceTest extends TestCase
      *
      * @return AbstractControllerTestCase
      */
-    public function reset()
-    {
-        //cleanup required to remove the transactionManager
-        $_REQUEST = [];
-    }
-
+    
     protected function getTransactionManager(){
         $dbbAdapter = $this->getApplicationServiceLocator()->get(Zend\Db\Adapter\AdapterInterface::class);
         return TransactionManager::getInstance($dbAdapter);
@@ -315,13 +310,16 @@ class ServiceTest extends TestCase
 
         $_GET     = [];
         $_POST    = [];
-
+        //cleanup required to remove the transactionManager
+        $_REQUEST = [];
+    
         // reset singleton
         if (class_exists(StaticEventManager::class)) {
             StaticEventManager::resetInstance();
         }
 
         return $this;
+
     }
 
     /**

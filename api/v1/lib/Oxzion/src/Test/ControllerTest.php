@@ -38,7 +38,7 @@ abstract class ControllerTest extends MainControllerTest{
     }
     protected function getSetUpOperation()
     {
-        return Factory::NONE();
+        return Factory::INSERT();
     }
 
 	protected function getMockGatewayData($name, $modelClass){

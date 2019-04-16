@@ -12,10 +12,10 @@ use Bos\Transaction\TransactionManager;
 
 class AbstractService
 {
-    private $sql;
+    protected $sql;
     protected $logger;
     protected $config;
-    private $dbAdapter;
+    protected $dbAdapter;
 
     protected function __construct($config, $dbAdapter, $log = null)
     {
