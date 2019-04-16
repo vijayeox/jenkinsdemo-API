@@ -55,11 +55,13 @@ camel()
         echo -e "${RED}CAMEL was not packaged so skipping it\n${RESET}"
     else
         #making the directory where api will be copied.
+        systemctl stop camel
         mkdir -p /opt/oxzion/camel
         #moving to temp directory and copying required
         cd ${TEMP}
         cp -R integrations/camel/* /opt/oxzion/camel/
         echo -e "${GREEN}Copying Camel Complete!\n${RESET}"
+        systemctl start camel
     fi    
 }
 
@@ -85,12 +87,12 @@ mattermost()
     then
         echo -e "${RED}MATTERMOST was not packaged so skipping it\n${RESET}"
     else
-    	systemctl stop view
+    	systemctl stop mattermost
         mkdir -p /opt/oxzion/mattermost
         cd ${TEMP}
         cp -R integrations/mattermost/* /opt/oxzion/mattermost/
         echo -e "${GREEN}Copying Mattermost Complete!"
-        systemctl start view
+        systemctl start mattermost
     fi
 }
 #Function to copy OROcrm
