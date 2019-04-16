@@ -141,6 +141,7 @@ class AppController extends AbstractApiController
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
+
     }
 
     /**
@@ -237,6 +238,26 @@ class AppController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($response);
     }
+
+    /**
+     * App Register API
+     * @api
+     * @link /app/register
+     * @method POST
+     * @param array $data
+     */
+    public function appregisterAction()
+    {   
+        $data = $this->params()->fromPost();
+        try {
+            $count = $this->appService->registerApps($data);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        return $this->getSuccessResponseWithData($data, 200);
+    }
+
 
     /**
      * Deploy App API using YAML File

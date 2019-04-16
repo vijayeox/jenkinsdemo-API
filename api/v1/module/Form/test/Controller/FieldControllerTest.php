@@ -83,7 +83,7 @@ class FieldControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 3);
+        $this->assertEquals($content['data']['id'] > 2, true);
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['required'], $data['required']);
         $this->assertEquals($content['data']['data_type'], $data['data_type']);
@@ -101,7 +101,7 @@ class FieldControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 3);
+        $this->assertEquals($content['data']['id']> 2, 3);
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['required'], $data['required']);
         $this->assertEquals($content['data']['sequence'], 3);
@@ -110,7 +110,7 @@ class FieldControllerTest extends ControllerTest{
 
     public function testCreateFormNameExists(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name'=>'field1','app_id'=>1,'required'=>1,'sequence'=>1,'data_type'=>'text'];
+        $data = ['name'=>'field2','app_id'=>1,'required'=>1,'sequence'=>1,'data_type'=>'text'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/form/1/field', 'POST', null);
         $this->assertResponseStatusCode(404);
@@ -143,7 +143,7 @@ class FieldControllerTest extends ControllerTest{
 
     public function testUpdate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Sample2','required'=>0, 'sequence' => 1];
+        $data = ['name' => 'Sample2','app_id' => 1,'required'=> 0, 'sequence' => 1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/form/1/field/1', 'PUT', null);
         $this->assertResponseStatusCode(200);

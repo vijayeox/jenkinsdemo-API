@@ -67,7 +67,6 @@ class FileControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Test File', 'status' => 1, 'field1' => 1, 'field2' => 1, 'form_id' => 1];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_file'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/file', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -78,7 +77,6 @@ class FileControllerTest extends ControllerTest
         $this->assertEquals($content['data']['status'], $data['status']);
         $this->assertEquals($content['data']['startdate'], $data['startdate']);
         $this->assertEquals($content['data']['enddate'], $data['enddate']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_file'));
     }
 
     public function testCreateWithOutNameFailure()

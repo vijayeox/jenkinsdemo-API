@@ -41,7 +41,6 @@ class ErrorHandler {
         if (!$error) {
             return;
         }
-
         $response = $e->getResponse();
         $exception = $e->getParam('exception');
         $exceptionJson = array();

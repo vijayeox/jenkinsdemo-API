@@ -85,6 +85,17 @@ return [
                     ],
                 ],
             ],
+            'appregister' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/register',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'appregister',
+                        'method' => 'POST'
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

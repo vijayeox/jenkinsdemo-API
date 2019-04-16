@@ -2,7 +2,7 @@
 namespace Role;
 
 use Role\Controller\RoleController;
-use Oxzion\Test\ControllerTest;
+use Oxzion\Test\MainControllerTest;
 use Role\Model;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
@@ -11,15 +11,12 @@ use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
 
 
-class RoleControllerTest extends ControllerTest {
+class RoleControllerTest extends MainControllerTest {
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
     }   
-    public function getDataSet() {
-        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Role.yml");
-        return $dataset;
-    }
+   
     protected function setDefaultAsserts() {
         $this->assertModuleName('Role');
         $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
@@ -37,7 +34,7 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['data'][0]['id'], 1);
         $this->assertEquals($content['data'][0]['name'], 'ADMIN');
         $this->assertEquals($content['data'][1]['id'], 2);
-        $this->assertEquals($content['data'][1]['name'], 'MANAGER');
+        $this->assertEquals($content['data'][1]['name'], 'EMPLOYEE');
     }
 
     public function testRolePrivilege(){
@@ -141,14 +138,12 @@ class RoleControllerTest extends ControllerTest {
     public function testCreate(){
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'ADMIN_SUPER','org_id' => 2];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_role'));
         $this->dispatch('/role', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
-        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_role'));
     }
     public function testCreateWithOutTextFailure(){
         $this->initAuthToken($this->adminUser);

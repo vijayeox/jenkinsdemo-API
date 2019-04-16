@@ -7,6 +7,16 @@ use Bos\ValidationException;
 
 class App extends Entity {
 
+    //status for the apps
+    const DELETED = 1;
+    const IN_DRAFT = 2;
+    const PREVIEW = 3;
+    const PUBLISHED = 4;
+
+    //types of apps
+    const PRE_BUILT = 1;
+    const MY_APP = 2;
+
     protected $data = array(
         'id' => 0,  
         'name' => NULL,  
@@ -19,11 +29,12 @@ class App extends Entity {
         'date_modified' => NULL,
         'created_by' => NULL,
         'modified_by' => NULL,
-        'status' => false
+        'status' => false,
+        'start_options' => NULL
     );
     
     public function validate(){
-        $dataArray = Array("name", "type", "category","uuid","date_created","created_by");
+        $dataArray = Array("name", "type", "category","uuid","date_created","created_by","status");
         $this->validateWithParams($dataArray);
     }
 }

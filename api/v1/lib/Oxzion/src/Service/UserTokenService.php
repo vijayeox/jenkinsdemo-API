@@ -8,6 +8,7 @@ use Bos\ValidationException;
 use Oxzion\Model\UserToken;
 use Oxzion\Model\UserTokenTable;
 use Oxzion\Jwt\JwtHelper;
+use Zend\Db\ResultSet\ResultSet;
 
 class UserTokenService extends AbstractService
 {
@@ -90,9 +91,15 @@ class UserTokenService extends AbstractService
 
     public function checkExpiredTokenInfo($userId) {
         $queryString = "select * from ox_user_refresh_token";
-        $where = "where user_id = " . $userId ." AND expiry_date > now()";
-        $resultSet = $this->executeQuerywithParams($queryString, $where);
-        return $queryResult = $resultSet->toArray();
+        $where = "where expiry_date > now()";
+        $resultSet = $this->exeutceQuerywithParams($queryString, $where);
+        $query="select * from ox_user_refresh_token";
+        $statement = $this->dbAdapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        
+        return $resultSet->toArray();
     }
 }
 

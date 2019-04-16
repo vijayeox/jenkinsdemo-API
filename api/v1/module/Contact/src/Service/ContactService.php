@@ -47,7 +47,7 @@ class ContactService extends AbstractService
             $data['id'] = $id;
             $this->commit();
         } catch (Exception $e) {
-            print_r($e->getMessage());exit;
+            $this->rollback();
             return 0;
         }
         return $count;
@@ -75,7 +75,6 @@ class ContactService extends AbstractService
                 $this->rollback();
                 return 0;
             }
-            $this->messageProducer->sendTopic(json_encode($data),'CONTACT_UPDATED');
         } catch (Exception $e) {
             $this->rollback();
             return 0;
@@ -91,7 +90,6 @@ class ContactService extends AbstractService
             if ($count == 0) {
                 return 0;
             }
-            $this->messageProducer->sendTopic(json_encode($id),'CONTACT_DELETED');
         } catch (Exception $e) {
             $this->rollback();
         }

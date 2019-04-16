@@ -103,7 +103,7 @@ class AnnouncementControllerTest extends ControllerTest{
 
     public function testinsertAnnouncementForGroup(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/announcement/1/group','POST',array('groupid' => '[{"id":1},{"id":2}]')); 
+        $this->dispatch('/announcement/1/group','POST',array(array('id'=>1), array('id' => 2))); 
         $this->assertResponseStatusCode(200);
          $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
@@ -115,7 +115,7 @@ class AnnouncementControllerTest extends ControllerTest{
 
     public function testinsertAnnouncementForGroupIdNotFound(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/announcement/1/group','POST',array('groupid' => '[{"id":4},{"id":5}]')); 
+        $this->dispatch('/announcement/1/group','POST',array(array('id'=>89), array('id' => 90))); 
         $this->assertResponseStatusCode(404);
          $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
@@ -124,19 +124,6 @@ class AnnouncementControllerTest extends ControllerTest{
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Entity not found'); 
-    }
-
-    public function testinsertAnnouncementForGroupWithoutId(){
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/announcement/1/group','POST'); 
-        $this->assertResponseStatusCode(404);
-         $this->assertModuleName('Announcement');
-        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcementToGroup');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error'); 
-        $this->assertEquals($content['message'], 'Enter Group Ids');
     }
 
     public function testCreateWithOutNameFailure(){

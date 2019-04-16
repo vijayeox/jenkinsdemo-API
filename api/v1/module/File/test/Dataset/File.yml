@@ -1,26 +1,4 @@
-ox_form:
-  -
-    id: 1
-    app_id: 1
-    name: "Test Form 1"
-    org_id: 1
-    description: "Form Description"
-  -
-    id: 2
-    app_id: 1
-    name: "Test Form 2"
-    org_id: 1
-    description: "Form Description"
 ox_field:
-  -
-    id: 1
-    app_id: 1
-    name: "field1"
-    form_id: 1
-    data_type: "integer"
-    org_id: 1
-    required: 1
-    sequence: 1
   -
     id: 2
     name: "field2"
@@ -30,6 +8,14 @@ ox_field:
     org_id: 1
     required: 1
     sequence: 2
+
+ox_form:
+  -
+    id: 2
+    app_id: 1
+    name: "Test Form 2"
+    org_id: 1
+    description: "Form Description"
 
 ox_metafield:
   -

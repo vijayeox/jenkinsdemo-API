@@ -95,7 +95,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_project'));
         if(enableActiveMQ == 0){
              $mockMessageProducer = $this->getMockMessageProducer();
-             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname'=> 'Cleveland Cavaliers','projectname' => 'Test Project 3')),'PROJECT_ADDED')->once()->andReturn();
+             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname'=> 'Cleveland Black','projectname' => 'Test Project 3')),'PROJECT_ADDED')->once()->andReturn();
         }
         $this->dispatch('/project', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -105,7 +105,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_project'));
     }
-    public function testCreateWithOutNameFailure() {
+    public function testCreateWithOutNameFailure() {    
         $this->initAuthToken($this->adminUser);
         $data = ['description'=>'Project Description'];
         $this->setJsonContent(json_encode($data));
@@ -145,7 +145,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Cavaliers','old_projectname'=> 'Test Project 1','new_projectname' => 'Test Project')),'PROJECT_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black','old_projectname'=> 'Test Project 1','new_projectname' => 'Test Project')),'PROJECT_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/project/1', 'PUT', null);
         $this->assertResponseStatusCode(200);
@@ -191,7 +191,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Cavaliers','projectname' => 'Test Project 2')),'PROJECT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 2')),'PROJECT_DELETED')->once()->andReturn();
         }
         $this->dispatch('/project/2', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -217,8 +217,8 @@ class ProjectControllerTest extends ControllerTest {
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Cavaliers','projectname' => 'Test Project 1','username' => 'bharatg')),'USERTOPROJECT_DELETED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Cavaliers','projectname' => 'Test Project 1','username' => 'rakshith')),'USERTOPROJECT_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => 'bharatg')),'USERTOPROJECT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => 'rakshith')),'USERTOPROJECT_ADDED')->once()->andReturn();
         }
     	$this->dispatch('/project/1/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
     	$this->assertResponseStatusCode(200);

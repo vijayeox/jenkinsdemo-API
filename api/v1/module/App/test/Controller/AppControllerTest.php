@@ -6,6 +6,11 @@ use App\Model;
 use Oxzion\Test\ControllerTest;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Oxzion\Test\MainControllerTest;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Stdlib\ArrayUtils;
+use Zend\Db\Adapter\AdapterInterface;
+
+
     
 
 class AppControllerTest extends MainControllerTest
@@ -16,6 +21,30 @@ class AppControllerTest extends MainControllerTest
         $this->loadConfig();
         parent::setUp();
     }
+
+
+    protected function loadConfig() {
+        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/autoload/global.php', include __DIR__ . '/../../../../config/autoload/local.php');
+        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php',$configOverrides);
+        $this->setApplicationConfig($configOverrides);
+    }
+
+    public function testAppRegister(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['applist' => json_encode(array(["name" => "CRM","category" => "organization","options" => ["autostart" => "false","hidden" => "false" ]],["name"=>"Calculator","category" =>  "office","options" => ["autostart" =>  "false","hidden" => "false"]],["name" => "Calendar","category" =>  "collaboration","options" =>  ["autostart" => "false","hidden" => "false"]],["name" => "Chat","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "FileManager","category" => "office","options" => ["autostart" => "false","hidden" => "false"]],["name" => "Mail","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "MailAdmin","category" => "utilities","options" => ["autostart" => "false","hidden" => "false"]],["name" => "MyTodo","category" => "null","options" => ["autostart" => "false","hidden" => "true"]],["name" => "Textpad","category" => "office","options" => ["autostart" => "false","hidden" => "false"]]))];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/app/register', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('appregister');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');     
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+
 
     public function testGetList()
     {
@@ -91,7 +120,7 @@ class AppControllerTest extends MainControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY'];
+        $data = ['name' => 'App1', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY'];
         $this->dispatch('/app', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
@@ -133,7 +162,7 @@ class AppControllerTest extends MainControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
+        $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'Admin', 'logo' => 'app.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1', 'PUT', null);
@@ -193,4 +222,5 @@ class AppControllerTest extends MainControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
+
 }

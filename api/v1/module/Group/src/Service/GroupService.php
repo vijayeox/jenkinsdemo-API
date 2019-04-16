@@ -146,6 +146,7 @@ class GroupService extends AbstractService {
         }
 
         $userArray=json_decode($data['userid'],true);
+
         if($userArray){
             $userSingleArray= array_unique(array_map('current', $userArray));
             $queryString = "SELECT ox_user.id, ox_user.username FROM ox_user_group " . 

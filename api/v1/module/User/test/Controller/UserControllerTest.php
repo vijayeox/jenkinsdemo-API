@@ -11,6 +11,11 @@ use Zend\Db\Adapter\Adapter;
 use Oxzion\Service\UserService;
 use Mockery;
 use Oxzion\Messaging\MessageProducer;
+use PHPUnit\DbUnit\DataSet\DefaultDataSet;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Stdlib\ArrayUtils;
+
 
 class UserControllerTest extends ControllerTest
 {
@@ -128,8 +133,6 @@ class UserControllerTest extends ControllerTest
         $data = ['name' => 'John Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        // $mockMessageProducer = $this->getMockMessageProducer();
-        // $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'John Holt', 'firstname' => 'John', 'password' => 'welcome2oxzion','email' => 'harshva.com')),'USER_UPDATED')->once()->andReturn();
         $this->dispatch('/user/1', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -157,7 +160,7 @@ class UserControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'rakshith', 'orgname' => 'Cleveland Cavaliers')),'USER_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'rakshith', 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
         }
         $this->dispatch('/user/3', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -296,7 +299,7 @@ class UserControllerTest extends ControllerTest
     }
 
     public function testChangePassword()
-    {
+    {   
         $this->initAuthToken($this->adminUser);
         $data = ['old_password' => 'password', 'new_password' => 'welcome', 'confirm_password' => 'welcome'];
         $this->setJsonContent(json_encode($data));
@@ -463,6 +466,10 @@ class UserControllerTest extends ControllerTest
     }
     public function testUpdateNewPassword()
     {
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $query="UPDATE ox_user SET password_reset_code = 'pvAQyJkY',password_reset_expiry_date ='".date('Y-m-d H:i:s', strtotime('+1 day', time()))."' WHERE id = 3";
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
         $this->initAuthToken($this->managerUser);
         $data = ['password_reset_code' => "pvAQyJkY", 'new_password' => 'password', 'confirm_password' => 'password'];
         $this->setJsonContent(json_encode($data));
@@ -476,6 +483,11 @@ class UserControllerTest extends ControllerTest
 
     public function testUpdateNewPasswordWithWrongPassword()
     {
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $query="UPDATE ox_user SET password_reset_code = 'pvAQyJkY',password_reset_expiry_date ='".date('Y-m-d H:i:s', strtotime('+1 day', time()))."' WHERE id = 3";
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        
         $this->initAuthToken($this->managerUser);
         $data = ['password_reset_code' => "pvAQyJkY", 'new_password' => 'password', 'confirm_password' => 'wrongpassword'];
         $this->setJsonContent(json_encode($data));
@@ -483,13 +495,17 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts('updatenewpassword');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-//        print_r($content);exit;
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], "Failed to Update Password");
     }
 
      public function testUpdateNewPasswordWithWrongCode()
     {
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $query="UPDATE ox_user SET password_reset_code = 'pvAQyJkY',password_reset_expiry_date ='".date('Y-m-d H:i:s', strtotime('+1 day', time()))."' WHERE id = 3";
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        
         $this->initAuthToken($this->managerUser);
         $data = ['password_reset_code' => "wrongCode", 'new_password' => 'password', 'confirm_password' => 'password'];
         $this->setJsonContent(json_encode($data));
@@ -497,7 +513,6 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseStatusCode(400);
         $this->setDefaultAsserts('updatenewpassword');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //    print_r($content);exit;
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], "You have entered an incorrect code");
     }

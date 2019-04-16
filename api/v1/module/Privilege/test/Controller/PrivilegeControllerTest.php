@@ -2,7 +2,7 @@
 namespace Privilege;
 
 use Privilege\Controller\PrivilegeController;
-use Oxzion\Test\ControllerTest;
+use Oxzion\Test\MainControllerTest;
 use Privilege\Model;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
@@ -12,18 +12,12 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Service\PrivilegeService;
 
 
-class PrivilegeControllerTest extends ControllerTest
+class PrivilegeControllerTest extends MainControllerTest
 {
     public function setUp() : void
     {
         $this->loadConfig();
         parent::setUp();
-    }
-
-    public function getDataSet()
-    {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Privilege.yml");
-        return $dataset;
     }
 
     protected function setDefaultAsserts()

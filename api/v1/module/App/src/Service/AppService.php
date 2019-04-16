@@ -73,6 +73,7 @@ class AppService extends AbstractService
         $data['id'] = $id;
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
+        $data['status'] = App::PUBLISHED;
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
@@ -83,6 +84,7 @@ class AppService extends AbstractService
                 $this->rollback();
                 return 0;
             }
+            $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             return 0;
@@ -101,7 +103,7 @@ class AppService extends AbstractService
         $data['id'] = $id;
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
-        $data['status'] = 1;
+        $data['status'] = App::DELETED;
         $form->exchangeArray($data);
         $count = 0;
         $this->beginTransaction();        
@@ -256,11 +258,11 @@ class AppService extends AbstractService
      * </code>
      */
     public function installAppForOrg($data)
-    {
+    {   
         $form = new App();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['status'] = 0;
+        $data['status'] = App::PUBLISHED;
         $data['uuid'] = uniqid();
         $form->exchangeArray($data);
         $form->validate();
@@ -368,6 +370,53 @@ class AppService extends AbstractService
         }
 
         return "App already registered to the Organization.";
+    }
+
+
+    public function registerApps($data){
+        $apps=json_decode($data['applist'],true);
+        unset($data);
+        $form = new App();
+        $list=array();
+        
+        for($x=0;$x<sizeof($apps);$x++){
+            $data['name']=$apps[$x]['name'];
+            array_push($list, $data);
+        }
+        $this->beginTransaction();
+        try{
+            $appSingleArray= array_unique(array_map('current', $list));
+            $update="UPDATE ox_app SET status = ".App::DELETED." where ox_app.name NOT IN ('".implode("','", $appSingleArray)."')";
+            $result = $this->runGenericQuery($update);
+            $select="SELECT name FROM ox_app where name in ('".implode("','", $appSingleArray)."')";
+            $result = $this->executeQuerywithParams($select)->toArray();
+            $result = array_unique(array_map('current', $result));
+            $count = 0;
+            
+            for($x=0;$x<sizeof($apps);$x++){
+                if(!in_array($apps[$x]['name'], $result)){
+                    $data['name'] = $apps[$x]['name'];
+                    $data['category'] = $apps[$x]['category'];
+                    $data['start_options'] = json_encode($apps[$x]['options']);
+                    $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+                    $data['date_created'] = date('Y-m-d H:i:s');
+                    $data['status'] = App::PUBLISHED;
+                    $data['type'] = App::PRE_BUILT;
+                    $data['uuid'] = uniqid();   
+                    $form->exchangeArray($data);
+                    $form->validate();
+                    $count += $this->table->save($form);
+                    
+                }
+            }
+            $this->commit();
+        }
+        catch (Exception $e) {
+            $this->rollback();
+            return 0;
+        }
+
+        return $count;
     }
 }
 
