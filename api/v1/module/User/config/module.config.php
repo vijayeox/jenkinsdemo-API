@@ -42,6 +42,20 @@ return [
                     ],
                 ],
             ],
+            'userInfoById' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/:userId/detail/:type',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'GET',
+                        'action' => 'getUserInfoById',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'assignUserManager' => [
                 'type' => Segment::class,
                 'options' => [

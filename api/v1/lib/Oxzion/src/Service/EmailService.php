@@ -89,10 +89,16 @@ class EmailService extends AbstractService
         return $count;
     }
 
-    public function getEmailAccountsByUserId()
+    public function getEmailAccountsByUserId($id=null)
     {
         $accounts = array();
-        $userId = AuthContext::get(AuthConstants::USER_ID);
+        if(empty($id))
+        {
+            $userId = AuthContext::get(AuthConstants::USER_ID);
+        }
+        else
+            $userId = $id;
+
         $queryString = "select email_setting_user.id,userid,password,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
         $where = "where email_setting_user.userid = " . $userId;
         $order = "order by email_setting_user.id";

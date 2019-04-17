@@ -804,20 +804,24 @@ class UserService extends AbstractService
         }
     }
 
-    public function getOrganizationByUserId() {
+    public function getOrganizationByUserId($id=null) {
+        if(empty($id))
+        {
+            $id = AuthContext::get(AuthConstants::USER_ID);
+        }
         $queryO = "Select org.id,org.name,org.address,org.city,org.state,org.zip,org.logo,org.labelfile,org.languagefile,org.status from ox_organization as org LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
-        $where = "where uo.user_id =".AuthContext::get(AuthConstants::USER_ID)." AND org.status='Active'";
+        $where = "where uo.user_id =".$id." AND org.status='Active'";
         $resultSet = $this->executeQuerywithParams($queryO, $where);
         return $resultSet->toArray();
     }
 
-    public function getAppsByUserId() {
+    public function getAppsByUserId($id=null) {
         return $this->getDataByParams(
             array('op' => 'ox_app'),
             array('name', 'description', 'uuid', 'type', 'logo', 'category'),
             array(
                 'orp.org_id' => AuthContext::get(AuthConstants::ORG_ID),
-                'our.user_id' => AuthContext::get(AuthConstants::USER_ID)
+                'our.user_id' => (!$id) ? AuthContext::get(AuthConstants::USER_ID) : $id
             ),
             array(
                 array(
