@@ -35,7 +35,7 @@ namespace Callback\Service;
         }
 
         private function sanitizeName($name){
-            return strtolower(trim(preg_replace("/[^A-Za-z0-9\-]/", "",$name)));
+            return strtolower(trim(preg_replace("/[^A-Za-z0-9]/", "",$name)));
         }
 
         private function getTeamByName($orgName,$forceCreateteam=false){
@@ -137,6 +137,7 @@ namespace Callback\Service;
             $response = $this->restClient->postWithHeader('api/v4/teams', array('name' => $orgName,'display_name' => $orgName,'type' => 'O'),$headers);
             return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
+                $this->logger->info(ChatService::class.$e->getMessage());
                 $this->logger->info(ChatService::class."A team with that name already exists");
             }
         }
@@ -347,6 +348,7 @@ namespace Callback\Service;
                 $response = $this->restClient->delete('api/v4/channels/'.$channelData['id'].'/members/'.$userData['id'],array(),$headers);
                 return $response;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
+                $this->logger->info(ChatService::class.$e->getMessage());
                 $this->logger->info(ChatService::class."Removing User from channel Failed");    
             }
         }
