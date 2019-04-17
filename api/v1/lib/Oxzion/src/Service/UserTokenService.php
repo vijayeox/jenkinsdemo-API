@@ -90,15 +90,10 @@ class UserTokenService extends AbstractService
     }
 
     public function checkExpiredTokenInfo($userId) {
+        $adapter = $this->dbAdapter;
         $queryString = "select * from ox_user_refresh_token";
         $where = "where expiry_date > now()";
-        $resultSet = $this->exeutceQuerywithParams($queryString, $where);
-        $query="select * from ox_user_refresh_token";
-        $statement = $this->dbAdapter->query($query);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $resultSet->initialize($result);
-        
+        $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $resultSet->toArray();
     }
 }

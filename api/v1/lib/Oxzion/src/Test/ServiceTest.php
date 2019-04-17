@@ -13,6 +13,8 @@ use Zend\Stdlib\Parameters;
 use Zend\Stdlib\ResponseInterface;
 use Zend\Uri\Http as HttpUri;
 use Bos\Transaction\TransactionManager;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Stdlib\ArrayUtils;
 
 class ServiceTest extends TestCase
 {
@@ -53,6 +55,13 @@ class ServiceTest extends TestCase
         $this->reset();
         $tm = $this->getTransactionManager();
         $tm->setRollbackOnly(true);
+        $tm->beginTransaction();
+    }
+
+    protected function loadConfig() {
+        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/autoload/global.php', include __DIR__ . '/../../../../config/autoload/local.php');
+        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php',$configOverrides);
+        $this->setApplicationConfig($configOverrides);
     }
 
     /**
@@ -65,6 +74,9 @@ class ServiceTest extends TestCase
         Console::overrideIsConsole($this->usedConsoleBackup);
         // Prevent memory leak
         $this->reset();
+            //cleanup required to remove the transactionManager
+        $_REQUEST = [];
+    
     }
     /**
      * Reset the request
@@ -73,7 +85,7 @@ class ServiceTest extends TestCase
      */
     
     protected function getTransactionManager(){
-        $dbbAdapter = $this->getApplicationServiceLocator()->get(Zend\Db\Adapter\AdapterInterface::class);
+        $dbbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         return TransactionManager::getInstance($dbAdapter);
     }
 
@@ -310,9 +322,7 @@ class ServiceTest extends TestCase
 
         $_GET     = [];
         $_POST    = [];
-        //cleanup required to remove the transactionManager
-        $_REQUEST = [];
-    
+        
         // reset singleton
         if (class_exists(StaticEventManager::class)) {
             StaticEventManager::resetInstance();

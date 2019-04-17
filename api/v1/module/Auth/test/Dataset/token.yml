@@ -3,13 +3,13 @@ ox_user_refresh_token:
   id: 1
   user_id: 1
   salt: "5940264875c7e2a6f120969.43960974"
-  expiry_date: "date_add(now(), interval 1 day)"
+  expiry_date: "2019-03-05 09:57:08"
   date_created: "2019-03-05 09:57:08"
   date_modified: "2019-03-05 09:57:08"
 -
   id: 2
   user_id: 3
   salt: "6456365665c809d01693770.52543401"
-  expiry_date: "date_add(now(), interval 1 day)"
+  expiry_date: "2019-03-05 09:57:08"
   date_created: "2019-03-05 09:57:08"
   date_modified: "2019-03-05 09:57:08"

@@ -29,7 +29,7 @@ class App extends Entity {
         'date_modified' => NULL,
         'created_by' => NULL,
         'modified_by' => NULL,
-        'status' => false,
+        'status' => 1,
         'start_options' => NULL
     );
     

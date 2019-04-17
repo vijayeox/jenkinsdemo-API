@@ -10,19 +10,15 @@ use Oxzion\Utils\FileUtils;
 
 class Migration extends AbstractService {
 
-    protected $config;
-
+    private $database;
+    
     /**
      * Migration constructor.
      * @param $config
      * @param $database
      */
-    public function __construct($config, $database) {
+    public function __construct($config, $database, $adapter) {
         $this->database = $database;
-        $this->config = $config;
-        $config = $config['db'];
-        $config['dsn'] = 'mysql:dbname=' . $config['database'] . ';host=' . $config['host'] . ';charset=utf8;username='.$config["appuser"].';password='.$config["password"].'';
-        $adapter = new Adapter($config);
         parent::__construct($config, $adapter);
     }
 
@@ -106,9 +102,7 @@ class Migration extends AbstractService {
             $this->beginTransaction();
             $checkDb = $this->checkDB($data);
             if (($checkDb == 1)) {
-                $config = $this->config;
-                $config['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $this->config['host'] . ';charset=utf8;username=' . $this->config["appuser"] . ';password=' . $this->config["password"];
-                $adapter = new Adapter($config);
+                $adapter = $this->dbAdapter;
                 sort($fileList);
                 foreach($fileList as $files) {
                     $versionExp = explode("__", $files);

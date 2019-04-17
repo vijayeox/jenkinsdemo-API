@@ -96,16 +96,14 @@ class AuthController extends AbstractApiControllerHelper
 
     public function refreshtokenAction(){
         $data = $this->request->getPost()->toArray();
-        
         try{
             if(isset($data['jwt'])){
                 $tokenPayload = $this->decodeJwtToken($data['jwt']);
-                // print_r($tokenPayload);
                 if (is_array($tokenPayload) || is_object($tokenPayload)) {
                     $uname = isset($tokenPayload->data->username)? $tokenPayload->data->username:$tokenPayload['username'] ;
                     $orgId = isset($tokenPayload->data->orgid)? $tokenPayload->data->orgid: $tokenPayload['orgid'];
-                    $userDetail = $this->userService->getUserDetailsbyUserName($uname);   
-                    $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($orgId);
+                    $userDetail = $this->userService->getUserDetailsbyUserName($uname); 
+                    $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($userDetail['id']);
                     if (!empty($userTokenInfo)) {
                         $data = ['username' => $uname, 'orgid' => $orgId];
                         $dataJwt = $this->getTokenPayload($data);

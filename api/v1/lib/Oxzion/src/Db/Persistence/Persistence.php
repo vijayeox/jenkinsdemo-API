@@ -12,19 +12,15 @@ use PHPSQLParser\PHPSQLCreator;
 
 
 class Persistence extends AbstractService {
-
+    private $database;
     /**
      * Persistence constructor.
      * @param $config
      * @param $database
      */
-    public function __construct($config, $database) {
+    public function __construct($config, $database, $adapter) {
         $this->database = $database;
-        $this->config = $config;
-        $config = $config['db'];
-        $config['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $config['host'] . ';charset=utf8;username=' . $config["username"] . ';password=' . $config["password"] . '';
-        $this->adapter = new Adapter($config);
-        parent::__construct($config, $this->adapter);
+        parent::__construct($config, $adapter);
     }
 
     /**
@@ -34,6 +30,7 @@ class Persistence extends AbstractService {
     public function insertQuery($sqlQuery) {
         $parsedData = new PHPSQLParser($sqlQuery['query']);
         $parsedArray = $parsedData->parsed;
+        $adapter=$this->dbAdapter;
         try {
             if(!empty($parsedArray['INSERT'])) {
                 foreach ($parsedArray['INSERT'] as $key => $insertArray) {
@@ -43,13 +40,13 @@ class Persistence extends AbstractService {
                         } else {
                             $tableName = $insertArray['table'];
                         }
-                        $columnResult = $this->adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
+                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
                         $resultSet1 = $columnResult->execute();
                         while ($resultSet1->next()) {
                             $resultTableName = $resultSet1->current();
                             $columnList = explode(",", $resultTableName['column_list']);
                             if (!in_array('ox_app_org_id', $columnList)) {
-                                $tableResult = $this->adapter->query("ALTER TABLE " . $tableName . " ADD `ox_app_org_id` INT(11) NOT NULL");
+                                $tableResult = $adapter->query("ALTER TABLE " . $tableName . " ADD `ox_app_org_id` INT(11) NOT NULL");
                                 $tableResult->execute();
                             }
                         }
@@ -98,14 +95,14 @@ class Persistence extends AbstractService {
                             $tableName = $queryFrom['table'];
                         }
                         $tableArrayList[] = $tableName;
-                        $columnResult = $this->adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM 
+                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM 
 INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
                         $resultSet1 = $columnResult->execute();
                         while ($resultSet1->next()) {
                             $resultTableName = $resultSet1->current();
                             $columnList = explode(",", $resultTableName['column_list']);
                             if (!in_array('ox_app_org_id', $columnList)) {
-                                $tableResult = $this->adapter->query("ALTER TABLE " . $tableName . " ADD `ox_app_org_id` INT(11) NOT NULL");
+                                $tableResult = $adapter->query("ALTER TABLE " . $tableName . " ADD `ox_app_org_id` INT(11) NOT NULL");
                                 $tableResult->execute();
                             }
                         }
@@ -151,6 +148,8 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
     public function updateQuery($sqlQuery) {
         $parsedData = new PHPSQLParser($sqlQuery['query']);
         $parsedArray = $parsedData->parsed;
+        $adapter=$this->dbAdapter;
+        
         try {
             if (!empty($parsedArray['UPDATE'])) {
                 foreach ($parsedArray['UPDATE'] as $key => $updateArray) {
@@ -161,7 +160,7 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
                             $tableName = $updateArray['table'];
                         }
                         $tableArrayList[] = $tableName;
-                        $columnResult = $this->adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
+                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
                         $resultSet1 = $columnResult->execute();
                         while ($resultSet1->next()) {
                             $resultTableName = $resultSet1->current();
@@ -193,6 +192,8 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
     public function selectQuery($sqlQuery) {
         $parsedData = new PHPSQLParser($sqlQuery['query']);
         $parsedArray = $parsedData->parsed;
+        $adapter=$this->dbAdapter;
+        
         try {
             if(!empty($parsedArray['FROM'])) {
                 foreach ($parsedArray['FROM'] as $key => $updateArray) {
@@ -203,7 +204,7 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
                             $tableName = $updateArray['table'];
                         }
                         $tableArrayList[] = $tableName;
-                        $columnResult = $this->adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
+                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
                         $resultSet1 = $columnResult->execute();
                         while($resultSet1->next()) {
                             $resultTableName = $resultSet1->current();
@@ -235,12 +236,13 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
     public function deleteQuery($sqlQuery) {
         $parsedData = new PHPSQLParser($sqlQuery['query']);
         $parsedArray = $parsedData->parsed;
+        $adapter=$this->dbAdapter;
         try {
             if(!empty($parsedArray['FROM'])) {
                 foreach ($parsedArray['FROM'] as $key => $updateArray) {
                     if ($updateArray['expr_type'] === 'table') {
                         $tableName = $updateArray['table'];
-                        $columnResult = $this->adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
+                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
                         $resultSet1 = $columnResult->execute();
                         while($resultSet1->next()) {
                             $resultTableName = $resultSet1->current();
@@ -265,6 +267,7 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
     }
 
     private function getReferenceClause($parsedArray, $key, $data, $tableArrayList, $queryStatement) {
+        $adapter=$this->dbAdapter;
         if(!empty($data['ref_clause'])) {
             $expAndOperator = Array ("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
             array_push($parsedArray[$queryStatement][$key]['ref_clause'], $expAndOperator);
@@ -292,8 +295,9 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
     }
 
     private function generateSQLFromArray($parsedArray) {
+        $adapter=$this->dbAdapter;
         $statement = new PHPSQLCreator($parsedArray);
-        $statement3 = $this->adapter->query($statement->created);
+        $statement3 = $adapter->query($statement->created);
         return $statement3->execute();
     }
 

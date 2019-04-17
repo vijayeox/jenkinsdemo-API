@@ -6,23 +6,35 @@ use Oxzion\Test\ServiceTest;
 use Oxzion\Service\EmailService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Service\EmailTemplateService;
+use Bos\Transaction\TransactionManager;
+use Zend\Db\Adapter\Adapter;
+
+
 
 class UserServiceTest extends ServiceTest {
 
-    public function setUp() : void {
+    public function setUp() : void{
         $this->loadConfig();
-        parent::setUp();
+        // parent::setUp();
+        $config = $this->getApplicationConfig();
+        $this->adapter = new Adapter($config['db']);
+        $tm = TransactionManager::getInstance($this->adapter);
+        $tm->setRollbackOnly(true);
+        $tm->beginTransaction();
+    
     }
 
-    protected function loadConfig() {
-        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/autoload/global.php', include __DIR__ . '/../../../../config/autoload/local.php');
-        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php',$configOverrides);
-        $this->setApplicationConfig($configOverrides);
+    public function tearDown() : void {
+        $tm = TransactionManager::getInstance($this->adapter);
+        $tm->rollback();
+        $_REQUEST = [];
     }
+
+
     private function getUserService(){
         return new UserService(
-            $this->getApplicationConfig(),
-            $this->getApplicationServiceLocator()->get(AdapterInterface::class),
+            $this->config,
+            $this->adapter,
             $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTable::class),
             $this->getApplicationServiceLocator()->get(EmailService::class),
             $this->getApplicationServiceLocator()->get(EmailTemplateService::class)

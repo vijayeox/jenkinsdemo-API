@@ -9,8 +9,11 @@ use Zend\Authentication\Result;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Adapter\AdapterInterface;
 
 class AuthControllerTest extends ControllerTest{
+    
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
@@ -35,7 +38,6 @@ class AuthControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(is_null($content['data']['jwt']), false);
         $this->assertEquals(is_null($content['data']['refresh_token']), false);
-        $this->reset();
     }
 
     public function testAuthenticationFail(){
@@ -50,7 +52,6 @@ class AuthControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Authentication Failure - Incorrect data specified');
-        // $this->reset();
     }
 
     public function testAuthenticationRefreshTokenExpired(){
@@ -66,7 +67,6 @@ class AuthControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(is_null($content['data']['jwt']), false);
         $this->assertNotEquals($content['data']['refresh_token'], '6456365665c809d01693770.52543401');
-        // $this->reset();
         
     }
 
@@ -100,7 +100,11 @@ class AuthControllerTest extends ControllerTest{
     }
 
     public function testRefreshValidUser(){
-        
+
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $query="update ox_user_refresh_token set expiry_date = '".date('Y-m-d H:i:s', strtotime('+1 day', time()))."'";
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
         $data = ['username' => 'bharatg', 'password' => 'password'];
         $this->dispatch('/auth', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);

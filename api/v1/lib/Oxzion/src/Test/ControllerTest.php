@@ -41,6 +41,11 @@ abstract class ControllerTest extends MainControllerTest{
         return Factory::INSERT();
     }
 
+    public function reset($keepPersistence = false){
+        parent::reset($keepPersistence);
+        $this->setupConnection();
+    }
+
 	protected function getMockGatewayData($name, $modelClass){
 		$originalTableGateway = $this->getApplicationServiceLocator()->get($name);
 		$dbAdapter = $originalTableGateway->getAdapter();

@@ -2,14 +2,16 @@
 namespace Organization;
 
 use Bos\Db\ModelTable;
+use Zend\Db\Adapter\AdapterInterface;
 use Organization\Controller\OrganizationController;
-use Oxzion\Test\ControllerTest;
-use PHPUnit\DbUnit\DataSet\YamlDataSet;
+use Oxzion\Test\MainControllerTest;
 use Oxzion\Service\OrganizationService;
 use Mockery;
 use Oxzion\Messaging\MessageProducer;
 
-class OrganizationControllerTest extends ControllerTest
+
+
+class OrganizationControllerTest extends MainControllerTest
 {
     protected $topic;
     public function setUp() : void
@@ -17,7 +19,6 @@ class OrganizationControllerTest extends ControllerTest
         $this->loadConfig();
         parent::setUp();
     }
-    
     public function getMockMessageProducer(){
         $organizationService = $this->getApplicationServiceLocator()->get(OrganizationService::class);
         $mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
@@ -25,12 +26,7 @@ class OrganizationControllerTest extends ControllerTest
         return $mockMessageProducer;
     }
 
-    public function getDataSet()
-    {
-        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Organization.yml");
-        return $dataset;
-    }
-
+   
 //Testing to see if the Create Contact function is working as intended if all the value passed are correct.
 
     public function testGetList()
@@ -41,9 +37,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals(2, count($content['data']));
         $this->assertEquals($content['data'][0]['id'], 1);
-        $this->assertEquals($content['data'][0]['name'], 'Cleveland Cavaliers');
+        $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
+        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['name'], 'Golden State Warriors');
     }
 
     protected function setDefaultAsserts()
@@ -63,7 +61,7 @@ class OrganizationControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
-        $this->assertEquals($content['data']['name'], 'Cleveland Cavaliers');
+        $this->assertEquals($content['data']['name'], 'Cleveland Black');
     }
 
     public function testGetNotFound()
@@ -78,16 +76,14 @@ class OrganizationControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Cleveland Black', 'logo' => 'logo.png', 'status' => 'Active'];
-        $this->assertEquals(1, $this->getConnection()->getRowCount('ox_organization'));
+        $data = ['name' => 'ORGANIZATION', 'logo' => 'logo.png', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active')),'ORGANIZATION_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'ORGANIZATION', 'status' => 'Active')),'ORGANIZATION_ADDED')->once()->andReturn();
         }
         $this->dispatch('/organization', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        print_r($content);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
@@ -95,7 +91,6 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_organization'));
     }
 
     public function testCreateWithOutNameFailure()
@@ -118,7 +113,7 @@ class OrganizationControllerTest extends ControllerTest
     public function testCreateAccess()
     {
         $this->initAuthToken($this->employeeUser);
-        $data = ['name' => 'Cleveland Black', 'logo' => 'logo.png', 'status' => 'Active'];
+        $data = ['name' => 'Cleveland Cavaliers', 'logo' => 'logo.png', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -133,17 +128,18 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
+        
     }
 
     public function testUpdate()
     {
-        $data = ['name' => 'Cleveland Black', 'logo' => 'logo.png', 'status' => 'InActive'];
+        $data = ['name' => 'Cleveland Cavaliers', 'logo' => 'logo.png', 'status' => 'InActive'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('new_orgname' => 'Cleveland Black','old_orgname'=> 'Cleveland Cavaliers','status' => 'InActive')),'ORGANIZATION_UPDATED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Cavaliers', 'status' => 'InActive')),'ORGANIZATION_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('new_orgname' => 'Cleveland Cavaliers','old_orgname'=> 'Cleveland Black','status' => 'InActive')),'ORGANIZATION_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'InActive')),'ORGANIZATION_DELETED')->once()->andReturn();
         }
         $this->dispatch('/organization/1', 'PUT', null);
         $this->assertResponseStatusCode(200);
@@ -152,11 +148,12 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
+        
     }
 
     public function testUpdateRestricted()
     {
-        $data = ['name' => 'Cleveland Blacks', 'logo' => 'logo.png', 'status' => 'Active'];
+        $data = ['name' => 'Cleveland Cavaliers', 'logo' => 'logo.png', 'status' => 'Active'];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
@@ -192,15 +189,15 @@ class OrganizationControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        if(enableActiveMQ == 0){
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Cavaliers', 'status' => 'Inactive')),'ORGANIZATION_DELETED')->once()->andReturn();
-        }
         $this->dispatch('/organization/1', 'DELETE');
+          if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'InActive')),'ORGANIZATION_DELETED')->once()->andReturn();
+        }
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['status'], 'success');        
     }
 
     public function testDeleteNotFound()
@@ -220,11 +217,11 @@ class OrganizationControllerTest extends ControllerTest
     public function testAddUserToOrganization()
     {
         $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/1/adduser/3', 'POST');
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'rakshith', 'orgname' => 'Golden State Warriors', 'status' => 'Active')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
-        $this->dispatch('/organization/1/adduser/3', 'POST');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -236,7 +233,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'karan', 'orgname' => 'Cleveland Cavaliers', 'status' => 'Active')),'USERTOORGANIZATION_ALREADYEXISTS')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'karan', 'orgname' => 'Cleveland Black', 'status' => 'Active')),'USERTOORGANIZATION_ALREADYEXISTS')->once()->andReturn();
         }
         $this->dispatch('/organization/1/adduser/2', 'POST');
         $this->assertResponseStatusCode(404);
@@ -248,11 +245,11 @@ class OrganizationControllerTest extends ControllerTest
     public function testAddUserToOrganizationWithDifferentUser()
     {
         $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/1/adduser/3', 'POST');
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'rakshith', 'orgname' => 'Cleveland Cavaliers', 'status' => 'Active')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'rakshith', 'orgname' => 'Cleveland Black', 'status' => 'Active')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
-        $this->dispatch('/organization/1/adduser/3', 'POST');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
         $content = json_decode($this->getResponse()->getContent(), true);
