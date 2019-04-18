@@ -105,7 +105,6 @@ class FileService extends AbstractService{
             }
             $this->commit();
         }catch(Exception $e){
-            print_r($e->getMessage());exit;
             switch (get_class ($e)) {
              case "Oxzion\ValidationException" :
                 $this->rollback();

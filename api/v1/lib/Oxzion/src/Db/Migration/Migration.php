@@ -11,7 +11,7 @@ use Oxzion\Utils\FileUtils;
 class Migration extends AbstractService {
 
     private $database;
-    
+    private $mysqlAdapter;    
     /**
      * Migration constructor.
      * @param $config
@@ -19,6 +19,10 @@ class Migration extends AbstractService {
      */
     public function __construct($config, $database, $adapter) {
         $this->database = $database;
+        $dbConfig = $config['db'];
+        $dbConfig['database']='mysql';
+        $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username='.$dbConfig["appuser"].';password='.$dbConfig["password"].'';
+        $this->mysqlAdapter = new Adapter($dbConfig);
         parent::__construct($config, $adapter);
     }
 
@@ -27,41 +31,43 @@ class Migration extends AbstractService {
      * @return int
      */
     public function initDB($data) {
-        $adapter = $this->getAdapter();
-        $this->beginTransaction();
+        $adapter = $this->mysqlAdapter;
+        $return = 0;
         try {
             if ($data['appName'] === NULL || $data['appName'] === "" || $data['UUID'] === NULL || $data['UUID'] === "") {
                 $this->rollback();
                 return 0;
             }
+            $adapter->getDriver()->getConnection()->beginTransaction();
             $checkVersion = $this->checkDB(); //Code to check if the App Version is already installed.
             if (($checkVersion == 0)) {
                 $sqlQuery = 'CREATE DATABASE IF NOT EXISTS ' . $this->database;
-                $statement = $adapter->query($sqlQuery);
+                $statement = $this->mysqlAdapter->query($sqlQuery);
                 $result = $statement->execute();
                 if ($result) {
                     $appVersion = $this->insertAppVersion($data);
-                    return 1;
+                    $return = 1;
                 } else {
-                    $this->updateMigration();
-                    return 0;
+                    //this method is not there!!!!!
+                    //$this->updateMigration();
                 }
+                $adapter->getDriver()->getConnection()->commit();
             } else {
-                $this->rollback();
-                return 0;
+                $adapter->getDriver()->getConnection()->rollback();;
             }
         } catch (Exception $e) {
-            $this->rollback();
-            return 0;
+            $adapter->getDriver()->getConnection()->rollback();
         }
+
+        return $return;
     }
 
     /**
      * @return mixed
      */
     private function checkDB() {
-        $adapter = $this->getAdapter();
-        $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' . $this->database . '"';
+        $adapter = $this->mysqlAdapter;
+        $sqlQuery = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '".$this->database."'" ;
         $statement = $adapter->query($sqlQuery);
         $result = $statement->execute();
         return $result->count();
@@ -73,21 +79,27 @@ class Migration extends AbstractService {
      */
     private function insertAppVersion($data) {
         //The code to add the app version information to the table, after it is been installed into the OXZion system.
-        $config = $this->config;
-        $config['dsn'] = 'mysql:dbname='.$this->database.';host=' . $this->config['host'] . ';charset=utf8;username='.$this->config["appuser"].';password='.$this->config["password"];
-        $adapter = new Adapter($config);
+        $adapter = $this->dbAdapter;
 
+        try{
 //Code to create the migration table once the app is installed to the system.
-        $createQuery = "CREATE TABLE IF NOT EXISTS `ox_app_migration_version` (
-              `id` int(11) NOT NULL AUTO_INCREMENT,
-              `version_number` varchar(1000) NOT NULL,
-              `date_created` datetime NOT NULL,
-              `date_modified` datetime NOT NULL,
-              `description` varchar(10000),
-              PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
-        $statement1 = $adapter->query($createQuery);
-        return $result = $statement1->execute();
+            $this->beginTransaction();
+            $createQuery = "CREATE TABLE IF NOT EXISTS `ox_app_migration_version` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `version_number` varchar(1000) NOT NULL,
+                  `date_created` datetime NOT NULL,
+                  `date_modified` datetime NOT NULL,
+                  `description` varchar(10000),
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
+            $statement1 = $adapter->query($createQuery);
+            $result = $statement1->execute();
+            $this->commit();
+        }catch(Exception $e){
+            $this->rollback();
+            throw $e;
+        }
+        return $result;
     }
 
     /**
@@ -99,9 +111,9 @@ class Migration extends AbstractService {
     public function migrationSql($fileList, $migrationFolder, $data) {
 //The code to add the app version information to the table, after it is been installed into the OXZion system.
         try {
-            $this->beginTransaction();
             $checkDb = $this->checkDB($data);
-            if (($checkDb == 1)) {
+            if ($checkDb == 1) {
+                $this->beginTransaction();
                 $adapter = $this->dbAdapter;
                 sort($fileList);
                 foreach($fileList as $files) {
@@ -117,7 +129,7 @@ class Migration extends AbstractService {
                 }
 
 //Code to add the new column org_id to the table that is created
-                $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . $this->database . "' and table_name NOT LIKE 'ox_app_migration_version'");
+                $columnResult = $this->mysqlAdapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . $this->database . "' and table_name NOT LIKE 'ox_app_migration_version'");
                 $resultSet1 = $columnResult->execute();
                 while($resultSet1->next()) {
                     $resultTableName = $resultSet1->current();
@@ -141,7 +153,6 @@ class Migration extends AbstractService {
                     }
                 }
             } else {
-                $this->rollback();
                 return 0;
             }
             return 1;

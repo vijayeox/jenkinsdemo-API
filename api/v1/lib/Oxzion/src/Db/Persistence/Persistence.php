@@ -13,6 +13,7 @@ use PHPSQLParser\PHPSQLCreator;
 
 class Persistence extends AbstractService {
     private $database;
+    
     /**
      * Persistence constructor.
      * @param $config
@@ -21,7 +22,7 @@ class Persistence extends AbstractService {
     public function __construct($config, $database, $adapter) {
         $this->database = $database;
         parent::__construct($config, $adapter);
-    }
+     }
 
     /**
      * @param $sqlQuery

@@ -29,6 +29,7 @@ class TransactionManager{
     public function beginTransaction()
     {
         $this->dbAdapter->getDriver()->getConnection()->beginTransaction();
+        
     }
 
     public function commit()
