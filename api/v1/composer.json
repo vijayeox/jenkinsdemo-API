@@ -11,6 +11,9 @@
   "homepage": "https://www.oxzion.com/",
   "minimum-stability": "dev",
   "prefer-stable": false,
+  "config": {
+    "secure-http" :false
+  },
   "repositories": [{
     "type": "path",
     "url": "./BOS"
