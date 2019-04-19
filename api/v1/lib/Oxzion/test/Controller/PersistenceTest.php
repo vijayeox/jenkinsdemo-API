@@ -92,7 +92,7 @@ VALUES ('".$insertData['name']."', ".$insertData['client_id'].", '".$insertData[
         while($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
-        $this->assertEquals($tableFieldName[0]['id'] > 1, true);
+        $this->assertEquals($tableFieldName[0]['id'] > 0, true);
         $this->assertEquals($tableFieldName[0]['name'], $insertData['name']);
         $this->assertEquals($tableFieldName[0]['client_id'], $insertData['client_id']);
         $this->assertEquals($tableFieldName[0]['description'], $insertData['description']);
