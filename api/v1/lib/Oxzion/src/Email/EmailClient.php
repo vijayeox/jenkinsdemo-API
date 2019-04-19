@@ -462,5 +462,10 @@ class EmailClient{
 
 	    return $ob;
 	}
+
+	private function getsmtpTransport($smtpConfig){
+		$transport = new Horde_Mail_Transport_Smtphorde($smtpConfig);
+		return $transport;
+	}
 }
 ?>
