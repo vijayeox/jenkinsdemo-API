@@ -55,6 +55,11 @@ class Module implements ConfigProviderInterface {
                         $container->get(Model\AppTable::class), $container->get(Service\AppService::class), $container->get('AppLogger'),
                         $container->get(AdapterInterface::class));
                 },
+                Controller\AppRegisterController::class => function($container) {
+                    return new Controller\AppRegisterController(
+                        $container->get(Model\AppTable::class), $container->get(Service\AppService::class), $container->get('AppLogger'),
+                        $container->get(AdapterInterface::class));
+                },
             ],
         ];
     }

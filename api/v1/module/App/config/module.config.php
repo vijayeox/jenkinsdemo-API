@@ -90,7 +90,7 @@ return [
                 'options' => [
                     'route' => '/app/register',
                     'defaults' => [
-                        'controller' => Controller\AppController::class,
+                        'controller' => Controller\AppRegisterController::class,
                         'action' => 'appregister',
                         'method' => 'POST'
                     ],

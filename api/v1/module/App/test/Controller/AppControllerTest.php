@@ -2,6 +2,7 @@
 namespace App;
 
 use App\Controller\AppController;
+use App\Controller\AppRegisterController;
 use App\Model;
 use Oxzion\Test\ControllerTest;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
@@ -30,8 +31,8 @@ class AppControllerTest extends MainControllerTest
         $this->dispatch('/app/register', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
-        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AppController');
+        $this->assertControllerName(AppRegisterController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppRegisterController');
         $this->assertMatchedRouteName('appregister');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');     
         $content = (array)json_decode($this->getResponse()->getContent(), true);

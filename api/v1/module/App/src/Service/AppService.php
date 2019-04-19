@@ -398,7 +398,8 @@ class AppService extends AbstractService
                     $data['name'] = $apps[$x]['name'];
                     $data['category'] = $apps[$x]['category'];
                     $data['start_options'] = json_encode($apps[$x]['options']);
-                    $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+                    //this API call is done by the server hence hardcoding the created by value
+                    $data['created_by'] = 1 ;
                     $data['date_created'] = date('Y-m-d H:i:s');
                     $data['status'] = App::PUBLISHED;
                     $data['type'] = App::PRE_BUILT;
