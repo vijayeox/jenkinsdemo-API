@@ -363,6 +363,7 @@ class UserService extends AbstractService
             return $response[0];
         }
         $result = $response[0];
+        $result['organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
         $result['preferences'] = json_decode($response[0]['preferences']);
         if (isset($result)) {
             return $result;
