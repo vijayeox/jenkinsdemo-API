@@ -1,0 +1,42 @@
+email_setting_user:
+-
+    id: 1
+    userid: 1
+    email: 'bharatg@myvamla.com'
+    password: 'hib5p1fBRjJwteo=::730652658de3c0c526333c7a792586b9'
+    host: 'myvamla.com'
+    isdefault: true
+-
+    id: 2
+    userid: 1
+    email: 'bharat@gmail.com'
+    password: 'hib5p1fBRjJwteo=::730652658de3c0c526333c7a792586b9'
+    host: 'gmail.com'
+    isdefault: true
+ox_email_domain:
+  -
+    id: 1
+    name: 'myvamla.com'
+    imap_server: 'box3053.bluehost.com'
+    imap_port: '993'
+    imap_secure: 'ssl'
+    imap_short_login: '2'
+    smtp_server: 'box3053.bluehost.com'
+    smtp_port: '465'
+    smtp_secure: 'ssl'
+    smtp_short_login: 'short_name'
+    smtp_auth: 'auth'
+    smtp_use_php_mail: 'No'
+  -
+    id: 2
+    name: 'gmail.com'
+    imap_server: 'imap.gmail.com'
+    imap_port: '993'
+    imap_secure: 'ssl'
+    imap_short_login: '2'
+    smtp_server: 'smtp.gmail.com'
+    smtp_port: '465'
+    smtp_secure: 'ssl'
+    smtp_short_login: 'short_name'
+    smtp_auth: 'auth'
+    smtp_use_php_mail: 'No'

@@ -1,0 +1,36 @@
+BEGIN:VCALENDAR
+PRODID:-//Google Inc//Google Calendar 70.9054//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VEVENT
+DTSTART:20190327T063000Z
+DTEND:20190327T073000Z
+DTSTAMP:20190327T055010Z
+ORGANIZER;CN=Ankita S Shetty:mailto:ankushetty21@gmail.com
+UID:B05E4FC5-81E1-4009-92B7-3CA767B487B1
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=TRUE;
+CN=Ankita S Shetty;X-NUM-GUESTS=0:mailto:ankushetty21@gmail.com
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;
+CN=ankitashetty@myvamla.com;X-NUM-GUESTS=0:mailto:ankitashetty@myvamla.com
+CREATED:20190327T055007Z
+DESCRIPTION:-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~
+ :~:~:~:~:~:~:~:~::~:~::-\nPlease do not edit this section of the descriptio
+ n.\n\nView your event at https://www.google.com/calendar/event?action=VIEW&
+ eid=Xzg4bzNhaDlrOHAxamFiOW82NTJqMmI5azYwbzNpYjlwNjkxM2ViOWo4ZDBqZWRobjg4cTN
+ nZHEyNjQgYW5raXRhc2hldHR5QG15dmFtbGEuY29t&tok=MjIjYW5rdXNoZXR0eTIxQGdtYWlsL
+ mNvbTkwMTE0OTM4YTZhYjZhZDNkMGI4OGU2YmY5Y2Q2MzlkZmYxNmUyNTY&ctz=Asia%2FKolka
+ ta&hl=en_GB&es=1.\n-::~:~::~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:~:
+ ~:~:~:~:~:~:~:~:~:~:~:~::~:~::-
+LAST-MODIFIED:20190327T055007Z
+LOCATION:
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:Test event 
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:NONE
+TRIGGER;VALUE=DATE-TIME:19760401T005545Z
+END:VALARM
+END:VEVENT
+END:VCALENDAR
