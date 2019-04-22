@@ -10,6 +10,8 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Oxzion\Service\UserService;
+use Oxzion\Service\EmailService;
+use Oxzion\Model\EmailTable;
 
 class Module implements ConfigProviderInterface
 {
@@ -39,6 +41,9 @@ class Module implements ConfigProviderInterface
                 Service\CRMService::class => function($container){
                     return new Service\CRMService($container->get('config'),$container->get('CallbackLogger'));
                 },
+                Service\CalendarService::class => function($container){
+                    return new Service\CalendarService($container->get('config'),$container->get('CallbackLogger'));
+                },
 
                 \Contact\Service\ContactService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -54,6 +59,11 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype->setArrayObjectPrototype(new \Contact\Model\Contact());
                     return new TableGateway('ox_contact', $dbAdapter, null, $resultSetPrototype);
                 },
+                Controller\EmailController::class => function ($container) {
+                    return new Controller\EmailController(
+                        $container->get(EmailTable::class), $container->get(EmailService::class), $container->get('EmailLogger'),
+                        $container->get(AdapterInterface::class));
+                },
             ],
         ];
     }
@@ -67,6 +77,9 @@ class Module implements ConfigProviderInterface
                 },
                 Controller\CRMCallbackController::class => function ($container) {
                     return new Controller\CRMCallbackController($container->get(Service\CRMService::class),$container->get(\Contact\Service\ContactService::class),$container->get(UserService::class),$container->get('CallbackLogger'));
+                },
+                Controller\CalendarCallbackController::class => function ($container) {
+                    return new Controller\CalendarCallbackController($container->get(Service\CalendarService::class),$container->get(EmailService::class),$container->get('CallbackLogger'));
                 },
             ],
         ];

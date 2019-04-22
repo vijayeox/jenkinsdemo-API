@@ -20,6 +20,16 @@ return [
                     ],
                 ],
             ],
+            'calendarsendmailcallback' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/calendar/sendmail',
+                    'defaults' => [
+                        'controller' => Controller\CalendarCallbackController::class,
+                        'action' => 'sendMail',
+                    ],
+                ],
+            ],
             'addcallback' => [
                 'type'    => Segment::class,
                 'options' => [
