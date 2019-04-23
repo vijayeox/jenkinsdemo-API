@@ -124,7 +124,7 @@ class EmailClient{
 			Horde_Mime_Headers $headers,
 			Horde_Mime_Part $message, $smtpConfig)
 		{
-			$smtpConfig = array_merge(array('timeout' => self::TIMEOUT,
+			$smtpConfig = array_merge(array('timeout' => 30,
 				'debug' => '../smtp.log'), 
 			$smtpConfig);
 	    	/* Fallback to UTF-8 (if replying, original message might be in
@@ -250,12 +250,10 @@ class EmailClient{
 
 	            /* Add attachments. */
 	            $aparts = array();
-
 	            foreach ($attDetails as $key => $value) {
 	            	$type = isset($value['type']) ? $value['type'] : null;
 	            	$aparts[] = $this->_getAttachmentPart($value['file'], $value['bytes'], $value['filename'], $type);
 	            }
-
 	            if (!empty($aparts)) {
 	            	if (is_null($base) && (count($aparts) === 1)) {
                     /* If this is a single attachment with no text, the

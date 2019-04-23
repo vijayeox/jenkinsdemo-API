@@ -39,7 +39,8 @@
     "zendframework/zend-cache": "^2.8",
     "zendframework/zend-serializer": "^2.9",
     "zendframework/zend-inputfilter": "^2.8",
-    "pear-pear.horde.org/Horde_Imap_Client": "*",
+    "pear-pear.horde.org/Horde_Imap_Client":"*",
+    "pear-pear.horde.org/Horde_Smtp":"*",
     "elasticsearch/elasticsearch": "~5.0",
     "guzzlehttp/guzzle": "~6.0",
     "oxzion/bos": "~1.0",
@@ -47,7 +48,10 @@
     "nelexa/zip": "dev-master",
     "stomp-php/stomp-php": "4.*",
     "mybuilder/phpunit-accelerator":"dev-prepare-3.0",
-    "johnkary/phpunit-speedtrap":"3.1.0"
+    "johnkary/phpunit-speedtrap":"3.1.0",
+    "ext-dom": "*",
+    "ext-hash": "*",
+    "ext-json": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^7",
