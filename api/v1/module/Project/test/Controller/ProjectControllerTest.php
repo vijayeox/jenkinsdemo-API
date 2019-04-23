@@ -62,6 +62,18 @@ class ProjectControllerTest extends ControllerTest {
             "isdeleted"=> "0",
             "user_id"=> "1",
             "project_id"=> "2"
+        ],[
+            "id"=> "4",
+            "name"=> "New Project",
+            "org_id"=>"1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=> "3"
         ])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/project', 'GET');
@@ -71,6 +83,85 @@ class ProjectControllerTest extends ControllerTest {
         $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($diff, array());
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+    }
+
+     public function testGetListWithQuery() {
+        $this->initAuthToken($this->adminUser);
+        $data = ['data' => array([
+            "id"=> "3",
+            "name"=> "Test Project 2",
+            "org_id"=>"1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=> "2"
+        ])];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/project?f=name&q=Test&psz=1&pg=2', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $diff=array_diff($data, $content);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($diff, array());
+        $this->assertEquals($content['data']['pagination']['page'], 2);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+    }
+
+    public function testGetListWithQuerywithPageNo() {
+        $this->initAuthToken($this->adminUser);
+        $data = ['data' => array([
+            "id"=> "1",
+            "name"=> "Test Project 1",
+            "org_id"=>"1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=> "2"
+        ])];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/project?f=name&q=Test&psz=1&pg=1', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $diff=array_diff($data, $content);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($diff, array());
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+    }
+
+
+    public function testGetListWithQuerywithSort() {
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/project?sort=name', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['data'][0]['id'], 3);
+        $this->assertEquals($content['data']['data'][0]['name'], 'New Project');
+        $this->assertEquals($content['data']['data'][1]['id'], 1);
+        $this->assertEquals($content['data']['data'][1]['name'], 'Test Project 1');
+        $this->assertEquals($content['data']['data'][2]['id'], 2);
+        $this->assertEquals($content['data']['data'][2]['name'], 'Test Project 2');
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
     }
     public function testGet() {
         $this->initAuthToken($this->adminUser);
@@ -82,6 +173,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], 'Test Project 1');
     }
+    
     public function testGetNotFound() {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/project/64', 'GET');
@@ -92,7 +184,7 @@ class ProjectControllerTest extends ControllerTest {
     public function testCreate() {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Test Project 3','description'=>'Project Description'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_project'));
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_project'));
         if(enableActiveMQ == 0){
              $mockMessageProducer = $this->getMockMessageProducer();
              $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname'=> 'Cleveland Black','projectname' => 'Test Project 3')),'PROJECT_ADDED')->once()->andReturn();
@@ -103,7 +195,7 @@ class ProjectControllerTest extends ControllerTest {
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_project'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_project'));
     }
     public function testCreateWithOutNameFailure() {    
         $this->initAuthToken($this->adminUser);
@@ -258,15 +350,73 @@ class ProjectControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
     	$content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['data'][1]['id'], 2);
+        $this->assertEquals($content['data']['data'][1]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
     }
+
+    public function testGetListOfUsersWithQuery() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/project/1/users?f=name&psz=1&pg=2','GET'); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data']['pagination']['page'], 2);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+    }
+
+    public function testGetListOfUsersWithPageNoQuery() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/project/1/users?f=name&psz=1&pg=1','GET'); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+    }
+
+    public function testGetListOfUsersWithQueryParameter() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/project/1/users?f=name&q=karan','GET'); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals(count($content['data']), 2);
+       $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+    }
+
 
     public function testGetListOfUsersNotFound() {
     	$this->initAuthToken($this->adminUser);
     	$this->dispatch('/project/64/users','GET'); 
-    	$this->assertResponseStatusCode(404);
+    	$this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
     	$content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error'); 
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['data'],array());
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 0);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
     }
 
     public function testGetMyProjectList(){

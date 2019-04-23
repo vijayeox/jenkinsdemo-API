@@ -205,15 +205,26 @@ class OrganizationService extends AbstractService
      *   } </code>
      * @return array Returns a JSON Response with Status Code and Created Organization.
      */
-    public function getOrganizations()
+    public function getOrganizations($q,$f,$pg,$psz,$sort)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_organization')
-            ->columns(array("*"))
-            ->where(array('status' => "Active"));
-        $response = $this->executeQuery($select)->toArray();
-        return $response;
+        $cntQuery ="SELECT count(id) FROM `ox_organization`";
+            if(empty($q)){
+                $where = " WHERE status = 'Active' ";
+            }
+            else{
+                $where = " WHERE status = 'Active' AND ".$f." like '".$q."%'";   
+            }
+            $offset = ($pg - 1) * $psz;
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$psz." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(id)'];
+            $query ="SELECT * FROM `ox_organization`".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            return array('data' => $resultSet->toArray(), 
+                     'pagination' => array('page' => $pg,
+                                            'noOfPages' => ceil($count/$psz),
+                                            'pageSize' => $psz));
     }
 
     public function addUserToOrg($userId, $organizationId) {

@@ -30,12 +30,25 @@ class ProjectService extends AbstractService {
         $this->organizationService = $organizationService;
 	}
 
-    public function getProjectList(){
-        $queryString = "select * from ox_project";
-        $where = "where ox_project.isdeleted!=1";
-        $order = "order by ox_project.id";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        return $resultSet->toArray();        
+    public function getProjectList($q,$f,$pg,$psz,$sort){
+         $cntQuery ="SELECT count(id) FROM `ox_project`";
+            if(empty($q)){
+                $where = " WHERE isdeleted!=1";
+            }
+            else{
+                $where = " WHERE isdeleted!=1 AND ".$f." like '".$q."%'";   
+            }
+            $offset = ($pg - 1) * $psz;
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$psz." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(id)'];
+            $query ="SELECT * FROM `ox_project`".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            return array('data' => $resultSet->toArray(), 
+                     'pagination' => array('page' => $pg,
+                                            'noOfPages' => ceil($count/$psz),
+                                            'pageSize' => $psz));        
     }
 
 	public function createProject(&$data) {
@@ -144,16 +157,34 @@ class ProjectService extends AbstractService {
             return $resultSet->toArray();
     }
 
-    public function getUserList($id) {
-        if(!isset($id)) {
+    public function getUserList($id,$q,$f,$pg,$psz,$sort) {
+          if(!isset($id)) {
             return 0;
-        }
-        $queryString = "SELECT ox_user.id,ox_user.name FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id where ox_project.id = ".$id." AND ox_project.isdeleted!=1";
-        $order = "order by ox_user.id";
-        $resultSet = $this->executeQuerywithParams($queryString, null , null, $order)->toArray();
-        return $resultSet?$resultSet:0;
+          }
+         $query = "SELECT ox_user.id,ox_user.name";
+         $from = " FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id";
+    
+         $cntQuery ="SELECT count(ox_user.id)".$from;
+            if(empty($q)){
+                $where = " WHERE ox_project.id = ".$id." AND ox_project.isdeleted!=1";
+            }
+            else{
+                $where = " WHERE ox_project.id = ".$id." AND ox_project.isdeleted!=1 AND ox_user.".$f." like '".$q."%'";   
+            }
+            $offset = ($pg - 1) * $psz;
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$psz." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(ox_user.id)'];
+            $query =$query." ".$from." ".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            return array('data' => $resultSet->toArray(), 
+                     'pagination' => array('page' => $pg,
+                                            'noOfPages' => ceil($count/$psz),
+                                            'pageSize' => $psz));
+    
     }
-
+    
     //Writing this incase we need to get all projects later. Please do not delete - Brian
     /*public function getProject($id) {
     	$userId = AuthContext::get(AuthConstants::USER_ID);

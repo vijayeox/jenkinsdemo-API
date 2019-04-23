@@ -144,8 +144,25 @@ class UserController extends AbstractApiController
      * @return array $dataget list of Users
      */
     public function getList()
-    {
-        $result = $this->userService->getUsers();
+    {   
+        $params = $this->params()->fromQuery(); // empty method call
+        if(!isset($params['q'])){
+            $params['q'] = "";
+        }
+
+        if(!isset($params['f'])){
+            $params['f'] = "name";
+        }
+        if(!isset($params['pg'])){
+            $params['pg'] = 1;
+        }
+        if(!isset($params['psz'])){
+            $params['psz'] = 20;
+        }
+        if(!isset($params['sort'])){
+            $params['sort'] = "name";
+        }
+        $result = $this->userService->getUsers($params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
         return $this->getSuccessResponseWithData($result);
     }
 

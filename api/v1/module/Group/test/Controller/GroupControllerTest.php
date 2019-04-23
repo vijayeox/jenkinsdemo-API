@@ -237,15 +237,75 @@ class GroupControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['data'][1]['id'], 2);
+        $this->assertEquals($content['data']['data'][1]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
     }
+
+ 
+    public function testgetuserlistWithPagesize() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/group/1/users?f=name&psz=1&pg=2','GET'); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals(count($content['data']), 2);
+         $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data']['pagination']['page'], 2);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+    }
+
+    public function testgetuserlistWithPageNo() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/group/1/users?f=name&psz=1&pg=1','GET'); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+    }
+
+
+    public function testgetuserlistWithQueryFieldParameter() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/group/1/users?f=id&q=1','GET'); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+    }
+
 
     public function testgetuserlistNotFound() {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/group/64/users','GET'); 
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error'); 
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals($content['data']['data'],array());
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 0);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
     }
 
 }

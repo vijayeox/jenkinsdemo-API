@@ -330,18 +330,26 @@ class UserService extends AbstractService
      * @method GET
      * @return array $dataget list of Users
      */
-    public function getUsers($group_id = null)
-    {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_user')
-            ->columns(array("*"))
-            ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'status' => 'Active'));
-        if ($group_id) {
-            $select->join('groups_ox_user', 'ox_user.id = groups_ox_user.avatarid', array('groupid', 'avatarid'), 'left')
-                ->where(array('groups_ox_user.groupid' => $group_id));
-        }
-        return $this->executeQuery($select)->toArray();
+    public function getUsers($q,$f,$pg,$psz,$sort)
+    {   
+            $cntQuery ="SELECT count(id) FROM `ox_user`";
+            if(empty($q)){
+                $where = "";
+            }
+            else{
+                $where = " WHERE ".$f." like '".$q."%'";   
+            }
+            $offset = ($pg - 1) * $psz;
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$psz." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(id)'];
+            $query ="SELECT * FROM `ox_user`".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            return array('data' => $resultSet->toArray(), 
+                     'pagination' => array('page' => $pg,
+                                            'noOfPages' => ceil($count/$psz),
+                                            'pageSize' => $psz));
     }
 
     /**

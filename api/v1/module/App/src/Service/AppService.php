@@ -54,12 +54,26 @@ class AppService extends AbstractService
         return $resultSet->toArray();
     }
 
-    public function getAppList(){
-        $queryString = "select * from ox_app";
-        $where = "where ox_app.status!=1";
-        $order = "order by ox_app.id";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        return $resultSet->toArray();
+    public function getAppList($q,$f,$pg,$psz,$sort){
+
+         $cntQuery ="SELECT count(id) FROM `ox_app`";
+            if(empty($q)){
+                $where = " WHERE status != 1";
+            }
+            else{
+                $where = " WHERE status != 1 AND ".$f." like '".$q."%'";   
+            }
+            $offset = ($pg - 1) * $psz;
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$psz." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(id)'];
+            $query ="SELECT * FROM `ox_app`".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            return array('data' => $resultSet->toArray(), 
+                     'pagination' => array('page' => $pg,
+                                            'noOfPages' => ceil($count/$psz),
+                                            'pageSize' => $psz));
     }
 
     public function updateApp($id, &$data)

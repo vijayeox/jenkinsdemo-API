@@ -121,11 +121,29 @@ class GroupService extends AbstractService {
         return $count;
     }
 
-    public function getUserList($id) {
-        $queryString = "SELECT ox_user.id,ox_user.name FROM ox_user left join ox_user_group on ox_user.id = ox_user_group.avatar_id left join ox_group on ox_group.id = ox_user_group.group_id where ox_group.id = ".$id." ";
-        $order = "order by ox_user.id";
-        $resultSet = $this->executeQuerywithParams($queryString, null, null, $order)->toArray();
-        return $resultSet?$resultSet:0;
+    public function getUserList($id,$q,$f,$pg,$psz,$sort) {
+    $query = "SELECT ox_user.id,ox_user.name";
+    $from = " FROM ox_user left join ox_user_group on ox_user.id = ox_user_group.avatar_id left join ox_group on ox_group.id = ox_user_group.group_id";
+    
+     $cntQuery ="SELECT count(ox_user.id)".$from;
+            if(empty($q)){
+                $where = " WHERE ox_group.id = ".$id;
+            }
+            else{
+                $where = " WHERE ox_group.id = ".$id." AND ox_user.".$f." like '".$q."%'";   
+            }
+            $offset = ($pg - 1) * $psz;
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$psz." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(ox_user.id)'];
+            $query =$query." ".$from." ".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            return array('data' => $resultSet->toArray(), 
+                     'pagination' => array('page' => $pg,
+                                            'noOfPages' => ceil($count/$psz),
+                                            'pageSize' => $psz));
+    
     }
 
     public function saveUser($id,$data) {

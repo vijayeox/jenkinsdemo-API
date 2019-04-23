@@ -145,10 +145,27 @@ class GroupController extends AbstractApiController {
     * </code>
     */
     public function getuserlistAction() {
-    	$params = $this->params()->fromRoute();
-        $id=$params[$this->getIdentifierName()];
+        $group = $this->params()->fromRoute();
+        $id=$group[$this->getIdentifierName()];
+        $params = $this->params()->fromQuery(); // empty method call
+        if(!isset($params['q'])){
+            $params['q'] = "";
+        }
+
+        if(!isset($params['f'])){
+            $params['f'] = "name";
+        }
+        if(!isset($params['pg'])){
+            $params['pg'] = 1;
+        }
+        if(!isset($params['psz'])){
+            $params['psz'] = 20;
+        }
+        if(!isset($params['sort'])){
+            $params['sort'] = "name";
+        }  
         try {
-            $count = $this->groupService->getUserList($params[$this->getIdentifierName()]);
+            $count = $this->groupService->getUserList($group[$this->getIdentifierName()],$params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);

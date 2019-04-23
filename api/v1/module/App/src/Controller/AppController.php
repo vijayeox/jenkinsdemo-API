@@ -232,7 +232,24 @@ class AppController extends AbstractApiController
      */
     public function applistAction()
     {
-        $response = $this->appService->getAppList();
+        $params = $this->params()->fromQuery(); // empty method call
+        if(!isset($params['q'])){
+            $params['q'] = "";
+        }
+
+        if(!isset($params['f'])){
+            $params['f'] = "name";
+        }
+        if(!isset($params['pg'])){
+            $params['pg'] = 1;
+        }
+        if(!isset($params['psz'])){
+            $params['psz'] = 20;
+        }
+        if(!isset($params['sort'])){
+            $params['sort'] = "name";
+        }  
+        $response = $this->appService->getAppList($params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
         if ($response == 0 || empty($response)) {
             return $this->getErrorResponse("No Apps to display", 404);
         }

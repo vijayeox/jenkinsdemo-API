@@ -62,7 +62,24 @@ class RoleController extends AbstractApiController
     * @return array Returns a JSON Response list of roles based on Form id.
     */
     public function getList() {
-        $result = $this->roleService->getRoles();
+        $params = $this->params()->fromQuery(); // empty method call
+        if(!isset($params['q'])){
+            $params['q'] = "";
+        }
+
+        if(!isset($params['f'])){
+            $params['f'] = "name";
+        }
+        if(!isset($params['pg'])){
+            $params['pg'] = 1;
+        }
+        if(!isset($params['psz'])){
+            $params['psz'] = 20;
+        }
+        if(!isset($params['sort'])){
+            $params['sort'] = "name";
+        }  
+        $result = $this->roleService->getRoles($params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
         return $this->getSuccessResponseWithData($result);
     }
     /**
@@ -133,10 +150,27 @@ class RoleController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Priviledges of Created Role.
     */
     public function roleprivilegeAction(){
-        $params=$this->params()->fromRoute();
-        $id=$params['roleId'];
+        $role=$this->params()->fromRoute();
+        $id=$role['roleId'];
+        $params = $this->params()->fromQuery(); // empty method call
+        if(!isset($params['q'])){
+            $params['q'] = "";
+        }
+
+        if(!isset($params['f'])){
+            $params['f'] = "name";
+        }
+        if(!isset($params['pg'])){
+            $params['pg'] = 1;
+        }
+        if(!isset($params['psz'])){
+            $params['psz'] = 20;
+        }
+        if(!isset($params['sort'])){
+            $params['sort'] = "name";
+        }  
         try {
-            $result = $this->roleService->getRolePrivilege($id);
+            $result = $this->roleService->getRolePrivilege($id,$params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);

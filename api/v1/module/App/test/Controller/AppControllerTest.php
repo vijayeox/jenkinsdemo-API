@@ -110,6 +110,84 @@ class AppControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('applist');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Admin App');
+        $this->assertEquals($content['data']['data'][1]['id'], 2);
+        $this->assertEquals($content['data']['data'][1]['name'], 'Announcement');
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+    }
+
+    public function testGetAppListWithQueryParameters()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/a?q=a&psz=1&pg=2', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('applist');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Announcement');
+        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['pagination']['page'], 2);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 3);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+    }
+
+    public function testGetAppListWithQueryPageSize()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/a?psz=4&pg=1', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('applist');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Admin App');
+        $this->assertEquals($content['data']['data'][1]['id'], 2);
+        $this->assertEquals($content['data']['data'][1]['name'], 'Announcement');
+        $this->assertEquals($content['data']['data'][2]['id'], 3);
+        $this->assertEquals($content['data']['data'][2]['name'], 'App Builder');
+        $this->assertEquals($content['data']['data'][3]['id'], 6);
+        $this->assertEquals($content['data']['data'][3]['name'], 'Group');
+        $this->assertEquals($content['data']['pagination']['page'], 1);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 4);
+    }
+
+
+    public function testGetAppListWithQuerySort()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/a?psz=4&pg=2&sort=id', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('applist');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['id'], 5);
+        $this->assertEquals($content['data']['data'][0]['name'], 'Project');
+        $this->assertEquals($content['data']['data'][1]['id'], 6);
+        $this->assertEquals($content['data']['data'][1]['name'], 'Group');
+        $this->assertEquals($content['data']['data'][2]['id'], 7);
+        $this->assertEquals($content['data']['data'][2]['name'], 'Role');
+        $this->assertEquals($content['data']['data'][3]['id'], 8);
+        $this->assertEquals($content['data']['data'][3]['name'], 'Organization');
+        $this->assertEquals($content['data']['pagination']['page'], 2);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['data']['pagination']['pageSize'], 4);
     }
 
     public function testCreate()
