@@ -177,16 +177,93 @@ class RoleControllerTest extends MainControllerTest {
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['id'], 1);
-        $this->assertEquals($content['data'][0]['name'], 'ADMIN');
+        $this->assertEquals(2, count($content['data']));
+        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['name'], 'ADMIN');
+        $this->assertEquals($content['data']['privileges'][0]['id'], 1);
+        $this->assertEquals($content['data']['privileges'][0]['privilege_name'], 'MANAGE_ANNOUNCEMENT');
+        $this->assertEquals($content['data']['privileges'][0]['permission'], 3);
+        $this->assertEquals($content['data']['privileges'][1]['id'], 16);
+        $this->assertEquals($content['data']['privileges'][1]['privilege_name'], 'MANAGE_GROUP');
+        $this->assertEquals($content['data']['privileges'][1]['permission'], 15);
     }
     public function testGetNotFound(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/role/64', 'GET');
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(2, count($content['data']));
+        $this->assertEquals($content['data']['data'],array());
+        $this->assertEquals($content['data']['privileges'], array()); 
+    }
+
+    public function testCreateRole(){
+        $this->initAuthToken($this->adminUser);
+        $data=array('name' => 'SUPER ADMIN','description' => 'Must have read and write control',
+            'privileges'=> json_encode(array(['name' => 'MANAGE_ADMIN','permission' => '15'],['name'=> 'MANAGE_ROLE','permission'=> '1'],['name' => 'MANAGE_ALERT','permission'=>'3'])));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/role', 'POST',$data);
+        $this->assertResponseStatusCode(201);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'],'SUPER ADMIN');
+        $this->assertEquals($content['data']['description'],'Must have read and write control');
+    }
+
+    public function testUpdatePrivilegePermission(){
+        $this->initAuthToken($this->adminUser);
+        $data=array('name' => 'ADMIN','description' => 'Must have write control',
+            'privileges'=> json_encode(array(['id' => '1','name' => 'MANAGE_ANNOUNCEMENT','permission' => '15'],['id'=>'14','name'=> 'MANAGE_FORM','permission'=> '1'],['id' => '4','name' => 'MANAGE_ALERT','permission'=>'3'])));
+         $this->setJsonContent(json_encode($data));
+        $this->dispatch('/role/1', 'POST',$data);
+        $this->assertResponseStatusCode(201);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+       $this->assertEquals($content['data']['name'],'ADMIN');
+        $this->assertEquals($content['data']['description'],'Must have write control');
+    }
+
+
+    public function testCreatePrivilege(){
+        $this->initAuthToken($this->adminUser);
+        $data=array('name' => 'ADMIN','description' => 'Must have write control',
+            'privileges'=> json_encode(array(['name' => 'MANAGE_FILE','permission' => '15'],['name'=> 'MANAGE_MAIL','permission'=> '1'],['id' => '4','name' => 'MANAGE_ALERT','permission'=>'15'])));
+         $this->setJsonContent(json_encode($data));
+        $this->dispatch('/role/1', 'POST',$data);
+        $this->assertResponseStatusCode(201);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'],'ADMIN');
+        $this->assertEquals($content['data']['description'],'Must have write control');
+    }
+
+    public function testCreateWithExisitingRole(){
+        $this->initAuthToken($this->adminUser);
+        $data=array('name' => 'ADMIN','description' => 'Must have write control',
+            'privileges'=> json_encode(array(['name' => 'MANAGE_FILE','permission' => '15'],['name'=> 'MANAGE_MAIL','permission'=> '1'],['id' => '4','name' => 'MANAGE_ALERT','permission'=>'15'])));
+         $this->setJsonContent(json_encode($data));
+       
+        $this->dispatch('/role','POST',$data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Failed to create a new entity');
     }
+
+     public function testCreateRoleWithRoleID(){
+        $this->initAuthToken($this->adminUser);
+        $data=array('name' => 'ADMIN','description' => 'Must have read and write control',
+            'privileges'=> json_encode(array(['id' => '1','name' => 'MANAGE_ANNOUNCEMENT','permission' => '15'],['id'=>'14','name'=> 'MANAGE_FORM','permission'=> '1'],['id' => '4','name' => 'MANAGE_ALERT','permission'=>'3'])));
+         $this->setJsonContent(json_encode($data));
+       
+        $this->dispatch('/role/1', 'POST',$data);
+        $this->assertResponseStatusCode(201);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+       $this->assertEquals($content['data']['name'],'ADMIN');
+        $this->assertEquals($content['data']['description'],'Must have read and write control');
+    }
+
     public function testCreate(){
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'ADMIN_SUPER','org_id' => 2];
@@ -197,19 +274,7 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
     }
-    public function testCreateWithOutTextFailure(){
-        $this->initAuthToken($this->adminUser);
-        $data = ['org_id' => 4];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/role', 'POST', null);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
-        $this->assertEquals($content['data']['errors']['name'], 'required');
-    }
-
+  
     public function testCreateAccess() {
         $this->initAuthToken($this->employeeUser);
         $data = ['name' => 'ADMIN_SUPER 1','org_id' => 4];

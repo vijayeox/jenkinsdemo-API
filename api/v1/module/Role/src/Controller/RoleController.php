@@ -38,12 +38,22 @@ class RoleController extends AbstractApiController
     *               id : integer,
     *               name : string,
     *               userid : integer,
+    *               privileges : [
+    *                   {
+    *                       id : integer
+    *                       name : string,
+    *                       permission : integer,
+    *
+    *                   }, ...
+    *                ]
     *   } </code>
     * @return array Returns a JSON Response with Status Code and Created Role.
     */
     public function create($data){
+        $params = $this->params()->fromRoute(); // empty method calls
+        $roleId = isset($params['roleId']) ? $params['roleId'] : null;
         try{
-            $count = $this->roleService->createRole($data);
+            $count = $this->roleService->createRole($roleId,$data);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);

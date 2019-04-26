@@ -11,6 +11,8 @@ use Bos\ValidationException;
 use Exception;
 use PhpZip;
 use Symfony\Component\Yaml\Parser;
+use Ramsey\Uuid\Uuid;
+
 
 class AppService extends AbstractService
 {
@@ -417,7 +419,7 @@ class AppService extends AbstractService
                     $data['date_created'] = date('Y-m-d H:i:s');
                     $data['status'] = App::PUBLISHED;
                     $data['type'] = App::PRE_BUILT;
-                    $data['uuid'] = uniqid();   
+                    $data['uuid'] = Uuid::uuid4();   
                     $form->exchangeArray($data);
                     $form->validate();
                     $count += $this->table->save($form);

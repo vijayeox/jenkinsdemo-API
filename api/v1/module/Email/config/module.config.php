@@ -20,10 +20,10 @@ return [
                         'controller' => Controller\EmailController::class,
                         'access' => [
                             // SET ACCESS CONTROL
-                            'put' => 'MANAGE_EMAIL_WRITE',
-                            'post' => 'MANAGE_EMAIL_CREATE',
-                            'delete' => 'MANAGE_EMAIL_DELETE',
-                            'get' => 'MANAGE_EMAIL_READ',
+                            'put' => '',
+                            'post' => '',
+                            'delete' => '',
+                            'get' => '',
                         ],
                     ],
                 ],

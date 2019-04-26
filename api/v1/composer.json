@@ -31,6 +31,7 @@
     "doctrine/migrations": "^1.5",
     "zendframework/zend-json": "^3.1",
     "zendframework/zend-log": "^2.10",
+    "ramsey/uuid":"^3.8.0",
     "zendframework/zend-authentication": "^2.6",
     "firebase/php-jwt": "^5.0",
     "zendframework/zend-permissions-rbac": "^2.6",

@@ -46,12 +46,12 @@ class AppControllerTest extends MainControllerTest
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app', 'GET');
         $data = ['data' => array([
-            "name"=> "Admin App",
-            "uuid"=> "5ca49c4abeb47",
+            "name"=> "Admin",
+            "uuid"=> "946fd092-b4f7-4737-b3f5-14086541492e",
             "description"=> null,
-            "type"=> "2",
+            "type"=> "1",
             "logo"=> "app.png",
-            "category"=> "EXAMPLE_CATEGORY",
+            "category"=> "utilities",
             "date_created"=> "2019-04-03 17:13:40",
             "date_modified"=> "2019-04-03 11:49:16",
             "created_by"=> "1",
@@ -85,9 +85,10 @@ class AppControllerTest extends MainControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
+
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content['data'][0]['uuid']);
-        $this->assertEquals($content['data'][0]['name'], 'Admin App');
+        $this->assertEquals($content['data'][0]['name'], 'Admin');
     }
 
     public function testGetNotFound()
@@ -112,9 +113,9 @@ class AppControllerTest extends MainControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data']['data'][0]['id'], 1);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Admin App');
+        $this->assertEquals($content['data']['data'][0]['name'], 'Admin');
         $this->assertEquals($content['data']['data'][1]['id'], 2);
-        $this->assertEquals($content['data']['data'][1]['name'], 'Announcement');
+        $this->assertEquals($content['data']['data'][1]['name'], 'Announcements');
         $this->assertEquals($content['data']['pagination']['page'], 1);
         $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
         $this->assertEquals($content['data']['pagination']['pageSize'], 20);
@@ -132,7 +133,7 @@ class AppControllerTest extends MainControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Announcement');
+        $this->assertEquals($content['data']['data'][0]['name'], 'Announcements');
         $this->assertEquals($content['data']['data'][0]['id'], 2);
         $this->assertEquals($content['data']['pagination']['page'], 2);
         $this->assertEquals($content['data']['pagination']['noOfPages'], 3);
@@ -152,15 +153,15 @@ class AppControllerTest extends MainControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data']['data'][0]['id'], 1);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Admin App');
+        $this->assertEquals($content['data']['data'][0]['name'], 'Admin');
         $this->assertEquals($content['data']['data'][1]['id'], 2);
-        $this->assertEquals($content['data']['data'][1]['name'], 'Announcement');
+        $this->assertEquals($content['data']['data'][1]['name'], 'Announcements');
         $this->assertEquals($content['data']['data'][2]['id'], 3);
-        $this->assertEquals($content['data']['data'][2]['name'], 'App Builder');
-        $this->assertEquals($content['data']['data'][3]['id'], 6);
-        $this->assertEquals($content['data']['data'][3]['name'], 'Group');
+        $this->assertEquals($content['data']['data'][2]['name'], 'AppBuilder');
+        $this->assertEquals($content['data']['data'][3]['id'], 9);
+        $this->assertEquals($content['data']['data'][3]['name'], 'CRM');
         $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 4);
         $this->assertEquals($content['data']['pagination']['pageSize'], 4);
     }
 
@@ -186,7 +187,7 @@ class AppControllerTest extends MainControllerTest
         $this->assertEquals($content['data']['data'][3]['id'], 8);
         $this->assertEquals($content['data']['data'][3]['name'], 'Organization');
         $this->assertEquals($content['data']['pagination']['page'], 2);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['data']['pagination']['noOfPages'], 4);
         $this->assertEquals($content['data']['pagination']['pageSize'], 4);
     }
 
