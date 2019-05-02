@@ -134,9 +134,9 @@ class EmailService extends AbstractService
         else{
             foreach ($resultSet->toArray() as $account) {
                 if($account['password'])
-                    $account['authRequired'] = 0;
-                else
                     $account['authRequired'] = 1;
+                else
+                    $account['authRequired'] = 0;
             }
         }
         return $accounts;
