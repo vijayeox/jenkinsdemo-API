@@ -134,12 +134,11 @@ class OrganizationService extends AbstractService
                     break;
             }
         }
-
         if($obj->name != $data['name']){
-            $this->messageProducer->sendTopic(json_encode(array('new_orgname' => $data['name'], 'old_orgname' => $obj->name,'status' => $data['status'])),'ORGANIZATION_UPDATED');
+             $this->messageProducer->sendTopic(json_encode(array('new_orgname' => $data['name'], 'old_orgname' => $obj->name,'status' => $form->status)),'ORGANIZATION_UPDATED');
         }
-        if($data['status'] == 'InActive'){
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name,'status' => $data['status'])),'ORGANIZATION_DELETED');
+        if($form->status == 'InActive'){
+            $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name,'status' => $form->status)),'ORGANIZATION_DELETED');
         }
         return $count;
     }

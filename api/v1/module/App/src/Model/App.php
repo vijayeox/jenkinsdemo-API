@@ -23,6 +23,7 @@ class App extends Entity {
         'uuid' => 0,
         'description' => NULL,
         'type' => NULL,  
+        'isdefault' => NULL,
         'logo' => "default_app.png",  
         'category' => NULL,
         'date_created' => NULL,  

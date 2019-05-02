@@ -726,31 +726,17 @@ class UserService extends AbstractService
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
         $userId = AuthContext::get(AuthConstants::USER_ID);
         $userRole = implode(array_column($this->getRolesFromDb($userId), 'role_id'), ",");
-        $sql = $this->getSqlObject();
 
-        //Code to get the name for which the logged in user has access to for the organization
-        $select1 = $sql->select();
-        $select1->from('ox_app')
-            ->columns(array("id", "name"))
-            ->join('ox_app_registry', 'ox_app_registry.app_id = ox_app.id', array(), 'left')
-            ->join('ox_role_privilege', 'ox_role_privilege.app_id = ox_app.id', array(), 'left')
-            ->join('ox_user_role', 'ox_user_role.role_id = ox_role_privilege.role_id', array(), 'left')
-            ->where(array('ox_app_registry.org_id = ' . $orgId))
-            ->where(array('ox_user_role.role_id IN (' . $userRole . ')'))
-            ->group(array('ox_app.name'))
-            ->order(array('ox_app.name'));
-        $result1 = array_column($this->executeQuery($select1)->toArray(), 'id');
-
-        //Code to get the list of all the apps available for the organization
-        $select2 = $sql->select();
-        $select2->from('ox_app')
-            ->columns(array("id"))
-            ->join('ox_app_registry', 'ox_app_registry.app_id = ox_app.id', array(), 'left')
-            ->where(array('ox_app_registry.org_id = ' . $orgId))
-            ->order(array('ox_app.name'));
-        $result2 = array_column($this->executeQuery($select2)->toArray(), 'id');
-        //Code to get the difference of the two array
-        return $blackListedApps = ArrayUtils::checkDiffMultiArray($result1, $result2);
+        $query = "SELECT DISTINCT app.uuid, app.name from (
+                    SELECT DISTINCT ap.uuid, ap.name, op.name as privilege_name, ar.org_id from ox_app as ap 
+                    INNER JOIN 
+                    ox_app_registry as ar ON ap.uuid = ar.app_id INNER JOIN 
+                    ox_privilege as op ON ar.app_id = op.app_id where ar.org_id =".$orgId.") app LEFT JOIN 
+                    (SELECT DISTINCT orp.privilege_name from ox_role_privilege as orp JOIN 
+                    ox_user_role as ou on orp.role_id = ou.role_id AND ou.user_id =".$userId." and orp.org_id = ".$orgId.") urp ON app.privilege_name = urp.privilege_name WHERE urp.privilege_name IS NULL union SELECT oa.uuid, oa.name FROM ox_app oa LEFT JOIN
+                    `ox_app_registry` ar on oa.uuid = ar.app_id and ar.org_id =".$orgId." WHERE org_id IS NULL";
+        $result = $this->executeQuerywithParams($query);
+        return $result->toArray();
     }
 
     /**

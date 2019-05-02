@@ -183,11 +183,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'get',
-                        'action' => 'userLoginToken',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                            'userLoginToken' => 'MANAGE_USER_READ',
-                        ],
+                        'action' => 'userLoginToken'
                     ],
                 ],
             ],

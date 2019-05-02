@@ -408,11 +408,11 @@ class AppService extends AbstractService
             $result = $this->executeQuerywithParams($select)->toArray();
             $result = array_unique(array_map('current', $result));
             $count = 0;
-            
             for($x=0;$x<sizeof($apps);$x++){
                 if(!in_array($apps[$x]['name'], $result)){
                     $data['name'] = $apps[$x]['name'];
                     $data['category'] = $apps[$x]['category'];
+                    $data['isdefault'] = $apps[$x]['isdefault'];
                     $data['start_options'] = json_encode($apps[$x]['options']);
                     //this API call is done by the server hence hardcoding the created by value
                     $data['created_by'] = 1 ;
@@ -423,9 +423,20 @@ class AppService extends AbstractService
                     $form->exchangeArray($data);
                     $form->validate();
                     $count += $this->table->save($form);
-                    
                 }
             }
+            $query = "SELECT uuid from `ox_app` WHERE isdefault = 1";
+            $selectquery = $this->executeQuerywithParams($query)->toArray();
+            $idList = array_unique(array_map('current', $selectquery));
+
+            for($i=0;$i<sizeof($idList);$i++){
+
+                $insert = "INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`) 
+                        SELECT org.id, '".$idList[$i]."', now() from ox_organization as org 
+                            where org.id not in(SELECT org_id FROM ox_app_registry WHERE app_id ='".$idList[$i]."')";
+                $result = $this->runGenericQuery($insert);
+            }
+            
             $this->commit();
         }
         catch (Exception $e) {
