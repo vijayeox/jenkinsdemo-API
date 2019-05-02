@@ -13,7 +13,7 @@ use Zend\InputFilter\Input;
 use Bos\Auth\AuthContext;
 use Bos\Auth\AuthConstants;
 
-class EmailController extends AbstractApiController {	
+class EmailController extends AbstractApiController {
     /**
     * @var EmailService Instance of Email Service
     */
@@ -76,7 +76,7 @@ class EmailController extends AbstractApiController {
     	$data = $this->params()->fromPost();
     	try {
     		$count = $this->emailService->createOrUpdateEmailAccount($data);
-    	} catch(ValidationException $e) {	
+    	} catch(ValidationException $e) {
     		$response = ['data' => $data, 'errors' => $e->getErrors()];
     		return $this->getErrorResponse("Validation Errors",404, $response);
     	}
@@ -86,7 +86,7 @@ class EmailController extends AbstractApiController {
         unset($data['password']);
     	return $this->getSuccessResponseWithData($data,201);
     }
-    
+
     /*public function update($id, $data) {
     	try {
     		$count = $this->emailService->updateEmailAccount($id, $data);
@@ -100,7 +100,7 @@ class EmailController extends AbstractApiController {
     	}
     	return $this->getSuccessResponseWithData($data,200);
     }*/
-    
+
     /*public function delete($id) {
     	$response = $this->emailService->deleteEmail($id);
     	if($response == 0) {
@@ -136,7 +136,7 @@ class EmailController extends AbstractApiController {
     * @link /email/:emailId/default
     * @method get
     * @param json object of userid
-    * @return array $dataget list of default emails 
+    * @return array $dataget list of default emails
     * <code>status : "success|error",
     *       data : all default email data passed back in json format
     * </code>
@@ -182,8 +182,8 @@ class EmailController extends AbstractApiController {
     * @api
     * @link /email[/:emailId]
     * @method PUT
-    * @param array $id ID of Email to update 
-    * @param array $data 
+    * @param array $id ID of Email to update
+    * @param array $data
     * <code> status : "success|error",
     *        data : {
                     string email,

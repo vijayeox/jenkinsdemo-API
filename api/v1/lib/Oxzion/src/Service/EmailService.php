@@ -110,7 +110,7 @@ class EmailService extends AbstractService
         return $accounts;
     }
 
-    public function getEmailAccountsByEmailId($id=null)
+    public function getEmailAccountsByEmailId($id=null,$pw =false)
     {
         $accounts = array();
         if(empty($id))
@@ -125,9 +125,19 @@ class EmailService extends AbstractService
         $order = "order by email_setting_user.id";
         // print_r('    '.$queryString.' '.$where.' '.$order);exit;
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        foreach ($resultSet->toArray() as $account) {
-            $account['password'] = TwoWayEncryption::decrypt($account['password']);
-            $accounts[] = $account;
+        if($pw) {
+            foreach ($resultSet->toArray() as $account) {
+                $account['password'] = TwoWayEncryption::decrypt($account['password']);
+                $accounts[] = $account;
+            }
+        }
+        else{
+            foreach ($resultSet->toArray() as $account) {
+                if($account['password'])
+                    $account['authRequired'] = 0;
+                else
+                    $account['authRequired'] = 1;
+            }
         }
         return $accounts;
     }
