@@ -713,8 +713,8 @@ class UserService extends AbstractService
             $privilege[$key] = str_replace('_', '', $privilege[$key]);
             $privilege[$key] = 'priv' . $privilege[$key] . ':true';
         }
-        $blackListedApps = $this->getAppsWithoutAccessForUser();
-        $responseArray = array('privilege' => $privilege, 'blackListedApps' => $blackListedApps);
+        $whiteListedApps = $this->getAppsByUserId();
+        $responseArray = array('privilege' => $privilege, 'whiteListedApps' => $whiteListedApps);
         return $responseArray;
     }
 
@@ -807,25 +807,15 @@ class UserService extends AbstractService
     }
 
     public function getAppsByUserId($id=null) {
-        return $this->getDataByParams(
-            array('op' => 'ox_app'),
-            array('name', 'description', 'uuid', 'type', 'logo', 'category'),
-            array(
-                'orp.org_id' => AuthContext::get(AuthConstants::ORG_ID),
-                'our.user_id' => (!$id) ? AuthContext::get(AuthConstants::USER_ID) : $id
-            ),
-            array(
-                array(
-                    'table' => array('orp' => 'ox_role_privilege'),
-                    'condition' => 'orp.app_id = op.uuid',
-                    'joinMethod' => 'left'
-                ),
-                array(
-                    'table' => array('our' => 'ox_user_role'),
-                    'condition' => 'our.role_id = orp.role_id',
-                    'joinMethod' => 'left'
-                )
-            )
-        );
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $userId = $id;
+        if(!isset($userId)){
+            $userId = AuthContext::get(AuthConstants::USER_ID);
+        }
+        $query = "SELECT DISTINCT oa.name,oa.description, oa.uuid, oa.type, oa.logo, oa.category from ox_app as oa INNER JOIN ox_app_registry as oar ON oa.uuid = oar.app_id INNER JOIN         ox_privilege as op on oar.app_id = op.app_id INNER JOIN ox_role_privilege as orp ON op.name = orp.privilege_name AND orp.org_id =".$orgId." INNER JOIN ox_user_role as   our ON orp.role_id = our.role_id AND our.user_id = ".$userId." union SELECT DISTINCT name,description, uuid, type, logo, category FROM ox_app as oa INNER JOIN ox_app_registry as oar ON oa.uuid= oar.app_id  WHERE oa.uuid NOT IN (SELECT app_id FROM ox_privilege WHERE app_id IS NOT NULL) AND oar.org_id =".$orgId;
+
+        $result = $this->executeQuerywithParams($query);
+        return $result->toArray();
+
     }
 }
