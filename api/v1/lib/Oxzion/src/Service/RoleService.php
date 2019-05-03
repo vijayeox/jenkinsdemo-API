@@ -72,9 +72,7 @@ class RoleService extends AbstractService {
     }
 
     protected function createSystemRoleForOrg(&$data) {
-        print_r($data);
         if (!$data['org_id']) {
-            print_r("inside org");
             $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         }
 

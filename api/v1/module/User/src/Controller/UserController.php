@@ -389,11 +389,17 @@ class UserController extends AbstractApiController
                     case "e":
                     $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId($id);
                     break;
+                    case "ewp":
+                    $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId($id,true);
+                    break;
                     case "o":
                     $userInfo['organization'] = $this->userService->getOrganizationByUserId($id);
                     break;
                     case "ap":
                     $userInfo['apps'] = $this->userService->getAppsByUserId($id);
+                    break;
+                    case "pr":
+                    $userInfo['projects'] = $this->projectService->getProjectsOfUserById($id);
                     break;
                 }
             }

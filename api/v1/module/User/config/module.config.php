@@ -78,11 +78,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'GET',
-                        'action' => 'getUserAppsAndPrivileges',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                            'getUserAppsAndPrivileges' => 'MANAGE_USER_WRITE',
-                        ],
+                        'action' => 'getUserAppsAndPrivileges'
                     ],
                 ],
             ],
@@ -183,11 +179,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'get',
-                        'action' => 'userLoginToken',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                            'userLoginToken' => 'MANAGE_USER_READ',
-                        ],
+                        'action' => 'userLoginToken'
                     ],
                 ],
             ],

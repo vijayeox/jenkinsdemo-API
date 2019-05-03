@@ -511,23 +511,8 @@ class UserControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content['data']['privilege']);
-        $this->assertNotEmpty($content['data']['blackListedApps']);
+        $this->assertNotEmpty($content['data']['whiteListedApps']);
     } 
-
-
-     public function testUserAccessNotFound() {
-        $this->initAuthToken($this->employeeUser);
-        $this->dispatch('/user/me/access', 'GET');
-        $this->assertResponseStatusCode(401);
-        $this->assertModuleName('User');
-        $this->assertControllerName(UserController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('UserController');
-        $this->assertMatchedRouteName('getUserAppsAndPrivileges');
-        $this->assertResponseHeaderContains('content-type', 'application/json');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
 
      public function testForgotPassword()
     {
