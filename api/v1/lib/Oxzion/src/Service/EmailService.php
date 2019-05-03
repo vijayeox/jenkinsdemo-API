@@ -123,7 +123,6 @@ class EmailService extends AbstractService
         $queryString = "select email_setting_user.id,userid,password,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
         $where = "where email_setting_user.email = '" . $emailId."'";
         $order = "order by email_setting_user.id";
-        // print_r('    '.$queryString.' '.$where.' '.$order);exit;
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         if($pw) {
             foreach ($resultSet->toArray() as $account) {
@@ -138,6 +137,7 @@ class EmailService extends AbstractService
                 else
                     $account['authRequired'] = 0;
             }
+            $accounts = $account;
         }
         return $accounts;
     }

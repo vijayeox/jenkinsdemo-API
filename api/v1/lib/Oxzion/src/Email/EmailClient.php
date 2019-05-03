@@ -7,7 +7,7 @@ use Horde_Mime_Headers;
 use Horde_Mime_Headers_Date;
 use Horde_Mime_Headers_MessageId;
 use Horde_Mime_Mdn;
-use Horde_Core_Factory_TextFilter;
+use Horde_Text_Filter;
 use Horde_Mime_Part;
 use Horde_Text_Flowed;
 use Horde_Mime_Magic;
@@ -77,7 +77,6 @@ class EmailClient{
 
 			/* Initalize a header object for the outgoing message. */
 			$headers = $this->_prepareHeaders($header, $opts);
-
 			/* Add the 'User-Agent' header. */
 			$headers->addHeaderOb(new Horde_Mime_Headers_UserAgent(
 				null,
@@ -136,7 +135,6 @@ class EmailClient{
 	    			$headers = clone $headers;
 	    			unset($headers['bcc']);
 	    		}
-
 	    		try {
 	    			$transport = $this->getsmtpTransport($smtpConfig);
 	    			$message->send($email, $headers, $transport);
@@ -169,7 +167,7 @@ class EmailClient{
 			if (empty($options['html'])) {
 				$body_html = null;
 			} else {
-				$tfilter = new Horde_Core_Factory_TextFilter(new Horde_Injector(new Horde_Injector_TopLevel()));
+				$tfilter = new Horde_Text_Filter(new Horde_Injector(new Horde_Injector_TopLevel()));
 
 					$body_html = $tfilter->filter(
 						$body,

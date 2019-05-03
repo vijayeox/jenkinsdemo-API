@@ -24,7 +24,7 @@ namespace Callback\Service;
             $emailClient = new EmailClient();
             $attachment = $attachment['attachment'];
             $userEmail = $data['from'];
-            $smtpDetails = $this->emailService->getEmailAccountsByEmailId($userEmail)[0];
+            $smtpDetails = $this->emailService->getEmailAccountsByEmailId($userEmail,true)[0];
             $body = $data['body'];
             if(is_array($attachment)){
                 $attachment = array(array(
@@ -50,8 +50,13 @@ namespace Callback\Service;
                 'username' => $data['from'],
             );
             try {
-                $response = $emailClient->buildAndSendMessage($body,$attachment,$headers,$smtpConfig);
+                if($body != strip_tags($body)){
+                    $response = $emailClient->buildAndSendMessage($body,$attachment,$headers,$smtpConfig,$opt=['html'=>true]);
+                } else {
+                    $response = $emailClient->buildAndSendMessage($body,$attachment,$headers,$smtpConfig,$opt=['html'=>false]);
+                }
             } catch(Exception $e) {
+                print_r($e->getMessage());exit;
                 return true;
             }
         }

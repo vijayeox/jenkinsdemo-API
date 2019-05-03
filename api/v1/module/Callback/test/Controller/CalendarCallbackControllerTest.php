@@ -52,13 +52,12 @@ class CalendarCallbackControllerTest extends ControllerTest
                 'subject' => $data['subject'],
             );
         $body=$data['body'];
-
         $mockemailService = $this->getMockEmailServiceForCalendarService();
         $smtpConfig = Array('host' => 'box3053.bluehost.com',
                         'password' => 'password',
                         'port' => '465',
                         'secure' => 'ssl');
-        $smtpDetails = $mockemailService->expects('getEmailAccountsByEmailId')->with($data['from'])->once()->andReturn($smtpConfig);
+        $smtpDetails = $mockemailService->expects('getEmailAccountsByEmailId')->with($data['from'],true)->once()->andReturn($smtpConfig);
 
         $mockemailClient = Mockery::mock('Oxzion\Email\EmailClient');
         $mockemailClient->expects('buildAndSendMessage')->with($data['body'],$_FILES['attachment'],$headers,$smtpDetails)->once()->andReturn(null);
@@ -85,7 +84,7 @@ class CalendarCallbackControllerTest extends ControllerTest
                         'password' => 'password',
                         'port' => '465',
                         'secure' => 'ssl');
-        $smtpDetails = $mockemailService->expects('getEmailAccountsByEmailId')->with($data['from'])->once()->andReturn($smtpConfig);
+        $smtpDetails = $mockemailService->expects('getEmailAccountsByEmailId')->with($data['from'],true)->once()->andReturn($smtpConfig);
 
         $mockemailClient = Mockery::mock('Oxzion\Email\EmailClient');
         $mockemailClient->expects('buildAndSendMessage')->with($data['body'],array(),$headers,$smtpDetails)->once()->andReturn(null);
@@ -111,7 +110,7 @@ class CalendarCallbackControllerTest extends ControllerTest
                         'password' => 'password',
                         'port' => '465',
                         'secure' => 'ssl');
-        $smtpDetails = $mockemailService->expects('getEmailAccountsByEmailId')->with($data['from'])->once()->andReturn($smtpConfig);
+        $smtpDetails = $mockemailService->expects('getEmailAccountsByEmailId')->with($data['from'],true)->once()->andReturn($smtpConfig);
 
         $mockemailClient = Mockery::mock('Oxzion\Email\EmailClient');
         $mockemailClient->expects('buildAndSendMessage')->with($data['body'],array(),$headers,$smtpDetails)->once()->andReturn(null);
