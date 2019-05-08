@@ -56,7 +56,6 @@ namespace Callback\Service;
                     $response = $emailClient->buildAndSendMessage($body,$attachment,$headers,$smtpConfig,$opt=['html'=>false]);
                 }
             } catch(Exception $e) {
-                print_r($e->getMessage());
                 return true;
             }
         }
