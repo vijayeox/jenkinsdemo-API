@@ -8,6 +8,9 @@ use Bos\Service\AbstractService;
 use Oxzion\Model\Organization;
 use Oxzion\Model\OrganizationTable;
 use Oxzion\Messaging\MessageProducer;
+use Oxzion\Utils\FileUtils;
+use Ramsey\Uuid\Uuid;
+
 
 class OrganizationService extends AbstractService
 {
@@ -18,7 +21,7 @@ class OrganizationService extends AbstractService
     protected $modelClass;
     private $messageProducer;
     private $privilegeService;
-
+    private $orgPic = "logo.png";
 
     public function setMessageProducer($messageProducer)
     {
@@ -51,13 +54,14 @@ class OrganizationService extends AbstractService
      *   } </code>
      * @return array Returns a JSON Response with Status Code and Created Organization.
      */
-    public function createOrganization(&$data)
+    public function createOrganization(&$data,$files)
     {
+        $data['uuid'] = Uuid::uuid4();  
+        $data['contact'] = json_decode($data['contact'],true);    
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['date_modified'] = date('Y-m-d H:i:s');
-
+        $data['date_modified'] = date('Y-m-d H:i:s'); 
         $form = new Organization($data);
         $form->validate();
         $this->beginTransaction();
@@ -69,8 +73,10 @@ class OrganizationService extends AbstractService
                 return 0;
             }
             $form->id = $this->table->getLastInsertValue();
-            $this->setupBasicOrg($form);
+            $this->setupBasicOrg($form,$data['contact']);
             $this->commit();
+
+            $this->uploadOrgLogo($data['uuid'],$files);
             $this->messageProducer->sendTopic(json_encode(array('orgname' => $form->name, 'status' => $form->status)),'ORGANIZATION_ADDED');
         } catch (Exception $e) {
             $this->rollback();
@@ -79,7 +85,49 @@ class OrganizationService extends AbstractService
         return $count;
     }
 
-    private function setupBasicOrg(Organization $org) {
+
+
+
+    public function getOrgLogoPath($id,$ensureDir=false){
+
+        $baseFolder = $this->config['DATA_FOLDER'];
+        //TODO : Replace the User_ID with USER uuid
+        $folder = $baseFolder."organization/";
+        if(isset($id)){
+            $folder = $folder.$id."/";
+        }
+
+        if($ensureDir && !file_exists($folder)){
+            FileUtils::createDirectory($folder);
+        }
+
+        return $folder;
+    }
+
+
+    
+
+    /**
+     * createUpload
+     *
+     * Upload files from Front End and store it in temp Folder
+     *
+     *  @param files Array of files to upload
+     *  @return JSON array of filenames
+    */
+    public function uploadOrgLogo($id,$file){
+        
+        if(isset($file)){
+
+            $destFile = $this->getOrgLogoPath($id,true);
+            $file['name'] = 'logo.png';
+            FileUtils::storeFile($file,$destFile); 
+            
+        }
+    }
+
+
+    private function setupBasicOrg(Organization $org,$contactPerson) {
         // adding basic roles
         $returnArray['roles'] = $this->roleService->createBasicRoles($org->id);
 
@@ -87,7 +135,7 @@ class OrganizationService extends AbstractService
         $returnArray['privileges'] = $this->privilegeService->createBasicPrivileges($org->id);
 
         // adding a user
-        $returnArray['user'] = $this->userService->createAdminForOrg($org);
+        $returnArray['user'] = $this->userService->createAdminForOrg($org,$contactPerson);
 
         return true;
     }
@@ -99,11 +147,11 @@ class OrganizationService extends AbstractService
      * @param array $data
      * @return array Returns a JSON Response with Status Code and Created Organization.
      */
-    public function updateOrganization($id, &$data)
+    public function updateOrganization($id, &$data,$files = null)
     {
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
-            return 0;
+            return 2;
         }
         $org = $obj->toArray();
         $form = new Organization();
@@ -116,9 +164,12 @@ class OrganizationService extends AbstractService
         $count = 0;
         try {
             $count = $this->table->save($form);
+            if(isset($files)){
+                $this->uploadOrgLogo($id,$files);
+            }   
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                return 1;
             }
             $this->commit();
         }
@@ -152,7 +203,7 @@ class OrganizationService extends AbstractService
      */
     public function deleteOrganization($id)
     {
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
             return 0;
         }
@@ -168,7 +219,7 @@ class OrganizationService extends AbstractService
     /**
      * GET Organization Service
      * @method getOrganization
-     * @param $id ID of Organization to Delete
+     * @param $id ID of Organization to GET
      * @return array $data
      * <code> {
      *               id : integer,
@@ -186,9 +237,41 @@ class OrganizationService extends AbstractService
             ->columns(array("*"))
             ->where(array('ox_organization.id' => $id, 'status' => "Active"));
         $response = $this->executeQuery($select)->toArray();
+        
         if (count($response) == 0) {
             return 0;
         }
+
+        return $response[0];
+    }
+
+
+    /**
+     * GET Organization Service
+     * @method getOrganization
+     * @param $id ID of Organization to GET
+     * @return array $data
+     * <code> {
+     *               id : integer,
+     *               name : string,
+     *               logo : string,
+     *               status : String(Active|Inactive),
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and Created Organization.
+     */
+    public function getOrganizationByUuid($id)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_organization')
+            ->columns(array("*"))
+            ->where(array('ox_organization.uuid' => $id, 'status' => "Active"));
+        $response = $this->executeQuery($select)->toArray();
+        
+        if (count($response) == 0) {
+            return 0;
+        }
+
         return $response[0];
     }
 

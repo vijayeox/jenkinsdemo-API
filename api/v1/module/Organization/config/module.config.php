@@ -41,6 +41,15 @@ return [
                     ],
                 ],
             ],
+            'organizationLogo' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/organization/logo/:orgId',
+                    'defaults' => [
+                        'controller' => Controller\OrganizationLogoController::class
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

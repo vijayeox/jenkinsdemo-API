@@ -6,12 +6,12 @@ class Organization extends Entity {
 
     protected $data = array(
         'id' => NULL,
+        'uuid' => NULL,
         'name' => NULL,
         'address' => NULL,
         'city' => NULL,
         'state' => NULL,
         'zip' => NULL,
-        'logo' => NULL,
         'labelfile' => NULL,
         'languagefile' => 'en',
         'theme' => 0,
@@ -27,7 +27,6 @@ class Organization extends Entity {
     public function validate() {
         $required = array(
             'name',
-            'logo',
             'status'
         );
         $this->validateWithParams($required);

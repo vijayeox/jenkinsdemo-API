@@ -169,11 +169,12 @@ class UserService extends AbstractService
         }
     }
 
-    public function createAdminForOrg($org) {
+    public function createAdminForOrg($org,$contactPerson) {
+        $contactPerson = (object)$contactPerson;
         $data = array(
-            "firstname" => str_replace(' ', '', $org->name),
-            "lastname" => "Adminisrator",
-            "email" => strtolower(str_replace(' ', '', $org->name)) . "@oxzion.com",
+            "firstname" => $contactPerson->firstname,
+            "lastname" => $contactPerson->lastname,
+            "email" => $contactPerson->email,
             "company_name" => $org->name,
             "address_1" => $org->address,
             "address_2" => $org->city,
@@ -191,7 +192,7 @@ class UserService extends AbstractService
             "password" => 'Welcome'.substr(str_replace(' ', '', $org->name), 0, 4).$org->id
         );
         $result = $this->createUser($data);
-
+        
         $this->messageProducer->sendTopic(json_encode(array(
             'To' => $data['email'],
             'Subject' => $org->name.' created!',
@@ -371,6 +372,7 @@ class UserService extends AbstractService
             return $response[0];
         }
         $result = $response[0];
+     
         $result['active_organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
         $result['preferences'] = json_decode($response[0]['preferences']);
         if (isset($result)) {

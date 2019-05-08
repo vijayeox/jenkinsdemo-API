@@ -39,15 +39,24 @@ class OrganizationController extends AbstractApiController
      * @return array Returns a JSON Response with Status Code and Created Organization.
      */
     public function create($data)
-    {
+    {   
+        $files = $this->params()->fromFiles('logo');
+        $id=$this->params()->fromRoute();
         try {
-            $count = $this->orgService->createOrganization($data);
-        } catch (ValidationException $e) {
+            if(!isset($id['orgId'])){
+                $count = $this->orgService->createOrganization($data,$files);
+            }else{
+                $count = $this->orgService->updateOrganization($id['orgId'],$data,$files);
+            }
+         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
             return $this->getFailureResponse("Failed to create a new entity", $data);
+        }
+        if ($count == 2) {
+            return $this->getFailureResponse("Entity not found for UUID", $id);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -93,8 +102,9 @@ class OrganizationController extends AbstractApiController
      */
     public function update($id, $data)
     {
+        $files = $this->params()->fromFiles('logo');
         try {
-            $count = $this->orgService->updateOrganization($id, $data);
+                $count = $this->orgService->updateOrganization($id,$data,$files);    
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -140,10 +150,18 @@ class OrganizationController extends AbstractApiController
      */
     public function get($id)
     {
-        $result = $this->orgService->getOrganization($id);
+        $result = $this->orgService->getOrganizationByUuid($id);
+        
         if ($result == 0) {
             return $this->getErrorResponse("Organization not found", 404, ['id' => $id]);
         }
+
+         if ($result) {
+                $baseUrl =$this->getBaseUrl();
+                $logo = $result['logo'];
+                $result['logo'] = $baseUrl . "/organization/" . $result["uuid"];
+            }
+
         return $this->getSuccessResponseWithData($result);
     }
 

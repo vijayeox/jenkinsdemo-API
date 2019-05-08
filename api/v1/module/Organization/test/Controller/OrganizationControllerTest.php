@@ -8,6 +8,7 @@ use Oxzion\Test\MainControllerTest;
 use Oxzion\Service\OrganizationService;
 use Mockery;
 use Oxzion\Messaging\MessageProducer;
+use Oxzion\Utils\FileUtils;
 
 
 
@@ -107,7 +108,7 @@ class OrganizationControllerTest extends MainControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/1', 'GET');
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -119,7 +120,7 @@ class OrganizationControllerTest extends MainControllerTest
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/64', 'GET');
+        $this->dispatch('/organization/53012471-2863-494', 'GET');
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -128,7 +129,12 @@ class OrganizationControllerTest extends MainControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'ORGANIZATION', 'logo' => 'logo.png', 'status' => 'Active'];
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/";
+        FileUtils::createDirectory($tempFolder);
+        copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
+        $contact = array('firstname'=>'Neha','lastname'=>'Rai','email'=>'bharat@myvamla.com');
+        $data = array('name'=>'ORGANIZATION','address' => 'Bangalore','contact' => json_encode($contact));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -223,25 +229,10 @@ class OrganizationControllerTest extends MainControllerTest
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
-    public function testUpdateNotFound()
-    {
-        $data = ['name' => 'Cleveland Blacks', 'logo' => 'logo.png', 'status' => 'Active'];
-        $this->initAuthToken($this->adminUser);
-        $this->setJsonContent(json_encode($data));
-        if(enableActiveMQ == 0){
-            $mockMessageProducer = $this->getMockMessageProducer();
-        }
-        $this->dispatch('/organization/122', 'PUT', null);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/1', 'DELETE');
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a', 'DELETE');
           if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'InActive')),'ORGANIZATION_DELETED')->once()->andReturn();
@@ -258,7 +249,7 @@ class OrganizationControllerTest extends MainControllerTest
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/organization/1222', 'DELETE');
+        $this->dispatch('/organization/53012471-2863-4', 'DELETE');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();

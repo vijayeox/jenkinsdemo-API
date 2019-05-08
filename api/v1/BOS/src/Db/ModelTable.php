@@ -48,6 +48,22 @@ abstract class ModelTable
         return $row;
     }
 
+    public function getByUuid($uuid, array $filter = null)
+    {
+        $this->init();
+        if (is_null($filter)) {
+            $filter = array();
+        }
+
+        $filter['uuid'] = $uuid;
+
+        $rowset = $this->tableGateway->select($filter);
+
+        $row = $rowset->current();
+
+        return $row;
+    }
+
     public function delete($id, array $filter = null)
     {
         $this->init();

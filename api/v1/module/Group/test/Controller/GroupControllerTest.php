@@ -110,7 +110,7 @@ class GroupControllerTest extends ControllerTest {
     }
 
     public function testUpdate() {
-        $data = ['name' => 'Test Create Group', 'parent_id'=> 9, 'org_id'=>1, 'manager_id' => 436, 'description
+        $data = ['name' => 'Test Create Group', 'parent_id'=> 9, 'org_id'=> 1, 'manager_id' => 436, 'description
         '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
