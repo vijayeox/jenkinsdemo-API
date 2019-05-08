@@ -28,6 +28,9 @@ if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
 return [
 	'db' => [
     	'driver' => 'Pdo_Mysql',
+        'database' => $db,
+        'username' => $username,
+        'password' => $password,
     	'dsn' => 'mysql:dbname=' . $db . ';host=' . $host . ';charset=utf8;username=' . $username . ';password=' . $password,
     ],
 
