@@ -172,7 +172,7 @@ class WorkflowTest extends TestCase{
         $workflowFactory = WorkflowFactory::getInstance();
         $processManager = $workflowFactory->getProcessManager();
         $processEngine = $workflowFactory->getProcessEngine();
-        $data = $processManager->parseBPMN(__DIR__."/Dataset/ScriptTaskTest.bpmn",'1');
+        $data = $processManager->parseBPMN(__DIR__."/Dataset/ScriptTaskTest.bpmn",1,1);
         $this->assertEquals($data[0]['form']['name'],'StartEvent_1');
         $this->assertEquals($data[0]['form']['app_id'],1);
         $this->assertEquals(count($data[0]['fields']),1);
