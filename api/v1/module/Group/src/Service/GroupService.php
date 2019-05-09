@@ -12,6 +12,9 @@ use Exception;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\OrganizationService;
 use Zend\Log\Logger;
+use Oxzion\Utils\FileUtils;
+use Ramsey\Uuid\Uuid;
+
 
 class GroupService extends AbstractService {
 
@@ -42,21 +45,51 @@ class GroupService extends AbstractService {
     return $resultSet->toArray();
     }
 
-    public function createGroup(&$data) {
-        $form = new Group();   
-        $org = $this->organizationService->getOrganization($data['org_id']);
-        $data['name'] = $data['name'] ? $data['name'] : uniqid();
+
+    /**
+     * GET Group Service
+     * @method getGroup
+     * @param $id ID of Group to GET
+     * @return array $data
+     * <code> {
+     *               id : integer,
+     *               name : string,
+     *               logo : string,
+     *               status : String(Active|Inactive),
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and Created Group.
+     */
+    public function getGroupByUuid($id)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_group')
+            ->columns(array("*"))
+            ->where(array('ox_group.uuid' => $id, 'status' => "Active"));
+        $response = $this->executeQuery($select)->toArray();
+        
+        if (count($response) == 0) {
+            return 0;
+        }
+
+        return $response[0];
+    }
+
+
+    public function createGroup(&$data,$files) {
+        $form = new Group();
+        $data['uuid'] = Uuid::uuid4();   
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['date_modified'] = date('Y-m-d H:i:s');
+        $org = $this->organizationService->getOrganization($data['org_id']); 
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
         $count = 0;
         try {
             $count = $this->table->save($form);
+            $this->uploadGroupLogo($org['uuid'],$data['uuid'],$files);
             if($count == 0) {
                 $this->rollback();
                 return 0;
@@ -72,15 +105,54 @@ class GroupService extends AbstractService {
         return $count;
     }
 
-    public function updateGroup ($id, &$data) {
-        $obj = $this->table->get($id,array());
-        $org = $this->organizationService->getOrganization($obj->org_id);
-        if (is_null($obj)) {
-            return 0;
+
+
+    public function getGroupLogoPath($orgId,$id,$ensureDir=false){
+
+        $baseFolder = $this->config['DATA_FOLDER'];
+        //TODO : Replace the User_ID with USER uuid
+        $folder = $baseFolder."organization/".$orgId."/group/";
+        if(isset($id)){
+            $folder = $folder.$id."/";
         }
+
+        if($ensureDir && !file_exists($folder)){
+            FileUtils::createDirectory($folder);
+        }
+        return $folder;
+    }
+
+
+    
+
+    /**
+     * createUpload
+     *
+     * Upload files from Front End and store it in temp Folder
+     *
+     *  @param files Array of files to upload
+     *  @return JSON array of filenames
+    */
+    public function uploadGroupLogo($orgId,$id,$file){
+        
+        if(isset($file)){
+
+            $destFile = $this->getGroupLogoPath($orgId,$id,true);
+            $file['name'] = 'logo.png';
+            FileUtils::storeFile($file,$destFile); 
+            
+        }
+    }
+
+
+    public function updateGroup ($id, &$data,$files = null) {
+        $obj = $this->table->getByUuid($id,array());
+        if (is_null($obj)) {
+            return 2;
+        }
+        $org = $this->organizationService->getOrganization($obj->org_id);
         $form = new Group();
         $data = array_merge($obj->toArray(), $data);
-        $data['id'] = $id;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
@@ -89,9 +161,12 @@ class GroupService extends AbstractService {
         $count = 0;
         try {
             $count = $this->table->save($form);
+             if(isset($files)){
+                $this->uploadGroupLogo($org['uuid'],$id,$files);
+            }
             if($count == 0) {
                 $this->rollback();
-                return 0;
+                return 1;
             }
         } catch(Exception $e) {
             $this->rollback();
@@ -102,7 +177,7 @@ class GroupService extends AbstractService {
     }
 
     public function deleteGroup($id) {
-        $obj = $this->table->get($id,array());
+        $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
             return 0;
         }
@@ -110,7 +185,7 @@ class GroupService extends AbstractService {
         $org = $this->organizationService->getOrganization($obj->org_id);
         $count = 0;
         try {
-            $count = $this->table->delete($id);
+            $count = $this->table->deleteByUuid($id);
             if($count == 0) {
                 return 0;
             }

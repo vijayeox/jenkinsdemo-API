@@ -1,28 +1,27 @@
 <?php
-namespace Organization\Controller;
+namespace Group\Controller;
 
 use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\Service\OrganizationService;
+use Group\Service\GroupService;
 use Zend\Db\Adapter\AdapterInterface;
 use Exception;
 use Zend\InputFilter\Input;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Controller\AbstractApiControllerHelper;
-use Oxzion\Service\UserService;
 
-class OrganizationLogoController extends AbstractApiControllerHelper { 
+class GroupLogoController extends AbstractApiControllerHelper { 
     /**
     * @var ProfilepictureService Instance of Projectpicture Service
     */
-    private $organizationService;
+    private $groupService;
     /**
     * @ignore __construct
     */
-    public function __construct(OrganizationService $organizationService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(GroupService $groupService, Logger $log, AdapterInterface $dbAdapter)
     {
-        $this->setIdentifierName('orgId');
-        $this->organizationService = $organizationService;
+        $this->setIdentifierName('groupId');
+        $this->groupService = $groupService;
     }
 
     /**
@@ -34,8 +33,9 @@ class OrganizationLogoController extends AbstractApiControllerHelper {
     * @return profile picture 
     */
     public function get($id){
+        $orgId = $this->params()->fromRoute()['orgId'];
         $logo = "logo.png";
-        $file = $this->organizationService->getOrgLogoPath($id);
+        $file = $this->groupService->getGroupLogoPath($orgId,$id);
         $file = $file . $logo;
         if (!headers_sent()) {
             header('Content-Type: image/png');
@@ -49,7 +49,7 @@ class OrganizationLogoController extends AbstractApiControllerHelper {
             return $this->response;
         } catch(Exception $e){
             print_r($e->getMessage());
-            return $this->getErrorResponse("Organization Logo not found", 404);
+            return $this->getErrorResponse("Group Logo not found", 404);
         }
     }
 }

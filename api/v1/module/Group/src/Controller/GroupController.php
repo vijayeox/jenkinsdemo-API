@@ -10,18 +10,22 @@ use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
 use Bos\ValidationException;
 use Zend\InputFilter\Input;
+use Oxzion\Service\OrganizationService;
 
 
 class GroupController extends AbstractApiController {
 
 	private $groupService;
+    private $orgService;
+
     /**
     * @ignore __construct
     */
-    public function __construct(GroupTable $table, GroupService $groupService, Logger $log, AdapterInterface $dbAdapter) {
+    public function __construct(GroupTable $table, GroupService $groupService, Logger $log, AdapterInterface $dbAdapter, OrganizationService $orgService) {
         parent::__construct($table, $log, __CLASS__, Group::class);
         $this->setIdentifierName('groupId');
         $this->groupService = $groupService;
+        $this->orgService = $orgService;
     }
 
     /**
@@ -53,16 +57,25 @@ class GroupController extends AbstractApiController {
     * @return array Returns a JSON Response with Status Code and Created Group.
     */
 	public function create($data) {
-		$data = $this->params()->fromPost();
+		$files = $this->params()->fromFiles('logo');
+        $id=$this->params()->fromRoute();
 		try {
-			$count = $this->groupService->createGroup($data);
+            if(!isset($id['groupId'])){
+			     $count = $this->groupService->createGroup($data,$files);
+            }else{
+                 $count = $this->groupService->updateGroup($id['groupId'],$data,$files); 
+            }
+
 		} catch(ValidationException $e) {
 			$response = ['data' => $data, 'errors' => $e->getErrors()];
 			return $this->getErrorResponse("Validation Errors",404, $response);
 		}
-		if($count == 0) {
+        if($count == 0) {
 			return $this->getFailureResponse("Failed to create a new entity", $data);
 		}
+        if ($count == 2) {
+            return $this->getErrorResponse("Entity not found for ".$id['groupId'], 404 );
+        }
 		return $this->getSuccessResponseWithData($data,201);
 	}
 
@@ -102,6 +115,39 @@ class GroupController extends AbstractApiController {
             return $this->getErrorResponse("Group not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
+    }
+
+
+     /**
+     * GET Group API
+     * @api
+     * @link /group[/:groupId]
+     * @method GET
+     * @param array $dataget of Group
+     * @return array $data
+     * <code> {
+     *               id : integer,
+     *               name : string,
+     *               logo : string,
+     *               status : String(Active|Inactive),
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and Created Group.
+     */
+    public function get($id)
+    {
+        $result = $this->groupService->getGroupByUuid($id);
+        $orgId = $this->orgService->getOrganization($result['org_id']);
+        if ($result == 0) {
+            return $this->getErrorResponse("Group not found", 404, ['id' => $id]);
+        }
+
+         if ($result) {
+                $baseUrl =$this->getBaseUrl();
+                $logo = $result['logo'];
+                $result['logo'] = $baseUrl . "/group/".$orgId['uuid']."/logo/".$result["uuid"];
+            }
+
+        return $this->getSuccessResponseWithData($result);
     }
     
      /**

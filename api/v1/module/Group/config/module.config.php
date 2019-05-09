@@ -69,6 +69,15 @@ return [
                    ],
                ],
            ],
+           'groupLogo' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/group/:orgId/logo/:groupId',
+                    'defaults' => [
+                        'controller' => Controller\GroupLogoController::class
+                    ],
+                ],
+            ],
        ],
    ],
    'log' => [

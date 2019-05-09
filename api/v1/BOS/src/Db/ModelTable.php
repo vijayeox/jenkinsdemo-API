@@ -76,6 +76,18 @@ abstract class ModelTable
         return $this->tableGateway->delete($filter);
     }
 
+    public function deleteByUuid($uuid, array $filter = null)
+    {
+        $this->init();
+        if (is_null($filter)) {
+            $filter = array();
+            $filter['uuid'] = $uuid;  // You cannot have a filter and an id. If there is filter, then id is irrelavant.
+        } else {
+            $filter['uuid'] = $uuid;
+        }
+        return $this->tableGateway->delete($filter);
+    }
+
     public function update(array $data, array $filter)
     {
         return $this->tableGateway->update($data, $filter);

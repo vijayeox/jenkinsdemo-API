@@ -57,6 +57,11 @@ class Module implements ConfigProviderInterface {
                 Controller\GroupController::class => function($container) {
                     return new Controller\GroupController(
                         $container->get(Model\GroupTable::class), $container->get(Service\GroupService::class), $container->get('GroupLogger'),
+                        $container->get(AdapterInterface::class),$container->get(OrganizationService::class));
+                },
+                Controller\GroupLogoController::class => function($container) {
+                    return new Controller\GroupLogoController(
+                        $container->get(Service\GroupService::class), $container->get('GroupLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],

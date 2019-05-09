@@ -42,7 +42,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testgetGroupsforUser() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/1', 'GET');
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('groups');
@@ -91,8 +91,8 @@ class GroupControllerTest extends ControllerTest {
 //Test Case to check the errors when the required field is not selected. Here I removed the parent_id field from the list.
     public function testCreateWithoutRequiredField() {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'manager_id' => 436, 'description
-        '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
+        $data = ['name' => 'Groups 22', 'description
+        '=>'Description Test Data', 'status' => 'Active'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
@@ -106,58 +106,40 @@ class GroupControllerTest extends ControllerTest {
         //  print_r($content);exit;
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation Errors');
-        $this->assertEquals($content['data']['errors']['parent_id'], 'required');
+        $this->assertEquals($content['data']['errors']['manager_id'], 'required');
     }
 
     public function testUpdate() {
-        $data = ['name' => 'Test Create Group', 'parent_id'=> 9, 'org_id'=> 1, 'manager_id' => 436, 'description
-        '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
+        $data = ['name' => 'Test Create Group','manager_id' => 436, 'description
+        '=>'Description Test Data'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group', 'orgname'=> 'Cleveland Black' , 'new_groupname'=> 'Test Create Group')),'GROUP_UPDATED')->once()->andReturn();
         }
-        $this->dispatch('/group/1', 'PUT', null);
-        $this->assertResponseStatusCode(200);
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', null);
+        $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('groups');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], 'Test Create Group');
-        $this->assertEquals($content['data']['parent_id'], 9);
         $this->assertEquals($content['data']['org_id'], 1);
         $this->assertEquals($content['data']['manager_id'], 436);
         $this->assertEquals($content['data']['description'], "Description Test Data");
-        $this->assertEquals($content['data']['logo'], "grp1.png");
         $this->assertEquals($content['data']['status'], "Active");
     }
 
     public function testUpdateNotFound() {
-        $data = ['name' => 'Test Create Group', 'org_id'=>1, 'manager_id' => 436, 'description
-        '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
+        $data = ['name' => 'Test','manager_id' => 436, 'description
+        '=>'Description Test Data'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
            $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/group/10000', 'PUT', null);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('groups');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
-    public function testUpdateWithoutRequiredField() {
-        $data = ['name' => 'Test Create Group', 'org_id'=>1, 'manager_id' => 436, 'description
-        '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
-        $this->initAuthToken($this->adminUser);
-        $this->setJsonContent(json_encode($data));
-        if(enableActiveMQ == 0){
-            $mockMessageProducer = $this->getMockMessageProducer();
-        }
-        $this->dispatch('/group/1', 'PUT', null);
+        $this->dispatch('/group/10000', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('groups');
@@ -171,7 +153,7 @@ class GroupControllerTest extends ControllerTest {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black')),'GROUP_DELETED')->once()->andReturn();
         }
-        $this->dispatch('/group/1', 'DELETE');
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('groups');

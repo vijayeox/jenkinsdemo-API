@@ -21,8 +21,7 @@ class OrganizationService extends AbstractService
     protected $modelClass;
     private $messageProducer;
     private $privilegeService;
-    private $orgPic = "logo.png";
-
+    
     public function setMessageProducer($messageProducer)
     {
         $this->messageProducer = $messageProducer;
