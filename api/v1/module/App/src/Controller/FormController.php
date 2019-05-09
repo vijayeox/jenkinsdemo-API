@@ -1,5 +1,5 @@
 <?php
-namespace Form\Controller;
+namespace App\Controller;
 /**
 * Form Api
 */
@@ -19,13 +19,13 @@ class FormController extends AbstractApiController
     */
 	public function __construct(FormTable $table, FormService $formService, Logger $log, AdapterInterface $dbAdapter) {
 		parent::__construct($table, $log, __CLASS__, Form::class);
-		$this->setIdentifierName('formId');
+		$this->setIdentifierName('id');
 		$this->formService = $formService;
 	}
 	/**
     * Create Form API
     * @api
-    * @link /form
+    * @link /app/appId/form
     * @method POST
     * @param array $data Array of elements as shown
     * <code> {
@@ -36,8 +36,9 @@ class FormController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Form.
     */
     public function create($data){
+        $appId = $this->params()->fromRoute()['appId'];
         try{
-            $count = $this->formService->createForm($data);
+            $count = $this->formService->createForm($appId,$data);
         } catch (ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
@@ -51,18 +52,19 @@ class FormController extends AbstractApiController
     /**
     * GET List Forms API
     * @api
-    * @link /form
+    * @link /app/appId/form
     * @method GET
     * @return array Returns a JSON Response list of Forms based on Access.
     */
     public function getList() {
-        $result = $this->formService->getForms();
-        return $this->getSuccessResponseWithData($result);
+        $appId = $this->params()->fromRoute()['appId'];
+        $result = $this->formService->getForms($appId);
+        return $this->getSuccessResponseWithData($result['data']);
     }
     /**
     * Update Form API
     * @api
-    * @link /form[/:formId]
+    * @link /app/appId/form[/:id]
     * @method PUT
     * @param array $id ID of Form to update 
     * @param array $data 
@@ -83,7 +85,7 @@ class FormController extends AbstractApiController
     /**
     * Delete Form API
     * @api
-    * @link /form[/:formId]
+    * @link /app/appId/form[/:id]
     * @method DELETE
     * @param $id ID of Form to Delete
     * @return array success|failure response
@@ -98,7 +100,7 @@ class FormController extends AbstractApiController
     /**
     * GET Form API
     * @api
-    * @link /form[/:formId]
+    * @link /app/appId/form[/:id]
     * @method GET
     * @param $id ID of Form
     * @return array $data 

@@ -1,5 +1,5 @@
 <?php
-namespace Form\Controller;
+namespace App\Controller;
 /**
 * Field Api
 */
@@ -42,9 +42,9 @@ class FieldController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Field.
     */
     public function create($data){
-        $formId = $this->params()->fromRoute()['formId'];
+        $appId = $this->params()->fromRoute()['appId'];
         try{
-            $count = $this->fieldService->createField($formId,$data);
+            $count = $this->fieldService->saveField($appId,$data);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
@@ -63,9 +63,9 @@ class FieldController extends AbstractApiController
     * @return array Returns a JSON Response list of fields based on Form id.
     */
     public function getList() {
-        $formId = $this->params()->fromRoute()['formId'];
-        $result = $this->fieldService->getFields($formId);
-        return $this->getSuccessResponseWithData($result);
+        $appId = $this->params()->fromRoute()['appId'];
+        $result = $this->fieldService->getFields($appId);
+        return $this->getSuccessResponseWithData($result['data']);
     }
     /**
     * Update Field API
@@ -97,8 +97,8 @@ class FieldController extends AbstractApiController
     * @return array success|failure response
     */
     public function delete($id){
-        $formId = $this->params()->fromRoute()['formId'];
-        $response = $this->fieldService->deleteField($formId,$id);
+        $appId = $this->params()->fromRoute()['appId'];
+        $response = $this->fieldService->deleteField($appId,$id);
         if($response == 0){
             return $this->getErrorResponse("Field not found", 404, ['id' => $id]);
         }
@@ -114,8 +114,8 @@ class FieldController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Field.
     */
     public function get($id){
-        $formId = $this->params()->fromRoute()['formId'];
-        $result = $this->fieldService->getField($formId,$id);
+        $appId = $this->params()->fromRoute()['appId'];
+        $result = $this->fieldService->getField($appId,$id);
         if($result == 0){
             return $this->getErrorResponse("Field not found", 404, ['id' => $id]);
         }

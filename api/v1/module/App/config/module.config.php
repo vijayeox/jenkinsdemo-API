@@ -52,6 +52,17 @@ return [
                     ],
                 ],
             ],
+            'applisttype' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/type/:typeId',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'appListByType',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
             'appdeployxml' => [
                 'type' => Segment::class,
                 'options' => [
@@ -85,6 +96,17 @@ return [
                     ],
                 ],
             ],
+            'appupload' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/deployworkflow[/:workflowId]',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'workflowDeploy',
+                        'method' => 'post'
+                    ],
+                ],
+            ],
             'appregister' => [
                 'type' => Segment::class,
                 'options' => [
@@ -93,6 +115,92 @@ return [
                         'controller' => Controller\AppRegisterController::class,
                         'action' => 'appregister',
                         'method' => 'POST'
+                    ],
+                ],
+            ],
+            'appform' => [
+                'type'    => Segment::class,
+                'options' => [
+                	'route'    => '/app/:appId/form[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\FormController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_FORM_WRITE',
+                            'post'=> 'MANAGE_FORM_WRITE',
+                            'delete'=> 'MANAGE_FORM_WRITE',
+                            'get'=> 'MANAGE_FORM_READ',
+                        ],
+                    ],
+                ],
+            ],
+            'appfield' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/field[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\FieldController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_FIELD_WRITE',
+                            'post'=> 'MANAGE_FIELD_WRITE',
+                            'delete'=> 'MANAGE_FIELD_WRITE',
+                            'get'=> 'MANAGE_FIELD_READ',
+                        ],
+                    ],
+                ],
+            ],
+            'appworkflow' => [
+                'type'    => Segment::class,
+                'options' => [
+                	'route'    => '/app/:appId/workflow[/:workflowId]',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            // 'put'=> 'MANAGE_FORM_WRITE',
+                            // 'post'=> 'MANAGE_FORM_WRITE',
+                            // 'delete'=> 'MANAGE_FORM_WRITE',
+                            // 'get'=> 'MANAGE_FORM_READ',
+                        ],
+                    ],
+                ],
+            ],
+            'workflowfields' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflow/:workflowId/fields',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowController::class,
+                        'action' => 'workflowFields',
+                        'method' => 'GET',
+                        'access'=>[
+                        ],
+                    ],
+                ],
+            ],
+            'workflowform' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflow/:workflowId/forms',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowController::class,
+                        'action' => 'workflowForms',
+                        'method' => 'GET',
+                        'access'=>[
+                        ],
+                    ],
+                ],
+            ],
+            'workflowFieldData' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/workflow/:workflowId/form/:formId/fielddata[/:fileId]',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowController::class,
+                        'action' => 'fieldData',
+                        'access'=>[
+                        ],
                     ],
                 ],
             ],

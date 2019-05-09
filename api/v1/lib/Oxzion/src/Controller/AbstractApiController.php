@@ -91,11 +91,9 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
             catch (Exception $e) {
                 return $this->getErrorResponse("Token Invalid. Please login again.", 401);
             }
-
         } else {
             $jsonModel = $this->getErrorResponse($config['authRequiredText'], 401);
         }
-
         $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
         $response->setContent($jsonModel->serialize());
         return $response;

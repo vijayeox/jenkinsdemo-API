@@ -3,9 +3,11 @@ namespace Oxzion\Workflow\Camunda;
 
 class CamundaField{
 	protected $data;
-	public function __construct($field) {
+	public function __construct($field,$appId,$workflowId) {
 		$this->data['name'] = $field->getAttribute('id');
 		$this->data['text'] = $field->getAttribute('label');
+		$this->data['app_id'] = $appId;
+		$this->data['workflow_id'] = $workflowId;
 		$this->data['data_type'] = $field->getAttribute('type');
 		$validation = $field->getElementsByTagNameNS(Config::camundaSpec,'validation');
 		if($validation->count()){

@@ -168,13 +168,15 @@ class AbstractService
          * @param      array            $fields         The where
          * @param      string           $joinMethod     The joins           join, left, right
          */
-        foreach ($joins as $key => $join)
+        if(isset($joins)){
+            foreach ($joins as $key => $join)
             $select->join(
                 $join['table'],
                 $join['condition'],
                 (isset($join['fields'])) ? $join['fields'] : array(),
                 (isset($join['joinMethod'])) ? $join['joinMethod'] : 'join'
             );
+        }
 
         if ($sortby)
             $select->order($sortby);
@@ -189,8 +191,8 @@ class AbstractService
             echo "<pre>";print_r($this->sql->buildSqlString($select));exit();
         }
 
-        $returnArray = $this->executeQuery($select)->toArray();
-        if (!$returnArray) return array();
+        $returnArray = $this->executeQuery($select);
+        // if (!$returnArray) return array();
         return $returnArray;
     }
 

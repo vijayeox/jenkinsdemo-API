@@ -31,26 +31,26 @@ class FileService extends AbstractService{
     * @return array Returns a JSON Response with Status Code and Created File.
     */
     public function createFile(&$data){
-        $form = new File();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['date_modified'] = date('Y-m-d H:i:s');
-        $form->exchangeArray($data);
-        $form->validate();
-        $fields = array_diff_assoc($data,$form->toArray());
+        $file = new File();
+        $file->exchangeArray($data);
+        $file->validate();
+        $fields = array_diff_assoc($data,$file->toArray());
         $this->beginTransaction();
         $count = 0;
         try{
-            $count = $this->table->save($form);
+            $count = $this->table->save($file);
             if($count == 0){
                 $this->rollback();
                 return 0;
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
-            $validFields = $this->checkFields($data['form_id'],$fields,$data['org_id'],$id);
+            $validFields = $this->checkFields($data['form_id'],$fields,$id);
             if($validFields){
                 $this->multiInsertOrUpdate('ox_file_attribute',$validFields,['id']);
             } else {
@@ -59,6 +59,7 @@ class FileService extends AbstractService{
             }
             $this->commit();
         }catch(Exception $e){
+            print_r($e->getMessage());exit;
             switch (get_class ($e)) {
              case "Oxzion\ValidationException" :
                 $this->rollback();
@@ -85,35 +86,35 @@ class FileService extends AbstractService{
             return 0;
         }
         $file = $obj->toArray();
-        $form = new File();
+        $file = new File();
         $changedArray = array_merge($obj->toArray(),$data);
         $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $changedArray['date_modified'] = date('Y-m-d H:i:s');
-        $form->exchangeArray($changedArray);
-        $form->validate();
-        $fields = array_diff($obj->toArray(),$data);
+        $file->exchangeArray($changedArray);
+        $file->validate();
+        $fields = array_diff($data,$obj->toArray());
         $this->beginTransaction();
         try{
-            $count = $this->table->save($form);
+            $count = $this->table->save($file);
             if($count == 0){
                 $this->rollback();
                 return 0;
             }
-            $validFields = $this->checkFields($data['form_id'],$fields,$data['org_id'],$id);
+            $validFields = $this->checkFields($data['form_id'],$fields,$id);
             if($validFields){
                 $this->multiInsertOrUpdate('ox_file_attribute',$validFields,['id']);
             }
             $this->commit();
         }catch(Exception $e){
             switch (get_class ($e)) {
-             case "Oxzion\ValidationException" :
-                $this->rollback();
-                throw $e;
-                break;
-             default:
-                $this->rollback();
-                return 0;
-                break;
+                case "Oxzion\ValidationException" :
+                    $this->rollback();
+                    throw $e;
+                    break;
+                default:
+                    $this->rollback();
+                    return 0;
+                    break;
             }
         }
         return $id;
@@ -181,13 +182,14 @@ class FileService extends AbstractService{
     /**
     * @ignore checkFields
     */
-    protected function checkFields($formId,$fieldData,$orgId,$fileId){
+    protected function checkFields($formId,$fieldData,$fileId){
         $required = array();
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_field')
         ->columns(array("*"))
-        ->where(array('ox_field.form_id' => $formId,'ox_field.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+        ->join('ox_form_field', 'ox_field.id = ox_form_field.field_id', array(),'left')
+        ->where(array('ox_form_field.form_id' => $formId));
         $fields = $this->executeQuery($select)->toArray();
         $keyValueFields = array();
         $i=0;
@@ -212,7 +214,6 @@ class FileService extends AbstractService{
             }
             $keyValueFields[$i]['fieldvalue'] = $fieldData[$field['name']];
             $keyValueFields[$i]['fieldid'] = $field['id'];
-            $keyValueFields[$i]['org_id'] = $orgId;
             $keyValueFields[$i]['fileid'] = $fileId;
             $i++;
         }

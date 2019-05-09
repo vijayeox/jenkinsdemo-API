@@ -197,11 +197,17 @@ class Module {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Organization());
-                    return new TableGateway('ox_organization', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_workflow', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\WorkflowService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\WorkflowService($container->get('config'), $dbAdapter, $container->get(Model\WorkflowTable::class));
+                    return new Service\WorkflowService($container->get('config'), 
+                    $dbAdapter,
+                    $container->get(Model\WorkflowTable::class),
+                    $container->get(Service\FormService::class),
+                    $container->get(Service\FieldService::class),
+                    $container->get(\Bos\Service\FileService::class),
+                    $container->get(Workflow\WorkflowFactory::class));
                 },
                 Service\UserTokenService::class => function($container) {
                     $config = $container->get('config');

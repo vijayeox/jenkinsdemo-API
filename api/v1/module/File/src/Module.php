@@ -40,11 +40,6 @@ class Module implements ConfigProviderInterface {
     public function getControllerConfig() {
         return [
             'factories' => [
-                Controller\FileController::class => function($container) {
-                    return new Controller\FileController(
-                            $container->get(FileTable::class), $container->get(\Bos\Service\FileService::class), $container->get('FileLogger'),
-                        $container->get(AdapterInterface::class));
-                },
                 Controller\CommentController::class => function($container) {
                     return new Controller\CommentController(
                             $container->get(CommentTable::class), $container->get(\Bos\Service\CommentService::class), $container->get('FileLogger'),

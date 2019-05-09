@@ -8,11 +8,11 @@ class Form extends Entity{
 	protected $data = array(
         'id'=>0,
         'app_id'=>0,
+        'workflow_id'=>0,
         'name'=>NULL,
         'description'=>NULL,
         'task_id'=>NULL,
         'process_id'=>NULL,
-        'org_id'=>NULL,
         'statuslist'=>NULL,
         'template'=>NULL,
         'created_by'=>NULL,
@@ -21,7 +21,7 @@ class Form extends Entity{
         'date_modified'=>NULL,
     );
     public function validate(){
-        $required = array('app_id','name','org_id','statuslist');
+        $required = array('app_id','name');
         $this->validateWithParams($required);
     }
 }

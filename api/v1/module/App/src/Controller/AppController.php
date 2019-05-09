@@ -28,7 +28,9 @@ class AppController extends AbstractApiController
         $this->setIdentifierName('appId');
         $this->appService = $appService;
     }
-
+    public function setParams($params){
+        $this->params = $params;
+    }
     /**
      * Create App API
      * @api
@@ -99,7 +101,7 @@ class AppController extends AbstractApiController
     {
         $result = $this->appService->getApps();
         if ($result == 0 || empty($result)) {
-            return $this->getErrorResponse("No File found", 404);
+            return $this->getErrorResponse("No App found", 404);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -138,7 +140,7 @@ class AppController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+            return $this->getErrorResponse("App not found for id - $id", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
 
@@ -233,27 +235,72 @@ class AppController extends AbstractApiController
     public function applistAction()
     {
         $params = $this->params()->fromQuery(); // empty method call
-        if(!isset($params['q'])){
-            $params['q'] = "";
+        if(!isset($params['page'])){
+            $params['page'] = 1;
         }
-
-        if(!isset($params['f'])){
-            $params['f'] = "name";
-        }
-        if(!isset($params['pg'])){
-            $params['pg'] = 1;
-        }
-        if(!isset($params['psz'])){
-            $params['psz'] = 20;
+        if(!isset($params['pagesize'])){
+            $params['pagesize'] = 20;
         }
         if(!isset($params['sort'])){
-            $params['sort'] = "name";
-        }  
-        $response = $this->appService->getAppList($params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
+            $params['sort'] = array("name");
+        }
+        $filter = array();
+        if(isset($params['filter'])){
+            $filter = $params['filter'];
+        }
+        $response = $this->appService->getAppList($filter,$params['page'],$params['pagesize'],$params['sort']);
         if ($response == 0 || empty($response)) {
             return $this->getErrorResponse("No Apps to display", 404);
         }
         return $this->getSuccessResponseWithData($response);
+    }
+
+    /**
+     * GET App API
+     * @api
+     * @link /app/type/:typeId
+     * @method GET
+     * @return array of Apps 
+     */
+    public function appListByTypeAction()
+    {
+        $data = $this->params()->fromRoute();
+        $response = $this->appService->getAppList(array('type'=>$data['typeId']));
+        $responseData = array();
+        foreach ($response['data'] as $app) {
+            $appData = $app;
+            $appData['logo'] = $this->getBaseUrl()."/resource/".$app['logo'];
+            $responseData[] = $appData;
+        }
+        return $this->getSuccessResponseWithData($responseData);
+    }
+    /**
+     * Upload the app from the UI and extracting the zip file in a folder that will start the installation of app.
+     * @api
+     * @link /app/:appId/deployworkflow
+     * @method POST
+     * @param null </br>
+     * <code>
+     * </code>
+     * @return array Returns a JSON Response with Status Code.</br>
+     * <code> status : "success|error"
+     * </code>
+     */
+    public function workflowDeployAction()
+    {
+        $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
+        $files = $_FILES['files'];
+        try {
+            if ($files&&isset($params['name'])) {
+
+                $response = $this->appService->deployWorkflow($params['appId'],$params,$files);
+                return $this->getSuccessResponse($response);
+             } else {
+                return $this->getErrorResponse("Files cannot be uploaded");
+            }
+        } catch (Exception $e) {
+            return $this->getErrorResponse("Files cannot be uploaded!");
+        }
     }
 
     /**

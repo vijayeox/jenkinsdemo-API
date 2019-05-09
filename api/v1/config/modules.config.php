@@ -18,7 +18,6 @@ return [
     'Auth',
     'Alert',
     'File',
-    'Form',
     'Announcement',
     'User',
     'Role',

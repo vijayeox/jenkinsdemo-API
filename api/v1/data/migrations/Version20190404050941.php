@@ -13,7 +13,7 @@ final class Version20190404050941 extends AbstractMigration
     public function up(Schema $schema) : void
     {
        
-        $this->addSql("ALTER TABLE `ox_app` ADD UNIQUE INDEX ind_uuid (`uuid`)");
+        // $this->addSql("ALTER TABLE `ox_app` ADD UNIQUE INDEX ind_uuid (`uuid`)");
         $this->addSql("ALTER TABLE `ox_app_registry` ADD INDEX ind_orgid (`org_id`)");
         $this->addSql("ALTER TABLE `ox_app_registry` ADD INDEX ind_appid (`app_id`)");
     }

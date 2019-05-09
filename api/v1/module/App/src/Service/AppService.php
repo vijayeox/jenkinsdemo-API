@@ -12,6 +12,10 @@ use Exception;
 use PhpZip;
 use Symfony\Component\Yaml\Parser;
 use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\FileUtils;
+use Oxzion\Service\WorkflowService;
+use Oxzion\Service\FormService;
+use Oxzion\Service\FieldService;
 
 
 class AppService extends AbstractService
@@ -19,14 +23,21 @@ class AppService extends AbstractService
 
     protected $config;
     private $table;
+    protected $workflowService;
+    protected $fieldService;
+    protected $formService;
+
 
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table)
+    public function __construct($config, $dbAdapter, AppTable $table,WorkflowService $workflowService,FormService $formService,FieldService $fieldService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->workflowService = $workflowService;
+        $this->formService = $formService;
+        $this->fieldService = $fieldService;
     }
 
     /**
@@ -56,26 +67,15 @@ class AppService extends AbstractService
         return $resultSet->toArray();
     }
 
-    public function getAppList($q,$f,$pg,$psz,$sort){
-
-         $cntQuery ="SELECT count(id) FROM `ox_app`";
-            if(empty($q)){
-                $where = " WHERE status != 1";
-            }
-            else{
-                $where = " WHERE status != 1 AND ".$f." like '".$q."%'";   
-            }
-            $offset = ($pg - 1) * $psz;
-            $sort = " ORDER BY ".$sort;
-            $limit = " LIMIT ".$psz." offset ".$offset;
-            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count=$resultSet->toArray()[0]['count(id)'];
-            $query ="SELECT * FROM `ox_app`".$where." ".$sort." ".$limit;
-            $resultSet = $this->executeQuerywithParams($query);
-            return array('data' => $resultSet->toArray(), 
-                     'pagination' => array('page' => $pg,
-                                            'noOfPages' => ceil($count/$psz),
-                                            'pageSize' => $psz));
+    public function getAppList($filterArray=null,$page=null,$pageSize=null,$sortArray=null,$groupBy=null){
+        $offset = ($page - 1) * $pageSize;
+        $resultSet = $this->getDataByParams('ox_app',array("*"),$filterArray,null,$sortArray,$groupBy,$pageSize,$offset);
+        $response = array();
+        $response['data'] = $resultSet->toArray();
+        if($pageSize){
+            $response['pagination'] = array('page' => $page, 'noOfPages' => ceil($resultSet->count()/$pageSize),'pageSize' => $pageSize,'total'=>$resultSet->count());
+        }
+        return $response;
     }
 
     public function updateApp($id, &$data)
@@ -368,8 +368,7 @@ class AppService extends AbstractService
         return $count;
     }
 
-    private function createAppRegistry($data)
-    {
+    private function createAppRegistry($data) {
         $sql = $this->getSqlObject();
 //Code to check if the app is already registered for the organization
         $queryString = "select * from ox_app_registry ";
@@ -387,9 +386,31 @@ class AppService extends AbstractService
 
         return "App already registered to the Organization.";
     }
+    public function deployWorkflow($appId,$params,$file=null) {
+        if(isset($file)){
+           $this->workflowService->deploy($file,$appId,$params);
+        } else {
+            return 0;
+        }
+    }
 
+    public function getFields($appId,$workflowId=null){
+        $filterArray = array();
+        if(isset($workflowId)){
+            $filterArray['workflow_id'] = $workflowId;
+        }
+        return $this->fieldService->getFields($appId,$filterArray);
+    }
 
-    public function registerApps($data){
+    public function getForms($appId,$workflowId=null){
+        $filterArray = array();
+        if(isset($workflowId)){
+            $filterArray['workflow_id'] = $workflowId;
+        }
+        return $this->formService->getForms($appId,$filterArray);
+    }
+
+    public function registerApps($data) {
         $apps=json_decode($data['applist'],true);
         unset($data);
         $form = new App();

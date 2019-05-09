@@ -17,9 +17,9 @@ class FormService extends AbstractService{
         $this->table = $table;
     }
 
-    public function createForm(&$data){
+    public function createForm($appId,&$data){
         $form = new Form();
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['app_id'] = $appId;
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -87,12 +87,11 @@ class FormService extends AbstractService{
         return $count;
     }
 
-
     public function deleteForm($id){
         $this->beginTransaction();
         $count = 0;
         try{
-            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
+            $count = $this->table->delete($id,[]);
             if($count == 0){
                 $this->rollback();
                 return 0;
@@ -105,20 +104,21 @@ class FormService extends AbstractService{
         return $count;
     }
 
-    public function getForms() {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_form')
-                ->columns(array("*"))
-                ->where(array('ox_form.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
-        return $this->executeQuery($select)->toArray();
+    public function getForms($appId=null,$filterArray=array()) {
+        if(isset($appId)){
+            $filterArray['app_id'] = $appId;
+        }
+        $resultSet = $this->getDataByParams('ox_form',array("*"),$filterArray,null);
+        $response = array();
+        $response['data'] = $resultSet->toArray();
+        return $response;
     }
     public function getForm($id) {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_form')
         ->columns(array("*"))
-        ->where(array('ox_form.id' => $id,'ox_form.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+        ->where(array('ox_form.id' => $id));
         $response = $this->executeQuery($select)->toArray();
         if(count($response)==0){
             return 0;

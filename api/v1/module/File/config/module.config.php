@@ -11,22 +11,6 @@ use Zend\Log\Processor\RequestId;
 return [
     'router' => [
         'routes' => [
-            'file' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/file[/:fileId]',
-                    'defaults' => [
-                        'controller' => Controller\FileController::class,
-                        'access'=>[
-                            // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_FILE_WRITE',
-                            'post'=> 'MANAGE_FILE_WRITE',
-                            'delete'=> 'MANAGE_FILE_WRITE',
-                            'get'=> 'MANAGE_FILE_READ',
-                        ],
-                    ],
-                ],
-            ],
             'comment' => [
                 'type' => Segment::class,
                 'options' => [

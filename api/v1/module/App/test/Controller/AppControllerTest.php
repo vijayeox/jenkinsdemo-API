@@ -10,7 +10,7 @@ use Oxzion\Test\MainControllerTest;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Db\Adapter\AdapterInterface;
-
+use Oxzion\Utils\FileUtils;
 
     
 
@@ -62,8 +62,6 @@ class AppControllerTest extends MainControllerTest
         ])];
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
@@ -111,76 +109,24 @@ class AppControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('applist');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals(count($content['data']['data']), 12);
         $this->assertEquals($content['data']['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['data']['data'][1]['id'], 3);
-        $this->assertEquals($content['data']['data'][1]['name'], 'AppBuilder');
         $this->assertEquals($content['data']['pagination']['page'], 1);
         $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
         $this->assertEquals($content['data']['pagination']['pageSize'], 20);
     }
 
-    public function testGetAppListWithQueryParameters()
+    public function testGetAppTypeList()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/a?q=a&psz=1&pg=2', 'GET');
+        $this->dispatch('/app/type/1', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AppController');
-        $this->assertMatchedRouteName('applist');
+        $this->assertMatchedRouteName('applisttype');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['name'], 'AppBuilder');
-        $this->assertEquals($content['data']['data'][0]['id'], 3);
-        $this->assertEquals($content['data']['pagination']['page'], 2);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
-    }
-
-    public function testGetAppListWithQueryPageSize()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/a?psz=3&pg=1', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('App');
-        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AppController');
-        $this->assertMatchedRouteName('applist');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['data']['data'][1]['id'], 3);
-        $this->assertEquals($content['data']['data'][1]['name'], 'AppBuilder');
-        $this->assertEquals($content['data']['data'][2]['id'], 9);
-        $this->assertEquals($content['data']['data'][2]['name'], 'CRM');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 3);
-    }
-
-
-    public function testGetAppListWithQuerySort()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/a?psz=3&pg=2&sort=id', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('App');
-        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AppController');
-        $this->assertMatchedRouteName('applist');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 10);
-        $this->assertEquals($content['data']['data'][0]['name'], 'MailAdmin');
-        $this->assertEquals($content['data']['pagination']['page'], 2);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 3);
     }
 
     public function testCreate()
@@ -288,5 +234,49 @@ class AppControllerTest extends MainControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-
+    public function testDeploy(){
+        $this->initAuthToken($this->adminUser);
+        $_FILES = array(
+            'files'    =>  array(
+                'name'      =>  'ScriptTaskTest.bpmn',
+                'tmp_name'  =>  __DIR__."/../Dataset/ScriptTaskTest.bpmn",
+                'size'      =>  filesize(__DIR__."/../Dataset/ScriptTaskTest.bpmn"),
+                'error'     =>  0
+            )
+        );
+        $data = array('name'=>'NewWorkflow');
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/app/1/deployworkflow', 'POST',$data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertEquals($content['status'], 'success');
+    }
+    public function testDeployWithOutName(){
+        $this->initAuthToken($this->adminUser);
+        $_FILES = array(
+            'files'    =>  array(
+                'name'      =>  'ScriptTaskTest.bpmn',
+                'tmp_name'  =>  __DIR__."/../Dataset/ScriptTaskTest.bpmn",
+                'size'      =>  filesize(__DIR__."/../Dataset/ScriptTaskTest.bpmn"),
+                'error'     =>  0
+            )
+        );
+        $data = array();
+        $this->dispatch('/app/1/deployworkflow', 'POST',$data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertEquals($content['status'], 'error');
+    }
+    public function testWithOutFile(){
+        $_FILES =array();
+        $this->initAuthToken($this->adminUser);
+        $data = array('name'=>'NewWorkflow');
+        $this->dispatch('/app/1/deployworkflow', 'POST',$data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertEquals($content['status'], 'error');
+    }
 }

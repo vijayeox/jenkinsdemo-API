@@ -9,9 +9,8 @@ class Field extends Entity{
 		'id'=>0,
 		'app_id'=>0,
 		'name'=>NULL,
-		'org_id'=>NULL,
 		'text'=>NULL,
-		'form_id'=>NULL,
+		'workflow_id'=>0,
 		'data_type'=>NULL,
 		'options'=>NULL,
 		'constraints'=>NULL,
@@ -30,7 +29,7 @@ class Field extends Entity{
 	);
 
 	public function validate(){
-        $required = array('app_id','name','org_id','form_id','data_type','sequence');
+        $required = array('app_id','name','data_type');
         $this->validateWithParams($required);
     }
 }

@@ -16,4 +16,4 @@ class Workflow extends Entity{
         $required = array('name','app_id');
         $this->validateWithParams($required);
     }
-} 
+}
