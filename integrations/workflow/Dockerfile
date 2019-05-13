@@ -20,9 +20,9 @@ COPY camunda-tomcat.sh /tmp/
 
 COPY ./IdentityService/dist/identity_plugin.jar /camunda/lib/
 
-ARG NEXUS="https://app.camunda.com/nexus/service/local/artifact/maven/redirect"
+ARG CAMUNDA_REPO="https://camunda.org/release/camunda-bpm/tomcat/7.9/"
 
-RUN wget --progress=bar:force:noscroll -O /tmp/camunda.tar.gz "${NEXUS}?r=camunda-bpm&g=org.camunda.bpm.${DISTRO}&a=camunda-bpm-${DISTRO}&v=${VERSION}&p=tar.gz"
+RUN wget --progress=bar:force:noscroll -O /tmp/camunda.tar.gz "${CAMUNDA_REPO}/camunda-bpm-${DISTRO}-${VERSION}.tar.gz"
 
 # Unpack distro to /camunda directory
 RUN mkdir -p /camunda \
@@ -30,10 +30,9 @@ RUN mkdir -p /camunda \
     && cp /tmp/camunda-${DISTRO}.sh /camunda/camunda.sh \
     && chmod +x /camunda/camunda.sh
 
-RUN wget --progress=bar:force:noscroll -O /tmp/pom.xml "${NEXUS}?r=camunda-bpm&g=org.camunda.bpm&a=camunda-database-settings&v=${VERSION}&p=pom"
 
-RUN MYSQL_VERSION=$(xmlstarlet sel -t -v //_:version.mysql /tmp/pom.xml) \
-    && wget -O /tmp/mysql-connector-java-${MYSQL_VERSION}.jar "${NEXUS}?r=public&g=mysql&a=mysql-connector-java&v=${MYSQL_VERSION}&p=jar" \ 
+RUN MYSQL_VERSION=5.1.21 \
+    && wget -O /tmp/mysql-connector-java-${MYSQL_VERSION}.jar "http://central.maven.org/maven2/mysql/mysql-connector-java/${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}.jar" \ 
     && cp /tmp/mysql-connector-java-${MYSQL_VERSION}.jar /camunda/lib 
 
 # remove default CATALINA_OPTS from environment settings
@@ -48,12 +47,15 @@ RUN rm -f /tmp/camunda-${DISTRO}.sh \
 
 ENV CAMUNDA_VERSION=${VERSION}
 ENV DB_DRIVER=com.mysql.jdbc.Driver
-ENV DB_URL=jdbc:mysql://172.16.1.80/process-engine
-ENV BASE_DB_URL=jdbc:mysql://172.16.1.80/oxapi
-ENV BASE_DB_USERNAME=root
-ENV BASE_DB_PASSWORD=
-ENV DB_USERNAME=root
-ENV DB_PASSWORD=
+ENV DB_HOST=localhost
+ENV DB_USER=root
+ENV DB_PASS=password
+ENV DB_URL=jdbc:mysql://${DB_HOST}/process-engine
+ENV BASE_DB_URL=jdbc:mysql://${DB_HOST}/oxapi
+ENV BASE_DB_USERNAME=${DB_USER}
+ENV BASE_DB_PASSWORD=${DB_PASS}
+ENV DB_USERNAME=${DB_USER}
+ENV DB_PASSWORD=${DB_PASS}
 ENV DB_CONN_MAXACTIVE=20
 ENV DB_CONN_MINIDLE=5
 ENV DB_CONN_MAXIDLE=20

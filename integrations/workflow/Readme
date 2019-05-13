@@ -1,6 +1,14 @@
 
 To build the docker container
-$ docker build -t oxint .
+$ docker build -t workflow .
 
-To run the docker container
-$ docker run --network="host" -it oxint
+copy the .env.sample to .env and update the db host, user and password values
+
+To run the docker container in foreground
+$ docker run --network="host" -it --env-file .env workflow 
+
+To run the docker container in background
+$ docker run --network="host" -d --env-file .env --rm --name wf_1 workflow 
+
+To stop the docker when running in background mode
+$ docker stop wf_1
