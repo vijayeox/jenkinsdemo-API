@@ -93,7 +93,8 @@
       "Callback\\": "module/Callback/src/",
       "Mlet\\": "module/Mlet/src/",
       "Messaging\\":"module/Messaging/src/",
-      "ProspectResearch\\":"module/ProspectResearch/src/"
+      "ProspectResearch\\":"module/ProspectResearch/src/",
+      "SplashPage\\":"module/SplashPage/src/"
     }
   },
   "autoload-dev": {

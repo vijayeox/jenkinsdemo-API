@@ -37,5 +37,6 @@ return [
     'Callback',
     'Mlet',
     'Messaging',
-    'ProspectResearch'
+    'ProspectResearch',
+    'SplashPage'
 ];
