@@ -177,21 +177,21 @@ class OrganizationController extends AbstractApiController
     public function addUserToOrganizationAction()
     {
         $params = $this->params()->fromRoute();
+
+        $id=$params['orgId'];
+        $data = $this->params()->fromPost();
         try {
-            $id = $params['orgId'];
-            $userId = $params['userId'];
-            $response = $this->orgService->addUserToOrg($userId, $id);
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found for id -$id", 404);
-            } elseif ($response == 2) {
-                return $this->getErrorResponse("Entity not found for User -$userId", 404);
-            } elseif ($response == 3) {
-                return $this->getErrorResponse("Entity exists and therefore unable to add", 404);
-            }
-            return $this->getSuccessResponse();
+            $count = $this->orgService->saveUser($id,$data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
+            return $this->getErrorResponse("Validation Errors",404, $response);
         }
+        if($count == 0) {
+            return $this->getErrorResponse("Entity not found", 404);
+        }
+        if($count == 2) {
+            return $this->getErrorResponse("Enter User Ids", 404);
+        }
+        return $this->getSuccessResponseWithData($data,200);
     }
 }

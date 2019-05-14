@@ -496,7 +496,7 @@ class UserController extends AbstractApiController
         $id = $params['userId'];
         $organizationId = $params['organizationId'];
         try {
-            $response = $this->userService->addUserToOrg($params['userId'], $params['organizationId']);
+            $response = $this->userService->addUserToOrg($id, $organizationId);
             if ($response == 0) {
                 return $this->getErrorResponse("Entity not found for id -$id", 404);
             } elseif ($response == 2) {

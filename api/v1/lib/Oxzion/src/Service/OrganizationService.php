@@ -333,5 +333,39 @@ class OrganizationService extends AbstractService
         return 0;
     }
 
+
+    public function saveUser($id,$data){
+
+        $obj = $this->table->getByUuid($id,array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        if(!isset($data['userid']) || empty($data['userid'])) {
+            return 2;
+        }
+
+        $userArray=json_decode($data['userid'],true);
+        if($userArray){
+             $userSingleArray= array_unique(array_map('current', $userArray));
+            
+             $this->beginTransaction();
+             try{
+             $query = "DELETE FROM ox_user_org where user_id not in (".implode(',', $userSingleArray).") and org_id in (SELECT id from ox_organization where uuid = '".$id."')";
+             $resultSet = $this->executeQuerywithParams($query);
+
+             $insert = "INSERT into ox_user_org (user_id,org_id) SELECT ou.id,ou.orgid = (SELECT org.id from ox_organization as org where org.uuid = '".$id."') from ox_user as ou LEFT OUTER JOIN ox_user_org as our on our.user_id = ou.id AND our.org_id = ou.orgid WHERE ou.id in (".implode(',', $userSingleArray).") AND our.org_id is Null";
+             $resultSet = $this->executeQuerywithParams($insert);
+             $this->commit();
+            }
+            catch(Exception $e){
+                $this->rollback();
+                throw $e;
+            }
+
+            return 1;
+        }
+        return 0;
+
+    }
 }
 ?>

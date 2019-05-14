@@ -194,19 +194,20 @@ class RoleService extends AbstractService {
     }
 
     protected function updateDefaultRolePrivileges(Role $role) {
+        $Privileges = array();
         $privileges = $this->privilegeService->getPrivilegesByOrgid($role->org_id);
         if (!$privileges)
             return 0;
         foreach ($privileges as $privilege)
-            $rolePrivileges[] = array(
+            $Privileges = array(
                 'role_id' => $role->id,
                 'privilege_name' => $privilege['name'],
                 'permission' => $privilege['permission_allowed'],
                 'org_id' => $privilege['org_id'],
                 'app_id' => $privilege['app_id']
             );
-        if ($rolePrivileges) {
-            $result = $this->multiInsertOrUpdate('ox_role_privilege', $rolePrivileges);
+        if ($Privileges) {
+            $result = $this->multiInsertOrUpdate('ox_role_privilege', $Privileges);
         }
         // echo "<pre>";print_r($result);exit();
         return count($privileges);

@@ -257,38 +257,24 @@ class OrganizationControllerTest extends MainControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testAddUserToOrganization()
+    public function testsaveUser()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/1/adduser/3', 'POST');
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/users/save', 'POST',array('userid' => '[{"id":3}]'));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'rakshith', 'orgname' => 'Golden State Warriors', 'status' => 'Active')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
         $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('addUserToOrganization');
+        $this->setDefaultAsserts('saveUser');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-    }
-
-    public function testAddUserToOrganizationWithSameData()
-    {
-        $this->initAuthToken($this->adminUser);
-        if(enableActiveMQ == 0){
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'karan', 'orgname' => 'Cleveland Black', 'status' => 'Active')),'USERTOORGANIZATION_ALREADYEXISTS')->once()->andReturn();
-        }
-        $this->dispatch('/organization/1/adduser/2', 'POST');
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts('addUserToOrganization');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
     }
 
     public function testAddUserToOrganizationWithDifferentUser()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/1/adduser/3', 'POST');
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/users/save', 'POST',array('userid' => '[{"id":10},{"id":5}]'));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'rakshith', 'orgname' => 'Cleveland Black', 'status' => 'Active')),'USERTOORGANIZATION_ADDED')->once()->andReturn();

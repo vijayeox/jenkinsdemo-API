@@ -109,7 +109,7 @@ class AppControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('applist');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 12);
+        $this->assertEquals(count($content['data']['data']), 4);
         $this->assertEquals($content['data']['data'][0]['name'], 'Admin');
         $this->assertEquals($content['data']['pagination']['page'], 1);
         $this->assertEquals($content['data']['pagination']['noOfPages'], 1);

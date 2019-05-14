@@ -29,7 +29,7 @@ return [
             'addUserToOrganization' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/organization/:orgId/adduser/:userId',
+                    'route' => '/organization/:orgId/users/save',
                     'defaults' => [
                         'controller' => Controller\OrganizationController::class,
                         'method' => 'POST',

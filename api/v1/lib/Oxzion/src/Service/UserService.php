@@ -204,9 +204,9 @@ class UserService extends AbstractService
     }
 
     public function addUserRole($userId, $roleName) {
-        if ($user = $this->getDataByParams('ox_user', array('id', 'orgid'), array('id' => $userId))) {
-            if ($role = $this->getDataByParams('ox_role', array('id'), array('org_id' => $user[0]['orgid'], 'name' => $roleName))) {
-                if (!$this->getDataByParams('ox_user_role', array(), array('user_id' => $userId, 'role_id' => $role[0]['id']))) {
+        if ($user = $this->getDataByParams('ox_user', array('id', 'orgid'), array('id' => $userId))->toArray()) {
+            if ($role = $this->getDataByParams('ox_role', array('id'), array('org_id' => $user[0]['orgid'], 'name' => $roleName))->toArray()) {
+                if (!$this->getDataByParams('ox_user_role', array(), array('user_id' => $userId, 'role_id' => $role[0]['id']))->toArray()) {
                     $data = array(array(
                         'user_id' => $userId,
                         'role_id' => $role[0]['id']
@@ -684,9 +684,9 @@ class UserService extends AbstractService
     }
 
     public function addUserToOrg($userId, $organizationId) {
-        if ($this->getDataByParams('ox_user', array('id'), array('id' => $userId))) {
-            if ($this->getDataByParams('ox_organization', array('id'), array('id' => $organizationId, 'status' => 'Active'))) {
-                if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))) {
+        if ($this->getDataByParams('ox_user', array('id'), array('id' => $userId))->toArray()) {
+            if ($this->getDataByParams('ox_organization', array('id'), array('id' => $organizationId, 'status' => 'Active'))->toArray()) {
+                if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))->toArray()) {
                     $data = array(array(
                         'user_id' => $userId,
                         'org_id' => $organizationId
