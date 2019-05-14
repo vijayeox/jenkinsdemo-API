@@ -1,5 +1,8 @@
 #This script is used to deploy build.zip to respective folders
 #!/bin/sh
+# exit when any command fails
+set -e
+#trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
 #going back to oxzion3.0 root directory
 cd ../
 #Defining variables for later use
@@ -10,9 +13,11 @@ BLUE="\e[34m"
 YELLOW="\e[93m"
 MAGENTA="\e[35m"
 BLUEBG="\e[44m"
+CYAN="\e[36m"
 BLINK="\e[5m"
 INVERT="\e[7m"
 RESET="\e[0m"
+
 
 #Checking if temp folder exist, delete and create new.
 if [ -d "./temp" ] ;
@@ -45,6 +50,9 @@ api()
         cd ${TEMP}
         cp -R api/v1/* /var/www/api/
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
+        echo -e "${YELLOW}Starting migrations script for API"
+        api/v1/migrations migrate
+        echo -e "${GREEN}Migrations Complete!"
     fi    
 }
 camel()
@@ -68,7 +76,7 @@ camel()
 #Function to copy calendar
 calendar()
 {
-    echo -e "${MAGENTA}Copying EventCalendar.."
+    echo -e "${YELLOW}Copying EventCalendar.."
     if [ ! -d "./integrations/eventcalendar" ] ;
     then
         echo -e "${RED}CALENDAR was not packaged so skipping it\n${RESET}"
@@ -82,7 +90,7 @@ calendar()
 #Function to copy mattermost
 mattermost()
 {
-    echo -e "${MAGENTA}Copying Mattermost.."
+    echo -e "${YELLOW}Copying Mattermost.."
     if [ ! -d "./integrations/mattermost" ] ;
     then
         echo -e "${RED}MATTERMOST was not packaged so skipping it\n${RESET}"
@@ -98,7 +106,7 @@ mattermost()
 #Function to copy OROcrm
 orocrm()
 {
-    echo -e "${MAGENTA}Copying OROcrm.."
+    echo -e "${YELLOW}Copying OROcrm.."
     if [ ! -d "./integrations/orocrm" ] ;
     then
         echo -e "${RED}OROCRM was not packaged so skipping it\n${RESET}"
@@ -107,12 +115,15 @@ orocrm()
     	cd ${TEMP}
     	cp -R integrations/orocrm/* /var/www/orocrm/
     	echo -e "${GREEN}Copying OROcrm Complete!"
+        echo -e "${YELLOW}Starting migrations script for OROcrm"
+        php integrations/orocrm/bin/console oro:install --env=prod --timeout=30000 --application-url="http://localhost:8075/crm/public" --organization-name="Vantage Agora" --user-name="admin" --user-email="admin@example.com" --user-firstname="Admin" --user-lastname="User" --user-password="admin" --language=en --formatting-code=en_US
+        echo -e "${GREEN}Migrations Complete!"
     fi
 }
 #Function to copy rainloop
 rainloop()
 {
-    echo -e "${MAGENTA}Copying Rainloop.."
+    echo -e "${YELLOW}Copying Rainloop.."
     if [ ! -d "./integrations/rainloop" ] ;
     then
         echo -e "${RED}RAINLOOP was not packaged so skipping it\n${RESET}"
@@ -125,7 +136,7 @@ rainloop()
 }
 view()
 {
-    echo -e "${Green}Copying view...${RESET}"
+    echo -e "${YELLOW}Copying view...${RESET}"
     if [ ! -d "./view" ] ;
     then
         echo -e "${RED}VIEW was not packaged so skipping it\n${RESET}"
@@ -138,17 +149,34 @@ view()
     	systemctl start view
     fi
 }
+workflow()
+{
+    echo -e "${YELLOW}Copying workflow...${RESET}"
+    if [ ! -d "./integrations/workflow" ] ;
+    then
+        echo -e "${RED}Workflow was not packaged so skipping it\n${RESET}"
+    else
+        docker stop wf_1
+        mkdir -p /opt/oxzion/workflow
+        cd ${TEMP}
+        cp -R integrations/workflow* /opt/oxzion/workflow
+        echo -e "${GREEN}Copying workflow Complete!${RESET}"
+        cd /opt/oxzion/workflow
+        docker build -t workflow .
+        docker run --network="host" -d --env-file ~/env/workflow/.env --rm --name wf_1 workflow 
+    fi
+}
 
 #calling functions accordingly
 unpack
-echo -e "${MAGENTA}Now copying files to respective locations..${RESET}"
+echo -e "${YELLOW}Now copying files to respective locations..${RESET}"
 api
 view
-echo -e "${YELLOW}Copying Integrations Now...\n${RESET}"
+echo -e "${CYAN}Copying Integrations Now...\n${RESET}"
 camel
 calendar
 mattermost
 orocrm
 rainloop
-echo -e "${GREEN}Copying Integraions Completed Successfully!\n${RESET}"
+workflow
 echo -e "${GREEN}${BLINK}DEPLOYED SUCCESSFULLY${RESET}"

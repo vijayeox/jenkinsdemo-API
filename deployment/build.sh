@@ -1,5 +1,8 @@
 # script to package oxzion3.0 to production build
 #!/bin/sh
+# exit when any command fails
+set -e
+#trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
 #going back to oxzion3.0 root directory
 cd ../
 #Defining variables for later use
@@ -23,22 +26,25 @@ then
     echo -e "1. all           -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
     echo -e "2. api           -${YELLOW}For packaging API.${RESET}"
     echo -e "3. view          -${YELLOW}For packaging UI/View.${RESET}"
-    echo -e "4. integrations  -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
-    echo -e "5. calendar      -${YELLOW}For packaging Event Calendar.${RESET}"
-	echo -e "6. camel         -${YELLOW}For packaging Apache Camel.${RESET}"
-    echo -e "7. chat          -${YELLOW}For packaging Mattermost Chat.${RESET}"
-    echo -e "8. crm           -${YELLOW}For packaging OroCRM.${RESET}"
-	echo -e "9. mail          -${YELLOW}For packaging Rainloop Mail.${RESET}"
-	echo -e "10. --help or -h -${YELLOW}For help.${RESET}"
-    echo -e "11. list         -${YELLOW}For list of options.${RESET}"
-    echo -e "12. deploy       -${YELLOW}For deploying to production${RESET}"
+    echo -e "4. workflow      -${YELLOW}For packaging workflow.${RESET}"
+    echo -e "5. integrations  -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
+    echo -e "6. calendar      -${YELLOW}For packaging Event Calendar.${RESET}"
+	echo -e "7. camel         -${YELLOW}For packaging Apache Camel.${RESET}"
+    echo -e "8. chat          -${YELLOW}For packaging Mattermost Chat.${RESET}"
+    echo -e "9. crm           -${YELLOW}For packaging OroCRM.${RESET}"
+	echo -e "10. mail         -${YELLOW}For packaging Rainloop Mail.${RESET}"
+	echo -e "11. --help or -h -${YELLOW}For help.${RESET}"
+    echo -e "12. list         -${YELLOW}For list of options.${RESET}"
+    echo -e "13. deploy       -${YELLOW}For deploying to production${RESET}"
     exit 0
 fi
 #writing functions for different tasks
 #function checking exiting build dir and deleting it
 deploy()
-{
-    ssh -i ${HOME}/.ssh/oxzionapi.pem ubuntu@dev3.oxzion.com 'cd deploy ; ./deploy.sh ;'
+{   
+    cd ${OXHOME}
+    scp -i ${HOME}/.ssh/oxzionapi.pem deployment/deploy.sh ubuntu@18.221.154.7:oxzion3.0/deployment
+    ssh -i ${HOME}/.ssh/oxzionapi.pem ubuntu@dev3.oxzion.com 'cd oxzion3.0/deployment ; ./deploy.sh ;'
 }
 check_dir()
 {
@@ -169,13 +175,23 @@ view()
     echo -e "${GREEN}Building UI/view Completed!${RESET}"
     cd ${OXHOME}
 }
+workflow()
+{
+    echo -e "${YELLOW}Creating directory build/integrations/workflow...${RESET}"
+    mkdir -p build/integrations/workflow/IdentityService/dist
+    echo -e "${YELLOW}Copying workflow....${RESET}"
+    cp integrations/workflow/bpm-platform.xml integrations/workflow/Dockerfile integrations/workflow/camunda-tomcat.sh ./build/integrations/workflow/ && cp integrations/workflow/IdentityService/dist/identity_plugin.jar ./build/integrations/workflow/IdentityService/dist/
+    echo -e "${GREEN}Copying workflow Completed!${RESET}"
+    cd ${OXHOME}
+}
 integrations()
 {
     camel
     calendar
     chat
     crm
-    mail    
+    mail
+    workflow    
 }
 all()
 {   
@@ -188,56 +204,61 @@ for i in $@
 do
     case $i in
         api)
-                echo -e "Starting script ${INVERT}$0...${RESET}"                
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 api
                 package
                 break ;;
         view)
-                echo -e "Starting script ${INVERT}$0...${RESET}"
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 view
                 package
                 break ;;
         camel)
-                echo -e "Starting script ${INVERT}$0...${RESET}"
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"
                 check_dir
                 camel
                 package
                 break ;;
         calendar)
-                echo -e "Starting script ${INVERT}$0...${RESET}"
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"
                 check_dir
                 calendar
                 package
                 break ;;
         chat)
-                echo -e "Starting script ${INVERT}$0...${RESET}"
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"
                 check_dir
                 chat
                 package
                 break ;;
         crm)
-                echo -e "Starting script ${INVERT}$0...${RESET}"    
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 crm
                 package
                 break ;;
         mail)
-                echo -e "Starting script ${INVERT}$0...${RESET}"
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 mail
                 package
                 break ;;
-
+        workflow)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                workflow
+                package
+                break ;;
         integrations)
-                echo -e "Starting script ${INVERT}$0...${RESET}"
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
                 integrations
                 package
                 break ;;
         all)
-                echo -e "Starting script ${INVERT}$0...${RESET}"
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir                
                 all
                 package
@@ -259,15 +280,16 @@ do
                 echo -e "1. all           -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
 	            echo -e "2. api           -${YELLOW}For packaging API.${RESET}"
                 echo -e "3. view          -${YELLOW}For packaging UI/View.${RESET}"
-                echo -e "4. integrations  -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
-                echo -e "5. calendar      -${YELLOW}For packaging Event Calendar.${RESET}"
-	            echo -e "6. camel         -${YELLOW}For packaging Apache Camel.${RESET}"
-                echo -e "7. chat          -${YELLOW}For packaging Mattermost Chat.${RESET}"
-                echo -e "8. crm           -${YELLOW}For packaging OroCRM.${RESET}"
-	            echo -e "9. mail          -${YELLOW}For packaging Rainloop Mail.${RESET}"
-	            echo -e "10. --help or -h -${YELLOW}For help.${RESET}"
-                echo -e "11. list${RESET}         -${YELLOW}For list of options.${RESET}"
-                echo -e "12. deploy       -${YELLOW}For deploying to production${RESET}"
+                echo -e "4. workflow      -${YELLOW}For packaging workflow.${RESET}"
+                echo -e "5. integrations  -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
+                echo -e "6. calendar      -${YELLOW}For packaging Event Calendar.${RESET}"
+                echo -e "7. camel         -${YELLOW}For packaging Apache Camel.${RESET}"
+                echo -e "8. chat          -${YELLOW}For packaging Mattermost Chat.${RESET}"
+                echo -e "9. crm           -${YELLOW}For packaging OroCRM.${RESET}"
+                echo -e "10. mail         -${YELLOW}For packaging Rainloop Mail.${RESET}"
+                echo -e "11. --help or -h -${YELLOW}For help.${RESET}"
+                echo -e "12. list         -${YELLOW}For list of options.${RESET}"
+                echo -e "13. deploy       -${YELLOW}For deploying to production${RESET}"
                 break ;;
         deploy)
                 deploy
