@@ -133,7 +133,7 @@ class OrganizationControllerTest extends MainControllerTest
         $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
-        $contact = array('firstname'=>'Neha','lastname'=>'Rai','email'=>'bharat@myvamla.com');
+        $contact = array('firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharat@myvamla.com');
         $data = array('name'=>'ORGANIZATION','address' => 'Bangalore','contact' => json_encode($contact));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
