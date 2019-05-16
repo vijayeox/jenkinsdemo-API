@@ -222,7 +222,7 @@ class GroupService extends AbstractService {
     }
 
     public function saveUser($id,$data) {
-        $obj = $this->table->get($id,array());
+        $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
             $this->logger->log(Logger::INFO, "Invalid group id - $id");
             return 0;
@@ -239,29 +239,28 @@ class GroupService extends AbstractService {
         }
 
         $userArray=json_decode($data['userid'],true);
+        $group_id = $obj->id;
 
         if($userArray){
             $userSingleArray= array_unique(array_map('current', $userArray));
             $queryString = "SELECT ox_user.id, ox_user.username FROM ox_user_group " . 
                            "inner join ox_user on ox_user.id = ox_user_group.avatar_id ".
-                           "where ox_user_group.group_id = ".$id.
+                           "where ox_user_group.id = ".$group_id.
                            " and ox_user_group.avatar_id not in (".implode(',', $userSingleArray).")";
             $deletedUser = $this->executeQuerywithParams($queryString)->toArray();
-            $query = "SELECT u.id, u.username, ug.avatar_id FROM ox_user_group ug ".
-                     "right join ox_user u on u.id = ug.avatar_id and ug.group_id = ".$id.
+            $query = "select avatar_id, group_id from ox_user_group";
+            $userGroup = $this->executeQuerywithParams($query)->toArray();
+            $query = "SELECT u.id, u.username FROM ox_user_group ug ".
+                     "right join ox_user u on u.id = ug.avatar_id and ug.group_id = ".$group_id.
                      " where u.id in (".implode(',', $userSingleArray).") and ug.avatar_id is null";
             $insertedUser = $this->executeQuerywithParams($query)->toArray();
             $this->beginTransaction();
             try{
-                $delete="Delete from ox_user_group where ox_user_group.group_id =".$id. " OR (ox_user_group.group_id !=" .$id. " AND ox_user_group.avatar_id in (".implode(',', $userSingleArray)."))"; 
-                $result = $this->runGenericQuery($delete);
-
-                $query ="Insert into ox_user_group(avatar_id,group_id) (Select ox_user.id, ".$id." AS group_id from ox_user_group right join  ox_user on ox_user_group.avatar_id = ox_user.id where ox_user.id in (".implode(',', $userSingleArray)."))";
-                $resultInsert = $this->runGenericQuery($query);
-                if(count($resultInsert) != count($userSingleArray)){
-                    $this->rollback();
-                    return 0;
-                }
+                $delete="DELETE FROM ox_user_group where avatar_id not in (".implode(',', $userSingleArray).") and group_id = ".$group_id; 
+                $result = $this->executeQuerywithParams($delete);
+                $query ="Insert into ox_user_group(avatar_id,group_id) SELECT ou.id,".$group_id." from ox_user as ou LEFT OUTER JOIN ox_user_group as our on ou.id = our.avatar_id AND our.group_id = ".$group_id." WHERE ou.id in (".implode(',', $userSingleArray).") AND our.group_id  is null";
+                
+                $resultInsert = $this->executeQuerywithParams($query);
                 $this->commit();
             }
             catch(Exception $e){

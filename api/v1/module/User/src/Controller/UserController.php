@@ -108,7 +108,9 @@ class UserController extends AbstractApiController
     public function get($id)
     {
         $params = $this->params()->fromRoute();
-        return $this->getUserInfo($id, $params);
+        // This API should use the UUID
+        $data = $this->table->getByUuid($id,array());
+        return $this->getUserInfo($data->id, $params);
     }
 
     /**
@@ -411,6 +413,7 @@ class UserController extends AbstractApiController
 
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
+
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if (($userInfo == 0) || (empty($userInfo))) {

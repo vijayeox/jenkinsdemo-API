@@ -12,6 +12,7 @@ use Exception;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\OrganizationService;
 use Doctrine\Migrations\AbstractMigration;
+use Ramsey\Uuid\Uuid;
 
 class ProjectService extends AbstractService {
 
@@ -51,9 +52,38 @@ class ProjectService extends AbstractService {
                                             'pageSize' => $psz));        
     }
 
+
+     /**
+     * GET Project Service
+     * @method getProject
+     * @param $id UUID of Project to GET
+     * @return array $data
+     * <code> {
+     *               id : integer,
+     *               name : string,
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and Created Project.
+     */
+    public function getProjectByUuid($id)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_project')
+            ->columns(array("*"))
+            ->where(array('ox_project.uuid' => $id, 'isdeleted' => 0));
+        $response = $this->executeQuery($select)->toArray();
+        
+        if (count($response) == 0) {
+            return 0;
+        }
+
+        return $response[0];
+    }
+
 	public function createProject(&$data) {
 		$form = new Project();
     //Additional fields that are needed for the create
+        $data['uuid'] = Uuid::uuid4();
 		$data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
 		$data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
 		$data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -83,7 +113,7 @@ class ProjectService extends AbstractService {
 	}
 
 	public function updateProject ($id, &$data) {
-		$obj = $this->table->get($id,array());
+      	$obj = $this->table->getByUuid($id,array());
 		if (is_null($obj)) {
 			return 0;
 		}
@@ -110,13 +140,13 @@ class ProjectService extends AbstractService {
     }
 
     public function deleteProject($id) {
-    	$obj = $this->table->get($id,array());
+    	$obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
             return 0;
         }
         $form = new Project();
         $data = $obj->toArray();
-        $data['id'] = $id;
+        $data['uuid'] = $id;
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['isdeleted'] = 1;
@@ -196,13 +226,18 @@ class ProjectService extends AbstractService {
     	return $resultSet->toArray();
     }*/
 
-    public function saveUser($projectId,$data) {
-        $obj = $this->table->get($projectId,array());
+    public function saveUser($id,$data) {
+        $obj = $this->table->getByUuid($id,array());
         $org = $this->organizationService->getOrganization($obj->org_id);
         if(!isset($data['userid']) || empty($data['userid'])) {
             return 2;
         }
     	$userArray=json_decode($data['userid'],true);
+
+        $selectid = "SELECT id from ox_project where uuid = '".$id."'";
+        $projectId = $this->executeQuerywithParams($selectid)->toArray();
+        $projectId = $projectId[0]['id'];
+
         if($userArray){
             $userSingleArray= array_map('current', $userArray);
             $queryString = "SELECT ox_user.id, ox_user.username FROM ox_user_project " . 

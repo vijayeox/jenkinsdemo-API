@@ -50,9 +50,8 @@ class ProjectController extends AbstractApiController {
     * </code>
     */
     public function create($data) {
-    	$data = $this->params()->fromPost();
     	try {
-    		$count = $this->projectService->createProject($data);
+                 $count = $this->projectService->createProject($data);
     	} catch(ValidationException $e) {	
     		$response = ['data' => $data, 'errors' => $e->getErrors()];
     		return $this->getErrorResponse("Validation Errors",404, $response);
@@ -60,7 +59,7 @@ class ProjectController extends AbstractApiController {
     	if($count == 0) {
     		return $this->getFailureResponse("Failed to create a new entity", $data);
     	}
-    	return $this->getSuccessResponseWithData($data,201);
+      	return $this->getSuccessResponseWithData($data,201);
     }
      /**
     * Update Project API
@@ -96,6 +95,32 @@ class ProjectController extends AbstractApiController {
     	}
     	return $this->getSuccessResponseWithData($data,200);
     }
+
+
+
+     /**
+     * GET project API
+     * @api
+     * @link /project[/:projectId]
+     * @method GET
+     * @param array $dataget of project
+     * @return array $data
+     * <code> {
+     *               id : integer,
+     *               name : string,
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and Created Group.
+     */
+    public function get($id)
+    {
+        $result = $this->projectService->getProjectByUuid($id);
+        if ($result == 0) {
+            return $this->getErrorResponse("Project not found", 404, ['id' => $id]);
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
+
+
     /**
     * Delete Project API
     * @api
@@ -111,6 +136,7 @@ class ProjectController extends AbstractApiController {
     	}
     	return $this->getSuccessResponse();
     }
+
     /**
     * GET List Project API
     * @api
@@ -189,10 +215,10 @@ class ProjectController extends AbstractApiController {
     */
     public function saveUserAction() {
         $params = $this->params()->fromRoute();
-        $id=$params[$this->getIdentifierName()];
+        $id=$params['projectId'];
         $data = $this->params()->fromPost();
         try {
-            $count = $this->projectService->saveUser($params[$this->getIdentifierName()],$data);
+            $count = $this->projectService->saveUser($id,$data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);

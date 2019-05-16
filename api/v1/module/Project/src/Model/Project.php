@@ -9,6 +9,7 @@ class Project extends Entity {
 
     protected $data = array(
         'id' => 0,
+        'uuid' => 0,
         'name'=> 0,
         'org_id' => 0,
         'description' => 0,

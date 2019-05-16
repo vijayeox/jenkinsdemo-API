@@ -40,6 +40,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->initAuthToken($this->adminUser);
         $data = ['data' => array([
             "id" => "1",
+            "uuid" => "886d7eff-6bae-4892-baf8-6fefc56cbf0b",
             "name"=> "Test Project 1",
             "org_id"=>"1",
             "description"=> "Description Test Data",
@@ -52,6 +53,7 @@ class ProjectControllerTest extends ControllerTest {
             "project_id"=>"1"
         ],[
             "id"=> "3",
+            "uuid"=> "ced672bb-fe33-4f0a-b153-f1d182a02603",
             "name"=> "Test Project 2",
             "org_id"=>"1",
             "description"=> "Description Test Data",
@@ -62,7 +64,8 @@ class ProjectControllerTest extends ControllerTest {
             "isdeleted"=> "0",
             "user_id"=> "1",
             "project_id"=> "2"
-        ],[
+        ]
+        ,[
             "id"=> "4",
             "name"=> "New Project",
             "org_id"=>"1",
@@ -74,7 +77,8 @@ class ProjectControllerTest extends ControllerTest {
             "isdeleted"=> "0",
             "user_id"=> "1",
             "project_id"=> "3"
-        ])];
+        ]
+    )];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/project', 'GET');
         $this->assertResponseStatusCode(200);
@@ -165,7 +169,7 @@ class ProjectControllerTest extends ControllerTest {
     }
     public function testGet() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/project/1', 'GET');
+        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -220,7 +224,7 @@ class ProjectControllerTest extends ControllerTest {
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/project', 'POST', null);
+        $this->dispatch('/project', 'POST',null);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('Project');
         $this->assertControllerName(ProjectController::class); // as specified in router's controller name alias
@@ -239,7 +243,7 @@ class ProjectControllerTest extends ControllerTest {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black','old_projectname'=> 'Test Project 1','new_projectname' => 'Test Project')),'PROJECT_UPDATED')->once()->andReturn();
         }
-        $this->dispatch('/project/1', 'PUT', null);
+        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -253,7 +257,7 @@ class ProjectControllerTest extends ControllerTest {
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/project/1', 'PUT', null);
+        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'PUT', null);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('Project');
         $this->assertControllerName(ProjectController::class); // as specified in router's controller name alias
@@ -272,7 +276,7 @@ class ProjectControllerTest extends ControllerTest {
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/project/122', 'PUT', null);
+        $this->dispatch('/project/886d7eff-6bae', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -285,7 +289,7 @@ class ProjectControllerTest extends ControllerTest {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 2')),'PROJECT_DELETED')->once()->andReturn();
         }
-        $this->dispatch('/project/2', 'DELETE');
+        $this->dispatch('/project/ced672bb-fe33-4f0a-b153-f1d182a02603', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -312,7 +316,7 @@ class ProjectControllerTest extends ControllerTest {
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => 'bharatg')),'USERTOPROJECT_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => 'rakshith')),'USERTOPROJECT_ADDED')->once()->andReturn();
         }
-    	$this->dispatch('/project/1/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
+    	$this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
     	$this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
     	$content = json_decode($this->getResponse()->getContent(), true);
@@ -324,7 +328,7 @@ class ProjectControllerTest extends ControllerTest {
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-    	$this->dispatch('/project/1/save','POST'); 
+    	$this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST'); 
     	$this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
     	$content = json_decode($this->getResponse()->getContent(), true);
@@ -336,7 +340,7 @@ class ProjectControllerTest extends ControllerTest {
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();      
         }
-    	$this->dispatch('/project/1/save','POST',array('userid' => '[{"id":1},{"id":23}]')); 
+    	$this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',array('userid' => '[{"id":1},{"id":23}]')); 
     	$this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
     	$content = json_decode($this->getResponse()->getContent(), true);
