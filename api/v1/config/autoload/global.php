@@ -12,17 +12,17 @@
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-$host = '34.192.157.77';
-$db = 'oxzionapi';
-$username = 'root';
-$password = 'oxzion';
+$host = '172.16.1.172';
+    $db = "oxapi";
+    $username = "root";
+    $password = "password";
 
 
 if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
-    $host = '34.192.157.77';
-    $db = 'oxzionapi';
-    $username = 'root';
-    $password = 'oxzion';
+   $host = '172.16.1.172';
+    $db = "oxapi";
+    $username = "root";
+    $password = "password";
 }
 
 return [

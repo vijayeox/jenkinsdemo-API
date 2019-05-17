@@ -1,6 +1,7 @@
 ox_project:
   -
     id: 1
+    uuid: 886d7eff-6bae-4892-baf8-6fefc56cbf0b
     name: 'Test Project 1'
     org_id: 1
     description: 'Description Test Data'
@@ -11,6 +12,7 @@ ox_project:
     isdeleted: 0
   -
     id: 2
+    uuid: ced672bb-fe33-4f0a-b153-f1d182a02603
     name: 'Test Project 2'
     org_id: 1
     description: 'Description Test Data'
@@ -21,6 +23,7 @@ ox_project:
     isdeleted: 0
   -
     id: 3
+    uuid: 3dbacd80-ff27-4169-a683-4a45d2a8fb8f
     name: 'New Project'
     org_id: 1
     description: 'Description Test Data'
