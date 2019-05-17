@@ -17,8 +17,10 @@ class IndexerImpl implements Indexer
     public function index($appId, $id, $type, $body, $fieldTypeAarray = null)
     {
         try {
-            $org_id = AuthContext::get(AuthConstants::ORG_ID);
-            $body['org_id'] = $org_id;
+            if (empty($body['org_id'])) {
+                $org_id = AuthContext::get(AuthConstants::ORG_ID);
+                $body['org_id'] = $org_id;    
+            }
             $body['type'] = $type;
             $index = $appId;
             if ($fieldTypeAarray) {
