@@ -45,7 +45,7 @@ class EmailClient{
 		 *                 - 'tlsv1' (TLS direct version 1.x connection to server)
 		 *                 - true (Use TLS, if available) 
 		 *     - username: (string) Username to use for SMTP server authentication.
-		 *		- xoauth2_token: (string) If set, will authenticate via the XOAUTH2
+		 *		- token: (string) If set, will authenticate via the XOAUTH2
 		 * @param array $opts                   An array of options w/the
 	     *                                      following keys:
 	     *  - html: (boolean) Whether this is an HTML message.
@@ -459,7 +459,13 @@ class EmailClient{
 	    return $ob;
 	}
 
+	private function getOAuth64($email, $accessToken){
+		return base64_encode("user=".$email."\001auth=Bearer ".$accessToken. "\001\001");
+	}
 	private function getsmtpTransport($smtpConfig){
+		if(isset($smtpConfig['token'])){
+			$smtpConfig['token'] = $this->getOAuth64($smtpConfig['username'], $smtpConfig['token']);
+		}
 		$transport = new Horde_Mail_Transport_Smtphorde($smtpConfig);
 		return $transport;
 	}
