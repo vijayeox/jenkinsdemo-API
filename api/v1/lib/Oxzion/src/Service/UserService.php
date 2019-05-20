@@ -738,7 +738,12 @@ class UserService extends AbstractService
                     ox_user_role as ou on orp.role_id = ou.role_id AND ou.user_id =".$userId." and orp.org_id = ".$orgId.") urp ON app.privilege_name = urp.privilege_name WHERE urp.privilege_name IS NULL union SELECT oa.uuid, oa.name FROM ox_app oa LEFT JOIN
                     `ox_app_registry` ar on oa.uuid = ar.app_id and ar.org_id =".$orgId." WHERE org_id IS NULL";
         $result = $this->executeQuerywithParams($query);
-        return $result->toArray();
+        $result= $result->toArray();
+        $arr = array();
+        for($i=0;$i<sizeof($result);$i++){
+            $arr[$result[$i]['name']] = $result[$i]['uuid'];
+        }
+         return $arr;
     }
 
     /**

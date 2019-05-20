@@ -400,6 +400,9 @@ class UserController extends AbstractApiController
                     case "ap":
                     $userInfo['apps'] = $this->userService->getAppsByUserId($id);
                     break;
+                    case "bapp":
+                    $userInfo['blackListedApps'] = $this->userService->getAppsWithoutAccessForUser();
+                    break;
                     case "pr":
                     $userInfo['projects'] = $this->projectService->getProjectsOfUserById($id);
                     break;
