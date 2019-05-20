@@ -12,6 +12,7 @@ use Oxzion\Encryption\Crypto;
 use TheSeer\Tokenizer\Exception;
 use Zend\Mail;
 use Zend\Mail\Message;
+use Zend\Db\ResultSet\ResultSet;
 
 class EmailService extends AbstractService
 {
@@ -99,11 +100,10 @@ class EmailService extends AbstractService
         else
             $userId = $id;
 
-        $queryString = "select email_setting_user.id,userid,password,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
-        $where = "where email_setting_user.userid = " . $userId;
-        $order = "order by email_setting_user.id";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        foreach ($resultSet->toArray() as $account) {
+        $queryString = "select email_setting_user.id, userid,password,email,host,email_setting_user.token,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host where email_setting_user.userid = " . $userId;
+        $result = $this->executeQuerywithParams($queryString);
+        foreach ($result->toArray() as $account) {
+            $account['token'] = json_decode($account['token']);
             $account['password'] = TwoWayEncryption::decrypt($account['password']);
             $accounts[] = $account;
         }

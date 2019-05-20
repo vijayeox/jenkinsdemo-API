@@ -11,6 +11,7 @@ class Email extends Entity {
         'email' => 0,
         'password' => 0,
         'host' => 0,
+        'token' => NULL,
         'isdefault'=> NULL,
     );
 
