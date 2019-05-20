@@ -337,6 +337,7 @@ class OrganizationService extends AbstractService
     public function saveUser($id,$data){
 
         $obj = $this->table->getByUuid($id,array());
+
         if (is_null($obj)) {
             return 0;
         }
@@ -347,6 +348,12 @@ class OrganizationService extends AbstractService
         $userArray=json_decode($data['userid'],true);
         if($userArray){
              $userSingleArray= array_unique(array_map('current', $userArray));
+
+             $querystring = "SELECT ouo.user_id , org.id from ox_user_org as ouo inner join ox_organization as org on ouo.org_id = org.id where org.uuid = '".$id."' and ouo.user_id not in (".implode(',', $userSingleArray).")";
+             $deletedUser = $this->executeQuerywithParams($querystring)->toArray();
+
+             $query = "SELECT ou.id,ou.orgid = (SELECT org.id from ox_organization as org where org.uuid = '".$id."') from ox_user as ou LEFT OUTER JOIN ox_user_org as our on our.user_id = ou.id AND our.org_id = ou.orgid WHERE ou.id in (".implode(',', $userSingleArray).") AND our.org_id is Null";
+             $insertedUser = $this->executeQuerywithParams($query)->toArray();
             
              $this->beginTransaction();
              try{
@@ -360,6 +367,13 @@ class OrganizationService extends AbstractService
             catch(Exception $e){
                 $this->rollback();
                 throw $e;
+            }
+
+            foreach($deletedUser as $key => $value){
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active')),'USERTOORGANIZATION_DELETED');
+            }
+            foreach($insertedUser as $key => $value){
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active')),'USERTOORGANIZATION_ADDED');
             }
 
             return 1;
