@@ -6,7 +6,7 @@ use Bos\ValidationException;
 use Countable;
 
 abstract class Entity implements Countable{
-    protected $data = array();
+    protected $data;
 
     public function __construct() {
         // $this->import($data);

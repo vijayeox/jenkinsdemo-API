@@ -79,7 +79,7 @@ class EmailControllerTest extends ControllerTest {
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['password'], 'required');
     }
-        
+
     public function testUpdate() {
         $data = ['email' => 'bharatg@myvamla.com','password' => 'password1'];
         $this->initAuthToken($this->adminUser);

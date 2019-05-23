@@ -6,6 +6,7 @@ set -e
 #going back to oxzion3.0 root directory
 cd ../
 #Defining variables for later use
+SERVER=${2}
 OXHOME=${PWD}
 RED="\e[91m"
 GREEN="\e[92m"
@@ -13,6 +14,7 @@ BLUE="\e[34m"
 YELLOW="\e[93m"
 MAGENTA="\e[35m"
 BLUEBG="\e[44m"
+CYAN="\e[96m"
 BLINK="\e[5m"
 INVERT="\e[7m"
 RESET="\e[0m"
@@ -20,7 +22,8 @@ RESET="\e[0m"
 if [ $# -eq 0 ] ;
 then
     echo -e "${RED}ERROR: argument missing.${RESET}"
-    echo -e "$0 : needs an arguments to start. See list below."
+    echo -e "$0 : needs 2 arguments to start."
+    echo -e "For example type \n$ ${GREEN}build.sh calendar${YELLOW}(build option) ${GREEN}abc@xyz.com${YELLOW}(server name) ${RESET}.\nSee build list below."
     echo -e "Type '$0 --help' or '$0 -h' for more information."
     echo -e "${BLUEBG}Argument list:${RESET}"
     echo -e "1. all           -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
@@ -36,16 +39,12 @@ then
 	echo -e "11. --help or -h -${YELLOW}For help.${RESET}"
     echo -e "12. list         -${YELLOW}For list of options.${RESET}"
     echo -e "13. deploy       -${YELLOW}For deploying to production${RESET}"
+    echo -e "14. clean        -${YELLOW}For cleaning the production server${RESET}"
+    echo -e "15. setup        -${YELLOW}For fresh setup of the production server${RESET}"
     exit 0
 fi
 #writing functions for different tasks
 #function checking exiting build dir and deleting it
-deploy()
-{   
-    cd ${OXHOME}
-    scp -i ${HOME}/.ssh/oxzionapi.pem deployment/deploy.sh ubuntu@18.221.154.7:oxzion3.0/deployment
-    ssh -i ${HOME}/.ssh/oxzionapi.pem ubuntu@dev3.oxzion.com 'cd oxzion3.0/deployment ; ./deploy.sh ;'
-}
 check_dir()
 {
 cd ${OXHOME}
@@ -71,9 +70,10 @@ package()
     echo -e "${GREEN}Packaging Complete :)${RESET}"
     #Doing secure copy to dev3 server
     cd ${OXHOME}
-    echo -e "${YELLOW}Now Copying ${RED}build.zip${YELLOW} to dev3..${RESET}"
-    scp -i ${HOME}/.ssh/oxzionapi.pem build.zip ubuntu@18.221.154.7:deploy
-    echo -e "${YELLOW}Copying ${RED}build.zip${YELLOW} to dev3 completed successfully!${RESET}"        
+    echo -e "${YELLOW}Now Copying ${RED}build.zip${YELLOW} to $SERVER..${RESET}"
+    ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER ' mkdir -p oxzion3.0/deployment ;'
+    scp -i ${HOME}/.ssh/oxzionapi.pem build.zip $SERVER:oxzion3.0
+    echo -e "${YELLOW}Copying ${RED}build.zip${YELLOW} to $SERVER completed successfully!${RESET}"        
 }
 api()
 {   
@@ -107,7 +107,7 @@ camel()
 }
 calendar()
 {   
-    echo -e "${YELLOW}Creating directory build/integrations/eventcalendar...${RESET}"
+    echo -e "${YELLOW}Creating directory build/integrations/eventcalendar...${RESET}" 
     mkdir -p build/integrations/eventcalendar
     echo -e "${YELLOW}Copying and Building Calendar....${RESET}"
     cp -R ./integrations/eventcalendar ./build/integrations/
@@ -148,7 +148,8 @@ mail()
 {   
     mkdir -p build/integrations/rainloop
     #building rainloop
-    cd ${OXHOME}integrations/rainloop
+    cd ${OXHOME}/integrations/rainloop
+    echo -e "${YELLOW}Building Rainloop...${RESET}"
     npm install
     npm audit fix
     npm update
@@ -264,16 +265,15 @@ do
                 package
                 break ;;
         --help | -h)
-                echo -e "${BLINK}  _____  __ ________ ___  _   _   ____  _   _ ___ _     ____  "
+                echo -e "${BLINK}${CYAN}  _____  __ ________ ___  _   _   ____  _   _ ___ _     ____  "
                 echo -e " / _ \ \/ /|__  /_ _/ _ \| \ | | | __ )| | | |_ _| |   |  _ \ "
                 echo -e "| | | \  /   / / | | | | |  \| | |  _ \| | | || || |   | | | |"
                 echo -e "| |_| /  \  / /_ | | |_| | |\  | | |_) | |_| || || |___| |_| |"
                 echo -e " \___/_/\_\/____|___\___/|_| \_| |____/ \___/|___|_____|____/ "
                 echo -e "                                                              ${RESET}"
-                echo -e "                                                                      "
-                echo -e "${MAGENTA}This script is made to package oxzion3.0 to production build." 
-                echo -e "This script takes arguments to build oxzion-3.0"
-                echo -e "To run this script do --> $ ./build.sh *argument*"
+                echo -e "This script is made to package oxzion3.0 to production build." 
+                echo -e "This script takes 2 arguments to build oxzion-3.0.\nFirst the ${YELLOW}Build Option${RESET} Second the ${YELLOW}Server hostname${RESET}"
+                echo -e "For example type \n$ ${GREEN}build.sh calendar$YELLOW(build option) ${GREEN}abc@xyz.com$YELLOW(server name) ${RESET}."
                 echo -e "For argument list type ${GREEN}'$0 list'${MAGENTA} as arguments${RESET}."
                 break ;;
         list)
@@ -290,10 +290,46 @@ do
                 echo -e "11. --help or -h -${YELLOW}For help.${RESET}"
                 echo -e "12. list         -${YELLOW}For list of options.${RESET}"
                 echo -e "13. deploy       -${YELLOW}For deploying to production${RESET}"
+                echo -e "14. clean        -${YELLOW}For cleaning the production server${RESET}"
+                echo -e "15. setup        -${YELLOW}For fresh setup of the production server${RESET}"
                 break ;;
+        setup)  
+                while true; do
+                    echo -e "${RED}Warning! Only use for Fresh Setup, might break the server $SERVER!${RESET}"
+                    read yn
+                    case $yn in
+                        [Yy]* ) scp -i ${HOME}/.ssh/oxzionapi.pem deployment/freshsetup.sh $SERVER:oxzion3.0/deployment
+                                ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER 'sudo bash oxzion3.0/deployment/freshsetup.sh ;'
+                                break;;
+                        [Nn]* ) echo "Ok bye! ;)"
+                                exit;;
+                        * ) echo "Please type 'Yes' or 'No'.";;
+                    esac
+                done
+                break ;;
+                
         deploy)
-                deploy
-                break;;
+                ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER ' mkdir -p oxzion3.0/deployment ;'
+                scp -i ${HOME}/.ssh/oxzionapi.pem deployment/deploy.sh $SERVER:oxzion3.0/deployment
+                ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER 'cd oxzion3.0/deployment ; sudo bash deploy.sh ;'
+                break ;;
+        clean)
+                while true; do
+                    echo -e "${RED}Warning! Are you sure you want to clean the production server $SERVER?${RESET}"
+                    read yn
+                    case $yn in
+                        [Yy]* ) echo -e "${YELLOW}Started Cleaning Production server $SERVER${RESET}"
+                                ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER ' rm -Rf oxzion3.0 ;'
+                                ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER ' mkdir -p oxzion3.0/deployment ;'
+                                echo -e "${GREEN}Cleaning Production server Completed!${RESET}"
+                                break;;
+                        [Nn]* ) echo "Ok bye! ;)"
+                                exit;;
+                        * ) echo "Please type 'Yes' or 'No'.";;
+                    esac
+                done
+                break ;;
+                
         *)
                 echo -e "${RED}Error : Wrong build option ${YELLOW}'$i'${RESET}"
                 echo -e "Type '$0 --help' or '$0 -h' for more information."
