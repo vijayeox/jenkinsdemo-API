@@ -1,5 +1,5 @@
 #This script is used to deploy build.zip to respective folders
-#!/bin/sh
+#!/bin/bash
 # exit when any command fails
 set -e
 #trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
@@ -39,8 +39,9 @@ unpack()
 }
 api()
 {   
+    cd ${TEMP}
     echo -e "${YELLOW}Copying API...${RESET}"
-    if [ ! -d "./api/v1" ] ;
+    if [ ! -d "./integrations/api/v1" ] ;
     then
         echo -e "${RED}API was not was not packaged so skipping it\n${RESET}"
     else    
@@ -48,7 +49,7 @@ api()
         mkdir -p /var/www/api
         #moving to temp directory and copying required
         cd ${TEMP}
-        cp -R api/v1/* /var/www/api/
+        cp -R integrations/api/v1/* /var/www/api/
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
         echo -e "${YELLOW}Starting migrations script for API"
         api/v1/migrations migrate
@@ -56,7 +57,8 @@ api()
     fi    
 }
 camel()
-{
+{   
+    cd ${TEMP}
     echo -e "${YELLOW}Copying Camel...${RESET}"
     if [ ! -d "./integrations/camel" ] ;
     then
@@ -76,6 +78,7 @@ camel()
 #Function to copy calendar
 calendar()
 {
+    cd ${TEMP}
     echo -e "${YELLOW}Copying EventCalendar.."
     if [ ! -d "./integrations/eventcalendar" ] ;
     then
@@ -90,6 +93,7 @@ calendar()
 #Function to copy mattermost
 mattermost()
 {
+    cd ${TEMP}
     echo -e "${YELLOW}Copying Mattermost.."
     if [ ! -d "./integrations/mattermost" ] ;
     then
@@ -106,6 +110,7 @@ mattermost()
 #Function to copy OROcrm
 orocrm()
 {
+    cd ${TEMP}
     echo -e "${YELLOW}Copying OROcrm.."
     if [ ! -d "./integrations/orocrm" ] ;
     then
@@ -123,6 +128,7 @@ orocrm()
 #Function to copy rainloop
 rainloop()
 {
+    cd ${TEMP}
     echo -e "${YELLOW}Copying Rainloop.."
     if [ ! -d "./integrations/rainloop" ] ;
     then
@@ -136,6 +142,7 @@ rainloop()
 }
 view()
 {
+    cd ${TEMP}
     echo -e "${YELLOW}Copying view...${RESET}"
     if [ ! -d "./view" ] ;
     then
@@ -151,6 +158,7 @@ view()
 }
 workflow()
 {
+    cd ${TEMP}
     echo -e "${YELLOW}Copying workflow...${RESET}"
     if [ ! -d "./integrations/workflow" ] ;
     then
