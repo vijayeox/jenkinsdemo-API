@@ -270,6 +270,9 @@ class Module {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Email());
                     return new TableGateway('email_setting_user', $dbAdapter, null, $resultSetPrototype);
                 },
+                NLP\NLPEngine::class => function ($container) {
+                    return new NLP\Dialogflow\NLPDialogflowV1();
+                },
             ],
         ];
     }
