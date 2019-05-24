@@ -6,17 +6,14 @@ use App\Model\AppTable;
 use Bos\Auth\AuthConstants;
 use Bos\Auth\AuthContext;
 use Bos\Service\AbstractService;
-use Bos\Service\UserService;
 use Bos\ValidationException;
 use Exception;
-use PhpZip;
-use Symfony\Component\Yaml\Parser;
-use Ramsey\Uuid\Uuid;
-use Oxzion\Utils\FileUtils;
-use Oxzion\Service\WorkflowService;
-use Oxzion\Service\FormService;
 use Oxzion\Service\FieldService;
-
+use Oxzion\Service\FormService;
+use Oxzion\Service\WorkflowService;
+use PhpZip;
+use Ramsey\Uuid\Uuid;
+use Symfony\Component\Yaml\Parser;
 
 class AppService extends AbstractService
 {
@@ -27,11 +24,10 @@ class AppService extends AbstractService
     protected $fieldService;
     protected $formService;
 
-
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table,WorkflowService $workflowService,FormService $formService,FieldService $fieldService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -51,7 +47,7 @@ class AppService extends AbstractService
      */
     public function getApps()
     {
-        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap 
+        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap
         left join ox_app_registry as ar on ap.uuid = ar.app_id";
         $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.status!=1";
         $resultSet = $this->executeQuerywithParams($queryString, $where);
@@ -60,20 +56,21 @@ class AppService extends AbstractService
 
     public function getApp($id)
     {
-        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap 
+        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap
         left join ox_app_registry as ar on ap.uuid = ar.app_id";
         $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.status!=1 AND ap.id =" . $id;
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $resultSet->toArray();
     }
 
-    public function getAppList($filterArray=null,$page=null,$pageSize=null,$sortArray=null,$groupBy=null){
+    public function getAppList($filterArray = null, $page = null, $pageSize = null, $sortArray = null, $groupBy = null)
+    {
         $offset = ($page - 1) * $pageSize;
-        $resultSet = $this->getDataByParams('ox_app',array("*"),$filterArray,null,$sortArray,$groupBy,$pageSize,$offset);
+        $resultSet = $this->getDataByParams('ox_app', array("*"), $filterArray, null, $sortArray, $groupBy, $pageSize, $offset);
         $response = array();
         $response['data'] = $resultSet->toArray();
-        if($pageSize){
-            $response['pagination'] = array('page' => $page, 'noOfPages' => ceil($resultSet->count()/$pageSize),'pageSize' => $pageSize,'total'=>$resultSet->count());
+        if ($pageSize) {
+            $response['pagination'] = array('page' => $page, 'noOfPages' => ceil($resultSet->count() / $pageSize), 'pageSize' => $pageSize, 'total' => $resultSet->count());
         }
         return $response;
     }
@@ -122,7 +119,7 @@ class AppService extends AbstractService
         $data['status'] = App::DELETED;
         $form->exchangeArray($data);
         $count = 0;
-        $this->beginTransaction();        
+        $this->beginTransaction();
         try {
             $count = $this->table->save($form);
             if ($count == 0) {
@@ -149,7 +146,7 @@ class AppService extends AbstractService
      */
     public function xmlToArrayParser($file)
     {
-        return $xmlArray = json_decode(json_encode(simplexml_load_string($file)), TRUE);
+        return $xmlArray = json_decode(json_encode(simplexml_load_string($file)), true);
     }
 
     /**
@@ -161,7 +158,7 @@ class AppService extends AbstractService
     }
 
 // I am not doing anything here because we dont know how the app installation process will be when we do that, so I am creating a place holder to use for the future.
-// The purpose of this function is to give permission and privileges to the app that is getting istalled in the OS
+    // The purpose of this function is to give permission and privileges to the app that is getting istalled in the OS
 
     /**
      * Deploy App API using YAML File
@@ -274,12 +271,13 @@ class AppService extends AbstractService
      * </code>
      */
     public function installAppForOrg($data)
-    {   
+    {
         $form = new App();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['status'] = App::PUBLISHED;
-        $data['uuid'] = uniqid();
+        $data['uuid'] = Uuid::uuid4();
+
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
@@ -368,7 +366,8 @@ class AppService extends AbstractService
         return $count;
     }
 
-    private function createAppRegistry($data) {
+    private function createAppRegistry($data)
+    {
         $sql = $this->getSqlObject();
 //Code to check if the app is already registered for the organization
         $queryString = "select * from ox_app_registry ";
@@ -386,61 +385,65 @@ class AppService extends AbstractService
 
         return "App already registered to the Organization.";
     }
-    public function deployWorkflow($appId,$params,$file=null) {
-        if(isset($file)){
-           $this->workflowService->deploy($file,$appId,$params);
+    public function deployWorkflow($appId, $params, $file = null)
+    {
+        if (isset($file)) {
+            $this->workflowService->deploy($file, $appId, $params);
         } else {
             return 0;
         }
     }
 
-    public function getFields($appId,$workflowId=null){
+    public function getFields($appId, $workflowId = null)
+    {
         $filterArray = array();
-        if(isset($workflowId)){
+        if (isset($workflowId)) {
             $filterArray['workflow_id'] = $workflowId;
         }
-        return $this->fieldService->getFields($appId,$filterArray);
+        return $this->fieldService->getFields($appId, $filterArray);
     }
 
-    public function getForms($appId,$workflowId=null){
+    public function getForms($appId, $workflowId = null)
+    {
         $filterArray = array();
-        if(isset($workflowId)){
+        if (isset($workflowId)) {
             $filterArray['workflow_id'] = $workflowId;
         }
-        return $this->formService->getForms($appId,$filterArray);
+        return $this->formService->getForms($appId, $filterArray);
     }
 
-    public function registerApps($data) {
-        $apps=json_decode($data['applist'],true);
+    public function registerApps($data)
+    {
+        $apps = json_decode($data['applist'], true);
         unset($data);
         $form = new App();
-        $list=array();
-        
-        for($x=0;$x<sizeof($apps);$x++){
-            $data['name']=$apps[$x]['name'];
+        $list = array();
+
+        for ($x = 0; $x < sizeof($apps); $x++) {
+            $data['name'] = $apps[$x]['name'];
             array_push($list, $data);
         }
         $this->beginTransaction();
-        try{
-            $appSingleArray= array_unique(array_map('current', $list));
-            $update="UPDATE ox_app SET status = ".App::DELETED." where ox_app.name NOT IN ('".implode("','", $appSingleArray)."')";
+        try {
+            $appSingleArray = array_unique(array_map('current', $list));
+            $update = "UPDATE ox_app SET status = " . App::DELETED . " where ox_app.name NOT IN ('" . implode("','", $appSingleArray) . "')";
             $result = $this->runGenericQuery($update);
-            $select="SELECT name FROM ox_app where name in ('".implode("','", $appSingleArray)."')";
+            $select = "SELECT name FROM ox_app where name in ('" . implode("','", $appSingleArray) . "')";
             $result = $this->executeQuerywithParams($select)->toArray();
             $result = array_unique(array_map('current', $result));
             $count = 0;
-            for($x=0;$x<sizeof($apps);$x++){
-                if(!in_array($apps[$x]['name'], $result)){
+            for ($x = 0; $x < sizeof($apps); $x++) {
+                if (!in_array($apps[$x]['name'], $result)) {
                     $data['name'] = $apps[$x]['name'];
                     $data['category'] = $apps[$x]['category'];
                     $data['isdefault'] = $apps[$x]['isdefault'];
                     $data['start_options'] = json_encode($apps[$x]['options']);
                     //this API call is done by the server hence hardcoding the created by value
-                    $data['created_by'] = 1 ;
+                    $data['created_by'] = 1;
                     $data['date_created'] = date('Y-m-d H:i:s');
                     $data['status'] = App::PUBLISHED;
                     $data['type'] = App::PRE_BUILT;
-                    $data['uuid'] = Uuid::uuid4();   
+                    $data['uuid'] = Uuid::uuid4();
                     $form->exchangeArray($data);
                     $form->validate();
                     $count += $this->table->save($form);
@@ -450,17 +453,16 @@ class AppService extends AbstractService
             $selectquery = $this->executeQuerywithParams($query)->toArray();
             $idList = array_unique(array_map('current', $selectquery));
 
-            for($i=0;$i<sizeof($idList);$i++){
+            for ($i = 0; $i < sizeof($idList); $i++) {
 
-                $insert = "INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`) 
-                        SELECT org.id, '".$idList[$i]."', now() from ox_organization as org 
-                            where org.id not in(SELECT org_id FROM ox_app_registry WHERE app_id ='".$idList[$i]."')";
+                $insert = "INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`)
+                        SELECT org.id, '" . $idList[$i] . "', now() from ox_organization as org
+                            where org.id not in(SELECT org_id FROM ox_app_registry WHERE app_id ='" . $idList[$i] . "')";
                 $result = $this->runGenericQuery($insert);
             }
-            
+
             $this->commit();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             return 0;
         }
@@ -468,5 +470,3 @@ class AppService extends AbstractService
         return $count;
     }
 }
-
-?>
