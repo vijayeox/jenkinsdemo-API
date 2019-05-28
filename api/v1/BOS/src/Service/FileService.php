@@ -24,13 +24,13 @@ class FileService extends AbstractService{
     * <code> {
     *               id : integer,
     *               name : string,
-    *               status : string,
     *               formid : integer,
     *               Fields from Form
     *   } </code>
     * @return array Returns a JSON Response with Status Code and Created File.
     */
-    public function createFile(&$data){
+    public function createFile(&$data,$workflowInstanceId,$formId){
+        $data['workflow_instance_id'] = $workflowInstanceId;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -59,7 +59,6 @@ class FileService extends AbstractService{
             }
             $this->commit();
         }catch(Exception $e){
-            print_r($e->getMessage());exit;
             switch (get_class ($e)) {
              case "Oxzion\ValidationException" :
                 $this->rollback();
@@ -80,19 +79,19 @@ class FileService extends AbstractService{
     * @param array $data 
     * @return array Returns a JSON Response with Status Code and Created File.
     */
-    public function updateFile($id,&$data){
-        $obj = $this->table->get($id,array());
+    public function updateFile(&$data,$id){
+        $obj = $this->table->fetchAll(array('workflow_instance_id'=>$id,'form_id'=>$data['form_id']));
         if(is_null($obj)){
             return 0;
         }
-        $file = $obj->toArray();
+        $fileObject = $obj->toArray();
         $file = new File();
-        $changedArray = array_merge($obj->toArray(),$data);
+        $changedArray = array_merge($fileObject[0],$data);
         $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $changedArray['date_modified'] = date('Y-m-d H:i:s');
         $file->exchangeArray($changedArray);
         $file->validate();
-        $fields = array_diff($data,$obj->toArray());
+        $fields = array_diff($data,$fileObject[0]);
         $this->beginTransaction();
         try{
             $count = $this->table->save($file);
@@ -126,10 +125,10 @@ class FileService extends AbstractService{
     * @param $id ID of File to Delete
     * @return array success|failure response
     */
-    public function deleteFile($id){
+    public function deleteFile($workflowInstanceId,$formId){
     $count = 0;
         try{
-            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
+            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID),'form_id' => $formId,'workflow_instance_id' => $workflowInstanceId]);
             if($count == 0){
                 return 0;
             }
@@ -161,8 +160,8 @@ class FileService extends AbstractService{
     * @return array $data 
     * @return array Returns a JSON Response with Status Code and Created File.
     */
-    public function getFile($id){
-        $obj = $this->table->get($id,array('org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+    public function getFile($workflowInstanceId,$id){
+        $obj = $this->table->get($id,array('org_id' => AuthContext::get(AuthConstants::ORG_ID),'workflow_instance_id' => $workflowInstanceId));
         if($obj){
             $fileArray = $obj->toArray(); 
             $sql = $this->getSqlObject();

@@ -32,6 +32,8 @@ class WorkflowService extends AbstractService{
 	protected $fileService;
 	protected $formService;
 	protected $fieldService;
+	protected $processEngine;
+    protected $activityEngine;
 
     public function __construct($config, $dbAdapter,WorkflowTable $table,FormService $formService,FieldService $fieldService,FileService $fileService,WorkflowFactory $workflowFactory){
     	parent::__construct($config, $dbAdapter);
@@ -43,7 +45,12 @@ class WorkflowService extends AbstractService{
     	$this->formService = $formService;
     	$this->fieldService = $fieldService;
     	$this->fileService = $fileService;
-    }
+		$this->processEngine = $this->workFlowFactory->getProcessEngine();
+        $this->activityEngine = $this->workFlowFactory->getActivity();
+	}
+	public function setProcessEngine($processEngine){
+		$this->processEngine = $processEngine;
+	}
     public function deploy($file,$appId,$data){
 		$baseFolder = $this->config['DATA_FOLDER'];
 		$workflowName = $data['name'];
@@ -243,12 +250,19 @@ class WorkflowService extends AbstractService{
         $response['data'] = $resultSet->toArray();
         return $response;
     }
-    public function getWorkflow($appId,$id) {
+    public function getWorkflow($appId=null,$id=null) {
         $sql = $this->getSqlObject();
+        $params = array();
+        if(isset($appId)){
+            $params['app_id'] = $appId;
+        }
+        if(isset($id)){
+            $params['id'] = $id;
+        }
         $select = $sql->select();
         $select->from('ox_workflow')
         ->columns(array("*"))
-        ->where(array('id' => $id,'app_id'=>$appId));
+        ->where($params);
         $response = $this->executeQuery($select)->toArray();
         if(count($response)==0){
             return 0;
@@ -273,32 +287,63 @@ class WorkflowService extends AbstractService{
         $response = $this->executeQuery($select)->toArray();
         return $response;
 	}
-	public function saveFile($params,$id=null){
-		if(isset($params['formId'])){
-			$params['form_id'] = $params['formId'];
+	public function executeWorkflow($params,$id=null){
+		$workflowId = $params['workflowId'];
+		$workflow = $this->getWorkflow(null,$workflowId);
+        $workFlowFlag = 1;
+		if(!isset($workflow)){
+            $workFlowFlag= 0;
+		}
+		if(isset($params['activityId'])){
+			$params['form_id'] = $params['activityId'];
 		} else {
-			return 0;
+			$params['form_id'] = $workflow['form_id'];
 		}
 		if(isset($id)){
-			return $this->fileService->updateFile($id,$params);
+			return $this->fileService->updateFile($params,$id);
 		} else {
-			return $this->fileService->createFile($params);
+            if($workFlowFlag){
+                 if($workFlow['form_id']==$params['form_id']){
+                    $workflowInstanceId = $this->processEngine->startProcess($workflowId,$params);
+                } else {
+    				$workflowInstanceId = $this->activityEngine->submitTaskForm($params['form_id'],$params);
+                }
+            }
+			return $this->fileService->createFile($params,$workflowInstanceId,$params['form_id']);
 		}
 		return 0;
 	}
 	public function getFile($params){
-		if(isset($params['fileId'])){
-			return $this->fileService->getFile($params['fileId']);
+		if(isset($params['activityId'])){
+			return $this->fileService->getFile($workflowInstanceId,$params['activityId']);
 		} else {
 			return 0;
 		}
 	}
 	public function deleteFile($params){
-		if(isset($params['fileId'])){
-			return $this->fileService->deleteFile($params['fileId']);
+		if(isset($params['activityId'])){
+			return $this->fileService->deleteFile($workflowInstanceId,$params['activityId']);
 		} else {
 			return 0;
 		}
 	}
+
+    public function getAssignments($appId) {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_workflow')
+        ->columns(array("*"))
+        ->where(array('app_id'=>$appId));
+        $response = $this->executeQuery($select)->toArray();
+        if(count($response)==0){
+            return 0;
+        }
+        foreach ($response as $workflow) {
+            foreach (json_decode($workflow['process_ids']) as $process_id) {
+                $assignments[] = $this->activityEngine->getActivitiesByUser(AuthContext::get(AuthConstants::USER_ID),array('processInstanceId'=>$process_id,'delegationState'=>'PENDING'));
+            }
+        }
+        return $response;
+    }
 }
 ?>

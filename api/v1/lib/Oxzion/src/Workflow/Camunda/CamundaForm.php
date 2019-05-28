@@ -5,7 +5,8 @@ use Oxzion\Utils\XMLUtils;
 class CamundaForm{
 	protected $data;
 	public function __construct($form,$appId,$processId,$workflowId) {
-		$this->data['name'] = $form->getAttribute('id');
+		$this->data['task_id'] = $form->getAttribute('id');
+		$this->data['name'] = $form->getAttribute('name');
 		$this->data['app_id'] = $appId;
 		$this->data['process_id'] = $processId;
 		$this->data['workflow_id'] = $workflowId;

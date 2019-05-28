@@ -107,7 +107,7 @@ class WorkflowController extends AbstractApiController
     /**
     * GET Workflow API
     * @api
-    * @link /Workflow[/:WorkflowId]
+    * @link /workflow[/:workflowId]
     * @method GET
     * @param $id ID of Workflow
     * @return array $data 
@@ -165,73 +165,10 @@ class WorkflowController extends AbstractApiController
             return $this->getErrorResponse("Files cannot be uploaded!");
         }
     }
-    public function fieldDataAction(){
+
+    public function assignmentsAction(){
         $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
-        switch ($this->request->getMethod()) {
-            case 'POST':
-                if(isset($params['fileId'])){
-                    return $this->saveFieldData($params,$params['fileId']);
-                } else {
-                    return $this->saveFieldData($params);
-                }
-                break;
-            case 'GET':
-                return $this->getFieldData($params);
-                break;
-            case 'DELETE':
-                return $this->deleteFieldData($params);
-                break;
-            default:
-                return $this->getErrorResponse("Not Sure what you are upto");
-                break;
-        }
-    }
-    /**
-    * Create File API
-    * @api
-    * @link /workflow/:workflowId/form/:formId/fielddata
-    * @method POST
-    * @param array $data Array of elements as shown
-    * <code> {
-    *               id : integer,
-    *               name : string,
-    *               status : string,
-    *               formid : integer,
-    *               Fields from Form
-    *   } </code>
-    * @return array Returns a JSON Response with Status Code and Created File.
-    */
-    private function saveFieldData($params,$id = null){
-        try{
-            $count = $this->workflowService->saveFile($params,$id);
-        } catch (ValidationException $e){
-            $response = ['data' => $params, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
-        }
-        if($count == 0){
-            return $this->getFailureResponse("Failed to create a new entity", $params);
-        }
-        if(isset($id)){
-            return $this->getSuccessResponseWithData($params,200);
-        } else {
-            return $this->getSuccessResponseWithData($params,201);
-        }
-    }
-    private function getFieldData($params){
-        if(!isset($params['fileId'])){
-            return $this->getInvalidMethod();
-        }
-        $result = $this->workflowService->getFile($params);
-        if($result == 0){
-            return $this->getErrorResponse("File not found", 404, ['id' => $id]);
-        }
-        return $this->getSuccessResponseWithData($result);
-    }
-    private function deleteFieldData($params){
-        $response = $this->workflowService->deleteFile($params);
-        if($response == 0){
-            return $this->getErrorResponse("File not found", 404, ['id' => $id]);
-        }
-        return $this->getSuccessResponse();
+        $assignments = $this->workflowService->getAssignments($params['appId']);
+        return $this->getSuccessResponseWithData($assignments);
     }
 }

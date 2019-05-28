@@ -62,7 +62,7 @@ class AppController extends AbstractApiController
     {
         $data = $this->params()->fromPost();
         try {
-            $count = $this->appService->installAppForOrg($data);
+            $count = $this->appService->deployAppForOrg($data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -273,6 +273,20 @@ class AppController extends AbstractApiController
             $responseData[] = $appData;
         }
         return $this->getSuccessResponseWithData($responseData);
+    }
+    public function appInstallAction($data)
+    {
+        $data = $this->params()->fromPost();
+        try {
+            $count = $this->appService->installAppForOrg($data);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        if ($count == 0) {
+            return $this->getFailureResponse("Failed to create a new entity", $data);
+        }
+        return $this->getSuccessResponseWithData($data, 201);
     }
     /**
      * Upload the app from the UI and extracting the zip file in a folder that will start the installation of app.

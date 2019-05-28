@@ -24,11 +24,11 @@ class ProcessEngineImpl implements ProcessEngine {
 		}
 	}
 
-	public function startProcess($key ,$tenantId, $processVariables = array()){
-		$query = 'process-definition/key/'.$key.'/tenant-id/'.$tenantId.'/start';
+	public function startProcess($id , $processVariables = array()){
+		$query = 'process-definition/'.$id.'/start';
 		try{
 			if($processVariables){
-				$response = $this->restClient->post($query, array("variables"=>json_encode((object)$processVariables)));
+				$response = $this->restClient->post($query, array("variables"=>json_encode($processVariables)));
 			} else {
 				$response = $this->restClient->post($query);
 			}

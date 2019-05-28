@@ -5,7 +5,7 @@ interface Activity{
 
 	public function getActivity($activityId);
 
-	public function getActivitiesByUser($userId);
+	public function getActivitiesByUser($userId,$params);
 
 	public function claimActivity($activityId,$userId);
 
@@ -16,6 +16,8 @@ interface Activity{
 	public function resolveActivity($activityId,$parameterArray);
 	
 	public function getActivitiesByGroup($groupId);
+
+	public function submitTaskForm($activityId,$parameterArray);
 
 	public function saveActivityData($activityId,$parameterArray);
 

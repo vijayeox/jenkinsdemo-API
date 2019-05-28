@@ -6,14 +6,17 @@ use App\Model\AppTable;
 use Bos\Auth\AuthConstants;
 use Bos\Auth\AuthContext;
 use Bos\Service\AbstractService;
+use Bos\Service\UserService;
 use Bos\ValidationException;
 use Exception;
-use Oxzion\Service\FieldService;
-use Oxzion\Service\FormService;
-use Oxzion\Service\WorkflowService;
-use PhpZip;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\Yaml\Parser;
+use Oxzion\Utils\FileUtils;
+use Oxzion\Utils\YMLUtils;
+use Oxzion\Utils\ZipUtils;
+use Oxzion\Service\WorkflowService;
+use Oxzion\Service\FormService;
+use Oxzion\Service\FieldService;
+
 
 class AppService extends AbstractService
 {
@@ -134,22 +137,6 @@ class AppService extends AbstractService
     }
 
     /**
-     * Parse the XML File and return a array
-     * @method xmlToArrayParser
-     * @param array $fileName Name of the file, $destinationFolder Folder to which the extracted App file should save</br>
-     * <code>
-     * </code>
-     * @return array Returns the file object.</br>
-     * <code> status : "success|error",
-     *        data : File Object
-     * </code>
-     */
-    public function xmlToArrayParser($file)
-    {
-        return $xmlArray = json_decode(json_encode(simplexml_load_string($file)), true);
-    }
-
-    /**
      * @return mixed
      */
     public function getAppUploadFolder()
@@ -175,67 +162,28 @@ class AppService extends AbstractService
         try {
             $appUploadedZipFile = $appUploadFolder . "/uploads/App.zip";
             $destinationFolder = $appUploadFolder . "/temp";
-            $this->extractZipFilefromAppUploader($appUploadedZipFile, $destinationFolder);
+            ZipUtils::extract($appUploadedZipFile, $destinationFolder);
             $fileName = file_get_contents($appUploadFolder . "/temp/App/web.yml");
         } catch (Exception $e) {
-//            return $this->getErrorResponse("The files could not be extracted!");
             return 0;
         }
-        $ymlArray = $this->ymlToArrayParser($fileName);
+        $ymlArray = YMLUtils::ymlToArray($fileName);
         //Code to insert the details of the app to the app table. Returns 1 or 0 for success or failure
         $app = $this->insertAppDetail($ymlArray['config']);
         if ($app === 0) {
-//            return $this->getErrorResponse("App could not be installed, please check your deployment descriptor and try again!");
             return 0;
         }
-        //Code to add the default privilege to the app installed.
         $appPrivileges = $this->applyAppPrivilege($ymlArray['config'], $app);
 
         if ($appPrivileges === 0) {
-//            return $this->getErrorResponse("App Privileges could not be set, please check your application and try again!");
             return 0;
         }
         $count = $this->getFormInsertFormat($ymlArray['config']);
         if ($count === 1) {
-//            return $this->getSuccessResponse();
             return 1;
         } else {
-//            return $this->getErrorResponse("Form could not be created, please check your deployment descriptor and try again!");
             return 0;
         }
-    }
-
-    /**
-     * Extract the zip file from the upload form
-     * @method extractZipFilefromAppUploader
-     * @param array $fileName Name of the file, $destinationFolder Folder to which the extracted App file should save</br>
-     * <code>
-     * </code>
-     * @return array Returns the file object.</br>
-     * <code> status : "success|error",
-     *        data : File Object
-     * </code>
-     */
-    public function extractZipFilefromAppUploader($fileName, $destinationFolder)
-    {
-        try {
-            $zipFile = new \PhpZip\ZipFile();
-            $zipFile->openFile($fileName); // open archive from file
-            $extract = $zipFile->extractTo($destinationFolder); // extract files to the specified directory
-        } catch (Exception $e) {
-            return 0;
-        }
-        return $extract;
-    }
-
-    /**
-     * @param $file
-     * @return mixed
-     */
-    public function ymlToArrayParser($file)
-    {
-        $yml = new Parser();
-        return $parsed = $yml->parse($file);
     }
 
     /**
@@ -252,7 +200,7 @@ class AppService extends AbstractService
             $formData['type'] = $appData['type'];
         }
         try {
-            $id = $this->installAppForOrg($formData);
+            $id = $this->deployAppForOrg($formData);
         } catch (ValidationException $e) {
             return 0;
         }
@@ -261,7 +209,7 @@ class AppService extends AbstractService
 
     /**
      * Create App Service
-     * @method installAppForOrg
+     * @method deployAppForOrg
      * @param array $data Array of elements as shown</br>
      * <code>
      * </code>
@@ -270,14 +218,16 @@ class AppService extends AbstractService
      *        data : array Created App Object
      * </code>
      */
-    public function installAppForOrg($data)
-    {
+    public function deployAppForOrg($data)
+    {   
         $form = new App();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['status'] = App::PUBLISHED;
         $data['uuid'] = Uuid::uuid4();
-
+		if(!isset($data['org_id'])){
+            return 0;
+        }
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
@@ -350,7 +300,6 @@ class AppService extends AbstractService
             $formData['name'] = $formArray['app-form-assign']['form-name'];
             $formData['description'] = $formArray['app-form-assign']['form-description'];
             if (!empty($formArray['app-form-assign']['form-statuslist'])) {
-                //{"data":{"1":"RCA - Not Done","2":"In Progress","3":"Audit","102":"Closed"}}
                 foreach ($formArray['app-form-assign']['form-statuslist'] as $statusArray) {
                     $stsData[$statusArray['status-value']] = $statusArray['status-text'];
                     $sts['data'] = $stsData;
@@ -375,9 +324,8 @@ class AppService extends AbstractService
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         $queryResult = $resultSet->toArray();
 
-        if (empty($queryResult)) { //Checking to see if we already have entry made to the database
+        if (empty($queryResult)) {
             $insert = $sql->insert('ox_app_registry');
-            // $data = array('group_id'=>$id['id'],'announcement_id'=>$announcementId);
             $insert->values($data);
             $result = $this->executeUpdate($insert);
             return 1;

@@ -21,10 +21,10 @@ class WorkflowTest extends TestCase{
         $this->assertNotEquals(0, $data);
         $deploymentId = $data['id'];
         if(enableCamunda==0){
-            $mockRestClient->expects('post')->with('process-definition/key/Process_1/tenant-id/1/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
+            $mockRestClient->expects('post')->with('process-definition/12321/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
             $processEngine->setRestClient($mockRestClient);
         }
-        $processStart = $processEngine->startProcess('Process_1',1);
+        $processStart = $processEngine->startProcess(12321);
         $definitionId = $processStart['definitionId'];
         $this->assertNotEquals(0, $definitionId);
         if(enableCamunda==0){
@@ -67,10 +67,10 @@ class WorkflowTest extends TestCase{
         $this->assertNotEquals(0, $data);
         $deploymentId = $data['id'];
         if(enableCamunda==0){
-            $mockRestClient->expects('post')->with('process-definition/key/Process_1/tenant-id/1/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
+            $mockRestClient->expects('post')->with('process-definition/12321/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
             $processEngine->setRestClient($mockRestClient);
         }
-        $processStart = $processEngine->startProcess('Process_1',1);
+        $processStart = $processEngine->startProcess(12321);
         $definitionId = $processStart['definitionId'];
         $this->assertNotEquals(0, $definitionId);
         if(enableCamunda==0){
@@ -100,10 +100,10 @@ class WorkflowTest extends TestCase{
         $this->assertNotEquals(0, $data);
         $deploymentId = $data['id'];
         if(enableCamunda==0){
-            $mockRestClient->expects('post')->with('process-definition/key/Process_2/tenant-id/1/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
+            $mockRestClient->expects('post')->with('process-definition/12321/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
             $processEngine->setRestClient($mockRestClient);
         }
-        $processStart = $processEngine->startProcess('Process_2',1);
+        $processStart = $processEngine->startProcess(12321);
         $definitionId = $processStart['definitionId'];
         $processId = $processStart['id'];
         // print_r($processStart);exit;

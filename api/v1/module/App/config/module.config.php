@@ -166,6 +166,22 @@ return [
                     ],
                 ],
             ],
+            'appmenu' => [
+                'type'    => Segment::class,
+                'options' => [
+                	'route'    => '/app/:appId/menu[/:menuId]',
+                    'defaults' => [
+                        'controller' => Controller\MenuController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            // 'put'=> 'MANAGE_FORM_WRITE',
+                            // 'post'=> 'MANAGE_FORM_WRITE',
+                            // 'delete'=> 'MANAGE_FORM_WRITE',
+                            // 'get'=> 'MANAGE_FORM_READ',
+                        ],
+                    ],
+                ],
+            ],
             'workflowfields' => [
                 'type' => Segment::class,
                 'options' => [
@@ -192,13 +208,25 @@ return [
                     ],
                 ],
             ],
-            'workflowFieldData' => [
+            'workflowInstance' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/workflow/:workflowId/form/:formId/fielddata[/:fileId]',
+                    'route' => '/workflow/:workflowId[/activity/:activityId][/instance/:instanceId]',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'action' => 'activity',
+                        'access'=>[
+                        ],
+                    ],
+                ],
+            ],
+            'assignments' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/assignments',
                     'defaults' => [
                         'controller' => Controller\WorkflowController::class,
-                        'action' => 'fieldData',
+                        'action' => 'assignments',
                         'access'=>[
                         ],
                     ],

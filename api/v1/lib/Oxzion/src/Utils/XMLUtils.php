@@ -3,6 +3,10 @@ namespace Oxzion\Utils;
 
 class XMLUtils {
 
+	static public function xmlToArray($file){
+        return $xmlArray = json_decode(json_encode(simplexml_load_string($file)), TRUE);
+	}
+
 	static public function domToArray($root) {
 		$result = array();
 		if ($root->hasAttributes()) {

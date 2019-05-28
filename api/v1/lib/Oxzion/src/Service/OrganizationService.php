@@ -309,8 +309,8 @@ class OrganizationService extends AbstractService
     }
 
     public function addUserToOrg($userId, $organizationId) {
-        if ($user = $this->getDataByParams('ox_user', array('id', 'username'), array('id' => $userId))) {
-            if ($org = $this->getDataByParams('ox_organization', array('id', 'name'), array('id' => $organizationId, 'status' => 'Active'))) {
+        if ($user = $this->getDataByParams('ox_user', array('id', 'username'), array('id' => $userId))->toArray()) {
+            if ($org = $this->getDataByParams('ox_organization', array('id', 'name'), array('id' => $organizationId, 'status' => 'Active'))->toArray()) {
                 if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))) {
                     $data = array(array(
                         'user_id' => $userId,

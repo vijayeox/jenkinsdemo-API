@@ -6,7 +6,7 @@ interface ProcessEngine
 
 	public function getProcessDefinition($id);
 
-    public function startProcess($key ,$tenantId,  $processVariables = null);
+    public function startProcess($id,  $processVariables = null);
 
     public function stopProcess($id);
 

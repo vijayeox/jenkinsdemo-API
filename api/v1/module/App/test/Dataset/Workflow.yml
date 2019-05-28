@@ -48,26 +48,36 @@ ox_workflow:
     id: 1
     app_id: 99
     name: "Test Workflow 1"
+    process_ids: "[main]"
+    form_id: 1
   -
     id: 2
     app_id: 99
     name: "Test Workflow 2"
+    process_ids: "[main]"
+    form_id: 1
 ox_file:
   -
     id: 1
     name: "Test Task 1"
+    workflow_instance_id: 1
     org_id: 1
     form_id: 1
-    status: "Active"
     data: "new data"
   -
     id: 2
     name: "Test Task  2"
+    workflow_instance_id: 1
     org_id: 1
-    form_id: 1
-    status: "Active"
+    form_id: 2
     data: "new data"
-
+ox_workflow_instance:
+  -
+    id: 1
+    workflow_id: 1
+    app_id: 0
+    org_id: 1
+    status: "In Progress"
 ox_file_attribute:
   -
     id: 1

@@ -25,9 +25,10 @@ class ActivityImpl implements Activity {
 		}
 	}
 
-	public function getActivitiesByUser($userId){
+	public function getActivitiesByUser($userId,$params){
 		try {
-			$response =  $this->restClient->post('task', array("assignee"=>$userId));
+			$queryArray = array_merge($params,array("assignee"=>$userId));
+			$response =  $this->restClient->get('task', $queryArray);
 			$result = json_decode($response,true);
 			return $result;
 		} catch(Exception $e){
@@ -59,6 +60,20 @@ class ActivityImpl implements Activity {
 		$query = 'task/'.$activityId.'/complete';
 		try {
 			$response =  $this->restClient->post($query,$parameterArray);
+			$result = json_decode($response,true);
+			return $result;
+		} catch(Exception $e){
+			return 0;
+		}
+	}
+	public function submitTaskForm($activityId,$parameterArray=array()){
+		$query = 'task/'.$activityId.'/submit-form';
+		$params = array();
+		foreach ($parameterArray as $k => $v) {
+			$params[$k] = array('value'=>$v);
+		}
+		try {
+			$response =  $this->restClient->post($query,json_encode(array('variables'=>$params)));
 			$result = json_decode($response,true);
 			return $result;
 		} catch(Exception $e){
