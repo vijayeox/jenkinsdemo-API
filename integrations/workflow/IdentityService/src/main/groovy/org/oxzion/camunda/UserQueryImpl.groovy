@@ -24,7 +24,7 @@ class UserQueryImpl extends org.camunda.bpm.engine.impl.UserQueryImpl {
         final IdentityProvider provider = getCustomIdentityProvider(commandContext)
         return provider.findUserByQueryCriteria(this)
     }
-    protected IdentityProvider getCustomIdentityProvider(CommandContext commandContext) {
+    protected static IdentityProvider getCustomIdentityProvider(CommandContext commandContext) {
         return (IdentityProvider) commandContext.getReadOnlyIdentityProvider()
     }
 }

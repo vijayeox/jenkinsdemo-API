@@ -7,7 +7,7 @@ class User implements org.camunda.bpm.engine.identity.User {
     private String lastName
     private String password
 
-    public User(userId,email,firstName,lastName,password){
+    User(userId,email,firstName,lastName,password){
         this.userId = userId
         this.firstName = firstName
         this.email = email

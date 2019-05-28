@@ -1,7 +1,8 @@
 package org.oxzion.camunda
 
-import groovy.sql.Sql
+
 import org.camunda.bpm.engine.BadUserRequestException
+import org.camunda.bpm.engine.authorization.Groups
 import org.camunda.bpm.engine.identity.GroupQuery
 import org.camunda.bpm.engine.identity.NativeUserQuery
 import org.camunda.bpm.engine.identity.TenantQuery
@@ -25,16 +26,26 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
     org.camunda.bpm.engine.identity.User findUserById(String userId) {Class.forName(DB_DRIVER).newInstance()
         Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
         Statement st = con.createStatement()
-        String statement = 'select id,firstname,lastname,email,password from ox_user where id = "'+userId+'"'
+        String statement = 'select username,firstname,lastname,email,password from ox_user where username="'+userId+'"'
         ResultSet rs = st.executeQuery(statement)
         if(rs.next()) {
-            return new User(rs.getString("id"),rs.getString("email"),rs.getString("firstname"),rs.getString("lastname"),rs.getString("password"))
+            return new User(rs.getString("username"),rs.getString("email"),rs.getString("firstname"),rs.getString("lastname"),rs.getString("password"))
+        }
+    }
+
+    org.camunda.bpm.engine.identity.User findUserByUsername(String userName) {Class.forName(DB_DRIVER).newInstance()
+        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
+        Statement st = con.createStatement()
+        String statement = 'select username,firstname,lastname,email,password from ox_user where username = "'+userName+'"'
+        ResultSet rs = st.executeQuery(statement)
+        if(rs.next()) {
+            return new User(rs.getString("username"),rs.getString("email"),rs.getString("firstname"),rs.getString("lastname"),rs.getString("password"))
         }
     }
 
     @Override
     UserQuery createUserQuery() {
-        return new UserQueryImpl(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired());
+        return new UserQueryImpl(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired())
     }
 
     @Override
@@ -47,7 +58,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
     }
 
     long findGroupCountByQueryCriteria(GroupQueryImpl query) {
-        return findGroupByQueryCriteria(query).size();
+        return findGroupByQueryCriteria(query).size()
     }
     long findTenantCountByQueryCriteria(TenantQueryImpl query) {
         return findTenantByQueryCriteria(query).size()
@@ -57,33 +68,34 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         Class.forName(DB_DRIVER).newInstance()
         Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
         Statement st = con.createStatement()
-        String statement = "select id,name,type from groups"
-        String orderByPart = "ORDER BY groups.id desc"
+        String statement = "select id,name,status from ox_group"
+        String orderByPart = "ORDER BY ox_group.id desc"
         if(query.orderByGroupId())
-            orderByPart = "ORDER BY groups.id desc"
+            orderByPart = "ORDER BY ox_group.id desc"
         if(query.orderByGroupName())
-            orderByPart = "ORDER BY groups.name desc"
+            orderByPart = "ORDER BY ox_group.name desc"
         if(query.orderByGroupType())
-            orderByPart = "ORDER BY groups.type desc"
+            orderByPart = "ORDER BY ox_group.status desc"
         if(query.getId() != null)
-            statement = "select id,name,type from groups where id=${query.getId()} ${orderByPart}"
+            statement = "select id,name,status from ox_group where id=${query.getId()} ${orderByPart}"
         if(query.getIds() != null)
-            statement = "select id,name,type from groups where id IN (${query.getIds()}) ${orderByPart}"
+            statement = "select id,name,status from ox_group where id IN (${query.getIds()}) ${orderByPart}"
         if(query.getName() != null)
-            statement = "select id,name,type from groups where name ='${query.getName()}' ${orderByPart}"
+            statement = "select id,name,status from ox_group where name ='${query.getName()}' ${orderByPart}"
         if(query.getName() != null)
-            statement = "select id,name,type from groups where name like '%${query.getName()}%' ${orderByPart}"
+            statement = "select id,name,status from ox_group where name like '%${query.getName()}%' ${orderByPart}"
         if(query.getType() != null)
-            statement = "select id,name,type from groups where type like '%${query.getType()}%' ${orderByPart}"
+            statement = "select id,name,status from ox_group where status like '%${query.getType()}%' ${orderByPart}"
         if(query.getTenantId() != null || query.tenantId)
-            statement = "select id,name,type from groups where orgid = '${query.getTenantId()}' ${orderByPart}"
+            statement = "select id,name,status from ox_group where orgid = '${query.getTenantId()}' ${orderByPart}"
         if(query.getUserId() !=null)
-            statement = "select groups.id,groups.name,groups.type FROM groups LEFT JOIN groups_ox_user ON groups.id=groups_ox_user.groupid WHERE groups_ox_user.avatarid='"+query.getUserId()+"' "+orderByPart
+            statement = "select ox_group.id,ox_group.name,ox_group.status FROM ox_group LEFT JOIN ox_user_group ON ox_group.id=ox_user_group.group_id WHERE ox_user_group.avatar_id='"+query.getUserId()+"' "+orderByPart
         ResultSet rs = st.executeQuery(statement)
         ArrayList<Group> groups =  new ArrayList<Group>()
         while (rs.next()) {
             groups.add(new Group(rs.getString("id"), rs.getString("name"), "SYSTEM"))
         }
+        groups.add(new Group("99999",'Admin', Groups.CAMUNDA_ADMIN))
         return groups
     }
 
@@ -94,18 +106,27 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
 
     @Override
     boolean checkPassword(String userId, String password) {
+        if(password == null) {
+            return false
+        }
+
+        // engine can't work without users
+        if(userId == null || userId.isEmpty()) {
+            return false
+        }
         return true
     }
+
 
     @Override
     org.camunda.bpm.engine.identity.Group findGroupById(String groupId) {
         Class.forName(DB_DRIVER).newInstance()
         Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
         Statement st = con.createStatement()
-        String statement = "select id,name,type from groups"
+        String statement = "select id,name,status from ox_group"
         ResultSet rs = st.executeQuery(statement)
         if(rs.next()) {
-            new Group(rs.getString("id"),rs.getString("name"),rs.getString("type"))
+            return new Group(rs.getString("id"),rs.getString("name"),rs.getString("status"))
         }
     }
 
@@ -124,8 +145,8 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         Statement st = con.createStatement()
         println(query.asc())
         try {
-            String statement = "select id,firstname,lastname,email,password from ox_user"
-            String orderByPart = "ORDER BY ox_user.id"
+            String statement = "select username,firstname,lastname,email,password from ox_user"
+            String orderByPart = "ORDER BY ox_user.username"
             if(query.orderByUserEmail())
                 orderByPart = "ORDER BY ox_user.email"
             if(query.orderByUserFirstName())
@@ -133,35 +154,35 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
             if(query.orderByUserLastName())
                 orderByPart = "ORDER BY ox_user.lastname"
             if(query.orderByUserId())
-                orderByPart = "ORDER BY ox_user.id"
+                orderByPart = "ORDER BY ox_user.username"
             if(query.getId() != null)
-                statement = "select id,firstname,lastname,email,password from ox_user where id=${query.getId()} ${orderByPart}"
+                statement = "select username,firstname,lastname,email,password from ox_user where username=${query.getId()} OR username=${query.getId()} ${orderByPart}"
             if(query.getIds() != null)
-                statement = "select id,firstname,lastname,email,password from ox_user where id in (${query.getIds()}) orderByPart}"
+                statement = "select username,firstname,lastname,email,password from ox_user where username in (${query.getIds()}) OR username in (${query.getIds()}) orderByPart}"
             if(query.getFirstName() != null)
-                statement = "select id,firstname,lastname,email,password from ox_user where firstname='${query.getFirstName()}' ${orderByPart}"
+                statement = "select username,firstname,lastname,email,password from ox_user where firstname='${query.getFirstName()}' ${orderByPart}"
             if(query.getFirstNameLike() != null)
-                statement = "select id,firstname,lastname,email,password from ox_user where firstname like'%${query.getFirstName()}%' ${orderByPart}"
+                statement = "select username,firstname,lastname,email,password from ox_user where firstname like'%${query.getFirstName()}%' ${orderByPart}"
             if(query.getLastName() != null)
-                statement = "select id,firstname,lastname,email,password from ox_user where lastname='${query.getLastName()}' ${orderByPart}"
+                statement = "select username,firstname,lastname,email,password from ox_user where lastname='${query.getLastName()}' ${orderByPart}"
             if(query.getLastNameLike() != null)
-                statement = "select id,firstname,lastname,email,password from ox_user where lastname like'%${query.getLastName()}%' ${orderByPart}"
+                statement = "select username,firstname,lastname,email,password from ox_user where lastname like'%${query.getLastName()}%' ${orderByPart}"
             if(query.getEmail() != null)
-                statement = "select id,firstname,lastname,email,password from ox_user where email='${query.getEmail()}' ${orderByPart}"
+                statement = "select username,firstname,lastname,email,password from ox_user where email='${query.getEmail()}' ${orderByPart}"
             if(query.getEmailLike() != null)
-                statement = "select id,firstname,lastname,email,password from ox_user where email like '%${query.getEmail()}%' ${orderByPart}"
+                statement = "select username,firstname,lastname,email,password from ox_user where email like '%${query.getEmail()}%' ${orderByPart}"
             if(query.getGroupId() != null)
-                statement = "select id,firstname,lastname,email,password FROM ox_user LEFT JOIN groups_ox_user ON ox_user.id=groups_ox_user.avatarid WHERE groups_ox_user.groupid=${query.getGroupId()} ${orderByPart}"
+                statement = "select username,firstname,lastname,email,password FROM ox_user LEFT JOIN ox_user_group ON ox_user.id=ox_user_group.avatar_id WHERE ox_user_group.group_id=${query.getGroupId()} ${orderByPart}"
             if(query.getTenantId() != null)
-                statement = "select id,firstname,lastname,email,password FROM ox_user WHERE orgid=${query.getTenantId()} ${orderByPart}"
+                statement = "select username,firstname,lastname,email,password FROM ox_user WHERE orgid=${query.getTenantId()} ${orderByPart}"
             ResultSet rs = st.executeQuery(statement)
             ArrayList<User> users = new ArrayList<User>()
             while(rs.next()) {
-                users.add(new User(rs.getString("id"),rs.getString("email"),rs.getString("firstname"),rs.getString("lastname"),rs.getString("password")))
+                users.add(new User(rs.getString("username"),rs.getString("email"),rs.getString("firstname"),rs.getString("lastname"),rs.getString("password")))
             }
             return users
         } catch(Exception e){
-            print(e)
+            print(e.getMessage())
         }
         return null
     }

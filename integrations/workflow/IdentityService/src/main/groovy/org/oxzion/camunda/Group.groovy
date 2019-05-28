@@ -1,11 +1,12 @@
 package org.oxzion.camunda
+import org.camunda.bpm.engine.authorization.Groups
 
 class Group implements org.camunda.bpm.engine.identity.Group{
     private String groupId
     private String name
     private String type
 
-    public Group(groupId,name,type){
+    Group(groupId,name,type){
         this.groupId = groupId
         this.name = name
         this.type = type

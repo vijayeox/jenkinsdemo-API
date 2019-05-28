@@ -20,11 +20,11 @@ class TenantQueryImpl extends org.camunda.bpm.engine.impl.TenantQueryImpl {
     }
 
     @Override
-    List<org.camunda.bpm.engine.identity.Group> executeList(CommandContext commandContext, Page page) {
-        final IdentityProvider provider = getCustomIdentityProvider(commandContext);
+    List<org.camunda.bpm.engine.identity.Tenant> executeList(CommandContext commandContext, Page page) {
+        final IdentityProvider provider = getCustomIdentityProvider(commandContext)
         return provider.findTenantByQueryCriteria(this);
     }
-    protected IdentityProvider getCustomIdentityProvider(CommandContext commandContext) {
+    protected static IdentityProvider getCustomIdentityProvider(CommandContext commandContext) {
         return (IdentityProvider) commandContext.getReadOnlyIdentityProvider()
     }
 }

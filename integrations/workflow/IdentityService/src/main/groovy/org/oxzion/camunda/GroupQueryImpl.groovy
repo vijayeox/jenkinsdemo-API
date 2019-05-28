@@ -20,10 +20,10 @@ class GroupQueryImpl extends org.camunda.bpm.engine.impl.GroupQueryImpl {
 
     @Override
     List<org.camunda.bpm.engine.identity.Group> executeList(CommandContext commandContext, Page page) {
-        final IdentityProvider provider = getCustomIdentityProvider(commandContext);
+        final IdentityProvider provider = getCustomIdentityProvider(commandContext)
         return provider.findGroupByQueryCriteria(this);
     }
-    protected IdentityProvider getCustomIdentityProvider(CommandContext commandContext) {
+    protected static IdentityProvider getCustomIdentityProvider(CommandContext commandContext) {
         return (IdentityProvider) commandContext.getReadOnlyIdentityProvider()
     }
 }
