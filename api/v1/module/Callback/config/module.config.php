@@ -140,6 +140,16 @@ return [
                     ],
                 ],
             ],
+            'addprojectfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/addproject',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'addProject',
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

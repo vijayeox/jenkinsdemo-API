@@ -44,7 +44,9 @@ class Module implements ConfigProviderInterface
                 Service\CalendarService::class => function($container){
                     return new Service\CalendarService($container->get('config'),$container->get('CallbackLogger'));
                 },
-
+                Service\TaskService::class => function($container){
+                    return new Service\TaskService($container->get('config'),$container->get('CallbackLogger'));
+                },
                 \Contact\Service\ContactService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new \Contact\Service\ContactService($container->get('config'), $dbAdapter, $container->get(\Contact\Model\ContactTable::class));
@@ -77,6 +79,9 @@ class Module implements ConfigProviderInterface
                 },
                 Controller\CRMCallbackController::class => function ($container) {
                     return new Controller\CRMCallbackController($container->get(Service\CRMService::class),$container->get(\Contact\Service\ContactService::class),$container->get(UserService::class),$container->get('CallbackLogger'));
+                },
+                Controller\TaskCallbackController::class => function ($container) {
+                    return new Controller\TaskCallbackController($container->get(Service\TaskService::class),$container->get('CallbackLogger'));
                 },
                 Controller\CalendarCallbackController::class => function ($container) {
                     return new Controller\CalendarCallbackController($container->get(Service\CalendarService::class),$container->get(EmailService::class),$container->get('CallbackLogger'));
