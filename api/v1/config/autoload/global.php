@@ -51,6 +51,10 @@ return [
         'crmServerUrl' => 'http://localhost:8075/crm/public/',
         'authToken' => ''
     ],
+    'task' => [
+        'taskServerUrl' => 'http://localhost:3000/api/v3',
+        'authToken' => ''
+    ],
     'DATA_FOLDER'=>__DIR__.'/../../data/uploads/',
     'APP_UPLOAD_FOLDER' => __DIR__.'/../../data/app',
     'baseUrl' => 'http://localhost:8080',
