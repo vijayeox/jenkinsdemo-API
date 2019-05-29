@@ -202,10 +202,10 @@ class GroupService extends AbstractService {
     
      $cntQuery ="SELECT count(ox_user.id)".$from;
             if(empty($q)){
-                $where = " WHERE ox_group.id = ".$id;
+                $where = " WHERE ox_group.uuid = '".$id."'";
             }
             else{
-                $where = " WHERE ox_group.id = ".$id." AND ox_user.".$f." like '".$q."%'";   
+                $where = " WHERE ox_group.uuid = '".$id."' AND ox_user.".$f." like '".$q."%'";   
             }
             $offset = ($pg - 1) * $psz;
             $sort = " ORDER BY ".$sort;

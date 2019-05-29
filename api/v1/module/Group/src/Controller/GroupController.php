@@ -219,6 +219,6 @@ class GroupController extends AbstractApiController {
         if($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
-        return $this->getSuccessResponseWithData($count,200);
+        return $this->getSuccessResponseDataWithPagination($count['data'],$count['pagination']);
     }
 }

@@ -39,13 +39,13 @@ class OrganizationControllerTest extends MainControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(2, count($content['data']));
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Cleveland Black');
-        $this->assertEquals($content['data']['data'][1]['id'], 2);
-        $this->assertEquals($content['data']['data'][1]['name'], 'Golden State Warriors');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
+        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['name'], 'Golden State Warriors');
+        $this->assertEquals($content['pagination']['page'], 1);
+        $this->assertEquals($content['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['pagination']['pageSize'], 20);
     }
 
     public function testGetListWithQuery()
@@ -56,12 +56,12 @@ class OrganizationControllerTest extends MainControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(2, count($content['data']));
-        $this->assertEquals($content['data']['data'][0]['id'], 2);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Golden State Warriors');
-        $this->assertEquals($content['data']['pagination']['page'], 2);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['name'], 'Golden State Warriors');
+        $this->assertEquals($content['pagination']['page'], 2);
+        $this->assertEquals($content['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['pagination']['pageSize'], 1);
     }
 
 
@@ -73,12 +73,12 @@ class OrganizationControllerTest extends MainControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(2, count($content['data']));
-        $this->assertEquals($content['data']['data'][0]['id'], 2);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Golden State Warriors');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['name'], 'Golden State Warriors');
+        $this->assertEquals($content['pagination']['page'], 1);
+        $this->assertEquals($content['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['pagination']['pageSize'], 20);
     }
 
     public function testGetListWithQueryPageNo()
@@ -89,12 +89,12 @@ class OrganizationControllerTest extends MainControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(2, count($content['data']));
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Cleveland Black');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
+        $this->assertEquals($content['pagination']['page'], 1);
+        $this->assertEquals($content['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['pagination']['pageSize'], 1);
     }
 
     protected function setDefaultAsserts()

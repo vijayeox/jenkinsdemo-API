@@ -87,9 +87,9 @@ class ProjectControllerTest extends ControllerTest {
         $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($diff, array());
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+        $this->assertEquals($content['pagination']['page'], 1);
+        $this->assertEquals($content['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['pagination']['pageSize'], 20);
     }
 
      public function testGetListWithQuery() {
@@ -115,9 +115,9 @@ class ProjectControllerTest extends ControllerTest {
         $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($diff, array());
-        $this->assertEquals($content['data']['pagination']['page'], 2);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+        $this->assertEquals($content['pagination']['page'], 2);
+        $this->assertEquals($content['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['pagination']['pageSize'], 1);
     }
 
     public function testGetListWithQuerywithPageNo() {
@@ -143,9 +143,9 @@ class ProjectControllerTest extends ControllerTest {
         $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($diff, array());
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+        $this->assertEquals($content['pagination']['page'], 1);
+        $this->assertEquals($content['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['pagination']['pageSize'], 1);
     }
 
 
@@ -157,15 +157,15 @@ class ProjectControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['data'][0]['id'], 3);
-        $this->assertEquals($content['data']['data'][0]['name'], 'New Project');
-        $this->assertEquals($content['data']['data'][1]['id'], 1);
-        $this->assertEquals($content['data']['data'][1]['name'], 'Test Project 1');
-        $this->assertEquals($content['data']['data'][2]['id'], 2);
-        $this->assertEquals($content['data']['data'][2]['name'], 'Test Project 2');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+        $this->assertEquals($content['data'][0]['id'], 3);
+        $this->assertEquals($content['data'][0]['name'], 'New Project');
+        $this->assertEquals($content['data'][1]['id'], 1);
+        $this->assertEquals($content['data'][1]['name'], 'Test Project 1');
+        $this->assertEquals($content['data'][2]['id'], 2);
+        $this->assertEquals($content['data'][2]['name'], 'Test Project 2');
+        $this->assertEquals($content['pagination']['page'], 1);
+        $this->assertEquals($content['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['pagination']['pageSize'], 20);
     }
     public function testGet() {
         $this->initAuthToken($this->adminUser);

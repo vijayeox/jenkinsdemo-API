@@ -165,7 +165,7 @@ class UserController extends AbstractApiController
             $params['sort'] = "name";
         }
         $result = $this->userService->getUsers($params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
-        return $this->getSuccessResponseWithData($result);
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['pagination']);
     }
 
     /**

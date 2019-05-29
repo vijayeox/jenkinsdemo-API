@@ -176,7 +176,7 @@ class ProjectController extends AbstractApiController {
             $params['sort'] = "name";
         }  
         $result = $this->projectService->getProjectList($params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
-        return $this->getSuccessResponseWithData($result);
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['pagination']);
     }
     /**
     * GET List Project of Current User API

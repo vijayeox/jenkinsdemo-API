@@ -70,7 +70,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     protected function getSuccessResponseWithData(array $data, $code = 200){
         return $this->getSuccessResponse(null, $code, $data);
     }
-    protected function getSuccessResponse($message = null, $code = 200, array $data = null){
+    protected function getSuccessResponse($message = null, $code = 200, array $data = null,array $pagination = null){
         $this->response->setStatusCode($code);
         $payload = ['status' => 'success'];
         if(! is_null($message)){
@@ -79,9 +79,18 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         if(! is_null($data)){
             $payload['data'] = (array) $data;
         }
-
+        if(! is_null($pagination)){
+            $payload['pagination'] = (array) $pagination;
+        }
         return new JsonModel($payload);
     }
+
+
+    protected function getSuccessResponseDataWithPagination(array $data,array $pagination,$code = 200){
+        return $this->getSuccessResponse(null, $code, $data,$pagination);
+    }
+
+    
 
     protected function getFailureResponse($message, array $data = null){
         return $this->getErrorResponse($message, 200, $data);

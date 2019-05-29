@@ -193,7 +193,7 @@ class GroupControllerTest extends ControllerTest {
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/group/1/save','POST'); 
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST'); 
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -214,66 +214,66 @@ class GroupControllerTest extends ControllerTest {
 
     public function testgetuserlist() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/1/users','GET'); 
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users','GET'); 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['data']['data'][1]['id'], 2);
-        $this->assertEquals($content['data']['data'][1]['name'], 'Karan Agarwal');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['pagination']['page'], 1);
+        $this->assertEquals($content['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['pagination']['pageSize'], 20);
     }
 
  
     public function testgetuserlistWithPagesize() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/1/users?f=name&psz=1&pg=2','GET'); 
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?f=name&psz=1&pg=2','GET'); 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
-        $this->assertEquals(count($content['data']), 2);
-         $this->assertEquals($content['data']['data'][0]['id'], 2);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Karan Agarwal');
-        $this->assertEquals($content['data']['pagination']['page'], 2);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+        $this->assertEquals(count($content['data']), 1);
+        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['pagination']['page'], 2);
+        $this->assertEquals($content['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['pagination']['pageSize'], 1);
     }
 
     public function testgetuserlistWithPageNo() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/1/users?f=name&psz=1&pg=1','GET'); 
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?f=name&psz=1&pg=1','GET'); 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
-        $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 1);
+        $this->assertEquals(count($content['data']), 1);
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['pagination']['page'], 1);
+        $this->assertEquals($content['pagination']['noOfPages'], 2);
+        $this->assertEquals($content['pagination']['pageSize'], 1);
     }
 
 
     public function testgetuserlistWithQueryFieldParameter() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/1/users?f=id&q=1','GET'); 
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?f=id&q=1','GET'); 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
-        $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+        $this->assertEquals(count($content['data']), 1);
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['pagination']['page'], 1);
+        $this->assertEquals($content['pagination']['noOfPages'], 1);
+        $this->assertEquals($content['pagination']['pageSize'], 20);
     }
 
 
@@ -284,10 +284,10 @@ class GroupControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
-        $this->assertEquals($content['data']['data'],array());
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 0);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+        $this->assertEquals($content['data'],array());
+        $this->assertEquals($content['pagination']['page'], 1);
+        $this->assertEquals($content['pagination']['noOfPages'], 0);
+        $this->assertEquals($content['pagination']['pageSize'], 20);
     }
 
 }

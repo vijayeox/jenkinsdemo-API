@@ -88,7 +88,7 @@ class OrganizationController extends AbstractApiController
             $params['sort'] = "name";
         }  
         $result = $this->orgService->getOrganizations($params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
-        return $this->getSuccessResponseWithData($result);
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['pagination']);
     }
 
     /**
