@@ -196,10 +196,10 @@ class ProjectService extends AbstractService {
     
          $cntQuery ="SELECT count(ox_user.id)".$from;
             if(empty($q)){
-                $where = " WHERE ox_project.id = ".$id." AND ox_project.isdeleted!=1";
+                $where = " WHERE ox_project.uuid = '".$id."' AND ox_project.isdeleted!=1";
             }
             else{
-                $where = " WHERE ox_project.id = ".$id." AND ox_project.isdeleted!=1 AND ox_user.".$f." like '".$q."%'";   
+                $where = " WHERE ox_project.uuid = '".$id."' AND ox_project.isdeleted!=1 AND ox_user.".$f." like '".$q."%'";   
             }
             $offset = ($pg - 1) * $psz;
             $sort = " ORDER BY ".$sort;
