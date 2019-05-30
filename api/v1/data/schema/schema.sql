@@ -10,18 +10,18 @@
 -- CREATE TABLE "active_brokers" -------------------------------
 CREATE TABLE `active_brokers` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`accountname` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`lookupcode` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`phonenumber` VarChar( 12 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`primarycontact` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`address1` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`address2` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`city` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`statecode` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`accountname` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`lookupcode` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`phonenumber` VarChar( 12 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`primarycontact` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`address1` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`address2` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`city` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`statecode` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`zipcode` Int( 10 ) NOT NULL,
-	`faxnumber` VarChar( 12 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`primaryemail` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`role` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT 'broker / prospect',
+	`faxnumber` VarChar( 12 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`primaryemail` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`role` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'broker / prospect',
 	`modified_date` Date NULL,
 	`longitude` Decimal( 18, 15 ) NULL,
 	`latitude` Decimal( 18, 15 ) NULL,
@@ -53,10 +53,10 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "admin_menus" ----------------------------------
 CREATE TABLE `admin_menus` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`modulename` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`modulename` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`parentid` Int( 11 ) NOT NULL DEFAULT '0',
-	`link` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`link` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -87,9 +87,9 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "admission_primary_physician" ------------------
 CREATE TABLE `admission_primary_physician` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`firstname` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`middlename` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`lastname` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`firstname` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`middlename` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`lastname` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -103,9 +103,9 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "admission_referring_physician" ----------------
 CREATE TABLE `admission_referring_physician` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`firstname` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`middlename` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`lastname` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`firstname` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`middlename` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`lastname` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -119,41 +119,41 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "admission_values" -----------------------------
 CREATE TABLE `admission_values` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`ssn` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`ssn` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`instanceformid` Int( 11 ) NOT NULL,
-	`formposition` VarChar( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`firstname` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`middlename` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`lastname` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`dateofbirth` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`referraldate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`referralsource` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`referothers` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`otherdetails` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`primarydoctor` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`otherdoc` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`formposition` VarChar( 15 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`firstname` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`middlename` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`lastname` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`dateofbirth` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`referraldate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`referralsource` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`referothers` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`otherdetails` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`primarydoctor` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`otherdoc` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`hospitalchoice` Int( 11 ) NULL,
 	`referringphysicianid` Int( 11 ) NULL,
-	`dxcode` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`dxcode` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`primepayor` TinyInt( 4 ) NULL,
 	`clinicallyapproved` TinyInt( 1 ) NULL,
 	`watchlistapproval` TinyInt( 4 ) NULL,
-	`watchlistapprovalname` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`watchlistapprovaldate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`streetone` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`streettwo` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`city` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`watchlistapprovalname` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`watchlistapprovaldate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`streetone` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`streettwo` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`city` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`isstatementaddress` TinyInt( 1 ) NULL,
-	`statementstate` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`healthaddress` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`financeaddress` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`statementcity` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`statementaddress` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`phone` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`statementstate` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`healthaddress` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`financeaddress` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`statementcity` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`statementaddress` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`phone` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`personhealth` Int( 11 ) NULL,
-	`state` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`state` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`personfinance` Int( 11 ) NULL,
-	`signindate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`signindate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`status` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	`levelofcare` TinyInt( 4 ) NULL,
 	`notskilled` Int( 11 ) NULL,
@@ -161,15 +161,15 @@ CREATE TABLE `admission_values` (
 	`needform7000` TinyInt( 4 ) NULL,
 	`appliedpasrr` TinyInt( 4 ) NULL,
 	`selectterm` TinyInt( 4 ) NULL,
-	`mcr3` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`hmo3` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`verificationdate3` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`mcr4` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`hmo4` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`verificationdate4` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`hospitaladmitdate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`hospitaldischargedate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`primarypayer` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`mcr3` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`hmo3` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`verificationdate3` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`mcr4` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`hmo4` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`verificationdate4` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`hospitaladmitdate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`hospitaldischargedate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`primarypayer` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -183,11 +183,11 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "admission_watchlist" --------------------------
 CREATE TABLE `admission_watchlist` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`ssn` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`firstname` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`middlename` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`lastname` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`dateofbirth` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`ssn` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`firstname` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`middlename` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`lastname` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`dateofbirth` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -200,10 +200,10 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "admit_dispatched_new" ---------------------
 -- CREATE TABLE "admit_dispatched_new" -------------------------
 CREATE TABLE `admit_dispatched_new` ( 
-	`RiskNumber` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`branch` VarChar( 110 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`RiskNumber` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`branch` VarChar( 110 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`Dispatcheddate` Date NULL,
-	`Admitted` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL )
+	`Admitted` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
 ENGINE = MyISAM;
@@ -214,10 +214,10 @@ ENGINE = MyISAM;
 -- CREATE TABLE "admit_dispatched_renewal" -----------------
 -- CREATE TABLE "admit_dispatched_renewal" ---------------------
 CREATE TABLE `admit_dispatched_renewal` ( 
-	`RiskNumber` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`branch` VarChar( 110 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`RiskNumber` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`branch` VarChar( 110 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`Dispatcheddate` Date NULL,
-	`Admitted` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL )
+	`Admitted` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
 ENGINE = MyISAM;
@@ -228,10 +228,10 @@ ENGINE = MyISAM;
 -- CREATE TABLE "admit_received_new" -----------------------
 -- CREATE TABLE "admit_received_new" ---------------------------
 CREATE TABLE `admit_received_new` ( 
-	`RiskNumber` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`branch` VarChar( 110 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`RiskNumber` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`branch` VarChar( 110 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`Receiveddate` Date NULL,
-	`Admitted` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL )
+	`Admitted` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
 ENGINE = MyISAM;
@@ -242,10 +242,10 @@ ENGINE = MyISAM;
 -- CREATE TABLE "admit_received_renewal" -------------------
 -- CREATE TABLE "admit_received_renewal" -----------------------
 CREATE TABLE `admit_received_renewal` ( 
-	`RiskNumber` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`branch` VarChar( 110 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`RiskNumber` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`branch` VarChar( 110 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`Receiveddate` Date NULL,
-	`Admitted` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL )
+	`Admitted` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
 ENGINE = MyISAM;
@@ -267,7 +267,7 @@ ENGINE = MyISAM;
 -- CREATE TABLE "admneedbydatebybranch" --------------------
 -- CREATE TABLE "admneedbydatebybranch" ------------------------
 CREATE TABLE `admneedbydatebybranch` ( 
-	`branch` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`branch` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`CurrentDate` Date NULL,
 	`DaysOut` Int( 8 ) NULL )
 CHARACTER SET = latin1
@@ -282,13 +282,13 @@ ENGINE = MyISAM;
 CREATE TABLE `agora_times` ( 
 	`Sl_No` Int( 100 ) NOT NULL,
 	`Policy_Number` Int( 200 ) NOT NULL,
-	`Process` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`Line_of_Business` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`Process` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`Line_of_Business` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`Received_Date` Date NOT NULL,
 	`Processed_Date` Date NOT NULL,
-	`KRA` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`Client_Id` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`Status` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`KRA` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`Client_Id` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`Status` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`tat` Int( 20 ) NOT NULL,
 	PRIMARY KEY ( `Sl_No` ) )
 CHARACTER SET = latin1
@@ -328,11 +328,11 @@ CREATE TABLE `announcements` (
 	`date_created` DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`startdate` DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`enddate` DateTime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`text` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`name` VarChar( 259 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`text` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`name` VarChar( 259 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`orgid` Int( 32 ) NOT NULL,
 	`enabled` TinyInt( 1 ) NOT NULL DEFAULT '1',
-	`media_location` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`media_location` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`media_type` Int( 5 ) NOT NULL DEFAULT '1',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -348,10 +348,10 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `api_data` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`avatarid` Int( 11 ) NOT NULL,
-	`api` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`api` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`apiid` Int( 11 ) NOT NULL,
-	`name` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`values` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`values` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`date` DateTime NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -389,9 +389,9 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `archives` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`amid` Int( 11 ) NOT NULL COMMENT 'primary key of archives_master table',
-	`table_name` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`column_name` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`records` LongText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`table_name` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`column_name` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`records` LongText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`addedon` Timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -407,7 +407,7 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `archives_master` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`avatarid` Int( 11 ) NOT NULL COMMENT 'the logged in person\'s id',
-	`type` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`type` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`orgid` Int( 11 ) NOT NULL DEFAULT '0',
 	`groupid` Int( 11 ) NOT NULL DEFAULT '0',
 	`userid` Int( 11 ) NOT NULL DEFAULT '0',
@@ -427,7 +427,7 @@ CREATE TABLE `assesment_avatarscore` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`questionid` Int( 11 ) NOT NULL,
 	`assesmentid` Int( 4 ) NOT NULL,
-	`answer` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`answer` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`score` Float( 12, 0 ) NOT NULL,
 	`avatarid` Int( 11 ) NOT NULL,
 	`timestamp` Timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -449,8 +449,8 @@ CREATE TABLE `assesment_category` (
 	`orgid` Int( 11 ) NOT NULL,
 	`instanceformid` Int( 11 ) NULL,
 	`assigntonewhire` TinyInt( 4 ) NULL DEFAULT '0',
-	`project` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`lob` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`project` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`lob` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`parentgroupid` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -482,7 +482,7 @@ CREATE TABLE `assesment_list` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`categoryid` Int( 11 ) NOT NULL,
 	`wizardid` Int( 11 ) NOT NULL DEFAULT '0',
-	`name` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`active` TinyInt( 1 ) NOT NULL,
 	`Type` Int( 11 ) NOT NULL,
 	`duedate` DateTime NOT NULL,
@@ -508,9 +508,9 @@ CREATE TABLE `assesment_questions` (
 	`categoryid` Int( 11 ) NOT NULL,
 	`question` VarChar( 5000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`weightage` Float( 12, 0 ) NOT NULL,
-	`answertype` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`options` VarChar( 2500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`answer` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`answertype` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`options` VarChar( 2500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`answer` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -534,7 +534,7 @@ CREATE TABLE `assesment_summary` (
 	`status` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_general_ci NULL,
 	`avatarid` Int( 11 ) NOT NULL,
 	`completed_questions` Int( 4 ) NOT NULL,
-	`completion_status` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`completion_status` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -550,9 +550,9 @@ CREATE TABLE `attachmentlogger` (
 	`id` Int( 255 ) AUTO_INCREMENT NOT NULL,
 	`fileid` Int( 255 ) NOT NULL,
 	`date_modified` DateTime NULL,
-	`type` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`metalog` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`filekey` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`type` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`metalog` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`filekey` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`avatarid` Int( 255 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -594,14 +594,14 @@ CREATE TABLE `auditlog_club` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`avatarid` Int( 11 ) NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`type` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`type` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`typeid` Int( 11 ) NOT NULL,
-	`action` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`description` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`action` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`description` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`actionon` Int( 11 ) NULL,
 	`modifieddate` DateTime NOT NULL,
 	`groupid` Int( 11 ) NULL,
-	`systeminfo` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`systeminfo` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -616,9 +616,9 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `avatar_api` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`avatarid` Int( 11 ) NULL,
-	`api` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`name` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`value` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`api` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`name` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`value` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -685,7 +685,7 @@ CREATE TABLE `avatars` (
 	`address` VarChar( 300 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`sex` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`website` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-	`about` VarChar( 2000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`about` VarChar( 2000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`interest` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`hobbies` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`managerid` Int( 11 ) NULL,
@@ -746,8 +746,8 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `avatars_app` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`type` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`typeid` VarChar( 11 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`type` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`typeid` VarChar( 11 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`moduleid` Int( 11 ) NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -796,7 +796,7 @@ CREATE TABLE `avatars_tiles` (
 	`avatarid` Int( 11 ) NOT NULL,
 	`tileid` Int( 11 ) NOT NULL,
 	`sequence` Int( 4 ) NULL,
-	`type` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT 'admin: tiles assigned from admin->list avatars;group: assigned through group and manage tiles, avatar: assigned through profile prefrences',
+	`type` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'admin: tiles assigned from admin->list avatars;group: assigned through group and manage tiles, avatar: assigned through profile prefrences',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -811,7 +811,7 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `categories` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`cat_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_bin NULL,
-	`cat_icon` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`cat_icon` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`cat_parent_id` Int( 11 ) NULL,
 	`cat_free_flag` Int( 1 ) NULL,
 	PRIMARY KEY ( `id` ) )
@@ -826,9 +826,9 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "clearance_view" ---------------------------
 -- CREATE TABLE "clearance_view" -------------------------------
 CREATE TABLE `clearance_view` ( 
-	`underwriter` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`status` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`type` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`underwriter` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`status` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`type` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`premium` Decimal( 42, 2 ) NULL,
 	`files` BigInt( 21 ) NULL )
 CHARACTER SET = latin1
@@ -845,11 +845,11 @@ CREATE TABLE `client_avatar` (
 	`orgid` Int( 11 ) NOT NULL,
 	`formid` Int( 11 ) NOT NULL,
 	`clientid` Int( 11 ) NOT NULL,
-	`customername` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`customername` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`avatarid` Int( 11 ) NOT NULL,
-	`avatarname` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`avatarname` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`groupid` Int( 11 ) NOT NULL,
-	`groupname` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`groupname` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`managerid` Int( 11 ) NOT NULL,
 	`primary` TinyInt( 1 ) NULL,
 	PRIMARY KEY ( `id` ) )
@@ -895,7 +895,7 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "club_client_target" ---------------------------
 CREATE TABLE `club_client_target` ( 
 	`id` Int( 100 ) AUTO_INCREMENT NOT NULL,
-	`client_id` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`client_id` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`target` Int( 100 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -926,31 +926,31 @@ ENGINE = MyISAM;
 -- CREATE TABLE "club_kra" -------------------------------------
 CREATE TABLE `club_kra` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`groupid` Int( 11 ) NULL,
-	`level` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`level` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`org_role` Int( 11 ) NULL,
 	`avatarid` Int( 11 ) NULL,
-	`url` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`url` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`creatorid` Int( 11 ) NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`filter` VarChar( 4000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fieldset` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`aggregate` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`groupby` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`filter` VarChar( 4000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fieldset` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`aggregate` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`groupby` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`targettype` Int( 11 ) NULL,
-	`src_table` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`src_table` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`formid` Int( 11 ) NULL,
-	`datetype` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`datetype` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`rygtype` Int( 11 ) NOT NULL,
-	`srctype` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT 'setting it to 2 will add the goal value instead of incrementing it',
+	`srctype` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'setting it to 2 will add the goal value instead of incrementing it',
 	`enddate` Date NULL,
 	`startdate` Date NULL,
-	`avatar_field` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`goal_field` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`avatar_field` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`goal_field` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`default_point` Double( 22, 0 ) NULL,
-	`calc_type` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT 'sum|times|diff|div|avg',
-	`field_color` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`calc_type` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'sum|times|diff|div|avg',
+	`field_color` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -966,7 +966,7 @@ CREATE TABLE `club_kra_sla` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`kraid` Int( 11 ) NULL COMMENT 'primary key of query_config table',
 	`groupid` Int( 11 ) NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`year` Year NULL,
 	`month` Int( 11 ) NULL,
 	`sla_type` Int( 11 ) NULL,
@@ -999,7 +999,7 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `club_matrix_admin` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL DEFAULT '1',
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`formid` Int( 11 ) NOT NULL,
 	`matrixlink` Int( 11 ) NULL,
 	`sel_status` TinyInt( 1 ) NOT NULL DEFAULT '0',
@@ -1007,8 +1007,8 @@ CREATE TABLE `club_matrix_admin` (
 	`srctype` Int( 11 ) NULL,
 	`client` Int( 11 ) NULL,
 	`rows` Int( 11 ) NOT NULL DEFAULT '1',
-	`datetype` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`defaultrange` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`datetype` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`defaultrange` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1023,9 +1023,9 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `club_matrix_filter` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`matrixid` Int( 11 ) NOT NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`label` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`type` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`label` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`type` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1041,17 +1041,17 @@ CREATE TABLE `club_matrix_graph_type` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`matrixid` Int( 10 ) NULL,
 	`matrixtypeid` Int( 10 ) NULL,
-	`graphtype` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`category` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`graphtype` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`category` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`filtercount` Int( 11 ) NULL,
-	`aggregate` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`filter` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`aggregate` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`filter` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`invert` Int( 1 ) NULL DEFAULT '0',
 	`percentage` Int( 11 ) NULL,
-	`fieldset` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`fieldset` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`metaformid` Int( 11 ) NULL,
-	`instanceformid` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`instanceformfield` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`instanceformid` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`instanceformfield` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1066,29 +1066,29 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `club_matrix_types` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`matrixid` Int( 11 ) NOT NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`creatorid` Int( 11 ) NOT NULL,
-	`filter` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fieldset` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`aggregate` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`sub_aggregate` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`groupby` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`sortfield` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`sortorder` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`charttype` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`filter` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fieldset` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`aggregate` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`sub_aggregate` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`groupby` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`sortfield` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`sortorder` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`charttype` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`chartrow` Int( 11 ) NULL,
-	`chartpos` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`legend` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`title` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`x_label` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`y_label` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`chartpos` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`legend` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`title` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`x_label` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`y_label` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`matrixlink` Int( 11 ) NULL,
 	`enable_drilldown` Int( 5 ) NOT NULL DEFAULT '0',
-	`drilldownvalue` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`drilldown_fields` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`link` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`link_tooltip` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`url_title` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`drilldownvalue` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`drilldown_fields` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`link` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`link_tooltip` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`url_title` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`matrixexport` Int( 1 ) NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -1103,12 +1103,12 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "club_task" ------------------------------------
 CREATE TABLE `club_task` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`task_name` VarChar( 145 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`task_name` VarChar( 145 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`avatar_id` Int( 11 ) NULL,
 	`status` Int( 11 ) NULL,
 	`start_time` DateTime NULL,
 	`end_time` DateTime NULL,
-	`task_duration` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '00:00:00',
+	`task_duration` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '00:00:00',
 	`process` Int( 11 ) NULL,
 	`project` Int( 11 ) NULL,
 	`billable` Int( 11 ) NULL,
@@ -1117,28 +1117,28 @@ CREATE TABLE `club_task` (
 	`client_id` Int( 11 ) NULL,
 	`received_date` DateTime NULL,
 	`effective_date` DateTime NULL,
-	`state` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`state` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`tat` Int( 11 ) NULL,
 	`days_out` Int( 11 ) NULL,
-	`comments` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`comments` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`error` Int( 11 ) NOT NULL DEFAULT '0',
-	`file_share` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`file_share` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`skip_counting` Int( 11 ) NULL DEFAULT '0' COMMENT 'Skip counting entry in matrix',
-	`field1` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field2` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field3` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field4` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field5` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field6` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field7` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field8` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field9` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field10` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`dropdown1` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`dropdown2` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`dropdown3` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`dropdown4` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`dropdown5` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`field1` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field2` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field3` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field4` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field5` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field6` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field7` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field8` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field9` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field10` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`dropdown1` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`dropdown2` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`dropdown3` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`dropdown4` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`dropdown5` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`datefield1` DateTime NULL,
 	`datefield2` DateTime NULL,
 	`datefield3` DateTime NULL,
@@ -1149,10 +1149,10 @@ CREATE TABLE `club_task` (
 	`error_date` Date NULL,
 	`session` Int( 11 ) NOT NULL DEFAULT '0',
 	`last_modified` DateTime NULL,
-	`instanceforms` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`instanceforms` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`matrixid` Int( 11 ) NULL,
-	`file_upload` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`file_download` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`file_upload` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`file_download` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`points_flag` Int( 11 ) NOT NULL DEFAULT '0' COMMENT '0=>Points not awarded 1=>Points awarded',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -1172,7 +1172,7 @@ CREATE TABLE `club_task_pause` (
 	`start_time` DateTime NULL,
 	`end_time` DateTime NULL,
 	`pause_duration` Time NULL,
-	`comment` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`comment` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1187,34 +1187,34 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `club_timesheet_comments` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`client` Int( 11 ) NOT NULL,
-	`role` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`role` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`comment_date` DateTime NOT NULL,
 	`process` Int( 11 ) NOT NULL,
-	`comments` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`status` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`field1` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field2` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field3` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field4` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field5` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field6` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`value1` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`value2` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`value3` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`value4` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`value5` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`value6` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`status1` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`status2` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`status3` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`status4` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`status5` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`status6` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`quality_score` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`client_quality_score` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`qc_per` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`qc_comment` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`qc_status` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`comments` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`status` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`field1` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field2` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field3` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field4` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field5` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field6` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`value1` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`value2` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`value3` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`value4` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`value5` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`value6` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`status1` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`status2` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`status3` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`status4` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`status5` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`status6` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`quality_score` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`client_quality_score` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`qc_per` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`qc_comment` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`qc_status` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`positive_feedback` Int( 10 ) NOT NULL DEFAULT '0',
 	`negative_feedback` Int( 10 ) NOT NULL DEFAULT '0',
 	`utilization` Int( 10 ) NULL,
@@ -1235,9 +1235,9 @@ CREATE TABLE `club_timesheet_daysout` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`client` Int( 11 ) NOT NULL,
 	`date` Date NULL,
-	`role` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`value` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`role` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`value` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1252,11 +1252,11 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `club_timesheet_in_out` ( 
 	`id` Int( 10 ) AUTO_INCREMENT NOT NULL,
 	`avatar_id` Int( 100 ) NOT NULL,
-	`avatar_name` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`avatar_name` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`in_time` DateTime NOT NULL,
 	`out_time` DateTime NULL,
-	`status` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`client_id` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`status` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`client_id` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1270,9 +1270,9 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "club_timesheet_in_out_cron" -------------------
 CREATE TABLE `club_timesheet_in_out_cron` ( 
 	`id` Int( 100 ) AUTO_INCREMENT NOT NULL,
-	`client_id` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`client_id` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`avatar_id` Int( 100 ) NULL,
-	`avatar_name` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`avatar_name` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`date` Date NOT NULL,
 	`break_duration` Float( 12, 0 ) NULL,
 	`total_breaks` Int( 100 ) NULL,
@@ -1291,8 +1291,8 @@ CREATE TABLE `club_timesheet_mapper` (
 	`id` Int( 13 ) AUTO_INCREMENT NOT NULL,
 	`club_id` Int( 11 ) NOT NULL,
 	`timesheet_fieldid` Int( 11 ) NOT NULL,
-	`club_field` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`timesheet_field` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`club_field` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`timesheet_field` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1306,32 +1306,32 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "clubinvoice" ----------------------------------
 CREATE TABLE `clubinvoice` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`customername` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`owner` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`msa` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`customername` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`owner` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`msa` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`msa_instanceid` Int( 11 ) NULL,
-	`invoicenumber` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`address` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`workorder` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`rate` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`transaction` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`tsprocess` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`invoicenumber` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`address` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`workorder` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`rate` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`transaction` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`tsprocess` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`currentinvoice` Int( 11 ) NULL,
 	`dategenerated` Date NOT NULL,
 	`datemodified` DateTime NULL,
-	`description` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`description` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`currency` Int( 11 ) NOT NULL,
 	`clientid` Int( 11 ) NULL,
 	`projectid` Int( 11 ) NOT NULL,
-	`pastdue` VarChar( 11 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`totalamount` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`vat` VarChar( 11 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`pastdue` VarChar( 11 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`totalamount` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`vat` VarChar( 11 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`status` Int( 11 ) NULL,
-	`transactiontype` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`notetocustomers` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`invoicehtml` VarChar( 20000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`transactiontype` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`notetocustomers` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`invoicehtml` VarChar( 20000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`days` Int( 10 ) NULL,
-	`servicetax` VarChar( 11 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`servicetax` VarChar( 11 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`summary` TinyInt( 1 ) NULL DEFAULT '0',
 	`swachhbharath` Float( 12, 0 ) NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `id` ) )
@@ -1545,37 +1545,37 @@ ENGINE = InnoDB;
 -- CREATE TABLE "cominvoice" -----------------------------------
 CREATE TABLE `cominvoice` ( 
 	`id` Int( 150 ) AUTO_INCREMENT NOT NULL,
-	`company_name` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`va_code` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`contract_renewal_date` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`msa_number` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`work_order_number` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`type` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`company_name` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`va_code` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`contract_renewal_date` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`msa_number` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`work_order_number` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`type` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`fte` Float( 12, 0 ) NULL,
 	`rate` Double( 22, 0 ) NULL,
-	`customer_contact_person` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`title` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`telephone` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`email` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`address` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`sales_person` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`account_manager` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`contract_start_date` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`project_status` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`commission_payable` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`commission_percentage` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`work_order_detail` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`city` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`state` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`zip` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`dashboard` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`work_order` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`cc` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`process` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`mr` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`location` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`group` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`in_no` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`customer_contact_person` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`title` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`telephone` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`email` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`address` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`sales_person` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`account_manager` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`contract_start_date` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`project_status` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`commission_payable` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`commission_percentage` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`work_order_detail` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`city` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`state` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`zip` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`dashboard` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`work_order` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`cc` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`process` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`mr` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`location` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`group` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`in_no` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1609,11 +1609,11 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "comphotos" ------------------------------------
 CREATE TABLE `comphotos` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 25 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`file` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 25 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`file` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`instanceformid` Int( 11 ) NOT NULL,
-	`link` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`tag` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`link` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`tag` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1628,8 +1628,8 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `configurations` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`parameter` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`value` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`parameter` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`value` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1660,9 +1660,9 @@ ENGINE = InnoDB;
 -- CREATE TABLE "country" --------------------------------------
 CREATE TABLE `country` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`iso` Char( 2 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`name` VarChar( 80 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`iso3` Char( 3 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`iso` Char( 2 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`name` VarChar( 80 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`iso3` Char( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`numcode` Smallint( 6 ) NULL,
 	`phonecode` Int( 5 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
@@ -1696,10 +1696,10 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "custom_login" ---------------------------------
 CREATE TABLE `custom_login` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`url` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`loginpage` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`forgotpassword` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`logo` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`url` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`loginpage` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`forgotpassword` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`logo` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1715,9 +1715,9 @@ CREATE TABLE `customlistfields` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`sequence` Int( 11 ) NULL,
 	`customlistid` Int( 11 ) NOT NULL,
-	`fieldname` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`fieldtext` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`sortable` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`fieldname` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`fieldtext` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`sortable` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`moduleid` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
@@ -1733,16 +1733,16 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "customlistviews" ------------------------------
 CREATE TABLE `customlistviews` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`moduleid` Int( 11 ) NOT NULL,
 	`formid` Int( 11 ) NOT NULL,
-	`customphtml` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`type` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`filter` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`parameters` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`customphtml` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`type` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`filter` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`parameters` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`groupid` Int( 11 ) NOT NULL,
-	`sortby` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`sortby` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1757,7 +1757,7 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `daysout` ( 
 	`Date` Date NOT NULL,
 	`Daysout` Int( 11 ) NOT NULL,
-	`Notes` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`Notes` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`Slno` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	PRIMARY KEY ( `Slno` ) )
 CHARACTER SET = latin1
@@ -1792,9 +1792,9 @@ CREATE TABLE `dependencies` (
 	`From` Int( 11 ) NULL,
 	`To` Int( 11 ) NULL,
 	`Type` Int( 11 ) NULL,
-	`Cls` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`Cls` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`Lag` Int( 11 ) NULL,
-	`LagUnit` VarChar( 12 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`LagUnit` VarChar( 12 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `Id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1877,9 +1877,9 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "email_templates" ------------------------------
 CREATE TABLE `email_templates` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`subject` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`body` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`subject` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`body` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -1913,13 +1913,13 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "emailconfig" ----------------------------------
 CREATE TABLE `emailconfig` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`host` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`host` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`emailid` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-	`password` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`password` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`assignedid` Int( 11 ) NOT NULL,
 	`groupid` Int( 11 ) NULL,
-	`moduleid` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`moduleid` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -1985,19 +1985,19 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "errorlog" ---------------------------------
 -- CREATE TABLE "errorlog" -------------------------------------
 CREATE TABLE `errorlog` ( 
-	`policynumber` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`branch` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`Issuedfor` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`Issuedby` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`LOB` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`FQC` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`uwsrater` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`policynumber` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`branch` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`Issuedfor` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`Issuedby` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`LOB` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`FQC` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`uwsrater` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`Date` Date NULL,
 	`ErrorFixedOn` Date NULL,
-	`Error` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`UWSaction` VarChar( 2000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`replysent` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`Client_ID` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`Error` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`UWSaction` VarChar( 2000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`replysent` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`Client_ID` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `policynumber` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -2013,8 +2013,8 @@ CREATE TABLE `escalations` (
 	`instanceformid` Int( 11 ) NOT NULL,
 	`groupid` Int( 11 ) NOT NULL,
 	`avatarid` Int( 11 ) NOT NULL,
-	`level` VarChar( 5 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`primary` VarChar( 5 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`level` VarChar( 5 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`primary` VarChar( 5 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`orgid` Int( 11 ) NULL,
 	`creatorid` Int( 11 ) NULL,
 	`moduleid` Int( 10 ) NULL,
@@ -2061,7 +2061,7 @@ CREATE TABLE `evolve_avatars` (
 	`ssn` Int( 11 ) NULL,
 	`premium` Decimal( 10, 0 ) NULL,
 	`completedatetime` DateTime NULL,
-	`language` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`language` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`locationid` Int( 11 ) NULL,
 	`createddate` DateTime NOT NULL,
 	`status` TinyInt( 4 ) NOT NULL DEFAULT '0',
@@ -2080,8 +2080,8 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `evolve_declined` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`name` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`value` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`value` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`wizardid` Int( 11 ) NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -2096,11 +2096,11 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "evolve_export" --------------------------------
 CREATE TABLE `evolve_export` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`wizardid` Int( 12 ) NULL,
-	`controllername` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`actionname` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`controllername` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`actionname` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -2114,12 +2114,12 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "evolve_exportfields" --------------------------
 CREATE TABLE `evolve_exportfields` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`evolveexportid` Int( 11 ) NOT NULL,
 	`evolveformid` Int( 11 ) NOT NULL,
 	`evolvefieldid` Int( 11 ) NOT NULL,
-	`condition` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`expression` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`condition` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`expression` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`evolvefieldname` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -2140,23 +2140,23 @@ CREATE TABLE `evolve_instanceseq` (
 	`avatarid` Int( 11 ) NULL,
 	`firstformseqid` Int( 11 ) NULL,
 	`status` TinyInt( 1 ) NOT NULL DEFAULT '0',
-	`ssn` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`ssn` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`premium` Decimal( 10, 2 ) NULL,
 	`employercost` Decimal( 10, 2 ) NOT NULL,
 	`completedatetime` DateTime NULL,
-	`language` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`language` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`locationid` Int( 11 ) NULL,
-	`terminationdate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`currentstatusofavatar` VarChar( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'A',
-	`changeeffectivedate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`terminationdate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`currentstatusofavatar` VarChar( 4 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'A',
+	`changeeffectivedate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`lifechangeflag` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	`createddate` DateTime NOT NULL,
-	`effectivedate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`effectivedate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`exportstatus` TinyInt( 4 ) NOT NULL DEFAULT '1',
-	`exportstatusdate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`exportstatusdate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`assementscore` Int( 11 ) NOT NULL DEFAULT '0',
-	`enrollment_startdate` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`enrollment_enddate` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`enrollment_startdate` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`enrollment_enddate` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`rewindflag` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -2178,25 +2178,25 @@ CREATE TABLE `evolve_instanceseq_history` (
 	`avatarid` Int( 11 ) NULL,
 	`firstformseqid` Int( 11 ) NULL,
 	`status` TinyInt( 1 ) NOT NULL DEFAULT '0',
-	`ssn` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`ssn` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`premium` Decimal( 10, 2 ) NULL,
 	`employercost` Decimal( 10, 2 ) NOT NULL,
 	`completedatetime` DateTime NULL,
-	`language` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`language` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`locationid` Int( 11 ) NULL,
-	`terminationdate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`currentstatusofavatar` VarChar( 4 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'A',
-	`changeeffectivedate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`terminationdate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`currentstatusofavatar` VarChar( 4 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'A',
+	`changeeffectivedate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`lifechangeflag` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	`createddate` DateTime NOT NULL,
-	`effectivedate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`effectivedate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`exportstatus` TinyInt( 4 ) NOT NULL DEFAULT '1',
 	`assementscore` Int( 4 ) NOT NULL DEFAULT '0',
-	`exportstatusdate` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`enrollment_startdate` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`enrollment_enddate` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`exportstatusdate` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`enrollment_startdate` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`enrollment_enddate` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`rewindflag` TinyInt( 4 ) NOT NULL DEFAULT '0',
-	`history_datetime` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`history_datetime` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -2214,13 +2214,13 @@ CREATE TABLE `evolve_metafields` (
 	`evolveformid` Int( 11 ) NOT NULL,
 	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`text` VarChar( 10000 ) CHARACTER SET ucs2 COLLATE ucs2_general_ci NOT NULL,
-	`helpertext` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`helpertext` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`type` VarChar( 30 ) CHARACTER SET ucs2 COLLATE ucs2_general_ci NULL,
-	`instancefield` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`other_inst` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`other_instfield` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`instancefield` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`other_inst` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`other_instfield` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`options` VarChar( 10000 ) CHARACTER SET ucs2 COLLATE ucs2_general_ci NULL,
-	`color` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`color` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`dependson` VarChar( 50 ) CHARACTER SET ucs2 COLLATE ucs2_general_ci NULL,
 	`disablejavascript` TinyInt( 4 ) NULL DEFAULT '0',
 	`required` TinyInt( 1 ) NULL DEFAULT '0',
@@ -2230,21 +2230,21 @@ CREATE TABLE `evolve_metafields` (
 	`readonly` TinyInt( 1 ) NULL DEFAULT '0',
 	`expression` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canbehidden` TinyInt( 4 ) NOT NULL DEFAULT '0',
-	`dateordependson` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`dateordependson` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`onlyownrcanchng` TinyInt( 1 ) NULL DEFAULT '0',
-	`condition` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`premiumname` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`textspanish` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`condition` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`premiumname` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`textspanish` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`dontshowpremiumbutton` Int( 4 ) NULL,
 	`scoreablequestion` TinyInt( 1 ) NULL DEFAULT '0',
-	`answer` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`answer` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`weightage` Int( 4 ) NULL,
-	`questiontype` VarChar( 40 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`questiontype` VarChar( 40 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`dependentrequired` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	`encrypted` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	`multiplefield` TinyInt( 4 ) NULL DEFAULT '0',
-	`tableproperty` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`classname` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`tableproperty` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`classname` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`dontshowinfirstform` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -2259,29 +2259,29 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "evolve_metaforms" -----------------------------
 CREATE TABLE `evolve_metaforms` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`description` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`description` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`sequence` Int( 11 ) NULL,
-	`htmltext` LongText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`modulename` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`htmltext` LongText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`modulename` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`video` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-	`videotype` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`videotype` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`multiple` Int( 11 ) NULL,
 	`dynamic` Int( 11 ) NULL,
-	`customform` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`condition` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`customcontroller` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`customaction` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`validation` VarChar( 300 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`validationmessage` VarChar( 300 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`customform` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`condition` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`customcontroller` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`customaction` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`validation` VarChar( 300 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`validationmessage` VarChar( 300 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`formid` Int( 11 ) NOT NULL,
 	`wizard_id` Int( 11 ) NOT NULL,
 	`workflowid` Int( 11 ) NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`classvideos` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`hookfunction` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`classvideos` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`hookfunction` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`pauseduration` TinyInt( 1 ) NOT NULL DEFAULT '0',
-	`multiplecondition` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`multiplecondition` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`calculatepremium` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -2297,7 +2297,7 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `evolve_organizations` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`videofolder` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`videofolder` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`pdfenable` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	`malepercentage` Int( 11 ) NULL,
 	PRIMARY KEY ( `id` ) )
@@ -2315,19 +2315,19 @@ CREATE TABLE `evolve_premiumcalculations` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`sequence` Int( 11 ) NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`text` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`dependentfield` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`expression` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`condition` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`showcondition` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`customclass` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`text` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`dependentfield` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`expression` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`condition` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`showcondition` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`customclass` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`wizardid` Int( 11 ) NULL,
-	`otherajaxfields` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`otherajaxfields` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`hidecoverage` TinyInt( 4 ) NOT NULL DEFAULT '0',
-	`brochurename` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`brochurelink` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`conditiontohidincompletepage` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`brochurename` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`brochurelink` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`conditiontohidincompletepage` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`multipleform` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	`multipleformfieldname` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_bin NULL,
 	PRIMARY KEY ( `id` ) )
@@ -2344,15 +2344,15 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `evolve_premiumlookup` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`name` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`minage` Int( 11 ) NULL,
 	`maxage` Int( 11 ) NULL,
-	`smoking` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`type` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`custom1` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`custom2` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`custom3` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`value` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`smoking` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`type` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`custom1` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`custom2` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`custom3` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`value` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`coverage` Int( 11 ) NULL,
 	`totalcost` Decimal( 10, 2 ) NULL,
 	PRIMARY KEY ( `id` ) )
@@ -2374,13 +2374,13 @@ CREATE TABLE `evolve_question_values` (
 	`avatarid` Int( 11 ) NOT NULL,
 	`empformid` Int( 11 ) NULL,
 	`formid` Int( 11 ) NOT NULL,
-	`formname` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`questionname` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`formname` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`questionname` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`questionid` Int( 11 ) NOT NULL,
 	`value` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`score` TinyInt( 4 ) NULL,
 	`encrypted` TinyInt( 1 ) NOT NULL DEFAULT '0',
-	`oldvalue` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`oldvalue` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`modified_avatarid` Int( 11 ) NOT NULL,
 	`modified_date` DateTime NOT NULL,
 	PRIMARY KEY ( `id` ) )
@@ -2401,16 +2401,16 @@ CREATE TABLE `evolve_question_values_history` (
 	`avatarid` Int( 11 ) NOT NULL,
 	`empformid` Int( 11 ) NULL,
 	`formid` Int( 11 ) NOT NULL,
-	`formname` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`questionname` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`formname` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`questionname` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`questionid` Int( 11 ) NOT NULL,
-	`value` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`value` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`wizardid` Int( 11 ) NULL,
 	`instanceformid` Int( 11 ) NULL,
 	`score` TinyInt( 4 ) NULL,
 	`attempt` TinyInt( 4 ) NULL,
-	`history_datetime` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`oldvalue` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`history_datetime` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`oldvalue` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`modified_avatarid` Int( 11 ) NOT NULL,
 	`modified_date` DateTime NOT NULL,
 	PRIMARY KEY ( `id` ) )
@@ -2427,8 +2427,8 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `evolve_signatures` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`avatarid` Int( 11 ) NOT NULL,
-	`username` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`password` VarChar( 32 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`username` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`password` VarChar( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`signed_date` Timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -2443,13 +2443,13 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "evolve_wizards" -------------------------------
 CREATE TABLE `evolve_wizards` ( 
 	`id` Int( 12 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`type` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`type` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`showpremium` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	`orgid` Int( 11 ) NOT NULL,
 	`metaformid` Int( 11 ) NOT NULL,
-	`customreview` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`customcomplete` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`customreview` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`customcomplete` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`disablevideo` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	`disableoptionsinvideo` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	`hideprevious` TinyInt( 4 ) NOT NULL DEFAULT '0',
@@ -2465,42 +2465,42 @@ CREATE TABLE `evolve_wizards` (
 	`duration` Time NOT NULL,
 	`parent` Int( 11 ) NOT NULL,
 	`passingper` Int( 11 ) NULL,
-	`rules` LongText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`rules` LongText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`disableeditfromreview` TinyInt( 4 ) NOT NULL DEFAULT '0',
-	`headingtitle` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'Total Paycheck Contribution',
+	`headingtitle` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'Total Paycheck Contribution',
 	`uniquecount` Int( 11 ) NULL,
 	`autogeneratedno` Int( 11 ) NOT NULL,
 	`pauseduration` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	`retaketrainingperiod` TinyInt( 4 ) NOT NULL DEFAULT '0',
-	`themecolor` VarChar( 11 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`themecolor` VarChar( 11 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`workflowid` Int( 11 ) NULL,
 	`email_status` TinyInt( 4 ) NOT NULL DEFAULT '0',
-	`email_from` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`email_to` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`email_from` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`email_to` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`email_temp_id` Int( 11 ) NULL,
-	`w1` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`w2` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`w3` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`w4` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`w5` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`w6` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`w7` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`w8` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`w9` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`w10` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`w11` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`w12` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`wbig1` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`wbig2` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`w1` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`w2` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`w3` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`w4` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`w5` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`w6` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`w7` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`w8` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`w9` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`w10` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`w11` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`w12` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`wbig1` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`wbig2` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`showrewindbutton` TinyInt( 4 ) NULL,
 	`wizard_access` TinyInt( 4 ) NULL,
-	`remark1` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`remark1` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`remark1lowerlimit` Int( 11 ) NULL,
 	`remark1upperlimit` Int( 11 ) NULL,
-	`remark2` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`remark2` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`remark2lowerlimit` Int( 11 ) NULL,
 	`remark2upperlimit` Int( 11 ) NULL,
-	`remark3` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`remark3` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`remark3lowerlimit` Int( 11 ) NULL,
 	`remark3upperlimit` Int( 11 ) NULL,
 	PRIMARY KEY ( `id` ) )
@@ -2516,17 +2516,17 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "executive_desktop" ----------------------------
 CREATE TABLE `executive_desktop` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`avatarid` Int( 11 ) NULL,
 	`instanceform` Int( 11 ) NULL,
-	`target` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`acheived` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`status` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`color` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`target` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`acheived` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`status` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`color` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`parentid` Int( 11 ) NOT NULL,
-	`contract_link` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`contract_link` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`contract_id` Int( 11 ) NULL,
-	`matrix_link` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`matrix_link` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`matrix_id` Int( 11 ) NULL,
 	`type` TinyInt( 4 ) NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
@@ -2543,18 +2543,18 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "expense" --------------------------------------
 CREATE TABLE `expense` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`employeeid` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`approvedby` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`date` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`description` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`category` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`moneytype` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`employeeid` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`approvedby` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`date` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`description` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`category` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`moneytype` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`cost` Double( 22, 0 ) NULL,
 	`avatarid` Int( 11 ) NULL,
 	`status` TinyInt( 4 ) NULL,
 	`createdid` Int( 11 ) NULL,
-	`attachment` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`attachment` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`instanceformid` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
@@ -2571,8 +2571,8 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `export_fields` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`formid` Int( 11 ) NOT NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`fields` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`fields` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -2586,9 +2586,9 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "facilities_equipments" ------------------------
 CREATE TABLE `facilities_equipments` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`type` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`test_name` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`astm` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`type` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`test_name` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`astm` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -2618,10 +2618,10 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `form_menu` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`formid` Int( 11 ) NOT NULL,
-	`name` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`workflowid` Int( 11 ) NULL,
-	`customaction` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`icon` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`customaction` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`icon` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -2637,15 +2637,15 @@ CREATE TABLE `formcomments` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`instanceformid` Int( 11 ) NOT NULL,
 	`avatarid` Int( 11 ) NOT NULL,
-	`comment` VarChar( 5000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`comment` VarChar( 5000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`date_created` DateTime NOT NULL,
 	`date_modified` DateTime NULL,
 	`replyid` Int( 11 ) NOT NULL DEFAULT '0',
-	`observers` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`observers` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`moduleid` Int( 11 ) NOT NULL,
 	`approval_status` Int( 11 ) NULL DEFAULT '0' COMMENT '0=>pending,1=>approved,2=>rejected',
-	`nextactiondate` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`email_ids` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`nextactiondate` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`email_ids` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`status` Int( 3 ) NULL,
 	`ownerid` Int( 11 ) NULL,
 	`assignedto` Int( 11 ) NULL,
@@ -2682,7 +2682,7 @@ CREATE TABLE `game_points` (
 	`parentinstanceformid` Int( 11 ) NOT NULL,
 	`childinstanceformid` Int( 11 ) NULL,
 	`score` Int( 11 ) NOT NULL,
-	`description` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`description` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`game_date` DateTime NULL,
 	PRIMARY KEY ( `id` ) )
@@ -2698,10 +2698,10 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "gmail" ----------------------------------------
 CREATE TABLE `gmail` ( 
 	`avatarid` Int( 11 ) NOT NULL,
-	`id` VarChar( 32 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`subject` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`date` VarChar( 32 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`sender` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`id` VarChar( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`subject` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`date` VarChar( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`sender` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`status` Int( 2 ) NOT NULL,
 	`attachments_flag` Int( 2 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
@@ -2720,12 +2720,12 @@ CREATE TABLE `goal_label` (
 	`groupid` Int( 11 ) NULL,
 	`org_role_id` Int( 11 ) NULL,
 	`level` Int( 11 ) NULL,
-	`goal_id` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`goal_label` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`description` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`goal_id` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`goal_label` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`description` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`kra_id` Int( 11 ) NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`CALC_TYPE` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'sum',
+	`CALC_TYPE` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'sum',
 	`REVERSE_FLAG` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -2800,8 +2800,8 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "google_gcm" -----------------------------------
 CREATE TABLE `google_gcm` ( 
 	`avatarid` Int( 11 ) NOT NULL,
-	`gcm_registration_id` VarChar( 512 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`device` VarChar( 3 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`gcm_registration_id` VarChar( 512 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`device` VarChar( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `gcm_registration_id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -2814,10 +2814,10 @@ ENGINE = InnoDB;
 -- CREATE TABLE "googlelogin" ----------------------------------
 CREATE TABLE `googlelogin` ( 
 	`avatarid` Int( 11 ) NOT NULL,
-	`emailid` VarChar( 64 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`name` VarChar( 64 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`refreshtoken` VarChar( 128 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`accesstoken` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`emailid` VarChar( 64 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`name` VarChar( 64 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`refreshtoken` VarChar( 128 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`accesstoken` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `avatarid` ),
 	CONSTRAINT `emailid` UNIQUE( `emailid` ) )
 CHARACTER SET = latin1
@@ -2831,9 +2831,9 @@ ENGINE = InnoDB;
 -- CREATE TABLE "grade" ----------------------------------------
 CREATE TABLE `grade` ( 
 	`id` Int( 13 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`moduleid` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`moduleid` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`cancreate` TinyInt( 1 ) NULL DEFAULT '0',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -2870,9 +2870,9 @@ CREATE TABLE `groups` (
 	`moduleid` Int( 11 ) NULL,
 	`disablechat` TinyInt( 4 ) NULL,
 	`assigntomanager` TinyInt( 4 ) NOT NULL DEFAULT '0',
-	`description` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`logo` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`coverphoto` VarChar( 111 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`description` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`logo` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`coverphoto` VarChar( 111 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`power_users` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	`type` TinyInt( 4 ) NULL DEFAULT '0',
 	`hiddentopicons` TinyInt( 1 ) NOT NULL,
@@ -2886,7 +2886,7 @@ CREATE TABLE `groups` (
 	`hiddencreate` TinyInt( 1 ) NULL,
 	`hiddensearch` TinyInt( 1 ) NULL,
 	`hiddengroup` TinyInt( 1 ) NULL,
-	`status` Enum( 'Active', 'Inactive' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Active',
+	`status` Enum( 'Active', 'Inactive' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Active',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3009,25 +3009,25 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "ikra" -----------------------------------------
 CREATE TABLE `ikra` ( 
 	`avatarid` Int( 11 ) NOT NULL,
-	`month` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`month` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`year` Int( 20 ) NULL,
 	`ikradate` Date NULL,
-	`k1` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k2` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k3` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k4` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k5` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`average` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`starpoints` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`k1` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k2` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k3` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k4` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k5` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`average` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`starpoints` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`weightage` Float( 11, 2 ) NULL,
 	`quality` Float( 11, 2 ) NOT NULL,
 	`ikraid` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`k6` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k7` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k8` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k9` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k10` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`comments` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`k6` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k7` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k8` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k9` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k10` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`comments` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`sentinalupdate` Int( 10 ) NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `ikraid` ) )
 CHARACTER SET = latin1
@@ -3044,27 +3044,27 @@ CREATE TABLE `ikradaily` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`avatarid` Int( 11 ) NULL,
 	`year` Int( 11 ) NULL,
-	`month` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`month` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`ikradate` DateTime NULL,
-	`average` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`starpoints` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`average` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`starpoints` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`weightage` Float( 11, 2 ) NULL DEFAULT '0.00',
 	`quality` Float( 11, 2 ) NULL DEFAULT '0.00',
-	`k1` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k2` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k3` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k4` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k5` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k6` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k7` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k8` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k9` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`k10` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`comments` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`k1` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k2` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k3` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k4` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k5` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k6` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k7` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k8` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k9` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`k10` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`comments` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`sentinalupdate` Int( 10 ) NOT NULL DEFAULT '0',
 	`mygoal` Float( 11, 2 ) NULL DEFAULT '0.00',
 	`teamgoal` Float( 11, 2 ) NULL DEFAULT '0.00',
-	`update_log` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`update_log` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3079,12 +3079,12 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `image_tags` ( 
 	`id` Int( 12 ) AUTO_INCREMENT NOT NULL,
 	`imgid` Int( 12 ) NOT NULL,
-	`tag_name` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`tag_name` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`instanceformid` Int( 12 ) NOT NULL,
-	`pos_x` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`pos_y` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`pos_width` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`pos_height` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`pos_x` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`pos_y` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`pos_width` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`pos_height` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3112,13 +3112,13 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "import_logs" ----------------------------------
 CREATE TABLE `import_logs` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`title` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`description` TinyText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`mime_type` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`filesize` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`filename` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`original_filename` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`errors` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`title` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`description` TinyText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`mime_type` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`filesize` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`filename` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`original_filename` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`errors` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`created_date` Timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`status` TinyInt( 1 ) NOT NULL COMMENT '1=success, 9=failed',
 	PRIMARY KEY ( `id` ) )
@@ -3168,9 +3168,9 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `instanceforms` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`assessid` Int( 11 ) NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`description` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`htmltext` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`description` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`htmltext` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`leaf` Int( 11 ) NULL,
 	`color` Int( 11 ) NULL,
 	`durationunit` Int( 11 ) NULL,
@@ -3188,82 +3188,82 @@ CREATE TABLE `instanceforms` (
 	`ownergroupid` Int( 11 ) NULL,
 	`parentinstformid` Int( 11 ) NULL,
 	`status` Int( 11 ) NULL,
-	`duplicate` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`duplicate` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`startdate` DateTime NULL,
 	`nextactiondate` DateTime NULL,
-	`emailaddress1` VarChar( 123 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`emailaddress1` VarChar( 123 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`enddate` DateTime NULL,
 	`cost` Float( 12, 0 ) NULL,
 	`starpoints` Int( 11 ) NULL,
 	`testerid` Int( 11 ) NULL,
-	`testercode` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`testercode` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`field3` Int( 10 ) NULL,
-	`tags` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`tags` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`category` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_bin NULL,
-	`goals` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`goals` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`kracategory` Int( 11 ) NULL,
 	`krasubcategory` Int( 11 ) NULL,
-	`observer` VarChar( 2000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`observer` VarChar( 2000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`location` Int( 11 ) NOT NULL,
 	`pod` TinyInt( 1 ) NOT NULL DEFAULT '0',
-	`observeravatardel` VarChar( 2000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`observergroupdel` VarChar( 2000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`observeravatardel` VarChar( 2000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`observergroupdel` VarChar( 2000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`comment_moderator` TinyInt( 4 ) NULL DEFAULT '1',
-	`reffield1` VarChar( 2000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`reffield2` VarChar( 2000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`reffield3` VarChar( 2000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`reffield4` VarChar( 2000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`reffield5` VarChar( 2000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f1` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f2` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f3` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f4` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f5` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f6` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f7` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f8` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f9` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f10` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f11` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f12` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f13` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f14` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f15` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f16` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f17` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f18` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f19` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f20` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f21` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f22` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f23` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f24` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f25` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f26` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f27` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f28` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f29` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`f30` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig1` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig2` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig3` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig4` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig5` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig6` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig7` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig8` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig9` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig10` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig11` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig12` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig13` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig14` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig15` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig16` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig17` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig18` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig19` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fbig20` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`reffield1` VarChar( 2000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`reffield2` VarChar( 2000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`reffield3` VarChar( 2000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`reffield4` VarChar( 2000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`reffield5` VarChar( 2000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f1` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f2` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f3` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f4` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f5` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f6` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f7` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f8` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f9` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f10` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f11` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f12` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f13` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f14` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f15` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f16` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f17` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f18` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f19` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f20` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f21` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f22` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f23` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f24` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f25` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f26` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f27` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f28` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f29` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`f30` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig1` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig2` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig3` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig4` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig5` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig6` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig7` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig8` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig9` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig10` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig11` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig12` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig13` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig14` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig15` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig16` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig17` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig18` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig19` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fbig20` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`locked` Int( 10 ) NULL DEFAULT '0',
 	`points_flag` Int( 11 ) NOT NULL DEFAULT '0' COMMENT '0=>Points not awarded 1=>Points awarded',
 	PRIMARY KEY ( `id` ) )
@@ -3280,56 +3280,56 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `instanceforms_join` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`instanceformid` Int( 11 ) NOT NULL,
-	`g1` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g2` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g3` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g4` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g5` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g6` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g7` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g8` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g9` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g10` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g11` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g12` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g13` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g14` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g15` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g16` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g17` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g18` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g19` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g20` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g21` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g22` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g23` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g24` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g25` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g26` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g27` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g28` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g29` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g30` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g31` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g32` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g33` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g34` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g35` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g36` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g37` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g38` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g39` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`g40` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`gbig1` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`gbig2` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`gbig3` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`gbig4` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`gbig5` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`gbig6` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`gbig7` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`gbig8` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`gbig9` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`gbig10` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`g1` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g2` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g3` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g4` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g5` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g6` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g7` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g8` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g9` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g10` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g11` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g12` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g13` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g14` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g15` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g16` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g17` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g18` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g19` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g20` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g21` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g22` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g23` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g24` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g25` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g26` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g27` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g28` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g29` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g30` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g31` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g32` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g33` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g34` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g35` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g36` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g37` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g38` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g39` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`g40` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`gbig1` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`gbig2` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`gbig3` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`gbig4` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`gbig5` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`gbig6` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`gbig7` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`gbig8` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`gbig9` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`gbig10` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3380,7 +3380,7 @@ CREATE TABLE `instforms_groups` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`instformid` Int( 11 ) NOT NULL,
 	`groupid` Int( 11 ) NOT NULL,
-	`access` VarChar( 1 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`access` VarChar( 1 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3488,7 +3488,7 @@ CREATE TABLE `leaderboard_log` (
 	`avatarid` Int( 11 ) NOT NULL,
 	`goals` Double( 22, 0 ) NOT NULL,
 	`source_id` Int( 11 ) NOT NULL,
-	`source` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT 'T=>Timesheet|I=>Instanceform|A=>Subordinate Avatarid',
+	`source` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'T=>Timesheet|I=>Instanceform|A=>Subordinate Avatarid',
 	`update_date` DateTime NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -3505,7 +3505,7 @@ CREATE TABLE `likes` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`commentid` Int( 11 ) NOT NULL,
 	`instanceformid` Int( 11 ) NULL,
-	`type` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`type` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`avatarid` Int( 11 ) NOT NULL,
 	`groupid` Int( 11 ) NULL,
 	`date_created` DateTime NOT NULL,
@@ -3525,10 +3525,10 @@ CREATE TABLE `links` (
 	`avatarid` Int( 11 ) NULL,
 	`groupid` Int( 11 ) NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`name` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`type` VarChar( 15 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`text` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`url` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`type` VarChar( 15 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`text` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`url` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3542,8 +3542,8 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "locations" ------------------------------------
 CREATE TABLE `locations` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`code` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`name` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`code` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`name` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`avatarid` Int( 11 ) NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
@@ -3561,29 +3561,29 @@ CREATE TABLE `loss_run_client` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`loss_date` Date NULL,
 	`create_date` Date NULL,
-	`create_user` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`loss_id` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`create_user` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`loss_id` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`pol_seq` Int( 11 ) NULL,
-	`policy_number` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`ins` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`cov` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`client_code` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`client_name` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`policy_number` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`ins` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`cov` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`client_code` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`client_name` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`eff_date` Date NULL,
 	`exp_date` Date NULL,
-	`insured_name` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`typ` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`loss_type` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`insured_name` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`typ` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`loss_type` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`rep_date` Date NULL,
-	`loss_status` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`adjuster_assigned` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`loc` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`loss_status` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`adjuster_assigned` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`loc` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`date_closed` Date NULL,
 	`written_premium` Float( 11, 2 ) NULL,
 	`annual_premium` Float( 11, 2 ) NULL,
-	`description` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`description` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`last_entry_date` Date NULL,
-	`org_id` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`org_id` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3597,42 +3597,42 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "loss_run_overall" -----------------------------
 CREATE TABLE `loss_run_overall` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`claim_number` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`claimant_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`lob` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`claim_number` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`claimant_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`lob` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`loss_date` Date NULL,
 	`carrier_report_date` Date NULL,
 	`incurred_indemnity` Float( 10, 2 ) NULL,
 	`incurred_medical` Float( 10, 2 ) NULL,
 	`incurred_expense` Float( 10, 2 ) NULL,
 	`total_incurred` Float( 10, 2 ) NULL,
-	`location` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`location` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`paid_indemnity` Float( 10, 2 ) NULL,
 	`paid_medical` Float( 10, 2 ) NULL,
 	`pain_expense` Float( 10, 2 ) NULL,
 	`total_paid` Float( 10, 2 ) NULL,
-	`cause` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`status` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`jurisdiction_state` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`cause` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`status` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`jurisdiction_state` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`indemnity_or` Float( 10, 2 ) NULL,
 	`medical_or` Float( 10, 2 ) NULL,
 	`expense_or` Float( 10, 2 ) NULL,
 	`outstanding_reserve` Float( 10, 2 ) NULL,
-	`accident_state` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`catalyst` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`accident_state` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`catalyst` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`date_closed` Date NULL,
 	`date_of_hire` Date NULL,
 	`date_reopened` Date NULL,
-	`litigation_status` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`litigation_status` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`lost_time_days` Int( 11 ) NULL,
-	`nature_of_injury` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`part_of_body` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`policy_number` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`org_id` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`nature_of_injury` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`part_of_body` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`policy_number` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`org_id` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`premium` Float( 10, 2 ) NULL,
 	`last_rundate` Date NULL,
-	`loss_type` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`client_code` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`loss_type` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`client_code` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3646,9 +3646,9 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "mapping_table" --------------------------------
 CREATE TABLE `mapping_table` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`type` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`keyvalue` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`value` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`type` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`keyvalue` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`value` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3678,13 +3678,13 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `matrix_config` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`instanceformid` Int( 11 ) NULL,
-	`type` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`name_prefix` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`type` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`name_prefix` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`formid` Int( 11 ) NULL,
-	`fieldid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fieldname` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`source` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`fieldid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fieldname` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`source` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3725,7 +3725,7 @@ ENGINE = InnoDB;
 CREATE TABLE `matrix_quarter` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`quarter` Int( 11 ) NOT NULL,
-	`name` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3752,7 +3752,7 @@ ENGINE = InnoDB;
 -- CREATE TABLE "menus" ----------------------------------------
 CREATE TABLE `menus` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3769,60 +3769,60 @@ CREATE TABLE `menus_avatars` (
 	`avatarid` Int( 11 ) NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`canAvatars` TinyInt( 1 ) NOT NULL,
-	`avatarsgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`avatarsgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canGroups` TinyInt( 1 ) NOT NULL,
-	`groupsgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`groupsgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canAlert` TinyInt( 1 ) NOT NULL,
-	`alertgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`alertgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canAnnouncement` TinyInt( 1 ) NOT NULL,
-	`announcementgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`announcementgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canMenus` TinyInt( 1 ) NOT NULL,
-	`menusgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`menusgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canLinks` TinyInt( 1 ) NOT NULL,
-	`linksgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`linksgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canTiles` TinyInt( 1 ) NOT NULL,
-	`tilesgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`tilesgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canAssesments` TinyInt( 1 ) NOT NULL,
-	`assesmentsgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`assesmentsgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canFeature` TinyInt( 1 ) NOT NULL,
-	`featuregroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`featuregroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canExport` TinyInt( 1 ) NOT NULL,
-	`exportgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`exportgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canImport` TinyInt( 1 ) NOT NULL,
-	`importgroupid` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`importgroupid` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canEscalations` TinyInt( 1 ) NOT NULL,
-	`escalationsgroupid` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`escalationsgroupid` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canFlash` TinyInt( 4 ) NOT NULL,
-	`flashgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`flashgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canWorkflow` TinyInt( 4 ) NOT NULL,
-	`workflowgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`workflowgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canKra` TinyInt( 4 ) NOT NULL,
-	`kragroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`kragroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canPolls` TinyInt( 4 ) NOT NULL,
-	`pollsgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`pollsgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canGamepoint` TinyInt( 4 ) NOT NULL,
-	`gamepointgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`gamepointgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canPodview` TinyInt( 4 ) NOT NULL,
-	`podviewgroupid` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`podviewgroupid` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canContractrate` TinyInt( 4 ) NOT NULL,
 	`canCarveoutsCostContract` TinyInt( 4 ) NOT NULL,
 	`canPrimaryPhysician` TinyInt( 4 ) NOT NULL,
 	`canReferPhysician` TinyInt( 4 ) NOT NULL,
 	`canCostGroup` TinyInt( 4 ) NOT NULL,
 	`canExecdesktop` TinyInt( 4 ) NOT NULL,
-	`execdesktopgroups` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`execdesktopgroups` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canMatrix` TinyInt( 4 ) NOT NULL,
-	`matrixgroup` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`matrixgroup` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canTimesheet` TinyInt( 4 ) NOT NULL,
-	`timesheetgroup` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`timesheetgroup` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canCustomlistview` TinyInt( 4 ) NOT NULL,
-	`customlistviewgroup` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`customlistviewgroup` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canAppmatrix` TinyInt( 4 ) NOT NULL,
-	`appmartixgroup` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`appmartixgroup` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canManagemodule` TinyInt( 4 ) NOT NULL,
-	`modulegroup` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`modulegroup` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canmonitorusers` TinyInt( 4 ) NOT NULL,
-	`monitorusersgroup` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`monitorusersgroup` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`createdemolink` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -3839,7 +3839,7 @@ CREATE TABLE `message_attachments` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`messageid` Int( 11 ) NOT NULL,
 	`instanceformid` Int( 11 ) NOT NULL,
-	`friendly_url` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`friendly_url` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3874,15 +3874,15 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `messages` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`fromid` Int( 11 ) NOT NULL,
-	`subject` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`message` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`subject` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`message` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`replyid` Int( 11 ) NULL DEFAULT '0',
 	`date_created` DateTime NOT NULL,
 	`setflag` TinyInt( 4 ) NOT NULL DEFAULT '0',
-	`tags` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`externalemail` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`ccemaillist` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`bccemaillist` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`tags` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`externalemail` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`ccemaillist` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`bccemaillist` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`old_message` Int( 1 ) NOT NULL DEFAULT '0',
 	`instanceformid` Int( 11 ) NULL,
 	PRIMARY KEY ( `id` ) )
@@ -3898,17 +3898,17 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "meta_import" ----------------------------------
 CREATE TABLE `meta_import` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`description` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`description` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`type` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`type` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`existingkeycolumn` Int( 11 ) NULL,
 	`terminationdatecolno` TinyInt( 4 ) NULL,
 	`datatype` Int( 11 ) NULL,
-	`tablename` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`tablename` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`existingflag` TinyInt( 4 ) NULL,
-	`existingkeyfield` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`wizardids` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`existingkeyfield` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`wizardids` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3924,12 +3924,12 @@ CREATE TABLE `meta_importcolumns` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`importid` Int( 11 ) NOT NULL,
 	`columnnumber` Int( 11 ) NULL,
-	`fieldname` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`fieldtype` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`expression` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`lookup` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`fieldname` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`fieldtype` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`expression` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`lookup` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`wizardid` Int( 15 ) NULL,
-	`multiple` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`multiple` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3946,7 +3946,7 @@ CREATE TABLE `meta_multiselect` (
 	`instanceformid` Int( 11 ) NOT NULL,
 	`fieldid` Int( 11 ) NOT NULL,
 	`selectedid` Int( 3 ) NOT NULL,
-	`selectedvalue` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`selectedvalue` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -3964,11 +3964,11 @@ CREATE TABLE `metafields` (
 	`formid` Int( 11 ) NOT NULL,
 	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`text` VarChar( 400 ) CHARACTER SET ucs2 COLLATE ucs2_general_ci NOT NULL,
-	`columnname` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`helpertext` VarChar( 150 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`columnname` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`helpertext` VarChar( 150 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`type` VarChar( 30 ) CHARACTER SET ucs2 COLLATE ucs2_general_ci NULL,
 	`options` VarChar( 10000 ) CHARACTER SET ucs2 COLLATE ucs2_general_ci NULL,
-	`color` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`color` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`dependson` VarChar( 50 ) CHARACTER SET ucs2 COLLATE ucs2_general_ci NULL,
 	`disablejavascript` TinyInt( 4 ) NULL DEFAULT '0',
 	`required` TinyInt( 1 ) NULL DEFAULT '0',
@@ -3978,16 +3978,16 @@ CREATE TABLE `metafields` (
 	`readonly` TinyInt( 1 ) NULL DEFAULT '0',
 	`expression` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`canbehidden` TinyInt( 4 ) NOT NULL DEFAULT '0',
-	`dateordependson` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`dateordependson` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`onlyownrcanchng` TinyInt( 1 ) NULL DEFAULT '0',
-	`condition` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`premiumname` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`condition` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`premiumname` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`xflat_parameter` Int( 2 ) NOT NULL DEFAULT '0',
 	`esign_parameter` Int( 11 ) NOT NULL DEFAULT '0' COMMENT 'this field will be used in esign api',
-	`field_type` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'config',
-	`category` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '1',
-	`field_value` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`display` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`field_type` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'config',
+	`category` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1',
+	`field_value` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`display` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4001,7 +4001,7 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "metaform_fieldorder" --------------------------
 CREATE TABLE `metaform_fieldorder` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`fieldname` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`fieldname` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`formid` Int( 11 ) NULL,
 	`fieldorder` Int( 3 ) NULL,
 	PRIMARY KEY ( `id` ) )
@@ -4019,12 +4019,12 @@ CREATE TABLE `metaforms` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`canhaveemail` TinyInt( 1 ) NOT NULL,
 	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`description` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`description` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`canhavedigitalsign` TinyInt( 1 ) NULL,
 	`canhavecategory` TinyInt( 1 ) NULL,
 	`sequence` Int( 11 ) NOT NULL,
-	`nextsequence` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`htmltext` LongText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`nextsequence` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`htmltext` LongText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`moduleid` Int( 11 ) NOT NULL,
 	`canhaveparent` TinyInt( 1 ) NULL DEFAULT '0',
@@ -4035,9 +4035,9 @@ CREATE TABLE `metaforms` (
 	`canhidetime` TinyInt( 1 ) NULL DEFAULT '0',
 	`canmultiassign` TinyInt( 1 ) NULL,
 	`onlyadmincancreate` TinyInt( 4 ) NULL DEFAULT '0',
-	`statusfield` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`emailfields` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`printfields` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`statusfield` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`emailfields` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`printfields` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`defaultassigngroup` Int( 11 ) NULL,
 	`canhaveattachment` TinyInt( 4 ) NOT NULL,
 	`canhavewriteaccess` TinyInt( 4 ) NOT NULL,
@@ -4046,23 +4046,23 @@ CREATE TABLE `metaforms` (
 	`nodelete` TinyInt( 1 ) NOT NULL COMMENT 'remove delete button with a value 1',
 	`hidestarpoints` TinyInt( 1 ) NOT NULL,
 	`hidecost` TinyInt( 1 ) NOT NULL,
-	`startdatefield` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`nextactiondatefield` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`enddatefield` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`assignedtoview` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'view',
-	`assignedtofromdefaultgroup` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`statuslist` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`statuslistcolor` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`hidetags` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`startdatefield` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`nextactiondatefield` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`enddatefield` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`assignedtoview` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'view',
+	`assignedtofromdefaultgroup` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`statuslist` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`statuslistcolor` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`hidetags` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`hideleveldifference` Int( 4 ) NULL,
 	`showallassignedgroup` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	`showallownergroup` TinyInt( 1 ) NOT NULL DEFAULT '0',
-	`kracategories` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`krasubcategories` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`kracategories` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`krasubcategories` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`wizard_id` Int( 12 ) NULL,
 	`canhavekra` TinyInt( 4 ) NULL DEFAULT '0',
-	`goals` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`type` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`goals` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`type` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`customcreate` Int( 11 ) NULL,
 	`customview` Int( 11 ) NULL,
 	`disable_mupdate` TinyInt( 4 ) NOT NULL DEFAULT '0',
@@ -4077,15 +4077,15 @@ CREATE TABLE `metaforms` (
 	`reffield3` Int( 11 ) NULL,
 	`reffield4` Int( 11 ) NULL,
 	`reffield5` Int( 11 ) NULL,
-	`template` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`canvas` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`formdeleteaccess` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`template` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`canvas` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`formdeleteaccess` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`defaultgroupaccess` Int( 11 ) NULL,
 	`nextactiondatediff` Int( 11 ) NULL,
 	`enddatediff` Int( 11 ) NULL,
 	`ownerassignedcanedit` TinyInt( 4 ) NULL,
 	`cancopywizardvalues` TinyInt( 1 ) NOT NULL,
-	`category` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '1=>General',
+	`category` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1=>General',
 	`can_have_print` TinyInt( 1 ) NULL DEFAULT '1',
 	`can_have_copyURL` TinyInt( 1 ) NULL DEFAULT '1',
 	`can_have_pm` TinyInt( 1 ) NULL DEFAULT '1',
@@ -4102,7 +4102,7 @@ CREATE TABLE `metaforms` (
 	`can_have_assignments` TinyInt( 1 ) NULL DEFAULT '1',
 	`can_have_quick_edit` TinyInt( 1 ) NULL DEFAULT '1',
 	`can_have_dyn_info_view` TinyInt( 1 ) NULL DEFAULT '1',
-	`fieldview` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'col-md-3',
+	`fieldview` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'col-md-3',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4116,8 +4116,8 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "metalist" -------------------------------------
 CREATE TABLE `metalist` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`value` LongText CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`value` LongText CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4135,11 +4135,11 @@ CREATE TABLE `metapdffields` (
 	`page` Int( 11 ) NOT NULL,
 	`xcoord` Int( 11 ) NOT NULL,
 	`ycoord` Int( 11 ) NOT NULL,
-	`field` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`expression` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`field` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`expression` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`fontsize` TinyInt( 4 ) NULL,
-	`fontcolor` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`tablename` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`fontcolor` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`tablename` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`multiple` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -4160,14 +4160,14 @@ CREATE TABLE `metapdfforms` (
 	`modulename` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`filename` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`condition` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-	`tables` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`type` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`tables` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`type` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`wizardid` Int( 11 ) NULL,
-	`customfunction` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`customfunction` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`multiple` TinyInt( 1 ) NOT NULL DEFAULT '0',
-	`multiplefieldname` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`sequence` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`formid` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`multiplefieldname` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`sequence` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`formid` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4245,18 +4245,18 @@ ENGINE = InnoDB;
 -- CREATE TABLE "mletquestions" --------------------------------
 CREATE TABLE `mletquestions` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`questiontext` VarChar( 256 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`parameters` VarChar( 256 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`questiontext` VarChar( 256 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`parameters` VarChar( 256 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`queryconfigid` Int( 11 ) NULL,
-	`html` LongText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`html` LongText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`groupid` Int( 11 ) NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`mletlist` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`where_used` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`description` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`mletlist` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`where_used` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`description` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`templateid` Int( 11 ) NULL,
-	`directsql` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`directsql` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4365,17 +4365,17 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `modules` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`description` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`description` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`sequence` Int( 11 ) NOT NULL,
-	`htmltext` LongText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`htmltext` LongText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`type` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-	`viewtype` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`customname` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`logo` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`email` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Active',
-	`appcolor` VarChar( 111 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'blue',
-	`helppdf` VarChar( 11 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`matrix_reference_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`viewtype` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`customname` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`logo` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`email` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Active',
+	`appcolor` VarChar( 111 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'blue',
+	`helppdf` VarChar( 11 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`matrix_reference_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`hidepivotgrid0` TinyInt( 4 ) NULL,
 	`hidepivotgrid1` TinyInt( 4 ) NULL,
 	`hidepivotgrid2` TinyInt( 4 ) NULL,
@@ -4412,7 +4412,7 @@ CREATE TABLE `non_compliance` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`assesmentid` Int( 11 ) NOT NULL,
 	`instanceformid` Int( 12 ) NOT NULL,
-	`name` VarChar( 25 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 25 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`avatar` Int( 12 ) NOT NULL,
 	`Parent` Int( 12 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
@@ -4448,11 +4448,11 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "observers" ------------------------------------
 CREATE TABLE `observers` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`avatarids` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`groupid` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`group_avatars` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`external_emails` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`instanceformid` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`avatarids` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`groupid` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`group_avatars` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`external_emails` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`instanceformid` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4485,7 +4485,7 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `operatingrhythm` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`summary` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`summary` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`startdate` Timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP DEFAULT '0000-00-00 00:00:00',
 	`enddate` Timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 	`organizer` Int( 11 ) NOT NULL,
@@ -4494,11 +4494,11 @@ CREATE TABLE `operatingrhythm` (
 	`instanceformid` Int( 11 ) NULL,
 	`groupid` Int( 11 ) NULL,
 	`reid` Int( 11 ) NULL,
-	`rrule` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`rexception` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`location` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`rrule` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`rexception` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`location` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`reminderperiod` Int( 255 ) NULL,
-	`emails` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`emails` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4559,16 +4559,16 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "or_meta" --------------------------------------
 CREATE TABLE `or_meta` ( 
 	`id` Int( 255 ) AUTO_INCREMENT NOT NULL,
-	`eventtype` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`eventid` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`eventtype` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`eventid` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`repeat_start` Date NULL,
 	`repeat_end` Date NULL,
-	`repeat_interval` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`repeat_year` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '*',
-	`repeat_month` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '*',
-	`repeat_day` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '*',
-	`repeat_week` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '*',
-	`repeat_weekday` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '*',
+	`repeat_interval` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`repeat_year` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '*',
+	`repeat_month` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '*',
+	`repeat_day` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '*',
+	`repeat_week` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '*',
+	`repeat_weekday` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '*',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4583,7 +4583,7 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `org_role` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`org_role` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`org_role` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`hiddentopicons` TinyInt( 1 ) NOT NULL,
 	`hidetiles` TinyInt( 1 ) NOT NULL,
 	`hidewall` TinyInt( 1 ) NOT NULL,
@@ -4613,21 +4613,21 @@ CREATE TABLE `organizations` (
 	`city` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`state` VarChar( 2 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`zip` VarChar( 5 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`logo` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`logo` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`defaultgroupid` Int( 11 ) NOT NULL,
-	`statusbox` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Matrix|MyKRA|StarPoints|Alerts',
-	`labelfile` VarChar( 40 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`statusbox` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Matrix|MyKRA|StarPoints|Alerts',
+	`labelfile` VarChar( 40 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`messagecount` Int( 12 ) NULL DEFAULT '200',
-	`languagefile` VarChar( 40 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'en',
+	`languagefile` VarChar( 40 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'en',
 	`orgtype` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	`flash_msg` Int( 11 ) NULL DEFAULT '0',
-	`email` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Active',
+	`email` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Active',
 	`themes` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	`formview` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	`assign_followuplimit` Int( 11 ) NOT NULL DEFAULT '10',
 	`insurelearn` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	`reset_password` Int( 11 ) NULL DEFAULT '0',
-	`status` Enum( 'Active', 'Inactive' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Active',
+	`status` Enum( 'Active', 'Inactive' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Active',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4643,7 +4643,7 @@ CREATE TABLE `orgclientlist` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`clientid` Int( 11 ) NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`clientname` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`clientname` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4659,7 +4659,7 @@ CREATE TABLE `orgs_modules` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`moduleid` Int( 11 ) NOT NULL,
-	`email` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Active',
+	`email` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Active',
 	`instanceformid` Int( 11 ) NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -4692,8 +4692,8 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `oxmedia_devices` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`device_name` VarChar( 400 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`device_id` VarChar( 400 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`description` MediumText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`device_id` VarChar( 400 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`description` MediumText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4723,11 +4723,11 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "oxmedia_playlist" -----------------------------
 CREATE TABLE `oxmedia_playlist` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`title` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`title` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`socialmedia` Int( 5 ) NULL COMMENT '1=>Twitter|2=>Instagram',
-	`hashtag` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`hashtag` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`watermark` TinyInt( 1 ) NOT NULL,
-	`medialocation` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`medialocation` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`venue_id` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -4743,16 +4743,16 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `oxmedia_slides` ( 
 	`id` Int( 6 ) AUTO_INCREMENT NOT NULL,
 	`slider_id` Int( 6 ) NOT NULL,
-	`name` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`type` Int( 5 ) NOT NULL COMMENT '0=>image,1=>video,2=>mlet',
 	`instformid` Int( 11 ) NULL,
 	`alertid` Int( 11 ) NULL,
 	`duration` Int( 10 ) NULL,
 	`enable` Int( 5 ) NOT NULL,
-	`medialocation` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`options` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`medialocation` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`options` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`sequence_no` Int( 11 ) NULL,
-	`socialmediaid` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`socialmediaid` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`endtime` DateTime NULL,
 	`starttime` DateTime NULL,
 	PRIMARY KEY ( `id` ) )
@@ -4768,12 +4768,12 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "podview" --------------------------------------
 CREATE TABLE `podview` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`title` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`title` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`instanceform` Int( 11 ) NOT NULL,
-	`type` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`color` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`url` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`position` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`type` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`color` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`url` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`position` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`sequence` Int( 11 ) NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -4806,7 +4806,7 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `poll_questions` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`pollid` Int( 11 ) NOT NULL,
-	`question` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`question` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`creatorid` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -4821,11 +4821,11 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "projects" -------------------------------------
 CREATE TABLE `projects` ( 
 	`prid` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`realname` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`owner` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`priority` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`remarks` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`status` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`realname` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`owner` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`priority` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`remarks` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`status` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `prid` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4839,9 +4839,9 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "queries" --------------------------------------
 CREATE TABLE `queries` ( 
 	`id` Int( 11 ) NOT NULL,
-	`name` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`type` Int( 50 ) NOT NULL,
-	`querytext` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`querytext` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`resulttype` Int( 11 ) NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -4855,14 +4855,14 @@ ENGINE = InnoDB;
 -- CREATE TABLE "query_config" ---------------------------------
 CREATE TABLE `query_config` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`question_text` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`question_name` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`question_text` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`question_name` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`source` Int( 11 ) NULL COMMENT 'the source of data 1=>instanceform|2=>Timesheet',
-	`sourceoption` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT 'main filter parameter like formid for instancerform',
+	`sourceoption` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'main filter parameter like formid for instancerform',
 	`type` Int( 11 ) NOT NULL COMMENT 'where this query is used',
-	`configs` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`link` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`configs` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`link` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -4877,10 +4877,10 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "questionqueries" ------------------------------
 CREATE TABLE `questionqueries` ( 
 	`id` Int( 11 ) NOT NULL,
-	`resultkey` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`resultkey` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`questionid` Int( 11 ) NOT NULL,
 	`queryid` Int( 11 ) NOT NULL,
-	`parameters` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`parameters` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4893,8 +4893,8 @@ ENGINE = InnoDB;
 -- CREATE TABLE "questions" ------------------------------------
 CREATE TABLE `questions` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`questiontext` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`parameters` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`questiontext` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`parameters` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`instanceform` Int( 11 ) NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -4935,18 +4935,18 @@ CREATE TABLE `relationships` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`metaformidfrom` Int( 11 ) NOT NULL,
 	`metaformidto` Int( 11 ) NOT NULL,
-	`displayfields` VarChar( 200 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`reffieldname` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`labelfrom` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`labelto` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`instanceformfields` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`fieldmapping` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`options` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`displayfields` VarChar( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`reffieldname` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`labelfrom` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`labelto` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`instanceformfields` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`fieldmapping` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`options` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`relationtype` Int( 11 ) NOT NULL,
 	`parentrelation` Int( 11 ) NULL,
-	`mappertype` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`fieldmultiplier` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`required` VarChar( 11 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'false',
+	`mappertype` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`fieldmultiplier` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`required` VarChar( 11 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'false',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4976,8 +4976,8 @@ CREATE TABLE `rpt_cluster4` (
 	`held_calls` Int( 11 ) NULL,
 	`abandoned_per` Float( 12, 0 ) NULL,
 	`asa` Float( 12, 0 ) NULL,
-	`client` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`report` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`client` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`report` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -4990,7 +4990,7 @@ ENGINE = MyISAM;
 -- CREATE TABLE "rpt_data" -------------------------------------
 CREATE TABLE `rpt_data` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`client` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`client` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`aht` Float( 12, 0 ) NOT NULL,
 	`acwt` Float( 12, 0 ) NOT NULL,
 	`att` Float( 12, 0 ) NOT NULL,
@@ -5021,7 +5021,7 @@ CREATE TABLE `rpt_volvo` (
 	`service_level` Float( 12, 0 ) NULL,
 	`aht` Int( 11 ) NULL,
 	`aban_call` Int( 11 ) NULL,
-	`client` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`client` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5035,8 +5035,8 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "rules" ----------------------------------------
 CREATE TABLE `rules` ( 
 	`idrules` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`rulename` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`procedurename` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`rulename` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`procedurename` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `idrules` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5050,7 +5050,7 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "sales" ----------------------------------------
 CREATE TABLE `sales` ( 
 	`Date` Date NOT NULL,
-	`KeyMetrics` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`KeyMetrics` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`FinalParameter` Decimal( 15, 2 ) NULL,
 	`Qty` Int( 11 ) NULL,
 	`ActualRevenue` Decimal( 15, 2 ) NULL,
@@ -5061,8 +5061,8 @@ CREATE TABLE `sales` (
 	`PlanRevenueChange` Decimal( 15, 2 ) NULL,
 	`PlanMargin` Decimal( 15, 2 ) NULL,
 	`PlanMarginChange` Decimal( 15, 2 ) NULL,
-	`ClientID` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`FYYear` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`ClientID` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`FYYear` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `Date`, `KeyMetrics` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5110,12 +5110,12 @@ ENGINE = InnoDB;
 CREATE TABLE `sla` ( 
 	`id` Int( 11 ) NOT NULL,
 	`groupid` Int( 11 ) NULL,
-	`slacol` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`slacol` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`date` Date NULL,
 	`target` Int( 11 ) NULL,
-	`status` VarChar( 45 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`status` VarChar( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`error` Int( 10 ) NULL,
-	`comment` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`comment` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5179,10 +5179,10 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "srf" ------------------------------------------
 CREATE TABLE `srf` ( 
 	`srfid` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`department` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`department` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`prid` Int( 11 ) NULL,
-	`remarks` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`status` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`remarks` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`status` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`sprid` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `srfid` ) )
 CHARACTER SET = latin1
@@ -5215,12 +5215,12 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `stattracker` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`avatarid` Int( 11 ) NOT NULL,
-	`browser` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`ip` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`browser` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`ip` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`thedate_visited` DateTime NULL,
-	`page` VarChar( 70 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`page` VarChar( 70 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`logout_date` DateTime NULL,
-	`systeminfo` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`systeminfo` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5235,22 +5235,22 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `statusboxes` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`name` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`class` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`label` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Status Box',
-	`color` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'green',
-	`link` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`imageicon` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'icon-bell',
-	`linklabel` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Status Box',
-	`class_method` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`description` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`popup` LongText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`popuptitle` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`class` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`label` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Status Box',
+	`color` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'green',
+	`link` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`imageicon` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'icon-bell',
+	`linklabel` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Status Box',
+	`class_method` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`description` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`popup` LongText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`popuptitle` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`showinpopup` TinyInt( 1 ) NULL DEFAULT '0',
-	`style` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`linkclass` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`subtile` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`embed` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`props` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`style` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`linkclass` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`subtile` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`embed` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`props` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`sequence_no` Int( 10 ) NULL,
 	`force_add_avatar` TinyInt( 1 ) NULL,
 	PRIMARY KEY ( `id` ) )
@@ -5267,11 +5267,11 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `sticky_notes` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`instanceformid` Int( 11 ) NOT NULL,
-	`message` LongText CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`message` LongText CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`color` Int( 2 ) NULL,
-	`left` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`top` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`tabid` VarChar( 55 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`left` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`top` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`tabid` VarChar( 55 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`avatarid` Int( 11 ) NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -5286,10 +5286,10 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "store" ----------------------------------------
 CREATE TABLE `store` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`available` Int( 11 ) NOT NULL,
 	`requested` Int( 11 ) NULL,
-	`vendor` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`vendor` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5303,11 +5303,11 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "sub_projects" ---------------------------------
 CREATE TABLE `sub_projects` ( 
 	`sprid` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`realname` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`priority` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`remarks` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`status` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`assigned_to` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`realname` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`priority` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`remarks` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`status` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`assigned_to` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`prid` Int( 11 ) NOT NULL,
 	`spr_owner_guid` Int( 100 ) NOT NULL,
 	PRIMARY KEY ( `sprid` ) )
@@ -5322,17 +5322,17 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "supportservice" ---------------------------
 -- CREATE TABLE "supportservice" -------------------------------
 CREATE TABLE `supportservice` ( 
-	`keyID` VarChar( 110 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`keyID` VarChar( 110 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`Date` Date NOT NULL,
 	`Incoming` Int( 11 ) NOT NULL,
 	`Outgoing` Int( 11 ) NOT NULL,
-	`Process` VarChar( 110 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`Process` VarChar( 110 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`OtherFactor` Int( 11 ) NOT NULL,
 	`AddInfo` Int( 11 ) NOT NULL,
 	`Pending` Int( 11 ) NOT NULL,
 	`Error` Int( 11 ) NOT NULL,
-	`Client_ID` VarChar( 110 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`KRA` VarChar( 110 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`Client_ID` VarChar( 110 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`KRA` VarChar( 110 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `keyID` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5349,12 +5349,12 @@ CREATE TABLE `table_statesave` (
 	`groupid` Int( 11 ) NULL DEFAULT '0',
 	`moduleid` Int( 11 ) NULL DEFAULT '0',
 	`formid` Int( 11 ) NULL,
-	`type` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`state` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`colorder` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`hiddencol` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`collocked` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`name` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'Default',
+	`type` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`state` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`colorder` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`hiddencol` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`collocked` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`name` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'Default',
 	`def` TinyInt( 4 ) NULL DEFAULT '0',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -5369,19 +5369,19 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "testcase" -------------------------------------
 CREATE TABLE `testcase` ( 
 	`id` Int( 11 ) UNSIGNED AUTO_INCREMENT NOT NULL,
-	`srfid` VarChar( 11 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`type` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`testname` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`code` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`cond1` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`cond2` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`assignedto` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`srfid` VarChar( 11 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`type` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`testname` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`code` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`cond1` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`cond2` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`assignedto` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`created_date` Date NULL,
 	`estimated_date` Date NULL,
-	`percent_completion` VarChar( 123 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '0',
-	`status` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`sup_remarks` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`remarks` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`percent_completion` VarChar( 123 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0',
+	`status` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`sup_remarks` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`remarks` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5395,10 +5395,10 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "testcaseparm" ---------------------------------
 CREATE TABLE `testcaseparm` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`parameter` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`instanceformid` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`value` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`remark` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`parameter` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`instanceformid` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`value` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`remark` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5413,7 +5413,7 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `tester` ( 
 	`id` Int( 11 ) NOT NULL,
 	`testerid` Int( 11 ) NOT NULL,
-	`testercode` VarChar( 10 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL )
+	`testercode` VarChar( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
 ENGINE = InnoDB;
@@ -5425,8 +5425,8 @@ ENGINE = InnoDB;
 -- CREATE TABLE "testname" -------------------------------------
 CREATE TABLE `testname` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 500 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`code` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 500 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`code` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5440,8 +5440,8 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "testnameparm" ---------------------------------
 CREATE TABLE `testnameparm` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`parameter` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`testnameid` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`parameter` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`testnameid` VarChar( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5455,7 +5455,7 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "testusers" ------------------------------------
 CREATE TABLE `testusers` ( 
 	`guid` Int( 11 ) NOT NULL,
-	`name` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `guid` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5469,10 +5469,10 @@ ENGINE = MyISAM;
 CREATE TABLE `timesheet_client_sla` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`client_id` Int( 11 ) NOT NULL,
-	`role` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`role` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`process` Int( 11 ) NULL,
-	`field_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`field_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`redlowlimit` Int( 11 ) NOT NULL,
 	`redhighlimit` Int( 11 ) NOT NULL,
 	`yellowlowlimit` Int( 11 ) NOT NULL,
@@ -5493,7 +5493,7 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `timesheet_clients` ( 
 	`id` Int( 111 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL DEFAULT '1',
-	`client_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'VA',
+	`client_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'VA',
 	`show_sla_process` TinyInt( 4 ) NULL,
 	`show_days_out` TinyInt( 4 ) NULL,
 	`show_tat` TinyInt( 4 ) NULL,
@@ -5503,13 +5503,13 @@ CREATE TABLE `timesheet_clients` (
 	`show_startstop` Int( 11 ) NOT NULL DEFAULT '0',
 	`validation_check` Int( 11 ) NOT NULL DEFAULT '1',
 	`view_dashboard` Int( 11 ) NOT NULL DEFAULT '1',
-	`managerdashboard` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`clientdashboard` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`managerdashboard` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`clientdashboard` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`appreciation` Int( 11 ) NOT NULL DEFAULT '0',
-	`appreciationlink` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`errorlink` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`rcalink` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`eventlink` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`appreciationlink` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`errorlink` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`rcalink` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`eventlink` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`show_daysout_trend` Int( 11 ) NULL,
 	`view_received` Int( 11 ) NULL DEFAULT '1',
 	`view_sla_popup` TinyInt( 1 ) NULL,
@@ -5518,9 +5518,9 @@ CREATE TABLE `timesheet_clients` (
 	`monthly_trend_sla` Int( 10 ) NOT NULL DEFAULT '0',
 	`monthly_error_sla` Int( 10 ) NOT NULL DEFAULT '0',
 	`daysout_trend_sla` Int( 10 ) NOT NULL DEFAULT '0',
-	`matrix_y_label` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Files',
+	`matrix_y_label` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'Files',
 	`matrix_qc_option` Int( 1 ) NOT NULL DEFAULT '0',
-	`auditlink` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`auditlink` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`show_hours` TinyInt( 4 ) NULL DEFAULT '0',
 	`skip_adding` Int( 4 ) NOT NULL DEFAULT '0',
 	`file_upload` TinyInt( 4 ) NOT NULL DEFAULT '0',
@@ -5528,10 +5528,10 @@ CREATE TABLE `timesheet_clients` (
 	`sequence` Int( 10 ) NULL DEFAULT '1',
 	`disable_edit` Int( 1 ) NOT NULL DEFAULT '0',
 	`addinfo_trend` Int( 1 ) NOT NULL DEFAULT '0',
-	`timesheet_type` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`timesheet_type` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`show_calendar` TinyInt( 1 ) NULL DEFAULT '0',
-	`project_status` VarChar( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`comment_shortcut` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`project_status` VarChar( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`comment_shortcut` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5567,7 +5567,7 @@ CREATE TABLE `timesheet_dropdown1` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`client_id` Int( 11 ) NOT NULL,
-	`field_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`field_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5583,7 +5583,7 @@ CREATE TABLE `timesheet_dropdown2` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`client_id` Int( 11 ) NOT NULL,
-	`field_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`field_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5599,7 +5599,7 @@ CREATE TABLE `timesheet_dropdown3` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`client_id` Int( 11 ) NOT NULL,
-	`field_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`field_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5615,7 +5615,7 @@ CREATE TABLE `timesheet_dropdown4` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`client_id` Int( 11 ) NOT NULL,
-	`field_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`field_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5631,7 +5631,7 @@ CREATE TABLE `timesheet_dropdown5` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`client_id` Int( 11 ) NOT NULL,
-	`field_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`field_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5647,13 +5647,13 @@ CREATE TABLE `timesheet_fields` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`client_id` Int( 11 ) NOT NULL,
-	`field_id` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`field_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`field_type` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`field_format` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`field_id` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`field_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`field_type` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`field_format` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`sequence` Int( 11 ) NOT NULL DEFAULT '0',
 	`required` TinyInt( 1 ) NOT NULL DEFAULT '1',
-	`field_formula` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`field_formula` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5667,10 +5667,10 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "timesheet_fields_mapper" ----------------------
 CREATE TABLE `timesheet_fields_mapper` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`timesheet_tablename` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`timesheet_tablename` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`employee_id` Int( 11 ) NULL,
 	`field_id` Int( 11 ) NOT NULL,
-	`field_value_id` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`field_value_id` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`field_value` Int( 11 ) NULL,
 	`clientid` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
@@ -5688,7 +5688,7 @@ CREATE TABLE `timesheet_lob` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`client_id` Int( 11 ) NOT NULL,
-	`field_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`field_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5704,7 +5704,7 @@ CREATE TABLE `timesheet_process` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`client_id` Int( 11 ) NOT NULL,
-	`field_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`field_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`default_value` TinyInt( 4 ) NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -5721,7 +5721,7 @@ CREATE TABLE `timesheet_project` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`client_id` Int( 11 ) NOT NULL,
-	`field_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`field_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5737,7 +5737,7 @@ CREATE TABLE `timesheet_status` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`client_id` Int( 11 ) NOT NULL,
-	`field_name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`field_name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`field_id` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -5753,8 +5753,8 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `timesheet_type` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
-	`fieldname` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`fieldtext` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '0',
+	`fieldname` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`fieldtext` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0',
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5768,33 +5768,33 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "training_app_data" ----------------------------
 CREATE TABLE `training_app_data` ( 
 	`id` Int( 11 ) NOT NULL,
-	`name` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`description` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`name` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`description` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`formid` Int( 11 ) NOT NULL,
 	`assignedto` Int( 11 ) NULL,
 	`createdid` Int( 11 ) NULL,
-	`startdate` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`nextactiondate` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`enddate` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`region` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`centre` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`batchcode` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`rollno` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`Type` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`sprint` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`teachers` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`grade` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`date` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`trackerupdate` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`schedule_conformance` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`attendance` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`assignment` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`dormitory` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`lastsprintscore` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`lastsprintstatus` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`Tollgate` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`tollgatestatus` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`MOP` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`startdate` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`nextactiondate` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`enddate` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`region` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`centre` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`batchcode` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`rollno` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`Type` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`sprint` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`teachers` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`grade` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`date` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`trackerupdate` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`schedule_conformance` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`attendance` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`assignment` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`dormitory` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`lastsprintscore` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`lastsprintstatus` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`Tollgate` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`tollgatestatus` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`MOP` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5876,7 +5876,7 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "users" ----------------------------------------
 CREATE TABLE `users` ( 
 	`guid` Int( 2 ) NOT NULL,
-	`name` VarChar( 300 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 300 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`lastactivity` Int( 11 ) NULL DEFAULT '0',
 	PRIMARY KEY ( `guid` ) )
 CHARACTER SET = latin1
@@ -5890,10 +5890,10 @@ ENGINE = MyISAM;
 -- CREATE TABLE "webpivottable" --------------------------------
 CREATE TABLE `webpivottable` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`orgid` Int( 11 ) NOT NULL,
 	`formid` Int( 11 ) NOT NULL,
-	`query` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`query` Text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5907,7 +5907,7 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "workflow" -------------------------------------
 CREATE TABLE `workflow` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`instanceformid` Int( 11 ) NULL,
 	`formid` Int( 11 ) NULL,
 	`orgid` Int( 11 ) NOT NULL,
@@ -5915,7 +5915,7 @@ CREATE TABLE `workflow` (
 	`groupid` Int( 11 ) NULL,
 	`sentinel` TinyInt( 1 ) NOT NULL DEFAULT '0',
 	`single_stage` TinyInt( 1 ) NOT NULL DEFAULT '0',
-	`type` VarChar( 20 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`type` VarChar( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5930,12 +5930,12 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `workflow_elements` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`workflowstageid` Int( 11 ) NOT NULL,
-	`flow_action` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`field` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`value` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`flow_action` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`field` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`value` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`expression` Smallint( 6 ) NULL,
-	`condition` VarChar( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-	`custom_method` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`condition` VarChar( 250 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+	`custom_method` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
@@ -5951,8 +5951,8 @@ CREATE TABLE `workflow_steps` (
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
 	`workflowid` Int( 11 ) NOT NULL,
 	`statusid` Int( 11 ) NOT NULL,
-	`type` VarChar( 50 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`customclass` VarChar( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`type` VarChar( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`customclass` VarChar( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	`keyid` Int( 11 ) NOT NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
@@ -5967,15 +5967,15 @@ AUTO_INCREMENT = 1;
 -- CREATE TABLE "xflat_config" ---------------------------------
 CREATE TABLE `xflat_config` ( 
 	`id` Int( 11 ) AUTO_INCREMENT NOT NULL,
-	`name` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`name` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	`instanceformid` Int( 11 ) NOT NULL,
-	`basicconfig` VarChar( 1000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT 'first box in the congif',
-	`dropdownconfig` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT 'multiple select values',
-	`red_avatar_trigger` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT '_a=>avatars _g=>groups',
-	`yellow_avatar_trigger` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT '_a=>avatars _g=>groups',
-	`green_avatar_trigger` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT '_a=>avatars _g=>groups',
-	`targets` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT 'red,yellow,green,(1=>Daily|2=>Weekly|3=>Monthly|4=>Quarter)',
-	`link` VarChar( 10000 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+	`basicconfig` VarChar( 1000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'first box in the congif',
+	`dropdownconfig` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'multiple select values',
+	`red_avatar_trigger` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '_a=>avatars _g=>groups',
+	`yellow_avatar_trigger` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '_a=>avatars _g=>groups',
+	`green_avatar_trigger` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '_a=>avatars _g=>groups',
+	`targets` Text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'red,yellow,green,(1=>Daily|2=>Weekly|3=>Monthly|4=>Quarter)',
+	`link` VarChar( 10000 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
 	PRIMARY KEY ( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
