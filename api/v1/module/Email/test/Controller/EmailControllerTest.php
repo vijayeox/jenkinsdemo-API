@@ -67,6 +67,20 @@ class EmailControllerTest extends ControllerTest {
         $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('email_setting_user'));
     }
+
+    public function testCreateWithToken(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['email' => 'brianmp@myvamla.com','token' => 'token'];
+        $this->assertEquals(2, $this->getConnection()->getRowCount('email_setting_user'));
+        $this->dispatch('/email', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
+        $this->assertEquals(3, $this->getConnection()->getRowCount('email_setting_user'));
+    }
+
     public function testCreateWithOutDataFailure(){
         $this->initAuthToken($this->adminUser);
         $data = ['username' => 'brianmp@myvamla.com'];
