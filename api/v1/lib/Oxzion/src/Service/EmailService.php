@@ -66,7 +66,7 @@ class EmailService extends AbstractService
                 }
             }
         }
-        if ($data['password']) {
+        if (isset($data['password'])) {
             $data['password'] = TwoWayEncryption::encrypt($data['password']);
         }
         $data['host'] = substr($data['email'], strpos($data['email'], "@") + 1);
