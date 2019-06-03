@@ -103,35 +103,90 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
         $this->assertEquals($content['data'][2]['id'], 3);
         $this->assertEquals($content['data'][2]['name'], 'rakshith amin');
-        $this->assertEquals($content['pagination']['page'], 1);
-        $this->assertEquals($content['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['pagination']['pageSize'], 20);
+        $this->assertEquals($content['total'],3);
     }
 
     public function testGetListWithSort()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user?sort=lastname', 'GET');
+        $this->dispatch('/user?filter=[{"sort":[{"field":"name","dir":"dsc"}],"skip":0,"take":2}]
+', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 3);
-        $this->assertEquals($content['data'][0]['id'], 2);
-        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
-        $this->assertEquals($content['data'][1]['id'], 3);
-        $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
-        $this->assertEquals($content['data'][2]['id'], 1);
-        $this->assertEquals($content['data'][2]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['pagination']['page'], 1);
-        $this->assertEquals($content['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['pagination']['pageSize'], 20);
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][0]['id'], 3);
+        $this->assertEquals($content['data'][0]['name'], 'rakshith amin');
+        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['total'],3);
+    }
+
+     public function testGetListSortWithPageSize()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":2,"take":2}]
+', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 1);
+        $this->assertEquals($content['data'][0]['id'], 3);
+        $this->assertEquals($content['data'][0]['name'], 'rakshith amin');
+        $this->assertEquals($content['total'],3);
     }
 
     public function testGetListwithQueryParameters()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user?f=email&q=test&pg=1', 'GET');
+        $this->dispatch('/user?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"endswith","value":"al"},{"field":"designation","operator":"startswith","value":"it"}]},"sort":[{"field":"id","dir":"asc"},{"field":"uuid","dir":"dsc"}],"skip":0,"take":2}]
+', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 1);
+        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['total'],1);
+    }
+
+    public function testGetListwithQueryWithPageSize()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"endswith","value":"ni"},{"field":"designation","operator":"startswith","value":"it"}]},"sort":[{"field":"id","dir":"asc"},{"field":"uuid","dir":"dsc"}],"skip":0,"take":1}]
+', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 1);
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['total'],1);
+    }
+
+    public function testGetListwithQueryPage()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user?filter=[{"skip":0,"take":1}]
+', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 1);
+         $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['total'],3);
+    }
+
+    public function testGetListwithQueryPageNo()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user?filter=[{"skip":1,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -141,59 +196,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['data'][1]['id'], 3);
         $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
-        $this->assertEquals($content['pagination']['page'], 1);
-        $this->assertEquals($content['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['pagination']['pageSize'], 20);
-    }
-
-    public function testGetListwithQueryWithPageSize()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user?f=email&q=test&psz=1', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 2);
-        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
-        $this->assertEquals($content['pagination']['page'], 1);
-        $this->assertEquals($content['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['pagination']['pageSize'], 1);
-    }
-
-    public function testGetListwithQueryPage()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user?psz=2&pg=2', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 1);
-         $this->assertEquals($content['data'][0]['id'], 3);
-        $this->assertEquals($content['data'][0]['name'], 'rakshith amin');
-        $this->assertEquals($content['pagination']['page'], 2);
-        $this->assertEquals($content['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['pagination']['pageSize'], 2);
-    }
-
-    public function testGetListwithQueryPageNo()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user?psz=2&pg=1', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['id'], 1);
-        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['data'][1]['id'], 2);
-        $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
-        $this->assertEquals($content['pagination']['page'], 1);
-        $this->assertEquals($content['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['pagination']['pageSize'], 2);
+        $this->assertEquals($content['total'], 3);
     }
 
 

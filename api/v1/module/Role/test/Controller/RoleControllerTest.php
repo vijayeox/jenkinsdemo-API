@@ -30,63 +30,53 @@ class RoleControllerTest extends MainControllerTest {
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(2, count($content['data']));
-        $this->assertEquals($content['data']['data'][0]['id'], 4);
-        $this->assertEquals($content['data']['data'][0]['name'], 'ADMIN');
-        $this->assertEquals($content['data']['data'][1]['id'], 5);
-        $this->assertEquals($content['data']['data'][1]['name'], 'EMPLOYEE');
-        $this->assertEquals($content['data']['data'][2]['id'], 6);
-        $this->assertEquals($content['data']['data'][2]['name'], 'MANAGER');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+        $this->assertEquals(3, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 4);
+        $this->assertEquals($content['data'][0]['name'], 'ADMIN');
+        $this->assertEquals($content['data'][1]['id'], 5);
+        $this->assertEquals($content['data'][1]['name'], 'EMPLOYEE');
+        $this->assertEquals($content['data'][2]['id'], 6);
+        $this->assertEquals($content['data'][2]['name'], 'MANAGER');
+        $this->assertEquals($content['total'],3);
     }
 
     public function testGetListWithQuery(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/role?f=name&pg=2&psz=2', 'GET');
+        $this->dispatch('/role?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"endswith","value":"in"},{"field":"description","operator":"startswith","value":"mu"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(2, count($content['data']));
-        $this->assertEquals($content['data']['data'][0]['id'], 6);
-        $this->assertEquals($content['data']['data'][0]['name'], 'MANAGER');
-        $this->assertEquals($content['data']['pagination']['page'], 2);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 2);
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 4);
+        $this->assertEquals($content['data'][0]['name'], 'ADMIN');
+        $this->assertEquals($content['total'], 1);
     }
 
     public function testGetListWithQueryPageNo(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/role?f=name&pg=1&psz=2', 'GET');
+        $this->dispatch('/role?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(2, count($content['data']));
-        $this->assertEquals($content['data']['data'][0]['id'], 4);
-        $this->assertEquals($content['data']['data'][0]['name'], 'ADMIN');
-        $this->assertEquals($content['data']['data'][1]['id'], 5);
-        $this->assertEquals($content['data']['data'][1]['name'], 'EMPLOYEE');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 2);
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 5);
+        $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
+        $this->assertEquals($content['total'], 3);
     }
 
-    public function testGetListWithQueryByName(){
+    public function testGetListWithQuerySort(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/role?f=name&q=emp', 'GET');
+        $this->dispatch('/role?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(2, count($content['data']));
-        $this->assertEquals($content['data']['data'][0]['id'], 5);
-        $this->assertEquals($content['data']['data'][0]['name'], 'EMPLOYEE');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 5);
+        $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
+        $this->assertEquals($content['total'], 3);
     }
 
     public function testRolePrivilege(){

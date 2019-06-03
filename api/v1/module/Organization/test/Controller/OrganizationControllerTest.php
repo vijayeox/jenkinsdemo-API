@@ -43,15 +43,14 @@ class OrganizationControllerTest extends MainControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
         $this->assertEquals($content['data'][1]['id'], 2);
         $this->assertEquals($content['data'][1]['name'], 'Golden State Warriors');
-        $this->assertEquals($content['pagination']['page'], 1);
-        $this->assertEquals($content['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['pagination']['pageSize'], 20);
+        $this->assertEquals($content['total'],2);
     }
 
     public function testGetListWithQuery()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization?f=state&q=o&psz=1&pg=2', 'GET');
+        $this->dispatch('/organization?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"endswith","value":"rs"},{"field":"state","operator":"contains","value":"oh"}]},"sort":[{"field":"id","dir":"asc"},{"field":"uuid","dir":"dsc"}],"skip":0,"take":1}]
+', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -59,32 +58,14 @@ class OrganizationControllerTest extends MainControllerTest
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['id'], 2);
         $this->assertEquals($content['data'][0]['name'], 'Golden State Warriors');
-        $this->assertEquals($content['pagination']['page'], 2);
-        $this->assertEquals($content['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['pagination']['pageSize'], 1);
+        $this->assertEquals($content['total'],1);
     }
 
 
     public function testGetListWithQueryField()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization?f=name&q=gol', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(1, count($content['data']));
-        $this->assertEquals($content['data'][0]['id'], 2);
-        $this->assertEquals($content['data'][0]['name'], 'Golden State Warriors');
-        $this->assertEquals($content['pagination']['page'], 1);
-        $this->assertEquals($content['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['pagination']['pageSize'], 20);
-    }
-
-    public function testGetListWithQueryPageNo()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization?f=state&q=o&psz=1&pg=1', 'GET');
+        $this->dispatch('/organization?filter=[{"filter":{"logic":"and","filters":[{"field":"state","operator":"contains","value":"oh"}]},"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -92,9 +73,21 @@ class OrganizationControllerTest extends MainControllerTest
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['id'], 1);
         $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
-        $this->assertEquals($content['pagination']['page'], 1);
-        $this->assertEquals($content['pagination']['noOfPages'], 2);
-        $this->assertEquals($content['pagination']['pageSize'], 1);
+        $this->assertEquals($content['total'],2);
+    }
+
+    public function testGetListWithQueryPageSize()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization?filter=[{"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
+        $this->assertEquals($content['total'],2);
     }
 
     protected function setDefaultAsserts()

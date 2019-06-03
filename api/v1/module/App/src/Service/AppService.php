@@ -16,6 +16,8 @@ use Oxzion\Utils\ZipUtils;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\FieldService;
+use Oxzion\Utils\FilterUtils;
+
 
 
 class AppService extends AbstractService
@@ -66,16 +68,46 @@ class AppService extends AbstractService
         return $resultSet->toArray();
     }
 
-    public function getAppList($filterArray = null, $page = null, $pageSize = null, $sortArray = null, $groupBy = null)
+    public function getAppList($filterParams = null)
     {
-        $offset = ($page - 1) * $pageSize;
-        $resultSet = $this->getDataByParams('ox_app', array("*"), $filterArray, null, $sortArray, $groupBy, $pageSize, $offset);
-        $response = array();
-        $response['data'] = $resultSet->toArray();
-        if ($pageSize) {
-            $response['pagination'] = array('page' => $page, 'noOfPages' => ceil($resultSet->count() / $pageSize), 'pageSize' => $pageSize, 'total' => $resultSet->count());
-        }
-        return $response;
+        $pageSize = 20;
+        $offset = 0;
+        $where = "";
+        $sort = "name";
+            
+        $cntQuery ="SELECT count(id) FROM `ox_app`";
+          
+            if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                if(isset($filterArray[0]['filter'])){
+                  $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                   $filterList = $filterArray[0]['filter']['filters'];
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                }
+                if(isset($filterArray[0]['sort'])){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
+            }
+
+
+            $where .= strlen($where) > 0 ? " AND status!=1" : "WHERE status!=1";
+
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(id)'];
+            $query ="SELECT * FROM `ox_app` ".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            $result = $resultSet->toArray();
+             for($x=0;$x<sizeof($result);$x++) {
+                 $result[$x]['start_options'] = json_decode($result[$x]['start_options'],true);
+            }
+            return array('data' => $result, 
+                     'total' => $count);  
     }
 
     public function updateApp($id, &$data)

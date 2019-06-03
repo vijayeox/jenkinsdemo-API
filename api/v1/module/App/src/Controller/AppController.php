@@ -234,25 +234,12 @@ class AppController extends AbstractApiController
      */
     public function applistAction()
     {
-        $params = $this->params()->fromQuery(); // empty method call
-        if(!isset($params['page'])){
-            $params['page'] = 1;
-        }
-        if(!isset($params['pagesize'])){
-            $params['pagesize'] = 20;
-        }
-        if(!isset($params['sort'])){
-            $params['sort'] = array("name");
-        }
-        $filter = array();
-        if(isset($params['filter'])){
-            $filter = $params['filter'];
-        }
-        $response = $this->appService->getAppList($filter,$params['page'],$params['pagesize'],$params['sort']);
+        $filterParams = $this->params()->fromQuery(); // empty method call
+        $response = $this->appService->getAppList($filterParams);
         if ($response == 0 || empty($response)) {
             return $this->getErrorResponse("No Apps to display", 404);
         }
-        return $this->getSuccessResponseWithData($response);
+        return $this->getSuccessResponseDataWithPagination($response['data'],$response['total']);
     }
 
     /**

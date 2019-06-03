@@ -70,25 +70,9 @@ class OrganizationController extends AbstractApiController
      */
     public function getList()
     {
-        $params = $this->params()->fromQuery(); // empty method call
-        if(!isset($params['q'])){
-            $params['q'] = "";
-        }
-
-        if(!isset($params['f'])){
-            $params['f'] = "name";
-        }
-        if(!isset($params['pg'])){
-            $params['pg'] = 1;
-        }
-        if(!isset($params['psz'])){
-            $params['psz'] = 20;
-        }
-        if(!isset($params['sort'])){
-            $params['sort'] = "name";
-        }  
-        $result = $this->orgService->getOrganizations($params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['pagination']);
+        $filterParams = $this->params()->fromQuery(); // empty method call
+        $result = $this->orgService->getOrganizations($filterParams);
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
 
     /**

@@ -13,11 +13,14 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\OrganizationService;
 use Doctrine\Migrations\AbstractMigration;
 use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\FilterUtils;
+
 
 class ProjectService extends AbstractService {
 
     private $table;
     private $organizationService;
+    static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
 
     public function setMessageProducer($messageProducer)
     {
@@ -31,25 +34,44 @@ class ProjectService extends AbstractService {
         $this->organizationService = $organizationService;
 	}
 
-    public function getProjectList($q,$f,$pg,$psz,$sort){
-         $cntQuery ="SELECT count(id) FROM `ox_project`";
-            if(empty($q)){
-                $where = " WHERE isdeleted!=1";
+
+
+    public function getProjectList($filterParams = null){
+            
+            $pageSize = 20;
+            $offset = 0;
+            $where = "";
+            $sort = "name";
+            
+            $cntQuery ="SELECT count(id) FROM `ox_project`";
+          
+            if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                if(isset($filterArray[0]['filter'])){
+                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                   $filterList = $filterArray[0]['filter']['filters'];
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                }
+                if(isset($filterArray[0]['sort'])){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
             }
-            else{
-                $where = " WHERE isdeleted!=1 AND ".$f." like '".$q."%'";   
-            }
-            $offset = ($pg - 1) * $psz;
+
+
+            $where .= strlen($where) > 0 ? " AND isdeleted!=1" : "WHERE isdeleted!=1";
+
             $sort = " ORDER BY ".$sort;
-            $limit = " LIMIT ".$psz." offset ".$offset;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(id)'];
-            $query ="SELECT * FROM `ox_project`".$where." ".$sort." ".$limit;
+            $query ="SELECT * FROM `ox_project` ".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query);
             return array('data' => $resultSet->toArray(), 
-                     'pagination' => array('page' => $pg,
-                                            'noOfPages' => ceil($count/$psz),
-                                            'pageSize' => $psz));        
+                     'total' => $count);        
     }
 
 
@@ -187,31 +209,52 @@ class ProjectService extends AbstractService {
             return $resultSet->toArray();
     }
 
-    public function getUserList($id,$q,$f,$pg,$psz,$sort) {
-          if(!isset($id)) {
+    public function getUserList($id,$filterParams = null) {
+
+        if(!isset($id)) {
             return 0;
-          }
+        }
+
+        $pageSize = 20;
+        $offset = 0;
+        $where = "";
+        $sort = "ox_user.name";
+
+
          $query = "SELECT ox_user.id,ox_user.name";
          $from = " FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id";
     
          $cntQuery ="SELECT count(ox_user.id)".$from;
-            if(empty($q)){
-                $where = " WHERE ox_project.uuid = '".$id."' AND ox_project.isdeleted!=1";
+
+         if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                if(isset($filterArray[0]['filter'])){
+                   $filterlogic = $filterArray[0]['filter']['logic'];
+                   $filterList = $filterArray[0]['filter']['filters'];
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
+                }
+                if(isset($filterArray[0]['sort'])){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort,self::$fieldName);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
             }
-            else{
-                $where = " WHERE ox_project.uuid = '".$id."' AND ox_project.isdeleted!=1 AND ox_user.".$f." like '".$q."%'";   
-            }
-            $offset = ($pg - 1) * $psz;
+
+
+
+            $where .= strlen($where) > 0 ? " AND ox_project.uuid = '".$id."' AND ox_project.isdeleted!=1" : " WHERE ox_project.uuid = '".$id."' AND ox_project.isdeleted!=1";
+
+            
             $sort = " ORDER BY ".$sort;
-            $limit = " LIMIT ".$psz." offset ".$offset;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(ox_user.id)'];
             $query =$query." ".$from." ".$where." ".$sort." ".$limit;
+
             $resultSet = $this->executeQuerywithParams($query);
             return array('data' => $resultSet->toArray(), 
-                     'pagination' => array('page' => $pg,
-                                            'noOfPages' => ceil($count/$psz),
-                                            'pageSize' => $psz));
+                     'total' => $count);
     
     }
     

@@ -109,11 +109,64 @@ class AppControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('applist');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 4);
-        $this->assertEquals($content['data']['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['data']['pagination']['page'], 1);
-        $this->assertEquals($content['data']['pagination']['noOfPages'], 1);
-        $this->assertEquals($content['data']['pagination']['pageSize'], 20);
+        $this->assertEquals(count($content['data']), 4);
+        $this->assertEquals($content['data'][0]['name'], 'Admin');
+        $this->assertEquals($content['total'], 4);
+    }
+
+
+    public function testGetAppListWithQuery()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/a?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"startswith","value":"a"},{"field":"category","operator":"contains","value":"utilities"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]
+', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('applist');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 1);
+        $this->assertEquals($content['data'][0]['name'], 'Admin');
+        $this->assertEquals($content['total'], 1);
+    }
+
+
+    public function testGetAppListWithPageSize()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/a?filter=[{"skip":0,"take":2}]
+', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('applist');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][0]['name'], 'Admin');
+        $this->assertEquals($content['data'][1]['name'], 'AppBuilder');
+        $this->assertEquals($content['total'], 4);
+    }
+
+    public function testGetAppListWithPageSize2()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/a?filter=[{"skip":2,"take":2}]
+', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('applist');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][0]['name'], 'CRM');
+        $this->assertEquals($content['data'][1]['name'], 'MailAdmin');
+        $this->assertEquals($content['total'], 4);
     }
 
     public function testGetAppTypeList()

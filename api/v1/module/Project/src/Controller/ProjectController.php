@@ -158,25 +158,9 @@ class ProjectController extends AbstractApiController {
     * </code>
     */
     public function getList(){
-        $params = $this->params()->fromQuery(); // empty method call
-        if(!isset($params['q'])){
-            $params['q'] = "";
-        }
-
-        if(!isset($params['f'])){
-            $params['f'] = "name";
-        }
-        if(!isset($params['pg'])){
-            $params['pg'] = 1;
-        }
-        if(!isset($params['psz'])){
-            $params['psz'] = 20;
-        }
-        if(!isset($params['sort'])){
-            $params['sort'] = "name";
-        }  
-        $result = $this->projectService->getProjectList($params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['pagination']);
+        $filterParams = $this->params()->fromQuery(); // empty method call  
+        $result = $this->projectService->getProjectList($filterParams);
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
     /**
     * GET List Project of Current User API
@@ -244,25 +228,9 @@ class ProjectController extends AbstractApiController {
     public function getListOfUsersAction() {
         $project = $this->params()->fromRoute();
         $id=$project[$this->getIdentifierName()];
-        $params = $this->params()->fromQuery(); // empty method call
-        if(!isset($params['q'])){
-            $params['q'] = "";
-        }
-
-        if(!isset($params['f'])){
-            $params['f'] = "name";
-        }
-        if(!isset($params['pg'])){
-            $params['pg'] = 1;
-        }
-        if(!isset($params['psz'])){
-            $params['psz'] = 20;
-        }
-        if(!isset($params['sort'])){
-            $params['sort'] = "name";
-        }  
+        $filterParams = $this->params()->fromQuery(); // empty method call
         try {
-            $count = $this->projectService->getUserList($project[$this->getIdentifierName()],$params['q'],$params['f'],$params['pg'],$params['psz'],$params['sort']);
+            $count = $this->projectService->getUserList($project[$this->getIdentifierName()],$filterParams);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
@@ -270,6 +238,6 @@ class ProjectController extends AbstractApiController {
         if($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
-        return $this->getSuccessResponseDataWithPagination($count['data'],$count['pagination']);
+        return $this->getSuccessResponseDataWithPagination($count['data'],$count['total']);
     }
 }
