@@ -72,6 +72,13 @@ class OrganizationController extends AbstractApiController
     {
         $filterParams = $this->params()->fromQuery(); // empty method call
         $result = $this->orgService->getOrganizations($filterParams);
+        if ($result) {
+            for($x=0;$x<sizeof($result['data']);$x++){
+                $baseUrl =$this->getBaseUrl();
+                $logo = $result['data'][$x]['logo'];
+                $result['data'][$x]['logo'] = $baseUrl . "/organization/" . $result['data'][$x]['uuid'];
+            }
+        }
         return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
 
@@ -140,7 +147,7 @@ class OrganizationController extends AbstractApiController
             return $this->getErrorResponse("Organization not found", 404, ['id' => $id]);
         }
 
-         if ($result) {
+        if ($result) {
                 $baseUrl =$this->getBaseUrl();
                 $logo = $result['logo'];
                 $result['logo'] = $baseUrl . "/organization/" . $result["uuid"];

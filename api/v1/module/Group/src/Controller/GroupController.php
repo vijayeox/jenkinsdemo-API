@@ -149,6 +149,31 @@ class GroupController extends AbstractApiController {
 
         return $this->getSuccessResponseWithData($result);
     }
+
+
+
+
+    /**
+     * GET List Group API
+     * @api
+     * @link /group
+     * @method GET
+     * @return array Returns a JSON Response with Invalid Method/
+     */
+    public function getList()
+    {
+        $filterParams = $this->params()->fromQuery(); // empty method call
+        $result = $this->groupService->getGroupList($filterParams);
+        if ($result) {
+            for($x=0;$x<sizeof($result['data']);$x++){
+                $baseUrl =$this->getBaseUrl();
+                $logo = $result['data'][$x]['logo'];
+                $orgId = $this->orgService->getOrganization($result['data'][$x]['org_id']);
+                $result['data'][$x]['logo'] = $baseUrl . "/group/".$orgId['uuid']."/logo/".$result['data'][$x]["uuid"];
+            }
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+    }
     
      /**
     * Save users in a Group API

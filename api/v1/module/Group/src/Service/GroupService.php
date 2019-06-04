@@ -148,6 +148,57 @@ class GroupService extends AbstractService {
     }
 
 
+
+     /**
+     * GET Group Service
+     * @method getGroup
+     * @return array $data
+     * <code> {
+     *               id : integer,
+     *               name : string,
+     *               logo : string,
+     *               status : String(Active|Inactive),
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and Created Group.
+     */
+    public function getGroupList($filterParams = null)
+    {
+
+        $where = "";
+        $pageSize = 20;
+        $offset = 0;
+        $sort = "name";
+
+        $cntQuery ="SELECT count(id) FROM `ox_group`";
+
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                if(isset($filterArray[0]['filter'])){
+                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                   $filterList = $filterArray[0]['filter']['filters'];
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                }
+                if(isset($filterArray[0]['sort'])){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                }
+                
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
+            }
+
+            $where .= strlen($where) > 0 ? " AND status = 'Active'" : " WHERE status = 'Active'";
+            
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(id)'];
+            $query ="SELECT * FROM `ox_group`".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            return array('data' => $resultSet->toArray(), 
+                     'total' => $count);
+    }
+
     public function updateGroup ($id, &$data,$files = null) {
         $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
