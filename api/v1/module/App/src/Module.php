@@ -49,20 +49,6 @@ class Module implements ConfigProviderInterface {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\App());
                     return new TableGateway('ox_app', $dbAdapter, null, $resultSetPrototype);
                 },
-                Service\WorkflowInstanceService::class => function($container){
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\WorkflowInstanceService($container->get('config'), $dbAdapter, $container->get(Model\WorkflowInstanceTable::class));
-                },
-                Model\WorkflowInstanceTable::class => function($container) {
-                    $tableGateway = $container->get(Model\WorkflowInstanceTableGateway::class);
-                    return new Model\WorkflowInstanceTable($tableGateway);
-                },
-                Model\WorkflowInstanceTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Menu());
-                    return new TableGateway('ox_workflow_instance', $dbAdapter, null, $resultSetPrototype);
-                },
                 Service\MenuItemService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\MenuItemService($container->get('config'), $dbAdapter, $container->get(Model\MenuItemTable::class));
@@ -74,7 +60,7 @@ class Module implements ConfigProviderInterface {
                 Model\MenuItemTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Menu());
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\MenuItem());
                     return new TableGateway('ox_app_menu', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
@@ -94,6 +80,11 @@ class Module implements ConfigProviderInterface {
                         $container->get(Model\AppTable::class), $container->get(Service\AppService::class), $container->get('AppLogger'),
                         $container->get(AdapterInterface::class));
                 },
+                Controller\MenuItemController::class => function($container) {
+                    return new Controller\MenuItemController(
+                        $container->get(Model\MenuItemTable::class), $container->get(Service\MenuItemService::class), $container->get('AppLogger'),
+                        $container->get(AdapterInterface::class));
+                },
                 Controller\FormController::class => function($container) {
                     return new Controller\FormController(
                         $container->get(FormTable::class),$container->get(FormService::class),
@@ -110,13 +101,6 @@ class Module implements ConfigProviderInterface {
                 },
                 Controller\WorkflowController::class => function($container) {
                     return new Controller\WorkflowController(
-                        $container->get(WorkflowTable::class),$container->get(WorkflowService::class),
-                        $container->get('AppLogger'),
-                        $container->get(AdapterInterface::class)
-                    );
-                },
-                Controller\WorkflowInstanceController::class => function($container) {
-                    return new Controller\WorkflowInstanceController(
                         $container->get(WorkflowTable::class),$container->get(WorkflowService::class),
                         $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)

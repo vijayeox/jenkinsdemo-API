@@ -19,14 +19,15 @@
         <testsuite name="Roles Fixtures">
             <directory>./module/Role/test</directory>
         </testsuite>
-        <testsuite name="App Fixtures">
+        <!-- <testsuite name="App Fixtures">
             <directory>./module/App/test</directory>
-        </testsuite>
+            <directory>./module/Workflow/test</directory>
+        </testsuite> -->
 
         <testsuite name="Core Fixtures">
             <directory>./lib/Oxzion/test</directory>
             <directory>./module/Mlet/test</directory>
-            <directory>./lib/Oxzion/test/WorkflowTest</directory>
+            <!-- <directory>./lib/Oxzion/test/WorkflowTest</directory> -->
             <directory>./lib/Oxzion/test/AnalyticsTest</directory>
             <directory>./lib/Oxzion/test/NLPTest</directory>
         </testsuite>

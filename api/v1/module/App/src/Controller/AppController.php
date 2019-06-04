@@ -304,6 +304,12 @@ class AppController extends AbstractApiController
         }
     }
 
+    public function assignmentsAction(){
+        $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
+        $assignments = $this->appService->getAssignments($params['appId']);
+        return $this->getSuccessResponseWithData($assignments);
+    }
+
     /**
      * Deploy App API using YAML File
      * @api

@@ -1,8 +1,8 @@
 <?php
-namespace Oxzion\Service;
+namespace Workflow\Service;
 
-use Oxzion\Model\WorkflowInstanceTable;
-use Oxzion\Model\WorkflowInstance;
+use Workflow\Model\WorkflowInstanceTable;
+use Workflow\Model\WorkflowInstance;
 use Bos\Auth\AuthContext;
 use Bos\Auth\AuthConstants;
 use Bos\Service\AbstractService;
@@ -10,7 +10,7 @@ use Bos\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
 
-class WorkflowInstanceService extends AbstractService{
+class WorkflowInstanceService extends AbstractService {
 
     public function __construct($config, $dbAdapter, WorkflowInstanceTable $table){
         parent::__construct($config, $dbAdapter);

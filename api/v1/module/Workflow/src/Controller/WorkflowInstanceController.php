@@ -1,26 +1,29 @@
 <?php
-namespace App\Controller;
+namespace Workflow\Controller;
 /**
 * Workflow Api
 */
 use Zend\Log\Logger;
-use Oxzion\Model\Workflow;
-use Oxzion\Model\WorkflowTable;
-use Oxzion\Service\WorkflowService;
+use Workflow\Model\WorkflowInstanceTable;
+use Workflow\Model\WorkflowInstance;
+use Workflow\Service\WorkflowInstanceService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Bos\ValidationException;
+use Oxzion\Service\WorkflowService;
 
 class WorkflowInstanceController extends AbstractApiController
 {
+    private $workflowInstanceService;
     private $workflowService;
     /**
     * @ignore __construct
     */
-	public function __construct(WorkflowTable $table, WorkflowService $workflowService, Logger $log, AdapterInterface $dbAdapter) {
-		parent::__construct($table, $log, __CLASS__, Workflow::class);
+	public function __construct(WorkflowInstanceTable $table, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, Logger $log, AdapterInterface $dbAdapter) {
+		parent::__construct($table, $log, __CLASS__, WorkflowInstance::class);
 		$this->setIdentifierName('activityId');
-		$this->workflowService = $workflowService;
+		$this->workflowInstanceService = $workflowInstanceService;
+        $this->workflowService = $workflowService;
 	}
 	public function activityAction(){
         $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());

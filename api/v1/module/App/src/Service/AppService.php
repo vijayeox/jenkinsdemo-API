@@ -449,4 +449,7 @@ class AppService extends AbstractService
 
         return $count;
     }
+    public function getAssignments($appId){
+        $assignments = $this->appService->getAssignments($params['appId']);
+    }
 }

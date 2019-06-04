@@ -165,10 +165,4 @@ class WorkflowController extends AbstractApiController
             return $this->getErrorResponse("Files cannot be uploaded!");
         }
     }
-
-    public function assignmentsAction(){
-        $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
-        $assignments = $this->workflowService->getAssignments($params['appId']);
-        return $this->getSuccessResponseWithData($assignments);
-    }
 }

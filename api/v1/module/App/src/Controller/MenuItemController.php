@@ -4,9 +4,9 @@ namespace App\Controller;
 * MenuItem Api
 */
 use Zend\Log\Logger;
-use Oxzion\Model\MenuItem;
-use Oxzion\Model\MenuItemTable;
-use Oxzion\Service\MenuItemService;
+use App\Model\MenuItem;
+use App\Model\MenuItemTable;
+use App\Service\MenuItemService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Bos\ValidationException;
@@ -38,7 +38,7 @@ class MenuItemController extends AbstractApiController
     public function create($data){
         $appId = $this->params()->fromRoute()['appId'];
         try{
-            $count = $this->menuItemService->createMenuItem($appId,$data);
+            $count = $this->menuItemService->saveMenuItem($appId,$data);
         } catch (ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
@@ -59,7 +59,7 @@ class MenuItemController extends AbstractApiController
     public function getList() {
         $appId = $this->params()->fromRoute()['appId'];
         $result = $this->menuItemService->getMenuItems($appId);
-        return $this->getSuccessResponseWithData($result['data']);
+        return $this->getSuccessResponseWithData($result);
     }
     /**
     * Update MenuItem API

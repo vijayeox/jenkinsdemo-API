@@ -1,10 +1,9 @@
 <?php
-namespace App;
+namespace Workflow;
 
+use Workflow\Controller\WorkflowInstanceController;
 use App\Controller\WorkflowController;
-use App\Controller\WorkflowInstanceController;
 use Zend\Stdlib\ArrayUtils;
-use Form\Model\Workflow;
 use Oxzion\Test\ControllerTest;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\Platform\Mysql;
@@ -14,7 +13,7 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Oxzion\Workflow\WorkFlowFactory;
 use Mockery;
 
-class WorkflowControllerTest extends ControllerTest{
+class WorkflowInstanceControllerTest extends ControllerTest{
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
@@ -203,7 +202,7 @@ class WorkflowControllerTest extends ControllerTest{
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/workflow/1/activity/1', 'GET');
         $this->assertResponseStatusCode(405);
-        $this->assertModuleName('App');
+        $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('WorkflowInstanceController');
         $this->assertMatchedRouteName('workflowInstance');
@@ -218,7 +217,7 @@ class WorkflowControllerTest extends ControllerTest{
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/workflow/1/activity/1', 'GET');
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('App');
+        $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('WorkflowInstanceController');
         $this->assertMatchedRouteName('workflowInstance');
@@ -234,7 +233,7 @@ class WorkflowControllerTest extends ControllerTest{
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/workflow/1/activity/1', 'GET');
         $this->assertResponseStatusCode(404);
-        $this->assertModuleName('App');
+        $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('WorkflowInstanceController');
         $this->assertMatchedRouteName('workflowInstance');
@@ -256,7 +255,7 @@ class WorkflowControllerTest extends ControllerTest{
         }
         $this->dispatch('/workflow/1/activity/1', 'POST', $data);
         $this->assertResponseStatusCode(201);
-        $this->assertModuleName('App');
+        $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('WorkflowInstanceController');
         $this->assertMatchedRouteName('workflowInstance');
@@ -281,7 +280,7 @@ class WorkflowControllerTest extends ControllerTest{
         }
         $this->dispatch('/workflow/1/activity/1', 'POST', $data);
         $this->assertResponseStatusCode(404);
-        $this->assertModuleName('App');
+        $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('WorkflowInstanceController');
         $this->assertMatchedRouteName('workflowInstance');
@@ -299,7 +298,7 @@ class WorkflowControllerTest extends ControllerTest{
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/workflow/1/activity/1', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('App');
+        $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('WorkflowInstanceController');
         $this->assertMatchedRouteName('workflowInstance');
@@ -318,7 +317,7 @@ class WorkflowControllerTest extends ControllerTest{
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/workflow/1/activity/1', 'POST', $data);
         $this->assertResponseStatusCode(200);
-        $this->assertModuleName('App');
+        $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('WorkflowInstanceController');
         $this->assertMatchedRouteName('workflowInstance');
@@ -332,7 +331,7 @@ class WorkflowControllerTest extends ControllerTest{
     //     $this->initAuthToken($this->adminUser);
     //     $this->dispatch('/workflow/1/activity/1', 'DELETE');
     //     $this->assertResponseStatusCode(200);
-    //     $this->assertModuleName('App');
+    //     $this->assertModuleName('workflow');
     //     $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
     //     $this->assertControllerClass('WorkflowInstanceController');
     //     $this->assertMatchedRouteName('workflowInstance');
@@ -347,7 +346,7 @@ class WorkflowControllerTest extends ControllerTest{
     //     $this->dispatch('/workflow/1/activity/1', 'DELETE');
     //     $content = json_decode($this->getResponse()->getContent(), true);
     //     $this->assertResponseStatusCode(404);
-    //     $this->assertModuleName('App');
+    //     $this->assertModuleName('workflow');
     //     $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
     //     $this->assertControllerClass('WorkflowInstanceController');
     //     $this->assertMatchedRouteName('workflowInstance');
@@ -359,7 +358,7 @@ class WorkflowControllerTest extends ControllerTest{
     //     $this->initAuthToken($this->adminUser);
     //     $this->dispatch('/app/99/assignments', 'GET');
     //     $this->assertResponseStatusCode(200);
-    //     $this->assertModuleName('App');
+    //     $this->assertModuleName('workflow');
     //     $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
     //     $this->assertControllerClass('WorkflowController');
     //     $this->assertMatchedRouteName('assignments');

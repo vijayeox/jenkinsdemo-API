@@ -1,8 +1,8 @@
 <?php
-namespace Oxzion\Service;
+namespace App\Service;
 
-use Oxzion\Model\MenuItemTable;
-use Oxzion\Model\MenuItem;
+use App\Model\MenuItemTable;
+use App\Model\MenuItem;
 use Bos\Auth\AuthContext;
 use Bos\Auth\AuthConstants;
 use Bos\Service\AbstractService;
@@ -105,15 +105,24 @@ class MenuItemService extends AbstractService{
         if(isset($appId)){
             $filterArray['app_id'] = $appId;
         }
-        $resultSet = $this->getDataByParams('ox_MenuItem',array("*"),$filterArray,null);
-        $response = array();
-        $response['data'] = $resultSet->toArray();
-        return $response;
+        $resultSet = $this->getDataByParams('ox_app_menu',array("*"),$filterArray,null);
+        if($resultSet->count()){
+            $menuList = $resultSet->toArray();
+            $i = 0;
+            foreach ($menuList as $key => $menuItem) {
+                if(isset($menuItem['parent_id']) && $menuItem['parent_id'] != 0){
+                    $parentKey = array_search($menuItem['parent_id'], array_column($menuList, 'id'));
+                    $menuList[$parentKey]['submenu'][] = $menuItem;
+                    unset($menuList[$key]);
+                }
+            }
+        }
+        return $menuList;
     }
     public function getMenuItem($appId,$id) {
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $select->from('ox_MenuItem')
+        $select->from('ox_app_menu')
         ->columns(array("*"))
         ->where(array('id' => $id,'app_id'=>$appId));
         $response = $this->executeQuery($select)->toArray();

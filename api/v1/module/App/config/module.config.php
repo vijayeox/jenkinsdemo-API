@@ -171,7 +171,7 @@ return [
                 'options' => [
                 	'route'    => '/app/:appId/menu[/:menuId]',
                     'defaults' => [
-                        'controller' => Controller\MenuController::class,
+                        'controller' => Controller\MenuItemController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
                             // 'put'=> 'MANAGE_FORM_WRITE',
@@ -208,24 +208,12 @@ return [
                     ],
                 ],
             ],
-            'workflowInstance' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/workflow/:workflowId[/activity/:activityId][/instance/:instanceId]',
-                    'defaults' => [
-                        'controller' => Controller\WorkflowInstanceController::class,
-                        'action' => 'activity',
-                        'access'=>[
-                        ],
-                    ],
-                ],
-            ],
             'assignments' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/assignments',
                     'defaults' => [
-                        'controller' => Controller\WorkflowController::class,
+                        'controller' => Controller\AppController::class,
                         'action' => 'assignments',
                         'access'=>[
                         ],

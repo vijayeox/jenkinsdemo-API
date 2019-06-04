@@ -289,7 +289,7 @@ class WorkflowService extends AbstractService{
 	}
 	public function executeWorkflow($params,$id=null){
 		$workflowId = $params['workflowId'];
-		$workflow = $this->getWorkflow(null,$workflowId);
+		$workFlow = $this->getWorkflow(null,$workflowId);
         $workFlowFlag = 1;
 		if(!isset($workflow)){
             $workFlowFlag= 0;

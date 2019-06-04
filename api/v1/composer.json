@@ -94,6 +94,7 @@
       "Mlet\\": "module/Mlet/src/",
       "Messaging\\":"module/Messaging/src/",
       "ProspectResearch\\":"module/ProspectResearch/src/",
+      "Workflow\\":"module/Workflow/src/",
       "SplashPage\\":"module/SplashPage/src/"
     }
   },
@@ -113,6 +114,7 @@
       "BookmarkTest\\": "module/Bookmark/test",
       "AppTest\\": "module/App/test",
       "Migration\\": "lib/Oxzion/test/Migration",
+      "WorkflowTests\\": "module/Workflow/test",
       "WorkflowTest\\": "lib/Oxzion/test/WorkflowTest",
       "ProjectTest\\": "lib/Oxzion/test/ProjectTest",
       "EmailTest\\": "lib/Oxzion/test/EmailTest",

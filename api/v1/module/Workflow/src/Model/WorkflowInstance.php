@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace Workflow\Model;
 
 use Bos\Model\Entity;
 use Bos\ValidationException;
