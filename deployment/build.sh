@@ -1,7 +1,7 @@
 # script to package oxzion3.0 to production build
 #!/bin/sh
 # exit when any command fails
-set -e
+#set -e
 #trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
 #going back to oxzion3.0 root directory
 cd ../
@@ -20,6 +20,7 @@ INVERT="\e[7m"
 RESET="\e[0m"
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
+#if [ -z "$1" ] || [ -z "$2" ];
 then
     echo -e "${RED}ERROR: argument missing.${RESET}"
     echo -e "$0 : needs 2 arguments to start."
@@ -66,7 +67,8 @@ package()
     	echo -e "${RED}'build.zip' exist! Removing it to avoid conflict.${RESET}"
         rm ../build.zip
     fi
-    zip -r ../build.zip . -x *node_modules/\*
+    zip -ry ../build.zip . -x *node_modules/\*
+    zip -ur ../build.zip view/bos/node_modules/
     echo -e "${GREEN}Packaging Complete :)${RESET}"
     #Doing secure copy to dev3 server
     cd ${OXHOME}
@@ -77,6 +79,7 @@ package()
 }
 api()
 {   
+    cd ${OXHOME}
     echo -e "${YELLOW}Creating directory /build/api/v1...${RESET}"
     mkdir -p build/api/v1
     #copy contents of ap1v1 to build
@@ -86,12 +89,12 @@ api()
     #building API
     cd build/api/v1
     echo -e "${YELLOW}Building API....${RESET}"
-    docker run -t -v ${PWD}:/var/www v1_zf composer update
+    docker run -t -v ${PWD}:/var/www v1_zf composer install
     echo -e "${GREEN}Building API Completed!${RESET}"
-    cd ${OXHOME}
 }
 camel()
 {   
+    cd ${OXHOME}
     echo -e "${YELLOW}Creating directory build/integrations/camel...${RESET}"
     mkdir -p build/integrations/camel
     #building camel
@@ -102,20 +105,21 @@ camel()
     echo -e "${GREEN}Building Camel Completed!${RESET}"
     echo -e "${YELLOW}Copying Camel...${RESET}"
     cp ./build/libs/app-0.0.1-SNAPSHOT.jar ../../build/integrations/camel/camel.jar
+    cp -R ./init.d ../../build/integrations/camel
     echo -e "${GREEN}Copying Camel completed!${RESET}"
-    cd ${OXHOME}
 }
 calendar()
 {   
+    cd ${OXHOME}
     echo -e "${YELLOW}Creating directory build/integrations/eventcalendar...${RESET}" 
     mkdir -p build/integrations/eventcalendar
     echo -e "${YELLOW}Copying and Building Calendar....${RESET}"
     cp -R ./integrations/eventcalendar ./build/integrations/
     echo -e "${GREEN}Copying and Building Calendar Completed!${RESET}"
-    cd ${OXHOME}
 }
 chat()
 {   
+    cd ${OXHOME}
     echo -e "${YELLOW}Creating directory build/integrations/mattermost...${RESET}"
     mkdir -p build/integrations/mattermost
     #building mattermost
@@ -127,12 +131,12 @@ chat()
     echo -e "${YELLOW}Copying Mattermost${RESET}"
     tar xvzf ./mattermost-server/dist/mattermost-team-linux-amd64.tar.gz -C ../../build/integrations
     echo -e "${GREEN}Copying Mattermost Completed!${RESET}"
-    cd ${OXHOME}
 }
 crm()
 {   
+    cd ${OXHOME}
     echo -e "${YELLOW}Creating directory build/integrations/orocrm...${RESET}"
-    mkdir -p build/integrations/orocrm
+    mkdir -p build/integrations/crm
     #building orocrm
     cd ${OXHOME}/integrations
     echo -e "${YELLOW}Building orocrm${RESET}"
@@ -140,50 +144,46 @@ crm()
     echo -e "${GREEN}Building orocrm Completed!${RESET}"
     #copying orocrm to build
     echo -e "${YELLOW}Copying Orocrm....${RESET}"
-    cp -R ./integrations/orocrm ./build/integrations/
+    cp -R ./orocrm/* ../build/integrations/crm/
     echo -e "${GREEN}Copying Completed!${RESET}"
-    cd ${OXHOME}
 }
 mail()
 {   
+    cd ${OXHOME}
     mkdir -p build/integrations/rainloop
     #building rainloop
     cd ${OXHOME}/integrations/rainloop
     echo -e "${YELLOW}Building Rainloop...${RESET}"
-    npm install
-    npm audit fix
-    npm update
-    gulp rainloop:start
-    #copying contents of src folder to build/integrations/rainloop
+    ./build.sh
     echo -e "${GREEN}Building Rainloop Completed!${RESET}"
+    #copying contents of src folder to build/integrations/rainloop
     echo -e "${YELLOW}Copying Rainloop...${RESET}"
     cp -R ./build/dist/releases/webmail/1.12.1/src/* ../../build/integrations/rainloop/
     echo -e "${GREEN}Copying Rainloop Completed!${RESET}"
-    cd ${OXHOME}
 }
 view()
 {   
+    cd ${OXHOME}
     echo -e "${YELLOW}Creating directory /build/view...${RESET}"
     mkdir -p build/view
     #copy contents of view to build
     echo -e "${YELLOW}Copying View. Please wait this may take sometime....${RESET}"
-    cp -R view build/
+    rsync -rv --exclude=node_modules ./view ./build/
     echo -e "${GREEN}Copying View Completed!${RESET}"
     #building UI/view folder
     cd build/view
     echo -e "${YELLOW}Build UI/view${RESET}"
-    docker run -t -v ${PWD}:/app -p 8081:8081 view ./build.sh
+    docker run -t -v ${PWD}:/app -p 8081:8081 view ./dockerbuild.sh
     echo -e "${GREEN}Building UI/view Completed!${RESET}"
-    cd ${OXHOME}
 }
 workflow()
 {
+    cd ${OXHOME}
     echo -e "${YELLOW}Creating directory build/integrations/workflow...${RESET}"
     mkdir -p build/integrations/workflow/IdentityService/dist
     echo -e "${YELLOW}Copying workflow....${RESET}"
     cp integrations/workflow/bpm-platform.xml integrations/workflow/Dockerfile integrations/workflow/camunda-tomcat.sh ./build/integrations/workflow/ && cp integrations/workflow/IdentityService/dist/identity_plugin.jar ./build/integrations/workflow/IdentityService/dist/
     echo -e "${GREEN}Copying workflow Completed!${RESET}"
-    cd ${OXHOME}
 }
 integrations()
 {
@@ -315,13 +315,13 @@ do
                 break ;;
         clean)
                 while true; do
-                    echo -e "${RED}Warning! Are you sure you want to clean the production server $SERVER?${RESET}"
+                    echo -e "${RED}Warning! Are you sure you want to clean the server $SERVER?${RESET}"
                     read yn
                     case $yn in
-                        [Yy]* ) echo -e "${YELLOW}Started Cleaning Production server $SERVER${RESET}"
+                        [Yy]* ) echo -e "${YELLOW}Started Cleaning server $SERVER${RESET}"
                                 ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER ' rm -Rf oxzion3.0 ;'
                                 ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER ' mkdir -p oxzion3.0/deployment ;'
-                                echo -e "${GREEN}Cleaning Production server Completed!${RESET}"
+                                echo -e "${GREEN}Cleaning server Completed!${RESET}"
                                 break;;
                         [Nn]* ) echo "Ok bye! ;)"
                                 exit;;
