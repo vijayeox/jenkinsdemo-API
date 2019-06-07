@@ -36,9 +36,9 @@
       </plugin>
 
     <!-- mysql Plugin CONFIGURATION -->
-      <!--plugin>
+      <plugin>
         <class>org.oxzion.camunda.IdentityProviderPlugin</class>
-      </plugin-->
+      </plugin>
 
     </plugins>
   </process-engine>
