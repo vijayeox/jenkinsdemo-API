@@ -15,6 +15,17 @@ cp -n bos/src/client/local.js.example bos/src/client/local.js
 sleep 1
 echo "Copy Complete"
 
+echo "Copying local.js.example to local.js in bos/src/server"
+cp -n bos/src/server/local.js.example bos/src/server/local.js
+sleep 1
+echo "Copy Complete"
+
+echo "Copying .env.example to .env in bos/src/osjs-server"
+cp -n bos/src/osjs-server/.env.example bos/src/osjs-server/.env
+sleep 1
+echo "Copy Complete"
+
+
 echo "Starting build for for oxzion3.0"
 sleep 1
 ./clean.sh
