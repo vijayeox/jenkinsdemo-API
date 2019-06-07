@@ -1,7 +1,10 @@
 [Unit]
 Description=Mattermost Chat app
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=mattermost
 [Service]
-User=ubuntu
+User=oxzion
 # The configuration file application.properties should be here:
 #change this to your workspace
 WorkingDirectory=/opt/oxzion/mattermost

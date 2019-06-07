@@ -1,7 +1,10 @@
 [Unit]
 Description=Oxzion UI
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=oxzionui
 [Service]
-User=ubuntu
+User=oxzion
 # The configuration file application.properties should be here:
 #change this to your workspace
 WorkingDirectory=/opt/oxzion/view

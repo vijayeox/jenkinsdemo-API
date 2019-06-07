@@ -1,7 +1,10 @@
 [Unit]
 Description=Activemq integrations
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=camel
 [Service]
-User=ubuntu
+User=oxzion
 # The configuration file application.properties should be here:
 #change this to your workspace
 WorkingDirectory=/opt/oxzion/camel
