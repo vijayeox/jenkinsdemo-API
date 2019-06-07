@@ -6,7 +6,10 @@
 #going back to oxzion3.0 root directory
 cd ../
 #Defining variables for later use
+#pass second parameter as server u want to build for example abc@xyz.com or abc@1.1.1.1
 SERVER=${2}
+#pass third parameter as the path to the identity file(pem/ppk) in your local system.
+PEM=${3}
 OXHOME=${PWD}
 RED="\e[91m"
 GREEN="\e[92m"
@@ -73,8 +76,8 @@ package()
     #Doing secure copy to dev3 server
     cd ${OXHOME}
     echo -e "${YELLOW}Now Copying ${RED}build.zip${YELLOW} to $SERVER..${RESET}"
-    ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER ' mkdir -p oxzion3.0/deployment ;'
-    scp -i ${HOME}/.ssh/oxzionapi.pem build.zip $SERVER:oxzion3.0
+    ssh -i ${PEM} $SERVER ' mkdir -p oxzion3.0/deployment ;'
+    scp -i ${PEM} build.zip $SERVER:oxzion3.0
     echo -e "${YELLOW}Copying ${RED}build.zip${YELLOW} to $SERVER completed successfully!${RESET}"        
 }
 api()
@@ -85,6 +88,7 @@ api()
     #copy contents of ap1v1 to build
     echo -e "${YELLOW}Copying Api/v1....${RESET}"
     cp -R api/v1 build/api/
+    scp -i ${PEM} -r ubuntu@3.18.62.194:env/api/v1/config/autoload/local.php build/api/v1/config/autoload/
     echo -e "${GREEN}Copying Completed!${RESET}"
     #building API
     cd build/api/v1
@@ -115,6 +119,7 @@ calendar()
     mkdir -p build/integrations/eventcalendar
     echo -e "${YELLOW}Copying and Building Calendar....${RESET}"
     cp -R ./integrations/eventcalendar ./build/integrations/
+    scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/eventcalendar/* ./build/integrations/eventcalendar/
     echo -e "${GREEN}Copying and Building Calendar Completed!${RESET}"
 }
 chat()
@@ -125,6 +130,7 @@ chat()
     #building mattermost
     cd ${OXHOME}/integrations/mattermost
     echo -e "${YELLOW}Building Integration Mattermost...${RESET}"
+    scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/mattermost/* ./
     docker run -t --network="host" -v ${PWD}:/mattermost --entrypoint ./docker-build.sh mchat
     echo -e "${GREEN}Building Mattermost Completed!${RESET}"
     # unzip of the tar.gz file to build/integrations/mattermost
@@ -140,6 +146,7 @@ crm()
     #building orocrm
     cd ${OXHOME}/integrations
     echo -e "${YELLOW}Building orocrm${RESET}"
+    scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/orocrm/config/parameters.yml ./orocrm/config/
     docker run -it --network="host" -v ${PWD}:/integrations -v /var/lib/oxzion/rainloop/data:/var/www/public/rainloop/data --entrypoint ./orocrm/docker-build.sh integrations
     echo -e "${GREEN}Building orocrm Completed!${RESET}"
     #copying orocrm to build
@@ -154,7 +161,11 @@ mail()
     #building rainloop
     cd ${OXHOME}/integrations/rainloop
     echo -e "${YELLOW}Building Rainloop...${RESET}"
-    ./build.sh
+    scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/rainloop/.env.js ./
+    npm install
+    npm audit fix
+    npm update
+    gulp rainloop:start
     echo -e "${GREEN}Building Rainloop Completed!${RESET}"
     #copying contents of src folder to build/integrations/rainloop
     echo -e "${YELLOW}Copying Rainloop...${RESET}"
@@ -182,6 +193,7 @@ workflow()
     echo -e "${YELLOW}Creating directory build/integrations/workflow...${RESET}"
     mkdir -p build/integrations/workflow/IdentityService/dist
     echo -e "${YELLOW}Copying workflow....${RESET}"
+    scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/workflow/.env ./build/integrations/workflow/
     cp integrations/workflow/bpm-platform.xml integrations/workflow/Dockerfile integrations/workflow/camunda-tomcat.sh ./build/integrations/workflow/ && cp integrations/workflow/IdentityService/dist/identity_plugin.jar ./build/integrations/workflow/IdentityService/dist/
     echo -e "${GREEN}Copying workflow Completed!${RESET}"
 }
@@ -298,8 +310,8 @@ do
                     echo -e "${RED}Warning! Only use for Fresh Setup, might break the server $SERVER!${RESET}"
                     read yn
                     case $yn in
-                        [Yy]* ) scp -i ${HOME}/.ssh/oxzionapi.pem deployment/freshsetup.sh $SERVER:oxzion3.0/deployment
-                                ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER 'sudo bash oxzion3.0/deployment/freshsetup.sh ;'
+                        [Yy]* ) scp -i ${PEM} deployment/freshsetup.sh $SERVER:oxzion3.0/deployment
+                                ssh -i ${PEM} $SERVER 'sudo bash oxzion3.0/deployment/freshsetup.sh ;'
                                 break;;
                         [Nn]* ) echo "Ok bye! ;)"
                                 exit;;
@@ -309,9 +321,9 @@ do
                 break ;;
                 
         deploy)
-                ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER ' mkdir -p oxzion3.0/deployment ;'
-                scp -i ${HOME}/.ssh/oxzionapi.pem deployment/deploy.sh $SERVER:oxzion3.0/deployment
-                ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER 'cd oxzion3.0/deployment ; sudo bash deploy.sh ;'
+                ssh -i ${PEM} $SERVER ' mkdir -p oxzion3.0/deployment ;'
+                scp -i ${PEM} deployment/deploy.sh $SERVER:oxzion3.0/deployment
+                ssh -i ${PEM} $SERVER 'cd oxzion3.0/deployment ; sudo bash deploy.sh ;'
                 break ;;
         clean)
                 while true; do
@@ -319,8 +331,8 @@ do
                     read yn
                     case $yn in
                         [Yy]* ) echo -e "${YELLOW}Started Cleaning server $SERVER${RESET}"
-                                ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER ' rm -Rf oxzion3.0 ;'
-                                ssh -i ${HOME}/.ssh/oxzionapi.pem $SERVER ' mkdir -p oxzion3.0/deployment ;'
+                                ssh -i ${PEM} $SERVER ' rm -Rf oxzion3.0 ;'
+                                ssh -i ${PEM} $SERVER ' mkdir -p oxzion3.0/deployment ;'
                                 echo -e "${GREEN}Cleaning server Completed!${RESET}"
                                 break;;
                         [Nn]* ) echo "Ok bye! ;)"

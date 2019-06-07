@@ -22,7 +22,14 @@
 
 --------------------------
 
-$ bash **_scriptname.sh_**
+This script take 3 parameters to run.
+a)Build Name like `api` `calendar`
+b)Server name
+c)Identity File Path(PEM/PPK)
+
+For example
+
+$ bash **_build.sh calendar abc@xyz.com ~/.ssh/abc.pem_**
 
 -------------------------
 
@@ -51,7 +58,7 @@ To learn how to install MySql [click here.](https://www.digitalocean.com/communi
 
 <h4>Java JDK 8.x: </h4>
 
-To learn how to install Java 8 [click here.](https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-get-on-ubuntu-16-04)
+To learn how to install Java 8 [click here.](https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-on-ubuntu-18-04)
 
 <h4> Docker: </h4>
 
