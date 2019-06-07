@@ -42,6 +42,21 @@ return [
                     ],
                 ],
             ],
+            'contactsForUser' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/contact/user',
+                    'defaults' => [
+                        'controller' => Controller\ContactController::class,
+                        'action' => 'getContacts',
+                        'method' => 'get',
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'getContacts'=> 'MANAGE_CONTACT_READ',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

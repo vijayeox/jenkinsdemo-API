@@ -138,5 +138,19 @@ class ContactController extends AbstractApiController
         // }
         return $this->getSuccessResponseWithData($result);
     }
+
+    public function getContactsAction()
+    {
+        $data = $this->params()->fromQuery();
+        if(isset($data['filter'])){
+            $result = $this->contactService->getContacts($data['column'],$data['filter']);
+        } else {
+            $result = $this->contactService->getContacts($data['column']);;
+        }
+        // if ($result == null || empty($result)) {
+        //     return $this->getErrorResponse("There is nothing in your contact list!");
+        // }
+        return $this->getSuccessResponseWithData($result);
+    }
 }
 

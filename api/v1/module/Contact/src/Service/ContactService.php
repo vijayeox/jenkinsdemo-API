@@ -122,5 +122,61 @@ class ContactService extends AbstractService
 
         return $resultSet = ['myContact' => ($resultSet1->toArray()), 'orgContact' => ($resultSet2->toArray())];
     }
-    
+
+    public function getContacts($column, $filter=null){
+        // filter criteria, column control - all or name
+        // filter for searching
+        // print_r('col: '.gettype($column));
+        $userId = AuthContext::get(AuthConstants::USER_ID);
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+
+        $queryString1 = "SELECT * from (";
+
+        if($column == "-1"){
+            $queryString2 = "SELECT id as contact_id, null as user_id, first_name, last_name, phone_1, phone_list, email, email_list from ox_contact";
+        } else {
+            $queryString2 = "SELECT id as contact_id, null as user_id, first_name, last_name from ox_contact";
+        }
+        $where1 = " WHERE owner_id = " . $userId . " ";
+
+        if($filter == null){
+            $and1  = '';
+        } else {
+            $and1 = " AND (LOWER(first_name) like '%".$filter."%' OR LOWER(last_name) like '%".$filter."%' OR LOWER(email) like '%".$filter."%' OR lower(phone_1) like '%".$filter."%')";
+        }
+
+        $union = " UNION ";
+
+        if($column == "-1"){
+            $queryString3 = "SELECT null as contact_id, uuid as user_id, firstname as first_name, lastname as last_name, phone as phone_1, null as phone_list, email, null as email_list from ox_user";
+        } else {
+            $queryString3 = "SELECT null as contact_id, uuid as user_id, firstname as first_name, lastname as last_name from ox_user";
+        }
+
+        $where2 = " WHERE orgid = " . $orgId . "";
+
+        if($filter == null){
+            $and2 = '';
+        } else {
+            $and2 = " AND (LOWER(firstname) like '%".$filter."%' OR LOWER(lastname) like '%".$filter."%' OR LOWER(email) like '%".$filter."%')";
+        }
+
+        $queryString4 = ") as a ORDER BY a.first_name, a.last_name";
+
+        $finalQueryString = $queryString1.$queryString2.$where1.$and1.$union.$queryString3.$where2.$and2.$queryString4;
+        $resultSet = $this->executeQuerywithParams($finalQueryString);
+        $resultSet = $resultSet->toArray();
+        $myContacts = array();
+        $orgContacts = array();
+        foreach ($resultSet as $key => $row) {
+            if($row['contact_id'] != null){
+                array_push($myContacts, $row);
+            } else if($row['user_id'] != null){
+                array_push($orgContacts, $row);
+            }
+
+        }
+        return $resultSet1 = ['myContacts' => $myContacts, 'orgContacts' => $orgContacts];
+
+    }
 }
