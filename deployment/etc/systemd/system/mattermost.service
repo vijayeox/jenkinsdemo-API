@@ -1,0 +1,16 @@
+[Unit]
+Description=Mattermost Chat app
+[Service]
+User=ubuntu
+# The configuration file application.properties should be here:
+#change this to your workspace
+WorkingDirectory=/opt/oxzion/mattermost
+#path to executable. 
+#executable is a bash script which run the server
+ExecStart=/opt/oxzion/mattermost/bin/mattermost
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=multi-user.target

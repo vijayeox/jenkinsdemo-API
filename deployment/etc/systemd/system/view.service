@@ -1,0 +1,16 @@
+[Unit]
+Description=Oxzion UI
+[Service]
+User=ubuntu
+# The configuration file application.properties should be here:
+#change this to your workspace
+WorkingDirectory=/opt/oxzion/view
+#path to executable. 
+#executable is a bash script which run the server
+ExecStart=/opt/oxzion/view/run.sh
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=multi-user.target
