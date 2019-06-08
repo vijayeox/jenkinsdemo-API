@@ -88,6 +88,7 @@ api()
     #copy contents of ap1v1 to build
     echo -e "${YELLOW}Copying Api/v1....${RESET}"
     cp -R api/v1 build/api/
+    echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ubuntu@3.18.62.194:env/api/v1/config/autoload/local.php build/api/v1/config/autoload/
     echo -e "${GREEN}Copying Completed!${RESET}"
     #building API
@@ -119,6 +120,7 @@ calendar()
     mkdir -p build/integrations/eventcalendar
     echo -e "${YELLOW}Copying and Building Calendar....${RESET}"
     cp -R ./integrations/eventcalendar ./build/integrations/
+    echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/eventcalendar/* ./build/integrations/eventcalendar/
     echo -e "${GREEN}Copying and Building Calendar Completed!${RESET}"
 }
@@ -130,6 +132,7 @@ chat()
     #building mattermost
     cd ${OXHOME}/integrations/mattermost
     echo -e "${YELLOW}Building Integration Mattermost...${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/mattermost/* ./
     docker run -t --network="host" -v ${PWD}:/mattermost --entrypoint ./docker-build.sh mchat
     echo -e "${GREEN}Building Mattermost Completed!${RESET}"
@@ -146,6 +149,7 @@ crm()
     #building orocrm
     cd ${OXHOME}/integrations
     echo -e "${YELLOW}Building orocrm${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/orocrm/config/parameters.yml ./orocrm/config/
     docker run -it --network="host" -v ${PWD}:/integrations -v /var/lib/oxzion/rainloop/data:/var/www/public/rainloop/data --entrypoint ./orocrm/docker-build.sh integrations
     echo -e "${GREEN}Building orocrm Completed!${RESET}"
@@ -161,6 +165,7 @@ mail()
     #building rainloop
     cd ${OXHOME}/integrations/rainloop
     echo -e "${YELLOW}Building Rainloop...${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/rainloop/.env.js ./
     npm install
     npm audit fix
@@ -184,6 +189,8 @@ view()
     #building UI/view folder
     cd build/view
     echo -e "${YELLOW}Build UI/view${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
+    scp -i ${PEM} -r ubuntu@3.18.62.194:env/view/* ./                                        
     docker run -t -v ${PWD}:/app -p 8081:8081 view ./dockerbuild.sh
     echo -e "${GREEN}Building UI/view Completed!${RESET}"
 }
@@ -193,6 +200,7 @@ workflow()
     echo -e "${YELLOW}Creating directory build/integrations/workflow...${RESET}"
     mkdir -p build/integrations/workflow/IdentityService/dist
     echo -e "${YELLOW}Copying workflow....${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/workflow/.env ./build/integrations/workflow/
     cp integrations/workflow/bpm-platform.xml integrations/workflow/Dockerfile integrations/workflow/camunda-tomcat.sh ./build/integrations/workflow/ && cp integrations/workflow/IdentityService/dist/identity_plugin.jar ./build/integrations/workflow/IdentityService/dist/
     echo -e "${GREEN}Copying workflow Completed!${RESET}"
