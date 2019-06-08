@@ -10,7 +10,7 @@ User=oxzion
 WorkingDirectory=/opt/oxzion/camel
 #path to executable. 
 #executable is a bash script which calls jar file
-ExecStart=/opt/oxzion/camel/run.sh
+ExecStart=/opt/oxzion/camel/init.d/run.sh
 SuccessExitStatus=143
 TimeoutStopSec=10
 Restart=on-failure

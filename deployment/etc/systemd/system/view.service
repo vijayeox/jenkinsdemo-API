@@ -10,7 +10,7 @@ User=oxzion
 WorkingDirectory=/opt/oxzion/view
 #path to executable. 
 #executable is a bash script which run the server
-ExecStart=/opt/oxzion/view/run.sh
+ExecStart=/opt/oxzion/view/init.d/run.sh
 SuccessExitStatus=143
 TimeoutStopSec=10
 Restart=on-failure
