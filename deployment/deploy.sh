@@ -1,12 +1,14 @@
 #This script is used to deploy build.zip to respective folders
 #!/bin/bash
 # exit when any command fails
-set -e
+#set -e
 #trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
 #going back to oxzion3.0 root directory
 cd ../
+echo ${PWD}
 #Defining variables for later use
-home=${PWD}
+source /home/ubuntu/env/integrations/orocrm/env.sh
+homedir=${PWD}
 RED="\e[91m"
 GREEN="\e[92m"
 BLUE="\e[34m"
@@ -29,7 +31,8 @@ fi
 
 #WRITING FUNCTIONS FOR DIFFERENT TASKS#
 unpack()
-{
+{   echo "this is homedir ---> ${homedir}"
+    cd ${homedir}
     echo -e "${YELLOW}Extracting build zip to './temp' folder...${RESET}"
     mkdir -p temp
     unzip build.zip -d temp
@@ -39,20 +42,22 @@ unpack()
 }
 api()
 {   
+    echo "this is temp dir ---> ${TEMP}"
     cd ${TEMP}
     echo -e "${YELLOW}Copying API...${RESET}"
-    if [ ! -d "./integrations/api/v1" ] ;
+    if [ ! -d "./api/v1" ] ;
     then
         echo -e "${RED}API was not was not packaged so skipping it\n${RESET}"
     else    
         #making the directory where api will be copied.
-        mkdir -p /var/www/api
+        rm -Rf /var/www/api
         #moving to temp directory and copying required
         cd ${TEMP}
-        cp -R integrations/api/v1/* /var/www/api/
+        mv api/v1 /var/www/api
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
         echo -e "${YELLOW}Starting migrations script for API"
-        api/v1/migrations migrate
+        cd /var/www/api
+        ./migrations migrate
         echo -e "${GREEN}Migrations Complete!"
     fi    
 }
@@ -65,13 +70,17 @@ camel()
         echo -e "${RED}CAMEL was not packaged so skipping it\n${RESET}"
     else
         #making the directory where api will be copied.
+        echo -e "${GREEN}Stopping Camel service"
         systemctl stop camel
-        mkdir -p /opt/oxzion/camel
+        echo -e "${YELLOW}Stopped!"
+        rm -Rf /opt/oxzion/camel
         #moving to temp directory and copying required
         cd ${TEMP}
-        cp -R integrations/camel/* /opt/oxzion/camel/
+        mv integrations/camel /opt/oxzion
         echo -e "${GREEN}Copying Camel Complete!\n${RESET}"
+        echo -e "${YELLOW}Starting Camel service"
         systemctl start camel
+        echo -e "${GREEN}Started!"
     fi    
 }
 
@@ -84,9 +93,9 @@ calendar()
     then
         echo -e "${RED}CALENDAR was not packaged so skipping it\n${RESET}"
     else
-        mkdir -p /var/www/eventcalendar
+        rm -Rf /var/www/eventcalendar
         cd ${TEMP}
-        cp -R integrations/eventcalendar/* /var/www/eventcalendar/
+        mv integrations/eventcalendar /var/www
         echo -e "${GREEN}Copying EventCalendar Complete!"
     fi
 }
@@ -99,12 +108,16 @@ mattermost()
     then
         echo -e "${RED}MATTERMOST was not packaged so skipping it\n${RESET}"
     else
+        echo -e "${GREEN}Stopping Mattermost service"
     	systemctl stop mattermost
-        mkdir -p /opt/oxzion/mattermost
+        echo -e "${YELLOW}Stopped!"
+        rm -Rf /opt/oxzion/mattermost
         cd ${TEMP}
-        cp -R integrations/mattermost/* /opt/oxzion/mattermost/
+        mv integrations/mattermost /opt/oxzion
         echo -e "${GREEN}Copying Mattermost Complete!"
+        echo -e "${GREEN}Starting Mattermost service"
         systemctl start mattermost
+        echo -e "${YELLOW}Started!"
     fi
 }
 #Function to copy OROcrm
@@ -116,12 +129,12 @@ orocrm()
     then
         echo -e "${RED}OROCRM was not packaged so skipping it\n${RESET}"
     else    
-    	mkdir -p /var/www/orocrm
+    	rm -Rf /var/www/crm
     	cd ${TEMP}
-    	cp -R integrations/orocrm/* /var/www/orocrm/
+    	mv integrations/crm /var/www
     	echo -e "${GREEN}Copying OROcrm Complete!"
         echo -e "${YELLOW}Starting migrations script for OROcrm"
-        php integrations/orocrm/bin/console oro:install --env=prod --timeout=30000 --application-url="http://localhost:8075/crm/public" --organization-name="Vantage Agora" --user-name="admin" --user-email="admin@example.com" --user-firstname="Admin" --user-lastname="User" --user-password="admin" --language=en --formatting-code=en_US
+        php integrations/orocrm/bin/console oro:install --env=prod --timeout=30000 --application-url="${appurl}" --organization-name="Vantage Agora" --user-name="admin" --user-email="${email}" --user-firstname="Admin" --user-lastname="User" --user-password="admin" --language=en --formatting-code=en_US
         echo -e "${GREEN}Migrations Complete!"
     fi
 }
@@ -134,9 +147,9 @@ rainloop()
     then
         echo -e "${RED}RAINLOOP was not packaged so skipping it\n${RESET}"
     else
-    	mkdir -p /var/www/rainloop
+    	rm -Rf /var/www/rainloop
     	cd ${TEMP}
-    	cp -R integrations/rainloop/* /var/www/rainloop
+    	mv integrations/rainloop /var/www
     	echo -e "${GREEN}Copying Rainloop Complete!"
     fi
 }
@@ -148,12 +161,16 @@ view()
     then
         echo -e "${RED}VIEW was not packaged so skipping it\n${RESET}"
     else
-   		systemctl stop view
-    	mkdir -p /opt/oxzion/view
+   		echo -e "${GREEN}Stopping view service"
+        systemctl stop view
+        echo -e "${YELLOW}Stopped!"
+    	rm -Rf /opt/oxzion/view
     	cd ${TEMP}
-    	cp -R view/* /opt/oxzion/view
+    	mv view /opt/oxzion
     	echo -e "${GREEN}Copying view Complete!${RESET}"
-    	systemctl start view
+    	echo -e "${GREEN}Starting view service"
+        systemctl start view
+        echo -e "${YELLOW}Started!"
     fi
 }
 workflow()
@@ -165,13 +182,17 @@ workflow()
         echo -e "${RED}Workflow was not packaged so skipping it\n${RESET}"
     else
         docker stop wf_1
-        mkdir -p /opt/oxzion/workflow
+        rm -Rf /opt/oxzion/workflow
         cd ${TEMP}
-        cp -R integrations/workflow* /opt/oxzion/workflow
+        mv integrations/workflow /opt/oxzion/
         echo -e "${GREEN}Copying workflow Complete!${RESET}"
         cd /opt/oxzion/workflow
+        echo -e "${YELLOW}Building Workflow Docker Image!${RESET}"
         docker build -t workflow .
-        docker run --network="host" -d --env-file ~/env/workflow/.env --rm --name wf_1 workflow 
+        echo -e "${GREEN}Built!"
+        echo -e "${YELLOW}Starting workflow in docker!${RESET}"
+        docker run --network="host" -d --env-file ~/env/integrations/workflow/.env --rm --name wf_1 workflow 
+        echo -e "${GREEN}Started Workflow!${RESET}"
     fi
 }
 
