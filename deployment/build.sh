@@ -26,8 +26,8 @@ if [ $# -eq 0 ] ;
 #if [ -z "$1" ] || [ -z "$2" ];
 then
     echo -e "${RED}ERROR: argument missing.${RESET}"
-    echo -e "$0 : needs 2 arguments to start."
-    echo -e "For example type \n$ ${GREEN}build.sh calendar${YELLOW}(build option) ${GREEN}abc@xyz.com${YELLOW}(server name) ${RESET}.\nSee build list below."
+    echo -e "$0 : needs 3 arguments to start."
+    echo -e "For example type \n$ ${GREEN}build.sh calendar${YELLOW}(build option) ${GREEN}abc@xyz.com${YELLOW}(server name){GREEN}~/.ssh/abc.pem${YELLOW}(identity file path)${RESET}.\nSee build option list below."
     echo -e "Type '$0 --help' or '$0 -h' for more information."
     echo -e "${BLUEBG}Argument list:${RESET}"
     echo -e "1. all           -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
@@ -89,7 +89,7 @@ api()
     echo -e "${YELLOW}Copying Api/v1....${RESET}"
     cp -R api/v1 build/api/
     echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ubuntu@3.18.62.194:env/api/v1/config/autoload/local.php build/api/v1/config/autoload/
+    scp -i ${PEM} -r ${SERVER}:env/api/v1/config/autoload/local.php build/api/v1/config/autoload/
     echo -e "${GREEN}Copying Completed!${RESET}"
     #building API
     cd build/api/v1
@@ -121,7 +121,7 @@ calendar()
     echo -e "${YELLOW}Copying and Building Calendar....${RESET}"
     cp -R ./integrations/eventcalendar ./build/integrations/
     echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/eventcalendar/* ./build/integrations/eventcalendar/
+    scp -i ${PEM} -r ${SERVER}:env/integrations/eventcalendar/* ./build/integrations/eventcalendar/
     echo -e "${GREEN}Copying and Building Calendar Completed!${RESET}"
 }
 chat()
@@ -133,7 +133,7 @@ chat()
     cd ${OXHOME}/integrations/mattermost
     echo -e "${YELLOW}Building Integration Mattermost...${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/mattermost/* ./
+    scp -i ${PEM} -r ${SERVER}:env/integrations/mattermost/* ./
     docker run -t --network="host" -v ${PWD}:/mattermost --entrypoint ./docker-build.sh mchat
     echo -e "${GREEN}Building Mattermost Completed!${RESET}"
     # unzip of the tar.gz file to build/integrations/mattermost
@@ -150,7 +150,7 @@ crm()
     cd ${OXHOME}/integrations
     echo -e "${YELLOW}Building orocrm${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/orocrm/config/parameters.yml ./orocrm/config/
+    scp -i ${PEM} -r ${SERVER}:env/integrations/orocrm/config/parameters.yml ./orocrm/config/
     docker run -it --network="host" -v ${PWD}:/integrations -v /var/lib/oxzion/rainloop/data:/var/www/public/rainloop/data --entrypoint ./orocrm/docker-build.sh integrations
     echo -e "${GREEN}Building orocrm Completed!${RESET}"
     #copying orocrm to build
@@ -166,7 +166,7 @@ mail()
     cd ${OXHOME}/integrations/rainloop
     echo -e "${YELLOW}Building Rainloop...${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/rainloop/.env.js ./
+    scp -i ${PEM} -r ${SERVER}:env/integrations/rainloop/.env.js ./
     npm install
     npm audit fix
     npm update
@@ -190,7 +190,7 @@ view()
     cd build/view
     echo -e "${YELLOW}Build UI/view${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ubuntu@3.18.62.194:env/view/* ./                                        
+    scp -i ${PEM} -r ${SERVER}:env/view/* ./                                        
     docker run -t -v ${PWD}:/app -p 8081:8081 view ./dockerbuild.sh
     echo -e "${GREEN}Building UI/view Completed!${RESET}"
 }
@@ -201,7 +201,7 @@ workflow()
     mkdir -p build/integrations/workflow/IdentityService/dist
     echo -e "${YELLOW}Copying workflow....${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ubuntu@3.18.62.194:env/integrations/workflow/.env ./build/integrations/workflow/
+    scp -i ${PEM} -r ${SERVER}:env/integrations/workflow/.env ./build/integrations/workflow/
     cp integrations/workflow/bpm-platform.xml integrations/workflow/Dockerfile integrations/workflow/camunda-tomcat.sh ./build/integrations/workflow/ && cp integrations/workflow/IdentityService/dist/identity_plugin.jar ./build/integrations/workflow/IdentityService/dist/
     echo -e "${GREEN}Copying workflow Completed!${RESET}"
 }
@@ -292,8 +292,8 @@ do
                 echo -e " \___/_/\_\/____|___\___/|_| \_| |____/ \___/|___|_____|____/ "
                 echo -e "                                                              ${RESET}"
                 echo -e "This script is made to package oxzion3.0 to production build." 
-                echo -e "This script takes 2 arguments to build oxzion-3.0.\nFirst the ${YELLOW}Build Option${RESET} Second the ${YELLOW}Server hostname${RESET}"
-                echo -e "For example type \n$ ${GREEN}build.sh calendar$YELLOW(build option) ${GREEN}abc@xyz.com$YELLOW(server name) ${RESET}."
+                echo -e "This script takes 3 arguments to build oxzion-3.0.\nFirst the ${YELLOW}Build Option${RESET} Second the ${YELLOW}Server hostname${RESET} and third the${YELLOW}IdentityFile Path$RESET"
+                echo -e "For example type \n$ ${GREEN}build.sh calendar$YELLOW(build option) ${GREEN}abc@xyz.com$YELLOW(server name)${GREEN} ~/.ssh/abc.pem${YELLOW}(identity file path)${RESET}"
                 echo -e "For argument list type ${GREEN}'$0 list'${MAGENTA} as arguments${RESET}."
                 break ;;
         list)
