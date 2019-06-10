@@ -37,7 +37,7 @@ class WorkflowService extends AbstractService{
 
     public function __construct($config, $dbAdapter,WorkflowTable $table,FormService $formService,FieldService $fieldService,FileService $fileService,WorkflowFactory $workflowFactory){
     	parent::__construct($config, $dbAdapter);
-    	$this->baseFolder = $this->config['DATA_FOLDER'];
+    	$this->baseFolder = $this->config['UPLOAD_FOLDER'];
     	$this->table = $table;
     	$this->config = $config;
     	$this->workFlowFactory = $workflowFactory;
@@ -52,7 +52,7 @@ class WorkflowService extends AbstractService{
 		$this->processEngine = $processEngine;
 	}
     public function deploy($file,$appId,$data){
-		$baseFolder = $this->config['DATA_FOLDER'];
+		$baseFolder = $this->config['UPLOAD_FOLDER'];
 		$workflowName = $data['name'];
 		if(!isset($data['workflowId'])){
 			if(!isset($data['app_id'])){

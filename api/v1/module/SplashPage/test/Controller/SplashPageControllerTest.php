@@ -25,7 +25,7 @@ class SplashPageControllerTest extends ControllerTest{
 
     protected function createDummyFile(){
         // $config = $this->getApplicationConfig();
-        // $tempFolder = $config['DATA_FOLDER']."splashpage/".$this->testOrgId."/splashpage/temp/";
+        // $tempFolder = $config['UPLOAD_FOLDER']."splashpage/".$this->testOrgId."/splashpage/temp/";
         // FileUtils::createDirectory($tempFolder);
         // copy(dirname(__FILE__)."/../files/test-oxzionlogo.png", $tempFolder."test-oxzionlogo.png");
     }

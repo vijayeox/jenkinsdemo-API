@@ -106,7 +106,7 @@ class AttachmentService extends AbstractService{
     * @ignore constructPath
     */
     private function constructPath($type){
-        $baseFolder = $this->config['DATA_FOLDER'];
+        $baseFolder = $this->config['UPLOAD_FOLDER'];
         switch ($type) {
             case 'ANNOUNCEMENT':
                 return $baseFolder."organization/".AuthContext::get(AuthConstants::ORG_ID)."/announcements/";

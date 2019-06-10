@@ -26,7 +26,7 @@ class AttachmentControllerTest extends ControllerTest{
     public function testAnnouncementCreate(){
         $this->initAuthToken('bharatg');
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/announcements/";
+        $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/announcements/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__."/../files/oxzionlogo.png", $tempFolder."oxzionlogo.png");
         $data = array('type'=>'ANNOUNCEMENT','files'=>array(array('extension'=>'png','uuid'=>'test','file_name'=>'oxzionlogo')));

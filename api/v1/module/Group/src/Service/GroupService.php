@@ -112,7 +112,7 @@ class GroupService extends AbstractService {
 
     public function getGroupLogoPath($orgId,$id,$ensureDir=false){
 
-        $baseFolder = $this->config['DATA_FOLDER'];
+        $baseFolder = $this->config['UPLOAD_FOLDER'];
         //TODO : Replace the User_ID with USER uuid
         $folder = $baseFolder."organization/".$orgId."/group/";
         if(isset($id)){

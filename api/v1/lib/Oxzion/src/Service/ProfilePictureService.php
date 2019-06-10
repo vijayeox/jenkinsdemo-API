@@ -25,7 +25,7 @@ class ProfilePictureService extends AbstractService{
 
     public function getProfilePicturePath($id,$ensureDir=false){
 
-        $baseFolder = $this->config['DATA_FOLDER'];
+        $baseFolder = $this->config['UPLOAD_FOLDER'];
         //TODO : Replace the User_ID with USER uuid
         $folder = $baseFolder."user/";
         if(isset($id)){

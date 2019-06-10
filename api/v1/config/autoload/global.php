@@ -55,7 +55,9 @@ return [
         'taskServerUrl' => 'http://localhost:3000/api/v3',
         'authToken' => ''
     ],
-    'DATA_FOLDER'=>__DIR__.'/../../data/uploads/',
+    'DATA_FOLDER'=>__DIR__.'/../../data/',
+    "UPLOAD_FOLDER" => __DIR__.'/../../data/uploads/',
+    'TEMPLATE_FOLDER'=>__DIR__.'/../../data/template/',
     'APP_UPLOAD_FOLDER' => __DIR__.'/../../data/app',
     'baseUrl' => 'http://localhost:8080',
     'salt' => 'arogAegatnaVOfficeBack123',

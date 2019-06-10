@@ -802,7 +802,7 @@ class UserService extends AbstractService
      */
     protected function getUserFolder($id)
     {
-        return $this->config['DATA_FOLDER'] . "organization/" . AuthContext::get(AuthConstants::ORG_ID) . self::USER_FOLDER . $id;
+        return $this->config['UPLOAD_FOLDER'] . "organization/" . AuthContext::get(AuthConstants::ORG_ID) . self::USER_FOLDER . $id;
     }
 
     /**

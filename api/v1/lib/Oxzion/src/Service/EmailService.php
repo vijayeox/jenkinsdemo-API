@@ -297,7 +297,7 @@ class EmailService extends AbstractService
 
     public function sendUserEmail($userData)
     {
-        $baseFolder = $this->config['DATA_FOLDER'];
+        $baseFolder = $this->config['UPLOAD_FOLDER'];
         $mainBody = "
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
                 <img src= " . $baseFolder . "'http://localhost:8081/79435fed1e7159c4c558a8192ac97fe0.png' class='CToWUd' height='35'>
@@ -322,7 +322,7 @@ class EmailService extends AbstractService
 
     public function sendPasswordResetEmail($userData)
     {
-        $baseFolder = $this->config['DATA_FOLDER'];
+        $baseFolder = $this->config['UPLOAD_FOLDER'];
         $mainBody = "
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
                 <img src= " . $baseFolder . "'http://localhost:8081/79435fed1e7159c4c558a8192ac97fe0.png' class='CToWUd' height='35'>

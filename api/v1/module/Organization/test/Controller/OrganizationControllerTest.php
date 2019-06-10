@@ -123,7 +123,7 @@ class OrganizationControllerTest extends MainControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/";
+        $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
         $contact = array('firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharat@myvamla.com');

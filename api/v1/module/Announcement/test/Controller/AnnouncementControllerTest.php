@@ -25,7 +25,7 @@ class AnnouncementControllerTest extends ControllerTest{
 
     protected function createDummyFile(){
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/announcements/temp/";
+        $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/announcements/temp/";
         FileUtils::createDirectory($tempFolder);
         copy(dirname(__FILE__)."/../files/test-oxzionlogo.png", $tempFolder."test-oxzionlogo.png");
     }

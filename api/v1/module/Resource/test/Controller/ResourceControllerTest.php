@@ -25,7 +25,7 @@ class ResourceControllerTest extends ControllerTest{
     public function testResourceGet(){
         $this->initAuthToken($this->adminUser);
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['DATA_FOLDER']."organization/".$this->testOrgId."/announcements/";
+        $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/announcements/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__."/../files/oxzionlogo.png", $tempFolder."oxzionlogo.png");
         $this->dispatch('/resource/test', 'GET');

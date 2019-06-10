@@ -95,7 +95,7 @@ class OrganizationService extends AbstractService
 
     public function getOrgLogoPath($id,$ensureDir=false){
 
-        $baseFolder = $this->config['DATA_FOLDER'];
+        $baseFolder = $this->config['UPLOAD_FOLDER'];
         //TODO : Replace the User_ID with USER uuid
         $folder = $baseFolder."organization/";
         if(isset($id)){

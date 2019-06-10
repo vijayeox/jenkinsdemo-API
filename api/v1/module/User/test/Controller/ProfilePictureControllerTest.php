@@ -34,7 +34,7 @@ namespace User{
             $this->initAuthToken($this->adminUser);
             $config = $this->getApplicationConfig();
             $userid="3a866d46-3fa0-11e9-a814-68ecc57cde45";
-            $tempFolder = $config['DATA_FOLDER']."user/".$userid."/";
+            $tempFolder = $config['UPLOAD_FOLDER']."user/".$userid."/";
             FileUtils::createDirectory($tempFolder);
             copy(__DIR__."/../files/oxzionlogo.png", $tempFolder."profile.png");       
             $this->dispatch('/user/profile/'.$userid, 'GET');
@@ -88,7 +88,7 @@ namespace User{
             $config = $this->getApplicationConfig();
             $username = "bharatg";
             $userid="b0cb0d3c-496e-11e9-a876-b88198a956ff";
-            $tempFolder = $config['DATA_FOLDER']."user/".$userid."/";
+            $tempFolder = $config['UPLOAD_FOLDER']."user/".$userid."/";
             FileUtils::createDirectory($tempFolder);
             copy(__DIR__."/../files/oxzionlogo.png", $tempFolder."profile.png");       
             $this->dispatch('/user/profile/username'.$username, 'GET');
