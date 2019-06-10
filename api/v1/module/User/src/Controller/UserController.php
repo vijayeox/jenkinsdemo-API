@@ -112,8 +112,15 @@ class UserController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         // This API should use the UUID
-        $data = $this->table->getByUuid($id,array());
-        return $this->getUserInfo($data->id, $params);
+        try{
+            // $data = $this->table->getByUuid($id,array());
+            $data = $this->userService->getUserByUuid($id);
+            return $this->getUserInfo($data, $params);
+        }
+        catch(Exception $e){
+            return $this->getErrorResponse("User not found", 404, ['id' => $id]);
+        }
+        
     }
 
     /**
@@ -408,8 +415,7 @@ class UserController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if (($userInfo == 0) || (empty($userInfo))) {
-            $response = ['id' => $id];
-            return $this->getErrorResponse("Failed to find User", 404, $response);
+            return $this->getErrorResponse("User Doesnot Exist", 404);
         }
         return $this->getSuccessResponseWithData($userInfo);
     }

@@ -54,7 +54,6 @@ class UserControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt', 'password' => 'welcome2oxzion', 'designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male'];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_user'));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -96,14 +95,14 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 3);
+        $this->assertEquals(count($content['data']), 5);
         $this->assertEquals($content['data'][0]['id'], 1);
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
         $this->assertEquals($content['data'][1]['id'], 2);
         $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
-        $this->assertEquals($content['data'][2]['id'], 3);
-        $this->assertEquals($content['data'][2]['name'], 'rakshith amin');
-        $this->assertEquals($content['total'],3);
+        $this->assertEquals($content['data'][2]['id'], 5);
+        $this->assertEquals($content['data'][2]['name'], 'rakesh kumar');
+        $this->assertEquals($content['total'],5);
     }
 
     public function testGetListWithSort()
@@ -116,11 +115,11 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['id'], 3);
-        $this->assertEquals($content['data'][0]['name'], 'rakshith amin');
-        $this->assertEquals($content['data'][1]['id'], 2);
-        $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
-        $this->assertEquals($content['total'],3);
+         $this->assertEquals($content['data'][0]['id'], 4);
+        $this->assertEquals($content['data'][0]['name'], 'rohan kumar');
+        $this->assertEquals($content['data'][1]['id'], 3);
+        $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
+        $this->assertEquals($content['total'],5);
     }
 
      public function testGetListSortWithPageSize()
@@ -132,10 +131,10 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 3);
-        $this->assertEquals($content['data'][0]['name'], 'rakshith amin');
-        $this->assertEquals($content['total'],3);
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][0]['id'], 5);
+        $this->assertEquals($content['data'][0]['name'], 'rakesh kumar');
+        $this->assertEquals($content['total'],5);
     }
 
     public function testGetListwithQueryParameters()
@@ -162,6 +161,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+        print_r($content);
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['id'], 1);
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
@@ -180,7 +180,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 1);
          $this->assertEquals($content['data'][0]['id'], 1);
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['total'],3);
+        $this->assertEquals($content['total'],5);
     }
 
     public function testGetListwithQueryPageNo()
@@ -194,9 +194,9 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['id'], 2);
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
-        $this->assertEquals($content['data'][1]['id'], 3);
-        $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
-        $this->assertEquals($content['total'], 3);
+        $this->assertEquals($content['data'][1]['id'], 5);
+        $this->assertEquals($content['data'][1]['name'], 'rakesh kumar');
+        $this->assertEquals($content['total'], 5);
     }
 
 

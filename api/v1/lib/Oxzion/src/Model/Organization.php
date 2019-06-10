@@ -11,9 +11,11 @@ class Organization extends Entity {
         'address' => NULL,
         'city' => NULL,
         'state' => NULL,
+        'country' => NULL,
         'zip' => NULL,
         'labelfile' => NULL,
         'languagefile' => 'en',
+        'contactid' => NULL,
         'theme' => 0,
         'status' => 'Active'
     );

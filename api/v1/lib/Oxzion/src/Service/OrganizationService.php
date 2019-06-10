@@ -74,7 +74,11 @@ class OrganizationService extends AbstractService
                 return 0;
             }
             $form->id = $this->table->getLastInsertValue();
-            $this->setupBasicOrg($form,$data['contact']);
+
+            $userid['id'] = $this->setupBasicOrg($form,$data['contact']);
+
+            $update = "UPDATE `ox_organization` SET `contactid` = '".$userid['id']."' where uuid = '".$data['uuid']."'";
+            $resultSet = $this->executeQueryWithParams($update);
             $this->commit();
 
             $this->uploadOrgLogo($data['uuid'],$files);
@@ -137,8 +141,8 @@ class OrganizationService extends AbstractService
 
         // adding a user
         $returnArray['user'] = $this->userService->createAdminForOrg($org,$contactPerson);
-
-        return true;
+      
+        return $returnArray['user'];
     }
 
     /**
@@ -238,7 +242,6 @@ class OrganizationService extends AbstractService
             ->columns(array("*"))
             ->where(array('ox_organization.id' => $id, 'status' => "Active"));
         $response = $this->executeQuery($select)->toArray();
-        
         if (count($response) == 0) {
             return 0;
         }
@@ -268,12 +271,22 @@ class OrganizationService extends AbstractService
             ->columns(array("*"))
             ->where(array('ox_organization.uuid' => $id, 'status' => "Active"));
         $response = $this->executeQuery($select)->toArray();
-        
         if (count($response) == 0) {
             return 0;
-        }
+        }else{
 
+        $response[0]['contact'] = $this->getOrgContactPersonDetails($id)[0]; 
+
+    }
+    
         return $response[0];
+    }
+
+    private function getOrgContactPersonDetails($id){
+        $userData = array();
+        $userSelect = "SELECT ou.firstname,ou.lastname,ou.email from `ox_user` as ou where ou.id = (SELECT og.contactid from `ox_organization` as og WHERE og.uuid = '".$id."')";
+        $userData = $this->executeQueryWithParams($userSelect)->toArray();     
+        return $userData;
     }
 
     /**
@@ -305,7 +318,7 @@ class OrganizationService extends AbstractService
                    $filterList = $filterArray[0]['filter']['filters'];
                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
                 }
-                if(isset($filterArray[0]['sort'])){
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                     $sort = $filterArray[0]['sort'];
                     $sort = FilterUtils::sortArray($sort);
                 }
@@ -321,8 +334,12 @@ class OrganizationService extends AbstractService
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(id)'];
             $query ="SELECT * FROM `ox_organization`".$where." ".$sort." ".$limit;
-            $resultSet = $this->executeQuerywithParams($query);
-            return array('data' => $resultSet->toArray(), 
+            $resultSet = $this->executeQuerywithParams($query)->toArray();
+
+            for($x=0;$x<sizeof($resultSet);$x++) {
+              $resultSet[$x]['contact'] = $this->getOrgContactPersonDetails($resultSet[$x]['uuid'])[0];
+            }
+            return array('data' => $resultSet, 
                      'total' => $count);
     }
 

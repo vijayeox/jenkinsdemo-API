@@ -178,7 +178,7 @@ class GroupService extends AbstractService {
                    $filterList = $filterArray[0]['filter']['filters'];
                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
                 }
-                if(isset($filterArray[0]['sort'])){
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                     $sort = $filterArray[0]['sort'];
                     $sort = FilterUtils::sortArray($sort);
                 }
@@ -274,7 +274,7 @@ class GroupService extends AbstractService {
                    $filterList = $filterArray[0]['filter']['filters'];
                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
                 }
-                if(isset($filterArray[0]['sort'])){
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                     $sort = $filterArray[0]['sort'];
                     $sort = FilterUtils::sortArray($sort,self::$fieldName);
                 }

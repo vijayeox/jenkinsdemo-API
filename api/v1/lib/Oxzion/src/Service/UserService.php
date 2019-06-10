@@ -176,24 +176,28 @@ class UserService extends AbstractService
             "firstname" => $contactPerson->firstname,
             "lastname" => $contactPerson->lastname,
             "email" => $contactPerson->email,
+            "phone" => $contactPerson->phone,
             "company_name" => $org->name,
             "address_1" => $org->address,
             "address_2" => $org->city,
-            "country" => "US",
-            "preferences" => "[{ 'create_user' => 'true', 'show_notification' => 'true' }]",
+            "country" => $org->country,
+            "preferences" => "{\"soundnotification\":\"true\",\"emailalerts\":\"false\",\"timezone\":\"Asia/Calcutta\",\"dateformat\":\"dd/mm/yyyy\"}",
             "username" => substr(strtolower(str_replace(' ', '', $org->name)), 0, 4).'admin',
             "date_of_birth" => date('1960/m/d'),
             "designation" => "Admin",
             "orgid" => $org->id,
             "status" => "Active",
             "timezone" => "United States/New York",
-            "gender" => "Male",
+            "gender" => " ",
             "managerid" => "1",
             "date_of_join" => Date("Y-m-d"),
             "password" => 'Welcome'.substr(str_replace(' ', '', $org->name), 0, 4).$org->id
         );
         $result = $this->createUser($data);
 
+        $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
+        $resultSet = $this->executeQueryWithParams($select)->toArray();
+      
         $this->messageProducer->sendTopic(json_encode(array(
             'To' => $data['email'],
             'Subject' => $org->name.' created!',
@@ -201,7 +205,7 @@ class UserService extends AbstractService
         )),'mail');
 
         $this->addUserRole($data['id'], 'ADMIN');
-        return $result;
+        return $resultSet[0]['id'];
     }
 
     public function addUserRole($userId, $roleName) {
@@ -325,9 +329,6 @@ class UserService extends AbstractService
         return $result;
     }
 
-    public function getFilterParameters(){
-
-    }
     /**
      * GET List User API
      * @api
@@ -351,7 +352,7 @@ class UserService extends AbstractService
                    $filterList = $filterArray[0]['filter']['filters'];
                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
                 }
-                if(isset($filterArray[0]['sort'])){
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                     $sort = $filterArray[0]['sort'];
                     $sort = FilterUtils::sortArray($sort);
                 }
@@ -404,6 +405,18 @@ class UserService extends AbstractService
         } else {
             return 0;
         }
+    }
+
+
+    public function getUserByUuid($uuid){
+        $select = "SELECT id from `ox_user` where uuid = '".$uuid."'";
+        $result = $this->executeQueryWithParams($select)->toArray();
+        if($result){
+        return $result[0]['id'];
+    }else{
+        return 0;
+    }
+
     }
 
     public function getActiveOrganization($id)
