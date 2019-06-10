@@ -50,10 +50,15 @@ api()
         echo -e "${RED}API was not was not packaged so skipping it\n${RESET}"
     else    
         #making the directory where api will be copied.
-        rm -Rf /var/www/api
         #moving to temp directory and copying required
         cd ${TEMP}
-        mv api/v1 /var/www/api
+        rsync -r --delete api/v1/data/uploads/* /var/www/api/data/uploads/
+        rm -R api/v1/data/uploads
+        rm -R api/v1/data/cache
+        rm -R api/v1/logs
+        rsync -rl --delete api/v1/* /var/www/api/
+        ln -s /var/lib/oxzion/api/cache /var/www/api/data/cache
+        ln -s /var/lib/oxzion/api/uploads /var/www/api/data/uploads
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
         echo -e "${YELLOW}Starting migrations script for API"
         cd /var/www/api
@@ -73,10 +78,9 @@ camel()
         echo -e "${GREEN}Stopping Camel service"
         systemctl stop camel
         echo -e "${YELLOW}Stopped!"
-        rm -Rf /opt/oxzion/camel
         #moving to temp directory and copying required
         cd ${TEMP}
-        mv integrations/camel /opt/oxzion
+        rsync -rl --delete integrations/camel/* /opt/oxzion/camel/
         echo -e "${GREEN}Copying Camel Complete!\n${RESET}"
         echo -e "${YELLOW}Starting Camel service"
         systemctl start camel
@@ -93,9 +97,8 @@ calendar()
     then
         echo -e "${RED}CALENDAR was not packaged so skipping it\n${RESET}"
     else
-        rm -Rf /var/www/eventcalendar
         cd ${TEMP}
-        mv integrations/eventcalendar /var/www
+        rsync -rl --delete integrations/eventcalendar/* /var/www/eventcalendar/
         echo -e "${GREEN}Copying EventCalendar Complete!"
     fi
 }
@@ -111,9 +114,8 @@ mattermost()
         echo -e "${GREEN}Stopping Mattermost service"
     	systemctl stop mattermost
         echo -e "${YELLOW}Stopped!"
-        rm -Rf /opt/oxzion/mattermost
         cd ${TEMP}
-        mv integrations/mattermost /opt/oxzion
+        rsync -rl --delete integrations/mattermost/* /opt/oxzion/mattermost/
         echo -e "${GREEN}Copying Mattermost Complete!"
         echo -e "${GREEN}Starting Mattermost service"
         systemctl start mattermost
@@ -129,9 +131,8 @@ orocrm()
     then
         echo -e "${RED}OROCRM was not packaged so skipping it\n${RESET}"
     else    
-    	rm -Rf /var/www/crm
     	cd ${TEMP}
-    	mv integrations/crm /var/www
+    	rsync -rl --delete integrations/crm/* /var/www/crm/
     	echo -e "${GREEN}Copying OROcrm Complete!"
         echo -e "${YELLOW}Starting migrations script for OROcrm"
         php integrations/orocrm/bin/console oro:install --env=prod --timeout=30000 --application-url="${appurl}" --organization-name="Vantage Agora" --user-name="admin" --user-email="${email}" --user-firstname="Admin" --user-lastname="User" --user-password="admin" --language=en --formatting-code=en_US
@@ -147,9 +148,8 @@ rainloop()
     then
         echo -e "${RED}RAINLOOP was not packaged so skipping it\n${RESET}"
     else
-    	rm -Rf /var/www/rainloop
     	cd ${TEMP}
-    	mv integrations/rainloop /var/www
+    	rsync -rl --delete integrations/rainloop/* /var/www/rainloop/
     	echo -e "${GREEN}Copying Rainloop Complete!"
     fi
 }
@@ -164,10 +164,13 @@ view()
    		echo -e "${GREEN}Stopping view service"
         systemctl stop view
         echo -e "${YELLOW}Stopped!"
-    	rm -Rf /opt/oxzion/view
     	cd ${TEMP}
-    	mv view /opt/oxzion
-    	echo -e "${GREEN}Copying view Complete!${RESET}"
+    	rsync -rl --delete view/vfs/* /opt/oxzion/view/vfs/
+        chown oxzion:oxzion -R /opt/oxzion/view/vfs/
+        rm -R view/vfs
+        rsync -rl --delete view/* /opt/oxzion/view/
+        chown oxzion:oxzion -R /opt/oxzion/view
+        echo -e "${GREEN}Copying view Complete!${RESET}"
     	echo -e "${GREEN}Starting view service"
         systemctl start view
         echo -e "${YELLOW}Started!"
@@ -182,9 +185,8 @@ workflow()
         echo -e "${RED}Workflow was not packaged so skipping it\n${RESET}"
     else
         docker stop wf_1
-        rm -Rf /opt/oxzion/workflow
         cd ${TEMP}
-        mv integrations/workflow /opt/oxzion/
+        rsync -rl --delete integrations/workflow/* /opt/oxzion/workflow/
         echo -e "${GREEN}Copying workflow Complete!${RESET}"
         cd /opt/oxzion/workflow
         echo -e "${YELLOW}Building Workflow Docker Image!${RESET}"
