@@ -227,36 +227,7 @@ class UserController extends AbstractApiController
         }
 
     }
-
-    /**
-     * Add User To Group API
-     * @api
-     * @link /user/:userId/addusertogroup/:groupId'
-     * @method POST
-     * @param $id and $groupid that adds a particular user to a group
-     * @return array success|failure response
-     */
-    public function addUserToGroupAction()
-    {
-        $params = $this->params()->fromRoute();
-        $id = $params['userId'];
-        $groupId = $params['groupId'];
-        try {
-            $response = $this->userService->addUserToGroup($params['userId'], $params['groupId']);
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found for id -$id", 404);
-            } elseif ($response == 2) {
-                return $this->getErrorResponse("Entity not found for groupId -$groupId", 404);
-            } elseif ($response == 3) {
-                return $this->getErrorResponse("Entity exists and therefore unable to add", 404);
-            }
-            return $this->getSuccessResponse();
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        }
-    }
-
+  
     /**
      * Add User To Project API
      * @api

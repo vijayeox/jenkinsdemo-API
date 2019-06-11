@@ -25,19 +25,19 @@ class TaskCallbackControllerTest extends ControllerTest
         return new DefaultDataSet();
     }
 
-    public function testCreate()
-    {
-    	$this->initAuthToken($this->adminUser);
-        $data = ['name' => 'New Project 1','description' => 'Open project applications'];
-        $this->dispatch('/callback/task/addproject', 'POST',array(json_encode($data)=>''));
-        $this->assertResponseStatusCode(201);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('addprojectfromcallback');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['description'], $data['description']);
-    }
+    // public function testCreate()
+    // {
+    // 	$this->initAuthToken($this->adminUser);
+    //     $data = ['name' => 'New Project 1','description' => 'Open project applications'];
+    //     $this->dispatch('/callback/task/addproject', 'POST',array(json_encode($data)=>''));
+    //     $this->assertResponseStatusCode(201);
+    //     $this->setDefaultAsserts();
+    //     $this->assertMatchedRouteName('addprojectfromcallback');
+    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
+    //     $this->assertEquals($content['status'], 'success');
+    //     $this->assertEquals($content['data']['name'], $data['name']);
+    //     $this->assertEquals($content['data']['description'], $data['description']);
+    // }
 
      protected function setDefaultAsserts()
     {

@@ -161,7 +161,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        print_r($content);
+        // print_r($content);
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['id'], 1);
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
@@ -309,25 +309,15 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testAddUserToGroup()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user/3/addusertogroup/2', 'POST');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('addusertogroup');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-    }
-
-    public function testAddUserToGroupWithExistingGroup()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user/1/addusertogroup/1', 'POST');
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts('addusertogroup');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
+    // public function testAddUserToGroupWithExistingGroup()
+    // {
+    //     $this->initAuthToken($this->adminUser);
+    //     $this->dispatch('/user/1/addusertogroup/1', 'POST');
+    //     $this->assertResponseStatusCode(404);
+    //     $this->setDefaultAsserts('addusertogroup');
+    //     $content = json_decode($this->getResponse()->getContent(), true);
+    //     $this->assertEquals($content['status'], 'error');
+    // }
 
     public function testAddUserToProject()
     {
@@ -505,15 +495,17 @@ class UserControllerTest extends ControllerTest
     }
 
     public function testUserAccess() 
-    {
+    {   
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/me/access', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('getUserAppsAndPrivileges');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+        // TO DO : Whitelisted apps for manageruser and employeeuser
         $this->assertNotEmpty($content['data']['privilege']);
         $this->assertNotEmpty($content['data']['whiteListedApps']);
+        $this->assertEquals(4,count($content['data']['whiteListedApps']));
     } 
 
      public function testForgotPassword()

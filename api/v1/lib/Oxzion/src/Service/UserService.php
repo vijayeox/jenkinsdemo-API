@@ -574,37 +574,6 @@ class UserService extends AbstractService
         return 1;
     }
 
-    public function addUserToGroup($userid, $groupid)
-    {
-        $sql = $this->getSqlObject();
-        $queryString = "select id from ox_user";
-        $where = "where id =" . $userid . " and status='Active'";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, null);
-        if ($resultSet) {
-            $query = "select id from groups";
-            $where = "where id =" . $groupid;
-            $result = $this->executeQuerywithParams($query, $where, null, null);
-            if ($result) {
-                $query = "select id from ox_user_group";
-                $where = "where avatar_id =" . $userid;
-                $notexist_result = $this->executeQuerywithParams($query, $where, null, null)->toArray();
-                if (!$notexist_result) {
-                    $data = array(array('avatar_id' => $userid, 'group_id' => $groupid));
-                    $result_update = $this->multiInsertOrUpdate('ox_user_group', $data, array());
-                    if ($result_update->getAffectedRows() == 0) {
-                        return $result_update;
-                    }
-                    return 1;
-                } else {
-                    return 3;
-                }
-            } else {
-                return 2;
-            }
-        }
-        return 0;
-    }
-
     public function addUserToProject($userid, $projectid)
     {
         $sql = $this->getSqlObject();
@@ -856,7 +825,7 @@ class UserService extends AbstractService
         if(!isset($userId)){
             $userId = AuthContext::get(AuthConstants::USER_ID);
         }
-        $query = "SELECT DISTINCT oa.name,oa.description, oa.uuid, oa.type, oa.logo, oa.category from ox_app as oa INNER JOIN ox_app_registry as oar ON oa.uuid = oar.app_id INNER JOIN         ox_privilege as op on oar.app_id = op.app_id INNER JOIN ox_role_privilege as orp ON op.name = orp.privilege_name AND orp.org_id =".$orgId." INNER JOIN ox_user_role as   our ON orp.role_id = our.role_id AND our.user_id = ".$userId." union SELECT DISTINCT name,description, uuid, type, logo, category FROM ox_app as oa INNER JOIN ox_app_registry as oar ON oa.uuid= oar.app_id  WHERE oa.uuid NOT IN (SELECT app_id FROM ox_privilege WHERE app_id IS NOT NULL) AND oar.org_id =".$orgId;
+        $query = "SELECT DISTINCT oa.name,oa.description, oa.uuid, oa.type, oa.logo, oa.category from ox_app as oa INNER JOIN ox_app_registry as oar ON oa.id = oar.app_id INNER JOIN         ox_privilege as op on oar.app_id = op.app_id INNER JOIN ox_role_privilege as orp ON op.name = orp.privilege_name AND orp.org_id =".$orgId." INNER JOIN ox_user_role as   our ON orp.role_id = our.role_id AND our.user_id = ".$userId." union SELECT DISTINCT name,description, uuid, type, logo, category FROM ox_app as oa INNER JOIN ox_app_registry as oar ON oa.id= oar.app_id  WHERE oa.uuid NOT IN (SELECT app_id FROM ox_privilege WHERE app_id IS NOT NULL) AND oar.org_id =".$orgId;
 
         $result = $this->executeQuerywithParams($query);
         return $result->toArray();
