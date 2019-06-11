@@ -2,10 +2,10 @@
 namespace Oxzion\Service;
 
 use Zend\Db\Sql\Sql;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\Service\AbstractService;
-use Bos\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Service\AbstractService;
+use Oxzion\ValidationException;
 use Oxzion\Model\Workflow;
 use Oxzion\Model\WorkflowTable;
 use Oxzion\Model\Form;
@@ -16,7 +16,8 @@ use Oxzion\Service\FieldService;
 use Oxzion\Model\FieldTable;
 use Oxzion\Workflow\WorkFlowFactory;
 use Oxzion\Utils\FileUtils;
-use Bos\Service\FileService;
+use Oxzion\Service\FileService;
+use Workflow\Model\WorkflowInstance;
 
 class WorkflowService extends AbstractService{
 	
@@ -141,7 +142,7 @@ class WorkflowService extends AbstractService{
     		$this->commit();
     	}catch(Exception $e){
     		switch (get_class ($e)) {
-    			case "Bos\ValidationException" :
+    			case "Oxzion\ValidationException" :
     			$this->rollback();
     			return 0;
     			break;
@@ -178,7 +179,8 @@ class WorkflowService extends AbstractService{
     		$fieldData = $oxField->toArray();
     		try {
     			$fieldResult = $this->fieldService->saveField($appId,$fieldData);
-    			$fieldIdArray[] = $fieldData['id'];
+				$fieldIdArray[] = $fieldData['id'];
+				// $createFormFieldEntry = $this->createFormFieldEntry($formId,$fieldData['id']);
     		} catch(Exception $e){
     			foreach ($fieldIdArray as $fieldId) {
     				$id = $this->fieldService->deleteField($fieldId);

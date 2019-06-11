@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Model\App;
 use App\Model\AppTable;
 use App\Service\AppService;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Zend\Log\Logger;

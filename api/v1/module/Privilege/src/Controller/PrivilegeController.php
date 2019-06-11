@@ -4,7 +4,7 @@ namespace Privilege\Controller;
 /**
  * Privilege Api
  */
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Model\Privilege;
 use Oxzion\Model\PrivilegeTable;

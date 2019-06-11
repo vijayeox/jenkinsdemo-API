@@ -9,7 +9,7 @@ use App\Model\MenuItemTable;
 use App\Service\MenuItemService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 
 class MenuItemController extends AbstractApiController
 {

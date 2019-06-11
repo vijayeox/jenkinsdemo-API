@@ -10,7 +10,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\Exception\LogicException;
 use Zend\Stdlib\Parameters;
 use Zend\Stdlib\ResponseInterface;
-use Bos\Transaction\TransactionManager;
+use Oxzion\Transaction\TransactionManager;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Stdlib\ArrayUtils;
 

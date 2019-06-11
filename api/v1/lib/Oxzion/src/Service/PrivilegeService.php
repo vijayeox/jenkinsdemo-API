@@ -1,12 +1,12 @@
 <?php
 namespace Oxzion\Service;
 
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Oxzion\Model\Privilege;
 use Oxzion\Model\PrivilegeTable;
-use Bos\ValidationException;
-use Bos\Service\AbstractService;
+use Oxzion\ValidationException;
+use Oxzion\Service\AbstractService;
 
 class PrivilegeService extends AbstractService {
 

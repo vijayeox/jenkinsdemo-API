@@ -6,7 +6,7 @@ use Oxzion\Test\ServiceTest;
 use Oxzion\Service\EmailService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Service\EmailTemplateService;
-use Bos\Transaction\TransactionManager;
+use Oxzion\Transaction\TransactionManager;
 use Zend\Db\Adapter\Adapter;
 
 

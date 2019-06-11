@@ -1,12 +1,12 @@
 <?php
 namespace Group\Service;
 
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Group\Model\GroupTable;
 use Group\Model\Group;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
 use Oxzion\Messaging\MessageProducer;

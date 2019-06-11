@@ -1,12 +1,12 @@
 <?php
 namespace Project\Service;
 
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Project\Model\ProjectTable;
 use Project\Model\Project;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
 use Oxzion\Messaging\MessageProducer;

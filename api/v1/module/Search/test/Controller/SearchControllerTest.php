@@ -3,7 +3,7 @@ namespace Search;
 
 use Search\Controller\SearchController;
 use Oxzion\Test\ControllerTest;
-use Bos\Db\ModelTable;
+use Oxzion\Db\ModelTable;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
@@ -13,8 +13,8 @@ use Oxzion\Search\Indexer;
 use Oxzion\Search;
 use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
 use Oxzion\Test\MainControllerTest;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
 class SearchControllerTest extends MainControllerTest{
     

@@ -8,10 +8,10 @@ use Oxzion\Model\EmailTable;
 use Oxzion\Model\Email;
 use Oxzion\Service\EmailService;
 use Zend\Db\Adapter\AdapterInterface;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
 class EmailController extends AbstractApiController {
     /**

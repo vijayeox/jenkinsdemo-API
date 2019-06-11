@@ -1,5 +1,5 @@
 <?php
-namespace Bos\Auth;
+namespace Oxzion\Auth;
 
 class AuthContext{
     const CONTEXT_KEY = 'AUTH_CONTEXT';

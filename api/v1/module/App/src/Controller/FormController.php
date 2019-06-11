@@ -9,7 +9,7 @@ use Oxzion\Model\FormTable;
 use Oxzion\Service\FormService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 
 class FormController extends AbstractApiController
 {

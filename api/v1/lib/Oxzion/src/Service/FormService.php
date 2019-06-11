@@ -3,10 +3,10 @@ namespace Oxzion\Service;
 
 use Oxzion\Model\FormTable;
 use Oxzion\Model\Form;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\Service\AbstractService;
-use Bos\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Service\AbstractService;
+use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
 
@@ -39,7 +39,7 @@ class FormService extends AbstractService{
             $this->commit();
         }catch(Exception $e){
             switch (get_class ($e)) {
-             case "Bos\ValidationException" :
+             case "Oxzion\ValidationException" :
                 $this->rollback();
                 throw $e;
                 break;
@@ -74,7 +74,7 @@ class FormService extends AbstractService{
             $this->commit();
         }catch(Exception $e){
             switch (get_class ($e)) {
-             case "Bos\ValidationException" :
+             case "Oxzion\ValidationException" :
                 $this->rollback();
                 throw $e;
                 break;

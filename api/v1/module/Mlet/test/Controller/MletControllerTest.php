@@ -6,8 +6,8 @@ use Oxzion\Test\ControllerTest;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Oxzion\Search\Indexer;
 use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
 
 class MletControllerTest extends ControllerTest{

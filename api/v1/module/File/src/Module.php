@@ -11,9 +11,9 @@ use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
-use Bos\Model\FileTable;
-use Bos\Model\CommentTable;
-use Bos\Model\SubscriberTable;
+use Oxzion\Model\FileTable;
+use Oxzion\Model\CommentTable;
+use Oxzion\Model\SubscriberTable;
 
 class Module implements ConfigProviderInterface {
 
@@ -42,12 +42,12 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\CommentController::class => function($container) {
                     return new Controller\CommentController(
-                            $container->get(CommentTable::class), $container->get(\Bos\Service\CommentService::class), $container->get('FileLogger'),
+                            $container->get(CommentTable::class), $container->get(\Oxzion\Service\CommentService::class), $container->get('FileLogger'),
                         $container->get(AdapterInterface::class));
                 },
                 Controller\SubscriberController::class => function($container) {
                     return new Controller\SubscriberController(
-                            $container->get(SubscriberTable::class), $container->get(\Bos\Service\SubscriberService::class), $container->get('FileLogger'),
+                            $container->get(SubscriberTable::class), $container->get(\Oxzion\Service\SubscriberService::class), $container->get('FileLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],

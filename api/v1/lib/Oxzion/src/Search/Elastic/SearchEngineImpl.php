@@ -1,8 +1,8 @@
 <?php
 namespace Oxzion\Search\Elastic;
 
-use Bos\Auth\AuthConstants;
-use Bos\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
 use Oxzion\Search\SearchEngine;
 use Oxzion\Service\ElasticService;
 use Exception;

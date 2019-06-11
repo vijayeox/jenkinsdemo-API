@@ -1,14 +1,15 @@
 <?php
 
-namespace Bos\Model;
+namespace Oxzion\Model;
 
 class File extends Entity {
 
 	protected $data = array(
 		'id'=>0 ,
-		'name' => NULL,
 		'org_id' => NULL,
-		'form_id' => NULL,
+        'form_id' => NULL,
+        'uuid' => NULL,
+        'data' => NULL,
         'workflow_instance_id' =>NULL,
         'created_by' => NULL,
         'modified_by' => NULL,
@@ -18,7 +19,7 @@ class File extends Entity {
     protected $attributes = array();
 
     public function validate(){
-        $required = array('name','org_id','form_id','workflow_instance_id');
+        $required = array('uuid', 'org_id','form_id','data', 'created_by', 'date_created', 'workflow_instance_id');
         $this->validateWithParams($required);
     }
 }

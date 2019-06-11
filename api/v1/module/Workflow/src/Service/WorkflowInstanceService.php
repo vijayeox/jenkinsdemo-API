@@ -3,18 +3,32 @@ namespace Workflow\Service;
 
 use Workflow\Model\WorkflowInstanceTable;
 use Workflow\Model\WorkflowInstance;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\Service\AbstractService;
-use Bos\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Service\AbstractService;
+use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
+use Oxzion\Service\WorkflowService;
+use Oxzion\Service\FileService;
+use Oxzion\Workflow\WorkFlowFactory;
 use Exception;
 
 class WorkflowInstanceService extends AbstractService {
+    protected $workflowService;
+    protected $fileService;
+    protected $processEngine;
+	protected $activityEngine;
 
-    public function __construct($config, $dbAdapter, WorkflowInstanceTable $table){
+    public function __construct($config, $dbAdapter, WorkflowInstanceTable $table,
+                FileService $fileService,WorkflowService $workflowService,
+                WorkflowFactory $workflowFactory){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->fileService = $fileService;
+        $this->workflowService = $workflowService;
+        $this->workFlowFactory = $workflowFactory;
+        $this->processEngine = $this->workFlowFactory->getProcessEngine();
+		$this->activityEngine = $this->workFlowFactory->getActivity();
     }
     public function saveWorkflowInstance($appId,&$data){
         $WorkflowInstance = new WorkflowInstance();
@@ -42,7 +56,7 @@ class WorkflowInstanceService extends AbstractService {
             $this->commit();
         }catch(Exception $e){
             switch (get_class ($e)) {
-             case "Bos\ValidationException" :
+             case "Oxzion\ValidationException" :
                 $this->rollback();
                 throw $e;
                 break;

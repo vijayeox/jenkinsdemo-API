@@ -5,8 +5,8 @@ namespace Analytics;
 use Oxzion\NLP\NLPEngine;
 use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
 use Oxzion\Test\MainControllerTest;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use function GuzzleHttp\json_decode;
 
 class NLPTest extends MainControllerTest{

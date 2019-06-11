@@ -1,11 +1,10 @@
 <?php
 namespace Callback\Service;
 
-    use Bos\Auth\AuthConstants;
-    use Bos\Auth\AuthContext;
-    use Bos\Service\AbstractService;
-    use Bos\Service\UserService;
-    use Bos\ValidationException;
+    use Oxzion\Auth\AuthConstants;
+    use Oxzion\Auth\AuthContext;
+    use Oxzion\Service\AbstractService;
+    use Oxzion\ValidationException;
     use Oxzion\Utils\RestClient;
     use Zend\Log\Logger;
     use Exception;

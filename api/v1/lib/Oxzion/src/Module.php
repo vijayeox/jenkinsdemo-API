@@ -45,9 +45,9 @@ class Module {
                     $config = $container->get('config');
                     return new Service\ElasticService($config);
                 },
-                \Bos\Service\FileService::class => function($container){
+                \Oxzion\Service\FileService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Bos\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Bos\Model\FileTable::class));
+                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class));
                 },
                 Service\RoleService::class => function($container){
                     return new Service\RoleService(
@@ -95,42 +95,42 @@ class Module {
                         $resultSetPrototype
                     );
                 },
-                \Bos\Service\CommentService::class => function($container){
+                \Oxzion\Service\CommentService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Bos\Service\CommentService($container->get('config'), $dbAdapter, $container->get(\Bos\Model\CommentTable::class));
+                    return new \Oxzion\Service\CommentService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\CommentTable::class));
                 },
-                \Bos\Service\SubscriberService::class => function($container){
+                \Oxzion\Service\SubscriberService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Bos\Service\SubscriberService($container->get('config'), $dbAdapter, $container->get(\Bos\Model\SubscriberTable::class));
+                    return new \Oxzion\Service\SubscriberService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\SubscriberTable::class));
                 },
-                \Bos\Model\FileTable::class => function($container) {
-                    $tableGateway = $container->get(\Bos\Model\FileTableGateway::class);
-                    return new \Bos\Model\FileTable($tableGateway);
+                \Oxzion\Model\FileTable::class => function($container) {
+                    $tableGateway = $container->get(\Oxzion\Model\FileTableGateway::class);
+                    return new \Oxzion\Model\FileTable($tableGateway);
                 },
-                \Bos\Model\CommentTable::class => function($container) {
-                    $tableGateway = $container->get(\Bos\Model\CommentTableGateway::class);
-                    return new \Bos\Model\CommentTable($tableGateway);
+                \Oxzion\Model\CommentTable::class => function($container) {
+                    $tableGateway = $container->get(\Oxzion\Model\CommentTableGateway::class);
+                    return new \Oxzion\Model\CommentTable($tableGateway);
                 },
-                \Bos\Model\SubscriberTable::class => function($container) {
-                    $tableGateway = $container->get(\Bos\Model\SubscriberTableGateway::class);
-                    return new \Bos\Model\SubscriberTable($tableGateway);
+                \Oxzion\Model\SubscriberTable::class => function($container) {
+                    $tableGateway = $container->get(\Oxzion\Model\SubscriberTableGateway::class);
+                    return new \Oxzion\Model\SubscriberTable($tableGateway);
                 },
-                \Bos\Model\FileTableGateway::class => function ($container) {
+                \Oxzion\Model\FileTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new \Bos\Model\File());
+                    $resultSetPrototype->setArrayObjectPrototype(new \Oxzion\Model\File());
                     return new TableGateway('ox_file', $dbAdapter, null, $resultSetPrototype);
                 },
-                \Bos\Model\CommentTableGateway::class => function ($container) {
+                \Oxzion\Model\CommentTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new \Bos\Model\Comment());
+                    $resultSetPrototype->setArrayObjectPrototype(new \Oxzion\Model\Comment());
                     return new TableGateway('ox_comment', $dbAdapter, null, $resultSetPrototype);
                 },
-                \Bos\Model\SubscriberTableGateway::class => function ($container) {
+                \Oxzion\Model\SubscriberTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new \Bos\Model\Subscriber());
+                    $resultSetPrototype->setArrayObjectPrototype(new \Oxzion\Model\Subscriber());
                     return new TableGateway('ox_subscriber', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\FormService::class => function($container){
@@ -206,7 +206,7 @@ class Module {
                     $container->get(Model\WorkflowTable::class),
                     $container->get(Service\FormService::class),
                     $container->get(Service\FieldService::class),
-                    $container->get(\Bos\Service\FileService::class),
+                    $container->get(\Oxzion\Service\FileService::class),
                     $container->get(Workflow\WorkflowFactory::class));
                 },
                 Service\UserTokenService::class => function($container) {

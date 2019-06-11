@@ -2,8 +2,8 @@
 
 namespace App\Model;
 
-use Bos\Model\Entity;
-use Bos\ValidationException;
+use Oxzion\Model\Entity;
+use Oxzion\ValidationException;
 
 class App extends Entity {
 

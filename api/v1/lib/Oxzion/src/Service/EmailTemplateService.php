@@ -3,7 +3,7 @@ namespace Oxzion\Service;
 
 use Smarty;
 use Exception;
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Oxzion\Utils\BosUtils;
 
 class EmailTemplateService extends AbstractService {

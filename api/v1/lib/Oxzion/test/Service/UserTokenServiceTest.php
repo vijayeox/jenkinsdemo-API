@@ -6,7 +6,7 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Stdlib\ArrayUtils;
 use Mockery;
 use Zend\Db\Adapter\Adapter;
-use Bos\Transaction\TransactionManager;
+use Oxzion\Transaction\TransactionManager;
 
 
 

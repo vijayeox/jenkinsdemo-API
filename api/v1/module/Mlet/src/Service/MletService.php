@@ -1,11 +1,11 @@
 <?php
 namespace Mlet\Service;
 
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Mlet\Model\MletTable;
 use Mlet\Model\Mlet;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Oxzion\Analytics\AnalyticsEngine;
 use Exception;
 

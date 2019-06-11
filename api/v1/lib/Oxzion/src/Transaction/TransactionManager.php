@@ -1,5 +1,5 @@
 <?php
-namespace Bos\Transaction;
+namespace Oxzion\Transaction;
 
 class TransactionManager{
     const CONTEXT_KEY = 'TRANSACTION_MANAGER';

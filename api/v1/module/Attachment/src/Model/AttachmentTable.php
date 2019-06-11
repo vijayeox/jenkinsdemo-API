@@ -2,8 +2,8 @@
 
 namespace Attachment\Model;
 
-use Bos\Db\ModelTable;
-use Bos\Model\Entity;
+use Oxzion\Db\ModelTable;
+use Oxzion\Model\Entity;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
 class AttachmentTable extends ModelTable {

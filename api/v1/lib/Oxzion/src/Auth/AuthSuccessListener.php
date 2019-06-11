@@ -1,8 +1,8 @@
 <?php
 namespace Oxzion\Auth;
 
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
 class AuthSuccessListener{
     private $userService;

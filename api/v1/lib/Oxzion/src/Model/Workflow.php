@@ -1,7 +1,7 @@
 <?php
 namespace Oxzion\Model;
 
-use Bos\Model\Entity;
+use Oxzion\Model\Entity;
 class Workflow extends Entity{
 
     protected $data = array(

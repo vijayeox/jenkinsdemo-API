@@ -1,8 +1,8 @@
 <?php
 namespace Group\Model;
 
-use Bos\Model\Entity;
-use Bos\ValidationException;
+use Oxzion\Model\Entity;
+use Oxzion\ValidationException;
 
 class Group extends Entity {
     protected $data = array(

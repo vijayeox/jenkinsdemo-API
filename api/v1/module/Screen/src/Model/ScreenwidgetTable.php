@@ -1,8 +1,8 @@
 <?php
 namespace Screen\Model;
 
-use Bos\Db\ModelTable;
-use Bos\Model\Entity;
+use Oxzion\Db\ModelTable;
+use Oxzion\Model\Entity;
 use Zend\Db\TableGateway\TableGatewayInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;

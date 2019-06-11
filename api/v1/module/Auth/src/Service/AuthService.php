@@ -1,10 +1,10 @@
 <?php
 namespace Auth\Service;
 
-use Bos\Service\AbstractService;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\ValidationException;
+use Oxzion\Service\AbstractService;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
 

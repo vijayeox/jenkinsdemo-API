@@ -1,11 +1,11 @@
 <?php
 namespace Oxzion\Service;
 
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\Service\AbstractService;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Service\AbstractService;
 use Oxzion\Model\User;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
 // use v1\module\Attachment\Service\AttachmentService;

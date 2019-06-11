@@ -1,8 +1,8 @@
 <?php
 
-namespace Bos\Model;
+namespace Oxzion\Model;
 
-use Bos\Db\ModelTable;
+use Oxzion\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
 class FileTable extends ModelTable {

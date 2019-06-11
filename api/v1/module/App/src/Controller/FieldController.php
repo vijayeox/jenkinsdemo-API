@@ -8,7 +8,7 @@ use Oxzion\Model\Field;
 use Oxzion\Model\FieldTable;
 use Oxzion\Service\FieldService;
 use Oxzion\Controller\AbstractApiController;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\View\Model\JsonModel;
 /**

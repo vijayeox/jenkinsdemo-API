@@ -1,7 +1,7 @@
 <?php
 namespace Callback\Service;
 
-    use Bos\Service\AbstractService;
+    use Oxzion\Service\AbstractService;
     use Zend\Log\Logger;
     use Oxzion\Email\EmailClient;
     use Exception;

@@ -1,11 +1,11 @@
 <?php
 namespace Resource\Service;
 
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FileUtils;
-use Bos\ValidationException;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Exception;
 
 class ResourceService extends AbstractService{

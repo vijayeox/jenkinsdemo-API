@@ -1,11 +1,11 @@
 <?php
 namespace Announcement\Service;
 
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Announcement\Model\AnnouncementTable;
 use Announcement\Model\Announcement;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;

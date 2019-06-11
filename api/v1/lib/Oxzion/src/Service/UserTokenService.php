@@ -1,10 +1,10 @@
 <?php
 namespace Oxzion\Service;
 
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\Service\AbstractService;
-use Bos\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Service\AbstractService;
+use Oxzion\ValidationException;
 use Oxzion\Model\UserToken;
 use Oxzion\Model\UserTokenTable;
 use Oxzion\Jwt\JwtHelper;

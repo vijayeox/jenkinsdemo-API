@@ -3,12 +3,12 @@
 namespace File\Controller;
 
 use Zend\Log\Logger;
-use Bos\Model\SubscriberTable;
-use Bos\Model\Subscriber;
-use Bos\Service\SubscriberService;
+use Oxzion\Model\SubscriberTable;
+use Oxzion\Model\Subscriber;
+use Oxzion\Service\SubscriberService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 
 class SubscriberController extends AbstractApiController {

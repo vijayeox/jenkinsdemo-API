@@ -4,7 +4,7 @@ namespace Group;
 use Group\Controller\GroupController;
 use Group\Model;
 use Oxzion\Test\ControllerTest;
-use Bos\Db\ModelTable;
+use Oxzion\Db\ModelTable;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;

@@ -3,7 +3,7 @@ namespace Callback\Controller;
 
     use Zend\Log\Logger;
     use Oxzion\Controller\AbstractApiControllerHelper;
-    use Bos\ValidationException;
+    use Oxzion\ValidationException;
     use Zend\Db\Adapter\AdapterInterface;
     use Oxzion\Utils\RestClient;
     use Callback\Service\CRMService;

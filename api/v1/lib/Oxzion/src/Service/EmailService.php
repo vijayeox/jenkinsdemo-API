@@ -1,10 +1,10 @@
 <?php
 namespace Oxzion\Service;
 
-use Bos\Auth\AuthConstants;
-use Bos\Auth\AuthContext;
-use Bos\Service\AbstractService;
-use Bos\ValidationException;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Service\AbstractService;
+use Oxzion\ValidationException;
 use Oxzion\Model\Email;
 use Oxzion\Model\EmailTable;
 use Oxzion\Encryption\TwoWayEncryption;

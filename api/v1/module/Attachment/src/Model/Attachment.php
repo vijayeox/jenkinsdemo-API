@@ -2,7 +2,7 @@
 
 namespace Attachment\Model;
 
-use Bos\Model\Entity;
+use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
 class Attachment extends Entity {

@@ -8,9 +8,9 @@ use Email\Model\DomainTable;
 use Email\Model\Domain;
 use Email\Service\DomainService;
 use Zend\Db\Adapter\AdapterInterface;
-use Bos\ValidationException;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
 class DomainController extends AbstractApiController
 {

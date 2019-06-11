@@ -1,12 +1,12 @@
 <?php
 namespace Contact\Service;
 
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Contact\Model\ContactTable;
 use Contact\Model\Contact;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
 

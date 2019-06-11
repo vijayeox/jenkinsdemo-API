@@ -2,7 +2,7 @@
 
 namespace Oxzion\Db\Migration;
 
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Table;

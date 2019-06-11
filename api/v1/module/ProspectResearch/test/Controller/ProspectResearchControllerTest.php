@@ -3,7 +3,7 @@ namespace ProspectResearch;
 
 use ProspectResearch\Controller\ProspectResearchController;
 use Oxzion\Test\ControllerTest;
-use Bos\Db\ModelTable;
+use Oxzion\Db\ModelTable;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
@@ -11,8 +11,8 @@ use Zend\Db\Adapter\Adapter;
 use Oxzion\ProspectResearch\InfoEngine;
 use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
 use Oxzion\Test\MainControllerTest;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use function GuzzleHttp\json_decode;
 
 class ProspectResearchControllerTest extends MainControllerTest{

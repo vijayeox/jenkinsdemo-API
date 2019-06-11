@@ -1,12 +1,12 @@
 <?php
 namespace Alert\Service;
 
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Alert\Model\AlertTable;
 use Alert\Model\Alert;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\ValidationException;
 use Exception;
 
 class AlertService extends AbstractService{

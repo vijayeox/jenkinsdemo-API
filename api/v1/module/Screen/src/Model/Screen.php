@@ -1,6 +1,6 @@
 <?php
 namespace Screen\Model;
-use Bos\Model\Entity;
+use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
 

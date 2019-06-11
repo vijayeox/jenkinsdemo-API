@@ -4,8 +4,8 @@ namespace Oxzion\Analytics\Elastic;
 use Oxzion\Analytics\AnalyticsEngine;
 use Elasticsearch\ClientBuilder;
 use Oxzion\Service\ElasticService;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
 class AnalyticsEngineImpl implements AnalyticsEngine {
 	private $config;

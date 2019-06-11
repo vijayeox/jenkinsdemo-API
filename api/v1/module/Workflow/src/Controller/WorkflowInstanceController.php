@@ -9,7 +9,7 @@ use Workflow\Model\WorkflowInstance;
 use Workflow\Service\WorkflowInstanceService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Oxzion\Service\WorkflowService;
 
 class WorkflowInstanceController extends AbstractApiController
@@ -32,8 +32,8 @@ class WorkflowInstanceController extends AbstractApiController
                 unset($params['controller']);
                 unset($params['action']);
                 unset($params['access']);
-                if(isset($params['workflowId'])){
-                    return $this->executeWorkflow($params,$params['workflowId']);
+                if(isset($params['instanceId'])){
+                    return $this->executeWorkflow($params,$params['instanceId']);
                 } else {
                     return $this->executeWorkflow($params);
                 }
@@ -51,7 +51,7 @@ class WorkflowInstanceController extends AbstractApiController
     }
     private function executeWorkflow($params,$id = null){
         try{
-            $count = $this->workflowService->executeWorkflow($params,$id);
+            $count = $this->workflowInstanceService->executeWorkflow($params,$id);
         } catch (ValidationException $e){
             $response = ['data' => $params, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);

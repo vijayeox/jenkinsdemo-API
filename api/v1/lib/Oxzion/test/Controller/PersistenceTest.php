@@ -4,7 +4,7 @@ namespace Oxzion\Db\Persistence;
 use Oxzion\Test\ServiceTest;
 use Zend\Db\Adapter\Adapter;
 use Zend\Stdlib\ArrayUtils;
-use Bos\Transaction\TransactionManager;
+use Oxzion\Transaction\TransactionManager;
 use Oxzion\Db\Migration\Migration;
 use Oxzion\Service\AbstractService;
 use Zend\Db\Adapter\AdapterInterface;

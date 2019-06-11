@@ -1,18 +1,19 @@
 <?php
-namespace Bos\Service;
+namespace Oxzion\Service;
 
-use Bos\Model\FileTable;
-use Bos\Model\File;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\ValidationException;
+use Oxzion\Model\FileTable;
+use Oxzion\Model\File;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\ValidationException;
+use Ramsey\Uuid\Uuid;
 use Exception;
 
 class FileService extends AbstractService{
     /**
     * @ignore __construct
     */
-    public function __construct($config, $dbAdapter, FileTable $table){
+    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
@@ -29,13 +30,17 @@ class FileService extends AbstractService{
     *   } </code>
     * @return array Returns a JSON Response with Status Code and Created File.
     */
-    public function createFile(&$data,$workflowInstanceId,$formId){
+    public function createFile(&$data,$workflowInstanceId){
+        print $workflowInstanceId."\n";
+        unset($data['submit']);
+        unset($data['workflowId']);
+        $jsonData = json_encode($data);
+        $data['data'] = $jsonData;
         $data['workflow_instance_id'] = $workflowInstanceId;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['date_modified'] = date('Y-m-d H:i:s');
+        $data['uuid'] = Uuid::uuid4()->getHex();
         $file = new File();
         $file->exchangeArray($data);
         $file->validate();
@@ -43,7 +48,9 @@ class FileService extends AbstractService{
         $this->beginTransaction();
         $count = 0;
         try{
+            // echo "Ceaet file";
             $count = $this->table->save($file);
+            // var_dump($count);
             if($count == 0){
                 $this->rollback();
                 return 0;
@@ -59,6 +66,7 @@ class FileService extends AbstractService{
             }
             $this->commit();
         }catch(Exception $e){
+            print_r($e->getMessage());
             switch (get_class ($e)) {
              case "Oxzion\ValidationException" :
                 $this->rollback();
@@ -80,11 +88,14 @@ class FileService extends AbstractService{
     * @return array Returns a JSON Response with Status Code and Created File.
     */
     public function updateFile(&$data,$id){
+        // print_r(array($data['form_id'],$id));
         $obj = $this->table->fetchAll(array('workflow_instance_id'=>$id,'form_id'=>$data['form_id']));
         if(is_null($obj)){
             return 0;
         }
+        // print_r($obj);
         $fileObject = $obj->toArray();
+        // print_r($fileObject);
         $file = new File();
         $changedArray = array_merge($fileObject[0],$data);
         $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -188,7 +199,8 @@ class FileService extends AbstractService{
         $select->from('ox_field')
         ->columns(array("*"))
         ->join('ox_form_field', 'ox_field.id = ox_form_field.field_id', array(),'left')
-        ->where(array('ox_form_field.form_id' => $formId));
+        ->join('ox_form', 'ox_form.id = ox_form_field.form_id', array(),'left')
+        ->where(array('ox_form.task_id' => $formId));
         $fields = $this->executeQuery($select)->toArray();
         $keyValueFields = array();
         $i=0;

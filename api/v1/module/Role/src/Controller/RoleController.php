@@ -8,7 +8,7 @@ use Oxzion\Model\Role;
 use Oxzion\Model\RoleTable;
 use Oxzion\Service\RoleService;
 use Oxzion\Controller\AbstractApiController;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\InputFilter\Input;
 /**

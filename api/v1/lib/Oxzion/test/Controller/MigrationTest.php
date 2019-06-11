@@ -9,7 +9,7 @@ use PHPUnit\DbUnit\TestCaseTrait;
 use Zend\Db\Adapter\AdapterInterface;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
-use Bos\Transaction\TransactionManager;
+use Oxzion\Transaction\TransactionManager;
 
 class MigrationTest extends ServiceTest {
 //    use TestCaseTrait;

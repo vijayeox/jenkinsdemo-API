@@ -3,7 +3,7 @@ namespace Callback;
 
 use Callback\Controller\TaskCallbackController;
 use Oxzion\Test\ControllerTest;
-use Bos\Db\ModelTable;
+use Oxzion\Db\ModelTable;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use PHPUnit\Framework\TestResult;

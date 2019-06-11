@@ -8,7 +8,7 @@ use Contact\Model\Contact;
 use Contact\Service\ContactService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 
 

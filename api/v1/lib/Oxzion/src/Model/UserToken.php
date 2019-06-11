@@ -1,8 +1,8 @@
 <?php
 namespace Oxzion\Model;
 
-use Bos\Model\Entity;
-use Bos\Db\ModelTable;
+use Oxzion\Model\Entity;
+use Oxzion\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;
 
 class UserToken extends Entity

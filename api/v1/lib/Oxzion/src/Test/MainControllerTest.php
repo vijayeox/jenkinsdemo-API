@@ -10,7 +10,7 @@ use Oxzion\Jwt\JwtHelper;
 use PHPUnit\DbUnit\TestCaseTrait;
 use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;
-use Bos\Transaction\TransactionManager;
+use Oxzion\Transaction\TransactionManager;
 use Zend\Console\Console;
 
 abstract class MainControllerTest extends AbstractHttpControllerTestCase

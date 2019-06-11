@@ -1,12 +1,12 @@
 <?php
 
-namespace Bos\Model;
+namespace Oxzion\Model;
 
-use Bos\Db\ModelTable;
+use Oxzion\Db\ModelTable;
 use Zend\Db\TableGateway\TableGatewayInterface;
-use Bos\Model\Entity;
+use Oxzion\Model\Entity;
 
-class CommentTable extends ModelTable {
+class SubscriberTable extends ModelTable {
     protected $tableGateway;
 	public function __construct(TableGatewayInterface $tableGateway) {
         parent::__construct($tableGateway);

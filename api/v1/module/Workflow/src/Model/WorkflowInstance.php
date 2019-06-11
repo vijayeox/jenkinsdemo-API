@@ -2,8 +2,8 @@
 
 namespace Workflow\Model;
 
-use Bos\Model\Entity;
-use Bos\ValidationException;
+use Oxzion\Model\Entity;
+use Oxzion\ValidationException;
 
 class WorkflowInstance extends Entity {
 
@@ -12,6 +12,7 @@ class WorkflowInstance extends Entity {
         'workflow_id' => NULL,  
         'app_id' => 0,
         'org_id' => 0,
+        'process_instance_id' => NULL,
         'status' => NULL,
         'data' => NULL,
         'date_created' => NULL,  
@@ -21,7 +22,7 @@ class WorkflowInstance extends Entity {
     );
     
     public function validate(){
-        $dataArray = Array("name","date_created","created_by","status");
+        $dataArray = Array("workflow_id", "app_id", "org_id", "process_instance_id", "date_created","created_by","status");
         $this->validateWithParams($dataArray);
     }
 }

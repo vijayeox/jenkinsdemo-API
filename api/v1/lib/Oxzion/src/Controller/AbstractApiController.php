@@ -7,14 +7,14 @@ use Zend\EventManager\Event;
 use Zend\Log\Logger;
 use User\Model\UserTable;
 use Zend\Db\Sql\Sql;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthConstants;
 use Oxzion\Security\SecurityManager;
 use Zend\Mvc\MvcEvent;
-use Bos\Utils\ValidationResult;
+use Oxzion\Utils\ValidationResult;
 use Oxzion\Auth\AuthSuccessListener;
 use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
-use Bos\Auth\AuthContext;
+use Oxzion\Auth\AuthContext;
 
 
 abstract class AbstractApiController extends AbstractApiControllerHelper

@@ -1,8 +1,8 @@
 <?php
 namespace Screen\Model;
-use Bos\Model\Entity;
+use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
-use Bos\Auth\AuthContext;
+use Oxzion\Auth\AuthContext;
 
 class Screenwidget extends Entity{
 

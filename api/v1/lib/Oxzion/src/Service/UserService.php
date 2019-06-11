@@ -1,13 +1,13 @@
 <?php
 namespace Oxzion\Service;
 
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Oxzion\Model\User;
 use Oxzion\Model\UserTable;
 use Oxzion\Utils\BosUtils;
 use Oxzion\Utils\ArrayUtils;
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Oxzion\Service\EmailService;
 use Oxzion\Service\EmailTemplateService;
 use Oxzion\Messaging\MessageProducer;

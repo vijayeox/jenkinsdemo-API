@@ -3,11 +3,10 @@ namespace App\Service;
 
 use App\Model\App;
 use App\Model\AppTable;
-use Bos\Auth\AuthConstants;
-use Bos\Auth\AuthContext;
-use Bos\Service\AbstractService;
-use Bos\Service\UserService;
-use Bos\ValidationException;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Service\AbstractService;
+use Oxzion\ValidationException;
 use Exception;
 use Ramsey\Uuid\Uuid;
 use Oxzion\Utils\FileUtils;
@@ -450,6 +449,6 @@ class AppService extends AbstractService
         return $count;
     }
     public function getAssignments($appId){
-        $assignments = $this->appService->getAssignments($params['appId']);
+        $assignments = $this->workflowService->getAssignments($params['appId']);
     }
 }

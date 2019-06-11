@@ -14,10 +14,7 @@
   "config": {
     "secure-http" :false
   },
-  "repositories": [{
-    "type": "path",
-    "url": "./BOS"
-  },
+  "repositories": [
   {
       "type": "pear",
       "url": "http://pear.horde.org"
@@ -47,7 +44,6 @@
     "pear-pear.horde.org/Horde_Text_Filter": "^2.1",
     "elasticsearch/elasticsearch": "~5.0",
     "guzzlehttp/guzzle": "~6.0",
-    "oxzion/bos": "~1.0",
     "greenlion/php-sql-parser": "^4.1.2",
     "nelexa/zip": "dev-master",
     "stomp-php/stomp-php": "4.*",

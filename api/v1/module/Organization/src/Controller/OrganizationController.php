@@ -3,7 +3,7 @@ namespace Organization\Controller;
 
 use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Model\Organization;
 use Oxzion\Model\OrganizationTable;

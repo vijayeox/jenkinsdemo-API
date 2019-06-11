@@ -3,12 +3,12 @@
 namespace File\Controller;
 
 use Zend\Log\Logger;
-use Bos\Model\CommentTable;
-use Bos\Model\Comment;
-use Bos\Service\CommentService;
+use Oxzion\Model\CommentTable;
+use Oxzion\Model\Comment;
+use Oxzion\Service\CommentService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 
 class CommentController extends AbstractApiController {

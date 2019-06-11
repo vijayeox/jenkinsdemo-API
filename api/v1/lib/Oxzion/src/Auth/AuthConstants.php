@@ -1,5 +1,5 @@
 <?php
-namespace Bos\Auth;
+namespace Oxzion\Auth;
 
 class AuthConstants{
     const AUTH_VERIFICATION_SUCCESS = "AUTH_VERIFICATION_SUCCESS";

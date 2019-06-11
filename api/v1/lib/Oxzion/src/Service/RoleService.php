@@ -1,12 +1,12 @@
 <?php
 namespace Oxzion\Service;
 
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Oxzion\Model\Role;
 use Oxzion\Model\RoleTable;
 use Oxzion\Model\PrivilegeTable;
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Exception;
 use Oxzion\Utils\FilterUtils;
 

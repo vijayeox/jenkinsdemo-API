@@ -1,5 +1,5 @@
 <?php
-namespace Bos\Service;
+namespace Oxzion\Service;
 
 use Zend\Db\Sql\Sql;
 use Zend\Log\Logger;
@@ -8,7 +8,7 @@ use Zend\Log\Writer\Stream;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Adapter\ParameterContainer;
-use Bos\Transaction\TransactionManager;
+use Oxzion\Transaction\TransactionManager;
 
 class AbstractService
 {

@@ -8,7 +8,7 @@ use Group\Model\Group;
 use Group\Service\GroupService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
-use Bos\ValidationException;
+use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 use Oxzion\Service\OrganizationService;
 

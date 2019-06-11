@@ -1,10 +1,10 @@
 <?php
 namespace Oxzion\Service;
 
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\ValidationException;
-use Bos\Service\AbstractService;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\ValidationException;
+use Oxzion\Service\AbstractService;
 use Oxzion\Model\Organization;
 use Oxzion\Model\OrganizationTable;
 use Oxzion\Messaging\MessageProducer;
@@ -180,7 +180,7 @@ class OrganizationService extends AbstractService
         }
          catch (Exception $e) {
             switch (get_class($e)) {
-                case "Bos\ValidationException" :
+                case "Oxzion\ValidationException" :
                     $this->rollback();
                     throw $e;
                     break;

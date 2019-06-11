@@ -1,11 +1,11 @@
 <?php
 namespace Screen\Service;
 
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Screen\Model\ScreenTable;
 use Screen\Model\Screen;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Exception;
 
 class ScreenService extends AbstractService{

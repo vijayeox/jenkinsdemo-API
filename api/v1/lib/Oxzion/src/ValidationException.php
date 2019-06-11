@@ -1,5 +1,5 @@
 <?php
-namespace Bos;
+namespace Oxzion;
 
 class ValidationException extends \Exception{
     private $errors = array();

@@ -1,12 +1,12 @@
 <?php
 namespace Email\Service;
 
-use Bos\Service\AbstractService;
+use Oxzion\Service\AbstractService;
 use Email\Model\DomainTable;
 use Email\Model\Domain;
-use Bos\Auth\AuthContext;
-use Bos\Auth\AuthConstants;
-use Bos\ValidationException;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\ValidationException;
 use Exception;
 
 class DomainService extends AbstractService

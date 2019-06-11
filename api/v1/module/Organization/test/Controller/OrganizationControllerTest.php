@@ -1,7 +1,7 @@
 <?php
 namespace Organization;
 
-use Bos\Db\ModelTable;
+use Oxzion\Db\ModelTable;
 use Zend\Db\Adapter\AdapterInterface;
 use Organization\Controller\OrganizationController;
 use Oxzion\Test\MainControllerTest;

@@ -1,5 +1,5 @@
 <?php
-namespace Bos\Utils;
+namespace Oxzion\Utils;
 
 class ValidationResult {
 	const SUCCESS = 1;

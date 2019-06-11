@@ -4,7 +4,7 @@ namespace Contact;
 use Contact\Controller\ContactController;
 use Contact\Model;
 use Oxzion\Test\ControllerTest;
-use Bos\Db\ModelTable;
+use Oxzion\Db\ModelTable;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use PHPUnit\Framework\TestResult;

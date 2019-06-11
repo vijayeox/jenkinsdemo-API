@@ -32,7 +32,11 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Service\WorkflowInstanceService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\WorkflowInstanceService($container->get('config'), $dbAdapter, $container->get(Model\WorkflowInstanceTable::class));
+                    return new Service\WorkflowInstanceService($container->get('config'), $dbAdapter, 
+                    $container->get(Model\WorkflowInstanceTable::class),
+                    $container->get(\Oxzion\Service\FileService::class),
+                    $container->get(\Oxzion\Service\WorkflowService::class),
+                    $container->get(\Oxzion\Workflow\WorkflowFactory::class));
                 },
                 Model\WorkflowInstanceTable::class => function($container) {
                     $tableGateway = $container->get(Model\WorkflowInstanceTableGateway::class);
