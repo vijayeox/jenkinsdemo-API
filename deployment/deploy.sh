@@ -59,6 +59,7 @@ api()
         rsync -rl --delete api/v1/* /var/www/api/
         ln -s /var/lib/oxzion/api/cache /var/www/api/data/cache
         ln -s /var/lib/oxzion/api/uploads /var/www/api/data/uploads
+        chown www-data:www-data -R /var/www/api
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
         echo -e "${YELLOW}Starting migrations script for API"
         cd /var/www/api
@@ -81,6 +82,7 @@ camel()
         #moving to temp directory and copying required
         cd ${TEMP}
         rsync -rl --delete integrations/camel/* /opt/oxzion/camel/
+	    chown -R oxzion:oxzion /opt/oxzion/camel
         echo -e "${GREEN}Copying Camel Complete!\n${RESET}"
         echo -e "${YELLOW}Starting Camel service"
         systemctl start camel
@@ -98,7 +100,8 @@ calendar()
         echo -e "${RED}CALENDAR was not packaged so skipping it\n${RESET}"
     else
         cd ${TEMP}
-        rsync -rl --delete integrations/eventcalendar/* /var/www/eventcalendar/
+        rsync -rl --delete integrations/eventcalendar/* /var/www/calendar/
+	    chown www-data:www-data -R /var/www/calendar
         echo -e "${GREEN}Copying EventCalendar Complete!"
     fi
 }
@@ -115,7 +118,9 @@ mattermost()
     	systemctl stop mattermost
         echo -e "${YELLOW}Stopped!"
         cd ${TEMP}
+	    rm -R integrations/mattermost/logs
         rsync -rl --delete integrations/mattermost/* /opt/oxzion/mattermost/
+	    chown oxzion:oxzion -R /opt/oxzion/mattermost
         echo -e "${GREEN}Copying Mattermost Complete!"
         echo -e "${GREEN}Starting Mattermost service"
         systemctl start mattermost
@@ -126,17 +131,26 @@ mattermost()
 orocrm()
 {
     cd ${TEMP}
-    echo -e "${YELLOW}Copying OROcrm.."
-    if [ ! -d "./integrations/orocrm" ] ;
+    echo -e "${YELLOW}Copying CRM.."
+    if [ ! -d "./integrations/crm" ] ;
     then
-        echo -e "${RED}OROCRM was not packaged so skipping it\n${RESET}"
+        echo -e "${RED}CRM was not packaged so skipping it\n${RESET}"
     else    
     	cd ${TEMP}
-    	rsync -rl --delete integrations/crm/* /var/www/crm/
-    	echo -e "${GREEN}Copying OROcrm Complete!"
-        echo -e "${YELLOW}Starting migrations script for OROcrm"
-        php integrations/orocrm/bin/console oro:install --env=prod --timeout=30000 --application-url="${appurl}" --organization-name="Vantage Agora" --user-name="admin" --user-email="${email}" --user-firstname="Admin" --user-lastname="User" --user-password="admin" --language=en --formatting-code=en_US
-        echo -e "${GREEN}Migrations Complete!"
+		echo -e "${YELLOW}Installing Assets for CRM"
+		chown ubuntu:ubuntu -R integrations/crm
+		runuser -l ubuntu -c "php ${TEMP}/integrations/crm/bin/console oro:assets:install"
+		mkdir -p integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome
+		cp -R integrations/crm/public/bundles/bowerassets/font-awesome/* integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome/
+		rm -R integrations/crm/var/logs
+	    rsync -rL --delete integrations/crm/var/* /var/www/crm/var/
+		rm -R integrations/crm/var
+		rsync -rl --delete integrations/crm/* /var/www/crm/
+		chown www-data:www-data -R /var/lib/oxzion/crm
+		rsync /var/www/crm/orocrm_supervisor.conf /etc/supervisor/conf.d/
+	    echo -e "${GREEN}Copying CRM Complete!"
+		chown www-data:www-data -R /var/www/crm
+		systemctl restart supervisor
     fi
 }
 #Function to copy rainloop
@@ -149,7 +163,11 @@ rainloop()
         echo -e "${RED}RAINLOOP was not packaged so skipping it\n${RESET}"
     else
     	cd ${TEMP}
+		rsync -rL --delete integrations/rainloop/data/* /var/www/rainloop/data/
+		rm -R integrations/rainloop/data
     	rsync -rl --delete integrations/rainloop/* /var/www/rainloop/
+		chown www-data:www-data -R /var/www/rainloop
+		chown www-data:www-data -R /var/lib/oxzion/rainloop
     	echo -e "${GREEN}Copying Rainloop Complete!"
     fi
 }
