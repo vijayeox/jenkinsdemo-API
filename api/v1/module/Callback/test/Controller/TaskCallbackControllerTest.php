@@ -89,24 +89,6 @@ class TaskCallbackControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testCreateProjectInvalidParameters()
-    {
-        $this->initAuthToken($this->adminUser);
-        $data = ['description' => 'Open project applications','uuid'=>'1'];
-        if(enableCamel==0){ 
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
-                     $mockRestClient->expects('postWithHeader')->with("projects",array("name" => NULL,"description" => "Open project applications","uuid" => "1"))->once()->andThrow($exception);
-                    }
-        $this->dispatch('/callback/task/addproject', 'POST',array(json_encode($data)=>''));
-        $this->assertResponseStatusCode(400);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('addprojectfromcallback');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
-
      protected function setDefaultAsserts()
     {
         $this->assertModuleName('Callback');
