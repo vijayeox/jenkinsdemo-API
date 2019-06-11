@@ -43,8 +43,7 @@
             <directory>./module/Contact/test</directory>
             <directory>./module/Privilege/test</directory>
             <directory>./module/Search/test</directory>
-            <directory>./module/ProspectResearch/test</directory> 
-            <directory>./module/SplashPage/test</directory> 
+            <directory>./module/ProspectResearch/test</directory>
         </testsuite>
 
         <testsuite name="Form File Fixtures">
