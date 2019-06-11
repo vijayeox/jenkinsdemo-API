@@ -65,6 +65,36 @@ To learn how to install Java 8 [click here.](https://www.digitalocean.com/commun
 To learn how to install Docker [click here.](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04)
 
 -------------------------
+<h3>Create oxzion User:
+>sudo adduser oxzion --home /opt/oxzion --shell /usr/sbin/nologin --disabled-login
+>sudo mkdir /opt/oxzion
+
+<h3>Data Folder setup:
+>sudo mkdir -p /var/lib/oxzion/vfs
+>sudo chown oxzion:oxzion -R /var/lib/oxzion/vfs
+>sudo ln -s /var/lib/oxzion/vfs /opt/oxzion/view/vfs
+>sudo mkdir -p /var/log/oxzion/api
+>sudo mkdir /var/www/api/data
+>sudo chown www-data:www-data /var/log/oxzion/api
+>sudo mkdir -p /bar/lib/oxzion/api/cache
+>sudo mkdir -p /bar/lib/oxzion/api/uploads
+>sudo chown www-data:www-data /var/lib/oxzion/api
+>sudo ln -s /var/log/oxzion/api /var/www/api/logs
+>sudo ln -s /var/lib/oxzion/api/cache /var/www/api/data/cache
+>sudo ln -s /var/lib/oxzion/api/uploads /var/www/api/data/uploads
+>sudo mkdir -p /var/lib/oxzion/rainloop
+>sudo chown www-data:www-data -R /var/lib/oxzion/rainloop
+>sudo mkdir -p /var/www/rainloop
+>sudo ln -s /var/lib/oxzion/rainloop /var/www/rainloop/data
+>sudo chown www-data:www-data -R /var/www/rainloop
+>sudo mkdir -p /var/log/oxzion/crm
+>sudo chown www-data:www-data -R /var/log/oxzion/crm
+>sudo mkdir -p /var/lib/oxzion/crm
+>sudo ln -s /var/log/oxzion/crm /var/lib/oxzion/crm/logs
+>sudo chown www-data:www-data -R /var/lib/oxzion/crm
+>sudo mkdir -p /var/www/crm
+>sudo ln -s /var/lib/oxzion/crm /var/www/crm/var
+>sudo chown www-data:www-data -R /var/www/crm
 
 <h3>Step 2: A one-time database setup is required for the following integrations:
 
@@ -74,13 +104,16 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 
 - Use the dump file **_schema.sql_** and **_data.sql_** in **_api/v1/data/schema_** for database creation.
 - A Database Migration should be performed by using the following command &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_[Note: You should be in the oxzion3.0 root folder to perform the command]_
->php integrations/orocrm/bin/console oro:install --env=prod --timeout=30000 --application-url="http://localhost:8075/crm/public" --organization-name="Vantage Agora" --user-name="admin" --user-email="admin@example.com" --user-firstname="Admin" --user-lastname="User" --user-password="admin" --language=en --formatting-code=en_US
+>api/v1/migrations migrate
 
 <h4>OroCRM</h4>
 
 - Create a database  **_oro_crm_** with a user **_crmuser_** and granting all previleges to the user in database.
 -A Database migration should be perform using the following commannd &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_[Note: You should be in the oxzion3.0 root folder to perform the command]_
->api/v1/migrations migrate
+>php integrations/orocrm/bin/console oro:install --env=prod --timeout=30000 --application-url="http://localhost:8075/crm/public" --organization-name="Vantage Agora" --user-name="admin" --user-email="admin@example.com" --user-firstname="Admin" --user-lastname="User" --user-password="admin" --language=en --formatting-code=en_US
+
+sudo apt-get install -y supervisor
+
 <h4>Mattermost</h4>
 
 - Create a database **_mattermost_test_** with user **_mmuser_** and granting all previleges to the user to the database.
