@@ -181,7 +181,7 @@ class RoleService extends AbstractService {
     public function getRole($id) {
         $query = "SELECT * FROM ox_role WHERE ox_role.id =".$id." AND ox_role.org_id=".AuthContext::get(AuthConstants::ORG_ID);
         $result = $this->executeQuerywithParams($query);
-        $queryString = "select ox_role_privilege.id, ox_role_privilege.privilege_name,ox_role_privilege.permission, ox_role_privilege.app_id,ox_app.name from ox_role_privilege,ox_app where ox_role_privilege.role_id = ".$id." AND ox_role_privilege.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_role_privilege.app_id = ox_app.id";
+        $queryString = "select ox_role_privilege.id, ox_role_privilege.privilege_name,ox_role_privilege.permission, ox_role_privilege.app_id,ox_app.name from ox_role_privilege,ox_app where ox_role_privilege.role_id = ".$id." AND ox_role_privilege.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_role_privilege.app_id = ox_app.id order by ox_role_privilege.privilege_name";
         $result1 = $this->executeQuerywithParams($queryString);
         return array('data' => $result->toArray(), 
                      'privileges' => $result1->toArray());
