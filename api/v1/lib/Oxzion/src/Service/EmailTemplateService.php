@@ -21,9 +21,9 @@ class EmailTemplateService extends AbstractService {
     	$dataFolder = $this->config['DATA_FOLDER'];
     	$templateDir = $this->config['TEMPLATE_FOLDER'];
     	if (!file_exists($templateDir)) mkdir($templateDir, 0777, true);
-    	if (!file_exists($cacheDir = $dataFolder.'/cache/')) mkdir($cacheDir, 0777);
-    	if (!file_exists($configsDir = $dataFolder.'/configs/')) mkdir($configsDir, 0777);
-    	if (!file_exists($templatescDir = $dataFolder.'/templates_c/')) mkdir($templatescDir, 0777);
+    	if (!file_exists($cacheDir = $templateDir.'/cache/')) mkdir($cacheDir, 0777);
+    	if (!file_exists($configsDir = $templateDir.'/configs/')) mkdir($configsDir, 0777);
+    	if (!file_exists($templatescDir = $templateDir.'/templates_c/')) mkdir($templatescDir, 0777);
 
 		$this->client = new Smarty();
 		// $this->client->debugging = true;
