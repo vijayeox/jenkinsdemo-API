@@ -1,13 +1,10 @@
 [Unit]
 Description=Oxzion UI
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=oxzionui
 [Service]
 User=oxzion
 # The configuration file application.properties should be here:
 #change this to your workspace
-WorkingDirectory=/opt/oxzion/view
+WorkingDirectory=/opt/oxzion/view/bos
 #path to executable. 
 #executable is a bash script which run the server
 ExecStart=/opt/oxzion/view/init.d/run.sh
@@ -15,5 +12,8 @@ SuccessExitStatus=143
 TimeoutStopSec=10
 Restart=on-failure
 RestartSec=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=oxzionui
 [Install]
 WantedBy=multi-user.target
