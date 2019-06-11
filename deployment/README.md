@@ -95,6 +95,29 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 >sudo mkdir -p /var/www/crm
 >sudo ln -s /var/lib/oxzion/crm /var/www/crm/var
 >sudo chown www-data:www-data -R /var/www/crm
+>sudo mkdir -p /var/log/oxzion/chat
+>sudo chown oxzion:oxzion -R /var/log/oxzion/chat
+>sudo mkdir -p /var/lib/oxzion/chat
+>sudo chown oxzion:oxzion -R /var/lib/oxzion/chat
+>sudo mkdir -p /opt/oxzion/mattermost
+>sudo ln -s /var/log/oxzion/chat /opt/oxzion/mattermost/logs
+>sudo ln -s /var/lib/oxzion/chat /opt/oxzion/mattermost/data
+>sudo chown oxzion:oxzion -R /opt/oxzion/mattermost
+
+<h3> ActiveMq setup
+>curl "https://archive.apache.org/dist/activemq/5.15.6/apache-activemq-5.15.6-bin.tar.gz" -o apache-activemq-5.15.6-bin.tar.gz
+
+>sudo tar xzf apache-activemq-5.15.6-bin.tar.gz -C  /opt
+>sudo ln -s /opt/apache-activemq-5.15.6 /opt/activemq
+>sudo useradd -r -M -d /opt/activemq activemq
+>sudo chown -R activemq:activemq /opt/apache-activemq-5.15.6
+>sudo chown -h activemq:activemq /opt/activemq
+copy the activemq.service to /etc/systemd/system/activemq.service
+>sudo systemctl daemon-reload
+
+<3> Camel setup
+>sudo mkdir /opt/oxzion/camel
+>sudo chown oxzion:oxzion -R /opt/oxzion/camel
 
 <h3>Step 2: A one-time database setup is required for the following integrations:
 
@@ -109,10 +132,30 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 <h4>OroCRM</h4>
 
 - Create a database  **_oro_crm_** with a user **_crmuser_** and granting all previleges to the user in database.
+>sudo mysql -u root -p
+mysql>create database oro_crm;
+mysql>CREATE USER 'crmuser'@'localhost' IDENTIFIED BY '<password>';
+mysql>GRANT ALL PRIVILEGES ON `oro_crm` . * TO 'crmuser'@'localhost' identified by '<password>';
+
 -A Database migration should be perform using the following commannd &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_[Note: You should be in the oxzion3.0 root folder to perform the command]_
->php integrations/orocrm/bin/console oro:install --env=prod --timeout=30000 --application-url="http://localhost:8075/crm/public" --organization-name="Vantage Agora" --user-name="admin" --user-email="admin@example.com" --user-firstname="Admin" --user-lastname="User" --user-password="admin" --language=en --formatting-code=en_US
+
+Ensure the Installed flag in parameters.yml under env folder is initially set to false before you start your build
+>sudo rm -R temp
+>mkdir temp
+>unzip build.zip -d temp
+>cd temp/integrations/crm
+>php bin/console oro:install --env=prod --timeout=30000 --application-url="http://localhost:8075/crm/public" --organization-name="Vantage Agora" --user-name="admin" --user-email="admin@example.com" --user-firstname="Admin" --user-lastname="User" --user-password="admin" --language=en --formatting-code=en_US
+
+If it fails for some reason start with an empy database and remove the cache folder
+>rm -R var/cache/*
+
+After the migration is completed replace the parameters.yml in the env folder from the /var/www/crm/config folder on the instance after deployment
+>cp config/parameters.yml ~/env/integrations/orocrm/config/
 
 sudo apt-get install -y supervisor
+sudo apt-get install redis-server
+sudo apt install php7.0-opcache
+sudo phpenmod opcache
 
 <h4>Mattermost</h4>
 
