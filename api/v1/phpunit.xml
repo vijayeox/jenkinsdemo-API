@@ -14,7 +14,6 @@
             <directory>./module/Announcement/test</directory>
             <directory>./module/Widget/test</directory>
             <directory>./module/Project/test</directory> 
-            <directory>./module/Bookmark/test</directory>
         </testsuite>
         <testsuite name="Roles Fixtures">
             <directory>./module/Role/test</directory>
