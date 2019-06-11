@@ -81,7 +81,6 @@
       "Widget\\": "module/Widget/src/",
       "Screen\\": "module/Screen/src/",
       "Attachment\\": "module/Attachment/src/",
-      "Bookmark\\": "module/Bookmark/src/",
       "App\\": "module/App/src/",
       "Project\\": "module/Project/src/",
       "Role\\": "module/Role/src/",
@@ -94,7 +93,7 @@
       "Mlet\\": "module/Mlet/src/",
       "Messaging\\":"module/Messaging/src/",
       "ProspectResearch\\":"module/ProspectResearch/src/",
-      "Workflow\\":"module/Workflow/src/",
+      "Workflow\\":"module/Workflow/src/", 
       "SplashPage\\":"module/SplashPage/src/"
     }
   },

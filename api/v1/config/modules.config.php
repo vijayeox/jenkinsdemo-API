@@ -27,7 +27,6 @@ return [
     'Widget',
     'Screen',
     'Attachment',
-    'Bookmark',
     'App',
     'Search',
     'Contact',
