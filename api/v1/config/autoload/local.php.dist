@@ -34,5 +34,8 @@ return [
         'password' => $password,
     	'dsn' => 'mysql:dbname=' . $db . ';host=' . $host . ';charset=utf8;username=' . $username . ';password=' . $password,
     ],
-
+     'task' => [
+        'username' => 'apikey',
+        'authToken' => 'Provide the apikey of openproject'
+    ],
 ];

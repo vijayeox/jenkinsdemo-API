@@ -57,6 +57,7 @@
         <const name="enableElastic" value="0"/>
         <const name="enableMattermost" value="0"/>
         <const name="enableActiveMQ" value="0"/>
+        <const name="enableCamel" value="0"/>
         <const name="enableProspectResearch" value="0"/>
 
     </php>

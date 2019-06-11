@@ -13,20 +13,26 @@ namespace Callback\Service;
     {
         protected $dbAdapter;
 
-        public function __construct($config, Logger $log)
-        {
-            parent::__construct($config,null,$log);
+        public function setRestClient($restClient){
+            $this->restClient = $restClient;
         }
 
 
-        public function addProjectToTask($name,$description){
+        public function __construct($config, Logger $log)
+        {
+            parent::__construct($config,null,$log);
+            $taskServerUrl = $this->config['task']['taskServerUrl'];
+            $this->restClient = new RestClient($this->config['task']['taskServerUrl'],array('auth'=>array($this->config['task']['username'],$this->config['task']['authToken'])));
+        }
+
+
+        public function addProjectToTask($name,$description,$uuid){
             try{
-            $headers = $this->getAuthHeader();
-            $response = $this->restClient->postWithHeader('/api/v3/projects', array('name' => $name,'description' => $description));
-            $projectData = json_decode($response['body'],true);
-            return $projectData;
+                $response = $this->restClient->postWithHeader('projects', array('name' => $name,'description' => $description,'uuid' => $uuid));
+                $projectData = json_decode($response['body'],true);
+                return $projectData;
             }catch (\GuzzleHttp\Exception\ClientException $e) {
-            $this->logger->info(TaskService::class."Failed to create new entity");
+                $this->logger->info(TaskService::class."Failed to create new entity".$e);
             }
         } 
 

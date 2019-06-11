@@ -10,7 +10,7 @@ namespace Callback\Controller;
     
     class TaskCallbackController extends AbstractApiControllerHelper {
 
-    	private $taskService;
+        private $taskService;
         protected $log;
         // /**
         // * @ignore __construct
@@ -34,13 +34,13 @@ namespace Callback\Controller;
             return $params;
         }
 
-
         public function addProjectAction(){
            $params = $this->convertParams($this->params()->fromPost());
-            $response = $this->taskService->addProjectToTask($params['name'],$params['description']);
-            if($response){
+           $response = $this->taskService->addProjectToTask($params['name'],$params['description'],$params['uuid']);
+           if($response){
                 $this->log->info(TaskCallbackController::class.":Added project to task");
-                return $this->getSuccessResponseWithData($response);
+                $response = json_decode($response,true);
+                return $this->getSuccessResponseWithData($response['result']);
             }
             return $this->getErrorResponse("Adding Project To Task Failure ", 400);
         }
@@ -55,4 +55,4 @@ namespace Callback\Controller;
         //     return $this->getErrorResponse("Adding Project To Task Failure ", 400);
         // }
         
-	}
+    }
