@@ -8,20 +8,21 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190508071153 extends AbstractMigration
+final class Version20190605112442 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `ox_group` MODIFY `name` varchar(200);");
-    	$this->addSql("ALTER TABLE `ox_group` ADD CONSTRAINT uniq_name UNIQUE (`name`,`org_id`)");
-    	$this->addSql("ALTER TABLE `ox_group` ADD COLUMN  `uuid` varchar(128) AFTER `id`");
+        $this->addSql("ALTER TABLE `ox_file` DROP `name`;");
+        $this->addSql("ALTER TABLE `ox_workflow_instance` MODIFY COLUMN `date_modified` DATETIME NULL;");
+        $this->addSql("ALTER TABLE `ox_workflow_instance` MODIFY COLUMN `modified_by` INT(64) NULL;");
+        $this->addSql("ALTER TABLE `ox_file` MODIFY COLUMN `workflow_instance_id` VARCHAR(128) NOT NULL;");
+
     }
 
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `ox_group` MODIFY `name` varchar(2000);");
-    	$this->addSql("ALTER TABLE `ox_group` DROP COLUMN  `uuid`");
+
     }
 }

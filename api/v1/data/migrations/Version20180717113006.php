@@ -37,19 +37,6 @@ class Version20180717113006 extends AbstractMigration {
                 ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8";
         $this->addSql($sql);
         $this->addSql("ALTER TABLE fields ADD UNIQUE INDEX ix_name (name)");
-        $sql = "INSERT INTO fields (`name`, `text`, `columnname`, `helpertext`, 
-                                    `type`,`options`, `color`, `regexpvalidator`,
-                                    `validationtext`, `specialvalidator`, 
-                                    `expression`, `condition`, `premiumname`, 
-                                    `xflat_parameter`, `esign_parameter`, 
-                                    `field_type`, `category`) 
-                SELECT distinct mf.`name`, `text`, `columnname`, `helpertext`, 
-                                    `type`, `options`, color, regexpvalidator, 
-                                    validationtext, specialvalidator, expression,
-                                    `condition`, premiumname, xflat_parameter,
-                                    esign_parameter, field_type, category from metafields mf
-                                    inner join (select min(id) as id, `name` from metafields group by `name`) uf on uf.id = mf.id";
-        $this->addSql($sql);
     }
 
     /**

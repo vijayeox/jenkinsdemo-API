@@ -15,7 +15,7 @@ final class Version20190227075005 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
     	$this->addSql("CREATE TABLE IF NOT EXISTS `ox_user` (
   			`id` int(11) NOT NULL AUTO_INCREMENT,
-  			`uuid` varchar(100) NOT NULL UNIQUE,
+  			`uuid` varchar(128) NOT NULL UNIQUE,
 			`username` varchar(100) NOT NULL,
 			`password` varchar(32) NOT NULL,
 			`firstname` varchar(50) DEFAULT NULL,

@@ -13,10 +13,10 @@ final class Version20190502101923 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-    	$this->addSql("INSERT INTO `ox_privilege` (`name`,`permission_allowed`,`org_id`,`app_id`) VALUES ('MANAGE_MYAPP',3,NULL,'0fc011f2-00ab-42cc-9de5-747ac6f47a2d');");
-    	$this->addSql("INSERT INTO `ox_privilege` (`name`,`permission_allowed`,`org_id`,`app_id`) VALUES ('MANAGE_MYAPP',3,1,'0fc011f2-00ab-42cc-9de5-747ac6f47a2d');");
-		$this->addSql("INSERT INTO `ox_role_privilege` (`role_id`,`privilege_name`,`permission`,`org_id`,`app_id`) VALUES (1,'MANAGE_MYAPP',3,NULL,'0fc011f2-00ab-42cc-9de5-747ac6f47a2d');");
-		$this->addSql("INSERT INTO `ox_role_privilege` (`role_id`,`privilege_name`,`permission`,`org_id`,`app_id`) VALUES (4,'MANAGE_MYAPP',3,1,'0fc011f2-00ab-42cc-9de5-747ac6f47a2d');");
+    	$this->addSql("INSERT INTO `ox_privilege` (`name`,`permission_allowed`,`org_id`,`app_id`) SELECT 'MANAGE_MYAPP',3,NULL,id from ox_app WHERE name LIKE 'AppBuilder';");
+    	$this->addSql("INSERT INTO `ox_privilege` (`name`,`permission_allowed`,`org_id`,`app_id`) SELECT 'MANAGE_MYAPP',3,1,id from ox_app WHERE name LIKE 'AppBuilder';");
+		$this->addSql("INSERT INTO `ox_role_privilege` (`role_id`,`privilege_name`,`permission`,`org_id`,`app_id`) SELECT 1,'MANAGE_MYAPP',3,NULL,id from ox_app WHERE name LIKE 'AppBuilder';");
+		$this->addSql("INSERT INTO `ox_role_privilege` (`role_id`,`privilege_name`,`permission`,`org_id`,`app_id`) SELECT 4,'MANAGE_MYAPP',3,1,id from ox_app WHERE name LIKE 'AppBuilder';");
 
 		$this->addSql("UPDATE `ox_role_privilege` SET role_id = 1 WHERE org_id IS NULL AND role_id = 4");
 		$this->addSql("UPDATE `ox_role_privilege` SET role_id = 2 WHERE org_id IS NULL AND role_id = 5");

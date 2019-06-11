@@ -22,10 +22,10 @@ final class Version20190429105845 extends AbstractMigration
         $this->addSql("ALTER TABLE `ox_app` ADD COLUMN  `isdefault` TINYINT(1) AFTER `type`");
         $this->addSql("UPDATE `ox_app` SET `isdefault` = 1 WHERE `name` = 'Admin'");
         $this->addSql("UPDATE `ox_app` SET `type` = 1, `isdefault` = 0 WHERE `name` in ('CRM','MailAdmin','AppBuilder')");
-        $this->addSql("UPDATE `ox_app_registry` SET `date_created` = now() WHERE app_id = '946fd092-b4f7-4737-b3f5-14086541492e'");
-    	$this->addSql("INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`) VALUES (1,'0b6f422a-64d9-45a5-8a22-992162845d86',now())");
-    	$this->addSql("INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`) VALUES (1,'0fc011f2-00ab-42cc-9de5-747ac6f47a2d',now())");
-    	$this->addSql("INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`) VALUES (1,'25898992-85e8-492e-9705-5e39340c0cc9',now())");
+        $this->addSql("UPDATE `ox_app_registry` SET `date_created` = now() WHERE app_id = (SELECT id from ox_app WHERE name LIKE 'Admin')");
+    	$this->addSql("INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`) SELECT 1,id,now() from ox_app WHERE name LIKE 'MailAdmin'");
+    	$this->addSql("INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`) SELECT 1,id,now() from ox_app WHERE name LIKE 'AppBuilder'");
+    	$this->addSql("INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`) SELECT 1,id,now() from ox_app WHERE name LIKE 'CRM'");
     }
 
     public function down(Schema $schema) : void
@@ -40,7 +40,7 @@ final class Version20190429105845 extends AbstractMigration
     	$this->addSql("UPDATE `ox_app` SET `type` = NULL WHERE `name` in ('CRM','MailAdmin')");
     	$this->addSql("ALTER TABLE `ox_app` DROP COLUMN  `isdefault`");
 
-    	$this->addSql("UPDATE `ox_app_registry` SET `date_created` = NULL WHERE app_id = '946fd092-b4f7-4737-b3f5-14086541492e'");
-    	$this->addSql("DELETE from `ox_app_registry` where `app_id` in ('0b6f422a-64d9-45a5-8a22-992162845d86','0fc011f2-00ab-42cc-9de5-747ac6f47a2d','25898992-85e8-492e-9705-5e39340c0cc9')");
+    	$this->addSql("UPDATE `ox_app_registry` SET `date_created` = NULL WHERE app_id = (SELECT id from ox_app WHERE name LIKE 'Admin')");
+    	$this->addSql("DELETE from `ox_app_registry` where `app_id` in (SELECT id from ox_app)");
     }
 }

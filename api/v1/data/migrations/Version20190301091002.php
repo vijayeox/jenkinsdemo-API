@@ -21,7 +21,7 @@ final class Version20190301091002 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql("CREATE TABLE IF NOT EXISTS `ox_email_domain` (
                   `id` int(11) NOT NULL AUTO_INCREMENT,
-                  `uuid` varchar(45) DEFAULT NULL,
+                  `uuid` varchar(128) DEFAULT NULL,
                   `name` varchar(1000) NOT NULL,
                   `imap_server` varchar(1000) NOT NULL,
                   `imap_port` varchar(1000) NOT NULL DEFAULT '143',

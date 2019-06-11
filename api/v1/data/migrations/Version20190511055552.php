@@ -13,9 +13,9 @@ final class Version20190511055552 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-    	$this->addSql("CREATE TABLE  IF NOT EXISTS `ox_workflow_instance` ( `id` INT(32) NOT NULL AUTO_INCREMENT, `workflow_id` int(64) NOT NULL , `app_id` INT(64) NOT NULL , `org_id` INT(64) NULL , `status` VARCHAR(500) NULL ,`data` TEXT NULL ,
+    	$this->addSql("CREATE TABLE  IF NOT EXISTS `ox_workflow_instance` ( `id` INT(32) NOT NULL AUTO_INCREMENT, `workflow_id` int(64) NOT NULL , `app_id` INT(11) NOT NULL , `org_id` INT(64) NULL , `status` VARCHAR(500) NULL ,`data` TEXT NULL ,
 		  `date_created` DATETIME NOT NULL,
-		  `date_modified` DATETIME NOT NULL, `created_by` INT(64) NOT NULL , `modified_by` INT(64) NOT NULL , PRIMARY KEY ( `id` ) ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
+		  `date_modified` DATETIME NOT NULL, `created_by` INT(64) NOT NULL , `modified_by` INT(64) NOT NULL , PRIMARY KEY ( `id` ),FOREIGN KEY (`app_id`) REFERENCES ox_app(`id`) ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
     	$this->addSql("ALTER TABLE `ox_file` ADD COLUMN `workflow_instance_id` int(32) ");
         $this->addSql("ALTER TABLE `ox_field` ADD COLUMN `template` TEXT NULL");
         $this->addSql("ALTER TABLE `ox_file` DROP COLUMN `status`");

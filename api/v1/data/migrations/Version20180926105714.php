@@ -15,33 +15,40 @@ final class Version20180926105714 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("CREATE TABLE IF NOT EXISTS  `ox_app` (
 		  `id` INT NOT NULL AUTO_INCREMENT,
-		  `name` VARCHAR(200) NOT NULL COMMENT '	',
-		  `uuid` varchar(20) NOT NULL,
-		  `description` LONGTEXT NOT NULL,
-		  `type` VARCHAR(200) NOT NULL,
-		  `logo` VARCHAR(200) NULL,
-		  `date_created` DATETIME NOT NULL,
-		  `date_modified` DATETIME NOT NULL,
+    		`name` varchar(200) NOT NULL,
+			`uuid` varchar(128) NOT NULL,
+			`description` TEXT DEFAULT NULL,
+			`type` varchar(255) NOT NULL,
+			`logo` varchar(255) NULL,
+			`category` varchar(255) NOT NULL,
+			`date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+			`date_modified`  DATETIME,
+			`created_by` INT(32) NOT NULL DEFAULT '1',
+			`modified_by` INT(32) ,
+			`isdeleted` BOOLEAN DEFAULT false ,
 		  PRIMARY KEY (`id`));");
 
         $this->addSql("CREATE TABLE IF NOT EXISTS  `ox_app_registry` (
 		  `id` INT NOT NULL AUTO_INCREMENT,
 		  `org_id` INT NOT NULL,
 		  `app_id` INT NOT NULL,
-		  `date_created` DATETIME NOT NULL,
-		  `date_modified` DATETIME NOT NULL,
-		  PRIMARY KEY (`id`));
+		  `date_created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		  `date_modified` DATETIME NULL,
+		  PRIMARY KEY (`id`),
+		  FOREIGN KEY (`app_id`) REFERENCES ox_app(`id`));
 		");
 
         $this->addSql("ALTER TABLE `ox_privilege` 
-			ADD COLUMN `app_id` INT(32) NULL AFTER `org_id`");
+			ADD COLUMN `app_id` INT(11) NULL AFTER `org_id`,
+			ADD CONSTRAINT FOREIGN KEY (`app_id`) REFERENCES ox_app(`id`)");
 
         $this->addSql("ALTER TABLE `ox_app` 
 			CHANGE COLUMN `uuid` `uuid` VARCHAR(200) NOT NULL");
 
         $this->addSql("ALTER TABLE `ox_role_privilege` 
 			CHANGE COLUMN `org_id` `org_id` INT(32) NULL ,
-			ADD COLUMN `app_id` INT(32) NULL AFTER `org_id`;
+			ADD COLUMN `app_id` INT(11) NULL AFTER `org_id`,
+			ADD CONSTRAINT FOREIGN KEY (`app_id`) REFERENCES ox_app(`id`);
 			");
     }
 

@@ -28,7 +28,7 @@ final class Version20181106182324 extends AbstractMigration
 			 PRIMARY KEY (`id`)
 			) ENGINE=MyISAM AUTO_INCREMENT=1835 DEFAULT CHARSET=latin1;");
         $this->addSql("ALTER TABLE `ox_organization` ADD UNIQUE `orgIdIndex` (`id`);");
-        $this->addSql("INSERT INTO `ox_organization` (`id`,`name`,`address`,`city`,`state`,`zip`,`logo`,`labelfile`,`languagefile`,`theme`,`status`) SELECT `id`,`name`,`address`,`city`,`state`,`zip`,`logo`,`labelfile`,`languagefile`,`themes`,`status` from `organizations`");
+        $this->addSql("INSERT INTO `ox_organization` (`id`,`name`,`address`,`city`,`state`,`zip`,`logo`,`labelfile`,`languagefile`,`theme`,`status`) values (1, 'Cleveland Cavaliers.', 'King James Street', 'Cleveland', 'OH', 42123, '', 'en', 'en', 1, 'Active')");
         $this->addSql("INSERT INTO ox_privilege (name,permission_allowed) values ('MANAGE_ORGANIZATION',15);");
         $this->addSql("INSERT INTO ox_role_privilege (role_id,privilege_name,permission) values (1, 'MANAGE_ORGANIZATION',15);");
     }
