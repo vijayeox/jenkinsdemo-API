@@ -184,7 +184,9 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_project'));
         if(enableActiveMQ == 0){
              $mockMessageProducer = $this->getMockMessageProducer();
-             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname'=> 'Cleveland Black','projectname' => 'Test Project 3')),'PROJECT_ADDED')->once()->andReturn();
+             //Message to be sent to Mockery => json_encode(array('orgname'=> 'Cleveland Black','projectname' => 'Test Project 3','description' => 'Project Description','uuid' => '')
+             // Since value of uuid changes during each project creation Mockery Message is set to Mockery::any()
+             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'PROJECT_ADDED')->once()->andReturn();
         }
         $this->dispatch('/project', 'POST', $data);
         $this->assertResponseStatusCode(201);

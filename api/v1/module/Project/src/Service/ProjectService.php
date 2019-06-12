@@ -130,7 +130,7 @@ class ProjectService extends AbstractService {
 			$this->rollback();
 			return 0;
         }
-        $this->messageProducer->sendTopic(json_encode(array('orgname'=>  $org['name'],'projectname' => $data['name'])),'PROJECT_ADDED');
+        $this->messageProducer->sendTopic(json_encode(array('orgname'=>  $org['name'],'projectname' => $data['name'],'description' => $data['description'],'uuid' => $data['uuid'])),'PROJECT_ADDED');
 		return $count;
 	}
 
