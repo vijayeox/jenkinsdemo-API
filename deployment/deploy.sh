@@ -82,7 +82,7 @@ camel()
         #moving to temp directory and copying required
         cd ${TEMP}
         rsync -rl --delete integrations/camel/* /opt/oxzion/camel/
-	    chown -R oxzion:oxzion /opt/oxzion/camel
+	chown -R oxzion:oxzion /opt/oxzion/camel
         echo -e "${GREEN}Copying Camel Complete!\n${RESET}"
         echo -e "${YELLOW}Starting Camel service"
         systemctl start camel
@@ -101,7 +101,7 @@ calendar()
     else
         cd ${TEMP}
         rsync -rl --delete integrations/eventcalendar/* /var/www/calendar/
-	    chown www-data:www-data -R /var/www/calendar
+	chown www-data:www-data -R /var/www/calendar
         echo -e "${GREEN}Copying EventCalendar Complete!"
     fi
 }
@@ -118,9 +118,9 @@ mattermost()
     	systemctl stop mattermost
         echo -e "${YELLOW}Stopped!"
         cd ${TEMP}
-	    rm -R integrations/mattermost/logs
+	rm -R integrations/mattermost/logs
         rsync -rl --delete integrations/mattermost/* /opt/oxzion/mattermost/
-	    chown oxzion:oxzion -R /opt/oxzion/mattermost
+	chown oxzion:oxzion -R /opt/oxzion/mattermost
         echo -e "${GREEN}Copying Mattermost Complete!"
         echo -e "${GREEN}Starting Mattermost service"
         systemctl start mattermost
@@ -137,20 +137,21 @@ orocrm()
         echo -e "${RED}CRM was not packaged so skipping it\n${RESET}"
     else    
     	cd ${TEMP}
-		echo -e "${YELLOW}Installing Assets for CRM"
-		chown ubuntu:ubuntu -R integrations/crm
-		runuser -l ubuntu -c "php ${TEMP}/integrations/crm/bin/console oro:assets:install"
-		mkdir -p integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome
-		cp -R integrations/crm/public/bundles/bowerassets/font-awesome/* integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome/
-		rm -R integrations/crm/var/logs
-	    rsync -rL --delete integrations/crm/var/* /var/www/crm/var/
-		rm -R integrations/crm/var
-		rsync -rl --delete integrations/crm/* /var/www/crm/
-		chown www-data:www-data -R /var/lib/oxzion/crm
-		rsync /var/www/crm/orocrm_supervisor.conf /etc/supervisor/conf.d/
-	    echo -e "${GREEN}Copying CRM Complete!"
-		chown www-data:www-data -R /var/www/crm
-		systemctl restart supervisor
+	echo -e "${YELLOW}Installing Assets for CRM"
+	chown ubuntu:ubuntu -R integrations/crm
+	runuser -l ubuntu -c "php ${TEMP}/integrations/crm/bin/console oro:assets:install"
+	mkdir -p integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome
+	cp -R integrations/crm/public/bundles/bowerassets/font-awesome/* integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome/
+	rm -R integrations/crm/var/logs
+    	rsync -rL --delete integrations/crm/var/* /var/www/crm/var/
+	rm -R integrations/crm/var
+	rsync -rl --delete integrations/crm/* /var/www/crm/
+	chown www-data:www-data -R /var/lib/oxzion/crm
+	rsync /var/www/crm/orocrm_supervisor.conf /etc/supervisor/conf.d/
+    	echo -e "${GREEN}Copying CRM Complete!"
+	chown www-data:www-data -R /var/www/crm
+	rm -R /var/www/crm/var/cache/*
+	systemctl restart supervisor
     fi
 }
 #Function to copy rainloop
@@ -163,11 +164,11 @@ rainloop()
         echo -e "${RED}RAINLOOP was not packaged so skipping it\n${RESET}"
     else
     	cd ${TEMP}
-		rsync -rL --delete integrations/rainloop/data/* /var/www/rainloop/data/
-		rm -R integrations/rainloop/data
+	rsync -rL --delete integrations/rainloop/data/* /var/www/rainloop/data/
+	rm -R integrations/rainloop/data
     	rsync -rl --delete integrations/rainloop/* /var/www/rainloop/
-		chown www-data:www-data -R /var/www/rainloop
-		chown www-data:www-data -R /var/lib/oxzion/rainloop
+	chown www-data:www-data -R /var/www/rainloop
+	chown www-data:www-data -R /var/lib/oxzion/rainloop
     	echo -e "${GREEN}Copying Rainloop Complete!"
     fi
 }
