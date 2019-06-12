@@ -15,4 +15,4 @@ if [[ $# < 1 ]]; then
     exit 1
 fi
 
-vendor/bin/doctrine-migrations migrations:$* --db-configuration migration-db.php --configuration Migrations.yml 
+vendor/bin/doctrine-migrations -n migrations:$* --db-configuration migration-db.php --configuration Migrations.yml 
