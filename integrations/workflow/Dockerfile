@@ -18,7 +18,7 @@ RUN apk add --no-cache \
 
 COPY camunda-tomcat.sh /tmp/
 
-COPY ./IdentityService/dist/identity_plugin.jar /camunda/lib/
+#COPY ./IdentityService/dist/identity_plugin.jar /camunda/lib/
 
 ARG CAMUNDA_REPO="https://camunda.org/release/camunda-bpm/tomcat/7.9/"
 
