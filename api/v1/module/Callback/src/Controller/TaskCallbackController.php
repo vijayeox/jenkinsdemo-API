@@ -39,20 +39,29 @@ namespace Callback\Controller;
            $response = $this->taskService->addProjectToTask($params['name'],$params['description'],$params['uuid']);
            if($response){
                 $this->log->info(TaskCallbackController::class.":Added project to task");
-                $response = json_decode($response,true);
-                return $this->getSuccessResponseWithData($response['result']);
+                return $this->getSuccessResponseWithData($response['data']);
             }
             return $this->getErrorResponse("Adding Project To Task Failure ", 400);
         }
 
-        // public function deleteProjectAction(){
-        //    $params = $this->convertParams($this->params()->fromPost());
-        //     $response = $this->taskService->addUserToTask($params['name'],$params['description']);
-        //     if($response){
-        //         $this->log->info(TaskCallbackController::class.":Added project to task");
-        //         return $this->getSuccessResponseWithData($response);
-        //     }
-        //     return $this->getErrorResponse("Adding Project To Task Failure ", 400);
-        // }
+        public function deleteProjectAction(){
+           $params = $this->convertParams($this->params()->fromPost());
+           $response = $this->taskService->deleteProjectFromTask($params['uuid']);
+            if($response){
+                $this->log->info(TaskCallbackController::class.":Project Deleted Successfully");
+                return $this->getSuccessResponseWithData($response['data']);
+            }
+            return $this->getErrorResponse("Delete Project From Task Failure ", 400);
+        }
+
+        public function updateProjectAction(){
+           $params = $this->convertParams($this->params()->fromPost());
+           $response = $this->taskService->updateProjectInTask($params['name'],$params['description'],$params['uuid']);
+            if($response){
+                $this->log->info(TaskCallbackController::class.":Project Updated Successfully");
+                return $this->getSuccessResponseWithData($response['data']);
+            }
+            return $this->getErrorResponse("Update Project Failed ", 400);
+        }
         
     }

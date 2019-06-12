@@ -6,7 +6,7 @@ use GuzzleHttp\Psr7\MultipartStream;
 class RestClient{
   private $client;
   public function __construct($baseUrl,$params=array()){
-    $this->client = new Client(array_merge($params,['base_uri' => $baseUrl,'timeout'  => 10.0]));
+    $this->client = new Client(array_merge(['base_uri' => $baseUrl,'timeout'  => 10.0],$params));
   }
   public function get($url,$params=array(),$headers=null){
     $payload = array();
@@ -16,8 +16,7 @@ class RestClient{
     if(isset($headers) && !empty($headers)){
         $payload['headers'] = $headers;
     }
-
-    $response = $this->client->request('GET',$baseUrl.$url, $payload);
+    $response = $this->client->request('GET',$url, $payload);
     
     return $response->getBody()->getContents();
   }
@@ -29,7 +28,8 @@ class RestClient{
     if(isset($headers) && !empty($headers)){
         $payload['headers'] = $headers;
     }
-    $response = $this->client->request('DELETE',$baseUrl.$url,$payload);
+    print_r($baseUrl);
+    $response = $this->client->request('DELETE',$url,$payload);
     return $response->getBody()->getContents();
   }
   public function postMultiPart($url,$formParams=array(),$fileParams=array()){
@@ -62,6 +62,7 @@ class RestClient{
     }
   }
   public function postWithHeader($url,$formParams=array(),$headers=array()){
+
     try {
       $response = $this->client->request('POST', $url,['headers' => $headers,'json' => $formParams]);
         return array('body'=>$response->getBody()->getContents(),'headers'=>$response->getHeaders());
@@ -69,6 +70,27 @@ class RestClient{
         return 0;
     }
   }
+
+  public function deleteWithHeader($url,$formParams=array(),$headers=array()){
+
+    try {
+      $response = $this->client->request('DELETE', $url,['headers' => $headers,'json' => $formParams]);
+        return array('body'=>$response->getBody()->getContents(),'headers'=>$response->getHeaders());
+    } catch(Exception $e){
+        return 0;
+    }
+  }
+
+  public function updateWithHeader($url,$formParams=array(),$headers=array()){
+
+    try {
+      $response = $this->client->request('PUT', $url,['headers' => $headers,'json' => $formParams]);
+        return array('body'=>$response->getBody()->getContents(),'headers'=>$response->getHeaders());
+    } catch(Exception $e){
+        return 0;
+    }
+  }
+
   public function put($url,$params=array(),$headers=null){
     $payload = array();
     if(isset($params) && !empty($params)){
@@ -77,7 +99,7 @@ class RestClient{
     if(isset($headers) && !empty($headers)){
         $payload['headers'] = $headers;
     }
-    $response = $this->client->request('PUT',$baseUrl.$url,$payload);
+    $response = $this->client->request('PUT',$url,$payload);
     return $response->getBody()->getContents();
   }
 }

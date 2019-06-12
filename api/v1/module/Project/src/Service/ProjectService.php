@@ -157,7 +157,7 @@ class ProjectService extends AbstractService {
         	$this->rollback();
         	return 0;
         }
-        $this->messageProducer->sendTopic(json_encode(array('orgname'=> $org['name'],'old_projectname' => $obj->toArray()['name'],'new_projectname' => $data['name'])),'PROJECT_UPDATED');
+        $this->messageProducer->sendTopic(json_encode(array('orgname'=> $org['name'],'old_projectname' => $obj->toArray()['name'],'new_projectname' => $data['name'],'description' => $data['description'],'uuid' => $data['uuid'])),'PROJECT_UPDATED');
         return $count;
     }
 
@@ -186,7 +186,7 @@ class ProjectService extends AbstractService {
             $this->rollback();
             return 0;
         }
-        $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $data['name'])),'PROJECT_DELETED');
+        $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $data['name'],'uuid' => $data['uuid'])),'PROJECT_DELETED');
         return $count;
     }
 

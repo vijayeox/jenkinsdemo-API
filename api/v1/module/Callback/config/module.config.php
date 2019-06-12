@@ -40,16 +40,6 @@ return [
                     ],
                 ],
             ],
-            'addcallback' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/callback/chat/addorg',
-                    'defaults' => [
-                        'controller' => Controller\ChatCallbackController::class,
-                        'action' => 'addOrg',
-                    ],
-                ],
-            ],
             'updatecallback' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -147,6 +137,26 @@ return [
                     'defaults' => [
                         'controller' => Controller\TaskCallbackController::class,
                         'action' => 'addProject',
+                    ],
+                ],
+            ],
+            'deleteprojectfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/deleteproject',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'deleteProject',
+                    ],
+                ],
+            ],
+            'updateprojectfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/updateproject',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'updateProject',
                     ],
                 ],
             ],

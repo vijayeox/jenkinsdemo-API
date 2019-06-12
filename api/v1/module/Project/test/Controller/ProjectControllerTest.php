@@ -236,7 +236,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black','old_projectname'=> 'Test Project 1','new_projectname' => 'Test Project')),'PROJECT_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black','old_projectname'=> 'Test Project 1','new_projectname' => 'Test Project','description' => 'Project Description','uuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')),'PROJECT_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'PUT', null);
         $this->assertResponseStatusCode(200);
@@ -282,7 +282,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 2')),'PROJECT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 2','uuid' => 'ced672bb-fe33-4f0a-b153-f1d182a02603')),'PROJECT_DELETED')->once()->andReturn();
         }
         $this->dispatch('/project/ced672bb-fe33-4f0a-b153-f1d182a02603', 'DELETE');
         $this->assertResponseStatusCode(200);

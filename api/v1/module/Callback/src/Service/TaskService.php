@@ -36,4 +36,25 @@ namespace Callback\Service;
             }
         } 
 
+
+        public function deleteProjectFromTask($uuid){
+            try{
+                $response = $this->restClient->deleteWithHeader('projects/'.$uuid);
+                $projectData = json_decode($response['body'],true);
+                return $projectData;
+            }catch (\GuzzleHttp\Exception\ClientException $e) {
+                $this->logger->info(TaskService::class."Failed to Delete entity".$e);
+            }
+        }
+
+        public function updateProjectInTask($name,$description,$uuid){
+            try{
+                $response = $this->restClient->updateWithHeader('projects/'.$uuid,array('name' => $name,'description' => $description));
+                $projectData = json_decode($response['body'],true);
+                return $projectData;
+            }catch (\GuzzleHttp\Exception\ClientException $e) {
+                $this->logger->info(TaskService::class."Failed to Update entity".$e);
+            }
+        } 
+
     }
