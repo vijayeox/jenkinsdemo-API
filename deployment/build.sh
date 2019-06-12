@@ -70,8 +70,7 @@ package()
     	echo -e "${RED}'build.zip' exist! Removing it to avoid conflict.${RESET}"
         rm ../build.zip
     fi
-    zip -ry ../build.zip . -x *node_modules/\*
-    zip -ur ../build.zip view/bos/node_modules/
+    zip -ry ../build.zip . 
     echo -e "${GREEN}Packaging Complete :)${RESET}"
     #Doing secure copy to dev3 server
     cd ${OXHOME}
@@ -84,17 +83,18 @@ api()
 {   
     cd ${OXHOME}
     echo -e "${YELLOW}Creating directory /build/api/v1...${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
+    scp -i ${PEM} -r ${SERVER}:env/api/v1/config/autoload/local.php api/v1/config/autoload/
+    echo -e "${GREEN}Copying Completed!${RESET}"
+    #building API
+    cd api/v1
+    echo -e "${YELLOW}Building API....${RESET}"
+    docker run -t -v ${PWD}:/var/www v1_zf composer install
+    cd ${OXHOME}
     mkdir -p build/api/v1
     #copy contents of ap1v1 to build
     echo -e "${YELLOW}Copying Api/v1....${RESET}"
-    cp -R api/v1 build/api/
-    echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/api/v1/config/autoload/local.php build/api/v1/config/autoload/
-    echo -e "${GREEN}Copying Completed!${RESET}"
-    #building API
-    cd build/api/v1
-    echo -e "${YELLOW}Building API....${RESET}"
-    docker run -t -v ${PWD}:/var/www v1_zf composer install
+    rsync -rl --delete api/v1 build/api/
     echo -e "${GREEN}Building API Completed!${RESET}"
 }
 camel()
@@ -181,18 +181,22 @@ view()
 {   
     cd ${OXHOME}
     echo -e "${YELLOW}Creating directory /build/view...${RESET}"
-    mkdir -p build/view
-    #copy contents of view to build
-    echo -e "${YELLOW}Copying View. Please wait this may take sometime....${RESET}"
-    rsync -rv --exclude=node_modules ./view ./build/
-    echo -e "${GREEN}Copying View Completed!${RESET}"
-    #building UI/view folder
-    cd build/view
+    cd view
     echo -e "${YELLOW}Build UI/view${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/view/* ./                                        
     docker run -t -v ${PWD}:/app -p 8081:8081 view ./dockerbuild.sh
     echo -e "${GREEN}Building UI/view Completed!${RESET}"
+    cd ..
+    #copy contents of view to build
+    mkdir -p build/view
+    echo -e "${YELLOW}Copying View. Please wait this may take sometime....${RESET}"
+    rsync -rl --exclude=node_modules ./view ./build/
+    mkdir -p ./build/view/bos/node_modules
+    rsync -rl --delete ./view/bos/node_modules/* ./build/view/bos/node_modules/
+    echo -e "${GREEN}Copying View Completed!${RESET}"
+    #building UI/view folder
+    
 }
 workflow()
 {
