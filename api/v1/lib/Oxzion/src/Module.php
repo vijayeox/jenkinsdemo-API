@@ -47,7 +47,7 @@ class Module {
                 },
                 \Oxzion\Service\FileService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class));
+                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class),$container->get(\Oxzion\Service\FormService::class));
                 },
                 Service\RoleService::class => function($container){
                     return new Service\RoleService(
