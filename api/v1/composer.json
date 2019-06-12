@@ -89,8 +89,7 @@
       "Mlet\\": "module/Mlet/src/",
       "Messaging\\":"module/Messaging/src/",
       "ProspectResearch\\":"module/ProspectResearch/src/",
-      "Workflow\\":"module/Workflow/src/", 
-      "SplashPage\\":"module/SplashPage/src/"
+      "Workflow\\":"module/Workflow/src/"
     }
   },
   "autoload-dev": {
