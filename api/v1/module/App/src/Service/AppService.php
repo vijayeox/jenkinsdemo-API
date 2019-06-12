@@ -52,7 +52,7 @@ class AppService extends AbstractService
     public function getApps()
     {
         $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap
-        left join ox_app_registry as ar on ap.uuid = ar.app_id";
+        left join ox_app_registry as ar on ap.id = ar.app_id";
         $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.status!=1";
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $resultSet->toArray();
@@ -61,7 +61,7 @@ class AppService extends AbstractService
     public function getApp($id)
     {
         $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap
-        left join ox_app_registry as ar on ap.uuid = ar.app_id";
+        left join ox_app_registry as ar on ap.id = ar.app_id";
         $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.status!=1 AND ap.id =" . $id;
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $resultSet->toArray();
