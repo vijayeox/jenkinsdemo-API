@@ -428,7 +428,7 @@ class AppService extends AbstractService
                     $count += $this->table->save($form);
                 }
             }
-            $query = "SELECT uuid from `ox_app` WHERE isdefault = 1";
+            $query = "SELECT id from `ox_app` WHERE isdefault = 1";
             $selectquery = $this->executeQuerywithParams($query)->toArray();
             $idList = array_unique(array_map('current', $selectquery));
 
@@ -442,6 +442,7 @@ class AppService extends AbstractService
 
             $this->commit();
         } catch (Exception $e) {
+            // print_r($e->getMessage());
             $this->rollback();
             return 0;
         }
