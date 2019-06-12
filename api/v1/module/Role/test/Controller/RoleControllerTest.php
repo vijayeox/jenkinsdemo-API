@@ -89,7 +89,7 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(9, count($content['data']));
+        $this->assertEquals(10, count($content['data']));
         foreach ($content['data'] as $key => $val) {
             if($val['privilege_name'] == "MANAGE_ANNOUNCEMENT"){
                 $this->assertEquals($val['permission'], 3);
@@ -165,9 +165,9 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertEquals($content['data']['privileges'][0]['id'], 1);
         $this->assertEquals($content['data']['privileges'][0]['privilege_name'], 'MANAGE_ANNOUNCEMENT');
         $this->assertEquals($content['data']['privileges'][0]['permission'], 3);
-        $this->assertEquals($content['data']['privileges'][3]['id'], 16);
-        $this->assertEquals($content['data']['privileges'][3]['privilege_name'], 'MANAGE_GROUP');
-        $this->assertEquals($content['data']['privileges'][3]['permission'], 15);
+        $this->assertEquals($content['data']['privileges'][4]['id'], 16);
+        $this->assertEquals($content['data']['privileges'][4]['privilege_name'], 'MANAGE_GROUP');
+        $this->assertEquals($content['data']['privileges'][4]['permission'], 15);
     }
     public function testGetNotFound(){
         $this->initAuthToken($this->adminUser);
