@@ -47,6 +47,7 @@ To learn how to install Node.js [click here.](https://nodesource.com/blog/instal
 <h4> PhP 7.x: </h4>
 
 To learn how to install PhP [click here.](https://tecadmin.net/install-php-7-on-ubuntu/)
+Set the memory limit in php.ini to atleast 512MB and restart apache
 
 <h4> Apache 2.4+: </h4>
 
@@ -150,6 +151,8 @@ If it fails for some reason start with an empy database and remove the cache fol
 >rm -R var/cache/*
 
 After the migration is completed replace the parameters.yml in the env folder from the /var/www/crm/config folder on the instance after deployment
+>sudo cp config/parameters.yml /var/www/crm/config/
+>sudo chown www-data:www-data /var/www/crm/config/parameters.yml
 >cp config/parameters.yml ~/env/integrations/orocrm/config/
 
 sudo apt-get install -y supervisor
