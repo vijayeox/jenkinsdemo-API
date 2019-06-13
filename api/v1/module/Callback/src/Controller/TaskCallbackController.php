@@ -36,7 +36,7 @@ namespace Callback\Controller;
 
         public function addProjectAction(){
            $params = $this->convertParams($this->params()->fromPost());
-           $response = $this->taskService->addProjectToTask($params['name'],$params['description'],$params['uuid']);
+           $response = $this->taskService->addProjectToTask($params['projectname'],$params['description'],$params['uuid']);
            if($response){
                 $this->log->info(TaskCallbackController::class.":Added project to task");
                 return $this->getSuccessResponseWithData($response['data']);
@@ -56,7 +56,7 @@ namespace Callback\Controller;
 
         public function updateProjectAction(){
            $params = $this->convertParams($this->params()->fromPost());
-           $response = $this->taskService->updateProjectInTask($params['name'],$params['description'],$params['uuid']);
+           $response = $this->taskService->updateProjectInTask($params['new_projectname'],$params['description'],$params['uuid']);
             if($response){
                 $this->log->info(TaskCallbackController::class.":Project Updated Successfully");
                 return $this->getSuccessResponseWithData($response['data']);
