@@ -15,11 +15,11 @@ use Zend\Console\Console;
 
 abstract class MainControllerTest extends AbstractHttpControllerTestCase
 {
-    protected $adminUser = 'bharatg'; //TODO Need to put as global setup
+    protected $adminUser = 'bharatgtest'; //TODO Need to put as global setup
     protected $adminUserId = 1;
-    protected $employeeUser = 'karan';
+    protected $employeeUser = 'karantest';
     protected $employeeUserId = 2;
-    protected $managerUser = 'rakshith';
+    protected $managerUser = 'rakshithtest';
     protected $managerUserId = 3;
     protected $noUser = 'admin';
     protected $noUserId = 0;

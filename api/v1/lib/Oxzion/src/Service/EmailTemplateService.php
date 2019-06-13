@@ -33,7 +33,7 @@ class EmailTemplateService extends AbstractService {
 		$this->client->setCompileDir($templatescDir);
 		// $this->testInstall();
         // echo "<pre>";print_r($this->getContent('newAdminUser', array('company_name' => 'Test Organization', 'username' => 'testadmin', 'password' => 'welcome2oxzion')));exit();
-        // echo "<pre>";print_r($this->getContent('test', array('name' => 'Karan')));exit();
+        // echo "<pre>";print_r($this->getContent('test', array('name' => $this->adminUser)));exit();
 	}
 
 	/**

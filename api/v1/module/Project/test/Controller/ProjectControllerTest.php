@@ -308,8 +308,8 @@ class ProjectControllerTest extends ControllerTest {
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => 'bharatg')),'USERTOPROJECT_DELETED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => 'rakshith')),'USERTOPROJECT_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => $this->adminUser)),'USERTOPROJECT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => $this->managerUser)),'USERTOPROJECT_ADDED')->once()->andReturn();
         }
     	$this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
     	$this->assertResponseStatusCode(200);

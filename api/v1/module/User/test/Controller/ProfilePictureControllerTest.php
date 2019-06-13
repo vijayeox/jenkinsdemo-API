@@ -86,7 +86,7 @@ namespace User{
         {
             $this->initAuthToken($this->adminUser);
             $config = $this->getApplicationConfig();
-            $username = "bharatg";
+            $username = $this->adminUser;
             $userid="b0cb0d3c-496e-11e9-a876-b88198a956ff";
             $tempFolder = $config['UPLOAD_FOLDER']."user/".$userid."/";
             FileUtils::createDirectory($tempFolder);

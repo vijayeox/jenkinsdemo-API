@@ -27,7 +27,7 @@ class CRMCallbackControllerTest extends ControllerTest
 
     public function testCreate()
     {
-        $data = ['user_id' => '1', 'firstName' => "Bharat", 'lastName' => 'Goki', 'phones' => array('9739591462'), 'email' => 'bharat@va.com', 'accounts' => array('name'=>'VA'), 'addresses' => array(array('name'=>'Indiranagar')), 'owner_id' => 1, 'organization' => array('id'=>1),'assignedTo'=>array('username'=>'bharatg'),'owner'=>array('username'=>'bharatg')];
+        $data = ['user_id' => '1', 'firstName' => "Bharat", 'lastName' => 'Goki', 'phones' => array('9739591462'), 'email' => 'bharat@va.com', 'accounts' => array('name'=>'VA'), 'addresses' => array(array('name'=>'Indiranagar')), 'owner_id' => 1, 'organization' => array('id'=>1),'assignedTo'=>array('username'=>$this->adminUser),'owner'=>array('username'=>$this->adminUser)];
         $this->dispatch('/callback/crm/addcontact', 'POST', array(json_encode($data)=>''));
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
@@ -45,7 +45,7 @@ class CRMCallbackControllerTest extends ControllerTest
 
     public function testCreateFailure()
     {
-        $data = ['lastName' => 'Goki', 'phones' => array('9739591462'), 'email' => 'bharat@va.com', 'accounts' => array('name'=>'VA'), 'addresses' => array(array('name'=>'Indiranagar')), 'owner_id' => 1, 'organization' => array('id'=>1),'assignedTo'=>array('username'=>'bharatg'),'owner'=>array('username'=>'bharatg')];
+        $data = ['lastName' => 'Goki', 'phones' => array('9739591462'), 'email' => 'bharat@va.com', 'accounts' => array('name'=>'VA'), 'addresses' => array(array('name'=>'Indiranagar')), 'owner_id' => 1, 'organization' => array('id'=>1),'assignedTo'=>array('username'=>$this->adminUser),'owner'=>array('username'=>$this->adminUser)];
         $this->dispatch('/callback/crm/addcontact', 'POST', array(json_encode($data)=>''));
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();

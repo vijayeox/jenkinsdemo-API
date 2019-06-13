@@ -178,8 +178,8 @@ class GroupControllerTest extends ControllerTest {
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => 'bharatg')),'USERTOGROUP_DELETED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => 'rakshith')),'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->adminUser)),'USERTOGROUP_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->managerUser)),'USERTOGROUP_ADDED')->once()->andReturn();
         }
         $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
         $this->assertResponseStatusCode(200);

@@ -208,7 +208,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'], 'bharatg');
+        $this->assertEquals($content['data']['username'], $this->adminUser);
         $this->assertEquals($content['data']['name'], 'Bharat Gogineni');
     }
 
@@ -254,7 +254,7 @@ class UserControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => 'rakshith', 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->managerUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
         }
         $this->dispatch('/user/3', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -466,7 +466,7 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('loggedInUser');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['data']['username'], 'bharatg');
+        $this->assertEquals($content['data']['username'], $this->adminUser);
         $this->assertEquals($content['data']['name'], 'Bharat Gogineni');
     }
 
@@ -478,7 +478,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('loggedInUser');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'], 'bharatg');
+        $this->assertEquals($content['data']['username'], $this->adminUser);
         $this->assertEquals($content['data']['status'], 'Active');
     }
 

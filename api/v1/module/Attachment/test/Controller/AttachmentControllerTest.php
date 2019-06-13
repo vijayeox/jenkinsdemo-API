@@ -24,7 +24,7 @@ class AttachmentControllerTest extends ControllerTest{
     }
     
     public function testAnnouncementCreate(){
-        $this->initAuthToken('bharatg');
+        $this->initAuthToken($this->adminUser);
         $config = $this->getApplicationConfig();
         $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/announcements/";
         FileUtils::createDirectory($tempFolder);

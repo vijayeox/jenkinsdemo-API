@@ -126,11 +126,11 @@ namespace Callback;
 		
 		public function testAddUserToOrgBothExists(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'rakshith','orgname' => 'teams-1','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname' => 'teams-1','status'=>'Active'];
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();
 				$mockRestClient->expects('get')->with("api/v4/teams/name/teams1",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"teamoxzion","display_name" => 'teamoxzion',"id" => 121)));
-				$mockRestClient->expects('get')->with("api/v4/users/username/rakshith",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"rakshith","id" => 1)));
+				$mockRestClient->expects('get')->with("api/v4/users/username/".$this->managerUser,array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>$this->managerUser,"id" => 1)));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams/121/members",array('team_id' => 121,'user_id' => 1),Mockery::any())->once()->andReturn(array("body" => json_encode(array("team_id"=>121,"user_id" => 1,"roles"=>"team_user"))));
 			}
 
@@ -198,7 +198,7 @@ namespace Callback;
 		
 		public function testAddUserToOrgForNewOrg(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'rakshith','orgname' => 'Teams new1','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname' => 'Teams new1','status'=>'Active'];
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();
 				$request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -206,7 +206,7 @@ namespace Callback;
 				$response->expects('getStatusCode')->andReturn(404);
 				$mockRestClient->expects('get')->with("api/v4/teams/name/teamsnew1",array(),Mockery::any())->once()->andThrow(new \GuzzleHttp\Exception\ClientException('"id" : "store.sql_team.get_by_name.app_error"', $request, $response));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams",array('name' => "teamsnew1",'display_name' => "teamsnew1",'type' => 'O'),Mockery::any())->once()->andReturn(array("body" => json_encode(array("id"=>125,"name" => "teamsnew1","display_name"=>"teamsnew1"))));
-				$mockRestClient->expects('get')->with("api/v4/users/username/rakshith",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"rakshith","id" => 1)));
+				$mockRestClient->expects('get')->with("api/v4/users/username/".$this->managerUser,array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>$this->managerUser,"id" => 1)));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams/125/members",array('team_id' => 125,'user_id' => 1),Mockery::any())->once()->andReturn(array("body" => json_encode(array("team_id"=>125,"user_id" => 1,"roles"=>"team_user"))));
 			}
 			$this->dispatch('/callback/chat/adduser', 'POST', array(json_encode($data)=>''));
@@ -222,7 +222,7 @@ namespace Callback;
 
 		public function testAddUserToOrgOrgNotFound(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'rakshith','orgname' => 'Orgo organization','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname' => 'Orgo organization','status'=>'Active'];
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();
 				$request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -408,12 +408,12 @@ namespace Callback;
 		
 		public function testAddUserToChannel(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'Rakshith','orgname'=>'Teams 1','groupname'=>'New Channel Private 1','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname'=>'Teams 1','groupname'=>'New Channel Private 1','status'=>'Active'];
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();	
 				$mockRestClient->expects('get')->with("api/v4/teams/name/teams1",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"teams1","display_name" => 'teams1',"id" => 121)));
 				$mockRestClient->expects('get')->with("api/v4/teams/121/channels/name/newchannelprivate1",array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>234,"name"=>"newchannelprivate1","display_name" => "newchannelprivate1","team_id" => 121)));
-				$mockRestClient->expects('get')->with("api/v4/users/username/rakshith",array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>1,"name"=>"rakshith")));
+				$mockRestClient->expects('get')->with("api/v4/users/username/".$this->managerUser,array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>1,"name"=>$this->managerUser)));
 				$mockRestClient->expects('get')->with("api/v4/teams/121/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("team_id"=>121,"user_id"=>1)));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels/234/members",array('user_id' => 1),Mockery::any())->once()->andReturn(array("body" => json_encode(array('channel_id'=>234,"user_id" =>1))));
 			}
@@ -431,7 +431,7 @@ namespace Callback;
 		
 		public function testAddUserToChannelCreateChannel(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'Rakshith','orgname'=>'Teams 1','groupname'=>'Private1 Private','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname'=>'Teams 1','groupname'=>'Private1 Private','status'=>'Active'];
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();	
 				$request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -440,7 +440,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/teams/name/teams1",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"teams1","display_name" => 'teams1',"id" => 121)));
 				$mockRestClient->expects('get')->with("api/v4/teams/121/channels/name/private1private",array(),Mockery::any())->once()->andThrow(new \GuzzleHttp\Exception\ClientException('"id" : "store.sql_channel.get_by_name.missing.app_error"', $request, $response));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels",array('team_id'=>121,'name'=>"private1private",'display_name'=>"private1private",'type'=>'P'),Mockery::any())->once()->andReturn(array("body" => json_encode(array('id'=>260,"team_id" =>121))));
-				$mockRestClient->expects('get')->with("api/v4/users/username/rakshith",Mockery::any(),Mockery::any())->once()->andReturn(json_encode(array("id"=>1,"name"=>"rakshith")));
+				$mockRestClient->expects('get')->with("api/v4/users/username/".$this->managerUser,Mockery::any(),Mockery::any())->once()->andReturn(json_encode(array("id"=>1,"name"=>$this->managerUser)));
 				$mockRestClient->expects('get')->with("api/v4/teams/121/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("team_id"=>121,"user_id"=>1)));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels/260/members",array('user_id' => 1),Mockery::any())->once()->andReturn(array("body" => json_encode(array('channel_id'=>260,"user_id" =>1))));
 			}
@@ -457,7 +457,7 @@ namespace Callback;
 
 		public function testAddUserToChannelNetworkIssue(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'Rakshith','orgname'=>'Teams 1','groupname'=>'Channel Chan','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname'=>'Teams 1','groupname'=>'Channel Chan','status'=>'Active'];
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();	
 				$request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -483,7 +483,7 @@ namespace Callback;
 		
 		public function testAddUserToChannelCreateTeam(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'Rakshith','orgname'=>'Boscos Team','groupname'=>'Private1 Private','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname'=>'Boscos Team','groupname'=>'Private1 Private','status'=>'Active'];
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();	
 				$request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -493,7 +493,7 @@ namespace Callback;
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams",array('name' => "boscosteam",'display_name' => "boscosteam",'type' => 'O'),Mockery::any())->andReturn(array("body" => json_encode(array('id'=>170,"name" =>"boscosteam","display_name"=>"boscosteam"))));
 				$mockRestClient->expects('get')->with("api/v4/teams/170/channels/name/private1private",array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>270,"name"=>"private1private","display_name" => "private1private","team_id" => 170)));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels",array('team_id'=>121,'name'=>"private1private",'display_name'=>"private1private",'type'=>'P'),Mockery::any())->once()->andReturn(array("body" => json_encode(array('id'=>270,"team_id" =>170))));
-				$mockRestClient->expects('get')->with("api/v4/users/username/rakshith",array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>1,"name"=>"rakshith")));
+				$mockRestClient->expects('get')->with("api/v4/users/username/".$this->managerUser,array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>1,"name"=>$this->managerUser)));
 				$mockRestClient->expects('get')->with("api/v4/teams/170/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("team_id"=>170,"user_id"=>1)));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels/270/members",array('user_id' => 1),Mockery::any())->once()->andReturn(array("body" => json_encode(array('channel_id'=>270,"user_id" =>1))));
 			}
@@ -510,7 +510,7 @@ namespace Callback;
 		
 		public function testAddUserToChannelTeamNotFoundBeczNetworkIssue(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'Rakshith','orgname'=>'PES Team','groupname'=>'Private1 Private','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname'=>'PES Team','groupname'=>'Private1 Private','status'=>'Active'];
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();	
 				$request = Mockery::Mock('Psr\Http\Message\RequestInterface');
@@ -600,12 +600,12 @@ namespace Callback;
 		
 		public function testRemoveUserFromChannel(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'Rakshith','orgname'=>'Teams 1','groupname'=>'New Channel Private 1','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname'=>'Teams 1','groupname'=>'New Channel Private 1','status'=>'Active'];
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();	
 				$mockRestClient->expects('get')->with("api/v4/teams/name/teams1",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"teams1","display_name" => 'teams1',"id" => 121)));
 				$mockRestClient->expects('get')->with("api/v4/teams/121/channels/name/newchannelprivate1",array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>234,"name"=>"newchannelprivate1","display_name" => "newchannelprivate1","team_id" => 121)));
-				$mockRestClient->expects('get')->with("api/v4/users/username/rakshith",array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>1,"name"=>"rakshith")));
+				$mockRestClient->expects('get')->with("api/v4/users/username/".$this->managerUser,array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>1,"name"=>$this->managerUser)));
 				$mockRestClient->expects('get')->with("api/v4/teams/121/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("team_id"=>121,"user_id"=>1)));
 				$mockRestClient->expects('get')->with("api/v4/channels/234/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("channel_id"=>234,"user_id"=>1)));
 				$mockRestClient->expects('delete')->with("api/v4/channels/234/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("status"=>"OK")));
@@ -634,14 +634,14 @@ namespace Callback;
 		
 		public function testRemoveUserFromChannelUserNotInChannel(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'Rakshith','orgname'=>'Teams 1','groupname'=>'Private1 Private','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname'=>'Teams 1','groupname'=>'Private1 Private','status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();	
 				$exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
 				$mockRestClient->expects('get')->with("api/v4/teams/name/teams1",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"teams1","display_name" => 'teams1',"id" => 121)));
 				$mockRestClient->expects('get')->with("api/v4/teams/121/channels/name/private1private",array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>260,"name"=>"private1private","display_name" => "private1private","team_id" => 121)));
-				$mockRestClient->expects('get')->with("api/v4/users/username/rakshith",array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>1,"name"=>"rakshith")));
+				$mockRestClient->expects('get')->with("api/v4/users/username/".$this->managerUser,array(),Mockery::any())->once()->andReturn(json_encode(array("id"=>1,"name"=>$this->managerUser)));
 				$mockRestClient->expects('get')->with("api/v4/teams/121/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("team_id"=>121,"user_id"=>1)));
 				$mockRestClient->expects('get')->with("api/v4/channels/260/members/1",array(),Mockery::any())->once()->andThrow($exception);
 			}
@@ -655,7 +655,7 @@ namespace Callback;
 		
 		public function testRemoveUserFromChannelNotCreatedIssue(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'Rakshith','orgname'=>'Teams 1','groupname'=>'Payyannur','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname'=>'Teams 1','groupname'=>'Payyannur','status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();	
@@ -748,10 +748,10 @@ namespace Callback;
 		
 		public function testRemoveUserFromOrg(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'rakshith','orgname' => 'teams-1','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname' => 'teams-1','status'=>'Active'];
 		if(enableMattermost==0){
 			$mockRestClient = $this->getMockRestClientForChatService();		
-			$mockRestClient->expects('get')->with("api/v4/users/username/rakshith",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"rakshith","id" => 1)));
+			$mockRestClient->expects('get')->with("api/v4/users/username/".$this->managerUser,array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>$this->managerUser,"id" => 1)));
 			$mockRestClient->expects('get')->with("api/v4/teams/name/teams1",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"teams1","display_name" => 'teams1',"id" => 121)));
 			$mockRestClient->expects('delete')->with("api/v4/teams/121/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("status"=>"OK")));
 		}
@@ -803,7 +803,7 @@ namespace Callback;
 		// No mock test
 		public function testRemoveUserFromOrgNotFound(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'bharatg','status'=>'Active'];
+			$data = ['username' => $this->adminUser,'status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
 			$this->dispatch('/callback/chat/removeuser', 'POST', array(json_encode($data)=>''));
 			$this->assertResponseStatusCode(404);
@@ -814,12 +814,12 @@ namespace Callback;
 		
 		public function testRemoveUserFromOrgUserNotInTeam(){
 			$this->initAuthToken($this->adminUser);
-			$data = ['username' => 'rakshith','orgname' => 'Raks Team','status'=>'Active'];
+			$data = ['username' => $this->managerUser,'orgname' => 'Raks Team','status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
 			if(enableMattermost==0){
 				$mockRestClient = $this->getMockRestClientForChatService();		
 				$exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
-				$mockRestClient->expects('get')->with("api/v4/users/username/rakshith",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"rakshith","id" => 1)));
+				$mockRestClient->expects('get')->with("api/v4/users/username/".$this->managerUser,array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>$this->managerUser,"id" => 1)));
 				$mockRestClient->expects('get')->with("api/v4/teams/name/raksteam",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"raksteam","display_name" => 'raksteam',"id" => 175)));
 				$mockRestClient->expects('delete')->with("api/v4/teams/175/members/1",array(),Mockery::any())->once()->andThrow($exception);
 			}
