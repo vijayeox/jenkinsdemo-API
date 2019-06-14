@@ -23,6 +23,7 @@ class OrganizationService extends AbstractService
     protected $modelClass;
     private $messageProducer;
     private $privilegeService;
+    static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
     
     public function setMessageProducer($messageProducer)
     {
@@ -370,7 +371,7 @@ class OrganizationService extends AbstractService
 
 
     public function saveUser($id,$data){
-
+    
         $obj = $this->table->getByUuid($id,array());
 
         if (is_null($obj)) {
@@ -379,25 +380,41 @@ class OrganizationService extends AbstractService
         if(!isset($data['userid']) || empty($data['userid'])) {
             return 2;
         }
-
+        $orgId = $obj->id;
         $userArray=json_decode($data['userid'],true);
         if($userArray){
-             $userSingleArray= array_unique(array_map('current', $userArray));
+            $userSingleArray= array_unique(array_map('current', $userArray));
 
-             $querystring = "SELECT ouo.user_id , org.id from ox_user_org as ouo inner join ox_organization as org on ouo.org_id = org.id where org.uuid = '".$id."' and ouo.user_id not in (".implode(',', $userSingleArray).")";
-             $deletedUser = $this->executeQuerywithParams($querystring)->toArray();
+            $querystring = "SELECT u.username from ox_user_org as ouo 
+                 inner join ox_user as u on u.id = ouo.user_id
+                 where ouo.org_id = ".$orgId." and ouo.user_id not in (".implode(',', $userSingleArray).")";
+            $deletedUser = $this->executeQuerywithParams($querystring)->toArray();
 
-             $query = "SELECT ou.id,ou.orgid = (SELECT org.id from ox_organization as org where org.uuid = '".$id."') from ox_user as ou LEFT OUTER JOIN ox_user_org as our on our.user_id = ou.id AND our.org_id = ou.orgid WHERE ou.id in (".implode(',', $userSingleArray).") AND our.org_id is Null";
-             $insertedUser = $this->executeQuerywithParams($query)->toArray();
+            $query = "SELECT ou.username from ox_user as ou 
+                LEFT OUTER JOIN ox_user_org as our on our.user_id = ou.id AND our.org_id = ou.orgid 
+                WHERE ou.id in (".implode(',', $userSingleArray).") AND our.org_id is Null";
+            $insertedUser = $this->executeQuerywithParams($query)->toArray();
             
-             $this->beginTransaction();
-             try{
-             $query = "DELETE FROM ox_user_org where user_id not in (".implode(',', $userSingleArray).") and org_id in (SELECT id from ox_organization where uuid = '".$id."')";
-             $resultSet = $this->executeQuerywithParams($query);
+            $this->beginTransaction();
+            try{
+                $query = "DELETE uo FROM ox_user_org as uo  
+                            inner join ox_organization as org on uo.org_id = org.id 
+                            where org.id = ".$orgId." and uo.user_id != org.contactid";
+                $resultSet = $this->executeQuerywithParams($query);
 
-             $insert = "INSERT into ox_user_org (user_id,org_id) SELECT ou.id,ou.orgid = (SELECT org.id from ox_organization as org where org.uuid = '".$id."') from ox_user as ou LEFT OUTER JOIN ox_user_org as our on our.user_id = ou.id AND our.org_id = ou.orgid WHERE ou.id in (".implode(',', $userSingleArray).") AND our.org_id is Null";
-             $resultSet = $this->executeQuerywithParams($insert);
-             $this->commit();
+                $update = "UPDATE ox_user SET orgid = $orgId WHERE id in (".implode(',', $userSingleArray).") AND orgid is NULL OR orgid = 0";
+                $resultSet = $this->executeQuerywithParams($update);
+
+                 
+                $insert = "INSERT INTO ox_user_org (user_id,org_id) 
+                                select u.id, ".$orgId." from ox_user as u 
+                                    left join ox_organization org on org.contactid = u.id and org.id = ".$orgId."
+                                    where org.id is null AND
+                                    u.id in (".implode(',', $userSingleArray).")";
+                                
+                $resultSet = $this->executeQuerywithParams($insert);
+                 
+                $this->commit();
             }
             catch(Exception $e){
                 $this->rollback();
@@ -405,16 +422,64 @@ class OrganizationService extends AbstractService
             }
 
             foreach($deletedUser as $key => $value){
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active')),'USERTOORGANIZATION_DELETED');
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value)),'USERTOORGANIZATION_DELETED');
             }
             foreach($insertedUser as $key => $value){
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active')),'USERTOORGANIZATION_ADDED');
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value)),'USERTOORGANIZATION_ADDED');
             }
 
             return 1;
         }
         return 0;
 
+    }
+
+        public function getOrgUserList($id,$filterParams = null) {
+
+        if(!isset($id)) {
+            return 0;
+        }
+
+        $pageSize = 20;
+        $offset = 0;
+        $where = "";
+        $sort = "ox_user.name";
+
+
+        $query = "SELECT ox_user.id,ox_user.name";
+        $from = " FROM ox_user left join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id";
+    
+        $cntQuery ="SELECT count(ox_user.id)".$from;
+
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                if(isset($filterArray[0]['filter'])){
+                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                   $filterList = $filterArray[0]['filter']['filters'];
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
+                }
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort,self::$fieldName);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
+            }
+
+            $where .= strlen($where) > 0 ? " AND ox_organization.uuid = '".$id."'" : " WHERE ox_organization.uuid = '".$id."'";
+
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(ox_user.id)'];
+            $query =$query." ".$from." ".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query)->toArray();
+            if(sizeof($resultSet) > 0){
+                return array('data' => $resultSet, 
+                     'total' => $count);
+            }else{
+                return 0;
+            }    
     }
 }
 ?>

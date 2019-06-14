@@ -29,7 +29,7 @@ return [
             'addUserToOrganization' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/organization/:orgId/users/save',
+                    'route' => '/organization/:orgId/save',
                     'defaults' => [
                         'controller' => Controller\OrganizationController::class,
                         'method' => 'POST',
@@ -47,6 +47,20 @@ return [
                     'route' => '/organization/logo/:orgId',
                     'defaults' => [
                         'controller' => Controller\OrganizationLogoController::class
+                    ],
+                ],
+            ],
+            'organizationuser' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/organization/:orgId/users',
+                    'defaults' => [
+                        'controller' => Controller\OrganizationController::class,
+                        'method' => 'GET',
+                        'action' => 'getListOfOrgUsers',
+                        'access' => [
+                            'getListOfOrgUsers'=>'MANAGE_ORGANIZATION_READ'
+                        ],
                     ],
                 ],
             ],

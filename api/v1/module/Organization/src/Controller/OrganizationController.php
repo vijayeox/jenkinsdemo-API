@@ -183,4 +183,31 @@ class OrganizationController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($data,200);
     }
+
+        /**
+    * GET all users in a particular Organization API
+    * @api
+    * @link /oeganization/:orgId/users
+    * @method GET
+    * @return array $dataget list of organization by User
+    * <code>status : "success|error",
+    *       data : all user id's in the organization passed back in json format
+    * </code>
+    */
+    public function getListOfOrgUsersAction() {
+        $organization = $this->params()->fromRoute();
+        $id=$organization[$this->getIdentifierName()];
+        $filterParams = $this->params()->fromQuery(); // empty method call
+          
+        try {
+            $count = $this->orgService->getOrgUserList($organization[$this->getIdentifierName()],$filterParams);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        if($count == 0) {
+            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        }
+        return $this->getSuccessResponseDataWithPagination($count['data'],$count['total']);
+    }
 }

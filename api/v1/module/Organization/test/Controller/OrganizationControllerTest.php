@@ -253,13 +253,13 @@ class OrganizationControllerTest extends MainControllerTest
     public function testsaveUser()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/users/save', 'POST',array('userid' => '[{"id":3}]'));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/save', 'POST',array('userid' => '[{"id":3}]'));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
         $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('saveUser');
+        $this->setDefaultAsserts('addUserToOrganization');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
@@ -267,11 +267,73 @@ class OrganizationControllerTest extends MainControllerTest
     public function testAddUserToOrganizationWithDifferentUser()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/users/save', 'POST',array('userid' => '[{"id":10},{"id":5}]'));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/save', 'POST',array('userid' => '[{"id":10},{"id":5}]'));
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testgetUsersofOrg()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/users', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(4, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['total'],4);
+    }
+
+    public function testgetUsersofOrgWithFilter()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/users?filter=[{"skip":1,"take":2}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(2, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][1]['id'], 3);
+        $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
+        $this->assertEquals($content['total'],4);
+    }
+
+    public function testgetUsersofOrgWithSortFilter()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/users?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":2,"take":2}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(2, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 3);
+        $this->assertEquals($content['data'][0]['name'], 'rakshith amin');
+        $this->assertEquals($content['data'][1]['id'], 4);
+        $this->assertEquals($content['data'][1]['name'], 'rohan kumar');
+        $this->assertEquals($content['total'],4);
+    }
+
+    public function testgetUsersofOrgWithFieldFilter()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/users?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"gogineni"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":2}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['total'],1);
     }
 
 }
