@@ -12,7 +12,8 @@
   "minimum-stability": "dev",
   "prefer-stable": false,
   "config": {
-    "secure-http" :false
+    "secure-http" :false,
+    "discard-changes": true
   },
   "repositories": [
   {
