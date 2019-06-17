@@ -22,16 +22,16 @@ final class Version20190423091630 extends AbstractMigration
         $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`) VALUES ('Settings','".Uuid::uuid4()->getHex()."','utilities','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}')");
         $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`) VALUES ('ImageUploader','".Uuid::uuid4()->getHex()."','collaboration','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"true\"}')");
         $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`) VALUES ('Preferences','".Uuid::uuid4()->getHex()."','office','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}')");
-    
+
 
         $this->addSql("UPDATE `ox_role_privilege` SET `permission` = 1 , `app_id` = (SELECT `id` from `ox_app` WHERE `name` LIKE 'MailAdmin') WHERE `privilege_name` = 'MANAGE_EMAIL' ");
         $this->addSql("UPDATE `ox_privilege` SET `permission_allowed` = 1 , `app_id` = (SELECT `id` from `ox_app` WHERE `name` LIKE 'MailAdmin') WHERE `name` = 'MANAGE_EMAIL' ");
-      
+
         $this->addSql("INSERT INTO `ox_privilege` (`name`,`permission_allowed`,`org_id`,`app_id`) SELECT 'MANAGE_CRM',1,NULL,id from ox_app where name LIKE 'CRM';");
         $this->addSql("INSERT INTO `ox_privilege` (`name`,`permission_allowed`,`org_id`,`app_id`) SELECT 'MANAGE_CRM',1,1,id from ox_app where name LIKE 'CRM';");
         $this->addSql("INSERT INTO `ox_role_privilege` (`role_id`,`privilege_name`,`permission`,`org_id`,`app_id`) SELECT 1,'MANAGE_CRM',1,1,id from ox_app where name LIKE 'CRM';");
         $this->addSql("INSERT INTO `ox_role_privilege` (`role_id`,`privilege_name`,`permission`,`org_id`,`app_id`) SELECT 2,'MANAGE_CRM',1,1,id from ox_app where name LIKE 'CRM';");
-        
+
     }
 
     public function down(Schema $schema) : void
@@ -48,9 +48,9 @@ final class Version20190423091630 extends AbstractMigration
 
         $this->addSql("UPDATE `ox_role_privilege` SET `permission` = 15 , `app_id` = NULL WHERE `privilege_name` = 'MANAGE_EMAIL'");
         $this->addSql("UPDATE `ox_privilege` SET `permission_allowed` = 15 , `app_id` = NULL WHERE `name` = 'MANAGE_EMAIL'");
-       
+
         $this->addSql("DELETE FROM `ox_privilege` WHERE `name` = 'MANAGE_CRM'");
         $this->addSql("DELETE FROM `ox_role_privilege` WHERE `privilege_name` = 'MANAGE_CRM'");
-               
+
     }
 }
