@@ -22,7 +22,7 @@ namespace Callback\Service;
 
         public function sendMail($data,$attachment){
             $emailClient = new EmailClient();
-            $attachment = $attachment['attachment'];
+            $attachment = isset($attachment['attachment']) ? $attachment['attachment'] : false;
             $userEmail = $data['from'];
             $smtpDetails = $this->emailService->getEmailAccountsByEmailId($userEmail,true)[0];
             $body = $data['body'];
