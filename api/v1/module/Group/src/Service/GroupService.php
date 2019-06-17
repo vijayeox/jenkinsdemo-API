@@ -139,11 +139,18 @@ class GroupService extends AbstractService {
     public function uploadGroupLogo($orgId,$id,$file){
         
         if(isset($file)){
-
-            $destFile = $this->getGroupLogoPath($orgId,$id,true);
-            $file['name'] = 'logo.png';
-            FileUtils::storeFile($file,$destFile); 
-            
+            $image = FileUtils::convetImageTypetoPNG($file);
+            if($image){
+                if(FileUtils::fileExists($destFile)){
+                    imagepng($image, $destFile.'/logo.png');
+                    $image = null;
+                }
+                else {
+                    mkdir($destFile);
+                    imagepng($image, $destFile.'/logo.png');
+                    $image = null;
+               }
+            } 
         }
     }
 

@@ -98,6 +98,7 @@ class PrivilegeService extends AbstractService {
     }
 
     public function updateRolePrivileges(Privilege $privilege) {
+        $rolePrivileges = array();
         $roles = $this->roleService->getRolesByOrgid($privilege->org_id);
         if (!$roles)
             return 0;

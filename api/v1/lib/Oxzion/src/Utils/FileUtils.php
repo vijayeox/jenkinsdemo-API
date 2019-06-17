@@ -108,6 +108,28 @@ class FileUtils{
 
 	static public function fileExists($fileName){
 		return file_exists($fileName);
+	}
+
+
+	static public function convetImageTypetoPNG($file){
+		$extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION)); 
+           switch ($extension) {
+                case 'jpg':
+                case 'jpeg':
+                case 'JPG':
+                case 'JPEG':
+                    $image = imagecreatefromjpeg($file['tmp_name']);
+                break;
+                case 'gif':
+                case 'GIF':
+                    $image = imageCreateFromGIF($file['tmp_name']);
+                    break;
+                case 'png':
+                case 'PNG':
+                    $image = imageCreateFromPNG($file['tmp_name']);
+                    break;
+                }
+         return $image;
 	} 
 }
 ?>

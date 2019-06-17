@@ -125,12 +125,22 @@ class OrganizationService extends AbstractService
         
         if(isset($file)){
 
-            $destFile = $this->getOrgLogoPath($id,true);
-            $file['name'] = 'logo.png';
-            FileUtils::storeFile($file,$destFile); 
-            
+           $destFile = $this->getOrgLogoPath($id,true);
+           $image = FileUtils::convetImageTypetoPNG($file);
+           if($image){
+                if(FileUtils::fileExists($destFile)){
+                    imagepng($image, $destFile.'/logo.png');
+                    $image = null;
+                }
+                else {
+                    mkdir($destFile);
+                    imagepng($image, $destFile.'/logo.png');
+                    $image = null;
+                }
+            }     
         }
     }
+
 
 
     private function setupBasicOrg(Organization $org,$contactPerson) {
@@ -285,7 +295,7 @@ class OrganizationService extends AbstractService
 
     private function getOrgContactPersonDetails($id){
         $userData = array();
-        $userSelect = "SELECT ou.firstname,ou.lastname,ou.email from `ox_user` as ou where ou.id = (SELECT og.contactid from `ox_organization` as og WHERE og.uuid = '".$id."')";
+        $userSelect = "SELECT ou.firstname,ou.lastname,ou.email,ou.phone from `ox_user` as ou where ou.id = (SELECT og.contactid from `ox_organization` as og WHERE og.uuid = '".$id."')";
         $userData = $this->executeQueryWithParams($userSelect)->toArray();     
         return $userData;
     }

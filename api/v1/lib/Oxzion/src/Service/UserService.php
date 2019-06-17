@@ -132,8 +132,8 @@ class UserService extends AbstractService
      * </code>
      */
     public function createUser(&$data) {
-         if (!$data['orgid'])
-            $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
+        
+        $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $tmpPwd = $data['password'];
@@ -191,7 +191,8 @@ class UserService extends AbstractService
             "gender" => " ",
             "managerid" => "1",
             "date_of_join" => Date("Y-m-d"),
-            "password" => 'Welcome'.substr(str_replace(' ', '', $org->name), 0, 4).$org->id
+            "password" => BosUtils::randomPassword()
+            // "password" => 'Welcome'.substr(str_replace(' ', '', $org->name), 0, 4).$org->id
         );
         $result = $this->createUser($data);
 
