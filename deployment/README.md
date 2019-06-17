@@ -49,6 +49,9 @@ To learn how to install Node.js [click here.](https://nodesource.com/blog/instal
 To learn how to install PhP [click here.](https://tecadmin.net/install-php-7-on-ubuntu/)
 Set the memory limit in php.ini to atleast 512MB and restart apache
 
+install the following extensions
+sudo apt install php-curl
+
 <h4> Apache 2.4+: </h4>
 
 To learn how to install Apache [click here.](https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-ubuntu-18-04-quickstart)
@@ -75,7 +78,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 >sudo chown oxzion:oxzion -R /var/lib/oxzion/vfs
 >sudo ln -s /var/lib/oxzion/vfs /opt/oxzion/view/vfs
 >sudo mkdir -p /var/log/oxzion/api
->sudo mkdir /var/www/api/data
+>sudo mkdir -p /var/www/api/data
 >sudo chown www-data:www-data /var/log/oxzion/api
 >sudo mkdir -p /bar/lib/oxzion/api/cache
 >sudo mkdir -p /bar/lib/oxzion/api/uploads
