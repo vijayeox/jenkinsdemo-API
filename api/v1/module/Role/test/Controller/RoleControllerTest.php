@@ -15,8 +15,8 @@ class RoleControllerTest extends MainControllerTest {
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
-    }   
-   
+    }
+
     protected function setDefaultAsserts() {
         $this->assertModuleName('Role');
         $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
@@ -89,7 +89,7 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(10, count($content['data']));
+        $this->assertEquals(11, count($content['data']));
         foreach ($content['data'] as $key => $val) {
             if($val['privilege_name'] == "MANAGE_ANNOUNCEMENT"){
                 $this->assertEquals($val['permission'], 3);
@@ -177,7 +177,7 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(2, count($content['data']));
         $this->assertEquals($content['data']['data'],array());
-        $this->assertEquals($content['data']['privileges'], array()); 
+        $this->assertEquals($content['data']['privileges'], array());
     }
 
     public function testCreateRole(){
@@ -225,7 +225,7 @@ class RoleControllerTest extends MainControllerTest {
         $data=array('name' => 'ADMIN','description' => 'Must have write control',
             'privileges'=> json_encode(array(['name' => 'MANAGE_FILE','permission' => '15'],['name'=> 'MANAGE_MAIL','permission'=> '1'],['id' => '4','name' => 'MANAGE_ALERT','permission'=>'15'])));
          $this->setJsonContent(json_encode($data));
-       
+
         $this->dispatch('/role','POST',$data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -237,7 +237,7 @@ class RoleControllerTest extends MainControllerTest {
         $data=array('name' => 'ADMIN','description' => 'Must have read and write control',
             'privileges'=> json_encode(array(['id' => '1','name' => 'MANAGE_ANNOUNCEMENT','permission' => '15'],['id'=>'14','name'=> 'MANAGE_FORM','permission'=> '1'],['id' => '4','name' => 'MANAGE_ALERT','permission'=>'3'])));
          $this->setJsonContent(json_encode($data));
-       
+
         $this->dispatch('/role/4', 'POST',$data);
         $this->assertResponseStatusCode(201);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -256,7 +256,7 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
     }
-  
+
     public function testCreateAccess() {
         $this->initAuthToken($this->employeeUser);
         $data = ['name' => 'ADMIN_SUPER 1','org_id' => 4];
@@ -272,7 +272,7 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
-        
+
     public function testUpdate() {
         $data = ['name' => 'ADMINs'];
         $this->initAuthToken($this->adminUser);
@@ -300,7 +300,7 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
-    
+
     public function testUpdateNotFound(){
         $data = ['name' => 'ADMINs'];
         $this->initAuthToken($this->adminUser);
@@ -328,6 +328,6 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');        
+        $this->assertEquals($content['status'], 'error');
     }
 }

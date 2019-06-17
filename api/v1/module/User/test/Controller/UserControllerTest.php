@@ -383,7 +383,7 @@ class UserControllerTest extends ControllerTest
     }
 
     public function testChangePassword()
-    {   
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['old_password' => 'password', 'new_password' => 'welcome', 'confirm_password' => 'welcome'];
         $this->setJsonContent(json_encode($data));
@@ -446,7 +446,7 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts('addOrganizationToUser');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');        
+        $this->assertEquals($content['status'], 'error');
     }
 
     public function testAddOrganizationToUserWithDifferentOrganization()
@@ -494,8 +494,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['status'], 'Active');
     }
 
-    public function testUserAccess() 
-    {   
+    public function testUserAccess()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/me/access', 'GET');
         $this->assertResponseStatusCode(200);
@@ -505,8 +505,8 @@ class UserControllerTest extends ControllerTest
         // TO DO : Whitelisted apps for manageruser and employeeuser
         $this->assertNotEmpty($content['data']['privilege']);
         $this->assertNotEmpty($content['data']['whiteListedApps']);
-        $this->assertEquals(4,count($content['data']['whiteListedApps']));
-    } 
+        $this->assertEquals(6,count($content['data']['whiteListedApps']));
+    }
 
      public function testForgotPassword()
     {
@@ -558,7 +558,7 @@ class UserControllerTest extends ControllerTest
         $query="UPDATE ox_user SET password_reset_code = 'pvAQyJkY',password_reset_expiry_date ='".date('Y-m-d H:i:s', strtotime('+1 day', time()))."' WHERE id = 3";
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
-        
+
         $this->initAuthToken($this->managerUser);
         $data = ['password_reset_code' => "pvAQyJkY", 'new_password' => 'password', 'confirm_password' => 'wrongpassword'];
         $this->setJsonContent(json_encode($data));
@@ -576,7 +576,7 @@ class UserControllerTest extends ControllerTest
         $query="UPDATE ox_user SET password_reset_code = 'pvAQyJkY',password_reset_expiry_date ='".date('Y-m-d H:i:s', strtotime('+1 day', time()))."' WHERE id = 3";
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
-        
+
         $this->initAuthToken($this->managerUser);
         $data = ['password_reset_code' => "wrongCode", 'new_password' => 'password', 'confirm_password' => 'password'];
         $this->setJsonContent(json_encode($data));
@@ -588,7 +588,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['message'], "You have entered an incorrect code");
     }
 
-    
+
     public function testGetUserProjectWithdata()
     {
         $this->initAuthToken($this->adminUser);
