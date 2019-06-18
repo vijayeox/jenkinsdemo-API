@@ -12,6 +12,7 @@ class Project extends Entity {
         'uuid' => 0,
         'name'=> 0,
         'org_id' => 0,
+        'manager_id' => 0,
         'description' => 0,
         'created_by' => 0,
         'modified_by' => 0,

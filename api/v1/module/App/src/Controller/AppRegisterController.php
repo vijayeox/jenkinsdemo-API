@@ -41,6 +41,9 @@ class AppRegisterController extends AbstractApiControllerHelper
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
+        if($count == 0){
+          return $this->getErrorResponse("Failed to Register",404);   
+        }
         return $this->getSuccessResponseWithData($data, 200);
     }
 }
