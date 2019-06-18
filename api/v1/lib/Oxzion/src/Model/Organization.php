@@ -16,6 +16,7 @@ class Organization extends Entity {
         'labelfile' => NULL,
         'languagefile' => 'en',
         'contactid' => NULL,
+        'preferences' => NULL,
         'theme' => 0,
         'status' => 'Active'
     );

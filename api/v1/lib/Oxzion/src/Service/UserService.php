@@ -136,10 +136,9 @@ class UserService extends AbstractService
         $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $tmpPwd = $data['password'];
-        if (isset($data['password']))
-            $data['password'] = md5(sha1($data['password']));
-
+        $password = BosUtils::randomPassword();
+        if (isset($password))
+            $data['password'] = md5(sha1($password));
         $form = new User($data);
         $form->validate();
         $this->beginTransaction();
@@ -151,7 +150,6 @@ class UserService extends AbstractService
                 return 0;
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
-            $form->password = $tmpPwd;
             $this->addUserToOrg($form->id, $form->orgid);
             // $this->emailService->sendUserEmail($form);
             // // Code to add the user information to the Elastic Search Index
@@ -161,7 +159,8 @@ class UserService extends AbstractService
             $this->messageProducer->sendTopic(json_encode(array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
-                'email' => $data['email']
+                'email' => $data['email'],
+                'password' => $password
             )),'USER_ADDED');
             return $count;
         } catch (Exception $e) {

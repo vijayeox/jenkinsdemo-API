@@ -105,7 +105,7 @@ class ProjectService extends AbstractService {
 	public function createProject(&$data) {
 		$form = new Project();
     //Additional fields that are needed for the create
-        $data['uuid'] = Uuid::uuid4()->getHex();
+        $data['uuid'] = Uuid::uuid4();
 		$data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
 		$data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
 		$data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);

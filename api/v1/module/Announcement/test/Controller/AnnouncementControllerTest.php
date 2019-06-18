@@ -10,6 +10,11 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Transaction\TransactionManager;
+use Oxzion\Service\AbstractService;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
+
 
 class AnnouncementControllerTest extends ControllerTest{
     
@@ -18,8 +23,8 @@ class AnnouncementControllerTest extends ControllerTest{
         parent::setUp();
     }   
     public function getDataSet() {
-        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Announcement.yml");
-        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Group/test/Dataset/Group.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__)."/../../../Group/test/Dataset/Group.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Announcement.yml");
         return $dataset;
     }
 
@@ -68,7 +73,7 @@ class AnnouncementControllerTest extends ControllerTest{
 
     public function testGet(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/announcement/1', 'GET');
+        $this->dispatch('/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -78,7 +83,7 @@ class AnnouncementControllerTest extends ControllerTest{
     }
     public function testGetNotFound(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/announcement/64', 'GET');
+        $this->dispatch('/announcement/9068b460-2943-4508-bd4c', 'GET');
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -87,7 +92,6 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->initAuthToken($this->adminUser);
         // $this->createDummyFile();
         $data = ['name' => 'Test Announcement','groups'=>'[{"id":1},{"id":2}]','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day")),'media'=>'test-oxzionlogo.png'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_announcement'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/announcement', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -98,32 +102,6 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['status'], $data['status']);
         $this->assertEquals($content['data']['startdate'], $data['startdate']);
         $this->assertEquals($content['data']['enddate'], $data['enddate']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_announcement'));
-    }
-
-    public function testinsertAnnouncementForGroup(){
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/announcement/1/group','POST',array(array('id'=>1), array('id' => 2))); 
-        $this->assertResponseStatusCode(200);
-         $this->assertModuleName('Announcement');
-        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcementToGroup');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success'); 
-    }
-
-    public function testinsertAnnouncementForGroupIdNotFound(){
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/announcement/1/group','POST',array(array('id'=>89), array('id' => 90))); 
-        $this->assertResponseStatusCode(404);
-         $this->assertModuleName('Announcement');
-        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcementToGroup');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Entity not found'); 
     }
 
     public function testCreateWithOutNameFailure(){
@@ -160,7 +138,7 @@ class AnnouncementControllerTest extends ControllerTest{
         // $this->createDummyFile();
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/announcement/1', 'PUT', null);
+        $this->dispatch('/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -174,7 +152,7 @@ class AnnouncementControllerTest extends ControllerTest{
         // $this->createDummyFile();
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/announcement/1', 'PUT', null);
+        $this->dispatch('/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'PUT', null);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
@@ -191,7 +169,7 @@ class AnnouncementControllerTest extends ControllerTest{
         // $this->createDummyFile();
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/announcement/122', 'PUT', null);
+        $this->dispatch('/announcement/9068b460-2943-4508-b', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -202,7 +180,7 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->initAuthToken($this->adminUser);
         // $this->createDummyFile();
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/announcement/1', 'PUT', null);
+        $this->dispatch('/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -216,7 +194,7 @@ class AnnouncementControllerTest extends ControllerTest{
         // $this->createDummyFile();
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/announcement/1', 'PUT', null);
+        $this->dispatch('/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -228,7 +206,7 @@ class AnnouncementControllerTest extends ControllerTest{
 
     public function testDelete(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/announcement/2', 'DELETE');
+        $this->dispatch('/announcement/e66157ee-47de-4ed5-a78e-8a9195033f7a', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -237,10 +215,31 @@ class AnnouncementControllerTest extends ControllerTest{
 
     public function testDeleteNotFound(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/announcement/122', 'DELETE');
+        $this->dispatch('/announcement/e66157ee-47de-4ed5-a', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');        
+    }
+
+     public function testGetListOfAnnouncementGroups() {
+        $this->initAuthToken($this->adminUser);
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $query = "UPDATE `ox_announcement` SET `start_date` = now() ,`end_date` = '".date('Y-m-d',strtotime("+0 day"))."' where uuid ='9068b460-2943-4508-bd4c-2b29238700f3'";
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+
+        $this->dispatch('/announcement/9068b460-2943-4508-bd4c-2b29238700f3/groups','GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcementgroups');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals(count($content['data']), 1);
+        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['name'], 'Test Group');
+        $this->assertEquals($content['total'], 1);
     }
 }

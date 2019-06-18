@@ -58,6 +58,9 @@ class OrganizationController extends AbstractApiController
         if ($count == 2) {
             return $this->getFailureResponse("Entity not found for UUID", $id);
         }
+        if(isset($data['preferences'])){
+            $data['preferences'] = json_decode($data['preferences'],true);
+        }  
         return $this->getSuccessResponseWithData($data, 201);
     }
 
@@ -149,6 +152,7 @@ class OrganizationController extends AbstractApiController
                 $baseUrl =$this->getBaseUrl();
                 $logo = $result['logo'];
                 $result['logo'] = $baseUrl . "/organization/logo/" . $result["uuid"];
+                $result['preferences'] = json_decode($result['preferences'],true);                
             }
 
         return $this->getSuccessResponseWithData($result);

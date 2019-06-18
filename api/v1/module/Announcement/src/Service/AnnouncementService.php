@@ -9,6 +9,8 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
+use Ramsey\Uuid\Uuid;
+
 /**
  * Announcement Service
  */
@@ -44,12 +46,13 @@ class AnnouncementService extends AbstractService{
     */
     public function createAnnouncement(&$data){
         $form = new Announcement();
+        $data['uuid'] = Uuid::uuid4();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['start_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d H:i:s');
+        $data['start_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d');
         $data['status'] = $data['status']?$data['status']:1;
-        $data['end_date'] = isset($data['end_date'])?$data['end_date']:date('Y-m-d H:i:s',strtotime("+7 day"));
-        $data['created_date'] = date('Y-m-d H:i:s');
+        $data['end_date'] = isset($data['end_date'])?$data['end_date']:date('Y-m-d',strtotime("+7 day"));
+        $data['created_date'] = date('Y-m-d');
         if(isset($data['groups'])){
             $groups = json_decode($data['groups'],true);
             unset($data['groups']);
@@ -101,7 +104,8 @@ class AnnouncementService extends AbstractService{
     * </code>
     * @return array Returns the Created Announcement.
     */
-    public function updateAnnouncement($id,&$data) {
+    public function updateAnnouncement($uuid,&$data) {
+        $id = $this->getAnnouncementIdBYUuid($uuid);
         $obj = $this->table->get($id,array());
         if(is_null($obj)){
             return 0;
@@ -118,28 +122,23 @@ class AnnouncementService extends AbstractService{
         $form->validate();
         $this->beginTransaction();
         $count = 0;
+        $groupsUpdated = 0;
         try{
-            $count = $this->table->save($form);
-            if($count == 0){
-                $this->rollback();
-                return 0;
-            }
+            $count = $this->table->save($form); 
             $data['id'] = $id;
-            if(isset($data['groups'])){
+            if(isset($groups) > 0){
                 $groupsUpdated = $this->updateGroups($id,$groups);
-                if(!$groupsUpdated) {
-                    $this->rollback();
-                    return 0;
-                }
-            } else {
-                //TODO handle this case properly
+            } 
+            if($count == 0 && $groupsUpdated == 0){
+                $this->rollback();
+                return 1;
             }
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
             return 0;
         }
-        return $count;
+        return $count||$groupsUpdated;
     }
     /**
     * @ignore updateGroups
@@ -147,20 +146,17 @@ class AnnouncementService extends AbstractService{
     protected function updateGroups($announcementId,$groups){
         $oldGroups = array_column($this->getGroupsByAnnouncement($announcementId), 'group_id');
         $newGroups = array_column($groups,'id');
-        $groupsAdded = array_diff($newGroups,$oldGroups);
-        $groupsRemoved = array_diff($oldGroups,$newGroups);
-        $insertGroups = array();
-        foreach ($groupsAdded as $key => $value) {
-            $insertGroups[$key]['id'] = $value;
+        $groupsRemoved = array_diff($oldGroups,$newGroups);  
+        if(count($groupsRemoved) > 0){
+            $result['delete'] = $this->deleteGroupsByAnnouncement($announcementId,$groupsRemoved);
+            if($result['delete']!=count($groupsRemoved)||count($groupsRemoved)==0){
+                return 0;
+            }
         }
-        $result['insert'] = $this->insertAnnouncementForGroup($announcementId,$insertGroups);
-        if($result['insert']!=count($groupsAdded)){
+        $result['insert'] = $this->insertAnnouncementForGroup($announcementId,$groups);
+        if($result['insert'] == 0){
             return 0;
-        }
-        $result['delete'] = $this->deleteGroupsByAnnouncement($announcementId,$groupsRemoved);
-        if($result['delete']!=count($groupsRemoved)||count($groupsRemoved)==0){
-            return 0;
-        }
+        }        
         return 1;
     }
     /**
@@ -174,7 +170,7 @@ class AnnouncementService extends AbstractService{
             $delete->where(['announcement_id' => $announcementId,'group_id' => $groupId]);
             $result = $this->executeUpdate($delete);
             if($result->getAffectedRows() == 0){
-                break;
+                  break;
             }
             $rowsAffected++; 
         }
@@ -219,27 +215,49 @@ class AnnouncementService extends AbstractService{
         }
         return 0;                    
     }
+
+
+    protected function getAnnouncementIdBYUuid($uuid){
+        $select = "SELECT id from `ox_announcement` where uuid = '".$uuid."'";
+        $id = $this->executeQuerywithParams($select)->toArray();
+        return $id[0]['id'];
+    }
     /**
     * Delete Announcement
     * @param integer $id ID of Announcement to Delete
     * @return int 0=>Failure | $id;
     */
-    public function deleteAnnouncement($id){
+    public function deleteAnnouncement($uuid){
         $this->beginTransaction();
         $count = 0;
         try{
-            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
-            if($count == 0){
-                $this->rollback();
-                return 0;
-            }
+            
+            $id = $this->getAnnouncementIdBYUuid($uuid); 
+
+
             $sql = $this->getSqlObject();
-            $delete = $sql->delete('ox_announcement_group_mapper');
-            $delete->where(['announcement_id' => $id]);
+            $delete = $sql->delete('ox_announcement');
+            $delete->where(['uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
             $result = $this->executeUpdate($delete);
+            
+           
             if($result->getAffectedRows() == 0){
                 $this->rollback();
                 return 0;
+            }
+
+            $select = "SELECT count(announcement_id) from `ox_announcement_group_mapper` where announcement_id = ".$id;
+            $count = $this->executeQuerywithParams($select)->toArray();
+
+            if($count[0]['count(announcement_id)'] > 0){
+                    $sql = $this->getSqlObject();
+                    $delete = $sql->delete('ox_announcement_group_mapper');
+                    $delete->where(['announcement_id' => $id]);
+                    $result = $this->executeUpdate($delete);
+                    if($result->getAffectedRows() == 0){
+                        $this->rollback();
+                        return 0;
+                    }
             }
             $this->commit();
         }catch(Exception $e){
@@ -299,8 +317,8 @@ class AnnouncementService extends AbstractService{
         ->columns(array("*"))
         ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
         ->join('ox_user_group', 'ox_announcement_group_mapper.group_id = ox_user_group.group_id',array('group_id','avatar_id'),'left')
-        ->where(array('ox_announcement.id' => $id))
-        ->group(array('ox_announcement.id'));
+        ->where(array('ox_announcement.uuid' => $id))
+        ->group(array('ox_announcement.uuid'));
         $response = $this->executeQuery($select)->toArray();
         if(count($response)==0){
             return 0;
@@ -315,5 +333,58 @@ class AnnouncementService extends AbstractService{
             $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
             return $resultSet->toArray();
     }
+
+
+    public function getAnnouncementGroupList($id,$filterParams = null) {
+
+        if(!isset($id)) {
+            return 0;
+        }
+
+        $pageSize = 20;
+        $offset = 0;
+        $where = "";
+        $sort = "ox_group.name";
+
+
+         $query = "SELECT ox_group.id,ox_group.name";
+         $from = " FROM ox_group left join ox_announcement_group_mapper on ox_group.id = ox_announcement_group_mapper.group_id left join ox_announcement on ox_announcement.id = ox_announcement_group_mapper.announcement_id";
+    
+         $cntQuery ="SELECT count(ox_group.id)".$from;
+
+         if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                if(isset($filterArray[0]['filter'])){
+                   $filterlogic = $filterArray[0]['filter']['logic'];
+                   $filterList = $filterArray[0]['filter']['filters'];
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                   // ,self::$fieldName);
+                }
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                    // ,self::$fieldName);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
+            }
+
+
+
+            $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= now() AND ox_group.status = 'Active'" : " WHERE ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= curdate() AND ox_group.status = 'Active'";
+
+            
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(ox_group.id)'];
+            $query =$query." ".$from." ".$where." ".$sort." ".$limit;
+
+            $resultSet = $this->executeQuerywithParams($query);
+            return array('data' => $resultSet->toArray(), 
+                     'total' => $count);
+    
+    }
+
 }
 ?>

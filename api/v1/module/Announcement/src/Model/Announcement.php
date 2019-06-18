@@ -9,6 +9,7 @@ class Announcement extends Entity {
 
     protected $data = array(
         'id' => 0,
+        'uuid' => NULL,
         'name' => NULL,
         'org_id' => NULL,
         'status' => NULL,
