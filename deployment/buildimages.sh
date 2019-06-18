@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 #Script to build all docker images in oxzion-3.0
 # exit when any command fails
-set -e
-#trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
+#set -e
+#trap 'echo -e "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
 #going back to oxzion3.0 root directory
 cd ../
 #Defining variables for later use
@@ -13,43 +13,55 @@ BLUE="\e[34m"
 YELLOW="\e[93m"
 MAGENTA="\e[35m"
 BLUEBG="\e[44m"
+CYAN="\e[96m"
 BLINK="\e[5m"
 INVERT="\e[7m"
 RESET="\e[0m"
 
 #building api v1 docker
-echo "${YELLOW}Building Api Docker image..${RESET}"
+echo -e "${YELLOW}Building Api Docker image..${RESET}"
 cd ${HOME}/api/v1
 docker-compose build
-echo "${GREEN}Building Api Docker image completed!\n${RESET}"
+echo -e "${GREEN}Building Api Docker image completed!\n${RESET}"
 
 #building view docker
-echo "${YELLOW}Building view Docker image..${RESET}"
+echo -e "${YELLOW}Building view Docker image..${RESET}"
 cd ${HOME}/view/docker
 docker build -t view .
-echo "${GREEN}Building View Docker image completed!\n${RESET}"
+echo -e "${GREEN}Building View Docker image completed!\n${RESET}"
 
 #building integrations(php-apps) docker
-echo "${YELLOW}Building Integrations php-apps Docker image..\n${BLUE}Contains OROCRM RAINLOOP AND CALENDAR${RESET}"
+echo -e "${YELLOW}Building Integrations php-apps Docker image..\n${BLUE}Contains OROCRM RAINLOOP AND CALENDAR${RESET}"
 cd $HOME/integrations/docker
 docker build --tag integrations .
-echo "${GREEN}Building Integrations php-apps Docker image completed.${RESET}"
+echo -e "${GREEN}Building Integrations php-apps Docker image completed.${RESET}"
 
 #building Camel docker
-echo "${YELLOW}Building Integrations Camel Docker image..${RESET}"
+echo -e "${YELLOW}Building Integrations Camel Docker image..${RESET}"
 cd ${HOME}/integrations/camel/docker
 docker build . --tag camel
-echo "${GREEN}Building Integrations Camel Docker image completed!\n${RESET}"
+echo -e "${GREEN}Building Integrations Camel Docker image completed!\n${RESET}"
 
 #building mattermost docker
-echo "${YELLOW}Building Integrations Mattermost Docker image..${RESET}"
+echo -e "${YELLOW}Building Integrations Mattermost Docker image..${RESET}"
 cd ${HOME}/integrations/mattermost/docker
 docker build --tag mchat .
-echo "${GREEN}Building Integrations Mattermost Docker image completed!\n${RESET}"
+echo -e "${GREEN}Building Integrations Mattermost Docker image completed!\n${RESET}"
 
 #building workflow docker
-echo "${YELLOW}Building Integrations Workflow Docker image..${RESET}"
+echo -e "${YELLOW}Building Integrations Workflow Docker image..${RESET}"
 cd ${HOME}/integrations/workflow
 docker build -t workflow .
-echo "${GREEN}Building Integrations Workflow Docker image completed!\n${RESET}"
-echo "${BLINK} All images built successfully${RESET}"
+echo -e "${GREEN}Building Integrations Workflow Docker image completed!\n${RESET}"
+echo -e "${BLINK} All images built successfully${RESET}"
+
+#building openproject docker
+echo -e "${YELLOW}Building Integrations Openproject Docker images..${RESET}"
+echo -e "${YELLOW}Building production docker first.."
+cd ${HOME}/integrations/openproject/docker2
+docker build -t openproject .
+echo -e "${YELLOW}Building production docker for build and deployment now.."
+cd ${HOME}/integrations/openproject/docker_prod
+docker build -t openproject_prod .
+echo -e "${GREEN}Building Integrations Openproject Docker images completed!\n${RESET}"
+echo -e "${BLINK} All images built successfully${RESET}"
