@@ -80,8 +80,8 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 >sudo mkdir -p /var/log/oxzion/api
 >sudo mkdir -p /var/www/api/data
 >sudo chown www-data:www-data /var/log/oxzion/api
->sudo mkdir -p /bar/lib/oxzion/api/cache
->sudo mkdir -p /bar/lib/oxzion/api/uploads
+>sudo mkdir -p /var/lib/oxzion/api/cache
+>sudo mkdir -p /var/lib/oxzion/api/uploads
 >sudo chown www-data:www-data /var/lib/oxzion/api
 >sudo ln -s /var/log/oxzion/api /var/www/api/logs
 >sudo ln -s /var/lib/oxzion/api/cache /var/www/api/data/cache
