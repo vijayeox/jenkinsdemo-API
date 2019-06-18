@@ -43,6 +43,7 @@ class ProjectControllerTest extends ControllerTest {
             "uuid" => "886d7eff-6bae-4892-baf8-6fefc56cbf0b",
             "name"=> "Test Project 1",
             "org_id"=>"1",
+            "manager_id" => "1",
             "description"=> "Description Test Data",
             "created_by"=> "1",
             "modified_by"=> "1",
@@ -56,6 +57,7 @@ class ProjectControllerTest extends ControllerTest {
             "uuid"=> "ced672bb-fe33-4f0a-b153-f1d182a02603",
             "name"=> "Test Project 2",
             "org_id"=>"1",
+            "manager_id" => "1",
             "description"=> "Description Test Data",
             "created_by"=> "1",
             "modified_by"=> "1",
@@ -69,6 +71,7 @@ class ProjectControllerTest extends ControllerTest {
             "id"=> "4",
             "name"=> "New Project",
             "org_id"=>"1",
+            "manager_id" => "1",
             "description"=> "Description Test Data",
             "created_by"=> "1",
             "modified_by"=> "1",
@@ -180,7 +183,7 @@ class ProjectControllerTest extends ControllerTest {
     }
     public function testCreate() {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Project 3','description'=>'Project Description'];
+        $data = ['name' => 'Test Project 3','description'=>'Project Description','manager_id' => '1'];
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_project'));
         if(enableActiveMQ == 0){
              $mockMessageProducer = $this->getMockMessageProducer();

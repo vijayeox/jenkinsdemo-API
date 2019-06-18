@@ -10,6 +10,7 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
 use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\FilterUtils;
 
 /**
  * Announcement Service
@@ -326,12 +327,40 @@ class AnnouncementService extends AbstractService{
         return $response[0];
     }
 
-    public function getAnnouncementsList(){
-            $queryString = "select * from ox_announcement";
-            $where = "where ox_announcement.org_id = ".AuthContext::get(AuthConstants::ORG_ID);
-            $order = "order by ox_announcement.id";
-            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-            return $resultSet->toArray();
+    public function getAnnouncementsList($filterParams){
+        $where = "";
+        $pageSize = 20;
+        $offset = 0;
+        $sort = "name";
+
+        $cntQuery ="SELECT count(id) FROM `ox_announcement`";
+
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                if(isset($filterArray[0]['filter'])){
+                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                   $filterList = $filterArray[0]['filter']['filters'];
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                }
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                }
+                
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
+            }
+
+            $where .= strlen($where) > 0 ? " AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID);
+            
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(id)'];
+            $query ="SELECT * FROM `ox_announcement`".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query)->toArray();
+            return array('data' => $resultSet, 
+                     'total' => $count);
     }
 
 

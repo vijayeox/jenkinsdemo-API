@@ -170,8 +170,9 @@ class AnnouncementController extends AbstractApiController {
     * @return array $dataget list of Announcements
     */
     public function announcementListAction() {
-        $result = $this->announcementService->getAnnouncementsList();
-        return $this->getSuccessResponseWithData($result);
+        $filterParams = $this->params()->fromQuery();
+        $result = $this->announcementService->getAnnouncementsList($filterParams);
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
 
     public function announcementToGroupAction(){

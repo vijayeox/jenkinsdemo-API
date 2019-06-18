@@ -22,7 +22,7 @@ class Project extends Entity {
     );
 
     public function validate() {
-        $dataArray = array("name","description");
+        $dataArray = array("name","description","manager_id");
         $this->validateWithParams($dataArray);
     }
         
