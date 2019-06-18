@@ -53,7 +53,6 @@ echo -e "${YELLOW}Building Integrations Workflow Docker image..${RESET}"
 cd ${HOME}/integrations/workflow
 docker build -t workflow .
 echo -e "${GREEN}Building Integrations Workflow Docker image completed!\n${RESET}"
-echo -e "${BLINK} All images built successfully${RESET}"
 
 #building openproject docker
 echo -e "${YELLOW}Building Integrations Openproject Docker images..${RESET}"
