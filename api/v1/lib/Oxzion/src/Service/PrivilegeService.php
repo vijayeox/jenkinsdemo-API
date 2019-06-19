@@ -21,31 +21,6 @@ class PrivilegeService extends AbstractService {
         $this->modelClass = new Privilege();
     }
 
-    public function createPrivilege(&$data) {
-        if (!$data['org_id']) {
-            $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        }
-
-        $form = new Privilege($data);
-        $form->validate();
-        $this->beginTransaction();
-        $count = 0;
-        try {
-            $count = $this->table->save($form);
-            if($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $form->id = $data['id'] = $this->table->getLastInsertValue();
-            $this->updateRolePrivileges($form);
-            $this->commit();
-        } catch(Exception $e) {
-            $this->rollback();
-            return 0;
-        }
-        return $count;
-    }
-
     public function getAppPrivilegeForUser($appId)
     {
         try {
@@ -81,41 +56,10 @@ class PrivilegeService extends AbstractService {
         }
     }
 
-    public function getPrivilegesByOrgid($orgid) {
-        return $this->getDataByParams('ox_privilege', array(), array('org_id' => $orgid));
-    }
-
-    public function createBasicPrivileges($orgid) {
-        $basicPrivileges = $this->getPrivilegesByOrgid(null);
-        foreach ($basicPrivileges as $basicPrivilege) {
-            unset($basicPrivilege['id']);
-            $basicPrivilege['org_id'] = $orgid;
-            if (!$this->createPrivilege($basicPrivilege)) {
-                return 0;
-            }
-        }
-        return count($basicPrivileges);
-    }
-
-    public function updateRolePrivileges(Privilege $privilege) {
-        $rolePrivileges = array();
-        $roles = $this->roleService->getRolesByOrgid($privilege->org_id);
-        if (!$roles)
-            return 0;
-        $rolePrivilege = array(
-            'role_id' => null,
-            'privilege_name' => $privilege->name,
-            'permission' => $privilege->permission_allowed,
-            'org_id' => $privilege->org_id,
-            'app_id' => $privilege->app_id
-        );
-        foreach ($roles as $role)
-            $rolePrivileges[] = array_merge($rolePrivilege, array('role_id' => $role['id']));
-        if ($rolePrivileges) {
-            $result = $this->multiInsertOrUpdate('ox_role_privilege', $rolePrivileges);
-        }
-        // echo "<pre>";print_r($result);exit();
-        return count($roles);
+    public function getDefaultPrivileges() {
+        $query = "select p.* from ox_privilege p left join ox_app ap on ap.id = p.app_id and ap.isdefault=1";
+        $result = $this->executeQuerywithParams($query);
+        return $result;
     }
 
 }

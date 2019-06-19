@@ -132,8 +132,10 @@ class UserService extends AbstractService
      * </code>
      */
     public function createUser(&$data) {
+        if(!isset($data['orgid'])){
+            $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
+        }
         
-        $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $password = BosUtils::randomPassword();
@@ -169,8 +171,15 @@ class UserService extends AbstractService
         }
     }
 
-    public function createAdminForOrg($org,$contactPerson) {
+    public function createAdminForOrg($org,$contactPerson,$orgPreferences) {
         $contactPerson = (object)$contactPerson;
+        $orgPreferences = (object)$orgPreferences;
+        $preferences = array(
+            "soundnotification" => "true",
+            "emailalerts" => "false",
+            "timezone" => $orgPreferences->timezone,
+            "dateformat" => $orgPreferences->dateformat
+        );
         $data = array(
             "firstname" => $contactPerson->firstname,
             "lastname" => $contactPerson->lastname,
@@ -180,35 +189,44 @@ class UserService extends AbstractService
             "address_1" => $org->address,
             "address_2" => $org->city,
             "country" => $org->country,
-            "preferences" => "{\"soundnotification\":\"true\",\"emailalerts\":\"false\",\"timezone\":\"Asia/Calcutta\",\"dateformat\":\"dd/mm/yyyy\"}",
-            "username" => substr(strtolower(str_replace(' ', '', $org->name)), 0, 4).'admin',
-            "date_of_birth" => date('1960/m/d'),
+            "preferences" => json_encode($preferences),
+            "username" => $contactPerson->username,
+            "date_of_birth" => ' ',
             "designation" => "Admin",
             "orgid" => $org->id,
             "status" => "Active",
             "timezone" => "United States/New York",
             "gender" => " ",
             "managerid" => "1",
-            "date_of_join" => Date("Y-m-d"),
+            "date_of_join" => ' ',
             "password" => BosUtils::randomPassword()
-            // "password" => 'Welcome'.substr(str_replace(' ', '', $org->name), 0, 4).$org->id
         );
-        $result = $this->createUser($data);
+        $this->beginTransaction();
+        try{
+            $result = $this->createUser($data);
 
-        $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
-        $resultSet = $this->executeQueryWithParams($select)->toArray();
-      
+            $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
+            $resultSet = $this->executeQueryWithParams($select)->toArray();
+              
+            $this->addUserRole($data['id'], 'ADMIN');
+            $this->commit();
+        }
+        catch(Exception $e){
+            $this->rollback();
+            return 0;
+        }
+
         $this->messageProducer->sendTopic(json_encode(array(
             'To' => $data['email'],
             'Subject' => $org->name.' created!',
             'body' => $this->emailTemplateService->getContent('newAdminUser', $data)
         )),'mail');
 
-        $this->addUserRole($data['id'], 'ADMIN');
+
         return $resultSet[0]['id'];
     }
 
-    public function addUserRole($userId, $roleName) {
+    private function addUserRole($userId, $roleName) {
         if ($user = $this->getDataByParams('ox_user', array('id', 'orgid'), array('id' => $userId))->toArray()) {
             if ($role = $this->getDataByParams('ox_role', array('id'), array('org_id' => $user[0]['orgid'], 'name' => $roleName))->toArray()) {
                 if (!$this->getDataByParams('ox_user_role', array(), array('user_id' => $userId, 'role_id' => $role[0]['id']))->toArray()) {

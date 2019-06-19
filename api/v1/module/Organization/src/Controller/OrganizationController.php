@@ -58,9 +58,6 @@ class OrganizationController extends AbstractApiController
         if ($count == 2) {
             return $this->getFailureResponse("Entity not found for UUID", $id);
         }
-        if(isset($data['preferences'])){
-            $data['preferences'] = json_decode($data['preferences'],true);
-        }  
         return $this->getSuccessResponseWithData($data, 201);
     }
 

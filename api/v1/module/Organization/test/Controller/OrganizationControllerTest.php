@@ -9,6 +9,10 @@ use Oxzion\Service\OrganizationService;
 use Mockery;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Transaction\TransactionManager;
+use Oxzion\Service\AbstractService;
+use Zend\Db\ResultSet\ResultSet;
+
 
 
 
@@ -119,6 +123,15 @@ class OrganizationControllerTest extends MainControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
+    private function executeQueryTest($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        return $resultSet->toArray();
+    }
+
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
@@ -126,19 +139,50 @@ class OrganizationControllerTest extends MainControllerTest
         $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
-        $contact = array('firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharat@myvamla.com');
-        $data = array('name'=>'ORGANIZATION','address' => 'Bangalore','contact' => json_encode($contact));
+        $contact = array('username' => 'goku','firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharat@myvamla.com');
+        $preferences = array('currency' => 'INR','timezone' => 'Asia/Calcutta','dateformat' => 'dd/mm/yyy');
+        $data = array('name'=>'ORGANIZATION','address' => 'Bangalore','contact' => json_encode($contact),'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'ORGANIZATION', 'status' => 'Active')),'ORGANIZATION_ADDED')->once()->andReturn();
         }
+
+
         $this->dispatch('/organization', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
+        
+        $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
+        $roleResult = $this->executeQueryTest($query);
+      
+        for($x=0;$x<sizeof($roleResult);$x++){
+            $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =".$roleResult[$x]['id']."
+                AND uuid = '".$content['data']['uuid']."')";
+            $rolePrivilegeResult[] = $this->executeQueryTest($query);
+        }
+
+        $select = "SELECT * FROM ox_user_role where role_id =".$roleResult[0]['id'];
+        $roleResult = $this->executeQueryTest($select); 
+
+        $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$content['data']['uuid']."')";
+        $orgResult = $this->executeQueryTest($select); 
+
+        $select = "SELECT * FROM ox_user where username ='".$contact['username']."'";
+        $usrResult = $this->executeQueryTest($select); 
+       
+
+        $this->assertEquals(count($roleResult), 1);
+        $this->assertEquals(count($orgResult), 1);
+        $this->assertEquals($usrResult[0]['firstname'],$contact['firstname']);
+        $this->assertEquals($usrResult[0]['lastname'],$contact['lastname']);
+        $this->assertEquals($usrResult[0]['designation'],'Admin');
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 22);
+        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 7);
+        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 2);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);

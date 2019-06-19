@@ -30,7 +30,8 @@ class Organization extends Entity {
     public function validate() {
         $required = array(
             'name',
-            'status'
+            'status',
+            'preferences'
         );
         $this->validateWithParams($required);
     }
