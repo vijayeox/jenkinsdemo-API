@@ -75,14 +75,18 @@ class OrganizationService extends AbstractService
                 return 0;
             }
             $form->id = $this->table->getLastInsertValue();
+            $data['preferences'] = json_decode($data['preferences'],true);
+            $userid['id'] = $this->setupBasicOrg($form,$data['contact'],$data['preferences']);
 
-            $userid['id'] = $this->setupBasicOrg($form,$data['contact']);
-
-            $update = "UPDATE `ox_organization` SET `contactid` = '".$userid['id']."' where uuid = '".$data['uuid']."'";
-            $resultSet = $this->executeQueryWithParams($update);
-            $this->commit();
-
+            if(isset($userid['id'])){
+                $update = "UPDATE `ox_organization` SET `contactid` = '".$userid['id']."' where uuid = '".$data['uuid']."'";
+                $resultSet = $this->executeQueryWithParams($update);
+            }else{
+                return 0;
+            }
             $this->uploadOrgLogo($data['uuid'],$files);
+           
+            $this->commit();
             $this->messageProducer->sendTopic(json_encode(array('orgname' => $form->name, 'status' => $form->status)),'ORGANIZATION_ADDED');
         } catch (Exception $e) {
             $this->rollback();
@@ -143,16 +147,15 @@ class OrganizationService extends AbstractService
 
 
 
-    private function setupBasicOrg(Organization $org,$contactPerson) {
-        // adding basic roles
+    private function setupBasicOrg(Organization $org,$contactPerson,$orgPreferences) {
+        
+         // adding basic roles
         $returnArray['roles'] = $this->roleService->createBasicRoles($org->id);
 
-        // adding basic privileges
-        $returnArray['privileges'] = $this->privilegeService->createBasicPrivileges($org->id);
-
-        // adding a user
-        $returnArray['user'] = $this->userService->createAdminForOrg($org,$contactPerson);
+         // adding a user
+        $returnArray['user'] = $this->userService->createAdminForOrg($org,$contactPerson,$orgPreferences);
       
+       
         return $returnArray['user'];
     }
 
@@ -285,9 +288,7 @@ class OrganizationService extends AbstractService
         if (count($response) == 0) {
             return 0;
         }else{
-
         $response[0]['contact'] = $this->getOrgContactPersonDetails($id)[0]; 
-
     }
     
         return $response[0];

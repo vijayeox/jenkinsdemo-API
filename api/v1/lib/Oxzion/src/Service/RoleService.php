@@ -89,7 +89,11 @@ class RoleService extends AbstractService {
                 return 0;
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
-            $this->updateDefaultRolePrivileges($form);
+            $count = $this->updateDefaultRolePrivileges($form);
+            if($count == 0){
+                $this->rollback();
+                return 0;
+            }
             $this->commit();
         } catch(Exception $e) {
             $this->rollback();
@@ -201,7 +205,7 @@ class RoleService extends AbstractService {
     }
 
     public function createBasicRoles($orgid) {
-        $basicRoles = $this->getRolesByOrgid(0);
+        $basicRoles = $this->getRolesByOrgid(NULL);
         foreach ($basicRoles as $basicRole) {
             unset($basicRole['id']);
             $basicRole['org_id'] = $orgid;
@@ -213,23 +217,16 @@ class RoleService extends AbstractService {
     }
 
     protected function updateDefaultRolePrivileges(Role $role) {
-        $Privileges = array();
-        $privileges = $this->privilegeService->getPrivilegesByOrgid($role->org_id);
-        if (!$privileges)
+        $count = 0;
+        $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id) 
+                    SELECT ".$role->id.", rp.privilege_name,rp.permission,".$role->org_id.",rp.app_id from ox_role_privilege rp left join ox_role r on rp.role_id = r.id 
+            where r.name = '".$role->name."' and r.org_id is NULL";
+        $count = $this->runGenericQuery($query);
+        if(!$count){
             return 0;
-        foreach ($privileges as $privilege)
-            $Privileges = array(
-                'role_id' => $role->id,
-                'privilege_name' => $privilege['name'],
-                'permission' => $privilege['permission_allowed'],
-                'org_id' => $privilege['org_id'],
-                'app_id' => $privilege['app_id']
-            );
-        if ($Privileges) {
-            $result = $this->multiInsertOrUpdate('ox_role_privilege', $Privileges);
+        }else{
+            return 1;
         }
-        // echo "<pre>";print_r($result);exit();
-        return count($privileges);
     }
 
 }

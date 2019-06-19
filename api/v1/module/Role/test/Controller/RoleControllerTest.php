@@ -33,9 +33,9 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertEquals(3, count($content['data']));
         $this->assertEquals($content['data'][0]['id'], 4);
         $this->assertEquals($content['data'][0]['name'], 'ADMIN');
-        $this->assertEquals($content['data'][1]['id'], 5);
+        $this->assertEquals($content['data'][1]['id'], 6);
         $this->assertEquals($content['data'][1]['name'], 'EMPLOYEE');
-        $this->assertEquals($content['data'][2]['id'], 6);
+        $this->assertEquals($content['data'][2]['id'], 5);
         $this->assertEquals($content['data'][2]['name'], 'MANAGER');
         $this->assertEquals($content['total'],3);
     }
@@ -61,7 +61,7 @@ class RoleControllerTest extends MainControllerTest {
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(1, count($content['data']));
-        $this->assertEquals($content['data'][0]['id'], 5);
+        $this->assertEquals($content['data'][0]['id'], 6);
         $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
         $this->assertEquals($content['total'], 3);
     }
@@ -74,7 +74,7 @@ class RoleControllerTest extends MainControllerTest {
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(1, count($content['data']));
-        $this->assertEquals($content['data'][0]['id'], 5);
+        $this->assertEquals($content['data'][0]['id'], 6);
         $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
         $this->assertEquals($content['total'], 3);
     }
