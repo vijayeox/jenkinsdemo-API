@@ -126,6 +126,9 @@ class EmailClient{
 			$smtpConfig = array_merge(array('timeout' => 30,
 				'debug' => '../smtp.log'), 
 			$smtpConfig);
+			if($smtpConfig['secure'] == 1){
+				$smtpConfig['secure'] = 'tlsv1';
+			}
 	    	/* Fallback to UTF-8 (if replying, original message might be in
 	         * US-ASCII, for example, but To/Subject/Etc. may contain 8-bit
 	         * characters. */
