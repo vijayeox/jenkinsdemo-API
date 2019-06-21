@@ -60,9 +60,7 @@ class User extends Entity
             'orgid',
             'status',
             'date_of_birth',
-            'designation',
             'gender',
-            'managerid',
             'date_of_join',
             'date_created',
             'created_by'
