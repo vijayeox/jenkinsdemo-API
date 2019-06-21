@@ -167,8 +167,8 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['myContact'][0]['first_name'], 'Karan S'); 
         $this->assertEquals($content['data']['myContact'][0]['last_name'], 'Agarwal'); 
 
-        $this->assertEquals($content['data']['orgContact'][0]['firstname'], 'Bharat'); 
-        $this->assertEquals($content['data']['orgContact'][0]['lastname'], 'Gogineni'); 
+        $this->assertEquals($content['data']['orgContact'][0]['first_name'], 'Bharat'); 
+        $this->assertEquals($content['data']['orgContact'][0]['last_name'], 'Gogineni'); 
     }
 
     public function testgetcontactsSuccess()

@@ -58,7 +58,7 @@ namespace Callback\Service;
                     $response = $emailClient->buildAndSendMessage($body,$attachment,$headers,$smtpConfig,$opt=['html'=>false]);
                 }
             } catch(Exception $e) {
-                $this->log->error($this->logClass . " Error : ".$e->getMessage());
+                $this->logger->err($this->logClass . " Error : ".$e->getMessage());
                 return true;
             }
         }

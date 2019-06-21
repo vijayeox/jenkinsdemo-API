@@ -396,35 +396,61 @@ class OrganizationService extends AbstractService
         if($userArray){
             $userSingleArray= array_unique(array_map('current', $userArray));
 
-            $querystring = "SELECT u.username from ox_user_org as ouo 
-                 inner join ox_user as u on u.id = ouo.user_id
-                 where ouo.org_id = ".$orgId." and ouo.user_id not in (".implode(',', $userSingleArray).")";
+            $querystring = "SELECT u.username FROM ox_user_org as ouo 
+                            inner join ox_user as u on u.id = ouo.user_id 
+                            inner join ox_organization as org on ouo.org_id = org.id and org.id =".$orgId."
+                            where ouo.org_id =".$orgId." and ouo.user_id not in (".implode(',', $userSingleArray).") and ouo.user_id != org.contactid";
             $deletedUser = $this->executeQuerywithParams($querystring)->toArray();
 
-            $query = "SELECT ou.username from ox_user as ou 
-                LEFT OUTER JOIN ox_user_org as our on our.user_id = ou.id AND our.org_id = ou.orgid 
-                WHERE ou.id in (".implode(',', $userSingleArray).") AND our.org_id is Null";
+          
+            $query = "SELECT ou.username from ox_user as ou LEFT OUTER JOIN ox_user_org as our on 
+                        our.user_id = ou.id AND our.org_id = ou.orgid and our.org_id =".$orgId."
+                        WHERE ou.id in (".implode(',', $userSingleArray).") AND our.org_id is Null and ou.id not in (select user_id from  ox_user_org where user_id in (".implode(',', $userSingleArray).") and org_id =".$orgId.")";
             $insertedUser = $this->executeQuerywithParams($query)->toArray();
-            
+
+
             $this->beginTransaction();
             try{
-                $query = "DELETE uo FROM ox_user_org as uo  
-                            inner join ox_organization as org on uo.org_id = org.id 
-                            where org.id = ".$orgId." and uo.user_id != org.contactid";
+
+                $query = "UPDATE ox_user as ou 
+                            inner join ox_organization as org on org.id = ou.orgid
+                            and ou.id != org.contactid 
+                            SET ou.orgid = NULL WHERE ou.id not in (".implode(',', $userSingleArray).") AND ou.orgid = $orgId";
                 $resultSet = $this->executeQuerywithParams($query);
 
-                $update = "UPDATE ox_user SET orgid = $orgId WHERE id in (".implode(',', $userSingleArray).") AND orgid is NULL OR orgid = 0";
-                $resultSet = $this->executeQuerywithParams($update);
+                $select = "SELECT u.id FROM ox_user_org as ouo 
+                            inner join ox_user as u on u.id = ouo.user_id 
+                            inner join ox_organization as org on ouo.org_id = org.id and org.id =".$orgId."
+                            where ouo.org_id =".$orgId." and ouo.user_id not in (".implode(',', $userSingleArray).") and ouo.user_id != org.contactid";
+                $userId = $this->executeQuerywithParams($select)->toArray();
 
-                 
-                $insert = "INSERT INTO ox_user_org (user_id,org_id) 
-                                select u.id, ".$orgId." from ox_user as u 
-                                    left join ox_organization org on org.contactid = u.id and org.id = ".$orgId."
-                                    where org.id is null AND
-                                    u.id in (".implode(',', $userSingleArray).")";
+                $query = "DELETE ouo FROM ox_user_org as ouo 
+                            inner join ox_user as u on u.id = ouo.user_id 
+                            inner join ox_organization as org on ouo.org_id = org.id and org.id =".$orgId."
+                            where ouo.org_id =".$orgId." and ouo.user_id not in (".implode(',', $userSingleArray).") and ouo.user_id != org.contactid";
+
+                $resultSet = $this->executeQuerywithParams($query);
+               
+
+                $insert = "INSERT INTO ox_user_org (user_id,org_id,`default`)  
+                                SELECT ou.id,".$orgId.",case when (ou.orgid is NULL) 
+                                    then 1
+                                end 
+                                from ox_user as ou LEFT OUTER JOIN ox_user_org as our on our.user_id = ou.id AND our.org_id = ou.orgid and our.org_id =".$orgId."
+                                WHERE ou.id in (".implode(',', $userSingleArray).") AND our.org_id is Null AND ou.id not in (select user_id from  ox_user_org where user_id in (".implode(',', $userSingleArray).") and org_id =".$orgId.")";
                                 
                 $resultSet = $this->executeQuerywithParams($insert);
-                 
+
+
+                $update = "UPDATE ox_user SET orgid = $orgId WHERE id in (".implode(',', $userSingleArray).") AND orgid is NULL";
+                $resultSet = $this->executeQuerywithParams($update);
+
+                if(count($userId) > 0){
+                    $userIdArray= array_unique(array_map('current', $userId));                    
+                    $update = "UPDATE ox_user SET orgid = NULL WHERE id in (".implode(',', $userIdArray).")";
+                    $resultSet = $this->executeQuerywithParams($update);
+                }
+
                 $this->commit();
             }
             catch(Exception $e){

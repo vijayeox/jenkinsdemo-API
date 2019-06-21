@@ -115,7 +115,7 @@ class ContactService extends AbstractService
         $resultSet1 = $this->executeQuerywithParams($queryString1, $where1, null, $order1);
 
         //Code to get the list of all the contact information from the user
-        $queryString2 = "Select firstname, lastname, name, email, status, country, date_of_birth, designation, phone, gender, website, timezone, date_of_join from ox_user";
+        $queryString2 = "Select firstname as first_name, lastname as last_name, name, email, status, country, date_of_birth, designation, phone as phone_1, gender, website, timezone, date_of_join from ox_user";
         $where2 = "where orgid = " . $orgId . "";
         $order2 = "order by firstname asc";
         $resultSet2 = $this->executeQuerywithParams($queryString2, $where2, null, $order2);
