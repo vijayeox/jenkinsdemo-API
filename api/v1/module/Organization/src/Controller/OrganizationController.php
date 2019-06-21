@@ -77,6 +77,7 @@ class OrganizationController extends AbstractApiController
                 $baseUrl =$this->getBaseUrl();
                 $logo = $result['data'][$x]['logo'];
                 $result['data'][$x]['logo'] = $baseUrl . "/organization/logo/" . $result['data'][$x]['uuid'];
+                $result['data'][$x]['preferences'] = json_decode($result['data'][$x]['preferences'],true);
             }
         }
         return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);

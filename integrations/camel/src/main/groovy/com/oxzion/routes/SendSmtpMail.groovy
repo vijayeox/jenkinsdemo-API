@@ -33,7 +33,7 @@ public class SendSmtpMail extends RouteBuilder {
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody() as String)
                         def toList = ""
                         if(object.to){
-                            def recepientList = object.to as ArrayList
+                            def recepientList = object.to instanceof String ? [object.to] : object.to as ArrayList
                             for (int i=0;i<recepientList.size();i++){
                                 def recepient = recepientList.get(i)
                                 if(recepientList.size()>1){
@@ -47,12 +47,12 @@ public class SendSmtpMail extends RouteBuilder {
                         if(object.from){
                             exchange.getIn().setHeader("From", object.from as String)
                         } else {
-                            exchange.getIn().setHeader("From", "{{smtp.from.email}}")
+                            exchange.getIn().setHeader("From", getContext().resolvePropertyPlaceholders("{{smtp.from.email}}"))
                         }
                         if(object.subject){
                             exchange.getIn().setHeader("Subject", object.subject as String)
                         } else {
-                            exchange.getIn().setHeader("Subject", "{{default.subject}}")
+                            exchange.getIn().setHeader("Subject", getContext().resolvePropertyPlaceholders("{{default.subject}}"))
                         }
                         exchange.getIn().setBody(object.body as String)
                         if(object.attachments){

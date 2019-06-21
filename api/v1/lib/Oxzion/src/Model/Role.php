@@ -9,6 +9,7 @@ class Role extends Entity {
         'name' => NULL,
         'org_id' => 0,
         'description' => NULL,
+        'is_system_role' => NULL,
     );
 
     public function __construct($data = array()) {

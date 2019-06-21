@@ -713,7 +713,8 @@ class UserService extends AbstractService
                 if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))->toArray()) {
                     $data = array(array(
                         'user_id' => $userId,
-                        'org_id' => $organizationId
+                        'org_id' => $organizationId,
+                        'default' => 1
                     ));
                     $result_update = $this->multiInsertOrUpdate('ox_user_org', $data);
                     if ($result_update->getAffectedRows() == 0)

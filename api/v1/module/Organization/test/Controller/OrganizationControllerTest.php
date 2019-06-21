@@ -297,15 +297,156 @@ class OrganizationControllerTest extends MainControllerTest
     public function testsaveUser()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/save', 'POST',array('userid' => '[{"id":3}]'));
+        $uuid = "53012471-2863-4949-afb1-e69b0891c98a";
+
+        $this->dispatch('/organization/'.$uuid.'/save', 'POST',array('userid' => '[{"id":3}]'));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
+
+        
+
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
-        $content = json_decode($this->getResponse()->getContent(), true);
+        $content = json_decode($this->getResponse()->getContent(), true);  
+
+        $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$uuid."')";
+        $orgResult = $this->executeQueryTest($select); 
+
+
+        $select = "SELECT count(id) from ox_user where orgid is NULL";
+        $orgCount = $this->executeQueryTest($select); 
+      
         $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($orgResult),2);
+        $this->assertEquals($orgResult[0]['user_id'],3);
+        $this->assertEquals($orgResult[0]['org_id'],1);
+        $this->assertEquals($orgResult[0]['default'],1);
+        $this->assertEquals($orgResult[1]['user_id'],4);
+        $this->assertEquals($orgResult[1]['org_id'],1);
+        $this->assertEquals($orgResult[1]['default'],1);
+        $this->assertEquals($orgCount[0]['count(id)'],2);
+
+    }
+
+
+    public function testsaveUserWithUserAlreadyExistsInOtherOrg()
+    {
+        $this->initAuthToken($this->adminUser);
+        $uuid = "53012471-2863-4949-afb1-e69b0891c98a";
+
+        $this->dispatch('/organization/'.$uuid.'/save', 'POST',array('userid' => '[{"id":3},{"id":"5"}]'));
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
+        }
+
+        
+
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('addUserToOrganization');
+        $content = json_decode($this->getResponse()->getContent(), true);  
+
+        $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$uuid."')";
+        $orgResult = $this->executeQueryTest($select); 
+
+        $select = "SELECT count(id) from ox_user where orgid is NULL";
+        $orgCount = $this->executeQueryTest($select); 
+      
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($orgResult),3);
+        $this->assertEquals($orgResult[0]['user_id'],3);
+        $this->assertEquals($orgResult[0]['org_id'],1);
+        $this->assertEquals($orgResult[0]['default'],1);
+        $this->assertEquals($orgResult[1]['user_id'],4);
+        $this->assertEquals($orgResult[1]['org_id'],1);
+        $this->assertEquals($orgResult[1]['default'],1);
+        $this->assertEquals($orgResult[2]['user_id'],5);
+        $this->assertEquals($orgResult[2]['org_id'],1);
+        $this->assertEquals($orgResult[2]['default'],NULL);
+        $this->assertEquals($orgCount[0]['count(id)'],2);
+
+    }
+
+
+    public function testsaveUserWithUserToOtherOrg()
+    {
+        $this->initAuthToken($this->adminUser);
+        $uuid = "b0971de7-0387-48ea-8f29-5d3704d96a46";
+
+        $this->dispatch('/organization/'.$uuid.'/save', 'POST',array('userid' => '[{"id":1},{"id":2},{"id":3},{"id":"5"}]'));
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
+        }
+
+        
+
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('addUserToOrganization');
+        $content = json_decode($this->getResponse()->getContent(), true);  
+
+        $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$uuid."')";
+        $orgResult = $this->executeQueryTest($select);
+
+
+        $select = "SELECT count(id) from ox_user where orgid is NULL";
+        $orgCount = $this->executeQueryTest($select);
+
+      
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($orgResult),4);
+        $this->assertEquals($orgResult[0]['user_id'],5);
+        $this->assertEquals($orgResult[0]['org_id'],2);
+        $this->assertEquals($orgResult[0]['default'],1);
+        $this->assertEquals($orgResult[1]['user_id'],1);
+        $this->assertEquals($orgResult[1]['org_id'],2);
+        $this->assertEquals($orgResult[1]['default'],NULL);
+        $this->assertEquals($orgResult[2]['user_id'],2);
+        $this->assertEquals($orgResult[2]['org_id'],2);
+        $this->assertEquals($orgResult[2]['default'],NULL);
+        $this->assertEquals($orgResult[3]['user_id'],3);
+        $this->assertEquals($orgResult[3]['org_id'],2);
+        $this->assertEquals($orgResult[3]['default'],NULL);
+        $this->assertEquals($orgCount[0]['count(id)'],0);
+
+    }
+
+    public function testToDeleteContactUserFromOrg()
+    {
+        $this->initAuthToken($this->adminUser);
+        $uuid = "b0971de7-0387-48ea-8f29-5d3704d96a46";
+
+        $this->dispatch('/organization/'.$uuid.'/save', 'POST',array('userid' => '[{"id":1}]'));
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
+        }
+
+        
+
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('addUserToOrganization');
+        $content = json_decode($this->getResponse()->getContent(), true);  
+
+        $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$uuid."')";
+        $orgResult = $this->executeQueryTest($select);
+        
+        $select = "SELECT count(id) from ox_user where orgid is NULL";
+        $orgCount = $this->executeQueryTest($select);
+        
+      
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($orgResult),2);
+        $this->assertEquals($orgResult[0]['user_id'],5);
+        $this->assertEquals($orgResult[0]['org_id'],2);
+        $this->assertEquals($orgResult[0]['default'],1);
+        $this->assertEquals($orgResult[1]['user_id'],1);
+        $this->assertEquals($orgResult[1]['org_id'],2);
+        $this->assertEquals($orgResult[1]['default'],NULL);
+        $this->assertEquals($orgCount[0]['count(id)'],0);
+
     }
 
     public function testAddUserToOrganizationWithDifferentUser()

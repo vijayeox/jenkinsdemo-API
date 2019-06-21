@@ -32,6 +32,15 @@ class PrivilegeController extends AbstractApiController
         $this->privilegeService = $privilegeService;
     }
 
+
+
+
+    public function getMasterPrivilegeAction()
+    {
+        $params = $this->params()->fromRoute();
+        $result = $this->privilegeService->getMasterPrivilegeList($params);
+        return $this->getSuccessResponseWithData($result);        
+    }
     /**
      * Get list of all the privileges for the logged in user for a specific app
      * @api

@@ -11,10 +11,12 @@ namespace Callback\Service;
     {
         protected $dbAdapter;
         protected $emailService;
+        private $logClass;
 
         public function __construct($config, Logger $log)
         {
             parent::__construct($config, null, $log);
+            $this->logClass = __CLASS__;
         }
         public function setEmailService($emailService){
             $this->emailService = $emailService;
@@ -56,6 +58,7 @@ namespace Callback\Service;
                     $response = $emailClient->buildAndSendMessage($body,$attachment,$headers,$smtpConfig,$opt=['html'=>false]);
                 }
             } catch(Exception $e) {
+                $this->logger->err($this->logClass . " Error : ".$e->getMessage());
                 return true;
             }
         }

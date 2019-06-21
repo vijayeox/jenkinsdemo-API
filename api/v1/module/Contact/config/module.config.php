@@ -17,13 +17,6 @@ return [
                     'route' => '/contact[/:contactId]',
                     'defaults' => [
                         'controller' => Controller\ContactController::class,
-                        'access' => [
-                            // SET ACCESS CONTROL
-                            'put' => 'MANAGE_CONTACT_WRITE',
-                            'post' => 'MANAGE_CONTACT_CREATE',
-                            'delete' => 'MANAGE_CONTACT_DELETE',
-                            'get' => 'MANAGE_CONTACT_READ',
-                        ],
                     ],
                 ],
             ],
@@ -35,10 +28,6 @@ return [
                         'controller' => Controller\ContactController::class,
                         'action' => 'getContactListByOrg',
                         'method' => 'get',
-                        'access'=>[
-                            // SET ACCESS CONTROL
-                            'getContactListByOrg'=> 'MANAGE_CONTACT_READ',
-                        ],
                     ],
                 ],
             ],
@@ -50,10 +39,7 @@ return [
                         'controller' => Controller\ContactController::class,
                         'action' => 'getContacts',
                         'method' => 'get',
-                        'access'=>[
-                            // SET ACCESS CONTROL
-                            'getContacts'=> 'MANAGE_CONTACT_READ',
-                        ],
+                        
                     ],
                 ],
             ],

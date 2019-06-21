@@ -21,6 +21,28 @@ class PrivilegeService extends AbstractService {
         $this->modelClass = new Privilege();
     }
 
+
+    public function getMasterPrivilegeList($params){
+            
+
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+            $select = "SELECT orp.* FROM ox_role_privilege orp WHERE orp.org_id = ".$orgId." AND orp.role_id = (SELECT r.id FROM ox_role r WHERE r.name = 'ADMIN' and r.org_id = ".$orgId.") ORDER BY orp.id";
+            $resultSet = $this->executeQuerywithParams($select);
+            $masterPrivilege = $resultSet->toArray();
+
+            if(isset($params['roleId'])){
+                $roleId = $params['roleId']; 
+                $select = "SELECT orp.* FROM ox_role_privilege orp WHERE orp.org_id = ".$orgId." AND orp.role_id =".$roleId." ORDER BY orp.id";
+                $resultSet = $this->executeQuerywithParams($select);
+                $rolePrivilege = $resultSet->toArray();
+
+                return array('masterPrivilege' => $masterPrivilege,
+                         'rolePrivilege' => $rolePrivilege);
+            }
+
+            return array('masterPrivilege' => $masterPrivilege);
+    }
+
     public function getAppPrivilegeForUser($appId)
     {
         try {
