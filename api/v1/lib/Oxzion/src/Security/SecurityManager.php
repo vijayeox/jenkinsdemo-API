@@ -22,7 +22,7 @@ class SecurityManager{
 			$api_permission = $accessName[$actionName];
 		} else {
 			if(!empty($accessName)){
-        		$api_permission = $accessName[strtolower($e->getRequest()->getMethod())];
+        		$api_permission = isset($accessName[strtolower($e->getRequest()->getMethod())]) ? $accessName[strtolower($e->getRequest()->getMethod())] : NULL;
 			} else {
 				$api_permission = NULL;
 			}
