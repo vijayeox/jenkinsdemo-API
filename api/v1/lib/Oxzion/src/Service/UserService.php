@@ -472,25 +472,29 @@ class UserService extends AbstractService
         foreach ($results as $key => $value) {
             $permissions = array_merge($permissions, $this->addPermissions($value['privilege_name'], $value['permission']));
         }
-        return array_unique($permissions);
+        return $permissions;
     }
 
     public function addPermissions($privilegeName, $permission)
     {
         $permissionArray = array();
         if (($permission & 1) != 0) {
-            $permissionArray[] = $privilegeName . "_" . 'READ';
+            $permissionData = $privilegeName . "_" . 'READ';
+            $permissionArray[$permissionData] = TRUE ;
         }
         if (($permission & 2) != 0) {
-            $permissionArray[] = $privilegeName . "_" . 'WRITE';
+            $permissionData = $privilegeName . "_" . 'WRITE';
+            $permissionArray[$permissionData] = TRUE ;
         }
         if (($permission & 4) != 0) {
-            $permissionArray[] = $privilegeName . "_" . 'CREATE';
+            $permissionData = $privilegeName . "_" . 'CREATE';
+            $permissionArray[$permissionData] =  TRUE;
         }
         if (($permission & 8) != 0) {
-            $permissionArray[] = $privilegeName . "_" . 'DELETE';
+            $permissionData = $privilegeName . "_" . 'DELETE';
+            $permissionArray[$permissionData] =  TRUE;
         }
-        return $permissionArray;
+     return $permissionArray;
     }
 
     /**
