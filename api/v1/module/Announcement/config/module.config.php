@@ -22,7 +22,6 @@ return [
                             'put'=> 'MANAGE_ANNOUNCEMENT_WRITE',
                             'post'=> 'MANAGE_ANNOUNCEMENT_WRITE',
                             'delete'=> 'MANAGE_ANNOUNCEMENT_WRITE',
-                            'get'=> 'MANAGE_ANNOUNCEMENT_READ',
                         ],
                     ],
                 ],
