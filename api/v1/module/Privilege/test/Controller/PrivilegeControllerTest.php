@@ -67,7 +67,7 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('getMasterPrivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['masterPrivilege']),25);
+        $this->assertEquals(count($content['data']['masterPrivilege']),24);
         $this->assertEquals($content['data']['masterPrivilege'][0]['id'],1);
         $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_ANNOUNCEMENT');
         $this->assertEquals($content['data']['masterPrivilege'][1]['id'],16);
@@ -87,12 +87,12 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('getMasterPrivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['masterPrivilege']),25);
+        $this->assertEquals(count($content['data']['masterPrivilege']),24);
         $this->assertEquals($content['data']['masterPrivilege'][0]['id'],1);
         $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_ANNOUNCEMENT');
         $this->assertEquals($content['data']['masterPrivilege'][1]['id'],16);
         $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'],'MANAGE_GROUP');
-        $this->assertEquals(count($content['data']['rolePrivilege']),7);
+        $this->assertEquals(count($content['data']['rolePrivilege']),6);
         $this->assertEquals($content['data']['rolePrivilege'][0]['id'],39);
         $this->assertEquals($content['data']['rolePrivilege'][0]['privilege_name'],'MANAGE_MLET');
         $this->assertEquals($content['data']['rolePrivilege'][1]['id'],42);
@@ -108,7 +108,7 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('getMasterPrivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['masterPrivilege']),25);
+        $this->assertEquals(count($content['data']['masterPrivilege']),24);
         $this->assertEquals($content['data']['masterPrivilege'][0]['id'],1);
         $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_ANNOUNCEMENT');
         $this->assertEquals($content['data']['masterPrivilege'][1]['id'],16);

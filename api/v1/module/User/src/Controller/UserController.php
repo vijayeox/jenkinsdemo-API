@@ -148,6 +148,13 @@ class UserController extends AbstractApiController
         return $this->getUserInfo($id,$params);
     }
 
+
+    public function saveMeAction()
+    {
+        $data = $this->params()->fromPost();
+        $id =AuthContext::get(AuthConstants::USER_ID);
+        return $this->update($id,$data);
+    }
  
     /**
      * GET List User API

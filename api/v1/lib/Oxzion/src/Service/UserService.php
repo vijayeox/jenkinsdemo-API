@@ -330,7 +330,7 @@ class UserService extends AbstractService
      */
     public function deleteUser($id)
     {
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->getByUuid($id, array());
         $org = $this->getOrg($obj->orgid);
         if (is_null($obj)) {
             return 0;

@@ -180,9 +180,9 @@ class OrganizationControllerTest extends MainControllerTest
         $this->assertEquals($usrResult[0]['firstname'],$contact['firstname']);
         $this->assertEquals($usrResult[0]['lastname'],$contact['lastname']);
         $this->assertEquals($usrResult[0]['designation'],'Admin');
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 22);
-        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 7);
-        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 2);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 21);
+        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
+        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
@@ -449,15 +449,19 @@ class OrganizationControllerTest extends MainControllerTest
 
     }
 
+    
+
     public function testAddUserToOrganizationWithDifferentUser()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/save', 'POST',array('userid' => '[{"id":10},{"id":5}]'));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/save', 'POST',array('userid' => '[{"id":10},{"id":90}]'));
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
+
+
 
     public function testgetUsersofOrg()
     {

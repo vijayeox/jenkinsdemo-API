@@ -42,6 +42,17 @@ return [
                     ],
                 ],
             ],
+            'saveMe'=> [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/me/save',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'PUT',
+                        'action' => 'saveMe',
+                    ],
+                ],
+            ],
             'userInfoById' => [
                 'type' => Segment::class,
                 'options' => [

@@ -219,7 +219,6 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['description'], $data['description']);
     }
 
     public function testUpdateNotFound()
@@ -241,7 +240,7 @@ class UserControllerTest extends ControllerTest
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->managerUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
         }
-        $this->dispatch('/user/3', 'DELETE');
+        $this->dispatch('/user/4fd9f04d-758f-11e9-b2d5-68ecc57cde45', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -294,15 +293,6 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    // public function testAddUserToGroupWithExistingGroup()
-    // {
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/user/1/addusertogroup/1', 'POST');
-    //     $this->assertResponseStatusCode(404);
-    //     $this->setDefaultAsserts('addusertogroup');
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error');
-    // }
 
     public function testAddUserToProject()
     {
@@ -623,6 +613,21 @@ class UserControllerTest extends ControllerTest
         $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($diff, array());
+    }
+
+    public function testSaveMe(){
+        $data = ['name' => 'John Holt','firstname' => 'John','lastname' => 'Holt'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/me/save', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('saveMe');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['firstname'], $data['firstname']);
+        $this->assertEquals($content['data']['lastname'], $data['lastname']);
     }
 
 }
