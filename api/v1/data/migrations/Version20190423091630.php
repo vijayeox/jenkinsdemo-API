@@ -17,11 +17,11 @@ final class Version20190423091630 extends AbstractMigration
         $this->addSql("UPDATE `ox_app` SET `category` = 'utilities', `name` = 'Admin', `type` = 1 WHERE `id` = 1");
         $this->addSql("UPDATE `ox_app` SET `category` = 'office', `name` = 'Announcements',`type` = 1 WHERE `id` = 2");
         $this->addSql("UPDATE `ox_app` SET `name`= 'AppBuilder',`type` = 1 WHERE `id` = 3");
-        $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`) VALUES ('CRM','".Uuid::uuid4()."','organization','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}')");
-        $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`) VALUES ('MailAdmin','".Uuid::uuid4()."','utilities','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}')");
-        $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`) VALUES ('Settings','".Uuid::uuid4()."','utilities','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}')");
-        $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`) VALUES ('ImageUploader','".Uuid::uuid4()."','collaboration','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"true\"}')");
-        $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`) VALUES ('Preferences','".Uuid::uuid4()."','office','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}')");
+        $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`,`type`) VALUES ('CRM','".Uuid::uuid4()."','organization','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}', 1)");
+        $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`,`type`) VALUES ('MailAdmin','".Uuid::uuid4()."','utilities','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}', 1)");
+        $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`,`type`) VALUES ('Settings','".Uuid::uuid4()."','utilities','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}', 1)");
+        $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`,`type`) VALUES ('ImageUploader','".Uuid::uuid4()."','collaboration','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"true\"}', 1)");
+        $this->addSql("INSERT INTO `ox_app` (`name`,`uuid`,`category`,`date_created`,`created_by`,`status`,`start_options`,`type`) VALUES ('Preferences','".Uuid::uuid4()."','office','2019-04-25 04:11:39',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}', 1)");
 
 
         $this->addSql("UPDATE `ox_role_privilege` SET `permission` = 1 , `app_id` = (SELECT `id` from `ox_app` WHERE `name` LIKE 'MailAdmin') WHERE `privilege_name` = 'MANAGE_EMAIL' ");

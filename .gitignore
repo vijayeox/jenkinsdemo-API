@@ -12,3 +12,4 @@
 /api/v1/data/template/templates_c
 /integrations/openproject/export
 /build/
+/.project

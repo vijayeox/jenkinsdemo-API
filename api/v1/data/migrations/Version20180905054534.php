@@ -2,7 +2,7 @@
 
 namespace Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
+use Doctrine\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
@@ -13,7 +13,7 @@ class Version20180905054534 extends AbstractMigration {
     /**
      * @param Schema $schema
      */
-    public function up(Schema $schema) {
+    public function up(Schema $schema) : void {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("CREATE TABLE `ox_announcement` (
                 `id` INT NOT NULL AUTO_INCREMENT,
@@ -61,7 +61,7 @@ class Version20180905054534 extends AbstractMigration {
     /**
      * @param Schema $schema
      */
-    public function down(Schema $schema) {
+    public function down(Schema $schema) : void {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql("DROP TABLE ox_announcement");
         $this->addSql("DROP TABLE ox_announcement_group_mapper");
