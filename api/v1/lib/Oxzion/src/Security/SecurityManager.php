@@ -51,11 +51,12 @@ class SecurityManager{
 	*/
 	public function isGranted($privilege){
 		$roles = AuthContext::get(AuthConstants::PRIVILEGES);
-		if (is_string($privilege) && in_array($privilege, $roles)) {
+		
+		if (is_string($privilege) && $roles[$privilege]) {
 			return 1;
 		} else if(is_array($privilege)){
 			foreach ($privilege as $value) {
-				if(in_array($value, $roles)){
+				if($roles[$value]){
 					return 1;
 				}
 			}
