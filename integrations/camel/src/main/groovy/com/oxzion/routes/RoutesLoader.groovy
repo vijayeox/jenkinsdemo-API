@@ -49,7 +49,11 @@ class RoutesLoader extends RouteBuilder{
                     // .setHeader(Exchange.HTTP_METHOD,constant("POST"))
                    // .to("log:DEBUG?showBody=true&showHeaders=true")
                     route.to.each{
-                        definition.to(it).to("log:DEBUG?showBody=true&showHeaders=true")
+                        try{
+                            definition.to(it).to("log:DEBUG?showBody=true&showHeaders=true")
+                        }catch(Exception e){
+                            println "Error when invoking ${it} - ${e.printStackTrace()}"
+                        }
                     }
                 }
             }

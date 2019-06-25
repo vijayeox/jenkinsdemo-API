@@ -139,7 +139,7 @@ class ProjectService extends AbstractService {
 		if (is_null($obj)) {
 			return 0;
 		}
-		$form = new Project();
+        $form = new Project();
         $data = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
@@ -157,7 +157,7 @@ class ProjectService extends AbstractService {
         	$this->rollback();
         	return 0;
         }
-        $this->messageProducer->sendTopic(json_encode(array('orgname'=> $org['name'],'old_projectname' => $obj->toArray()['name'],'new_projectname' => $data['name'],'description' => $data['description'],'uuid' => $data['uuid'])),'PROJECT_UPDATED');
+        $this->messageProducer->sendTopic(json_encode(array('orgname'=> $org['name'],'old_projectname' => $obj->name,'new_projectname' => $data['name'],'description' => $data['description'],'uuid' => $data['uuid'])),'PROJECT_UPDATED');
         return $count;
     }
 

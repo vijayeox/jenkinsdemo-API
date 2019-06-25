@@ -11,12 +11,12 @@ routes {
                                                                  "${callback.URL}/callback/crm/adduser"]],
         // ['from':'activemq:topic:USERTOORGANIZATION_ALREADYEXISTS', 'to':'"callback.URL" + '],
 
-        ['from':'activemq:topic:PROJECT_ADDED', 'to':["${callback.URL}/callback/chat/createchannel",
-                                                      "${callback.URL}/callback/task/addproject"]],
-        ['from':'activemq:topic:PROJECT_UPDATED', 'to':["${callback.URL}/callback/chat/updatechannel",
-                                                       "${callback.URL}/callback/task/updateproject"]],
-        ['from':'activemq:topic:PROJECT_DELETED', 'to':["${callback.URL}/callback/chat/deletechannel",
-                                                            "${callback.URL}/callback/task/deleteproject"]],
+        ['from':'activemq:topic:PROJECT_ADDED', 'to':["${callback.URL}/callback/task/addproject",
+                                                      "${callback.URL}/callback/chat/createchannel"]],
+        ['from':'activemq:topic:PROJECT_UPDATED', 'to':["${callback.URL}/callback/task/updateproject",
+                                                        "${callback.URL}/callback/chat/updatechannel"]],
+        ['from':'activemq:topic:PROJECT_DELETED', 'to':["${callback.URL}/callback/task/deleteproject",
+                                                        "${callback.URL}/callback/chat/deletechannel"]],
         ['from':'activemq:topic:USERTOPROJECT_ADDED', 'to':["${callback.URL}/callback/chat/addusertochannel"]],
         ['from':'activemq:topic:USERTOPROJECT_DELETED', 'to':["${callback.URL}/callback/chat/removeuserfromchannel"]],
 

@@ -25,17 +25,26 @@ namespace Callback\Controller;
             $this->taskService = $taskService;
         }
 
-        private function convertParams($params){
-            if(!is_object($params)){
-                if(key($params)){
-                    $params = json_decode(key($params),true);
+        private function convertParams(){
+           $params = json_decode(file_get_contents("php://input"),true);
+
+           if(!isset($params)){
+                 $params = $this->params()->fromPost();          
+                 if(!is_object($params)){
+                    if(key($params)){
+                            $params = json_decode(key($params),true);
+                    }
                 }
-            }
+           }
             return $params;
         }
 
+
         public function addProjectAction(){
-           $params = $this->convertParams($this->params()->fromPost());
+            
+            $params = $this->convertParams();
+            $params['projectdata'] = ($params['projectname']) ? ($params['projectname']) : "No Project to ADD";
+           $this->log->info(TaskCallbackController::class.":Project Data- ".$params['projectdata']);
            $response = $this->taskService->addProjectToTask($params['projectname'],$params['description'],$params['uuid']);
            if($response){
                 $this->log->info(TaskCallbackController::class.":Added project to task");
@@ -45,7 +54,11 @@ namespace Callback\Controller;
         }
 
         public function deleteProjectAction(){
-           $params = $this->convertParams($this->params()->fromPost());
+           $params = $this->convertParams();
+
+           $params['projectdata'] = ($params['uuid']) ? ($params['uuid']) : "No Project to Delete";
+            $this->log->info(TaskCallbackController::class.":Project Data- ".$params['projectdata']);
+         
            $response = $this->taskService->deleteProjectFromTask($params['uuid']);
             if($response){
                 $this->log->info(TaskCallbackController::class.":Project Deleted Successfully");
@@ -55,7 +68,10 @@ namespace Callback\Controller;
         }
 
         public function updateProjectAction(){
-           $params = $this->convertParams($this->params()->fromPost());
+           $params = $this->convertParams();
+
+           $params['projectdata'] = ($params['new_projectname']) ? ($params['new_projectname']) : "No Project to Update";
+           $this->log->info(TaskCallbackController::class.":Project Data- ".$params['projectdata']);
            $response = $this->taskService->updateProjectInTask($params['new_projectname'],$params['description'],$params['uuid']);
             if($response){
                 $this->log->info(TaskCallbackController::class.":Project Updated Successfully");
