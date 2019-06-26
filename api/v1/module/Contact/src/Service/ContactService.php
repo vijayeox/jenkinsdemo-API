@@ -9,11 +9,16 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
+use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\FileUtils;
+use Oxzion\Service\UserService;
+
 
 class ContactService extends AbstractService
 {
 
     private $table;
+    public const ALL_FIELDS = "-1";
 
     public function __construct($config, $dbAdapter, ContactTable $table)
     {
@@ -26,12 +31,22 @@ class ContactService extends AbstractService
      * @return int|string
      *
      */
-    public function createContact(&$data)
+    public function createContact(&$data,$files = NULL)
     {
         $form = new Contact();
-        $data['org_id'] = (isset($data['org_id']))?$data['org_id']:AuthContext::get(AuthConstants::ORG_ID);
+
+        if(isset($data['uuid'])){
+            $data['user_id'] = $this->getUserByUuid($data['uuid']);
+        }
+        else{
+            $data['user_id'] = NULL;
+        }
+        unset($data['uuid']);
+        $data['uuid'] = Uuid::uuid4();
+        $data['user_id'] = (isset($data['user_id'])) ? $data['user_id'] : null;
+        $data['icon_type'] = (isset($data['icon_type'])) ? $data['icon_type'] : TRUE; 
         $data['owner_id'] = (isset($data['owner_id'])) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
-        $data['created_id'] = (isset($data['user_id']))?$data['user_id']:AuthContext::get(AuthConstants::USER_ID);
+        $data['created_id'] = (isset($data['created_id'])) ? $data['created_id'] : AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $form->exchangeArray($data);
         $form->validate();
@@ -39,6 +54,11 @@ class ContactService extends AbstractService
         $count = 0;
         try {
             $count = $this->table->save($form);
+
+            if(isset($files)){
+                print("FIE");
+                $this->uploadContactIcon($data['uuid'],$data['owner_id'],$files);
+            }
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -53,27 +73,27 @@ class ContactService extends AbstractService
         return $count;
     }
 
-    public function updateContact($id, &$data)
+    public function updateContact($id,&$data,$files)
     {
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
-            return 0;
+            return 2;
         }
         $form = new Contact();
         $data = array_merge($obj->toArray(), $data);
-        $data['id'] = $id;
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['owner_id'] = ($data['owner_id']) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
-        $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
         try {
             $count = $this->table->save($form);
+            if(isset($files)){
+                $this->uploadContactIcon($data['uuid'],$data['owner_id'],$files);
+            }
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                return 1;
             }
         } catch (Exception $e) {
             $this->rollback();
@@ -82,48 +102,39 @@ class ContactService extends AbstractService
         return $count;
     }
 
+
+    public function getContactsByUuid($uuid){
+        $select = "SELECT * from `ox_contact` where uuid = '".$uuid."'";
+        $result = $this->executeQuerywithParams($select)->toArray();
+        if($result == 0){
+            return 0;
+        }
+        return $result;
+    }
+
     public function deleteContact($id)
     {
+        $sql = $this->getSqlObject();
         $count = 0;
         try {
-            $count = $this->table->delete($id);
-            if ($count == 0) {
-                return 0;
-            }
+            $delete = $sql->delete('ox_contact');
+            $delete->where(['uuid' => $id]);
+            $result = $this->executeUpdate($delete);
+            if($result->getAffectedRows() == 0)
+                {
+                    $this->rollback();
+                    return 0;
+                }
+            else {
+                    return 1;
+                 }
         } catch (Exception $e) {
             $this->rollback();
         }
         return $count;
     }
 
-    public function getContactByOwnerId()
-    {
-        $userId = AuthContext::get(AuthConstants::USER_ID);
-        $queryString = "select * from ox_contact";
-        $where = "where owner_id = " . $userId . " ";
-        $order = "order by first_name";
-        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        return $resultSet->toArray();
-    }
-
-    public function getContactByOrgId()
-    {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
-        $queryString1 = "select * from ox_contact";
-        $where1 = "where org_id = " . $orgId . "";
-        $order1 = "order by first_name asc";
-        $resultSet1 = $this->executeQuerywithParams($queryString1, $where1, null, $order1);
-
-        //Code to get the list of all the contact information from the user
-        $queryString2 = "Select firstname as first_name, lastname as last_name, name, email, status, country, date_of_birth, designation, phone as phone_1, gender, website, timezone, date_of_join from ox_user";
-        $where2 = "where orgid = " . $orgId . "";
-        $order2 = "order by firstname asc";
-        $resultSet2 = $this->executeQuerywithParams($queryString2, $where2, null, $order2);
-
-        return $resultSet = ['myContact' => ($resultSet1->toArray()), 'orgContact' => ($resultSet2->toArray())];
-    }
-
-    public function getContacts($column, $filter=null){
+    public function getContacts($column = ContactService::ALL_FIELDS, $filter=null){
         // filter criteria, column control - all or name
         // filter for searching
         // print_r('col: '.gettype($column));
@@ -132,33 +143,33 @@ class ContactService extends AbstractService
 
         $queryString1 = "SELECT * from (";
 
-        if($column == "-1"){
-            $queryString2 = "SELECT id as contact_id, null as user_id, first_name, last_name, phone_1, phone_list, email, email_list from ox_contact";
+        if($column == ContactService::ALL_FIELDS){
+            $queryString2 = "SELECT oxc.uuid as uuid, user_id, oxc.first_name, oxc.last_name, oxc.phone_1, oxc.phone_list, oxc.email, oxc.email_list, oxc.company_name, oxc.icon_type,oxc.designation, oxc.country, '1' as contact_type from ox_contact as oxc";
         } else {
-            $queryString2 = "SELECT id as contact_id, null as user_id, first_name, last_name from ox_contact";
+            $queryString2 = "SELECT oxc.uuid as uuid,user_id, oxc.first_name, oxc.last_name, oxc.icon_type, '1' as contact_type  from ox_contact as oxc";
         }
-        $where1 = " WHERE owner_id = " . $userId . " ";
+        $where1 = " WHERE oxc.owner_id = " . $userId . " ";
 
         if($filter == null){
             $and1  = '';
         } else {
-            $and1 = " AND (LOWER(first_name) like '%".$filter."%' OR LOWER(last_name) like '%".$filter."%' OR LOWER(email) like '%".$filter."%' OR lower(phone_1) like '%".$filter."%')";
+            $and1 = " AND (LOWER(oxc.first_name) like '%".$filter."%' OR LOWER(oxc.last_name) like '%".$filter."%' OR LOWER(oxc.email) like '%".$filter."%' OR lower(oxc.phone_1) like '%".$filter."%')";
         }
 
         $union = " UNION ";
 
         if($column == "-1"){
-            $queryString3 = "SELECT null as contact_id, uuid as user_id, firstname as first_name, lastname as last_name, phone as phone_1, null as phone_list, email, null as email_list from ox_user";
+            $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name, ou.phone as phone_1, null as phone_list, ou.email, null as email_list, org.name as company_name, null as icon_type,ou.designation,ou.country, '2' as contact_type  from ox_user as ou inner join ox_organization as org on ou.orgid = org.id";
         } else {
-            $queryString3 = "SELECT null as contact_id, uuid as user_id, firstname as first_name, lastname as last_name from ox_user";
+            $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name,null as icon_type, '2' as contact_type  from ox_user as ou";
         }
 
-        $where2 = " WHERE orgid = " . $orgId . "";
+        $where2 = " WHERE ou.orgid = " . $orgId . "";
 
         if($filter == null){
             $and2 = '';
         } else {
-            $and2 = " AND (LOWER(firstname) like '%".$filter."%' OR LOWER(lastname) like '%".$filter."%' OR LOWER(email) like '%".$filter."%')";
+            $and2 = " AND (LOWER(ou.firstname) like '%".$filter."%' OR LOWER(ou.lastname) like '%".$filter."%' OR LOWER(ou.email) like '%".$filter."%')";
         }
 
         $queryString4 = ") as a ORDER BY a.first_name, a.last_name";
@@ -169,14 +180,81 @@ class ContactService extends AbstractService
         $myContacts = array();
         $orgContacts = array();
         foreach ($resultSet as $key => $row) {
-            if($row['contact_id'] != null){
+            if($row['contact_type'] == 1){
                 array_push($myContacts, $row);
-            } else if($row['user_id'] != null){
+            } else {
                 array_push($orgContacts, $row);
             }
 
         }
+
         return $resultSet1 = ['myContacts' => $myContacts, 'orgContacts' => $orgContacts];
 
     }
+
+
+
+    public function getContactIconPath($ownerId,$ensureDir=false){
+        $baseFolder = $this->config['UPLOAD_FOLDER'];
+        //TODO : Replace the User_ID with USER uuid
+        $folder = $baseFolder."contact/".$ownerId;
+        if(isset($ownerId)){
+            $folder = $folder."/";
+        }
+
+        
+        if($ensureDir && !file_exists($folder)){
+            FileUtils::createDirectory($folder);
+        }
+
+        return $folder;
+    }
+
+    public function getUuidById($userId){
+        $select = "SELECT uuid from ox_user where id = ".$userId." AND orgid = ".AuthContext::get(AuthConstants::ORG_ID);
+        $result = $this->executeQuerywithParams($select)->toArray();
+        if($result){
+            return $result[0]['uuid'];   
+        }
+    }
+
+    public function getUserByUuid($uuid){
+        $select = "SELECT id from `ox_user` where uuid = '".$uuid."'";
+        $result = $this->executeQueryWithParams($select)->toArray();
+        if($result){
+        return $result[0]['id'];
+    }
+    }
+
+
+    /**
+     * createUpload
+     *
+     * Upload files from Front End and store it in temp Folder
+     *
+     *  @param files Array of files to upload
+     *  @return JSON array of filenames
+    */
+    public function uploadContactIcon($uuid,$owner_id,$file){
+        
+        $id = $this->getUuidById($owner_id);
+
+        if(isset($file)){
+
+           $destFile = $this->getContactIconPath($id,true);
+           $image = FileUtils::convetImageTypetoPNG($file);
+           if($image){
+                if(FileUtils::fileExists($destFile)){
+                    imagepng($image, $destFile.'/'.$uuid.'.png');
+                    $image = null;
+                }
+                else {
+                    mkdir($destFile);
+                    imagepng($image, $destFile.'/'.$uuid.'.png');
+                    $image = null;
+                }
+            }     
+        }
+    }
+
 }

@@ -59,6 +59,12 @@ class Module implements ConfigProviderInterface
                         $container->get(Model\ContactTable::class), $container->get(Service\ContactService::class), $container->get('ContactLogger'),
                         $container->get(AdapterInterface::class));
                 },
+                Controller\ContactIconController::class => function ($container) {
+                    return new Controller\ContactIconController(
+                        $container->get(Service\ContactService::class),
+                        $container->get('ContactLogger'),
+                        $container->get(AdapterInterface::class));
+                },
             ],
         ];
     }

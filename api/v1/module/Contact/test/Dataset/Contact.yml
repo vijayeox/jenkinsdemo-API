@@ -1,6 +1,8 @@
 ox_contact:
   -
     id: 1
+    uuid: c384bdbf-48e1-4180-937a-08e5852718ea
+    user_id: 1
     first_name: Karan S
     last_name: Agarwal
     phone_1: 09383883922
@@ -8,14 +10,15 @@ ox_contact:
     email: karan@myvamla.com
     email_list: '{"data":["raks@va.com"," asas@ox.com"]}'
     company_name: Vantage Agora
+    designation: Developer
     address_1: Banashankri 2nd Stage
     address_2: Bangalore
     country: India
     owner_id: 1
-    org_id: 1
-    other: ''
+    icon_type: 1
   -
     id: 2
+    uuid: 143949cf-6696-42ad-877a-26e8119603c3
     first_name: Bharat G
     last_name: Gogineni
     phone_1: 9829838883
@@ -23,9 +26,9 @@ ox_contact:
     email: bharatg@myvamla.com
     email_list: '{"data":["raks@va.com"," asas@ox.com"]}'
     company_name: Vantage Agora
+    designation: Developer
     address_1: Indiranagar
     address_2: Bangalore
     country: India
     owner_id: 2
-    org_id: 2
-    other: ''
+    icon_type: 0

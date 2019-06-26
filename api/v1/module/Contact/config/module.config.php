@@ -20,10 +20,10 @@ return [
                     ],
                 ],
             ],
-            'contactsForOrg' => [
+            'getContactListByOrg' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/contact/org[/:orgId]',
+                    'route' => '/contact/org',
                     'defaults' => [
                         'controller' => Controller\ContactController::class,
                         'action' => 'getContactListByOrg',
@@ -34,12 +34,22 @@ return [
             'contactsForUser' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/contact/user',
+                    'route' => '/contact/search',
                     'defaults' => [
                         'controller' => Controller\ContactController::class,
                         'action' => 'getContacts',
                         'method' => 'get',
-                        
+                    ],
+                ],
+            ],
+            'contactIcon' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/contact/:contactId/:ownerId',
+                    'defaults' => [
+                        'controller' => Controller\ContactIconController::class,
+                        'action' => 'getIcon',
+                        'method' => 'get',
                     ],
                 ],
             ],
