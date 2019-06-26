@@ -135,7 +135,7 @@ class UserService extends AbstractService
         if(!isset($data['orgid'])){
             $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
         }
-        
+
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $password = BosUtils::randomPassword();
@@ -207,7 +207,7 @@ class UserService extends AbstractService
 
             $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
-              
+
             $this->addUserRole($data['id'], 'ADMIN');
             $this->commit();
         }
@@ -294,8 +294,12 @@ class UserService extends AbstractService
         $userdata['id'] = $id;
         $userdata['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $userdata['date_modified'] = date('Y-m-d H:i:s');
-        if (isset($userdata['preferences']) && is_array($userdata['preferences'])) {
-            $userdata['preferences'] = json_encode($userdata['preferences']);
+        if (isset($userdata['preferences'])) {
+            if(!is_array($userdata['preferences']))
+                $preferences = json_decode($userdata['preferences'],true);
+            $userdata['timezone'] = $preferences['timezone'];
+            unset($preferences['timezone']);
+            $userdata['preferences'] = json_encode($preferences);
         }
         $form->exchangeArray($userdata);
         $form->validate();
@@ -355,7 +359,7 @@ class UserService extends AbstractService
      * @return array $dataget list of Users
      */
     public function getUsers($filterParams = null)
-    {   
+    {
             $where = "";
             $pageSize = 20;
             $offset = 0;
@@ -364,7 +368,7 @@ class UserService extends AbstractService
             $cntQuery ="SELECT count(id) FROM `ox_user` ";
 
             if(count($filterParams) > 0 || sizeof($filterParams) > 0){
-                $filterArray = json_decode($filterParams['filter'],true); 
+                $filterArray = json_decode($filterParams['filter'],true);
                 if(isset($filterArray[0]['filter'])){
                     $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
                    $filterList = $filterArray[0]['filter']['filters'];
@@ -375,7 +379,7 @@ class UserService extends AbstractService
                     $sort = FilterUtils::sortArray($sort);
                 }
                 $pageSize = $filterArray[0]['take'];
-                $offset = $filterArray[0]['skip'];            
+                $offset = $filterArray[0]['skip'];
             }
 
 
@@ -417,7 +421,8 @@ class UserService extends AbstractService
         $result = $response[0];
 
         $result['active_organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
-        $result['preferences'] = json_decode($response[0]['preferences']);
+        $result['preferences'] = json_decode($response[0]['preferences'],true);
+        $result['preferences']['timezone'] = $response[0]['timezone'];
         if (isset($result)) {
             return $result;
         } else {
@@ -426,15 +431,14 @@ class UserService extends AbstractService
     }
 
 
-    public function getUserByUuid($uuid){
+    public function getUserByUuid($uuid) {
         $select = "SELECT id from `ox_user` where uuid = '".$uuid."'";
         $result = $this->executeQueryWithParams($select)->toArray();
-        if($result){
-        return $result[0]['id'];
-    }else{
-        return 0;
-    }
-
+        if($result) {
+            return $result[0]['id'];
+        } else {
+            return 0;
+        }
     }
 
     public function getActiveOrganization($id)

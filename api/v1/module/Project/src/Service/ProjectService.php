@@ -37,16 +37,16 @@ class ProjectService extends AbstractService {
 
 
     public function getProjectList($filterParams = null){
-            
+
             $pageSize = 20;
             $offset = 0;
             $where = "";
             $sort = "name";
-            
+
             $cntQuery ="SELECT count(id) FROM `ox_project`";
-          
+
             if(count($filterParams) > 0 || sizeof($filterParams) > 0){
-                $filterArray = json_decode($filterParams['filter'],true); 
+                $filterArray = json_decode($filterParams['filter'],true);
                 if(isset($filterArray[0]['filter'])){
                    $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
                    $filterList = $filterArray[0]['filter']['filters'];
@@ -57,7 +57,7 @@ class ProjectService extends AbstractService {
                     $sort = FilterUtils::sortArray($sort);
                 }
                 $pageSize = $filterArray[0]['take'];
-                $offset = $filterArray[0]['skip'];            
+                $offset = $filterArray[0]['skip'];
             }
 
 
@@ -65,13 +65,13 @@ class ProjectService extends AbstractService {
 
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
-            
+
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(id)'];
             $query ="SELECT * FROM `ox_project` ".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query);
-            return array('data' => $resultSet->toArray(), 
-                     'total' => $count);        
+            return array('data' => $resultSet->toArray(),
+                     'total' => $count);
     }
 
 
@@ -94,7 +94,7 @@ class ProjectService extends AbstractService {
             ->columns(array("*"))
             ->where(array('ox_project.uuid' => $id, 'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
-        
+
         if (count($response) == 0) {
             return 0;
         }
@@ -201,8 +201,8 @@ class ProjectService extends AbstractService {
     }
 
     public function getProjectsOfUserById($userId) {
-            $queryString = "select * from ox_project
-                left join ox_user_project on ox_user_project.project_id = ox_project.id";
+            $queryString = "select ox_project.* , ox_user.username as manager_username, ox_user.uuid as manager_uuid from ox_project
+                inner join ox_user_project on ox_user_project.project_id = ox_project.id inner join ox_user on ox_project.manager_id = ox_user.id";
             $where = "where ox_user_project.user_id = " . $userId." AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.isdeleted!=1";
             $order = "order by ox_project.id";
             $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
@@ -223,11 +223,11 @@ class ProjectService extends AbstractService {
 
          $query = "SELECT ox_user.id,ox_user.name";
          $from = " FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id";
-    
+
          $cntQuery ="SELECT count(ox_user.id)".$from;
 
          if(count($filterParams) > 0 || sizeof($filterParams) > 0){
-                $filterArray = json_decode($filterParams['filter'],true); 
+                $filterArray = json_decode($filterParams['filter'],true);
                 if(isset($filterArray[0]['filter'])){
                    $filterlogic = $filterArray[0]['filter']['logic'];
                    $filterList = $filterArray[0]['filter']['filters'];
@@ -238,14 +238,14 @@ class ProjectService extends AbstractService {
                     $sort = FilterUtils::sortArray($sort,self::$fieldName);
                 }
                 $pageSize = $filterArray[0]['take'];
-                $offset = $filterArray[0]['skip'];            
+                $offset = $filterArray[0]['skip'];
             }
 
 
 
             $where .= strlen($where) > 0 ? " AND ox_project.uuid = '".$id."' AND ox_project.isdeleted!=1" : " WHERE ox_project.uuid = '".$id."' AND ox_project.isdeleted!=1";
 
-            
+
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
@@ -253,11 +253,11 @@ class ProjectService extends AbstractService {
             $query =$query." ".$from." ".$where." ".$sort." ".$limit;
 
             $resultSet = $this->executeQuerywithParams($query);
-            return array('data' => $resultSet->toArray(), 
+            return array('data' => $resultSet->toArray(),
                      'total' => $count);
-    
+
     }
-    
+
     //Writing this incase we need to get all projects later. Please do not delete - Brian
     /*public function getProject($id) {
     	$userId = AuthContext::get(AuthConstants::USER_ID);
@@ -283,7 +283,7 @@ class ProjectService extends AbstractService {
 
         if($userArray){
             $userSingleArray= array_map('current', $userArray);
-            $queryString = "SELECT ox_user.id, ox_user.username FROM ox_user_project " . 
+            $queryString = "SELECT ox_user.id, ox_user.username FROM ox_user_project " .
                             "inner join ox_user on ox_user.id = ox_user_project.user_id ".
                             "where ox_user_project.project_id = ".$projectId.
                             " and ox_user_project.user_id not in (".implode(',', $userSingleArray).")";

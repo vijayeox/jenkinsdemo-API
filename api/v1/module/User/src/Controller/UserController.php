@@ -120,7 +120,7 @@ class UserController extends AbstractApiController
         catch(Exception $e){
             return $this->getErrorResponse("User not found", 404, ['id' => $id]);
         }
-        
+
     }
 
     /**
@@ -155,7 +155,7 @@ class UserController extends AbstractApiController
         $id =AuthContext::get(AuthConstants::USER_ID);
         return $this->update($id,$data);
     }
- 
+
     /**
      * GET List User API
      * @api
@@ -164,7 +164,7 @@ class UserController extends AbstractApiController
      * @return array $dataget list of Users
      */
     public function getList()
-    {   
+    {
         $filterParams = $this->params()->fromQuery(); // empty method call
         $result = $this->userService->getUsers($filterParams);
         return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
@@ -234,7 +234,7 @@ class UserController extends AbstractApiController
         }
 
     }
-  
+
     /**
      * Add User To Project API
      * @api
