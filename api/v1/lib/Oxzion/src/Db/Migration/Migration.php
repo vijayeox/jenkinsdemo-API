@@ -88,7 +88,7 @@ class Migration extends AbstractService {
                   `id` int(11) NOT NULL AUTO_INCREMENT,
                   `version_number` varchar(1000) NOT NULL,
                   `date_created` datetime NOT NULL,
-                  `date_modified` datetime NOT NULL,
+                  `date_modified` datetime NULL,
                   `description` varchar(10000),
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
@@ -129,7 +129,7 @@ class Migration extends AbstractService {
                 }
 
 //Code to add the new column org_id to the table that is created
-                $columnResult = $this->mysqlAdapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . $this->database . "' and table_name NOT LIKE 'ox_app_migration_version'");
+                $columnResult = $this->mysqlAdapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" . $this->database . "' and table_name NOT LIKE 'ox_app_migration_version' GROUP BY TABLE_NAME");
                 $resultSet1 = $columnResult->execute();
                 while($resultSet1->next()) {
                     $resultTableName = $resultSet1->current();

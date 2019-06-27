@@ -94,7 +94,7 @@ class WidgetControllerTest extends ControllerTest{
 
 
     public function testUpdate(){
-        $data = ['name' => 'Test Widget Update'];
+        $data = ['name' => 'Test Widget Update', 'defaultwidth' => 2, 'defaultheight' => 2, 'applicationguid' => '49af3ce6-98cb-11e9-adc5-308d99c9145b'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/widget/1', 'PUT', null);

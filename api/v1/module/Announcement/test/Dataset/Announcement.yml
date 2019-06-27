@@ -4,11 +4,15 @@ ox_announcement:
     uuid: 9068b460-2943-4508-bd4c-2b29238700f3
     name: "Announcement 1"
     org_id: 1
+    created_date: "2019-06-26 00:00:00"
+    created_id: 1
   -
     id: 2
     uuid: e66157ee-47de-4ed5-a78e-8a9195033f7a
     name: "Announcement 2"
     org_id: 1
+    created_date: "2019-06-26 00:00:00"
+    created_id: 1
 ox_announcement_group_mapper:
   -
     id: 1

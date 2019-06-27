@@ -58,7 +58,7 @@ class OrganizationService extends AbstractService
      */
     public function createOrganization(&$data,$files)
     {
-        $data['uuid'] = Uuid::uuid4();  
+        $data['uuid'] = Uuid::uuid4()->toString();  
         $data['contact'] = json_decode($data['contact'],true);    
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -296,7 +296,7 @@ class OrganizationService extends AbstractService
 
     private function getOrgContactPersonDetails($id){
         $userData = array();
-        $userSelect = "SELECT ou.firstname,ou.lastname,ou.email,ou.phone from `ox_user` as ou where ou.id = (SELECT og.contactid from `ox_organization` as og WHERE og.uuid = '".$id."')";
+        $userSelect = "SELECT ou.username,ou.firstname,ou.lastname,ou.email,ou.phone from `ox_user` as ou where ou.id = (SELECT og.contactid from `ox_organization` as og WHERE og.uuid = '".$id."')";
         $userData = $this->executeQueryWithParams($userSelect)->toArray();     
         return $userData;
     }

@@ -56,7 +56,7 @@ class PrivilegeService extends AbstractService {
                             LEFT JOIN  ox_user as av on av.id = our.user_id ";
             $where = "where av.id = " . $userId . " and op.app_id = '" . $appId . "'";
             $order = "order by av.firstname";
-            $group = "group by op.name";
+            $group = "group by op.name, op.permission_allowed";
             $resultSet = $this->executeQuerywithParams($queryString, $where, $group, $order);
         } catch (ValidationException $e) {
             return $response = ['data' => $appId, 'errors' => $e->getErrors()];

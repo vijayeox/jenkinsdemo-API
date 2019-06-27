@@ -41,7 +41,7 @@ class Persistence extends AbstractService {
                         } else {
                             $tableName = $insertArray['table'];
                         }
-                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
+                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
                         $resultSet1 = $columnResult->execute();
                         while ($resultSet1->next()) {
                             $resultTableName = $resultSet1->current();
@@ -97,7 +97,7 @@ class Persistence extends AbstractService {
                         }
                         $tableArrayList[] = $tableName;
                         $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM 
-INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
+INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
                         $resultSet1 = $columnResult->execute();
                         while ($resultSet1->next()) {
                             $resultTableName = $resultSet1->current();
@@ -161,7 +161,7 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
                             $tableName = $updateArray['table'];
                         }
                         $tableArrayList[] = $tableName;
-                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
+                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
                         $resultSet1 = $columnResult->execute();
                         while ($resultSet1->next()) {
                             $resultTableName = $resultSet1->current();
@@ -205,7 +205,7 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
                             $tableName = $updateArray['table'];
                         }
                         $tableArrayList[] = $tableName;
-                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
+                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
                         $resultSet1 = $columnResult->execute();
                         while($resultSet1->next()) {
                             $resultTableName = $resultSet1->current();
@@ -243,7 +243,7 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
                 foreach ($parsedArray['FROM'] as $key => $updateArray) {
                     if ($updateArray['expr_type'] === 'table') {
                         $tableName = $updateArray['table'];
-                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName'");
+                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
                         $resultSet1 = $columnResult->execute();
                         while($resultSet1->next()) {
                             $resultTableName = $resultSet1->current();

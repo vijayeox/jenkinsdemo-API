@@ -1,3 +1,11 @@
+ox_app:
+-
+    id: 99
+    name: "SampleApp"
+    uuid: "somerandom123"
+    category: "OTHERS"
+    type: 2
+    status: 1
 ox_field:
 -
     id: 1
@@ -15,12 +23,7 @@ ox_field:
     data_type: "integer"
     required: 1
     sequence: 1
-ox_app:
--
-    id: 99
-    uuid: "somerandom123"
-    type: 2
-    status: 1
+
 ox_form:
   -
     id: 1
@@ -59,25 +62,27 @@ ox_workflow:
 ox_file:
   -
     id: 1
-    name: "Test Task 1"
     workflow_instance_id: 1
     org_id: 1
     form_id: 1
     data: "new data"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
   -
     id: 2
-    name: "Test Task  2"
     workflow_instance_id: 1
     org_id: 1
     form_id: 2
     data: "new data"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
 ox_workflow_instance:
   -
     id: 1
     workflow_id: 1
-    app_id: 0
+    app_id: 99
     org_id: 1
     status: "In Progress"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
 ox_file_attribute:
   -
     id: 1

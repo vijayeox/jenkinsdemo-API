@@ -40,7 +40,7 @@ class FileService extends AbstractService{
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['uuid'] = Uuid::uuid4()->getHex();
+        $data['uuid'] = Uuid::uuid4()->toString();
         $file = new File();
         $file->exchangeArray($data);
         $file->validate();

@@ -5,12 +5,14 @@ ox_alert:
     org_id: 1
     description: "Alert 1 description"
     created_id: 1
+    created_date: '2019-06-26 00:00:00'
   -
     id: 2
     name: "Alert 2"
     org_id: 1
     description: "Alert 2 description"
     created_id: 1
+    created_date: '2019-06-26 00:00:00'
 user_alert_verfication:
   -
     id: 1

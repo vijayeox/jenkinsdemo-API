@@ -32,11 +32,11 @@ namespace Callback\Service;
                 $params['address_1'] = $data['addresses'][0]['name'];
                 $params['address_2'] = $data['addresses'][1]['name'];
             }
-            $assignedTo = $userService->getUserDetailsbyUserName($data['owner']['username'],array('id'));
+            $assignedTo = $userService->getUserDetailsbyUserName($data['owner']['username'],array('uuid'));
             $owner = $userService->getUserDetailsbyUserName($data['assignedTo']['username'],array('id'));
             $params['owner_id'] = $owner['id'];
-            $params['org_id'] = $data['organization']['id'];
-            $params['user_id'] = $assignedTo['id'];
+            $params['created_id'] = $owner['id'];
+            $params['uuid'] = $assignedTo['uuid'];
             try {
                 $result = $contactService->createContact($params);
             } catch (Exception $e){

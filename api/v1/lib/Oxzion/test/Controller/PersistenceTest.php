@@ -27,7 +27,7 @@ class PersistenceTest extends ServiceTest {
         $this->data =  Array (
             "appName" => 'ox_app_2',
             'UUID' => 123889,
-            'description' => 'FirstApp',
+            'description' => 'FirstApp'
         );
 
         $config = $this->getApplicationConfig();
@@ -42,6 +42,7 @@ class PersistenceTest extends ServiceTest {
         $dataSet = array_diff(scandir(dirname(__FILE__) ."/../Migration/"), array(".", ".."));
         $migrationFolder = dirname(__FILE__) ."/../Migration/";
         $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
+
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->setRollbackOnly(true);
         $tm->beginTransaction();
@@ -49,9 +50,6 @@ class PersistenceTest extends ServiceTest {
         if($this->getName() == 'testInsertQueryWithJoinSelect' || $this->getName() == 'testSelectQuery' || $this->getName() == 'testSelectQueryWithJoin' || $this->getName() == 'testUpdateQuery' || $this->getName() == 'testUpdateQueryWithJoin'){
             $insertQuery = "INSERT INTO ox_timesheet (`name`, `client_id`, `description`, `process_id`, `date_created`,`ox_app_org_id`) VALUES ('Task1', 1, 'New Task', 2, '2019-01-02 12:00:00',1)";
             $statement = $this->adapter->query($insertQuery);
-            $result = $statement->execute();
-            $update ="ALTER TABLE ox_timesheet_client ADD COLUMN ox_app_org_id INT(11) NOT NULL";
-            $statement = $this->adapter->query($update);
             $result = $statement->execute();
             $update="UPDATE ox_timesheet_client SET ox_app_org_id = 1 where id = 1"; 
             $statement = $this->adapter->query($update);

@@ -255,7 +255,7 @@ class AppService extends AbstractService
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['status'] = App::PUBLISHED;
-        $data['uuid'] = Uuid::uuid4();
+        $data['uuid'] = Uuid::uuid4()->toString();
 		if(!isset($data['org_id'])){
             return 0;
         }
@@ -422,7 +422,7 @@ class AppService extends AbstractService
                     $data['date_created'] = date('Y-m-d H:i:s');
                     $data['status'] = App::PUBLISHED;
                     $data['type'] = App::PRE_BUILT;
-                    $data['uuid'] = Uuid::uuid4();
+                    $data['uuid'] = Uuid::uuid4()->toString();
                     $form->exchangeArray($data);
                     $form->validate();
                     $count += $this->table->save($form);
