@@ -58,7 +58,7 @@ class OrganizationService extends AbstractService
      */
     public function createOrganization(&$data,$files)
     {
-        $data['uuid'] = Uuid::uuid4();  
+        $data['uuid'] = Uuid::uuid4()->toString();  
         $data['contact'] = json_decode($data['contact'],true);    
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
