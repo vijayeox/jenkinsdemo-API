@@ -29,6 +29,7 @@ ox_email_domain:
     smtp_short_login: 'short_name'
     smtp_auth: 'auth'
     smtp_use_php_mail: 'No'
+    created_by : 1
   -
     id: 2
     name: 'gmail.com'
@@ -42,3 +43,4 @@ ox_email_domain:
     smtp_short_login: 'short_name'
     smtp_auth: 'auth'
     smtp_use_php_mail: 'No'
+    created_by : 1

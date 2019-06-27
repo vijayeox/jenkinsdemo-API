@@ -6,8 +6,8 @@ ox_subscriber:
     file_id: 1
     created_by: 1
     modified_by: 1
-    date_created: 2019-01-08 04:15:37
-    date_modified: 2019-01-08 04:15:37
+    date_created: '2019-01-08 04:15:37'
+    date_modified: '2019-01-08 04:15:37'
   -
     id: 2
     user_id: 2
@@ -15,5 +15,5 @@ ox_subscriber:
     file_id: 1
     created_by: 1
     modified_by: 1
-    date_created: 2019-01-08 04:15:37
-    date_modified: 2019-01-08 04:15:37
+    date_created: '2019-01-08 04:15:37'
+    date_modified: '2019-01-08 04:15:37'

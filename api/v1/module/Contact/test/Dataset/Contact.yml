@@ -16,6 +16,7 @@ ox_contact:
     country: India
     owner_id: 1
     icon_type: 1
+    date_created: '2019-06-26 00:00:00'
   -
     id: 2
     uuid: 143949cf-6696-42ad-877a-26e8119603c3
@@ -32,3 +33,4 @@ ox_contact:
     country: India
     owner_id: 2
     icon_type: 0
+    date_created: '2019-06-26 00:00:00'

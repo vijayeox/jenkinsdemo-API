@@ -4,23 +4,28 @@ ox_widget:
     name: "Announcement"
     defaultheight: 3
     defaultwidth: 2
+    applicationguid: "49af3ce6-98cb-11e9-adc5-308d99c9145b"
   -
     id: 2
     name: "Assignments"
     defaultheight: 4
     defaultwidth: 3
+    applicationguid: "49af3ce6-98cb-11e9-adc5-308d99c9145c"
   -
     id: 3
     name: "Followups"
     defaultheight: 2
     defaultwidth: 3
+    applicationguid: "49af3ce6-98cb-11e9-adc5-308d99c9145d"
 
 ox_org_widget:
   -
     id: 1
     orgid: 1
     widgetid: 1
+    locked: 1
   -
     id: 2
     orgid: 1
     widgetid: 3
+    locked: 1
