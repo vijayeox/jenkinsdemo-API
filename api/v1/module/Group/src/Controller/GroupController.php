@@ -72,9 +72,8 @@ class GroupController extends AbstractApiController {
 		}
         if($count == 0) {
 			return $this->getFailureResponse("Failed to create a new entity", $data);
-		}
-        if ($count == 2) {
-            return $this->getErrorResponse("Entity not found for ".$id['groupId'], 404 );
+		}else if($count == 2) {
+            return $this->getErrorResponse("Updating non-existent Group", 404, $data);
         }
 		return $this->getSuccessResponseWithData($data,201);
 	}

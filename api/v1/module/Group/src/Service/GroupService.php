@@ -26,12 +26,13 @@ class GroupService extends AbstractService {
     static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
 
 
-    public function __construct($config, $dbAdapter, GroupTable $table,$organizationService) {
+    public function __construct($config, $dbAdapter, GroupTable $table,$organizationService, Logger $log) {
         parent::__construct($config, $dbAdapter);
         parent::initLogger(__DIR__ . '/../../../../logs/group.log');
         $this->table = $table;
         $this->messageProducer = MessageProducer::getInstance();
         $this->organizationService = $organizationService;
+        $this->logger = $log;
     }
 
     public function setMessageProducer($messageProducer)
@@ -81,7 +82,7 @@ class GroupService extends AbstractService {
 
     public function createGroup(&$data,$files) {
         $form = new Group();
-        $data['uuid'] = Uuid::uuid4();   
+        $data['uuid'] = Uuid::uuid4()->toString();   
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -101,6 +102,7 @@ class GroupService extends AbstractService {
             $data['id'] = $id;
             $this->commit();
         } catch(Exception $e) {
+            $this->logger->err(__CLASS__.$e->getMessage());
             $this->rollback();
             return 0;
         }

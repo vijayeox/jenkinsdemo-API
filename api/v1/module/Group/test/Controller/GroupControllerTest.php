@@ -64,13 +64,13 @@ class GroupControllerTest extends ControllerTest {
 //Testing to see if the Create Group function is working as intended if all the value passed are correct.
     public function testCreate() {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'parent_id'=> 9, 'org_id'=>1, 'manager_id' => 436, 'description
+        $data = ['name' => 'Groups 22', 'parent_id' => 1, 'org_id'=>1, 'manager_id' => 1, 'description
         '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
-        $mockMessageProducer = $this->getMockMessageProducer();
-        $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Groups 22', 'orgname'=>'Cleveland Black')),'GROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Groups 22', 'orgname'=>'Cleveland Black')),'GROUP_ADDED')->once()->andReturn();
         }
         $this->dispatch('/group', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -79,9 +79,9 @@ class GroupControllerTest extends ControllerTest {
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['parent_id'], 9);
+        $this->assertEquals($content['data']['parent_id'], 1);
         $this->assertEquals($content['data']['org_id'], 1);
-        $this->assertEquals($content['data']['manager_id'], 436);
+        $this->assertEquals($content['data']['manager_id'], 1);
         $this->assertEquals($content['data']['description'], $data['description']);
         $this->assertEquals($content['data']['logo'], "grp1.png");
         $this->assertEquals($content['data']['status'], "Active");
@@ -110,7 +110,7 @@ class GroupControllerTest extends ControllerTest {
     }
 
     public function testUpdate() {
-        $data = ['name' => 'Test Create Group','manager_id' => 436, 'description
+        $data = ['name' => 'Test Create Group','manager_id' => 1, 'description
         '=>'Description Test Data'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -126,13 +126,13 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], 'Test Create Group');
         $this->assertEquals($content['data']['org_id'], 1);
-        $this->assertEquals($content['data']['manager_id'], 436);
+        $this->assertEquals($content['data']['manager_id'], 1);
         $this->assertEquals($content['data']['description'], "Description Test Data");
         $this->assertEquals($content['data']['status'], "Active");
     }
 
     public function testUpdateNotFound() {
-        $data = ['name' => 'Test','manager_id' => 436, 'description
+        $data = ['name' => 'Test','manager_id' => 1, 'description
         '=>'Description Test Data'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));

@@ -6,18 +6,18 @@ use Oxzion\ValidationException;
 
 class Group extends Entity {
     protected $data = array(
-        'id' => 0,
+        'id' => NULL,
         'uuid' => NULL,
-        'name'=> 0,
-        'parent_id' => 0,
-        'org_id' => 0,
-        'manager_id' => 0,
-        'description' => 0,
+        'name'=> '',
+        'parent_id' => NULL,
+        'org_id' => NULL,
+        'manager_id' => NULL,
+        'description' => '',
         'status' => "Active",
-        'date_created' => 0,
-        'date_modified' => 0,
-        'created_id' => 0,
-        'modified_id' => 0
+        'date_created' => NULL,
+        'date_modified' => NULL,
+        'created_id' => NULL,
+        'modified_id' => NULL
     );
 
     public function validate() {
