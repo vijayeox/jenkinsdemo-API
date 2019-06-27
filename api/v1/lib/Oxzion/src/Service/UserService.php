@@ -191,14 +191,14 @@ class UserService extends AbstractService
             "country" => $org->country,
             "preferences" => json_encode($preferences),
             "username" => $contactPerson->username,
-            "date_of_birth" => ' ',
+            "date_of_birth" => date('Y-m-d'),
             "designation" => "Admin",
             "orgid" => $org->id,
             "status" => "Active",
             "timezone" => "United States/New York",
             "gender" => " ",
             "managerid" => "1",
-            "date_of_join" => ' ',
+            "date_of_join" => date('Y-m-d'),
             "password" => BosUtils::randomPassword()
         );
         $this->beginTransaction();
@@ -207,7 +207,6 @@ class UserService extends AbstractService
 
             $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
-
             $this->addUserRole($data['id'], 'ADMIN');
             $this->commit();
         }
