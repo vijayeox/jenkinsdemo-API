@@ -47,7 +47,7 @@ class AnnouncementService extends AbstractService{
     */
     public function createAnnouncement(&$data){
         $form = new Announcement();
-        $data['uuid'] = Uuid::uuid4();
+        $data['uuid'] = Uuid::uuid4()->toString();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['start_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d');
@@ -287,11 +287,10 @@ class AnnouncementService extends AbstractService{
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_announcement')
-                ->columns(array("*"))
+                ->columns(array("id", "uuid", "name", "org_id", "status", "description", "start_date", "end_date", "media_type", "media"))
                 ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
                 ->join('ox_user_group', 'ox_announcement_group_mapper.group_id = ox_user_group.group_id',array('group_id','avatar_id'),'left')
-                ->where(array('ox_user_group.avatar_id' => AuthContext::get(AuthConstants::USER_ID)))
-                ->group(array('ox_announcement.id'));
+                ->where(array('ox_user_group.avatar_id' => AuthContext::get(AuthConstants::USER_ID)));
         return $this->executeQuery($select)->toArray();
     }
     /**
@@ -318,8 +317,7 @@ class AnnouncementService extends AbstractService{
         ->columns(array("*"))
         ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
         ->join('ox_user_group', 'ox_announcement_group_mapper.group_id = ox_user_group.group_id',array('group_id','avatar_id'),'left')
-        ->where(array('ox_announcement.uuid' => $id))
-        ->group(array('ox_announcement.uuid'));
+        ->where(array('ox_announcement.uuid' => $id));
         $response = $this->executeQuery($select)->toArray();
         if(count($response)==0){
             return 0;
