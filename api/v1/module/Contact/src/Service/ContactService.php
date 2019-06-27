@@ -42,7 +42,7 @@ class ContactService extends AbstractService
             $data['user_id'] = NULL;
         }
         unset($data['uuid']);
-        $data['uuid'] = Uuid::uuid4();
+        $data['uuid'] = Uuid::uuid4()->toString();
         $data['user_id'] = (isset($data['user_id'])) ? $data['user_id'] : null;
         $data['icon_type'] = (isset($data['icon_type'])) ? $data['icon_type'] : TRUE; 
         $data['owner_id'] = (isset($data['owner_id'])) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
