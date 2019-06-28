@@ -19,7 +19,7 @@ class FieldService extends AbstractService{
     public function saveField($appId,&$data){
         $field = new Field();
         $data['app_id'] = $appId;
-        if(!isset($data['id'])){
+        if(!isset($data['id']) || $data['id']==0){
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
         }
@@ -35,7 +35,7 @@ class FieldService extends AbstractService{
                 $this->rollback();
                 return 0;
             }
-            if(!isset($data['id'])){
+            if(!isset($data['id']) || $data['id']==0){
                 $id = $this->table->getLastInsertValue();
                 $data['id'] = $id;
             }

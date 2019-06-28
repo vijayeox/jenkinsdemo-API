@@ -5,6 +5,7 @@ use Oxzion\Workflow\ProcessManager;
 use Oxzion\Utils\RestClient;
 use Sabre\Xml\Service;
 use Oxzion\Service\FormService;
+use Oxzion\Utils\XMLUtils;
 
 class ProcessManagerImpl implements ProcessManager {
   public function __construct() {

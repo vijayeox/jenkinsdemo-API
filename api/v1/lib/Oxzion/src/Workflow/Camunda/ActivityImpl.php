@@ -28,10 +28,12 @@ class ActivityImpl implements Activity {
 	public function getActivitiesByUser($userId,$params=array()){
 		try {
 			$queryArray = array_merge($params,array("assignee"=>$userId));
-			$response =  $this->restClient->post('task', $queryArray);
+			$response =  $this->restClient->get('task?'.http_build_query($queryArray));
 			$result = json_decode($response,true);
+			//  print_r($result);exit;
 			return $result;
 		} catch(Exception $e){
+			// print_r($e->getMessage());
 			return array();
 		}
 	}

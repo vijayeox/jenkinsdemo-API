@@ -27,6 +27,7 @@ class WorkflowInstanceController extends AbstractApiController
 	}
 	public function activityAction(){
         $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
+        // print_r($params);
         switch ($this->request->getMethod()) {
             case 'POST':
                 unset($params['controller']);

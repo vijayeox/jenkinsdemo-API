@@ -19,7 +19,9 @@ class FormService extends AbstractService{
 
     public function createForm($appId,&$data){
         $form = new Form();
-        $data['app_id'] = $appId;
+        // $query = "SELECT * FROM `ox_app` WHERE uuid = '".$data['app_id']."';";
+		// $resultSet = $this->executeQuerywithParams($query)->toArray();
+		// $data['app_id'] = $resultSet[0]['id'];
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -28,6 +30,7 @@ class FormService extends AbstractService{
         $form->validate();
         $this->beginTransaction();
         $count = 0;
+        // print_r($form);
         try{
             $count = $this->table->save($form);
             if($count == 0){
@@ -38,6 +41,7 @@ class FormService extends AbstractService{
             $data['id'] = $id;
             $this->commit();
         }catch(Exception $e){
+            print_r($e->getMessage());
             switch (get_class ($e)) {
              case "Oxzion\ValidationException" :
                 $this->rollback();
@@ -119,6 +123,19 @@ class FormService extends AbstractService{
         $select->from('ox_form')
         ->columns(array("*"))
         ->where(array('ox_form.id' => $id));
+        $response = $this->executeQuery($select)->toArray();
+        if(count($response)==0){
+            return 0;
+        }
+        return $response[0];
+    }
+
+    public function getFormByTaskId($taskId) {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_form')
+        ->columns(array("*"))
+        ->where(array('ox_form.task_id' => $taskId));
         $response = $this->executeQuery($select)->toArray();
         if(count($response)==0){
             return 0;

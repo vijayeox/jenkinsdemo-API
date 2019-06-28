@@ -31,7 +31,7 @@ class FileService extends AbstractService{
     * @return array Returns a JSON Response with Status Code and Created File.
     */
     public function createFile(&$data,$workflowInstanceId){
-        print $workflowInstanceId."\n";
+        // print $workflowInstanceId."\n";
         unset($data['submit']);
         unset($data['workflowId']);
         $jsonData = json_encode($data);

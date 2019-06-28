@@ -450,6 +450,8 @@ class AppService extends AbstractService
         return $count;
     }
     public function getAssignments($appId){
-        $assignments = $this->workflowService->getAssignments($params['appId']);
+        $assignments = $this->workflowService->getAssignments($appId);
+        return $assignments;
+        // print_r($assignments);exit;
     }
 }

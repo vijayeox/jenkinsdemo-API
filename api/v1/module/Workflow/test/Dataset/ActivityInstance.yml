@@ -1,0 +1,41 @@
+ox_group:
+-
+    id: 1
+    uuid: c99ac1b0-90ee-11e9-b683-526af7764f64
+    name: "HR Group"
+    org_id: 1
+    manager_id: 2
+    status: "Active"
+    date_created: "2019-03-05 09:57:08"
+    date_modified: "2019-05-05 09:57:08"
+    created_id: 1
+    modified_id: 1
+ox_app:
+-
+    id: 2
+    name: "SampleTemplate"
+    uuid: debf3d35-a0ee-49d3-a8ac-8e480be9dac7
+    type: 1
+    category: "null"
+    date_created: "2019-03-05 09:57:08"
+    created_by: 1
+
+ox_workflow_instance:
+-
+    id: 1
+    workflow_id: 1
+    app_id: 2
+    org_id: 1
+    process_instance_id: d0dd0ec8-9106-11e9-8991-6a75cb9aef40
+    status: "In Progress"
+    date_created: "2019-03-05 09:57:08"
+    created_by: 1
+ox_form:
+-
+    id: 1
+    app_id: 2
+    uuid: 3e94fdd7-9106-11e9-875f-283a4d5cd637
+    name: "Recruitment Request Created"
+    created_by: 1
+    date_created: "2019-03-05 09:57:08"
+

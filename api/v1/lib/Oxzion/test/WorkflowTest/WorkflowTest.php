@@ -52,7 +52,7 @@ class WorkflowTest extends TestCase{
         $delete = $processManager->remove($deploymentId);
         $this->assertEquals($delete, 1);
     }
-
+// Check this
     public function testAssigneeProcess(){
         $workflowFactory = WorkflowFactory::getInstance();
         $processManager = $workflowFactory->getProcessManager();
@@ -74,7 +74,7 @@ class WorkflowTest extends TestCase{
         $definitionId = $processStart['definitionId'];
         $this->assertNotEquals(0, $definitionId);
         if(enableCamunda==0){
-            $mockRestClient->expects('post')->withArgs(array('task', array("assignee"=>2)))->once()->andReturn(json_encode(array('id'=>123321)));
+            $mockRestClient->expects('get')->withArgs(array('task', array("assignee"=>2)))->once()->andReturn(json_encode(array('id'=>123321)));
             $activityManager->setRestClient($mockRestClient);
         }
         $activityList = $activityManager->getActivitiesByUser(2);
