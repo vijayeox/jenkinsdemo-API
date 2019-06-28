@@ -74,7 +74,7 @@ class WorkflowTest extends TestCase{
         $definitionId = $processStart['definitionId'];
         $this->assertNotEquals(0, $definitionId);
         if(enableCamunda==0){
-            $mockRestClient->expects('get')->withArgs(array('task', array("assignee"=>2)))->once()->andReturn(json_encode(array('id'=>123321)));
+            $mockRestClient->expects('get')->withArgs(array('task?'.http_build_query(array("assignee"=>2))))->once()->andReturn(json_encode(array('id'=>123321)));
             $activityManager->setRestClient($mockRestClient);
         }
         $activityList = $activityManager->getActivitiesByUser(2);
