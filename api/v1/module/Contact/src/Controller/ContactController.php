@@ -119,6 +119,8 @@ class ContactController extends AbstractApiController
             return $this->getErrorResponse("Contact not found", 404, ['id' => $id]);
         }
         else{
+            $result['phone_list']=json_decode($result['phone_list'],true);
+            $result['email_list']=json_decode($result['email_list'],true);
             $baseUrl =$this->getBaseUrl();
             if($result[0]['icon_type']){
                 $userId = $this->contactService->getUuidById($result[0]['user_id']);
@@ -164,6 +166,8 @@ class ContactController extends AbstractApiController
         if(isset($result) > 0){
             if(isset($result['orgContacts']) && sizeof($result['myContacts']) > 0){
                 for($x=0;$x<sizeof($result['myContacts']);$x++){
+                    $result['myContacts'][$x]['phone_list']=json_decode($result['myContacts'][$x]['phone_list'],true);
+                    $result['myContacts'][$x]['email_list']=json_decode($result['myContacts'][$x]['email_list'],true);
                     if($result['myContacts'][$x]['icon_type']){
                         $userId = $this->contactService->getUuidById($result['myContacts'][$x]['user_id']);
                         $result['myContacts'][$x]['icon'] = $baseUrl . "/user/profile/" . $userId;

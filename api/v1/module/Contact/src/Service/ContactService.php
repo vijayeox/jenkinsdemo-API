@@ -56,7 +56,6 @@ class ContactService extends AbstractService
             $count = $this->table->save($form);
 
             if(isset($files)){
-                print("FIE");
                 $this->uploadContactIcon($data['uuid'],$data['owner_id'],$files);
             }
             if ($count == 0) {
