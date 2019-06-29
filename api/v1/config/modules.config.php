@@ -23,6 +23,7 @@ return [
     'Role',
     'Project',
     'Group',
+    'Analytics',
     'Organization',
     'Widget',
     'Screen',

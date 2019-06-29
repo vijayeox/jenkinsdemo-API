@@ -1,0 +1,15 @@
+datasource:
+  -
+    id: 1
+    name: 'mattermost'
+    type: 'MySql'
+    connection_string: '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+  -
+    id: 2
+    name: 'reporting engine'
+    type: 'Elastic'
+    connection_string: '{"data": {"username": "myUsername","password": "myPassword","host": "localhost","port": "10113"}}'
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'

@@ -3,8 +3,34 @@
 namespace Oxzion\Utils;
 
 class FilterUtils{
-	
-	static public function filterArray($filterList, $filterlogic, $fieldMap = array()){
+
+    static public function paginate($params) {
+        $pageSize = 20;
+        $offset = 0;
+        $sort = "id";
+        $where = "";
+
+        if(!empty($params))
+        {
+            if(!empty($params['limit']))
+                $pageSize = $params['limit'];
+            if(!empty($params['skip']))
+                $offset = $params['skip'];
+            if(isset($params['sort'])){
+                $sortArray = json_decode($params['sort'],true);
+                $sort = FilterUtils::sortArray($sortArray);
+            }
+            if(isset($params['filter'])){
+                $filterArray = call_user_func_array('array_merge',json_decode($params['filter'],true));
+                $filterlogic = isset($filterArray['logic']) ? $filterArray['logic'] : "AND" ;
+                $filterList = $filterArray['filters'];
+                $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+            }
+        }
+        return $paginate = array('pageSize' => $pageSize, 'offset' => $offset, 'sort' => $sort, 'where' => $where);
+    }
+
+    static public function filterArray($filterList, $filterlogic, $fieldMap = array()){
 		$where = "";
 		for($x=0;$x<sizeof($filterList);$x++){
             $operator = $filterList[$x]['operator'];
@@ -72,14 +98,13 @@ class FilterUtils{
 
 	static public function sortArray($sort,$fieldMap = array()){
 		 $sSort = "";
-                    foreach ($sort as $key => $value) { 
+                    foreach ($sort as $key => $value) {
                         if($value['dir'] == 'dsc'){
                             $value['dir'] = 'desc';
                         }
                         $value['field'] = isset($fieldMap[$value['field']]) ? $fieldMap[$value['field']] : $value['field'];
                         $sSort .= strlen($sSort) == 0 ? $value['field']." ". $value['dir'] : " ," .$value['field']." ". $value['dir'];
                     }
-
          return $sSort;
 	}
 

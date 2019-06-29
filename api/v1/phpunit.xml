@@ -4,16 +4,19 @@
         <testsuite name="Messaging Fixtures Fixtures">
             <directory>./module/Messaging/test</directory>
         </testsuite>
-         <testsuite name="Attachment Fixtures">
+        <testsuite name="Attachment Fixtures">
             <directory>./module/Attachment/test</directory>
             <directory>./module/Resource/test</directory>
+        </testsuite>
+        <testsuite name="Analytics Fixtures">
+            <directory>./module/Analytics/test</directory>
         </testsuite>
         <testsuite name="Home Page Fixtures">
             <directory>./module/Auth/test</directory>
             <directory>./module/Screen/test</directory>
             <directory>./module/Announcement/test</directory>
             <directory>./module/Widget/test</directory>
-            <directory>./module/Project/test</directory> 
+            <directory>./module/Project/test</directory>
         </testsuite>
         <testsuite name="Roles Fixtures">
             <directory>./module/Role/test</directory>
@@ -48,8 +51,8 @@
         <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
-        </testsuite> 
-    </testsuites> 
+        </testsuite>
+    </testsuites>
     <php>
         <ini name="memory_limit" value="256M" />
         <const name="enableNLP" value="0"/>
