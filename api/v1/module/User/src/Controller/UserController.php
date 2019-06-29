@@ -379,6 +379,9 @@ class UserController extends AbstractApiController
                     case "pr":
                     $userInfo['projects'] = $this->projectService->getProjectsOfUserById($id);
                     break;
+                    case "role":
+                    $userInfo['role']= $this->userService->getRolesofUser($id);
+                    break; 
                 }
             }
             if ($userInfo) {

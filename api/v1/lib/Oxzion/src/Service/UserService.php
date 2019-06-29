@@ -62,6 +62,13 @@ class UserService extends AbstractService
         return $response[0]['orgid'];
     }
 
+    public function getRolesofUser($id){
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $select = "SELECT ouo.role_id, oro.name from ox_user_role as ouo inner join ox_role as oro on ouo.role_id = oro.id where ouo.user_id = (SELECT ou.id from ox_user as ou where ou.id ='".$id."') and oro.org_id = ".$orgId;
+        $resultSet = $this->executeQueryWithParams($select)->toArray();
+        return $resultSet;
+    }
+
     public function getUserContextDetails($userName)
     {
         if ($results = $this->cacheService->get($userName)) {
