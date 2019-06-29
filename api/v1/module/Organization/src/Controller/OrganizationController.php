@@ -8,6 +8,7 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Model\Organization;
 use Oxzion\Model\OrganizationTable;
 use Oxzion\Service\OrganizationService;
+use Oxzion\AccessDeniedException;
 
 class OrganizationController extends AbstractApiController
 {
@@ -212,4 +213,18 @@ class OrganizationController extends AbstractApiController
         }
         return $this->getSuccessResponseDataWithPagination($count['data'],$count['total']);
     }
+
+
+    public function getListofAdminUsersAction(){
+        $data = $this->params()->fromRoute();
+        $filterParams = $this->params()->fromQuery();
+        $orgId = isset($data['orgId']) ? $data['orgId'] : null;
+        try{
+            $result = $this->orgService->getAdminUsers($filterParams, $orgId); 
+        }catch(AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(),403);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+    }
+
 }

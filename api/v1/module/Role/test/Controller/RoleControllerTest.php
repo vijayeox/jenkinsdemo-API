@@ -89,7 +89,7 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(11, count($content['data']));
+        $this->assertEquals(12, count($content['data']));
         foreach ($content['data'] as $key => $val) {
             if($val['privilege_name'] == "MANAGE_ANNOUNCEMENT"){
                 $this->assertEquals($val['permission'], 3);
@@ -107,7 +107,7 @@ class RoleControllerTest extends MainControllerTest {
                 $this->assertEquals($val['app_id'], 10);
             }
             if($val['privilege_name'] == "MANAGE_GROUP"){
-                $this->assertEquals($val['permission'], 15);
+                $this->assertEquals($val['permission'], 3);
                 $this->assertEquals($val['org_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
@@ -122,7 +122,7 @@ class RoleControllerTest extends MainControllerTest {
                 $this->assertEquals($val['app_id'], 1);
             }
             if($val['privilege_name'] == "MANAGE_PROJECT"){
-                $this->assertEquals($val['permission'], 15);
+                $this->assertEquals($val['permission'], 3);
                 $this->assertEquals($val['org_id'], 1);
                 $this->assertEquals($val['app_id'], 1);
             }
@@ -167,7 +167,7 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertEquals($content['data']['privileges'][0]['permission'], 3);
         $this->assertEquals($content['data']['privileges'][4]['id'], 16);
         $this->assertEquals($content['data']['privileges'][4]['privilege_name'], 'MANAGE_GROUP');
-        $this->assertEquals($content['data']['privileges'][4]['permission'], 15);
+        $this->assertEquals($content['data']['privileges'][4]['permission'], 3);
     }
     public function testGetNotFound(){
         $this->initAuthToken($this->adminUser);

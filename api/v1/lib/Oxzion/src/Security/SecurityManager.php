@@ -30,7 +30,6 @@ class SecurityManager{
 		if(AuthContext::get(AuthConstants::API_KEY)) {
 			return;
 		}
-		// print_r($accessName);exit;
 		if(isset($accessName) && $api_permission){
 			if($accessName && !$this->isGranted($api_permission)){
 				$response = $e->getResponse();
@@ -49,10 +48,9 @@ class SecurityManager{
 	* @param: privilege Array|String
 	* Return : Boolean 0|1 for Granted
 	*/
-	public function isGranted($privilege){
+	public static function isGranted($privilege){
 		$roles = AuthContext::get(AuthConstants::PRIVILEGES);
-		
-		if (is_string($privilege) && $roles[$privilege]) {
+		if (is_string($privilege) && isset($roles[$privilege])) {
 			return 1;
 		} else if(is_array($privilege)){
 			foreach ($privilege as $value) {

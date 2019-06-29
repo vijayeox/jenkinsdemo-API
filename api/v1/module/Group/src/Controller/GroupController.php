@@ -9,6 +9,7 @@ use Group\Service\GroupService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
+use Oxzion\AccessDeniedException;
 use Zend\InputFilter\Input;
 use Oxzion\Service\OrganizationService;
 
@@ -39,8 +40,16 @@ class GroupController extends AbstractApiController {
     */
     public function getGroupsforUserAction() {
         $params = $this->params()->fromRoute();
+        $data=$this->params()->fromQuery();
+        print_r($data);
         $userId = $params['userId'];
-		$groupList = $this->groupService->getGroupsforUser($userId); //Service to get the list of groups
+        try{
+		  $groupList = $this->groupService->getGroupsforUser($userId,$data);
+        }
+        catch(AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        } //Service to get the list of groups
 		return $this->getSuccessResponseWithData($groupList);
 	}
 	/**
@@ -70,6 +79,10 @@ class GroupController extends AbstractApiController {
 			$response = ['data' => $data, 'errors' => $e->getErrors()];
 			return $this->getErrorResponse("Validation Errors",404, $response);
 		}
+        catch(AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
         if($count == 0) {
 			return $this->getFailureResponse("Failed to create a new entity", $data);
 		}else if($count == 2) {
@@ -98,7 +111,7 @@ class GroupController extends AbstractApiController {
          return $this->getErrorResponse("Entity not found for id - $id", 404);
      }
      return $this->getSuccessResponseWithData($data,200);
- }
+    }
 
     /**
     * Delete Group API
@@ -109,10 +122,17 @@ class GroupController extends AbstractApiController {
     * @return array success|failure response
     */
     public function delete($id) {
-        $response = $this->groupService->deleteGroup($id);
-        if($response == 0) {
-            return $this->getErrorResponse("Group not found", 404, ['id' => $id]);
+        $data = $this->params()->fromQuery();
+        try{
+           $response = $this->groupService->deleteGroup($id,$data);
+           if($response == 0) {
+                 return $this->getErrorResponse("Group not found", 404, ['id' => $id]);
+            }
         }
+        catch(AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(),403);
+        }
+
         return $this->getSuccessResponse();
     }
 
@@ -133,19 +153,24 @@ class GroupController extends AbstractApiController {
      * @return array Returns a JSON Response with Status Code and Created Group.
      */
     public function get($id)
-    {
-        $result = $this->groupService->getGroupByUuid($id);
-        $orgId = $this->orgService->getOrganization($result['org_id']);
-        if ($result == 0) {
-            return $this->getErrorResponse("Group not found", 404, ['id' => $id]);
-        }
-
-         if ($result) {
-                $baseUrl =$this->getBaseUrl();
-                $logo = $result['logo'];
-                $result['logo'] = $baseUrl . "/group/".$orgId['uuid']."/logo/".$result["uuid"];
+    {   
+        $data = $this->params()->fromQuery();
+        try{
+            $result = $this->groupService->getGroupByUuid($id,$data);
+            $orgId = $this->orgService->getOrganization($result['org_id']);
+            if ($result == 0) {
+                return $this->getErrorResponse("Group not found", 404, ['id' => $id]);
             }
 
+             if ($result) {
+                    $baseUrl =$this->getBaseUrl();
+                    $logo = $result['logo'];
+                    $result['logo'] = $baseUrl . "/group/".$orgId['uuid']."/logo/".$result["uuid"];
+                }
+        }
+        catch(AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(),403);
+        }
         return $this->getSuccessResponseWithData($result);
     }
 
@@ -162,14 +187,19 @@ class GroupController extends AbstractApiController {
     public function getList()
     {
         $filterParams = $this->params()->fromQuery(); // empty method call
-        $result = $this->groupService->getGroupList($filterParams);
-        if ($result) {
-            for($x=0;$x<sizeof($result['data']);$x++){
-                $baseUrl =$this->getBaseUrl();
-                $logo = $result['data'][$x]['logo'];
-                $orgId = $this->orgService->getOrganization($result['data'][$x]['org_id']);
-                $result['data'][$x]['logo'] = $baseUrl . "/group/".$orgId['uuid']."/logo/".$result['data'][$x]["uuid"];
+        try{
+            $result = $this->groupService->getGroupList($filterParams);
+            if ($result) {
+                for($x=0;$x<sizeof($result['data']);$x++){
+                    $baseUrl =$this->getBaseUrl();
+                    $logo = $result['data'][$x]['logo'];
+                    $orgId = $this->orgService->getOrganization($result['data'][$x]['org_id']);
+                    $result['data'][$x]['logo'] = $baseUrl . "/group/".$orgId['uuid']."/logo/".$result['data'][$x]["uuid"];
+                }
             }
+        }
+        catch(AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(),403);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
@@ -194,6 +224,9 @@ class GroupController extends AbstractApiController {
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        catch(AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(),403);
         }
         if($count == 0) {
             return $this->getErrorResponse("Entity not found", 404);
@@ -224,6 +257,9 @@ class GroupController extends AbstractApiController {
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        catch(AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(),403);
         }
         if($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);

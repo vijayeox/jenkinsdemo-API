@@ -36,7 +36,7 @@ return [
                         'action' => 'addUserToOrganization',
                         'access' => [
                             // SET ACCESS CONTROL
-                            'addUserToOrganization' => 'MANAGE_USER_WRITE',
+                            'addUserToOrganization' => 'MANAGE_ORGANIZATION_WRITE',
                         ],
                     ],
                 ],
@@ -64,6 +64,22 @@ return [
                     ],
                 ],
             ],
+            'getListofAdminUsers' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/organization[/:orgId]/adminusers',
+                    'defaults' => [
+                        'controller' => Controller\OrganizationController::class,
+                        'method' => 'GET',
+                        'action' => 'getListofAdminUsers',
+                        'access' => [
+                            'getListofAdminUsers'=> ['MANAGE_ORGANIZATION_WRITE', 'MANAGE_MYORG_WRITE']
+                        ],
+                    ],
+                ],
+            ],
+            
+
         ],
     ],
     'log' => [

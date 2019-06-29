@@ -34,3 +34,11 @@ ox_user_group:
     id: 2
     group_id: 1
     avatar_id: 2
+ox_role_privilege:
+  -
+    id: 1000
+    role_id: 5
+    privilege_name: 'MANAGE_GROUP'
+    permission: 3
+    org_id: 1
+

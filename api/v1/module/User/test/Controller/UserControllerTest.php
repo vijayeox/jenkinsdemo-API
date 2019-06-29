@@ -238,7 +238,7 @@ class UserControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->managerUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
         }
         $this->dispatch('/user/4fd9f04d-758f-11e9-b2d5-68ecc57cde45', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -486,7 +486,7 @@ class UserControllerTest extends ControllerTest
      public function testForgotPassword()
     {
         $this->initAuthToken($this->managerUser);
-        $data = ['email' => 'test@va.com'];
+        $data = ['email' => 'test1@va.com'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/me/forgotpassword', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -516,7 +516,7 @@ class UserControllerTest extends ControllerTest
         $query="UPDATE ox_user SET password_reset_code = 'pvAQyJkY',password_reset_expiry_date ='".date('Y-m-d H:i:s', strtotime('+1 day', time()))."' WHERE id = 3";
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
-        $this->initAuthToken($this->managerUser);
+        $this->initAuthToken($this->employeeUser);
         $data = ['password_reset_code' => "pvAQyJkY", 'new_password' => 'password', 'confirm_password' => 'password'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/me/updatenewpassword', 'POST', $data);
@@ -534,7 +534,7 @@ class UserControllerTest extends ControllerTest
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
 
-        $this->initAuthToken($this->managerUser);
+        $this->initAuthToken($this->employeeUser);
         $data = ['password_reset_code' => "pvAQyJkY", 'new_password' => 'password', 'confirm_password' => 'wrongpassword'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/me/updatenewpassword', 'POST', $data);
@@ -552,7 +552,7 @@ class UserControllerTest extends ControllerTest
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
 
-        $this->initAuthToken($this->managerUser);
+        $this->initAuthToken($this->employeeUser);
         $data = ['password_reset_code' => "wrongCode", 'new_password' => 'password', 'confirm_password' => 'password'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/me/updatenewpassword', 'POST', $data);

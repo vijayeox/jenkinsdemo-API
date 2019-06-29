@@ -4,7 +4,7 @@ namespace Organization;
 use Oxzion\Db\ModelTable;
 use Zend\Db\Adapter\AdapterInterface;
 use Organization\Controller\OrganizationController;
-use Oxzion\Test\MainControllerTest;
+use Oxzion\Test\ControllerTest;
 use Oxzion\Service\OrganizationService;
 use Mockery;
 use Oxzion\Messaging\MessageProducer;
@@ -12,11 +12,15 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Transaction\TransactionManager;
 use Oxzion\Service\AbstractService;
 use Zend\Db\ResultSet\ResultSet;
+use PHPUnit\DbUnit\TestCaseTrait;
+use PHPUnit\DbUnit\DataSet\YamlDataSet;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Adapter\Adapter;
 
 
 
 
-class OrganizationControllerTest extends MainControllerTest
+class OrganizationControllerTest extends ControllerTest
 {
     protected $topic;
     public function setUp() : void
@@ -29,6 +33,11 @@ class OrganizationControllerTest extends MainControllerTest
         $mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
         $organizationService->setMessageProducer($mockMessageProducer);
         return $mockMessageProducer;
+    }
+
+    public function getDataSet() {
+        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Organization.yml");
+        return $dataset;
     }
 
    
@@ -390,11 +399,9 @@ class OrganizationControllerTest extends MainControllerTest
         $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$uuid."')";
         $orgResult = $this->executeQueryTest($select);
 
-
         $select = "SELECT count(id) from ox_user where orgid is NULL";
         $orgCount = $this->executeQueryTest($select);
 
-      
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($orgResult),4);
         $this->assertEquals($orgResult[0]['user_id'],5);
@@ -409,7 +416,7 @@ class OrganizationControllerTest extends MainControllerTest
         $this->assertEquals($orgResult[3]['user_id'],3);
         $this->assertEquals($orgResult[3]['org_id'],2);
         $this->assertEquals($orgResult[3]['default'],NULL);
-        $this->assertEquals($orgCount[0]['count(id)'],0);
+        $this->assertEquals($orgCount[0]['count(id)'],1);
 
     }
 
@@ -436,7 +443,6 @@ class OrganizationControllerTest extends MainControllerTest
         $select = "SELECT count(id) from ox_user where orgid is NULL";
         $orgCount = $this->executeQueryTest($select);
         
-      
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($orgResult),2);
         $this->assertEquals($orgResult[0]['user_id'],5);
@@ -445,7 +451,7 @@ class OrganizationControllerTest extends MainControllerTest
         $this->assertEquals($orgResult[1]['user_id'],1);
         $this->assertEquals($orgResult[1]['org_id'],2);
         $this->assertEquals($orgResult[1]['default'],NULL);
-        $this->assertEquals($orgCount[0]['count(id)'],0);
+        $this->assertEquals($orgCount[0]['count(id)'],1);
 
     }
 
@@ -523,6 +529,58 @@ class OrganizationControllerTest extends MainControllerTest
         $this->assertEquals($content['data'][0]['id'], 1);
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
         $this->assertEquals($content['total'],1);
+    }
+
+    public function testgetAdminUsersOrgWithFilter(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/adminusers?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"gogineni"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":2}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['total'],1); 
+    }
+
+
+    public function testgetAdminUsersOrg(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/adminusers?filter=[{"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":20}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['total'],1); 
+    }
+
+
+    public function testgetAdminUsersOrgByManager(){
+        $this->initAuthToken($this->managerUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/adminusers?filter=[{"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":20}]', 'GET');
+        $this->assertResponseStatusCode(403);
+        $this->assertModuleName('Organization');
+        $this->assertControllerName(OrganizationController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('OrganizationController');
+        $this->assertMatchedRouteName('getListofAdminUsers');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testgetAdminUsersOrgByEmployee(){
+        $this->initAuthToken($this->employeeUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/adminusers?filter=[{"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":20}]', 'GET');
+        $this->assertResponseStatusCode(401);
+        $this->assertModuleName('Organization');
+        $this->assertControllerName(OrganizationController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('OrganizationController');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'You have no Access to this API'); 
     }
 
 }

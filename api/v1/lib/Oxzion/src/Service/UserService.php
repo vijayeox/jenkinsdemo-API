@@ -67,13 +67,9 @@ class UserService extends AbstractService
         if ($results = $this->cacheService->get($userName)) {
             return $results;
         }
-        $sql = $this->getSqlObject();
-        $select = $sql->select()
-            ->from('ox_user')
-            ->columns(array('id', 'name', 'uuid', 'orgid'))
-            ->where(array('username = "' . (string) $userName . '"'))->limit(1);
-        $results = $this->executeQuery($select);
-        $results = $results->toArray();
+
+        $select  = "SELECT ou.id,ou.name,ou.uuid as user_uuid,ou.orgid,org.uuid as org_uuid from ox_user as ou inner join ox_organization as org on ou.orgid = org.id where ou.username = '".$userName."'";
+        $results = $this->executeQueryWithParams($select)->toArray(); 
         if (count($results) > 0) {
             $results = $results[0];
         }
@@ -451,26 +447,28 @@ class UserService extends AbstractService
         return $result[0];
     }
 
-    public function getPrivileges($userId)
+    public function getPrivileges($userId, $orgId = NULL)
     {
+        if(!isset($orgId)){
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        }
         // if($roleData = $this->cacheService->get($userId.PRIVILEGESS)){
         // $data = $roleData;
         // } else {
-        $data = $this->getPrivilegesFromDb($userId);
+        $data = $this->getPrivilegesFromDb($userId,$orgId);
         // $this->cacheService->set($userId.PERMISSIONS, $data);
         // }
         return $data;
     }
 
-    private function getPrivilegesFromDb($userId)
+    private function getPrivilegesFromDb($userId, $orgId)
     {
         $sql = $this->getSqlObject();
-        $select = $sql->select()
-            ->from('ox_role_privilege')
-            ->columns(array('privilege_name', 'permission'))
-            ->join('ox_user_role', 'ox_role_privilege.role_id = ox_user_role.role_id', array())
-            ->where(array('ox_user_role.user_id' => $userId));
-        $results = $this->executeQuery($select)->toArray();
+        $query = "select privilege_name, permission from ox_role_privilege rp 
+                    INNER join ox_user_role ur on ur.role_id = rp.role_id 
+                    where ur.user_id = ".$userId." and rp.org_id = ".$orgId;
+
+        $results = $this->executeQueryWithParams($query)->toArray();
         $permissions = array();
         foreach ($results as $key => $value) {
             $permissions = array_merge($permissions, $this->addPermissions($value['privilege_name'], $value['permission']));

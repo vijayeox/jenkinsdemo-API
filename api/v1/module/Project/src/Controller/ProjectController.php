@@ -10,6 +10,7 @@ use Project\Service\ProjectService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
+use Oxzion\AccessDeniedException;
 
 class ProjectController extends AbstractApiController {	
     /**
@@ -90,6 +91,10 @@ class ProjectController extends AbstractApiController {
     		$response = ['data' => $data, 'errors' => $e->getErrors()];
     		return $this->getErrorResponse("Validation Errors",404, $response);
     	}
+        catch(AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
     	if($count == 0) {
     		return $this->getErrorResponse("Entity not found for id - $id", 404);
     	}
@@ -113,9 +118,16 @@ class ProjectController extends AbstractApiController {
      */
     public function get($id)
     {
-        $result = $this->projectService->getProjectByUuid($id);
-        if ($result == 0) {
-            return $this->getErrorResponse("Project not found", 404, ['id' => $id]);
+        $data = $this->params()->fromQuery();
+        try{
+            $result = $this->projectService->getProjectByUuid($id,$data);
+            if ($result == 0) {
+                return $this->getErrorResponse("Project not found", 404, ['id' => $id]);
+            }
+        }
+        catch(AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -130,10 +142,17 @@ class ProjectController extends AbstractApiController {
     * @return array success|failure response
     */
     public function delete($id) {
-    	$response = $this->projectService->deleteProject($id);
-    	if($response == 0) {
-		return $this->getErrorResponse("Project not found", 404, ['id' => $id]);
-    	}
+        $data = $this->params()->fromQuery();
+        try{
+        	$response = $this->projectService->deleteProject($id,$data);
+        	if($response == 0) {
+    		return $this->getErrorResponse("Project not found", 404, ['id' => $id]);
+        	}
+        }
+        catch(AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
     	return $this->getSuccessResponse();
     }
 
@@ -158,8 +177,14 @@ class ProjectController extends AbstractApiController {
     * </code>
     */
     public function getList(){
-        $filterParams = $this->params()->fromQuery(); // empty method call  
-        $result = $this->projectService->getProjectList($filterParams);
+        try{
+            $filterParams = $this->params()->fromQuery(); // empty method call  
+            $result = $this->projectService->getProjectList($filterParams);
+        }
+        catch(AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
         return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
     /**
@@ -183,7 +208,14 @@ class ProjectController extends AbstractApiController {
     * </code>
     */
     public function getListOfMyProjectAction(){
-        $result = $this->projectService->getProjectsOfUser();
+        try{
+            $data = $this->params()->fromQuery();
+            $result = $this->projectService->getProjectsOfUser($data);
+        }
+        catch(AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
         return $this->getSuccessResponseWithData($result);
     }
     /**
@@ -206,6 +238,9 @@ class ProjectController extends AbstractApiController {
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        catch(AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(),403);
         }
         if($count == 0) {
             return $this->getErrorResponse("Entity not found", 404);
@@ -234,6 +269,10 @@ class ProjectController extends AbstractApiController {
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        catch(AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
         }
         if($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);

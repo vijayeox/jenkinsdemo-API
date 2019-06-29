@@ -93,6 +93,58 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['total'],3);
     }
 
+    public function testGetListByManagerWithDifferentOrg() {
+        $this->initAuthToken($this->managerUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/project?filter=[{"skip":0,"take":1}]&org_id=b0971de7-0387-48ea-8f29-5d3704d96a46', 'GET');
+        $this->assertResponseStatusCode(403);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'You do not have permissions to get the project list');
+    }
+
+    public function testGetListByManager() {
+        $this->initAuthToken($this->managerUser);
+        $data = ['data' => array([
+            "id" => "1",
+            "uuid" => "886d7eff-6bae-4892-baf8-6fefc56cbf0b",
+            "name"=> "Test Project 1",
+            "org_id"=>"1",
+            "manager_id" => "1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=>"1"
+        ]
+    )];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/project?filter=[{"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $diff=array_diff($data, $content);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($diff, array());
+        $this->assertEquals($content['total'],3);
+    }
+
+    public function testGetListByEmployee() {
+        $this->initAuthToken($this->employeeUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/project?filter=[{"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(401);
+         $this->assertModuleName('Project');
+        $this->assertControllerName(ProjectController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ProjectController');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'You have no Access to this API');
+    }
      public function testGetListWithQuery() {
         $this->initAuthToken($this->adminUser);
         $data = ['data' => array([
@@ -181,6 +233,8 @@ class ProjectControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
+
+
     public function testCreate() {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Test Project 3','description'=>'Project Description','manager_id' => '1'];
@@ -199,6 +253,20 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_project'));
     }
+
+
+    public function testCreateWithDifferentOrgID() {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Test Project 3','description'=>'Project Description','manager_id' => '1','org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46'];
+        $this->dispatch('/project', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertequals($content['data']['org_id'],2);
+    }
+
     public function testCreateWithOutNameFailure() {    
         $this->initAuthToken($this->adminUser);
         $data = ['description'=>'Project Description'];
@@ -233,6 +301,8 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
+
+
     public function testUpdate() {
         $data = ['name' => 'Test Project','description'=>'Project Description'];
         $this->initAuthToken($this->adminUser);
@@ -248,6 +318,36 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
     }
+
+    public function testUpdateByManager() {
+        $data = ['name' => 'Test Project','description'=>'Project Description'];
+        $this->initAuthToken($this->managerUser);
+        $this->setJsonContent(json_encode($data));
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black','old_projectname'=> 'Test Project 1','new_projectname' => 'Test Project','description' => 'Project Description','uuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')),'PROJECT_UPDATED')->once()->andReturn();
+        }
+        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'PUT', null);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'], $data['name']);
+    }
+
+    public function testUpdateByManagerofDifferentOrg() {
+        $data = ['name' => 'Test Project','description'=>'Project Description','org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46'];
+        $this->initAuthToken($this->managerUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'PUT', null);
+        $this->assertResponseStatusCode(403);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'You do not have permissions to edit the project');
+    }
+
+
     public function testUpdateRestricted() {
         $data = ['name' => 'Test Project 1','description'=>'Project Description'];
         $this->initAuthToken($this->employeeUser);
@@ -294,6 +394,25 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'success');
     }
 
+    public function testDeleteByManagerOfDifferentOrg() {
+        $this->initAuthToken($this->managerUser);
+        $this->dispatch('/project/ced672bb-fe33-4f0a-b153-f1d182a02603?org_id=b0971de7-0387-48ea-8f29-5d3704d96a46', 'DELETE');
+        $this->assertResponseStatusCode(403);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'You do not have permissions to delete the project');
+    }
+
+    public function testDeleteByManager() {
+        $this->initAuthToken($this->managerUser);
+        $this->dispatch('/project/ced672bb-fe33-4f0a-b153-f1d182a02603', 'DELETE');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
     public function testDeleteNotFound() {
         $this->initAuthToken($this->adminUser);
         if(enableActiveMQ == 0){
@@ -312,13 +431,24 @@ class ProjectControllerTest extends ControllerTest {
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => $this->adminUser)),'USERTOPROJECT_DELETED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => $this->managerUser)),'USERTOPROJECT_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => $this->employeeUser)),'USERTOPROJECT_ADDED')->once()->andReturn();
         }
     	$this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
     	$this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
     	$content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
+    }
+
+
+    public function testSaveUserByManagerOfDifferentOrg() {
+        $this->initAuthToken($this->managerUser);
+        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',array('userid' => '[{"id":2},{"id":3}]','org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46')); 
+        $this->assertResponseStatusCode(403);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'You do not have permissions to add users to project'); 
     }
 
     public function testSaveUserWithoutUser() {
@@ -360,6 +490,17 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['total'], 2);
     }
 
+
+     public function testGetListOfUsersByManagerofDifferentOrg() {
+        $this->initAuthToken($this->managerUser);
+        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/users?filter=[{"take":20,"skip":0}]&org_id=b0971de7-0387-48ea-8f29-5d3704d96a46','GET'); 
+        $this->assertResponseStatusCode(403);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'You do not have permissions to get the userlist of project'); 
+    }
+
     public function testGetListOfUsersWithQuery() {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/users?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"al"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]
@@ -395,7 +536,7 @@ class ProjectControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 1);
-       $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['id'], 2);
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'], 1);
     }
@@ -448,6 +589,19 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($diff, array());
     }
+
+
+    public function testGetMyProjectListByManager(){
+        $this->initAuthToken($this->managerUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/project/myproject?org_id=b0971de7-0387-48ea-8f29-5d3704d96a46', 'GET');
+        $this->assertResponseStatusCode(403);
+        $this->setDefaultAsserts('myproject');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'You do not have permissions to get the users of project'); 
+    }
+
     public function testGetMyProjectListWithoutdata()
     {
         $this->initAuthToken($this->adminUser);
