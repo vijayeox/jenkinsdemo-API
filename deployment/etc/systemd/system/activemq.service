@@ -8,7 +8,7 @@ Type=forking
 User=activemq
 Group=activemq
 
-ExecStart=/opt/activemq/bin/activemq start
+ExecStart=/opt/activemq/bin/activemq -Djava.io.tmpdir=/tmp start
 ExecStop=/opt/activemq/bin/activemq stop
 
 [Install]
