@@ -637,8 +637,10 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 	<h5>sudo useradd -r -M -d /opt/activemq activemq</h5>
 
 	<h5>sudo chown -R activemq:activemq /opt/apache-activemq-5.15.6</h5>
-
-	<h5>sudo chown -h activemq:activemq /opt/activemq</h5>
+	
+	<h5> sudo adduser activemq --home /opt/activemq --shell /usr/sbin/nologin --disabled-login</h5>
+	
+	<h5>sudo chown -RH activemq:activemq /opt/activemq</h5>
 
 
 2. Copy the activemq.service to /etc/systemd/system/activemq.service and restart systemctl by the following
@@ -716,7 +718,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 </div>
 ---
 
-- Create a database **_mattermost** with user **_mmuser_** and granting all previleges to the user to the database.
+- Create a database **_mattermost_** with user **_mmuser_** and granting all previleges to the user to the database.
 
 - Change configurations for the database in **_mattermost/mattermost-server/config/default.json_** under **_SqlSettings_**.
 
