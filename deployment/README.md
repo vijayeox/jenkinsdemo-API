@@ -175,6 +175,21 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
   	Note-If you do not see any Apache processes or Passenger processes, then you probably have some kind of installation problem or configuration problem. Please refer to the troubleshooting guide on the following [link.](https://www.phusionpassenger.com/library/admin/apache/troubleshooting/)
 
 ---
+<h4>Postfix installation</h4>
+Follow instructions from this site to use postfix https://rtcamp.com/tutorials/linux/ubuntu-postfix-gmail-smtp/
+
+To retain the Reply-To header
+https://serverfault.com/questions/811245/how-to-configure-postfix-to-force-from-field-but-leave-reply-to-alone
+
+/etc/postfix/main.cf:
+
+smtp_header_checks = regexp:/etc/postfix/header_check
+/etc/postfix/header_check:
+
+/From:.*/ REPLACE From: newsender@address.com
+Tested with:
+
+mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 
 <h4>8. <u>Supervisor and Redis Server:</u></h4>
 
