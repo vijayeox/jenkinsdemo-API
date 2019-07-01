@@ -360,7 +360,7 @@ class UserService extends AbstractService
      * @method GET
      * @return array $dataget list of Users
      */
-    public function getUsers($filterParams = null)
+    public function getUsers($filterParams = null, $baseUrl = '')
     {
             $where = "";
             $pageSize = 20;
@@ -397,6 +397,7 @@ class UserService extends AbstractService
             $result = $resultSet->toArray();
             for($x=0;$x<sizeof($result);$x++) {
                  $result[$x]['preferences'] = json_decode($result[$x]['preferences'],true);
+                 $result[$x]['icon'] = $baseUrl . "/user/profile/" . $result[$x]['uuid'];
             }
             return array('data' => $result,
                      'total' => $count);
