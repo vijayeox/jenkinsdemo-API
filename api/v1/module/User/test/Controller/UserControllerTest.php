@@ -200,7 +200,7 @@ class UserControllerTest extends ControllerTest
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/user/64', 'GET');
+        $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57c3456', 'GET');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -212,7 +212,7 @@ class UserControllerTest extends ControllerTest
         $data = ['name' => 'John Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/1', 'PUT', null);
+        $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -226,7 +226,7 @@ class UserControllerTest extends ControllerTest
         $data = ['name' => 'Test User'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/122', 'PUT', null);
+        $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57c6543', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);

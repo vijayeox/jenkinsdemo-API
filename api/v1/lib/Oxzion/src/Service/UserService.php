@@ -287,13 +287,13 @@ class UserService extends AbstractService
      */
     public function updateUser($id, &$data)
     {
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
             return 0;
         }
         $form = new User();
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
-        $userdata['id'] = $id;
+        $userdata['uuid'] = $id;
         $userdata['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $userdata['date_modified'] = date('Y-m-d H:i:s');
         if (isset($userdata['preferences'])) {
@@ -415,7 +415,12 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_user')
-            ->columns(array("*"))
+            ->columns(array(
+                "uuid", "username", "firstname", "lastname",
+                "email", "orgid", "icon", "country", "date_of_birth",
+                "designation", "phone", "address", "gender", "website", "about",
+                "managerid", "timezone", "date_of_join", "preferences"
+            ))
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
@@ -424,8 +429,9 @@ class UserService extends AbstractService
         $result = $response[0];
 
         $result['active_organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
-        $result['preferences'] = json_decode($response[0]['preferences'],true);
+        $result['preferences'] = json_decode($response[0]['preferences'], true);
         $result['preferences']['timezone'] = $response[0]['timezone'];
+        unset($result['password']);
         if (isset($result)) {
             return $result;
         } else {
@@ -566,6 +572,9 @@ class UserService extends AbstractService
      * @param $id ID of User to set as Manager
      * @return array success|failure response
      */
+
+    //  TODO CHANGE TO UUID //
+
     public function assignManagerToUser($userId, $managerId)
     {
         $queryString = "Select user_id, manager_id from ox_user_manager";
