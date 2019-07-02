@@ -26,6 +26,22 @@ return [
                     ],
                 ],
             ],
+            'query' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/analytics/query[/:queryId]',
+                    'defaults' => [
+                        'controller' => Controller\QueryController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_QUERY_WRITE',
+                            'post'=> 'MANAGE_QUERY_WRITE',
+                            'delete'=> 'MANAGE_QUERY_WRITE',
+                            'get'=> 'MANAGE_QUERY_READ',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

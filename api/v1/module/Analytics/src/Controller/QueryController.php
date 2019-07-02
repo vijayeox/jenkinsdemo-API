@@ -3,48 +3,49 @@
 namespace Analytics\Controller;
 
 use Zend\Log\Logger;
-use Analytics\Model\DataSourceTable;
-use Analytics\Model\DataSource;
-use Analytics\Service\DataSourceService;
+use Analytics\Model\QueryTable;
+use Analytics\Model\Query;
+use Analytics\Service\QueryService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 
 
-class DataSourceController extends AbstractApiController
+class QueryController extends AbstractApiController
 {
 
-    private $dataSourceService;
+    private $queryService;
 
     /**
      * @ignore __construct
      */
-    public function __construct(DataSourceTable $table, DataSourceService $dataSourceService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(QueryTable $table, QueryService $queryService, Logger $log, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __class__, DataSource::class);
-        $this->setIdentifierName('dataSourceId');
-        $this->dataSourceService = $dataSourceService;
+        parent::__construct($table, $log, __class__, Query::class);
+        $this->setIdentifierName('queryId');
+        $this->queryService = $queryService;
     }
 
     /**
-     * Create DataSource API
+     * Create Query API
      * @api
-     * @link /analytics/dataSource
+     * @link /analytics/query
      * @method POST
      * @param array $data Array of elements as shown
      * <code> {
      *               name : string,
-     *               type : string,
-     *               connection_string : string
+     *               datasource_id : integer,
+     *               query_json : string,
+     *               ispublic : integer,
      *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created DataSource.
+     * @return array Returns a JSON Response with Status Code and Created Query.
      */
     public function create($data)
     {
         $data = $this->params()->fromPost();
         try {
-            $count = $this->dataSourceService->createDataSource($data);
+            $count = $this->queryService->createQuery($data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -56,68 +57,71 @@ class DataSourceController extends AbstractApiController
     }
 
     /**
-     * Update DataSource API
+     * Update Query API
      * @api
-     * @link /analytics/dataSource/:dataSourceId
+     * @link /analytics/query/:queryId
      * @method PUT
-     * @param array $id ID of DataSource to update
+     * @param array $id ID of Query to update
      * @param array $data
-     * @return array Returns a JSON Response with Status Code and Created DataSource.
+     * @return array Returns a JSON Response with Status Code and Created Query.
      */
     public function update($id, $data)
     {
         try {
-            $count = $this->dataSourceService->updateDataSource($id, $data);
+            $count = $this->queryService->updateQuery($id, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
+            print_r($response);exit;
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("DataSource not found for id - $id", 404);
+            return $this->getErrorResponse("Query not found for id - $id", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
 
     /**
-     * Delete DataSource API
+     * Delete Query API
      * @api
-     * @link /analytics/dataSource/:dataSourceId
+     * @link /analytics/query/:queryId
      * @method DELETE
-     * @param $id ID of DataSource to Delete
+     * @param $id ID of Query to Delete
      * @return array success|failure response
      */
     public function delete($id)
     {
-        $response = $this->dataSourceService->deleteDataSource($id);
+        $response = $this->queryService->deleteQuery($id);
         if ($response == 0) {
-            return $this->getErrorResponse("DataSource not found for id - $id", 404, ['id' => $id]);
+            return $this->getErrorResponse("Query not found for id - $id", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
     }
 
     /**
-     * GET DataSource API
+     * GET Query API
      * @api
-     * @link /analytics/datasource/:dataSourceId
+     * @link /analytics/query/:queryId
      * @method GET
-     * @param array $dataget of DataSource
+     * @param array $dataget of Query
      * @return array $data
      * {
      *              id: integer,
+     *              uuid: string,
      *              name : string,
-     *              type : string,
-     *              connection_string : string,
+     *              datasource_id : integer,
+     *              query_json : string,
+     *              ispublic : integer,
      *              created_by: integer,
      *              date_created: date,
      *              org_id: integer
-     *   }
+     * }
      * @return array Returns a JSON Response with Status Code and Created Group.
      */
     public function get($id)
     {
-        $result = $this->dataSourceService->getDataSource($id);
+        $result = $this->queryService->getQuery($id);
         if ($result == 0) {
-            return $this->getErrorResponse("DataSource not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("Query not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -144,7 +148,7 @@ class DataSourceController extends AbstractApiController
     public function getList()
     {
         $params = $this->params()->fromQuery();
-        $result = $this->dataSourceService->getDataSourceList($params);
+        $result = $this->queryService->getQueryList($params);
         if ($result == 0) {
             return $this->getErrorResponse("No records found",404);
         }

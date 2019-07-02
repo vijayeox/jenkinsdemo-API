@@ -1,0 +1,31 @@
+query:
+  -
+    id: 1
+    uuid: '8f1d2819-c5ff-4426-bc40-f7a20704a738'
+    name: 'query1'
+    datasource_id: 1
+    query_json: '{"date_type":"date_created","date-period":"2018-01-01/now","list":"name,amount"}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+  -
+    id: 2
+    uuid: '86c0cc5b-2567-4e5f-a741-f34e9f6f1af1'
+    name: 'query2'
+    datasource_id: 1
+    query_json: '{"date_type":"date_created","date-period":"2019-01-01/now","operation":"count"}'
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+  -
+    id: 3
+    uuid: '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1'
+    name: 'query3'
+    datasource_id: 1
+    query_json: '{"date_type":"date_created","date-period":"2018-01-01/now","list":"name,amount"}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
