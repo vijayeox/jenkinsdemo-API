@@ -410,7 +410,7 @@ class UserService extends AbstractService
      * @return array $data
      * @return array Returns a JSON Response with Status Code and Created User.
      */
-    public function getUser($id, $getPassword = false)
+    public function getUser($id, $getAllFields = false)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
@@ -419,7 +419,8 @@ class UserService extends AbstractService
                 "uuid", "username", "firstname", "lastname",
                 "email", "orgid", "icon", "country", "date_of_birth",
                 "designation", "phone", "address", "gender", "website", "about",
-                "managerid", "timezone", "date_of_join", "preferences", "password"
+                "managerid", "timezone", "date_of_join", "preferences", "password",
+                "password_reset_expiry_date","password_reset_code"
             ))
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
@@ -428,8 +429,10 @@ class UserService extends AbstractService
         }
 
         $result = $response[0];
-        if(!$getPassword){
+        if(!$getAllFields){
             unset($result['password']);   
+            unset($result['password_reset_expiry_date']);
+            unset($result['password_reset_code']);
         }
         $result['active_organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
         $result['preferences'] = json_decode($response[0]['preferences'], true);
@@ -832,7 +835,7 @@ class UserService extends AbstractService
         $userId = AuthContext::get(AuthConstants::USER_ID);
         $userDetails = $this->getUser($userId);
         if ($email === $userDetails['email']) {
-            $userReset['id'] = $id = $userDetails['id'];
+            $userReset['uuid'] = $id = $userDetails['uuid'];
             $userReset['email'] = $userDetails['email'];
             $userReset['firstname'] = $userDetails['firstname'];
             $userReset['lastname'] = $userDetails['lastname'];

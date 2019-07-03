@@ -152,7 +152,7 @@ class UserController extends AbstractApiController
     public function saveMeAction()
     {
         $data = $this->params()->fromPost();
-        $id =AuthContext::get(AuthConstants::USER_ID);
+        $id =AuthContext::get(AuthConstants::USER_UUID);
         return $this->update($id,$data);
     }
 
@@ -532,7 +532,7 @@ class UserController extends AbstractApiController
     {
         $data = $this->params()->fromPost();
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $userDetail = $this->userService->getUser($userId);
+        $userDetail = $this->userService->getUser($userId,true);
         $resetCode = $data['password_reset_code'];
         $newPassword = md5(sha1($data['new_password']));
         $confirmPassword = md5(sha1($data['confirm_password']));
@@ -543,11 +543,11 @@ class UserController extends AbstractApiController
         } elseif ($resetCode !== $userDetail['password_reset_code']) {
             return $this->getErrorResponse("You have entered an incorrect code", 400);
         } else if (($resetCode == $userDetail['password_reset_code']) && ($newPassword == $confirmPassword)) {
-            $formData = array('id' => $userDetail['id'], 'password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null, 'password_reset_code' => null, 'password_reset_expiry_date' => null);
-            $this->update($userDetail['id'], $formData);
+            $formData = array('id' => $userId, 'password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null, 'password_reset_code' => null, 'password_reset_expiry_date' => null);
+            $this->update($userId, $formData);
             return $this->getSuccessResponseWithData($data, 200);
         } else {
-            $response = ['id' => $userDetail['id']];
+            $response = ['id' => $userId];
             return $this->getErrorResponse("Failed to Update Password", 404, $response);
         }
 
