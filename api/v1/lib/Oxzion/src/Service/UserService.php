@@ -410,7 +410,7 @@ class UserService extends AbstractService
      * @return array $data
      * @return array Returns a JSON Response with Status Code and Created User.
      */
-    public function getUser($id)
+    public function getUser($id, $getPassword = false)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
@@ -419,19 +419,21 @@ class UserService extends AbstractService
                 "uuid", "username", "firstname", "lastname",
                 "email", "orgid", "icon", "country", "date_of_birth",
                 "designation", "phone", "address", "gender", "website", "about",
-                "managerid", "timezone", "date_of_join", "preferences"
+                "managerid", "timezone", "date_of_join", "preferences", "password"
             ))
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
             return $response[0];
         }
-        $result = $response[0];
 
+        $result = $response[0];
+        if(!$getPassword){
+            unset($result['password']);   
+        }
         $result['active_organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
         $result['preferences'] = json_decode($response[0]['preferences'], true);
         $result['preferences']['timezone'] = $response[0]['timezone'];
-        unset($result['password']);
         if (isset($result)) {
             return $result;
         } else {
