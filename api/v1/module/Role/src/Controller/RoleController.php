@@ -27,7 +27,24 @@ class RoleController extends AbstractApiController
 		parent::__construct($table, $log, __CLASS__, Role::class);
 		$this->setIdentifierName('roleId');
 		$this->roleService = $roleService;
-	}
+    }
+    
+    private function convertParams(){
+        $params = json_decode(file_get_contents("php://input"),true);
+        if(!isset($params)){
+            $params = $this->params()->fromPost(); 
+            // if(!isset($params))   {
+            //     $params = $this->params()->fromRoute(); 
+            //     if(!is_object($params)){
+            //         if(key($params)){
+            //                 $params = json_decode(key($params),true);
+            //         }
+            //     }
+            //  }
+        }
+         return $params;
+     }
+     
     /**
     * Create Role API
     * @api
@@ -50,10 +67,10 @@ class RoleController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Role.
     */
     public function create($data){
-        $params = $this->params()->fromRoute(); // empty method calls
-        $roleId = isset($params['roleId']) ? $params['roleId'] : null;
+        $data = $this->convertParams();
+        $roleId = isset($data['roleId']) ? $data['roleId'] : null;
         try{
-            $count = $this->roleService->createRole($roleId,$data);
+            $count = $this->roleService->saveRole($roleId,$data);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
@@ -86,8 +103,9 @@ class RoleController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Role.
     */
     public function update($id, $data){
+        $data = $this->convertParams();
         try{
-            $count = $this->roleService->updateRole($id,$data);
+            $count = $this->roleService->saveRole($id,$data);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
@@ -124,7 +142,7 @@ class RoleController extends AbstractApiController
     public function get($id){
         try {
             $result = $this->roleService->getRole($id);
-        } catch (ValidationException $e) {
+        } catch (ValidationException $e) { 
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
         }
