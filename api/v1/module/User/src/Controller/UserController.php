@@ -404,19 +404,18 @@ class UserController extends AbstractApiController
     public function changePasswordAction()
     {
         $data = $this->params()->fromPost();
-        $user = $this->params()->fromRoute();
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $userDetail = $this->userService->getUser($userId);
+        $userDetail = $this->userService->getUser($userId, true);
         $oldPassword = md5(sha1($data['old_password']));
         $newPassword = md5(sha1($data['new_password']));
         $confirmPassword = md5(sha1($data['confirm_password']));
 
         if (($oldPassword == $userDetail['password']) && ($newPassword == $confirmPassword)) {
-            $formData = array('id' => $userDetail['id'], 'password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null);
-            $result = $this->update($userDetail['id'], $formData);
+            $formData = array('id' => $userId, 'password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null);
+            $result = $this->update($userId, $formData);
             return $this->getSuccessResponse("Password changed successfully!");
         } else {
-            $response = ['id' => $userDetail['id']];
+            $response = ['id' => $userId];
             return $this->getErrorResponse("Failed to Update Password", 404, $response);
         }
     }
