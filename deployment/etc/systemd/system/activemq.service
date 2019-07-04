@@ -1,15 +1,22 @@
 [Unit]
 Description=Apache ActiveMQ
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=activemq
 After=network.target
-
 [Service]
 Type=forking
-
+# The configuration file application.properties should be here:
+#change this to your workspace
+WorkingDirectory=/opt/activemq/
 User=activemq
 Group=activemq
-
-ExecStart=/opt/activemq/bin/activemq -Djava.io.tmpdir=/tmp start
+#path to executable. 
+ExecStart=/opt/activemq/bin/activemq start
 ExecStop=/opt/activemq/bin/activemq stop
-
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
 [Install]
 WantedBy=multi-user.target

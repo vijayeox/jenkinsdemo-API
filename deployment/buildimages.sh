@@ -56,11 +56,14 @@ echo -e "${GREEN}Building Integrations Workflow Docker image completed!\n${RESET
 
 #building openproject docker
 echo -e "${YELLOW}Building Integrations Openproject Docker images..${RESET}"
-echo -e "${YELLOW}Building production docker first.."
-cd ${HOME}/integrations/openproject/docker2
+echo -e "${YELLOW}Building development docker now..${RESET}"
+cd ${HOME}/integrations/openproject
 docker build -t openproject .
-echo -e "${YELLOW}Building production docker for build and deployment now.."
+echo -e "${YELLOW}Building production docker now..${RESET}"
 cd ${HOME}/integrations/openproject/docker_prod
 docker build -t openproject_prod .
+echo -e "${YELLOW}Building docker for build and deployment now..${RESET}"
+cd ${HOME}/integrations/openproject/docker_build
+docker build -t openproject_build .
 echo -e "${GREEN}Building Integrations Openproject Docker images completed!\n${RESET}"
 echo -e "${BLINK} All images built successfully${RESET}"
