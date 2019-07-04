@@ -123,13 +123,12 @@ class QueryControllerTest extends ControllerTest
     public function testGet() {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/query/1', 'GET');
-        print_r(json_decode($this->getResponse()->getContent(), true));exit;
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 1);
-        $this->assertEquals($content['data']['name'], 'query1');
+        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['name'], 'query1');
     }
 
     public function testGetNotFound() {
@@ -148,12 +147,56 @@ class QueryControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 2);
+        $this->assertEquals(count($content['data']['data']), 3);
         $this->assertEquals($content['data']['data'][0]['id'], 1);
-        $this->assertEquals($content['data']['data'][0]['name'], 'mattermost');
-        $this->assertEquals($content['data']['data'][1]['type'], 'Elastic');
-        $this->assertEquals($content['data']['data'][1]['name'], 'reporting engine');
-        $this->assertEquals($content['data']['total'],2);
+        $this->assertEquals($content['data']['data'][0]['name'], 'query1');
+        $this->assertEquals($content['data']['data'][1]['datasource_id'], 1);
+        $this->assertEquals($content['data']['data'][1]['name'], 'query2');
+        $this->assertEquals($content['data']['total'],3);
     }
 
+    public function testGetListWithSort()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/query?sort=[{"field":"name","dir":"desc"}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']['data']), 3);
+        $this->assertEquals($content['data']['data'][0]['id'], 3);
+        $this->assertEquals($content['data']['data'][0]['name'], 'query3');
+        $this->assertEquals($content['data']['data'][1]['ispublic'], 1);
+        $this->assertEquals($content['data']['data'][1]['name'], 'query2');
+        $this->assertEquals($content['data']['total'],3);
+    }
+
+     public function testGetListSortWithPageSize()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/query?skip=1&limit=10&sort=[{"field":"name","dir":"asc"}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['name'], 'query2');
+        $this->assertEquals($content['data']['data'][0]['created_by'], 2);
+        $this->assertEquals($content['data']['total'],3);
+    }
+
+    public function testGetListwithQueryParameters()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/query?limit=10&sort=[{"field":"name","dir":"desc"}]&filter=[{"logic":"and"},{"filters":[{"field":"name","operator":"endswith","value":"3"},{"field":"name","operator":"startswith","value":"q"}]}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']['data']), 1);
+        $this->assertEquals($content['data']['data'][0]['id'], 3);
+        $this->assertEquals($content['data']['data'][0]['name'], 'query3');
+        $this->assertEquals($content['data']['total'],1);
+    }
 }

@@ -16,7 +16,7 @@ query:
     datasource_id: 1
     query_json: '{"date_type":"date_created","date-period":"2019-01-01/now","operation":"count"}'
     ispublic: 1
-    created_by: 1
+    created_by: 2
     date_created: '2019-06-27 07:25:06'
     org_id: 1
   -

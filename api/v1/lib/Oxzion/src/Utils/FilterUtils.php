@@ -7,7 +7,7 @@ class FilterUtils{
     static public function paginate($params) {
         $pageSize = 20;
         $offset = 0;
-        $sort = "id";
+        $sort = "name";
         $where = "";
 
         if(!empty($params))

@@ -90,8 +90,8 @@ class QueryService extends AbstractService
 
     public function getQuery($id)
     {
-        $statement = "Select * from query where (id =".$id." and org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1";
-        $resultSet = $this->executeQuerywithParams($query);
+        $statement = "Select * from query where (id =".$id." and org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
+        $resultSet = $this->executeQuerywithParams($statement);
         $result = $resultSet->toArray();
         if (count($result) == 0) {
             return 0;
@@ -104,7 +104,7 @@ class QueryService extends AbstractService
 
             $paginateOptions = FilterUtils::paginate($params);
             $where = $paginateOptions['where'];
-            $where .= empty($where) ? "WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
+            $where .= empty($where) ? "WHERE (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
             $sort = " ORDER BY ".$paginateOptions['sort'];
             $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
