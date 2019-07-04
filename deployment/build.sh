@@ -1,5 +1,5 @@
 # script to package oxzion3.0 to production build
-#!/bin/bash
+#!/bin/sh
 # exit when any command fails
 #set -e
 #trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
