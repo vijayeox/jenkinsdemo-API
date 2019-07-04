@@ -157,7 +157,6 @@ class OrganizationService extends AbstractService
 
          // adding a user
         $returnArray['user'] = $this->userService->createAdminForOrg($org,$contactPerson,$orgPreferences);
-      
        
         return $returnArray['user'];
     }

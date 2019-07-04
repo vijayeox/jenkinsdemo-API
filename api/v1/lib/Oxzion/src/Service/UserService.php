@@ -12,6 +12,7 @@ use Oxzion\Service\EmailService;
 use Oxzion\Service\EmailTemplateService;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Search\Elastic\IndexerImpl;
+use Ramsey\Uuid\Uuid;
 use Oxzion\Utils\FilterUtils;
 
 class UserService extends AbstractService
@@ -138,7 +139,7 @@ class UserService extends AbstractService
         if(!isset($data['orgid'])){
             $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
         }
-
+        $data['uuid'] = Uuid::uuid4()->toString();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $password = BosUtils::randomPassword();
@@ -207,7 +208,6 @@ class UserService extends AbstractService
         $this->beginTransaction();
         try{
             $result = $this->createUser($data);
-
             $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
             $this->addUserRole($data['id'], 'ADMIN');

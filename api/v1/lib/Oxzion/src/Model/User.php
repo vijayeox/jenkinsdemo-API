@@ -8,6 +8,7 @@ class User extends Entity
 
     protected $data = array(
         'id' => NULL,
+        'uuid' => NULL,
         'username' => NULL,
         'password' => NULL,
         'firstname' => NULL,
@@ -60,7 +61,6 @@ class User extends Entity
             'orgid',
             'status',
             'date_of_birth',
-            'gender',
             'date_of_join',
             'date_created',
             'created_by'

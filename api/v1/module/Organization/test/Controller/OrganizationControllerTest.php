@@ -533,7 +533,7 @@ class OrganizationControllerTest extends ControllerTest
 
     public function testgetAdminUsersOrgWithFilter(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/adminusers?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"gogineni"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":2}]', 'GET');
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/adminusers?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"gogineni"}]},"sort":[{"field":"name","dir":"asc"}],"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -547,7 +547,7 @@ class OrganizationControllerTest extends ControllerTest
 
     public function testgetAdminUsersOrg(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/adminusers?filter=[{"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":20}]', 'GET');
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/adminusers?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":0,"take":20}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
