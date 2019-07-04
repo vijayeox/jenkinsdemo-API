@@ -84,7 +84,7 @@ class Module implements ConfigProviderInterface
                     return new Controller\TaskCallbackController($container->get(Service\TaskService::class),$container->get('CallbackLogger'));
                 },
                 Controller\CalendarCallbackController::class => function ($container) {
-                    return new Controller\CalendarCallbackController($container->get(Service\CalendarService::class),$container->get(EmailService::class),$container->get('CallbackLogger'));
+                    return new Controller\CalendarCallbackController($container->get(Service\CalendarService::class),$container->get(EmailService::class),$container->get('CallbackLogger'), $container->get('config'));
                 },
             ],
         ];

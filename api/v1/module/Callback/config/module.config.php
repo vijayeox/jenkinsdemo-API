@@ -30,6 +30,16 @@ return [
                     ],
                 ],
             ],
+            'calendaraddeventcallback' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/calendar/addevent',
+                    'defaults' => [
+                        'controller' => Controller\CalendarCallbackController::class,
+                        'action' => 'addEvent',
+                    ],
+                ],
+            ],
             'addcallback' => [
                 'type'    => Segment::class,
                 'options' => [
