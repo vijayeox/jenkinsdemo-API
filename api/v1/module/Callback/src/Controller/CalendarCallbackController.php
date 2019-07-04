@@ -52,9 +52,9 @@ namespace Callback\Controller;
 
         public function addEventAction() {
             $params = $this->convertParams();
-            $this->log->info(__CLASS__.print_r($params, true));
+            $this->log->info(__CLASS__.": ".print_r($params, true));
             $response = $this->restClient->post('/calendar/server/phpmailer/extras/extract_ics_data/geticsdata.php', $params);
-            print_r($response);
+            $this->log->info(__CLASS__.": ".$response);
             return $this->getSuccessResponseWithData(array('Event Added'),201);
         }
 
