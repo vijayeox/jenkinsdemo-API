@@ -42,6 +42,38 @@ return [
                     ],
                 ],
             ],
+            'visualization' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/analytics/visualization[/:visualizationId]',
+                    'defaults' => [
+                        'controller' => Controller\VisualizationController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_VISUALIZATION_WRITE',
+                            'post'=> 'MANAGE_VISUALIZATION_WRITE',
+                            'delete'=> 'MANAGE_VISUALIZATION_WRITE',
+                            'get'=> 'MANAGE_VISUALIZATION_READ',
+                        ],
+                    ],
+                ],
+            ],
+            'analytics_widget' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/analytics/widget[/:widgetId]',
+                    'defaults' => [
+                        'controller' => Controller\WidgetController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
+                            'post'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
+                            'delete'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
+                            'get'=> 'MANAGE_ANALYTICS_WIDGET_READ',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [
