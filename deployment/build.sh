@@ -153,7 +153,7 @@ crm()
     echo -e "${YELLOW}Building orocrm${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/integrations/orocrm/* ./orocrm/
-    docker run -it --network="host" -v ${PWD}:/integrations -v /var/lib/oxzion/rainloop/data:/var/www/public/rainloop/data --entrypoint ./orocrm/docker-build.sh integrations
+    docker run -t --network="host" -v ${PWD}:/integrations -v /var/lib/oxzion/rainloop/data:/var/www/public/rainloop/data --entrypoint ./orocrm/docker-build.sh integrations
     echo -e "${GREEN}Building orocrm Completed!${RESET}"
     #copying orocrm to build
     echo -e "${YELLOW}Copying Orocrm to build folder....${RESET}"
@@ -217,7 +217,7 @@ openproject()
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/integrations/openproject/config/* ./config/
     echo -e "${YELLOW}Building Openproject...${RESET}"
-    docker run -it -v ${PWD}:/app -p 8095:80 --entrypoint ./dockerbuild.sh openproject_build
+    docker run -t -v ${PWD}:/app -p 8095:80 --entrypoint ./dockerbuild.sh openproject_build
     echo -e "${GREEN}Building Openproject Completed!${RESET}"
     echo -e "${YELLOW}Now Copying Openproject to build folder...${RESET}"
     rsync -rl --exclude=node_modules ${OXHOME}/integrations/openproject/ ${OXHOME}/build/integrations/openproject/

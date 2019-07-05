@@ -57,7 +57,7 @@ Set the memory limit in php.ini located inside /etc/php/"version"/apache2 to atl
 
 - **Note: Install the following extensions according to php version**
 
-<h5>sudo apt-get install php7.2-mysql php7.2-curl php7.2-json php7.2-cgi php7.2-xsl</h5>
+<h5>sudo apt-get install php7.2-mysql php7.2-curl php7.2-json php7.2-cgi php7.2-xsl php7.2-intl php7.2gd php7.2-zip</h5>
 
 ---------
 <h4> 1. <u>Apache 2.4+</u>: </h4>
@@ -207,9 +207,11 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 <h4>Step 2:<u>Server Side Configuration Setup</u>:</h4>
 </div>
 ---
-1. Create oxzion user on the server:
+1. Create oxzion and activemq users on the server:
 
   	<h5>sudo adduser oxzion --home /opt/oxzion --shell /usr/sbin/nologin --disabled-login</h5>
+  	
+  	<h5>sudo adduser activemq --home /opt/activemq --shell /usr/sbin/nologin --disabled-login</h5>
   	
   	- Note : If prompted to enter personal details like Full Name, Work, Mobile, etc, just enter Full Name as "oxzion" and leave rest of fields blank.
   	
@@ -256,6 +258,23 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 3. You need to have the certifications setup such as oxzion.cert, intermediate.cert , amazon.key in /etc/certs on the server with appropriate permissions on the certificate files i.e chmod 444. If not do so by
 
   	<h5> sudo chmod 444 -R /etc/certs/* </h5>
+4. You need to enable the following mods
+	
+	1. passenger
+	2. php7.2
+	3. ssl
+	4. rewrite
+	5. proxy
+	6. proxy_http
+	7. proxy_http
+	8. proxy_conncet
+	9. proxy_wstunnel
+	
+		- Run the following to enable them and then restart/reload apache.
+	
+		<h5>sudo a2enmod mod_name</h5>
+
+		- For example: sudo a2enmod php7.2
 
 ---
 
@@ -271,31 +290,27 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 
   	<h5>sudo mkdir -p /var/www/task</h5>
 
-  	<h5>sudo chown www-data:www-data -R /var/www/task</h5>
-
 2. Data folder setup for task app
 
   	<h5>sudo mkdir -p /var/lib/oxzion/task/</h5>
 
-3. Taking ownership of data folder as apache user
+3. Log folder Setup
 
-  	<h5>sudo chown www-data:www-data -R /var/lib/oxzion/task/</h5>
+  	<h5>sudo mkdir -p /var/log/oxzion/task</h5>
 
 4. Creating symlink for data folder
 
   	<h5>sudo ln -s /var/lib/oxzion/task /var/www/task/files</h5>
-
-5. Log folder Setup
-
-  	<h5>sudo mkdir -p /var/log/oxzion/task</h5>
-
-6. Taking ownership of the log folder as apache user
-
-  	<h5>sudo chown www-data:www-data -R /var/log/oxzion/task/</h5>
-
-7. Creating symlink for log folder
-
+  	
   	<h5>sudo ln -s /var/log/oxzion/task /var/www/task/log</h5>
+
+5. Taking ownership of data folder as apache user
+
+	<h5>sudo chown www-data:www-data -R /var/www/task</h5>
+	
+  	<h5>sudo chown www-data:www-data -R /var/lib/oxzion/task/</h5>
+	
+	<h5>sudo chown www-data:www-data -R /var/log/oxzion/task/</h5>
 
 ---
   >Similarly For View/UI
@@ -346,15 +361,15 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 ---
 >For Crm App
 
-<h5>sudo mkdir -p /var/log/oxzion/crm</h5>
+<h5>sudo mkdir -p /var/www/crm</h5>
 
 <h5>sudo mkdir -p /var/lib/oxzion/crm</h5>
 
-<h5>sudo mkdir -p /var/www/crm</h5>
-
-<h5>sudo ln -s /var/log/oxzion/crm /var/lib/oxzion/crm/logs</h5>
+<h5>sudo mkdir -p /var/log/oxzion/crm</h5>
 
 <h5>sudo ln -s /var/lib/oxzion/crm /var/www/crm/var</h5>
+
+<h5>sudo ln -s /var/log/oxzion/crm /var/lib/oxzion/crm/logs</h5>
 
 <h5>sudo chown www-data:www-data -R /var/www/crm</h5>
 
@@ -400,14 +415,17 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 
 2. Creating a User with a Password
 
-  	<h5>CREATE USER 'username'@'%' IDENTIFIED BY 'password';</h5>
+	- Note Use the below command to list users.
+  	<h5>SELECT User FROM mysql.user;</h5>
+  	
+  		<h5>CREATE USER 'newuser'@'%' IDENTIFIED BY 'password';</h5>
 
 3. Creating a database.
 
   	<h5>Create database "dbname";</h5>
 
 4. Granting all previleges on the database to the user.
-  	<h5>GRANT ALL PRIVILEGES ON `databasename` . * TO 'username'@'%' identified by 'password!';</h5>
+  	<h5>GRANT ALL PRIVILEGES ON 'databasename' . * TO 'username'@'%' identified by 'password';</h5>
 ---
 
 >Basic Tutotial for Postgres command-line
@@ -467,6 +485,17 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 
 - The list of **POSTGRES databases** are as follows.
 
+	1. **tasktracker** with **taskuser** and _password_.
+	
+	- Follows this to create tasktracker database.
+	<h5>sudo su postgres</h5>
+	
+		<h5>createuser -d -P taskuser</h5>
+	
+		<h5>createdb -O taskuser openproject</h5>
+	
+		<h5>exit</h5>
+	
 ---
 
 <div align="center">	
@@ -533,6 +562,8 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 			3. **config/local_env.yml**
 	
 			4. **config/secrets.yml**
+
+			5. **config/settings.yml**
 
 - For "**secrets.yml**" configuration you need to login inside bash shell of openproject docker and generate the secret key for production. This step should not be missed. To do so do the following:-
 
@@ -706,9 +737,11 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 		
 		<h5>cd temp/integrations/crm</h5>
 		
+		- Note : Check parameters.yml after unzip check installed is set as false before doing oro:install. Installation will fail if not changed.
+		
 		<h5>php bin/console oro:install --env=prod --timeout=30000 --application-url="http://localhost:8075/crm/public" --organization-name="Vantage Agora" --user-name="admin" --user-email="admin@example.com"</h5>
 		
-		- Note - Update the flags as required for the above command.
+		- Note - Update the flags as required for the above command like application url and user-email.
 
 	- Note: If it fails for some reason start with an empy database and remove the cache folder
 
@@ -753,6 +786,16 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 <h3>Extras</h3>
 </div>
 ---
+
+- To start a service
+
+	<h5>sudo systemctl daemon-reload</h5>
+
+	<h5>sudo systemctl enable my-webapp.service</h5>
+
+	<h5>sudo systemctl start my-webapp</h5>
+
+	<h5>sudo systemctl status my-webapp</h5>
 
 
 - To Learn how to make a service [click here.](https://dzone.com/articles/run-your-java-application-as-a-service-on-ubuntu)
