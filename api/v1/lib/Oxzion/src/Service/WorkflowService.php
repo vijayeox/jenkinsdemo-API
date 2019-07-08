@@ -141,7 +141,7 @@ class WorkflowService extends AbstractService{
     		}
         }
 		if(isset($workflowName)){
-			$deployedData = array('id'=>$workFlowId,'app_id'=>$appId,'name'=>$workflowName,'process_ids'=>$processIdList,'form_id'=>$startFormId,'process_keys'=>$formData['process_id'],'file'=>$workFlowStorageFolder.$fileName);
+			$deployedData = array('id'=>$workFlowId,'app_id'=>$appId,'name'=>$workflowName,'process_ids'=>$processId,'form_id'=>$startFormId,'process_keys'=>$formData['process_id'],'file'=>$workFlowStorageFolder.$fileName);
 			$workFlow = $this->saveWorkflow($appId,$deployedData);
 		}
 		return $deployedData?$deployedData:0;
