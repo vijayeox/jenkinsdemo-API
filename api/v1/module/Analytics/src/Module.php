@@ -85,6 +85,20 @@ class Module implements ConfigProviderInterface {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Widget());
                     return new TableGateway('widget', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\DashboardService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\DashboardService($container->get('config'), $dbAdapter, $container->get(Model\DashboardTable::class));
+                },
+                Model\DashboardTable::class => function($container) {
+                    $tableGateway = $container->get(Model\DashboardTableGateway::class);
+                    return new Model\DashboardTable($tableGateway);
+                },
+                Model\DashboardTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Dashboard());
+                    return new TableGateway('dashboard', $dbAdapter, null, $resultSetPrototype);
+                },
             ],
         ];
     }
@@ -110,6 +124,11 @@ class Module implements ConfigProviderInterface {
                 Controller\WidgetController::class => function($container) {
                     return new Controller\WidgetController(
                             $container->get(Model\WidgetTable::class), $container->get(Service\WidgetService::class), $container->get('AnalyticsLogger'),
+                        $container->get(AdapterInterface::class));
+                },
+                Controller\DashboardController::class => function($container) {
+                    return new Controller\DashboardController(
+                            $container->get(Model\DashboardTable::class), $container->get(Service\DashboardService::class), $container->get('AnalyticsLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],

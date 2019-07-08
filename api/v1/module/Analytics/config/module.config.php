@@ -74,6 +74,22 @@ return [
                     ],
                 ],
             ],
+            'dashboard' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/analytics/dashboard[/:dashboardId]',
+                    'defaults' => [
+                        'controller' => Controller\DashboardController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_DASHBOARD_WRITE',
+                            'post'=> 'MANAGE_DASHBOARD_WRITE',
+                            'delete'=> 'MANAGE_DASHBOARD_WRITE',
+                            'get'=> 'MANAGE_DASHBOARD_READ',
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [
