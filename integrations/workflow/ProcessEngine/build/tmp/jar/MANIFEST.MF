@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Build-Time: 2019-07-01 19:02:08
-Built-By: Bharat Gogineni
-Created-By: Bharat Gogineni
-
