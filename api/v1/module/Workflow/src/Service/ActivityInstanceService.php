@@ -28,12 +28,14 @@ class ActivityInstanceService extends AbstractService {
         $this->table = $table;
     }
 
-    public function createActivityInstanceEntry($data){	
+    public function createActivityInstanceEntry(&$data){
         // Org Id from workflow instance based on the Id
+        if(!isset($data['processInstanceId'])){
+            return 0;
+        }
         $query = "SELECT * FROM `ox_workflow_instance` WHERE id = '".$data['processInstanceId']."';";
         $resultSet = $this->executeQuerywithParams($query)->toArray();	
         $orgId = $resultSet[0]['org_id'];
-
          // Org Id from workflow instance based on the Id
          $data['group_id'] = NULL;
         if(isset($data['group_name'])){
@@ -54,10 +56,11 @@ class ActivityInstanceService extends AbstractService {
             $this->commit();  		
 		} catch (Exception $e) {
             $this->logger->info(ActivityInstanceService::class."Creation of Activity Instance Entry Failed".$e->getMessage());
-            print_r($e->getMessage());		
+            print_r($e->getMessage());exit;
 			$this->rollback();		
 			return 0;		
-		}     		
+		}
+        return $data;
 	}
 }
 ?>

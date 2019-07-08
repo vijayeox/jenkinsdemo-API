@@ -30,7 +30,7 @@ namespace Callback\Controller;
             $this->restClient = new RestClient($config['calendar']['calendarServerUrl']);
         }
 
-        private function convertParams(){
+        protected function convertParams(){
            $params = json_decode(file_get_contents("php://input"),true);
 
            if(!isset($params)){

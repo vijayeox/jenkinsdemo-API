@@ -11,7 +11,7 @@ interface ProcessManager
    * @return mixed returns the server response
    */
 
-    public function deploy($tenantId,$name,$filesArray);
+    public function deploy($name,$filesArray);
 
     public function remove($id);
 

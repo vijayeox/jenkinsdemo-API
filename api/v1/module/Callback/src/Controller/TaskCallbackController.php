@@ -25,20 +25,6 @@ namespace Callback\Controller;
             $this->taskService = $taskService;
         }
 
-        private function convertParams(){
-           $params = json_decode(file_get_contents("php://input"),true);
-
-           if(!isset($params)){
-                 $params = $this->params()->fromPost();          
-                 if(!is_object($params)){
-                    if(key($params)){
-                            $params = json_decode(key($params),true);
-                    }
-                }
-           }
-            return $params;
-        }
-
 
         public function addProjectAction(){
             

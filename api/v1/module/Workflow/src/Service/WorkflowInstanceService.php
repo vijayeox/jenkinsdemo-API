@@ -30,6 +30,9 @@ class WorkflowInstanceService extends AbstractService {
         $this->processEngine = $this->workFlowFactory->getProcessEngine();
 		$this->activityEngine = $this->workFlowFactory->getActivity();
     }
+    public function setProcessEngine($processEngine){
+        $this->processEngine = $processEngine;
+    }
     public function saveWorkflowInstance($appId,&$data){
         $WorkflowInstance = new WorkflowInstance();
         $data['app_id'] = $appId;
@@ -98,11 +101,11 @@ class WorkflowInstanceService extends AbstractService {
     }
 
 
-    public function deleteWorkflowInstance($appId,$id){
+    public function deleteWorkflowInstance($id){
         $this->beginTransaction();
         $count = 0;
         try{
-            $count = $this->table->delete($id, ['app_id'=>$appId]);
+            $count = $this->table->delete($id);
             if($count == 0){
                 $this->rollback();
                 return 0;
@@ -139,10 +142,11 @@ class WorkflowInstanceService extends AbstractService {
 
     public function executeWorkflow($params,$id=null){
 		$workflowId = $params['workflowId'];
+        $workFlowFlag = 1;
 		$workflow = $this->workflowService->getWorkflow(null,$workflowId);
-		$workFlowFlag = 1;
-		if(!isset($workflow)){
+		if(empty($workflow)){
 			$workFlowFlag= 0;
+            return 0;
 		}
 		if(isset($params['activityId'])){
 			$params['form_id'] = $params['activityId'];
@@ -155,10 +159,12 @@ class WorkflowInstanceService extends AbstractService {
 			if($workFlowFlag){
 				if($workflow['form_id']==$params['form_id'] || $params['activityId']==NULL){
 					$workflowInstanceId = $this->processEngine->startProcess($workflow['process_ids'],$params);
-                    $setupWorkflowInstance = $this->setupWorkflowInstance($workflowId,$workflowInstanceId['id']);	
+                    $this->setupWorkflowInstance($workflowId,$workflowInstanceId['id']);	
 				} else {
 					$workflowInstanceId = $this->activityEngine->submitTaskForm($params['form_id'],$params);
 				}
+            } else {
+                return 0;
             }
             return $this->fileService->createFile($params,$workflowInstanceId['id']);
 		}
@@ -173,7 +179,6 @@ class WorkflowInstanceService extends AbstractService {
         $query = "Select app_id from ox_workflow where id = $workflowId";
         $resultSet = $this->executeQuerywithParams($query)->toArray();
         $data = array('workflow_id'=> $workflowId,'app_id'=> $resultSet[0]['app_id'],'org_id'=> $orgId,'process_instance_id'=>$processInstanceId,'status'=>"In Progress",'date_created'=>$dateCreated,'created_by'=>$createdBy);
-        // print_r($data);exit;
         $form->exchangeArray($data);
 		$form->validate();
         $this->beginTransaction();
@@ -191,7 +196,6 @@ class WorkflowInstanceService extends AbstractService {
 	// 		"(SELECT ".$workflowId.",app_id,".$orgId.",'".$processInstanceId."','In progress' from `ox_workflow` WHERE id = ".$workflowId.")";
 	// 		$resultSet = $this->executeQuerywithParams($insert);
 		} catch (Exception $e) {
-            error_log($e->getMessage());
 			$this->rollback();
 			return 0;
 		} 

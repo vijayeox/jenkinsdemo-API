@@ -63,6 +63,20 @@ class Module implements ConfigProviderInterface {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\MenuItem());
                     return new TableGateway('ox_app_menu', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\PageService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\PageService($container->get('config'), $dbAdapter, $container->get(Model\PageTable::class));
+                },
+                Model\PageTable::class => function($container) {
+                    $tableGateway = $container->get(Model\PageTableGateway::class);
+                    return new Model\PageTable($tableGateway);
+                },
+                Model\PageTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Page());
+                    return new TableGateway('ox_app_page', $dbAdapter, null, $resultSetPrototype);
+                },
             ],
         ];
     }
@@ -85,6 +99,11 @@ class Module implements ConfigProviderInterface {
                         $container->get(Model\MenuItemTable::class), $container->get(Service\MenuItemService::class), $container->get('AppLogger'),
                         $container->get(AdapterInterface::class));
                 },
+                Controller\PageController::class => function($container) {
+                    return new Controller\PageController(
+                        $container->get(Model\PageTable::class), $container->get(Service\PageService::class), $container->get('AppLogger'),
+                        $container->get(AdapterInterface::class));
+                },
                 Controller\FormController::class => function($container) {
                     return new Controller\FormController(
                         $container->get(FormTable::class),$container->get(FormService::class),
@@ -105,7 +124,7 @@ class Module implements ConfigProviderInterface {
                         $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
-                },
+                }
             ],
         ];
     }

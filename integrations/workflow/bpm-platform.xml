@@ -14,7 +14,7 @@
     <properties>
       <property name="history">full</property>
       <property name="databaseSchemaUpdate">true</property>
-      <property name="authorizationEnabled">true</property>
+      <property name="authorizationEnabled">false</property>
       <property name="jobExecutorDeploymentAware">true</property>
       <property name="historyCleanupBatchWindowStartTime">00:01</property>
     </properties>
@@ -24,7 +24,13 @@
       <plugin>
         <class>org.camunda.bpm.application.impl.event.ProcessApplicationEventListenerPlugin</class>
       </plugin>
-
+      <!-- plugin enabling Admin Access -->
+	<plugin>
+      <class>org.camunda.bpm.engine.impl.plugin.AdministratorAuthorizationPlugin</class>
+      <properties>
+        <property name="administratorGroupName">admin</property>
+      </properties>
+    </plugin>
       <!-- plugin enabling integration of camunda Spin -->
       <plugin>
         <class>org.camunda.spin.plugin.impl.SpinProcessEnginePlugin</class>
@@ -39,7 +45,9 @@
       <plugin>
         <class>org.oxzion.camunda.IdentityProviderPlugin</class>
       </plugin>
-
+      <plugin>
+        <class>org.oxzion.processengine.ProcessEnginePlugin</class>
+      </plugin>
     </plugins>
   </process-engine>
 

@@ -58,15 +58,16 @@ class FileService extends AbstractService{
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $validFields = $this->checkFields($data['form_id'],$fields,$id);
-            if($validFields){
+            if($validFields && !empty($validFields)){
                 $this->multiInsertOrUpdate('ox_file_attribute',$validFields,['id']);
             } else {
-                $this->rollback();
-                return 0;
+                if(!empty($validFields)){
+                    $this->rollback();
+                    return 0;
+                }
             }
             $this->commit();
         }catch(Exception $e){
-            print_r($e->getMessage());
             switch (get_class ($e)) {
              case "Oxzion\ValidationException" :
                 $this->rollback();
@@ -111,7 +112,7 @@ class FileService extends AbstractService{
                 return 0;
             }
             $validFields = $this->checkFields($data['form_id'],$fields,$id);
-            if($validFields){
+            if($validFields && !empty($validFields)){
                 $this->multiInsertOrUpdate('ox_file_attribute',$validFields,['id']);
             }
             $this->commit();
@@ -136,10 +137,10 @@ class FileService extends AbstractService{
     * @param $id ID of File to Delete
     * @return array success|failure response
     */
-    public function deleteFile($workflowInstanceId,$formId){
+    public function deleteFile($id){
     $count = 0;
         try{
-            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID),'form_id' => $formId,'workflow_instance_id' => $workflowInstanceId]);
+            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
             if($count == 0){
                 return 0;
             }
@@ -171,8 +172,8 @@ class FileService extends AbstractService{
     * @return array $data 
     * @return array Returns a JSON Response with Status Code and Created File.
     */
-    public function getFile($workflowInstanceId,$id){
-        $obj = $this->table->get($id,array('org_id' => AuthContext::get(AuthConstants::ORG_ID),'workflow_instance_id' => $workflowInstanceId));
+    public function getFile($id){
+        $obj = $this->table->get($id,array('org_id' => AuthContext::get(AuthConstants::ORG_ID)));
         if($obj){
             $fileArray = $obj->toArray(); 
             $sql = $this->getSqlObject();
@@ -204,29 +205,31 @@ class FileService extends AbstractService{
         $fields = $this->executeQuery($select)->toArray();
         $keyValueFields = array();
         $i=0;
-        foreach ($fields as $key => $field) {
-            if($field['required']){
-                if(!isset($fieldData[$field['name']])){
-                    $required[$field['name']] = 'required';
-                }
-            }
-            if($field['options']){
-                $valid = 0;
-                $optionslist = json_decode($field['options'],true);
-                foreach ($optionslist['data'] as $k => $option) {
-                    if($k==$fieldData[$field['name']]){
-                        $valid = 1;
-                        break;
+        if(!empty($fields)){
+            foreach ($fields as $key => $field) {
+                if($field['required']){
+                    if(!isset($fieldData[$field['name']])){
+                        $required[$field['name']] = 'required';
                     }
                 }
-                if(!$valid){
-                    $required[$field['name']] = 'option not found';
+                if($field['options']){
+                    $valid = 0;
+                    $optionslist = json_decode($field['options'],true);
+                    foreach ($optionslist['data'] as $k => $option) {
+                        if($k==$fieldData[$field['name']]){
+                            $valid = 1;
+                            break;
+                        }
+                    }
+                    if(!$valid){
+                        $required[$field['name']] = 'option not found';
+                    }
                 }
+                $keyValueFields[$i]['fieldvalue'] = $fieldData[$field['name']];
+                $keyValueFields[$i]['fieldid'] = $field['id'];
+                $keyValueFields[$i]['fileid'] = $fileId;
+                $i++;
             }
-            $keyValueFields[$i]['fieldvalue'] = $fieldData[$field['name']];
-            $keyValueFields[$i]['fieldid'] = $field['id'];
-            $keyValueFields[$i]['fileid'] = $fileId;
-            $i++;
         }
         if(count($required)>0){
             $validationException = new ValidationException();

@@ -73,9 +73,7 @@ class AppService extends AbstractService
         $offset = 0;
         $where = "";
         $sort = "name";
-            
         $cntQuery ="SELECT count(id) FROM `ox_app`";
-          
             if(count($filterParams) > 0 || sizeof($filterParams) > 0){
                 $filterArray = json_decode($filterParams['filter'],true); 
                 if(isset($filterArray[0]['filter'])){
@@ -90,13 +88,9 @@ class AppService extends AbstractService
                 $pageSize = $filterArray[0]['take'];
                 $offset = $filterArray[0]['skip'];            
             }
-
-
             $where .= strlen($where) > 0 ? " AND status!=1" : "WHERE status!=1";
-
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
-            
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(id)'];
             $query ="SELECT * FROM `ox_app` ".$where." ".$sort." ".$limit;
@@ -253,6 +247,7 @@ class AppService extends AbstractService
     {   
         $form = new App();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['status'] = App::PUBLISHED;
         $data['uuid'] = Uuid::uuid4()->toString();
@@ -272,9 +267,17 @@ class AppService extends AbstractService
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $this->commit();
-        } catch (Exception $e) {
-            $this->rollback();
-            return 0;
+        }catch(Exception $e){
+            switch (get_class ($e)) {
+             case "Oxzion\ValidationException":
+                $this->rollback();
+                return 0;
+                break;
+             default:
+                $this->rollback();
+                return 0;
+                break;
+            }
         }
         return $count;
     }
@@ -367,7 +370,7 @@ class AppService extends AbstractService
     public function deployWorkflow($appId, $params, $file = null)
     {
         if (isset($file)) {
-            $this->workflowService->deploy($file, $appId, $params);
+            return $this->workflowService->deploy($file, $appId, $params);
         } else {
             return 0;
         }

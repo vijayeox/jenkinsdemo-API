@@ -4,11 +4,10 @@ namespace Oxzion\Workflow\Camunda;
 use Oxzion\Utils\XMLUtils;
 class CamundaForm{
 	protected $data;
-	public function __construct($form,$appId,$processId,$workflowId) {
+	public function __construct($form,$appId,$workflowId) {
 		$this->data['task_id'] = $form->getAttribute('id');
 		$this->data['name'] = $form->getAttribute('name');
 		$this->data['app_id'] = $appId;
-		$this->data['process_id'] = $processId;
 		$this->data['workflow_id'] = $workflowId;
 		$extensionElements = $form->getElementsByTagNameNS(Config::bpmnSpec,'extensionElements');
 		$bs = XMLUtils::domToArray($form);

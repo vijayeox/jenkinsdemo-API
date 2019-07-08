@@ -24,7 +24,7 @@ namespace Callback\Controller;
             $this->chatService = $chatService;
         }
 
-         private function convertParams(){
+        protected function convertParams(){
            $params = json_decode(file_get_contents("php://input"),true);
 
            if(!isset($params)){

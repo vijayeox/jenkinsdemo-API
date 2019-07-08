@@ -5,7 +5,7 @@ use Oxzion\Model\Entity;
 class Workflow extends Entity{
 
     protected $data = array(
-        'id' => NULL,
+        'id' => 0,
         'name' => NULL,
         'process_ids' => NULL,
         'process_keys' =>0,

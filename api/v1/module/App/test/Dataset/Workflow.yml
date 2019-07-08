@@ -108,3 +108,50 @@ ox_file_attribute:
     org_id: 1
     fieldvalue: 2
     fieldid: 2
+ox_app_menu:
+  -
+    id: 1
+    name: "menu1"
+    app_id: 99
+    parent_id: 0
+    icon: "new data"
+    sequence: 1
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1
+  -
+    id: 2
+    name: "menu2"
+    app_id: 99
+    parent_id: 0
+    icon: "new data"
+    sequence: 2
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1
+  -
+    id: 3
+    name: "menu3"
+    app_id: 99
+    parent_id: 1
+    icon: "icon3"
+    sequence: 3
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1
+ox_app_page:
+  -
+    id: 1
+    name: "page1"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1
+  -
+    id: 2
+    name: "page2"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1
+  -
+    id: 3
+    name: "page3"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1

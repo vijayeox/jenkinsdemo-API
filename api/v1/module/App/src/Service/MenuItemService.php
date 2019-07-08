@@ -23,6 +23,7 @@ class MenuItemService extends AbstractService{
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
         }
+        $data['icon'] = $data['icon']?$data['icon']:"DummyIcon";
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $MenuItem->exchangeArray($data);

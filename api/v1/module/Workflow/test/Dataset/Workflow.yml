@@ -51,13 +51,13 @@ ox_workflow:
     id: 1
     app_id: 99
     name: "Test Workflow 1"
-    process_ids: "[main]"
+    process_ids: 'sampleProcessId'
     form_id: 1
   -
     id: 2
     app_id: 99
     name: "Test Workflow 2"
-    process_ids: "[main]"
+    process_ids: 'sampleProcessId'
     form_id: 1
 ox_file:
   -

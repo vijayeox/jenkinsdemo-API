@@ -29,7 +29,7 @@ class RoleController extends AbstractApiController
 		$this->roleService = $roleService;
     }
     
-    private function convertParams(){
+    protected function convertParams(){
         $params = json_decode(file_get_contents("php://input"),true);
         if(!isset($params)){
             $params = $this->params()->fromPost(); 

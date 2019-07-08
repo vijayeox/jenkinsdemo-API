@@ -174,13 +174,29 @@ return [
                         'controller' => Controller\MenuItemController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
-                            // 'put'=> 'MANAGE_FORM_WRITE',
-                            // 'post'=> 'MANAGE_FORM_WRITE',
-                            // 'delete'=> 'MANAGE_FORM_WRITE',
-                            // 'get'=> 'MANAGE_FORM_READ',
+                            // 'put'=> 'MANAGE_MENU_WRITE',
+                            // 'post'=> 'MANAGE_MENU_WRITE',
+                            // 'delete'=> 'MANAGE_MENU_WRITE',
+                            // 'get'=> 'MANAGE_MENU_READ',
                         ],
                     ],
                 ],
+            ],
+            'apppage' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/page[/:pageId]',
+                    'defaults' => [
+                        'controller' => Controller\PageController::class,
+                        'access' =>[
+                            // SET ACCESS CONTROL
+                            // 'put'=> 'MANAGE_PAGE_WRITE',
+                            // 'post'=> 'MANAGE_PAGE_WRITE',
+                            // 'delete'=> 'MANAGE_PAGE_WRITE',
+                            // 'get'=> 'MANAGE_PAGE_READ',
+                        ]
+                    ]
+                ]
             ],
             'workflowfields' => [
                 'type' => Segment::class,

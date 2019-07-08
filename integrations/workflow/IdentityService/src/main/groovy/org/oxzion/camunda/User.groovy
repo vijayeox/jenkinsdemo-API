@@ -9,8 +9,8 @@ class User implements org.camunda.bpm.engine.identity.User {
 
     User(userId,email,firstName,lastName,password){
         this.userId = userId
-        this.firstName = firstName
         this.email = email
+        this.firstName = firstName
         this.lastName = lastName
         this.password = password
     }

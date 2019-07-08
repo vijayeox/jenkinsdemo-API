@@ -24,9 +24,9 @@ class ActivityInstanceControllerTest extends ControllerTest{
 
     public function testaddactivityinstance() {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'c99ac426-90ee-11e9-b683-526af7764f64' , 'assignee' => 'bharatgtest', 'group_name' => 'HR Group','name'=>'Recruitment Request Created', 'status' => 'Active'];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'c99ac426-90ee-11e9-b683-526af7764f64' , 'assignee' => 'bharatgtest', 'group_name' => 'HR Group','processInstanceId'=>1,'name'=>'Recruitment Request Created', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/activityInstance','POST',$data); 
+        $this->dispatch('/activityInstance','POST',array(json_encode($data)=>""));
         $this->assertResponseStatusCode(200);
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $sqlQuery1 = "Select * from ox_activity_instance";

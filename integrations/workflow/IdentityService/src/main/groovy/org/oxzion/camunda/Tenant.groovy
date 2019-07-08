@@ -5,7 +5,7 @@ class Tenant implements org.camunda.bpm.engine.identity.Tenant {
     private String tenantId
     private String name
 
-    public Tenant(tenantId,name){
+    Tenant(tenantId,name){
         this.tenantId = tenantId
         this.name = name
     }

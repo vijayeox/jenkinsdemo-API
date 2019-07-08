@@ -35,7 +35,18 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         }
         return $jwtToken;
     }
-
+    protected function convertParams(){
+        $params = json_decode(file_get_contents("php://input"),true);
+        if(!isset($params)){
+            $params = $this->params()->fromPost();          
+            if(!is_object($params)){
+                if(key($params)){
+                    $params = json_decode(key($params),true);
+                }
+            }
+        }
+        return $params;
+    }
     /**
      * contain encoded token for user.
      */

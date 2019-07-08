@@ -1,17 +1,12 @@
 package com.oxzion.routes
 
-import groovy.util.*
-import org.apache.camel.Exchange
+
 import org.apache.camel.CamelContext
+import org.apache.camel.Exchange
+import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.impl.DefaultCamelContext
-import org.apache.camel.model.dataformat.JsonLibrary
 import org.springframework.stereotype.Component
-import org.apache.camel.Processor
-import groovy.json.JsonSlurper
-
-import javax.servlet.http.HttpServletRequest
-
 
 @Component
 class RoutesLoader extends RouteBuilder{
