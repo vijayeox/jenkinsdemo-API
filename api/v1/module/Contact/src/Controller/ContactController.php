@@ -203,6 +203,8 @@ class ContactController extends AbstractApiController
         if(isset($result) > 0){
             if(isset($result['orgContacts']) && sizeof($result['myContacts']) > 0){
                 for($x=0;$x<sizeof($result['myContacts']);$x++){
+                    $result['myContacts'][$x]['phone_list']=json_decode($result['myContacts'][$x]['phone_list'],true);
+                    $result['myContacts'][$x]['email_list']=json_decode($result['myContacts'][$x]['email_list'],true);
                     if($result['myContacts'][$x]['icon_type']){
                         $userId = $this->contactService->getUuidById($result['myContacts'][$x]['user_id']);
                         $result['myContacts'][$x]['icon'] = $baseUrl . "/user/profile/" . $userId;

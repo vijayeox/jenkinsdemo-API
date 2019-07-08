@@ -44,7 +44,7 @@ class ContactService extends AbstractService
         unset($data['uuid']);
         $data['uuid'] = Uuid::uuid4()->toString();
         $data['user_id'] = (isset($data['user_id'])) ? $data['user_id'] : null;
-        $data['icon_type'] = (isset($data['icon_type'])) ? $data['icon_type'] : TRUE; 
+        $data['icon_type'] = (isset($data['icon_type'])) ? $data['icon_type'] : FALSE; 
         $data['owner_id'] = (isset($data['owner_id'])) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
         $data['created_id'] = (isset($data['created_id'])) ? $data['created_id'] : AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
