@@ -56,7 +56,7 @@ class ActivityInstanceService extends AbstractService {
             $this->commit();  		
 		} catch (Exception $e) {
             $this->logger->info(ActivityInstanceService::class."Creation of Activity Instance Entry Failed".$e->getMessage());
-            print_r($e->getMessage());exit;
+            print_r($e->getMessage());
 			$this->rollback();		
 			return 0;		
 		}
