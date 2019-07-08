@@ -174,7 +174,7 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['myContacts'][0]['phone_1'], '14034');
         $this->assertEquals($content['data']['myContacts'][0]['phone_list'], array('data'=>["8399547885"," 7899290200"," 123123122445"]));
         $this->assertEquals($content['data']['myContacts'][0]['email'], 'karan@myvamla.com');
-        $this->assertEquals($content['data']['myContacts'][0]['email_list'], , array('data'=>["raks@va.com"," asas@ox.com"]));
+        $this->assertEquals($content['data']['myContacts'][0]['email_list'],array('data'=>["raks@va.com"," asas@ox.com"]));
         $this->assertEquals($content['data']['orgContacts'][0]['user_id'], '1');
         $this->assertEquals($content['data']['orgContacts'][0]['first_name'], 'Bharat');
         $this->assertEquals($content['data']['orgContacts'][0]['last_name'], 'Gogineni');
