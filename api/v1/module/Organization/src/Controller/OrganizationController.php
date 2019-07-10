@@ -203,7 +203,7 @@ class OrganizationController extends AbstractApiController
         $filterParams = $this->params()->fromQuery(); // empty method call
           
         try {
-            $count = $this->orgService->getOrgUserList($organization[$this->getIdentifierName()],$filterParams);
+            $count = $this->orgService->getOrgUserList($organization[$this->getIdentifierName()],$filterParams,$this->getBaseUrl());
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);

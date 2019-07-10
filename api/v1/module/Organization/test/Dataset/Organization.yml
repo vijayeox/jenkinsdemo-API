@@ -1,3 +1,11 @@
+ox_organization:
+  -
+        id: 3
+        uuid: 'b6499a34-c100-4e41-bece-5822adca3844'
+        name: 'Sample Organization'
+        status: 'Active'
+        preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
+
 ox_user:
   -
         id: 6
@@ -8,7 +16,7 @@ ox_user:
         lastname: 'Shree'
         name: 'Deepa Shree'
         email: 'deepa@gmail.com'
-        orgid: 2
+        orgid: 3
         country: 'India'
         date_of_birth: '1990-11-11'
         date_of_join: '2018-11-11'
@@ -20,27 +28,56 @@ ox_user:
         date_modified: '2018-12-11 07:25:06'
         created_by: 1
         modified_by: 1
-
-ox_user_role:
   -
-    user_id: 6
-    role_id: 7
-  - 
-    user_id: 5
-    role_id: 7
-
+        id: 7
+        uuid : '2db1c5a3-8a82-4d5b-b60a-c648cf1e27ef'
+        username: 'abc134'
+        password: '1619d7adc23f4f633f11014d2f22b7d8'
+        firstname: 'Deepa'
+        lastname: 'Kumar'
+        name: 'Deepa Kumar'
+        email: 'deepakum@gmail.com'
+        orgid: 3
+        country: 'India'
+        date_of_birth: '1990-11-11'
+        date_of_join: '2018-11-11'
+        designation: 'IT ANALYST'
+        phone: '+91-1234567890'
+        gender: 'Female'
+        status: 'Active'
+        date_created: '2018-11-11 07:25:06'
+        date_modified: '2018-12-11 07:25:06'
+        created_by: 1
+        modified_by: 1
+ox_user_org:
+  -
+    user_id : 6
+    org_id: 3
+    default: 1
+  -
+    user_id : 7
+    org_id: 3
+    default : 1
 ox_role:
   -
-    id: 7
-    name: 'ADMIN'
+    id: 10
+    name: 'ADMIN-2'
     description: 'Must have read,write,create and delete control'
-    org_id: 2 
+    org_id: 3 
     is_system_role: 1
+    uuid: "9e249236-9f3b-11e9-a730-308d99c9146c"
 
 ox_role_privilege:
   -
-    id: 71
-    role_id: 5
+    id: 101
+    role_id: 10
     privilege_name: 'MANAGE_MYORG'
     permission: 3
     org_id: 1
+ox_user_role:
+  -
+    user_id: 6
+    role_id: 10
+  - 
+    user_id: 7
+    role_id: 10   

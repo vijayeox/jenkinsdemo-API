@@ -175,7 +175,9 @@ class OrganizationService extends AbstractService
         if (is_null($obj)) {
             return 2;
         }
-        $data['contactid'] = $this->userService->getUserByUuid($data['contactid']);
+        if(isset($data['contactid'])){
+            $data['contactid'] = $this->userService->getUserByUuid($data['contactid']);
+        }
         $org = $obj->toArray();
         $form = new Organization();
         $changedArray = array_merge($obj->toArray(), $data);
@@ -315,7 +317,7 @@ class OrganizationService extends AbstractService
     private function getOrgContactPersonDetails($id){
         $userData = array();
         $userSelect = "SELECT ou.uuid from `ox_user` as ou where ou.id = (SELECT og.contactid from `ox_organization` as og WHERE og.uuid = '".$id."')";
-        $userData = $this->executeQueryWithParams($userSelect)->toArray();     
+        $userData = $this->executeQueryWithParams($userSelect)->toArray();    
         return $userData[0]['uuid'];
     }
 
@@ -366,7 +368,7 @@ class OrganizationService extends AbstractService
             $resultSet = $this->executeQuerywithParams($query)->toArray();
 
             for($x=0;$x<sizeof($resultSet);$x++) {
-              $resultSet[$x]['contactid'] = $this->getOrgContactPersonDetails($resultSet[$x]['uuid'])[0];
+              $resultSet[$x]['contactid'] = $this->getOrgContactPersonDetails($resultSet[$x]['uuid']);
             }
             return array('data' => $resultSet, 
                      'total' => $count);
@@ -447,15 +449,12 @@ class OrganizationService extends AbstractService
                             where ouo.org_id =".$orgId." and ouo.user_id not in (".implode(',', $userSingleArray).") and ouo.user_id != org.contactid";
 
                 $resultSet = $this->executeQuerywithParams($query);
-               
-
                 $insert = "INSERT INTO ox_user_org (user_id,org_id,`default`)  
                                 SELECT ou.id,".$orgId.",case when (ou.orgid is NULL) 
                                     then 1
                                 end 
                                 from ox_user as ou LEFT OUTER JOIN ox_user_org as our on our.user_id = ou.id AND our.org_id = ou.orgid and our.org_id =".$orgId."
                                 WHERE ou.id in (".implode(',', $userSingleArray).") AND our.org_id is Null AND ou.id not in (select user_id from  ox_user_org where user_id in (".implode(',', $userSingleArray).") and org_id =".$orgId.")";
-                                
                 $resultSet = $this->executeQuerywithParams($insert);
 
 
@@ -476,10 +475,10 @@ class OrganizationService extends AbstractService
             }
 
             foreach($deletedUser as $key => $value){
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value)),'USERTOORGANIZATION_DELETED');
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value["username"])),'USERTOORGANIZATION_DELETED');
             }
             foreach($insertedUser as $key => $value){
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value)),'USERTOORGANIZATION_ADDED');
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value["username"])),'USERTOORGANIZATION_ADDED');
             }
 
             return 1;
@@ -488,8 +487,7 @@ class OrganizationService extends AbstractService
 
     }
 
-    public function getOrgUserList($id,$filterParams = null) {
-
+    public function getOrgUserList($id,$filterParams = null,$baseUrl = '') {
         if(!isset($id)) {
             return 0;
         }
@@ -500,7 +498,7 @@ class OrganizationService extends AbstractService
         $sort = "ox_user.name";
 
 
-        $query = "SELECT ox_user.id,ox_user.name";
+        $query = "SELECT ox_user.uuid,ox_user.name,ox_user.country,ox_user.designation";
         $from = " FROM ox_user left join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id";
     
         $cntQuery ="SELECT count(ox_user.id)".$from;
@@ -528,6 +526,9 @@ class OrganizationService extends AbstractService
             $count=$resultSet->toArray()[0]['count(ox_user.id)'];
             $query =$query." ".$from." ".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query)->toArray();
+            for($x=0;$x<sizeof($resultSet);$x++) {
+                $resultSet[$x]['icon'] = $baseUrl . "/user/profile/" . $resultSet[$x]['uuid'];
+           }
             if(sizeof($resultSet) > 0){
                 return array('data' => $resultSet, 
                      'total' => $count);
@@ -540,7 +541,6 @@ class OrganizationService extends AbstractService
         if(!isset($orgId)){
             $orgId = AuthContext::get(AuthConstants::ORG_UUID);
         }
-       
         if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
             SecurityManager::isGranted('MANAGE_MYORG_WRITE') && 
             $orgId != AuthContext::get(AuthConstants::ORG_UUID) ) {
