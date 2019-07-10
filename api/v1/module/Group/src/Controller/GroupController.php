@@ -41,7 +41,6 @@ class GroupController extends AbstractApiController {
     public function getGroupsforUserAction() {
         $params = $this->params()->fromRoute();
         $data=$this->params()->fromQuery();
-        print_r($data);
         $userId = $params['userId'];
         try{
 		  $groupList = $this->groupService->getGroupsforUser($userId,$data);

@@ -111,6 +111,9 @@ class GroupService extends AbstractService {
         $data['uuid'] = Uuid::uuid4()->toString();   
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
+        $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
+        $result = $this->executeQueryWithParams($select)->toArray();
+        $data['manager_id']=$result[0]["id"];
         $org = $this->organizationService->getOrganization($data['org_id']);
        
         $form->exchangeArray($data);
@@ -236,7 +239,13 @@ class GroupService extends AbstractService {
             $count=$resultSet->toArray()[0]['count(id)'];
             $query ="SELECT * FROM `ox_group`".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query);
-            return array('data' => $resultSet->toArray(), 
+            $resultSet=$resultSet->toArray();
+            for($x=0;$x<sizeof($resultSet);$x++){
+                $select ="SELECT uuid from ox_user where id = '".$resultSet[$x]['manager_id']."'";
+                $result = $this->executeQueryWithParams($select)->toArray();
+                $resultSet[$x]['manager_id']=$result[0]["uuid"];
+            }
+            return array('data' => $resultSet, 
                      'total' => $count);
     }
 
@@ -260,6 +269,9 @@ class GroupService extends AbstractService {
         $data = array_merge($obj->toArray(), $data);
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
+        $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
+        $result = $this->executeQueryWithParams($select)->toArray();
+        $data['manager_id']=$result[0]["id"];
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
