@@ -6,7 +6,7 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\JsonModel;
 use Oxzion\Jwt\JwtHelper;
 use Oxzion\Error\ErrorHandler;
-
+use Zend\Stdlib\RequestInterface as Request;
 abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
     private $config;
@@ -19,7 +19,51 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
      * @return type String
      */
 
+    /**
+     * Process post data and call create
+     *
+     * @param Request $request
+     * @return mixed
+     * @throws Exception\DomainException If a JSON request was made, but no
+     *    method for parsing JSON is available.
+     */
+    public function processPostData(Request $request)
+    {
+        if ($this->requestHasContentType($request, AbstractRestfulController::CONTENT_TYPE_JSON)) {
+            return $this->create($this->jsonDecode($request->getContent()));
+        }
 
+        $data = $request->getPost()->toArray();
+        if(sizeof($data) == 0){
+            $data =json_decode(file_get_contents("php://input"),true);
+        }
+        return $this->create($data);
+    }
+
+    protected function processBodyContent($request)
+    {
+        $content = $request->getContent();
+        // print_r($content);
+        // JSON content? decode and return it.
+        if ($this->requestHasContentType($request, AbstractRestfulController::CONTENT_TYPE_JSON)) {
+            return $this->jsonDecode($request->getContent());
+        }
+
+        parse_str($content, $parsedParams);
+        // print_r($parsedParams);
+        // If parse_str fails to decode, or we have a single element with empty value
+        if (! is_array($parsedParams) || empty($parsedParams)
+            || (1 == count($parsedParams) && '' === reset($parsedParams))
+        ) {
+            if(!empty($content)){
+                return $content;
+            }else{
+                return json_decode(file_get_contents("php://input"),true);
+            }
+        }
+
+        return $parsedParams;
+    }
     public function findJwtToken($request)
     {
         $jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';
