@@ -437,6 +437,12 @@ class UserService extends AbstractService
         $result['active_organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
         $result['preferences'] = json_decode($response[0]['preferences'], true);
         $result['preferences']['timezone'] = $response[0]['timezone'];
+        $getUUID= $sql->select();
+        $getUUID->from('ox_organization')
+            ->columns(array("uuid"))
+            ->where(array('ox_organization.id' => AuthContext::get(AuthConstants::ORG_ID)));
+        $responseUUID = $this->executeQuery($getUUID)->toArray();
+        $result['orgid'] = $responseUUID[0]['uuid'];
         if (isset($result)) {
             return $result;
         } else {
