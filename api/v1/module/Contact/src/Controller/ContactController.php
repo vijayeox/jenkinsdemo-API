@@ -161,31 +161,6 @@ class ContactController extends AbstractApiController
     public function getList()
     {
         $result = $this->contactService->getContacts();
-        $uuid = $this->contactService->getUuidById(AuthContext::get(AuthConstants::USER_ID));
-        $baseUrl =$this->getBaseUrl();
-        if(isset($result) > 0){
-            if(isset($result['orgContacts']) && sizeof($result['myContacts']) > 0){
-                for($x=0;$x<sizeof($result['myContacts']);$x++){
-                    $result['myContacts'][$x]['phone_list']=json_decode($result['myContacts'][$x]['phone_list'],true);
-                    $result['myContacts'][$x]['email_list']=json_decode($result['myContacts'][$x]['email_list'],true);
-                    if($result['myContacts'][$x]['icon_type']){
-                        $userId = $this->contactService->getUuidById($result['myContacts'][$x]['user_id']);
-                        $result['myContacts'][$x]['icon'] = $baseUrl . "/user/profile/" . $userId;
-                    }
-                    else{
-                        $result['myContacts'][$x]['icon'] = $baseUrl . "/contact/".$result['myContacts'][$x]["uuid"]."/".$uuid; 
-                    }     
-                }
-            }
-            if(isset($result['orgContacts']) && sizeof($result['orgContacts']) > 0){
-                for($x=0;$x<sizeof($result['orgContacts']);$x++){
-                    $result['orgContacts'][$x]['icon'] = $baseUrl . "/user/profile/" . $result['orgContacts'][$x]['uuid']; 
-                }
-            }
-        }
-        else{
-            return $this->getErrorResponse("No Contacts",404);
-        }
         return $this->getSuccessResponseWithData($result);
     }
 
@@ -198,31 +173,6 @@ class ContactController extends AbstractApiController
         } else {
             $result = $this->contactService->getContacts($data['column']);;
         }
-        $uuid = $this->contactService->getUuidById(AuthContext::get(AuthConstants::USER_ID));
-        $baseUrl =$this->getBaseUrl();
-        if(isset($result) > 0){
-            if(isset($result['orgContacts']) && sizeof($result['myContacts']) > 0){
-                for($x=0;$x<sizeof($result['myContacts']);$x++){
-                    $result['myContacts'][$x]['phone_list']=json_decode($result['myContacts'][$x]['phone_list'],true);
-                    $result['myContacts'][$x]['email_list']=json_decode($result['myContacts'][$x]['email_list'],true);
-                    if($result['myContacts'][$x]['icon_type']){
-                        $userId = $this->contactService->getUuidById($result['myContacts'][$x]['user_id']);
-                        $result['myContacts'][$x]['icon'] = $baseUrl . "/user/profile/" . $userId;
-                    }
-                    else{
-                        $result['myContacts'][$x]['icon'] = $baseUrl . "/contact/".$result['myContacts'][$x]["uuid"]."/".$uuid; 
-                    }     
-                }
-            }
-            if(isset($result['orgContacts']) && sizeof($result['orgContacts']) > 0){
-                for($x=0;$x<sizeof($result['orgContacts']);$x++){
-                    $result['orgContacts'][$x]['icon'] = $baseUrl . "/user/profile/" . $result['orgContacts'][$x]['uuid']; 
-                }
-            }
-        }else{
-             return $this->getErrorResponse("There is nothing in your contact list!");
-        }
-        
         return $this->getSuccessResponseWithData($result);
     }
 }

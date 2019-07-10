@@ -187,18 +187,42 @@ class ContactService extends AbstractService
 
         }
 
-        return $resultSet1 = ['myContacts' => $myContacts, 'orgContacts' => $orgContacts];
-
+        $resultSet1 = ['myContacts' => $myContacts, 'orgContacts' => $orgContacts];
+        $this->processIcons($resultSet1);
+        return $resultSet1;
     }
 
+    private function processIcons(&$result){
+        $uuid = $this->getUuidById(AuthContext::get(AuthConstants::USER_ID));
+        $baseUrl =$this->getBaseUrl();
+        
+        for($x=0;$x<sizeof($result['myContacts']);$x++){
+            $result['myContacts'][$x]['phone_list']=json_decode($result['myContacts'][$x]['phone_list'],true);
+            $result['myContacts'][$x]['email_list']=json_decode($result['myContacts'][$x]['email_list'],true);
+            if($result['myContacts'][$x]['icon_type']){
+                $userId = $this->getUuidById($result['myContacts'][$x]['user_id']);
+                $result['myContacts'][$x]['icon'] = $baseUrl . "/user/profile/" . $userId;
+            }
+            else{
+                $result['myContacts'][$x]['icon'] = $baseUrl . "/contact/".$uuid."/".$result['myContacts'][$x]["uuid"];
+                
+            }     
+        }
+    
+        for($x=0;$x<sizeof($result['orgContacts']);$x++){
+            $result['orgContacts'][$x]['icon'] = $baseUrl . "/user/profile/" . $result['orgContacts'][$x]['uuid']; 
+        }
+        
+    
+    }
 
 
     public function getContactIconPath($ownerId,$ensureDir=false){
         $baseFolder = $this->config['UPLOAD_FOLDER'];
         //TODO : Replace the User_ID with USER uuid
-        $folder = $baseFolder."contact/".$ownerId;
+        $folder = $baseFolder."contact/";
         if(isset($ownerId)){
-            $folder = $folder."/";
+            $folder = $folder.$ownerId."/";
         }
 
         
