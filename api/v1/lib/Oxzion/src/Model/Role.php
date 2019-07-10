@@ -10,6 +10,7 @@ class Role extends Entity {
         'org_id' => 0,
         'description' => NULL,
         'is_system_role' => NULL,
+        'uuid' => NULL
     );
 
     public function __construct($data = array()) {
@@ -20,7 +21,7 @@ class Role extends Entity {
 
     public function validate() {
         $required = array(
-            'name'
+            'name', 'uuid'
         );
         $this->validateWithParams($required);
     }

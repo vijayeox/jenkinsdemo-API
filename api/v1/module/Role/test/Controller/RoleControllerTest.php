@@ -2,6 +2,7 @@
 namespace Role;
 
 use Role\Controller\RoleController;
+use Oxzion\Test\ControllerTest;
 use Oxzion\Test\MainControllerTest;
 use Role\Model;
 use PHPUnit\DbUnit\TestCaseTrait;
@@ -11,10 +12,16 @@ use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
 
 
-class RoleControllerTest extends MainControllerTest {
+class RoleControllerTest extends ControllerTest {
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
+    }
+
+    public function getDataSet()
+    {
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Role.yml");
+        return $dataset;
     }
 
     protected function setDefaultAsserts() {
@@ -161,7 +168,7 @@ class RoleControllerTest extends MainControllerTest {
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 4);
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(12,count($content['data']['privileges']));
+        $this->assertEquals(25,count($content['data']['privileges']));
     }
     public function testGetNotFound(){
         $this->initAuthToken($this->adminUser);
@@ -189,7 +196,7 @@ class RoleControllerTest extends MainControllerTest {
         $data=array('name' => 'ADMIN','description' => 'Must have write control',
             'privileges'=> json_encode(array(['id' => '1','privilege_name' => 'MANAGE_ANNOUNCEMENT','permission' => '15'],['id'=>'14','privilege_name'=> 'MANAGE_FORM','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'3'])));
          $this->setJsonContent(json_encode($data));
-        $this->dispatch('/role/4', 'PUT',$data);
+        $this->dispatch('/role/53012471-2863', 'PUT',$data);
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -201,7 +208,7 @@ class RoleControllerTest extends MainControllerTest {
         $data=array('name' => 'ADMIN','description' => 'Must have write control',
             'privileges'=> json_encode(array(['privilege_name' => 'MANAGE_FILE','permission' => '15'],['privilege_name'=> 'MANAGE_MAIL','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'15'])));
          $this->setJsonContent(json_encode($data));
-        $this->dispatch('/role/4', 'PUT',$data);
+        $this->dispatch('/role/53012471-2863', 'PUT',$data);
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -250,7 +257,7 @@ class RoleControllerTest extends MainControllerTest {
         $data = ['name' => 'ADMINs'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/role/4', 'PUT', null);
+        $this->dispatch('/role/53012471-2863', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -261,7 +268,7 @@ class RoleControllerTest extends MainControllerTest {
         $data = ['name' => 'ADMINs'];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/role/4', 'PUT', null);
+        $this->dispatch('/role/53012471-2863', 'PUT', null);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('Role');
         $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
@@ -286,7 +293,7 @@ class RoleControllerTest extends MainControllerTest {
 
     public function testDelete(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/role/5', 'DELETE');
+        $this->dispatch('/role/53012471-2863', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -302,4 +309,4 @@ class RoleControllerTest extends MainControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-}
+ }
