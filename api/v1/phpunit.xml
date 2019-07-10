@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true" >
+<phpunit colors="true">
     <testsuites>
         <testsuite name="Messaging Fixtures Fixtures">
             <directory>./module/Messaging/test</directory>
         </testsuite>
-         <testsuite name="Attachment Fixtures">
+        <testsuite name="Attachment Fixtures">
             <directory>./module/Attachment/test</directory>
             <directory>./module/Resource/test</directory>
         </testsuite>
@@ -13,7 +13,7 @@
             <directory>./module/Screen/test</directory>
             <directory>./module/Announcement/test</directory>
             <directory>./module/Widget/test</directory>
-            <directory>./module/Project/test</directory> 
+            <directory>./module/Project/test</directory>
         </testsuite>
         <testsuite name="Roles Fixtures">
             <directory>./module/Role/test</directory>
@@ -21,13 +21,13 @@
         <testsuite name="App Fixtures">
             <directory>./module/App/test</directory>
             <directory>./module/Workflow/test</directory>
-        </testsuite> 
+        </testsuite>
         <testsuite name="Core Fixtures">
             <directory>./lib/Oxzion/test</directory>
-            <directory>./module/Mlet/test</directory> 
-           <directory>./lib/Oxzion/test/WorkflowTest</directory>          
-            <directory>./lib/Oxzion/test/AnalyticsTest</directory> 
-            <directory>./lib/Oxzion/test/NLPTest</directory> 
+            <directory>./module/Mlet/test</directory>
+            <directory>./lib/Oxzion/test/WorkflowTest</directory>
+            <directory>./lib/Oxzion/test/AnalyticsTest</directory>
+            <directory>./lib/Oxzion/test/NLPTest</directory>
         </testsuite>
         <testsuite name="Callback Fixtures">
             <directory>./module/Callback/test</directory>
@@ -46,8 +46,8 @@
         <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
-        </testsuite> 
-    </testsuites> 
+        </testsuite>
+    </testsuites>
     <php>
         <ini name="memory_limit" value="256M" />
         <const name="enableNLP" value="0"/>
