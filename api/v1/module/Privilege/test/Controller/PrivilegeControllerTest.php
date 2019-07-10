@@ -92,7 +92,7 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_ANNOUNCEMENT');
         $this->assertEquals($content['data']['masterPrivilege'][1]['id'],16);
         $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'],'MANAGE_GROUP');
-        $this->assertEquals(count($content['data']['rolePrivilege']),6);
+        $this->assertEquals(count($content['data']['rolePrivilege']),7);
         $this->assertEquals($content['data']['rolePrivilege'][0]['id'],39);
         $this->assertEquals($content['data']['rolePrivilege'][0]['privilege_name'],'MANAGE_MLET');
         $this->assertEquals($content['data']['rolePrivilege'][1]['id'],42);
