@@ -52,7 +52,7 @@ ox_user_project:
 
 ox_role_privilege:
   -
-    id: 71
+    id: 120
     role_id: 5
     privilege_name: 'MANAGE_PROJECT'
     permission: 3
