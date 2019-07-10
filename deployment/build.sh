@@ -136,7 +136,7 @@ chat()
     echo -e "${YELLOW}Building Integration Mattermost...${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/integrations/mattermost/* ./
-    docker run -t --network="host" -v ${PWD}:/mattermost --entrypoint ./docker-build.sh mchat
+    docker run -t --network="host" -e NODE_ENV='<production>' -v ${PWD}:/mattermost --entrypoint ./docker-build.sh mchat
     echo -e "${GREEN}Building Mattermost Completed!${RESET}"
     # unzip of the tar.gz file to build/integrations/mattermost
     echo -e "${YELLOW}Copying Mattermost to build folder${RESET}"
@@ -183,7 +183,7 @@ view()
     cd view
     echo -e "${YELLOW}Build UI/view${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/view/* ./                                        
+    scp -i ${PEM} -r ${SERVER}:env/view/* ./
     docker run -t -v ${PWD}:/app -p 8081:8081 view ./dockerbuild.sh
     echo -e "${GREEN}Building UI/view Completed!${RESET}"
     cd ..
