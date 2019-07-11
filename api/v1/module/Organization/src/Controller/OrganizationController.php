@@ -171,7 +171,7 @@ class OrganizationController extends AbstractApiController
         $params = $this->params()->fromRoute();
 
         $id=$params['orgId'];
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         try {
             $count = $this->orgService->saveUser($id,$data);
         } catch (ValidationException $e) {

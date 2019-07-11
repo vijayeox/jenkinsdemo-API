@@ -178,7 +178,7 @@ class AnnouncementController extends AbstractApiController {
     public function announcementToGroupAction(){
         $params = $this->params()->fromRoute();
         $id=$params['announcementId'];
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         try{
             $count = $this->announcementService->insertAnnouncementForGroup($id,$data);
         } catch (ValidationException $e) {

@@ -29,22 +29,6 @@ class RoleController extends AbstractApiController
 		$this->roleService = $roleService;
     }
     
-    protected function convertParams(){
-        $params = json_decode(file_get_contents("php://input"),true);
-        if(!isset($params)){
-            $params = $this->params()->fromPost(); 
-            // if(!isset($params))   {
-            //     $params = $this->params()->fromRoute(); 
-            //     if(!is_object($params)){
-            //         if(key($params)){
-            //                 $params = json_decode(key($params),true);
-            //         }
-            //     }
-            //  }
-        }
-         return $params;
-     }
-     
     /**
     * Create Role API
     * @api
@@ -67,7 +51,6 @@ class RoleController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Role.
     */
     public function create($data){
-        $data = $this->convertParams();
         $roleId = isset($data['roleId']) ? $data['roleId'] : null;
         try{
             $count = $this->roleService->saveRole($roleId,$data);
@@ -103,7 +86,6 @@ class RoleController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Role.
     */
     public function update($id, $data){
-        $data = $this->convertParams();
         try{
             $count = $this->roleService->saveRole($id,$data);
         }catch(ValidationException $e){
