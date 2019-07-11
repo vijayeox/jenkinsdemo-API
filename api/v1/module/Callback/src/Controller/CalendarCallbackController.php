@@ -30,16 +30,8 @@ namespace Callback\Controller;
             $this->restClient = new RestClient($config['calendar']['calendarServerUrl']);
         }
 
-        protected function convertParams(){
-           $params = json_decode(file_get_contents("php://input"),true);
-
-           if(!isset($params)){
-                $params = $this->params()->fromPost();          
-           }
-            return $params;
-        }
         public function sendMailAction() {
-            $params = $this->params()->fromPost();
+            $params = $this->extractPostData();
             $attachments = $this->params()->fromFiles();
             $this->calendarService->setEmailService($this->emailService);
             $response = $this->calendarService->sendMail($params,$attachments);
@@ -51,7 +43,7 @@ namespace Callback\Controller;
         }
 
         public function addEventAction() {
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $this->log->info(__CLASS__.": ".print_r($params, true));
             $response = $this->restClient->post('/calendar/server/phpmailer/extras/extract_ics_data/geticsdata.php', $params);
             $this->log->info(__CLASS__.": ".$response);

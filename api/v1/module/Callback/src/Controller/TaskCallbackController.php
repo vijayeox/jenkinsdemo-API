@@ -28,7 +28,7 @@ namespace Callback\Controller;
 
         public function addProjectAction(){
             
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $params['projectdata'] = ($params['projectname']) ? ($params['projectname']) : "No Project to ADD";
            $this->log->info(TaskCallbackController::class.":Project Data- ".$params['projectdata']);
            $response = $this->taskService->addProjectToTask($params['projectname'],$params['description'],$params['uuid']);
@@ -40,7 +40,7 @@ namespace Callback\Controller;
         }
 
         public function deleteProjectAction(){
-           $params = $this->convertParams();
+           $params = $this->extractPostData();
 
            $params['projectdata'] = ($params['uuid']) ? ($params['uuid']) : "No Project to Delete";
             $this->log->info(TaskCallbackController::class.":Project Data- ".$params['projectdata']);
@@ -54,7 +54,7 @@ namespace Callback\Controller;
         }
 
         public function updateProjectAction(){
-           $params = $this->convertParams();
+           $params = $this->extractPostData();
 
            $params['projectdata'] = ($params['new_projectname']) ? ($params['new_projectname']) : "No Project to Update";
            $this->log->info(TaskCallbackController::class.":Project Data- ".$params['projectdata']);
