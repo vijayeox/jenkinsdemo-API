@@ -30,10 +30,10 @@ class ActivityInstanceController extends AbstractApiControllerHelper
     */
 
     public function addActivityInstanceAction() { 
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         $this->log->info(ActivityInstanceController::class.":Post Data- ". print_r(json_encode($data), true));
         try {
-            $response = $this->activityInstanceService->createActivityInstanceEntry($this->convertParams());
+            $response = $this->activityInstanceService->createActivityInstanceEntry($this->extractPostData());
             $this->log->info(ActivityInstanceController::class.":Add Activity Instance Successful");
             if($response == 0){
                 return $this->getErrorResponse("Entity not found", 404);
