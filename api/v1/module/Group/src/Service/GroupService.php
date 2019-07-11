@@ -114,9 +114,12 @@ class GroupService extends AbstractService {
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
         $data['manager_id']=$result[0]["id"];
-        $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
-        $result = $this->executeQueryWithParams($select)->toArray();
-        $data['manager_id']=$result[0]["id"];
+
+        if(isset($data['parent_id'])){
+            $select ="SELECT id from ox_group where uuid = '".$data['parent_id']."'";
+            $result = $this->executeQueryWithParams($select)->toArray();
+            $data['parent_id']=$result[0]["id"];
+        }
 
         $org = $this->organizationService->getOrganization($data['org_id']);
        
@@ -135,6 +138,7 @@ class GroupService extends AbstractService {
             $data['id'] = $id;
             $this->commit();
         } catch(Exception $e) {
+            print_r($e->getMessage());
             $this->logger->err(__CLASS__.$e->getMessage());
             $this->rollback();
             return 0;
