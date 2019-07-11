@@ -143,7 +143,7 @@ class ProjectService extends AbstractService {
 		$this->beginTransaction();
 		$count = 0;
 		try {
-        	$count = $this->table->save($form);
+            $count = $this->table->save($form);
 			if($count == 0) {
 				$this->rollback();
 				return 0;

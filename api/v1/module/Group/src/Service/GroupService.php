@@ -114,6 +114,10 @@ class GroupService extends AbstractService {
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
         $data['manager_id']=$result[0]["id"];
+        $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
+        $result = $this->executeQueryWithParams($select)->toArray();
+        $data['manager_id']=$result[0]["id"];
+
         $org = $this->organizationService->getOrganization($data['org_id']);
        
         $form->exchangeArray($data);

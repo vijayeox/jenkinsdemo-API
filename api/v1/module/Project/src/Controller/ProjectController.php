@@ -34,20 +34,20 @@ class ProjectController extends AbstractApiController {
     * @method POST
     * @param array $data Array of elements as shown</br>
     * <code> name : string,
-             description : string,
+    *         description : string,
     * </code>
     * @return array Returns a JSON Response with Status Code and Created Project.</br>
     * <code> status : "success|error",
     *        data : array Created Project Object
-                    string name,
-                    string description,
-                    integer orgid,
-                    integer created_by,
-                    integer modified_by,
-                    dateTime date_created (ISO8601 format yyyy-mm-ddThh:mm:ss),
-                    dateTime date_modified (ISO8601 format yyyy-mm-ddThh:mm:ss),
-                    boolean isdeleted,
-                    integer id,
+    *                string name,
+    *                string description,
+    *                integer orgid,
+    *                integer created_by,
+    *                integer modified_by,
+    *                dateTime date_created (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *                dateTime date_modified (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *                boolean isdeleted,
+    *                integer id,
     * </code>
     */
     public function create($data) {
@@ -232,7 +232,7 @@ class ProjectController extends AbstractApiController {
     public function saveUserAction() {
         $params = $this->params()->fromRoute();
         $id=$params['projectId'];
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         try {
             $count = $this->projectService->saveUser($id,$data);
         } catch (ValidationException $e) {

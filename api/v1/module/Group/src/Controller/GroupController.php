@@ -217,9 +217,10 @@ class GroupController extends AbstractApiController {
     public function saveUserAction() {
         $params = $this->params()->fromRoute();
         $id=$params['groupId'];
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         try {
             $count = $this->groupService->saveUser($id,$data);
+            print_r($data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
