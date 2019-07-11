@@ -403,7 +403,6 @@ class OrganizationService extends AbstractService
     public function saveUser($id,$data){
 
         $obj = $this->table->getByUuid($id,array());
-
         if (is_null($obj)) {
             return 0;
         }

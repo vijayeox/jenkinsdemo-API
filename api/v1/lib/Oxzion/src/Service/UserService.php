@@ -294,13 +294,21 @@ class UserService extends AbstractService
         $form = new User();
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $userdata['uuid'] = $id;
+        $sql = $this->getSqlObject();
+        $getID= $sql->select();
+        $getID->from('ox_user')
+            ->columns(array("id"))
+            ->where(array('ox_user.uuid' => $userdata['managerid']));
+        $responseUUID = $this->executeQuery($getID)->toArray();
+        $userdata['managerid'] = $responseUUID[0]['id'];
         $userdata['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $userdata['date_modified'] = date('Y-m-d H:i:s');
         if (isset($userdata['preferences'])) {
             if(!is_array($userdata['preferences']))
                 $preferences = json_decode($userdata['preferences'],true);
+            if(isset($preferences['timezone'])){
             $userdata['timezone'] = $preferences['timezone'];
-            unset($preferences['timezone']);
+            unset($preferences['timezone']);}
             $userdata['preferences'] = json_encode($preferences);
         }
         $form->exchangeArray($userdata);
@@ -434,6 +442,17 @@ class UserService extends AbstractService
             unset($result['password_reset_expiry_date']);
             unset($result['password_reset_code']);
         }
+        // print_r($result['managerid']);
+        $getManagerUUID= $sql->select();
+        $getManagerUUID->from('ox_user')
+            ->columns(array("uuid"))
+            ->where(array('ox_user.id' => $result['managerid']  ));
+        $responseUUID = $this->executeQuery($getManagerUUID)->toArray();
+        $result['managerid'] = $responseUUID[0]['uuid'];
+        // print_r($responseUUID[0]['uuid']);
+
+
+
         $result['active_organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
         $result['preferences'] = json_decode($response[0]['preferences'], true);
         $result['preferences']['timezone'] = $response[0]['timezone'];
