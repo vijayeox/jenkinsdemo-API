@@ -4,6 +4,7 @@
 #set -e
 #trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
 #going back to oxzion3.0 root directory
+start_time="$(date +%s)"
 cd ../
 #Defining variables for later use
 #pass second parameter as server u want to build for example abc@xyz.com or abc@1.1.1.1
@@ -388,3 +389,7 @@ do
                 break ;;
     esac
 done
+finish_time="$(date +%s)"
+min="$(( $((finish_time - start_time)) /60 ))"
+sec="$(( $((finish_time - start_time)) %60 ))"
+echo "Time elapsed $min mins and $sec secs."
