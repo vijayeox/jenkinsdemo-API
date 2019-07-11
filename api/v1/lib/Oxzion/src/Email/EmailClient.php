@@ -124,10 +124,12 @@ class EmailClient{
 			Horde_Mime_Part $message, $smtpConfig)
 		{
 			$smtpConfig = array_merge(array('timeout' => 30,
-				'debug' => '../smtp.log'), 
+				'debug' => __DIR__.'/../../../../logs/smtp.log'), 
 			$smtpConfig);
-			if($smtpConfig['secure'] == 1){
-				$smtpConfig['secure'] = 'tlsv1';
+			if($smtpConfig['secure'] == 2){
+				$smtpConfig['secure'] = true;
+			}else if($smtpConfig['secure'] == 1){
+				$smtpConfig['secure'] = 'ssl';
 			}
 	    	/* Fallback to UTF-8 (if replying, original message might be in
 	         * US-ASCII, for example, but To/Subject/Etc. may contain 8-bit
