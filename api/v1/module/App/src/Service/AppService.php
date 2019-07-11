@@ -396,7 +396,7 @@ class AppService extends AbstractService
 
     public function registerApps($data)
     {
-        $apps = json_decode($data['applist'], true);
+        $apps = $data['applist'];
         unset($data);
         $form = new App();
         $list = array();

@@ -34,7 +34,7 @@ class AppRegisterController extends AbstractApiControllerHelper
      */
     public function appregisterAction()
     {   
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         try {
             $count = $this->appService->registerApps($data);
         } catch (ValidationException $e) {

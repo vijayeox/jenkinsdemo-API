@@ -60,7 +60,6 @@ class AppController extends AbstractApiController
      */
     public function create($data)
     {
-        $data = $this->params()->fromPost();
         try {
             $count = $this->appService->deployAppForOrg($data);
         } catch (ValidationException $e) {
@@ -244,7 +243,7 @@ class AppController extends AbstractApiController
 
     public function appInstallAction($data)
     {
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         try {
             $count = $this->appService->installAppForOrg($data);
         } catch (ValidationException $e) {
@@ -270,7 +269,8 @@ class AppController extends AbstractApiController
      */
     public function workflowDeployAction()
     {
-        $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
+        $data=$this->extractPostData();
+        $params = array_merge($data,$this->params()->fromRoute());
         $files = $_FILES['files'];
         try {
             if ($files&&isset($params['name'])) {
@@ -291,7 +291,7 @@ class AppController extends AbstractApiController
     }
 
     public function assignmentsAction(){
-        $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
+        $params = array_merge($this->extractPostData(),$this->params()->fromRoute());
         $assignments = $this->appService->getAssignments($params['appId']);
         return $this->getSuccessResponseWithData($assignments);
     }
