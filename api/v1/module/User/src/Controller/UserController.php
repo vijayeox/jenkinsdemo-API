@@ -151,7 +151,7 @@ class UserController extends AbstractApiController
 
     public function saveMeAction()
     {
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         $id =AuthContext::get(AuthConstants::USER_UUID);
         return $this->update($id,$data);
     }
@@ -320,7 +320,7 @@ class UserController extends AbstractApiController
 
     public function userSearchAction()
     {
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         try {
             $result = $this->userService->getUserBySearchName($data['searchVal']);
             if ($result == null || empty($result)) {
@@ -403,7 +403,7 @@ class UserController extends AbstractApiController
 
     public function changePasswordAction()
     {
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         $userId = AuthContext::get(AuthConstants::USER_ID);
         $userDetail = $this->userService->getUser($userId, true);
         $oldPassword = md5(sha1($data['old_password']));
@@ -512,7 +512,7 @@ class UserController extends AbstractApiController
 
     public function forgotPasswordAction()
     {
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         $email = $data['email'];
         try {
             $responseData = $this->userService->sendResetPasswordCode($email);
@@ -530,7 +530,7 @@ class UserController extends AbstractApiController
 
     public function updateNewPasswordAction()
     {
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         $userId = AuthContext::get(AuthConstants::USER_ID);
         $userDetail = $this->userService->getUser($userId,true);
         $resetCode = $data['password_reset_code'];
