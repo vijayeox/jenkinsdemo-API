@@ -24,6 +24,7 @@ class ProjectService extends AbstractService {
     private $table;
     private $organizationService;
     static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
+    static $projectFields = array("name" => "p.name", "description" => "p.description");
 
     public function setMessageProducer($messageProducer)
     {
@@ -53,14 +54,14 @@ class ProjectService extends AbstractService {
         $where = "";
         $sort = "name";
 
-        $cntQuery ="SELECT count(id) FROM `ox_project`";
+        $cntQuery ="SELECT count(p.id) as total FROM `ox_project` as p ";
 
         if(count($filterParams) > 0 || sizeof($filterParams) > 0){
             $filterArray = json_decode($filterParams['filter'],true);
             if(isset($filterArray[0]['filter'])){
                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
                $filterList = $filterArray[0]['filter']['filters'];
-               $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+               $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic, self::$projectFields);
             }
             if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                 $sort = $filterArray[0]['sort'];
@@ -71,16 +72,18 @@ class ProjectService extends AbstractService {
         }
 
 
-        $where .= strlen($where) > 0 ? " AND isdeleted!=1" : "WHERE isdeleted!=1";
+        $where .= strlen($where) > 0 ? " AND p.isdeleted!=1" : "WHERE p.isdeleted!=1";
 
         $sort = " ORDER BY ".$sort;
         $limit = " LIMIT ".$pageSize." offset ".$offset;
-
         $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-        $count=$resultSet->toArray()[0]['count(id)'];
-        $query ="SELECT * FROM `ox_project` ".$where." ".$sort." ".$limit;
+        
+        $count=$resultSet->toArray()[0]['total'];
+        $query ="SELECT p.uuid, p.name, u.uuid as manager_id, p.description FROM `ox_project` as p inner join ox_user as u on u.id = p.manager_id ".$where." ".$sort." ".$limit;
         $resultSet = $this->executeQuerywithParams($query);
-        return array('data' => $resultSet->toArray(),
+        $resultSet=$resultSet->toArray();
+        
+        return array('data' => $resultSet,
                  'total' => $count);
     }
 
@@ -137,6 +140,9 @@ class ProjectService extends AbstractService {
 		$data['date_created'] = date('Y-m-d H:i:s');
 		$data['date_modified'] = date('Y-m-d H:i:s');
         $data['isdeleted'] = false;
+        $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
+        $result = $this->executeQueryWithParams($select)->toArray();
+        $data['manager_id']=$result[0]["id"];
         $org = $this->organizationService->getOrganization($data['org_id']);
         $form->exchangeArray($data);
 		$form->validate();
@@ -177,6 +183,9 @@ class ProjectService extends AbstractService {
         $data = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
+        $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
+        $result = $this->executeQueryWithParams($select)->toArray();
+        $data['manager_id']=$result[0]["id"];
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;

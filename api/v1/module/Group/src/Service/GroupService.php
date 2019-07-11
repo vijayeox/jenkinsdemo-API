@@ -252,6 +252,11 @@ class GroupService extends AbstractService {
                 $select ="SELECT uuid from ox_user where id = '".$resultSet[$x]['manager_id']."'";
                 $result = $this->executeQueryWithParams($select)->toArray();
                 $resultSet[$x]['manager_id']=$result[0]["uuid"];
+                if(isset($resultSet[$x]['parent_id'])){
+                    $selectParentUUID ="SELECT uuid from ox_group where id = '".$resultSet[$x]['parent_id']."'";
+                    $result = $this->executeQueryWithParams($selectParentUUID)->toArray();
+                    $resultSet[$x]['parent_id']=$result[0]["uuid"];
+                }
             }
             return array('data' => $resultSet, 
                      'total' => $count);
