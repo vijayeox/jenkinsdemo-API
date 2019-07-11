@@ -19,6 +19,13 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
      * @return type String
      */
 
+    protected function extractPostData(){
+        $params = json_decode(file_get_contents("php://input"),true);
+        if(!isset($params)){
+            $params = $this->params()->fromPost();
+        }
+        return $params;
+    } 
     /**
      * Process post data and call create
      *
@@ -43,14 +50,12 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     protected function processBodyContent($request)
     {
         $content = $request->getContent();
-        // print_r($content);
         // JSON content? decode and return it.
         if ($this->requestHasContentType($request, AbstractRestfulController::CONTENT_TYPE_JSON)) {
             return $this->jsonDecode($request->getContent());
         }
 
         parse_str($content, $parsedParams);
-        // print_r($parsedParams);
         // If parse_str fails to decode, or we have a single element with empty value
         if (! is_array($parsedParams) || empty($parsedParams)
             || (1 == count($parsedParams) && '' === reset($parsedParams))
@@ -79,18 +84,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         }
         return $jwtToken;
     }
-    protected function convertParams(){
-        $params = json_decode(file_get_contents("php://input"),true);
-        if(!isset($params)){
-            $params = $this->params()->fromPost();          
-            if(!is_object($params)){
-                if(key($params)){
-                    $params = json_decode(key($params),true);
-                }
-            }
-        }
-        return $params;
-    }
+    
     /**
      * contain encoded token for user.
      */
