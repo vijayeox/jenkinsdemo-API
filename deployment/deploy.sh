@@ -1,5 +1,5 @@
 #This script is used to deploy build.zip to respective folders
-#!/bin/sh
+#!/bin/bash
 # exit when any command fails
 #set -e
 #trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT

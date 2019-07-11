@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #Script to build all docker images in oxzion-3.0
 # exit when any command fails
 #set -e
@@ -66,4 +66,4 @@ echo -e "${YELLOW}Building docker for build and deployment now..${RESET}"
 cd ${HOME}/integrations/openproject/docker_build
 docker build -t openproject_build .
 echo -e "${GREEN}Building Integrations Openproject Docker images completed!\n${RESET}"
-echo -e "${BLINK} All images built successfully${RESET}"
+echo -e "${GREEN} All images built successfully${RESET}"

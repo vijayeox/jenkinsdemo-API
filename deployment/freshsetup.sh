@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 cd ../view
 echo "Copying .env.example to .env in all the apps"
 cp -n apps/Calendar/.env.example apps/Calendar/.env
