@@ -451,10 +451,11 @@ class UserService extends AbstractService
             ->columns(array("uuid"))
             ->where(array('ox_user.id' => $result['managerid']  ));
         $responseUUID = $this->executeQuery($getManagerUUID)->toArray();
-        $result['managerid'] = $responseUUID[0]['uuid'];
-
-
-
+        if(isset($responseUUID)){
+            $result['managerid'] = $responseUUID[0]['uuid'];
+        } else {
+            $result['managerid'] = 0;
+        }
         $result['active_organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
         $result['preferences'] = json_decode($response[0]['preferences'], true);
         $result['preferences']['timezone'] = $response[0]['timezone'];
