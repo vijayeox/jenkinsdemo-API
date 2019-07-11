@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #Script to build all docker images in oxzion-3.0
 # exit when any command fails
 #set -e

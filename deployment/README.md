@@ -725,7 +725,9 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 
 	<h5>mysql>GRANT ALL PRIVILEGES ON `oro_crm` . * TO 'crmuser'@'localhost' identified by '<password>';</h5>
 
-2. A Database migration should be perform using the following commannd &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_[Note: You should be in the oxzion3.0 root folder to perform the command]_
+2. For a **First time setup**  the following commands should be performed  in order to install the application and also to do a database migration.
+ 
+	- Note: You should be in the oxzion3.0 root folder to perform the commands below
 
 	- Note: Ensure the Installed flag in parameters.yml under env folder is initially set to false before you start your build
 
