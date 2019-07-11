@@ -104,7 +104,6 @@ class UserService extends AbstractService
             ->columns(array('id', 'name'))
             ->join('ox_user_group', 'ox_user_group.group_id = ox_group.id', array())
             ->where(array('ox_user_group.avatar_id' => $id));
-        //echo "<pre>";print_r($this->executeQuery($select)->toArray());exit();
         return $this->executeQuery($select)->toArray();
     }
 
@@ -253,7 +252,6 @@ class UserService extends AbstractService
 
     private function generateUserIndexForElastic($data)
     {
-        //    print_r($data);exit;
         $elasticIndex = new IndexerImpl($this->config);
         $appId = 'user';
         $id = $data['id'];
@@ -296,6 +294,13 @@ class UserService extends AbstractService
         $userdata['uuid'] = $id;
         $sql = $this->getSqlObject();
         $getID= $sql->select();
+        $getID->from('ox_organization')
+            ->columns(array("id"))
+            ->where(array('uuid' => $userdata['orgid']));
+        $responseID = $this->executeQuery($getID)->toArray();
+        $userdata['orgid'] = $responseID[0]['id'];
+        $sql = $this->getSqlObject();
+        $getID= $sql->select();
         $getID->from('ox_user')
             ->columns(array("id"))
             ->where(array('ox_user.uuid' => $userdata['managerid']));
@@ -304,11 +309,16 @@ class UserService extends AbstractService
         $userdata['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $userdata['date_modified'] = date('Y-m-d H:i:s');
         if (isset($userdata['preferences'])) {
-            if(!is_array($userdata['preferences']))
-                $preferences = json_decode($userdata['preferences'],true);
-            if(isset($preferences['timezone'])){
-            $userdata['timezone'] = $preferences['timezone'];
-            unset($preferences['timezone']);}
+            
+            if (!is_array($userdata['preferences'])) {
+                $preferences = json_decode($userdata['preferences'], true);
+            } else {
+                $preferences =$userdata['preferences'];
+            }
+            if (isset($preferences['timezone'])) {
+                $userdata['timezone'] = $preferences['timezone'];
+                unset($preferences['timezone']);
+            }
             $userdata['preferences'] = json_encode($preferences);
         }
         $form->exchangeArray($userdata);
@@ -442,14 +452,12 @@ class UserService extends AbstractService
             unset($result['password_reset_expiry_date']);
             unset($result['password_reset_code']);
         }
-        // print_r($result['managerid']);
         $getManagerUUID= $sql->select();
         $getManagerUUID->from('ox_user')
             ->columns(array("uuid"))
             ->where(array('ox_user.id' => $result['managerid']  ));
         $responseUUID = $this->executeQuery($getManagerUUID)->toArray();
         $result['managerid'] = $responseUUID[0]['uuid'];
-        // print_r($responseUUID[0]['uuid']);
 
 
 
@@ -866,7 +874,6 @@ class UserService extends AbstractService
             $userReset['lastname'] = $userDetails['lastname'];
             $userReset['password_reset_code'] = $resetPasswordCode;
             $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
-            //            print_r($userReset);exit;
             //Code to update the password reset and expiration time
             $userUpdate = $this->updateUser($id, $userReset);
             if ($userUpdate) {
