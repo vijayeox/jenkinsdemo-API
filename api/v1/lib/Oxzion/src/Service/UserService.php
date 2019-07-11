@@ -137,6 +137,8 @@ class UserService extends AbstractService
     public function createUser(&$data) {
         if(!isset($data['orgid'])){
             $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
+        }else{
+            
         }
         $data['uuid'] = Uuid::uuid4()->toString();
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -290,22 +292,14 @@ class UserService extends AbstractService
             return 0;
         }
         $form = new User();
+        if(isset($data['orgid'])){
+            unset($data['orgid']);
+        }
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $userdata['uuid'] = $id;
-        $sql = $this->getSqlObject();
-        $getID= $sql->select();
-        $getID->from('ox_organization')
-            ->columns(array("id"))
-            ->where(array('uuid' => $userdata['orgid']));
-        $responseID = $this->executeQuery($getID)->toArray();
-        $userdata['orgid'] = $responseID[0]['id'];
-        $sql = $this->getSqlObject();
-        $getID= $sql->select();
-        $getID->from('ox_user')
-            ->columns(array("id"))
-            ->where(array('ox_user.uuid' => $userdata['managerid']));
-        $responseUUID = $this->executeQuery($getID)->toArray();
-        $userdata['managerid'] = $responseUUID[0]['id'];
+        if(isset($data['managerid'])){
+            $userdata['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
+        }
         $userdata['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $userdata['date_modified'] = date('Y-m-d H:i:s');
         if (isset($userdata['preferences'])) {
@@ -438,7 +432,7 @@ class UserService extends AbstractService
                 "email", "orgid", "icon", "country", "date_of_birth",
                 "designation", "phone", "address", "gender", "website", "about",
                 "managerid", "timezone", "date_of_join", "preferences", "password",
-                "password_reset_expiry_date","password_reset_code"
+                "password_reset_expiry_date","password_reset_code","interest"
             ))
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();

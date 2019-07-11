@@ -31,6 +31,15 @@ class AbstractService
         return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
     }
     
+    protected function getIdFromUuid($table, $uuid){
+        $sql = $this->getSqlObject();
+        $getID= $sql->select();
+        $getID->from($table)
+                ->columns(array("id"))
+                ->where(array('uuid' => $uuid));
+        $responseID = $this->executeQuery($getID)->toArray();
+        return $responseID[0]['id'];
+    }
 
     protected function initLogger($logLocation) {
         $this->logger = new Logger;
