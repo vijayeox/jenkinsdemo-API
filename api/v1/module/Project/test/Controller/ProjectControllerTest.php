@@ -43,7 +43,7 @@ class ProjectControllerTest extends ControllerTest {
             "uuid" => "886d7eff-6bae-4892-baf8-6fefc56cbf0b",
             "name"=> "Test Project 1",
             "org_id"=>"1",
-            "manager_id" => "1",
+            "manager_id" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
             "description"=> "Description Test Data",
             "created_by"=> "1",
             "modified_by"=> "1",
@@ -57,7 +57,7 @@ class ProjectControllerTest extends ControllerTest {
             "uuid"=> "ced672bb-fe33-4f0a-b153-f1d182a02603",
             "name"=> "Test Project 2",
             "org_id"=>"1",
-            "manager_id" => "1",
+            "manager_id" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
             "description"=> "Description Test Data",
             "created_by"=> "1",
             "modified_by"=> "1",
@@ -73,7 +73,7 @@ class ProjectControllerTest extends ControllerTest {
             "org_id"=>"1",
             "manager_id" => "1",
             "description"=> "Description Test Data",
-            "created_by"=> "1",
+            "created_by"=> "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
             "modified_by"=> "1",
             "date_created"=> "2018-11-11 07:25:06",
             "date_modified"=> "2018-12-11 07:25:06",
@@ -111,7 +111,7 @@ class ProjectControllerTest extends ControllerTest {
             "uuid" => "886d7eff-6bae-4892-baf8-6fefc56cbf0b",
             "name"=> "Test Project 1",
             "org_id"=>"1",
-            "manager_id" => "1",
+            "manager_id" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
             "description"=> "Description Test Data",
             "created_by"=> "1",
             "modified_by"=> "1",
@@ -161,7 +161,7 @@ class ProjectControllerTest extends ControllerTest {
             "project_id"=> "2"
         ])];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/project?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"2"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/project?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"2"}]},"sort":[{"field":"name","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -206,11 +206,11 @@ class ProjectControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['id'], 3);
+        $this->assertEquals($content['data'][0]['uuid'], '3dbacd80-ff27-4169-a683-4a45d2a8fb8f');
         $this->assertEquals($content['data'][0]['name'], 'New Project');
-        $this->assertEquals($content['data'][1]['id'], 1);
+        $this->assertEquals($content['data'][1]['uuid'], '886d7eff-6bae-4892-baf8-6fefc56cbf0b');
         $this->assertEquals($content['data'][1]['name'], 'Test Project 1');
-        $this->assertEquals($content['data'][2]['id'], 2);
+        $this->assertEquals($content['data'][2]['uuid'], 'ced672bb-fe33-4f0a-b153-f1d182a02603');
         $this->assertEquals($content['data'][2]['name'], 'Test Project 2');
         $this->assertEquals($content['total'], 3);
     }
@@ -237,7 +237,7 @@ class ProjectControllerTest extends ControllerTest {
 
     public function testCreate() {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Project 3','description'=>'Project Description','manager_id' => '1'];
+        $data = ['name' => 'Test Project 3','description'=>'Project Description','manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_project'));
         if(enableActiveMQ == 0){
              $mockMessageProducer = $this->getMockMessageProducer();
@@ -257,7 +257,7 @@ class ProjectControllerTest extends ControllerTest {
 
     public function testCreateWithDifferentOrgID() {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Project 3','description'=>'Project Description','manager_id' => '1','org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46'];
+        $data = ['name' => 'Test Project 3','description'=>'Project Description','manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45','org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46'];
         $this->dispatch('/project', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
@@ -309,7 +309,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black','old_projectname'=> 'Test Project 1','new_projectname' => 'Test Project','description' => 'Project Description','uuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')),'PROJECT_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'old_projectname'=> 'Test Project 1','new_projectname' => 'Test Project','description' => 'Project Description','uuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')),'PROJECT_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'PUT', null);
         $this->assertResponseStatusCode(200);

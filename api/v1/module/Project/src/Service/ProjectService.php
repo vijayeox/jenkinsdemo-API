@@ -74,7 +74,7 @@ class ProjectService extends AbstractService {
 
         $where .= strlen($where) > 0 ? " AND p.isdeleted!=1" : "WHERE p.isdeleted!=1";
 
-        $sort = " ORDER BY ".$sort;
+        $sort = " ORDER BY p.".$sort;
         $limit = " LIMIT ".$pageSize." offset ".$offset;
         $resultSet = $this->executeQuerywithParams($cntQuery.$where);
         
@@ -165,7 +165,7 @@ class ProjectService extends AbstractService {
 		return $count;
 	}
 
-	public function updateProject ($id, &$data) {
+	public function updateProject ($id, $data) {
         if(isset($data['org_id'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
                 ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
@@ -180,12 +180,13 @@ class ProjectService extends AbstractService {
 			return 0;
 		}
         $form = new Project();
+        if(isset($data['manager_id'])){
+            $data['manager_id']=$this->getIdFromUuid('ox_user', $data['manager_id']);
+        }
         $data = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
-        $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
-        $result = $this->executeQueryWithParams($select)->toArray();
-        $data['manager_id']=$result[0]["id"];
+        
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;

@@ -116,9 +116,7 @@ class GroupService extends AbstractService {
         $data['manager_id']=$result[0]["id"];
 
         if(isset($data['parent_id'])){
-            $select ="SELECT id from ox_group where uuid = '".$data['parent_id']."'";
-            $result = $this->executeQueryWithParams($select)->toArray();
-            $data['parent_id']=$result[0]["id"];
+            $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
         }
 
         $org = $this->organizationService->getOrganization($data['org_id']);

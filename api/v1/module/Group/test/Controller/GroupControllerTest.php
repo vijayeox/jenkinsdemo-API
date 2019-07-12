@@ -103,7 +103,7 @@ class GroupControllerTest extends ControllerTest {
 // Testing to see if the Create Group function is working as intended if all the value passed are correct.
     public function testCreate() {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'parent_id' => 1, 'org_id'=> 1, 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description
+        $data = ['name' => 'Groups 22', 'parent_id' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'org_id'=> 1, 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description
         '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
@@ -129,7 +129,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testCreateByAdminWithDifferentOrgID() {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'parent_id' => 1, 'org_id'=> 'b0971de7-0387-48ea-8f29-5d3704d96a46', 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description
+        $data = ['name' => 'Groups 22', 'parent_id' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'org_id'=> 'b0971de7-0387-48ea-8f29-5d3704d96a46', 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description
         '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
