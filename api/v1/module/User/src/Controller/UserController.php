@@ -409,14 +409,19 @@ class UserController extends AbstractApiController
         $oldPassword = md5(sha1($data['old_password']));
         $newPassword = md5(sha1($data['new_password']));
         $confirmPassword = md5(sha1($data['confirm_password']));
-
         if (($oldPassword == $userDetail['password']) && ($newPassword == $confirmPassword)) {
-            $formData = array('id' => $userId, 'password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null);
+            $formData = array( 'password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null);
             $result = $this->update($userId, $formData);
             return $this->getSuccessResponse("Password changed successfully!");
+        } else if(($oldPassword != $userDetail['password'])){
+            $response = ['id' => $userId];
+            return $this->getErrorResponse("Old password is not valid.", 404, $response);
+        } else if(($newPassword != $confirmPassword)){
+            $response = ['id' => $userId];
+            return $this->getErrorResponse("Confirm password missmatch.", 404, $response);
         } else {
             $response = ['id' => $userId];
-            return $this->getErrorResponse("Failed to Update Password", 404, $response);
+            return $this->getErrorResponse("Failed to Update Password.", 404, $response);
         }
     }
 
@@ -486,7 +491,7 @@ class UserController extends AbstractApiController
             }
             return $this->getSuccessResponse();
         } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            $response = ['data' => $params, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
     }
@@ -500,13 +505,7 @@ class UserController extends AbstractApiController
      */
     public function getUserAppsAndPrivilegesAction()
     {
-        $params = $this->params()->fromRoute();
-        try {
-            $responseData = $this->userService->getUserAppsAndPrivileges();
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
+        $responseData = $this->userService->getUserAppsAndPrivileges();
         return $this->getSuccessResponseWithData($responseData, 200);
     }
 
