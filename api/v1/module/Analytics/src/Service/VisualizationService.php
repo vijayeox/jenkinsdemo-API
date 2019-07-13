@@ -2,29 +2,31 @@
 namespace Analytics\Service;
 
 use Oxzion\Service\AbstractService;
-use Analytics\Model\DataSourceTable;
-use Analytics\Model\DataSource;
+use Analytics\Model\VisualizationTable;
+use Analytics\Model\Visualization;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Oxzion\Utils\FilterUtils;
+use Ramsey\Uuid\Uuid;
 use Exception;
 
-class DataSourceService extends AbstractService
+class VisualizationService extends AbstractService
 {
 
     private $table;
 
-    public function __construct($config, $dbAdapter, DataSourceTable $table)
+    public function __construct($config, $dbAdapter, VisualizationTable $table)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
 
-    public function createDataSource(&$data)
+    public function createVisualization(&$data)
     {
-        $form = new DataSource();
+        $form = new Visualization();
+        $data['uuid'] = Uuid::uuid4()->toString();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -48,13 +50,13 @@ class DataSourceService extends AbstractService
         return $count;
     }
 
-    public function updateDataSource($id, &$data)
+    public function updateVisualization($id, &$data)
     {
         $obj = $this->table->get($id, array());
         if (is_null($obj)) {
             return 0;
         }
-        $form = new DataSource();
+        $form = new Visualization();
         $data = array_merge($obj->toArray(), $data);
         $form->exchangeArray($data);
         $form->validate();
@@ -72,7 +74,7 @@ class DataSourceService extends AbstractService
         return $count;
     }
 
-    public function deleteDataSource($id)
+    public function deleteVisualization($id)
     {
         $count = 0;
         try {
@@ -86,13 +88,13 @@ class DataSourceService extends AbstractService
         return $count;
     }
 
-    public function getDataSource($id)
+    public function getVisualization($id)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $select->from('datasource')
+        $select->from('visualization')
             ->columns(array("*"))
-            ->where(array('datasource.id' => $id,'org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+            ->where(array('visualization.id' => $id,'org_id' => AuthContext::get(AuthConstants::ORG_ID)));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
             return 0;
@@ -100,7 +102,7 @@ class DataSourceService extends AbstractService
         return $response[0];
     }
 
-    public function getDataSourceList($params = null)
+    public function getVisualizationList($params = null)
     {
 
             $paginateOptions = FilterUtils::paginate($params);
@@ -109,11 +111,11 @@ class DataSourceService extends AbstractService
             $sort = " ORDER BY ".$paginateOptions['sort'];
             $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
-            $cntQuery ="SELECT count(id) as 'count' FROM `datasource` ";
+            $cntQuery ="SELECT count(id) as 'count' FROM `visualization` ";
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count'];
 
-            $query ="SELECT * FROM `datasource`".$where." ".$sort." ".$limit;
+            $query ="SELECT * FROM `visualization`".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
             foreach ($result as $key => $value) {

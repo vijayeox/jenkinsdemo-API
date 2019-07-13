@@ -3,48 +3,49 @@
 namespace Analytics\Controller;
 
 use Zend\Log\Logger;
-use Analytics\Model\DataSourceTable;
-use Analytics\Model\DataSource;
-use Analytics\Service\DataSourceService;
+use Analytics\Model\DashboardTable;
+use Analytics\Model\Dashboard;
+use Analytics\Service\DashboardService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 
 
-class DataSourceController extends AbstractApiController
+class DashboardController extends AbstractApiController
 {
 
-    private $dataSourceService;
+    private $dashboardService;
 
     /**
      * @ignore __construct
      */
-    public function __construct(DataSourceTable $table, DataSourceService $dataSourceService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(DashboardTable $table, DashboardService $dashboardService, Logger $log, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __class__, DataSource::class);
-        $this->setIdentifierName('dataSourceId');
-        $this->dataSourceService = $dataSourceService;
+        parent::__construct($table, $log, __class__, Dashboard::class);
+        $this->setIdentifierName('dashboardId');
+        $this->dashboardService = $dashboardService;
     }
 
     /**
-     * Create DataSource API
+     * Create Dashboard API
      * @api
-     * @link /analytics/dataSource
+     * @link /analytics/dashboard
      * @method POST
      * @param array $data Array of elements as shown
      * <code> {
-     *               name : string,
-     *               type : string,
-     *               connection_string : string
+     *               name : string
+     *               dashboard_type : string
+     *               ispublic : integer(binary)
+     *               description : string
      *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created DataSource.
+     * @return array Returns a JSON Response with Status Code and Created Dashboard.
      */
     public function create($data)
     {
         $data = $this->params()->fromPost();
         try {
-            $count = $this->dataSourceService->createDataSource($data);
+            $count = $this->dashboardService->createDashboard($data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -56,57 +57,59 @@ class DataSourceController extends AbstractApiController
     }
 
     /**
-     * Update DataSource API
+     * Update Dashboard API
      * @api
-     * @link /analytics/dataSource/:dataSourceId
+     * @link /analytics/dashboard/:dashboardId
      * @method PUT
-     * @param array $id ID of DataSource to update
+     * @param array $id ID of Dashboard to update
      * @param array $data
-     * @return array Returns a JSON Response with Status Code and Created DataSource.
+     * @return array Returns a JSON Response with Status Code and Created Dashboard.
      */
     public function update($id, $data)
     {
         try {
-            $count = $this->dataSourceService->updateDataSource($id, $data);
+            $count = $this->dashboardService->updateDashboard($id, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("DataSource not found for id - $id", 404);
+            return $this->getErrorResponse("Dashboard not found for id - $id", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
 
     /**
-     * Delete DataSource API
+     * Delete Dashboard API
      * @api
-     * @link /analytics/dataSource/:dataSourceId
+     * @link /analytics/dashboard/:dashboardId
      * @method DELETE
-     * @param $id ID of DataSource to Delete
+     * @param $id ID of Dashboard to Delete
      * @return array success|failure response
      */
     public function delete($id)
     {
-        $response = $this->dataSourceService->deleteDataSource($id);
+        $response = $this->dashboardService->deleteDashboard($id);
         if ($response == 0) {
-            return $this->getErrorResponse("DataSource not found for id - $id", 404, ['id' => $id]);
+            return $this->getErrorResponse("Dashboard not found for id - $id", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
     }
 
     /**
-     * GET DataSource API
+     * GET Dashboard API
      * @api
-     * @link /analytics/datasource/:dataSourceId
+     * @link /analytics/dashboard/:dashboardId
      * @method GET
-     * @param array $dataget of DataSource
+     * @param array $dataget of Dashboard
      * @return array $data
      * {
      *              id: integer,
+     *              uuid : string,
      *              name : string,
-     *              type : string,
-     *              connection_string : string,
+     *              ispublic : integer,
+     *              description : string,
+     *              dashboard_type : string,
      *              created_by: integer,
      *              date_created: date,
      *              org_id: integer
@@ -115,17 +118,17 @@ class DataSourceController extends AbstractApiController
      */
     public function get($id)
     {
-        $result = $this->dataSourceService->getDataSource($id);
+        $result = $this->dashboardService->getDashboard($id);
         if ($result == 0) {
-            return $this->getErrorResponse("DataSource not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("Dashboard not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponseWithData($result);
     }
 
     /**
-     * GET DataSource API
+     * GET Dashboard API
      * @api
-     * @link /analytics/datasource
+     * @link /analytics/dashboard
      * @method GET
      * @param      integer      $limit   (number of rows to fetch)
      * @param      integer      $skip    (number of rows to skip)
@@ -133,18 +136,21 @@ class DataSourceController extends AbstractApiController
      * @param      array[json]  $filter  (filter with logic and filters)
      * @return array $dataget list of Datasource
      * <code>status : "success|error",
-     *              id: integer
+     *              id: integer,
+     *              uuid : string,
      *              name : string,
-     *              type : string,
-     *              connection_string : string
-     *              created_by: integer
-     *              date_created: date
+     *              ispublic : integer,
+     *              description : string,
+     *              dashboard_type : string,
+     *              created_by: integer,
+     *              date_created: date,
+     *              org_id: integer
      * </code>
      */
     public function getList()
     {
         $params = $this->params()->fromQuery();
-        $result = $this->dataSourceService->getDataSourceList($params);
+        $result = $this->dashboardService->getDashboardList($params);
         if ($result == 0) {
             return $this->getErrorResponse("No records found",404);
         }

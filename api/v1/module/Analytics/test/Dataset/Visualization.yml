@@ -1,0 +1,15 @@
+visualization:
+  -
+    id: 1
+    uuid: '44f22a46-26d2-48df-96b9-c58520005817'
+    type: 'Pie Chart'
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+  -
+    id: 2
+    uuid: '101b3d1e-175b-43d8-ac38-485e80e6b2f3'
+    type: 'Panel Item'
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1

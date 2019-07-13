@@ -43,6 +43,62 @@ class Module implements ConfigProviderInterface {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\DataSource());
                     return new TableGateway('datasource', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\QueryService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\QueryService($container->get('config'), $dbAdapter, $container->get(Model\QueryTable::class));
+                },
+                Model\QueryTable::class => function($container) {
+                    $tableGateway = $container->get(Model\QueryTableGateway::class);
+                    return new Model\QueryTable($tableGateway);
+                },
+                Model\QueryTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Query());
+                    return new TableGateway('query', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\VisualizationService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\VisualizationService($container->get('config'), $dbAdapter, $container->get(Model\VisualizationTable::class));
+                },
+                Model\VisualizationTable::class => function($container) {
+                    $tableGateway = $container->get(Model\VisualizationTableGateway::class);
+                    return new Model\VisualizationTable($tableGateway);
+                },
+                Model\VisualizationTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Visualization());
+                    return new TableGateway('visualization', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\WidgetService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\WidgetService($container->get('config'), $dbAdapter, $container->get(Model\WidgetTable::class));
+                },
+                Model\WidgetTable::class => function($container) {
+                    $tableGateway = $container->get(Model\WidgetTableGateway::class);
+                    return new Model\WidgetTable($tableGateway);
+                },
+                Model\WidgetTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Widget());
+                    return new TableGateway('widget', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\DashboardService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\DashboardService($container->get('config'), $dbAdapter, $container->get(Model\DashboardTable::class));
+                },
+                Model\DashboardTable::class => function($container) {
+                    $tableGateway = $container->get(Model\DashboardTableGateway::class);
+                    return new Model\DashboardTable($tableGateway);
+                },
+                Model\DashboardTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Dashboard());
+                    return new TableGateway('dashboard', $dbAdapter, null, $resultSetPrototype);
+                },
             ],
         ];
     }
@@ -53,6 +109,26 @@ class Module implements ConfigProviderInterface {
                 Controller\DataSourceController::class => function($container) {
                     return new Controller\DataSourceController(
                             $container->get(Model\DataSourceTable::class), $container->get(Service\DataSourceService::class), $container->get('AnalyticsLogger'),
+                        $container->get(AdapterInterface::class));
+                },
+                Controller\QueryController::class => function($container) {
+                    return new Controller\QueryController(
+                            $container->get(Model\QueryTable::class), $container->get(Service\QueryService::class), $container->get('AnalyticsLogger'),
+                        $container->get(AdapterInterface::class));
+                },
+                Controller\VisualizationController::class => function($container) {
+                    return new Controller\VisualizationController(
+                            $container->get(Model\VisualizationTable::class), $container->get(Service\VisualizationService::class), $container->get('AnalyticsLogger'),
+                        $container->get(AdapterInterface::class));
+                },
+                Controller\WidgetController::class => function($container) {
+                    return new Controller\WidgetController(
+                            $container->get(Model\WidgetTable::class), $container->get(Service\WidgetService::class), $container->get('AnalyticsLogger'),
+                        $container->get(AdapterInterface::class));
+                },
+                Controller\DashboardController::class => function($container) {
+                    return new Controller\DashboardController(
+                            $container->get(Model\DashboardTable::class), $container->get(Service\DashboardService::class), $container->get('AnalyticsLogger'),
                         $container->get(AdapterInterface::class));
                 },
             ],

@@ -3,48 +3,48 @@
 namespace Analytics\Controller;
 
 use Zend\Log\Logger;
-use Analytics\Model\DataSourceTable;
-use Analytics\Model\DataSource;
-use Analytics\Service\DataSourceService;
+use Analytics\Model\WidgetTable;
+use Analytics\Model\Widget;
+use Analytics\Service\WidgetService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 
 
-class DataSourceController extends AbstractApiController
+class WidgetController extends AbstractApiController
 {
 
-    private $dataSourceService;
+    private $widgetService;
 
     /**
      * @ignore __construct
      */
-    public function __construct(DataSourceTable $table, DataSourceService $dataSourceService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(WidgetTable $table, WidgetService $widgetService, Logger $log, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __class__, DataSource::class);
-        $this->setIdentifierName('dataSourceId');
-        $this->dataSourceService = $dataSourceService;
+        parent::__construct($table, $log, __class__, Widget::class);
+        $this->setIdentifierName('widgetId');
+        $this->widgetService = $widgetService;
     }
 
     /**
-     * Create DataSource API
+     * Create Widget API
      * @api
-     * @link /analytics/dataSource
+     * @link /analytics/widget
      * @method POST
      * @param array $data Array of elements as shown
      * <code> {
-     *               name : string,
-     *               type : string,
-     *               connection_string : string
+     *               query_id : integer
+     *               visualization_id : integer
+     *               ispublic : integer(binary)
      *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created DataSource.
+     * @return array Returns a JSON Response with Status Code and Created Widget.
      */
     public function create($data)
     {
         $data = $this->params()->fromPost();
         try {
-            $count = $this->dataSourceService->createDataSource($data);
+            $count = $this->widgetService->createWidget($data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -56,57 +56,56 @@ class DataSourceController extends AbstractApiController
     }
 
     /**
-     * Update DataSource API
+     * Update Widget API
      * @api
-     * @link /analytics/dataSource/:dataSourceId
+     * @link /analytics/widget/:widgetId
      * @method PUT
-     * @param array $id ID of DataSource to update
+     * @param array $id ID of Widget to update
      * @param array $data
-     * @return array Returns a JSON Response with Status Code and Created DataSource.
+     * @return array Returns a JSON Response with Status Code and Created Widget.
      */
     public function update($id, $data)
     {
         try {
-            $count = $this->dataSourceService->updateDataSource($id, $data);
+            $count = $this->widgetService->updateWidget($id, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("DataSource not found for id - $id", 404);
+            return $this->getErrorResponse("Widget not found for id - $id", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
 
     /**
-     * Delete DataSource API
+     * Delete Widget API
      * @api
-     * @link /analytics/dataSource/:dataSourceId
+     * @link /analytics/widget/:widgetId
      * @method DELETE
-     * @param $id ID of DataSource to Delete
+     * @param $id ID of Widget to Delete
      * @return array success|failure response
      */
     public function delete($id)
     {
-        $response = $this->dataSourceService->deleteDataSource($id);
+        $response = $this->widgetService->deleteWidget($id);
         if ($response == 0) {
-            return $this->getErrorResponse("DataSource not found for id - $id", 404, ['id' => $id]);
+            return $this->getErrorResponse("Widget not found for id - $id", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
     }
 
     /**
-     * GET DataSource API
+     * GET Widget API
      * @api
-     * @link /analytics/datasource/:dataSourceId
+     * @link /analytics/widget/:widgetId
      * @method GET
-     * @param array $dataget of DataSource
+     * @param array $dataget of Widget
      * @return array $data
      * {
      *              id: integer,
-     *              name : string,
+     *              uuid : string,
      *              type : string,
-     *              connection_string : string,
      *              created_by: integer,
      *              date_created: date,
      *              org_id: integer
@@ -115,17 +114,17 @@ class DataSourceController extends AbstractApiController
      */
     public function get($id)
     {
-        $result = $this->dataSourceService->getDataSource($id);
+        $result = $this->widgetService->getWidget($id);
         if ($result == 0) {
-            return $this->getErrorResponse("DataSource not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("Widget not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponseWithData($result);
     }
 
     /**
-     * GET DataSource API
+     * GET Widget API
      * @api
-     * @link /analytics/datasource
+     * @link /analytics/widget
      * @method GET
      * @param      integer      $limit   (number of rows to fetch)
      * @param      integer      $skip    (number of rows to skip)
@@ -136,15 +135,15 @@ class DataSourceController extends AbstractApiController
      *              id: integer
      *              name : string,
      *              type : string,
-     *              connection_string : string
-     *              created_by: integer
-     *              date_created: date
+     *              created_by: integer,
+     *              date_created: date,
+     *              org_id: integer
      * </code>
      */
     public function getList()
     {
         $params = $this->params()->fromQuery();
-        $result = $this->dataSourceService->getDataSourceList($params);
+        $result = $this->widgetService->getWidgetList($params);
         if ($result == 0) {
             return $this->getErrorResponse("No records found",404);
         }

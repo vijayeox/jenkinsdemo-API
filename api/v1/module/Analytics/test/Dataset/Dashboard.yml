@@ -1,0 +1,32 @@
+dashboard:
+  -
+    id: 1
+    uuid: 'a59f865e-efba-472e-91f2-2ae2d8a16d36'
+    name: 'Dashboard1'
+    ispublic: 1
+    description: 'Description'
+    dashboard_type: 'Widget Dashboard'
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+  -
+    id: 2
+    uuid: 'fc67ceb2-4b6f-4a33-8527-5fc6b0822988'
+    name: 'Dashboard2'
+    ispublic: 1 
+    description: 'Description'
+    dashboard_type: 'Document Dashboard'
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+widget_dashboard_mapper:
+  -
+    id: 1
+    dashboard_id: 1
+    widget_id: 1
+    dimensions: '{"length": "23","width": "23","height": "23","breath" : "25"}'
+  -
+    id: 2
+    dashboard_id: 2
+    widget_id: 2
+    dimensions: '{"length": "23","width": "23","height": "23","breath" : "25"}'

@@ -3,48 +3,46 @@
 namespace Analytics\Controller;
 
 use Zend\Log\Logger;
-use Analytics\Model\DataSourceTable;
-use Analytics\Model\DataSource;
-use Analytics\Service\DataSourceService;
+use Analytics\Model\VisualizationTable;
+use Analytics\Model\Visualization;
+use Analytics\Service\VisualizationService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 
 
-class DataSourceController extends AbstractApiController
+class VisualizationController extends AbstractApiController
 {
 
-    private $dataSourceService;
+    private $visualizationService;
 
     /**
      * @ignore __construct
      */
-    public function __construct(DataSourceTable $table, DataSourceService $dataSourceService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(VisualizationTable $table, VisualizationService $visualizationService, Logger $log, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __class__, DataSource::class);
-        $this->setIdentifierName('dataSourceId');
-        $this->dataSourceService = $dataSourceService;
+        parent::__construct($table, $log, __class__, Visualization::class);
+        $this->setIdentifierName('visualizationId');
+        $this->visualizationService = $visualizationService;
     }
 
     /**
-     * Create DataSource API
+     * Create Visualization API
      * @api
-     * @link /analytics/dataSource
+     * @link /analytics/visualization
      * @method POST
      * @param array $data Array of elements as shown
      * <code> {
-     *               name : string,
-     *               type : string,
-     *               connection_string : string
+     *               type : string
      *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created DataSource.
+     * @return array Returns a JSON Response with Status Code and Created Visualization.
      */
     public function create($data)
     {
         $data = $this->params()->fromPost();
         try {
-            $count = $this->dataSourceService->createDataSource($data);
+            $count = $this->visualizationService->createVisualization($data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -56,57 +54,56 @@ class DataSourceController extends AbstractApiController
     }
 
     /**
-     * Update DataSource API
+     * Update Visualization API
      * @api
-     * @link /analytics/dataSource/:dataSourceId
+     * @link /analytics/visualization/:visualizationId
      * @method PUT
-     * @param array $id ID of DataSource to update
+     * @param array $id ID of Visualization to update
      * @param array $data
-     * @return array Returns a JSON Response with Status Code and Created DataSource.
+     * @return array Returns a JSON Response with Status Code and Created Visualization.
      */
     public function update($id, $data)
     {
         try {
-            $count = $this->dataSourceService->updateDataSource($id, $data);
+            $count = $this->visualizationService->updateVisualization($id, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("DataSource not found for id - $id", 404);
+            return $this->getErrorResponse("Visualization not found for id - $id", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
 
     /**
-     * Delete DataSource API
+     * Delete Visualization API
      * @api
-     * @link /analytics/dataSource/:dataSourceId
+     * @link /analytics/visualization/:visualizationId
      * @method DELETE
-     * @param $id ID of DataSource to Delete
+     * @param $id ID of Visualization to Delete
      * @return array success|failure response
      */
     public function delete($id)
     {
-        $response = $this->dataSourceService->deleteDataSource($id);
+        $response = $this->visualizationService->deleteVisualization($id);
         if ($response == 0) {
-            return $this->getErrorResponse("DataSource not found for id - $id", 404, ['id' => $id]);
+            return $this->getErrorResponse("Visualization not found for id - $id", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
     }
 
     /**
-     * GET DataSource API
+     * GET Visualization API
      * @api
-     * @link /analytics/datasource/:dataSourceId
+     * @link /analytics/visualization/:visualizationId
      * @method GET
-     * @param array $dataget of DataSource
+     * @param array $dataget of Visualization
      * @return array $data
      * {
      *              id: integer,
-     *              name : string,
+     *              uuid : string,
      *              type : string,
-     *              connection_string : string,
      *              created_by: integer,
      *              date_created: date,
      *              org_id: integer
@@ -115,17 +112,17 @@ class DataSourceController extends AbstractApiController
      */
     public function get($id)
     {
-        $result = $this->dataSourceService->getDataSource($id);
+        $result = $this->visualizationService->getVisualization($id);
         if ($result == 0) {
-            return $this->getErrorResponse("DataSource not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("Visualization not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponseWithData($result);
     }
 
     /**
-     * GET DataSource API
+     * GET Visualization API
      * @api
-     * @link /analytics/datasource
+     * @link /analytics/visualization
      * @method GET
      * @param      integer      $limit   (number of rows to fetch)
      * @param      integer      $skip    (number of rows to skip)
@@ -136,15 +133,15 @@ class DataSourceController extends AbstractApiController
      *              id: integer
      *              name : string,
      *              type : string,
-     *              connection_string : string
-     *              created_by: integer
-     *              date_created: date
+     *              created_by: integer,
+     *              date_created: date,
+     *              org_id: integer
      * </code>
      */
     public function getList()
     {
         $params = $this->params()->fromQuery();
-        $result = $this->dataSourceService->getDataSourceList($params);
+        $result = $this->visualizationService->getVisualizationList($params);
         if ($result == 0) {
             return $this->getErrorResponse("No records found",404);
         }
