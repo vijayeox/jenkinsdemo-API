@@ -26,6 +26,16 @@ class RoleService extends AbstractService {
     }
 
     public function saveRole($roleId,&$data){
+        if(isset($roleId)){
+            $obj = $this->table->getByUuid($roleId,array());
+            if(isset($obj)){
+                $roleId = $obj->id;
+            }else{
+                return 0;
+            }
+        }else{
+            $roleId = NULL;
+        }
         $rolename=$data['name'];
         $org_id = isset($data['org_id']) ? $data['org_id'] : AuthContext::get(AuthConstants::ORG_ID);
         $data['description'] = isset($data['description'])?$data['description']:'';
@@ -38,7 +48,7 @@ class RoleService extends AbstractService {
                 $result1 = $this->runGenericQuery($update);
                 $update = "UPDATE `ox_role` SET `description`= '".$data['description']."' WHERE `id` = '".$roleId."' AND org_id = ".$org_id ;
                 $result1 = $this->runGenericQuery($update);
-                $count = $result1->getAffectedRows(); 
+                $count = $result1->getAffectedRows() + 1; 
             }else{
                 $data['uuid'] = Uuid::uuid4()->toString(); 
                 $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`org_id`)
@@ -50,6 +60,7 @@ class RoleService extends AbstractService {
                     $data['id'] = $roleId;
                 }
             }
+
             if($count > 0){
                 $this->updateRolePrivileges($roleId, $data['privileges']);
                 $this->commit();
@@ -66,6 +77,7 @@ class RoleService extends AbstractService {
     }
 
     protected function updateRolePrivileges($roleId, &$privileges) {
+        // $privileges = json_decode($privileges,true);
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
         try{
             $delete = "DELETE from `ox_role_privilege` where role_id =".$roleId."";

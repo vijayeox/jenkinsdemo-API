@@ -197,9 +197,9 @@ class RoleControllerTest extends ControllerTest {
             'privileges'=> json_encode(array(['id' => '1','privilege_name' => 'MANAGE_ANNOUNCEMENT','permission' => '15'],['id'=>'14','privilege_name'=> 'MANAGE_FORM','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'3'])));
          $this->setJsonContent(json_encode($data));
         $this->dispatch('/role/53012471-2863', 'PUT',$data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'success');
     }
 
 
@@ -209,9 +209,9 @@ class RoleControllerTest extends ControllerTest {
             'privileges'=> json_encode(array(['privilege_name' => 'MANAGE_FILE','permission' => '15'],['privilege_name'=> 'MANAGE_MAIL','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'15'])));
          $this->setJsonContent(json_encode($data));
         $this->dispatch('/role/53012471-2863', 'PUT',$data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'success');
     }
 
     public function testCreateWithExisitingRole(){
@@ -258,10 +258,10 @@ class RoleControllerTest extends ControllerTest {
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/role/53012471-2863', 'PUT', null);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'success');
     }
 
     public function testUpdateRestricted() {
