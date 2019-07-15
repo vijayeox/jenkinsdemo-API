@@ -302,9 +302,10 @@ class OrganizationService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_organization')
-            ->columns(array("*"))
+            ->columns(array('uuid','name','address','city','state','country','zip','logo','preferences','contactid'))
             ->where(array('ox_organization.uuid' => $id, 'status' => "Active"));
         $response = $this->executeQuery($select)->toArray();
+
         if (count($response) == 0) {
             return 0;
         }else{
@@ -364,7 +365,7 @@ class OrganizationService extends AbstractService
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(id)'];
-            $query ="SELECT * FROM `ox_organization`".$where." ".$sort." ".$limit;
+            $query ="SELECT uuid,name,address,city,state,country,zip,logo,preferences,contactid FROM `ox_organization`".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query)->toArray();
 
             for($x=0;$x<sizeof($resultSet);$x++) {

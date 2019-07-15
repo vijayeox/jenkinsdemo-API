@@ -135,7 +135,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     }
 
 
-    protected function getSuccessResponseDataWithPagination(array $data,$total,$code = 200){
+    protected function getSuccessResponseDataWithPagination(array $data = null,$total,$code = 200){
         return $this->getSuccessResponse(null, $code, $data,$total);
     }
 
