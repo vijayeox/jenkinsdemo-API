@@ -69,7 +69,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper {
         $file = "nonexistant_file";
         if(isset($params['username'])){
             $userInfo = $this->userService->getUserContextDetails($params['username']);
-            $file = $this->profilepictureService->getProfilePicturePath($userInfo['uuid']);
+            $file = $this->profilepictureService->getProfilePicturePath($userInfo['user_uuid']);
         }
         if(FileUtils::fileExists($file) != 1){
              $file = $this->profilepictureService->getProfilePicturePath(null);
