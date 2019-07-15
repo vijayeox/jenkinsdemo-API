@@ -451,7 +451,7 @@ class UserService extends AbstractService
             ->columns(array("uuid"))
             ->where(array('ox_user.id' => $result['managerid']  ));
         $responseUUID = $this->executeQuery($getManagerUUID)->toArray();
-        if(isset($responseUUID)){
+        if(isset($responseUUID) && sizeof($responseUUID) > 0){
             $result['managerid'] = $responseUUID[0]['uuid'];
         } else {
             $result['managerid'] = 0;
