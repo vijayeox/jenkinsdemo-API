@@ -411,7 +411,7 @@ class UserController extends AbstractApiController
         $confirmPassword = md5(sha1($data['confirm_password']));
         if (($oldPassword == $userDetail['password']) && ($newPassword == $confirmPassword)) {
             $formData = array( 'password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null);
-            $result = $this->update($userId, $formData);
+            $result = $this->update($userDetail['uuid'], $formData);
             return $this->getSuccessResponse("Password changed successfully!");
         } else if(($oldPassword != $userDetail['password'])){
             $response = ['id' => $userId];
