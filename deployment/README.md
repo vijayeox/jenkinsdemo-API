@@ -359,6 +359,17 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 <h5>sudo chown www-data:www-data -R /var/lib/oxzion/rainloop</h5>
 
 ---
+>For Calendar App
+<h5>sudo mkdir -p /var/lib/oxzion/calendar</h5>
+
+<h5>sudo mkdir -p /var/www/calendar</h5>
+
+<h5>sudo ln -s /var/lib/oxzion/calendar /var/www/calendar/uploads</h5>
+
+<h5>sudo chown www-data:www-data -R /var/www/calendar</h5>
+
+<h5>sudo chown www-data:www-data -R /var/lib/oxzion/calendar</h5>
+
 >For Crm App
 
 <h5>sudo mkdir -p /var/www/crm</h5>
