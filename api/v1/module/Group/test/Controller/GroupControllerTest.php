@@ -330,7 +330,7 @@ class GroupControllerTest extends ControllerTest {
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->adminUser)),'USERTOGROUP_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->employeeUser)),'USERTOGROUP_ADDED')->once()->andReturn();
         }
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"}]')); 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -339,7 +339,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testsaveuserByManagerWithDifferentOrgId() {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":2},{"id":3}]','org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46')); 
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"}]','org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46')); 
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('saveusers');
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -350,7 +350,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testsaveuserByManager() {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"}]')); 
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('saveusers');
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -360,7 +360,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testsaveuserByEmployee() {
         $this->initAuthToken($this->employeeUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":2},{"id":3}]')); 
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"}]')); 
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('Group');
         $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
@@ -388,7 +388,7 @@ class GroupControllerTest extends ControllerTest {
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/group/1/save','POST',array('userid' => '[{"id":1},{"id":2},{"id":23}]')); 
+        $this->dispatch('/group/1/save','POST',array('userid' => '[{"id":"4fd99e8e-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd99e8e-758f-11e9-b2d5"}]')); 
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);

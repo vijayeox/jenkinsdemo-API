@@ -399,6 +399,13 @@ class OrganizationService extends AbstractService
         return 0;
     }
 
+    public function getUserIdList($uuidList){
+        $uuidList= array_unique(array_map('current', $uuidList));
+        $query = "SELECT id from ox_user where uuid in ('".implode("','", $uuidList) . "')";
+        $result = $this->executeQueryWithParams($query)->toArray();
+        return $result; 
+    }
+
 
     public function saveUser($id,$data){
 
@@ -410,7 +417,8 @@ class OrganizationService extends AbstractService
             return 2;
         }
         $orgId = $obj->id;
-        $userArray=json_decode($data['userid'],true);
+        $userUuidList=json_decode($data['userid'],true);
+        $userArray = $this->getUserIdList($userUuidList);
         if($userArray){
             $userSingleArray= array_unique(array_map('current', $userArray));
 

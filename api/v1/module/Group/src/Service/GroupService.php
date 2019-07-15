@@ -404,8 +404,10 @@ class GroupService extends AbstractService {
         if(!isset($data['userid']) || empty($data['userid'])) {
             return 2;
         }
+       
+        $userUuidList=json_decode($data['userid'],true);
+        $userArray = $this->organizationService->getUserIdList($userUuidList);
 
-        $userArray=json_decode($data['userid'],true);
         $group_id = $obj->id;
 
         if($userArray){

@@ -346,11 +346,12 @@ class ProjectService extends AbstractService {
         if(!isset($data['userid']) || empty($data['userid'])) {
             return 2;
         }
-    	$userArray=json_decode($data['userid'],true);
+    	
+        $userUuidList=json_decode($data['userid'],true);
+        $userArray = $this->organizationService->getUserIdList($userUuidList);
 
-        $selectid = "SELECT id from ox_project where uuid = '".$id."'";
-        $projectId = $this->executeQuerywithParams($selectid)->toArray();
-        $projectId = $projectId[0]['id'];
+
+        $projectId = $obj->id;
 
         if($userArray){
             $userSingleArray= array_map('current', $userArray);
