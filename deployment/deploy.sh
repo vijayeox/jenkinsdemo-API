@@ -51,7 +51,7 @@ api()
         #making the directory where api will be copied.
         #moving to temp directory and copying required
         cd ${TEMP}
-        rsync -rl --delete api/v1/data/uploads/ /var/www/api/data/uploads/
+        rsync -rl api/v1/data/uploads/ /var/www/api/data/uploads/
         rm -R api/v1/data/uploads
         rm -R api/v1/data/cache
         rm -R api/v1/logs
@@ -100,7 +100,9 @@ calendar()
         echo -e "${RED}CALENDAR was not packaged so skipping it\n${RESET}"
     else
         cd ${TEMP}
+        rm -R integrations/eventcalendar/uploads
         rsync -rl --delete integrations/eventcalendar/ /var/www/calendar/
+        ln -s /var/lib/oxzion/calendar /var/www/calendar/uploads
         chown www-data:www-data -R /var/www/calendar
         echo -e "${GREEN}Copying EventCalendar Complete!${RESET}"
     fi
@@ -119,7 +121,10 @@ mattermost()
         echo -e "${YELLOW}Stopped!${RESET}"
         cd ${TEMP}
         rm -R integrations/mattermost/logs
+        rm -R integrations/mattermost/data
         rsync -rl --delete integrations/mattermost/ /opt/oxzion/mattermost/
+        ln -s /var/lib/oxzion/chat /opt/oxzion/mattermost/data
+        ln -s /var/log/oxzion/chat /opt/oxzion/mattermost/logs
         chown oxzion:oxzion -R /opt/oxzion/mattermost
         echo -e "${GREEN}Copying Mattermost Complete!${RESET}"
         echo -e "${GREEN}Starting Mattermost service${RESET}"
@@ -167,9 +172,10 @@ rainloop()
         echo -e "${RED}RAINLOOP was not packaged so skipping it\n${RESET}"
     else
         cd ${TEMP}
-        rsync -rl --delete integrations/rainloop/data/ /var/www/rainloop/data/
+        rsync -rl integrations/rainloop/data/ /var/www/rainloop/data/
         rm -R integrations/rainloop/data
         rsync -rl --delete integrations/rainloop/ /var/www/rainloop/
+        ln -s /var/lib/oxzion/rainloop /var/www/rainloop/data
         chown www-data:www-data -R /var/www/rainloop
         chown www-data:www-data -R /var/lib/oxzion/rainloop
         echo -e "${GREEN}Copying Rainloop Complete!${RESET}"
