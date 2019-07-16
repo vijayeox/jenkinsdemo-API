@@ -50,10 +50,20 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    public function testCreate()
+    private function executeQueryTest($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        return $resultSet->toArray();
+    }
+
+    public function testCreateByAdmin()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male'];
+        $role = array('id' => '343db64a-a71d-11e9-b648-68ecc57cde45','id' => '343db567-a71d-11e9-b648-68ecc57cde45');
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '50873baa-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873bf0-a6c2-11e9-b648-68ecc57cde45'])];
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -64,10 +74,95 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
+
+        $query = "SELECT id from ox_user where username = '" .$data['username']."'";
+        $userId = $this->executeQueryTest($query);
+
+        $query = "SELECT * from ox_user_org where user_id = ".$userId[0]['id'];
+        $userOrg = $this->executeQueryTest($query);
+
+        $query = "SELECT * from ox_user_role where user_id = ".$userId[0]['id'];
+        $userRole = $this->executeQueryTest($query);
+
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content['data']['id']);
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
+        $this->assertEquals($userOrg[0]['user_id'], $userId[0]['id']);
+        $this->assertEquals($userOrg[0]['org_id'],1);
+        $this->assertEquals($userRole[0]['user_id'], $userId[0]['id']);
+        $this->assertEquals($userRole[0]['role_id'], 5);
+        $this->assertEquals($userRole[1]['role_id'], 6);
+    }
+
+
+    public function testCreateWithRoleOfOtherOrg()
+    {
+        $this->initAuthToken($this->adminUser);
+        $role = array('id' => '343db64a-a71d-11e9-b648-68ecc57cde45','id' => '343db567-a71d-11e9-b648-68ecc57cde45');
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '508572ae-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873a47-a6c2-11e9-b648-68ecc57cde45'])];
+        $this->setJsonContent(json_encode($data));
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'USER_ADDED')->once()->andReturn();
+        }
+        $this->dispatch('/user', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+
+        $query = "SELECT id from ox_user where username = '" .$data['username']."'";
+        $userId = $this->executeQueryTest($query);
+
+        $query = "SELECT * from ox_user_org where user_id = ".$userId[0]['id'];
+        $userOrg = $this->executeQueryTest($query);
+
+        $query = "SELECT * from ox_user_role where user_id = ".$userId[0]['id'];
+        $userRole = $this->executeQueryTest($query);
+
+        $this->assertEquals($content['status'], 'success');
+        $this->assertNotEmpty($content['data']['id']);
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['status'], $data['status']);
+        $this->assertEquals($userOrg[0]['user_id'], $userId[0]['id']);
+        $this->assertEquals($userOrg[0]['org_id'],1);
+        $this->assertEquals(count($userRole),0);
+    }
+
+    public function testCreateWithoutRole()
+    {
+        $this->initAuthToken($this->adminUser);
+        $role = array('id' => '343db64a-a71d-11e9-b648-68ecc57cde45','id' => '343db567-a71d-11e9-b648-68ecc57cde45');
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'User should be assigned to atleast one role');
+    }
+
+
+    public function testCreateByEmployee()
+    {
+        $this->initAuthToken($this->employeeUser);
+        $role = array('id' => '343db64a-a71d-11e9-b648-68ecc57cde45','id' => '343db567-a71d-11e9-b648-68ecc57cde45');
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '50873baa-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873bf0-a6c2-11e9-b648-68ecc57cde45'])];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user', 'POST', $data);
+        $this->assertResponseStatusCode(401);
+         $this->assertModuleName('User');
+        $this->assertControllerName(UserController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('UserController');
+        $this->assertMatchedRouteName('user');
+               $this->assertResponseHeaderContains('content-type', 'application/json');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'You have no Access to this API');
     }
 
     
@@ -81,11 +176,11 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 5);
-        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
-        $this->assertEquals($content['data'][2]['id'], 5);
+        $this->assertEquals($content['data'][2]['uuid'], 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a');
         $this->assertEquals($content['data'][2]['name'], 'rakesh kumar');
         $this->assertEquals($content['total'],5);
     }
@@ -100,9 +195,9 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
-         $this->assertEquals($content['data'][0]['id'], 4);
+         $this->assertEquals($content['data'][0]['uuid'], '768d1fb9-de9c-46c3-8d5c-23e0e484ce2e');
         $this->assertEquals($content['data'][0]['name'], 'rohan kumar');
-        $this->assertEquals($content['data'][1]['id'], 3);
+        $this->assertEquals($content['data'][1]['uuid'], '4fd9f04d-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
         $this->assertEquals($content['total'],5);
     }
@@ -117,7 +212,7 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['id'], 5);
+        $this->assertEquals($content['data'][0]['uuid'], 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a');
         $this->assertEquals($content['data'][0]['name'], 'rakesh kumar');
         $this->assertEquals($content['total'],5);
     }
@@ -132,7 +227,7 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'],1);
     }
@@ -148,7 +243,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         // print_r($content);
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
         $this->assertEquals($content['total'],1);
     }
@@ -163,7 +258,7 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
-         $this->assertEquals($content['data'][0]['id'], 1);
+         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
         $this->assertEquals($content['total'],5);
     }
@@ -177,9 +272,9 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
-        $this->assertEquals($content['data'][1]['id'], 5);
+        $this->assertEquals($content['data'][1]['uuid'], 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a');
         $this->assertEquals($content['data'][1]['name'], 'rakesh kumar');
         $this->assertEquals($content['total'], 5);
     }
@@ -219,6 +314,31 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], $data['name']);
+    }
+
+    public function testUpdateWithRole()
+    {
+        $data = ['name' => 'John Holt','role' => array(['id' => '50873baa-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873bf0-a6c2-11e9-b648-68ecc57cde45'])];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+
+        $query = "SELECT id from ox_user where name = '" .$data['name']."'";
+        $userId = $this->executeQueryTest($query);
+
+        $query = "SELECT * from ox_user_role where user_id = ".$userId[0]['id'];
+        $userRole = $this->executeQueryTest($query);
+
+
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($userRole[0]['user_id'], $userId[0]['id']);
+        $this->assertEquals($userRole[0]['role_id'], 5);
+        $this->assertEquals($userRole[1]['role_id'], 6);
     }
 
     public function testUpdateNotFound()
@@ -627,5 +747,4 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['firstname'], $data['firstname']);
         $this->assertEquals($content['data']['lastname'], $data['lastname']);
     }
-
 }
