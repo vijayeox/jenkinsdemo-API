@@ -22,17 +22,6 @@ return [
                     ],
                 ],
             ],
-            'singleSignOn' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/sso',
-                    'defaults' => [
-                        'controller' => Controller\AuthController::class,
-                        'action' => 'sso',
-                        'method' => 'post'
-                    ],
-                ],
-            ],
             'auth' => [
                 'type'    => Literal::class,
                 'options' => [

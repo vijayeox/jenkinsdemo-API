@@ -135,7 +135,7 @@ class AuthController extends AbstractApiControllerHelper
         $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
         $jwt = $this->generateJwtToken($dataJwt);
         if($refreshToken != 0){
-            return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken]);
+            return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken,'username'=>$userName]);
         } else {
             return $this->getErrorResponse("Login Error", 405, array());
         }
@@ -196,19 +196,6 @@ class AuthController extends AbstractApiControllerHelper
             }
 
         } catch (Exception $e) {
-            return $this->getErrorResponse("Something went wrong", 404);
-        }
-    }
-
-    public function ssoAction() {
-        $data = $this->request->getPost()->toArray();
-        try{
-            if(isset($data["uname"])) {
-                $username = base64_decode($data["uname"]);
-                return $this->getJwt($username, $this->userService->getUserOrg($username));
-            }
-        }
-        catch(Exception $e) {
             return $this->getErrorResponse("Something went wrong", 404);
         }
     }
