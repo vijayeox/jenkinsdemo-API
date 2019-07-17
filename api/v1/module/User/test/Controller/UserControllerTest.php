@@ -131,22 +131,6 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals(count($userRole),0);
     }
 
-    public function testCreateWithoutRole()
-    {
-        $this->initAuthToken($this->adminUser);
-        $role = array('id' => '343db64a-a71d-11e9-b648-68ecc57cde45','id' => '343db567-a71d-11e9-b648-68ecc57cde45');
-        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user', 'POST', $data);
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'User should be assigned to atleast one role');
-    }
-
-
     public function testCreateByEmployee()
     {
         $this->initAuthToken($this->employeeUser);

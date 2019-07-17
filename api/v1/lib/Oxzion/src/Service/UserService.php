@@ -166,10 +166,9 @@ class UserService extends AbstractService
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
             $this->addUserToOrg($form->id, $form->orgid);
-            if(!isset($data['role'])){
-                return 2;
+            if(isset($data['role'])){
+                $this->addRoleToUser($data['uuid'],$data['role'],$form->orgid);
             }
-            $this->addRoleToUser($data['uuid'],$data['role'],$form->orgid);
             // $this->emailService->sendUserEmail($form);
             // // Code to add the user information to the Elastic Search Index
             // $result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
@@ -275,7 +274,8 @@ class UserService extends AbstractService
             $result = $this->createUser($data);
             $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
-            $this->addUserRole($data['id'], 'ADMIN');
+            $this->addUserRole($resultSet[0]['id'], 'ADMIN');
+
             $this->commit();
         }
         catch(Exception $e){

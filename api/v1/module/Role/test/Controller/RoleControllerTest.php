@@ -37,14 +37,14 @@ class RoleControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(3, count($content['data']));
+        $this->assertEquals(5, count($content['data']));
         $this->assertEquals($content['data'][0]['id'], 4);
         $this->assertEquals($content['data'][0]['name'], 'ADMIN');
         $this->assertEquals($content['data'][1]['id'], 6);
         $this->assertEquals($content['data'][1]['name'], 'EMPLOYEE');
-        $this->assertEquals($content['data'][2]['id'], 5);
-        $this->assertEquals($content['data'][2]['name'], 'MANAGER');
-        $this->assertEquals($content['total'],3);
+        $this->assertEquals($content['data'][2]['id'], 17);
+        $this->assertEquals($content['data'][2]['name'], 'EMPLOYEE-2');
+        $this->assertEquals($content['total'],5);
     }
 
     public function testGetListWithQuery(){
@@ -70,7 +70,7 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['id'], 6);
         $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
-        $this->assertEquals($content['total'], 3);
+        $this->assertEquals($content['total'], 5);
     }
 
     public function testGetListWithQuerySort(){
@@ -83,7 +83,7 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['id'], 6);
         $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
-        $this->assertEquals($content['total'], 3);
+        $this->assertEquals($content['total'], 5);
     }
 
     public function testRolePrivilege(){
