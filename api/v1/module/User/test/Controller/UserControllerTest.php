@@ -38,6 +38,7 @@ class UserControllerTest extends ControllerTest
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/User.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../Project/test/Dataset/Project.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../Group/test/Dataset/Group.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Role/test/Dataset/Role.yml");
         return $dataset;
     }
 
@@ -63,7 +64,7 @@ class UserControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $role = array('id' => '343db64a-a71d-11e9-b648-68ecc57cde45','id' => '343db567-a71d-11e9-b648-68ecc57cde45');
-        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '50873baa-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873bf0-a6c2-11e9-b648-68ecc57cde45'])];
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -91,8 +92,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($userOrg[0]['user_id'], $userId[0]['id']);
         $this->assertEquals($userOrg[0]['org_id'],1);
         $this->assertEquals($userRole[0]['user_id'], $userId[0]['id']);
-        $this->assertEquals($userRole[0]['role_id'], 5);
-        $this->assertEquals($userRole[1]['role_id'], 6);
+        $this->assertEquals($userRole[0]['role_id'], 16);
+        $this->assertEquals($userRole[1]['role_id'], 17);
     }
 
 
@@ -318,7 +319,7 @@ class UserControllerTest extends ControllerTest
 
     public function testUpdateWithRole()
     {
-        $data = ['name' => 'John Holt','role' => array(['id' => '50873baa-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873bf0-a6c2-11e9-b648-68ecc57cde45'])];
+        $data = ['name' => 'John Holt','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
@@ -337,8 +338,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($userRole[0]['user_id'], $userId[0]['id']);
-        $this->assertEquals($userRole[0]['role_id'], 5);
-        $this->assertEquals($userRole[1]['role_id'], 6);
+        $this->assertEquals($userRole[0]['role_id'], 16);
+        $this->assertEquals($userRole[1]['role_id'], 17);
     }
 
     public function testUpdateNotFound()
