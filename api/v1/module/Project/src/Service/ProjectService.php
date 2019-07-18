@@ -163,9 +163,10 @@ class ProjectService extends AbstractService {
             return 0;
         }
         $insert = $sql->insert('ox_user_project');
-        $data = array('user_id' => $data['manager_id'], 'project_id' => $data['id']);
-        $insert->values($data);
-        $this->messageProducer->sendTopic(json_encode(array('orgname'=>  $org['name'],'projectname' => $data['name'],'description' => $data['description'],'uuid' => $data['uuid'])),'PROJECT_ADDED');
+        $insert_data = array('user_id' => $data['manager_id'], 'project_id' => $data['id']);
+        $insert->values($insert_data);
+        if(isset($data['name']))
+            $this->messageProducer->sendTopic(json_encode(array('orgname'=>  $org['name'],'projectname' => $data['name'],'description' => $data['description'],'uuid' => $data['uuid'])),'PROJECT_ADDED');
         return $count;
     }
 
