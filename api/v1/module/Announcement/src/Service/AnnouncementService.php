@@ -9,7 +9,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
 
 /**
@@ -47,7 +47,7 @@ class AnnouncementService extends AbstractService{
     */
     public function createAnnouncement(&$data){
         $form = new Announcement();
-        $data['uuid'] = Uuid::uuid4()->toString();
+        $data['uuid'] = UuidUtil::uuid();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['start_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d');

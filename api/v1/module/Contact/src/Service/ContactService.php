@@ -9,7 +9,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\UserService;
 
@@ -42,7 +42,7 @@ class ContactService extends AbstractService
             $data['user_id'] = NULL;
         }
         unset($data['uuid']);
-        $data['uuid'] = Uuid::uuid4()->toString();
+        $data['uuid'] = UuidUtil::uuid();
         $data['user_id'] = (isset($data['user_id'])) ? $data['user_id'] : null;
         $data['icon_type'] = (isset($data['icon_type'])) ? $data['icon_type'] : FALSE; 
         $data['owner_id'] = (isset($data['owner_id'])) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);

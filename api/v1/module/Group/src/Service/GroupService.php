@@ -13,7 +13,7 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\OrganizationService;
 use Zend\Log\Logger;
 use Oxzion\Utils\FileUtils;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
@@ -108,7 +108,7 @@ class GroupService extends AbstractService {
             $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         }
         $form = new Group();
-        $data['uuid'] = Uuid::uuid4()->toString();   
+        $data['uuid'] = UuidUtil::uuid();   
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";

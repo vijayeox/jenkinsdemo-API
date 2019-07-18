@@ -12,7 +12,7 @@ use Oxzion\Service\EmailService;
 use Oxzion\Service\EmailTemplateService;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Search\Elastic\IndexerImpl;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
 
 class UserService extends AbstractService
@@ -140,7 +140,7 @@ class UserService extends AbstractService
         }else{
             
         }
-        $data['uuid'] = Uuid::uuid4()->toString();
+        $data['uuid'] = UuidUtil::uuid();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $password = BosUtils::randomPassword();

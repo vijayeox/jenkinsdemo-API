@@ -9,7 +9,7 @@ use Oxzion\Model\Organization;
 use Oxzion\Model\OrganizationTable;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Utils\FileUtils;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Security\SecurityManager;
 use Oxzion\AccessDeniedException;
@@ -61,7 +61,7 @@ class OrganizationService extends AbstractService
      */
     public function createOrganization(&$data,$files)
     {
-        $data['uuid'] = Uuid::uuid4()->toString();  
+        $data['uuid'] = UuidUtil::uuid();  
         $data['contact'] = json_decode($data['contact'],true);    
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);

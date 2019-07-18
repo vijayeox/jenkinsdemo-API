@@ -7,7 +7,7 @@ use Oxzion\Model\Role;
 use Oxzion\Model\RoleTable;
 use Oxzion\Model\PrivilegeTable;
 use Oxzion\Service\AbstractService;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Exception;
 use Oxzion\Utils\FilterUtils;
 
@@ -50,7 +50,7 @@ class RoleService extends AbstractService {
                 $result1 = $this->runGenericQuery($update);
                 $count = $result1->getAffectedRows() + 1; 
             }else{
-                $data['uuid'] = Uuid::uuid4()->toString(); 
+                $data['uuid'] = UuidUtil::uuid(); 
                 $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`org_id`)
                  VALUES ('".$rolename."','".$data['description']."','".$data['uuid']."',".$org_id.")";
                 $result1 = $this->runGenericQuery($insert);

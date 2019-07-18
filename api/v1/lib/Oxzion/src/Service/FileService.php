@@ -6,7 +6,7 @@ use Oxzion\Model\File;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Exception;
 
 class FileService extends AbstractService{
@@ -40,7 +40,7 @@ class FileService extends AbstractService{
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['uuid'] = Uuid::uuid4()->toString();
+        $data['uuid'] = UuidUtil::uuid();
         $file = new File();
         $file->exchangeArray($data);
         $file->validate();
