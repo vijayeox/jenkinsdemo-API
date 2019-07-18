@@ -109,7 +109,7 @@ class OrganizationService extends AbstractService
         if(isset($id)){
             $folder = $folder.$id."/";
         }
-
+        
         if($ensureDir && !file_exists($folder)){
             FileUtils::createDirectory($folder);
         }

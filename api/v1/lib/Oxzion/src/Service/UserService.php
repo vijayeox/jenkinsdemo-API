@@ -208,20 +208,11 @@ class UserService extends AbstractService
 
                 $result = $this->executeQuerywithParams($delete);
               
-                $select = "SELECT ".$userId.",oro.id from ox_role as oro LEFT OUTER JOIN ox_user_role as our on oro.id = our.role_id and our.user_id = ".$userId." where oro.uuid in ('".implode("','", $roleSingleArray)."') and oro.org_id = ".$orgId." and our.user_id is null";
-                $result = $this->executeQuerywithParams($select)->toArray();
-
-
+                
                 $query ="Insert into ox_user_role(user_id,role_id) SELECT ".$userId.",oro.id from ox_role as oro LEFT OUTER JOIN ox_user_role as our on oro.id = our.role_id and our.user_id = ".$userId." where oro.uuid in ('".implode("','", $roleSingleArray)."') and oro.org_id = ".$orgId." and our.user_id is null";
 
                
                 $resultInsert = $this->runGenericQuery($query);
-
-                $count = $resultInsert->getAffectedRows();
-
-                if($count <= 0){
-                    return 0;
-                }
             }
             catch(Exception $e){
                 throw $e;

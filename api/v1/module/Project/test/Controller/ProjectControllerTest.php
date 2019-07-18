@@ -483,9 +483,9 @@ class ProjectControllerTest extends ControllerTest {
     	$content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'], 2);
     }
@@ -510,7 +510,7 @@ class ProjectControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'],1);
     }
@@ -523,7 +523,7 @@ class ProjectControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'], 2);
     }
@@ -536,7 +536,7 @@ class ProjectControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'], 1);
     }
