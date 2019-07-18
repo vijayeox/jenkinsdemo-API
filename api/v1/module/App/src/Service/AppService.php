@@ -8,7 +8,7 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
 use Exception;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\YMLUtils;
 use Oxzion\Utils\ZipUtils;
@@ -250,7 +250,7 @@ class AppService extends AbstractService
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['status'] = App::PUBLISHED;
-        $data['uuid'] = Uuid::uuid4()->toString();
+        $data['uuid'] = UuidUtil::uuid();
 		if(!isset($data['org_id'])){
             return 0;
         }
@@ -425,7 +425,7 @@ class AppService extends AbstractService
                     $data['date_created'] = date('Y-m-d H:i:s');
                     $data['status'] = App::PUBLISHED;
                     $data['type'] = App::PRE_BUILT;
-                    $data['uuid'] = Uuid::uuid4()->toString();
+                    $data['uuid'] = UuidUtil::uuid();
                     $form->exchangeArray($data);
                     $form->validate();
                     $count += $this->table->save($form);

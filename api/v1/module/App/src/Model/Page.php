@@ -8,7 +8,8 @@ use Oxzion\ValidationException;
 class Page extends Entity {
     
     protected $data = array(
-        'id' => 0,  
+        'id' => 0,
+        'uuid' => 0,  
         'name' => NULL,  
         'app_id' => 0,
         'form_id' => 0,

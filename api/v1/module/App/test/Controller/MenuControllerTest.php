@@ -70,7 +70,7 @@ class MenuItemControllerTest extends ControllerTest{
 
     public function testCreate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'menu3','app_id'=>1,'required'=>1];
+        $data = ['name' => 'menu4','app_id'=>1,'required'=>1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/99/menu', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -89,7 +89,7 @@ class MenuItemControllerTest extends ControllerTest{
 
     public function testCreateFailure(){
         $this->initAuthToken($this->adminUser);
-        $data = ['required'=>1,'sequence'=>1];
+        $data = ['required'=>1,'title' => 'menu4','sequence'=>1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/99/menu', 'POST', null);
         $this->assertResponseStatusCode(404);
@@ -106,7 +106,7 @@ class MenuItemControllerTest extends ControllerTest{
 
     public function testUpdate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['id'=>2,'name' => 'menu23','app_id' => 99,'required'=> 0, 'sequence' => 2,'type'=>'Page'];
+        $data = ['id'=>2,'title' => 'menu32','name' => 'menu23','app_id' => 99,'required'=> 0, 'sequence' => 2,'type'=>'Page'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/99/menu/2', 'PUT', null);
         $this->assertResponseStatusCode(200);
@@ -124,7 +124,7 @@ class MenuItemControllerTest extends ControllerTest{
 
     public function testUpdateNotFound(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Sample2', 'text' => 'Sample 2 Description'];
+        $data = ['name' => 'Sample2','title' => 'menu32', 'text' => 'Sample 2 Description'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/99/menu/122', 'PUT', null);
         $this->assertResponseStatusCode(404);

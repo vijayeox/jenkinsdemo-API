@@ -8,6 +8,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
+use Oxzion\Utils\UuidUtil;
 use Exception;
 
 class MenuItemService extends AbstractService{
@@ -18,6 +19,7 @@ class MenuItemService extends AbstractService{
     }
     public function saveMenuItem($appId,&$data){
         $MenuItem = new MenuItem();
+        $data['uuid'] = UuidUtil::uuid();
         $data['app_id'] = $appId;
         if(!isset($data['id'])){
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);

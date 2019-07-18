@@ -8,6 +8,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
+use Oxzion\Utils\UuidUtil;
 use Exception;
 
 class PageService extends AbstractService{
@@ -19,6 +20,7 @@ class PageService extends AbstractService{
     public function savePage($appId,&$data){
         $page = new Page();
         $data['app_id'] = $appId;
+        $data['uuid'] = UuidUtil::uuid();
         if(!isset($data['id'])){
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');

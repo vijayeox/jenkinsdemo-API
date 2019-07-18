@@ -19,7 +19,7 @@ class App extends Entity {
 
     protected $data = array(
         'id' => 0,  
-        'name' => NULL,  
+        'name' => NULL,
         'uuid' => 0,
         'description' => NULL,
         'type' => NULL,  
