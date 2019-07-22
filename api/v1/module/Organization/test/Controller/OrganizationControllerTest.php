@@ -319,7 +319,10 @@ class OrganizationControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $uuid = "53012471-2863-4949-afb1-e69b0891c98a";
 
-        $this->dispatch('/organization/'.$uuid.'/save', 'POST',array('userid' => '[{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"}]'));
+
+        $data = ['userid' => array(['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
+
+        $this->dispatch('/organization/'.$uuid.'/save', 'POST',$data);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
@@ -355,7 +358,9 @@ class OrganizationControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $uuid = "53012471-2863-4949-afb1-e69b0891c98a";
 
-        $this->dispatch('/organization/'.$uuid.'/save', 'POST',array('userid' => '[{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"},{"id":"fbde2453-17eb-4d7f-909a-0fccc6d53e7a"}]'));
+        $data = ['userid' => array(['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'],['uuid' => 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a'])];
+
+        $this->dispatch('/organization/'.$uuid.'/save', 'POST', $data);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
@@ -393,7 +398,9 @@ class OrganizationControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $uuid = "53012471-2863-4949-afb1-e69b0891c98a";
 
-        $this->dispatch('/organization/'.$uuid.'/save', 'POST',array('userid' => '[{"id":"4fd99e8e-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"768d1fb9-de9c-46c3-8d5c-23e0e484ce2e"},{"id":"fbde2453-17eb-4d7f-909a-0fccc6d53e7a"}]'));
+        $data = ['userid' => array(['uuid' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'],['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['uuid' => '768d1fb9-de9c-46c3-8d5c-23e0e484ce2e'],['uuid' => 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a'])];
+
+        $this->dispatch('/organization/'.$uuid.'/save', 'POST', $data);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
@@ -432,10 +439,12 @@ class OrganizationControllerTest extends ControllerTest
     public function testToDeleteContactUserFromOrg()
     {
         $this->initAuthToken($this->adminUser);
+        $data = ['userid' => array(['uuid' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'])];
+
         $uuid = "b6499a34-c100-4e41-bece-5822adca3844";
         $update = "update ox_organization set contactid = 6 where id = 3";
         $orgResult = $this->executeUpdate($update);
-        $this->dispatch('/organization/'.$uuid.'/save', 'POST',array('userid' => '[{"id":"4fd99e8e-758f-11e9-b2d5-68ecc57cde45"}]'));
+        $this->dispatch('/organization/'.$uuid.'/save', 'POST',$data);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Sample Organization', 'status' => 'Active', 'username' => 'abc134')),'USERTOORGANIZATION_DELETED')->once()->andReturn();
@@ -467,7 +476,9 @@ class OrganizationControllerTest extends ControllerTest
     public function testAddUserToOrganizationWithDifferentUser()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/save', 'POST',array('userid' => '[{"id":"4fd99e8e-758f-11e9-b2d5"},{"id":"4fd99e8e68ecc57cde45"}]'));
+        $data = ['userid' => array(['uuid' => '4fd99e8e-758f-11e9-b2d5'],['uuid' => '4fd99e8e68ecc57cde4'])];
+
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/save', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts('addUserToOrganization');
         $content = json_decode($this->getResponse()->getContent(), true);

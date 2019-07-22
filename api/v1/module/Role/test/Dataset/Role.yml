@@ -20,4 +20,14 @@ ox_role:
     org_id: 1
     is_system_role: 0
     uuid: '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'
-    
+
+
+ox_role_privilege:
+  -
+    id: 111
+    role_id: 5
+    privilege_name: 'MANAGE_CRMADMIN' 
+    permission: 1
+    org_id: 1
+    app_id: 1
+  

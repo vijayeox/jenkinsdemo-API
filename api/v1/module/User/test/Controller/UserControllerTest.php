@@ -732,4 +732,37 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['firstname'], $data['firstname']);
         $this->assertEquals($content['data']['lastname'], $data['lastname']);
     }
+
+    public function testBlackListApps(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/me/bapp', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('loggedInUser');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']['blackListedApps']), 0);
+    }
+
+    public function testBlackListAppsForEmployee(){
+        $this->initAuthToken($this->employeeUser);
+        $this->dispatch('/user/me/bapp', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('loggedInUser');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['blackListedApps']['Admin'],'f297dd6a-3eb4-4e06-83ad-fb289e5c0535');
+        $this->assertEquals($content['data']['blackListedApps']['AppBuilder'],'c980e23a-ade8-4bd9-a06c-a39ca7854b9d');
+        $this->assertEquals($content['data']['blackListedApps']['CRM'],'636cb8e2-14a9-4c09-a668-14f6518b8d0d');
+    }
+
+    public function testBlackListAppsForManager(){
+        $this->initAuthToken($this->managerUser);
+        $this->dispatch('/user/me/bapp', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('loggedInUser');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['blackListedApps']['Admin'],'f297dd6a-3eb4-4e06-83ad-fb289e5c0535');
+        $this->assertEquals($content['data']['blackListedApps']['AppBuilder'],'c980e23a-ade8-4bd9-a06c-a39ca7854b9d');
+    }
 }

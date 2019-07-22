@@ -347,8 +347,7 @@ class ProjectService extends AbstractService {
             return 2;
         }
     	
-        $userUuidList=json_decode($data['userid'],true);
-        $userArray = $this->organizationService->getUserIdList($userUuidList);
+        $userArray = $this->organizationService->getUserIdList($data['userid']);
 
 
         $projectId = $obj->id;

@@ -418,8 +418,7 @@ class OrganizationService extends AbstractService
             return 2;
         }
         $orgId = $obj->id;
-        $userUuidList=json_decode($data['userid'],true);
-        $userArray = $this->getUserIdList($userUuidList);
+        $userArray = $this->getUserIdList($data['userid']);
         if($userArray){
             $userSingleArray= array_unique(array_map('current', $userArray));
 
@@ -526,7 +525,7 @@ class OrganizationService extends AbstractService
                 $offset = $filterArray[0]['skip'];            
             }
 
-            $where .= strlen($where) > 0 ? " AND ox_organization.uuid = '".$id."'" : " WHERE ox_organization.uuid = '".$id."'";
+            $where .= strlen($where) > 0 ? " AND ox_organization.uuid = '".$id."' AND ox_user.status = 'Active'" : " WHERE ox_organization.uuid = '".$id."' AND ox_user.status = 'Active'";
 
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
