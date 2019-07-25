@@ -17,9 +17,12 @@ routes {
                                                         "${callback.URL}/callback/chat/updatechannel"]],
         ['from':'activemq:topic:PROJECT_DELETED', 'to':["${callback.URL}/callback/task/deleteproject",
                                                         "${callback.URL}/callback/chat/deletechannel"]],
+
+        ['from':'activemq:topic:DELETION_USERFROMPROJECT', 'to':["${callback.URL}/callback/task/deleteuserfromtasktracker"]],
+        ['from':'activemq:topic:ADDITION_USERTOPROJECT', 'to':["${callback.URL}/callback/task/addusertotasktracker"]],
+
         ['from':'activemq:topic:USERTOPROJECT_ADDED', 'to':["${callback.URL}/callback/chat/addusertochannel"]],
         ['from':'activemq:topic:USERTOPROJECT_DELETED', 'to':["${callback.URL}/callback/chat/removeuserfromchannel"]],
-
         ['from':'activemq:topic:GROUP_ADDED', 'to':["${callback.URL}/callback/chat/createchannel"]],
         ['from':'activemq:topic:GROUP_UPDATED', 'to':["${callback.URL}/callback/chat/updatechannel"]],
         ['from':'activemq:topic:GROUP_DELETED', 'to':["${callback.URL}/callback/chat/deletechannel"]],

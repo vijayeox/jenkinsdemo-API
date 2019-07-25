@@ -12,7 +12,7 @@ use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 use Oxzion\AccessDeniedException;
 
-class ProjectController extends AbstractApiController {	
+class ProjectController extends AbstractApiController {
     /**
     * @var ProjectService Instance of Project Service
     */
@@ -23,7 +23,7 @@ class ProjectController extends AbstractApiController {
     public function __construct(ProjectTable $table, ProjectService $projectService, Logger $log, AdapterInterface $dbAdapter)
     {
     	parent::__construct($table, $log, __CLASS__, Project::class);
-    	$this->setIdentifierName('projectId');
+    	$this->setIdentifierName('projectUuid');
     	$this->projectService = $projectService;
     }
 
@@ -53,7 +53,7 @@ class ProjectController extends AbstractApiController {
     public function create($data) {
     	try {
                  $count = $this->projectService->createProject($data);
-    	} catch(ValidationException $e) {	
+    	} catch(ValidationException $e) {
     		$response = ['data' => $data, 'errors' => $e->getErrors()];
     		return $this->getErrorResponse("Validation Errors",404, $response);
     	}
@@ -65,10 +65,10 @@ class ProjectController extends AbstractApiController {
      /**
     * Update Project API
     * @api
-    * @link /project[/:projectId]
+    * @link /project[/:projectUuid]
     * @method PUT
-    * @param array $id ID of Project to update 
-    * @param array $data 
+    * @param array $id ID of Project to update
+    * @param array $data
     * <code> status : "success|error",
     *        data : {
                     string name,
@@ -106,7 +106,7 @@ class ProjectController extends AbstractApiController {
      /**
      * GET project API
      * @api
-     * @link /project[/:projectId]
+     * @link /project[/:projectUuid]
      * @method GET
      * @param array $dataget of project
      * @return array $data
@@ -136,7 +136,7 @@ class ProjectController extends AbstractApiController {
     /**
     * Delete Project API
     * @api
-    * @link /project[/:projectId]
+    * @link /project[/:projectUuid]
     * @method DELETE
     * @param $id ID of Project to Delete
     * @return array success|failure response
@@ -178,7 +178,7 @@ class ProjectController extends AbstractApiController {
     */
     public function getList(){
         try{
-            $filterParams = $this->params()->fromQuery(); // empty method call  
+            $filterParams = $this->params()->fromQuery(); // empty method call
             $result = $this->projectService->getProjectList($filterParams);
         }
         catch(AccessDeniedException $e) {
@@ -221,7 +221,7 @@ class ProjectController extends AbstractApiController {
     /**
     * Save users in a Project API
     * @api
-    * @link /project/:projectid/save
+    * @link /project/:projectUuid/save
     * @method Post
     * @param json object of userid
     * @return array $dataget list of Projects by User
@@ -231,7 +231,7 @@ class ProjectController extends AbstractApiController {
     */
     public function saveUserAction() {
         $params = $this->params()->fromRoute();
-        $id=$params['projectId'];
+        $id=$params['projectUuid'];
         $data = $this->extractPostData();
         try {
             $count = $this->projectService->saveUser($id,$data);
@@ -253,7 +253,7 @@ class ProjectController extends AbstractApiController {
     /**
     * GET all users in a particular Project API
     * @api
-    * @link /project/:projectid/users
+    * @link /project/:projectuuid/users
     * @method GET
     * @return array $dataget list of Projects by User
     * <code>status : "success|error",
