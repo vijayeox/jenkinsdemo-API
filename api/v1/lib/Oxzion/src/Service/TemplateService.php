@@ -5,8 +5,10 @@ use Smarty;
 use Exception;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\BosUtils;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
-class EmailTemplateService extends AbstractService {
+class TemplateService extends AbstractService {
 
 	private $client;
 	private $templateName;
@@ -37,58 +39,33 @@ class EmailTemplateService extends AbstractService {
 	}
 
 	/**
-	 * Gets the templates.
-	 *
-	 * @return     array  The templates name and the template.
-	 */
-	public function getTemplates() {
-		$templates = array();
-		foreach (glob($this->client->getTemplateDir()[0]."*") as $file) {
-			if (is_file($file)) {
-				if (strpos($file, $this->templateExt) != false) {
-					$templates[basename($file)] = file_get_contents($file);
-				}
-			}
-		}
-		return $templates;
-	}
-
-	/**
 	 * Gets the template content.
 	 *
-	 * @param      String     $templatePath  The template path or the template name
+	 * @param      String     $templateName  The template name
 	 * @param      array      $data          The data element pathed in the template
 	 *
 	 * @throws     Exception  (If the template is not found)
 	 *
 	 * @return     String     The template content.
 	 */
-	public function getContent($templatePath, $data = array()) {
-		if (!$this->checkTemplateExists($templatePath))
+	public function getContent($templateName, $data = array()) {
+		$template = $this->getTemplatePath($templateName);
+		if (!$template){
 			throw new Exception("Email Template not found!", 1);
-
-		$this->client->assign($data);
-		return $this->client->fetch($this->templateName);
-	}
-
-	public function setTemplatePath($templatePath) {
-		if (is_dir($templatePath)) {
-			$this->client->setTemplateDir($templateDir);
-		} else {
-			$pathInfo = pathinfo($templatePath);
-			if ($pathInfo['dirname'] != '.') {
-				$this->client->setTemplateDir($pathInfo['dirname']);
-				$this->templateName = $pathInfo['basename'].$this->templateExt;
-			} else {
-				$this->templateName = $pathInfo['basename'].$this->templateExt;
-			}
 		}
+		$this->client->assign($data);
+		return $this->client->fetch($template);
 	}
 
-	public function checkTemplateExists($templatePath) {
-		$this->setTemplatePath($templatePath);
-		if (is_file($this->client->getTemplateDir()[0].$this->templateName)) {
-			return true;
+	public function getTemplatePath($templateName) {
+		$orgUuid = AuthContext::get(AuthConstants::ORG_UUID);
+		$template = $templateName.$this->templateExt;
+		$path = "/".$orgUuid."/".$template;
+		if (is_file($this->client->getTemplateDir()[0].$path)) {
+			$this->client->setTemplateDir($this->client->getTemplateDir()[0]."/".$orgUuid);
+			return $template;
+		}else if(is_file($this->client->getTemplateDir()[0]."/".$template)){
+			return $template;
 		}
 		return false;
 	}

@@ -9,7 +9,7 @@ use Oxzion\Utils\BosUtils;
 use Oxzion\Utils\ArrayUtils;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\EmailService;
-use Oxzion\Service\EmailTemplateService;
+use Oxzion\Service\TemplateService;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Search\Elastic\IndexerImpl;
 use Oxzion\Utils\UuidUtil;
@@ -30,19 +30,19 @@ class UserService extends AbstractService
     private $cacheService;
     private $emailService;
     private $messageProducer;
-    private $emailTemplateService;
+    private $templateService;
 
     public function setMessageProducer($messageProducer)
     {
 		$this->messageProducer = $messageProducer;
     }
 
-    public function __construct($config, $dbAdapter, UserTable $table = null, EmailService $emailService, EmailTemplateService $emailTemplateService) {
+    public function __construct($config, $dbAdapter, UserTable $table = null, EmailService $emailService, TemplateService $templateService) {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->config = $config;
         $this->emailService = $emailService;
-        $this->emailTemplateService = $emailTemplateService;
+        $this->templateService = $templateService;
         $this->cacheService = CacheService::getInstance();
         $this->messageProducer = MessageProducer::getInstance();
     }
@@ -222,7 +222,7 @@ class UserService extends AbstractService
         $this->messageProducer->sendTopic(json_encode(array(
             'To' => $data['email'],
             'Subject' => $org->name.' created!',
-            'body' => $this->emailTemplateService->getContent('newAdminUser', $data)
+            'body' => $this->templateService->getContent('newAdminUser', $data)
         )),'mail');
 
 

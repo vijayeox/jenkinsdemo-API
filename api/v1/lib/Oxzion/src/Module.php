@@ -23,7 +23,7 @@ class Module {
                         $container->get(AdapterInterface::class),
                         $container->get(Model\UserTable::class),
                         $container->get(Service\EmailService::class),
-                        $container->get(Service\EmailTemplateService::class)
+                        $container->get(Service\TemplateService::class)
                     );
                 },
                 Model\UserTable::class => function($container) {
@@ -250,8 +250,8 @@ class Module {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\UserSessionService($config, $dbAdapter);
                 },
-                Service\EmailTemplateService::class => function ($container) {
-                    return new Service\EmailTemplateService(
+                Service\TemplateService::class => function ($container) {
+                    return new Service\TemplateService(
                         $container->get('config'),
                         $container->get(AdapterInterface::class)
                     );
