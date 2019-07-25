@@ -256,6 +256,12 @@ class Module {
                         $container->get(AdapterInterface::class)
                     );
                 },
+                Rule\RuleService::class => function ($container) {
+                    return new Rule\RuleService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
                 Service\EmailService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\EmailService($container->get('config'), $dbAdapter, $container->get(Model\EmailTable::class));
