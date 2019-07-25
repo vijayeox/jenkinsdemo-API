@@ -165,6 +165,7 @@ class ProjectService extends AbstractService {
         $insert = $sql->insert('ox_user_project');
         $insert_data = array('user_id' => $data['manager_id'], 'project_id' => $data['id']);
         $insert->values($insert_data);
+        $result = $this->executeUpdate($insert);
         if(isset($data['name']))
             $this->messageProducer->sendTopic(json_encode(array('orgname'=>  $org['name'],'projectname' => $data['name'],'description' => $data['description'],'uuid' => $data['uuid'])),'PROJECT_ADDED');
         return $count;
@@ -355,17 +356,16 @@ class ProjectService extends AbstractService {
         $userUuidList=json_decode($data['userid'],true);
         $userArray = $this->organizationService->getUserIdList($userUuidList);
 
-
         $projectId = $obj->id;
 
         if($userArray){
             $userSingleArray= array_map('current', $userArray);
-            $queryString = "SELECT ox_user.id, ox_user.username FROM ox_user_project " .
+            $queryString = "SELECT ox_user.id,ox_user.uuid, ox_user.username FROM ox_user_project " .
                             "inner join ox_user on ox_user.id = ox_user_project.user_id ".
                             "where ox_user_project.project_id = ".$projectId.
                             " and ox_user_project.user_id not in (".implode(',', $userSingleArray).")";
             $deletedUser = $this->executeQuerywithParams($queryString)->toArray();
-            $query = "SELECT u.id, u.username, up.user_id FROM ox_user_project up ".
+            $query = "SELECT u.id,u.uuid, u.username, up.user_id, u.firstname, u.lastname, u.email , u.timezone FROM ox_user_project up ".
                      "right join ox_user u on u.id = up.user_id and up.project_id = ".$projectId.
                      " where u.id in (".implode(',', $userSingleArray).") and up.user_id is null";
             $insertedUser = $this->executeQuerywithParams($query)->toArray();
@@ -389,9 +389,12 @@ class ProjectService extends AbstractService {
             }
             foreach($deletedUser as $key => $value){
                 $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $obj->name,'username' => $value['username'])),'USERTOPROJECT_DELETED');
+                $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'],'projectUuid' => $obj->uuid)),'DELETION_USERFROMPROJECT');
+
             }
             foreach($insertedUser as $key => $value){
-                 $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $obj->name,'username' => $value['username'])),'USERTOPROJECT_ADDED');
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $obj->name,'username' => $value['username'])),'USERTOPROJECT_ADDED');
+                $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'],'firstname' => $value['firstname'],'lastname' => $value['lastname'],'email' => $value['email'], 'timezone' => $value['timezone'],'projectUuid' => $obj->uuid)),'ADDITION_USERTOPROJECT');
             }
             return 1;
         }

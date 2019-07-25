@@ -170,6 +170,26 @@ return [
                     ],
                 ],
             ],
+            'ttadduserfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/addusertotasktracker',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'createUser',
+                    ],
+                ],
+            ],
+            'ttdeleteuserfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/deleteuserfromtasktracker',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'deleteUser',
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [
