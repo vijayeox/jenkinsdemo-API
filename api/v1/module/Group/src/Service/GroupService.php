@@ -84,7 +84,7 @@ class GroupService extends AbstractService {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_group')
-            ->columns(array("*"))
+            ->columns(array('uuid','name','parent_id','org_id','manager_id','description','logo'))
             ->where(array('ox_group.uuid' => $id, 'status' => "Active"));
         $response = $this->executeQuery($select)->toArray();
         
@@ -243,7 +243,7 @@ class GroupService extends AbstractService {
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(id)'];
-            $query ="SELECT * FROM `ox_group`".$where." ".$sort." ".$limit;
+            $query ="SELECT uuid,name,parent_id,org_id,manager_id,description,logo FROM `ox_group`".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query);
             $resultSet=$resultSet->toArray();
             for($x=0;$x<sizeof($resultSet);$x++){
@@ -283,6 +283,7 @@ class GroupService extends AbstractService {
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
         $data['manager_id']=$result[0]["id"];
+        $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
@@ -347,7 +348,7 @@ class GroupService extends AbstractService {
         $sort = "ox_user.name";
 
 
-        $query = "SELECT ox_user.id,ox_user.name";
+        $query = "SELECT ox_user.uuid,ox_user.name";
         $from = " FROM ox_user left join ox_user_group on ox_user.id = ox_user_group.avatar_id left join ox_group on ox_group.id = ox_user_group.group_id";
     
         $cntQuery ="SELECT count(ox_user.id)".$from;
@@ -381,7 +382,6 @@ class GroupService extends AbstractService {
     }
 
     public function saveUser($id,$data) {
-
         if(isset($data['org_id'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
                 ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
@@ -405,8 +405,7 @@ class GroupService extends AbstractService {
             return 2;
         }
        
-        $userUuidList=json_decode($data['userid'],true);
-        $userArray = $this->organizationService->getUserIdList($userUuidList);
+        $userArray = $this->organizationService->getUserIdList($data['userid']);
 
         $group_id = $obj->id;
 

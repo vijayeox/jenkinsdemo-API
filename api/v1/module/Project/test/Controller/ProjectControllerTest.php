@@ -428,12 +428,14 @@ class ProjectControllerTest extends ControllerTest {
 
     public function testSaveUser() {
         $this->initAuthToken($this->adminUser);
+        $data = ['userid' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => $this->adminUser)),'USERTOPROJECT_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => $this->employeeUser)),'USERTOPROJECT_ADDED')->once()->andReturn();
         }
-    	$this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',array('userid' => '[{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"}]')); 
+        
+    	$this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST', $data); 
     	$this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
     	$content = json_decode($this->getResponse()->getContent(), true);
@@ -443,7 +445,8 @@ class ProjectControllerTest extends ControllerTest {
 
     public function testSaveUserByManagerOfDifferentOrg() {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',array('userid' => '[{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"}]','org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46')); 
+        $data = ['userid' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45']),'org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46'];
+        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',$data); 
         $this->assertResponseStatusCode(403);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -465,10 +468,13 @@ class ProjectControllerTest extends ControllerTest {
 
     public function testSaveUserNotFound() {
         $this->initAuthToken($this->adminUser);
+
+        $data = ['userid' => array(['uuid' => '4fd99e8e-758f-11ikwsd-dbnb'],['uuid' => '4fd99e8e-758f-11e9'])];
+
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();      
         }
-    	$this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',array('userid' => '[{"id":"4fd99e8e-758f-11ikwsd-dbnb"},{"id":"4fd99e8e-758f-11e9"}]')); 
+    	$this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST', $data); 
     	$this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
     	$content = json_decode($this->getResponse()->getContent(), true);
@@ -483,9 +489,9 @@ class ProjectControllerTest extends ControllerTest {
     	$content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'], 2);
     }
@@ -510,7 +516,7 @@ class ProjectControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'],1);
     }
@@ -523,7 +529,7 @@ class ProjectControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'], 2);
     }
@@ -536,7 +542,7 @@ class ProjectControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'], 1);
     }

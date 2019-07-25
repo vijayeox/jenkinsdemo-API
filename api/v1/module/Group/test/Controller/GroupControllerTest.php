@@ -48,7 +48,7 @@ class GroupControllerTest extends ControllerTest {
         $this->assertMatchedRouteName('groups');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_group'));
     }
 
 
@@ -83,7 +83,7 @@ class GroupControllerTest extends ControllerTest {
         $this->assertMatchedRouteName('groups');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));  
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_group'));  
     }
 
   
@@ -105,7 +105,7 @@ class GroupControllerTest extends ControllerTest {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Groups 22', 'parent_id' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'org_id'=> 1, 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description
         '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -124,14 +124,14 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($content['data']['description'], $data['description']);
         $this->assertEquals($content['data']['logo'], "grp1.png");
         $this->assertEquals($content['data']['status'], "Active");
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
     }
 
     public function testCreateByAdminWithDifferentOrgID() {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Groups 22', 'parent_id' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'org_id'=> 'b0971de7-0387-48ea-8f29-5d3704d96a46', 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description
         '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/group', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -146,7 +146,7 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($content['data']['description'], $data['description']);
         $this->assertEquals($content['data']['logo'], "grp1.png");
         $this->assertEquals($content['data']['status'], "Active");
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
     }
 
 //Test Case to check the errors when the required field is not selected. Here I removed the parent_id field from the list.
@@ -154,7 +154,7 @@ class GroupControllerTest extends ControllerTest {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Groups 22', 'description
         '=>'Description Test Data', 'status' => 'Active'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -174,7 +174,7 @@ class GroupControllerTest extends ControllerTest {
         $this->initAuthToken($this->employeeUser);
         $data = ['name' => 'Groups 22', 'parent_id' => 1, 'org_id'=> 'b0971de7-0387-48ea-8f29-5d3704d96a46', 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description
         '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_group'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/group', 'POST', $data);
         $this->assertResponseStatusCode(401);
@@ -325,12 +325,13 @@ class GroupControllerTest extends ControllerTest {
 
     public function testsaveuserByAdmin() {
         $this->initAuthToken($this->adminUser);
+        $data = ['userid' => array(['id' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['id' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->adminUser)),'USERTOGROUP_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->employeeUser)),'USERTOGROUP_ADDED')->once()->andReturn();
         }
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"}]')); 
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST', $data); 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -339,7 +340,8 @@ class GroupControllerTest extends ControllerTest {
 
     public function testsaveuserByManagerWithDifferentOrgId() {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"}]','org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46')); 
+        $data = ['userid' => array(['id' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['id' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45']),'org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46'];
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',$data); 
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('saveusers');
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -350,7 +352,8 @@ class GroupControllerTest extends ControllerTest {
 
     public function testsaveuserByManager() {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"}]')); 
+        $data = ['userid' => array(['id' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['id' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])]; 
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',$data);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('saveusers');
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -360,7 +363,8 @@ class GroupControllerTest extends ControllerTest {
 
     public function testsaveuserByEmployee() {
         $this->initAuthToken($this->employeeUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',array('userid' => '[{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9f04d-758f-11e9-b2d5-68ecc57cde45"}]')); 
+        $data = ['userid' => array(['id' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['id' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',$data); 
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('Group');
         $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
@@ -388,7 +392,8 @@ class GroupControllerTest extends ControllerTest {
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
         }
-        $this->dispatch('/group/1/save','POST',array('userid' => '[{"id":"4fd99e8e-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd9ce37-758f-11e9-b2d5-68ecc57cde45"},{"id":"4fd99e8e-758f-11e9-b2d5"}]')); 
+        $data = ['userid' => array(['id' => '4fd9ce37-758f-1c57cde45'],['id' => '4fd9f04d-758f-11e9-b'])];
+        $this->dispatch('/group/1/save','POST',$data); 
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -403,9 +408,9 @@ class GroupControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'],2);
     }
@@ -418,9 +423,9 @@ class GroupControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['data'][1]['id'], 2);
+        $this->assertEquals($content['data'][1]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'],2);
     }
@@ -444,7 +449,7 @@ class GroupControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'],2);
     }
@@ -458,7 +463,7 @@ class GroupControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 1);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
         $this->assertEquals($content['total'], 1);
     }
@@ -471,7 +476,7 @@ class GroupControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success'); 
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['id'], 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'], 1);
     }

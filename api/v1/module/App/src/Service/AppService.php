@@ -396,7 +396,7 @@ class AppService extends AbstractService
 
     public function registerApps($data)
     {
-        $apps = $data['applist'];
+        $apps = json_decode($data['applist'],true);
         unset($data);
         $form = new App();
         $list = array();
@@ -450,7 +450,7 @@ class AppService extends AbstractService
             return 0;
         }
 
-        return $count;
+        return 1;
     }
     public function getAssignments($appId){
         $assignments = $this->workflowService->getAssignments($appId);
