@@ -9,14 +9,14 @@ use Mockery;
 
 class MessagingControllerTest extends MainControllerTest{
     
-    private static $mockMessageProducer = null;
+    private $mockMessageProducer = null;
 
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
         $config = $this->getApplicationConfig();
         $this->mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
-        $this->mockMessageProducer->expects('getInstance')->once()->andReturn($mockMessageProducer);
+        $this->mockMessageProducer->expects('getInstance')->once()->andReturn($this->mockMessageProducer);
     }
 
     public function getMockMessageProducer(){
@@ -52,7 +52,6 @@ class MessagingControllerTest extends MainControllerTest{
         $this->assertEquals($content['data']['result']['topic'], $data['topic']);
         $this->assertEquals($content['data']['result']['param1'], $data['param1']);
         $this->assertEquals($content['data']['result']['param2'], $data['param2']);
-        $this->assertEquals($content['data']['status'], $data['status']);
     }
     public function testQueueCreate()
     {
@@ -68,10 +67,9 @@ class MessagingControllerTest extends MainControllerTest{
         $this->assertMatchedRouteName('messaging');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['result']['topic'], $data['topic']);
+        $this->assertEquals($content['data']['result']['queue'], $data['queue']);
         $this->assertEquals($content['data']['result']['param1'], $data['param1']);
         $this->assertEquals($content['data']['result']['param2'], $data['param2']);
-        $this->assertEquals($content['data']['status'], $data['status']);
     }
     public function testFail()
     {
@@ -87,7 +85,6 @@ class MessagingControllerTest extends MainControllerTest{
         $this->assertMatchedRouteName('messaging');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['data']['status'], $data['status']);
     }
 
   
