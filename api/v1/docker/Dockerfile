@@ -17,6 +17,8 @@ RUN apt-get update \
  && docker-php-ext-install xsl \
  && a2enmod rewrite \
  && apt-get install -y mysql-client \
+ && cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini \
+ && sed -i 's!upload_max_filesize = 2M!upload_max_filesize = 20M!g' /usr/local/etc/php/php.ini \
  && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf \
  && mv /var/www/html /var/www/public \
  && curl -sS https://getcomposer.org/installer \
