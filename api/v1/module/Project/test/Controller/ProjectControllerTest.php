@@ -39,63 +39,35 @@ class ProjectControllerTest extends ControllerTest {
     public function testGetList() {
         $this->initAuthToken($this->adminUser);
         $data = ['data' => array([
-            "id" => "1",
             "uuid" => "886d7eff-6bae-4892-baf8-6fefc56cbf0b",
             "name"=> "Test Project 1",
-            "org_id"=>"1",
             "manager_id" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
-            "description"=> "Description Test Data",
-            "created_by"=> "1",
-            "modified_by"=> "1",
-            "date_created"=> "2018-11-11 07:25:06",
-            "date_modified"=> "2018-12-11 07:25:06",
-            "isdeleted"=> "0",
-            "user_id"=> "1",
-            "project_id"=>"1"
+            "description" => "Description Test Data"
         ],[
-            "id"=> "3",
             "uuid"=> "ced672bb-fe33-4f0a-b153-f1d182a02603",
             "name"=> "Test Project 2",
-            "org_id"=>"1",
             "manager_id" => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
-            "description"=> "Description Test Data",
-            "created_by"=> "1",
-            "modified_by"=> "1",
-            "date_created"=> "2018-11-11 07:25:06",
-            "date_modified"=> "2018-12-11 07:25:06",
-            "isdeleted"=> "0",
-            "user_id"=> "1",
-            "project_id"=> "2"
+            "description"=> "Description Test Data"
         ]
         ,[
-            "id"=> "4",
             "name"=> "New Project",
-            "org_id"=>"1",
             "manager_id" => "1",
-            "description"=> "Description Test Data",
-            "created_by"=> "4fd99e8e-758f-11e9-b2d5-68ecc57cde45",
-            "modified_by"=> "1",
-            "date_created"=> "2018-11-11 07:25:06",
-            "date_modified"=> "2018-12-11 07:25:06",
-            "isdeleted"=> "0",
-            "user_id"=> "1",
-            "project_id"=> "3"
+            "description"=> "Description Test Data"
         ]
     )];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/project', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
+        $diff = Array();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $diff=array_diff($data, $content);
+        $this->assertEquals(count($content['data']), 3);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($diff, array());
         $this->assertEquals($content['total'],3);
     }
 
     public function testGetListByManagerWithDifferentOrg() {
         $this->initAuthToken($this->managerUser);
-        $this->setJsonContent(json_encode($data));
         $this->dispatch('/project?filter=[{"skip":0,"take":1}]&org_id=b0971de7-0387-48ea-8f29-5d3704d96a46', 'GET');
         $this->assertResponseStatusCode(403);
         $this->setDefaultAsserts();
@@ -127,18 +99,16 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($diff, array());
+        $this->assertEquals(count($content['data']),1);
         $this->assertEquals($content['total'],3);
     }
 
     public function testGetListByEmployee() {
         $this->initAuthToken($this->employeeUser);
-        $this->setJsonContent(json_encode($data));
         $this->dispatch('/project?filter=[{"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(401);
-         $this->assertModuleName('Project');
+        $this->assertModuleName('Project');
         $this->assertControllerName(ProjectController::class); // as specified in router's controller name alias
         $this->assertControllerClass('ProjectController');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -165,9 +135,8 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($diff, array());
+        $this->assertEquals(count($content['data']),1);
         $this->assertEquals($content['total'], 1);
     }
 
@@ -191,16 +160,14 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($diff, array());
+        $this->assertEquals(count($content['data']),1);
         $this->assertEquals($content['total'], 3);
     }
 
 
     public function testGetListWithQuerywithSort() {
         $this->initAuthToken($this->adminUser);
-        $this->setJsonContent(json_encode($data));
         $this->dispatch('/project?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":0,"take":3}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -269,7 +236,7 @@ class ProjectControllerTest extends ControllerTest {
 
     public function testCreateWithOutNameFailure() {    
         $this->initAuthToken($this->adminUser);
-        $data = ['description'=>'Project Description'];
+        $data = ['description'=>'Project Description','manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -591,15 +558,13 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('myproject');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($diff, array());
+        $this->assertEquals(count($content['data']),2);
     }
 
 
     public function testGetMyProjectListByManager(){
         $this->initAuthToken($this->managerUser);
-        $this->setJsonContent(json_encode($data));
         $this->dispatch('/project/myproject?org_id=b0971de7-0387-48ea-8f29-5d3704d96a46', 'GET');
         $this->assertResponseStatusCode(403);
         $this->setDefaultAsserts('myproject');
@@ -611,15 +576,11 @@ class ProjectControllerTest extends ControllerTest {
     public function testGetMyProjectListWithoutdata()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['data' => array([])];
-        $this->setJsonContent(json_encode($data));
         $this->dispatch('/project/myproject', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('myproject');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($diff, array());
     }
 }
 ?>

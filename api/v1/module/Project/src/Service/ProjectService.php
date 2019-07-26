@@ -292,7 +292,7 @@ class ProjectService extends AbstractService {
          if(count($filterParams) > 0 || sizeof($filterParams) > 0){
                 $filterArray = json_decode($filterParams['filter'],true);
                 if(isset($filterArray[0]['filter'])){
-                   $filterlogic = $filterArray[0]['filter']['logic'];
+                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : " ";
                    $filterList = $filterArray[0]['filter']['filters'];
                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
                 }
