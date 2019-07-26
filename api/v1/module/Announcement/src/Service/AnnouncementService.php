@@ -210,7 +210,10 @@ class AnnouncementService extends AbstractService{
     protected function getAnnouncementIdBYUuid($uuid){
         $select = "SELECT id from `ox_announcement` where uuid = '".$uuid."'";
         $id = $this->executeQuerywithParams($select)->toArray();
-        return $id[0]['id'];
+        if(count($id) > 0){
+            return $id[0]['id'];
+        }
+        return 0;
     }
     /**
     * Delete Announcement

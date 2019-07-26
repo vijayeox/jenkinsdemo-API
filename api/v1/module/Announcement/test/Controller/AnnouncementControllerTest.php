@@ -111,8 +111,8 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
-        $this->assertEquals($content['data']['startdate'], $data['startdate']);
-        $this->assertEquals($content['data']['enddate'], $data['enddate']);
+        $this->assertEquals($content['data']['start_date'], $data['start_date']);
+        $this->assertEquals($content['data']['end_date'], $data['end_date']);
     }
 
     public function testCreateWithOutNameFailure(){
@@ -156,7 +156,6 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['description'], $data['description']);
     }
     public function testUpdateRestricted(){
         $data = ['name' => 'Test Announcement','groups'=>'[{"id":1}]','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day")),'media'=>'test-oxzionlogo.png'];
