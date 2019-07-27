@@ -73,7 +73,7 @@ class WorkflowInstanceController extends AbstractApiController
             return $this->getInvalidMethod();
         }
         if($result == 0){
-            return $this->getErrorResponse("File not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("File not found", 404);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -83,7 +83,7 @@ class WorkflowInstanceController extends AbstractApiController
         }
         $response = $this->workflowService->deleteFile($params);
         if($response == 0){
-            return $this->getErrorResponse("File not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("File not found", 404);
         }
         return $this->getSuccessResponse();
     }

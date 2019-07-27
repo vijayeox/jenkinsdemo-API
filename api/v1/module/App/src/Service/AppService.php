@@ -402,7 +402,7 @@ class AppService extends AbstractService
         $list = array();
 
         for ($x = 0; $x < sizeof($apps); $x++) {
-            $data['name'] = $apps[$x]['name'];
+            $data['name'] = isset($apps[$x]['name']) ? $apps[$x]['name'] : NULL; 
             array_push($list, $data);
         }
         $this->beginTransaction();
@@ -416,9 +416,9 @@ class AppService extends AbstractService
             $count = 0;
             for ($x = 0; $x < sizeof($apps); $x++) {
                 if (!in_array($apps[$x]['name'], $result)) {
-                    $data['name'] = $apps[$x]['name'];
-                    $data['category'] = $apps[$x]['category'];
-                    $data['isdefault'] = $apps[$x]['isdefault'];
+                    $data['name'] = isset($apps[$x]['name']) ? $apps[$x]['name'] : NULL ;
+                    $data['category'] = isset($apps[$x]['category']) ? $apps[$x]['category'] : NULL;
+                    $data['isdefault'] = isset($apps[$x]['isdefault']) ? $apps[$x]['isdefault'] : 0;
                     $data['start_options'] = json_encode($apps[$x]['options']);
                     //this API call is done by the server hence hardcoding the created by value
                     $data['created_by'] = 1;

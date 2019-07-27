@@ -185,7 +185,7 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
+        $this->assertEquals($content['data']['name'], $data['name']);
     }
 
     public function testCreateWithOutTextFailure()
@@ -292,7 +292,8 @@ class AppControllerTest extends ControllerTest
         );
         $workflowFactory = WorkflowFactory::getInstance();
         $processManager = $workflowFactory->getProcessManager();
-        $baseFolder = $this->config['UPLOAD_FOLDER'];
+        $config = $this->getApplicationConfig();
+        $baseFolder = $config['UPLOAD_FOLDER'];
         if(enableCamunda==0){
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
@@ -335,7 +336,8 @@ class AppControllerTest extends ControllerTest
                 'error'     =>  0
             )
         );
-        $baseFolder = $this->config['UPLOAD_FOLDER'];
+        $config = $this->getApplicationConfig();
+        $baseFolder = $config['UPLOAD_FOLDER'];
         if(enableCamunda==0){
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
