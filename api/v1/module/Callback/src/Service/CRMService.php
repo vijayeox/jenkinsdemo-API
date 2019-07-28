@@ -19,23 +19,26 @@ namespace Callback\Service;
         }
         public function addContact($data,$contactService,$userService){
             $params = array();
-            $params['first_name'] = $data['firstName'];
-            $params['last_name'] = $data['lastName'];
+            $params['first_name'] = isset($data['firstName']) ? $data['firstName'] : NULL;
+            $params['last_name'] = isset($data['lastName']) ? $data['lastName'] : NULL;
             if(isset($data['phones']) && !empty($data['phones'])){
                 $params['phone_1'] = $data['phones'][0];
             }
-            $params['email'] = $data['email'];
+            $params['email'] = isset($data['email']) ? $data['email'] : NULL;
             if(isset($data['accounts']) && !empty($data['accounts'])) {
-                $params['company_name'] = $data['accounts'][0]['name'];
+                $params['company_name'] = $data['accounts']['name'];
             }
             if(isset($data['addresses']) && !empty($data['addresses'])) {
                 $params['address_1'] = $data['addresses'][0]['name'];
-                $params['address_2'] = $data['addresses'][1]['name'];
+                $params['address_2'] = isset($data['addresses'][1]['name']) ? $data['addresses'][1]['name'] : NULL;
             }
+            $data['owner']['username'] = isset($data['owner']['username']) ? $data['owner']['username'] : NULL;
+            $data['assignedTo']['username'] = isset($data['assignedTo']['username']) ? $data['assignedTo']['username'] : NULL;
             $assignedTo = $userService->getUserDetailsbyUserName($data['owner']['username'],array('uuid'));
             $owner = $userService->getUserDetailsbyUserName($data['assignedTo']['username'],array('id'));
-            $params['owner_id'] = $owner['id'];
-            $params['created_id'] = $owner['id'];
+            $assignedTo['uuid'] = isset($assignedTo['uuid']) ? $assignedTo['uuid'] : NULL;
+            $params['owner_id'] = isset($owner['id']) ? $owner['id'] : NULL;
+            $params['created_id'] = isset($owner['id']) ? $owner['id'] : NULL;
             $params['uuid'] = $assignedTo['uuid'];
             try {
                 $result = $contactService->createContact($params);
