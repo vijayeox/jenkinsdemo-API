@@ -30,6 +30,7 @@ class UserTokenService extends AbstractService
     public function generateRefreshToken($userDetail){
         $dataSalt = self::getRefreshTokenPayload();
         try {
+            $userDetail['id'] = isset($userDetail['id']) ? $userDetail['id'] : NULL;
             if ($userDetail['id'] === null || $userDetail['id'] === '') {
                 return 0;
             }

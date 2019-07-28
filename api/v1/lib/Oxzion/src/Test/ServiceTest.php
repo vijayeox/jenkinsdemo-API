@@ -16,6 +16,17 @@ use Zend\Stdlib\ArrayUtils;
 
 class ServiceTest extends TestCase
 {
+
+    protected $adminUser = 'bharatgtest'; //TODO Need to put as global setup
+    protected $adminUserId = 1;
+    protected $employeeUser = 'rakshithtest';
+    protected $employeeUserId = 2;
+    protected $managerUser = 'karantest';
+    protected $managerUserId = 3;
+    protected $noUser = 'admin';
+    protected $noUserId = 0;
+    protected $testOrgId = 1;
+
     /**
      * @var \Zend\Mvc\ApplicationInterface
      */

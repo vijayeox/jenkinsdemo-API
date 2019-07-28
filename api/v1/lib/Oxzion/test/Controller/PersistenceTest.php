@@ -33,7 +33,7 @@ class PersistenceTest extends ServiceTest {
         $config = $this->getApplicationConfig();
         $dbConfig = $config['db'];
         $this->database = $this->data['appName'] . "___" . $this->data['UUID'];
-        $dbConfig['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $dbConfig['host'] . ';charset=utf8;username='.$dbConfig["appuser"].';password='.$dbConfig["password"].'';
+        $dbConfig['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $dbConfig['host'] . ';charset=utf8;username='.$dbConfig["username"].';password='.$dbConfig["password"].'';
         $dbConfig['database'] = $this->database;
         $this->adapter = new Adapter($dbConfig);
 
@@ -233,10 +233,11 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
         $persistenceObject->deleteQuery($this->data);
         $statement1 = $this->adapter->query("Select * from ox_timesheet");
         $result1 = $statement1->execute();
+        $tableFieldName = Array();
         while($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
-        $this->assertEquals($tableFieldName, null);
+        $this->assertEquals($tableFieldName, array());
     }
 
 // //Code to delete all the enreies made to the timesheet table for testing purpose.
@@ -247,9 +248,10 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
         $persistenceObject->deleteQuery($this->data);
         $statement1 = $this->adapter->query("Select * from ox_timesheet");
         $result1 = $statement1->execute();
+        $tableFieldName = Array();
         while($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
-        $this->assertEquals($tableFieldName, null);
+        $this->assertEquals($tableFieldName, array());
     }
 }

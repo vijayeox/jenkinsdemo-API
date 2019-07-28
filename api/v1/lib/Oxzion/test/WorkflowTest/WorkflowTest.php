@@ -19,7 +19,7 @@ class WorkflowTest extends TestCase{
         }
         $data = $processManager->deploy('TestProcess1',array(__DIR__."/Dataset/testwithparams.bpmn"));
         $this->assertNotEquals(0, $data);
-        $deploymentId = $data['id'];
+        $deploymentId = isset($data['id']) ? $data['id'] : NULL;
         if(enableCamunda==0){
             $mockRestClient->expects('post')->with('process-definition/12321/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
             $processEngine->setRestClient($mockRestClient);
@@ -65,7 +65,7 @@ class WorkflowTest extends TestCase{
         }
         $data = $processManager->deploy('TestProcess1',array(__DIR__."/Dataset/testwithparams.bpmn"));
         $this->assertNotEquals(0, $data);
-        $deploymentId = $data['id'];
+        $deploymentId = isset($data['id']) ? $data['id'] : NULL;
         if(enableCamunda==0){
             $mockRestClient->expects('post')->with('process-definition/12321/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
             $processEngine->setRestClient($mockRestClient);
@@ -98,14 +98,14 @@ class WorkflowTest extends TestCase{
         }
         $data = $processManager->deploy('TestProcess1',array(__DIR__."/Dataset/testAssigntoGroup.bpmn"));
         $this->assertNotEquals(0, $data);
-        $deploymentId = $data['id'];
+        $deploymentId = isset($data['id']) ? $data['id'] : NULL;
         if(enableCamunda==0){
             $mockRestClient->expects('post')->with('process-definition/12321/start')->once()->andReturn(json_encode(array('definitionId'=>12321)));
             $processEngine->setRestClient($mockRestClient);
         }
         $processStart = $processEngine->startProcess(12321);
         $definitionId = $processStart['definitionId'];
-        $processId = $processStart['id'];
+        $processId = isset($processStart['id']) ? $processStart['id'] : NULL;
         // print_r($processStart);exit;
         $this->assertNotEquals(0, $definitionId);
         if(enableCamunda==0){
