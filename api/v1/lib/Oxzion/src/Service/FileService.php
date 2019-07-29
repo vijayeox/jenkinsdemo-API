@@ -114,7 +114,7 @@ class FileService extends AbstractService{
             }
             $validFields = $this->checkFields($data['form_id'],$fields,$id);
             if($validFields && !empty($validFields)){
-                $this->multiInsertOrUpdate('ox_file_attribute',$validFields,['id']);
+                $this->multiInsertOrUpdate('ox_file_attribute',$validFields);
             }
             $this->commit();
         }catch(Exception $e){
@@ -204,29 +204,32 @@ class FileService extends AbstractService{
         ->join('ox_form', 'ox_form.id = ox_form_field.form_id', array(),'left')
         ->where(array('ox_form.id' => $formId));
         $fields = $this->executeQuery($select)->toArray();
+        $fileFields = $sql->select();
+        $fileFields->from('ox_file_attribute')
+        ->columns(array("*"))
+        ->where(array('ox_file_attribute.fileid' => $fileId));
+        $fileArray = $this->executeQuery($fileFields)->toArray();
         $keyValueFields = array();
         $i=0;
         if(!empty($fields)){
-            foreach ($fields as $key => $field) {
+            foreach ($fields as $field) {
                 if($field['required']){
                     if(!isset($fieldData[$field['name']])){
                         $required[$field['name']] = 'required';
                     }
                 }
-                if($field['options']){
-                    $valid = 0;
-                    $optionslist = json_decode($field['options'],true);
-                    foreach ($optionslist['data'] as $k => $option) {
-                        if($k==$fieldData[$field['name']]){
-                            $valid = 1;
-                            break;
-                        }
-                    }
-                    if(!$valid){
-                        $required[$field['name']] = 'option not found';
-                    }
+                if(($key = array_search($field['id'], array_column($fileArray, 'fieldid')))>-1){
+                    $keyValueFields[$i]['id'] = $fileArray[$key]['id'];
+                    $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
+                    $keyValueFields[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);;
+                } else {
+                    $keyValueFields[$i]['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+                    $keyValueFields[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+                    $keyValueFields[$i]['date_created'] = date('Y-m-d H:i:s');
+                    $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
+                    $keyValueFields[$i]['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
                 }
-                $keyValueFields[$i]['fieldvalue'] = $fieldData[$field['name']];
+                $keyValueFields[$i]['fieldvalue'] = isset($fieldData[$field['name']])?$fieldData[$field['name']]:null;
                 $keyValueFields[$i]['fieldid'] = $field['id'];
                 $keyValueFields[$i]['fileid'] = $fileId;
                 $i++;
