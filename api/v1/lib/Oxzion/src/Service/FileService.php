@@ -30,16 +30,17 @@ class FileService extends AbstractService{
     *   } </code>
     * @return array Returns a JSON Response with Status Code and Created File.
     */
-    public function createFile(&$data,$workflowInstanceId){
-        // print $workflowInstanceId."\n";
+    public function createFile(&$data,$workflowInstanceId=null){
         unset($data['submit']);
         unset($data['workflowId']);
         $jsonData = json_encode($data);
         $data['data'] = $jsonData;
-        $data['workflow_instance_id'] = $workflowInstanceId;
+        $data['workflow_instance_id'] = isset($workflowInstanceId)?$workflowInstanceId:0;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
+        $data['date_modified'] = date('Y-m-d H:i:s');
         $data['uuid'] = UuidUtil::uuid();
         $file = new File();
         $file->exchangeArray($data);
@@ -90,7 +91,7 @@ class FileService extends AbstractService{
     */
     public function updateFile(&$data,$id){
         // print_r(array($data['form_id'],$id));
-        $obj = $this->table->fetchAll(array('workflow_instance_id'=>$id,'form_id'=>$data['form_id']));
+        $obj = $this->table->get($id);
         if(is_null($obj)){
             return 0;
         }
@@ -98,12 +99,12 @@ class FileService extends AbstractService{
         $fileObject = $obj->toArray();
         // print_r($fileObject);
         $file = new File();
-        $changedArray = array_merge($fileObject[0],$data);
+        $changedArray = array_merge($fileObject,$data);
         $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $changedArray['date_modified'] = date('Y-m-d H:i:s');
         $file->exchangeArray($changedArray);
         $file->validate();
-        $fields = array_diff($data,$fileObject[0]);
+        $fields = array_diff($data,$fileObject);
         $this->beginTransaction();
         try{
             $count = $this->table->save($file);
@@ -155,13 +156,13 @@ class FileService extends AbstractService{
     * @method GET
     * @return array Returns a JSON Response with Error Message.
     */
-    public function getFiles() {
-        // $sql = $this->getSqlObject();
-        // $select = $sql->select()
-        //         ->from('ox_file')
-        //         ->columns(array("*"))
-        //         ->where(array('ox_file.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
-        // $result = $this->executeQuery($select)->toArray();
+    public function getFiles($formId) {
+        $sql = $this->getSqlObject();
+        $select = $sql->select()
+                ->from('ox_file')
+                ->columns(array("*"))
+                ->where(array('ox_file.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+        $result = $this->executeQuery($select)->toArray();
         return array();
     }
 
@@ -201,7 +202,7 @@ class FileService extends AbstractService{
         ->columns(array("*"))
         ->join('ox_form_field', 'ox_field.id = ox_form_field.field_id', array(),'left')
         ->join('ox_form', 'ox_form.id = ox_form_field.form_id', array(),'left')
-        ->where(array('ox_form.task_id' => $formId));
+        ->where(array('ox_form.id' => $formId));
         $fields = $this->executeQuery($select)->toArray();
         $keyValueFields = array();
         $i=0;

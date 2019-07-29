@@ -71,8 +71,9 @@ class FormController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Form.
     */
     public function update($id, $data){
+        $appId = $this->params()->fromRoute()['appId'];
         try{
-            $count = $this->formService->updateForm($id,$data);
+            $count = $this->formService->updateForm($appId,$id,$data);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);

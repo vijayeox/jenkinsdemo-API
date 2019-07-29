@@ -9,13 +9,13 @@ class Page extends Entity {
     
     protected $data = array(
         'id' => 0,
-        'uuid' => 0,  
-        'name' => NULL,  
+        'uuid' => 0,
+        'name' => NULL,
         'app_id' => 0,
         'form_id' => 0,
         'text' => NULL,
         'description'=> NULL,
-        'date_created' => NULL,  
+        'date_created' => NULL,
         'date_modified' => NULL,
         'created_by' => NULL,
         'modified_by' => NULL

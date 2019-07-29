@@ -13,6 +13,7 @@ class Field extends Entity{
 		'workflow_id'=>0,
 		'data_type'=>NULL,
 		'options'=>NULL,
+		'template'=>NULL,
 		'constraints'=>NULL,
 		'properties'=>NULL,
 		'dependson'=>NULL,

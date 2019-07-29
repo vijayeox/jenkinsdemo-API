@@ -19,7 +19,7 @@ class File extends Entity {
     protected $attributes = array();
 
     public function validate(){
-        $required = array('uuid', 'org_id','form_id','data', 'created_by', 'date_created', 'workflow_instance_id');
+        $required = array('uuid', 'org_id','form_id','data', 'created_by', 'date_created');
         $this->validateWithParams($required);
     }
 }

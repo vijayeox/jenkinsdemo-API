@@ -21,20 +21,18 @@ ox_field:
     app_id: 99
     workflow_id: 1
     data_type: "integer"
-    required: 1
+    required: 0
     sequence: 1
 
 ox_form:
   -
     id: 1
     app_id: 99
-    workflow_id: 1
     name: "Task"
     description: "Form Description"
   -
     id: 2
     app_id: 99
-    workflow_id: 1
     name: "Test Form 2"
     description: "Form Description"
 ox_form_field:

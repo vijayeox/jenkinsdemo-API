@@ -52,17 +52,6 @@ return [
                     ],
                 ],
             ],
-            'applisttype' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/type/:typeId',
-                    'defaults' => [
-                        'controller' => Controller\AppController::class,
-                        'action' => 'appListByType',
-                        'method' => 'GET'
-                    ],
-                ],
-            ],
             'appdeployxml' => [
                 'type' => Segment::class,
                 'options' => [
@@ -130,6 +119,22 @@ return [
                             'post'=> 'MANAGE_FORM_WRITE',
                             'delete'=> 'MANAGE_FORM_WRITE',
                             'get'=> 'MANAGE_FORM_READ',
+                        ],
+                    ],
+                ],
+            ],
+            'appfile' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/app/:appId/form/:formId/file[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'access'=>[
+                            // SET ACCESS CONTROL
+                            'put'=> 'MANAGE_FILE_WRITE',
+                            'post'=> 'MANAGE_FILE_WRITE',
+                            'delete'=> 'MANAGE_FILE_WRITE',
+                            'get'=> 'MANAGE_FILE_READ',
                         ],
                     ],
                 ],

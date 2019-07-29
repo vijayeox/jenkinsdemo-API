@@ -9,7 +9,10 @@ use Oxzion\ValidationException;
 use Oxzion\Model\Workflow;
 use Oxzion\Model\WorkflowTable;
 use Oxzion\Model\Form;
+use Oxzion\Model\Activity;
+use Oxzion\Model\ActivityTable;
 use Oxzion\Service\FormService;
+use Oxzion\Service\ActivityService;
 use Oxzion\Model\FormTable;
 use Oxzion\Model\Field;
 use Oxzion\Service\FieldService;
@@ -35,8 +38,9 @@ class WorkflowService extends AbstractService{
 	protected $fieldService;
 	protected $processEngine;
     protected $activityEngine;
+    protected $activityService;
 
-    public function __construct($config, $dbAdapter,WorkflowTable $table,FormService $formService,FieldService $fieldService,FileService $fileService,WorkflowFactory $workflowFactory){
+    public function __construct($config, $dbAdapter,WorkflowTable $table,FormService $formService,FieldService $fieldService,FileService $fileService,WorkflowFactory $workflowFactory,ActivityService $activityService){
     	parent::__construct($config, $dbAdapter);
     	$this->baseFolder = $this->config['UPLOAD_FOLDER'];
     	$this->table = $table;
@@ -48,6 +52,7 @@ class WorkflowService extends AbstractService{
     	$this->fileService = $fileService;
 		$this->processEngine = $this->workFlowFactory->getProcessEngine();
         $this->activityEngine = $this->workFlowFactory->getActivity();
+        $this->activityService = $activityService;
 	}
 	public function setProcessEngine($processEngine){
 		$this->processEngine = $processEngine;
@@ -97,51 +102,51 @@ class WorkflowService extends AbstractService{
             $this->deleteWorkflow($appId,$workFlowId);
             return 1;
         }
-		$formList = $this->getProcessManager()->parseBPMN($workFlowStorageFolder.$fileName,$appId,$workFlowId);
+		$activity = $this->getProcessManager()->parseBPMN($workFlowStorageFolder.$fileName,$appId,$workFlowId);
     	$startFormId = null;
     	$workFlowList = array();
 		$workFlowFormIds = array();
-        if(isset($formList)){
-        	foreach ($formList as $form) {
-    			$formData = array();
-    			if(isset($form['form']['properties'])){
-    				$formProperties = json_decode($form['form']['properties'],true);
+        if(isset($activity)){
+        	foreach ($activity as $activity) {
+    			$activityData = array();
+    			if(isset($activity['form']['properties'])){
+    				$activityProperties = json_decode($activity['form']['properties'],true);
     			}
-        		$oxForm = new Form();
-        		$oxForm->exchangeArray($form['form']);
+        		$oxForm = new Activity();
+        		$oxForm->exchangeArray($activity['activity']);
     			$oxFormProperties = $oxForm->getKeyArray();
-    			if(isset($formProperties)){
-    				foreach ($formProperties as $formKey => $formValue) {
-    					if(in_array($formKey, $formProperties)){
-    						$oxForm->__set($key,$formValue);
+    			if(isset($activityProperties)){
+    				foreach ($activityProperties as $activityKey => $activityValue) {
+    					if(in_array($activityKey, $activityProperties)){
+    						$oxForm->__set($key,$activityValue);
     					}
     				}
     			}
-        		$formData = $oxForm->toArray();
+        		$activityData = $oxForm->toArray();
         		try {
-    				$formResult = $this->formService->createForm($appId,$formData);
-        			$formIdArray[] = $formData['id'];
-                    if(isset($form['start_form'])){
-                        $startFormId = $form['start_form'];
+    				$activityResult = $this->activityService->createActivity($appId,$activityData);
+        			$activityIdArray[] = $activityData['id'];
+                    if(isset($activity['start_form'])){
+                        $startFormId = $activity['start_form'];
                     }
-        			if($formResult){
-        				if(!$this->generateFields($form['fields'],$appId,$formData['id'],$workFlowId)) {
+        			if($activityResult){
+        				if(!$this->generateFields($activity['fields'],$appId,$activityData['id'],$workFlowId)) {
         					return 0;
         				}
         			} else {
-        				$formResult = $this->formService->deleteForm($formData['id']);
+        				$activityResult = $this->activityService->deleteActivity($activityData['id']);
         				return 0;
         			}
         		} catch (Exception $e){
-        			foreach ($formIdArray as $formCreatedId) {
-        				$id = $this->formService->deleteForm($formCreatedId);
+        			foreach ($activityIdArray as $activityCreatedId) {
+        				$id = $this->activityService->deleteActivity($activityCreatedId);
         			}
         			return 0;
         		}
     		}
         }
 		if(isset($workflowName)){
-			$deployedData = array('id'=>$workFlowId,'app_id'=>$appId,'name'=>$workflowName,'process_ids'=>$processId,'form_id'=>$startFormId,'process_keys'=>$formData['process_id'],'file'=>$workFlowStorageFolder.$fileName);
+			$deployedData = array('id'=>$workFlowId,'app_id'=>$appId,'name'=>$workflowName,'process_id'=>$processId,'form_id'=>$startFormId,'file'=>$workFlowStorageFolder.$fileName);
 			$workFlow = $this->saveWorkflow($appId,$deployedData);
 		}
 		return $deployedData?$deployedData:0;
@@ -184,7 +189,7 @@ class WorkflowService extends AbstractService{
     	}
     	return $count;
     }
-    private function generateFields($fieldsList,$appId,$formId,$workFlowId){
+    private function generateFields($fieldsList,$appId,$activityId,$workFlowId){
     	$i=0;
 		$fieldIdArray = array();
 		$existingFields = $this->fieldService->getFields($appId,array('workflow_id'=>$workFlowId));
@@ -213,7 +218,7 @@ class WorkflowService extends AbstractService{
     		try {
     			$fieldResult = $this->fieldService->saveField($appId,$fieldData);
 				$fieldIdArray[] = $fieldData['id'];
-				$createFormFieldEntry = $this->createFormFieldEntry($formId,$fieldData['id']);
+				$createFormFieldEntry = $this->createActivityFieldEntry($activityId,$fieldData['id']);
     		} catch(Exception $e){
     			foreach ($fieldIdArray as $fieldId) {
     				$id = $this->fieldService->deleteField($fieldId);
@@ -229,17 +234,17 @@ class WorkflowService extends AbstractService{
     	}
 	}
 
-	private function createFormFieldEntry($formId,$fieldId){		
-		$this->beginTransaction();		
-		try {		
-			$insert = "INSERT INTO `ox_form_field` (`form_id`,`field_id`) VALUES ($formId,$fieldId)";		
-			$resultSet = $this->executeQuerywithParams($insert);		
-			$this->commit();  		
-		} catch (Exception $e) {		
-			$this->rollback();		
-			return 0;		
-		}     		
-	}
+    private function createActivityFieldEntry($activityId,$fieldId){        
+        $this->beginTransaction();      
+        try {       
+            $insert = "INSERT INTO `ox_activity_field` (`activity_id`,`field_id`) VALUES ($activityId,$fieldId)";
+            $resultSet = $this->executeQuerywithParams($insert);
+            $this->commit();        
+        } catch (Exception $e) {        
+            $this->rollback();      
+            return 0;       
+        }           
+    }
 
 	public function updateWorkflow($id,&$data){
         $obj = $this->table->get($id,array());

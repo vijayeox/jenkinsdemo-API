@@ -8,7 +8,6 @@ class Workflow extends Entity{
         'id' => 0,
         'name' => NULL,
         'process_ids' => NULL,
-        'process_keys' =>0,
         'app_id' => NULL,
         'form_id' => NULL,
         'file'=>NULL

@@ -34,9 +34,9 @@ class WorkflowControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['id']>0, true);
-        $this->assertEquals($content['data'][0]['name'], 'workflow1');
+        $this->assertEquals($content['data'][0]['name'], 'Test Workflow 1');
         $this->assertEquals($content['data'][1]['id']>1, true);
-        $this->assertEquals($content['data'][1]['name'], 'workflow2');
+        $this->assertEquals($content['data'][1]['name'], 'Test Workflow 2');
     }
 
     public function testGet(){
@@ -51,7 +51,7 @@ class WorkflowControllerTest extends ControllerTest{
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id']>0, true);
-        $this->assertEquals($content['data']['name'], 'workflow1');
+        $this->assertEquals($content['data']['name'], 'Test Workflow 1');
     }
 
     public function testGetNotFound(){

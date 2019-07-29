@@ -41,7 +41,7 @@ public function parseBPMN($file,$appId,$workflowId){
     $startForm = $startEventList->item(0)->getElementsByTagNameNS(Config::camundaSpec,'formData');
     if($startForm){
       $fieldArray = array();
-      $formArray[$i]['form'] = $this->generateForm($startEventList->item(0),$appId,$element->getAttribute('id'),$workflowId);
+      $formArray[$i]['form'] = $this->generateForm($startEventList->item(0),$appId,$workflowId);
       $fields = $startEventList->item(0)->getElementsByTagNameNS(Config::camundaSpec,'formField');
       $formArray[$i]['fields'] = $this->generateFields($fieldArray,$fields,$appId,$workflowId);
       $formArray[$i]['start_form'] = $startEventList->item(0)->getAttribute('id');
@@ -50,7 +50,7 @@ public function parseBPMN($file,$appId,$workflowId){
     $elementList = $element->getElementsByTagNameNs(Config::bpmnSpec, 'userTask');
     foreach ($elementList as $task) {
       $fieldArray = array();
-      $formArray[$i]['form'] = $this->generateForm($task,$appId,$element->getAttribute('id'),$workflowId);
+      $formArray[$i]['activity'] = $this->generateActivity($task,$appId,$workflowId);
       $extensionElements = $task->getElementsByTagNameNS(Config::bpmnSpec,'extensionElements');
       foreach ($extensionElements as $eElem) {
         $elements = $eElem->getElementsByTagNameNS(Config::camundaSpec,'formData');
@@ -76,6 +76,10 @@ public function parseBPMN($file,$appId,$workflowId){
 private function generateForm($task,$appId,$workflowId){
   $oxForm = new CamundaForm($task,$appId,$workflowId);
   return $oxForm->toArray();
+}
+private function generateActivity($task,$appId,$workflowId){
+  $oxActivity = new CamundaActivity($task,$appId,$workflowId);
+  return $oxActivity->toArray();
 }
 private function generateFields($fieldArray,$fields,$appId,$workflowId){
   foreach ($fields as $field) {

@@ -159,7 +159,7 @@ class WorkflowInstanceService extends AbstractService {
 			if($workFlowFlag){
 				if($workflow['form_id']==$params['form_id'] || $params['activityId']==NULL){
 					$workflowInstanceId = $this->processEngine->startProcess($workflow['process_ids'],$params);
-                    $this->setupWorkflowInstance($workflowId,$workflowInstanceId['id']);	
+                    $workflowInstance = $this->setupWorkflowInstance($workflowId,$workflowInstanceId['id']);
 				} else {
 					$workflowInstanceId = $this->activityEngine->submitTaskForm($params['form_id'],$params);
 				}

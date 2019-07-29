@@ -12,8 +12,10 @@ use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Model\FormTable;
 use Oxzion\Model\FieldTable;
+use Oxzion\Model\FileTable;
 use Oxzion\Model\WorkflowTable;
 use Oxzion\Service\FieldService;
+use Oxzion\Service\FileService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\WorkflowService;
 
@@ -107,6 +109,13 @@ class Module implements ConfigProviderInterface {
                 Controller\FormController::class => function($container) {
                     return new Controller\FormController(
                         $container->get(FormTable::class),$container->get(FormService::class),
+                        $container->get('AppLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\FileController::class => function($container) {
+                    return new Controller\FileController(
+                        $container->get(FileTable::class),$container->get(FileService::class),
                         $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
