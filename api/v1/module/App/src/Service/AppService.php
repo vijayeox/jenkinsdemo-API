@@ -425,10 +425,20 @@ class AppService extends AbstractService
                     $data['date_created'] = date('Y-m-d H:i:s');
                     $data['status'] = App::PUBLISHED;
                     $data['type'] = App::PRE_BUILT;
-                    $data['uuid'] = Uuid::uuid4()->toString();
+                    if($apps[$x]['uuid'] == "NULL"){
+                        $apps[$x]['uuid'] = NULL;
+                    }
+                    $data['uuid'] = isset($apps[$x]['uuid'])? $apps[$x]['uuid'] : Uuid::uuid4()->toString();
                     $form->exchangeArray($data);
                     $form->validate();
                     $count += $this->table->save($form);
+                }else{
+                    $start_options = isset($apps[$x]['options']) ? json_encode($apps[$x]['options']) : NULL;
+                    $category = isset($apps[$x]['category']) ? $apps[$x]['category'] : NULL;
+                    $isdefault = isset($apps[$x]['isdefault']) ? $apps[$x]['isdefault'] : 0;
+                    $modified_by = 1;
+                    $update = "UPDATE ox_app SET `start_options` = '".$start_options."', `category` = '".$category."',`isdefault` = ".$isdefault.", `date_modified` = '".date('Y-m-d H:i:s')."',`modified_by` = ".$modified_by." WHERE name = '".$apps[$x]['name']."'";
+                    $updatequery = $this->executeQuerywithParams($update);
                 }
             }
             $query = "SELECT id from `ox_app` WHERE isdefault = 1";
