@@ -13,7 +13,10 @@ use Zend\InputFilter\Input;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Zend\Db\Sql\Expression;
+use Oxzion\Utils\FileUtils;
 use Oxzion\Service\AbstractService;
+use Oxzion\Utils\BosUtils;
+
 
 
 class ContactController extends AbstractApiController
@@ -119,8 +122,12 @@ class ContactController extends AbstractApiController
             return $this->getErrorResponse("Contact not found", 404, ['id' => $id]);
         }
         else{
-            $result['phone_list']=json_decode($result['phone_list'],true);
-            $result['email_list']=json_decode($result['email_list'],true);
+            if(isset($result[0]['phone_list']) && $result[0]['phone_list'] != "null" && !empty($result[0]['phone_list'])){
+                $result[0]['phone_list']=json_decode($result[0]['phone_list'],true);
+            }
+            if(isset($result[0]['email_list']) && $result[0]['email_list'] != "null" && !empty($result[0]['email_list'])){
+                $result[0]['email_list']=json_decode($result[0]['email_list'],true);
+            }
             $baseUrl =$this->getBaseUrl();
             if($result[0]['icon_type']){
                 $userId = $this->contactService->getUuidById($result[0]['user_id']);
@@ -174,6 +181,67 @@ class ContactController extends AbstractApiController
             $result = $this->contactService->getContacts($data['column']);;
         }
         return $this->getSuccessResponseWithData($result);
+    }
+
+    public function contactImportAction(){
+        $columns = ['Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type','Phone 1 - Value','Organization 1 - Name','Organization 2 - Title','Location'];
+        if(!isset($_FILES['file'])){
+            return $this->getErrorResponse("Add file to import", 404);   
+        }
+        $result = $this->contactService->importContactCSV($_FILES['file']);
+
+        if($result ==  3){
+            return $this->getErrorResponse("Column Headers donot match...", 404,$columns);
+        }
+
+        if($result == 0){
+            return $this->getErrorResponse("Failed to insert", 404);
+        }
+        if(is_array($result)){
+            $filename = BosUtils::randomPassword();
+            $response = $this->convertToCsv($result,$filename.'.csv');
+            return $this->getSuccessStringResponse("Validate and Import the downloaded file",200,$response);
+        }
+
+        return $this->getSuccessResponse("Imported Successfully",200);
+    }
+
+
+    public function convertToCsv($data,$filename){
+        FileUtils::createDirectory('/tmp/oxzion');
+        
+        $file = '/tmp/oxzion/'.$filename;
+        
+        try{
+            $fp = fopen($file, 'x');
+            foreach ($data as $line ) {
+                    fputcsv($fp, $line);
+            }
+            fclose($fp);
+            $fp = fopen($file,'rb');
+            $data = file_get_contents($file);
+            fclose($fp);
+            return $data;
+        }
+        catch(Exception $e){
+            return $this->getErrorResponse("Resource not Found", 404);
+        }
+    }
+
+    public function contactExportAction()
+    {
+        $id = $this->extractPostData();
+
+        if(isset($id['contactUuid'])){
+            $result = $this->contactService->exportContactCSV($id['contactUuid']);
+        }else{
+            $result = $this->contactService->exportContactCSV(); 
+        }
+        if(isset($result['data'])){
+                 $filename = BosUtils::randomPassword();
+                 $response = $this->convertToCsv($result['data'], $filename.'.csv');
+                 return $this->getSuccessStringResponse("Exported CSV Data",200,$response);
+        }
     }
 }
 

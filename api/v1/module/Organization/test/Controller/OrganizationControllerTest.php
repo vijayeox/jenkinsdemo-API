@@ -159,7 +159,7 @@ class OrganizationControllerTest extends ControllerTest
         $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
-        $contact = array('username' => 'goku','firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharat@myvamla.com');
+        $contact = array('username' => 'goku','firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharat@myvamla.com','phone' => '1234567890');
         $preferences = array('currency' => 'INR','timezone' => 'Asia/Calcutta','dateformat' => 'dd/mm/yyy');
         $data = array('name'=>'ORGANIZATION','address' => 'Bangalore','contact' => json_encode($contact),'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
@@ -205,13 +205,15 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['status'], $data['status']);
     }
 
     public function testCreateWithOutNameFailure()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['logo' => 'logo.png', 'status' => 'Active'];
+        $contact = array('username' => 'goku','firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharat@myvamla.com','phone' => '1234567890');
+        $preferences = array('currency' => 'INR','timezone' => 'Asia/Calcutta','dateformat' => 'dd/mm/yyy');
+        
+        $data = ['logo' => 'logo.png', 'status' => 'Active','contact' => json_encode($contact),'preferences' => json_encode($preferences)];
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();

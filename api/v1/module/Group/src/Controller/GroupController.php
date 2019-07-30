@@ -73,7 +73,7 @@ class GroupController extends AbstractApiController {
             }else{
                  $count = $this->groupService->updateGroup($id['groupId'],$data,$files); 
             }
-
+            
 		} catch(ValidationException $e) {
 			$response = ['data' => $data, 'errors' => $e->getErrors()];
 			return $this->getErrorResponse("Validation Errors",404, $response);

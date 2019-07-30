@@ -1,4 +1,5 @@
 <?php
+
 namespace Contact;
 
 use Contact\Controller\ContactController;
@@ -9,6 +10,7 @@ use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use PHPUnit\Framework\TestResult;
 use Zend\Db\Sql\Sql;
+use Oxzion\Utils\FileUtils;
 use Zend\Db\Adapter\Adapter;
 
 
@@ -227,8 +229,95 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['myContacts'][0]['user_id'], 1);
         $this->assertEquals($content['data']['myContacts'][0]['first_name'], 'Karan S');
         $this->assertEquals($content['data']['myContacts'][0]['last_name'], 'Agarwal');
-        $this->assertEquals($content['data']['myContacts'][0]['icon'], '://:/user/profile/4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data']['myContacts'][0]['icon'], 'http://localhost:8080/user/profile/4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
            
+    }
+
+
+    public function testContactImport(){
+        $this->initAuthToken($this->adminUser);
+        $_FILES['file'] = array();
+        $_FILES['file']['name'] = 'contact1.csv';
+        $_FILES['file']['type'] = 'text/csv';
+        $_FILES['file']['tmp_name'] = __DIR__.'/../files/contact1.csv';
+        $_FILES['file']['error'] = 0;
+        $_FILES['file']['size'] = 1007;
+        $this->dispatch('/contact/import', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Contact');
+        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ContactController');
+        $this->assertMatchedRouteName('contactImport');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testContactImportWithInvalidColumnHeaders(){
+        $this->initAuthToken($this->adminUser);
+        $_FILES['file'] = array();
+        $_FILES['file']['name'] = 'invalidheaders.csv';
+        $_FILES['file']['type'] = 'text/csv';
+        $_FILES['file']['tmp_name'] = __DIR__.'/../files/invalidheaders.csv';
+        $_FILES['file']['error'] = 0;
+        $_FILES['file']['size'] = 1007;
+        $this->dispatch('/contact/import', 'POST');
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('Contact');
+        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ContactController');
+        $this->assertMatchedRouteName('contactImport');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Column Headers donot match...');
+    }
+
+    public function testContactImportWithInvalidData(){
+        $this->initAuthToken($this->adminUser);
+        $_FILES['file'] = array();
+        $_FILES['file']['name'] = 'invaliddata.csv';
+        $_FILES['file']['type'] = 'text/csv';
+        $_FILES['file']['tmp_name'] = __DIR__.'/../files/invaliddata.csv';
+        $_FILES['file']['error'] = 0;
+        $_FILES['file']['size'] = 1007;
+        $this->dispatch('/contact/import', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Contact');
+        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ContactController');
+        $this->assertMatchedRouteName('contactImport');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['message'], 'Validate and Import the downloaded file');
+        $this->assertEquals(count($content['data']), 1);       
+    }
+
+    public function testContactExport(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/contact/export', 'POST',null);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Contact');
+        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ContactController');
+        $this->assertMatchedRouteName('contactExport');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['message'], 'Exported CSV Data');
+        $this->assertEquals(count($content['data']), 1);       
+    }
+
+    public function testContactExportByUuid(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['contactUuid' => array(['uuid' => '143949cf-6696-42ad-877a-26e8119603c3'])];
+        $this->dispatch('/contact/export', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Contact');
+        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ContactController');
+        $this->assertMatchedRouteName('contactExport');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['message'], 'Exported CSV Data');
+        $this->assertEquals(count($content['data']), 1);       
     }
 
 }

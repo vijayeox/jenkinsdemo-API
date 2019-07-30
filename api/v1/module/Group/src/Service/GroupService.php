@@ -111,10 +111,12 @@ class GroupService extends AbstractService {
         $data['uuid'] = Uuid::uuid4()->toString();   
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
+        $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
-        $data['manager_id']=$result[0]["id"];
-
+        if($result){
+           $data['manager_id']=$result[0]["id"];
+        }
         if(isset($data['parent_id'])){
             $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
         }
@@ -280,9 +282,12 @@ class GroupService extends AbstractService {
         $data = array_merge($obj->toArray(), $data);
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
+        $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
-        $data['manager_id']=$result[0]["id"];
+        if($result){
+           $data['manager_id']=$result[0]["id"];
+        }
         $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
         $form->exchangeArray($data);
         $form->validate();
@@ -293,10 +298,11 @@ class GroupService extends AbstractService {
                 $this->uploadGroupLogo($org['uuid'],$id,$files);
             }
             if($count == 0) {
-                $this->rollback();
                 return 1;
             }
         } catch(Exception $e) {
+            // print("Exception");
+            // print_r($e->getMessage());
             $this->rollback();
             return 0;
         }

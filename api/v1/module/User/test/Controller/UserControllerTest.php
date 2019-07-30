@@ -60,6 +60,15 @@ class UserControllerTest extends ControllerTest
         return $resultSet->toArray();
     }
 
+
+    private function executeUpdate($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        return $result;
+    }
+  
+
     public function testCreateByAdmin()
     {
         $this->initAuthToken($this->adminUser);
@@ -87,7 +96,7 @@ class UserControllerTest extends ControllerTest
 
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content['data']['id']);
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['username'], $data['username']);
         $this->assertEquals($content['data']['status'], $data['status']);
         $this->assertEquals($userOrg[0]['user_id'], $userId[0]['id']);
         $this->assertEquals($userOrg[0]['org_id'],1);
@@ -124,7 +133,7 @@ class UserControllerTest extends ControllerTest
 
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content['data']['id']);
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['username'], $data['username']);
         $this->assertEquals($content['data']['status'], $data['status']);
         $this->assertEquals($userOrg[0]['user_id'], $userId[0]['id']);
         $this->assertEquals($userOrg[0]['org_id'],1);
@@ -700,9 +709,8 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('getuserproject');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($diff, array());
+        $this->assertEquals(count($content['data']),2);
     }
     public function testGetUserProjectWithoutdata()
     {
@@ -713,9 +721,8 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('getuserproject');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($diff, array());
+        $this->assertEquals(count($content['data']),0);
     }
 
     public function testSaveMe(){
@@ -745,6 +752,13 @@ class UserControllerTest extends ControllerTest
 
     public function testBlackListAppsForEmployee(){
         $this->initAuthToken($this->employeeUser);
+        $update = "update ox_app set uuid = 'c980e23a-ade8-4bd9-a06c-a39ca7854b9d' where name = 'AppBuilder'";
+        $result = $this->executeUpdate($update);
+
+        $update = "update ox_app set uuid = '636cb8e2-14a9-4c09-a668-14f6518b8d0d' where name = 'CRM'";
+        $result = $this->executeUpdate($update);
+      
+      
         $this->dispatch('/user/me/bapp', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('loggedInUser');
@@ -757,6 +771,9 @@ class UserControllerTest extends ControllerTest
 
     public function testBlackListAppsForManager(){
         $this->initAuthToken($this->managerUser);
+        $update = "update ox_app set uuid = 'c980e23a-ade8-4bd9-a06c-a39ca7854b9d' where name = 'AppBuilder'";
+        $result = $this->executeUpdate($update);
+
         $this->dispatch('/user/me/bapp', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('loggedInUser');

@@ -5,6 +5,7 @@ ox_organization:
         name: 'Sample Organization'
         status: 'Active'
         preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
+        contactid: 2
 
 ox_user:
   -

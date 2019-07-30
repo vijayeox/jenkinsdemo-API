@@ -64,7 +64,7 @@ class EmailControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
+        $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('email_setting_user'));
     }
 
@@ -77,7 +77,7 @@ class EmailControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
+        $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('email_setting_user'));
     }
 
@@ -103,7 +103,7 @@ class EmailControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['email'], $data['email']);
     }
     
     public function testUpdateNotFound(){

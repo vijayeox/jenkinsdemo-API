@@ -318,7 +318,7 @@ class OrganizationService extends AbstractService
     private function getOrgContactPersonDetails($id){
         $userData = array();
         $userSelect = "SELECT ou.uuid from `ox_user` as ou where ou.id = (SELECT og.contactid from `ox_organization` as og WHERE og.uuid = '".$id."')";
-        $userData = $this->executeQueryWithParams($userSelect)->toArray();    
+        $userData = $this->executeQueryWithParams($userSelect)->toArray();
         return $userData[0]['uuid'];
     }
 
@@ -367,7 +367,6 @@ class OrganizationService extends AbstractService
             $count=$resultSet->toArray()[0]['count(id)'];
             $query ="SELECT uuid,name,address,city,state,country,zip,logo,preferences,contactid FROM `ox_organization`".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query)->toArray();
-
             for($x=0;$x<sizeof($resultSet);$x++) {
               $resultSet[$x]['contactid'] = $this->getOrgContactPersonDetails($resultSet[$x]['uuid']);
             }
