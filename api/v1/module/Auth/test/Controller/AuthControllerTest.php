@@ -211,7 +211,7 @@ class AuthControllerTest extends ControllerTest{
     public function testValidateTokenFail(){
         $data =[ 'jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTY4NTg1NjIsImp0aSI6Im9BZGNqQ1JhOWJGZzdwNnNXd3oyT3RDVTdNNzR5UlJPMGhZR2NiZjhpR289IiwibmJmIjoxNTU2ODU4NTYyLCJleHAiOjE1NTY5MzA1NjIsImRhdGEiOnsidXNlcm5hbWUiOiJiaGFyYXRnIiwib3JnaWQiOiIxIn19.p7T8djg6zAaSTNeBEPK-Z_1nBA1zcgh8eZ23JdPBpUCywluG3NFqjD37C9o_Fj8zw5xIHQMi0_aKk0sgNpUPaw'];
         $this->dispatch('/validatetoken', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
         $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AuthController');
