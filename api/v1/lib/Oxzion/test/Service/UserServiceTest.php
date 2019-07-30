@@ -42,7 +42,7 @@ class UserServiceTest extends ServiceTest {
     }
 
     public function testGetPrivileges(){
-        $data = $this->getUserService()->getPrivileges(1);
+        $data = $this->getUserService()->getPrivileges(1,1);
         $this->assertEquals(isset($data), true);
         $this->assertEquals(count($data) > 0, true);
     }

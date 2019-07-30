@@ -37,7 +37,7 @@ class ProfilePictureController extends AbstractApiController {
     */
     public function updateProfileAction() {
         $this->log->info($this->logClass . ":Profile update controller");
-        $params=$this->params()->fromPost();
+        $params=$this->extractPostData();
         $files=substr($params['file'],strpos($params['file'],",")+1);
         $files=base64_decode($files);
         try {

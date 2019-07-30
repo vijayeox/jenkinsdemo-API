@@ -5,6 +5,7 @@ use Oxzion\Workflow\ProcessManager;
 use Oxzion\Utils\RestClient;
 use Sabre\Xml\Service;
 use Oxzion\Service\FormService;
+use Oxzion\Utils\XMLUtils;
 
 class ProcessManagerImpl implements ProcessManager {
   public function __construct() {
@@ -14,16 +15,14 @@ class ProcessManagerImpl implements ProcessManager {
     $this->restClient = $restClient;
   }
 
-  public function deploy($tenantId,$name,$filesArray){
-    $fields = array("deployment-name"=>$name,"tenant-id"=>$tenantId);
+  public function deploy($name,$filesArray){
+    $fields = array("deployment-name"=>$name);
     $url = "deployment/create";
     try{
      $response = $this->restClient->postMultiPart($url,$fields,$filesArray);
      $result = json_decode($response,true);
      if($result){
-       $process = new Process();
-       $process->exchangeArray($result);
-       return $process->toArray();
+       return array_keys($result['deployedProcessDefinitions']);
      } else {
       return 0;
     }
@@ -52,7 +51,6 @@ public function parseBPMN($file,$appId,$workflowId){
     foreach ($elementList as $task) {
       $fieldArray = array();
       $formArray[$i]['form'] = $this->generateForm($task,$appId,$element->getAttribute('id'),$workflowId);
-      $processId = $task->getAttribute('id');
       $extensionElements = $task->getElementsByTagNameNS(Config::bpmnSpec,'extensionElements');
       foreach ($extensionElements as $eElem) {
         $elements = $eElem->getElementsByTagNameNS(Config::camundaSpec,'formData');
@@ -65,7 +63,7 @@ public function parseBPMN($file,$appId,$workflowId){
         $hiddenFields = $eElem->getElementsByTagNameNS(Config::camundaSpec,'field');
         if($hiddenFields){
           foreach ($hiddenFields as $hiddenField) {
-            $fieldArray = $this->generateHiddenFields($fieldArray,$hiddenField,$processId,$appId,$workflowId);
+            $fieldArray = $this->generateHiddenFields($fieldArray,$hiddenField,$appId,$workflowId);
           }
         }
         $formArray[$i]['fields'] = $fieldArray;
@@ -75,8 +73,8 @@ public function parseBPMN($file,$appId,$workflowId){
   }
   return $formArray;
 }
-private function generateForm($task,$appId,$processId,$workflowId){
-  $oxForm = new CamundaForm($task,$appId,$processId,$workflowId);
+private function generateForm($task,$appId,$workflowId){
+  $oxForm = new CamundaForm($task,$appId,$workflowId);
   return $oxForm->toArray();
 }
 private function generateFields($fieldArray,$fields,$appId,$workflowId){

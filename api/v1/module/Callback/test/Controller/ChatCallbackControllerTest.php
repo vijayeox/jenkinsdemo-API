@@ -36,7 +36,7 @@ namespace Callback;
 				$mockRestClient = $this->getMockRestClientForChatService();
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams",array("name" => "teams1","display_name" => "teams1","type" => "O"), Mockery::any())->once()->andReturn(array("body" => json_encode(array("name"=>"teams-1","display_name" => "teams-1"))));
 			}
-			$this->dispatch('/callback/chat/addorg', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/addorg', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -56,7 +56,7 @@ namespace Callback;
 				$exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams",array("name" => 'teams1',"display_name" => 'teams1',"type" => 'O'),Mockery::any())->once()->andThrow($exception);
 			 }
-			$this->dispatch('/callback/chat/addorg', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/addorg', 'POST', $data);
 			$this->assertResponseStatusCode(400);
 			$this->assertMatchedRouteName('addcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -72,7 +72,7 @@ namespace Callback;
 				$exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams",array("status"=>"Active"),Mockery::any())->once()->andThrow($exception);
 			 }
-			$this->dispatch('/callback/chat/addorg', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/addorg', 'POST', $data);
 			$this->assertResponseStatusCode(400);
 			$this->assertMatchedRouteName('addcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -89,7 +89,7 @@ namespace Callback;
 			$mockRestClient->expects('put')->with("api/v4/teams/121",array("name" => 'newoxzion1',"display_name" => 'newoxzion1',"id" => 121),Mockery::any())->once()->andReturn(json_encode(array('name'=>"newoxzion1","display_name" => 'newoxzion1')));
 		}
 
-			$this->dispatch('/callback/chat/updateorg', 'POST',array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/updateorg', 'POST',$data);
 			$this->assertResponseStatusCode(200);
 			$this->assertMatchedRouteName('updatecallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -106,7 +106,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/teams/name/teams1",array(),Mockery::any())->once()->andReturn(json_encode(array("name"=>"teams1","display_name" => 'teams1',"id" => 121)));
 				$mockRestClient->expects('put')->with("api/v4/teams/121",array("id" => 121),Mockery::any())->once()->andThrow($exception);
 			 }
-			$this->dispatch('/callback/chat/updateorg', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/updateorg', 'POST', $data);
 			$this->assertResponseStatusCode(404);
 			$this->assertMatchedRouteName('updatecallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -117,7 +117,7 @@ namespace Callback;
 			$data = ['new_orgname' => 'Vantage Vantage','status'=>'Active'];
 			$this->initAuthToken($this->adminUser);
 			$this->setJsonContent(json_encode($data));
-			$this->dispatch('/callback/chat/updateorg', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/updateorg', 'POST', $data);
 			$this->assertResponseStatusCode(404);
 			$this->assertMatchedRouteName('updatecallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -134,7 +134,7 @@ namespace Callback;
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams/121/members",array('team_id' => 121,'user_id' => 1),Mockery::any())->once()->andReturn(array("body" => json_encode(array("team_id"=>121,"user_id" => 1,"roles"=>"team_user"))));
 			}
 
-			$this->dispatch('/callback/chat/adduser', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/adduser', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -159,7 +159,7 @@ namespace Callback;
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams/121/members",array('team_id' => 121,'user_id' => 2),Mockery::any())->once()->andReturn(array("body" => json_encode(array("team_id"=>121,"user_id" => 2,"roles"=>"team_user"))));
 				
 			}
-			$this->dispatch('/callback/chat/adduser', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/adduser', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -184,7 +184,7 @@ namespace Callback;
 			if(enableMattermost==1){
 				$this->assertTrue(true);
 			}else{
-				$this->dispatch('/callback/chat/adduser', 'POST', array(json_encode($data)=>''));
+				$this->dispatch('/callback/chat/adduser', 'POST', $data);
 				$this->assertResponseStatusCode(500);
 				$this->assertModuleName('Callback');
 				$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -209,7 +209,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/users/username/".$this->managerUser,array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>$this->managerUser,"id" => 1)));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams/125/members",array('team_id' => 125,'user_id' => 1),Mockery::any())->once()->andReturn(array("body" => json_encode(array("team_id"=>125,"user_id" => 1,"roles"=>"team_user"))));
 			}
-			$this->dispatch('/callback/chat/adduser', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/adduser', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -233,7 +233,7 @@ namespace Callback;
 			if(enableMattermost==1){
 				$this->assertTrue(true);
 			}else{
-				$this->dispatch('/callback/chat/adduser', 'POST', array(json_encode($data)=>''));
+				$this->dispatch('/callback/chat/adduser', 'POST', $data);
 				$this->assertResponseStatusCode(500);
 				$this->assertModuleName('Callback');
 				$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -253,7 +253,7 @@ namespace Callback;
 				$exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams",array("status"=>"Active"),Mockery::any())->once()->andThrow($exception);
 			 }
-			$this->dispatch('/callback/chat/adduser', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/adduser', 'POST', $data);
 			$this->assertResponseStatusCode(400);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -273,7 +273,7 @@ namespace Callback;
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels",array('team_id'=>121,'name'=>"channelprivate1",'display_name'=>"channelprivate1",'type'=>'P'),Mockery::any())->once()->andReturn(array("body" => json_encode(array("id"=> 234,"name"=>"channelprivate1","display_name" => "channelprivate1","team_id" => 121))));
 			}
 
-			$this->dispatch('/callback/chat/createchannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/createchannel', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -296,7 +296,7 @@ namespace Callback;
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams",array('name' => "neworg1",'display_name' => "neworg1",'type' => 'O'),Mockery::any())->once()->andReturn(array("body" => json_encode(array("id"=> 130,"name"=>"neworg1","display_name" => "neworg1"))));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels",array('team_id'=>130,'name'=>"newchanneltest",'display_name'=>"newchanneltest",'type'=>'P'),Mockery::any())->once()->andReturn(array("body" => json_encode(array("id"=> 250,"name"=>"newchanneltest","display_name" => "newchanneltest","team_id" => 130))));
 			}
-			$this->dispatch('/callback/chat/createchannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/createchannel', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -320,7 +320,7 @@ namespace Callback;
 			if(enableMattermost==1){
 				$this->assertTrue(true);
 			}else{
-				$this->dispatch('/callback/chat/createchannel', 'POST', array(json_encode($data)=>''));
+				$this->dispatch('/callback/chat/createchannel', 'POST', $data);
 				$this->assertResponseStatusCode(500);
 				$this->assertModuleName('Callback');
 				$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -342,7 +342,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/teams/name/teams1",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"teams1","display_name" => 'teams1',"id" => 121)));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels",array('team_id'=>121,'type'=>'P'),Mockery::any())->once()->andThrows($exception);
 			}
-			$this->dispatch('/callback/chat/createchannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/createchannel', 'POST', $data);
 			$this->assertResponseStatusCode(400);
 			$this->assertMatchedRouteName('createchannelcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -353,7 +353,7 @@ namespace Callback;
 			$this->initAuthToken($this->adminUser);
 			$data = ['groupname'=>'Private Channel 1','status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
-			$this->dispatch('/callback/chat/createchannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/createchannel', 'POST', $data);
 			$this->assertResponseStatusCode(400);
 			$this->assertMatchedRouteName('createchannelcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -370,7 +370,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/teams/121/channels/name/channelprivate1",array(),Mockery::any())->once()->andReturn(json_encode(array("id"=> 234,"name"=>"channelprivate1","display_name" => "channelprivate1","team_id" => 121)));
 				$mockRestClient->expects('put')->with("api/v4/channels/234",array('id'=>234,'name'=>"newchannelprivate1",'display_name' =>"newchannelprivate1"),Mockery::any())->once()->andReturn(json_encode(array("id"=> 234,"name"=>"newchannelprivate1","display_name" => "newchannelprivate1","team_id" => 121)));
 			}
-			$this->dispatch('/callback/chat/updatechannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/updatechannel', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertMatchedRouteName('updatechannelcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -388,7 +388,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/teams/121/channels/name/channelprivate1",array(),Mockery::any())->once()->andReturn(json_encode(array("id"=> 234,"name"=>"channelprivate1","display_name" => "channelprivate1","team_id" => 121)));
 				$mockRestClient->expects('put')->with("api/v4/channels/234",array('id'=>234),Mockery::any())->once()->andThrow($exception);
 			 }
-			$this->dispatch('/callback/chat/updatechannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/updatechannel', 'POST', $data);
 			$this->assertResponseStatusCode(404);
 			$this->assertMatchedRouteName('updatechannelcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -399,7 +399,7 @@ namespace Callback;
 			$this->initAuthToken($this->adminUser);
 			$data = ['new_groupname' => 'Oh myh god','orgname'=>'Testing Team','status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
-			$this->dispatch('/callback/chat/updatechannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/updatechannel', 'POST', $data);
 			$this->assertResponseStatusCode(404);
 			$this->assertMatchedRouteName('updatechannelcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -418,7 +418,7 @@ namespace Callback;
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels/234/members",array('user_id' => 1),Mockery::any())->once()->andReturn(array("body" => json_encode(array('channel_id'=>234,"user_id" =>1))));
 			}
 	
-			$this->dispatch('/callback/chat/addusertochannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -444,7 +444,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/teams/121/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("team_id"=>121,"user_id"=>1)));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels/260/members",array('user_id' => 1),Mockery::any())->once()->andReturn(array("body" => json_encode(array('channel_id'=>260,"user_id" =>1))));
 			}
-			$this->dispatch('/callback/chat/addusertochannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -469,7 +469,7 @@ namespace Callback;
 			if(enableMattermost==1){
 				$this->assertTrue(true);
 			}else{
-				$this->dispatch('/callback/chat/addusertochannel', 'POST', array(json_encode($data)=>''));
+				$this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
 				$this->assertResponseStatusCode(500);
 				$this->assertModuleName('Callback');
 				$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -497,7 +497,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/teams/170/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("team_id"=>170,"user_id"=>1)));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels/270/members",array('user_id' => 1),Mockery::any())->once()->andReturn(array("body" => json_encode(array('channel_id'=>270,"user_id" =>1))));
 			}
-			$this->dispatch('/callback/chat/addusertochannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -521,7 +521,7 @@ namespace Callback;
 			if(enableMattermost==1){
 				$this->assertTrue(true);
 			}else{
-				$this->dispatch('/callback/chat/addusertochannel', 'POST', array(json_encode($data)=>''));
+				$this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
 				$this->assertResponseStatusCode(500);
 				$this->assertModuleName('Callback');
 				$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -548,7 +548,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/teams/121/members/3",array(),Mockery::any())->once()->andReturn(json_encode(array("team_id"=>121,"user_id"=>3)));
 				$mockRestClient->expects('postWithHeader')->with("api/v4/channels/260/members",array('user_id' => 3),Mockery::any())->once()->andReturn(array("body" => json_encode(array('channel_id'=>260,"user_id" =>3))));
 			}
-			$this->dispatch('/callback/chat/addusertochannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -574,7 +574,7 @@ namespace Callback;
 			if(enableMattermost==1){
 				$this->assertTrue(true);
 			}else{
-				$this->dispatch('/callback/chat/addusertochannel', 'POST', array(json_encode($data)=>''));
+				$this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
 				$this->assertResponseStatusCode(500);
 				$this->assertModuleName('Callback');
 				$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -591,7 +591,7 @@ namespace Callback;
 			$this->initAuthToken($this->adminUser);
 			$data = ['orgname'=>'Raks Team','groupname'=>'Channel Crrate Private','status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
-			$this->dispatch('/callback/chat/addusertochannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/addusertochannel', 'POST', $data);
 			$this->assertResponseStatusCode(400);
 			$this->assertMatchedRouteName('addusertochannelcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -610,7 +610,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/channels/234/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("channel_id"=>234,"user_id"=>1)));
 				$mockRestClient->expects('delete')->with("api/v4/channels/234/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("status"=>"OK")));
 			}
-			$this->dispatch('/callback/chat/removeuserfromchannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/removeuserfromchannel', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); 
@@ -625,7 +625,7 @@ namespace Callback;
 			$this->initAuthToken($this->adminUser);
 			$data = ['orgname'=>'Raks Team','groupname'=>'Channel Crrate Private','status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
-			$this->dispatch('/callback/chat/removeuserfromchannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/removeuserfromchannel', 'POST', $data);
 			$this->assertResponseStatusCode(400);
 			$this->assertMatchedRouteName('removeuserfromchannelcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -645,7 +645,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/teams/121/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("team_id"=>121,"user_id"=>1)));
 				$mockRestClient->expects('get')->with("api/v4/channels/260/members/1",array(),Mockery::any())->once()->andThrow($exception);
 			}
-			$this->dispatch('/callback/chat/removeuserfromchannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/removeuserfromchannel', 'POST', $data);
 			$this->assertResponseStatusCode(400);
 			$this->assertMatchedRouteName('removeuserfromchannelcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -668,7 +668,7 @@ namespace Callback;
 			if(enableMattermost==1){
 				$this->assertTrue(true);
 			}else{
-				$this->dispatch('/callback/chat/removeuserfromchannel', 'POST', array(json_encode($data)=>''));
+				$this->dispatch('/callback/chat/removeuserfromchannel', 'POST', $data);
 				$this->assertResponseStatusCode(500);
 				$this->assertMatchedRouteName('removeuserfromchannelcallback');
 				$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -686,7 +686,7 @@ namespace Callback;
 				$mockRestClient->expects('delete')->with("api/v4/channels/234",array(),Mockery::any())->once()->andReturn(json_encode(array("status"=>"OK")));
 			}
 	
-			$this->dispatch('/callback/chat/deletechannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/deletechannel', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -701,7 +701,7 @@ namespace Callback;
 			$this->initAuthToken($this->adminUser);
 			$data = ['orgname'=>'Raks Team','status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
-			$this->dispatch('/callback/chat/deletechannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/deletechannel', 'POST', $data);
 			$this->assertResponseStatusCode(400);
 			$this->assertMatchedRouteName('deletechannelcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -712,7 +712,7 @@ namespace Callback;
 			$this->initAuthToken($this->adminUser);
 			$data = ['groupname'=>'off-topic','status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
-			$this->dispatch('/callback/chat/deletechannel', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/deletechannel', 'POST', $data);
 			$this->assertResponseStatusCode(400);
 			$this->assertMatchedRouteName('deletechannelcallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -734,7 +734,7 @@ namespace Callback;
 			if(enableMattermost==1){
 				$this->assertTrue(true);
 			}else{
-				$this->dispatch('/callback/chat/deletechannel', 'POST', array(json_encode($data)=>''));
+				$this->dispatch('/callback/chat/deletechannel', 'POST', $data);
 				$this->assertResponseStatusCode(500);
 				$this->assertModuleName('Callback');
 				$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -756,7 +756,7 @@ namespace Callback;
 			$mockRestClient->expects('delete')->with("api/v4/teams/121/members/1",array(),Mockery::any())->once()->andReturn(json_encode(array("status"=>"OK")));
 		}
 		
-			$this->dispatch('/callback/chat/removeuser', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/removeuser', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertModuleName('Callback');
 			$this->assertControllerName(ChatcallbackController::class); // as specified in router's controller name alias
@@ -781,7 +781,7 @@ namespace Callback;
 			if(enableMattermost==1){
 				$this->assertTrue(true);
 			}else{
-				$this->dispatch('/callback/chat/removeuser', 'POST', array(json_encode($data)=>''));
+				$this->dispatch('/callback/chat/removeuser', 'POST', $data);
 				$this->assertResponseStatusCode(500);
 				$this->assertMatchedRouteName('removeusercallback');
 				$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -794,7 +794,7 @@ namespace Callback;
 			$this->initAuthToken($this->adminUser);
 			$data = ['orgname' => 'Raks Team','status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
-			$this->dispatch('/callback/chat/removeuser', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/removeuser', 'POST', $data);
 			$this->assertResponseStatusCode(404);
 			$this->assertMatchedRouteName('removeusercallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -805,7 +805,7 @@ namespace Callback;
 			$this->initAuthToken($this->adminUser);
 			$data = ['username' => $this->adminUser,'status'=>'Active'];
 			$this->setJsonContent(json_encode($data));
-			$this->dispatch('/callback/chat/removeuser', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/removeuser', 'POST', $data);
 			$this->assertResponseStatusCode(404);
 			$this->assertMatchedRouteName('removeusercallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -823,7 +823,7 @@ namespace Callback;
 				$mockRestClient->expects('get')->with("api/v4/teams/name/raksteam",array(),Mockery::any())->once()->andReturn(json_encode(array('name'=>"raksteam","display_name" => 'raksteam',"id" => 175)));
 				$mockRestClient->expects('delete')->with("api/v4/teams/175/members/1",array(),Mockery::any())->once()->andThrow($exception);
 			}
-			$this->dispatch('/callback/chat/removeuser', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/removeuser', 'POST', $data);
 			$this->assertResponseStatusCode(404);
 			$this->assertMatchedRouteName('removeusercallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -839,7 +839,7 @@ namespace Callback;
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams/search",array('term' => "teams1"),Mockery::any())->once()->andReturn(array("body" => json_encode(array(array("name"=>"teams1","display_name" => "teams1","id"=>121)))));
 				$mockRestClient->expects('delete')->with("api/v4/teams/121",array('permanent' => 'false'),Mockery::any())->once()->andReturn(json_encode(array("status"=>"OK")));
 			}	
-			$this->dispatch('/callback/chat/deleteorg', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/deleteorg', 'POST', $data);
 			$this->assertResponseStatusCode(200);
 			$this->assertMatchedRouteName('deletecallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -855,7 +855,7 @@ namespace Callback;
 				$exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
 				$mockRestClient->expects('postWithHeader')->with("api/v4/teams/search",array('term' => "hmmokjog"),Mockery::any())->once()->andThrow($exception);
 			}
-			$this->dispatch('/callback/chat/deleteorg', 'POST', array(json_encode($data)=>''));
+			$this->dispatch('/callback/chat/deleteorg', 'POST', $data);
 			$this->assertResponseStatusCode(400);
 			$this->assertMatchedRouteName('deletecallback');
 			$content = (array)json_decode($this->getResponse()->getContent(), true);

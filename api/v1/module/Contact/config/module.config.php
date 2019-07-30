@@ -45,7 +45,7 @@ return [
             'contactIcon' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/contact/:contactId/:ownerId',
+                    'route' => '/contact/:ownerId/:contactId',
                     'defaults' => [
                         'controller' => Controller\ContactIconController::class,
                         'action' => 'getIcon',

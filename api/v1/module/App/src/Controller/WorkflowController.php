@@ -135,7 +135,7 @@ class WorkflowController extends AbstractApiController
      */
     public function workflowFieldsAction()
     {
-        $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
+        $params = array_merge($this->extractPostData(),$this->params()->fromRoute());
         try {
             $response = $this->workflowService->getFields($params['appId'],$params['workflowId']);
             return $this->getSuccessResponseWithData($response);
@@ -157,7 +157,7 @@ class WorkflowController extends AbstractApiController
      */
     public function workflowFormsAction()
     {
-        $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
+        $params = array_merge($this->extractPostData(),$this->params()->fromRoute());
         try {
             $response = $this->workflowService->getForms($params['appId'],$params['workflowId']);
             return $this->getSuccessResponseWithData($response);

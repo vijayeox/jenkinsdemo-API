@@ -26,22 +26,17 @@ namespace Callback\Controller;
             $this->crmService = $crmService;
         }
 
-        private function convertParams(){
-           $params = json_decode(file_get_contents("php://input"),true);
-
-           if(!isset($params)){
-                 $params = $this->params()->fromPost();          
-                 if(!is_object($params)){
-                    if(key($params)){
-                            $params = json_decode(key($params),true);
-                    }
-                }
-           }
-            return $params;
+        public function addContactAction() {
+            $params = $this->extractPostData();
+            $response = $this->crmService->addContact($params,$this->contactService,$this->userService);
+            if($response){
+                return $this->getSuccessResponseWithData($response['body'],201);
+            }
+            return $this->getErrorResponse("Contact Creation Failed", 404);
         }
 
-        public function addContactAction() {
-            $params = $this->convertParams();
+        public function addCampaignAction() {
+            $params = $this->extractPostData();
             $response = $this->crmService->addContact($params,$this->contactService,$this->userService);
             if($response){
                 return $this->getSuccessResponseWithData($response['body'],201);

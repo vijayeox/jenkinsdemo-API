@@ -39,13 +39,19 @@ class ContactIconController extends AbstractApiControllerHelper {
         $contactid = $params['contactId']; 
         $logo = $contactid.".png";
         $file = $this->contactService->getContactIconPath($ownerid);
-        $file = $file . $logo;
+        $iconUrl = $file.$logo;
+        if(!FileUtils::fileExists($iconUrl)){
+            $file = $this->contactService->getContactIconPath(null);
+            $iconUrl = $file."profile.png";
+            
+        }
+                
         if (!headers_sent()) {
             header('Content-Type: image/png');
             header("Content-Transfer-Encoding: Binary"); 
         }
         try {
-            $fp = @fopen($file, 'rb');
+            $fp = @fopen($iconUrl, 'rb');
             fpassthru($fp);
             fclose($fp);
             $this->response->setStatusCode(200);

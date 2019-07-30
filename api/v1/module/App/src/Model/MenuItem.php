@@ -16,6 +16,7 @@ class MenuItem extends Entity {
         'name' => NULL,  
         'app_id' => 0,
         'parent_id' => 0,
+        'page_id' => 0,
         'icon' => NULL,
         'sequence' => 0,
         'date_created' => NULL,  
@@ -25,7 +26,7 @@ class MenuItem extends Entity {
     );
     
     public function validate(){
-        $dataArray = Array("name", "type");
+        $dataArray = Array("name");
         $this->validateWithParams($dataArray);
     }
 }

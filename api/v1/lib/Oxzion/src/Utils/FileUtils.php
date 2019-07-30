@@ -47,6 +47,9 @@ class FileUtils{
 			if(is_array($file)){
 				if(isset($file['tmp_name'])){
 					move_uploaded_file($file['tmp_name'], $directory.$file['name']);
+					if(!file_exists($directory.$file['name'])){
+						file_put_contents($directory.$file['name'],file_get_contents($file['tmp_name']));
+					}
 					chmod($directory.$file['name'], 0777);
 				}
 				if(isset($file['body'])){

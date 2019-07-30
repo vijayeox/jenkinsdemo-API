@@ -60,7 +60,6 @@ class AppController extends AbstractApiController
      */
     public function create($data)
     {
-        $data = $this->params()->fromPost();
         try {
             $count = $this->appService->deployAppForOrg($data);
         } catch (ValidationException $e) {
@@ -242,28 +241,9 @@ class AppController extends AbstractApiController
         return $this->getSuccessResponseDataWithPagination($response['data'],$response['total']);
     }
 
-    /**
-     * GET App API
-     * @api
-     * @link /app/type/:typeId
-     * @method GET
-     * @return array of Apps 
-     */
-    public function appListByTypeAction()
-    {
-        $data = $this->params()->fromRoute();
-        $response = $this->appService->getAppList(array('type'=>$data['typeId']));
-        $responseData = array();
-        foreach ($response['data'] as $app) {
-            $appData = $app;
-            $appData['logo'] = $this->getBaseUrl()."/resource/".$app['logo'];
-            $responseData[] = $appData;
-        }
-        return $this->getSuccessResponseWithData($responseData);
-    }
     public function appInstallAction($data)
     {
-        $data = $this->params()->fromPost();
+        $data = $this->extractPostData();
         try {
             $count = $this->appService->installAppForOrg($data);
         } catch (ValidationException $e) {
@@ -289,12 +269,18 @@ class AppController extends AbstractApiController
      */
     public function workflowDeployAction()
     {
-        $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
+        $data=$this->extractPostData();
+        $params = array_merge($data,$this->params()->fromRoute());
         $files = $_FILES['files'];
         try {
             if ($files&&isset($params['name'])) {
-
                 $response = $this->appService->deployWorkflow($params['appId'],$params,$files);
+                if($response == 1){
+                    return $this->getErrorResponse("Error Parsing BPMN");
+                }
+                if($response == 2){
+                    return $this->getErrorResponse("More Than 1 Process Found in BPMN Please Define only one Process per BPMN");
+                }
                 return $this->getSuccessResponse($response);
              } else {
                 return $this->getErrorResponse("Files cannot be uploaded");
@@ -305,7 +291,7 @@ class AppController extends AbstractApiController
     }
 
     public function assignmentsAction(){
-        $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
+        $params = array_merge($this->extractPostData(),$this->params()->fromRoute());
         $assignments = $this->appService->getAssignments($params['appId']);
         return $this->getSuccessResponseWithData($assignments);
     }

@@ -8,12 +8,13 @@ namespace Callback\Controller;
     use Oxzion\Utils\RestClient;
     use Callback\Service\CalendarService;
     use Oxzion\Service\EmailService;
-
+    
     class CalendarCallbackController extends AbstractApiControllerHelper {
 
         private $calendarService;
         private $emailService;
         protected $log;
+        private $restClient;
 
         public function setEmailService($emailService){
             $this->emailService = $emailService;
@@ -22,14 +23,15 @@ namespace Callback\Controller;
         // /**
         // * @ignore __construct
         // */
-        public function __construct(CalendarService $calendarService, EmailService $emailService,Logger $log) {
+        public function __construct(CalendarService $calendarService, EmailService $emailService,Logger $log, $config) {
             $this->calendarService = $calendarService;
             $this->emailService = $emailService;
             $this->log = $log;
+            $this->restClient = new RestClient($config['calendar']['calendarServerUrl']);
         }
 
         public function sendMailAction() {
-            $params = $this->params()->fromPost();
+            $params = $this->extractPostData();
             $attachments = $this->params()->fromFiles();
             $this->calendarService->setEmailService($this->emailService);
             $response = $this->calendarService->sendMail($params,$attachments);
@@ -39,4 +41,14 @@ namespace Callback\Controller;
                 return $this->getErrorResponse("Mail Send Failed", 404);
             }
         }
+
+        public function addEventAction() {
+            $params = $this->extractPostData();
+            $this->log->info(__CLASS__.": ".print_r($params, true));
+            $response = $this->restClient->post('/calendar/server/phpmailer/extras/extract_ics_data/geticsdata.php', $params);
+            $this->log->info(__CLASS__.": ".$response);
+            return $this->getSuccessResponseWithData(array('Event Added'),201);
+        }
+
+
     }

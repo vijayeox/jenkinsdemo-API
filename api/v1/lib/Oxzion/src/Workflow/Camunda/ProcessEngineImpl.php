@@ -26,9 +26,13 @@ class ProcessEngineImpl implements ProcessEngine {
 
 	public function startProcess($id , $processVariables = array()){
 		$query = 'process-definition/'.$id.'/start';
+		$params =array();
+		foreach($processVariables as $key => $value){
+			$params[$key]['value'] = $value;
+		}
 		try{
 			if($processVariables){
-				$response = $this->restClient->post($query, array("variables"=>json_encode($processVariables)));
+				$response = $this->restClient->post($query, array("variables"=>$params));
 			} else {
 				$response = $this->restClient->post($query);
 			}

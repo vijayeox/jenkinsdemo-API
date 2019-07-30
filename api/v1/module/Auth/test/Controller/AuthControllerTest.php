@@ -13,12 +13,12 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\AdapterInterface;
 
 class AuthControllerTest extends ControllerTest{
-    
+
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
     }
-    
+
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/token.yml");
@@ -67,7 +67,7 @@ class AuthControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(is_null($content['data']['jwt']), false);
         $this->assertNotEquals($content['data']['refresh_token'], '6456365665c809d01693770.52543401');
-        
+
     }
 
     public function testAuthenticationByApiKey(){
@@ -96,7 +96,7 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-                
+
     }
 
     public function testRefreshValidUser(){
@@ -158,7 +158,7 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Refresh Token Expired');   
+        $this->assertEquals($content['message'], 'Refresh Token Expired');
     }
 
     public function testRefreshFailInvalidToken() {
@@ -172,7 +172,7 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Invalid JWT Token');   
+        $this->assertEquals($content['message'], 'Invalid JWT Token');
     }
 
     public function testRefreshNoJwtToken() {
@@ -186,7 +186,7 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'JWT Token Not Found');   
+        $this->assertEquals($content['message'], 'JWT Token Not Found');
     }
 
     public function testValidateToken(){
@@ -194,7 +194,7 @@ class AuthControllerTest extends ControllerTest{
         $this->dispatch('/auth', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $data = ['jwt' => $content['data']['jwt']];
-        $this->reset(); 
+        $this->reset();
         $this->dispatch('/validatetoken', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
@@ -204,8 +204,8 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['message'], 'Token Valid');   
-        
+        $this->assertEquals($content['message'], 'Token Valid');
+
     }
 
     public function testValidateTokenFail(){
@@ -219,7 +219,7 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Token Expired');   
+        $this->assertEquals($content['message'], 'Token Expired');
 
     }
 
@@ -234,7 +234,7 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Invalid JWT Token');   
+        $this->assertEquals($content['message'], 'Invalid JWT Token');
 
     }
 
@@ -249,7 +249,7 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'JWT Token Not Found');   
+        $this->assertEquals($content['message'], 'JWT Token Not Found');
 
     }
 
@@ -265,7 +265,7 @@ class AuthControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['username'],'Bharat Gogineni');
-        $this->assertContains('user/profile/',$content['data']['profileUrl']);   
+        $this->assertContains('user/profile/',$content['data']['profileUrl']);
     }
 
     public function testValidProfileEmail(){
@@ -280,7 +280,7 @@ class AuthControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['username'],'Bharat Gogineni');
-        $this->assertContains('user/profile/',$content['data']['profileUrl']);   
+        $this->assertContains('user/profile/',$content['data']['profileUrl']);
     }
 
     public function testInvalidProfileEmail(){

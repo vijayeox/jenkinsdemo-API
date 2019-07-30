@@ -102,7 +102,7 @@ class AuthController extends AbstractApiControllerHelper
                 if (is_array($tokenPayload) || is_object($tokenPayload)) {
                     $uname = isset($tokenPayload->data->username)? $tokenPayload->data->username:$tokenPayload['username'] ;
                     $orgId = isset($tokenPayload->data->orgid)? $tokenPayload->data->orgid: $tokenPayload['orgid'];
-                    $userDetail = $this->userService->getUserDetailsbyUserName($uname); 
+                    $userDetail = $this->userService->getUserDetailsbyUserName($uname);
                     $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($userDetail['id']);
                     if (!empty($userTokenInfo)) {
                         $data = ['username' => $uname, 'orgid' => $orgId];
@@ -135,7 +135,7 @@ class AuthController extends AbstractApiControllerHelper
         $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
         $jwt = $this->generateJwtToken($dataJwt);
         if($refreshToken != 0){
-            return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken]);
+            return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken,'username'=>$userName]);
         } else {
             return $this->getErrorResponse("Login Error", 405, array());
         }
@@ -148,16 +148,16 @@ class AuthController extends AbstractApiControllerHelper
                 $tokenPayload = $this->decodeJwtToken($data['jwt']);
                 if(is_array($tokenPayload) && !is_object($tokenPayload)) {
                     if($tokenPayload['Error'] == 'Expired token') {
-                        return $this->getErrorResponse("Token Expired");    
+                        return $this->getErrorResponse("Token Expired");
                     } else {
                         return $this->getErrorResponse("Token Invalid");
-                    } 
+                    }
                 } else{
                     return $this->getSuccessResponse("Token Valid");
                 }
             } else {
                     return $this->getErrorResponse("JWT Token Not Found", 404);
-            }    
+            }
         } catch (Exception $e) {
             return $this->getErrorResponse("Invalid JWT Token", 404);
         }
@@ -184,17 +184,17 @@ class AuthController extends AbstractApiControllerHelper
             if(isset($data["username"])){
                 $username = $data["username"];
                 $res =$this->userService->getUserBaseProfile($username);
-                
+
                 if($res == 0) {
-                    return $this->getErrorResponse("Invalid User", 404);    
+                    return $this->getErrorResponse("Invalid User", 404);
                 } else {
                     $profilePicUrl = $this->getBaseUrl() . "/user/profile/" . $res["uuid"];
-                    return $this->getSuccessResponseWithData(['username'=> $res["name"],'profileUrl'=>$profilePicUrl]);    
+                    return $this->getSuccessResponseWithData(['username'=> $res["name"],'profileUrl'=>$profilePicUrl]);
                 }
             } else {
-                return $this->getErrorResponse("Invalid Request", 404);    
-            } 
-                
+                return $this->getErrorResponse("Invalid Request", 404);
+            }
+
         } catch (Exception $e) {
             return $this->getErrorResponse("Something went wrong", 404);
         }

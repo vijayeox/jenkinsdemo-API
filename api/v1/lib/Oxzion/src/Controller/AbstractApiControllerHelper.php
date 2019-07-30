@@ -6,7 +6,7 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\JsonModel;
 use Oxzion\Jwt\JwtHelper;
 use Oxzion\Error\ErrorHandler;
-
+use Zend\Stdlib\RequestInterface as Request;
 abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
     private $config;
@@ -19,7 +19,56 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
      * @return type String
      */
 
+    protected function extractPostData(){
+        $params = json_decode(file_get_contents("php://input"),true);
+        if(!isset($params)){
+            $params = $this->params()->fromPost();
+        }
+        return $params;
+    } 
+    /**
+     * Process post data and call create
+     *
+     * @param Request $request
+     * @return mixed
+     * @throws Exception\DomainException If a JSON request was made, but no
+     *    method for parsing JSON is available.
+     */
+    public function processPostData(Request $request)
+    {
+        if ($this->requestHasContentType($request, AbstractRestfulController::CONTENT_TYPE_JSON)) {
+            return $this->create($this->jsonDecode($request->getContent()));
+        }
 
+        $data = $request->getPost()->toArray();
+        if(sizeof($data) == 0){
+            $data =json_decode(file_get_contents("php://input"),true);
+        }
+        return $this->create($data);
+    }
+
+    protected function processBodyContent($request)
+    {
+        $content = $request->getContent();
+        // JSON content? decode and return it.
+        if ($this->requestHasContentType($request, AbstractRestfulController::CONTENT_TYPE_JSON)) {
+            return $this->jsonDecode($request->getContent());
+        }
+
+        parse_str($content, $parsedParams);
+        // If parse_str fails to decode, or we have a single element with empty value
+        if (! is_array($parsedParams) || empty($parsedParams)
+            || (1 == count($parsedParams) && '' === reset($parsedParams))
+        ) {
+            if(!empty($content)){
+                return $content;
+            }else{
+                return json_decode(file_get_contents("php://input"),true);
+            }
+        }
+
+        return $parsedParams;
+    }
     public function findJwtToken($request)
     {
         $jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';
@@ -35,7 +84,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         }
         return $jwtToken;
     }
-
+    
     /**
      * contain encoded token for user.
      */
@@ -86,7 +135,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     }
 
 
-    protected function getSuccessResponseDataWithPagination(array $data,$total,$code = 200){
+    protected function getSuccessResponseDataWithPagination(array $data = null,$total,$code = 200){
         return $this->getSuccessResponse(null, $code, $data,$total);
     }
 

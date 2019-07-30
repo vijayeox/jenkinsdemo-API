@@ -27,7 +27,8 @@ class RoleController extends AbstractApiController
 		parent::__construct($table, $log, __CLASS__, Role::class);
 		$this->setIdentifierName('roleId');
 		$this->roleService = $roleService;
-	}
+    }
+    
     /**
     * Create Role API
     * @api
@@ -50,10 +51,9 @@ class RoleController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Role.
     */
     public function create($data){
-        $params = $this->params()->fromRoute(); // empty method calls
-        $roleId = isset($params['roleId']) ? $params['roleId'] : null;
+        $roleId = isset($data['roleId']) ? $data['roleId'] : null;
         try{
-            $count = $this->roleService->createRole($roleId,$data);
+            $count = $this->roleService->saveRole($roleId,$data);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
@@ -87,7 +87,7 @@ class RoleController extends AbstractApiController
     */
     public function update($id, $data){
         try{
-            $count = $this->roleService->updateRole($id,$data);
+            $count = $this->roleService->saveRole($id,$data);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
@@ -124,7 +124,7 @@ class RoleController extends AbstractApiController
     public function get($id){
         try {
             $result = $this->roleService->getRole($id);
-        } catch (ValidationException $e) {
+        } catch (ValidationException $e) { 
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
         }

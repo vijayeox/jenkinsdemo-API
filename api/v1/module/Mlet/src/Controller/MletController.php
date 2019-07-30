@@ -43,7 +43,7 @@ class MletController extends AbstractApiController
 			$request = $this->getRequest();
 			$jsondata = $this->getRequest()->getContent();
 			$data = ($jsondata) ? json_decode($jsondata,true):null;
-	//		$data = $this->params()->fromPost(); 
+	//		$data = $this->extractPostData(); 
 			$params = $this->params()->fromRoute();
 			$id=$params[$this->getIdentifierName()];
 			$result= $this->mletService->getResult($id,$data);

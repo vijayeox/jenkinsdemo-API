@@ -17,9 +17,9 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
 {
     protected $adminUser = 'bharatgtest'; //TODO Need to put as global setup
     protected $adminUserId = 1;
-    protected $employeeUser = 'karantest';
+    protected $employeeUser = 'rakshithtest';
     protected $employeeUserId = 2;
-    protected $managerUser = 'rakshithtest';
+    protected $managerUser = 'karantest';
     protected $managerUserId = 3;
     protected $noUser = 'admin';
     protected $noUserId = 0;

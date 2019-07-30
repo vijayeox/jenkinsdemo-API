@@ -1,0 +1,13 @@
+insert into ox_role (name, description, org_id) select name, description, 3 from ox_role where org_id is null;
+
+insert into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id) select rn.id, rp.privilege_name, rp.permission, 3, rp.app_id from ox_role as r inner join ox_role_privilege as rp on r.id = rp.role_id and r.org_id = 1 inner join ox_role rn on rn.name = r.name and rn.org_id = 3 and r.org_id = 1;
+
+insert into ox_app_registry (org_id, app_id, date_created, start_options) select 3, id, now(), start_options from ox_app where isdefault = 1 OR name in ('CRM', 'MailAdmin', 'FreedesktopSounds');
+
+insert into ox_user (uuid, username, password, firstname, lastname, name, email, orgid, icon, status, country, date_of_birth, designation, phone, address, gender, website, about, interest, hobbies, selfcontribute, contribute_percent, eid, signature, in_game, timezone,date_created, created_by, date_of_join) select uuid(), username, password, firstname, lastname, name, email, 3, icon, status, country, dob, designation, phone, address, sex, website, about, interest, hobbies, selfcontribute, contribute_percent, eid, signature, in_game, timezone, avatar_date_created, 6, doj from avatars where orgid = 1 and email not in (select email from avatars where orgid = 1 group by email having count(email) > 1); 
+
+update ox_user inner join (select umap.new_id, c.nmid from (select m.id as oid, b.new_id as nmid from (select a.id as old_id, u.id as new_id from avatars a inner join ox_user u on u.username = a.username and a.orgid = 1) as b inner join avatars m on m.managerid = b.old_id) as c inner join (select a.id as old_id, u.id as new_id from avatars a inner join ox_user u on u.username = a.username and a.orgid = 1) as umap on umap.old_id  = c.oid) as d on ox_user.id = d.new_id set managerid = d.nmid;
+
+insert into ox_user_org (user_id, org_id, `default`) select id, orgid, 1 where orgid = 3;
+
+insert into ox_user_role (user_id, role_id) select u.id, 9 from (select username from avatars where orgid = 1) as a inner join ox_user as u on u.username = a.username; 

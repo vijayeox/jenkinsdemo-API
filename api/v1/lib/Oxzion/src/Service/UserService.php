@@ -12,6 +12,9 @@ use Oxzion\Service\EmailService;
 use Oxzion\Service\EmailTemplateService;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Search\Elastic\IndexerImpl;
+use Ramsey\Uuid\Uuid;
+use Oxzion\AccessDeniedException;
+use Oxzion\Security\SecurityManager;
 use Oxzion\Utils\FilterUtils;
 
 class UserService extends AbstractService
@@ -62,18 +65,21 @@ class UserService extends AbstractService
         return $response[0]['orgid'];
     }
 
+    public function getRolesofUser($id){
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $select = "SELECT oro.uuid, oro.name from ox_user_role as ouo inner join ox_role as oro on ouo.role_id = oro.id where ouo.user_id = (SELECT ou.id from ox_user as ou where ou.id ='".$id."') and oro.org_id = ".$orgId;
+        $resultSet = $this->executeQueryWithParams($select)->toArray();
+        return $resultSet;
+    }
+
     public function getUserContextDetails($userName)
     {
         if ($results = $this->cacheService->get($userName)) {
             return $results;
         }
-        $sql = $this->getSqlObject();
-        $select = $sql->select()
-            ->from('ox_user')
-            ->columns(array('id', 'name', 'uuid', 'orgid'))
-            ->where(array('username = "' . (string) $userName . '"'))->limit(1);
-        $results = $this->executeQuery($select);
-        $results = $results->toArray();
+
+        $select  = "SELECT ou.id,ou.name,ou.uuid as user_uuid,ou.orgid,org.uuid as org_uuid from ox_user as ou inner join ox_organization as org on ou.orgid = org.id where ou.username = '".$userName."'";
+        $results = $this->executeQueryWithParams($select)->toArray(); 
         if (count($results) > 0) {
             $results = $results[0];
         }
@@ -100,7 +106,6 @@ class UserService extends AbstractService
             ->columns(array('id', 'name'))
             ->join('ox_user_group', 'ox_user_group.group_id = ox_group.id', array())
             ->where(array('ox_user_group.avatar_id' => $id));
-        //echo "<pre>";print_r($this->executeQuery($select)->toArray());exit();
         return $this->executeQuery($select)->toArray();
     }
 
@@ -132,12 +137,20 @@ class UserService extends AbstractService
      * </code>
      */
     public function createUser(&$data) {
-        if(!isset($data['orgid'])){
+        if(isset($data['orgid'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($data['orgid'] != AuthContext::get(AuthConstants::ORG_ID))) {
+                throw new AccessDeniedException("You do not have permissions to assign role to user");
+            }
+        }
+        else{
             $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
         }
 
+        $data['uuid'] = Uuid::uuid4()->toString();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+
         $password = BosUtils::randomPassword();
         if (isset($password))
             $data['password'] = md5(sha1($password));
@@ -153,6 +166,9 @@ class UserService extends AbstractService
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
             $this->addUserToOrg($form->id, $form->orgid);
+            if(isset($data['role'])){
+                $this->addRoleToUser($data['uuid'],$data['role'],$form->orgid);
+            }
             // $this->emailService->sendUserEmail($form);
             // // Code to add the user information to the Elastic Search Index
             // $result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
@@ -170,6 +186,49 @@ class UserService extends AbstractService
             return 0;
         }
     }
+
+
+    public function addRoleToUser($id,$role,$orgId){
+        $obj = $this->table->getByUuid($id,array());
+        if (is_null($obj)) {
+
+            return 0;
+        }
+        if(!isset($role) || empty($role)) {
+            return 2;
+        }
+        $userId = $obj->id;
+        
+        if($role){
+            $roleSingleArray= array_map('current', $role);
+            try{
+               
+                $delete = "DELETE our FROM ox_user_role as our
+                            inner join ox_role as oro on our.role_id = oro.id where oro.uuid not in ('".implode("','", $roleSingleArray)."') and our.user_id = ".$userId." and oro.org_id =".$orgId;
+
+                $result = $this->executeQuerywithParams($delete);
+              
+                
+                $query ="Insert into ox_user_role(user_id,role_id) SELECT ".$userId.",oro.id from ox_role as oro LEFT OUTER JOIN ox_user_role as our on oro.id = our.role_id and our.user_id = ".$userId." where oro.uuid in ('".implode("','", $roleSingleArray)."') and oro.org_id = ".$orgId." and our.user_id is null";
+
+               
+                $resultInsert = $this->runGenericQuery($query);
+            }
+            catch(Exception $e){
+                throw $e;
+            }
+            return 1;
+        }
+        return 0;
+    }
+
+    private function getRoleIdList($uuidList){
+        $uuidList= array_unique(array_map('current', $uuidList));
+        $query = "SELECT id from ox_role where uuid in ('".implode("','", $uuidList) . "')";
+        $result = $this->executeQueryWithParams($query)->toArray();
+        return $result;
+    }
+
 
     public function createAdminForOrg($org,$contactPerson,$orgPreferences) {
         $contactPerson = (object)$contactPerson;
@@ -195,7 +254,7 @@ class UserService extends AbstractService
             "designation" => "Admin",
             "orgid" => $org->id,
             "status" => "Active",
-            "timezone" => "United States/New York",
+            "timezone" => $orgPreferences->timezone,
             "gender" => " ",
             "managerid" => "1",
             "date_of_join" => date('Y-m-d'),
@@ -204,10 +263,10 @@ class UserService extends AbstractService
         $this->beginTransaction();
         try{
             $result = $this->createUser($data);
-
             $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
-            $this->addUserRole($data['id'], 'ADMIN');
+            $this->addUserRole($resultSet[0]['id'], 'ADMIN');
+
             $this->commit();
         }
         catch(Exception $e){
@@ -250,7 +309,6 @@ class UserService extends AbstractService
 
     private function generateUserIndexForElastic($data)
     {
-        //    print_r($data);exit;
         $elasticIndex = new IndexerImpl($this->config);
         $appId = 'user';
         $id = $data['id'];
@@ -284,20 +342,39 @@ class UserService extends AbstractService
      */
     public function updateUser($id, &$data)
     {
-        $obj = $this->table->get($id, array());
+        if(isset($data['orgid'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($data['orgid'] != AuthContext::get(AuthConstants::ORG_ID))) {
+                throw new AccessDeniedException("You do not have permissions to assign role to user");
+            }
+        }
+
+        $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
             return 0;
         }
         $form = new User();
+        if(isset($data['orgid'])){
+            unset($data['orgid']);
+        }
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
-        $userdata['id'] = $id;
+        $userdata['uuid'] = $id;
+        if(isset($data['managerid'])){
+            $userdata['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
+        }
         $userdata['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $userdata['date_modified'] = date('Y-m-d H:i:s');
         if (isset($userdata['preferences'])) {
-            if(!is_array($userdata['preferences']))
-                $preferences = json_decode($userdata['preferences'],true);
-            $userdata['timezone'] = $preferences['timezone'];
-            unset($preferences['timezone']);
+            
+            if (!is_array($userdata['preferences'])) {
+                $preferences = json_decode($userdata['preferences'], true);
+            } else {
+                $preferences =$userdata['preferences'];
+            }
+            if (isset($preferences['timezone'])) {
+                $userdata['timezone'] = $preferences['timezone'];
+                unset($preferences['timezone']);
+            }
             $userdata['preferences'] = json_encode($preferences);
         }
         $form->exchangeArray($userdata);
@@ -307,6 +384,9 @@ class UserService extends AbstractService
         $this->beginTransaction();
         try {
             $this->table->save($form);
+            if(isset($data['role'])){
+                $this->addRoleToUser($form->uuid,$data['role'],$form->orgid);
+            }
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
@@ -357,7 +437,7 @@ class UserService extends AbstractService
      * @method GET
      * @return array $dataget list of Users
      */
-    public function getUsers($filterParams = null)
+    public function getUsers($filterParams = null, $baseUrl = '')
     {
             $where = "";
             $pageSize = 20;
@@ -389,11 +469,15 @@ class UserService extends AbstractService
 
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(id)'];
-            $query ="SELECT * FROM `ox_user`".$where." ".$sort." ".$limit;
+            $query ="SELECT uuid, username, firstname, lastname, name,
+                email, orgid, icon, country, date_of_birth,
+                designation, phone, address, gender, website, about,
+                managerid, timezone, date_of_join, interest, preferences FROM `ox_user`".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
             for($x=0;$x<sizeof($result);$x++) {
                  $result[$x]['preferences'] = json_decode($result[$x]['preferences'],true);
+                 $result[$x]['icon'] = $baseUrl . "/user/profile/" . $result[$x]['uuid'];
             }
             return array('data' => $result,
                      'total' => $count);
@@ -406,22 +490,49 @@ class UserService extends AbstractService
      * @return array $data
      * @return array Returns a JSON Response with Status Code and Created User.
      */
-    public function getUser($id)
+    public function getUser($id, $getAllFields = false)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_user')
-            ->columns(array("*"))
+            ->columns(array(
+                "uuid", "username", "firstname", "lastname",
+                "name","email", "orgid", "icon", "country", "date_of_birth",
+                "designation", "phone", "address", "gender", "website", "about",
+                "managerid", "timezone", "date_of_join", "interest", "preferences","password",
+                "password_reset_expiry_date","password_reset_code"
+            ))  
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
             return $response[0];
         }
-        $result = $response[0];
 
+        $result = $response[0];
+        if(!$getAllFields){
+            unset($result['password']);   
+            unset($result['password_reset_expiry_date']);
+            unset($result['password_reset_code']);
+        }
+        $getManagerUUID= $sql->select();
+        $getManagerUUID->from('ox_user')
+            ->columns(array("uuid"))
+            ->where(array('ox_user.id' => $result['managerid']  ));
+        $responseUUID = $this->executeQuery($getManagerUUID)->toArray();
+        if(isset($responseUUID) && sizeof($responseUUID) > 0){
+            $result['managerid'] = $responseUUID[0]['uuid'];
+        } else {
+            $result['managerid'] = 0;
+        }
         $result['active_organization'] = $this->getActiveOrganization(AuthContext::get(AuthConstants::ORG_ID));
-        $result['preferences'] = json_decode($response[0]['preferences'],true);
+        $result['preferences'] = json_decode($response[0]['preferences'], true);
         $result['preferences']['timezone'] = $response[0]['timezone'];
+        $getUUID= $sql->select();
+        $getUUID->from('ox_organization')
+            ->columns(array("uuid"))
+            ->where(array('ox_organization.id' => AuthContext::get(AuthConstants::ORG_ID)));
+        $responseUUID = $this->executeQuery($getUUID)->toArray();
+        $result['orgid'] = $responseUUID[0]['uuid'];
         if (isset($result)) {
             return $result;
         } else {
@@ -451,26 +562,28 @@ class UserService extends AbstractService
         return $result[0];
     }
 
-    public function getPrivileges($userId)
+    public function getPrivileges($userId, $orgId = NULL)
     {
+        if(!isset($orgId)){
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        }
         // if($roleData = $this->cacheService->get($userId.PRIVILEGESS)){
         // $data = $roleData;
         // } else {
-        $data = $this->getPrivilegesFromDb($userId);
+        $data = $this->getPrivilegesFromDb($userId,$orgId);
         // $this->cacheService->set($userId.PERMISSIONS, $data);
         // }
         return $data;
     }
 
-    private function getPrivilegesFromDb($userId)
+    private function getPrivilegesFromDb($userId, $orgId)
     {
         $sql = $this->getSqlObject();
-        $select = $sql->select()
-            ->from('ox_role_privilege')
-            ->columns(array('privilege_name', 'permission'))
-            ->join('ox_user_role', 'ox_role_privilege.role_id = ox_user_role.role_id', array())
-            ->where(array('ox_user_role.user_id' => $userId));
-        $results = $this->executeQuery($select)->toArray();
+        $query = "select privilege_name, permission from ox_role_privilege rp 
+                    INNER join ox_user_role ur on ur.role_id = rp.role_id 
+                    where ur.user_id = ".$userId." and rp.org_id = ".$orgId;
+
+        $results = $this->executeQueryWithParams($query)->toArray();
         $permissions = array();
         foreach ($results as $key => $value) {
             $permissions = array_merge($permissions, $this->addPermissions($value['privilege_name'], $value['permission']));
@@ -512,7 +625,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_user')
-            ->columns(array('id', 'uuid', 'username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone', 'date_of_birth', 'date_of_join', 'country', 'website', 'about', 'gender', 'interest', 'address', 'icon', 'preferences'))
+            ->columns(array('uuid', 'username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone', 'date_of_birth', 'date_of_join', 'country', 'website', 'about', 'gender', 'managerid','interest', 'address', 'icon', 'preferences'))
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (empty($response)) {
@@ -560,6 +673,9 @@ class UserService extends AbstractService
      * @param $id ID of User to set as Manager
      * @return array success|failure response
      */
+
+    //  TODO CHANGE TO UUID //
+
     public function assignManagerToUser($userId, $managerId)
     {
         $queryString = "Select user_id, manager_id from ox_user_manager";
@@ -815,13 +931,12 @@ class UserService extends AbstractService
         $userId = AuthContext::get(AuthConstants::USER_ID);
         $userDetails = $this->getUser($userId);
         if ($email === $userDetails['email']) {
-            $userReset['id'] = $id = $userDetails['id'];
+            $userReset['uuid'] = $id = $userDetails['uuid'];
             $userReset['email'] = $userDetails['email'];
             $userReset['firstname'] = $userDetails['firstname'];
             $userReset['lastname'] = $userDetails['lastname'];
             $userReset['password_reset_code'] = $resetPasswordCode;
             $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
-            //            print_r($userReset);exit;
             //Code to update the password reset and expiration time
             $userUpdate = $this->updateUser($id, $userReset);
             if ($userUpdate) {

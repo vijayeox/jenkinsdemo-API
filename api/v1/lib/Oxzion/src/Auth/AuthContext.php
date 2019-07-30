@@ -27,6 +27,10 @@ class AuthContext{
         return $_REQUEST[self::CONTEXT_KEY];
     }
 
+    public static function isPrivileged($privilege){
+        return isset(self::get(AuthConstants::PRIVILEGES)[$privilege]) ? true : false;
+    }
+
 
 }
 ?>

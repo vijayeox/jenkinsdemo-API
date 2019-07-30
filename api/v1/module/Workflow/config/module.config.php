@@ -19,6 +19,20 @@ return [
                     ],
                 ],
             ],
+            'addActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/activityInstance',
+                    'defaults' => [
+                        'controller' => Controller\ActivityInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'addActivityInstance',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

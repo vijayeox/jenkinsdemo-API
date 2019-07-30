@@ -34,7 +34,7 @@ class MenuItemControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['id']>0, true);
-        $this->assertEquals($content['data'][0]['name'], 'menu item 1');
+        $this->assertEquals($content['data'][0]['name'], 'menu1');
         $this->assertEquals($content['data'][1]['id']>1, true);
         $this->assertEquals($content['data'][1]['name'], 'menu2');
     }
@@ -70,7 +70,7 @@ class MenuItemControllerTest extends ControllerTest{
 
     public function testCreate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'menu3','app_id'=>1,'required'=>1,'data_type'=>'text'];
+        $data = ['name' => 'menu3','app_id'=>1,'required'=>1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/99/menu', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -89,7 +89,7 @@ class MenuItemControllerTest extends ControllerTest{
 
     public function testCreateFailure(){
         $this->initAuthToken($this->adminUser);
-        $data = ['required'=>1,'sequence'=>1,'data_type'=>'text'];
+        $data = ['required'=>1,'sequence'=>1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/99/menu', 'POST', null);
         $this->assertResponseStatusCode(404);
@@ -106,9 +106,9 @@ class MenuItemControllerTest extends ControllerTest{
 
     public function testUpdate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Sample2','app_id' => 1,'required'=> 0, 'sequence' => 1];
+        $data = ['id'=>2,'name' => 'menu23','app_id' => 99,'required'=> 0, 'sequence' => 2,'type'=>'Page'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/menu/1', 'PUT', null);
+        $this->dispatch('/app/99/menu/2', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -117,7 +117,7 @@ class MenuItemControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['id'], 2);
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['sequence'], $data['sequence']);
     }

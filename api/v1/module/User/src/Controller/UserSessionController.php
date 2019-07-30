@@ -55,7 +55,7 @@ class UserSessionController extends AbstractApiController
      */
     public function updateSessionAction()
     {
-        $data=$this->params()->fromPost();
+        $data=$this->extractPostData();
         try {
             $count = $this->sessionService->updateSessionData($data);
         } catch (Exception $e) {

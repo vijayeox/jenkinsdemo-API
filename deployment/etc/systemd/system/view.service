@@ -1,5 +1,8 @@
 [Unit]
 Description=Oxzion UI
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=oxzionui
 [Service]
 User=oxzion
 # The configuration file application.properties should be here:

@@ -30,6 +30,16 @@ return [
                     ],
                 ],
             ],
+            'calendaraddeventcallback' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/calendar/addevent',
+                    'defaults' => [
+                        'controller' => Controller\CalendarCallbackController::class,
+                        'action' => 'addEvent',
+                    ],
+                ],
+            ],
             'addcallback' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -157,6 +167,26 @@ return [
                     'defaults' => [
                         'controller' => Controller\TaskCallbackController::class,
                         'action' => 'updateProject',
+                    ],
+                ],
+            ],
+            'ttadduserfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/addusertotasktracker',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'createUser',
+                    ],
+                ],
+            ],
+            'ttdeleteuserfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/deleteuserfromtasktracker',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'deleteUser',
                     ],
                 ],
             ],

@@ -52,7 +52,12 @@ return [
         'authToken' => ''
     ],
     'task' => [
-        'taskServerUrl' => 'http://localhost:3000/api/v3',
+        'taskServerUrl' => 'http://localhost:3000/api/v3/',
+        'username' => 'apikey',
+        'authToken' => ''
+    ],
+    'calendar' => [
+        'calendarServerUrl' => 'http://localhost:8075/calendar',
         'authToken' => ''
     ],
     'DATA_FOLDER'=>__DIR__.'/../../data/',

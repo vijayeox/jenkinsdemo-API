@@ -1,6 +1,7 @@
 <?php
 namespace Oxzion\Utils;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\MultipartStream;
 
 class RestClient{
@@ -28,7 +29,6 @@ class RestClient{
     if(isset($headers) && !empty($headers)){
         $payload['headers'] = $headers;
     }
-    print_r($baseUrl);
     $response = $this->client->request('DELETE',$url,$payload);
     return $response->getBody()->getContents();
   }
@@ -46,8 +46,12 @@ class RestClient{
       }
     }
     $params = ['headers' => ['Connection' => 'close','Content-Type' => 'multipart/form-data; boundary='.$boundary,],'body' => new MultipartStream($multipart_form, $boundary),];
-    $response = $this->client->request('POST', $url, $params);
-    return $response->getBody()->getContents();
+    try {
+      $response = $this->client->post($url, $params);
+      return $response->getBody()->getContents();
+    } catch(ServerException $e){
+      return $e->getMessage();
+    }
   }
   public function post($url,$formParams=array()){
     try {

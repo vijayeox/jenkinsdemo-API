@@ -24,23 +24,8 @@ namespace Callback\Controller;
             $this->chatService = $chatService;
         }
 
-         private function convertParams(){
-           $params = json_decode(file_get_contents("php://input"),true);
-
-           if(!isset($params)){
-                 $params = $this->params()->fromPost();          
-                 if(!is_object($params)){
-                    if(key($params)){
-                            $params = json_decode(key($params),true);
-                    }
-                }
-           }
-            return $params;
-        }
-
-       
         public function addOrgAction() {
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $this->log->info(ChatCallbackController::class.":Organization Add Params- ".json_encode($params));
             $response = $this->chatService->createTeam($params['orgname']);
             if($response){
@@ -51,7 +36,7 @@ namespace Callback\Controller;
         }
 
         public function updateOrgAction(){
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $response = $this->chatService->updateTeam($params['old_orgname'],$params['new_orgname']);
             if($response){
                 $this->log->info(ChatCallbackController::class.":Organization Updated");
@@ -61,7 +46,7 @@ namespace Callback\Controller;
         }
 
         public function deleteOrgAction(){
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $response = $this->chatService->deleteOrg($params['orgname']);
             if($response){
                 $this->log->info(ChatCallbackController::class.":Organization Deleted");
@@ -71,7 +56,7 @@ namespace Callback\Controller;
         }
 
         public function addUserAction(){
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $response = $this->chatService->addUserToTeam($params['username'],$params['orgname']);
             if($response){
                 $this->log->info(ChatCallbackController::class.":Added user to organization");
@@ -81,7 +66,7 @@ namespace Callback\Controller;
         }
 
         public function removeUserAction(){
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $response = $this->chatService->removeUserFromTeam($params['username'],$params['orgname']);
             if($response){
                 $this->log->info(ChatCallbackController::class.":Removed user from organization");
@@ -91,7 +76,7 @@ namespace Callback\Controller;
         } 
 
         public function createChannelAction(){
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $params['channelname'] = ($params['projectname']) ? ($params['projectname']) :( $params['groupname']);
             $this->log->info(ChatCallbackController::class.":Channel Name- ".$params['channelname']);
             $response = $this->chatService->createChannel($params['channelname'],$params['orgname']);
@@ -103,7 +88,7 @@ namespace Callback\Controller;
         } 
 
         public function deleteChannelAction(){
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $params['channelname'] = ($params['projectname']) ? ($params['projectname']) :( $params['groupname']);
             $response = $this->chatService->deleteChannel($params['channelname'],$params['orgname']);
             if($response){
@@ -114,7 +99,7 @@ namespace Callback\Controller;
         } 
         
         public function updateChannelAction(){
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $params['old_channelname'] = ($params['old_projectname']) ? ($params['old_projectname']) :( $params['old_groupname']);
             $params['new_channelname'] = ($params['new_projectname']) ? ($params['new_projectname']) :( $params['new_groupname']);
             $response = $this->chatService->updateChannel($params['old_channelname'],$params['new_channelname'],$params['orgname']);
@@ -126,7 +111,7 @@ namespace Callback\Controller;
         }
 
         public function adduserToChannelAction(){
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $params['channelname'] = ($params['projectname']) ? ($params['projectname']) :( $params['groupname']);
             $response = $this->chatService->addUserToChannel($params['username'],$params['channelname'],$params['orgname']);    
             if($response){
@@ -137,7 +122,7 @@ namespace Callback\Controller;
         }
 
         public function removeUserFromChannelAction(){
-            $params = $this->convertParams();
+            $params = $this->extractPostData();
             $params['channelname'] = ($params['projectname']) ? ($params['projectname']) :( $params['groupname']);
             $response = $this->chatService->removeUserFromChannel($params['username'],$params['channelname'],$params['orgname']);
             if($response){

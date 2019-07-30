@@ -11,6 +11,8 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Utils\FileUtils;
 use Ramsey\Uuid\Uuid;
 use Oxzion\Utils\FilterUtils;
+use Oxzion\Security\SecurityManager;
+use Oxzion\AccessDeniedException;
 
 
 
@@ -24,6 +26,7 @@ class OrganizationService extends AbstractService
     private $messageProducer;
     private $privilegeService;
     static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
+
     
     public function setMessageProducer($messageProducer)
     {
@@ -106,7 +109,7 @@ class OrganizationService extends AbstractService
         if(isset($id)){
             $folder = $folder.$id."/";
         }
-
+        
         if($ensureDir && !file_exists($folder)){
             FileUtils::createDirectory($folder);
         }
@@ -154,7 +157,6 @@ class OrganizationService extends AbstractService
 
          // adding a user
         $returnArray['user'] = $this->userService->createAdminForOrg($org,$contactPerson,$orgPreferences);
-      
        
         return $returnArray['user'];
     }
@@ -168,9 +170,13 @@ class OrganizationService extends AbstractService
      */
     public function updateOrganization($id, &$data,$files = null)
     {
+        
         $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
             return 2;
+        }
+        if(isset($data['contactid'])){
+            $data['contactid'] = $this->userService->getUserByUuid($data['contactid']);
         }
         $org = $obj->toArray();
         $form = new Organization();
@@ -181,16 +187,19 @@ class OrganizationService extends AbstractService
         $form->validate();
         $this->beginTransaction();
         $count = 0;
+
         try {
             $count = $this->table->save($form);
             if(isset($files)){
                 $this->uploadOrgLogo($id,$files);
             }   
+
+
+            $this->commit();
             if ($count == 0) {
-                $this->rollback();
                 return 1;
             }
-            $this->commit();
+            
         }
          catch (Exception $e) {
             switch (get_class($e)) {
@@ -222,6 +231,7 @@ class OrganizationService extends AbstractService
      */
     public function deleteOrganization($id)
     {
+       
         $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
             return 0;
@@ -263,6 +273,15 @@ class OrganizationService extends AbstractService
         return $response[0];
     }
 
+    public function getOrganizationIdByUuid($uuid){
+        $select ="SELECT id from ox_organization where uuid = '".$uuid."'";
+        $result = $this->executeQueryWithParams($select)->toArray();
+        if(isset($result[0])){
+            return $result[0]['id'];
+        }else{
+            return NULL;
+        }       
+    }
 
     /**
      * GET Organization Service
@@ -279,16 +298,18 @@ class OrganizationService extends AbstractService
      */
     public function getOrganizationByUuid($id)
     {
+       
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_organization')
-            ->columns(array("*"))
+            ->columns(array('uuid','name','address','city','state','country','zip','logo','preferences','contactid'))
             ->where(array('ox_organization.uuid' => $id, 'status' => "Active"));
         $response = $this->executeQuery($select)->toArray();
+
         if (count($response) == 0) {
             return 0;
         }else{
-        $response[0]['contact'] = $this->getOrgContactPersonDetails($id)[0]; 
+        $response[0]['contactid'] = $this->getOrgContactPersonDetails($id); 
     }
     
         return $response[0];
@@ -296,9 +317,9 @@ class OrganizationService extends AbstractService
 
     private function getOrgContactPersonDetails($id){
         $userData = array();
-        $userSelect = "SELECT ou.username,ou.firstname,ou.lastname,ou.email,ou.phone from `ox_user` as ou where ou.id = (SELECT og.contactid from `ox_organization` as og WHERE og.uuid = '".$id."')";
-        $userData = $this->executeQueryWithParams($userSelect)->toArray();     
-        return $userData;
+        $userSelect = "SELECT ou.uuid from `ox_user` as ou where ou.id = (SELECT og.contactid from `ox_organization` as og WHERE og.uuid = '".$id."')";
+        $userData = $this->executeQueryWithParams($userSelect)->toArray();    
+        return $userData[0]['uuid'];
     }
 
     /**
@@ -315,7 +336,6 @@ class OrganizationService extends AbstractService
      */
     public function getOrganizations($filterParams = null)
     {
-
         $where = "";
         $pageSize = 20;
         $offset = 0;
@@ -345,11 +365,11 @@ class OrganizationService extends AbstractService
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(id)'];
-            $query ="SELECT * FROM `ox_organization`".$where." ".$sort." ".$limit;
+            $query ="SELECT uuid,name,address,city,state,country,zip,logo,preferences,contactid FROM `ox_organization`".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query)->toArray();
 
             for($x=0;$x<sizeof($resultSet);$x++) {
-              $resultSet[$x]['contact'] = $this->getOrgContactPersonDetails($resultSet[$x]['uuid'])[0];
+              $resultSet[$x]['contactid'] = $this->getOrgContactPersonDetails($resultSet[$x]['uuid']);
             }
             return array('data' => $resultSet, 
                      'total' => $count);
@@ -380,11 +400,17 @@ class OrganizationService extends AbstractService
         return 0;
     }
 
+    public function getUserIdList($uuidList){
+        $uuidList= array_unique(array_map('current', $uuidList));
+        $query = "SELECT id from ox_user where uuid in ('".implode("','", $uuidList) . "')";
+        $result = $this->executeQueryWithParams($query)->toArray();
+        return $result; 
+    }
+
 
     public function saveUser($id,$data){
-    
-        $obj = $this->table->getByUuid($id,array());
 
+        $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
             return 0;
         }
@@ -392,7 +418,7 @@ class OrganizationService extends AbstractService
             return 2;
         }
         $orgId = $obj->id;
-        $userArray=json_decode($data['userid'],true);
+        $userArray = $this->getUserIdList($data['userid']);
         if($userArray){
             $userSingleArray= array_unique(array_map('current', $userArray));
 
@@ -430,15 +456,12 @@ class OrganizationService extends AbstractService
                             where ouo.org_id =".$orgId." and ouo.user_id not in (".implode(',', $userSingleArray).") and ouo.user_id != org.contactid";
 
                 $resultSet = $this->executeQuerywithParams($query);
-               
-
                 $insert = "INSERT INTO ox_user_org (user_id,org_id,`default`)  
                                 SELECT ou.id,".$orgId.",case when (ou.orgid is NULL) 
                                     then 1
                                 end 
                                 from ox_user as ou LEFT OUTER JOIN ox_user_org as our on our.user_id = ou.id AND our.org_id = ou.orgid and our.org_id =".$orgId."
                                 WHERE ou.id in (".implode(',', $userSingleArray).") AND our.org_id is Null AND ou.id not in (select user_id from  ox_user_org where user_id in (".implode(',', $userSingleArray).") and org_id =".$orgId.")";
-                                
                 $resultSet = $this->executeQuerywithParams($insert);
 
 
@@ -459,10 +482,10 @@ class OrganizationService extends AbstractService
             }
 
             foreach($deletedUser as $key => $value){
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value)),'USERTOORGANIZATION_DELETED');
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value["username"])),'USERTOORGANIZATION_DELETED');
             }
             foreach($insertedUser as $key => $value){
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value)),'USERTOORGANIZATION_ADDED');
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value["username"])),'USERTOORGANIZATION_ADDED');
             }
 
             return 1;
@@ -471,8 +494,7 @@ class OrganizationService extends AbstractService
 
     }
 
-        public function getOrgUserList($id,$filterParams = null) {
-
+    public function getOrgUserList($id,$filterParams = null,$baseUrl = '') {
         if(!isset($id)) {
             return 0;
         }
@@ -483,7 +505,7 @@ class OrganizationService extends AbstractService
         $sort = "ox_user.name";
 
 
-        $query = "SELECT ox_user.id,ox_user.name";
+        $query = "SELECT ox_user.uuid,ox_user.name,ox_user.country,ox_user.designation";
         $from = " FROM ox_user left join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id";
     
         $cntQuery ="SELECT count(ox_user.id)".$from;
@@ -503,7 +525,7 @@ class OrganizationService extends AbstractService
                 $offset = $filterArray[0]['skip'];            
             }
 
-            $where .= strlen($where) > 0 ? " AND ox_organization.uuid = '".$id."'" : " WHERE ox_organization.uuid = '".$id."'";
+            $where .= strlen($where) > 0 ? " AND ox_organization.uuid = '".$id."' AND ox_user.status = 'Active'" : " WHERE ox_organization.uuid = '".$id."' AND ox_user.status = 'Active'";
 
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
@@ -511,6 +533,9 @@ class OrganizationService extends AbstractService
             $count=$resultSet->toArray()[0]['count(ox_user.id)'];
             $query =$query." ".$from." ".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query)->toArray();
+            for($x=0;$x<sizeof($resultSet);$x++) {
+                $resultSet[$x]['icon'] = $baseUrl . "/user/profile/" . $resultSet[$x]['uuid'];
+           }
             if(sizeof($resultSet) > 0){
                 return array('data' => $resultSet, 
                      'total' => $count);
@@ -518,5 +543,59 @@ class OrganizationService extends AbstractService
                 return 0;
             }    
     }
+
+    public function getAdminUsers($filterParams, $orgId = null){
+        if(!isset($orgId)){
+            $orgId = AuthContext::get(AuthConstants::ORG_UUID);
+        }
+        if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+            SecurityManager::isGranted('MANAGE_MYORG_WRITE') && 
+            $orgId != AuthContext::get(AuthConstants::ORG_UUID) ) {
+            throw new AccessDeniedException("You do not have permissions");
+        }
+        
+        $pageSize = 20;
+        $offset = 0;
+        $where = "";
+        $sort = "name";
+
+
+        $select = "SELECT DISTINCT ox_user.uuid,ox_user.name ";
+        $from = " from ox_user inner join ox_user_role as our on ox_user.id = our.user_id inner join ox_role as oro on our.role_id = oro.id inner join ox_user_org as oug on oro.org_id = oug.org_id";
+
+       $cntQuery ="SELECT count(DISTINCT ox_user.uuid)".$from;
+
+       if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                if(isset($filterArray[0]['filter'])){
+                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                   $filterList = $filterArray[0]['filter']['filters'];
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
+                }
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort,self::$fieldName);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
+            }
+
+            $orgId = $this->getOrganizationIdByUuid($orgId);
+            $where .= strlen($where) > 0 ? " AND oro.org_id =".$orgId." and oro.name = 'ADMIN'" : " WHERE oro.org_id =".$orgId." and oro.name = 'ADMIN'";
+        
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(DISTINCT ox_user.uuid)'];
+            $query =$select." ".$from." ".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query)->toArray();
+            if(sizeof($resultSet) > 0){
+                return array('data' => $resultSet, 
+                     'total' => $count);
+            }else{
+                return 0;
+            }
+    }
+
 }
 ?>

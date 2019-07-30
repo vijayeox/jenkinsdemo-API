@@ -98,6 +98,8 @@ abstract class Entity implements Countable{
             $validationException = new ValidationException();
             $validationException->setErrors($errors);
             throw $validationException;
+        } else {
+            return;
         }
     }
 }

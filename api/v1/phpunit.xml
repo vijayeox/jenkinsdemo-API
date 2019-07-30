@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true" >
+<phpunit colors="true">
     <testsuites>
         <testsuite name="Messaging Fixtures Fixtures">
             <directory>./module/Messaging/test</directory>
@@ -21,15 +21,14 @@
         <testsuite name="Roles Fixtures">
             <directory>./module/Role/test</directory>
         </testsuite>
-        <!-- <testsuite name="App Fixtures">
+        <testsuite name="App Fixtures">
             <directory>./module/App/test</directory>
             <directory>./module/Workflow/test</directory>
-        </testsuite> -->
-
+        </testsuite>
         <testsuite name="Core Fixtures">
             <directory>./lib/Oxzion/test</directory>
             <directory>./module/Mlet/test</directory>
-            <!-- <directory>./lib/Oxzion/test/WorkflowTest</directory> -->
+            <directory>./lib/Oxzion/test/WorkflowTest</directory>
             <directory>./lib/Oxzion/test/AnalyticsTest</directory>
             <directory>./lib/Oxzion/test/NLPTest</directory>
         </testsuite>
@@ -47,7 +46,6 @@
             <directory>./module/Search/test</directory>
             <directory>./module/ProspectResearch/test</directory>
         </testsuite>
-
         <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
@@ -62,7 +60,6 @@
         <const name="enableActiveMQ" value="0"/>
         <const name="enableCamel" value="0"/>
         <const name="enableProspectResearch" value="0"/>
-
     </php>
     <listeners>
         <listener class="\MyBuilder\PhpunitAccelerator\TestListener"/>

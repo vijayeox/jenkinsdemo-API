@@ -14,10 +14,10 @@ class WorkflowTest extends TestCase{
         $processEngine = $workflowFactory->getProcessEngine();
         if(enableCamunda==0){
             $mockRestClient = Mockery::mock('RestClient');
-            $mockRestClient->expects('postMultiPart')->with("deployment/create",array("deployment-name"=>'TestProcess1',"tenant-id"=>1),array(__DIR__."/Dataset/testwithparams.bpmn"))->once()->andReturn(json_encode(array('id'=>1,'name'=>"TestProcess1","tenantId"=>1)));
+            $mockRestClient->expects('postMultiPart')->with("deployment/create",array("deployment-name"=>'TestProcess1'),array(__DIR__."/Dataset/testwithparams.bpmn"))->once()->andReturn('{"tenantId":null,"deployedProcessDefinitions":{"main:2:2849099d-9e78-11e9-a32f-3efeb18f8381":{"id":"main:2:2849099d-9e78-11e9-a32f-3efeb18f8381","key":"main","category":"http://camunda.org/schema/1.0/bpmn","description":null,"name":"Task Form","version":2,"resource":"ScriptTaskTest.bpmn","deploymentId":"2846989b-9e78-11e9-a32f-3efeb18f8381","diagram":null,"suspended":false,"tenantId":null,"versionTag":null,"historyTimeToLive":null}},"deployedCaseDefinitions":null,"deployedDecisionDefinitions":null,"deployedDecisionRequirementsDefinitions":null}');
             $processManager->setRestClient($mockRestClient);
         }
-        $data = $processManager->deploy(1,'TestProcess1',array(__DIR__."/Dataset/testwithparams.bpmn"));
+        $data = $processManager->deploy('TestProcess1',array(__DIR__."/Dataset/testwithparams.bpmn"));
         $this->assertNotEquals(0, $data);
         $deploymentId = $data['id'];
         if(enableCamunda==0){
@@ -52,7 +52,7 @@ class WorkflowTest extends TestCase{
         $delete = $processManager->remove($deploymentId);
         $this->assertEquals($delete, 1);
     }
-
+// Check this
     public function testAssigneeProcess(){
         $workflowFactory = WorkflowFactory::getInstance();
         $processManager = $workflowFactory->getProcessManager();
@@ -60,10 +60,10 @@ class WorkflowTest extends TestCase{
         $activityManager = $workflowFactory->getActivity();
         if(enableCamunda==0){
             $mockRestClient = Mockery::mock('RestClient');
-            $mockRestClient->expects('postMultiPart')->with("deployment/create",array("deployment-name"=>'TestProcess1',"tenant-id"=>1),array(__DIR__."/Dataset/testwithparams.bpmn"))->once()->andReturn(json_encode(array('id'=>1,'name'=>"TestProcess1","tenantId"=>1)));
+            $mockRestClient->expects('postMultiPart')->with("deployment/create",array("deployment-name"=>'TestProcess1'),array(__DIR__."/Dataset/testwithparams.bpmn"))->once()->andReturn('{"tenantId":null,"deployedProcessDefinitions":{"main:2:2849099d-9e78-11e9-a32f-3efeb18f8381":{"id":"main:2:2849099d-9e78-11e9-a32f-3efeb18f8381","key":"main","category":"http://camunda.org/schema/1.0/bpmn","description":null,"name":"Task Form","version":2,"resource":"ScriptTaskTest.bpmn","deploymentId":"2846989b-9e78-11e9-a32f-3efeb18f8381","diagram":null,"suspended":false,"tenantId":null,"versionTag":null,"historyTimeToLive":null}},"deployedCaseDefinitions":null,"deployedDecisionDefinitions":null,"deployedDecisionRequirementsDefinitions":null}');
             $processManager->setRestClient($mockRestClient);
         }
-        $data = $processManager->deploy(1,'TestProcess1',array(__DIR__."/Dataset/testwithparams.bpmn"));
+        $data = $processManager->deploy('TestProcess1',array(__DIR__."/Dataset/testwithparams.bpmn"));
         $this->assertNotEquals(0, $data);
         $deploymentId = $data['id'];
         if(enableCamunda==0){
@@ -74,7 +74,7 @@ class WorkflowTest extends TestCase{
         $definitionId = $processStart['definitionId'];
         $this->assertNotEquals(0, $definitionId);
         if(enableCamunda==0){
-            $mockRestClient->expects('post')->withArgs(array('task', array("assignee"=>2)))->once()->andReturn(json_encode(array('id'=>123321)));
+            $mockRestClient->expects('get')->withArgs(array('task?'.http_build_query(array("assignee"=>2))))->once()->andReturn(json_encode(array('id'=>123321)));
             $activityManager->setRestClient($mockRestClient);
         }
         $activityList = $activityManager->getActivitiesByUser(2);
@@ -93,10 +93,10 @@ class WorkflowTest extends TestCase{
         $activityManager = $workflowFactory->getActivity();
         if(enableCamunda==0){
             $mockRestClient = Mockery::mock('RestClient');
-            $mockRestClient->expects('postMultiPart')->with("deployment/create",array("deployment-name"=>'TestProcess1',"tenant-id"=>1),array(__DIR__."/Dataset/testAssigntoGroup.bpmn"))->once()->andReturn(json_encode(array('id'=>1,'name'=>"TestProcess1","tenantId"=>1)));
+            $mockRestClient->expects('postMultiPart')->with("deployment/create",array("deployment-name"=>'TestProcess1'),array(__DIR__."/Dataset/testAssigntoGroup.bpmn"))->once()->andReturn('{"tenantId":null,"deployedProcessDefinitions":{"main:2:2849099d-9e78-11e9-a32f-3efeb18f8381":{"id":"main:2:2849099d-9e78-11e9-a32f-3efeb18f8381","key":"main","category":"http://camunda.org/schema/1.0/bpmn","description":null,"name":"Task Form","version":2,"resource":"ScriptTaskTest.bpmn","deploymentId":"2846989b-9e78-11e9-a32f-3efeb18f8381","diagram":null,"suspended":false,"tenantId":null,"versionTag":null,"historyTimeToLive":null}},"deployedCaseDefinitions":null,"deployedDecisionDefinitions":null,"deployedDecisionRequirementsDefinitions":null}');
             $processManager->setRestClient($mockRestClient);
         }
-        $data = $processManager->deploy(1,'TestProcess1',array(__DIR__."/Dataset/testAssigntoGroup.bpmn"));
+        $data = $processManager->deploy('TestProcess1',array(__DIR__."/Dataset/testAssigntoGroup.bpmn"));
         $this->assertNotEquals(0, $data);
         $deploymentId = $data['id'];
         if(enableCamunda==0){

@@ -25,6 +25,33 @@ ox_group:
         date_modified: '2018-12-11 07:25:06'
         created_id: 1
         modified_id: 1
+  -
+        id: 3
+        uuid : 153f3e9e-eb07-4ca4-be78-34f715bd50sd
+        name: 'Test Group 3'
+        org_id: 2
+        manager_id: 1
+        description: 'Group Description'
+        logo: 'grp2.png'
+        status: 'Active'
+        date_created: '2018-11-11 07:25:06'
+        date_modified: '2018-12-11 07:25:06'
+        created_id: 1
+        modified_id: 1
+  -
+        id: 4
+        uuid : 153f3e9e-eb07-4ca4-be78-34f715bd50ab
+        name: 'Test Group 4'
+        org_id: 1
+        manager_id: 1
+        description: 'Group Description'
+        logo: 'grp2.png'
+        status: 'InActive'
+        date_created: '2018-11-11 07:25:06'
+        date_modified: '2018-12-11 07:25:06'
+        created_id: 1
+        modified_id: 1
+
 ox_user_group:
   -      
     id: 1
@@ -34,3 +61,12 @@ ox_user_group:
     id: 2
     group_id: 1
     avatar_id: 2
+    
+ox_role_privilege:
+  -
+    id: 1000
+    role_id: 5
+    privilege_name: 'MANAGE_GROUP'
+    permission: 3
+    org_id: 1
+

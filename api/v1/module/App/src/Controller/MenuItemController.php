@@ -19,7 +19,7 @@ class MenuItemController extends AbstractApiController
     */
 	public function __construct(MenuItemTable $table, MenuItemService $menuItemService, Logger $log, AdapterInterface $dbAdapter) {
 		parent::__construct($table, $log, __CLASS__, MenuItem::class);
-		$this->setIdentifierName('id');
+		$this->setIdentifierName('menuId');
 		$this->menuItemService = $menuItemService;
 	}
 	/**
@@ -52,7 +52,7 @@ class MenuItemController extends AbstractApiController
     /**
     * GET List MenuItems API
     * @api
-    * @link /app/appId/menuItem
+    * @link /app/appId/menu
     * @method GET
     * @return array Returns a JSON Response list of MenuItems based on Access.
     */
@@ -71,6 +71,7 @@ class MenuItemController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created MenuItem.
     */
     public function update($id, $data){
+        $appId = $this->params()->fromRoute()['appId'];
         try{
             $count = $this->menuItemService->updateMenuItem($id,$data);
         }catch(ValidationException $e){
@@ -91,7 +92,8 @@ class MenuItemController extends AbstractApiController
     * @return array success|failure response
     */
     public function delete($id){
-        $response = $this->menuItemService->deleteMenuItem($id);
+        $appId = $this->params()->fromRoute()['appId'];
+        $response = $this->menuItemService->deleteMenuItem($appId,$id);
         if($response == 0){
             return $this->getErrorResponse("MenuItem not found", 404, ['id' => $id]);
         }
@@ -107,7 +109,8 @@ class MenuItemController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created MenuItem.
     */
     public function get($id){
-        $result = $this->menuItemService->getMenuItem($id);
+        $appId = $this->params()->fromRoute()['appId'];
+        $result = $this->menuItemService->getMenuItem($appId,$id);
         if($result == 0){
             return $this->getErrorResponse("MenuItem not found", 404, ['id' => $id]);
         }
