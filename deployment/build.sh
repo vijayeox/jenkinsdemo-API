@@ -233,7 +233,7 @@ integrations()
     chat
     crm
     mail
-    #openproject
+    openproject
     #workflow    
 }
 all()

@@ -310,33 +310,4 @@ class AuthControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'],'Invalid User');
     }
-
-    public function testSSO() {
-        $data = ['uname'=>'YmhhcmF0Z3Rlc3Q='];
-        $this->dispatch('/sso', 'POST', $data);
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('auth');
-        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AuthController');
-        $this->assertMatchedRouteName('singleSignOn');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(is_null($content['data']['jwt']), false);
-        $this->assertEquals(is_null($content['data']['refresh_token']), false);
-    }
-
-    public function testSSOWithIncorrectName () {
-        $data = ['uname'=>'bhara'];
-        $this->dispatch('/sso', 'POST', $data);
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
-        $this->assertModuleName('auth');
-        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AuthController');
-        $this->assertMatchedRouteName('singleSignOn');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'],'Something went wrong');
-    }
 }

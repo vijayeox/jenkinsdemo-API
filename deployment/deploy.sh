@@ -193,7 +193,7 @@ view()
         systemctl stop view
         echo -e "${YELLOW}Stopped!${RESET}"
         cd ${TEMP}
-        rsync -rl --delete view/vfs/ /opt/oxzion/view/vfs/
+        rsync -rl view/vfs/ /opt/oxzion/view/vfs/
         chown oxzion:oxzion -R /opt/oxzion/view/vfs/
         rm -R view/vfs
         rsync -rl --delete view/ /opt/oxzion/view/

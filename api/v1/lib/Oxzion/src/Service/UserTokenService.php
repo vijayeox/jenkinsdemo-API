@@ -53,8 +53,8 @@ class UserTokenService extends AbstractService
         return $salt;
     }
     private function createUpdateToken($userId,$dataSalt,$id=null){
-        if(isset($this->config['db']['refreshTokenPeriod'])){
-            $refreshTokenPeriod = $this->config['db']['refreshTokenPeriod'];
+        if(isset($this->config['refreshTokenPeriod'])){
+            $refreshTokenPeriod = $this->config['refreshTokenPeriod'];
         } else {
             $refreshTokenPeriod = 1;
         }
