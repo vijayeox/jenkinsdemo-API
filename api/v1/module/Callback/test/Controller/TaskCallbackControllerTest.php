@@ -183,7 +183,7 @@ class TaskCallbackControllerTest extends ControllerTest
         $this->assertMatchedRouteName('ttadduserfromcallback');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['userid'], $data['userid']);
+        $this->assertEquals($content['data']['username'], $data['username']);
     }
 
     public function testAddUserToProjectWithMissingData()
@@ -216,7 +216,7 @@ class TaskCallbackControllerTest extends ControllerTest
         $this->assertMatchedRouteName('ttdeleteuserfromcallback');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['userid'], $data['userid']);
+        $this->assertEquals($content['data']['username'], $data['username']);
     }
 
     public function testRemoveUserFromProjectWithMissingData()

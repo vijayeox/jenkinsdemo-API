@@ -68,7 +68,8 @@ class TaskCallbackController extends AbstractApiControllerHelper {
 
     public function createUserAction() {
         $params = $this->extractPostData();
-        $params['userData'] = ($params['username']) ? ($params['username']) : "No User to ADD";
+        $params['projectUuid'] = isset($params['projectUuid']) ? $params['projectUuid'] : NULL;
+        $params['userData'] = isset($params['username']) ? ($params['username']) : "No User to ADD";
         $this->log->info(TaskCallbackController::class.":User Data- ".$params['userData']);
         $response = $this->taskService->addUserToTask($params['projectUuid'],$params['username'],$params['firstname'],$params['lastname'],$params['email'],$params['timezone']);
         if($response['status'] == "success"){
@@ -84,7 +85,8 @@ class TaskCallbackController extends AbstractApiControllerHelper {
 
     public function deleteUserAction() {
         $params = $this->extractPostData();
-        $params['userData'] = ($params['username']) ? ($params['username']) : "No User to DELETE";
+        $params['userData'] = isset($params['username']) ? ($params['username']) : "No User to DELETE";
+        $params['projectUuid'] = isset($params['projectUuid']) ? $params['projectUuid'] : NULL;
         $this->log->info(TaskCallbackController::class.":User Data- ".$params['userData']);
         $response = $this->taskService->deleteUserFromTask($params['projectUuid'],$params['username']);
         if($response['status'] == "success"){
