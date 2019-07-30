@@ -289,6 +289,7 @@ class GroupService extends AbstractService {
            $data['manager_id']=$result[0]["id"];
         }
         $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
+        $data['parent_id'] = $data['parent_id'] == 0 ? NULL : $data['parent_id'];
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
@@ -301,8 +302,8 @@ class GroupService extends AbstractService {
                 return 1;
             }
         } catch(Exception $e) {
-            // print("Exception");
-            // print_r($e->getMessage());
+            print("Exception");
+            print_r($e->getMessage());
             $this->rollback();
             return 0;
         }

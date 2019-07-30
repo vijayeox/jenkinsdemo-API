@@ -193,7 +193,7 @@ class GroupControllerTest extends ControllerTest {
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group', 'orgname'=> 'Cleveland Black' , 'new_groupname'=> 'Test Create Group')),'GROUP_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', $data);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('groups');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -230,7 +230,7 @@ class GroupControllerTest extends ControllerTest {
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group', 'orgname'=> 'Cleveland Black' , 'new_groupname'=> 'Test Create Group')),'GROUP_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', $data);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(201);
         $this->assertModuleName('Group');
         $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
         $this->assertControllerClass('GroupController');
