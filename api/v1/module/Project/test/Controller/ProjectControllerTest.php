@@ -11,6 +11,9 @@ use Zend\Db\Adapter\Adapter;
 use Oxzion\Service\ProjectService;
 use Mockery;
 use Oxzion\Messaging\MessageProducer;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
+
 
 class ProjectControllerTest extends ControllerTest {
     public function setUp() : void{
@@ -36,6 +39,16 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertControllerClass('ProjectController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
+
+    private function executeQueryTest($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        return $resultSet->toArray();
+    }
+
     public function testGetList() {
         $this->initAuthToken($this->adminUser);
         $data = ['data' => array([
@@ -215,9 +228,15 @@ class ProjectControllerTest extends ControllerTest {
         $this->dispatch('/project', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
+        $select = "SELECT id,manager_id from ox_project where name = 'Test Project 3'";
+        $project = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_user_project where user_id =".$project[0]['manager_id']." and project_id =".$project[0]['id'];
+        $oxproject = $this->executeQueryTest($select);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($project[0]['manager_id'], 1);
+        $this->assertEquals($oxproject[0]['user_id'], 1);
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_project'));
     }
 
@@ -284,6 +303,32 @@ class ProjectControllerTest extends ControllerTest {
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
+    }
+
+    public function testUpdateWithManagerID() {
+        $data = ['name' => 'Test Project','description'=>'Project Description','manager_id' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'old_projectname'=> 'Test Project 1','new_projectname' => 'Test Project','description' => 'Project Description','uuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')),'PROJECT_UPDATED')->once()->andReturn();
+        }
+        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'PUT', null);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $select = "SELECT id,manager_id from ox_project where name = 'Test Project'";
+        $project = $this->executeQueryTest($select);
+
+        $select = "SELECT * from ox_user_project where user_id =".$project[0]['manager_id']." and project_id =".$project[0]['id'];
+        $oxproject = $this->executeQueryTest($select);
+
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($project[0]['manager_id'], 3);
+        $this->assertEquals($oxproject[0]['user_id'], 3);
+        $this->assertEquals($oxproject[0]['project_id'], 1);
+
     }
 
     public function testUpdateByManager() {
