@@ -502,7 +502,7 @@ class UserService extends AbstractService
                 "managerid", "timezone", "date_of_join", "interest", "preferences","password",
                 "password_reset_expiry_date","password_reset_code"
             ))  
-            ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
+            ->where(array('ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (!$response) {
             return $response[0];
