@@ -54,7 +54,7 @@ class SecurityManager{
 			return 1;
 		} else if(is_array($privilege)){
 			foreach ($privilege as $value) {
-				if($roles[$value]){
+				if(isset($roles[$value]) && $roles[$value]){
 					return 1;
 				}
 			}
