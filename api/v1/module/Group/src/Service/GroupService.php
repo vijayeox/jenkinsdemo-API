@@ -351,7 +351,9 @@ class GroupService extends AbstractService {
         $sort = "ox_user.name";
 
 
-        $query = "SELECT ox_user.uuid,ox_user.name";
+        $query = "SELECT ox_user.uuid,ox_user.name,case when (ox_group.manager_id is NOT NULL) 
+                                    then 1
+                                end as is_manager";
         $from = " FROM ox_user left join ox_user_group on ox_user.id = ox_user_group.avatar_id left join ox_group on ox_group.id = ox_user_group.group_id";
     
         $cntQuery ="SELECT count(ox_user.id)".$from;
