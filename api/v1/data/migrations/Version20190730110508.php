@@ -20,7 +20,7 @@ final class Version20190730110508 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("CREATE TABLE ox_padi_verification_pl (
+        $this->addSql("CREATE TABLE IF NOT EXISTS ox_padi_verification_pl (
             id INT NOT NULL AUTO_INCREMENT,
             member_number varchar(6) NOT NULL,
             first_name varchar(16) NULL,
