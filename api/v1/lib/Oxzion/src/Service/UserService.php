@@ -65,8 +65,8 @@ class UserService extends AbstractService
         return $response[0]['orgid'];
     }
 
-    public function getRolesofUser($id){
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+    public function getRolesofUser($orgId,$id){
+        $orgId = $this->getIdFromUuid('ox_organization',$orgId);
         $select = "SELECT oro.uuid, oro.name from ox_user_role as ouo inner join ox_role as oro on ouo.role_id = oro.id where ouo.user_id = (SELECT ou.id from ox_user as ou where ou.id ='".$id."') and oro.org_id = ".$orgId;
         $resultSet = $this->executeQueryWithParams($select)->toArray();
         return $resultSet;
@@ -625,7 +625,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_user')
-            ->columns(array('uuid', 'username', 'firstname', 'lastname', 'name', 'email', 'designation', 'phone', 'date_of_birth', 'date_of_join', 'country', 'website', 'about', 'gender', 'managerid','interest', 'address', 'icon', 'preferences'))
+            ->columns(array('uuid', 'username', 'firstname', 'lastname', 'name', 'email', 'designation','orgid', 'phone', 'date_of_birth', 'date_of_join', 'country', 'website', 'about', 'gender', 'managerid','interest', 'address', 'icon', 'preferences'))
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (empty($response)) {
@@ -633,6 +633,8 @@ class UserService extends AbstractService
         }
         $result = $response[0];
         $result['preferences'] = json_decode($response[0]['preferences']);
+        $result['orgid'] = $this->getUuidFromId('ox_organization',$result['orgid']);
+        $result['managerid'] = $this->getUuidFromId('ox_user',$result['managerid']);
         if (isset($result)) {
             return $result;
         } else {

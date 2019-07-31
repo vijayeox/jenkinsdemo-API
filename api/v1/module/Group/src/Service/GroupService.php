@@ -324,17 +324,13 @@ class GroupService extends AbstractService {
         }
 
         $org = $this->organizationService->getOrganization($obj->org_id);
-        $count = 0;
-        try {
-            $count = $this->table->deleteByUuid($id);
-            if($count == 0) {
-                return 0;
-            }
-        } catch(Exception $e) {
-            $this->rollback();
-        }
+        $originalArray = $obj->toArray();
+        $form = new Group();
+        $originalArray['status'] = 'Inactive';
+        $form->exchangeArray($originalArray);
+        $result = $this->table->save($form);
         $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'] )),'GROUP_DELETED');
-        return $count;
+        return $result;
     }
 
     public function getUserList($id,$filterParams = null) {

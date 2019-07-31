@@ -26,15 +26,14 @@ class PrivilegeService extends AbstractService {
             
 
             $orgId = AuthContext::get(AuthConstants::ORG_ID);
-            $select = "SELECT orp.*,oa.name FROM ox_role_privilege orp 
-                        left join ox_app as oa on oa.id = orp.app_id  
+            $select = "SELECT orp.privilege_name,orp.permission,oa.name FROM ox_role_privilege orp left join ox_app as oa on oa.id = orp.app_id
                         WHERE orp.org_id = ".$orgId." AND orp.role_id = (SELECT r.id FROM ox_role r WHERE r.name = 'ADMIN' and r.org_id = ".$orgId.") ORDER BY orp.id";
             $resultSet = $this->executeQuerywithParams($select);
             $masterPrivilege = $resultSet->toArray();
 
             if(isset($params['roleId'])){
                 $roleId = $params['roleId']; 
-                $select = "SELECT orp.* FROM ox_role_privilege orp WHERE orp.org_id = ".$orgId." AND orp.role_id =".$roleId." ORDER BY orp.id";
+                $select = "SELECT orp.privilege_name,orp.permission FROM ox_role_privilege orp WHERE orp.org_id = ".$orgId." AND orp.role_id =".$roleId." ORDER BY orp.id";
                 $resultSet = $this->executeQuerywithParams($select);
                 $rolePrivilege = $resultSet->toArray();
 

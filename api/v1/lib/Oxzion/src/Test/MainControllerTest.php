@@ -44,6 +44,10 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     {
         parent::setUp();
         $_REQUEST = [];
+        $_SERVER['REQUEST_SCHEME'] = "http";
+        $_SERVER['SERVER_NAME'] = "localhost";
+        $_SERVER['SERVER_PORT'] = "8080";
+    
         $this->setupConnection();
         $tm = $this->getTransactionManager();
         $tm->setRollbackOnly(true);

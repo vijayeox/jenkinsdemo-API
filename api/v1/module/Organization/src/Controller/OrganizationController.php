@@ -227,4 +227,98 @@ class OrganizationController extends AbstractApiController
         return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
 
+
+     /**
+     * GET Organization Groups API
+     * @api
+     * @link /organization/:orgId/groups
+     * @method GET
+     **/
+    public function getListofOrgGroupsAction()
+    {
+        $params = $this->params()->fromRoute();
+        $filterParams = $this->params()->fromQuery();
+        $orgId = isset($params['orgId']) ? $params['orgId'] : NULL;
+        try{
+            $result = $this->orgService->getOrgGroupsList($orgId,$filterParams);
+            if (!$result) {
+                return $this->getErrorResponse("Organization not found", 404);
+            }
+        }
+        catch(Exception $e) {
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+    }
+
+    // /**
+    //  * GET Organization Projects API
+    //  * @api
+    //  * @link /organization/:orgId/projects
+    //  * @method GET
+    //  **/
+    public function getListofOrgProjectsAction()
+    {
+        $params = $this->params()->fromRoute();
+        $filterParams = $this->params()->fromQuery();
+        $orgId = isset($params['orgId']) ? $params['orgId'] : NULL;
+        try{
+            $result = $this->orgService->getOrgProjectsList($orgId,$filterParams);
+            if (!$result) {
+                return $this->getErrorResponse("Organization not found", 404);
+            }
+        }
+        catch(Exception $e) {
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+    }
+
+    // /**
+    //  * GET Organization Announcements API
+    //  * @api
+    //  * @link /organization/:orgId/announcements
+    //  * @method GET
+    //  **/
+    public function getListofOrgAnnouncementsAction()
+    {
+        $params = $this->params()->fromRoute();
+        $filterParams = $this->params()->fromQuery();
+        $orgId = isset($params['orgId']) ? $params['orgId'] : NULL;
+        try{
+            $result = $this->orgService->getOrgAnnouncementsList($orgId,$filterParams);
+            if (!$result) {
+                return $this->getErrorResponse("Organization not found", 404);
+            }
+        }
+        catch(Exception $e) {
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+    }
+
+    // /**
+    //  * GET Organization Roles API
+    //  * @api
+    //  * @link /organization/:orgId/roles
+    //  * @method GET
+    //  **/
+    public function getListofOrgRolesAction()
+    {
+        $params = $this->params()->fromRoute();
+        $filterParams = $this->params()->fromQuery();
+        $orgId = isset($params['orgId']) ? $params['orgId'] : NULL;
+        try{
+            $result = $this->orgService->getOrgRolesList($orgId,$filterParams);
+            if (!$result) {
+                return $this->getErrorResponse("Organization not found", 404);
+            }
+        }
+        catch(Exception $e) {
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+    }
+
+
 }

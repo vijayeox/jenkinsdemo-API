@@ -218,7 +218,7 @@ class ProjectControllerTest extends ControllerTest {
     public function testCreate() {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Test Project 3','description'=>'Project Description','manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_project'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_project'));
         if(enableActiveMQ == 0){
              $mockMessageProducer = $this->getMockMessageProducer();
              //Message to be sent to Mockery => json_encode(array('orgname'=> 'Cleveland Black','projectname' => 'Test Project 3','description' => 'Project Description','uuid' => '')
@@ -237,7 +237,7 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($project[0]['manager_id'], 1);
         $this->assertEquals($oxproject[0]['user_id'], 1);
-        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_project'));
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_project'));
     }
 
 

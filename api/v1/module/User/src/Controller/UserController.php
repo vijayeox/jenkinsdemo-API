@@ -389,7 +389,7 @@ class UserController extends AbstractApiController
                     $userInfo['projects'] = $this->projectService->getProjectsOfUserById($id);
                     break;
                     case "role":
-                    $userInfo['role']= $this->userService->getRolesofUser($id);
+                    $userInfo['role']= $this->userService->getRolesofUser($userInfo['orgid'],$id);
                     break; 
                 }
             }
