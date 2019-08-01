@@ -122,7 +122,8 @@ class GroupService extends AbstractService {
         }
 
         $org = $this->organizationService->getOrganization($data['org_id']);
-       
+        $sql = $this->getSqlObject();
+        
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
@@ -136,7 +137,14 @@ class GroupService extends AbstractService {
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
+        
+            $insert = $sql->insert('ox_user_group');
+            $insert_data = array('avatar_id' => $data['manager_id'], 'group_id' => $data['id']);
+            $insert->values($insert_data);
+            $result = $this->executeUpdate($insert);
+
             $this->commit();
+        
         } catch(Exception $e) {
             print_r($e->getMessage());
             $this->logger->err(__CLASS__.$e->getMessage());
@@ -298,8 +306,15 @@ class GroupService extends AbstractService {
              if(isset($files)){
                 $this->uploadGroupLogo($org['uuid'],$id,$files);
             }
-            if($count == 0) {
-                return 1;
+            if($count === 1) {
+                $select = "SELECT count(id) as users from ox_user_group where avatar_id =".$data['manager_id']." AND group_id = (SELECT id from ox_group where uuid = '".$id."')";
+                $query=$this->executeQuerywithParams($select)->toArray();
+                if($query[0]['users'] === '0'){
+                    $insert = "INSERT INTO ox_user_group (`avatar_id`,`group_id`) VALUES (".$data['manager_id'].",(SELECT id from ox_group where uuid = '".$id."'))";
+                    $query1 = $this->executeQuerywithParams($insert);
+                }
+            } else {
+                return 2;
             }
         } catch(Exception $e) {
             print("Exception");
