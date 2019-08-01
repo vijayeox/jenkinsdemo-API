@@ -17,12 +17,12 @@ class FormController extends AbstractApiController
     /**
     * @ignore __construct
     */
-	public function __construct(FormTable $table, FormService $formService, Logger $log, AdapterInterface $dbAdapter) {
-		parent::__construct($table, $log, __CLASS__, Form::class);
-		$this->setIdentifierName('id');
-		$this->formService = $formService;
-	}
-	/**
+    public function __construct(FormTable $table, FormService $formService, Logger $log, AdapterInterface $dbAdapter) {
+        parent::__construct($table, $log, __CLASS__, Form::class);
+        $this->setIdentifierName('id');
+        $this->formService = $formService;
+    }
+    /**
     * Create Form API
     * @api
     * @link /app/appId/form
@@ -40,10 +40,9 @@ class FormController extends AbstractApiController
         try{
             $count = $this->formService->createForm($appId,$data);
         } catch (ValidationException $e){
-            print_r($e->getMessage());
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
-        }print_r($count);
+        }
         if($count == 0){
             return $this->getFailureResponse("Failed to create a new entity", $data);
         }
