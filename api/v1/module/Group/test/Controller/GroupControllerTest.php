@@ -12,6 +12,9 @@ use Zend\Db\Adapter\Adapter;
 use Oxzion\Service\GroupService;
 use Mockery;
 use Oxzion\Messaging\MessageProducer;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
+
 
 
 class GroupControllerTest extends ControllerTest {
@@ -38,6 +41,15 @@ class GroupControllerTest extends ControllerTest {
         $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
         $this->assertControllerClass('GroupController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+    }
+
+    private function executeQueryTest($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        return $resultSet->toArray();
     }
 
     public function testgetGroupsforUser() {
@@ -114,6 +126,10 @@ class GroupControllerTest extends ControllerTest {
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('groups');
+        $select = "SELECT id,manager_id from ox_group where name = 'Groups 22'";
+        $group = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_user_group where avatar_id =".$group[0]['manager_id']." and group_id =".$group[0]['id'];
+        $oxgroup = $this->executeQueryTest($select);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
@@ -123,6 +139,8 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($content['data']['description'], $data['description']);
         $this->assertEquals($content['data']['logo'], "grp1.png");
         $this->assertEquals($content['data']['status'], "Active");
+        $this->assertEquals($group[0]['manager_id'], 1);
+        $this->assertEquals($oxgroup[0]['avatar_id'], 1);
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
     }
 
@@ -185,7 +203,7 @@ class GroupControllerTest extends ControllerTest {
     }
 
     public function testUpdate() {
-        $data = ['name' => 'Test Create Group','manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description'=>'Description Test Data'];
+        $data = ['name' => 'Test Create Group','manager_id' => "4fd9ce37-758f-11e9-b2d5-68ecc57cde45", 'description'=>'Description Test Data'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
@@ -193,16 +211,22 @@ class GroupControllerTest extends ControllerTest {
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group', 'orgname'=> 'Cleveland Black' , 'new_groupname'=> 'Test Create Group')),'GROUP_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', $data);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('groups');
+        $select = "SELECT id,manager_id from ox_group where name = 'Test Create Group'";
+        $group = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_user_group where avatar_id =".$group[0]['manager_id']." and group_id =".$group[0]['id'];
+        $oxgroup = $this->executeQueryTest($select);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], 'Test Create Group');
         $this->assertEquals($content['data']['org_id'], 1);
-        $this->assertEquals($content['data']['manager_id'], 1);
+        $this->assertEquals($content['data']['manager_id'], 2);
         $this->assertEquals($content['data']['description'], "Description Test Data");
         $this->assertEquals($content['data']['status'], "Active");
+        $this->assertEquals($group[0]['manager_id'], 2);
+        $this->assertEquals($oxgroup[0]['avatar_id'], 2);
     }
 
 
@@ -230,7 +254,7 @@ class GroupControllerTest extends ControllerTest {
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group', 'orgname'=> 'Cleveland Black' , 'new_groupname'=> 'Test Create Group')),'GROUP_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', $data);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(201);
         $this->assertModuleName('Group');
         $this->assertControllerName(GroupController::class); // as specified in router's controller name alias
         $this->assertControllerClass('GroupController');

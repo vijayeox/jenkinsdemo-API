@@ -16,7 +16,7 @@ use Oxzion\Service\OrganizationService;
 
 class GroupController extends AbstractApiController {
 
-	private $groupService;
+    private $groupService;
     private $orgService;
 
     /**
@@ -43,15 +43,15 @@ class GroupController extends AbstractApiController {
         $data=$this->params()->fromQuery();
         $userId = $params['userId'];
         try{
-		  $groupList = $this->groupService->getGroupsforUser($userId,$data);
+          $groupList = $this->groupService->getGroupsforUser($userId,$data);
         }
         catch(AccessDeniedException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse($e->getMessage(),403, $response);
         } //Service to get the list of groups
-		return $this->getSuccessResponseWithData($groupList);
-	}
-	/**
+        return $this->getSuccessResponseWithData($groupList);
+    }
+    /**
     * Create Group API
     * @api
     * @link /group
@@ -64,31 +64,31 @@ class GroupController extends AbstractApiController {
     *   } </code>
     * @return array Returns a JSON Response with Status Code and Created Group.
     */
-	public function create($data) {
-		$files = $this->params()->fromFiles('logo');
+    public function create($data) {
+        $files = $this->params()->fromFiles('logo');
         $id=$this->params()->fromRoute();
-		try {
+        try {
             if(!isset($id['groupId'])){
-			     $count = $this->groupService->createGroup($data,$files);
+                 $count = $this->groupService->createGroup($data,$files);
             }else{
                  $count = $this->groupService->updateGroup($id['groupId'],$data,$files); 
             }
             
-		} catch(ValidationException $e) {
-			$response = ['data' => $data, 'errors' => $e->getErrors()];
-			return $this->getErrorResponse("Validation Errors",404, $response);
-		}
+        } catch(ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
         catch(AccessDeniedException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse($e->getMessage(),403, $response);
         }
         if($count == 0) {
-			return $this->getFailureResponse("Failed to create a new entity", $data);
-		}else if($count == 2) {
+            return $this->getFailureResponse("Failed to create a new entity", $data);
+        }else if($count == 2) {
             return $this->getErrorResponse("Updating non-existent Group", 404, $data);
         }
-		return $this->getSuccessResponseWithData($data,201);
-	}
+        return $this->getSuccessResponseWithData($data,201);
+    }
 
     /**
     * Update Group API
