@@ -200,12 +200,12 @@ class EmailClient{
 				$textBody->setDisposition('inline');
 
 				/* Send in flowed format. */
-				$flowed = new Horde_Text_Flowed($body, 'utf-8');
-				$flowed->setDelSp(true);
-				$textBody->setContentTypeParameter('format', 'flowed');
-				$textBody->setContentTypeParameter('DelSp', 'Yes');
-				$text_contents = $flowed->toFlowed();
-				$textBody->setContents($text_contents);
+				// $flowed = new Horde_Text_Flowed($body, 'utf-8');
+				// $flowed->setDelSp(true);
+				// $textBody->setContentTypeParameter('format', 'flowed');
+				// $textBody->setContentTypeParameter('DelSp', 'Yes');
+				// $text_contents = $flowed->toFlowed();
+				// $textBody->setContents($text_contents);
 
 	        /* Determine whether or not to send a multipart/alternative
 	         * message with an HTML part. */
@@ -221,16 +221,16 @@ class EmailClient{
 	             * to the attachment list. Convert to multipart/related if
 	             * this is the case. Exception: if text representation is empty,
 	             * just send HTML part. */
-	            if (strlen(trim($text_contents))) {
-	            	$textpart = new Horde_Mime_Part();
-	            	$textpart->setType('multipart/alternative');
-	            	$textpart[] = $textBody;
-	            	$textpart[] = $to_add;
-	            	$textpart->setHeaderCharset('utf-8');
-	            	$textBody->setDescription("Plaintext Message");
-	            } else {
+	            // if (strlen(trim($text_contents))) {
+	            // 	$textpart = new Horde_Mime_Part();
+	            // 	$textpart->setType('multipart/alternative');
+	            // 	$textpart[] = $textBody;
+	            // 	$textpart[] = $to_add;
+	            // 	$textpart->setHeaderCharset('utf-8');
+	            // 	$textBody->setDescription("Plaintext Message");
+	            // } else {
 	            	$textpart = $to_add;
-	            }
+	            // }
 
 	            $htmlBody->setContents(
 	            	$tfilter->filter(
@@ -246,9 +246,7 @@ class EmailClient{
 	            		);
 	            	$base = $textpart;
 	            }else {
-	            	$base = $textpart = strlen(trim($text_contents))
-	            	? $textBody
-	            	: null;
+	            	$base = $textpart = $textBody;
 	            }
 
 	            /* Add attachments. */

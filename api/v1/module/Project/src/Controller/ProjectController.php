@@ -98,6 +98,9 @@ class ProjectController extends AbstractApiController {
     	if($count == 0) {
     		return $this->getErrorResponse("Entity not found for id - $id", 404);
     	}
+        if($count == 2) {
+            return $this->getErrorResponse("Failed To Update", 404);
+        }
     	return $this->getSuccessResponseWithData($data,200);
     }
 
@@ -182,7 +185,7 @@ class ProjectController extends AbstractApiController {
             $result = $this->projectService->getProjectList($filterParams);
         }
         catch(AccessDeniedException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse($e->getMessage(),403, $response);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
@@ -267,11 +270,11 @@ class ProjectController extends AbstractApiController {
         try {
             $count = $this->projectService->getUserList($project[$this->getIdentifierName()],$filterParams);
         } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
         }
         catch(AccessDeniedException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse($e->getMessage(),403, $response);
         }
         if($count == 0) {

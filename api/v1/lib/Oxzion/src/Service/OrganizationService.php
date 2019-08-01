@@ -25,7 +25,11 @@ class OrganizationService extends AbstractService
     protected $modelClass;
     private $messageProducer;
     private $privilegeService;
-    static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
+    static $userField= array('name' => 'ox_user.name','id' => 'ox_user.id');
+    static $groupField = array('name' => 'oxg.name','description' => 'oxg.description');
+    static $projectField = array('name' => 'oxp.name','description' => 'oxp.description');
+    static $announcementField = array('name' => 'oxa.name','description' => 'oxa.description');
+    static $roleField = array('name' => 'oxr.name','description' => 'oxr.description');
 
     
     public function setMessageProducer($messageProducer)
@@ -318,7 +322,7 @@ class OrganizationService extends AbstractService
     private function getOrgContactPersonDetails($id){
         $userData = array();
         $userSelect = "SELECT ou.uuid from `ox_user` as ou where ou.id = (SELECT og.contactid from `ox_organization` as og WHERE og.uuid = '".$id."')";
-        $userData = $this->executeQueryWithParams($userSelect)->toArray();    
+        $userData = $this->executeQueryWithParams($userSelect)->toArray();
         return $userData[0]['uuid'];
     }
 
@@ -344,17 +348,11 @@ class OrganizationService extends AbstractService
         $cntQuery ="SELECT count(id) FROM `ox_organization`";
 
         if(count($filterParams) > 0 || sizeof($filterParams) > 0){
-                $filterArray = json_decode($filterParams['filter'],true); 
-                if(isset($filterArray[0]['filter'])){
-                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                   $filterList = $filterArray[0]['filter']['filters'];
-                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
-                }
+                $filterArray = json_decode($filterParams['filter'],true);
+                $where = $this->createWhereClause($filterArray);
                 if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
-                    $sort = $filterArray[0]['sort'];
-                    $sort = FilterUtils::sortArray($sort);
-                }
-                
+                     $sort = $this->createSortClause($filterArray[0]['sort']);
+                } 
                 $pageSize = $filterArray[0]['take'];
                 $offset = $filterArray[0]['skip'];            
             }
@@ -364,15 +362,14 @@ class OrganizationService extends AbstractService
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count=$resultSet->toArray()[0]['count(id)'];
+            $count=$resultSet->toArray();
             $query ="SELECT uuid,name,address,city,state,country,zip,logo,preferences,contactid FROM `ox_organization`".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query)->toArray();
-
             for($x=0;$x<sizeof($resultSet);$x++) {
               $resultSet[$x]['contactid'] = $this->getOrgContactPersonDetails($resultSet[$x]['uuid']);
             }
             return array('data' => $resultSet, 
-                     'total' => $count);
+                     'total' => $count[0]['count(id)']);
     }
 
     public function addUserToOrg($userId, $organizationId) {
@@ -512,14 +509,9 @@ class OrganizationService extends AbstractService
 
         if(count($filterParams) > 0 || sizeof($filterParams) > 0){
                 $filterArray = json_decode($filterParams['filter'],true); 
-                if(isset($filterArray[0]['filter'])){
-                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                   $filterList = $filterArray[0]['filter']['filters'];
-                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
-                }
+                $where = $this->createWhereClause($filterArray,self::$userField);
                 if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
-                    $sort = $filterArray[0]['sort'];
-                    $sort = FilterUtils::sortArray($sort,self::$fieldName);
+                     $sort = $this->createSortClause($filterArray[0]['sort'],self::$userField);
                 }
                 $pageSize = $filterArray[0]['take'];
                 $offset = $filterArray[0]['skip'];            
@@ -530,18 +522,14 @@ class OrganizationService extends AbstractService
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count=$resultSet->toArray()[0]['count(ox_user.id)'];
+            $count=$resultSet->toArray();
             $query =$query." ".$from." ".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query)->toArray();
             for($x=0;$x<sizeof($resultSet);$x++) {
                 $resultSet[$x]['icon'] = $baseUrl . "/user/profile/" . $resultSet[$x]['uuid'];
-           }
-            if(sizeof($resultSet) > 0){
-                return array('data' => $resultSet, 
-                     'total' => $count);
-            }else{
-                return 0;
-            }    
+            }
+            return array('data' => $resultSet, 
+                     'total' => $count[0]['count(ox_user.id)']);
     }
 
     public function getAdminUsers($filterParams, $orgId = null){
@@ -566,16 +554,11 @@ class OrganizationService extends AbstractService
        $cntQuery ="SELECT count(DISTINCT ox_user.uuid)".$from;
 
        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
-                $filterArray = json_decode($filterParams['filter'],true); 
-                if(isset($filterArray[0]['filter'])){
-                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                   $filterList = $filterArray[0]['filter']['filters'];
-                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
-                }
+                $filterArray = json_decode($filterParams['filter'],true);
+                $where = $this->createWhereClause($filterArray,self::$userField);
                 if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
-                    $sort = $filterArray[0]['sort'];
-                    $sort = FilterUtils::sortArray($sort,self::$fieldName);
-                }
+                     $sort = $this->createSortClause($filterArray[0]['sort'],self::$userField);
+                } 
                 $pageSize = $filterArray[0]['take'];
                 $offset = $filterArray[0]['skip'];            
             }
@@ -586,15 +569,227 @@ class OrganizationService extends AbstractService
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count=$resultSet->toArray()[0]['count(DISTINCT ox_user.uuid)'];
+            $count=$resultSet->toArray();
             $query =$select." ".$from." ".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query)->toArray();
-            if(sizeof($resultSet) > 0){
-                return array('data' => $resultSet, 
-                     'total' => $count);
-            }else{
-                return 0;
+            return array('data' => $resultSet, 
+                     'total' => $count[0]['count(DISTINCT ox_user.uuid)']);
+    }
+
+    public function getOrgGroupsList($id,$filterParams = null){
+
+        if(!isset($id)){
+            return 0;
+        }
+
+        $pageSize = 20;
+        $offset = 0;
+        $where = "";
+        $sort = "oxg.name";
+
+     
+        $select = "SELECT oxg.uuid,oxg.name,oxg.description,oxu.uuid as manager_id, oxg1.uuid as parent_id, oxo.uuid as org_id";
+        $from = "FROM `ox_group` as oxg
+            LEFT JOIN ox_user as oxu on oxu.id = oxg.manager_id 
+            LEFT JOIN ox_group as oxg1 on oxg.parent_id = oxg1.id
+            LEFT JOIN ox_organization as oxo on oxg.org_id = oxo.id";
+     
+        $cntQuery ="SELECT count(oxg.uuid) ".$from;
+
+
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                $where = $this->createWhereClause($filterArray,self::$groupField);
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                     $sort = $this->createSortClause($filterArray[0]['sort'],self::$groupField);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
             }
+        $orgId = $this->getOrganizationIdByUuid($id);
+        if(!$orgId){
+            return 0;
+        }
+        $where .= strlen($where) > 0 ? " AND oxg.org_id =".$orgId." and oxg.status = 'Active'" : " WHERE oxg.org_id =".$orgId." and oxg.status = 'Active'";
+        
+        $sort = " ORDER BY ".$sort;
+        $limit = " LIMIT ".$pageSize." offset ".$offset;
+
+
+        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+        $count=$resultSet->toArray();
+        $query =$select." ".$from." ".$where." ".$sort." ".$limit;
+        $resultSet = $this->executeQuerywithParams($query)->toArray();
+            
+        return array('data' => $resultSet, 
+                     'total' => $count[0]['count(oxg.uuid)']);
+       
+    }
+
+    public function getOrgProjectsList($id,$filterParams = null){
+ 
+        if(!isset($id)){
+            return 0;
+        }
+
+        $pageSize = 20;
+        $offset = 0;
+        $where = "";
+        $sort = "oxp.name";
+
+     
+        $select = "SELECT oxp.uuid,oxp.name,oxp.description,oxu.uuid as manager_id, oxo.uuid as org_id";
+        $from = "FROM `ox_project` as oxp
+            LEFT JOIN ox_user as oxu on oxu.id = oxp.manager_id 
+            LEFT JOIN ox_organization as oxo on oxp.org_id = oxo.id";
+     
+        $cntQuery ="SELECT count(oxp.uuid) ".$from;
+
+
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true);
+                $where = $this->createWhereClause($filterArray,self::$projectField);
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                 $sort = $this->createSortClause($filterArray[0]['sort'],self::$projectField);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
+            }
+        $orgId = $this->getOrganizationIdByUuid($id);
+        if(!$orgId){
+            return 0;
+        }
+        $where .= strlen($where) > 0 ? " AND oxp.org_id =".$orgId." and oxp.isdeleted != 1" : " WHERE oxp.org_id =".$orgId." and oxp.isdeleted != 1";
+        
+        $sort = " ORDER BY ".$sort;
+        $limit = " LIMIT ".$pageSize." offset ".$offset;
+
+
+        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+        $count=$resultSet->toArray();
+        $query =$select." ".$from." ".$where." ".$sort." ".$limit;
+        $resultSet = $this->executeQuerywithParams($query)->toArray();
+            
+        return array('data' => $resultSet, 
+                     'total' => $count[0]['count(oxp.uuid)']);
+       
+    }
+
+    public function getOrgAnnouncementsList($id,$filterParams = null){
+ 
+        if(!isset($id)){
+            return 0;
+        }
+
+        $pageSize = 20;
+        $offset = 0;
+        $where = "";
+        $sort = "oxa.name";
+
+     
+        $select = "SELECT oxa.uuid,oxa.name,oxa.description,oxa.media_type,oxa.media,oxo.uuid as org_id";
+        $from = "FROM `ox_announcement` as oxa
+            LEFT JOIN ox_organization as oxo on oxa.org_id = oxo.id";
+     
+        $cntQuery ="SELECT count(oxa.uuid) ".$from;
+
+
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true);
+                $where = $this->createWhereClause($filterArray,self::$announcementField);
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                     $sort = $this->createSortClause($filterArray[0]['sort'],self::$announcementField);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
+            }
+        $orgId = $this->getOrganizationIdByUuid($id);
+        if(!$orgId){
+            return 0;
+        }
+       
+        $where .= strlen($where) > 0 ? " AND oxa.org_id =".$orgId." and oxa.end_date >= curdate() and oxa.status = 1" : " WHERE oxa.org_id =".$orgId." and oxa.end_date >= curdate() and oxa.status = 1";
+        
+        $sort = " ORDER BY ".$sort;
+        $limit = " LIMIT ".$pageSize." offset ".$offset;
+
+
+        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+        $count=$resultSet->toArray();
+        $query =$select." ".$from." ".$where." ".$sort." ".$limit;
+        $resultSet = $this->executeQuerywithParams($query)->toArray();
+            
+        return array('data' => $resultSet, 
+                     'total' => $count[0]['count(oxa.uuid)']);
+       
+    }
+
+
+    public function getOrgRolesList($id,$filterParams = null){
+ 
+        if(!isset($id)){
+            return 0;
+        }
+
+        $pageSize = 20;
+        $offset = 0;
+        $where = "";
+        $sort = "oxr.name";
+
+     
+        $select = "SELECT oxr.uuid,oxr.name,oxr.description,oxr.is_system_role,oxo.uuid as org_id";
+        $from = "FROM `ox_role` as oxr
+            LEFT JOIN ox_organization as oxo on oxr.org_id = oxo.id";
+     
+        $cntQuery ="SELECT count(oxr.uuid) ".$from;
+
+
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+            $filterArray = json_decode($filterParams['filter'],true); 
+            $where = $this->createWhereClause($filterArray,self::$roleField);
+            if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                 $sort = $this->createSortClause($filterArray[0]['sort'],self::$roleField);
+            }     
+            $pageSize = $filterArray[0]['take'];
+            $offset = $filterArray[0]['skip'];            
+        }
+
+        $orgId = $this->getOrganizationIdByUuid($id);
+        if(!$orgId){
+            return 0;
+        }
+       
+        $where .= strlen($where) > 0 ? " AND oxr.org_id =".$orgId : " WHERE oxr.org_id =".$orgId;
+        
+        $sort = " ORDER BY ".$sort;
+       
+        $limit = " LIMIT ".$pageSize." offset ".$offset;
+        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+
+        $count=$resultSet->toArray();
+        $query =$select." ".$from." ".$where." ".$sort." ".$limit;
+        $resultSet = $this->executeQuerywithParams($query)->toArray();
+            
+        return array('data' => $resultSet, 
+                     'total' => $count[0]['count(oxr.uuid)']);
+       
+    }
+
+
+    private function createWhereClause($filterArray,$fieldName = null){
+        if(isset($filterArray[0]['filter'])){
+            $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+            $filterList = $filterArray[0]['filter']['filters'];
+            $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,$fieldName);
+            return $where;
+        }else{
+            return "";
+        }
+    }
+
+    private function createSortClause($sort,$fieldName = null){
+            $sort = FilterUtils::sortArray($sort,$fieldName);
+            return $sort;
     }
 
 }

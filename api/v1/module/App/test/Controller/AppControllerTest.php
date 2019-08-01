@@ -34,7 +34,7 @@ class AppControllerTest extends ControllerTest
 
     public function testAppRegister(){
         $this->initAuthToken($this->adminUser);
-        $data = ['applist' => json_encode([["name" => "CRM","category" => "organization","options" => ["autostart" => "false","hidden" => "false" ]],["name"=>"Calculator","category" =>  "office","options" => ["autostart" =>  "false","hidden" => "false"]],["name" => "Calendar","category" =>  "collaboration","options" =>  ["autostart" => "false","hidden" => "false"]],["name" => "Chat","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "FileManager","category" => "office","options" => ["autostart" => "false","hidden" => "false"]],["name" => "Mail","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "MailAdmin","category" => "utilities","options" => ["autostart" => "false","hidden" => "false"]],["name" => "MyTodo","category" => "null","options" => ["autostart" => "false","hidden" => "true"]],["name" => "Textpad","category" => "office","options" => ["autostart" => "false","hidden" => "false"]]])];
+        $data = ['applist' => json_encode([["uuid" => "NULL","name" => "CRM","category" => "organization","options" => ["autostart" => "false","hidden" => "false" ]],["uuid" => "NULL","name"=>"Calculator","category" =>  "office","options" => ["autostart" =>  "false","hidden" => "false"]],["uuid" => "NULL","name" => "Calendar","category" =>  "collaboration","options" =>  ["autostart" => "false","hidden" => "false"]],["uuid" => "NULL","name" => "Chat","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["uuid" => "NULL","name" => "FileManager","category" => "office","options" => ["autostart" => "false","hidden" => "false"]],["uuid" => "NULL","name" => "Mail","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["uuid" => "NULL","name" => "MailAdmin","category" => "utilities","options" => ["autostart" => "false","hidden" => "false"]],["uuid" => "NULL","name" => "MyTodo","category" => "null","options" => ["autostart" => "false","hidden" => "true"]],["uuid" => "NULL","name" => "Textpad","category" => "office","options" => ["autostart" => "false","hidden" => "false"]]])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/register', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -185,7 +185,7 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
+        $this->assertEquals($content['data']['name'], $data['name']);
     }
 
     public function testCreateWithOutTextFailure()
@@ -292,7 +292,8 @@ class AppControllerTest extends ControllerTest
         );
         $workflowFactory = WorkflowFactory::getInstance();
         $processManager = $workflowFactory->getProcessManager();
-        $baseFolder = $this->config['UPLOAD_FOLDER'];
+        $config = $this->getApplicationConfig();
+        $baseFolder = $config['UPLOAD_FOLDER'];
         if(enableCamunda==0){
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
@@ -335,7 +336,8 @@ class AppControllerTest extends ControllerTest
                 'error'     =>  0
             )
         );
-        $baseFolder = $this->config['UPLOAD_FOLDER'];
+        $config = $this->getApplicationConfig();
+        $baseFolder = $config['UPLOAD_FOLDER'];
         if(enableCamunda==0){
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);

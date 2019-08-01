@@ -103,8 +103,7 @@ class GroupControllerTest extends ControllerTest {
 // Testing to see if the Create Group function is working as intended if all the value passed are correct.
     public function testCreate() {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'parent_id' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'org_id'=> 1, 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description
-        '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
+        $data = ['name' => 'Groups 22', 'parent_id' => "2db1c5a3-8a82-4d5b-b60a-c648cf1e27de", 'org_id'=> 1, 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description'=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
@@ -129,8 +128,7 @@ class GroupControllerTest extends ControllerTest {
 
     public function testCreateByAdminWithDifferentOrgID() {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'parent_id' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'org_id'=> 'b0971de7-0387-48ea-8f29-5d3704d96a46', 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description
-        '=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
+        $data = ['name' => 'Groups 22', 'parent_id' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'org_id'=> 'b0971de7-0387-48ea-8f29-5d3704d96a46', 'manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description'=>'Description Test Data', 'logo' => 'grp1.png','status' => 'Active'];
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/group', 'POST', $data);
@@ -152,8 +150,7 @@ class GroupControllerTest extends ControllerTest {
 //Test Case to check the errors when the required field is not selected. Here I removed the parent_id field from the list.
     public function testCreateWithoutRequiredField() {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Groups 22', 'description
-        '=>'Description Test Data', 'status' => 'Active'];
+        $data = ['name' => 'Groups 22', 'description'=>'Description Test Data', 'status' => 'Active'];
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_group'));
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
@@ -195,7 +192,7 @@ class GroupControllerTest extends ControllerTest {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group', 'orgname'=> 'Cleveland Black' , 'new_groupname'=> 'Test Create Group')),'GROUP_UPDATED')->once()->andReturn();
         }
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', null);
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('groups');
@@ -232,7 +229,7 @@ class GroupControllerTest extends ControllerTest {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group', 'orgname'=> 'Cleveland Black' , 'new_groupname'=> 'Test Create Group')),'GROUP_UPDATED')->once()->andReturn();
         }
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', null);
+        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('Group');
         $this->assertControllerName(GroupController::class); // as specified in router's controller name alias

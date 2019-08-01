@@ -210,7 +210,10 @@ class AnnouncementService extends AbstractService{
     protected function getAnnouncementIdBYUuid($uuid){
         $select = "SELECT id from `ox_announcement` where uuid = '".$uuid."'";
         $id = $this->executeQuerywithParams($select)->toArray();
-        return $id[0]['id'];
+        if(count($id) > 0){
+            return $id[0]['id'];
+        }
+        return 0;
     }
     /**
     * Delete Announcement
@@ -374,12 +377,10 @@ class AnnouncementService extends AbstractService{
                    $filterlogic = $filterArray[0]['filter']['logic'];
                    $filterList = $filterArray[0]['filter']['filters'];
                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
-                   // ,self::$fieldName);
                 }
                 if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                     $sort = $filterArray[0]['sort'];
                     $sort = FilterUtils::sortArray($sort);
-                    // ,self::$fieldName);
                 }
                 $pageSize = $filterArray[0]['take'];
                 $offset = $filterArray[0]['skip'];            
@@ -387,7 +388,7 @@ class AnnouncementService extends AbstractService{
 
 
 
-            $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= now() AND ox_group.status = 'Active'" : " WHERE ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= curdate() AND ox_group.status = 'Active'";
+            $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= now() AND ox_group.status = 1" : " WHERE ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= curdate() AND ox_group.status = 1";
 
             
             $sort = " ORDER BY ".$sort;

@@ -61,7 +61,6 @@ class CalendarCallbackControllerTest extends ControllerTest
 
         $mockemailClient = Mockery::mock('Oxzion\Email\EmailClient');
         $mockemailClient->expects('buildAndSendMessage')->with($data['body'],$_FILES['attachment'],$headers,$smtpDetails)->once()->andReturn(null);
-        // exit;
         $this->dispatch('/callback/calendar/sendmail', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
@@ -99,7 +98,6 @@ class CalendarCallbackControllerTest extends ControllerTest
     {
         $data = ['from' => 'bharatg@myvamla.com','subject'=>'test case for email','body'=>'test body for email'];
         $headers = array(
-                'to' => $data['to'],
                 'from' => $data['from'],
                 'subject' => $data['subject'],
             );

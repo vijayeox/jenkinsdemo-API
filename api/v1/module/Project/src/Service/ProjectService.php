@@ -141,7 +141,7 @@ class ProjectService extends AbstractService {
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['isdeleted'] = false;
-        $select ="SELECT id from ox_user where id = '".$data['manager_id']."'";
+        $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
         $data['manager_id']=$result[0]["id"];
         $org = $this->organizationService->getOrganization($data['org_id']);
@@ -192,17 +192,24 @@ class ProjectService extends AbstractService {
         $data = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
-
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
         $org = $this->organizationService->getOrganization($obj->org_id);
         try {
+
             $count = $this->table->save($form);
-            if($count == 0) {
-                $this->rollback();
-                return 0;
+            if($count === 1) {
+                $select = "SELECT count(id) as users from ox_user_project where user_id =".$data['manager_id']." AND project_id = (SELECT id from ox_project where uuid = '".$id."')";
+                $query=$this->executeQuerywithParams($select)->toArray();
+                if($query[0]['users'] === '0'){
+                    $insert = "INSERT INTO ox_user_project (`user_id`,`project_id`) VALUES (".$data['manager_id'].",(SELECT id from ox_project where uuid = '".$id."'))";
+                    $query1 = $this->executeQuerywithParams($insert);
+                }
+            } else {
+                return 2;
             }
+
         } catch(Exception $e) {
             $this->rollback();
             return 0;
@@ -290,7 +297,10 @@ class ProjectService extends AbstractService {
         $sort = "ox_user.name";
 
 
-         $query = "SELECT ox_user.uuid,ox_user.name";
+         $query = "SELECT ox_user.uuid,ox_user.name,
+                                case when (ox_project.manager_id = ox_user.id) 
+                                    then 1
+                                end as is_manager";
          $from = " FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id";
 
          $cntQuery ="SELECT count(ox_user.id)".$from;
@@ -298,7 +308,7 @@ class ProjectService extends AbstractService {
          if(count($filterParams) > 0 || sizeof($filterParams) > 0){
                 $filterArray = json_decode($filterParams['filter'],true);
                 if(isset($filterArray[0]['filter'])){
-                   $filterlogic = $filterArray[0]['filter']['logic'];
+                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : " AND ";
                    $filterList = $filterArray[0]['filter']['filters'];
                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
                 }
@@ -320,7 +330,6 @@ class ProjectService extends AbstractService {
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(ox_user.id)'];
             $query =$query." ".$from." ".$where." ".$sort." ".$limit;
-
             $resultSet = $this->executeQuerywithParams($query);
             return array('data' => $resultSet->toArray(),
                      'total' => $count);

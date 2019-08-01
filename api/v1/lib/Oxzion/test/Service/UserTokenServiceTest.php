@@ -18,7 +18,7 @@ class UserTokenServiceTest extends ServiceTest
         $this->loadConfig();
         $config = $this->getApplicationConfig();
         $this->adapter = new Adapter($config['db']);
-        $table = $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTokenTable::class);
+        $this->table = $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTokenTable::class);
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->setRollbackOnly(true);
         $tm->beginTransaction();
@@ -51,7 +51,7 @@ class UserTokenServiceTest extends ServiceTest
         $config = $this->getApplicationConfig();
         // $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         // $table = $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTokenTable::class);
-        $userTokenService = new UserTokenService($this->config, $this->adapter, $this->table);
+        $userTokenService = new UserTokenService($config, $this->adapter, $this->table);
         $content = $userTokenService->generateRefreshToken($data, $salt);
         $this->assertEquals(0, $content);
     }

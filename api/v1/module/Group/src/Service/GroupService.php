@@ -111,10 +111,12 @@ class GroupService extends AbstractService {
         $data['uuid'] = Uuid::uuid4()->toString();   
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
+        $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
-        $data['manager_id']=$result[0]["id"];
-
+        if($result){
+           $data['manager_id']=$result[0]["id"];
+        }
         if(isset($data['parent_id'])){
             $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
         }
@@ -280,10 +282,14 @@ class GroupService extends AbstractService {
         $data = array_merge($obj->toArray(), $data);
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
+        $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
-        $data['manager_id']=$result[0]["id"];
+        if($result){
+           $data['manager_id']=$result[0]["id"];
+        }
         $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
+        $data['parent_id'] = $data['parent_id'] == 0 ? NULL : $data['parent_id'];
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
@@ -293,10 +299,11 @@ class GroupService extends AbstractService {
                 $this->uploadGroupLogo($org['uuid'],$id,$files);
             }
             if($count == 0) {
-                $this->rollback();
                 return 1;
             }
         } catch(Exception $e) {
+            print("Exception");
+            print_r($e->getMessage());
             $this->rollback();
             return 0;
         }
@@ -317,17 +324,13 @@ class GroupService extends AbstractService {
         }
 
         $org = $this->organizationService->getOrganization($obj->org_id);
-        $count = 0;
-        try {
-            $count = $this->table->deleteByUuid($id);
-            if($count == 0) {
-                return 0;
-            }
-        } catch(Exception $e) {
-            $this->rollback();
-        }
+        $originalArray = $obj->toArray();
+        $form = new Group();
+        $originalArray['status'] = 'Inactive';
+        $form->exchangeArray($originalArray);
+        $result = $this->table->save($form);
         $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'] )),'GROUP_DELETED');
-        return $count;
+        return $result;
     }
 
     public function getUserList($id,$filterParams = null) {
@@ -348,7 +351,9 @@ class GroupService extends AbstractService {
         $sort = "ox_user.name";
 
 
-        $query = "SELECT ox_user.uuid,ox_user.name";
+        $query = "SELECT ox_user.uuid,ox_user.name,case when (ox_group.manager_id = ox_user.id) 
+                                    then 1
+                                end as is_manager";
         $from = " FROM ox_user left join ox_user_group on ox_user.id = ox_user_group.avatar_id left join ox_group on ox_group.id = ox_user_group.group_id";
     
         $cntQuery ="SELECT count(ox_user.id)".$from;
@@ -368,7 +373,7 @@ class GroupService extends AbstractService {
                 $offset = $filterArray[0]['skip'];            
             }
 
-            $where .= strlen($where) > 0 ? " AND ox_group.uuid = '".$id."'" : " WHERE ox_group.uuid = '".$id."'";
+            $where .= strlen($where) > 0 ? " AND ox_group.uuid = '".$id."' AND ox_group.status = 'Active'" : " WHERE ox_group.uuid = '".$id."' AND ox_group.status = 'Active'";
 
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;

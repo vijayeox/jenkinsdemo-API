@@ -6,6 +6,23 @@ import Notification from "../components/Notification";
 import AvatarImageCropper from "react-avatar-image-cropper";
 import image2base64 from "image-to-base64";
 import Webcam from "react-webcam";
+import { Editor, EditorTools } from "@progress/kendo-react-editor";
+const {
+  Bold,
+  Italic,
+  Underline,
+  AlignLeft,
+  AlignRight,
+  AlignCenter,
+  Indent,
+  Outdent,
+  OrderedList,
+  UnorderedList,
+  Undo,
+  Redo,
+  Link,
+  Unlink
+} = EditorTools;
 
 class EditProfile extends Component {
   constructor(props) {
@@ -46,20 +63,17 @@ class EditProfile extends Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.onSelect2 = this.onSelect2.bind(this);
-    this.onSelect1 = this.onSelect1.bind(this);
     this.notif = React.createRef();
     this.submitProfilePic = this.submitProfilePic.bind(this);
 
     Codes.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));
   }
 
-  onSelect1(event) {
+  onSelect1 = event => {
     const field = {};
     field[event.target.name] = event.target.value;
     this.setState(field);
-  }
+  };
 
   splitPhoneNumber() {
     if (this.state.fields.phone == (null || undefined)) {
@@ -74,11 +88,11 @@ class EditProfile extends Component {
     }
   }
 
-  onSelect2(event) {
+  onSelect2 = event => {
     const field = {};
     field[event.target.name] = event.target.value;
     this.setState(field);
-  }
+  };
 
   componentWillMount() {
     this.state.dateformat = this.state.dateformat.replace(/m/g, "M");
@@ -103,13 +117,22 @@ class EditProfile extends Component {
     this.setState({ fields: fields });
   };
 
-  handleChange(e) {
+  handleChange = e => {
     let fields = this.state.fields;
     fields[e.target.name] = e.target.value;
     this.setState({
       fields
     });
-  }
+  };
+
+  handleChangeAboutField = value => {
+    console.log(value);
+    let fields = this.state.fields;
+    fields["about"] = value;
+    this.setState({
+      fields
+    });
+  };
 
   async handleSubmit(event) {
     event.preventDefault();
@@ -123,7 +146,9 @@ class EditProfile extends Component {
         fields: fields
       });
 
-      let date_of_birth = new Moment(this.state.fields.date_of_birth).format("YYYY-MM-DD");
+      let date_of_birth = new Moment(this.state.fields.date_of_birth).format(
+        "YYYY-MM-DD"
+      );
 
       Object.keys(this.state.fields).map(key => {
         if (key == "date_of_birth") {
@@ -158,8 +183,7 @@ class EditProfile extends Component {
         );
         this.core.make("oxzion/profile").update();
       }
-    }
-    else{
+    } else {
       this.notif.current.failNotification(
         "Please fill all the mandatory fields."
       );
@@ -468,11 +492,7 @@ class EditProfile extends Component {
             </div>
 
             <div className="col input-field">
-              <label
-                id="name"
-                className="active"
-                style={{ fontSize: "16px" }}
-              >
+              <label id="name" className="active" style={{ fontSize: "16px" }}>
                 Gender
               </label>
               <div className="row gender">
@@ -615,14 +635,25 @@ class EditProfile extends Component {
             <div className="col-md-12 input-field">
               <label>About Me</label>
               <div>
-                <textarea
-                  rows="3"
-                  className="textareaField"
-                  type="text"
-                  ref="about"
+                <Editor
+                  style={{ height: "20vh", overflow: "auto" }}
                   name="about"
-                  value={this.state.fields.about ? this.state.fields.about : ""}
-                  onChange={this.handleChange}
+                  tools={[
+                    [Bold, Italic, Underline],
+                    [Undo, Redo],
+                    [Link, Unlink],
+                    [AlignLeft, AlignCenter, AlignRight],
+                    [OrderedList, UnorderedList, Indent, Outdent]
+                  ]}
+                  contentStyle={{ height: 320 }}
+                  defaultContent={
+                    this.state.fields.about ? this.state.fields.about : ""
+                  }
+                  onExecute={event =>
+                    this.handleChangeAboutField(
+                      event.target._contentElement.innerHTML
+                    )
+                  }
                 />
               </div>
             </div>

@@ -148,7 +148,7 @@ class AuthControllerTest extends ControllerTest{
     }
 
     public function testRefreshFailRefreshTokenExpired() {
-        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTI1NDc4MDgsImp0aSI6IkNkNzJyeUJnOXZ2M2g0dDZOc2JFell0VGtYaVBKM3Z5YVwvbGx1aWJyTzhVPSIsIm5iZiI6MTU1MjU0NzgwOCwiZXhwIjoxNTUyNTQ3ODE1LCJkYXRhIjp7InVzZXJuYW1lIjoiYmhhcmF0ZyIsIm9yZ2lkIjoiMSJ9fQ.EQoePmb-g9xN0gME6fL8_SSDK7hzwDcmi21qQy-bW5X0RneA03sfv61btb8Q84rL3fM_Ad8UiLyVTgsFU05Pxw', 'refresh_token' => '13273925815c7e2c7930c794.82022621'];
+        $data = ['jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NjQxNDQ5NDQsImp0aSI6IkdpTUdVM0RBckRrU21HVVAxVm1tZ01Tc2ZtdUd5YlNjaEl1TndCaXlHXC9VPSIsIm5iZiI6MTU2NDE0NDk0NCwiZXhwIjoxNTY0MjE2OTQ0LCJkYXRhIjp7InVzZXJuYW1lIjoibmVoYSIsIm9yZ2lkIjoiMyJ9fQ.Yhm_UQJiXdkxrOT6sz18IywVtMvzLD_5vkUCmbIHR_AHnNw5bxiBSi9x54IEHOP8sLpz72AgAB8RKi3qJ_nM7Q', 'refresh_token' => '13273925815c7e2c7930c794.82022621'];
         $this->dispatch('/refreshtoken', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('auth');
@@ -209,7 +209,7 @@ class AuthControllerTest extends ControllerTest{
     }
 
     public function testValidateTokenFail(){
-        $data =[ 'jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTE4NjQ2MTAsImp0aSI6InFwaHMxSDc4ZzBIVFVWSUlNZHZmSHBFd1hvZXJzeGdNdGRSUDRvQUN2KzQ9IiwibmJmIjoxNTUxODY0NjEwLCJleHAiOjE1NTE4NjQ3MTAsImRhdGEiOnsidXNlcm5hbWUiOiJiaGFyYXRnIiwib3JnSWQiOiIxIn19.b2OsP-ZE0LHzSb6t4NO3tMdM1OIrKJ23hsQK0iV5lsyM03UfuGwhFl8GJShlAojXtG0jD7ujNOhC2yJvVzRqPQ'];
+        $data =[ 'jwt' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NTY4NTg1NjIsImp0aSI6Im9BZGNqQ1JhOWJGZzdwNnNXd3oyT3RDVTdNNzR5UlJPMGhZR2NiZjhpR289IiwibmJmIjoxNTU2ODU4NTYyLCJleHAiOjE1NTY5MzA1NjIsImRhdGEiOnsidXNlcm5hbWUiOiJiaGFyYXRnIiwib3JnaWQiOiIxIn19.p7T8djg6zAaSTNeBEPK-Z_1nBA1zcgh8eZ23JdPBpUCywluG3NFqjD37C9o_Fj8zw5xIHQMi0_aKk0sgNpUPaw'];
         $this->dispatch('/validatetoken', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');

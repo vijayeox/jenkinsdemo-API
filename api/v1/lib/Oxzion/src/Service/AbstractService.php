@@ -38,7 +38,25 @@ class AbstractService
                 ->columns(array("id"))
                 ->where(array('uuid' => $uuid));
         $responseID = $this->executeQuery($getID)->toArray();
-        return $responseID[0]['id'];
+        if($responseID){
+            return $responseID[0]['id'];
+        }else{
+            return 0;
+        }
+    }
+
+    protected function getUuidFromId($table, $id){
+        $sql = $this->getSqlObject();
+        $getID= $sql->select();
+        $getID->from($table)
+                ->columns(array("uuid"))
+                ->where(array('id' => $id));
+        $responseID = $this->executeQuery($getID)->toArray();
+        if($responseID){
+            return $responseID[0]['uuid'];
+        }else{
+            return 0;
+        }
     }
 
     protected function initLogger($logLocation) {

@@ -71,9 +71,6 @@ class FormControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['status'], $data['status']);
-        $this->assertEquals($content['data']['startdate'], $data['startdate']);
-        $this->assertEquals($content['data']['enddate'], $data['enddate']);
         $this->assertEquals($currentRowCount+1, $this->getConnection()->getRowCount('ox_form'));
     }
     public function testCreateWithOutNameFailure(){
@@ -114,9 +111,7 @@ class FormControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['field1'], $data['field1']);
-        $this->assertEquals($content['data']['field2'], $data['field2']);
-    }
+  }
     public function testUpdateRestricted(){
         $data = ['name' => 'Test Form 1','app_id'=>1];
         $this->initAuthToken($this->employeeUser);

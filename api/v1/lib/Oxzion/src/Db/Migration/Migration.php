@@ -21,7 +21,7 @@ class Migration extends AbstractService {
         $this->database = $database;
         $dbConfig = $config['db'];
         $dbConfig['database']='mysql';
-        $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username='.$dbConfig["appuser"].';password='.$dbConfig["password"].'';
+        $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username='.$dbConfig["username"].';password='.$dbConfig["password"].'';
         $this->mysqlAdapter = new Adapter($dbConfig);
         parent::__construct($config, $adapter);
     }
