@@ -50,6 +50,7 @@ public function tearDown() : void {
         $this->assertTrue(filesize($output)>0);
         $templateName="GenericTemplate.tpl";
         FileUtils::deleteFile($templateName,$tempFile);
+        FileUtils::deleteFile("GenericTemplate.pdf", $config['TEMPLATE_FOLDER']);
         // TO DO DIGITAL SIGNATURE
     }
 }
