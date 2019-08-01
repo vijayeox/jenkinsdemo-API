@@ -502,8 +502,11 @@ class OrganizationService extends AbstractService
         $sort = "ox_user.name";
 
 
-        $query = "SELECT ox_user.uuid,ox_user.name,ox_user.country,ox_user.designation";
-        $from = " FROM ox_user left join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id";
+        $query = "SELECT ox_user.uuid,ox_user.name,ox_user.country,ox_user.designation,
+                                case when (ora.name = 'ADMIN') 
+                                    then 1
+                                end as is_admin";
+        $from = " FROM ox_user inner join ox_user_org on ox_user.id = ox_user_org.user_id left join (select our.*, orr.name from  ox_user_role as our inner join ox_role as orr on our.role_id = orr.id and orr.name = 'ADMIN') ora on ox_user_org.user_id = ora.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id";
     
         $cntQuery ="SELECT count(ox_user.id)".$from;
 

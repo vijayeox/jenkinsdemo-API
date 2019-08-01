@@ -503,6 +503,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals(4, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], "4fd99e8e-758f-11e9-b2d5-68ecc57cde45");
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][0]['is_admin'], 1);
         $this->assertEquals($content['data'][1]['uuid'], "4fd9ce37-758f-11e9-b2d5-68ecc57cde45");
         $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'],4);
