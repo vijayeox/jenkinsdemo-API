@@ -34,8 +34,18 @@ class FileService extends AbstractService{
         unset($data['submit']);
         unset($data['workflowId']);
         $jsonData = json_encode($data);
+        if(isset($data['form_id'])){
+            $formId = $data['form_id'];
+        } else {
+            $formId = null;
+        }
+        if(isset($data['activity_id'])){
+            $activityId = $data['activity_id'];
+        } else {
+            $activityId = null;
+        }
         $data['data'] = $jsonData;
-        $data['workflow_instance_id'] = isset($workflowInstanceId)?$workflowInstanceId:0;
+        $data['workflow_instance_id'] = isset($workflowInstanceId)?$workflowInstanceId:NULL;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -58,7 +68,7 @@ class FileService extends AbstractService{
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
-            $validFields = $this->checkFields($data['form_id'],$fields,$id);
+            $validFields = $this->checkFields($activityId,$formId,$fields,$id);
             if($validFields && !empty($validFields)){
                 $this->multiInsertOrUpdate('ox_file_attribute',$validFields,['id']);
             } else {
@@ -95,6 +105,16 @@ class FileService extends AbstractService{
         if(is_null($obj)){
             return 0;
         }
+        if(isset($data['form_id'])){
+            $formId = $data['form_id'];
+        } else {
+            $formId = null;
+        }
+        if(isset($data['activity_id'])){
+            $activityId = $data['activity_id'];
+        } else {
+            $activityId = null;
+        }
         // print_r($obj);
         $fileObject = $obj->toArray();
         // print_r($fileObject);
@@ -112,7 +132,7 @@ class FileService extends AbstractService{
                 $this->rollback();
                 return 0;
             }
-            $validFields = $this->checkFields($data['form_id'],$fields,$id);
+            $validFields = $this->checkFields($activityId,$formId,$fields,$id);
             if($validFields && !empty($validFields)){
                 $this->multiInsertOrUpdate('ox_file_attribute',$validFields);
             }
@@ -194,16 +214,36 @@ class FileService extends AbstractService{
     /**
     * @ignore checkFields
     */
-    protected function checkFields($formId,$fieldData,$fileId){
+    protected function checkFields($activityId=null,$formId=null,$fieldData,$fileId){
         $required = array();
         $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_field')
-        ->columns(array("*"))
-        ->join('ox_form_field', 'ox_field.id = ox_form_field.field_id', array(),'left')
-        ->join('ox_form', 'ox_form.id = ox_form_field.form_id', array(),'left')
-        ->where(array('ox_form.id' => $formId));
-        $fields = $this->executeQuery($select)->toArray();
+        $activityFormsQuery = $sql->select();
+        if(isset($activityId)){
+            $activityFormsQuery->from('ox_activity_form')
+            ->columns(array("*"))
+            ->where(array('ox_activity_form.activity_id' => $activityId));
+            $activityForms = $this->executeQuery($activityFormsQuery)->toArray();
+            $select = $sql->select();
+            $select->from('ox_field')
+            ->columns(array("*"))
+            ->join('ox_form_field', 'ox_field.id = ox_form_field.field_id', array(),'left')
+            ->join('ox_form', 'ox_form.id = ox_form_field.form_id', array(),'left')
+            ->where(array('ox_form.id' => array(array_column($activityForms, 'form_id'))));
+            $fields = $this->executeQuery($select)->toArray();
+        } else {
+            if(isset($formId)){
+                $select = $sql->select();
+                $select->from('ox_field')
+                ->columns(array("*"))
+                ->join('ox_form_field', 'ox_field.id = ox_form_field.field_id', array(),'left')
+                ->join('ox_form', 'ox_form.id = ox_form_field.form_id', array(),'left')
+                ->where(array('ox_form.id' => $formId));
+                $fields = $this->executeQuery($select)->toArray();
+            } else {
+                return 0;
+            }
+        }
+
         $fileFields = $sql->select();
         $fileFields->from('ox_file_attribute')
         ->columns(array("*"))

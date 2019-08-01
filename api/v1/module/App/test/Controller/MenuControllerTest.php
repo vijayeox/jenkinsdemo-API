@@ -33,9 +33,7 @@ class MenuItemControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['id']>0, true);
         $this->assertEquals($content['data'][0]['name'], 'menu1');
-        $this->assertEquals($content['data'][1]['id']>1, true);
         $this->assertEquals($content['data'][1]['name'], 'menu2');
     }
 

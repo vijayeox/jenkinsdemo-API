@@ -7,7 +7,7 @@ class Workflow extends Entity{
     protected $data = array(
         'id' => 0,
         'name' => NULL,
-        'process_ids' => NULL,
+        'process_id' => NULL,
         'app_id' => NULL,
         'form_id' => NULL,
         'file'=>NULL

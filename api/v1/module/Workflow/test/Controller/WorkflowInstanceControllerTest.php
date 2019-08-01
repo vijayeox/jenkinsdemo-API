@@ -76,16 +76,16 @@ class WorkflowInstanceControllerTest extends ControllerTest{
 
     public function testCreate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'workflow3','app_id'=>1];
+        $data = ['name' => 'workflow3','app_id'=>1,'field2'=>1];
         $this->setJsonContent(json_encode($data));
         if(enableCamunda==0){
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Workflow\Service\WorkflowInstanceService::class);
-            $mockProcessEngine->expects('startProcess')->with('sampleProcessId',array('workflowId'=>1,'form_id'=>1))->once()->andReturn(array('id'=>1));
+            $mockProcessEngine->expects('startProcess')->with('[main]',array('name'=>'workflow3','app_id'=>1,'workflowId'=>1,'form_id'=>1,'field2'=>1))->once()->andReturn(array('id'=>1));
             $workflowService->setProcessEngine($mockProcessEngine);
             $this->processId = 1;
         }
-        $this->dispatch('/workflow/1', 'POST', null);
+        $this->dispatch('/workflow/1', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('Workflow');

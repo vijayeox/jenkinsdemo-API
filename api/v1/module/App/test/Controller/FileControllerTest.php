@@ -48,7 +48,7 @@ class FileControllerTest extends ControllerTest{
     public function testCreate(){
         $this->initAuthToken($this->adminUser);
         $data = ['field1' => '1','field2' => '2'];
-        // $this->setJsonContent(json_encode($data));
+        $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/99/form/1/file', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);

@@ -37,8 +37,8 @@ class FormService extends AbstractService{
         $template['form']['date_modified'] = date('Y-m-d H:i:s');
         $form->exchangeArray($template['form']);
         $form->validate();
-        $this->beginTransaction();
         $count = 0;
+        $this->beginTransaction();
         try{
             $count = $this->table->save($form);
             if($count == 0){
@@ -50,7 +50,6 @@ class FormService extends AbstractService{
             $generateFields = $this->generateFields($template['fields'],$appId,$id);
             $this->commit();
         }catch(Exception $e){
-            print_r($e->getMessage());
             switch (get_class ($e)) {
              case "Oxzion\ValidationException" :
                 $this->rollback();
@@ -58,7 +57,7 @@ class FormService extends AbstractService{
                 break;
              default:
                 $this->rollback();
-                return 0;
+                throw $e;
                 break;
             }
         }
@@ -144,9 +143,9 @@ class FormService extends AbstractService{
     }
     private function generateFields($fieldsList,$appId,$formId){
         try {
-            $deleteFields = $this->fieldService->deleteFields($formId);
+            $deleteFields = $this->fieldService->executeQuerywithParams($formId);
             $delete = "DELETE from ox_form_field where form_id=".$formId.";";
-            $result = $this->runGenericQuery($delete);
+            $result = $this->executeQuerywithParams($delete);
         } catch (Exception $e){
             return 0;
         }

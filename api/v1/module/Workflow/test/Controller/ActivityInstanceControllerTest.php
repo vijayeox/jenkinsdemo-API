@@ -24,9 +24,9 @@ class ActivityInstanceControllerTest extends ControllerTest{
 
     public function testaddactivityinstance() {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'c99ac426-90ee-11e9-b683-526af7764f64' , 'assignee' => 'bharatgtest', 'group_name' => 'HR Group','processInstanceId'=>1,'name'=>'Recruitment Request Created', 'status' => 'Active'];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'c99ac426-90ee-11e9-b683-526af7764f64','activityId'=>1 , 'assignee' => 'bharatgtest', 'group_name' => 'HR Group','processInstanceId'=>1,'name'=>'Recruitment Request Created', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/activityInstance','POST',$data);
+        $this->dispatch('/callback/workflow/activityinstance','POST',$data);
         $this->assertResponseStatusCode(200);
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $sqlQuery1 = "Select * from ox_activity_instance";
@@ -39,6 +39,5 @@ class ActivityInstanceControllerTest extends ControllerTest{
         $this->assertEquals($tableFieldName[0]['workflow_instance_id'],$data['workflow_instance_id']);
         $this->assertEquals($tableFieldName[0]['activity_instance_id'],$data['activityInstanceId']);
         $this->assertEquals($tableFieldName[0]['group_id'],1);
-        $this->assertEquals($tableFieldName[0]['form_id'],1);
     }
 }

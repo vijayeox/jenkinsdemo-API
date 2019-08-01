@@ -10,7 +10,6 @@ class Activity extends Entity{
         'name'=>NULL,
         'app_id'=>0,
         'workflow_id'=>0,
-        'activity_id' => NULL,
         'created_by'=>NULL,
         'modified_by'=>NULL,
         'date_created'=>NULL,

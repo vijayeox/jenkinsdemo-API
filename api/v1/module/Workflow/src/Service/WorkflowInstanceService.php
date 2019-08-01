@@ -148,20 +148,22 @@ class WorkflowInstanceService extends AbstractService {
 			$workFlowFlag= 0;
             return 0;
 		}
-		if(isset($params['activityId'])){
-			$params['form_id'] = $params['activityId'];
-		} else {
+		if(!isset($params['activityId'])){
 			$params['form_id'] = $workflow['form_id'];
-		}
+            $activityId = $params['form_id'];
+		} else {
+            $params['activity_id'] = $params['activityId'];
+            $activityId = $params['activityId'];
+        }
 		if(isset($id)){
 			return $this->fileService->updateFile($params,$id);
 		} else {
 			if($workFlowFlag){
 				if($workflow['form_id']==$params['form_id'] || $params['activityId']==NULL){
-					$workflowInstanceId = $this->processEngine->startProcess($workflow['process_ids'],$params);
+					$workflowInstanceId = $this->processEngine->startProcess($workflow['process_id'],$params);
                     $workflowInstance = $this->setupWorkflowInstance($workflowId,$workflowInstanceId['id']);
 				} else {
-					$workflowInstanceId = $this->activityEngine->submitTaskForm($params['form_id'],$params);
+					$workflowInstanceId = $this->activityEngine->submitTaskForm($activityId,$params);
 				}
             } else {
                 return 0;

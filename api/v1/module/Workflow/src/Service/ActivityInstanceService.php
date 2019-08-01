@@ -43,20 +43,14 @@ class ActivityInstanceService extends AbstractService {
             $resultSet = $this->executeQuerywithParams($query1)->toArray();
             $data['group_id'] = $resultSet[0]['id'];
         }
-        $query2 = "SELECT * FROM `ox_form` WHERE `name` = '".$data['name']."';";
-        $resultSet = $this->executeQuerywithParams($query2)->toArray();
-        $data['form_id'] = $resultSet[0]['id'];
-         
         // $data['start_date'] =  now();
-
-		$this->beginTransaction();		
-		try {	
-			$insert = "INSERT INTO `ox_activity_instance` (`workflow_instance_id`,`activity_instance_id`,`assignee`,`group_id`,`form_id`,`status`,`start_date`,`org_id`) VALUES ('" .$data['processInstanceId']."','" .$data['activityInstanceId']."','" .$data['assignee']."','" .$data['group_id']."','" .$data['form_id']."','" .$data['status']."',now(),'" .$orgId."')";		
+		$this->beginTransaction();
+		try {
+			$insert = "INSERT INTO `ox_activity_instance` (`workflow_instance_id`,`activity_id`,`activity_instance_id`,`assignee`,`group_id`,`status`,`start_date`,`org_id`) VALUES ('" .$data['processInstanceId']."','".$data['activityId']."','" .$data['activityInstanceId']."','" .$data['assignee']."','" .$data['group_id']."','" .$data['status']."',now(),'" .$orgId."')";
             $resultSet = $this->runGenericQuery($insert);
-            $this->commit();  		
+            $this->commit();
 		} catch (Exception $e) {
             $this->logger->info(ActivityInstanceService::class."Creation of Activity Instance Entry Failed".$e->getMessage());
-            print_r($e->getMessage());
 			$this->rollback();		
 			return 0;		
 		}
