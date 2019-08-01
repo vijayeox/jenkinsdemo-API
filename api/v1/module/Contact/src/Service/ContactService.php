@@ -514,7 +514,7 @@ class ContactService extends AbstractService
                             }
                         }
                         unset($email,$phone);
-                        $finalArray['uuid'] = Uuid::uuid4()->toString(); 
+                        $finalArray['uuid'] = UuidUtil::uuid(); 
                         $finalArray['first_name'] = $data['Given Name'] ." ".$data['Additional Name'];
                         $finalArray['last_name'] = $data['Family Name'];
                         $finalArray['phone_1'] = $data['Phone 1 - Value'];
@@ -680,5 +680,3 @@ class ContactService extends AbstractService
         }
     }
 }
-   
-                
