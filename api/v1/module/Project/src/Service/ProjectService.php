@@ -298,10 +298,10 @@ class ProjectService extends AbstractService {
 
 
          $query = "SELECT ox_user.uuid,ox_user.name,
-                                case when (ox_project.manager_id is NOT NULL) 
+                                case when (ox_project.manager_id = ox_user.id) 
                                     then 1
                                 end as is_manager";
-         $from = " FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id and ox_project.manager_id = ox_user.id";
+         $from = " FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id";
 
          $cntQuery ="SELECT count(ox_user.id)".$from;
 
@@ -330,7 +330,6 @@ class ProjectService extends AbstractService {
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(ox_user.id)'];
             $query =$query." ".$from." ".$where." ".$sort." ".$limit;
-
             $resultSet = $this->executeQuerywithParams($query);
             return array('data' => $resultSet->toArray(),
                      'total' => $count);
