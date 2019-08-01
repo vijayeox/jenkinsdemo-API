@@ -51,8 +51,8 @@ class RoleService extends AbstractService {
                 $count = $result1->getAffectedRows() + 1; 
             }else{
                 $data['uuid'] = Uuid::uuid4()->toString(); 
-                $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`org_id`)
-                 VALUES ('".$rolename."','".$data['description']."','".$data['uuid']."',".$org_id.")";
+                $data['is_system_role'] = isset($data['is_system_role']) ? $data['is_system_role'] : "NULL";
+                $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`org_id`,`is_system_role`)VALUES ('".$rolename."','".$data['description']."','".$data['uuid']."',".$org_id.",".$data['is_system_role'].")";
                 $result1 = $this->runGenericQuery($insert);
                 $count = $result1->getAffectedRows();
                 if($count > 0){
