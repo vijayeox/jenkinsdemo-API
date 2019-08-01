@@ -150,7 +150,9 @@ class UserService extends AbstractService
         $data['uuid'] = Uuid::uuid4()->toString();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-
+        if(isset($data['managerid'])){
+            $data['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
+        }
         $password = BosUtils::randomPassword();
         if (isset($password))
             $data['password'] = md5(sha1($password));
