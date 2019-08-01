@@ -40,7 +40,7 @@ class FormService extends AbstractService{
         $this->beginTransaction();
         $count = 0;
         try{
-            $count = $this->table->save($form);print_r($count);
+            $count = $this->table->save($form);
             if($count == 0){
                 $this->rollback();
                 return 0;
@@ -62,7 +62,6 @@ class FormService extends AbstractService{
                 break;
             }
         }
-        // print_r($count);exit;
         return $count;
     }
     public function updateForm($appId,$id,&$data){
@@ -80,19 +79,24 @@ class FormService extends AbstractService{
         $changedArray['date_modified'] = date('Y-m-d H:i:s');
         $form->exchangeArray($changedArray);
         $form->validate();
+        $this->beginTransaction();
         $count = 0;
         try{
             $count = $this->table->save($form);
             if($count == 0){
+                $this->rollback();
                 return 0;
             }
             $generateFields = $this->generateFields($template['fields'],$appId,$id);
+            $this->commit();
         }catch(Exception $e){
             switch (get_class ($e)) {
              case "Oxzion\ValidationException" :
+                $this->rollback();
                 throw $e;
                 break;
              default:
+                $this->rollback();
                 return 0;
                 break;
             }
