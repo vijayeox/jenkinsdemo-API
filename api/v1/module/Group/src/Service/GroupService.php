@@ -354,7 +354,7 @@ class GroupService extends AbstractService {
         $query = "SELECT ox_user.uuid,ox_user.name,case when (ox_group.manager_id is NOT NULL) 
                                     then 1
                                 end as is_manager";
-        $from = " FROM ox_user left join ox_user_group on ox_user.id = ox_user_group.avatar_id left join ox_group on ox_group.id = ox_user_group.group_id";
+        $from = " FROM ox_user left join ox_user_group on ox_user.id = ox_user_group.avatar_id left join ox_group on ox_group.id = ox_user_group.group_id and ox_group.manager_id = ox_user.id";
     
         $cntQuery ="SELECT count(ox_user.id)".$from;
 
@@ -373,7 +373,7 @@ class GroupService extends AbstractService {
                 $offset = $filterArray[0]['skip'];            
             }
 
-            $where .= strlen($where) > 0 ? " AND ox_group.uuid = '".$id."'" : " WHERE ox_group.uuid = '".$id."'";
+            $where .= strlen($where) > 0 ? " AND ox_group.uuid = '".$id."' AND ox_group.status = 'Active'" : " WHERE ox_group.uuid = '".$id."' AND ox_group.status = 'Active'";
 
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
