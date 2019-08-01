@@ -36,6 +36,10 @@ class OrganizationLogoController extends AbstractApiControllerHelper {
     public function get($id){
         $logo = "logo.png";
         $file = $this->organizationService->getOrgLogoPath($id);
+        
+        if(FileUtils::fileExists($file) != 1){
+             $file = $this->organizationService->getOrgLogoPath(null);
+        }
         $file = $file . $logo;
         if (!headers_sent()) {
             header('Content-Type: image/png');

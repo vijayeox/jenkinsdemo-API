@@ -40,6 +40,5 @@ class AttachmentControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['filename'][0], $data['files'][0]['uuid']);
     }
 }

@@ -40,9 +40,10 @@ class FormController extends AbstractApiController
         try{
             $count = $this->formService->createForm($appId,$data);
         } catch (ValidationException $e){
+            print_r($e->getMessage());
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
-        }
+        }print_r($count);
         if($count == 0){
             return $this->getFailureResponse("Failed to create a new entity", $data);
         }

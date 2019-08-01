@@ -51,7 +51,8 @@ return [
         'authToken' => ''
     ],
     'task' => [
-        'taskServerUrl' => 'http://localhost:3000/api/v3',
+        'taskServerUrl' => 'http://localhost:3000/api/v3/',
+        'username' => 'apikey',
         'authToken' => ''
     ],
     'calendar' => [

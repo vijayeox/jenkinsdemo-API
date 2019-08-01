@@ -27,8 +27,8 @@ class WorkflowInstanceControllerTest extends ControllerTest{
             $sqlQuery1 = "Update ox_workflow set process_ids='".$data[0]."' where id=1";
             $statement1 = $dbAdapter->query($sqlQuery1);
             $result1 = $statement1->execute();
+            $this->processId = $data[0];
         }
-        $this->processId = $data[0];
     }   
     public function getDataSet() {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");

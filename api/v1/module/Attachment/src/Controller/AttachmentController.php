@@ -53,6 +53,9 @@ class AttachmentController extends AbstractApiController {
         $files = $this->params()->fromFiles('files');
         $filesList = array();
         try{
+            if(!isset($files)){
+                return $this->getSuccessResponseWithData(array("filename"=> ''),201);
+            }
             if($files['name']){
                 $filesList = $this->attachmentService->upload($data,array($files));
             } else {

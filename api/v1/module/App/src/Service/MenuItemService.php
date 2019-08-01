@@ -10,12 +10,14 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Oxzion\Utils\UuidUtil;
 use Exception;
+use Group\Service\GroupService;
 
 class MenuItemService extends AbstractService{
 
-    public function __construct($config, $dbAdapter, MenuItemTable $table){
+    public function __construct($config, Groupservice $groupService, $dbAdapter, MenuItemTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->groupService = $groupService;
     }
     public function saveMenuItem($appId,&$data){
         $MenuItem = new MenuItem();
@@ -25,7 +27,7 @@ class MenuItemService extends AbstractService{
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
         }
-        $data['icon'] = $data['icon']?$data['icon']:"DummyIcon";
+        $data['icon'] = isset($data['icon']) ? $data['icon'] : "DummyIcon";
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $MenuItem->exchangeArray($data);
@@ -44,6 +46,7 @@ class MenuItemService extends AbstractService{
             }
             $this->commit();
         }catch(Exception $e){
+            print_r($e->getMessage());
             switch (get_class ($e)) {
              case "Oxzion\ValidationException" :
                 $this->rollback();
@@ -108,7 +111,16 @@ class MenuItemService extends AbstractService{
         if(isset($appId)){
             $filterArray['app_id'] = $appId;
         }
-        $resultSet = $this->getDataByParams('ox_app_menu',array("*"),$filterArray,null);
+
+        $userId = AuthContext::get(AuthConstants::USER_ID);
+        $queryString = " SELECT ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu where group_id=0 union select ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu LEFT JOIN ox_user_group on ox_user_group.group_id=ox_app_menu.group_id where ox_user_group.avatar_id = ".$userId;
+        $resultSet = $this->executeQuerywithParams($queryString);
+
+        // $groupDetails = $this->groupService->getGroupsforUser($userId);
+        // $filterArray['group_id']= $groupDetails[0]['group_id'];
+
+        // $resultSet = $this->getDataByParams('ox_app_menu',array("*"),$filterArray,null);
+        $menuList = array();
         if($resultSet->count()){
             $menuList = $resultSet->toArray();
             $i = 0;

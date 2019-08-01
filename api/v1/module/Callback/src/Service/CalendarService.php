@@ -39,7 +39,7 @@ namespace Callback\Service;
                 $attachment = array();
             }
             $headers = array(
-                'to' => $data['to'],
+                'to' => isset($data['to']) ? $data['to'] : NULL,
                 'from' => $data['from'],
                 'subject' => $data['subject'],
             );

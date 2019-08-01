@@ -12,6 +12,8 @@ use Exception;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\UserService;
+use Zend\Http\Headers;
+use Zend\Http\Response\Stream;
 
 
 class ContactService extends AbstractService
@@ -197,7 +199,9 @@ class ContactService extends AbstractService
         $baseUrl =$this->getBaseUrl();
         
         for($x=0;$x<sizeof($result['myContacts']);$x++){
+            $result['myContacts'][$x]['phone_list'] = isset($result['myContacts'][$x]['phone_list']) ? $result['myContacts'][$x]['phone_list'] : NULL;
             $result['myContacts'][$x]['phone_list']=json_decode($result['myContacts'][$x]['phone_list'],true);
+            $result['myContacts'][$x]['email_list'] = isset($result['myContacts'][$x]['email_list']) ? $result['myContacts'][$x]['email_list'] : NULL;
             $result['myContacts'][$x]['email_list']=json_decode($result['myContacts'][$x]['email_list'],true);
             if($result['myContacts'][$x]['icon_type']){
                 $userId = $this->getUuidById($result['myContacts'][$x]['user_id']);
@@ -280,4 +284,401 @@ class ContactService extends AbstractService
         }
     }
 
+
+    private function getPhoneEmailList($data,$fieldname){
+           if($data[$fieldname] == "null" || empty($data[$fieldname]) || $data[$fieldname] == "NULL"){
+                        $data[$fieldname] = NULL;
+            }
+            else {
+                $field = Array();
+                $field_list = explode(",",$data[$fieldname]);
+                foreach ($field_list as $key => $value) {
+                            $fieldlist = Array();
+                            $fieldlist = explode(":",$value);
+                            if(count($fieldlist) == 1){
+                              $field['other'] = $fieldlist[0];
+                            }else{
+                              $field[$fieldlist[0]] = $fieldlist[1];
+                            }                        
+                        }
+                        $data[$fieldname] = json_encode($field);
+            }
+            return $data[$fieldname];
+    }
+
+    // Import Custom CSV Format
+    public function importContactCustomFormat($files){
+        $error_list = Array();
+        $error = Array();
+        $contact = Array();
+        $file = FileUtils::storeFile($files,'/tmp/oxzion/');
+        $file_handle = fopen('/tmp/oxzion/'.$file, 'r');
+        while (!feof($file_handle) ) {
+                $line_of_text[] = fgetcsv($file_handle);
+        }
+        fclose($file_handle);
+        array_pop($line_of_text);
+        $columns = array_shift($line_of_text);
+        $requiredHeaders = array('first_name','last_name','phone_1','phone_list','email','email_list','company_name','designation','country');
+        if ($columns !== $requiredHeaders) {
+               return 3;
+        }        
+        array_push($error_list, $columns);
+
+        $line = array_chunk($line_of_text,1000);
+        foreach($line as $key=>$val) {
+            $data = Array();
+            for($y=0;$y<sizeof($val);$y++){
+                $data[] = array_combine($columns,$val[$y]);
+            }
+
+            for($x=0;$x<sizeof($data);$x++){
+                if(empty($data['first_name']) || $data['first_name'] == "null"
+                      || ($data['phone_1'] == "null" && $data['email'] == "null")
+                      || (empty($data['phone_1']) && empty($data['email'])) 
+                      || ($data['phone_1'] == "null" && empty($data['email'])) 
+                      ||  ($data['email'] == "null" && empty($data['phone_1']))){
+                    array_push($error_list,$data);
+                }
+                else{
+                     $regex ='/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z0-9]{2,5})$/';
+                     $pregex = '/^[a-zA-Z]*$/';
+                     $flag = 0;
+                     if(isset($data['email']) && $data['email'] != "null" && !empty($data['email'])){
+                        if(!preg_match($regex,$data['email'])){
+                              array_push($error_list,$data);
+                              $flag=1;
+                        }
+                     }
+                     else if(isset($data['phone_1']) && $data['phone_1'] != "null" && !empty($data['phone_1'])){
+                            if(preg_match($pregex,$data['phone_1'])){
+                                array_push($error_list, $data);
+                                $flag=1;
+                            }
+                     }
+                     if($flag == 0){
+                         $data['phone_list'] = $this->getPhoneEmailList($data,'phone_list');
+                         $data['email_list'] = $this->getPhoneEmailList($data,'email_list');
+                         $data['uuid'] = Uuid::uuid4()->toString();
+                         $data['icon_type'] = 0;
+                         $data['owner_id'] = AuthContext::get(AuthConstants::USER_ID);
+                         array_push($contact, $data);
+                     }
+                }
+             }
+             $insert =  $this->multiInsertOrUpdate('ox_contact',$contact);
+             if($insert->getAffectedRows() == 0){
+                return 0;
+             }
+          }
+          if(count($error_list) > 1){
+             return $error_list;
+          } 
+          return 1;         
+    }
+
+
+   // Export Custom CSV Format
+   public function exportContactCustomFormat($id = null){
+        $csv = Array();
+        $export = Array();
+        if(isset($id)){
+            $uuidArray= array_map('current', $id);
+            $select = "SELECT first_name,last_name,phone_1,phone_list,email,email_list,company_name,designation,country FROM ox_contact where uuid in ('".implode("','", $uuidArray)."')";
+        }
+        else{
+            $select = "SELECT first_name,last_name,phone_1,phone_list,email,email_list,company_name,designation,country FROM ox_contact where owner_id = ".AuthContext::get(AuthConstants::USER_ID);
+        }
+        
+        $result =$this->executeQueryWithParams($select)->toArray();
+
+     
+        $requiredHeaders = array('first_name','last_name','phone_1','phone_list','email','email_list','company_name','designation','country');
+        array_push($export,$requiredHeaders);
+       
+        for($x=0;$x<sizeof($result);$x++){
+            if(isset($result[$x]['phone_list']) && !empty($result[$x]['phone_list']) && $result[$x]['phone_list'] != "null"  && $result[$x]['phone_list'] != "NULL"){
+                $phoneArray = Array();
+                $phone = json_decode($result[$x]['phone_list'],true);
+                foreach($phone as $key => $value) {
+                   $phoneArray[]= "$key: $value";
+                }
+                $result[$x]['phone_list']=implode(',',$phoneArray);
+            }
+            if(isset($result[$x]['email_list']) && !empty($result[$x]['email_list']) && $result[$x]['email_list'] != "null" && $result[$x]['email_list'] != "NULL"){
+                $emailArray = Array();
+                $email = json_decode($result[$x]['email_list'],true);
+                foreach($email as $key => $value) {
+                   $emailArray[]= "$key: $value";
+                }
+                $result[$x]['email_list']=implode(',',$emailArray);
+            }
+            array_push($export, $result[$x]);
+        }
+        if(count($export) > 1) {
+            return array('data' => $export);
+        }       
+    }
+
+
+    private function getPhoneEmailArray($list){
+           $data = Array();
+           $list = array_pop($list);
+           $list = array_chunk($list,2);
+           foreach ($list as $key => $val) {
+               $data[] = ["type" => $val[0],"value" => $val[1]];
+           }
+           return json_encode($data);
+    }
+
+
+
+    //Import Google CSV Format
+    public function importContactCSV($files){
+        
+        set_time_limit(300);
+        $error_list = Array();
+        $error = Array();
+        $contact = array();
+               
+        $file = FileUtils::storeFile($files,'/tmp/oxzion/');
+
+
+        $file_handle = fopen('/tmp/oxzion/'.$file, 'r');
+        $line = 1;
+        $data = array();            
+        try{
+            while (!feof($file_handle)) {
+                $line_of_text = fgetcsv($file_handle);
+                if($line == 1){
+                    $columns = $line_of_text;
+                    $requiredHeaders = array('Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type','Phone 1 - Value','Organization 1 - Name','Organization 2 - Title','Location');
+                    $result = array_intersect($requiredHeaders, $columns);
+                    if(count($result) != 8){
+                        return 3;
+                    }
+                    $line++;            
+                }else{
+                    unset($data);
+                    $dataExists = false;
+                    foreach ($columns as $key => $value) {
+                        if(!$dataExists && !empty($line_of_text[$key]) && strtolower($line_of_text[$key]) != "null"){
+                            $dataExists = true;
+                        }
+                        $data[$value] = $line_of_text[$key];
+                    }
+                   
+                    if(!$dataExists){
+                        continue;
+                    }
+
+                    $emailArray = Array();
+                    $phoneArray = Array();
+                    $finalArray = Array();
+                    $keys = array_keys($data);
+
+
+                     if(empty($data['Given Name']) || $data['Given Name'] == "null"  
+                        || ($data['Phone 1 - Value'] == "null" && $data['E-mail 1 - Value'] == "null") 
+                        || (empty($data['Phone 1 - Value']) && empty($data['E-mail 1 - Value'])) 
+                        || ($data['Phone 1 - Value'] == "null" && empty($data['E-mail 1 - Value'])) 
+                        || ($data['E-mail 1 - Value'] == "null" && empty($data['Phone 1 - Value']))){
+                                $data['Comments'] = "Given Name and Phone 1 - Value or Email 1 - Value Fields are required";
+                                array_push($error_list,$data);
+                                continue;
+                       }else{
+                         if(isset($data['E-mail 1 - Value']) && $data['E-mail 1 - Value'] != "null" && !empty($data['E-mail 1 - Value'])){
+                            if(!preg_match('/[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z0-9]{2,5})/',$data['E-mail 1 - Value'])){
+                                  $data['Comments'] = "Invalid Email ID";
+                                  array_push($error_list,$data);
+                                  continue;
+                            }
+                         }
+
+                         if(isset($data['Phone 1 - Value']) && $data['Phone 1 - Value'] != "null" && !empty($data['Phone 1 - Value'])){
+                                if(preg_match('/[A-Za-z]/',$data['Phone 1 - Value'])){
+                                    $data['Comments'] = "Invalid Phone Number";
+                                    array_push($error_list, $data);
+                                    continue;
+                                }
+                         }
+                         
+                        for($y=0;$y<count($keys);$y++){
+                            if(preg_match('/E-mail\s[2-9]\s[-]\s[A-Za-z]/', $keys[$y])){
+                                $email[$keys[$y]] = $data[$keys[$y]];
+                                array_push($emailArray, $email);  
+                            }
+                            if(preg_match('/Phone\s[2-9]\s[-]\s[A-Za-z]/', $keys[$y])){
+                                $phone[$keys[$y]] = $data[$keys[$y]];
+                                array_push($phoneArray, $phone);  
+                            }
+                        }
+                        unset($email,$phone);
+                        $finalArray['uuid'] = Uuid::uuid4()->toString(); 
+                        $finalArray['first_name'] = $data['Given Name'] ." ".$data['Additional Name'];
+                        $finalArray['last_name'] = $data['Family Name'];
+                        $finalArray['phone_1'] = $data['Phone 1 - Value'];
+                       
+                        if(count($phoneArray) > 1){
+                            $finalArray['phone_list'] = $this->getPhoneEmailArray($phoneArray);
+                        }
+                        $finalArray['email'] = $data['E-mail 1 - Value'];
+                        if(count($emailArray) > 1){
+                            $finalArray['email_list'] = $this->getPhoneEmailArray($emailArray);
+                        }
+                        $finalArray['company_name'] = $data['Organization 1 - Name'];
+                        $finalArray['designation'] = $data['Organization 1 - Title'];
+                        $finalArray['country'] = $data['Location'];
+                        $finalArray['icon_type'] = 0;
+                        $finalArray['owner_id'] = AuthContext::get(AuthConstants::USER_ID);
+                        array_push($contact, $finalArray);
+                   }
+                   if(count($contact) % 1000 == 0){
+                        $this->persistContacts($contact, $error_list);
+                        unset($contact);
+                        $contact = array();
+                   }
+                }
+            }
+            if(count($contact) > 0){
+                $this->persistContacts($contact, $error_list);
+            }
+        }catch(Exception $e){
+            print_r($e->getMessage());
+        }
+        finally{
+            fclose($file_handle);
+        }
+        if(count($error_list) > 1){
+            return $error_list;
+        } 
+        return 1; 
+    }
+
+
+
+    private function persistContacts($contact, &$error_list){
+        $this->beginTransaction();
+        $insert =  $this->multiInsertOrUpdate('ox_contact',$contact);
+        $this->commit();
+        if($insert->getAffectedRows() == 0){
+            array_push($error_list, $contact);
+        }
+    }
+
+
+
+    // Export Google CSV Format
+    public function exportContactCSV($id = null){
+        $finalArray = Array();
+        $emailArray= Array();
+        $finalList = Array();
+
+        if(isset($id)){
+            $uuidArray= array_map('current', $id);
+            $select = "SELECT first_name,last_name,phone_1,phone_list,email,email_list,company_name,designation,country FROM ox_contact where uuid in ('".implode("','", $uuidArray)."')";
+        }
+        else{
+            $select = "SELECT first_name,last_name,phone_1,phone_list,email,email_list,company_name,designation,country FROM ox_contact where owner_id = ".AuthContext::get(AuthConstants::USER_ID);
+        }
+        
+        $result =$this->executeQueryWithParams($select)->toArray();
+        $maxPhone = 0;
+        $maxEmail = 0;
+        for($x=0;$x<sizeof($result);$x++){
+
+             $finalArray[$x]['Given Name'] = $result[$x]['first_name'] ;
+             $finalArray[$x]['Family Name'] = $result[$x]['last_name'];
+             $finalArray[$x]['Email 1 - Type'] = NULL;
+             $finalArray[$x]['Email 1 - Value'] = isset($result[$x]['email']) ? $result[$x]['email'] : NULL;
+
+
+             if(isset($result[$x]['email_list']) && !empty($result[$x]['email_list']) && $result[$x]['email_list'] != "null"  && $result[$x]['email_list'] != "NULL"){
+                $emailArray = Array();
+                $emailArray = json_decode($result[$x]['email_list'],true);
+                $count = 2;
+                foreach ($emailArray as $key => $value) {
+                        $index = 'E-mail '.$count.' - Type';
+                        $val = 'E-mail '.$count.' - Value';
+                        $finalArray[$x][$index] = isset($value['type']) ? $value['type'] : NULL;
+                        $finalArray[$x][$val] = isset($value['value']) ? $value['value'] : NULL;
+                        $count++;
+                 }
+                 $max = $count - 2;
+                 if($maxEmail < $max){
+                    $maxEmail = $max;
+                 }
+             }
+
+
+             $finalArray[$x]['Phone 1 - Type'] = NULL;
+             $finalArray[$x]['Phone 1 - Value'] = isset($result[$x]['phone_1']) ? $result[$x]['phone_1'] : NULL;
+
+             if(isset($result[$x]['phone_list']) && !empty($result[$x]['phone_list']) && $result[$x]['phone_list'] != "null"  && $result[$x]['phone_list'] != "NULL"){
+                $phoneArray = Array();
+                $phoneArray = json_decode($result[$x]['phone_list'],true);
+                $param = 2;
+                foreach ($phoneArray as $key => $value) {
+                        $index = 'Phone '.$param.' - Type';
+                        $val = 'Phone '.$param.' - Value';
+                        $finalArray[$x][$index] = isset($value['type']) ? $value['type'] : NULL ;
+                        $finalArray[$x][$val] = isset($value['value']) ? $value['value'] : NULL;
+                        $param++;
+                 }
+                 $max = $param - 2;
+                 if($maxPhone < $max){
+                    $maxPhone = $max;
+                 }
+             }
+
+             $finalArray[$x]['Organization 1 - Name'] = isset($result[$x]['company_name']) ? $result[$x]['company_name'] : NULL;
+             $finalArray[$x]['Organization 1 - Title'] = isset($result[$x]['designation']) ? $result[$x]['designation'] : NULL;
+             $finalArray[$x]['Location'] = isset($result[$x]['country']) ? $result[$x]['country'] : NULL;
+             $finalArray[$x]['Name Prefix'] = NULL;
+             $finalArray[$x]['Name Suffix'] = NULL;
+             $finalArray[$x]['Initials'] = NULL;
+             $finalArray[$x]['Nickname'] = NULL;
+             $finalArray[$x]['Short Name'] = NULL;
+             $finalArray[$x]['Maiden Name'] = NULL;
+
+            }
+        
+        $headers = array('Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value');
+        $count = 2;
+        for($x=0;$x<$maxEmail;$x++){
+            $index = 'E-mail '.$count.' - Type';
+            $val = 'E-mail '.$count.' - Value';
+            array_push($headers,$index);
+            array_push($headers,$val);
+            $count++;
+        }
+        array_push($headers,'Phone 1 - Type','Phone 1 - Value');
+        $count = 2;
+        for($x=0;$x<$maxPhone;$x++){
+            $index = 'Phone '.$count.' - Type';
+            $val = 'Phone '.$count.' - Value';
+            array_push($headers,$index);
+            array_push($headers,$val);
+            $count++;
+        }
+
+        array_push($headers,'Organization 1 - Name','Organization 1 - Title','Location','Name Prefix','Name Suffix','Initials','Nickname','Short Name','Maiden Name');
+
+        array_push($finalList,$headers);
+  
+        for($l=0;$l<sizeof($finalArray);$l++){
+            $export = Array();    
+            for($k=0;$k<sizeof($headers);$k++){
+                    $newdata = Array();
+                    $newdata[$k] = isset($finalArray[$l][$headers[$k]]) ? $finalArray[$l][$headers[$k]] : NULL ;  
+                    array_push($export,$newdata[$k]);  
+                }
+            array_push($finalList, $export);
+        }
+        if(count($finalList) > 1) {
+            return array('data' => $finalList);
+        }
+    }
 }
+   
+                

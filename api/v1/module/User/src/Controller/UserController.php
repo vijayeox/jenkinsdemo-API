@@ -20,6 +20,8 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Service\EmailService;
 use Project\Service\ProjectService;
+use Oxzion\AccessDeniedException;
+
 
 
 
@@ -86,10 +88,17 @@ class UserController extends AbstractApiController
              */
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
+        catch(AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(),403);
+        }
 
         if ($count == 0) {
             return $this->getFailureResponse("Failed to create a new user", $data);
         }
+        if($count == 2){
+            return $this->getErrorResponse("User should be assigned to atleast one role", 404);
+        }
+
         /*
         PLease see the html error codes. https://www.restapitutorial.com/httpstatuscodes.html
         Successful create = 201
@@ -380,7 +389,7 @@ class UserController extends AbstractApiController
                     $userInfo['projects'] = $this->projectService->getProjectsOfUserById($id);
                     break;
                     case "role":
-                    $userInfo['role']= $this->userService->getRolesofUser($id);
+                    $userInfo['role']= $this->userService->getRolesofUser($userInfo['orgid'],$id);
                     break; 
                 }
             }

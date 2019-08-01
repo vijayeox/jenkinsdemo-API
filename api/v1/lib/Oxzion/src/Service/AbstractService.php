@@ -22,6 +22,9 @@ class AbstractService
         $this->logger = $log;
         $this->config = $config;
         $this->dbAdapter = $dbAdapter;
+        $_SERVER['REQUEST_SCHEME'] = "http";
+        $_SERVER['SERVER_NAME'] = "localhost";
+        $_SERVER['SERVER_PORT'] = "8080";
         if ($dbAdapter) {
             $this->sql = new Sql($this->dbAdapter);
         }
@@ -38,7 +41,11 @@ class AbstractService
                 ->columns(array("id"))
                 ->where(array('uuid' => $uuid));
         $responseID = $this->executeQuery($getID)->toArray();
-        return $responseID[0]['id'];
+        if($responseID){
+            return $responseID[0]['id'];
+        }else{
+            return 0;
+        }
     }
 
     protected function initLogger($logLocation) {

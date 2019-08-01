@@ -18,6 +18,7 @@ use Oxzion\Service\FieldService;
 use Oxzion\Service\FileService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\WorkflowService;
+use Group\Service\GroupService;
 
 class Module implements ConfigProviderInterface {
 
@@ -53,7 +54,7 @@ class Module implements ConfigProviderInterface {
                 },
                 Service\MenuItemService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\MenuItemService($container->get('config'), $dbAdapter, $container->get(Model\MenuItemTable::class));
+                    return new Service\MenuItemService($container->get('config'),$container->get(GroupService::class), $dbAdapter, $container->get(Model\MenuItemTable::class));
                 },
                 Model\MenuItemTable::class => function($container) {
                     $tableGateway = $container->get(Model\MenuItemTableGateway::class);
@@ -78,6 +79,20 @@ class Module implements ConfigProviderInterface {
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Page());
                     return new TableGateway('ox_app_page', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\PageContentService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\PageContentService($container->get('config'), $dbAdapter, $container->get(Model\PageContentTable::class));
+                },
+                Model\PageContentTable::class => function($container) {
+                    $tableGateway = $container->get(Model\PageContentTableGateway::class);
+                    return new Model\PageContentTable($tableGateway);
+                },
+                Model\PageContentTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\PageContent());
+                    return new TableGateway('ox_page_content', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];

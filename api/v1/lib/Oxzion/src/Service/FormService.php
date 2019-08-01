@@ -40,7 +40,7 @@ class FormService extends AbstractService{
         $this->beginTransaction();
         $count = 0;
         try{
-            $count = $this->table->save($form);
+            $count = $this->table->save($form);print_r($count);
             if($count == 0){
                 $this->rollback();
                 return 0;
@@ -50,6 +50,7 @@ class FormService extends AbstractService{
             $generateFields = $this->generateFields($template['fields'],$appId,$id);
             $this->commit();
         }catch(Exception $e){
+            print_r($e->getMessage());
             switch (get_class ($e)) {
              case "Oxzion\ValidationException" :
                 $this->rollback();
@@ -61,6 +62,7 @@ class FormService extends AbstractService{
                 break;
             }
         }
+        // print_r($count);exit;
         return $count;
     }
     public function updateForm($appId,$id,&$data){

@@ -4,12 +4,12 @@ namespace Analytics;
 
 use Oxzion\NLP\NLPEngine;
 use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
-use Oxzion\Test\MainControllerTest;
+use Oxzion\Test\ServiceTest;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use function GuzzleHttp\json_decode;
 
-class NLPTest extends MainControllerTest{
+class NLPTest extends ServiceTest{
     
     private $dataset;
     private $searchFactory;
@@ -19,7 +19,6 @@ class NLPTest extends MainControllerTest{
         $this->loadConfig();
         parent::setUp();
     }   
-    
     
     public function testNLP() {
         if(enableNLP==0){

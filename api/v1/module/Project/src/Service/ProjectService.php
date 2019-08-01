@@ -284,7 +284,7 @@ class ProjectService extends AbstractService {
         $sort = "ox_user.name";
 
 
-         $query = "SELECT ox_user.id,ox_user.name";
+         $query = "SELECT ox_user.uuid,ox_user.name";
          $from = " FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id";
 
          $cntQuery ="SELECT count(ox_user.id)".$from;
@@ -292,7 +292,7 @@ class ProjectService extends AbstractService {
          if(count($filterParams) > 0 || sizeof($filterParams) > 0){
                 $filterArray = json_decode($filterParams['filter'],true);
                 if(isset($filterArray[0]['filter'])){
-                   $filterlogic = $filterArray[0]['filter']['logic'];
+                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : " AND ";
                    $filterList = $filterArray[0]['filter']['filters'];
                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
                 }
@@ -347,8 +347,7 @@ class ProjectService extends AbstractService {
             return 2;
         }
     	
-        $userUuidList=json_decode($data['userid'],true);
-        $userArray = $this->organizationService->getUserIdList($userUuidList);
+        $userArray = $this->organizationService->getUserIdList($data['userid']);
 
 
         $projectId = $obj->id;

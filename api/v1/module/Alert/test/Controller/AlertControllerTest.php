@@ -72,8 +72,6 @@ class AlertControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
-        $this->assertEquals($content['data']['startdate'], $data['startdate']);
-        $this->assertEquals($content['data']['enddate'], $data['enddate']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_alert'));
     }
     public function testCreateWithOutNameFailure(){

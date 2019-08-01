@@ -271,7 +271,7 @@ class AppController extends AbstractApiController
     {
         $data=$this->extractPostData();
         $params = array_merge($data,$this->params()->fromRoute());
-        $files = $_FILES['files'];
+        $files = isset($_FILES['files']) ? $_FILES['files'] : NULL;
         try {
             if ($files&&isset($params['name'])) {
                 $response = $this->appService->deployWorkflow($params['appId'],$params,$files);

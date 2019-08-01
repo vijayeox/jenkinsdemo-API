@@ -60,8 +60,11 @@ class PrivilegeController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $appId = $params['appId'];
         $result = $this->privilegeService->getAppPrivilegeForUser($appId);
-        if ($result['status'] === 'error') {
-            return $this->getFailureResponse("No Privileges to show, there is something wrong with your request");
+        if($result){
+            $result['status'] = isset($result['status']) ? $result['status'] : NULL;
+            if ($result['status'] === 'error') {
+                return $this->getFailureResponse("No Privileges to show, there is something wrong with your request");
+            }
         }
         if ($result == null || empty($result)) {
             return $this->getErrorResponse("There is nothing in your privilege list!", 404, ['id' => $appId]);

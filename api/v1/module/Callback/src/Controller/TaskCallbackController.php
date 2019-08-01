@@ -28,8 +28,9 @@ namespace Callback\Controller;
 
         public function addProjectAction(){
             
-            $params = $this->extractPostData();
-            $params['projectdata'] = ($params['projectname']) ? ($params['projectname']) : "No Project to ADD";
+           $params = $this->extractPostData();
+           $params['projectname']  = isset($params['projectname']) ? $params['projectname'] : NULL;
+           $params['projectdata'] = ($params['projectname']) ? ($params['projectname']) : "No Project to ADD";
            $this->log->info(TaskCallbackController::class.":Project Data- ".$params['projectdata']);
            $response = $this->taskService->addProjectToTask($params['projectname'],$params['description'],$params['uuid']);
            if($response){
@@ -42,7 +43,7 @@ namespace Callback\Controller;
         public function deleteProjectAction(){
            $params = $this->extractPostData();
 
-           $params['projectdata'] = ($params['uuid']) ? ($params['uuid']) : "No Project to Delete";
+           $params['projectdata'] = isset($params['uuid']) ? ($params['uuid']) : "No Project to Delete";
             $this->log->info(TaskCallbackController::class.":Project Data- ".$params['projectdata']);
          
            $response = $this->taskService->deleteProjectFromTask($params['uuid']);
@@ -56,7 +57,7 @@ namespace Callback\Controller;
         public function updateProjectAction(){
            $params = $this->extractPostData();
 
-           $params['projectdata'] = ($params['new_projectname']) ? ($params['new_projectname']) : "No Project to Update";
+           $params['projectdata'] = isset($params['new_projectname']) ? ($params['new_projectname']) : "No Project to Update";
            $this->log->info(TaskCallbackController::class.":Project Data- ".$params['projectdata']);
            $response = $this->taskService->updateProjectInTask($params['new_projectname'],$params['description'],$params['uuid']);
             if($response){

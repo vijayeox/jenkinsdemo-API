@@ -11,6 +11,11 @@ use Zend\Db\Sql\Expression;
 use Exception;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
+use Oxzion\Service\OrganizationService;
+use Oxzion\AccessDeniedException;
+use Oxzion\Security\SecurityManager;
+
+
 
 /**
  * Announcement Service
@@ -27,9 +32,10 @@ class AnnouncementService extends AbstractService{
     /**
     * @ignore __construct
     */
-    public function __construct($config, $dbAdapter, AnnouncementTable $table){
+    public function __construct($config, $dbAdapter, AnnouncementTable $table,OrganizationService $organizationService){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->organizationService = $organizationService;
     }
     /**
     * Create Announcement Service
@@ -54,10 +60,6 @@ class AnnouncementService extends AbstractService{
         $data['status'] = $data['status']?$data['status']:1;
         $data['end_date'] = isset($data['end_date'])?$data['end_date']:date('Y-m-d',strtotime("+7 day"));
         $data['created_date'] = date('Y-m-d');
-        if(isset($data['groups'])){
-            $groups = json_decode($data['groups'],true);
-            unset($data['groups']);
-        }
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
@@ -70,13 +72,6 @@ class AnnouncementService extends AbstractService{
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
-            if(isset($groups)){
-                $affected = $this->insertAnnouncementForGroup($id,$groups);
-                if(is_string($groups) && $affected != count($groups)) {
-                    $this->rollback();
-                    return 0;
-                }
-            }
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
@@ -115,10 +110,6 @@ class AnnouncementService extends AbstractService{
         $form = new Announcement();
         $data = array_merge($originalArray, $data);
         $data['id'] = $id;
-        if(isset($data['groups'])){
-            $groups = json_decode($data['groups'],true);
-            unset($data['groups']);
-        }
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
@@ -127,10 +118,7 @@ class AnnouncementService extends AbstractService{
         try{
             $count = $this->table->save($form); 
             $data['id'] = $id;
-            if(isset($groups) > 0){
-                $groupsUpdated = $this->updateGroups($id,$groups);
-            } 
-            if($count == 0 && $groupsUpdated == 0){
+            if($count == 0){
                 $this->rollback();
                 return 1;
             }
@@ -139,7 +127,7 @@ class AnnouncementService extends AbstractService{
             $this->rollback();
             return 0;
         }
-        return $count||$groupsUpdated;
+        return $count;
     }
     /**
     * @ignore updateGroups
@@ -200,7 +188,8 @@ class AnnouncementService extends AbstractService{
                 ->delete('ox_announcement_group_mapper')
                 ->where(['announcement_id' => $announcementId]);
                 $result = $this->executeQueryString($delete);
-                $query ="Insert into ox_announcement_group_mapper(announcement_id,group_id) Select $announcementId, id from ox_group where ox_group.id in (".implode(',', $groupSingleArray).")";
+
+                $query ="Insert into ox_announcement_group_mapper(announcement_id,group_id) Select $announcementId, id from ox_group where ox_group.uuid in (".implode(',', $groupSingleArray).")";
                 $resultInsert = $this->runGenericQuery($query);
                 if(count($resultInsert) == 0){
                     $this->rollback();
@@ -221,7 +210,10 @@ class AnnouncementService extends AbstractService{
     protected function getAnnouncementIdBYUuid($uuid){
         $select = "SELECT id from `ox_announcement` where uuid = '".$uuid."'";
         $id = $this->executeQuerywithParams($select)->toArray();
-        return $id[0]['id'];
+        if(count($id) > 0){
+            return $id[0]['id'];
+        }
+        return 0;
     }
     /**
     * Delete Announcement
@@ -287,7 +279,7 @@ class AnnouncementService extends AbstractService{
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_announcement')
-                ->columns(array("id", "uuid", "name", "org_id", "status", "description", "start_date", "end_date", "media_type", "media"))
+                ->columns(array("uuid", "name", "org_id", "status", "description", "start_date", "end_date", "media_type", "media"))
                 ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
                 ->join('ox_user_group', 'ox_announcement_group_mapper.group_id = ox_user_group.group_id',array('group_id','avatar_id'),'left')
                 ->where(array('ox_user_group.avatar_id' => AuthContext::get(AuthConstants::USER_ID)));
@@ -314,7 +306,7 @@ class AnnouncementService extends AbstractService{
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_announcement')
-        ->columns(array("*"))
+        ->columns(array("uuid", "name", "org_id", "status", "description", "start_date", "end_date", "media_type", "media"))
         ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
         ->join('ox_user_group', 'ox_announcement_group_mapper.group_id = ox_user_group.group_id',array('group_id','avatar_id'),'left')
         ->where(array('ox_announcement.uuid' => $id));
@@ -355,7 +347,7 @@ class AnnouncementService extends AbstractService{
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count(id)'];
-            $query ="SELECT * FROM `ox_announcement`".$where." ".$sort." ".$limit;
+            $query ="SELECT uuid, name, org_id, status, description, start_date, end_date, media_type, media FROM `ox_announcement`".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query)->toArray();
             return array('data' => $resultSet, 
                      'total' => $count);
@@ -374,7 +366,7 @@ class AnnouncementService extends AbstractService{
         $sort = "ox_group.name";
 
 
-         $query = "SELECT ox_group.id,ox_group.name";
+         $query = "SELECT ox_group.uuid,ox_group.name";
          $from = " FROM ox_group left join ox_announcement_group_mapper on ox_group.id = ox_announcement_group_mapper.group_id left join ox_announcement on ox_announcement.id = ox_announcement_group_mapper.announcement_id";
     
          $cntQuery ="SELECT count(ox_group.id)".$from;
@@ -385,12 +377,10 @@ class AnnouncementService extends AbstractService{
                    $filterlogic = $filterArray[0]['filter']['logic'];
                    $filterList = $filterArray[0]['filter']['filters'];
                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
-                   // ,self::$fieldName);
                 }
                 if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                     $sort = $filterArray[0]['sort'];
                     $sort = FilterUtils::sortArray($sort);
-                    // ,self::$fieldName);
                 }
                 $pageSize = $filterArray[0]['take'];
                 $offset = $filterArray[0]['skip'];            
@@ -398,7 +388,7 @@ class AnnouncementService extends AbstractService{
 
 
 
-            $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= now() AND ox_group.status = 'Active'" : " WHERE ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= curdate() AND ox_group.status = 'Active'";
+            $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= now() AND ox_group.status = 1" : " WHERE ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= curdate() AND ox_group.status = 1";
 
             
             $sort = " ORDER BY ".$sort;
@@ -411,6 +401,51 @@ class AnnouncementService extends AbstractService{
             return array('data' => $resultSet->toArray(), 
                      'total' => $count);
     
+    }
+
+
+    public function saveGroup($id,$data){
+        if(isset($data['org_id'])){
+            $data['org_id'] = $this->organizationService->getOrganizationIdByUuid($data['org_id']);
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($data['org_id'] != AuthContext::get(AuthConstants::ORG_ID))) {
+                throw new AccessDeniedException("You do not have permissions to add users to project");
+            }
+        }
+        else{
+           $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID); 
+        }
+
+        $obj = $this->table->getByUuid($id,array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        if(!isset($data['groups']) || empty($data['groups'])) {
+            return 2;
+        }
+        $announcementId = $obj->id;
+        $orgId = $data['org_id'];
+        
+    
+        if($data['groups']){
+            $groupSingleArray= array_map('current', $data['groups']);
+            try{
+               
+                $delete = "DELETE oag FROM ox_announcement_group_mapper as oag
+                            inner join ox_group as og on oag.group_id = og.id where og.uuid not in ('".implode("','", $groupSingleArray)."') and oag.announcement_id = ".$announcementId." and og.org_id =".$orgId." and og.status = 'Active'";
+
+                $result = $this->executeQuerywithParams($delete);
+             
+                $query ="Insert into ox_announcement_group_mapper(announcement_id,group_id) SELECT ".$announcementId.",og.id from ox_group as og LEFT OUTER JOIN ox_announcement_group_mapper as oag on og.id = oag.group_id and oag.announcement_id = ".$announcementId." where og.uuid in ('".implode("','", $groupSingleArray)."') and og.org_id = ".$orgId." and og.status = 'Active' and oag.announcement_id is null";
+
+                $resultInsert = $this->runGenericQuery($query);
+            }
+            catch(Exception $e){
+                throw $e;
+            }
+            return 1;
+        }
+        return 0;
     }
 
 }

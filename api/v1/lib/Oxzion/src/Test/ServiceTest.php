@@ -16,6 +16,17 @@ use Zend\Stdlib\ArrayUtils;
 
 class ServiceTest extends TestCase
 {
+
+    protected $adminUser = 'bharatgtest'; //TODO Need to put as global setup
+    protected $adminUserId = 1;
+    protected $employeeUser = 'rakshithtest';
+    protected $employeeUserId = 2;
+    protected $managerUser = 'karantest';
+    protected $managerUserId = 3;
+    protected $noUser = 'admin';
+    protected $noUserId = 0;
+    protected $testOrgId = 1;
+
     /**
      * @var \Zend\Mvc\ApplicationInterface
      */
@@ -49,6 +60,7 @@ class ServiceTest extends TestCase
      */
     protected function setUp()
     {
+        $_REQUEST = [];
         $this->usedConsoleBackup = Console::isConsole();
         $this->reset();
         $tm = $this->getTransactionManager();
@@ -83,7 +95,7 @@ class ServiceTest extends TestCase
      */
     
     protected function getTransactionManager(){
-        $dbbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         return TransactionManager::getInstance($dbAdapter);
     }
 
@@ -198,7 +210,8 @@ class ServiceTest extends TestCase
     {
         // force to re-create all components
         $this->application = null;
-
+        //unset($_REQUEST[TransactionManager::CONTEXT_KEY]);
+        
         // reset server data
         if (! $keepPersistence) {
             // Do not create a global session variable if it doesn't already

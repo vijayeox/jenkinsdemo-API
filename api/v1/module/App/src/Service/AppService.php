@@ -8,7 +8,7 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
 use Exception;
-use Oxzion\Utils\UuidUtil;
+use Ramsey\Uuid\Uuid;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\YMLUtils;
 use Oxzion\Utils\ZipUtils;
@@ -250,7 +250,7 @@ class AppService extends AbstractService
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['status'] = App::PUBLISHED;
-        $data['uuid'] = UuidUtil::uuid();
+        $data['uuid'] = Uuid::uuid4()->toString();
 		if(!isset($data['org_id'])){
             return 0;
         }
@@ -396,13 +396,13 @@ class AppService extends AbstractService
 
     public function registerApps($data)
     {
-        $apps = $data['applist'];
+        $apps = json_decode($data['applist'],true);
         unset($data);
         $form = new App();
         $list = array();
 
         for ($x = 0; $x < sizeof($apps); $x++) {
-            $data['name'] = $apps[$x]['name'];
+            $data['name'] = isset($apps[$x]['name']) ? $apps[$x]['name'] : NULL; 
             array_push($list, $data);
         }
         $this->beginTransaction();
@@ -416,19 +416,29 @@ class AppService extends AbstractService
             $count = 0;
             for ($x = 0; $x < sizeof($apps); $x++) {
                 if (!in_array($apps[$x]['name'], $result)) {
-                    $data['name'] = $apps[$x]['name'];
-                    $data['category'] = $apps[$x]['category'];
-                    $data['isdefault'] = $apps[$x]['isdefault'];
+                    $data['name'] = isset($apps[$x]['name']) ? $apps[$x]['name'] : NULL ;
+                    $data['category'] = isset($apps[$x]['category']) ? $apps[$x]['category'] : NULL;
+                    $data['isdefault'] = isset($apps[$x]['isdefault']) ? $apps[$x]['isdefault'] : 0;
                     $data['start_options'] = json_encode($apps[$x]['options']);
                     //this API call is done by the server hence hardcoding the created by value
                     $data['created_by'] = 1;
                     $data['date_created'] = date('Y-m-d H:i:s');
                     $data['status'] = App::PUBLISHED;
                     $data['type'] = App::PRE_BUILT;
-                    $data['uuid'] = UuidUtil::uuid();
+                    if($apps[$x]['uuid'] == "NULL"){
+                        $apps[$x]['uuid'] = NULL;
+                    }
+                    $data['uuid'] = isset($apps[$x]['uuid'])? $apps[$x]['uuid'] : Uuid::uuid4()->toString();
                     $form->exchangeArray($data);
                     $form->validate();
                     $count += $this->table->save($form);
+                }else{
+                    $start_options = isset($apps[$x]['options']) ? json_encode($apps[$x]['options']) : NULL;
+                    $category = isset($apps[$x]['category']) ? $apps[$x]['category'] : NULL;
+                    $isdefault = isset($apps[$x]['isdefault']) ? $apps[$x]['isdefault'] : 0;
+                    $modified_by = 1;
+                    $update = "UPDATE ox_app SET `start_options` = '".$start_options."', `category` = '".$category."',`isdefault` = ".$isdefault.", `date_modified` = '".date('Y-m-d H:i:s')."',`modified_by` = ".$modified_by." WHERE name = '".$apps[$x]['name']."'";
+                    $updatequery = $this->executeQuerywithParams($update);
                 }
             }
             $query = "SELECT id from `ox_app` WHERE isdefault = 1";
@@ -450,7 +460,7 @@ class AppService extends AbstractService
             return 0;
         }
 
-        return $count;
+        return 1;
     }
     public function getAssignments($appId){
         $assignments = $this->workflowService->getAssignments($appId);

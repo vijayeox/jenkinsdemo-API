@@ -32,7 +32,7 @@ class CommentService extends AbstractService {
     public function createComment(&$data,$fileid) {
 		$form = new Comment();
     //Additional fields that are needed for the create    
-		$data['text'] = $data['text'];
+		$data['text'] = isset($data['text']) ? $data['text'] : NULL;
 		$data['file_id'] = $fileid;
 		$data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
 		$data['created_by'] = AuthContext::get(AuthConstants::USER_ID);

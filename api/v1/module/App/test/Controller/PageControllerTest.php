@@ -83,9 +83,7 @@ class PageControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'] > 2, true);
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['required'], $data['required']);
-        $this->assertEquals($content['data']['data_type'], $data['data_type']);
-    }
+     }
 
     public function testCreateFailure(){
         $this->initAuthToken($this->adminUser);

@@ -43,6 +43,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     protected function setUp() : void
     {
         parent::setUp();
+        $_REQUEST = [];
         $this->setupConnection();
         $tm = $this->getTransactionManager();
         $tm->setRollbackOnly(true);

@@ -36,11 +36,12 @@ class MigrationTest extends ServiceTest {
         else if($this->getName() == 'testMigrateWrongAppName'){
             $this->data['appName'] = 'ox_app_4';
         }
+        $this->data['appName'] = isset($this->data['appName']) ? $this->data['appName'] : NULL;
         $config = $this->getApplicationConfig();
         $config = $config['db'];
         $this->database = $this->data['appName'] . "___" . $this->data['UUID'];
         $config['database']=$this->database;
-        $config['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $config['host'] . ';charset=utf8;username='.$config["appuser"].';password='.$config["password"].'';
+        $config['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $config['host'] . ';charset=utf8;username='.$config["username"].';password='.$config["password"].'';
         $this->adapter = new Adapter($config);
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->setRollbackOnly(true);        
@@ -79,7 +80,7 @@ class MigrationTest extends ServiceTest {
         $config = $this->getApplicationConfig();
         $this->assertEquals(isset($this->data['appName']), false);
         $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->initDB($data);
+        $testCase = $migrationObject->initDB($this->data);
         $this->assertEquals(0, $testCase);
     }
 
@@ -90,7 +91,7 @@ class MigrationTest extends ServiceTest {
         $dataSet = array_diff(scandir(dirname(__FILE__) ."/../Migration/"), array(".", ".."));
         $migrationFolder = dirname(__FILE__) ."/../Migration/";
         $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $data);
+        $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
 
         //Check to see if the version table is updated or not     
         $versionArray = '1.0, 1.1';
@@ -115,7 +116,7 @@ class MigrationTest extends ServiceTest {
         $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' . $this->database . '"';
         $dbConfig = $config['db'];
         $dbConfig['database']='mysql';
-        $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username='.$dbConfig["appuser"].';password='.$dbConfig["password"].'';
+        $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username='.$dbConfig["username"].';password='.$dbConfig["password"].'';
         $mysqlAdapter = new Adapter($dbConfig);
         
         $statement = $mysqlAdapter->query($sqlQuery);
