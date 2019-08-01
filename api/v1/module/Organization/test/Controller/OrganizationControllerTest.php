@@ -196,14 +196,13 @@ class OrganizationControllerTest extends ControllerTest
 
         $select = "SELECT * FROM ox_user where username ='".$contact['username']."'";
         $usrResult = $this->executeQueryTest($select); 
-       
-
+        
         $this->assertEquals(count($roleResult), 1);
         $this->assertEquals(count($orgResult), 1);
         $this->assertEquals($usrResult[0]['firstname'],$contact['firstname']);
         $this->assertEquals($usrResult[0]['lastname'],$contact['lastname']);
         $this->assertEquals($usrResult[0]['designation'],'Admin');
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 22);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 23);
         $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
         $this->assertEquals($content['status'], 'success');
@@ -905,13 +904,10 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], 'c04edc32-af8a-11e9-91bf-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'ADMIN');
         $this->assertEquals($content['data'][0]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
-        $this->assertEquals($content['data'][1]['uuid'], 'c04ede69-af8a-11e9-91bf-68ecc57cde45');
         $this->assertEquals($content['data'][1]['name'], 'EMPLOYEE');
 
-        $this->assertEquals($content['data'][2]['uuid'], 'c04edd51-af8a-11e9-91bf-68ecc57cde45');
         $this->assertEquals($content['data'][2]['name'], 'MANAGER');
         $this->assertEquals($content['total'],3); 
     }
@@ -924,7 +920,6 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], 'c04edd51-af8a-11e9-91bf-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'MANAGER');
         $this->assertEquals($content['total'],1); 
     }
@@ -937,9 +932,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], 'c04edc32-af8a-11e9-91bf-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'ADMIN');
-        $this->assertEquals($content['data'][1]['uuid'], 'c04edd51-af8a-11e9-91bf-68ecc57cde45');
         $this->assertEquals($content['data'][1]['name'], 'MANAGER');
         $this->assertEquals($content['total'],3); 
     }
@@ -952,7 +945,6 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], 'c04edc32-af8a-11e9-91bf-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'ADMIN');
         $this->assertEquals($content['total'],3); 
     }
@@ -964,7 +956,6 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], 'c04ede69-af8a-11e9-91bf-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
         $this->assertEquals($content['total'],3); 
     }
