@@ -180,15 +180,16 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         
         $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
-        $roleResult = $this->executeQueryTest($query);
-      
-        for($x=0;$x<sizeof($roleResult);$x++){
-            $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =".$roleResult[$x]['id']."
+        $role = $this->executeQueryTest($query);
+
+        
+        for($x=0;$x<sizeof($role);$x++){
+            $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =".$role[$x]['id']."
                 AND uuid = '".$content['data']['uuid']."')";
             $rolePrivilegeResult[] = $this->executeQueryTest($query);
         }
 
-        $select = "SELECT * FROM ox_user_role where role_id =".$roleResult[0]['id'];
+        $select = "SELECT * FROM ox_user_role where role_id =".$role[0]['id'];
         $roleResult = $this->executeQueryTest($select);
      
         $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$content['data']['uuid']."')";
@@ -196,8 +197,9 @@ class OrganizationControllerTest extends ControllerTest
 
         $select = "SELECT * FROM ox_user where username ='".$contact['username']."'";
         $usrResult = $this->executeQueryTest($select); 
-       
+        
 
+        $this->assertEquals(count($role), 3);
         $this->assertEquals(count($roleResult), 1);
         $this->assertEquals(count($orgResult), 1);
         $this->assertEquals($usrResult[0]['firstname'],$contact['firstname']);
