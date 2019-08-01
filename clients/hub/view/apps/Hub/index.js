@@ -2,15 +2,28 @@ import './index.scss';
 import osjs from 'osjs';
 import React from "react";
 import ReactDOM from "react-dom";
-import menu from './menu.json';
-import {name as applicationName} from './metadata.json';
-import RenderTemplate from "../../../../../view/gui/src/rendertemplate.js";
-
+import merge from "deepmerge";
+import {name as applicationName,appId as application_id} from './metadata.json';
+import LeftMenuTemplate from "../../../../../view/gui/src/leftmenutemplate.js";
+// let menus = [];
 // Our launcher
 const register = (core, args, options, metadata) => {
   // Create a new Application instance
   const proc = core.make('osjs/application', {args, options, metadata});
- 
+
+//   const getMenulist = async () => {
+//     let helper = core.make('oxzion/restClient');
+//     let menulist = await helper.request('v1','/app/'+application_id+'/menu', {}, 'get' );
+//     return menulist;
+// };
+
+// getMenulist().then(response => {
+//  menus = response["data"];
+//  console.log("Menuss");
+//   console.log(menus);
+// });
+// console.log("Menus List");
+// console.log(menus);
   // Create  a new Window instance
   proc.createWindow({
     id: 'HubWindow',
@@ -19,7 +32,7 @@ const register = (core, args, options, metadata) => {
     position: {left: 700, top: 200}
   })
     .on('destroy', () => proc.destroy())
-    .render($content => ReactDOM.render(<RenderTemplate args={core} menu={menu}/>, $content));
+    .render($content => ReactDOM.render(<LeftMenuTemplate args={core} appId={application_id}/>, $content));
 
    return proc;
 };
