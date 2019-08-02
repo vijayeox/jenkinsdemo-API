@@ -11,6 +11,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Service\WorkflowService;
+use Oxzion\Service\TemplateService;
 
 class Module implements ConfigProviderInterface {
 
@@ -42,7 +43,11 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\ActivityInstanceService($container->get('config'), 
                                         $dbAdapter, $container->get(Model\ActivityInstanceTable::class),  
-                                        $container->get('AppLogger'));
+                                        $container->get('ActivityInstanceLogger'));
+                },
+                Service\ServiceTaskService::class => function($container){
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ServiceTaskService($container->get('config'),$dbAdapter,$container->get('ServiceTaskLogger'),$container->get(TemplateService::class));
                 },
                 Model\WorkflowInstanceTable::class => function($container) {
                     $tableGateway = $container->get(Model\WorkflowInstanceTableGateway::class);
@@ -74,14 +79,20 @@ class Module implements ConfigProviderInterface {
                 Controller\WorkflowInstanceController::class => function($container) {
                     return new Controller\WorkflowInstanceController(
                         $container->get(Model\WorkflowInstanceTable::class),$container->get(Service\WorkflowInstanceService::class),$container->get(WorkflowService::class),
-                        $container->get('AppLogger'),
+                        $container->get('WorkflowInstanceLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
                 Controller\ActivityInstanceController::class => function($container) {
                     return new Controller\ActivityInstanceController(
                         $container->get(Service\ActivityInstanceService::class),
-                        $container->get('AppLogger')
+                        $container->get('ActivityInstanceLogger')
+                    );
+                },
+                Controller\ServiceTaskController::class => function($container) {
+                    return new Controller\ServiceTaskController(
+                        $container->get(Service\ServiceTaskService::class),
+                        $container->get('ServiceTaskLogger')
                     );
                 },
             ],
