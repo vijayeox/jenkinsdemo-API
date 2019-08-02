@@ -425,7 +425,7 @@ class AppService extends AbstractService
                     $data['date_created'] = date('Y-m-d H:i:s');
                     $data['status'] = App::PUBLISHED;
                     $data['type'] = App::PRE_BUILT;
-                    if($apps[$x]['uuid'] == "NULL"){
+                    if(isset($apps[$x]['uuid']) && $apps[$x]['uuid'] == "NULL"){
                         $apps[$x]['uuid'] = NULL;
                     }
                     $data['uuid'] = isset($apps[$x]['uuid'])? $apps[$x]['uuid'] : Uuid::uuid4()->toString();
@@ -455,7 +455,7 @@ class AppService extends AbstractService
 
             $this->commit();
         } catch (Exception $e) {
-            // print_r($e->getMessage());
+            // print_r($e->getMessage());exit;
             $this->rollback();
             return 0;
         }

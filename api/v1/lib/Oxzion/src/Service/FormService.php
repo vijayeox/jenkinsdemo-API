@@ -31,6 +31,7 @@ class FormService extends AbstractService{
             return 0;
         }
 		$template['form']['app_id'] = $appId;
+        $data['name'] = $template['form']['name'];
         $template['form']['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $template['form']['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $template['form']['date_created'] = date('Y-m-d H:i:s');

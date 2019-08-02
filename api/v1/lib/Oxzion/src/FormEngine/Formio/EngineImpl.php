@@ -7,7 +7,7 @@ class EngineImpl implements Engine {
 	public function parseForm($form){
 		$template = json_decode($form,true);
 		if(isset($template)){
-			$formTemplate['form']['name'] = $template['name'];
+			$formTemplate['form']['name'] = isset($template['name'])?$template['name']:null;
 			$formTemplate['form']['description'] = $template['title'];
 			$formTemplate['form']['template'] = json_encode($template);
 			$itemslist = array();

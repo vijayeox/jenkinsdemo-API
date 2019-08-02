@@ -54,7 +54,7 @@ class FileControllerTest extends ControllerTest{
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['field1'], $data['field1']);
     }
     public function testCreateWithOutFieldFailure(){
         $this->initAuthToken($this->adminUser);
