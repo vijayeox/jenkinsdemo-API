@@ -60,7 +60,11 @@ class TemplateService extends AbstractService {
 	public function getTemplatePath($templateName) {
 		$orgUuid = AuthContext::get(AuthConstants::ORG_UUID);
 		$template = $templateName.$this->templateExt;
-		$path = "/".$orgUuid."/".$template;
+		if(isset($orgUuid)){
+			$path = "/".$orgUuid."/".$template;
+		} else {
+			$path = "/".$template;
+		}
 		if (is_file($this->client->getTemplateDir()[0].$path)) {
 			$this->client->setTemplateDir($this->client->getTemplateDir()[0]."/".$orgUuid);
 			return $template;

@@ -168,10 +168,6 @@ class UserService extends AbstractService
             if(isset($data['role'])){
                 $this->addRoleToUser($data['uuid'],$data['role'],$form->orgid);
             }
-            // $this->emailService->sendUserEmail($form);
-            // // Code to add the user information to the Elastic Search Index
-            // $result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
-            // $es = $this->generateUserIndexForElastic($data);
             $this->commit();
             $this->messageProducer->sendTopic(json_encode(array(
                 'username' => $data['username'],
@@ -939,7 +935,12 @@ class UserService extends AbstractService
             //Code to update the password reset and expiration time
             $userUpdate = $this->updateUser($id, $userReset);
             if ($userUpdate) {
-                $this->emailService->sendPasswordResetEmail($userReset);
+                $userReset['baseurl'] = $this->config['baseUrl'];
+                $this->messageProducer->sendTopic(json_encode(array(
+                    'To' => $userReset['email'],
+                    'Subject' => $userReset['firstname'] . ', You login details for OX Zion!',
+                    'body' => $this->templateService->getContent('resetPassword', $userReset)
+                )),'mail');
                 return $userReset;
             }
             return 0;

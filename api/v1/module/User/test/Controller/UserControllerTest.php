@@ -78,6 +78,7 @@ class UserControllerTest extends ControllerTest
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'USER_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'USER_ADDED')->once()->andReturn();
         }
         $this->dispatch('/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -477,9 +478,9 @@ class UserControllerTest extends ControllerTest
         $data = ['old_password' => 'password', 'new_password' => 'welcome', 'confirm_password' => 'welcome'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/me/changepassword', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('changepassword');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
@@ -600,6 +601,10 @@ class UserControllerTest extends ControllerTest
         $this->initAuthToken($this->managerUser);
         $data = ['email' => 'test1@va.com'];
         $this->setJsonContent(json_encode($data));
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
         $this->dispatch('/user/me/forgotpassword', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('forgotpassword');

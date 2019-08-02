@@ -12,6 +12,7 @@ use Zend\Mvc\MvcEvent;
 use Oxzion\Service\UserService;
 use Oxzion\Service\EmailService;
 use Oxzion\Model\EmailTable;
+use Oxzion\Service\TemplateService;
 
 class Module implements ConfigProviderInterface
 {
@@ -82,6 +83,9 @@ class Module implements ConfigProviderInterface
                 },
                 Controller\TaskCallbackController::class => function ($container) {
                     return new Controller\TaskCallbackController($container->get(Service\TaskService::class),$container->get('CallbackLogger'));
+                },
+                Controller\OXCallbackController::class => function ($container) {
+                    return new Controller\OXCallbackController($container->get(TemplateService::class), $container->get('config'),$container->get('CallbackLogger'));
                 },
                 Controller\CalendarCallbackController::class => function ($container) {
                     return new Controller\CalendarCallbackController($container->get(Service\CalendarService::class),$container->get(EmailService::class),$container->get('CallbackLogger'), $container->get('config'));
