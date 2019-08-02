@@ -83,14 +83,12 @@ ox_file:
     id: 1
     workflow_instance_id: 1
     org_id: 1
-    form_id: 1
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
   -
     id: 2
     workflow_instance_id: 1
     org_id: 1
-    form_id: 2
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
 ox_workflow_instance:
