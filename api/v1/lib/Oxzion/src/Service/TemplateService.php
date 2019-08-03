@@ -49,7 +49,7 @@ class TemplateService extends AbstractService {
 	 * @return     String     The template content.
 	 */
 	public function getContent($templateName, $data = array()) {
-		$template = $this->getTemplatePath($templateName);
+		$template = $this->getTemplatePath($templateName,$data);
 		if (!$template){
 			throw new Exception("Email Template not found!", 1);
 		}
@@ -57,8 +57,17 @@ class TemplateService extends AbstractService {
 		return $this->client->fetch($template);
 	}
 
-	public function getTemplatePath($templateName) {
-		$orgUuid = AuthContext::get(AuthConstants::ORG_UUID);
+	public function getTemplatePath($templateName,$params = array()) {
+		if(isset($params['orgid'])){
+			if($org = $this->getIdFromUuid('ox_organization',$params['orgid'])){
+				$orgId = $org;
+			} else {
+				$orgId = $params['orgid'];
+			}
+		} else {
+			$orgId = AuthContext::get(AuthConstants::ORG_UUID);
+		}
+		$orgUuid = $orgId;
 		$template = $templateName.$this->templateExt;
 		if(isset($orgUuid)){
 			$path = "/".$orgUuid."/".$template;

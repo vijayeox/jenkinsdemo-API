@@ -76,6 +76,54 @@ class TemplateServiceTest extends ServiceTest {
         $this->expectException(Exception::class);
         $content = $TemplateService->getContent('UnknownTemplate',$data);
     }
-    
+
+    public function testEmailTemplateWithOrgId()
+    {
+        $data = ['username' => 'John','orgid'=>3];
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['TEMPLATE_FOLDER']."b6499a34-c100-4e41-bece-5822adca3844/";
+        FileUtils::createDirectory($tempFolder);
+        $tempFile = $config['TEMPLATE_FOLDER']."/";
+        FileUtils::createDirectory($tempFile);
+        copy(__DIR__."/template/GenericTemplate.tpl", $tempFile."GenericTemplate.tpl"); 
+        $TemplateService = new TemplateService($config, $this->adapter);
+        $content = $TemplateService->getContent('GenericTemplate',$data);
+        $temp = "Hello ".$data['username'].", this is a generic template.</p>";
+        $this->assertEquals(strpos($content, $temp), 3);
+        $templateName="GenericTemplate.tpl";
+        FileUtils::deleteFile($templateName,$tempFile);
+    }
+    public function testEmailTemplateWithOrgUUId()
+    {
+        $data = ['username' => 'John','orgid'=>"b6499a34-c100-4e41-bece-5822adca3844"];
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['TEMPLATE_FOLDER']."b6499a34-c100-4e41-bece-5822adca3844/";
+        FileUtils::createDirectory($tempFolder);
+        $tempFile = $config['TEMPLATE_FOLDER']."/";
+        FileUtils::createDirectory($tempFile);
+        copy(__DIR__."/template/GenericTemplate.tpl", $tempFile."GenericTemplate.tpl"); 
+        $TemplateService = new TemplateService($config, $this->adapter);
+        $content = $TemplateService->getContent('GenericTemplate',$data);
+        $temp = "Hello ".$data['username'].", this is a generic template.</p>";
+        $this->assertEquals(strpos($content, $temp), 3);
+        $templateName="GenericTemplate.tpl";
+        FileUtils::deleteFile($templateName,$tempFile);
+    }
+    public function testEmailTemplateWithInvalidOrgId()
+    {
+        $data = ['username' => 'John','orgid' => '4'];
+        $config = $this->getApplicationConfig();
+        $TemplateService = new TemplateService($config, $this->adapter);
+        $this->expectException(Exception::class);
+        $content = $TemplateService->getContent('GenericTemplate',$data);
+    }
+    public function testEmailTemplateWithInvalidOrgUUId()
+    {
+        $data = ['username' => 'John','orgid'=>"b6499a34-c100-4e41-bece-5822adca3844"];
+        $config = $this->getApplicationConfig();
+        $TemplateService = new TemplateService($config, $this->adapter);
+        $this->expectException(Exception::class);
+        $content = $TemplateService->getContent('GenericTemplate',$data);
+    }
 }
 ?>
