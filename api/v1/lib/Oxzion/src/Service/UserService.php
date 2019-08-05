@@ -16,6 +16,9 @@ use Ramsey\Uuid\Uuid;
 use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
 use Oxzion\Utils\FilterUtils;
+use Oxzion\ServiceException;
+
+
 
 class UserService extends AbstractService
 {
@@ -150,12 +153,13 @@ class UserService extends AbstractService
             $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
         }
 
+        try {  
 
         $select = "SELECT ou.id,ou.uuid,count(ou.id),ou.status,ou.username,ou.email,GROUP_CONCAT(ouo.org_id) from ox_user as ou inner join ox_user_org as ouo on ouo.user_id = ou.id where ou.username = '".$data['username']."' OR ou.email = '".$data['email']."' GROUP BY ou.id,ou.uuid,ou.status,ou.email";
         $result = $this->executeQuerywithParams($select)->toArray();
-        
+
         if(count($result) > 1){
-            return 5;
+           throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");       
         }
 
         if(count($result) == 1){
@@ -169,25 +173,25 @@ class UserService extends AbstractService
                 if(in_array($data['orgid'],$orgList)){
                     $countval = 0;
                     if($result[0]['username'] == $data['username'] && $result[0]['status'] == 'Active'){
-                        return 3;
+                        throw new ServiceException("Username Exist","duplicate.username");
                     }else if($result[0]['email'] == $data['email'] && $result[0]['status'] == 'Active'){
-                        return 4;
+                        throw new ServiceException("Email ID Exist","duplicate.email");
                     }else if($result[0]['status'] == "Inactive"){
                          $data['status'] = 'Active';
                          $countval = $this->updateUser($result[0]['uuid'],$data,$data['orgid']);
                          $this->addUserToOrg($result[0]['id'], $data['orgid']);
                          if(isset($data['role'])){
-                         $this->addRoleToUser($result[0]['uuid'],$data['role'],$data['orgid']);
+                            $this->addRoleToUser($result[0]['uuid'],$data['role'],$data['orgid']);
                         }
                         if(isset($countval) == 1){
                           return $result[0]['uuid'];
                         }else{
-                            return 0;
+                            throw new ServiceException("Failed to Create User","failed.create.user");
                         }
                     }
                 }
                 else{
-                    return 5;
+                    throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");
                 }
             }
         }
@@ -205,12 +209,11 @@ class UserService extends AbstractService
         $form = new User($data);
         $form->validate();
         $this->beginTransaction();
-        try {
             $count = 0;
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Failed to Create User","failed.create.user");
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
 
@@ -231,10 +234,8 @@ class UserService extends AbstractService
             )),'USER_ADDED');
             return $count;
         } catch (Exception $e) {
-            print("EXCEPTION");
-            print_r($e->getMessage());
             $this->rollback();
-            return 0;
+            throw $e;
         }
     }
 
@@ -282,6 +283,7 @@ class UserService extends AbstractService
 
 
     public function createAdminForOrg($org,$contactPerson,$orgPreferences) {
+        $params = Array();
         $contactPerson = (object)$contactPerson;
         $orgPreferences = (object)$orgPreferences;
         $preferences = array(
@@ -311,11 +313,30 @@ class UserService extends AbstractService
             "date_of_join" => date('Y-m-d'),
             "password" => BosUtils::randomPassword()
         );
+        $params['orgId'] = $org->uuid;
+        
         $this->beginTransaction();
         try{
-            $result = $this->createUser($data);
+            $result = $this->createUser($params,$data);
+            print_r($result);
+            if($result == 3){
+                 return 3;
+            }
+            else if($result == 4){
+                     return 4;
+                 }
+            else if($result == 5){
+                    print("5");
+                     return 5;
+                 } 
+            else if(is_array($result)){
+                    return 1;
+                 }
+            print("PASSED");
+            exit;
             $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
+
             $this->addUserRole($resultSet[0]['id'], 'ADMIN');
 
             $this->commit();

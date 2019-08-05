@@ -21,6 +21,8 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Service\EmailService;
 use Project\Service\ProjectService;
 use Oxzion\AccessDeniedException;
+use Oxzion\ServiceException;
+
 
 
 
@@ -93,26 +95,12 @@ class UserController extends AbstractApiController
         catch(AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(),403);
         }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
         if(is_string($count)){
             $data['uuid'] = $count;
             return $this->getSuccessResponseWithData($data, 201);
-        }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new user", $data);
-        }
-        if($count == 2){
-            return $this->getErrorResponse("User should be assigned to atleast one role", 404);
-        }
-        if($count == 3){
-            return $this->getErrorResponse("Username Exist", 404);
-        }
-
-        if($count == 4){
-            return $this->getErrorResponse("Email ID Exist", 404);
-        }
-
-        if($count == 5){
-            return $this->getErrorResponse("Username or Email ID Exist in other Organization", 404);
         }
         return $this->getSuccessResponseWithData($data, 201);
         /*
