@@ -38,8 +38,8 @@ class PersistenceTest extends ServiceTest
 
         $migrationObject = new Migration($config, $this->database, $this->adapter);
         $migrationObject->initDB($this->data);
-        $dataSet = array_diff(scandir(dirname(__FILE__) ."/../Migration/"), array(".", ".."));
-        $migrationFolder = dirname(__FILE__) ."/../Migration/";
+        $dataSet = array_diff(scandir(dirname(__FILE__) ."/scripts/"), array(".", ".."));
+        $migrationFolder = dirname(__FILE__) ."/scripts/";
         $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
 
         $tm = TransactionManager::getInstance($this->adapter);

@@ -92,8 +92,8 @@ class MigrationTest extends ServiceTest
         $config = $this->getApplicationConfig();
         $migrationObject = new Migration($config, $this->database, $this->adapter);
         $testCase = $migrationObject->initDB($this->data);
-        $dataSet = array_diff(scandir(dirname(__FILE__) ."/../Migration/"), array(".", ".."));
-        $migrationFolder = dirname(__FILE__) ."/../Migration/";
+        $dataSet = array_diff(scandir(dirname(__FILE__) ."/scripts/"), array(".", ".."));
+        $migrationFolder = dirname(__FILE__) ."/scripts/";
         $migrationObject = new Migration($config, $this->database, $this->adapter);
         $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
 
@@ -113,8 +113,8 @@ class MigrationTest extends ServiceTest
     {
         $config = $this->getApplicationConfig();
         $this->assertEquals($this->data['appName'], 'ox_app_4');
-        $dataSet = array_diff(scandir(dirname(__FILE__) ."/../Migration/"), array(".", ".."));
-        $migrationFolder = dirname(__FILE__) ."/../Migration/";
+        $dataSet = array_diff(scandir(dirname(__FILE__) ."/scripts/"), array(".", ".."));
+        $migrationFolder = dirname(__FILE__) ."/scripts/";
         $migrationObject = new Migration($config, $this->database, $this->adapter);
         $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
         $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' . $this->database . '"';
