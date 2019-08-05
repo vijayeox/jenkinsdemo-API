@@ -110,7 +110,7 @@ return [
             'appform' => [
                 'type'    => Segment::class,
                 'options' => [
-                	'route'    => '/app/:appId/form[/:id]',
+                    'route'    => '/app/:appId/form[/:id]',
                     'defaults' => [
                         'controller' => Controller\FormController::class,
                         'access'=>[
@@ -158,7 +158,7 @@ return [
             'appworkflow' => [
                 'type'    => Segment::class,
                 'options' => [
-                	'route'    => '/app/:appId/workflow[/:workflowId]',
+                    'route'    => '/app/:appId/workflow[/:workflowId]',
                     'defaults' => [
                         'controller' => Controller\WorkflowController::class,
                         'access'=>[
@@ -174,7 +174,7 @@ return [
             'appmenu' => [
                 'type'    => Segment::class,
                 'options' => [
-                	'route'    => '/app/:appId/menu[/:menuId]',
+                    'route'    => '/app/:appId/menu[/:menuId]',
                     'defaults' => [
                         'controller' => Controller\MenuItemController::class,
                         'access'=>[

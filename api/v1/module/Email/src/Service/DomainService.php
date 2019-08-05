@@ -11,7 +11,6 @@ use Exception;
 
 class DomainService extends AbstractService
 {
-
     private $table;
 
     public function __construct($config, $dbAdapter, DomainTable $table)
@@ -132,5 +131,4 @@ class DomainService extends AbstractService
             return 0;
         }
     }
-
 }

@@ -11,17 +11,21 @@ use Zend\Db\Adapter\Adapter;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
-class WorkflowControllerTest extends ControllerTest{
-    public function setUp() : void{
+class WorkflowControllerTest extends ControllerTest
+{
+    public function setUp() : void
+    {
         $this->loadConfig();
         parent::setUp();
-    }   
-    public function getDataSet() {
+    }
+    public function getDataSet()
+    {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
         return $dataset;
     }
 
-    public function testGetList(){
+    public function testGetList()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/workflow', 'GET');
         $this->assertResponseStatusCode(200);
@@ -39,7 +43,8 @@ class WorkflowControllerTest extends ControllerTest{
         $this->assertEquals($content['data'][1]['name'], 'Test Workflow 2');
     }
 
-    public function testGet(){
+    public function testGet()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/workflow/1', 'GET');
         $this->assertResponseStatusCode(200);
@@ -54,7 +59,8 @@ class WorkflowControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['name'], 'Test Workflow 1');
     }
 
-    public function testGetNotFound(){
+    public function testGetNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/workflow/122', 'GET');
         $this->assertResponseStatusCode(404);
@@ -68,7 +74,8 @@ class WorkflowControllerTest extends ControllerTest{
     }
 
 
-    public function testCreate(){
+    public function testCreate()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'workflow3','app_id'=>1,'required'=>1];
         $this->setJsonContent(json_encode($data));
@@ -86,7 +93,8 @@ class WorkflowControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['required'], $data['required']);
     }
 
-    public function testCreateFailure(){
+    public function testCreateFailure()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['required'=>1,'sequence'=>1];
         $this->setJsonContent(json_encode($data));
@@ -103,7 +111,8 @@ class WorkflowControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
 
-    public function testUpdate(){
+    public function testUpdate()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['id'=>2,'name' => 'workflow23','app_id' => 99,'required'=> 0, 'sequence' => 2,'type'=>'Page'];
         $this->setJsonContent(json_encode($data));
@@ -121,7 +130,8 @@ class WorkflowControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['sequence'], $data['sequence']);
     }
 
-    public function testUpdateNotFound(){
+    public function testUpdateNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Sample2', 'text' => 'Sample 2 Description'];
         $this->setJsonContent(json_encode($data));
@@ -136,7 +146,8 @@ class WorkflowControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testDelete(){
+    public function testDelete()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/workflow/1', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -146,10 +157,11 @@ class WorkflowControllerTest extends ControllerTest{
         $this->assertMatchedRouteName('appworkflow');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');        
+        $this->assertEquals($content['status'], 'success');
     }
 
-    public function testDeleteNotFound(){
+    public function testDeleteNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/workflow/122', 'DELETE');
         $this->assertResponseStatusCode(404);
@@ -159,7 +171,6 @@ class WorkflowControllerTest extends ControllerTest{
         $this->assertMatchedRouteName('appworkflow');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');        
+        $this->assertEquals($content['status'], 'error');
     }
 }
-?>

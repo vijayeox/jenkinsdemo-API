@@ -39,7 +39,7 @@ class PrivilegeController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         $result = $this->privilegeService->getMasterPrivilegeList($params);
-        return $this->getSuccessResponseWithData($result);        
+        return $this->getSuccessResponseWithData($result);
     }
     /**
      * Get list of all the privileges for the logged in user for a specific app
@@ -60,8 +60,8 @@ class PrivilegeController extends AbstractApiController
         $params = $this->params()->fromRoute();
         $appId = $params['appId'];
         $result = $this->privilegeService->getAppPrivilegeForUser($appId);
-        if($result){
-            $result['status'] = isset($result['status']) ? $result['status'] : NULL;
+        if ($result) {
+            $result['status'] = isset($result['status']) ? $result['status'] : null;
             if ($result['status'] === 'error') {
                 return $this->getFailureResponse("No Privileges to show, there is something wrong with your request");
             }
@@ -75,10 +75,9 @@ class PrivilegeController extends AbstractApiController
     public function getAppIdAction()
     {
         $result = $this->privilegeService->getAppId();
-        if($result == 0){
+        if ($result == 0) {
             return $this->getFailureResponse("Something went wrong");
         }
         return $this->getSuccessResponseWithData($result);
     }
-
 }

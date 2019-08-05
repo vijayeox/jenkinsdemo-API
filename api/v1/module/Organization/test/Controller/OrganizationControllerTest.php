@@ -17,9 +17,6 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 
-
-
-
 class OrganizationControllerTest extends ControllerTest
 {
     protected $topic;
@@ -28,14 +25,16 @@ class OrganizationControllerTest extends ControllerTest
         $this->loadConfig();
         parent::setUp();
     }
-    public function getMockMessageProducer(){
+    public function getMockMessageProducer()
+    {
         $organizationService = $this->getApplicationServiceLocator()->get(OrganizationService::class);
         $mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
         $organizationService->setMessageProducer($mockMessageProducer);
         return $mockMessageProducer;
     }
 
-    public function getDataSet() {
+    public function getDataSet()
+    {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Organization.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../Group/test/Dataset/Group.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../Project/test/Dataset/Project.yml");
@@ -51,7 +50,8 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    private function executeQueryTest($query){
+    private function executeQueryTest($query)
+    {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
@@ -60,7 +60,8 @@ class OrganizationControllerTest extends ControllerTest
         return $resultSet->toArray();
     }
 
-    private function executeUpdate($query){
+    private function executeUpdate($query)
+    {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
@@ -68,7 +69,7 @@ class OrganizationControllerTest extends ControllerTest
         return $result;
     }
    
-// Testing to see if the Create Contact function is working as intended if all the value passed are correct.
+    // Testing to see if the Create Contact function is working as intended if all the value passed are correct.
 
     public function testGetList()
     {
@@ -85,7 +86,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['name'], 'Golden State Warriors');
         $this->assertEquals($content['data'][2]['uuid'], 'b6499a34-c100-4e41-bece-5822adca3844');
         $this->assertEquals($content['data'][2]['name'], 'Sample Organization');
-        $this->assertEquals($content['total'],3);
+        $this->assertEquals($content['total'], 3);
     }
 
     public function testGetListWithQuery()
@@ -100,7 +101,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], 'b0971de7-0387-48ea-8f29-5d3704d96a46');
         $this->assertEquals($content['data'][0]['name'], 'Golden State Warriors');
-        $this->assertEquals($content['total'],1);
+        $this->assertEquals($content['total'], 1);
     }
 
 
@@ -115,7 +116,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], '53012471-2863-4949-afb1-e69b0891c98a');
         $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
-        $this->assertEquals($content['total'],2);
+        $this->assertEquals($content['total'], 2);
     }
 
     public function testGetListWithQueryPageSize()
@@ -129,7 +130,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], '53012471-2863-4949-afb1-e69b0891c98a');
         $this->assertEquals($content['data'][0]['name'], 'Cleveland Black');
-        $this->assertEquals($content['total'],3);
+        $this->assertEquals($content['total'], 3);
     }
 
     public function testGet()
@@ -166,9 +167,9 @@ class OrganizationControllerTest extends ControllerTest
         $preferences = array('currency' => 'INR','timezone' => 'Asia/Calcutta','dateformat' => 'dd/mm/yyy');
         $data = array('name'=>'ORGANIZATION','address' => 'Bangalore','contact' => json_encode($contact),'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
-        if(enableActiveMQ == 0){
+        if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'ORGANIZATION', 'status' => 'Active')),'ORGANIZATION_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'ORGANIZATION', 'status' => 'Active')), 'ORGANIZATION_ADDED')->once()->andReturn();
         }
 
 
@@ -182,7 +183,7 @@ class OrganizationControllerTest extends ControllerTest
         $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
         $roleResult = $this->executeQueryTest($query);
       
-        for($x=0;$x<sizeof($roleResult);$x++){
+        for ($x=0;$x<sizeof($roleResult);$x++) {
             $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =".$roleResult[$x]['id']."
                 AND uuid = '".$content['data']['uuid']."')";
             $rolePrivilegeResult[] = $this->executeQueryTest($query);
@@ -192,16 +193,16 @@ class OrganizationControllerTest extends ControllerTest
         $roleResult = $this->executeQueryTest($select);
      
         $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$content['data']['uuid']."')";
-        $orgResult = $this->executeQueryTest($select); 
+        $orgResult = $this->executeQueryTest($select);
 
         $select = "SELECT * FROM ox_user where username ='".$contact['username']."'";
-        $usrResult = $this->executeQueryTest($select); 
+        $usrResult = $this->executeQueryTest($select);
         
         $this->assertEquals(count($roleResult), 1);
         $this->assertEquals(count($orgResult), 1);
-        $this->assertEquals($usrResult[0]['firstname'],$contact['firstname']);
-        $this->assertEquals($usrResult[0]['lastname'],$contact['lastname']);
-        $this->assertEquals($usrResult[0]['designation'],'Admin');
+        $this->assertEquals($usrResult[0]['firstname'], $contact['firstname']);
+        $this->assertEquals($usrResult[0]['lastname'], $contact['lastname']);
+        $this->assertEquals($usrResult[0]['designation'], 'Admin');
         $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 23);
         $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
@@ -217,7 +218,7 @@ class OrganizationControllerTest extends ControllerTest
         
         $data = ['logo' => 'logo.png', 'status' => 'Active','contact' => json_encode($contact),'preferences' => json_encode($preferences)];
         $this->setJsonContent(json_encode($data));
-        if(enableActiveMQ == 0){
+        if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
         }
         $this->dispatch('/organization', 'POST', null);
@@ -234,7 +235,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->initAuthToken($this->employeeUser);
         $data = ['name' => 'Cleveland Cavaliers', 'logo' => 'logo.png', 'status' => 'Active'];
         $this->setJsonContent(json_encode($data));
-        if(enableActiveMQ == 0){
+        if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
         }
         $this->dispatch('/organization', 'POST', null);
@@ -247,7 +248,6 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
-        
     }
 
     public function testUpdate()
@@ -255,10 +255,10 @@ class OrganizationControllerTest extends ControllerTest
         $data = ['name' => 'Cleveland Cavaliers', 'logo' => 'logo.png', 'status' => 'InActive'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        if(enableActiveMQ == 0){
+        if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('new_orgname' => 'Cleveland Cavaliers','old_orgname'=> 'Cleveland Black','status' => 'InActive')),'ORGANIZATION_UPDATED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'InActive')),'ORGANIZATION_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('new_orgname' => 'Cleveland Cavaliers','old_orgname'=> 'Cleveland Black','status' => 'InActive')), 'ORGANIZATION_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'InActive')), 'ORGANIZATION_DELETED')->once()->andReturn();
         }
         $this->dispatch('/organization/1', 'PUT', null);
         $this->assertResponseStatusCode(200);
@@ -267,7 +267,6 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['status'], $data['status']);
-        
     }
 
     public function testUpdateRestricted()
@@ -275,7 +274,7 @@ class OrganizationControllerTest extends ControllerTest
         $data = ['name' => 'Cleveland Cavaliers', 'logo' => 'logo.png', 'status' => 'Active'];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
-        if(enableActiveMQ == 0){
+        if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
         }
         $this->dispatch('/organization/1', 'PUT', null);
@@ -294,20 +293,20 @@ class OrganizationControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a', 'DELETE');
-          if(enableActiveMQ == 0){
+        if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'InActive')),'ORGANIZATION_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'InActive')), 'ORGANIZATION_DELETED')->once()->andReturn();
         }
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');        
+        $this->assertEquals($content['status'], 'success');
     }
 
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        if(enableActiveMQ == 0){
+        if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
         }
         $this->dispatch('/organization/53012471-2863-4', 'DELETE');
@@ -326,34 +325,33 @@ class OrganizationControllerTest extends ControllerTest
 
         $data = ['userid' => array(['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
 
-        $this->dispatch('/organization/'.$uuid.'/save', 'POST',$data);
-        if(enableActiveMQ == 0){
+        $this->dispatch('/organization/'.$uuid.'/save', 'POST', $data);
+        if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')), 'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
 
         
 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
-        $content = json_decode($this->getResponse()->getContent(), true);  
+        $content = json_decode($this->getResponse()->getContent(), true);
 
         $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$uuid."')";
-        $orgResult = $this->executeQueryTest($select); 
+        $orgResult = $this->executeQueryTest($select);
 
 
         $select = "SELECT count(id) from ox_user where orgid is NULL";
-        $orgCount = $this->executeQueryTest($select); 
+        $orgCount = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($orgResult),2);
-        $this->assertEquals($orgResult[0]['user_id'],1);
-        $this->assertEquals($orgResult[0]['org_id'],1);
-        $this->assertEquals($orgResult[0]['default'],1);
-        $this->assertEquals($orgResult[1]['user_id'],3);
-        $this->assertEquals($orgResult[1]['org_id'],1);
-        $this->assertEquals($orgResult[1]['default'],1);
-        $this->assertEquals($orgCount[0]['count(id)'],2);
-
+        $this->assertEquals(count($orgResult), 2);
+        $this->assertEquals($orgResult[0]['user_id'], 1);
+        $this->assertEquals($orgResult[0]['org_id'], 1);
+        $this->assertEquals($orgResult[0]['default'], 1);
+        $this->assertEquals($orgResult[1]['user_id'], 3);
+        $this->assertEquals($orgResult[1]['org_id'], 1);
+        $this->assertEquals($orgResult[1]['default'], 1);
+        $this->assertEquals($orgCount[0]['count(id)'], 2);
     }
 
 
@@ -365,35 +363,34 @@ class OrganizationControllerTest extends ControllerTest
         $data = ['userid' => array(['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'],['uuid' => 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a'])];
 
         $this->dispatch('/organization/'.$uuid.'/save', 'POST', $data);
-        if(enableActiveMQ == 0){
+        if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')), 'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
 
         
 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
-        $content = json_decode($this->getResponse()->getContent(), true);  
+        $content = json_decode($this->getResponse()->getContent(), true);
 
         $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$uuid."')";
-        $orgResult = $this->executeQueryTest($select); 
+        $orgResult = $this->executeQueryTest($select);
 
         $select = "SELECT count(id) from ox_user where orgid is NULL";
-        $orgCount = $this->executeQueryTest($select); 
+        $orgCount = $this->executeQueryTest($select);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($orgResult),3);
-        $this->assertEquals($orgResult[0]['user_id'],1);
-        $this->assertEquals($orgResult[0]['org_id'],1);
-        $this->assertEquals($orgResult[0]['default'],1);
-        $this->assertEquals($orgResult[1]['user_id'],3);
-        $this->assertEquals($orgResult[1]['org_id'],1);
-        $this->assertEquals($orgResult[1]['default'],1);
-        $this->assertEquals($orgResult[2]['user_id'],5);
-        $this->assertEquals($orgResult[2]['org_id'],1);
-        $this->assertEquals($orgResult[2]['default'],NULL);
-        $this->assertEquals($orgCount[0]['count(id)'],2);
-
+        $this->assertEquals(count($orgResult), 3);
+        $this->assertEquals($orgResult[0]['user_id'], 1);
+        $this->assertEquals($orgResult[0]['org_id'], 1);
+        $this->assertEquals($orgResult[0]['default'], 1);
+        $this->assertEquals($orgResult[1]['user_id'], 3);
+        $this->assertEquals($orgResult[1]['org_id'], 1);
+        $this->assertEquals($orgResult[1]['default'], 1);
+        $this->assertEquals($orgResult[2]['user_id'], 5);
+        $this->assertEquals($orgResult[2]['org_id'], 1);
+        $this->assertEquals($orgResult[2]['default'], null);
+        $this->assertEquals($orgCount[0]['count(id)'], 2);
     }
 
 
@@ -405,16 +402,16 @@ class OrganizationControllerTest extends ControllerTest
         $data = ['userid' => array(['uuid' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'],['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['uuid' => '768d1fb9-de9c-46c3-8d5c-23e0e484ce2e'],['uuid' => 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a'])];
 
         $this->dispatch('/organization/'.$uuid.'/save', 'POST', $data);
-        if(enableActiveMQ == 0){
+        if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')), 'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
 
         
 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
-        $content = json_decode($this->getResponse()->getContent(), true);  
+        $content = json_decode($this->getResponse()->getContent(), true);
 
         $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$uuid."')";
         $orgResult = $this->executeQueryTest($select);
@@ -423,21 +420,20 @@ class OrganizationControllerTest extends ControllerTest
         $orgCount = $this->executeQueryTest($select);
 
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($orgResult),4);
-        $this->assertEquals($orgResult[0]['user_id'],1);
-        $this->assertEquals($orgResult[0]['org_id'],1);
-        $this->assertEquals($orgResult[0]['default'],1);
-        $this->assertEquals($orgResult[1]['user_id'],2);
-        $this->assertEquals($orgResult[1]['org_id'],1);
-        $this->assertEquals($orgResult[1]['default'],1);
-        $this->assertEquals($orgResult[2]['user_id'],4);
-        $this->assertEquals($orgResult[2]['org_id'],1);
-        $this->assertEquals($orgResult[2]['default'],1);
-        $this->assertEquals($orgResult[3]['user_id'],5);
-        $this->assertEquals($orgResult[3]['org_id'],1);
-        $this->assertEquals($orgResult[3]['default'],NULL);
-        $this->assertEquals($orgCount[0]['count(id)'],1);
-
+        $this->assertEquals(count($orgResult), 4);
+        $this->assertEquals($orgResult[0]['user_id'], 1);
+        $this->assertEquals($orgResult[0]['org_id'], 1);
+        $this->assertEquals($orgResult[0]['default'], 1);
+        $this->assertEquals($orgResult[1]['user_id'], 2);
+        $this->assertEquals($orgResult[1]['org_id'], 1);
+        $this->assertEquals($orgResult[1]['default'], 1);
+        $this->assertEquals($orgResult[2]['user_id'], 4);
+        $this->assertEquals($orgResult[2]['org_id'], 1);
+        $this->assertEquals($orgResult[2]['default'], 1);
+        $this->assertEquals($orgResult[3]['user_id'], 5);
+        $this->assertEquals($orgResult[3]['org_id'], 1);
+        $this->assertEquals($orgResult[3]['default'], null);
+        $this->assertEquals($orgCount[0]['count(id)'], 1);
     }
 
     public function testToDeleteContactUserFromOrg()
@@ -448,15 +444,15 @@ class OrganizationControllerTest extends ControllerTest
         $uuid = "b6499a34-c100-4e41-bece-5822adca3844";
         $update = "update ox_organization set contactid = 6 where id = 3";
         $orgResult = $this->executeUpdate($update);
-        $this->dispatch('/organization/'.$uuid.'/save', 'POST',$data);
-        if(enableActiveMQ == 0){
+        $this->dispatch('/organization/'.$uuid.'/save', 'POST', $data);
+        if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Sample Organization', 'status' => 'Active', 'username' => 'abc134')),'USERTOORGANIZATION_DELETED')->once()->andReturn();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Sample Organization', 'status' => 'Active', 'username' => 'bharatgtest')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Sample Organization', 'status' => 'Active', 'username' => 'abc134')), 'USERTOORGANIZATION_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Sample Organization', 'status' => 'Active', 'username' => 'bharatgtest')), 'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
-        $content = json_decode($this->getResponse()->getContent(), true);  
+        $content = json_decode($this->getResponse()->getContent(), true);
 
         $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$uuid."')";
         $orgResult = $this->executeQueryTest($select);
@@ -465,14 +461,14 @@ class OrganizationControllerTest extends ControllerTest
         $orgCount = $this->executeQueryTest($select);
         
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($orgResult),2);
-        $this->assertEquals($orgResult[0]['user_id'],6);
-        $this->assertEquals($orgResult[0]['org_id'],3);
-        $this->assertEquals($orgResult[0]['default'],1);
-        $this->assertEquals($orgResult[1]['user_id'],1);
-        $this->assertEquals($orgResult[1]['org_id'],3);
-        $this->assertEquals($orgResult[1]['default'],NULL);
-        $this->assertEquals($orgCount[0]['count(id)'],1);
+        $this->assertEquals(count($orgResult), 2);
+        $this->assertEquals($orgResult[0]['user_id'], 6);
+        $this->assertEquals($orgResult[0]['org_id'], 3);
+        $this->assertEquals($orgResult[0]['default'], 1);
+        $this->assertEquals($orgResult[1]['user_id'], 1);
+        $this->assertEquals($orgResult[1]['org_id'], 3);
+        $this->assertEquals($orgResult[1]['default'], null);
+        $this->assertEquals($orgCount[0]['count(id)'], 1);
     }
 
     
@@ -504,7 +500,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
         $this->assertEquals($content['data'][1]['uuid'], "4fd9ce37-758f-11e9-b2d5-68ecc57cde45");
         $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
-        $this->assertEquals($content['total'],4);
+        $this->assertEquals($content['total'], 4);
     }
 
     public function testgetUsersofOrgWithFilter()
@@ -520,7 +516,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['data'][1]['uuid'], "4fd9f04d-758f-11e9-b2d5-68ecc57cde45");
         $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
-        $this->assertEquals($content['total'],4);
+        $this->assertEquals($content['total'], 4);
     }
 
     public function testgetUsersofOrgWithSortFilter()
@@ -536,7 +532,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'rakshith amin');
         $this->assertEquals($content['data'][1]['uuid'], "768d1fb9-de9c-46c3-8d5c-23e0e484ce2e");
         $this->assertEquals($content['data'][1]['name'], 'rohan kumar');
-        $this->assertEquals($content['total'],4);
+        $this->assertEquals($content['total'], 4);
     }
 
     public function testgetUsersofOrgWithFieldFilter()
@@ -550,10 +546,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], "4fd99e8e-758f-11e9-b2d5-68ecc57cde45");
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['total'],1);
+        $this->assertEquals($content['total'], 1);
     }
 
-    public function testgetAdminUsersOrgWithFilter(){
+    public function testgetAdminUsersOrgWithFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/adminusers?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"gogineni"}]},"sort":[{"field":"name","dir":"asc"}],"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -563,11 +560,12 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
-        $this->assertEquals($content['total'],1); 
+        $this->assertEquals($content['total'], 1);
     }
 
 
-    public function testgetAdminUsersOrg(){
+    public function testgetAdminUsersOrg()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/adminusers?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":0,"take":20}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -577,11 +575,12 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals(1, count($content['data']));
         $this->assertEquals($content['data'][0]['uuid'], 'fbde2453-17eb-4d7f-909a-0fccc6d53e7a');
         $this->assertEquals($content['data'][0]['name'], 'rakesh kumar');
-        $this->assertEquals($content['total'],1); 
+        $this->assertEquals($content['total'], 1);
     }
 
 
-    public function testgetAdminUsersOrgByManager(){
+    public function testgetAdminUsersOrgByManager()
+    {
         $this->initAuthToken($this->managerUser);
         $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/adminusers?filter=[{"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":20}]', 'GET');
         $this->assertResponseStatusCode(403);
@@ -593,7 +592,8 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testgetAdminUsersOrgByEmployee(){
+    public function testgetAdminUsersOrgByEmployee()
+    {
         $this->initAuthToken($this->employeeUser);
         $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/adminusers?filter=[{"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":20}]', 'GET');
         $this->assertResponseStatusCode(401);
@@ -602,10 +602,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertControllerClass('OrganizationController');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'You have no Access to this API'); 
+        $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
-    public function testgetOrgGroups(){
+    public function testgetOrgGroups()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/groups', 'GET');
         $this->assertResponseStatusCode(200);
@@ -616,7 +617,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Test Group');
         $this->assertEquals($content['data'][0]['description'], 'Description Test Data');
         $this->assertEquals($content['data'][0]['manager_id'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['parent_id'], NULL);
+        $this->assertEquals($content['data'][0]['parent_id'], null);
         $this->assertEquals($content['data'][0]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
         $this->assertEquals($content['data'][1]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
         $this->assertEquals($content['data'][1]['name'], 'Test Group Once Again');
@@ -624,11 +625,12 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['manager_id'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][1]['parent_id'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
         $this->assertEquals($content['data'][1]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['total'], 2);
     }
 
 
-    public function testgetOrgGroupsWithFilter(){
+    public function testgetOrgGroupsWithFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"oup"},{"field":"description","operator":"startswith","value":"dEs"}]},"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -639,13 +641,14 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Test Group');
         $this->assertEquals($content['data'][0]['description'], 'Description Test Data');
         $this->assertEquals($content['data'][0]['manager_id'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][0]['parent_id'], NULL);
+        $this->assertEquals($content['data'][0]['parent_id'], null);
         $this->assertEquals($content['data'][0]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
-        $this->assertEquals($content['total'],1); 
+        $this->assertEquals($content['total'], 1);
     }
 
 
-     public function testgetOrgGroupsWithSortFilter(){
+    public function testgetOrgGroupsWithSortFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"sort":[{"field":"uuid","dir":"asc"}],"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -653,14 +656,15 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
-        $this->assertEquals($content['data'][0]['name'], 'Test Group Once Again');   
+        $this->assertEquals($content['data'][0]['name'], 'Test Group Once Again');
         $this->assertEquals($content['data'][1]['uuid'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
         $this->assertEquals($content['data'][1]['name'], 'Test Group');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['total'], 2);
     }
 
 
-    public function testgetOrgGroupsWithPagsize(){
+    public function testgetOrgGroupsWithPagsize()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -669,10 +673,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
         $this->assertEquals($content['data'][0]['name'], 'Test Group');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['total'], 2);
     }
 
-    public function testgetOrgGroupsWithPagination(){
+    public function testgetOrgGroupsWithPagination()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -681,10 +686,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
         $this->assertEquals($content['data'][0]['name'], 'Test Group Once Again');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['total'], 2);
     }
 
-    public function testgetOrgGroupsWithInvalidOrgID(){
+    public function testgetOrgGroupsWithInvalidOrgID()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-/groups?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(404);
@@ -694,7 +700,8 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Organization not found');
     }
 
-    public function testgetOrgGroupsWithInvalidFilter(){
+    public function testgetOrgGroupsWithInvalidFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/groups?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"nbn"},{"field":"description","operator":"startswith","value":"ngjdg"}]},"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -702,12 +709,13 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'], array());
-        $this->assertEquals($content['total'],0); 
+        $this->assertEquals($content['total'], 0);
     }
 
 
-//Project
-    public function testgetOrgProjects(){
+    //Project
+    public function testgetOrgProjects()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/projects', 'GET');
         $this->assertResponseStatusCode(200);
@@ -723,11 +731,12 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['manager_id'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][2]['uuid'], 'ced672bb-fe33-4f0a-b153-f1d182a02603');
         $this->assertEquals($content['data'][2]['name'], 'Test Project 2');
-        $this->assertEquals($content['total'],3); 
+        $this->assertEquals($content['total'], 3);
     }
 
 
-    public function testgetOrgProjectWithFilter(){
+    public function testgetOrgProjectWithFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/projects?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"ct"},{"field":"description","operator":"startswith","value":"dEs"}]},"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -739,11 +748,12 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['description'], 'Description Test Data');
         $this->assertEquals($content['data'][0]['manager_id'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
-        $this->assertEquals($content['total'],1); 
+        $this->assertEquals($content['total'], 1);
     }
 
 
-     public function testgetOrgProjectsWithSortFilter(){
+    public function testgetOrgProjectsWithSortFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/projects?filter=[{"sort":[{"field":"uuid","dir":"asc"}],"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -751,14 +761,15 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '3dbacd80-ff27-4169-a683-4a45d2a8fb8f');
-        $this->assertEquals($content['data'][0]['name'], 'New Project');   
+        $this->assertEquals($content['data'][0]['name'], 'New Project');
         $this->assertEquals($content['data'][1]['uuid'], '886d7eff-6bae-4892-baf8-6fefc56cbf0b');
         $this->assertEquals($content['data'][1]['name'], 'Test Project 1');
-        $this->assertEquals($content['total'],3); 
+        $this->assertEquals($content['total'], 3);
     }
 
 
-    public function testgetOrgProjectsWithPagsize(){
+    public function testgetOrgProjectsWithPagsize()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/projects?filter=[{"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -767,10 +778,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '3dbacd80-ff27-4169-a683-4a45d2a8fb8f');
         $this->assertEquals($content['data'][0]['name'], 'New Project');
-        $this->assertEquals($content['total'],3); 
+        $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetOrgProjectsWithPagination(){
+    public function testgetOrgProjectsWithPagination()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/projects?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -779,10 +791,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '886d7eff-6bae-4892-baf8-6fefc56cbf0b');
         $this->assertEquals($content['data'][0]['name'], 'Test Project 1');
-        $this->assertEquals($content['total'],3); 
+        $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetOrgProjectsWithInvalidOrgID(){
+    public function testgetOrgProjectsWithInvalidOrgID()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-/projects?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(404);
@@ -792,7 +805,8 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Organization not found');
     }
 
-    public function testgetOrgProjectsWithInvalidFilter(){
+    public function testgetOrgProjectsWithInvalidFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/projects?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"nbn"},{"field":"description","operator":"startswith","value":"ngjdg"}]},"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -800,11 +814,12 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'], array());
-        $this->assertEquals($content['total'],0); 
+        $this->assertEquals($content['total'], 0);
     }
 
-// Announcements
-    public function testgetOrgAnnouncements(){
+    // Announcements
+    public function testgetOrgAnnouncements()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcements', 'GET');
         $this->assertResponseStatusCode(200);
@@ -816,11 +831,12 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
         $this->assertEquals($content['data'][1]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['total'], 2);
     }
 
 
-    public function testgetOrgAnnouncementsWithFilter(){
+    public function testgetOrgAnnouncementsWithFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcements?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"2"},{"field":"description","operator":"startswith","value":"announ"}]},"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -831,11 +847,12 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Announcement 2');
         $this->assertEquals($content['data'][0]['description'], 'Announcemnt Test');
         $this->assertEquals($content['data'][0]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
-        $this->assertEquals($content['total'],1); 
+        $this->assertEquals($content['total'], 1);
     }
 
 
-     public function testgetOrgAnnouncementsWithSortFilter(){
+    public function testgetOrgAnnouncementsWithSortFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcements?filter=[{"sort":[{"field":"uuid","dir":"asc"}],"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -843,14 +860,15 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '9068b460-2943-4508-bd4c-2b29238700f3');
-        $this->assertEquals($content['data'][0]['name'], 'Announcement 1');   
+        $this->assertEquals($content['data'][0]['name'], 'Announcement 1');
         $this->assertEquals($content['data'][1]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['total'], 2);
     }
 
 
-    public function testgetOrgAnnouncementsWithPagsize(){
+    public function testgetOrgAnnouncementsWithPagsize()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcements?filter=[{"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -859,10 +877,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '9068b460-2943-4508-bd4c-2b29238700f3');
         $this->assertEquals($content['data'][0]['name'], 'Announcement 1');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['total'], 2);
     }
 
-    public function testgetOrgAnnouncementsWithPagination(){
+    public function testgetOrgAnnouncementsWithPagination()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcements?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -871,10 +890,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
         $this->assertEquals($content['data'][0]['name'], 'Announcement 2');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['total'], 2);
     }
 
-    public function testgetOrgAnnouncementsWithInvalidOrgID(){
+    public function testgetOrgAnnouncementsWithInvalidOrgID()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-/announcements?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(404);
@@ -884,7 +904,8 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Organization not found');
     }
 
-    public function testgetOrgAnnouncementsWithInvalidFilter(){
+    public function testgetOrgAnnouncementsWithInvalidFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcements?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"nbn"},{"field":"description","operator":"startswith","value":"ngjdg"}]},"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -892,12 +913,13 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'], array());
-        $this->assertEquals($content['total'],0); 
+        $this->assertEquals($content['total'], 0);
     }
 
-// Roles
+    // Roles
 
-     public function testgetOrgRoles(){
+    public function testgetOrgRoles()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/roles', 'GET');
         $this->assertResponseStatusCode(200);
@@ -909,11 +931,12 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['name'], 'EMPLOYEE');
 
         $this->assertEquals($content['data'][2]['name'], 'MANAGER');
-        $this->assertEquals($content['total'],3); 
+        $this->assertEquals($content['total'], 3);
     }
 
 
-    public function testgetOrgRolesWithFilter(){
+    public function testgetOrgRolesWithFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/roles?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"ger"},{"field":"description","operator":"startswith","value":"Must"}]},"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -921,11 +944,12 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['name'], 'MANAGER');
-        $this->assertEquals($content['total'],1); 
+        $this->assertEquals($content['total'], 1);
     }
 
 
-     public function testgetOrgRolesWithSortFilter(){
+    public function testgetOrgRolesWithSortFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/roles?filter=[{"sort":[{"field":"uuid","dir":"asc"}],"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -934,11 +958,12 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['name'], 'ADMIN');
         $this->assertEquals($content['data'][1]['name'], 'MANAGER');
-        $this->assertEquals($content['total'],3); 
+        $this->assertEquals($content['total'], 3);
     }
 
 
-    public function testgetOrgRolesWithPagsize(){
+    public function testgetOrgRolesWithPagsize()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/roles?filter=[{"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -946,10 +971,11 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['name'], 'ADMIN');
-        $this->assertEquals($content['total'],3); 
+        $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetOrgRolesWithPagination(){
+    public function testgetOrgRolesWithPagination()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/roles?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -957,10 +983,11 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
-        $this->assertEquals($content['total'],3); 
+        $this->assertEquals($content['total'], 3);
     }
 
-    public function testgetOrgRolesWithInvalidOrgID(){
+    public function testgetOrgRolesWithInvalidOrgID()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-/roles?filter=[{"skip":1,"take":1}]', 'GET');
         $this->assertResponseStatusCode(404);
@@ -970,7 +997,8 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Organization not found');
     }
 
-    public function testgetOrgRolesWithInvalidFilter(){
+    public function testgetOrgRolesWithInvalidFilter()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/roles?filter=[{"filter":{"filters":[{"field":"name","operator":"endswith","value":"nbn"},{"field":"description","operator":"startswith","value":"ngjdg"}]},"skip":0,"take":2}]', 'GET');
         $this->assertResponseStatusCode(200);
@@ -978,6 +1006,6 @@ class OrganizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'], array());
-        $this->assertEquals($content['total'],0); 
+        $this->assertEquals($content['total'], 0);
     }
 }

@@ -15,24 +15,24 @@ use Oxzion\Workflow\ProcessManager;
 use Oxzion\Workflow\WorkflowFactory;
 use Mockery;
 use Camunda\ProcessManagerImpl;
-    
 
 class AppControllerTest extends ControllerTest
 {
-
     public function setUp() : void
     {
         $this->loadConfig();
         parent::setUp();
     }
 
-    public function getDataSet() {
+    public function getDataSet()
+    {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
         return $dataset;
     }
 
 
-    public function testAppRegister(){
+    public function testAppRegister()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['applist' => json_encode([["name" => "CRM","category" => "organization","options" => ["autostart" => "false","hidden" => "false" ]],["name"=>"Calculator","category" =>  "office","options" => ["autostart" =>  "false","hidden" => "false"]],["name" => "Calendar","category" =>  "collaboration","options" =>  ["autostart" => "false","hidden" => "false"]],["name" => "Chat","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "FileManager","category" => "office","options" => ["autostart" => "false","hidden" => "false"]],["name" => "Mail","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "MailAdmin","category" => "utilities","options" => ["autostart" => "false","hidden" => "false"]],["name" => "MyTodo","category" => "null","options" => ["autostart" => "false","hidden" => "true"]],["name" => "Textpad","category" => "office","options" => ["autostart" => "false","hidden" => "false"]]])];
         $this->setJsonContent(json_encode($data));
@@ -42,12 +42,13 @@ class AppControllerTest extends ControllerTest
         $this->assertControllerName(AppRegisterController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AppRegisterController');
         $this->assertMatchedRouteName('appregister');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');     
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testAppRegisterInvaliddata(){
+    public function testAppRegisterInvaliddata()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['applist' => json_encode([["" => "CRM","category" => "organization","options" => ["autostart" => "false","hidden" => "false" ]],["name"=>"Calculator","category" =>  "office","options" => ["autostart" =>  "false","hidden" => "false"]],["name" => "Calendar","category" =>  "collaboration","" =>  ["autostart" => "false","hidden" => "false"]],["name" => "Chat","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "FileManager","category" => "office","options" => ["autostart" => "false","hidden" => "false"]],["name" => "Mail","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "MailAdmin","category" => "utilities","options" => ["autostart" => "false","hidden" => "false"]],["name" => "MyTodo","category" => "null","options" => ["autostart" => "false","hidden" => "true"]],["name" => "Textpad","category" => "office","options" => ["autostart" => "false","hidden" => "false"]]])];
         $this->setJsonContent(json_encode($data));
@@ -57,7 +58,7 @@ class AppControllerTest extends ControllerTest
         $this->assertControllerName(AppRegisterController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AppRegisterController');
         $this->assertMatchedRouteName('appregister');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');     
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
@@ -280,7 +281,8 @@ class AppControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-    public function testDeploy(){
+    public function testDeploy()
+    {
         $this->initAuthToken($this->adminUser);
         $_FILES = array(
             'files'    =>  array(
@@ -294,22 +296,23 @@ class AppControllerTest extends ControllerTest
         $processManager = $workflowFactory->getProcessManager();
         $config = $this->getApplicationConfig();
         $baseFolder = $config['UPLOAD_FOLDER'];
-        if(enableCamunda==0){
+        if (enableCamunda==0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow',array('/var/www/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTest.bpmn'))->once()->andReturn(array(1));
-            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(NULL);
+            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/var/www/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTest.bpmn'))->once()->andReturn(array(1));
+            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
             $workflowService->setProcessManager($mockProcessManager);
         }
         $data = array('name'=>'NewWorkflow');
-        $this->dispatch('/app/somerandom123/deployworkflow', 'POST',$data);
+        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         // print_r($content);exit;
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
     }
-    public function testDeployWithOutName(){
+    public function testDeployWithOutName()
+    {
         $this->initAuthToken($this->adminUser);
         $_FILES = array(
             'files'    =>  array(
@@ -320,13 +323,14 @@ class AppControllerTest extends ControllerTest
             )
         );
         $data = array();
-        $this->dispatch('/app/somerandom123/deployworkflow', 'POST',$data);
+        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
     }
-    public function testDeployFailedBpmn(){
+    public function testDeployFailedBpmn()
+    {
         $this->initAuthToken($this->adminUser);
         $_FILES = array(
             'files'    =>  array(
@@ -338,25 +342,26 @@ class AppControllerTest extends ControllerTest
         );
         $config = $this->getApplicationConfig();
         $baseFolder = $config['UPLOAD_FOLDER'];
-        if(enableCamunda==0){
+        if (enableCamunda==0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow1',array('/var/www/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTestFail.bpmn'))->once()->andReturn(0);
-            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(NULL);
+            $mockProcessManager->expects('deploy')->with('NewWorkflow1', array('/var/www/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTestFail.bpmn'))->once()->andReturn(0);
+            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
             $workflowService->setProcessManager($mockProcessManager);
         }
         $data = array('name'=>'NewWorkflow1');
-        $this->dispatch('/app/somerandom123/deployworkflow', 'POST',$data);
+        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
     }
-    public function testWithOutFile(){
+    public function testWithOutFile()
+    {
         $_FILES =array();
         $this->initAuthToken($this->adminUser);
         $data = array('name'=>'NewWorkflow');
-        $this->dispatch('/app/somerandom123/deployworkflow', 'POST',$data);
+        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();

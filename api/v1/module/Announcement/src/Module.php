@@ -13,13 +13,15 @@ use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Service\OrganizationService;
 
-class Module implements ConfigProviderInterface {
-
-    public function getConfig() {
+class Module implements ConfigProviderInterface
+{
+    public function getConfig()
+    {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e) {
+    public function onBootstrap(MvcEvent $e)
+    {
         $eventManager = $e->getApplication()->getEventManager();
         $sharedEventManager = $eventManager->getSharedManager();
         $moduleRouteListener = new ModuleRouteListener();
@@ -28,14 +30,15 @@ class Module implements ConfigProviderInterface {
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onRenderError'), 0);
     }
 
-    public function getServiceConfig() {
+    public function getServiceConfig()
+    {
         return [
             'factories' => [
-                Service\AnnouncementService::class => function($container){
+                Service\AnnouncementService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AnnouncementService($container->get('config'), $dbAdapter, $container->get(Model\AnnouncementTable::class),$container->get(OrganizationService::class));
+                    return new Service\AnnouncementService($container->get('config'), $dbAdapter, $container->get(Model\AnnouncementTable::class), $container->get(OrganizationService::class));
                 },
-                Model\AnnouncementTable::class => function($container) {
+                Model\AnnouncementTable::class => function ($container) {
                     $tableGateway = $container->get(Model\AnnouncementTableGateway::class);
                     return new Model\AnnouncementTable($tableGateway);
                 },
@@ -49,24 +52,29 @@ class Module implements ConfigProviderInterface {
         ];
     }
 
-    public function getControllerConfig() {
+    public function getControllerConfig()
+    {
         return [
             'factories' => [
-                Controller\AnnouncementController::class => function($container) {
+                Controller\AnnouncementController::class => function ($container) {
                     return new Controller\AnnouncementController(
-                            $container->get(Model\AnnouncementTable::class), $container->get(Service\AnnouncementService::class), $container->get('AnnouncementLogger'),
-                        $container->get(AdapterInterface::class));
+                        $container->get(Model\AnnouncementTable::class),
+                        $container->get(Service\AnnouncementService::class),
+                        $container->get('AnnouncementLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
                 },
             ],
         ];
     }
 
-    public function onDispatchError($e) {
+    public function onDispatchError($e)
+    {
         return ErrorHandler::getJsonModelError($e);
     }
 
-    public function onRenderError($e) {
+    public function onRenderError($e)
+    {
         return ErrorHandler::getJsonModelError($e);
     }
-
 }

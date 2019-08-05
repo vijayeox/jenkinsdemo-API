@@ -12,7 +12,6 @@ use Oxzion\Model\PrivilegeTable;
 
 class Module implements ConfigProviderInterface
 {
-
     public function getConfig()
     {
         return include __DIR__ . '/../config/module.config.php';
@@ -42,8 +41,11 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\PrivilegeController::class => function ($container) {
                     return new Controller\PrivilegeController(
-                        $container->get(PrivilegeTable::class), $container->get(PrivilegeService::class), $container->get('PrivilegeLogger'),
-                        $container->get(AdapterInterface::class));
+                        $container->get(PrivilegeTable::class),
+                        $container->get(PrivilegeService::class),
+                        $container->get('PrivilegeLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
                 },
             ],
         ];
@@ -58,5 +60,4 @@ class Module implements ConfigProviderInterface
     {
         return ErrorHandler::getJsonModelError($e);
     }
-
 }

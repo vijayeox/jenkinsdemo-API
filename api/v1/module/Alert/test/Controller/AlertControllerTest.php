@@ -10,24 +10,27 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 
-
-class AlertControllerTest extends ControllerTest{
-    
-    public function setUp() : void{
+class AlertControllerTest extends ControllerTest
+{
+    public function setUp() : void
+    {
         $this->loadConfig();
         parent::setUp();
-    }   
-    public function getDataSet() {
+    }
+    public function getDataSet()
+    {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Alert.yml");
         return $dataset;
     }
-    protected function setDefaultAsserts(){
+    protected function setDefaultAsserts()
+    {
         $this->assertModuleName('Alert');
         $this->assertControllerName(AlertController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AlertController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
-    public function testGetList(){
+    public function testGetList()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/alert', 'GET');
         $this->assertResponseStatusCode(200);
@@ -41,7 +44,8 @@ class AlertControllerTest extends ControllerTest{
         $this->assertEquals($content['data'][1]['id'], 2);
         $this->assertEquals($content['data'][1]['name'], 'Alert 2');
     }
-    public function testGet(){
+    public function testGet()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/alert/1', 'GET');
         $this->assertResponseStatusCode(200);
@@ -52,14 +56,16 @@ class AlertControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], 'Alert 1');
     }
-    public function testGetNotFound(){
+    public function testGetNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/alert/64', 'GET');
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-    public function testCreate(){
+    public function testCreate()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Test Alert','status'=>1,'description'=>'testing'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_alert'));
@@ -74,7 +80,8 @@ class AlertControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['status'], $data['status']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_alert'));
     }
-    public function testCreateWithOutNameFailure(){
+    public function testCreateWithOutNameFailure()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['status'=>1,'description'=>'testing'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_alert'));
@@ -89,7 +96,8 @@ class AlertControllerTest extends ControllerTest{
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
-    public function testCreateAccess(){
+    public function testCreateAccess()
+    {
         $this->initAuthToken($this->employeeUser);
         $data = ['name' => 'Test Alert','status'=>1,'description'=>'testing'];
         $this->setJsonContent(json_encode($data));
@@ -105,7 +113,8 @@ class AlertControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
-    public function testUpdate(){
+    public function testUpdate()
+    {
         $data = ['name' => 'Test Alert','status'=>1,'description'=>'testing'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -120,7 +129,8 @@ class AlertControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['description'], $data['description']);
     }
 
-    public function testUpdateNotFound(){
+    public function testUpdateNotFound()
+    {
         $data = ['name' => 'Test Alert','status'=>1,'description'=>'testing'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -132,7 +142,8 @@ class AlertControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testDelete(){
+    public function testDelete()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/alert/1', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -142,16 +153,18 @@ class AlertControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testDeleteNotFound(){
+    public function testDeleteNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/alert/122', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('alert');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');        
+        $this->assertEquals($content['status'], 'error');
     }
-    public function testAccept(){
+    public function testAccept()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/alert/1/accept', 'POST', null);
         $this->assertResponseStatusCode(200);
@@ -160,7 +173,8 @@ class AlertControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
-    public function testAcceptNotFound(){
+    public function testAcceptNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/alert/122/accept', 'POST', null);
         $this->assertResponseStatusCode(404);
@@ -169,7 +183,8 @@ class AlertControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-    public function testDecline(){
+    public function testDecline()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/alert/2/decline', 'POST', null);
         $this->assertResponseStatusCode(200);
@@ -178,7 +193,8 @@ class AlertControllerTest extends ControllerTest{
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
-    public function testDeclineNotFound(){
+    public function testDeclineNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/alert/122/decline', 'POST', null);
         $this->assertResponseStatusCode(404);

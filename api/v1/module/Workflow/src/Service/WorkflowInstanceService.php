@@ -13,30 +13,38 @@ use Oxzion\Service\FileService;
 use Oxzion\Workflow\WorkFlowFactory;
 use Exception;
 
-class WorkflowInstanceService extends AbstractService {
+class WorkflowInstanceService extends AbstractService
+{
     protected $workflowService;
     protected $fileService;
     protected $processEngine;
-	protected $activityEngine;
+    protected $activityEngine;
 
-    public function __construct($config, $dbAdapter, WorkflowInstanceTable $table,
-                FileService $fileService,WorkflowService $workflowService,
-                WorkflowFactory $workflowFactory){
+    public function __construct(
+        $config,
+        $dbAdapter,
+        WorkflowInstanceTable $table,
+        FileService $fileService,
+        WorkflowService $workflowService,
+        WorkflowFactory $workflowFactory
+    ) {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->fileService = $fileService;
         $this->workflowService = $workflowService;
         $this->workFlowFactory = $workflowFactory;
         $this->processEngine = $this->workFlowFactory->getProcessEngine();
-		$this->activityEngine = $this->workFlowFactory->getActivity();
+        $this->activityEngine = $this->workFlowFactory->getActivity();
     }
-    public function setProcessEngine($processEngine){
+    public function setProcessEngine($processEngine)
+    {
         $this->processEngine = $processEngine;
     }
-    public function saveWorkflowInstance($appId,&$data){
+    public function saveWorkflowInstance($appId, &$data)
+    {
         $WorkflowInstance = new WorkflowInstance();
         $data['app_id'] = $appId;
-        if(!isset($data['id'])){
+        if (!isset($data['id'])) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
         }
@@ -46,20 +54,20 @@ class WorkflowInstanceService extends AbstractService {
         $WorkflowInstance->validate();
         $this->beginTransaction();
         $count = 0;
-        try{
+        try {
             $count = $this->table->save($WorkflowInstance);
-            if($count == 0){
+            if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
-            if(!isset($data['id'])){
+            if (!isset($data['id'])) {
                 $id = $this->table->getLastInsertValue();
                 $data['id'] = $id;
             }
             $this->commit();
-        }catch(Exception $e){
-            switch (get_class ($e)) {
-             case "Oxzion\ValidationException" :
+        } catch (Exception $e) {
+            switch (get_class($e)) {
+             case "Oxzion\ValidationException":
                 $this->rollback();
                 throw $e;
                 break;
@@ -71,29 +79,30 @@ class WorkflowInstanceService extends AbstractService {
         }
         return $count;
     }
-    public function updateWorkflowInstance($id,&$data){
-        $obj = $this->table->get($id,array());
-        if(is_null($obj)){
+    public function updateWorkflowInstance($id, &$data)
+    {
+        $obj = $this->table->get($id, array());
+        if (is_null($obj)) {
             return 0;
         }
         $data['id'] = $id;
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $file = $obj->toArray();
-        $changedArray = array_merge($obj->toArray(),$data);
+        $changedArray = array_merge($obj->toArray(), $data);
         $WorkflowInstance = new WorkflowInstance();
         $WorkflowInstance->exchangeArray($changedArray);
         $WorkflowInstance->validate();
         $this->beginTransaction();
         $count = 0;
-        try{
+        try {
             $count = $this->table->save($WorkflowInstance);
-            if($count == 0){
+            if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $this->commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             return 0;
         }
@@ -101,79 +110,84 @@ class WorkflowInstanceService extends AbstractService {
     }
 
 
-    public function deleteWorkflowInstance($id){
+    public function deleteWorkflowInstance($id)
+    {
         $this->beginTransaction();
         $count = 0;
-        try{
+        try {
             $count = $this->table->delete($id);
-            if($count == 0){
+            if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $this->commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
         }
         
         return $count;
     }
 
-    public function getWorkflowInstances($appId=null,$filterArray = array()) {
-        if(isset($appId)){
+    public function getWorkflowInstances($appId=null, $filterArray = array())
+    {
+        if (isset($appId)) {
             $filterArray['app_id'] = $appId;
         }
-        $resultSet = $this->getDataByParams('ox_workflow_instance',array("*"),$filterArray,null);
+        $resultSet = $this->getDataByParams('ox_workflow_instance', array("*"), $filterArray, null);
         $response = array();
         $response['data'] = $resultSet->toArray();
         return $response;
     }
-    public function getWorkflowInstance($appId,$id) {
+    public function getWorkflowInstance($appId, $id)
+    {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_workflow_instance')
         ->columns(array("*"))
         ->where(array('id' => $id,'app_id'=>$appId));
         $response = $this->executeQuery($select)->toArray();
-        if(count($response)==0){
+        if (count($response)==0) {
             return 0;
         }
         return $response[0];
     }
 
-    public function executeWorkflow($params,$id=null){
-		$workflowId = $params['workflowId'];
+    public function executeWorkflow($params, $id=null)
+    {
+        $workflowId = $params['workflowId'];
         $workFlowFlag = 1;
-		$workflow = $this->workflowService->getWorkflow(null,$workflowId);
-		if(empty($workflow)){
-			$workFlowFlag= 0;
+        $workflow = $this->workflowService->getWorkflow(null, $workflowId);
+        if (empty($workflow)) {
+            $workFlowFlag= 0;
             return 0;
-		}
-		if(!isset($params['activityId'])){
-			$params['form_id'] = $workflow['form_id'];
+        }
+        if (!isset($params['activityId'])) {
+            $params['form_id'] = $workflow['form_id'];
             $activityId = $params['form_id'];
-		} else {
+        } else {
             $params['activity_id'] = $params['activityId'];
             $activityId = $params['activityId'];
         }
-		if(isset($id)){
-			return $this->fileService->updateFile($params,$id);
-		} else {
-			if($workFlowFlag){
-				if($workflow['form_id']==$params['form_id'] || $params['activityId']==NULL){
-					$workflowInstanceId = $this->processEngine->startProcess($workflow['process_id'],$params);
-                    $workflowInstance = $this->setupWorkflowInstance($workflowId,$workflowInstanceId['id']);
-				} else {
-					$workflowInstanceId = $this->activityEngine->submitTaskForm($activityId,$params);
-				}
+        if (isset($id)) {
+            return $this->fileService->updateFile($params, $id);
+        } else {
+            if ($workFlowFlag) {
+                if ($workflow['form_id']==$params['form_id'] || $params['activityId']==null) {
+                    $workflowInstanceId = $this->processEngine->startProcess($workflow['process_id'], $params);
+                    $workflowInstance = $this->setupWorkflowInstance($workflowId, $workflowInstanceId['id']);
+                } else {
+                    $workflowInstanceId = $this->activityEngine->submitTaskForm($activityId, $params);
+                }
             } else {
                 return 0;
             }
-            return $this->fileService->createFile($params,$workflowInstanceId['id']);
-		}
-		return 0;
-	}
-	
-	private function setupWorkflowInstance($workflowId,$processInstanceId){
+            return $this->fileService->createFile($params, $workflowInstanceId['id']);
+        }
+        return 0;
+    }
+    
+    private function setupWorkflowInstance($workflowId, $processInstanceId)
+    {
         $form = new WorkflowInstance();
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
         $dateCreated = date('Y-m-d H:i:s');
@@ -182,26 +196,25 @@ class WorkflowInstanceService extends AbstractService {
         $resultSet = $this->executeQuerywithParams($query)->toArray();
         $data = array('workflow_id'=> $workflowId,'app_id'=> $resultSet[0]['app_id'],'org_id'=> $orgId,'process_instance_id'=>$processInstanceId,'status'=>"In Progress",'date_created'=>$dateCreated,'created_by'=>$createdBy);
         $form->exchangeArray($data);
-		$form->validate();
+        $form->validate();
         $this->beginTransaction();
-		try {
+        try {
             $count = $this->table->save($form);
-            if($count == 0){
-				$this->rollback();
-				return 0;
-			}
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
             $this->commit();
             $id = $this->table->getLastInsertValue();
-	// 		$orgId = AuthContext::get(AuthConstants::ORG_ID);
-	// // TODO OX_WORKFLOW_INSTANCE UPDATE STATUS
-	// 		$insert = "INSERT INTO `ox_workflow_instance` (`workflow_id`,`app_id`,`org_id`,`process_instance_id`,`status`)".
-	// 		"(SELECT ".$workflowId.",app_id,".$orgId.",'".$processInstanceId."','In progress' from `ox_workflow` WHERE id = ".$workflowId.")";
-	// 		$resultSet = $this->executeQuerywithParams($insert);
-		} catch (Exception $e) {
-			$this->rollback();
-			return 0;
-		} 
-		return $id;  
-	}
+            // 		$orgId = AuthContext::get(AuthConstants::ORG_ID);
+    // // TODO OX_WORKFLOW_INSTANCE UPDATE STATUS
+    // 		$insert = "INSERT INTO `ox_workflow_instance` (`workflow_id`,`app_id`,`org_id`,`process_instance_id`,`status`)".
+    // 		"(SELECT ".$workflowId.",app_id,".$orgId.",'".$processInstanceId."','In progress' from `ox_workflow` WHERE id = ".$workflowId.")";
+    // 		$resultSet = $this->executeQuerywithParams($insert);
+        } catch (Exception $e) {
+            $this->rollback();
+            return 0;
+        }
+        return $id;
+    }
 }
-?>

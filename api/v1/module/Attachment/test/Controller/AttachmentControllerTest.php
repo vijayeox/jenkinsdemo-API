@@ -11,19 +11,22 @@ use Zend\Db\Adapter\Adapter;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use Oxzion\Utils\FileUtils;
 
-
-class AttachmentControllerTest extends ControllerTest{
+class AttachmentControllerTest extends ControllerTest
+{
     
     // public $testFile = array('name'=>'oxzionlogo.png','tmp_name'=>__DIR__."/../files/oxzionlogo.png",'type'=>'image/png','size'=>sizeof(__DIR__."/../files/oxzionlogo.png"),'error'=>0);
-    public function setUp() : void{
+    public function setUp() : void
+    {
         $this->loadConfig();
         parent::setUp();
-    }   
-    public function getDataSet() {
+    }
+    public function getDataSet()
+    {
         return new DefaultDataSet();
     }
     
-    public function testAnnouncementCreate(){
+    public function testAnnouncementCreate()
+    {
         $this->initAuthToken($this->adminUser);
         $config = $this->getApplicationConfig();
         $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/announcements/";

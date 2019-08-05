@@ -14,7 +14,6 @@ use Mockery;
 
 class OXCallbackControllerTest extends ControllerTest
 {
-
     public function setUp() : void
     {
         $this->loadConfig();
@@ -26,12 +25,14 @@ class OXCallbackControllerTest extends ControllerTest
         return new DefaultDataSet();
     }
 
-    public function getMockMessageProducer(){
+    public function getMockMessageProducer()
+    {
         $mockMessageProducer = $this->getMockObject('Oxzion\Messaging\MessageProducer');
         return $mockMessageProducer;
     }
 
-    public function testCreatedUser(){
+    public function testCreatedUser()
+    {
         $data = array('email'=>'bharat@goku.com','firstname'=>'bharat','username'=>'bharat','password'=>'password');
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/ox/createuser', 'POST', $data);
