@@ -980,12 +980,14 @@ class UserService extends AbstractService
         return $fileName[1];
     }
 
-    public function sendResetPasswordCode($email)
+    public function sendResetPasswordCode($username)
     {
+        
         $resetPasswordCode = BosUtils::randomPassword(); // I am using the randomPassword generator to do this since it is similar to a password generation
-        $userId = AuthContext::get(AuthConstants::USER_ID);
-        $userDetails = $this->getUser($userId);
-        if ($email === $userDetails['email']) {
+
+        $userDetails = $this->getUserBaseProfile($username);
+
+        if ($username === $userDetails['username']) {
             $userReset['uuid'] = $id = $userDetails['uuid'];
             $userReset['email'] = $userDetails['email'];
             $userReset['firstname'] = $userDetails['firstname'];
@@ -994,15 +996,18 @@ class UserService extends AbstractService
             $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
             //Code to update the password reset and expiration time
             $userUpdate = $this->updateUser($id, $userReset);
+
             if ($userUpdate) {
                 $this->emailService->sendPasswordResetEmail($userReset);
                 return $userReset;
             }
             return 0;
         } else {
+            print ("wrong username");
             return 0;
         }
     }
+
 
     public function getOrganizationByUserId($id=null) {
         if(empty($id))

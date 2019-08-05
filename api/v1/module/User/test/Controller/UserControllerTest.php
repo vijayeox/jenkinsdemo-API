@@ -15,7 +15,7 @@ use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Stdlib\ArrayUtils;
-
+use User\Controller\ForgotPasswordController;
 
 class UserControllerTest extends ControllerTest
 {
@@ -38,7 +38,6 @@ class UserControllerTest extends ControllerTest
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/User.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../Project/test/Dataset/Project.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../../../Group/test/Dataset/Group.yml");
-        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Role/test/Dataset/Role.yml");
         return $dataset;
     }
 
@@ -59,7 +58,6 @@ class UserControllerTest extends ControllerTest
         $resultSet->initialize($result);
         return $resultSet->toArray();
     }
-
 
     private function executeUpdate($query){
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
@@ -118,19 +116,9 @@ class UserControllerTest extends ControllerTest
         }
         $this->dispatch('/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(201);
+        $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-
-        $query = "SELECT id from ox_user where username = '" .$data['username']."'";
-        $userId = $this->executeQueryTest($query);
-
-        $query = "SELECT * from ox_user_org where user_id = ".$userId[0]['id'];
-        $userOrg = $this->executeQueryTest($query);
-
-        $query = "SELECT * from ox_user_role where user_id = ".$userId[0]['id'];
-        $userRole = $this->executeQueryTest($query);
-
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content['data']['id']);
         $this->assertEquals($content['data']['username'], $data['username']);
@@ -153,7 +141,6 @@ class UserControllerTest extends ControllerTest
         $this->assertMatchedRouteName('user');
                $this->assertResponseHeaderContains('content-type', 'application/json');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'],'You have no Access to this API');
     }
@@ -444,9 +431,9 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
-         $this->assertEquals($content['data'][0]['uuid'], '768d1fb9-de9c-46c3-8d5c-23e0e484ce2e');
+         $this->assertEquals($content['data'][0]['id'], 4);
         $this->assertEquals($content['data'][0]['name'], 'rohan kumar');
-        $this->assertEquals($content['data'][1]['uuid'], '4fd9f04d-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data'][1]['id'], 3);
         $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
         $this->assertEquals($content['total'],6);
     }
@@ -476,7 +463,7 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data'][0]['id'], 2);
         $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
         $this->assertEquals($content['total'],1);
     }
@@ -492,7 +479,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         // print_r($content);
         $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data'][0]['id'], 1);
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
         $this->assertEquals($content['total'],1);
     }
@@ -507,7 +494,7 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 1);
-         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
+         $this->assertEquals($content['data'][0]['id'], 1);
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
         $this->assertEquals($content['total'],6);
     }
@@ -563,31 +550,6 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], $data['name']);
-    }
-
-    public function testUpdateWithRole()
-    {
-        $data = ['name' => 'John Holt','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
-        $this->initAuthToken($this->adminUser);
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-
-        $query = "SELECT id from ox_user where name = '" .$data['name']."'";
-        $userId = $this->executeQueryTest($query);
-
-        $query = "SELECT * from ox_user_role where user_id = ".$userId[0]['id'];
-        $userRole = $this->executeQueryTest($query);
-
-
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 1);
-        $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($userRole[0]['user_id'], $userId[0]['id']);
-        $this->assertEquals($userRole[0]['role_id'], 16);
-        $this->assertEquals($userRole[1]['role_id'], 17);
     }
 
     public function testUpdateNotFound()
@@ -821,87 +783,6 @@ class UserControllerTest extends ControllerTest
         $this->assertNotEmpty($content['data']['whiteListedApps']);
         $this->assertEquals(6,count($content['data']['whiteListedApps']));
     }
-
-     public function testForgotPassword()
-    {
-        $this->initAuthToken($this->managerUser);
-        $data = ['email' => 'test1@va.com'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/me/forgotpassword', 'POST', $data);
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('forgotpassword');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->resetCode = $content['data']['password_reset_code'];
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['email'], $data['email']);
-    }
-
-
-    public function testForgotPasswordWrongEmail()
-    {
-        $this->initAuthToken($this->managerUser);
-        $data = ['email' => 'wrongemail@va.com'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/me/forgotpassword', 'POST', $data);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts('forgotpassword');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'The email entered does not match your profile email');
-    }
-    public function testUpdateNewPassword()
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $query="UPDATE ox_user SET password_reset_code = 'pvAQyJkY',password_reset_expiry_date ='".date('Y-m-d H:i:s', strtotime('+1 day', time()))."' WHERE id = 3";
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        $this->initAuthToken($this->employeeUser);
-        $data = ['password_reset_code' => "pvAQyJkY", 'new_password' => 'password', 'confirm_password' => 'password'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/me/updatenewpassword', 'POST', $data);
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('updatenewpassword');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['new_password'], $data['new_password']);
-    }
-
-    public function testUpdateNewPasswordWithWrongPassword()
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $query="UPDATE ox_user SET password_reset_code = 'pvAQyJkY',password_reset_expiry_date ='".date('Y-m-d H:i:s', strtotime('+1 day', time()))."' WHERE id = 3";
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-
-        $this->initAuthToken($this->employeeUser);
-        $data = ['password_reset_code' => "pvAQyJkY", 'new_password' => 'password', 'confirm_password' => 'wrongpassword'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/me/updatenewpassword', 'POST', $data);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts('updatenewpassword');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], "Failed to Update Password");
-    }
-
-     public function testUpdateNewPasswordWithWrongCode()
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $query="UPDATE ox_user SET password_reset_code = 'pvAQyJkY',password_reset_expiry_date ='".date('Y-m-d H:i:s', strtotime('+1 day', time()))."' WHERE id = 3";
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-
-        $this->initAuthToken($this->employeeUser);
-        $data = ['password_reset_code' => "wrongCode", 'new_password' => 'password', 'confirm_password' => 'password'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/me/updatenewpassword', 'POST', $data);
-        $this->assertResponseStatusCode(400);
-        $this->setDefaultAsserts('updatenewpassword');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], "You have entered an incorrect code");
-    }
-
 
     public function testGetUserProjectWithdata()
     {

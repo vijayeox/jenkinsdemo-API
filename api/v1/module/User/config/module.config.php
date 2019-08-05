@@ -236,7 +236,7 @@ return [
                 'options' => [
                     'route' => '/user/me/forgotpassword',
                     'defaults' => [
-                        'controller' => Controller\UserController::class,
+                        'controller' => Controller\ForgotPasswordController::class,
                         'method' => 'POST',
                         'action' => 'forgotPassword'
                     ],

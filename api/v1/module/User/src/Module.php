@@ -79,6 +79,12 @@ class Module implements ConfigProviderInterface {
                         $container->get(AdapterInterface::class)
                     );
                 },
+                Controller\ForgotPasswordController::class => function($container) {
+                    return new Controller\ForgotPasswordController(
+                        $container->get('UserLogger'),
+                        $container->get(UserService::class)
+                    );
+                },
             ],
         ];
     }

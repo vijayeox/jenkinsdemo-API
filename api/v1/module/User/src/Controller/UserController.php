@@ -507,24 +507,6 @@ class UserController extends AbstractApiController
         return $this->getSuccessResponseWithData($responseData, 200);
     }
 
-    public function forgotPasswordAction()
-    {
-        $data = $this->extractPostData();
-        $email = $data['email'];
-        try {
-            $responseData = $this->userService->sendResetPasswordCode($email);
-            if ($responseData === 0) {
-                return $this->getErrorResponse("The email entered does not match your profile email", 404);
-            }
-        } catch (Exception $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Something went wrong with password reset, please contact your administrator", 500);
-        }
-        return $this->getSuccessResponseWithData($responseData, 200);
-
-    }
-
-
     public function updateNewPasswordAction()
     {
         $data = $this->extractPostData();
