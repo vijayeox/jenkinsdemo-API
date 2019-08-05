@@ -71,6 +71,26 @@ class OrganizationService extends AbstractService
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['date_modified'] = date('Y-m-d H:i:s'); 
+
+        // $select = "SELECT count(name),status,uuid from ox_organization where name = '".$data['name']."'";
+        // $result = $this->executeQuerywithParams($select)->toArray();
+
+        // if($result['count(name)'] ==  1){
+        //     if($result['status'] == 'Inactive'){
+        //         $data['status'] = 'Active';
+        //         $count = $this->updateOrganization($result['uuid'],$data,$files);
+        //         if($count == 0){
+        //             return 2;
+        //         }else if($count == 2){
+        //                 return 2;
+        //               }else{
+        //                 return 1;
+        //               }
+        //     }else{
+        //         return 3;
+        //     }
+        // }
+
         $form = new Organization($data);
         $form->validate();
         $this->beginTransaction();
@@ -372,31 +392,7 @@ class OrganizationService extends AbstractService
                      'total' => $count[0]['count(id)']);
     }
 
-    public function addUserToOrg($userId, $organizationId) {
-        if ($user = $this->getDataByParams('ox_user', array('id', 'username'), array('id' => $userId))->toArray()) {
-            if ($org = $this->getDataByParams('ox_organization', array('id', 'name'), array('id' => $organizationId, 'status' => 'Active'))->toArray()) {
-                if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))) {
-                    $data = array(array(
-                        'user_id' => $userId,
-                        'org_id' => $organizationId
-                    ));
-                    $result_update = $this->multiInsertOrUpdate('ox_user_org', $data);
-                    if ($result_update->getAffectedRows() == 0) {
-                        return $result_update;
-                    }
-                    $this->messageProducer->sendTopic(json_encode(array('username' => $user[0]['username'], 'orgname' => $org[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ADDED');
-                    return 1;
-                } else {
-                    $this->messageProducer->sendTopic(json_encode(array('username' => $user[0]['username'], 'orgname' => $org[0]['name'] , 'status' => 'Active')),'USERTOORGANIZATION_ALREADYEXISTS');
-                    return 3;
-                }
-            } else {
-                return 2;
-            }
-        }
-        return 0;
-    }
-
+    
     public function getUserIdList($uuidList){
         $uuidList= array_unique(array_map('current', $uuidList));
         $query = "SELECT id from ox_user where uuid in ('".implode("','", $uuidList) . "')";

@@ -59,6 +59,9 @@ class OrganizationController extends AbstractApiController
         if ($count == 2) {
             return $this->getFailureResponse("Entity not found for UUID", $id);
         }
+        if ($count == 3) {
+            return $this->getFailureResponse("Organization already exists", $id);
+        }
         return $this->getSuccessResponseWithData($data, 201);
     }
 

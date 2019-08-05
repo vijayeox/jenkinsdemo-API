@@ -136,15 +136,60 @@ class UserService extends AbstractService
      *        data : array Created User Object
      * </code>
      */
-    public function createUser(&$data) {
-        if(isset($data['orgid'])){
+    public function createUser($params,&$data) {
+
+        if(isset($params['orgId'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($data['orgid'] != AuthContext::get(AuthConstants::ORG_ID))) {
-                throw new AccessDeniedException("You do not have permissions to assign role to user");
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions create user");
+            }else{
+                $data['orgid'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
         }
         else{
             $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
+        }
+
+
+        $select = "SELECT ou.id,ou.uuid,count(ou.id),ou.status,ou.username,ou.email,GROUP_CONCAT(ouo.org_id) from ox_user as ou inner join ox_user_org as ouo on ouo.user_id = ou.id where ou.username = '".$data['username']."' OR ou.email = '".$data['email']."' GROUP BY ou.id,ou.uuid,ou.status,ou.email";
+        $result = $this->executeQuerywithParams($select)->toArray();
+        
+        if(count($result) > 1){
+            return 5;
+        }
+
+        if(count($result) == 1){
+            $result[0]['GROUP_CONCAT(ouo.org_id)'] = isset($result[0]['GROUP_CONCAT(ouo.org_id)']) ? $result[0]['GROUP_CONCAT(ouo.org_id)'] : NULL;
+            $orgList =explode(',',$result[0]['GROUP_CONCAT(ouo.org_id)']);
+
+            $result[0]['count(ou.id)'] = isset($result[0]['count(ou.id)']) ? $result[0]['count(ou.id)'] : 0;
+
+        
+            if($result[0]['count(ou.id)'] > 0){
+                if(in_array($data['orgid'],$orgList)){
+                    $countval = 0;
+                    if($result[0]['username'] == $data['username'] && $result[0]['status'] == 'Active'){
+                        return 3;
+                    }else if($result[0]['email'] == $data['email'] && $result[0]['status'] == 'Active'){
+                        return 4;
+                    }else if($result[0]['status'] == "Inactive"){
+                         $data['status'] = 'Active';
+                         $countval = $this->updateUser($result[0]['uuid'],$data,$data['orgid']);
+                         $this->addUserToOrg($result[0]['id'], $data['orgid']);
+                         if(isset($data['role'])){
+                         $this->addRoleToUser($result[0]['uuid'],$data['role'],$data['orgid']);
+                        }
+                        if(isset($countval) == 1){
+                          return $result[0]['uuid'];
+                        }else{
+                            return 0;
+                        }
+                    }
+                }
+                else{
+                    return 5;
+                }
+            }
         }
 
         $data['uuid'] = Uuid::uuid4()->toString();
@@ -156,6 +201,7 @@ class UserService extends AbstractService
         $password = BosUtils::randomPassword();
         if (isset($password))
             $data['password'] = md5(sha1($password));
+
         $form = new User($data);
         $form->validate();
         $this->beginTransaction();
@@ -167,6 +213,7 @@ class UserService extends AbstractService
                 return 0;
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
+
             $this->addUserToOrg($form->id, $form->orgid);
             if(isset($data['role'])){
                 $this->addRoleToUser($data['uuid'],$data['role'],$form->orgid);
@@ -184,6 +231,8 @@ class UserService extends AbstractService
             )),'USER_ADDED');
             return $count;
         } catch (Exception $e) {
+            print("EXCEPTION");
+            print_r($e->getMessage());
             $this->rollback();
             return 0;
         }
@@ -342,11 +391,11 @@ class UserService extends AbstractService
      * </code>
      * @return array Returns a JSON Response with Status Code and Created User.
      */
-    public function updateUser($id, &$data)
+    public function updateUser($id,&$data,$orgId = null)
     {
-        if(isset($data['orgid'])){
+        if(isset($orgId)){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($data['orgid'] != AuthContext::get(AuthConstants::ORG_ID))) {
+                ($orgId != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to assign role to user");
             }
         }
@@ -356,9 +405,7 @@ class UserService extends AbstractService
             return 0;
         }
         $form = new User();
-        if(isset($data['orgid'])){
-            unset($data['orgid']);
-        }
+        
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $userdata['uuid'] = $id;
         if(isset($data['managerid'])){
@@ -382,7 +429,6 @@ class UserService extends AbstractService
         $form->exchangeArray($userdata);
         $form->validate();
 
-        $count = 0;
         $this->beginTransaction();
         try {
             $this->table->save($form);
@@ -394,7 +440,7 @@ class UserService extends AbstractService
             $this->rollback();
             return 0;
         }
-        return $form->toArray();
+        return $userdata;
     }
 
     private function getOrg($id){
@@ -428,6 +474,11 @@ class UserService extends AbstractService
         $form->exchangeArray($originalArray);
         $form->validate();
         $result = $this->table->save($form);
+
+        $delete = "DELETE FROM ox_user_org where user_id = ".$obj->id." AND org_id = ".$obj->orgid;
+        $result1 = $this->executeQuerywithParams($delete);
+
+   
         $this->messageProducer->sendTopic(json_encode(array('username' => $obj->username ,'orgname' => $org['name'] )),'USER_DELETED');
         return $result;
     }
@@ -834,7 +885,7 @@ class UserService extends AbstractService
         return $results;
     }
 
-    public function addUserToOrg($userId, $organizationId) {
+    private function addUserToOrg($userId, $organizationId) {
         if ($this->getDataByParams('ox_user', array('id'), array('id' => $userId))->toArray()) {
             if ($this->getDataByParams('ox_organization', array('id'), array('id' => $organizationId, 'status' => 'Active'))->toArray()) {
                 if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))->toArray()) {

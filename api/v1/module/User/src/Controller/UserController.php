@@ -77,8 +77,10 @@ class UserController extends AbstractApiController
      */
     public function create($data)
     {
+
         try {
-            $count = $this->userService->createUser($data);
+            $params = $this->params()->fromRoute();
+            $count = $this->userService->createUser($params,$data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             /*
@@ -91,19 +93,32 @@ class UserController extends AbstractApiController
         catch(AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(),403);
         }
-
+        if(is_string($count)){
+            $data['uuid'] = $count;
+            return $this->getSuccessResponseWithData($data, 201);
+        }
         if ($count == 0) {
             return $this->getFailureResponse("Failed to create a new user", $data);
         }
         if($count == 2){
             return $this->getErrorResponse("User should be assigned to atleast one role", 404);
         }
+        if($count == 3){
+            return $this->getErrorResponse("Username Exist", 404);
+        }
 
+        if($count == 4){
+            return $this->getErrorResponse("Email ID Exist", 404);
+        }
+
+        if($count == 5){
+            return $this->getErrorResponse("Username or Email ID Exist in other Organization", 404);
+        }
+        return $this->getSuccessResponseWithData($data, 201);
         /*
         PLease see the html error codes. https://www.restapitutorial.com/httpstatuscodes.html
         Successful create = 201
          */
-        return $this->getSuccessResponseWithData($data, 201);
     }
 
     /**
@@ -464,8 +479,10 @@ class UserController extends AbstractApiController
      */
     public function update($id, $data)
     {
+        $params = $this->params()->fromRoute();
+        $params['orgId'] = isset($params['orgId']) ? $params['orgId'] : NULL;
         try {
-            $response = $this->userService->updateUser($id, $data);
+            $response = $this->userService->updateUser($id, $data,$params['orgId']);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
@@ -476,34 +493,6 @@ class UserController extends AbstractApiController
         return $this->getSuccessResponseWithData($response, 200);
     }
 
-    /**
-     * Add User To Organization API
-     * @api
-     * @link /user/:userId/organization/:organizationId'
-     * @method POST
-     * @param $id and $orgid that adds a particular user to a organization
-     * @return array success|failure response
-     */
-    public function addOrganizationToUserAction()
-    {
-        $params = $this->params()->fromRoute();
-        $id = $params['userId'];
-        $organizationId = $params['organizationId'];
-        try {
-            $response = $this->userService->addUserToOrg($id, $organizationId);
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found for id -$id", 404);
-            } elseif ($response == 2) {
-                return $this->getErrorResponse("Entity not found for organizationid -$organizationId", 404);
-            } elseif ($response == 3) {
-                return $this->getErrorResponse("Entity exists and therefore unable to add", 404);
-            }
-            return $this->getSuccessResponse();
-        } catch (ValidationException $e) {
-            $response = ['data' => $params, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 406, $response);
-        }
-    }
 
     /**
      * GET User Access API
