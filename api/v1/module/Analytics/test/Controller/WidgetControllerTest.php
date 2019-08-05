@@ -76,7 +76,7 @@ class WidgetControllerTest extends ControllerTest
         $data = ['visualization_id' => 1];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/analytics/widget/1', 'PUT', null);
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('analytics_widget');
@@ -101,7 +101,7 @@ class WidgetControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget/1', 'DELETE');
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('analytics_widget');
@@ -122,12 +122,12 @@ class WidgetControllerTest extends ControllerTest
 
     public function testGet() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget/1', 'GET');
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
         $this->assertEquals($content['data']['query_id'],1);
         $this->assertEquals($content['data']['visualization_id'],2);
     }
@@ -149,12 +149,12 @@ class WidgetControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
         $this->assertEquals($content['data']['data'][0]['visualization_id'], 2);
         $this->assertEquals($content['data']['data'][0]['query_id'], 1);
         $this->assertEquals($content['data']['data'][1]['visualization_id'], 1);
         $this->assertEquals($content['data']['data'][0]['query_id'], 1);
-        $this->assertEquals($content['data']['data'][1]['id'], 2);
+        $this->assertEquals($content['data']['data'][1]['uuid'], '0e57b45f-5938-4e26-acd8-d65fb89e8503');
         $this->assertEquals($content['data']['total'],2);
     }
 
@@ -167,10 +167,10 @@ class WidgetControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '0e57b45f-5938-4e26-acd8-d65fb89e8503');
         $this->assertEquals($content['data']['data'][0]['visualization_id'], 1);
         $this->assertEquals($content['data']['data'][1]['visualization_id'], 2);
-        $this->assertEquals($content['data']['data'][1]['id'], 1);
+        $this->assertEquals($content['data']['data'][1]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
         $this->assertEquals($content['data']['total'],2);
     }
 
@@ -183,7 +183,7 @@ class WidgetControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 1);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
         $this->assertEquals($content['data']['data'][0]['visualization_id'], 2);
         $this->assertEquals($content['data']['data'][0]['query_id'], 1);
         $this->assertEquals($content['data']['total'],2);
@@ -198,7 +198,7 @@ class WidgetControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 1);
-        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '0e57b45f-5938-4e26-acd8-d65fb89e8503');
         $this->assertEquals($content['data']['data'][0]['visualization_id'], 1);
         $this->assertEquals($content['data']['total'],1);
     }

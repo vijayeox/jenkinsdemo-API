@@ -23,7 +23,7 @@ class WidgetController extends AbstractApiController
     public function __construct(WidgetTable $table, WidgetService $widgetService, Logger $log, AdapterInterface $dbAdapter)
     {
         parent::__construct($table, $log, __class__, Widget::class);
-        $this->setIdentifierName('widgetId');
+        $this->setIdentifierName('widgetUuid');
         $this->widgetService = $widgetService;
     }
 
@@ -58,22 +58,22 @@ class WidgetController extends AbstractApiController
     /**
      * Update Widget API
      * @api
-     * @link /analytics/widget/:widgetId
+     * @link /analytics/widget/:widgetUuid
      * @method PUT
-     * @param array $id ID of Widget to update
+     * @param array $uuid ID of Widget to update
      * @param array $data
      * @return array Returns a JSON Response with Status Code and Created Widget.
      */
-    public function update($id, $data)
+    public function update($uuid, $data)
     {
         try {
-            $count = $this->widgetService->updateWidget($id, $data);
+            $count = $this->widgetService->updateWidget($uuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("Widget not found for id - $id", 404);
+            return $this->getErrorResponse("Widget not found for uuid - $uuid", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -81,16 +81,16 @@ class WidgetController extends AbstractApiController
     /**
      * Delete Widget API
      * @api
-     * @link /analytics/widget/:widgetId
+     * @link /analytics/widget/:widgetUuid
      * @method DELETE
-     * @param $id ID of Widget to Delete
+     * @param $uuid ID of Widget to Delete
      * @return array success|failure response
      */
-    public function delete($id)
+    public function delete($uuid)
     {
-        $response = $this->widgetService->deleteWidget($id);
+        $response = $this->widgetService->deleteWidget($uuid);
         if ($response == 0) {
-            return $this->getErrorResponse("Widget not found for id - $id", 404, ['id' => $id]);
+            return $this->getErrorResponse("Widget not found for uuid - $uuid", 404, ['uuid' => $uuid]);
         }
         return $this->getSuccessResponse();
     }
@@ -98,25 +98,25 @@ class WidgetController extends AbstractApiController
     /**
      * GET Widget API
      * @api
-     * @link /analytics/widget/:widgetId
+     * @link /analytics/widget/:widgetUuid
      * @method GET
      * @param array $dataget of Widget
      * @return array $data
      * {
-     *              id: integer,
      *              uuid : string,
      *              type : string,
      *              created_by: integer,
      *              date_created: date,
-     *              org_id: integer
-     *   }
+     *              org_id: integer,
+     *              isdeleted: tinyint
+     * }
      * @return array Returns a JSON Response with Status Code and Created Group.
      */
-    public function get($id)
+    public function get($uuid)
     {
-        $result = $this->widgetService->getWidget($id);
+        $result = $this->widgetService->getWidget($uuid);
         if ($result == 0) {
-            return $this->getErrorResponse("Widget not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("Widget not found", 404, ['uuid' => $uuid]);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -132,12 +132,12 @@ class WidgetController extends AbstractApiController
      * @param      array[json]  $filter  (filter with logic and filters)
      * @return array $dataget list of Datasource
      * <code>status : "success|error",
-     *              id: integer
      *              name : string,
      *              type : string,
      *              created_by: integer,
      *              date_created: date,
-     *              org_id: integer
+     *              org_id: integer,
+     *              isdeleted: tinyint
      * </code>
      */
     public function getList()

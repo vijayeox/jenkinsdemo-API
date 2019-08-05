@@ -50,9 +50,9 @@ class VisualizationService extends AbstractService
         return $count;
     }
 
-    public function updateVisualization($id, &$data)
+    public function updateVisualization($uuid, &$data)
     {
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->getByUuid($uuid, array());
         if (is_null($obj)) {
             return 0;
         }
@@ -74,27 +74,38 @@ class VisualizationService extends AbstractService
         return $count;
     }
 
-    public function deleteVisualization($id)
+    public function deleteVisualization($uuid)
     {
+        $obj = $this->table->getByUuid($uuid, array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        $form = new Visualization();
+        $data['isdeleted'] = 1;
+        $data = array_merge($obj->toArray(), $data);
+        $form->exchangeArray($data);
+        $form->validate();
         $count = 0;
         try {
-            $count = $this->table->delete($id);
+            $count = $this->table->save($form);
             if ($count == 0) {
+                $this->rollback();
                 return 0;
             }
         } catch (Exception $e) {
             $this->rollback();
+            return 0;
         }
         return $count;
     }
 
-    public function getVisualization($id)
+    public function getVisualization($uuid)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('visualization')
-            ->columns(array("*"))
-            ->where(array('visualization.id' => $id,'org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+            ->columns(array('uuid','type','created_by','date_created','org_id','isdeleted'))
+            ->where(array('visualization.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
             return 0;
@@ -107,7 +118,7 @@ class VisualizationService extends AbstractService
 
             $paginateOptions = FilterUtils::paginate($params);
             $where = $paginateOptions['where'];
-            $where .= empty($where) ? "WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
+            $where .= empty($where) ? "WHERE isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
             $sort = " ORDER BY ".$paginateOptions['sort'];
             $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
@@ -120,6 +131,7 @@ class VisualizationService extends AbstractService
             $result = $resultSet->toArray();
             foreach ($result as $key => $value) {
                 $result[$key]['connection_string'] = json_decode($result[$key]['connection_string']);
+                unset($result[$key]['id']);
             }
             return array('data' => $result,
                      'total' => $count);

@@ -74,7 +74,7 @@ class DataSourceControllerTest extends ControllerTest
         $data = ['name' => "Analytics", 'type' => 'Elastic'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/analytics/datasource/1', 'PUT', null);
+        $this->dispatch('/analytics/datasource/7700c623-1361-4c85-8203-e255ac995c4a', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dataSource');
@@ -100,7 +100,7 @@ class DataSourceControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/datasource/1', 'DELETE');
+        $this->dispatch('/analytics/datasource/7700c623-1361-4c85-8203-e255ac995c4a', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dataSource');
@@ -121,12 +121,12 @@ class DataSourceControllerTest extends ControllerTest
 
     public function testGet() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/datasource/1', 'GET');
+        $this->dispatch('/analytics/datasource/7700c623-1361-4c85-8203-e255ac995c4a', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
         $this->assertEquals($content['data']['name'], 'mattermost');
     }
 
@@ -147,7 +147,7 @@ class DataSourceControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
         $this->assertEquals($content['data']['data'][0]['name'], 'mattermost');
         $this->assertEquals($content['data']['data'][1]['type'], 'Elastic');
         $this->assertEquals($content['data']['data'][1]['name'], 'reporting engine');
@@ -163,7 +163,7 @@ class DataSourceControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
         $this->assertEquals($content['data']['data'][0]['name'], 'reporting engine');
         $this->assertEquals($content['data']['data'][1]['type'], 'MySql');
         $this->assertEquals($content['data']['data'][1]['name'], 'mattermost');
@@ -179,7 +179,7 @@ class DataSourceControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 1);
-        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
         $this->assertEquals($content['data']['data'][0]['name'], 'reporting engine');
         $this->assertEquals($content['data']['data'][0]['type'], 'Elastic');
         $this->assertEquals($content['data']['total'],2);
@@ -194,7 +194,7 @@ class DataSourceControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 1);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
         $this->assertEquals($content['data']['data'][0]['name'], 'mattermost');
         $this->assertEquals($content['data']['total'],1);
     }

@@ -50,9 +50,9 @@ class WidgetService extends AbstractService
         return $count;
     }
 
-    public function updateWidget($id, &$data)
+    public function updateWidget($uuid, &$data)
     {
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->getByUuid($uuid, array());
         if (is_null($obj)) {
             return 0;
         }
@@ -74,27 +74,38 @@ class WidgetService extends AbstractService
         return $count;
     }
 
-    public function deleteWidget($id)
+    public function deleteWidget($uuid)
     {
+        $obj = $this->table->getByUuid($uuid, array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        $form = new Widget();
+        $data['isdeleted'] = 1;
+        $data = array_merge($obj->toArray(), $data);
+        $form->exchangeArray($data);
+        $form->validate();
         $count = 0;
         try {
-            $count = $this->table->delete($id);
+            $count = $this->table->save($form);
             if ($count == 0) {
+                $this->rollback();
                 return 0;
             }
         } catch (Exception $e) {
             $this->rollback();
+            return 0;
         }
         return $count;
     }
 
-    public function getWidget($id)
+    public function getWidget($uuid)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('widget')
-            ->columns(array("*"))
-            ->where(array('widget.id' => $id,'org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+            ->columns(array('uuid','query_id','visualization_id','ispublic','created_by','date_created','org_id','isdeleted'))
+            ->where(array('widget.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
             return 0;
@@ -107,7 +118,7 @@ class WidgetService extends AbstractService
 
             $paginateOptions = FilterUtils::paginate($params);
             $where = $paginateOptions['where'];
-            $where .= empty($where) ? "WHERE (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
+            $where .= empty($where) ? "WHERE isdeleted <>1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND isdeleted <>1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
             $sort = " ORDER BY ".$paginateOptions['sort'];
             $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
@@ -120,6 +131,7 @@ class WidgetService extends AbstractService
             $result = $resultSet->toArray();
             foreach ($result as $key => $value) {
                 $result[$key]['connection_string'] = json_decode($result[$key]['connection_string']);
+                unset($result[$key]['id']);
             }
             return array('data' => $result,
                      'total' => $count);

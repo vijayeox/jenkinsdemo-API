@@ -75,7 +75,7 @@ class QueryControllerTest extends ControllerTest
         $data = ['name' => "querytest", 'datasource_id' => 2];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/analytics/query/1', 'PUT', null);
+        $this->dispatch('/analytics/query/8f1d2819-c5ff-4426-bc40-f7a20704a738', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('query');
@@ -101,7 +101,7 @@ class QueryControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/query/1', 'DELETE');
+        $this->dispatch('/analytics/query/8f1d2819-c5ff-4426-bc40-f7a20704a738', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('query');
@@ -122,12 +122,12 @@ class QueryControllerTest extends ControllerTest
 
     public function testGet() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/query/1', 'GET');
+        $this->dispatch('/analytics/query/8f1d2819-c5ff-4426-bc40-f7a20704a738', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
         $this->assertEquals($content['data']['data'][0]['name'], 'query1');
     }
 
@@ -148,7 +148,7 @@ class QueryControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 3);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
         $this->assertEquals($content['data']['data'][0]['name'], 'query1');
         $this->assertEquals($content['data']['data'][1]['datasource_id'], 1);
         $this->assertEquals($content['data']['data'][1]['name'], 'query2');
@@ -164,7 +164,7 @@ class QueryControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 3);
-        $this->assertEquals($content['data']['data'][0]['id'], 3);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1');
         $this->assertEquals($content['data']['data'][0]['name'], 'query3');
         $this->assertEquals($content['data']['data'][1]['ispublic'], 1);
         $this->assertEquals($content['data']['data'][1]['name'], 'query2');
@@ -180,7 +180,7 @@ class QueryControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '86c0cc5b-2567-4e5f-a741-f34e9f6f1af1');
         $this->assertEquals($content['data']['data'][0]['name'], 'query2');
         $this->assertEquals($content['data']['data'][0]['created_by'], 2);
         $this->assertEquals($content['data']['total'],3);
@@ -195,7 +195,7 @@ class QueryControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 1);
-        $this->assertEquals($content['data']['data'][0]['id'], 3);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1');
         $this->assertEquals($content['data']['data'][0]['name'], 'query3');
         $this->assertEquals($content['data']['total'],1);
     }

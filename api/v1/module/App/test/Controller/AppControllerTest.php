@@ -116,9 +116,9 @@ class AppControllerTest extends ControllerTest
         $this->assertMatchedRouteName('applist');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 6);
+        $this->assertEquals(count($content['data']), 7);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['total'], 6);
+        $this->assertEquals($content['total'], 7);
     }
 
 
@@ -154,8 +154,8 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['data'][1]['name'], 'AppBuilder');
-        $this->assertEquals($content['total'], 6);
+        $this->assertEquals($content['data'][1]['name'], 'Analytics');
+        $this->assertEquals($content['total'], 7);
     }
 
     public function testGetAppListWithPageSize2()
@@ -171,9 +171,9 @@ class AppControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['name'], 'CRM');
-        $this->assertEquals($content['data'][1]['name'], 'MailAdmin');
-        $this->assertEquals($content['total'], 6);
+        $this->assertEquals($content['data'][0]['name'], 'AppBuilder');
+        $this->assertEquals($content['data'][1]['name'], 'CRM');
+        $this->assertEquals($content['total'], 7);
     }
 
     public function testCreate()

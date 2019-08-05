@@ -77,14 +77,14 @@ class ElasticService
         $tmpfilter = $this->getFilters($searchconfig, $orgId);
 		if ($tmpfilter) {
 			$boolfilterquery['query']['bool']['filter'] = array($tmpfilter);
-		}	
+		}
 		$boolfilterquery['_source'] = (isset($searchconfig['select']))?$searchconfig['select']:array('*');
 		$pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:10000;
 		if(!empty($searchconfig['aggregates'])) {
 			if (!isset($searchconfig['select'])) {
 				$pagesize=0;
 			}
-			$aggs=$this->getAggregate($searchconfig['aggregates'],$boolfilterquery);	
+			$aggs=$this->getAggregate($searchconfig['aggregates'],$boolfilterquery);
 			if($searchconfig['group'] && !empty($searchconfig['group'])) {
 				$this->getGroups($searchconfig,$boolfilterquery,$aggs);
 			} else {
@@ -288,7 +288,7 @@ class ElasticService
             return $this->client->delete(['index' => $index, 'type' => $this->type, 'id' => $id]);
         }
 	}
-	
+
 	public function getBoostFields($entity){
 		switch ($entity) {
 			case 'files':

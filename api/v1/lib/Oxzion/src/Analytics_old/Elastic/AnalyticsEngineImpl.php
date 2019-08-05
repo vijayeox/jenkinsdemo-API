@@ -1,20 +1,19 @@
 <?php
 namespace Oxzion\Analytics\Elastic;
 
-use Oxzion\Analytics\AnalyticsEngine;
 use Elasticsearch\ClientBuilder;
 use Oxzion\Service\ElasticService;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 
-class AnalyticsEngineImpl implements AnalyticsEngine {
+class AnalyticsEngineImpl {
 	private $config;
 	private $hasGroup;
     public function __construct($config) {
         $this->config = $config;
     }
 
-    public function runQuery($appId,$type,$parameters)
+    public function runQuery($appId,$type,$query,$parameters)
     {
         try {
 			$orgId = AuthContext::get(AuthConstants::ORG_ID);
@@ -31,7 +30,6 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 				$result['displaylist'] = $query['displaylist'];
 			}
 			return $result;
-			
         } catch (Exception $e) {
             throw new Exception("Error performing Elastic Search", 0, $e);
         }
@@ -77,14 +75,14 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			} else {
 				$group = explode(',',$parameters['group']);
 			}
-		} 
-		if ($field) { 
-			$aggregates[$operation[0]] = strtolower($field); 
-		} 
+		}
+		if ($field) {
+			$aggregates[$operation[0]] = strtolower($field);
+		}
 		else {
 				if (!isset($parameters['list'])) {
 					if (!empty($group)) {
-						$aggregates[$operation[0]] = strtolower($group[0]); 				
+						$aggregates[$operation[0]] = strtolower($group[0]);
 				} else {
 						$aggregates[$operation[0]] = '_id';
 				}
@@ -128,7 +126,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 					if (count($options) > 1) {
 						$filter[$keycolumn] = $options;
 					} else {
-						if ($options[0] != 'all') {  
+						if ($options[0] != 'all') {
 							if ($filtertype == 'value') {
 								$filter[$keycolumn . '__value'] = $options[0];
 							} else {
@@ -161,16 +159,16 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 							$returnarray['displaylist'][] = $v;
 						}
 					}
-				}	
+				}
 		}
 		if (isset($parameters['sort'])) {
 			$returnarray['sort'] = $parameters['sort'];
 		}
 		return $returnarray;
 	}
-	
 
-	public function flattenmultigroups(&$finalresult,$result,$config,$count,$index,$key='',$grouplist=array()){
+
+	public function flattenmultigroups(&$finalresult,$result,$config,$count,$index,$key='',$grouplist=array()) {
 		$operation = key($config['aggregates']);
 		if ($index==$count) {
 			foreach($result as $data) {
@@ -188,11 +186,11 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 				$grouplisttemp = array_merge($grouplist,array($data['key']));
 				$this->flattenmultigroups($finalresult,$data['groupdata'.(string)$index]['buckets'],$config,$count,$index+1,$keytemp,$grouplisttemp);
 			}
-			
+
 		}
 	}
 
-	public function flattenResult($result,$config){
+	public function flattenResult($result,$config) {
 		$finalresult = array();
 		$operation = key($config['aggregates']);
 		$qtrtranslate = array('Jan'=>'Q1','Apr'=>'Q2','Jul'=>'Q3','Oct'=>'Q4');
@@ -202,7 +200,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 					if (substr($config['group'][0],0,7)=='period-') {
 						$name = $data['key_as_string'];
 						if ($config['group'][0]=='period-quarter') {
-						   $month = substr($name,0,3);	
+						   $month = substr($name,0,3);
 						   $name=$qtrtranslate[$month].substr($name,3);
 						}
 

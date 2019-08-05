@@ -6,6 +6,7 @@ visualization:
     created_by: 1
     date_created: '2019-06-27 07:25:06'
     org_id: 1
+    isdeleted: 0
   -
     id: 2
     uuid: '101b3d1e-175b-43d8-ac38-485e80e6b2f3'
@@ -13,3 +14,4 @@ visualization:
     created_by: 1
     date_created: '2019-06-27 07:25:06'
     org_id: 1
+    isdeleted: 0

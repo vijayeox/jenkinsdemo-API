@@ -150,7 +150,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['message'],'You have no Access to this API');
     }
 
-    
+
 
     public function testGetList()
     {
@@ -583,7 +583,7 @@ class UserControllerTest extends ControllerTest
         // TO DO : Whitelisted apps for manageruser and employeeuser
         $this->assertNotEmpty($content['data']['privilege']);
         $this->assertNotEmpty($content['data']['whiteListedApps']);
-        $this->assertEquals(6,count($content['data']['whiteListedApps']));
+        $this->assertEquals(7,count($content['data']['whiteListedApps']));
     }
 
      public function testForgotPassword()
@@ -750,9 +750,9 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('loggedInUser');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['blackListedApps']['Admin'],'f297dd6a-3eb4-4e06-83ad-fb289e5c0535');
-        $this->assertEquals($content['data']['blackListedApps']['AppBuilder'],'c980e23a-ade8-4bd9-a06c-a39ca7854b9d');
-        $this->assertEquals($content['data']['blackListedApps']['CRM'],'636cb8e2-14a9-4c09-a668-14f6518b8d0d');
+        $this->assertArrayHasKey('Admin',$content['data']['blackListedApps']);
+        $this->assertArrayHasKey('AppBuilder',$content['data']['blackListedApps']);
+        $this->assertArrayHasKey('CRM',$content['data']['blackListedApps']);
     }
 
     public function testBlackListAppsForManager(){
@@ -762,7 +762,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('loggedInUser');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['blackListedApps']['Admin'],'f297dd6a-3eb4-4e06-83ad-fb289e5c0535');
-        $this->assertEquals($content['data']['blackListedApps']['AppBuilder'],'c980e23a-ade8-4bd9-a06c-a39ca7854b9d');
+        $this->assertArrayHasKey('Admin',$content['data']['blackListedApps']);
+        $this->assertArrayHasKey('AppBuilder',$content['data']['blackListedApps']);
     }
 }

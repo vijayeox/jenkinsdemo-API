@@ -23,7 +23,7 @@ class DashboardController extends AbstractApiController
     public function __construct(DashboardTable $table, DashboardService $dashboardService, Logger $log, AdapterInterface $dbAdapter)
     {
         parent::__construct($table, $log, __class__, Dashboard::class);
-        $this->setIdentifierName('dashboardId');
+        $this->setIdentifierName('dashboardUuid');
         $this->dashboardService = $dashboardService;
     }
 
@@ -59,22 +59,22 @@ class DashboardController extends AbstractApiController
     /**
      * Update Dashboard API
      * @api
-     * @link /analytics/dashboard/:dashboardId
+     * @link /analytics/dashboard/:dashboardUuid
      * @method PUT
-     * @param array $id ID of Dashboard to update
+     * @param array $uuid ID of Dashboard to update
      * @param array $data
      * @return array Returns a JSON Response with Status Code and Created Dashboard.
      */
-    public function update($id, $data)
+    public function update($uuid, $data)
     {
         try {
-            $count = $this->dashboardService->updateDashboard($id, $data);
+            $count = $this->dashboardService->updateDashboard($uuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("Dashboard not found for id - $id", 404);
+            return $this->getErrorResponse("Dashboard not found for uuid - $uuid", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -82,16 +82,16 @@ class DashboardController extends AbstractApiController
     /**
      * Delete Dashboard API
      * @api
-     * @link /analytics/dashboard/:dashboardId
+     * @link /analytics/dashboard/:dashboardUuid
      * @method DELETE
-     * @param $id ID of Dashboard to Delete
+     * @param $uuid ID of Dashboard to Delete
      * @return array success|failure response
      */
-    public function delete($id)
+    public function delete($uuid)
     {
-        $response = $this->dashboardService->deleteDashboard($id);
+        $response = $this->dashboardService->deleteDashboard($uuid);
         if ($response == 0) {
-            return $this->getErrorResponse("Dashboard not found for id - $id", 404, ['id' => $id]);
+            return $this->getErrorResponse("Dashboard not found for uuid - $uuid", 404, ['uuid' => $uuid]);
         }
         return $this->getSuccessResponse();
     }
@@ -99,7 +99,7 @@ class DashboardController extends AbstractApiController
     /**
      * GET Dashboard API
      * @api
-     * @link /analytics/dashboard/:dashboardId
+     * @link /analytics/dashboard/:dashboardUuid
      * @method GET
      * @param array $dataget of Dashboard
      * @return array $data
@@ -112,15 +112,16 @@ class DashboardController extends AbstractApiController
      *              dashboard_type : string,
      *              created_by: integer,
      *              date_created: date,
-     *              org_id: integer
+     *              org_id: integer,
+     *              isdeleted: tinyint
      *   }
      * @return array Returns a JSON Response with Status Code and Created Group.
      */
-    public function get($id)
+    public function get($uuid)
     {
-        $result = $this->dashboardService->getDashboard($id);
+        $result = $this->dashboardService->getDashboard($uuid);
         if ($result == 0) {
-            return $this->getErrorResponse("Dashboard not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("Dashboard not found", 404, ['uuid' => $uuid]);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -144,7 +145,8 @@ class DashboardController extends AbstractApiController
      *              dashboard_type : string,
      *              created_by: integer,
      *              date_created: date,
-     *              org_id: integer
+     *              org_id: integer,
+     *              isdeleted: tinyint
      * </code>
      */
     public function getList()

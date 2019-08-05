@@ -50,9 +50,9 @@ class QueryService extends AbstractService
         return $count;
     }
 
-    public function updateQuery($id, &$data)
+    public function updateQuery($uuid, &$data)
     {
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->getByUuid($uuid, array());
         if (is_null($obj)) {
             return 0;
         }
@@ -74,23 +74,34 @@ class QueryService extends AbstractService
         return $count;
     }
 
-    public function deleteQuery($id)
+    public function deleteQuery($uuid)
     {
+        $obj = $this->table->getByUuid($uuid, array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        $form = new Query();
+        $data['isdeleted'] = 1;
+        $data = array_merge($obj->toArray(), $data);
+        $form->exchangeArray($data);
+        $form->validate();
         $count = 0;
         try {
-            $count = $this->table->delete($id);
+            $count = $this->table->save($form);
             if ($count == 0) {
+                $this->rollback();
                 return 0;
             }
         } catch (Exception $e) {
             $this->rollback();
+            return 0;
         }
         return $count;
     }
 
-    public function getQuery($id)
+    public function getQuery($uuid)
     {
-        $statement = "Select * from query where (id =".$id." and org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
+        $statement = "Select uuid,name,datasource_id,query_json,ispublic,created_by,date_created,org_id,isdeleted from query where isdeleted <> 1 AND (uuid = '".$uuid."' and org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
         $resultSet = $this->executeQuerywithParams($statement);
         $result = $resultSet->toArray();
         if (count($result) == 0) {
@@ -104,7 +115,7 @@ class QueryService extends AbstractService
 
             $paginateOptions = FilterUtils::paginate($params);
             $where = $paginateOptions['where'];
-            $where .= empty($where) ? "WHERE (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
+            $where .= empty($where) ? "WHERE query.isdeleted <> 1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND query.isdeleted <> 1 AND(org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
             $sort = " ORDER BY ".$paginateOptions['sort'];
             $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
@@ -117,6 +128,7 @@ class QueryService extends AbstractService
             $result = $resultSet->toArray();
             foreach ($result as $key => $value) {
                 $result[$key]['query_json'] = json_decode($result[$key]['query_json']);
+                unset($result[$key]['id']);
             }
             return array('data' => $result,
                      'total' => $count);

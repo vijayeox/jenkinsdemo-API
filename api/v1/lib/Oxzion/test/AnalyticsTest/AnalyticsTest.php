@@ -16,8 +16,8 @@ use Oxzion\Test\MainControllerTest;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 
-class AnalyticsTest extends MainControllerTest{
-    
+class AnalyticsTest extends MainControllerTest
+{
     private $dataset;
     private $searchFactory;
     private $analyticsFactory;
@@ -25,21 +25,21 @@ class AnalyticsTest extends MainControllerTest{
     public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
-        if(enableElastic!=0){ 
-            $this->setSearchData();            
+        if(enableElastic!=0){
+            $this->setSearchData();
             $config = $this->getApplicationConfig();
-            $this->setupData(); 
+            $this->setupData();
             sleep (1) ;
         }
-    }   
-    
+    }
+
 
     public function setSearchData() {
           $parser = new SymfonyYamlParser();
           $this->dataset = $parser->parseYaml(dirname(__FILE__)."/Dataset/Analytics.yml");
     }
 
-    public function createIndex($indexer,$body) {       
+    public function createIndex($indexer,$body) {
         $type = 'type';
         $app_id = $body['app_id'];
         $id = $body['id'];
@@ -55,10 +55,10 @@ class AnalyticsTest extends MainControllerTest{
             }
     }
 
-    
+
     public function testGrouping() {
         if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test');        
+            $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
@@ -75,7 +75,7 @@ class AnalyticsTest extends MainControllerTest{
 
     public function testDoubleGrouping() {
         if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test');        
+            $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
@@ -92,7 +92,7 @@ class AnalyticsTest extends MainControllerTest{
 
     public function testDoubleGroupingCount() {
         if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test');        
+            $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
@@ -109,7 +109,7 @@ class AnalyticsTest extends MainControllerTest{
 
     public function testLists() {
         if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test');        
+            $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
@@ -118,24 +118,24 @@ class AnalyticsTest extends MainControllerTest{
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "testing document");
         $this->assertEquals($results[0]['category'], "A");
-        $this->assertEquals($results[0]['created_by'], "Mike Price");                
+        $this->assertEquals($results[0]['created_by'], "Mike Price");
     }
 
     public function testAggregatesNoGroups() {
         if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test');        
+            $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['operation'=>'sum','field'=>'amount','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test',null,$parameters);
         $results = $results['data'];
-        $this->assertEquals($results,950.5);               
+        $this->assertEquals($results,950.5);
     }
 
     public function testOnlyFilters() {
         if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test');        
+            $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
@@ -147,7 +147,7 @@ class AnalyticsTest extends MainControllerTest{
 
     public function testDefaultField() {
         if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test');        
+            $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
@@ -163,12 +163,12 @@ class AnalyticsTest extends MainControllerTest{
     public function tearDown()
     {
          parent::tearDown();
-         if(enableElastic!=0){                
+         if(enableElastic!=0){
             $indexer=  $this->getApplicationServiceLocator()->get(Indexer::class);
             $return1=$indexer->delete('11_test','all');
             $return2=$indexer->delete('12_test','all');
-        }    
+        }
     }
 
-  
+
 }
