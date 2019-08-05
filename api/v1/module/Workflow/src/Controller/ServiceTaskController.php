@@ -37,13 +37,14 @@ class ServiceTaskController extends AbstractApiControllerHelper
         $this->log->info(ServiceTask::class.":Post Data- ". print_r(json_encode($data), true));
         try {
             $response = $this->serviceTaskService->runCommand($this->extractPostData());
-            $this->log->info(ServiceTask::class.":Workflow Step Successfully Executed");
-            if ($response == 0) {
-                return $this->getErrorResponse("Entity not found", 404);
+            if($response){
+                $this->log->info(ServiceTask::class.":Workflow Step Successfully Executed");
+                return $this->getSuccessResponse();
+            } else {
+                return $this->getErrorResponse("Failed to perform Service Task", 200);
             }
-            return $this->getSuccessResponseWithData($response);
         } catch (ValidationException $e) {
-            $this->log->info(ServiceTask::class.":Exception at Add Activity Instance-".$e->getMessage());
+            $this->log->info(ServiceTask::class.":Exception while Performing Service Task-".$e->getMessage());
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
