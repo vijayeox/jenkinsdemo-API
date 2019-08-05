@@ -53,14 +53,16 @@
     "ext-hash": "*",
     "ext-json": "*",
     "smarty/smarty": "~3.1",
-    "tecnickcom/tcpdf": "^6.2.26"
+    "tecnickcom/tcpdf": "^6.2.26",
+    "friendsofphp/php-cs-fixer": "^2.16@dev"
   },
   "require-dev": {
     "phpunit/phpunit": "^7",
     "zendframework/zend-test": "^3.2",
     "phpunit/dbunit": "^4",
     "mockery/mockery": "^1.2",
-    "sempro/phpunit-pretty-print": "dev-master"
+    "sempro/phpunit-pretty-print": "dev-master",
+    "mybuilder/phpunit-accelerator": "dev-master"
   },
   "autoload": {
     "psr-4": {
