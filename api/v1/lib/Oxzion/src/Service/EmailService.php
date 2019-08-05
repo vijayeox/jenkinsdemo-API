@@ -28,7 +28,7 @@ class EmailService extends AbstractService
     {
         $form = new Email();
         $userId = $data['userid'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['email'] = isset($data['email']) ? $data['email'] : NULL;
+        $data['email'] = isset($data['email']) ? $data['email'] : null;
         if ($data['email']) {
             $queryString = "select id,email from email_setting_user";
             $where = "where userid = " . $userId;
@@ -94,12 +94,11 @@ class EmailService extends AbstractService
     public function getEmailAccountsByUserId($id=null)
     {
         $accounts = array();
-        if(empty($id))
-        {
+        if (empty($id)) {
             $userId = AuthContext::get(AuthConstants::USER_ID);
-        }
-        else
+        } else {
             $userId = $id;
+        }
 
         $queryString = "select email_setting_user.id, userid,password,email,host,email_setting_user.token,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host where email_setting_user.userid = " . $userId;
         $result = $this->executeQuerywithParams($queryString);
@@ -111,32 +110,31 @@ class EmailService extends AbstractService
         return $accounts;
     }
 
-    public function getEmailAccountsByEmailId($id=null,$pw =false)
+    public function getEmailAccountsByEmailId($id=null, $pw =false)
     {
         $accounts = array();
-        if(empty($id))
-        {
+        if (empty($id)) {
             return false;
-        }
-        else
+        } else {
             $emailId = $id;
+        }
 
         $queryString = "select email_setting_user.id,userid,password,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
         $where = "where email_setting_user.email = '" . $emailId."'";
         $order = "order by email_setting_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        if($pw) {
+        if ($pw) {
             foreach ($resultSet->toArray() as $account) {
                 $account['password'] = TwoWayEncryption::decrypt($account['password']);
                 $accounts[] = $account;
             }
-        }
-        else{
+        } else {
             foreach ($resultSet->toArray() as $account) {
-                if($account['password'])
+                if ($account['password']) {
                     $account['authRequired'] = 1;
-                else
+                } else {
                     $account['authRequired'] = 0;
+                }
             }
             $accounts = $account;
         }
@@ -262,7 +260,6 @@ class EmailService extends AbstractService
                 $data['password'] = null;
                 return $data;
             }
-
         }
         return 0;
     }

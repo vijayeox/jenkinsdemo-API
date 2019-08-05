@@ -1,12 +1,13 @@
 <?php
 namespace Oxzion\Email;
+
 use Horde_Mail_Rfc822_List;
 use Horde_Mail_Exception;
 use Horde_Mail_Rfc822;
 
 class EmailUtils
 {
-	/**
+    /**
      * Wrapper around Horde_Mail_Rfc822#parseAddressList(). Ensures all
      * addresses have a default mail domain appended.
      *
@@ -23,7 +24,7 @@ class EmailUtils
             $res = clone $in;
             foreach ($res->raw_addresses as $val) {
                 if (is_null($val->host)) {
-                	throw new MailException("Invalid Email Address :".$val);    
+                    throw new MailException("Invalid Email Address :".$val);
                 }
             }
         } else {
@@ -39,4 +40,3 @@ class EmailUtils
         return $res;
     }
 }
-?>

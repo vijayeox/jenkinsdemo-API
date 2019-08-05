@@ -11,8 +11,8 @@ use Oxzion\Auth\AuthConstants;
 use Exception;
 use Oxzion\Transaction\TransactionManager;
 
-class RuleServiceTest extends ServiceTest {
-
+class RuleServiceTest extends ServiceTest
+{
     public function setUp() : void
     {
         $this->loadConfig();
@@ -23,7 +23,8 @@ class RuleServiceTest extends ServiceTest {
         $tm->beginTransaction();
     }
 
-    public function tearDown() : void {
+    public function tearDown() : void
+    {
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->rollback();
         $_REQUEST = [];
@@ -31,13 +32,11 @@ class RuleServiceTest extends ServiceTest {
 
     public function testRunRule()
     {
-        $data = array("Checking Rule Engine","Checking1"); 
+        $data = array("Checking Rule Engine","Checking1");
         $appId = 'debf3d35-a0ee-49d3-a8ac-8e480be9dac7';
         $config = $this->getApplicationConfig();
         $ruleService = new RuleService($config, $this->adapter);
-        $content = $ruleService->rule($appId,'IndividualLiabilityImpl',$data);
-        $this->assertEquals("Checking Rule Engine",$content);
-      
-    }    
+        $content = $ruleService->rule($appId, 'IndividualLiabilityImpl', $data);
+        $this->assertEquals("Checking Rule Engine", $content);
+    }
 }
-?>

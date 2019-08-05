@@ -30,25 +30,28 @@ class AbstractService
         }
     }
 
-    protected function getBaseUrl() {
+    protected function getBaseUrl()
+    {
         return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
     }
     
-    protected function getIdFromUuid($table, $uuid){
+    protected function getIdFromUuid($table, $uuid)
+    {
         $sql = $this->getSqlObject();
         $getID= $sql->select();
         $getID->from($table)
                 ->columns(array("id"))
                 ->where(array('uuid' => $uuid));
         $responseID = $this->executeQuery($getID)->toArray();
-        if($responseID){
+        if ($responseID) {
             return $responseID[0]['id'];
-        }else{
+        } else {
             return 0;
         }
     }
 
-    protected function initLogger($logLocation) {
+    protected function initLogger($logLocation)
+    {
         $this->logger = new Logger;
         $writer = new Stream($logLocation);
         $this->logger->addWriter($writer);
@@ -130,21 +133,23 @@ class AbstractService
         return $resultSet->initialize($result);
     }
 
-    public function create(&$data, $commit = true){
+    public function create(&$data, $commit = true)
+    {
         $this->modelClass->exchangeArray($data);
         $this->modelClass->validate();
         $this->beginTransaction();
         $count = 0;
         try {
             $count = $this->table->save($this->modelClass);
-            if($count == 0) {
+            if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $data['id'] = $this->table->getLastInsertValue();
-            if ($commit)
+            if ($commit) {
                 $this->commit();
-        } catch(Exception $e) {
+            }
+        } catch (Exception $e) {
             $this->rollback();
             return 0;
         }
@@ -166,16 +171,19 @@ class AbstractService
      *
      * @return     array   The data by parameters.
      */
-    protected function getDataByParams($tableName, $fieldArray = array(), $where = array(), $joins = array(), $sortby = null, $groupby = array(), $limit = null, $offset = 0, $debug = false) {
+    protected function getDataByParams($tableName, $fieldArray = array(), $where = array(), $joins = array(), $sortby = null, $groupby = array(), $limit = null, $offset = 0, $debug = false)
+    {
         $select = $this->sql->select($tableName);
 
-        if ($fieldArray)
+        if ($fieldArray) {
             $select->columns($fieldArray);
+        }
 
         if ($where) {
             if (is_array($where) && array_intersect(array('OR', 'AND', 'or', 'and'), array_keys($where))) {
-                foreach ($where as $op => $cond)
+                foreach ($where as $op => $cond) {
                     $select->where($cond, strtoupper($op));
+                }
             } else {
                 $select->where($where, 'AND');
             }
@@ -189,27 +197,34 @@ class AbstractService
          * @param      array            $fields         The where
          * @param      string           $joinMethod     The joins           join, left, right
          */
-        if(isset($joins)){
-            foreach ($joins as $key => $join)
-            $select->join(
+        if (isset($joins)) {
+            foreach ($joins as $key => $join) {
+                $select->join(
                 $join['table'],
                 $join['condition'],
                 (isset($join['fields'])) ? $join['fields'] : array(),
                 (isset($join['joinMethod'])) ? $join['joinMethod'] : 'join'
             );
+            }
         }
 
-        if ($sortby)
+        if ($sortby) {
             $select->order($sortby);
-        if ($groupby)
+        }
+        if ($groupby) {
             $select->group($group);
-        if ($limit)
+        }
+        if ($limit) {
             $select->limit($limit);
-        if ($offset)
+        }
+        if ($offset) {
             $select->offset($offset);
+        }
 
         if ($debug) {
-            echo "<pre>";print_r($this->sql->buildSqlString($select));exit();
+            echo "<pre>";
+            print_r($this->sql->buildSqlString($select));
+            exit();
         }
 
         $returnArray = $this->executeQuery($select);
@@ -261,7 +276,8 @@ class AbstractService
         return $statementContainer->execute();
     }
 
-    public function runGenericQuery($query){
+    public function runGenericQuery($query)
+    {
         $adapter = $this->getAdapter();
         $driver = $adapter->getDriver();
         $platform = $adapter->getPlatform();
@@ -271,6 +287,4 @@ class AbstractService
         $statementContainer->setSql($query);
         return $statementContainer->execute();
     }
-
 }
-?>

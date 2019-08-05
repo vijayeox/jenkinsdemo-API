@@ -3,8 +3,5 @@ namespace Oxzion\Analytics;
 
 interface AnalyticsEngine
 {
-
-    public function runQuery($appId,$type,$parameters);
-
+    public function runQuery($appId, $type, $parameters);
 }
-?>

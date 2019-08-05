@@ -37,7 +37,7 @@ class ImportTest extends MainControllerTest
         $importObj = new ImportText($config, $this->database, $this->adapter);
         $dataSet = array_diff(scandir(dirname(__FILE__) . "/Dataset/"), array(".", ".."));
         $filePath = dirname(__FILE__) . "/DatasetWrong/";
-        $columnList = Array("member_number", "first_name", "MI", "last_name", "address_1", "address_2", "address_international", "city", "state", "zip", "country_code", "home_phone", "work_phone", "insurance_type", "date_expire", "rating", "email");
+        $columnList = array("member_number", "first_name", "MI", "last_name", "address_1", "address_2", "address_international", "city", "state", "zip", "country_code", "home_phone", "work_phone", "insurance_type", "date_expire", "rating", "email");
         $textImport = $importObj->extractTextFileToArrayImport($dataSet[2], $filePath, $columnList, null);
         $this->assertEquals(3, $textImport);
     }
@@ -48,9 +48,8 @@ class ImportTest extends MainControllerTest
         $importObj = new ImportText($config, $this->database, $this->adapter);
         $dataSet = array_diff(scandir(dirname(__FILE__) . "/Dataset/"), array(".", ".."));
         $filePath = dirname(__FILE__) . "/DatasetEmpty/";
-        $columnList = Array("member_number", "first_name", "MI", "last_name", "address_1", "address_2", "address_international", "city", "state", "zip", "country_code", "home_phone", "work_phone", "insurance_type", "date_expire", "rating", "email");
+        $columnList = array("member_number", "first_name", "MI", "last_name", "address_1", "address_2", "address_international", "city", "state", "zip", "country_code", "home_phone", "work_phone", "insurance_type", "date_expire", "rating", "email");
         $textImport = $importObj->extractTextFileToArrayImport($dataSet[2], $filePath, $columnList, null);
         $this->assertEquals(3, $textImport);
     }
-
 }
