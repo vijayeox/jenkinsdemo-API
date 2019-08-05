@@ -37,7 +37,7 @@ class ServiceTaskController extends AbstractApiControllerHelper
         $this->log->info(ServiceTask::class.":Post Data- ". print_r(json_encode($data), true));
         try {
             $response = $this->serviceTaskService->runCommand($this->extractPostData());
-            if($response){
+            if ($response) {
                 $this->log->info(ServiceTask::class.":Workflow Step Successfully Executed");
                 return $this->getSuccessResponse();
             } else {

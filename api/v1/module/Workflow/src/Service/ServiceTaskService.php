@@ -64,7 +64,7 @@ class ServiceTaskService extends AbstractService
             if ($template) {
                 try {
                     $body = $this->templateService->getContent($template, $params);
-                } catch (Exception $e){
+                } catch (Exception $e) {
                     return;
                 }
             } else {
@@ -106,7 +106,7 @@ class ServiceTaskService extends AbstractService
             if ($template) {
                 try {
                     $body = $this->templateService->getContent($template, $params);
-                } catch (Exception $e){
+                } catch (Exception $e) {
                     return;
                 }
             } else {
@@ -116,21 +116,21 @@ class ServiceTaskService extends AbstractService
                     $body = null;
                 }
             }
-            if(!$body){
+            if (!$body) {
                 return;
             }
-            if(isset($params['options'])){
+            if (isset($params['options'])) {
                 $options = $params['options'];
             } else {
                 $options = null;
             }
-            if(isset($params['destination'])){
+            if (isset($params['destination'])) {
                 $destination = $params['destination'];
             } else {
                 return;
             }
             $generatePdf = new DocumentGeneratorImpl();
-            return $generatePdf->generateDocument($body,$destination,$options);
+            return $generatePdf->generateDocument($body, $destination, $options);
         } else {
             return;
         }
