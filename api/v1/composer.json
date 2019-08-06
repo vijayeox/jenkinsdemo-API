@@ -52,7 +52,8 @@
     "ext-dom": "*",
     "ext-hash": "*",
     "ext-json": "*",
-    "sempro/phpunit-pretty-print": "dev-master"
+    "sempro/phpunit-pretty-print": "dev-master",
+    "mybuilder/phpunit-accelerator":"dev-prepare-3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7",

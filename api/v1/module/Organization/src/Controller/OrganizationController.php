@@ -9,6 +9,8 @@ use Oxzion\Model\Organization;
 use Oxzion\Model\OrganizationTable;
 use Oxzion\Service\OrganizationService;
 use Oxzion\AccessDeniedException;
+use Oxzion\ServiceException;
+
 
 class OrganizationController extends AbstractApiController
 {
@@ -53,14 +55,8 @@ class OrganizationController extends AbstractApiController
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
-        }
-        if ($count == 2) {
-            return $this->getFailureResponse("Entity not found for UUID", $id);
-        }
-        if ($count == 3) {
-            return $this->getFailureResponse("Organization already exists", $id);
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }

@@ -10,6 +10,8 @@ use Oxzion\Service\AbstractService;
 use Ramsey\Uuid\Uuid;
 use Exception;
 use Oxzion\Utils\FilterUtils;
+use Oxzion\ServiceException;
+
 
 
 class RoleService extends AbstractService {
@@ -107,17 +109,17 @@ class RoleService extends AbstractService {
         try {
             $count = $this->saveRole(NULL, $data);
             if($count == 0){
-                return 0;
+                throw new ServiceException("Failed to create basic roles","failed.create.basicroles");
             }
             $count = $this->updateDefaultRolePrivileges($data);
             if($count == 0){
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Failed to create basic roles","failed.create.basicroles");
             }
             $this->commit();
         } catch(Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -210,27 +212,37 @@ class RoleService extends AbstractService {
 
     public function createBasicRoles($orgid) {
         $basicRoles = $this->getRolesByOrgid(NULL);
-        foreach ($basicRoles as $basicRole) {
-            unset($basicRole['id']);
-            $basicRole['org_id'] = $orgid;
-            if (!$this->createSystemRoleForOrg($basicRole)) {
-                return 0;
+        try{
+            foreach ($basicRoles as $basicRole) {
+                unset($basicRole['id']);
+                $basicRole['org_id'] = $orgid;
+                if (!$this->createSystemRoleForOrg($basicRole)) {
+                    throw new ServiceException("Failed to create basic roles","failed.create.basicroles");
+                }
             }
+            return count($basicRoles);
         }
-        return count($basicRoles);
+        catch(Exception $e){
+            throw $e;
+        }
     }
 
     protected function updateDefaultRolePrivileges($role) {
         $count = 0;
-        $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id) 
-                    SELECT ".$role['id'].", rp.privilege_name,rp.permission,".$role['org_id'].
-                    ",rp.app_id from ox_role_privilege rp left join ox_role r on rp.role_id = r.id 
-                    where r.name = '".$role['name']."' and r.org_id is NULL";
-        $count = $this->runGenericQuery($query);
-        if(!$count){
-            return 0;
-        }else{
-            return 1;
+        try{
+            $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id) 
+                        SELECT ".$role['id'].", rp.privilege_name,rp.permission,".$role['org_id'].
+                        ",rp.app_id from ox_role_privilege rp left join ox_role r on rp.role_id = r.id 
+                        where r.name = '".$role['name']."' and r.org_id is NULL";
+            $count = $this->runGenericQuery($query);
+            if(!$count){
+                  throw new ServiceException("Failed to update role privileges","failed.update.default.privileges");
+            }else{
+                return 1;
+            }
+        }
+        catch(Exception $e){
+            throw $e;
         }
     }
 

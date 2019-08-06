@@ -169,33 +169,36 @@ class UserService extends AbstractService
             $result[0]['count(ou.id)'] = isset($result[0]['count(ou.id)']) ? $result[0]['count(ou.id)'] : 0;
 
         
-            if($result[0]['count(ou.id)'] > 0){
-                if(in_array($data['orgid'],$orgList)){
+            if(in_array($data['orgid'],$orgList)){
                     $countval = 0;
-                    if($result[0]['username'] == $data['username'] && $result[0]['status'] == 'Active'){
-                        throw new ServiceException("Username Exist","duplicate.username");
-                    }else if($result[0]['email'] == $data['email'] && $result[0]['status'] == 'Active'){
-                        throw new ServiceException("Email ID Exist","duplicate.email");
-                    }else if($result[0]['status'] == "Inactive"){
+                if($result[0]['username'] == $data['username'] && $result[0]['status'] == 'Active'){
+                    throw new ServiceException("Username Exist","duplicate.username");
+                }else if($result[0]['email'] == $data['email'] && $result[0]['status'] == 'Active'){
+                    throw new ServiceException("Email ID Exist","duplicate.email");
+                }else if($result[0]['status'] == "Inactive"){
+                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : 0; 
+                     if($data['reactivate'] == 1){
                          $data['status'] = 'Active';
                          $countval = $this->updateUser($result[0]['uuid'],$data,$data['orgid']);
                          $this->addUserToOrg($result[0]['id'], $data['orgid']);
                          if(isset($data['role'])){
-                            $this->addRoleToUser($result[0]['uuid'],$data['role'],$data['orgid']);
-                        }
-                        if(isset($countval) == 1){
-                          return $result[0]['uuid'];
-                        }else{
+                                $this->addRoleToUser($result[0]['uuid'],$data['role'],$data['orgid']);
+                         }
+                         if(isset($countval) == 1){
+                              return $result[0]['uuid'];
+                         }else{
                             throw new ServiceException("Failed to Create User","failed.create.user");
-                        }
-                    }
-                }
+                         }
+                     }else{
+                            throw new ServiceException("User already exists would you like to reactivate?","user.already.exists"); 
+                          }
+                     }
+                 }
                 else{
                     throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");
                 }
             }
-        }
-
+        
         $data['uuid'] = Uuid::uuid4()->toString();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -213,7 +216,7 @@ class UserService extends AbstractService
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                throw new ServiceException("Failed to Create User","failed.create.user");
+                throw new ServiceException("Failed to create a new entity","failed.create.user");
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
 
@@ -243,11 +246,10 @@ class UserService extends AbstractService
     public function addRoleToUser($id,$role,$orgId){
         $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
-
-            return 0;
+            throw new ServiceException("Failed to create a new entity","failed.create.user");
         }
         if(!isset($role) || empty($role)) {
-            return 2;
+            throw new ServiceException("User should be assigned to atleast one role","failed.create.addrole");
         }
         $userId = $obj->id;
         
@@ -260,7 +262,6 @@ class UserService extends AbstractService
 
                 $result = $this->executeQuerywithParams($delete);
               
-                
                 $query ="Insert into ox_user_role(user_id,role_id) SELECT ".$userId.",oro.id from ox_role as oro LEFT OUTER JOIN ox_user_role as our on oro.id = our.role_id and our.user_id = ".$userId." where oro.uuid in ('".implode("','", $roleSingleArray)."') and oro.org_id = ".$orgId." and our.user_id is null";
 
                
@@ -271,7 +272,7 @@ class UserService extends AbstractService
             }
             return 1;
         }
-        return 0;
+        throw new ServiceException("Failed to create a new entity","failed.create.user");
     }
 
     private function getRoleIdList($uuidList){
@@ -318,22 +319,6 @@ class UserService extends AbstractService
         $this->beginTransaction();
         try{
             $result = $this->createUser($params,$data);
-            print_r($result);
-            if($result == 3){
-                 return 3;
-            }
-            else if($result == 4){
-                     return 4;
-                 }
-            else if($result == 5){
-                    print("5");
-                     return 5;
-                 } 
-            else if(is_array($result)){
-                    return 1;
-                 }
-            print("PASSED");
-            exit;
             $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
 
@@ -343,7 +328,7 @@ class UserService extends AbstractService
         }
         catch(Exception $e){
             $this->rollback();
-            return 0;
+            throw $e;
         }
 
         $this->messageProducer->sendTopic(json_encode(array(
