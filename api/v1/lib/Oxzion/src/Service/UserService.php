@@ -193,7 +193,7 @@ class UserService extends AbstractService
                             throw new ServiceException("User already exists would you like to reactivate?","user.already.exists"); 
                           }
                      }
-                 }
+                }
                 else{
                     throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");
                 }
@@ -467,7 +467,13 @@ class UserService extends AbstractService
      */
     public function deleteUser($id)
     {
-        $obj = $this->table->getByUuid($id, array());
+        if(isset($id['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($id['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to delete the user");
+            }
+        }
+        $obj = $this->table->getByUuid($id['userId'], array());
         if (is_null($obj)) {
             return 0;
         }

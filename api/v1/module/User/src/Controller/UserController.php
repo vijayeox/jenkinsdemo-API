@@ -192,6 +192,7 @@ class UserController extends AbstractApiController
      */
     public function delete($id)
     {
+        $id = $this->params()->fromRoute();
         $response = $this->userService->deleteUser($id);
         if ($response == 0) {
             return $this->getErrorResponse("User not found", 404, ['id' => $id]);

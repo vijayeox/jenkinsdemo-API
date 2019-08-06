@@ -748,13 +748,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['manager_id'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['parent_id'], NULL);
         $this->assertEquals($content['data'][0]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
-        $this->assertEquals($content['data'][1]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
-        $this->assertEquals($content['data'][1]['name'], 'Test Group Once Again');
-        $this->assertEquals($content['data'][1]['description'], 'Description for the second test cases');
-        $this->assertEquals($content['data'][1]['manager_id'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][1]['parent_id'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
-        $this->assertEquals($content['data'][1]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['data'][1]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd124');
+        $this->assertEquals($content['data'][1]['name'], 'Test Group 5');
+        $this->assertEquals($content['data'][1]['description'], 'Group Description');
+        $this->assertEquals($content['data'][1]['manager_id'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['total'],3); 
     }
 
 
@@ -782,11 +780,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
-        $this->assertEquals($content['data'][0]['name'], 'Test Group Once Again');   
-        $this->assertEquals($content['data'][1]['uuid'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
-        $this->assertEquals($content['data'][1]['name'], 'Test Group');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd124');
+        $this->assertEquals($content['data'][0]['name'], 'Test Group 5');
+        $this->assertEquals($content['data'][1]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
+        $this->assertEquals($content['data'][1]['name'], 'Test Group Once Again');   
+        $this->assertEquals($content['total'],3); 
     }
 
 
@@ -799,7 +797,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
         $this->assertEquals($content['data'][0]['name'], 'Test Group');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['total'],3); 
     }
 
     public function testgetOrgGroupsWithPagination(){
@@ -809,9 +807,10 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
-        $this->assertEquals($content['data'][0]['name'], 'Test Group Once Again');
-        $this->assertEquals($content['total'],2); 
+         $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd124');
+        $this->assertEquals($content['data'][0]['name'], 'Test Group 5');
+       
+        $this->assertEquals($content['total'],3); 
     }
 
     public function testgetOrgGroupsWithInvalidOrgID(){
