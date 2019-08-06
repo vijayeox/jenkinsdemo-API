@@ -56,7 +56,7 @@ class PageControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['type'], 'Form');
-        $this->assertNotEmpty($content['data'][0]['form']);
+        $this->assertNotEmpty($content['data'][0]['content']);
         $this->assertEquals($content['data'][1]['type'], 'List');
         $this->assertEquals($content['data'][1]['content'], 'content_2');
         $this->assertEquals($content['data'][2]['type'], 'Document');

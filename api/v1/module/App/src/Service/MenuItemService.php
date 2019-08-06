@@ -118,7 +118,7 @@ class MenuItemService extends AbstractService
         }
 
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $queryString = " SELECT ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu where group_id=0 union select ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu LEFT JOIN ox_user_group on ox_user_group.group_id=ox_app_menu.group_id where ox_user_group.avatar_id = ".$userId;
+        $queryString = " SELECT ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu where group_id=0 AND ox_app_menu.app_id=".$appId." union select ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu LEFT JOIN ox_user_group on ox_user_group.group_id=ox_app_menu.group_id where ox_user_group.avatar_id = ".$userId." AND ox_app_menu.app_id=".$appId;
         $resultSet = $this->executeQuerywithParams($queryString);
 
         // $groupDetails = $this->groupService->getGroupsforUser($userId);

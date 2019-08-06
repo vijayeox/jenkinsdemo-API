@@ -21,7 +21,7 @@ class PageContentService extends AbstractService
 
     public function getPageContent($appId, $pageId)
     {
-        $queryString = " SELECT ox_page_content.type, COALESCE(ox_page_content.content,ox_form.template) as content,ox_form.template as form FROM ox_page_content LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id WHERE ox_page_content.page_id = ".$pageId. " ORDER BY ox_page_content.sequence ";
+        $queryString = " SELECT ox_page_content.type, COALESCE(ox_page_content.content,ox_form.template) as content FROM ox_page_content LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id WHERE ox_page_content.page_id = ".$pageId. " ORDER BY ox_page_content.sequence ";
         $result= $this->runGenericQuery($queryString);
         $resultSet = new ResultSet();
         $resultSet->initialize($result);
