@@ -178,3 +178,23 @@ ox_app_page:
     app_id: 99
     date_created: '2019-06-26 00:00:00'
     created_by: 1
+ox_page_content:
+  -
+    id: 1
+    sequence: 1
+    content: 'content_1'
+    page_id: 1
+    type: 1
+    form_id: 1
+  -
+    id: 2
+    sequence: 2
+    content: 'content_2'
+    page_id: 1
+    type: 2
+  -
+    id: 3
+    sequence: 3
+    content: 'content_3'
+    page_id: 1
+    type: 3

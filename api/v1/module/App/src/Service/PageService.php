@@ -27,7 +27,6 @@ class PageService extends AbstractService
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
         }
-        $data['icon'] = isset($data['icon']) ? $data['icon'] : "DummyIcon";
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $page->exchangeArray($data);
@@ -92,6 +91,12 @@ class PageService extends AbstractService
 
     public function deletePage($appId, $id)
     {
+        try {
+            $delete = "DELETE from ox_page_content where page_id=".$id.";";
+            $result = $this->executeQuerywithParams($delete);
+        } catch (Exception $e) {
+            return 0;
+        }
         $this->beginTransaction();
         $count = 0;
         try {
@@ -104,7 +109,6 @@ class PageService extends AbstractService
         } catch (Exception $e) {
             $this->rollback();
         }
-        
         return $count;
     }
 

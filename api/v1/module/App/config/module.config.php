@@ -203,6 +203,22 @@ return [
                     ]
                 ]
             ],
+            'apppagecontent' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/pagecontent[/:pageContentId]',
+                    'defaults' => [
+                        'controller' => Controller\PageContentController::class,
+                        'access' =>[
+                            // SET ACCESS CONTROL
+                            // 'put'=> 'MANAGE_PAGE_WRITE',
+                            // 'post'=> 'MANAGE_PAGE_WRITE',
+                            // 'delete'=> 'MANAGE_PAGE_WRITE',
+                            // 'get'=> 'MANAGE_PAGE_READ',
+                        ]
+                    ]
+                ]
+            ],
             'workflowfields' => [
                 'type' => Segment::class,
                 'options' => [

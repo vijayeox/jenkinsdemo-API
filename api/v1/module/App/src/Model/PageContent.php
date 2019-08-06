@@ -11,14 +11,14 @@ class PageContent extends Entity
         'id' => 0,
         'sequence' => 1,
         'content' => null,
-        'page_id' => 0,
-        'form_id' => 0,
+        'page_id' => null,
+        'form_id' => null,
         'type' => null
     );
     
     public function validate()
     {
-        $dataArray = array("type","page_id");
+        $dataArray = array("type","page_id","sequence");
         $this->validateWithParams($dataArray);
     }
 }
