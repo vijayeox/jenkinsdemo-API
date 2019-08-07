@@ -191,6 +191,33 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['data']['description'],'Must have read and write control');
     }
 
+
+    public function testCreateRoleWithOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $data=array('name' => 'SUPER ADMIN','description' => 'Must have read and write control',
+            'privileges'=> json_encode(array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3'])));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role', 'POST',$data);
+        $this->assertResponseStatusCode(201);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'],'SUPER ADMIN');
+        $this->assertEquals($content['data']['description'],'Must have read and write control');
+    }
+
+    public function testCreateRoleWithDifferentOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $data=array('name' => 'SUPER ADMIN','description' => 'Must have read and write control',
+            'privileges'=> json_encode(array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3'])));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role', 'POST',$data);
+        $this->assertResponseStatusCode(201);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'],'SUPER ADMIN');
+        $this->assertEquals($content['data']['description'],'Must have read and write control');
+    }
+
     public function testUpdatePrivilegePermission(){
         $this->initAuthToken($this->adminUser);
         $data=array('name' => 'ADMIN','description' => 'Must have write control',
@@ -202,6 +229,16 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'success');
     }
 
+    public function testUpdatePrivilegePermissionWithOrgID(){
+        $this->initAuthToken($this->adminUser);
+        $data=array('name' => 'ADMIN','description' => 'Must have write control',
+            'privileges'=> json_encode(array(['id' => '1','privilege_name' => 'MANAGE_ANNOUNCEMENT','permission' => '15'],['id'=>'14','privilege_name'=> 'MANAGE_FORM','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'3'])));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/53012471-2863', 'PUT');
+        $this->assertResponseStatusCode(200);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
 
     public function testAddNewPrivilege(){
         $this->initAuthToken($this->adminUser);
@@ -223,7 +260,7 @@ class RoleControllerTest extends ControllerTest {
         $this->dispatch('/role','POST',$data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Failed to create a new entity');
+        $this->assertEquals($content['message'], 'Role already exists');
     }
 
     public function testCreate(){
@@ -294,6 +331,15 @@ class RoleControllerTest extends ControllerTest {
     public function testDelete(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/role/53012471-2863', 'DELETE');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testDeleteWithOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/53012471-2863', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);

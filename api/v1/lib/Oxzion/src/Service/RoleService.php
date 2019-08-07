@@ -11,6 +11,8 @@ use Ramsey\Uuid\Uuid;
 use Exception;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ServiceException;
+use Oxzion\Security\SecurityManager;
+
 
 
 
@@ -27,19 +29,29 @@ class RoleService extends AbstractService {
         $this->privilegeService = new PrivilegeService($config, $dbAdapter, $privilegeTable, $this);
     }
 
-    public function saveRole($roleId,&$data){
+    public function saveRole($roleId = null,&$data,$params){
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions create project");
+            }else{
+                $org_id = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }
+        else{
+            $org_id = AuthContext::get(AuthConstants::ORG_ID);
+        }
         if(isset($roleId)){
             $obj = $this->table->getByUuid($roleId,array());
             if(isset($obj)){
                 $roleId = $obj->id;
             }else{
-                return 0;
+                throw new ServiceException("Role not found","role.not.found");
             }
         }else{
             $roleId = NULL;
         }
         $rolename=$data['name'];
-        $org_id = isset($data['org_id']) ? $data['org_id'] : AuthContext::get(AuthConstants::ORG_ID);
         $data['description'] = isset($data['description'])?$data['description']:'';
         $data['privileges'] = isset($data['privileges'])?$data['privileges']:array();
         $count = 0;
@@ -52,6 +64,18 @@ class RoleService extends AbstractService {
                 $result1 = $this->runGenericQuery($update);
                 $count = $result1->getAffectedRows() + 1; 
             }else{
+                if(!isset($rolename)){
+                   throw new ServiceException("Role name cannot be empty","role.name.empty"); 
+                }
+                $select ="SELECT count(id),name,uuid from ox_role where name = '".$rolename."' AND org_id =".$org_id;
+                $result = $this->executeQuerywithParams($select)->toArray();
+
+                if($result[0]['count(id)'] > 0){
+                    if($result[0]['name'] == $rolename){
+                        throw new ServiceException("Role already exists","role.already.exists");
+                    }
+                }
+
                 $data['uuid'] = Uuid::uuid4()->toString(); 
                 $data['is_system_role'] = isset($data['is_system_role']) ? $data['is_system_role'] : "NULL";
                 $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`org_id`,`is_system_role`)VALUES ('".$rolename."','".$data['description']."','".$data['uuid']."',".$org_id.",".$data['is_system_role'].")";
@@ -63,8 +87,14 @@ class RoleService extends AbstractService {
                 }
             }
 
+            if(is_array($data['privileges'])){
+                $data['privileges'] = NULL;
+            }
+       
             if($count > 0){
-                $this->updateRolePrivileges($roleId, $data['privileges']);
+                if(isset($data['privileges'])){
+                    $this->updateRolePrivileges($roleId, $data['privileges']);
+                }
                 $this->commit();
             }else{
                 $this->rollback();
@@ -73,13 +103,13 @@ class RoleService extends AbstractService {
         }
         catch(Exception $e){
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;   
     }
 
     protected function updateRolePrivileges($roleId, &$privileges) {
-        // $privileges = json_decode($privileges,true);
+        $privileges = json_decode($privileges,true);
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
         try{
             $delete = "DELETE from `ox_role_privilege` where role_id =".$roleId."";
@@ -95,7 +125,7 @@ class RoleService extends AbstractService {
             }            
         }
         catch(Exception $e){
-            return 0;
+            throw $e;
         }
     }
 
@@ -124,7 +154,13 @@ class RoleService extends AbstractService {
         return $count;
     }
 
-    public function deleteRole($id){
+    public function deleteRole($id,$params){
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to delete the project");
+            }
+        }
         $this->beginTransaction();
         $count = 0;
         try{

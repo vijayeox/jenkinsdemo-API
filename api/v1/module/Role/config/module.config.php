@@ -13,7 +13,7 @@ return [
             'role' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/role[/:roleId]',
+                    'route' => '/[organization/:orgId/]role[/:roleId]',
                     'defaults' => [
                         'controller' => Controller\RoleController::class,
                         'access' => [

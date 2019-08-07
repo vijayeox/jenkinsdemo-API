@@ -619,6 +619,20 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
+    public function testDeleteWithOrgID()
+    {
+        $this->initAuthToken($this->adminUser);
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+        }
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd9f04d-758f-11e9-b2d5-68ecc57cde45', 'DELETE');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
