@@ -14,7 +14,7 @@ return [
             'project' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project[/:projectUuid]',
+                    'route'    => '/[organization/:orgId/]project[/:projectUuid]',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'access'=>[

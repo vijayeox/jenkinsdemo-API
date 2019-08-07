@@ -11,6 +11,8 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 use Oxzion\AccessDeniedException;
+use Oxzion\ServiceException;
+
 
 class ProjectController extends AbstractApiController {
     /**
@@ -51,15 +53,20 @@ class ProjectController extends AbstractApiController {
     * </code>
     */
     public function create($data) {
+        $id = $this->params()->fromRoute();
     	try {
-                 $count = $this->projectService->createProject($data);
+                 $count = $this->projectService->createProject($data,$id);
     	} catch(ValidationException $e) {
     		$response = ['data' => $data, 'errors' => $e->getErrors()];
     		return $this->getErrorResponse("Validation Errors",404, $response);
     	}
-    	if($count == 0) {
-    		return $this->getFailureResponse("Failed to create a new entity", $data);
-    	}
+        catch(AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
       	return $this->getSuccessResponseWithData($data,201);
     }
      /**
@@ -86,7 +93,9 @@ class ProjectController extends AbstractApiController {
     */
     public function update($id, $data) {
     	try {
-    		$count = $this->projectService->updateProject($id, $data);
+            $params = $this->params()->fromRoute();
+            $params['orgId'] = isset($params['orgId']) ? $params['orgId'] : NULL; 
+    		$count = $this->projectService->updateProject($id, $data,$params['orgId']);
     	} catch (ValidationException $e) {
     		$response = ['data' => $data, 'errors' => $e->getErrors()];
     		return $this->getErrorResponse("Validation Errors",404, $response);
@@ -95,11 +104,8 @@ class ProjectController extends AbstractApiController {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse($e->getMessage(),403, $response);
         }
-    	if($count == 0) {
-    		return $this->getErrorResponse("Entity not found for id - $id", 404);
-    	}
-        if($count == 2) {
-            return $this->getErrorResponse("Failed To Update", 404);
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
     	return $this->getSuccessResponseWithData($data,200);
     }
@@ -146,6 +152,7 @@ class ProjectController extends AbstractApiController {
     */
     public function delete($id) {
         $data = $this->params()->fromQuery();
+        $id = $this->params()->fromRoute();
         try{
         	$response = $this->projectService->deleteProject($id,$data);
         	if($response == 0) {
@@ -155,6 +162,9 @@ class ProjectController extends AbstractApiController {
         catch(AccessDeniedException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
     	return $this->getSuccessResponse();
     }

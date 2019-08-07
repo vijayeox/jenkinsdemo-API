@@ -112,6 +112,8 @@ class GroupService extends AbstractService {
         }
 
         try {
+            $data['name'] = isset($data['name']) ? $data['name'] : NULL;
+       
             $select = "SELECT count(id),name,uuid,status from ox_group where name = '".$data['name']."' AND org_id = ".$data['org_id'];
          
             $result = $this->executeQuerywithParams($select)->toArray();
@@ -294,7 +296,7 @@ class GroupService extends AbstractService {
                      'total' => $count);
     }
 
-    public function updateGroup ($id, &$data,$files = null,$orgId) {
+    public function updateGroup ($id, &$data,$files = null,$orgId = null) {
         if(isset($orgId)){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
                 ($orgId != AuthContext::get(AuthConstants::ORG_UUID))) {
@@ -306,9 +308,10 @@ class GroupService extends AbstractService {
         else{
             $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         }
+
         $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
-            throw new ServiceException("Updating non-existent Group","non.existent.group");
+            throw new ServiceException("Updating non existent Group","non.existent.group");
         }
         $org = $this->organizationService->getOrganization($obj->org_id);
         $form = new Group();
@@ -341,7 +344,7 @@ class GroupService extends AbstractService {
                     $query1 = $this->executeQuerywithParams($insert);
                 }
             } else {
-                throw new ServiceException("Updating non-existent Group","non.existent.group");
+                throw new ServiceException("Failed to Update","failed.update.group");
             }
         } catch(Exception $e) {
             print("Exception");
