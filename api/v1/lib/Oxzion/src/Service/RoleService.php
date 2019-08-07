@@ -137,7 +137,8 @@ class RoleService extends AbstractService {
         $this->beginTransaction();
         $count = 0;
         try {
-            $count = $this->saveRole(NULL, $data);
+            $params['orgId'] = $this->getUuidFromId('ox_organization',$data['org_id']);
+            $count = $this->saveRole(NULL,$data,$params);
             if($count == 0){
                 throw new ServiceException("Failed to create basic roles","failed.create.basicroles");
             }
