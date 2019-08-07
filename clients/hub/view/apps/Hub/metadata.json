@@ -1,7 +1,7 @@
 {
   "type": "application",
   "name": "Hub",
-  "appId":30,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+  "appId":29,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
   "category": null,
   "defaultAppforOrgs" : true,
   "server": "server.js",

@@ -4,7 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import merge from "deepmerge";
 import {name as applicationName,appId as application_id} from './metadata.json';
-import LeftMenuTemplate from "../../../../../view/gui/src/leftmenutemplate.js";
+import {LeftMenuTemplate} from "@oxzion/gui";
 // let menus = [];
 // Our launcher
 const register = (core, args, options, metadata) => {
