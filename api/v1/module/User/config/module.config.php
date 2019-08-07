@@ -190,6 +190,17 @@ return [
                     ],
                 ],
             ],
+            'usersList' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/users/list',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'usersList'
+                    ],
+                ],
+            ],
             'changePassword' => [
                 'type' => Segment::class,
                 'options' => [

@@ -945,4 +945,32 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['blackListedApps']['Admin'],'f297dd6a-3eb4-4e06-83ad-fb289e5c0535');
         $this->assertEquals($content['data']['blackListedApps']['AppBuilder'],'c980e23a-ade8-4bd9-a06c-a39ca7854b9d');
     }
+
+    public function testGetExcludedUserList(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['exclude' => array('4fd9f04d-758f-11e9-b2d5-68ecc57cde45','768d1fb9-de9c-46c3-8d5c-23e0e484ce2e'),'filter' => json_encode(array('0' => array('filter' => array('logic' => 'and','filters' => array(['field' => 'name','operator' => 'endswith','value' => 'al'],['field' => 'designation' ,'operator' => 'startswith','value' => 'it'])),'sort' => array(['field' => 'id','dir' => 'asc'],['field' => 'uuid','dir' => 'dsc']),'skip' => 0,'take' => 2)))];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/users/list', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('usersList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['name'],'Karan Agarwal');
+    }
+
+
+    public function testGetExcludedUserListWithExcludedUserFilter(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['exclude' => array('4fd9f04d-758f-11e9-b2d5-68ecc57cde45','768d1fb9-de9c-46c3-8d5c-23e0e484ce2e','4fd9ce37-758f-11e9-b2d5-68ecc57cde45'),'filter' => json_encode(array('0' => array('filter' => array('logic' => 'and','filters' => array(['field' => 'name','operator' => 'endswith','value' => 'al'],['field' => 'designation' ,'operator' => 'startswith','value' => 'it'])),'sort' => array(['field' => 'id','dir' => 'asc'],['field' => 'uuid','dir' => 'dsc']),'skip' => 0,'take' => 2)))];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/users/list', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('usersList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'],0);
+    }
+    
+
+
 }

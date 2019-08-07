@@ -271,6 +271,12 @@ class UserController extends AbstractApiController
         }
     }
 
+
+    public function usersListAction(){
+        $filterParams = $this->extractPostData();           
+        $result = $this->userService->getUsers($filterParams, $this->getBaseUrl());
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+    }
     /**
      * Remove User from Project API
      * @api
