@@ -7,25 +7,28 @@ use Zend\View\Model\JsonModel;
 use Oxzion\Jwt\JwtHelper;
 use Oxzion\Error\ErrorHandler;
 use Zend\Stdlib\RequestInterface as Request;
-abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
+abstract class AbstractApiControllerHelper extends AbstractRestfulController
+{
     private $config;
-    protected function getBaseUrl() {
+    protected function getBaseUrl()
+    {
         return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
     }
     /**
-     * Check Request object have Authorization token or not 
+     * Check Request object have Authorization token or not
      * @param type $request
      * @return type String
      */
 
-    protected function extractPostData(){
-        $params = json_decode(file_get_contents("php://input"),true);
-        if(!isset($params)){
+    protected function extractPostData()
+    {
+        $params = json_decode(file_get_contents("php://input"), true);
+        if (!isset($params)) {
             $params = $this->params()->fromPost();
         }
         return $params;
-    } 
+    }
     /**
      * Process post data and call create
      *
@@ -41,8 +44,8 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         }
 
         $data = $request->getPost()->toArray();
-        if(sizeof($data) == 0){
-            $data =json_decode(file_get_contents("php://input"),true);
+        if (sizeof($data) == 0) {
+            $data =json_decode(file_get_contents("php://input"), true);
         }
         return $this->create($data);
     }
@@ -60,10 +63,10 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         if (! is_array($parsedParams) || empty($parsedParams)
             || (1 == count($parsedParams) && '' === reset($parsedParams))
         ) {
-            if(!empty($content)){
+            if (!empty($content)) {
                 return $content;
-            }else{
-                return json_decode(file_get_contents("php://input"),true);
+            } else {
+                return json_decode(file_get_contents("php://input"), true);
             }
         }
 
@@ -101,63 +104,84 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         return $decodeToken;
     }
 
-    protected function getTokenPayload($responseData){
+    protected function getTokenPayload($responseData)
+    {
         return JwtHelper::getTokenPayload($responseData);
     }
 
-    protected function getRefreshTokenPayload(){
+    protected function getRefreshTokenPayload()
+    {
         return JwtHelper::getRefreshTokenPayload();
     }
 
-    protected function generateJwtToken($payload){
+    protected function generateJwtToken($payload)
+    {
         $config = $this->getConfig();
         $jwtKey = $config['jwtKey'];
-        $jwtAlgo = $config['jwtAlgo'];      
+        $jwtAlgo = $config['jwtAlgo'];
         return JwtHelper::generateJwtToken($payload, $jwtKey, $jwtAlgo);
     }
 
-    protected function getSuccessResponseWithData(array $data, $code = 200){
+    protected function getSuccessResponseWithData(array $data, $code = 200)
+    {
         return $this->getSuccessResponse(null, $code, $data);
     }
-    protected function getSuccessResponse($message = null, $code = 200, array $data = null,$total = null){
+    protected function getSuccessResponse($message = null, $code = 200, array $data = null, $total = null)
+    {
         $this->response->setStatusCode($code);
         $payload = ['status' => 'success'];
-        if(! is_null($message)){
+        if (! is_null($message)) {
             $payload['message'] = $message;
         }
-        if(! is_null($data)){
+        if (! is_null($data)) {
             $payload['data'] = (array) $data;
         }
-        if(! is_null($total)){
+        if (! is_null($total)) {
             $payload['total'] = $total;
         }
         return new JsonModel($payload);
     }
 
 
-    protected function getSuccessResponseDataWithPagination(array $data = null,$total,$code = 200){
-        return $this->getSuccessResponse(null, $code, $data,$total);
+    protected function getSuccessResponseDataWithPagination(array $data = null, $total, $code = 200)
+    {
+        return $this->getSuccessResponse(null, $code, $data, $total);
     }
 
     
+    protected function getSuccessStringResponse($message = null, $code = 200, $data = null)
+    {
+        $this->response->setStatusCode($code);
+        $payload = ['status' => 'success'];
+        if (! is_null($message)) {
+            $payload['message'] = $message;
+        }
+        if (! is_null($data)) {
+            $payload['data'] = (array) $data;
+        }
+        return new JsonModel($payload);
+    }
 
-    protected function getFailureResponse($message, array $data = null){
+    protected function getFailureResponse($message, array $data = null)
+    {
         return $this->getErrorResponse($message, 200, $data);
     }
-    protected function getErrorResponse($message, $code = 200, array $data = null){
+    protected function getErrorResponse($message, $code = 200, array $data = null)
+    {
         $this->response->setStatusCode($code);
-        return ErrorHandler::buildErrorJson($message,$data);
+        return ErrorHandler::buildErrorJson($message, $data);
     }
-    protected function getInvalidMethod(){
-        return $this->getErrorResponse("Method Not Found",405);
+    protected function getInvalidMethod()
+    {
+        return $this->getErrorResponse("Method Not Found", 405);
     }
 
-    protected function getConfig(){
-        if(! isset($this->config)){
+    protected function getConfig()
+    {
+        if (! isset($this->config)) {
             $this->config = $this->getEvent()->getApplication()->getServiceManager()->get('Config');
         }
 
         return $this->config;
-        
     }
 }

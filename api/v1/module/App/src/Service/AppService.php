@@ -17,11 +17,8 @@ use Oxzion\Service\FormService;
 use Oxzion\Service\FieldService;
 use Oxzion\Utils\FilterUtils;
 
-
-
 class AppService extends AbstractService
 {
-
     protected $config;
     private $table;
     protected $workflowService;
@@ -74,33 +71,33 @@ class AppService extends AbstractService
         $where = "";
         $sort = "name";
         $cntQuery ="SELECT count(id) FROM `ox_app`";
-            if(count($filterParams) > 0 || sizeof($filterParams) > 0){
-                $filterArray = json_decode($filterParams['filter'],true); 
-                if(isset($filterArray[0]['filter'])){
-                  $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                   $filterList = $filterArray[0]['filter']['filters'];
-                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
-                }
-                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
-                    $sort = $filterArray[0]['sort'];
-                    $sort = FilterUtils::sortArray($sort);
-                }
-                $pageSize = $filterArray[0]['take'];
-                $offset = $filterArray[0]['skip'];            
+        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
+            $filterArray = json_decode($filterParams['filter'], true);
+            if (isset($filterArray[0]['filter'])) {
+                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                $filterList = $filterArray[0]['filter']['filters'];
+                $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic);
             }
-            $where .= strlen($where) > 0 ? " AND status!=1" : "WHERE status!=1";
-            $sort = " ORDER BY ".$sort;
-            $limit = " LIMIT ".$pageSize." offset ".$offset;
-            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count=$resultSet->toArray()[0]['count(id)'];
-            $query ="SELECT * FROM `ox_app` ".$where." ".$sort." ".$limit;
-            $resultSet = $this->executeQuerywithParams($query);
-            $result = $resultSet->toArray();
-             for($x=0;$x<sizeof($result);$x++) {
-                 $result[$x]['start_options'] = json_decode($result[$x]['start_options'],true);
+            if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
+                $sort = $filterArray[0]['sort'];
+                $sort = FilterUtils::sortArray($sort);
             }
-            return array('data' => $result, 
-                     'total' => $count);  
+            $pageSize = $filterArray[0]['take'];
+            $offset = $filterArray[0]['skip'];
+        }
+        $where .= strlen($where) > 0 ? " AND status!=1" : "WHERE status!=1";
+        $sort = " ORDER BY ".$sort;
+        $limit = " LIMIT ".$pageSize." offset ".$offset;
+        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+        $count=$resultSet->toArray()[0]['count(id)'];
+        $query ="SELECT * FROM `ox_app` ".$where." ".$sort." ".$limit;
+        $resultSet = $this->executeQuerywithParams($query);
+        $result = $resultSet->toArray();
+        for ($x=0;$x<sizeof($result);$x++) {
+            $result[$x]['start_options'] = json_decode($result[$x]['start_options'], true);
+        }
+        return array('data' => $result,
+                     'total' => $count);
     }
 
     public function updateApp($id, &$data)
@@ -169,7 +166,7 @@ class AppService extends AbstractService
         return $upload = $this->config["APP_UPLOAD_FOLDER"];
     }
 
-// I am not doing anything here because we dont know how the app installation process will be when we do that, so I am creating a place holder to use for the future.
+    // I am not doing anything here because we dont know how the app installation process will be when we do that, so I am creating a place holder to use for the future.
     // The purpose of this function is to give permission and privileges to the app that is getting istalled in the OS
 
     /**
@@ -244,14 +241,14 @@ class AppService extends AbstractService
      * </code>
      */
     public function deployAppForOrg($data)
-    {   
+    {
         $form = new App();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['status'] = App::PUBLISHED;
         $data['uuid'] = Uuid::uuid4()->toString();
-		if(!isset($data['org_id'])){
+        if (!isset($data['org_id'])) {
             return 0;
         }
         $form->exchangeArray($data);
@@ -267,8 +264,8 @@ class AppService extends AbstractService
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $this->commit();
-        }catch(Exception $e){
-            switch (get_class ($e)) {
+        } catch (Exception $e) {
+            switch (get_class($e)) {
              case "Oxzion\ValidationException":
                 $this->rollback();
                 return 0;
@@ -352,7 +349,7 @@ class AppService extends AbstractService
     private function createAppRegistry($data)
     {
         $sql = $this->getSqlObject();
-//Code to check if the app is already registered for the organization
+        //Code to check if the app is already registered for the organization
         $queryString = "select * from ox_app_registry ";
         $where = "where app_id = " . $data['app_id'] . " and org_id = " . $data['org_id'] . " ";
         $resultSet = $this->executeQuerywithParams($queryString, $where);
@@ -396,13 +393,13 @@ class AppService extends AbstractService
 
     public function registerApps($data)
     {
-        $apps = json_decode($data['applist'],true);
+        $apps = json_decode($data['applist'], true);
         unset($data);
         $form = new App();
         $list = array();
 
         for ($x = 0; $x < sizeof($apps); $x++) {
-            $data['name'] = $apps[$x]['name'];
+            $data['name'] = isset($apps[$x]['name']) ? $apps[$x]['name'] : null;
             array_push($list, $data);
         }
         $this->beginTransaction();
@@ -416,19 +413,29 @@ class AppService extends AbstractService
             $count = 0;
             for ($x = 0; $x < sizeof($apps); $x++) {
                 if (!in_array($apps[$x]['name'], $result)) {
-                    $data['name'] = $apps[$x]['name'];
-                    $data['category'] = $apps[$x]['category'];
-                    $data['isdefault'] = $apps[$x]['isdefault'];
+                    $data['name'] = isset($apps[$x]['name']) ? $apps[$x]['name'] : null ;
+                    $data['category'] = isset($apps[$x]['category']) ? $apps[$x]['category'] : null;
+                    $data['isdefault'] = isset($apps[$x]['isdefault']) ? $apps[$x]['isdefault'] : 0;
                     $data['start_options'] = json_encode($apps[$x]['options']);
                     //this API call is done by the server hence hardcoding the created by value
                     $data['created_by'] = 1;
                     $data['date_created'] = date('Y-m-d H:i:s');
                     $data['status'] = App::PUBLISHED;
                     $data['type'] = App::PRE_BUILT;
-                    $data['uuid'] = Uuid::uuid4()->toString();
+                    if (isset($apps[$x]['uuid']) && $apps[$x]['uuid'] == "NULL") {
+                        $apps[$x]['uuid'] = null;
+                    }
+                    $data['uuid'] = isset($apps[$x]['uuid'])? $apps[$x]['uuid'] : Uuid::uuid4()->toString();
                     $form->exchangeArray($data);
                     $form->validate();
                     $count += $this->table->save($form);
+                } else {
+                    $start_options = isset($apps[$x]['options']) ? json_encode($apps[$x]['options']) : null;
+                    $category = isset($apps[$x]['category']) ? $apps[$x]['category'] : null;
+                    $isdefault = isset($apps[$x]['isdefault']) ? $apps[$x]['isdefault'] : 0;
+                    $modified_by = 1;
+                    $update = "UPDATE ox_app SET `start_options` = '".$start_options."', `category` = '".$category."',`isdefault` = ".$isdefault.", `date_modified` = '".date('Y-m-d H:i:s')."',`modified_by` = ".$modified_by." WHERE name = '".$apps[$x]['name']."'";
+                    $updatequery = $this->executeQuerywithParams($update);
                 }
             }
             $query = "SELECT id from `ox_app` WHERE isdefault = 1";
@@ -436,7 +443,6 @@ class AppService extends AbstractService
             $idList = array_unique(array_map('current', $selectquery));
 
             for ($i = 0; $i < sizeof($idList); $i++) {
-
                 $insert = "INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`)
                         SELECT org.id, '" . $idList[$i] . "', now() from ox_organization as org
                             where org.id not in(SELECT org_id FROM ox_app_registry WHERE app_id ='" . $idList[$i] . "')";
@@ -445,14 +451,15 @@ class AppService extends AbstractService
 
             $this->commit();
         } catch (Exception $e) {
-            // print_r($e->getMessage());
+            // print_r($e->getMessage());exit;
             $this->rollback();
             return 0;
         }
 
         return 1;
     }
-    public function getAssignments($appId){
+    public function getAssignments($appId)
+    {
         $assignments = $this->workflowService->getAssignments($appId);
         return $assignments;
         // print_r($assignments);exit;

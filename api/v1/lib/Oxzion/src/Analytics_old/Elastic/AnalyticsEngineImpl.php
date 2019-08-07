@@ -16,11 +16,11 @@ class AnalyticsEngineImpl {
     public function runQuery($appId,$type,$query,$parameters)
     {
         try {
-			$orgId = AuthContext::get(AuthConstants::ORG_ID);
-			if ($type) {
-				$parameters['Filter-type']=$type;
-			}
-			$query = $this->formatQuery($parameters);
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+            if ($type) {
+                $parameters['Filter-type']=$type;
+            }
+            $query = $this->formatQuery($parameters);
             $elasticService = new ElasticService($this->config);
 			$result = $elasticService->getQueryResults($orgId,$appId,$query);
 			if ($result['type']=='group') {
@@ -168,7 +168,7 @@ class AnalyticsEngineImpl {
 	}
 
 
-	public function flattenmultigroups(&$finalresult,$result,$config,$count,$index,$key='',$grouplist=array()) {
+
 		$operation = key($config['aggregates']);
 		if ($index==$count) {
 			foreach($result as $data) {

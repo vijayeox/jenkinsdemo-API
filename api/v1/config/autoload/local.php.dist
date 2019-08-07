@@ -13,26 +13,26 @@
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-$host = '61.12.69.67';
-$db = 'stephenox';
-$username = 'stephen';
-$password = 'stephen321!';
+$host = '172.16.1.101';
+$db = 'appBuilder_oxzionapi';
+$username = 'bharat';
+$password = 'password';
 
 if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
-    $host = '127.0.0.1';
-    $db = "va_test";
-    $username = "user";
-    $password = "'password";
+    $host = '172.16.1.101';
+    $db = "appBuilder_oxzionapi_test";
+    $username = "bharat";
+    $password = "password";
 }
 
 return [
-	'db' => [
-    	'driver' => 'Pdo_Mysql',
+    'db' => [
+        'driver' => 'Pdo',
         'database' => $db,
         'host' => $host,
         'username' => $username,
         'password' => $password,
-    	'dsn' => 'mysql:dbname=' . $db . ';host=' . $host . ';charset=utf8;username=' . $username . ';password=' . $password,
+        'dsn' => 'mysql:dbname=' . $db . ';host=' . $host . ';charset=utf8;username=' . $username . ';password=' . $password,
     ],
      'task' => [
         'username' => 'apikey',

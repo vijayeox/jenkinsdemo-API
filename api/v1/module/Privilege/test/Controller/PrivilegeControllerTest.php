@@ -11,7 +11,6 @@ use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\PrivilegeService;
 
-
 class PrivilegeControllerTest extends MainControllerTest
 {
     public function setUp() : void
@@ -61,58 +60,61 @@ class PrivilegeControllerTest extends MainControllerTest
     public function testGetMasterPrivilegeList()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/masterprivilege', 'GET');
+        $this->dispatch('/organization/masterprivilege', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('getMasterPrivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['masterPrivilege']),31);
-        $this->assertEquals($content['data']['masterPrivilege'][0]['id'],1);
-        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_ANNOUNCEMENT');
-        $this->assertEquals($content['data']['masterPrivilege'][1]['id'],16);
-        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'],'MANAGE_GROUP');
-        $this->assertEquals($content['data']['masterPrivilege'][2]['id'],17);
-        $this->assertEquals($content['data']['masterPrivilege'][2]['privilege_name'],'MANAGE_ORGANIZATION');
-        $this->assertEquals($content['data']['masterPrivilege'][3]['id'],18);
-        $this->assertEquals($content['data']['masterPrivilege'][3]['privilege_name'],'MANAGE_USER');
+        $this->assertEquals(count($content['data']['masterPrivilege']), 26);
+        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'], 'MANAGE_ANNOUNCEMENT');
+        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'], 'MANAGE_GROUP');
+        $this->assertEquals($content['data']['masterPrivilege'][2]['privilege_name'], 'MANAGE_ORGANIZATION');
+        $this->assertEquals($content['data']['masterPrivilege'][3]['privilege_name'], 'MANAGE_USER');
     }
 
     public function testGetMasterPrivilegeListWithRolePrivilege()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/masterprivilege/5', 'GET');
+        $this->dispatch('/organization/masterprivilege/c04edd51-af8a-11e9-91bf-68ecc57cde45', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('getMasterPrivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['masterPrivilege']),31);
-        $this->assertEquals($content['data']['masterPrivilege'][0]['id'],1);
-        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_ANNOUNCEMENT');
-        $this->assertEquals($content['data']['masterPrivilege'][1]['id'],16);
-        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'],'MANAGE_GROUP');
-        $this->assertEquals(count($content['data']['rolePrivilege']),12);
-        $this->assertEquals($content['data']['rolePrivilege'][0]['id'],39);
-        $this->assertEquals($content['data']['rolePrivilege'][0]['privilege_name'],'MANAGE_MLET');
-        $this->assertEquals($content['data']['rolePrivilege'][1]['id'],42);
-        $this->assertEquals($content['data']['rolePrivilege'][1]['privilege_name'],'MANAGE_CRM');
+        $this->assertEquals(count($content['data']['masterPrivilege']), 26);
+        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'], 'MANAGE_ANNOUNCEMENT');
+        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'], 'MANAGE_GROUP');
+        $this->assertEquals(count($content['data']['rolePrivilege']), 7);
+        $this->assertEquals($content['data']['rolePrivilege'][0]['privilege_name'], 'MANAGE_MLET');
+        $this->assertEquals($content['data']['rolePrivilege'][1]['privilege_name'], 'MANAGE_CRM');
     }
 
     public function testGetMasterPrivilegeListWithInValidRolePrivilege()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/masterprivilege/58428', 'GET');
+        $this->dispatch('/organization/masterprivilege/58428', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('getMasterPrivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['masterPrivilege']),31);
-        $this->assertEquals($content['data']['masterPrivilege'][0]['id'],1);
-        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_ANNOUNCEMENT');
-        $this->assertEquals($content['data']['masterPrivilege'][1]['id'],16);
-        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'],'MANAGE_GROUP');
-        $this->assertEquals($content['data']['rolePrivilege'],array());
+        $this->assertEquals(count($content['data']['masterPrivilege']), 26);
+        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'], 'MANAGE_ANNOUNCEMENT');
+        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'], 'MANAGE_GROUP');
+        $this->assertEquals($content['data']['rolePrivilege'], array());
+    }
+
+
+    public function testGetMasterPrivilegeOtherOrg()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/masterprivilege', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('getMasterPrivilege');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']['masterPrivilege']), 23);
     }
 }

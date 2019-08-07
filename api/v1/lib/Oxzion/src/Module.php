@@ -6,27 +6,28 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
-class Module {
-
-    public function getServiceConfig(){
+class Module
+{
+    public function getServiceConfig()
+    {
         return [
             'factories' => [
-                Auth\AuthContext::class => function($container) {
+                Auth\AuthContext::class => function ($container) {
                     return new Auth\AuthContext();
                 },
-                Auth\AuthSuccessListener::class => function($container){
+                Auth\AuthSuccessListener::class => function ($container) {
                     return new Auth\AuthSuccessListener($container->get(Service\UserService::class));
                 },
-                Service\UserService::class => function($container) {
+                Service\UserService::class => function ($container) {
                     return new Service\UserService(
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
                         $container->get(Model\UserTable::class),
                         $container->get(Service\EmailService::class),
-                        $container->get(Service\EmailTemplateService::class)
+                        $container->get(Service\TemplateService::class)
                     );
                 },
-                Model\UserTable::class => function($container) {
+                Model\UserTable::class => function ($container) {
                     return new Model\UserTable(
                         $container->get(Model\UserTableGateway::class)
                     );
@@ -41,15 +42,15 @@ class Module {
                         $resultSetPrototype
                     );
                 },
-                Service\ElasticService::class => function($container) {
+                Service\ElasticService::class => function ($container) {
                     $config = $container->get('config');
                     return new Service\ElasticService($config);
                 },
-                \Oxzion\Service\FileService::class => function($container){
+                \Oxzion\Service\FileService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class),$container->get(\Oxzion\Service\FormService::class));
+                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class), $container->get(\Oxzion\Service\FormService::class));
                 },
-                Service\RoleService::class => function($container){
+                Service\RoleService::class => function ($container) {
                     return new Service\RoleService(
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
@@ -57,7 +58,7 @@ class Module {
                         $container->get(Model\PrivilegeTable::class)
                     );
                 },
-                Model\RoleTable::class => function($container) {
+                Model\RoleTable::class => function ($container) {
                     return new Model\RoleTable(
                         $container->get(Model\RoleTableGateway::class)
                     );
@@ -95,23 +96,23 @@ class Module {
                         $resultSetPrototype
                     );
                 },
-                \Oxzion\Service\CommentService::class => function($container){
+                \Oxzion\Service\CommentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new \Oxzion\Service\CommentService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\CommentTable::class));
                 },
-                \Oxzion\Service\SubscriberService::class => function($container){
+                \Oxzion\Service\SubscriberService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new \Oxzion\Service\SubscriberService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\SubscriberTable::class));
                 },
-                \Oxzion\Model\FileTable::class => function($container) {
+                \Oxzion\Model\FileTable::class => function ($container) {
                     $tableGateway = $container->get(\Oxzion\Model\FileTableGateway::class);
                     return new \Oxzion\Model\FileTable($tableGateway);
                 },
-                \Oxzion\Model\CommentTable::class => function($container) {
+                \Oxzion\Model\CommentTable::class => function ($container) {
                     $tableGateway = $container->get(\Oxzion\Model\CommentTableGateway::class);
                     return new \Oxzion\Model\CommentTable($tableGateway);
                 },
-                \Oxzion\Model\SubscriberTable::class => function($container) {
+                \Oxzion\Model\SubscriberTable::class => function ($container) {
                     $tableGateway = $container->get(\Oxzion\Model\SubscriberTableGateway::class);
                     return new \Oxzion\Model\SubscriberTable($tableGateway);
                 },
@@ -133,15 +134,19 @@ class Module {
                     $resultSetPrototype->setArrayObjectPrototype(new \Oxzion\Model\Subscriber());
                     return new TableGateway('ox_subscriber', $dbAdapter, null, $resultSetPrototype);
                 },
-                Service\FormService::class => function($container){
+                Service\FormService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\FormService($container->get('config'), $dbAdapter, $container->get(Model\FormTable::class));
+                    return new Service\FormService($container->get('config'), $dbAdapter, $container->get(Model\FormTable::class), $container->get(FormEngine\FormFactory::class), $container->get(Service\FieldService::class));
                 },
-                Service\FieldService::class => function($container){
+                Service\ActivityService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ActivityService($container->get('config'), $dbAdapter, $container->get(Model\ActivityTable::class));
+                },
+                Service\FieldService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\FieldService($container->get('config'), $dbAdapter, $container->get(Model\FieldTable::class));
                 },
-                Model\FormTable::class => function($container) {
+                Model\FormTable::class => function ($container) {
                     $tableGateway = $container->get(Model\FormTableGateway::class);
                     return new Model\FormTable($tableGateway);
                 },
@@ -151,7 +156,17 @@ class Module {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Form());
                     return new TableGateway('ox_form', $dbAdapter, null, $resultSetPrototype);
                 },
-                Model\FieldTable::class => function($container) {
+                Model\ActivityTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\ActivityTableGateway::class);
+                    return new Model\ActivityTable($tableGateway);
+                },
+                Model\ActivityTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Activity());
+                    return new TableGateway('ox_activity', $dbAdapter, null, $resultSetPrototype);
+                },
+                Model\FieldTable::class => function ($container) {
                     $tableGateway = $container->get(Model\FieldTableGateway::class);
                     return new Model\FieldTable($tableGateway);
                 },
@@ -161,7 +176,7 @@ class Module {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Field());
                     return new TableGateway('ox_field', $dbAdapter, null, $resultSetPrototype);
                 },
-                Service\OrganizationService::class => function($container){
+                Service\OrganizationService::class => function ($container) {
                     return new Service\OrganizationService(
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
@@ -171,7 +186,7 @@ class Module {
                         $container->get(Service\PrivilegeService::class)
                     );
                 },
-                Model\OrganizationTable::class => function($container) {
+                Model\OrganizationTable::class => function ($container) {
                     return new Model\OrganizationTable(
                         $container->get(Model\OrganizationTableGateway::class)
                     );
@@ -186,10 +201,13 @@ class Module {
                         $resultSetPrototype
                     );
                 },
-                Workflow\WorkflowFactory::class => function ($container){
+                Workflow\WorkflowFactory::class => function ($container) {
                     return Workflow\WorkflowFactory::getInstance();
                 },
-                Model\WorkflowTable::class => function($container) {
+                FormEngine\FormFactory::class => function ($container) {
+                    return FormEngine\FormFactory::getInstance();
+                },
+                Model\WorkflowTable::class => function ($container) {
                     $tableGateway = $container->get(Model\WorkflowTableGateway::class);
                     return new Model\WorkflowTable($tableGateway);
                 },
@@ -199,22 +217,25 @@ class Module {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Organization());
                     return new TableGateway('ox_workflow', $dbAdapter, null, $resultSetPrototype);
                 },
-                Service\WorkflowService::class => function($container){
+                Service\WorkflowService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\WorkflowService($container->get('config'), 
-                    $dbAdapter,
-                    $container->get(Model\WorkflowTable::class),
-                    $container->get(Service\FormService::class),
-                    $container->get(Service\FieldService::class),
-                    $container->get(\Oxzion\Service\FileService::class),
-                    $container->get(Workflow\WorkflowFactory::class));
+                    return new Service\WorkflowService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Model\WorkflowTable::class),
+                        $container->get(Service\FormService::class),
+                        $container->get(Service\FieldService::class),
+                        $container->get(\Oxzion\Service\FileService::class),
+                        $container->get(Workflow\WorkflowFactory::class),
+                        $container->get(Service\ActivityService::class)
+                    );
                 },
-                Service\UserTokenService::class => function($container) {
+                Service\UserTokenService::class => function ($container) {
                     $config = $container->get('config');
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\UserTokenService($config, $dbAdapter, $container->get(Model\UserTokenTable::class));
                 },
-                Model\UserTokenTable::class => function($container) {
+                Model\UserTokenTable::class => function ($container) {
                     $tableGateway = $container->get(Model\UserTokenTableGateway::class);
                     return new Model\UserTokenTable($tableGateway);
                 },
@@ -240,18 +261,24 @@ class Module {
                     $config = $container->get('config');
                     return new Search\Elastic\IndexerImpl($config);
                 },
-                Service\ProfilePictureService::class => function($container) {
+                Service\ProfilePictureService::class => function ($container) {
                     $config = $container->get('config');
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\ProfilePictureService($config, $dbAdapter);
                 },
-                Service\UserSessionService::class => function($container) {
+                Service\UserSessionService::class => function ($container) {
                     $config = $container->get('config');
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\UserSessionService($config, $dbAdapter);
                 },
-                Service\EmailTemplateService::class => function ($container) {
-                    return new Service\EmailTemplateService(
+                Service\TemplateService::class => function ($container) {
+                    return new Service\TemplateService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Rule\RuleService::class => function ($container) {
+                    return new Rule\RuleService(
                         $container->get('config'),
                         $container->get(AdapterInterface::class)
                     );
@@ -286,5 +313,4 @@ class Module {
         return [
         ];
     }
-
 }

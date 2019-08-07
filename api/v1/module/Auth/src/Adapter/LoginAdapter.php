@@ -26,6 +26,4 @@ class LoginAdapter extends CredentialTreatmentAdapter
             $this->setCredentialTreatment($credentialTreatment);
         }
     }
-
- 
 }

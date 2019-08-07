@@ -22,7 +22,8 @@ class AnalyticsTest extends MainControllerTest
     private $searchFactory;
     private $analyticsFactory;
 
-    public function setUp() : void{
+    public function setUp() : void
+    {
         $this->loadConfig();
         parent::setUp();
         if(enableElastic!=0){
@@ -33,10 +34,10 @@ class AnalyticsTest extends MainControllerTest
         }
     }
 
-
-    public function setSearchData() {
-          $parser = new SymfonyYamlParser();
-          $this->dataset = $parser->parseYaml(dirname(__FILE__)."/Dataset/Analytics.yml");
+    public function setSearchData()
+    {
+        $parser = new SymfonyYamlParser();
+        $this->dataset = $parser->parseYaml(dirname(__FILE__)."/Dataset/Analytics.yml");
     }
 
     public function createIndex($indexer,$body) {
@@ -44,15 +45,16 @@ class AnalyticsTest extends MainControllerTest
         $app_id = $body['app_id'];
         $id = $body['id'];
         AuthContext::put(AuthConstants::ORG_ID, $body['org_id']);
-        $return=$indexer->index($app_id,$id,$type,$body);
+        $return=$indexer->index($app_id, $id, $type, $body);
     }
 
-    public function setupData(){
-            $indexer=  $this->getApplicationServiceLocator()->get(Indexer::class);
-            $dataset = $this->dataset['ox_analysis'];
-            foreach($dataset as $body) {
-                $this->createIndex($indexer,$body);
-            }
+    public function setupData()
+    {
+        $indexer=  $this->getApplicationServiceLocator()->get(Indexer::class);
+        $dataset = $this->dataset['ox_analysis'];
+        foreach ($dataset as $body) {
+            $this->createIndex($indexer, $body);
+        }
     }
 
 
@@ -63,7 +65,7 @@ class AnalyticsTest extends MainControllerTest
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['group'=>'created_by','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created'];
-        $results = $ae->runQuery('11_test',null,$parameters);
+        $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe");
         $this->assertEquals($results[0]['value'], "800");
@@ -80,7 +82,7 @@ class AnalyticsTest extends MainControllerTest
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['group'=>'created_by,category','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created'];
-        $results = $ae->runQuery('11_test',null,$parameters);
+        $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe - A");
         $this->assertEquals($results[0]['value'], "200");
@@ -97,7 +99,7 @@ class AnalyticsTest extends MainControllerTest
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['group'=>'created_by,category','field'=>'amount','operation'=>'count','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created'];
-        $results = $ae->runQuery('11_test',null,$parameters);
+        $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe - A");
         $this->assertEquals($results[0]['value'], "1");
@@ -114,7 +116,7 @@ class AnalyticsTest extends MainControllerTest
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['field'=>'amount','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created','list'=>'name,created_by,category'];
-        $results = $ae->runQuery('11_test',null,$parameters);
+        $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "testing document");
         $this->assertEquals($results[0]['category'], "A");
@@ -128,7 +130,7 @@ class AnalyticsTest extends MainControllerTest
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['operation'=>'sum','field'=>'amount','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created'];
-        $results = $ae->runQuery('11_test',null,$parameters);
+        $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
         $this->assertEquals($results,950.5);
     }
@@ -140,9 +142,9 @@ class AnalyticsTest extends MainControllerTest
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created'];
-        $results = $ae->runQuery('11_test',null,$parameters);
+        $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
-        $this->assertEquals($results,4);
+        $this->assertEquals($results, 4);
     }
 
     public function testDefaultField() {
@@ -152,7 +154,7 @@ class AnalyticsTest extends MainControllerTest
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
         $parameters = ['group'=>'created_by','operation'=>'count','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created'];
-        $results = $ae->runQuery('11_test',null,$parameters);
+        $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe");
         $this->assertEquals($results[0]['value'], "3");
@@ -171,4 +173,3 @@ class AnalyticsTest extends MainControllerTest
     }
 
 
-}

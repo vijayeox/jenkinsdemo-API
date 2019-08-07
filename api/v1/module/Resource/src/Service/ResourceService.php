@@ -8,11 +8,13 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Exception;
 
-class ResourceService extends AbstractService{
+class ResourceService extends AbstractService
+{
     /**
     * @ignore __construct
     */
-    public function __construct($config, $dbAdapter){
+    public function __construct($config, $dbAdapter)
+    {
         parent::__construct($config, $dbAdapter);
     }
 
@@ -20,7 +22,7 @@ class ResourceService extends AbstractService{
     * GET Resource Service
     * @method GET
     * @param $id ID of Resource to Delete
-    * @return array $data 
+    * @return array $data
     * <code>
     * {
     *  integer id,
@@ -33,7 +35,8 @@ class ResourceService extends AbstractService{
     * </code>
     * @return array Returns a JSON Response with Status Code and Created Resource.
     */
-    public function getResource($id){
+    public function getResource($id)
+    {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_attachment')
@@ -43,4 +46,3 @@ class ResourceService extends AbstractService{
         return $result[0]['path'];
     }
 }
-?>

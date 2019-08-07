@@ -17,7 +17,8 @@ ox_group:
         uuid : 153f3e9e-eb07-4ca4-be78-34f715bd50db
         name: 'Test Group Once Again'
         org_id: 1
-        manager_id: 1
+        manager_id: 2
+        parent_id : 1
         description: 'Description for the second test cases'
         logo: 'grp2.png'
         status: 'Active'

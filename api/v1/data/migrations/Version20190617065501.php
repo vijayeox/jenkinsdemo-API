@@ -4,7 +4,7 @@ namespace Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
@@ -13,8 +13,8 @@ final class Version20190617065501 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("INSERT IGNORE INTO `ox_app` (`name`,`uuid`,`type`,`isdefault`,`category`,`created_by`,`status`,`start_options`) VALUES ('TaskAdmin','".Uuid::uuid4()->toString()."','1',0,'utilities',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}')");
-        $this->addSql("INSERT IGNORE INTO `ox_app` (`name`,`uuid`,`type`,`isdefault`,`category`,`created_by`,`status`,`start_options`) VALUES ('Task','".Uuid::uuid4()->toString()."','1',0,'organization',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}')");
+        $this->addSql("INSERT IGNORE INTO `ox_app` (`name`,`uuid`,`type`,`isdefault`,`category`,`created_by`,`status`,`start_options`) VALUES ('TaskAdmin','".UuidUtil::uuid()."','1',0,'utilities',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}')");
+        $this->addSql("INSERT IGNORE INTO `ox_app` (`name`,`uuid`,`type`,`isdefault`,`category`,`created_by`,`status`,`start_options`) VALUES ('Task','".UuidUtil::uuid()."','1',0,'organization',1,4,'{\"autostart\":\"false\",\"hidden\":\"false\"}')");
         $this->addSql("INSERT IGNORE INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`) SELECT 1,id,now() from ox_app WHERE name LIKE 'TaskAdmin'");
         $this->addSql("INSERT IGNORE INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`) SELECT 1,id,now() from ox_app WHERE name LIKE 'Task'");
         $this->addSql("INSERT INTO `ox_privilege` (`name`,`permission_allowed`,`app_id`) SELECT 'MANAGE_TASK',1,id from ox_app WHERE name LIKE 'TaskAdmin'");

@@ -24,7 +24,7 @@ ox_role:
 
 ox_role_privilege:
   -
-    id: 187
+    id: 111
     role_id: 5
     privilege_name: 'MANAGE_CRMADMIN' 
     permission: 1

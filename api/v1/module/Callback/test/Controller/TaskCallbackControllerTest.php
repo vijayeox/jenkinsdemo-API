@@ -13,11 +13,8 @@ use Oxzion\Utils\RestClient;
 use Callback\Service\TaskService;
 use Mockery;
 
-
-
 class TaskCallbackControllerTest extends ControllerTest
 {
-
     public function setUp() : void
     {
         $this->loadConfig();
@@ -29,30 +26,23 @@ class TaskCallbackControllerTest extends ControllerTest
         return new DefaultDataSet();
     }
 
-    private function getMockRestClientForTaskService(){
+    private function getMockRestClientForTaskService()
+    {
         $taskService = $this->getApplicationServiceLocator()->get(Service\TaskService::class);
         $mockRestClient = Mockery::mock('Oxzion\Utils\RestClient');
         $taskService->setRestClient($mockRestClient);
         return $mockRestClient;
     }
 
-    protected function setDefaultAsserts()
-    {
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(TaskCallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('TaskCallbackController');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-    }
-
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['projectname' => 'New Project 1','description' => 'Open project applications','uuid'=>'faaf6453-d5a8-4061-9ac7-a83b8eefe20e'];
-        if(enableCamel==0){
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $mockRestClient->expects('postWithHeader')->with("projects",array("name" => "New Project 1","description" => "Open project applications","uuid" => "faaf6453-d5a8-4061-9ac7-a83b8eefe20e"))->once()->andReturn(array("body" => json_encode(array("status" => "success","data" => array("name" => "New Project 1","description" => "Open project applications","uuid" => "faaf6453-d5a8-4061-9ac7-a83b8eefe20e"),"message" => "Project Added Successfully"))));
-                    }
-        $this->dispatch('/callback/task/addproject', 'POST',$data);
+        if (enableCamel==0) {
+            $mockRestClient = $this->getMockRestClientForTaskService();
+            $mockRestClient->expects('postWithHeader')->with("projects", array("name" => "New Project 1","description" => "Open project applications","uuid" => "faaf6453-d5a8-4061-9ac7-a83b8eefe20e"))->once()->andReturn(array("body" => json_encode(array("status" => "success","data" => array("name" => "New Project 1","description" => "Open project applications","uuid" => "faaf6453-d5a8-4061-9ac7-a83b8eefe20e"),"message" => "Project Added Successfully"))));
+        }
+        $this->dispatch('/callback/task/addproject', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('addprojectfromcallback');
@@ -66,12 +56,12 @@ class TaskCallbackControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['projectname' => 'New Project 1','description' => 'Open project applications','uuid'=>'faaf6453-d5a8-4061-9ac7-a83b8eefe20e'];
-        if(enableCamel==0){
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
-                     $mockRestClient->expects('postWithHeader')->with("projects",array("name" => "New Project 1","description" => "Open project applications","uuid" => "faaf6453-d5a8-4061-9ac7-a83b8eefe20e"))->once()->andThrow($exception);
-                    }
-        $this->dispatch('/callback/task/addproject', 'POST',$data);
+        if (enableCamel==0) {
+            $mockRestClient = $this->getMockRestClientForTaskService();
+            $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
+            $mockRestClient->expects('postWithHeader')->with("projects", array("name" => "New Project 1","description" => "Open project applications","uuid" => "faaf6453-d5a8-4061-9ac7-a83b8eefe20e"))->once()->andThrow($exception);
+        }
+        $this->dispatch('/callback/task/addproject', 'POST', $data);
         $this->assertResponseStatusCode(400);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('addprojectfromcallback');
@@ -84,12 +74,12 @@ class TaskCallbackControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['description' => 'Open project applications','uuid'=>'faaf6453-d5a8-4061-9ac7-a83b8eefe20e'];
-        if(enableCamel==0){
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
-                     $mockRestClient->expects('postWithHeader')->with("projects",array("name" => NULL,"description" => "Open project applications","uuid" => "faaf6453-d5a8-4061-9ac7-a83b8eefe20e"))->once()->andThrow($exception);
-                    }
-        $this->dispatch('/callback/task/addproject', 'POST',$data);
+        if (enableCamel==0) {
+            $mockRestClient = $this->getMockRestClientForTaskService();
+            $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
+            $mockRestClient->expects('postWithHeader')->with("projects", array("name" => null,"description" => "Open project applications","uuid" => "faaf6453-d5a8-4061-9ac7-a83b8eefe20e"))->once()->andThrow($exception);
+        }
+        $this->dispatch('/callback/task/addproject', 'POST', $data);
         $this->assertResponseStatusCode(400);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('addprojectfromcallback');
@@ -102,11 +92,11 @@ class TaskCallbackControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['uuid'=>'faaf6453-d5a8-4061-9ac7-a83b8eefe20e','new_projectname' => 'Project Data','description' => 'New Demo Project'];
-        if(enableCamel==0){
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $mockRestClient->expects('updateWithHeader')->with("projects/".$data['uuid'],array("name" => "Project Data","description" => "New Demo Project"))->once()->andReturn(array("body" => json_encode(array("status" => "success","data" => array("name" => "Project Data","description" => "New Demo Project"),"message" => "Project Updated Successfully"))));
-                    }
-        $this->dispatch('/callback/task/updateproject', 'POST',$data);
+        if (enableCamel==0) {
+            $mockRestClient = $this->getMockRestClientForTaskService();
+            $mockRestClient->expects('updateWithHeader')->with("projects/".$data['uuid'], array("name" => "Project Data","description" => "New Demo Project"))->once()->andReturn(array("body" => json_encode(array("status" => "success","data" => array("name" => "Project Data","description" => "New Demo Project"),"message" => "Project Updated Successfully"))));
+        }
+        $this->dispatch('/callback/task/updateproject', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('updateprojectfromcallback');
@@ -120,12 +110,12 @@ class TaskCallbackControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['uuid'=>'faaf6453-d5a8-406','new_projectname' => 'Project Data','description' => 'New Demo Project'];
-        if(enableCamel==0){
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
-                     $mockRestClient->expects('updateWithHeader')->with("projects/".$data['uuid'],array("name" => "Project Data","description" => "New Demo Project"))->once()->andThrow($exception);
-                    }
-        $this->dispatch('/callback/task/updateproject', 'POST',$data);
+        if (enableCamel==0) {
+            $mockRestClient = $this->getMockRestClientForTaskService();
+            $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
+            $mockRestClient->expects('updateWithHeader')->with("projects/".$data['uuid'], array("name" => "Project Data","description" => "New Demo Project"))->once()->andThrow($exception);
+        }
+        $this->dispatch('/callback/task/updateproject', 'POST', $data);
         $this->assertResponseStatusCode(400);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('updateprojectfromcallback');
@@ -138,11 +128,11 @@ class TaskCallbackControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['uuid'=>'faaf6453-d5a8-4061-9ac7-a83b8eefe20e'];
-        if(enableCamel==0){
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $mockRestClient->expects('deleteWithHeader')->with("projects/".$data['uuid'])->once()->andReturn(array("body" => json_encode(array("status" => "success","data" => array("name" => "Project Data","description" => "New Demo Project","uuid" => "faaf6453-d5a8-4061-9ac7-a83b8eefe20e"),"message" => "Project Deleted Successfully"))));
-                    }
-        $this->dispatch('/callback/task/deleteproject', 'POST',$data);
+        if (enableCamel==0) {
+            $mockRestClient = $this->getMockRestClientForTaskService();
+            $mockRestClient->expects('deleteWithHeader')->with("projects/".$data['uuid'])->once()->andReturn(array("body" => json_encode(array("status" => "success","data" => array("name" => "Project Data","description" => "New Demo Project","uuid" => "faaf6453-d5a8-4061-9ac7-a83b8eefe20e"),"message" => "Project Deleted Successfully"))));
+        }
+        $this->dispatch('/callback/task/deleteproject', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('deleteprojectfromcallback');
@@ -156,12 +146,12 @@ class TaskCallbackControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['uuid'=>'faaf6453-d5a8-406'];
-        if(enableCamel==0){
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
-                     $mockRestClient->expects('deleteWithHeader')->with("projects/".$data['uuid'])->once()->andThrow($exception);
-                    }
-        $this->dispatch('/callback/task/deleteproject', 'POST',$data);
+        if (enableCamel==0) {
+            $mockRestClient = $this->getMockRestClientForTaskService();
+            $exception = Mockery::Mock('GuzzleHttp\Exception\ClientException');
+            $mockRestClient->expects('deleteWithHeader')->with("projects/".$data['uuid'])->once()->andThrow($exception);
+        }
+        $this->dispatch('/callback/task/deleteproject', 'POST', $data);
         $this->assertResponseStatusCode(400);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('deleteprojectfromcallback');
@@ -169,70 +159,11 @@ class TaskCallbackControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testAddUserToProject()
+    protected function setDefaultAsserts()
     {
-        $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rakshithtest','firstname' => 'rakshith','lastname' => 'amin','email' => 'test@va.com','timezone' => 'United States/New York' ,'projectUuid' => 'demo-project'];
-        if(enableCamel==0){
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $mockRestClient->expects('postWithHeader')->with("oxusers",array('username' => 'rakshithtest','firstname' => 'rakshith','lastname' => 'amin','email' => 'test@va.com','timezone' => 'United States/New York' ,'projectUuid' => 'demo-project'))->once()->andReturn(array("body" => json_encode(array("status" => "success","data" => array('username' => 'rakshithtest','firstname' => 'rakshith','lastname' => 'amin','email' => 'test@va.com','timezone' => 'United States/New York' ,'projectUuid' => 'demo-project')))));
-                    }
-        $this->dispatch('/callback/task/addusertotasktracker', 'POST',$data);
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('ttadduserfromcallback');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['userid'], $data['userid']);
+        $this->assertModuleName('Callback');
+        $this->assertControllerName(TaskCallbackController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('TaskCallbackController');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
-
-    public function testAddUserToProjectWithMissingData()
-    {
-        $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rakshithtest','firstname' => 'rakshith','lastname' => 'amin','email' => 'test@va.com','timezone' => 'United States/New York'];
-        if(enableCamel==0){
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $mockRestClient->expects('postWithHeader')->with("oxusers",array('username' => 'rakshithtest','firstname' => 'rakshith','lastname' => 'amin','email' => 'test@va.com','timezone' => 'United States/New York'))->once()->andReturn(array("body" => json_encode(array("status" => "error","data" => array('username' => 'rakshithtest','firstname' => 'rakshith','lastname' => 'amin','email' => 'test@va.com','timezone' => 'United States/New York')))));
-                    }
-        $this->dispatch('/callback/task/addusertotasktracker', 'POST',$data);
-        $this->assertResponseStatusCode(400);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('ttadduserfromcallback');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
-    public function testRemoveUserFromProject()
-    {
-        $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rakshithtest','projectUuid' => 'demo-project'];
-        if(enableCamel==0){
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $mockRestClient->expects('deleteWithHeader')->with("oxusers",array('username' => 'rakshithtest','projectUuid' => 'demo-project'))->once()->andReturn(array("body" => json_encode(array("status" => "success","data" => array('username' => 'rakshithtest','projectUuid' => 'demo-project')))));
-                    }
-        $this->dispatch('/callback/task/deleteuserfromtasktracker', 'POST',$data);
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('ttdeleteuserfromcallback');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['userid'], $data['userid']);
-    }
-
-    public function testRemoveUserFromProjectWithMissingData()
-    {
-        $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rakshithtest'];
-        if(enableCamel==0){
-                     $mockRestClient = $this->getMockRestClientForTaskService();
-                     $mockRestClient->expects('deleteWithHeader')->with("oxusers",array('username' => 'rakshithtest', 'projectUuid' => NULL))->once()->andReturn(array("body" => json_encode(array("status" => "error","data" => array('username' => 'rakshithtest')))));
-                    }
-        $this->dispatch('/callback/task/deleteuserfromtasktracker', 'POST',$data);
-        $this->assertResponseStatusCode(400);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('ttdeleteuserfromcallback');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
 }
