@@ -87,10 +87,7 @@ class RoleService extends AbstractService {
                 }
             }
 
-            if(is_array($data['privileges'])){
-                $data['privileges'] = NULL;
-            }
-       
+           
             if($count > 0){
                 if(isset($data['privileges'])){
                     $this->updateRolePrivileges($roleId, $data['privileges']);
@@ -109,7 +106,6 @@ class RoleService extends AbstractService {
     }
 
     protected function updateRolePrivileges($roleId, &$privileges) {
-        $privileges = json_decode($privileges,true);
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
         try{
             $delete = "DELETE from `ox_role_privilege` where role_id =".$roleId."";
