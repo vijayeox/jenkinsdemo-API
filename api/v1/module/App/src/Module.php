@@ -133,6 +133,15 @@ class Module implements ConfigProviderInterface
                     return new Controller\PageController(
                         $container->get(Model\PageTable::class),
                         $container->get(Service\PageService::class),
+                        $container->get(Service\PageContentService::class),
+                        $container->get('AppLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\PageContentController::class => function ($container) {
+                    return new Controller\PageContentController(
+                        $container->get(Model\PageContentTable::class),
+                        $container->get(Service\PageContentService::class),
                         $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );

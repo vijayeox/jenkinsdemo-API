@@ -12,8 +12,6 @@ class Page extends Entity
         'uuid' => 0,
         'name' => null,
         'app_id' => 0,
-        'form_id' => 0,
-        'text' => null,
         'description'=> null,
         'date_created' => null,
         'date_modified' => null,

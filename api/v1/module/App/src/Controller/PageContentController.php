@@ -2,49 +2,46 @@
 namespace App\Controller;
 
 /**
-* Page Api
+* PageContent Api
 */
 use Zend\Log\Logger;
-use App\Model\Page;
-use App\Model\PageTable;
-use App\Service\PageService;
+use App\Model\PageContent;
+use App\Model\PageContentTable;
 use App\Service\PageContentService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 
-class PageController extends AbstractApiController
+class PageContentController extends AbstractApiController
 {
-    private $pageService;
     private $pageContentService;
     /**
     * @ignore __construct
     */
-    public function __construct(PageTable $table, PageService $pageService, PageContentService $pageContentService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(PageContentTable $table, PageContentService $pageContentService, Logger $log, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Page::class);
-        $this->setIdentifierName('pageId');
-        $this->pageService = $pageService;
+        parent::__construct($table, $log, __CLASS__, PageContent::class);
+        $this->setIdentifierName('pageContentId');
         $this->pageContentService = $pageContentService;
     }
     /**
-    * Create Page API
+    * Create PageContent API
     * @api
-    * @link /app/appId/page
+    * @link /app/appId/pagecontent
     * @method POST
     * @param array $data Array of elements as shown
     * <code> {
     *               id : integer,
     *               name : string,
-    *               Fields from Page
+    *               Fields from PageContent
     *   } </code>
-    * @return array Returns a JSON Response with Status Code and Created Page.
+    * @return array Returns a JSON Response with Status Code and Created PageContent.
     */
     public function create($data)
     {
         $appId = $this->params()->fromRoute()['appId'];
         try {
-            $count = $this->pageService->savePage($appId, $data);
+            $count = $this->pageContentService->savePageContent($appId, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -56,32 +53,30 @@ class PageController extends AbstractApiController
     }
     
     /**
-    * GET List Pages API
+    * GET List PageContents API
     * @api
-    * @link /app/appId/page
+    * @link /app/appId/pagecontent
     * @method GET
-    * @return array Returns a JSON Response list of Pages based on Access.
+    * @return array Returns a JSON Response list of PageContents based on Access.
     */
     public function getList()
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->pageService->getPages($appId);
-        return $this->getSuccessResponseWithData($result);
+        return $this->getInvalidMethod();
     }
     /**
-    * Update Page API
+    * Update PageContent API
     * @api
-    * @link /app/appId/page[/:id]
+    * @link /app/appId/pagecontent[/:id]
     * @method PUT
-    * @param array $id ID of Page to update
+    * @param array $id ID of PageContent to update
     * @param array $data
-    * @return array Returns a JSON Response with Status Code and Created Page.
+    * @return array Returns a JSON Response with Status Code and Created PageContent.
     */
     public function update($id, $data)
     {
         $appId = $this->params()->fromRoute()['appId'];
         try {
-            $count = $this->pageService->updatePage($id, $data);
+            $count = $this->pageContentService->updatePageContent($id, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -92,37 +87,37 @@ class PageController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
     /**
-    * Delete Page API
+    * Delete PageContent API
     * @api
-    * @link /app/appId/page[/:id]
+    * @link /app/appId/pagecontent[/:id]
     * @method DELETE
-    * @param $id ID of Page to Delete
+    * @param $id ID of PageContent to Delete
     * @return array success|failure response
     */
     public function delete($id)
     {
         $appId = $this->params()->fromRoute()['appId'];
-        $response = $this->pageService->deletePage($appId, $id);
+        $response = $this->pageContentService->deletePageContent($appId, $id);
         if ($response == 0) {
-            return $this->getErrorResponse("Page not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("PageContent not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
     }
     /**
-    * GET Page API
+    * GET PageContent API
     * @api
-    * @link /app/appId/page[/:id]
+    * @link /app/appId/pagecontent[/:id]
     * @method GET
-    * @param $id ID of Page
+    * @param $id ID of PageContent
     * @return array $data
-    * @return array Returns a JSON Response with Status Code and Created Page.
+    * @return array Returns a JSON Response with Status Code and Created PageContent.
     */
-    public function get($pageId)
+    public function get($pageContentId)
     {
         $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->pageContentService->getPageContent($appId, $pageId);
-        if ($result == 0) {
-            return $this->getErrorResponse("Page not found", 404, ['id' => $pageId]);
+        $result = $this->pageContentService->getContent($appId, $pageContentId);
+        if (empty($result)) {
+            return $this->getErrorResponse("Page Content not found", 404, ['id' => $pageContentId]);
         }
         return $this->getSuccessResponseWithData($result);
     }

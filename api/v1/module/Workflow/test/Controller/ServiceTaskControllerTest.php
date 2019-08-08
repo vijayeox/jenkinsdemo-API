@@ -83,8 +83,8 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->dispatch('/callback/workflow/servicetask', 'POST', $params);
         $this->assertResponseStatusCode(200);
         $templateName="GenericTemplate.tpl";
-        FileUtils::deleteFile($templateName,$tempFile);
-        FileUtils::deleteFile("GenericTemplate.pdf",$config['TEMPLATE_FOLDER']);
+        FileUtils::deleteFile($templateName, $tempFile);
+        FileUtils::deleteFile("GenericTemplate.pdf", $config['TEMPLATE_FOLDER']);
     }
     public function testServiceTaskPDFInvalidTemplateExecution()
     {
