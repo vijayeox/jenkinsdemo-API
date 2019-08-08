@@ -16,6 +16,8 @@ use Zend\Db\Sql\Expression;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\BosUtils;
+use Oxzion\ServiceException;
+
 
 
 
@@ -242,6 +244,16 @@ class ContactController extends AbstractApiController
                  $response = $this->convertToCsv($result['data'], $filename.'.csv');
                  return $this->getSuccessStringResponse("Exported CSV Data",200,$response);
         }
+    }
+
+    public function contactsDeleteAction(){
+        $data = $this->extractPostData();
+        try{
+            $response = $this->contactService->mutipleContactsDelete($data);
+        }catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $this->getSuccessResponse();
     }
 }
 

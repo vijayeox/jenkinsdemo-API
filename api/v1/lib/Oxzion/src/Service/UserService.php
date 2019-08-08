@@ -16,6 +16,9 @@ use Ramsey\Uuid\Uuid;
 use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
 use Oxzion\Utils\FilterUtils;
+use Oxzion\ServiceException;
+
+
 
 class UserService extends AbstractService
 {
@@ -136,35 +139,87 @@ class UserService extends AbstractService
      *        data : array Created User Object
      * </code>
      */
-    public function createUser(&$data) {
-        if(isset($data['orgid'])){
+    public function createUser($params,&$data) {
+
+        if(isset($params['orgId'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($data['orgid'] != AuthContext::get(AuthConstants::ORG_ID))) {
-                throw new AccessDeniedException("You do not have permissions to assign role to user");
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions create user");
+            }else{
+                $data['orgid'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
         }
         else{
             $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
         }
 
+        try {  
+
+        $select = "SELECT ou.id,ou.uuid,count(ou.id),ou.status,ou.username,ou.email,GROUP_CONCAT(ouo.org_id) from ox_user as ou inner join ox_user_org as ouo on ouo.user_id = ou.id where ou.username = '".$data['username']."' OR ou.email = '".$data['email']."' GROUP BY ou.id,ou.uuid,ou.status,ou.email";
+        $result = $this->executeQuerywithParams($select)->toArray();
+
+        if(count($result) > 1){
+           throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");       
+        }
+
+        if(count($result) == 1){
+            $result[0]['GROUP_CONCAT(ouo.org_id)'] = isset($result[0]['GROUP_CONCAT(ouo.org_id)']) ? $result[0]['GROUP_CONCAT(ouo.org_id)'] : NULL;
+            $orgList =explode(',',$result[0]['GROUP_CONCAT(ouo.org_id)']);
+
+            $result[0]['count(ou.id)'] = isset($result[0]['count(ou.id)']) ? $result[0]['count(ou.id)'] : 0;
+
+        
+            if(in_array($data['orgid'],$orgList)){
+                    $countval = 0;
+                if($result[0]['username'] == $data['username'] && $result[0]['status'] == 'Active'){
+                    throw new ServiceException("Username Exist","duplicate.username");
+                }else if($result[0]['email'] == $data['email'] && $result[0]['status'] == 'Active'){
+                    throw new ServiceException("Email ID Exist","duplicate.email");
+                }else if($result[0]['status'] == "Inactive"){
+                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : 0; 
+                     if($data['reactivate'] == 1){
+                         $data['status'] = 'Active';
+                         $countval = $this->updateUser($result[0]['uuid'],$data,$data['orgid']);
+                         $this->addUserToOrg($result[0]['id'], $data['orgid']);
+                         if(isset($data['role'])){
+                                $this->addRoleToUser($result[0]['uuid'],$data['role'],$data['orgid']);
+                         }
+                         if(isset($countval) == 1){
+                              return $result[0]['uuid'];
+                         }else{
+                            throw new ServiceException("Failed to Create User","failed.create.user");
+                         }
+                     }else{
+                            throw new ServiceException("User already exists would you like to reactivate?","user.already.exists"); 
+                          }
+                     }
+                }
+                else{
+                    throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");
+                }
+            }
+        
         $data['uuid'] = Uuid::uuid4()->toString();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-
+        if(isset($data['managerid'])){
+            $data['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
+        }
         $password = BosUtils::randomPassword();
         if (isset($password))
             $data['password'] = md5(sha1($password));
+
         $form = new User($data);
         $form->validate();
         $this->beginTransaction();
-        try {
             $count = 0;
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Failed to create a new entity","failed.create.user");
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
+
             $this->addUserToOrg($form->id, $form->orgid);
             if(isset($data['role'])){
                 $this->addRoleToUser($data['uuid'],$data['role'],$form->orgid);
@@ -183,7 +238,7 @@ class UserService extends AbstractService
             return $count;
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
     }
 
@@ -191,11 +246,10 @@ class UserService extends AbstractService
     public function addRoleToUser($id,$role,$orgId){
         $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
-
-            return 0;
+            throw new ServiceException("Failed to create a new entity","failed.create.user");
         }
         if(!isset($role) || empty($role)) {
-            return 2;
+            throw new ServiceException("User should be assigned to atleast one role","failed.create.addrole");
         }
         $userId = $obj->id;
         
@@ -208,7 +262,6 @@ class UserService extends AbstractService
 
                 $result = $this->executeQuerywithParams($delete);
               
-                
                 $query ="Insert into ox_user_role(user_id,role_id) SELECT ".$userId.",oro.id from ox_role as oro LEFT OUTER JOIN ox_user_role as our on oro.id = our.role_id and our.user_id = ".$userId." where oro.uuid in ('".implode("','", $roleSingleArray)."') and oro.org_id = ".$orgId." and our.user_id is null";
 
                
@@ -219,7 +272,7 @@ class UserService extends AbstractService
             }
             return 1;
         }
-        return 0;
+        throw new ServiceException("Failed to create a new entity","failed.create.user");
     }
 
     private function getRoleIdList($uuidList){
@@ -231,6 +284,7 @@ class UserService extends AbstractService
 
 
     public function createAdminForOrg($org,$contactPerson,$orgPreferences) {
+        $params = Array();
         $contactPerson = (object)$contactPerson;
         $orgPreferences = (object)$orgPreferences;
         $preferences = array(
@@ -260,18 +314,21 @@ class UserService extends AbstractService
             "date_of_join" => date('Y-m-d'),
             "password" => BosUtils::randomPassword()
         );
+        $params['orgId'] = $org->uuid;
+        
         $this->beginTransaction();
         try{
-            $result = $this->createUser($data);
+            $result = $this->createUser($params,$data);
             $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
+
             $this->addUserRole($resultSet[0]['id'], 'ADMIN');
 
             $this->commit();
         }
         catch(Exception $e){
             $this->rollback();
-            return 0;
+            throw $e;
         }
 
         $this->messageProducer->sendTopic(json_encode(array(
@@ -340,11 +397,11 @@ class UserService extends AbstractService
      * </code>
      * @return array Returns a JSON Response with Status Code and Created User.
      */
-    public function updateUser($id, &$data)
+    public function updateUser($id,&$data,$orgId = null)
     {
-        if(isset($data['orgid'])){
+        if(isset($orgId)){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($data['orgid'] != AuthContext::get(AuthConstants::ORG_ID))) {
+                ($orgId != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to assign role to user");
             }
         }
@@ -354,9 +411,7 @@ class UserService extends AbstractService
             return 0;
         }
         $form = new User();
-        if(isset($data['orgid'])){
-            unset($data['orgid']);
-        }
+        
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $userdata['uuid'] = $id;
         if(isset($data['managerid'])){
@@ -380,7 +435,6 @@ class UserService extends AbstractService
         $form->exchangeArray($userdata);
         $form->validate();
 
-        $count = 0;
         $this->beginTransaction();
         try {
             $this->table->save($form);
@@ -392,7 +446,7 @@ class UserService extends AbstractService
             $this->rollback();
             return 0;
         }
-        return $form->toArray();
+        return $userdata;
     }
 
     private function getOrg($id){
@@ -413,7 +467,13 @@ class UserService extends AbstractService
      */
     public function deleteUser($id)
     {
-        $obj = $this->table->getByUuid($id, array());
+        if(isset($id['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($id['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to delete the user");
+            }
+        }
+        $obj = $this->table->getByUuid($id['userId'], array());
         if (is_null($obj)) {
             return 0;
         }
@@ -426,6 +486,11 @@ class UserService extends AbstractService
         $form->exchangeArray($originalArray);
         $form->validate();
         $result = $this->table->save($form);
+
+        $delete = "DELETE FROM ox_user_org where user_id = ".$obj->id." AND org_id = ".$obj->orgid;
+        $result1 = $this->executeQuerywithParams($delete);
+
+   
         $this->messageProducer->sendTopic(json_encode(array('username' => $obj->username ,'orgname' => $org['name'] )),'USER_DELETED');
         return $result;
     }
@@ -453,6 +518,9 @@ class UserService extends AbstractService
                    $filterList = $filterArray[0]['filter']['filters'];
                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
                 }
+                if(isset($filterParams['exclude'])){
+                   $where .= strlen($where) > 0 ? " AND uuid NOT in ('".implode("','", $filterParams['exclude'])."') " : " WHERE uuid NOT in ('".implode("','", $filterParams['exclude'])."') " ;
+                }
                 if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                     $sort = $filterArray[0]['sort'];
                     $sort = FilterUtils::sortArray($sort);
@@ -461,7 +529,7 @@ class UserService extends AbstractService
                 $offset = $filterArray[0]['skip'];
             }
 
-
+    
             $where .= strlen($where) > 0 ? " AND status = 'Active'" : " WHERE status = 'Active'";
 
             $sort = " ORDER BY ".$sort;
@@ -832,7 +900,7 @@ class UserService extends AbstractService
         return $results;
     }
 
-    public function addUserToOrg($userId, $organizationId) {
+    private function addUserToOrg($userId, $organizationId) {
         if ($this->getDataByParams('ox_user', array('id'), array('id' => $userId))->toArray()) {
             if ($this->getDataByParams('ox_organization', array('id'), array('id' => $organizationId, 'status' => 'Active'))->toArray()) {
                 if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))->toArray()) {
@@ -927,12 +995,14 @@ class UserService extends AbstractService
         return $fileName[1];
     }
 
-    public function sendResetPasswordCode($email)
+    public function sendResetPasswordCode($username)
     {
+        
         $resetPasswordCode = BosUtils::randomPassword(); // I am using the randomPassword generator to do this since it is similar to a password generation
-        $userId = AuthContext::get(AuthConstants::USER_ID);
-        $userDetails = $this->getUser($userId);
-        if ($email === $userDetails['email']) {
+
+        $userDetails = $this->getUserBaseProfile($username);
+
+        if ($username === $userDetails['username']) {
             $userReset['uuid'] = $id = $userDetails['uuid'];
             $userReset['email'] = $userDetails['email'];
             $userReset['firstname'] = $userDetails['firstname'];
@@ -941,15 +1011,18 @@ class UserService extends AbstractService
             $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
             //Code to update the password reset and expiration time
             $userUpdate = $this->updateUser($id, $userReset);
+
             if ($userUpdate) {
                 $this->emailService->sendPasswordResetEmail($userReset);
                 return $userReset;
             }
             return 0;
         } else {
+            print ("wrong username");
             return 0;
         }
     }
+
 
     public function getOrganizationByUserId($id=null) {
         if(empty($id))

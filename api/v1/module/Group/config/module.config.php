@@ -14,7 +14,7 @@ return [
             'groups' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/group[/:groupId]',
+                    'route'    => '/[organization/:orgId/]group[/:groupId]',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'access'=>[

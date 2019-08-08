@@ -15,7 +15,7 @@ return [
             'user' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user[/:userId][/:type]',
+                    'route' => '/[organization/:orgId/]user[/:userId][/:type]',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'access' => [
@@ -123,21 +123,6 @@ return [
                     ],
                 ],
             ],
-            'addOrganizationToUser' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/user/:userId/organization/:organizationId',
-                    'defaults' => [
-                        'controller' => Controller\UserController::class,
-                        'method' => 'POST',
-                        'action' => 'addOrganizationToUser',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                            'addOrganizationToUser' => 'MANAGE_USER_WRITE',
-                        ],
-                    ],
-                ],
-            ],
             'removeUserFromGroup' => [
                 'type' => Segment::class,
                 'options' => [
@@ -205,6 +190,17 @@ return [
                     ],
                 ],
             ],
+            'usersList' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/users/list',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'usersList'
+                    ],
+                ],
+            ],
             'changePassword' => [
                 'type' => Segment::class,
                 'options' => [
@@ -251,7 +247,7 @@ return [
                 'options' => [
                     'route' => '/user/me/forgotpassword',
                     'defaults' => [
-                        'controller' => Controller\UserController::class,
+                        'controller' => Controller\ForgotPasswordController::class,
                         'method' => 'POST',
                         'action' => 'forgotPassword'
                     ],

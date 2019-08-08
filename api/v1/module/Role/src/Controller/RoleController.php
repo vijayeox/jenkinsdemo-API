@@ -11,6 +11,8 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\InputFilter\Input;
+use Oxzion\ServiceException;
+
 /**
  * Role Controller
  */
@@ -51,12 +53,15 @@ class RoleController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Role.
     */
     public function create($data){
-        $roleId = isset($data['roleId']) ? $data['roleId'] : null;
+        $id = $this->params()->fromRoute();
         try{
-            $count = $this->roleService->saveRole($roleId,$data);
+            $count = $this->roleService->saveRole(null,$data,$id);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         if($count == 0){
             return $this->getFailureResponse("Failed to create a new entity", $data);
@@ -87,13 +92,14 @@ class RoleController extends AbstractApiController
     */
     public function update($id, $data){
         try{
-            $count = $this->roleService->saveRole($id,$data);
+            $params = $this->params()->fromRoute(); 
+            $count = $this->roleService->saveRole($id,$data,$params);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
         }
-        if($count == 0){
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data,200);
     }
@@ -106,7 +112,8 @@ class RoleController extends AbstractApiController
     * @return array success|failure response
     */
     public function delete($id){
-        $response = $this->roleService->deleteRole($id);
+        $params = $this->params()->fromRoute();
+        $response = $this->roleService->deleteRole($id,$params);
         if($response == 0){
             return $this->getErrorResponse("Role not found", 404, ['id' => $id]);
         }

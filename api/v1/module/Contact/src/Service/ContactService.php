@@ -14,6 +14,8 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Service\UserService;
 use Zend\Http\Headers;
 use Zend\Http\Response\Stream;
+use Oxzion\ServiceException;
+
 
 
 class ContactService extends AbstractService
@@ -678,6 +680,21 @@ class ContactService extends AbstractService
         if(count($finalList) > 1) {
             return array('data' => $finalList);
         }
+    }
+
+
+    public function mutipleContactsDelete($data){
+        try{
+            if(count($data['uuid']) < 1){
+                throw new ServiceException("No Contacts to Delete","failed.create.user");
+            }
+            $delete = "DELETE FROM ox_contact where uuid in ('".implode("','", $data['uuid'])."') AND owner_id = ".AuthContext::get(AuthConstants::USER_ID);
+            $result = $this->executeQuerywithParams($delete);
+        }
+        catch(Exception $e){
+            throw $e;
+        }
+        return;
     }
 }
    

@@ -48,11 +48,12 @@
     "greenlion/php-sql-parser": "^4.1.2",
     "nelexa/zip": "dev-master",
     "stomp-php/stomp-php": "4.*",
-    "mybuilder/phpunit-accelerator":"dev-prepare-3.0",
     "johnkary/phpunit-speedtrap":"3.1.0",
     "ext-dom": "*",
     "ext-hash": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "sempro/phpunit-pretty-print": "dev-master",
+    "mybuilder/phpunit-accelerator":"dev-prepare-3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^7",
