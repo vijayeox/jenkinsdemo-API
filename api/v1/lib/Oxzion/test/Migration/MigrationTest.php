@@ -34,7 +34,7 @@ class MigrationTest extends ServiceTest
         );
         if ($this->getName() == 'testInitDBWithOutAppName') {
             unset($this->data['appName']);
-        } elseif ($this->getName() == 'testMigrateWrongAppName') {
+        } else if ($this->getName() == 'testMigrateWrongAppName') {
             $this->data['appName'] = 'ox_app_4';
         }
         $this->data['appName'] = isset($this->data['appName']) ? $this->data['appName'] : null;

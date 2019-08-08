@@ -15,7 +15,7 @@ return [
             'user' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user[/:userId][/:type]',
+                    'route' => '/[organization/:orgId/]user[/:userId][/:type]',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'access' => [
@@ -119,21 +119,6 @@ return [
                         'access' => [
                             // SET ACCESS CONTROL
                             'addUserToGroup' => 'MANAGE_USER_WRITE',
-                        ],
-                    ],
-                ],
-            ],
-            'addOrganizationToUser' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/user/:userId/organization/:organizationId',
-                    'defaults' => [
-                        'controller' => Controller\UserController::class,
-                        'method' => 'POST',
-                        'action' => 'addOrganizationToUser',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                            'addOrganizationToUser' => 'MANAGE_USER_WRITE',
                         ],
                     ],
                 ],
@@ -251,7 +236,7 @@ return [
                 'options' => [
                     'route' => '/user/me/forgotpassword',
                     'defaults' => [
-                        'controller' => Controller\UserController::class,
+                        'controller' => Controller\ForgotPasswordController::class,
                         'method' => 'POST',
                         'action' => 'forgotPassword'
                     ],

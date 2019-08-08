@@ -58,7 +58,7 @@ class SecurityManager
         $roles = AuthContext::get(AuthConstants::PRIVILEGES);
         if (is_string($privilege) && isset($roles[$privilege])) {
             return 1;
-        } elseif (is_array($privilege)) {
+        } else if (is_array($privilege)) {
             foreach ($privilege as $value) {
                 if (isset($roles[$value]) && $roles[$value]) {
                     return 1;

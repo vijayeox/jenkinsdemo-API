@@ -111,13 +111,13 @@ class GroupService extends AbstractService
         $data['uuid'] = UuidUtil::uuid();
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : null;
+        $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
-        if ($result) {
-            $data['manager_id']=$result[0]["id"];
+        if($result){
+           $data['manager_id']=$result[0]["id"];
         }
-        if (isset($data['parent_id'])) {
+        if(isset($data['parent_id'])){
             $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
         }
 
@@ -144,7 +144,8 @@ class GroupService extends AbstractService
             $result = $this->executeUpdate($insert);
 
             $this->commit();
-        } catch (Exception $e) {
+        
+        } catch(Exception $e) {
             print_r($e->getMessage());
             $this->logger->err(__CLASS__.$e->getMessage());
             $this->rollback();
@@ -229,39 +230,39 @@ class GroupService extends AbstractService
 
         $cntQuery ="SELECT count(id) FROM `ox_group`";
 
-        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
-            $filterArray = json_decode($filterParams['filter'], true);
-            if (isset($filterArray[0]['filter'])) {
-                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                $filterList = $filterArray[0]['filter']['filters'];
-                $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic);
-            }
-            if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
-                $sort = $filterArray[0]['sort'];
-                $sort = FilterUtils::sortArray($sort);
-            }
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                if(isset($filterArray[0]['filter'])){
+                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                   $filterList = $filterArray[0]['filter']['filters'];
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                }
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                }
                 
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
-        }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
+            }
 
-        $where .= strlen($where) > 0 ? " AND status = 'Active'" : " WHERE status = 'Active'";
+            $where .= strlen($where) > 0 ? " AND status = 'Active'" : " WHERE status = 'Active'";
             
-        $sort = " ORDER BY ".$sort;
-        $limit = " LIMIT ".$pageSize." offset ".$offset;
-        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-        $count=$resultSet->toArray()[0]['count(id)'];
-        $query ="SELECT uuid,name,parent_id,org_id,manager_id,description,logo FROM `ox_group`".$where." ".$sort." ".$limit;
-        $resultSet = $this->executeQuerywithParams($query);
-        $resultSet=$resultSet->toArray();
-        for ($x=0;$x<sizeof($resultSet);$x++) {
-            $select ="SELECT uuid from ox_user where id = '".$resultSet[$x]['manager_id']."'";
-            $result = $this->executeQueryWithParams($select)->toArray();
-            $resultSet[$x]['manager_id']=$result[0]["uuid"];
-            if (isset($resultSet[$x]['parent_id'])) {
-                $selectParentUUID ="SELECT uuid from ox_group where id = '".$resultSet[$x]['parent_id']."'";
-                $result = $this->executeQueryWithParams($selectParentUUID)->toArray();
-                $resultSet[$x]['parent_id']=$result[0]["uuid"];
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(id)'];
+            $query ="SELECT uuid,name,parent_id,org_id,manager_id,description,logo FROM `ox_group`".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            $resultSet=$resultSet->toArray();
+            for($x=0;$x<sizeof($resultSet);$x++){
+                $select ="SELECT uuid from ox_user where id = '".$resultSet[$x]['manager_id']."'";
+                $result = $this->executeQueryWithParams($select)->toArray();
+                $resultSet[$x]['manager_id']=$result[0]["uuid"];
+                if(isset($resultSet[$x]['parent_id'])){
+                    $selectParentUUID ="SELECT uuid from ox_group where id = '".$resultSet[$x]['parent_id']."'";
+                    $result = $this->executeQueryWithParams($selectParentUUID)->toArray();
+                    $resultSet[$x]['parent_id']=$result[0]["uuid"];
             }
         }
         return array('data' => $resultSet,
@@ -287,14 +288,14 @@ class GroupService extends AbstractService
         $data = array_merge($obj->toArray(), $data);
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
-        $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : null;
+        $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
-        if ($result) {
-            $data['manager_id']=$result[0]["id"];
+        if($result){
+           $data['manager_id']=$result[0]["id"];
         }
         $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
-        $data['parent_id'] = $data['parent_id'] == 0 ? null : $data['parent_id'];
+        $data['parent_id'] = $data['parent_id'] == 0 ? NULL : $data['parent_id'];
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
@@ -303,10 +304,10 @@ class GroupService extends AbstractService
             if (isset($files)) {
                 $this->uploadGroupLogo($org['uuid'], $id, $files);
             }
-            if ($count === 1) {
+            if($count === 1) {
                 $select = "SELECT count(id) as users from ox_user_group where avatar_id =".$data['manager_id']." AND group_id = (SELECT id from ox_group where uuid = '".$id."')";
                 $query=$this->executeQuerywithParams($select)->toArray();
-                if ($query[0]['users'] === '0') {
+                if($query[0]['users'] === '0'){
                     $insert = "INSERT INTO ox_user_group (`avatar_id`,`group_id`) VALUES (".$data['manager_id'].",(SELECT id from ox_group where uuid = '".$id."'))";
                     $query1 = $this->executeQuerywithParams($insert);
                 }
@@ -372,19 +373,19 @@ class GroupService extends AbstractService
     
         $cntQuery ="SELECT count(ox_user.id)".$from;
 
-        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
-            $filterArray = json_decode($filterParams['filter'], true);
-            if (isset($filterArray[0]['filter'])) {
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+            $filterArray = json_decode($filterParams['filter'],true); 
+            if(isset($filterArray[0]['filter'])){
                 $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
                 $filterList = $filterArray[0]['filter']['filters'];
-                $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic, self::$fieldName);
+                $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
             }
-            if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
+            if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                 $sort = $filterArray[0]['sort'];
-                $sort = FilterUtils::sortArray($sort, self::$fieldName);
+                $sort = FilterUtils::sortArray($sort,self::$fieldName);
             }
             $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+            $offset = $filterArray[0]['skip'];            
         }
 
         $where .= strlen($where) > 0 ? " AND ox_group.uuid = '".$id."' AND ox_group.status = 'Active'" : " WHERE ox_group.uuid = '".$id."' AND ox_group.status = 'Active'";

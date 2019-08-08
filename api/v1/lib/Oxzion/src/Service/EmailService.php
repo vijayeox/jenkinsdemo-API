@@ -28,7 +28,7 @@ class EmailService extends AbstractService
     {
         $form = new Email();
         $userId = $data['userid'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['email'] = isset($data['email']) ? $data['email'] : null;
+        $data['email'] = isset($data['email']) ? $data['email'] : NULL;
         if ($data['email']) {
             $queryString = "select id,email from email_setting_user";
             $where = "where userid = " . $userId;

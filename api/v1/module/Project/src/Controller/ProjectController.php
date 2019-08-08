@@ -95,32 +95,32 @@ class ProjectController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (AccessDeniedException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
+            return $this->getErrorResponse($e->getMessage(),403, $response);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
-        }
-        if ($count == 2) {
+    	if($count == 0) {
+    		return $this->getErrorResponse("Entity not found for id - $id", 404);
+    	}
+        if($count == 2) {
             return $this->getErrorResponse("Failed To Update", 404);
         }
-        return $this->getSuccessResponseWithData($data, 200);
+    	return $this->getSuccessResponseWithData($data,200);
     }
 
 
 
-    /**
-    * GET project API
-    * @api
-    * @link /project[/:projectUuid]
-    * @method GET
-    * @param array $dataget of project
-    * @return array $data
-    * <code> {
-    *               id : integer,
-    *               name : string,
-    *   } </code>
-    * @return array Returns a JSON Response with Status Code and Created Group.
-    */
+     /**
+     * GET project API
+     * @api
+     * @link /project[/:projectUuid]
+     * @method GET
+     * @param array $dataget of project
+     * @return array $data
+     * <code> {
+     *               id : integer,
+     *               name : string,
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and Created Group.
+     */
     public function get($id)
     {
         $data = $this->params()->fromQuery();
@@ -180,16 +180,16 @@ class ProjectController extends AbstractApiController
                     }
     * </code>
     */
-    public function getList()
-    {
-        try {
+    public function getList(){
+        try{
             $filterParams = $this->params()->fromQuery(); // empty method call
             $result = $this->projectService->getProjectList($filterParams);
-        } catch (AccessDeniedException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
         }
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        catch(AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
     /**
     * GET List Project of Current User API
@@ -273,10 +273,11 @@ class ProjectController extends AbstractApiController
             $count = $this->projectService->getUserList($project[$this->getIdentifierName()], $filterParams);
         } catch (ValidationException $e) {
             $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        catch(AccessDeniedException $e) {
             $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
+            return $this->getErrorResponse($e->getMessage(),403, $response);
         }
         if ($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);

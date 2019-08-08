@@ -36,7 +36,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\AnnouncementService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AnnouncementService($container->get('config'), $dbAdapter, $container->get(Model\AnnouncementTable::class), $container->get(OrganizationService::class));
+                    return new Service\AnnouncementService($container->get('config'), $dbAdapter, $container->get(Model\AnnouncementTable::class),$container->get(OrganizationService::class));
                 },
                 Model\AnnouncementTable::class => function ($container) {
                     $tableGateway = $container->get(Model\AnnouncementTableGateway::class);

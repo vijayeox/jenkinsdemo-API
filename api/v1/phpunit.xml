@@ -23,7 +23,7 @@
             <directory>./module/Workflow/test</directory>
         </testsuite>
         <testsuite name="Core Fixtures">
-            <directory>./lib/Oxzion/test</directory>
+            <directory>./lpib/Oxzion/test</directory>
             <directory>./module/Mlet/test</directory>
         </testsuite>
         <testsuite name="Callback Fixtures">
@@ -46,7 +46,7 @@
         </testsuite>
     </testsuites>
     <php>
-        <ini name="memory_limit" value="256M" />
+        <ini name="memory_limit" value="700M" />
         <const name="enableNLP" value="0"/>
         <const name="enableCamunda" value="0"/>
         <const name="enableElastic" value="0"/>
@@ -56,7 +56,6 @@
         <const name="enableProspectResearch" value="0"/>
     </php>
     <listeners>
-        <listener class="\MyBuilder\PhpunitAccelerator\TestListener"/>
         <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
     </listeners>
 </phpunit>

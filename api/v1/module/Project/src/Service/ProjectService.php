@@ -299,7 +299,7 @@ class ProjectService extends AbstractService
         $sort = "ox_user.name";
 
 
-        $query = "SELECT ox_user.uuid,ox_user.name,
+         $query = "SELECT ox_user.uuid,ox_user.name,
                                 case when (ox_project.manager_id = ox_user.id) 
                                     then 1
                                 end as is_manager";
@@ -395,13 +395,14 @@ class ProjectService extends AbstractService
                 $this->rollback();
                 throw $e;
             }
-            foreach ($deletedUser as $key => $value) {
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $obj->name,'username' => $value['username'])), 'USERTOPROJECT_DELETED');
-                $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'],'projectUuid' => $obj->uuid)), 'DELETION_USERFROMPROJECT');
+            foreach($deletedUser as $key => $value){
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $obj->name,'username' => $value['username'])),'USERTOPROJECT_DELETED');
+                $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'],'projectUuid' => $obj->uuid)),'DELETION_USERFROMPROJECT');
+
             }
-            foreach ($insertedUser as $key => $value) {
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $obj->name,'username' => $value['username'])), 'USERTOPROJECT_ADDED');
-                $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'],'firstname' => $value['firstname'],'lastname' => $value['lastname'],'email' => $value['email'], 'timezone' => $value['timezone'],'projectUuid' => $obj->uuid)), 'ADDITION_USERTOPROJECT');
+            foreach($insertedUser as $key => $value){
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $obj->name,'username' => $value['username'])),'USERTOPROJECT_ADDED');
+                $test = $this->messageProducer->sendTopic(json_encode(array('username' => $value['username'],'firstname' => $value['firstname'],'lastname' => $value['lastname'],'email' => $value['email'], 'timezone' => $value['timezone'],'projectUuid' => $obj->uuid)),'ADDITION_USERTOPROJECT');
             }
             return 1;
         }

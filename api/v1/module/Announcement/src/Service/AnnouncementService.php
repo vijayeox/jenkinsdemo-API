@@ -15,6 +15,8 @@ use Oxzion\Service\OrganizationService;
 use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
 
+
+
 /**
  * Announcement Service
  */
@@ -334,31 +336,31 @@ class AnnouncementService extends AbstractService
 
         $cntQuery ="SELECT count(id) FROM `ox_announcement`";
 
-        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
-            $filterArray = json_decode($filterParams['filter'], true);
-            if (isset($filterArray[0]['filter'])) {
-                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                $filterList = $filterArray[0]['filter']['filters'];
-                $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic);
-            }
-            if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
-                $sort = $filterArray[0]['sort'];
-                $sort = FilterUtils::sortArray($sort);
-            }
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                if(isset($filterArray[0]['filter'])){
+                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                   $filterList = $filterArray[0]['filter']['filters'];
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                }
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                }
                 
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
-        }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
+            }
 
-        $where .= strlen($where) > 0 ? " AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID);
+            $where .= strlen($where) > 0 ? " AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID);
             
-        $sort = " ORDER BY ".$sort;
-        $limit = " LIMIT ".$pageSize." offset ".$offset;
-        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-        $count=$resultSet->toArray()[0]['count(id)'];
-        $query ="SELECT uuid, name, org_id, status, description, start_date, end_date, media_type, media FROM `ox_announcement`".$where." ".$sort." ".$limit;
-        $resultSet = $this->executeQuerywithParams($query)->toArray();
-        return array('data' => $resultSet,
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(id)'];
+            $query ="SELECT uuid, name, org_id, status, description, start_date, end_date, media_type, media FROM `ox_announcement`".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query)->toArray();
+            return array('data' => $resultSet, 
                      'total' => $count);
     }
 
@@ -375,29 +377,29 @@ class AnnouncementService extends AbstractService
         $sort = "ox_group.name";
 
 
-        $query = "SELECT ox_group.uuid,ox_group.name";
-        $from = " FROM ox_group left join ox_announcement_group_mapper on ox_group.id = ox_announcement_group_mapper.group_id left join ox_announcement on ox_announcement.id = ox_announcement_group_mapper.announcement_id";
+         $query = "SELECT ox_group.uuid,ox_group.name";
+         $from = " FROM ox_group left join ox_announcement_group_mapper on ox_group.id = ox_announcement_group_mapper.group_id left join ox_announcement on ox_announcement.id = ox_announcement_group_mapper.announcement_id";
     
-        $cntQuery ="SELECT count(ox_group.id)".$from;
+         $cntQuery ="SELECT count(ox_group.id)".$from;
 
-        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
-            $filterArray = json_decode($filterParams['filter'], true);
-            if (isset($filterArray[0]['filter'])) {
-                $filterlogic = $filterArray[0]['filter']['logic'];
-                $filterList = $filterArray[0]['filter']['filters'];
-                $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic);
+         if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true); 
+                if(isset($filterArray[0]['filter'])){
+                   $filterlogic = $filterArray[0]['filter']['logic'];
+                   $filterList = $filterArray[0]['filter']['filters'];
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                }
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];            
             }
-            if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
-                $sort = $filterArray[0]['sort'];
-                $sort = FilterUtils::sortArray($sort);
-            }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
-        }
 
 
 
-        $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= now() AND ox_group.status = 1" : " WHERE ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= curdate() AND ox_group.status = 1";
+            $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= now() AND ox_group.status = 1" : " WHERE ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= curdate() AND ox_group.status = 1";
 
             
         $sort = " ORDER BY ".$sort;
@@ -412,32 +414,33 @@ class AnnouncementService extends AbstractService
     }
 
 
-    public function saveGroup($id, $data)
-    {
-        if (isset($data['org_id'])) {
+    public function saveGroup($id,$data){
+        if(isset($data['org_id'])){
             $data['org_id'] = $this->organizationService->getOrganizationIdByUuid($data['org_id']);
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
                 ($data['org_id'] != AuthContext::get(AuthConstants::ORG_ID))) {
                 throw new AccessDeniedException("You do not have permissions to add users to project");
             }
-        } else {
-            $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        }
+        else{
+           $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID); 
         }
 
-        $obj = $this->table->getByUuid($id, array());
+        $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
             return 0;
         }
-        if (!isset($data['groups']) || empty($data['groups'])) {
+        if(!isset($data['groups']) || empty($data['groups'])) {
             return 2;
         }
         $announcementId = $obj->id;
         $orgId = $data['org_id'];
         
     
-        if ($data['groups']) {
+        if($data['groups']){
             $groupSingleArray= array_map('current', $data['groups']);
-            try {
+            try{
+               
                 $delete = "DELETE oag FROM ox_announcement_group_mapper as oag
                             inner join ox_group as og on oag.group_id = og.id where og.uuid not in ('".implode("','", $groupSingleArray)."') and oag.announcement_id = ".$announcementId." and og.org_id =".$orgId." and og.status = 'Active'";
 
@@ -446,7 +449,8 @@ class AnnouncementService extends AbstractService
                 $query ="Insert into ox_announcement_group_mapper(announcement_id,group_id) SELECT ".$announcementId.",og.id from ox_group as og LEFT OUTER JOIN ox_announcement_group_mapper as oag on og.id = oag.group_id and oag.announcement_id = ".$announcementId." where og.uuid in ('".implode("','", $groupSingleArray)."') and og.org_id = ".$orgId." and og.status = 'Active' and oag.announcement_id is null";
 
                 $resultInsert = $this->runGenericQuery($query);
-            } catch (Exception $e) {
+            }
+            catch(Exception $e){
                 throw $e;
             }
             return 1;
@@ -454,3 +458,4 @@ class AnnouncementService extends AbstractService
         return 0;
     }
 }
+?>
