@@ -12,6 +12,9 @@ use PHPUnit\Framework\TestResult;
 use Zend\Db\Sql\Sql;
 use Oxzion\Utils\FileUtils;
 use Zend\Db\Adapter\Adapter;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
+
 
 
 class ContactControllerTest extends ControllerTest
@@ -27,6 +30,15 @@ class ContactControllerTest extends ControllerTest
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Contact.yml");
         return $dataset;
+    }
+
+    private function executeQueryTest($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        return $resultSet->toArray();
     }
 
     public function testCreate()
@@ -318,6 +330,40 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['message'], 'Exported CSV Data');
         $this->assertEquals(count($content['data']), 1);       
+    }
+
+    public function testMultipleContactDelete(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['uuid' => ['c384bdbf-48e1-4180-937a-08e5852718ea','c384bdbf-48e1-4180-937a-08e585271ng6']];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/contacts/delete', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Contact');
+        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+        $select ="SELECT * from ox_contact where owner_id = 1";
+        $result = $this->executeQueryTest($select);
+        $this->assertControllerClass('ContactController');
+        $this->assertMatchedRouteName('contactsDelete');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($result),0);
+    }
+
+    public function testConactDeleteofDifferentOwner(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['uuid' => ['143949cf-6696-42ad-877a-26e8119603c3']];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/contacts/delete', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Contact');
+        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+        $select ="SELECT * from ox_contact where uuid = '143949cf-6696-42ad-877a-26e8119603c3'";
+        $result = $this->executeQueryTest($select);
+        $this->assertControllerClass('ContactController');
+        $this->assertMatchedRouteName('contactsDelete');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($result),1);
     }
 
 }
