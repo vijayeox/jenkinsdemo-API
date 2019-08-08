@@ -76,13 +76,14 @@ class GroupControllerTest extends ControllerTest {
 
     public function testgetGroupsforUserByManager() {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/group?org_id=b0971de7-0387-48ea-8f29-5d3704d96a46', 'GET');
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/group', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(403);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('groups');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'],'You do not have permissions to get the group list');
+        $this->assertEquals($content['message'],'You do not have permissions to get the groups list');
     }
 
     public function testgetGroupsforUserForManager() {
@@ -602,5 +603,45 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($content['data'],array());
         $this->assertEquals($content['total'],0);
     }
+
+
+    public function testGetExcludedGroupsList(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['exclude' => array('2db1c5a3-8a82-4d5b-b60a-c648cf1e27de','153f3e9e-eb07-4ca4-be78-34f715bd50db'),'filter' => json_encode(array('0' => array('filter' => array('logic' => 'and','filters' => array(['field' => 'name','operator' => 'startswith','value' => 'Test'])),'sort' => array(['field' => 'id','dir' => 'asc'],['field' => 'uuid','dir' => 'dsc']),'skip' => 0,'take' => 2)))];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/groups/list', 'POST',$data);
+        $this->assertResponseStatusCode(200);        
+        $this->setDefaultAsserts('groupsList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['name'],'Test Group 3');
+        $this->assertEquals($content['data'][1]['name'],'Test Group 5');
+    }
+
+
+    public function testGetExcludedGroupsListWithExcludedGroupFilter(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['exclude' => array('4fd9f04d-758f-11e9-b2d5-68ecc57cde45','768d1fb9-de9c-46c3-8d5c-23e0e484ce2e'),'filter' => json_encode(array('0' => array('sort' => array(['field' => 'id','dir' => 'asc'],['field' => 'uuid','dir' => 'dsc']),'skip' => 0,'take' => 2)))];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/groups/list', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('groupsList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'],4);
+    }
+    
+    public function testGetExcludedGroupsListWithOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['exclude' => array('2db1c5a3-8a82-4d5b-b60a-c648cf1e27de'),'filter' => json_encode(array('0' => array('sort' => array(['field' => 'id','dir' => 'asc'],['field' => 'uuid','dir' => 'dsc']),'skip' => 0,'take' => 20)))];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/groups/list', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('groupsList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['name'],'Test Group Once Again');
+        $this->assertEquals($content['data'][1]['name'],'Test Group 5');
+     }    
 
 }

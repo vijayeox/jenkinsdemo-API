@@ -193,7 +193,7 @@ return [
             'usersList' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/users/list',
+                    'route' => '/[organization/:orgId/]users/list',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',

@@ -241,15 +241,17 @@ class GroupService extends AbstractService {
      *   } </code>
      * @return array Returns a JSON Response with Status Code and Created Group.
      */
-    public function getGroupList($filterParams = null)
+    public function getGroupList($filterParams = null,$params = null)
     {
-        if(isset($filterParams['org_id'])){
+        if(isset($params['orgId'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($filterParams['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
-                throw new AccessDeniedException("You do not have permissions to get the group list");
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the groups list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
         }
-
+       
         $where = "";
         $pageSize = 20;
         $offset = 0;
@@ -258,23 +260,33 @@ class GroupService extends AbstractService {
         $cntQuery ="SELECT count(id) FROM `ox_group`";
 
         if(count($filterParams) > 0 || sizeof($filterParams) > 0){
-                $filterArray = json_decode($filterParams['filter'],true); 
-                if(isset($filterArray[0]['filter'])){
-                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                   $filterList = $filterArray[0]['filter']['filters'];
-                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
-                }
-                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
-                    $sort = $filterArray[0]['sort'];
-                    $sort = FilterUtils::sortArray($sort);
-                }
-                
-                $pageSize = $filterArray[0]['take'];
-                $offset = $filterArray[0]['skip'];            
+                if(isset($filterParams['filter'])){
+                    $filterArray = json_decode($filterParams['filter'],true); 
+                    if(isset($filterArray[0]['filter'])){
+                       $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                       $filterList = $filterArray[0]['filter']['filters'];
+                       $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                    }
+                    if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                        $sort = $filterArray[0]['sort'];
+                        $sort = FilterUtils::sortArray($sort);
+                    }
+                    
+                    $pageSize = $filterArray[0]['take'];
+                    $offset = $filterArray[0]['skip']; 
+                } 
+                if(isset($filterParams['exclude'])){
+                   $where .= strlen($where) > 0 ? " AND uuid NOT in ('".implode("','", $filterParams['exclude'])."') " : " WHERE uuid NOT in ('".implode("','", $filterParams['exclude'])."') " ;
+                }          
             }
 
             $where .= strlen($where) > 0 ? " AND status = 'Active'" : " WHERE status = 'Active'";
             
+            if(isset($orgId)){
+                $where .= " AND org_id =".$orgId; 
+            }
+
+
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
