@@ -964,13 +964,13 @@ class UserService extends AbstractService
         $userId = AuthContext::get(AuthConstants::USER_ID);
         $userRole = implode(array_column($this->getRolesFromDb($userId), 'role_id'), ",");
 
-        $query = "SELECT DISTINCT app.uuid, app.name from (
+        $query = "SELECT uuid,name from (SELECT DISTINCT app.uuid, app.name , count(NULLIF(urp.privilege_name,NULL)) as app_count from (
                     SELECT DISTINCT ap.uuid, ap.name, op.name as privilege_name, ar.org_id from ox_app as ap
                     INNER JOIN
                     ox_app_registry as ar ON ap.id = ar.app_id INNER JOIN
                     ox_privilege as op ON ar.app_id = op.app_id where ar.org_id =".$orgId.") app LEFT JOIN
                     (SELECT DISTINCT orp.privilege_name from ox_role_privilege as orp JOIN
-                    ox_user_role as ou on orp.role_id = ou.role_id AND ou.user_id =".$userId." and orp.org_id = ".$orgId.") urp ON app.privilege_name = urp.privilege_name WHERE urp.privilege_name IS NULL union SELECT oa.uuid, oa.name FROM ox_app oa LEFT JOIN
+                    ox_user_role as ou on orp.role_id = ou.role_id AND ou.user_id =".$userId." and orp.org_id = ".$orgId.") urp ON app.privilege_name = urp.privilege_name) a WHERE a.app_count = 0 union SELECT oa.uuid, oa.name FROM ox_app oa LEFT JOIN
                     `ox_app_registry` ar on oa.id = ar.app_id and ar.org_id =".$orgId." WHERE org_id IS NULL";
         $result = $this->executeQuerywithParams($query);
         $result= $result->toArray();
