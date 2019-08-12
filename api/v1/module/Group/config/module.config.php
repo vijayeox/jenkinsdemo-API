@@ -69,6 +69,17 @@ return [
                    ],
                ],
            ],
+           'groupsList' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/[organization/:orgId/]groups/list',
+                    'defaults' => [
+                        'controller' => Controller\GroupController::class,
+                        'method' => 'POST',
+                        'action' => 'groupsList'
+                    ],
+                ],
+            ],
            'groupLogo' => [
                 'type' => Segment::class,
                 'options' => [

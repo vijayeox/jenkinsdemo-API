@@ -75,6 +75,17 @@ return [
                     ],
                 ],
             ],
+            'contactsDelete' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/contacts/delete',
+                    'defaults' => [
+                        'controller' => Controller\ContactController::class,
+                        'action' => 'contactsDelete',
+                        'method' => 'POST',
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

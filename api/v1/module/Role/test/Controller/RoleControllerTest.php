@@ -10,6 +10,9 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
+
 
 
 class RoleControllerTest extends ControllerTest {
@@ -30,6 +33,17 @@ class RoleControllerTest extends ControllerTest {
         $this->assertControllerClass('RoleController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
+
+    private function executeQueryTest($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        return $resultSet->toArray();
+    }
+
+
     public function testGetList(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/role', 'GET');
@@ -181,69 +195,113 @@ class RoleControllerTest extends ControllerTest {
     public function testCreateRole(){
         $this->initAuthToken($this->adminUser);
         $data=array('name' => 'SUPER ADMIN','description' => 'Must have read and write control',
-            'privileges'=> json_encode(array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3'])));
+            'privileges'=> array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3']));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/role', 'POST',$data);
         $this->assertResponseStatusCode(201);
+
+        $select = "SELECT id from ox_role where name = 'SUPER ADMIN'";
+        $id = $this->executeQueryTest($select);
+
+        $select1 = "SELECT * from ox_role_privilege where role_id = ".$id[0]['id'];
+        $result = $this->executeQueryTest($select1);
+
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'],'SUPER ADMIN');
         $this->assertEquals($content['data']['description'],'Must have read and write control');
+        $this->assertEquals($result[0]['privilege_name'],'MANAGE_ALERT');
+        $this->assertEquals($result[1]['privilege_name'],'MANAGE_ROLE');
     }
 
 
     public function testCreateRoleWithOrgId(){
         $this->initAuthToken($this->adminUser);
         $data=array('name' => 'SUPER ADMIN','description' => 'Must have read and write control',
-            'privileges'=> json_encode(array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3'])));
+            'privileges'=> array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3']));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role', 'POST',$data);
         $this->assertResponseStatusCode(201);
+        $select = "SELECT id from ox_role where name = 'SUPER ADMIN'";
+        $id = $this->executeQueryTest($select);
+
+        $select1 = "SELECT * from ox_role_privilege where role_id = ".$id[0]['id'];
+        $result = $this->executeQueryTest($select1);
+
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'],'SUPER ADMIN');
         $this->assertEquals($content['data']['description'],'Must have read and write control');
+        $this->assertEquals($result[0]['privilege_name'],'MANAGE_ALERT');
+        $this->assertEquals($result[1]['privilege_name'],'MANAGE_ROLE');
     }
 
     public function testCreateRoleWithDifferentOrgId(){
         $this->initAuthToken($this->adminUser);
         $data=array('name' => 'SUPER ADMIN','description' => 'Must have read and write control',
-            'privileges'=> json_encode(array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3'])));
+            'privileges'=> array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3']));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role', 'POST',$data);
         $this->assertResponseStatusCode(201);
+        $select = "SELECT id from ox_role where name = 'SUPER ADMIN'";
+        $id = $this->executeQueryTest($select);
+
+        $select1 = "SELECT * from ox_role_privilege where role_id = ".$id[0]['id'];
+        $result = $this->executeQueryTest($select1);
+
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'],'SUPER ADMIN');
         $this->assertEquals($content['data']['description'],'Must have read and write control');
+        $this->assertEquals($result[0]['privilege_name'],'MANAGE_ALERT');
+        $this->assertEquals($result[1]['privilege_name'],'MANAGE_ROLE');
     }
 
     public function testUpdatePrivilegePermission(){
         $this->initAuthToken($this->adminUser);
         $data=array('name' => 'ADMIN','description' => 'Must have write control',
-            'privileges'=> json_encode(array(['id' => '1','privilege_name' => 'MANAGE_ANNOUNCEMENT','permission' => '15'],['id'=>'14','privilege_name'=> 'MANAGE_FORM','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'3'])));
+            'privileges'=> array(['id' => '1','privilege_name' => 'MANAGE_ANNOUNCEMENT','permission' => '15'],['id'=>'14','privilege_name'=> 'MANAGE_FORM','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'3']));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/role/53012471-2863', 'PUT');
         $this->assertResponseStatusCode(200);
+
+        $select = "SELECT id from ox_role where name = 'ADMIN' AND org_id = 1";
+        $id = $this->executeQueryTest($select);
+
+        $select1 = "SELECT * from ox_role_privilege where role_id = ".$id[0]['id'];
+        $result = $this->executeQueryTest($select1);
+
         $content = json_decode($this->getResponse()->getContent(), true);
+
         $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'],'ADMIN');
+        $this->assertEquals(count($result),26);
     }
 
     public function testUpdatePrivilegePermissionWithOrgID(){
         $this->initAuthToken($this->adminUser);
         $data=array('name' => 'ADMIN','description' => 'Must have write control',
-            'privileges'=> json_encode(array(['id' => '1','privilege_name' => 'MANAGE_ANNOUNCEMENT','permission' => '15'],['id'=>'14','privilege_name'=> 'MANAGE_FORM','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'3'])));
+            'privileges'=> array(['id' => '1','privilege_name' => 'MANAGE_ANNOUNCEMENT','permission' => '15'],['id'=>'14','privilege_name'=> 'MANAGE_FORM','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'3']));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/53012471-2863', 'PUT');
+
         $this->assertResponseStatusCode(200);
+        $select = "SELECT id from ox_role where name = 'ADMIN' AND org_id = 1";
+        $id = $this->executeQueryTest($select);
+
+        $select1 = "SELECT * from ox_role_privilege where role_id = ".$id[0]['id'];
+        $result = $this->executeQueryTest($select1);
+
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'],'ADMIN');
+        $this->assertEquals(count($result),26);
     }
 
     public function testAddNewPrivilege(){
         $this->initAuthToken($this->adminUser);
         $data=array('name' => 'ADMIN','description' => 'Must have write control',
-            'privileges'=> json_encode(array(['privilege_name' => 'MANAGE_FILE','permission' => '15'],['privilege_name'=> 'MANAGE_MAIL','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'15'])));
+            'privileges'=> array(['privilege_name' => 'MANAGE_FILE','permission' => '15'],['privilege_name'=> 'MANAGE_MAIL','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'15']));
          $this->setJsonContent(json_encode($data));
         $this->dispatch('/role/53012471-2863', 'PUT');
         $this->assertResponseStatusCode(200);
@@ -254,7 +312,7 @@ class RoleControllerTest extends ControllerTest {
     public function testCreateWithExisitingRole(){
         $this->initAuthToken($this->adminUser);
         $data=array('name' => 'ADMIN','description' => 'Must have write control',
-            'privileges'=> json_encode(array(['privilege_name' => 'MANAGE_FILE','permission' => '15'],['privilege_name'=> 'MANAGE_MAIL','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'15'])));
+            'privileges'=> array(['privilege_name' => 'MANAGE_FILE','permission' => '15'],['privilege_name'=> 'MANAGE_MAIL','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'15']));
          $this->setJsonContent(json_encode($data));
 
         $this->dispatch('/role','POST',$data);

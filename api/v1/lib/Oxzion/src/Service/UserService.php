@@ -502,8 +502,17 @@ class UserService extends AbstractService
      * @method GET
      * @return array $dataget list of Users
      */
-    public function getUsers($filterParams = null, $baseUrl = '')
+    public function getUsers($filterParams = null, $baseUrl = '',$params = null)
     {
+          if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_READ') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions get the groups list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+          }
+
             $where = "";
             $pageSize = 20;
             $offset = 0;
@@ -512,25 +521,32 @@ class UserService extends AbstractService
             $cntQuery ="SELECT count(id) FROM `ox_user` ";
 
             if(count($filterParams) > 0 || sizeof($filterParams) > 0){
-                $filterArray = json_decode($filterParams['filter'],true);
-                if(isset($filterArray[0]['filter'])){
-                    $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                if(isset($filterParams['filter'])){
+                 $filterArray = json_decode($filterParams['filter'],true);
+                 if(isset($filterArray[0]['filter'])){
+                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
                    $filterList = $filterArray[0]['filter']['filters'];
                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                 }
+
+                 if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                 }
+                 $pageSize = $filterArray[0]['take'];
+                 $offset = $filterArray[0]['skip'];
                 }
                 if(isset($filterParams['exclude'])){
                    $where .= strlen($where) > 0 ? " AND uuid NOT in ('".implode("','", $filterParams['exclude'])."') " : " WHERE uuid NOT in ('".implode("','", $filterParams['exclude'])."') " ;
                 }
-                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
-                    $sort = $filterArray[0]['sort'];
-                    $sort = FilterUtils::sortArray($sort);
-                }
-                $pageSize = $filterArray[0]['take'];
-                $offset = $filterArray[0]['skip'];
             }
 
     
             $where .= strlen($where) > 0 ? " AND status = 'Active'" : " WHERE status = 'Active'";
+
+            if(isset($orgId)){
+              $where .= " AND orgid = ".$orgId;
+            }
 
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
@@ -541,6 +557,7 @@ class UserService extends AbstractService
                 email, orgid, icon, country, date_of_birth,
                 designation, phone, address, gender, website, about,
                 managerid, timezone, date_of_join, interest, preferences FROM `ox_user`".$where." ".$sort." ".$limit;
+
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
             for($x=0;$x<sizeof($result);$x++) {
@@ -947,13 +964,13 @@ class UserService extends AbstractService
         $userId = AuthContext::get(AuthConstants::USER_ID);
         $userRole = implode(array_column($this->getRolesFromDb($userId), 'role_id'), ",");
 
-        $query = "SELECT DISTINCT app.uuid, app.name from (
+        $query = "SELECT uuid,name from (SELECT DISTINCT app.uuid, app.name , count(NULLIF(urp.privilege_name,NULL)) as app_count from (
                     SELECT DISTINCT ap.uuid, ap.name, op.name as privilege_name, ar.org_id from ox_app as ap
                     INNER JOIN
                     ox_app_registry as ar ON ap.id = ar.app_id INNER JOIN
                     ox_privilege as op ON ar.app_id = op.app_id where ar.org_id =".$orgId.") app LEFT JOIN
                     (SELECT DISTINCT orp.privilege_name from ox_role_privilege as orp JOIN
-                    ox_user_role as ou on orp.role_id = ou.role_id AND ou.user_id =".$userId." and orp.org_id = ".$orgId.") urp ON app.privilege_name = urp.privilege_name WHERE urp.privilege_name IS NULL union SELECT oa.uuid, oa.name FROM ox_app oa LEFT JOIN
+                    ox_user_role as ou on orp.role_id = ou.role_id AND ou.user_id =".$userId." and orp.org_id = ".$orgId.") urp ON app.privilege_name = urp.privilege_name) a WHERE a.app_count = 0 union SELECT oa.uuid, oa.name FROM ox_app oa LEFT JOIN
                     `ox_app_registry` ar on oa.id = ar.app_id and ar.org_id =".$orgId." WHERE org_id IS NULL";
         $result = $this->executeQuerywithParams($query);
         $result= $result->toArray();

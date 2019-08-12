@@ -971,6 +971,19 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['total'],0);
     }
     
+    public function testGetExcludedUserListWithOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['exclude' => array('4fd9f04d-758f-11e9-b2d5-68ecc57cde45','768d1fb9-de9c-46c3-8d5c-23e0e484ce2e'),'filter' => json_encode(array('0' => array('sort' => array(['field' => 'id','dir' => 'asc'],['field' => 'uuid','dir' => 'dsc']),'skip' => 0,'take' => 20)))];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/users/list', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('usersList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['name'],'Bharat Gogineni');
+        $this->assertEquals($content['data'][1]['name'],'Karan Agarwal');
+        $this->assertEquals($content['data'][2]['name'],'Deepak S');
+    }    
 
 
 }

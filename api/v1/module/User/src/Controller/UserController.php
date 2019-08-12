@@ -273,8 +273,9 @@ class UserController extends AbstractApiController
 
 
     public function usersListAction(){
-        $filterParams = $this->extractPostData();           
-        $result = $this->userService->getUsers($filterParams, $this->getBaseUrl());
+        $filterParams = $this->extractPostData();
+        $params = $this->params()->fromRoute();           
+        $result = $this->userService->getUsers($filterParams, $this->getBaseUrl(),$params);
         return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
     /**
