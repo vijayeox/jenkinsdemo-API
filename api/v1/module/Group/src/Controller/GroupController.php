@@ -130,7 +130,6 @@ class GroupController extends AbstractApiController
            if($response == 0) {
                  return $this->getErrorResponse("Group not found", 404, ['id' => $id]);
             }
-            }
         } catch (AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(), 403);
         }

@@ -367,3 +367,4 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals(count($result),1);
     }
 
+}

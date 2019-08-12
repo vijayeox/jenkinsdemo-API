@@ -120,6 +120,7 @@ class RoleService extends AbstractService
             }            
         }
         catch(Exception $e){
+            throw $e;
         }
     }
 
@@ -169,6 +170,8 @@ class RoleService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
+            throw $e;
+            
         }
         return $count;
     }
@@ -279,8 +282,6 @@ class RoleService extends AbstractService
         }
         catch(Exception $e){
             throw $e;
-        }
-    }
         }
     }
 }
