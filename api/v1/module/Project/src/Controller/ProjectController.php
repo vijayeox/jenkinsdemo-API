@@ -244,10 +244,9 @@ class ProjectController extends AbstractApiController {
     */
     public function saveUserAction() {
         $params = $this->params()->fromRoute();
-        $id=$params['projectUuid'];
         $data = $this->extractPostData();
         try {
-            $count = $this->projectService->saveUser($id,$data);
+            $count = $this->projectService->saveUser($params,$data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
@@ -255,12 +254,10 @@ class ProjectController extends AbstractApiController {
         catch(AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(),403);
         }
-        if($count == 0) {
-            return $this->getErrorResponse("Entity not found", 404);
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
-        if($count == 2) {
-            return $this->getErrorResponse("Enter User Ids", 404);
-        }
+        
         return $this->getSuccessResponseWithData($data,200);
     }
     /**

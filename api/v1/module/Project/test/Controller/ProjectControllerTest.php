@@ -530,15 +530,57 @@ class ProjectControllerTest extends ControllerTest {
     }
 
 
+    public function testSaveUserWithOrgId() {
+        $this->initAuthToken($this->adminUser);
+        $data = ['userid' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => $this->adminUser)),'USERTOPROJECT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 1','username' => $this->employeeUser)),'USERTOPROJECT_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->adminUser, 'projectUuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')),'DELETION_USERFROMPROJECT')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser,'firstname' => 'rakshith','lastname' => 'amin','email' => 'test@va.com','timezone' => 'United States/New York' ,'projectUuid' => '886d7eff-6bae-4892-baf8-6fefc56cbf0b')),'ADDITION_USERTOPROJECT')->once()->andReturn();
+        }
+        
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST', $data); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+    }
+
+
     public function testSaveUserByManagerOfDifferentOrg() {
         $this->initAuthToken($this->managerUser);
-        $data = ['userid' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45']),'org_id' => 'b0971de7-0387-48ea-8f29-5d3704d96a46'];
-        $this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',$data); 
+        $data = ['userid' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',$data); 
         $this->assertResponseStatusCode(403);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You do not have permissions to add users to project'); 
+    }
+
+
+    public function testSaveUserInvalidOrg() {
+        $this->initAuthToken($this->adminUser);
+        $data = ['userid' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
+        $this->dispatch('/organization/b0971de7-0387-48e5d3704d96a46/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST',$data); 
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Entity not found'); 
+    }
+
+    public function testSaveUserInvalidProject() {
+        $this->initAuthToken($this->adminUser);
+        $data = ['userid' => array(['uuid' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['uuid' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])];
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/project/8-6bae-4892-baf8-6fefc56cbf0b/save','POST',$data); 
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Project does not belong to the organization'); 
     }
 
     public function testSaveUserWithoutUser() {
