@@ -107,6 +107,9 @@ class GroupService extends AbstractService {
                 $data['org_id'] = $this->getIdFromUuid('ox_organization',$orgId);    
             }
         }
+        else{
+            $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        }
        
         try {
             $data['name'] = isset($data['name']) ? $data['name'] : NULL;
@@ -314,9 +317,7 @@ class GroupService extends AbstractService {
                 $data['org_id'] = $this->getIdFromUuid('ox_organization',$orgId);    
             }
         }
-        else{
-            $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        }
+        
 
         $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
