@@ -113,7 +113,5 @@ class PrivilegeControllerTest extends MainControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['masterPrivilege']),23);
-        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_WORKFLOW');
-        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'],'MANAGE_WIDGET');
     }
 }
