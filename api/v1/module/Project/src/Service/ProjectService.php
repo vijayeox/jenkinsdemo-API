@@ -205,9 +205,7 @@ class ProjectService extends AbstractService {
                 $data['org_id'] = $this->getIdFromUuid('ox_organization',$orgId);    
             }
         }
-        else{
-            $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        }
+
         $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
             throw new ServiceException("Updating non-existent Group","non.existent.group");
