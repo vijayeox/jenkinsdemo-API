@@ -319,7 +319,6 @@ class UserService extends AbstractService
         $this->beginTransaction();
         try{
             $result = $this->createUser($params,$data);
-            print_r($result);
             if($result == 3){
                  return 3;
             }
@@ -327,14 +326,12 @@ class UserService extends AbstractService
                      return 4;
                  }
             else if($result == 5){
-                    print("5");
                      return 5;
                  } 
             else if(is_array($result)){
                     return 1;
                  }
-            print("PASSED");
-            exit;
+          
             $select = "SELECT id from `ox_user` where username = '".$data['username']."'";
             $resultSet = $this->executeQueryWithParams($select)->toArray();
 
@@ -1032,7 +1029,6 @@ class UserService extends AbstractService
             }
             return 0;
         } else {
-            print ("wrong username");
             return 0;
         }
     }
