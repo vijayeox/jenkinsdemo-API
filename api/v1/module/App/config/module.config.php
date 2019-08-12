@@ -257,6 +257,17 @@ return [
                     ],
                 ],
             ],
+            'importcsv' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/importcsv',
+                    'defaults' => [
+                        'controller' => Controller\ImportController::class,
+                        'action' => 'importCSV',
+                        'method' => 'POST'
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

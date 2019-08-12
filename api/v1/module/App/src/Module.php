@@ -13,6 +13,7 @@ use Oxzion\Error\ErrorHandler;
 use Oxzion\Model\FormTable;
 use Oxzion\Model\FieldTable;
 use Oxzion\Model\FileTable;
+use Oxzion\Model\FormTable;
 use Oxzion\Model\WorkflowTable;
 use Oxzion\Service\FieldService;
 use Oxzion\Service\FileService;
@@ -177,7 +178,14 @@ class Module implements ConfigProviderInterface
                         $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
-                }
+                },
+                Controller\ImportController::class => function ($container) {
+                    return new Controller\ImportController(
+                        $container->get(Service\ImportService::class),
+                        $container->get('AppLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
             ],
         ];
     }
