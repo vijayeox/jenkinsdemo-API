@@ -611,9 +611,9 @@ class UserControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        if (enableActiveMQ == 0) {
+        if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')), 'USER_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
         }
         $this->dispatch('/user/4fd9f04d-758f-11e9-b2d5-68ecc57cde45', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -918,39 +918,23 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']['blackListedApps']), 0);
     }
 
-    public function testBlackListAppsForEmployee()
-    {
-        $this->initAuthToken($this->employeeUser);
-        $update = "update ox_app set uuid = 'c980e23a-ade8-4bd9-a06c-a39ca7854b9d' where name = 'AppBuilder'";
-        $result = $this->executeUpdate($update);
-
-        $update = "update ox_app set uuid = '636cb8e2-14a9-4c09-a668-14f6518b8d0d' where name = 'CRM'";
-        $result = $this->executeUpdate($update);
-      
-      
+    public function testBlackListAppsForEmployee(){
+        $this->initAuthToken($this->employeeUser); 
         $this->dispatch('/user/me/bapp', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('loggedInUser');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['blackListedApps']['Admin'], 'f297dd6a-3eb4-4e06-83ad-fb289e5c0535');
-        $this->assertEquals($content['data']['blackListedApps']['AppBuilder'], 'c980e23a-ade8-4bd9-a06c-a39ca7854b9d');
-        $this->assertEquals($content['data']['blackListedApps']['CRM'], '636cb8e2-14a9-4c09-a668-14f6518b8d0d');
+        $this->assertEquals($content['data']['blackListedApps']['Admin'],'f297dd6a-3eb4-4e06-83ad-fb289e5c0535');
     }
 
-    public function testBlackListAppsForManager()
-    {
+    public function testBlackListAppsForManager(){
         $this->initAuthToken($this->managerUser);
-        $update = "update ox_app set uuid = 'c980e23a-ade8-4bd9-a06c-a39ca7854b9d' where name = 'AppBuilder'";
-        $result = $this->executeUpdate($update);
-
         $this->dispatch('/user/me/bapp', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('loggedInUser');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['blackListedApps']['Admin'], 'f297dd6a-3eb4-4e06-83ad-fb289e5c0535');
-        $this->assertEquals($content['data']['blackListedApps']['AppBuilder'], 'c980e23a-ade8-4bd9-a06c-a39ca7854b9d');
     }
 
     public function testGetExcludedUserList(){

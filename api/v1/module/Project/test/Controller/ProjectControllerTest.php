@@ -281,6 +281,32 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_project'));
     }
 
+    public function testCreateWithOrgID() {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Test Project 3','description'=>'Project Description','manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_project'));
+        if(enableActiveMQ == 0){
+             $mockMessageProducer = $this->getMockMessageProducer();
+             //Message to be sent to Mockery => json_encode(array('orgname'=> 'Cleveland Black','projectname' => 'Test Project 3','description' => 'Project Description','uuid' => '')
+             // Since value of uuid changes during each project creation Mockery Message is set to Mockery::any()
+             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'PROJECT_ADDED')->once()->andReturn();
+        }
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/project', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $select = "SELECT id,manager_id from ox_project where name = 'Test Project 3'";
+        $project = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_user_project where user_id =".$project[0]['manager_id']." and project_id =".$project[0]['id'];
+        $oxproject = $this->executeQueryTest($select);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($project[0]['manager_id'], 1);
+        $this->assertEquals($oxproject[0]['user_id'], 1);
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_project'));
+    }
+
 
     public function testCreateWithExistingProject() {
         $this->initAuthToken($this->adminUser);
@@ -478,11 +504,11 @@ class ProjectControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        if (enableActiveMQ == 0) {
+        if(enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 2','uuid' => 'ced672bb-fe33-4f0a-b153-f1d182a02603')), 'PROJECT_DELETED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' =>'Cleveland Black','projectname' => 'Test Project 2','uuid' => 'ced672bb-fe33-4f0a-b153-f1d182a02603')),'PROJECT_DELETED')->once()->andReturn();
         }
-        $this->dispatch('/project/ced672bb-fe33-4f0a-b153-f1d182a02603', 'DELETE');
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/project/ced672bb-fe33-4f0a-b153-f1d182a02603', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -551,8 +577,8 @@ class ProjectControllerTest extends ControllerTest
     	$this->dispatch('/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b/save','POST', $data); 
     	$this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
+    	$content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
     }
 
 
@@ -583,7 +609,7 @@ class ProjectControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'You do not have permissions to add users to project');
+        $this->assertEquals($content['message'], 'You do not have permissions to add users to project'); 
     }
 
 

@@ -1029,6 +1029,7 @@ class UserService extends AbstractService
             $userReset['lastname'] = $userDetails['lastname'];
             $userReset['password_reset_code'] = $resetPasswordCode;
             $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+            $userReset['modified_id'] = $userDetails['uuid'];
             //Code to update the password reset and expiration time
             $userUpdate = $this->updateUser($id, $userReset);
 

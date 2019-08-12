@@ -65,6 +65,9 @@ class RoleController extends AbstractApiController
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
         }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
         if($count == 0){
             return $this->getFailureResponse("Failed to create a new entity", $data);
         }

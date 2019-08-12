@@ -200,6 +200,9 @@ class AnnouncementController extends AbstractApiController
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
         }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
         if($count == 0) {
             return $this->getErrorResponse("Entity not found", 404);
         }

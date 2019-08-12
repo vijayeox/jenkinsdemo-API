@@ -113,11 +113,11 @@ class GroupService extends AbstractService
         try {
             $data['name'] = isset($data['name']) ? $data['name'] : NULL;
        
-            $select = "SELECT count(id),name,uuid,status from ox_group where name = '".$data['name']."' AND org_id = ".$data['org_id'];
+            $select = "SELECT name,uuid,status from ox_group where name = '".$data['name']."' AND org_id = ".$data['org_id'];
          
             $result = $this->executeQuerywithParams($select)->toArray();
 
-            if($result[0]['count(id)'] > 0){
+            if(count($result) > 0){
                 if($data['name'] == $result[0]['name'] && $result[0]['status'] == 'Active'){
                     throw new ServiceException("Group already exists","group.exists");
                 }

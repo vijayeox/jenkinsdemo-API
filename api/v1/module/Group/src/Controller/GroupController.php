@@ -136,6 +136,9 @@ class GroupController extends AbstractApiController
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
         }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
 
         return $this->getSuccessResponse();
     }
@@ -205,6 +208,22 @@ class GroupController extends AbstractApiController
             return $this->getErrorResponse($e->getMessage(), 403);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+    }
+
+
+    public function groupsListAction(){
+        $filterParams = $this->extractPostData();
+        $params = $this->params()->fromRoute();
+        $result = $this->groupService->getGroupList($filterParams,$params);
+        if ($result) {
+            for($x=0;$x<sizeof($result['data']);$x++){
+                $baseUrl =$this->getBaseUrl();
+                $logo = $result['data'][$x]['logo'];
+                $orgId = $this->orgService->getOrganization($result['data'][$x]['org_id']);
+                $result['data'][$x]['logo'] = $baseUrl . "/group/".$orgId['uuid']."/logo/".$result['data'][$x]["uuid"];
+            }
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
 
 

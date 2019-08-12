@@ -167,6 +167,9 @@ class ProjectController extends AbstractApiController
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
         }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
     	return $this->getSuccessResponse();
     }
 
