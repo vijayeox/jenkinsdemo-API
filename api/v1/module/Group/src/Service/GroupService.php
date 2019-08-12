@@ -317,7 +317,6 @@ class GroupService extends AbstractService {
                 $data['org_id'] = $this->getIdFromUuid('ox_organization',$orgId);    
             }
         }
-        
 
         $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
@@ -453,28 +452,33 @@ class GroupService extends AbstractService {
     
     }
 
-    public function saveUser($id,$data) {
-        if(isset($data['org_id'])){
+    public function saveUser($params,$data) {
+        if(isset($params['orgId'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to add users to group");
+            }else{
+                $params['orgId'] = $this->getIdFromUuid('ox_organization',$params['orgId']);
             }
         }
 
-        $obj = $this->table->getByUuid($id,array());
+        $obj = $this->table->getByUuid($params['groupId'],array());
+
         if (is_null($obj)) {
-            $this->logger->log(Logger::INFO, "Invalid group id - $id");
-            return 0;
+            $this->logger->log(Logger::INFO, "Invalid group id - ".$params['groupId']);
+            throw new ServiceException("Group does not belong to the organization","group.not.found");
         }
-        
+
+        if(isset($params['orgId'])){
+            if($params['orgId'] != $obj->org_id){
+               throw new ServiceException("Entity not found","group.not.found");  
+            }
+        }
+
         $org = $this->organizationService->getOrganization($obj->org_id);
-        if ($org['id'] != AuthContext::get(AuthConstants::ORG_ID)) {
-            $this->logger->log(Logger::WARN, "Group $id does not belong to logged in Organization");
-            return 0;
-        }
-        
+      
         if(!isset($data['userid']) || empty($data['userid'])) {
-            return 2;
+            throw new ServiceException("Enter User Ids","select.user");
         }
        
         $userArray = $this->organizationService->getUserIdList($data['userid']);
@@ -516,6 +520,6 @@ class GroupService extends AbstractService {
             }
             return 1;
         }
-        return 0;
+        throw new ServiceException("Entity not found","group.not.found");
     }
 }
