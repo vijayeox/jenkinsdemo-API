@@ -237,16 +237,18 @@ class GroupController extends AbstractApiController {
     */
     public function saveUserAction() {
         $params = $this->params()->fromRoute();
-        $id=$params['groupId'];
         $data = $this->extractPostData();
         try {
-            $count = $this->groupService->saveUser($id,$data);
+            $count = $this->groupService->saveUser($params,$data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
         }
         catch(AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(),403);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         if($count == 0) {
             return $this->getErrorResponse("Entity not found", 404);

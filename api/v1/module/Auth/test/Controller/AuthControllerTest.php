@@ -25,6 +25,15 @@ class AuthControllerTest extends ControllerTest{
         return $dataset;
     }
 
+    private function executeUpdate($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        
+        return $result;
+    }
+
+
     public function testAuthentication(){
         $data = ['username' => $this->adminUser, 'password' => 'password'];
         $this->dispatch('/auth', 'POST', $data);
@@ -38,6 +47,40 @@ class AuthControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(is_null($content['data']['jwt']), false);
         $this->assertEquals(is_null($content['data']['refresh_token']), false);
+    }
+
+
+
+    public function testAuthenticationInActiveUser(){
+        $update = "UPDATE ox_user SET status = 'Inactive' where username = '".$this->adminUser."'";
+        $result = $this->executeUpdate($update);
+        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $this->dispatch('/auth', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('auth');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Authentication Failure - Incorrect data specified');
+    }
+
+    public function testAuthenticationInActiveOrganization(){
+        $update = "UPDATE ox_organization SET status = 'Inactive' where id = 1";
+        $result = $this->executeUpdate($update);
+        $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $this->dispatch('/auth', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('auth');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Authentication Failure - Incorrect data specified');
     }
 
     public function testAuthenticationFail(){
