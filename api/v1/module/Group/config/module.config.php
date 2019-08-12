@@ -58,7 +58,7 @@ return [
            'saveusers' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/group/:groupId/save',
+                    'route'    => '/[organization/:orgId/]group/:groupId/save',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'method' => 'POST',
