@@ -417,7 +417,7 @@ class UserService extends AbstractService
         if(isset($data['managerid'])){
             $userdata['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
         }
-        $userdata['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
+        $userdata['modified_id'] = isset($userdata['modified_id']) ? $userdata['modified_id'] :AuthContext::get(AuthConstants::USER_ID);
         $userdata['date_modified'] = date('Y-m-d H:i:s');
         if (isset($userdata['preferences'])) {
             
@@ -1026,16 +1026,17 @@ class UserService extends AbstractService
             $userReset['lastname'] = $userDetails['lastname'];
             $userReset['password_reset_code'] = $resetPasswordCode;
             $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+            $userReset['modified_id'] = $userDetails['uuid'];
             //Code to update the password reset and expiration time
             $userUpdate = $this->updateUser($id, $userReset);
 
             if ($userUpdate) {
                 $this->emailService->sendPasswordResetEmail($userReset);
+                $this->messageProducer->sendTopic(json_encode(array('username' => $username)),'PASSWORD_RESET');
                 return $userReset;
             }
             return 0;
         } else {
-            print ("wrong username");
             return 0;
         }
     }
