@@ -30,7 +30,7 @@ return [
             'projectusersave' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project/:projectUuid/save',
+                    'route'    => '/[organization/:orgId/]project/:projectUuid/save',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'method' => 'POST',
