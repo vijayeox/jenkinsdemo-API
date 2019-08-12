@@ -16,6 +16,7 @@ use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
+use Oxzion\ServiceException;
 
 class ProjectService extends AbstractService
 {
@@ -120,18 +121,42 @@ class ProjectService extends AbstractService
         return $response[0];
     }
 
-    public function createProject(&$data)
-    {
-        if (isset($data['org_id'])) {
-            if (SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')) {
-                $data['org_id'] = $this->organizationService->getOrganizationIdByUuid($data['org_id']);
-            } else {
-                unset($data['org_id']);
+    public function createProject(&$data,$params = null) {
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions create project");
+            }else{
+                $data['org_id'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
         }
-        if (!isset($data['org_id'])) {
+        else{
             $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         }
+        try {
+            $data['name'] = isset($data['name']) ? $data['name'] : NULL;
+       
+            $select = "SELECT count(id),name,uuid,isdeleted from ox_project where name = '".$data['name']."' AND org_id = ".$data['org_id'];
+         
+            $result = $this->executeQuerywithParams($select)->toArray();
+
+            if($result[0]['count(id)'] > 0){
+                if($data['name'] == $result[0]['name'] && $result[0]['isdeleted'] == 0){
+                    throw new ServiceException("Project already exists","project.exists");
+                }
+                else if($result[0]['isdeleted'] == 1){
+                    $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : NULL;
+                    if($data['reactivate'] == 1){
+                        $data['isdeleted'] = 0;
+                        $count = $this->updateProject($result[0]['uuid'],$data,$params['orgId']);
+                        return;
+                    }else{
+                        throw new ServiceException("Project already exists would you like to reactivate?","project.already.exists");
+                    }
+                }
+            }
+     
+
         $sql = $this->getSqlObject();
         $form = new Project();
         //Additional fields that are needed for the create
@@ -149,18 +174,17 @@ class ProjectService extends AbstractService
         $form->validate();
         $this->beginTransaction();
         $count = 0;
-        try {
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Failed to create a new entity","failed.project.create");
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         $insert = $sql->insert('ox_user_project');
         $insert_data = array('user_id' => $data['manager_id'], 'project_id' => $data['id']);
@@ -172,19 +196,19 @@ class ProjectService extends AbstractService
         return $count;
     }
 
-    public function updateProject($id, $data)
-    {
-        if (isset($data['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+    public function updateProject ($id, $data,$orgId = null) {
+        if(isset($orgId)){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($orgId != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to edit the project");
-            } else {
-                $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+            }else{
+                $data['org_id'] = $this->getIdFromUuid('ox_organization',$orgId);    
             }
         }
-        $obj = $this->table->getByUuid($id, array());
+
+        $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
-            return 0;
+            throw new ServiceException("Updating non-existent Group","non.existent.group");
         }
         $form = new Project();
         if (isset($data['manager_id'])) {
@@ -207,31 +231,30 @@ class ProjectService extends AbstractService
                     $query1 = $this->executeQuerywithParams($insert);
                 }
             } else {
-                return 2;
+                throw new ServiceException("Failed to Update","failed.update.project");
             }
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         $this->messageProducer->sendTopic(json_encode(array('orgname'=> $org['name'],'old_projectname' => $obj->name,'new_projectname' => $data['name'],'description' => $data['description'],'uuid' => $data['uuid'])), 'PROJECT_UPDATED');
         return $count;
     }
 
-    public function deleteProject($id, $data)
-    {
-        if (isset($data['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+    public function deleteProject($id,$data) {
+        if(isset($id['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($id['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to delete the project");
             }
         }
-        $obj = $this->table->getByUuid($id, array());
+        $obj = $this->table->getByUuid($id['projectUuid'],array());
         if (is_null($obj)) {
-            return 0;
+            throw new ServiceException("Entity not found","project.not.found");
         }
         $form = new Project();
         $data = $obj->toArray();
-        $data['uuid'] = $id;
+        $data['uuid'] = $id['projectUuid'];
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['isdeleted'] = 1;
@@ -243,11 +266,11 @@ class ProjectService extends AbstractService
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Failed to Delete","failed.project.delete");
             }
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'] ,'projectname' => $data['name'],'uuid' => $data['uuid'])), 'PROJECT_DELETED');
         return $count;
@@ -348,19 +371,33 @@ class ProjectService extends AbstractService
         return $resultSet->toArray();
     }*/
 
-    public function saveUser($id, $data)
-    {
-        if (isset($data['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+    public function saveUser($params,$data) {
+
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to add users to project");
+            }else{
+                $params['orgId'] = $this->getIdFromUuid('ox_organization',$params['orgId']);
             }
         }
 
-        $obj = $this->table->getByUuid($id, array());
+        $obj = $this->table->getByUuid($params['projectUuid'],array());
+
+        if (is_null($obj)) {
+            throw new ServiceException("Project does not belong to the organization","group.not.found");
+        }
+
         $org = $this->organizationService->getOrganization($obj->org_id);
-        if (!isset($data['userid']) || empty($data['userid'])) {
-            return 2;
+
+       
+        if(isset($params['orgId'])){
+            if($params['orgId'] != $obj->org_id){
+               throw new ServiceException("Entity not found","project.not.found");  
+            }
+        }
+        if(!isset($data['userid']) || empty($data['userid'])) {
+             throw new ServiceException("Enter User Ids","select.user");
         }
         
         $userArray = $this->organizationService->getUserIdList($data['userid']);
@@ -388,7 +425,7 @@ class ProjectService extends AbstractService
                 $resultInsert = $this->runGenericQuery($query);
                 if (count($resultInsert) != count($userArray)) {
                     $this->rollback();
-                    return 0;
+                    throw new ServiceException("Failed to add","failed.to.add");
                 }
                 $this->commit();
             } catch (Exception $e) {
@@ -406,7 +443,7 @@ class ProjectService extends AbstractService
             }
             return 1;
         }
-        return 0;
+       throw new ServiceException("Entity not found","project.not.found");
     }
 
     /*public function deleteUser($project_id, $data) {

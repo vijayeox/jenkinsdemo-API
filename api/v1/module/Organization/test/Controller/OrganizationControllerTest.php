@@ -154,8 +154,6 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-  
-
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
@@ -163,7 +161,7 @@ class OrganizationControllerTest extends ControllerTest
         $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/";
         FileUtils::createDirectory($tempFolder);
         copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
-        $contact = array('username' => 'goku','firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharat@myvamla.com','phone' => '1234567890');
+        $contact = array('username' => 'goku','firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'barat@myvamla.com','phone' => '1234567890');
         $preferences = array('currency' => 'INR','timezone' => 'Asia/Calcutta','dateformat' => 'dd/mm/yyy');
         $data = array('name'=>'ORGANIZATION','address' => 'Bangalore','contact' => json_encode($contact),'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
@@ -198,8 +196,7 @@ class OrganizationControllerTest extends ControllerTest
 
         $select = "SELECT * FROM ox_user where username ='".$contact['username']."'";
         $usrResult = $this->executeQueryTest($select); 
-        
-
+       
         $this->assertEquals(count($role), 3);
         $this->assertEquals(count($roleResult), 1);
         $this->assertEquals(count($orgResult), 1);
@@ -212,6 +209,135 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
     }
+
+
+    public function testCreateWithExistingContactpersonEmail()
+    {
+        $this->initAuthToken($this->adminUser);
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/";
+        FileUtils::createDirectory($tempFolder);
+        copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
+        $contact = array('username' => 'goku','firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharatg@myvamla.com','phone' => '1234567890');
+        $preferences = array('currency' => 'INR','timezone' => 'Asia/Calcutta','dateformat' => 'dd/mm/yyy');
+        $data = array('name'=>'ORGANIZATION','address' => 'Bangalore','contact' => json_encode($contact),'preferences' => json_encode($preferences));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('organization');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Username or Email ID Exist in other Organization');
+    }
+
+
+    public function testCreateWithExistingContactpersonUsername()
+    {
+        $this->initAuthToken($this->adminUser);
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/";
+        FileUtils::createDirectory($tempFolder);
+        copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
+        $contact = array('username' => 'bharatgtest','firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'goku@myvamla.com','phone' => '1234567890');
+        $preferences = array('currency' => 'INR','timezone' => 'Asia/Calcutta','dateformat' => 'dd/mm/yyy');
+        $data = array('name'=>'ORGANIZATION','address' => 'Bangalore','contact' => json_encode($contact),'preferences' => json_encode($preferences));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('organization');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Username or Email ID Exist in other Organization');
+    }
+
+    public function testCreateWithExistingActiveOrg()
+    {
+        $this->initAuthToken($this->adminUser);
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/";
+        FileUtils::createDirectory($tempFolder);
+        copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
+        $contact = array('username' => 'goku','firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharatg@myvamla.com','phone' => '1234567890');
+        $preferences = array('currency' => 'INR','timezone' => 'Asia/Calcutta','dateformat' => 'dd/mm/yyy');
+        $data = array('name'=>'Sample Organization','address' => 'Bangalore','contact' => json_encode($contact),'preferences' => json_encode($preferences));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('organization');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Organization already exists');
+    }
+
+    public function testCreateWithExistingInactiveOrgWithoutReactivateFlag()
+    {
+        $this->initAuthToken($this->adminUser);
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/";
+        FileUtils::createDirectory($tempFolder);
+        copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
+        $contact = array('username' => 'goku','firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharatg@myvamla.com','phone' => '1234567890');
+        $preferences = array('currency' => 'INR','timezone' => 'Asia/Calcutta','dateformat' => 'dd/mm/yyy');
+        $data = array('name'=>'Test Organization','address' => 'Bangalore','contact' => json_encode($contact),'preferences' => json_encode($preferences));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('organization');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Organization already exists would you like to reactivate?');
+    }
+
+    public function testCreateWithExistingInactiveOrgWithReactivateFlag()
+    {
+        $this->initAuthToken($this->adminUser);
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/";
+        FileUtils::createDirectory($tempFolder);
+        copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
+        $contact = array('username' => 'goku','firstname'=>'Bharat','lastname'=>'Gogineni','email'=>'bharatg@myvamla.com','phone' => '1234567890');
+        $preferences = array('currency' => 'INR','timezone' => 'Asia/Calcutta','dateformat' => 'dd/mm/yyy');
+        $data = array('name'=>'Test Organization','address' => 'Bangalore','contact' => json_encode($contact),'preferences' => json_encode($preferences),'reactivate' => 1);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('organization');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['status'], 'Active');
+    }
+
+    public function testCreateWithoutContactPerson()
+    {
+        $this->initAuthToken($this->adminUser);
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/";
+        FileUtils::createDirectory($tempFolder);
+        copy(__DIR__."/../files/logo.png", $tempFolder."logo.png");
+        $preferences = array('currency' => 'INR','timezone' => 'Asia/Calcutta','dateformat' => 'dd/mm/yyy');
+        $data = array('name'=>'Test Organization','address' => 'Bangalore','preferences' => json_encode($preferences),'reactivate' => 1);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('organization');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Contact Person details are required');
+    }    
+
+
 
     public function testCreateWithOutNameFailure()
     {
@@ -263,8 +389,8 @@ class OrganizationControllerTest extends ControllerTest
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('new_orgname' => 'Cleveland Cavaliers','old_orgname'=> 'Cleveland Black','status' => 'InActive')), 'ORGANIZATION_UPDATED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'InActive')), 'ORGANIZATION_DELETED')->once()->andReturn();
         }
-        $this->dispatch('/organization/1', 'PUT', null);
-        $this->assertResponseStatusCode(200);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a', 'POST', null);
+        $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -622,13 +748,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['manager_id'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['parent_id'], NULL);
         $this->assertEquals($content['data'][0]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
-        $this->assertEquals($content['data'][1]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
-        $this->assertEquals($content['data'][1]['name'], 'Test Group Once Again');
-        $this->assertEquals($content['data'][1]['description'], 'Description for the second test cases');
-        $this->assertEquals($content['data'][1]['manager_id'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
-        $this->assertEquals($content['data'][1]['parent_id'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
-        $this->assertEquals($content['data'][1]['org_id'], '53012471-2863-4949-afb1-e69b0891c98a');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['data'][1]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd124');
+        $this->assertEquals($content['data'][1]['name'], 'Test Group 5');
+        $this->assertEquals($content['data'][1]['description'], 'Group Description');
+        $this->assertEquals($content['data'][1]['manager_id'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['total'],3); 
     }
 
 
@@ -656,11 +780,11 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
-        $this->assertEquals($content['data'][0]['name'], 'Test Group Once Again');   
-        $this->assertEquals($content['data'][1]['uuid'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
-        $this->assertEquals($content['data'][1]['name'], 'Test Group');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd124');
+        $this->assertEquals($content['data'][0]['name'], 'Test Group 5');
+        $this->assertEquals($content['data'][1]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
+        $this->assertEquals($content['data'][1]['name'], 'Test Group Once Again');   
+        $this->assertEquals($content['total'],3); 
     }
 
 
@@ -673,7 +797,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['uuid'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
         $this->assertEquals($content['data'][0]['name'], 'Test Group');
-        $this->assertEquals($content['total'],2); 
+        $this->assertEquals($content['total'],3); 
     }
 
     public function testgetOrgGroupsWithPagination(){
@@ -683,9 +807,10 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd50db');
-        $this->assertEquals($content['data'][0]['name'], 'Test Group Once Again');
-        $this->assertEquals($content['total'],2); 
+         $this->assertEquals($content['data'][0]['uuid'], '153f3e9e-eb07-4ca4-be78-34f715bd124');
+        $this->assertEquals($content['data'][0]['name'], 'Test Group 5');
+       
+        $this->assertEquals($content['total'],3); 
     }
 
     public function testgetOrgGroupsWithInvalidOrgID(){

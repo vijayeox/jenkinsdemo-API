@@ -191,6 +191,7 @@ class UserController extends AbstractApiController
      */
     public function delete($id)
     {
+        $id = $this->params()->fromRoute();
         $response = $this->userService->deleteUser($id);
         if ($response == 0) {
             return $this->getErrorResponse("User not found", 404, ['id' => $id]);
@@ -267,6 +268,13 @@ class UserController extends AbstractApiController
         }
     }
 
+
+    public function usersListAction(){
+        $filterParams = $this->extractPostData();
+        $params = $this->params()->fromRoute();           
+        $result = $this->userService->getUsers($filterParams, $this->getBaseUrl(),$params);
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+    }
     /**
      * Remove User from Project API
      * @api

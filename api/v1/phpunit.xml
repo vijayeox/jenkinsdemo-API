@@ -46,7 +46,7 @@
         </testsuite>
     </testsuites>
     <php>
-        <ini name="memory_limit" value="700M" />
+        <ini name="memory_limit" value="250M" />
         <const name="enableNLP" value="0"/>
         <const name="enableCamunda" value="0"/>
         <const name="enableElastic" value="0"/>
@@ -56,6 +56,7 @@
         <const name="enableProspectResearch" value="0"/>
     </php>
     <listeners>
+        <listener class="\MyBuilder\PhpunitAccelerator\TestListener"/>
         <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
     </listeners>
 </phpunit>

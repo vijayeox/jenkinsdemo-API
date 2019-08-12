@@ -159,10 +159,27 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['message'],'You have no Access to this API');
     }
 
-    public function testCreateforExistingInactiveUser()
+    public function testCreateforExistingInactiveUserWithoutReactivateFlag()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['username' => 'rajesh', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
+        $this->setJsonContent(json_encode($data));
+        
+        $this->dispatch('/user', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'User already exists would you like to reactivate?');
+    }
+
+
+    public function testCreateforExistingInactiveUserWithReactivateFlag()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['username' => 'rajesh', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073']),'reactivate' => 1];
         $this->setJsonContent(json_encode($data));
         
         if(enableActiveMQ == 0){
@@ -175,7 +192,7 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-
+        
         $query = "SELECT status from ox_user where username = '" .$data['username']."'";
         $userStatus = $this->executeQueryTest($query);
 
@@ -207,16 +224,11 @@ class UserControllerTest extends ControllerTest
 
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(201);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-
-        $query = "SELECT status from ox_user where username = '" .$data['username']."'";
-        $userStatus = $this->executeQueryTest($query);
-
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'], $data['username']);
-        $this->assertEquals($userStatus[0]['status'], 'Active');
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'User already exists would you like to reactivate?');
     } 
 
     public function testCreateforOtherOrg()
@@ -322,25 +334,11 @@ class UserControllerTest extends ControllerTest
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
 
-        $this->assertResponseStatusCode(201);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-
-
-        $query = "SELECT id from ox_user where username = '" .$data['username']."'";
-        $userId = $this->executeQueryTest($query);
-
-        $query = "SELECT * from ox_user_org where user_id = ".$userId[0]['id'];
-        $userOrg = $this->executeQueryTest($query);
-
-        $query = "SELECT * from ox_user_role where user_id = ".$userId[0]['id'];
-        $userRole = $this->executeQueryTest($query);
-
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['username'], $data['username']);
-        $this->assertEquals($userOrg[0]['org_id'],1);
-        $this->assertEquals($userRole[0]['user_id'], $userId[0]['id']);
-        $this->assertEquals($userRole[0]['role_id'], 16);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'User already exists would you like to reactivate?');
     }
 
 
@@ -348,6 +346,22 @@ class UserControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'klmn@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'])];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'User already exists would you like to reactivate?');
+    }
+
+    public function testCreateExistingUsernameInactiveUserWithReactivateFlag()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'klmn@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7']),'reactivate' => 1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -378,6 +392,23 @@ class UserControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'prajwal@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'])];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'User already exists would you like to reactivate?');
+    }
+
+
+    public function testCreateExistingUsernameAndEmailIdInactiveUserWithReactivateFlag()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'prajwal@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7']),'reactivate' => 1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -491,7 +522,6 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        // print_r($content);
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
         $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
@@ -586,6 +616,20 @@ class UserControllerTest extends ControllerTest
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')), 'USER_DELETED')->once()->andReturn();
         }
         $this->dispatch('/user/4fd9f04d-758f-11e9-b2d5-68ecc57cde45', 'DELETE');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testDeleteWithOrgID()
+    {
+        $this->initAuthToken($this->adminUser);
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+        }
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd9f04d-758f-11e9-b2d5-68ecc57cde45', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -908,4 +952,45 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['blackListedApps']['Admin'], 'f297dd6a-3eb4-4e06-83ad-fb289e5c0535');
         $this->assertEquals($content['data']['blackListedApps']['AppBuilder'], 'c980e23a-ade8-4bd9-a06c-a39ca7854b9d');
     }
+
+    public function testGetExcludedUserList(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['exclude' => array('4fd9f04d-758f-11e9-b2d5-68ecc57cde45','768d1fb9-de9c-46c3-8d5c-23e0e484ce2e'),'filter' => json_encode(array('0' => array('filter' => array('logic' => 'and','filters' => array(['field' => 'name','operator' => 'endswith','value' => 'al'],['field' => 'designation' ,'operator' => 'startswith','value' => 'it'])),'sort' => array(['field' => 'id','dir' => 'asc'],['field' => 'uuid','dir' => 'dsc']),'skip' => 0,'take' => 2)))];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/users/list', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('usersList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['name'],'Karan Agarwal');
+    }
+
+
+    public function testGetExcludedUserListWithExcludedUserFilter(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['exclude' => array('4fd9f04d-758f-11e9-b2d5-68ecc57cde45','768d1fb9-de9c-46c3-8d5c-23e0e484ce2e','4fd9ce37-758f-11e9-b2d5-68ecc57cde45'),'filter' => json_encode(array('0' => array('filter' => array('logic' => 'and','filters' => array(['field' => 'name','operator' => 'endswith','value' => 'al'],['field' => 'designation' ,'operator' => 'startswith','value' => 'it'])),'sort' => array(['field' => 'id','dir' => 'asc'],['field' => 'uuid','dir' => 'dsc']),'skip' => 0,'take' => 2)))];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/users/list', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('usersList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'],0);
+    }
+    
+    public function testGetExcludedUserListWithOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['exclude' => array('4fd9f04d-758f-11e9-b2d5-68ecc57cde45','768d1fb9-de9c-46c3-8d5c-23e0e484ce2e'),'filter' => json_encode(array('0' => array('sort' => array(['field' => 'id','dir' => 'asc'],['field' => 'uuid','dir' => 'dsc']),'skip' => 0,'take' => 20)))];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/users/list', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('usersList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['name'],'Bharat Gogineni');
+        $this->assertEquals($content['data'][1]['name'],'Karan Agarwal');
+        $this->assertEquals($content['data'][2]['name'],'Deepak S');
+    }    
+
+
 }

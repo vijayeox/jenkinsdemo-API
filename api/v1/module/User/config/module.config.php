@@ -20,10 +20,10 @@ return [
                         'controller' => Controller\UserController::class,
                         'access' => [
                             // SET ACCESS CONTROL
-                            'put' => 'MANAGE_USER_WRITE',
-                            'post' => 'MANAGE_USER_WRITE',
-                            'delete' => 'MANAGE_USER_WRITE',
-                            'get' => 'MANAGE_USER_READ',
+                            'put' => ['MANAGE_USER_WRITE','MANAGE_ORGANIZATION_WRITE','MANAGE_GROUP_WRITE'],
+                            'post' => ['MANAGE_USER_WRITE','MANAGE_ORGANIZATION_WRITE','MANAGE_GROUP_WRITE'],
+                            'delete' => ['MANAGE_USER_WRITE','MANAGE_ORGANIZATION_WRITE','MANAGE_GROUP_WRITE'],
+                            'get' => ['MANAGE_USER_READ','MANAGE_ORGANIZATION_READ','MANAGE_GROUP_READ']
                         ],
                     ],
                 ],
@@ -187,6 +187,17 @@ return [
                         'controller' => Controller\UserController::class,
                         'method' => 'POST',
                         'action' => 'userSearch'
+                    ],
+                ],
+            ],
+            'usersList' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/[organization/:orgId/]users/list',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'usersList'
                     ],
                 ],
             ],

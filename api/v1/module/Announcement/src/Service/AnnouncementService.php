@@ -14,6 +14,8 @@ use Oxzion\Utils\FilterUtils;
 use Oxzion\Service\OrganizationService;
 use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
+use Oxzion\ServiceException;
+
 
 
 
@@ -414,27 +416,39 @@ class AnnouncementService extends AbstractService
     }
 
 
-    public function saveGroup($id,$data){
-        if(isset($data['org_id'])){
-            $data['org_id'] = $this->organizationService->getOrganizationIdByUuid($data['org_id']);
+    public function saveGroup($params,$data){
+        if(isset($params['orgId'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($data['org_id'] != AuthContext::get(AuthConstants::ORG_ID))) {
-                throw new AccessDeniedException("You do not have permissions to add users to project");
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to add groups to announcement");
+            }else{
+               $params['orgId'] = $this->getIdFromUuid('ox_organization',$params['orgId']); 
             }
         }
         else{
-           $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID); 
+           $params['orgId'] = AuthContext::get(AuthConstants::ORG_ID); 
         }
 
-        $obj = $this->table->getByUuid($id,array());
+        $obj = $this->table->getByUuid($params['announcementId'],array());
         if (is_null($obj)) {
-            return 0;
+            throw new ServiceException("Announcement does not belong to the organization","announcement.not.found");
         }
+
+        $org = $this->organizationService->getOrganization($obj->org_id);
+
+       
+        if(isset($params['orgId'])){
+            if($params['orgId'] != $obj->org_id){
+               throw new ServiceException("Entity not found","Announcemnet.not.found");  
+            }
+        }
+
         if(!isset($data['groups']) || empty($data['groups'])) {
-            return 2;
+             throw new ServiceException("Enter Group Ids","select.group");
         }
+
         $announcementId = $obj->id;
-        $orgId = $data['org_id'];
+        $orgId = $params['orgId'];
         
     
         if($data['groups']){
@@ -455,7 +469,7 @@ class AnnouncementService extends AbstractService
             }
             return 1;
         }
-        return 0;
+           throw new ServiceException("Entity not found","Announcemnet.not.found");  
     }
 }
 ?>

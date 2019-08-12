@@ -14,7 +14,7 @@ return [
             'announcement' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/announcement[/:announcementId]',
+                    'route' => '/[organization/:orgId/]announcement[/:announcementId]',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'access'=>[
@@ -40,7 +40,7 @@ return [
             'announcementToGroup' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/announcement/:announcementId/save',
+                    'route' => '/[organization/:orgId/]announcement/:announcementId/save',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'POST',
