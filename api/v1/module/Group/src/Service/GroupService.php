@@ -110,7 +110,7 @@ class GroupService extends AbstractService {
         else{
             $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         }
-       
+
         try {
             $data['name'] = isset($data['name']) ? $data['name'] : NULL;
        
@@ -322,6 +322,13 @@ class GroupService extends AbstractService {
         if (is_null($obj)) {
             throw new ServiceException("Updating non existent Group","non.existent.group");
         }
+
+        if(isset($orgId)){
+            if($data['org_id'] != $obj->org_id){
+                throw new ServiceException("Group does not belong to the organization","Group.not.found");                
+            }
+        }
+        
         $org = $this->organizationService->getOrganization($obj->org_id);
         $form = new Group();
         $data = array_merge($obj->toArray(), $data);

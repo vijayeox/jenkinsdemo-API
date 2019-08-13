@@ -419,6 +419,32 @@ class ProjectControllerTest extends ControllerTest {
         $this->assertEquals($content['message'], 'You do not have permissions to edit the project');
     }
 
+    public function testUpdateInvalidOrg() {
+        $data = ['name' => 'Test Project','description'=>'Project Description'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/project/886d7eff-6bae-4892-baf8-6fefc56cbf0b', 'PUT', null);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Project does not belong to the organization');
+    }
+
+
+    public function testUpdateInvalidProjectId() {
+        $data = ['name' => 'Test Project','description'=>'Project Description'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/project/886d7eff-6bae-4892-bc56cbf0b', 'PUT', null);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Updating non-existent Project');
+    }
+
+
 
     public function testUpdateRestricted() {
         $data = ['name' => 'Test Project 1','description'=>'Project Description'];
