@@ -78,9 +78,8 @@ job:
   - 
   import_padi: 
     -
-      file_name: "/clients/hub/data/migrations/app/hub/data/"
-      task_name: "ox_padi_verification"
-      app_name: "hub"
+      stored_procedure_name: "ox_padi_verification"
+      app_name: padi
 
 
 

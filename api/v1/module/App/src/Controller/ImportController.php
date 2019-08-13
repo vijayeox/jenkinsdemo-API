@@ -26,10 +26,11 @@ class ImportController extends AbstractApiController
 
     public function importCSVAction()
     {
-        $storedProcedureName = $_POST['stored_procedure_name'];
-        $orgId = $_POST['org_id'];
-        $appId = $_POST['app_id'];
-        $appName = $_POST['app_name'];
+        $params = $this->extractPostData();
+        $storedProcedureName = $params['stored_procedure_name'];
+        $orgId = $params['org_id'];
+        $appId = $params['app_id'];
+        $appName = $params['app_name'];
 
         try
         {
