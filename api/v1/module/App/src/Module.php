@@ -97,6 +97,10 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype->setArrayObjectPrototype(new Model\PageContent());
                     return new TableGateway('ox_page_content', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\ImportService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ImportService($container->get('config'), $dbAdapter);
+                },
             ],
         ];
     }
