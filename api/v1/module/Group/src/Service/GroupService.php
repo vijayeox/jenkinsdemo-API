@@ -126,6 +126,7 @@ class GroupService extends AbstractService {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : NULL;
                     if($data['reactivate'] == 1){
                         $data['status'] = 'Active';
+                        $orgId = $this->getUuidFromId('ox_organization',$data['org_id']);
                         $count = $this->updateGroup($result[0]['uuid'],$data,$files,$orgId);
                         return;
                     }else{

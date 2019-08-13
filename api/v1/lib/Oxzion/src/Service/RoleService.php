@@ -67,13 +67,11 @@ class RoleService extends AbstractService {
                 if(!isset($rolename)){
                    throw new ServiceException("Role name cannot be empty","role.name.empty"); 
                 }
-                $select ="SELECT count(id),name,uuid from ox_role where name = '".$rolename."' AND org_id =".$org_id;
+                $select ="SELECT name,uuid from ox_role where name = '".$rolename."' AND org_id =".$org_id;
                 $result = $this->executeQuerywithParams($select)->toArray();
 
-                if($result[0]['count(id)'] > 0){
-                    if($result[0]['name'] == $rolename){
+                if(count($result) > 0){
                         throw new ServiceException("Role already exists","role.already.exists");
-                    }
                 }
 
                 $data['uuid'] = Uuid::uuid4()->toString(); 
@@ -90,7 +88,7 @@ class RoleService extends AbstractService {
            
             if($count > 0){
                 if(isset($data['privileges'])){
-                    $this->updateRolePrivileges($roleId, $data['privileges']);
+                    $this->updateRolePrivileges($roleId, $data['privileges'],$org_id);
                 }
                 $this->commit();
             }else{
@@ -105,8 +103,8 @@ class RoleService extends AbstractService {
         return $count;   
     }
 
-    protected function updateRolePrivileges($roleId, &$privileges) {
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+    protected function updateRolePrivileges($roleId, &$privileges,$orgId = null) {
+        $orgId = isset($orgId) ? $orgId : AuthContext::get(AuthConstants::ORG_ID);
         try{
             $delete = "DELETE from `ox_role_privilege` where role_id =".$roleId."";
             $result = $this->runGenericQuery($delete);

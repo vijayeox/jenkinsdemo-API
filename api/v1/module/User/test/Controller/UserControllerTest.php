@@ -593,6 +593,52 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
     }
 
+
+    public function testUpdateWithOrgID()
+    {
+        $data = ['name' => 'John Holt'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['name'], $data['name']);
+    }
+
+
+    public function testUpdateWithInvalidOrgID()
+    {
+        $data = ['name' => 'John Holt'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'User does not belong to the organization');
+    }
+
+
+    public function testUpdateWithInvalidUserid()
+    {
+        $data = ['name' => 'John Holt'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-e9-b2d5-68ecc57cde45', 'PUT', null);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'User not found');
+    }
+
     public function testUpdateNotFound()
     {
         $data = ['name' => 'Test User'];
@@ -632,6 +678,37 @@ class UserControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
+
+    public function testDeleteInvalidOrgID()
+    {
+        $this->initAuthToken($this->adminUser);
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+        }
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/user/4fd9f04d-758f-11e9-b2d5-68ecc57cde45', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'User does not belong to the organization');
+    }
+
+    public function testDeleteInvalidUserID()
+    {
+        $this->initAuthToken($this->adminUser);
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+        }
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd9f04d-7e9-b2d5-68ecc57cde45', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'User not found');
+    }
+
 
     public function testDeleteNotFound()
     {
@@ -836,7 +913,7 @@ class UserControllerTest extends ControllerTest
         // TO DO : Whitelisted apps for manageruser and employeeuser
         $this->assertNotEmpty($content['data']['privilege']);
         $this->assertNotEmpty($content['data']['whiteListedApps']);
-        $this->assertEquals(6,count($content['data']['whiteListedApps']));
+        $this->assertEquals(5,count($content['data']['whiteListedApps']));
     }
 
     public function testGetUserProjectWithdata()
