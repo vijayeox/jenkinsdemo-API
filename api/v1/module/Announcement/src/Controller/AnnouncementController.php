@@ -54,14 +54,16 @@ class AnnouncementController extends AbstractApiController {
     * </code>
     */
     public function create($data) {
+        $params=$this->params()->fromRoute();
+       
         try{
-            $count = $this->announcementService->createAnnouncement($data);
+            $count = $this->announcementService->createAnnouncement($data,$params);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
         }
-        if($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data,201);
     }
@@ -112,13 +114,15 @@ class AnnouncementController extends AbstractApiController {
     */
     public function update($id, $data) {
         try{
-            $count = $this->announcementService->updateAnnouncement($id,$data);
+            $params = $this->params()->fromRoute();
+            $orgId = isset($params['orgId']) ? $params['orgId'] : NULL; 
+            $count = $this->announcementService->updateAnnouncement($id,$data,$orgId);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
         }
-        if($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+         catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data,200);
     }
@@ -131,9 +135,12 @@ class AnnouncementController extends AbstractApiController {
     * @return array success|failure response
     */
     public function delete($id) {
-        $response = $this->announcementService->deleteAnnouncement($id);
-        if($response == 0) {
-            return $this->getErrorResponse("Announcement not found", 404, ['id' => $id]);
+        try{
+            $params = $this->params()->fromRoute();
+            $response = $this->announcementService->deleteAnnouncement($id,$params);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponse();
     }
