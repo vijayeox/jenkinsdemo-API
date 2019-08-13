@@ -418,9 +418,29 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testDeleteWithOrgId(){
+    public function testDeleteWithInvalidOrgId(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/53012471-2863', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Role does not belong to the organization');
+    }
+
+    public function testDeleteWithInvalidRoleId(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/53471-2863', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Role not found');
+    }
+
+    public function testDeleteWithOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role/53012471-2863', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);

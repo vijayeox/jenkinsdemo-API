@@ -154,19 +154,35 @@ class RoleService extends AbstractService {
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to delete the project");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
         }
+
+        $obj = $this->table->getByUuid($id,array());
+        if (is_null($obj)) {
+            throw new ServiceException("Role not found","role.not.found");
+        }
+
+        if(isset($orgId)){
+            if($orgId != $obj->org_id){
+                throw new ServiceException("Role does not belong to the organization","role.not.found");                
+            }
+        }
+
+
         $this->beginTransaction();
         $count = 0;
         try{
             $count = $this->table->deleteByUuid($id);
             if($count == 0){
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Role not found","role.not.found");
             }
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
+            throw $e;
         }
         return $count;
     }
