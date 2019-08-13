@@ -281,33 +281,6 @@ class ProjectControllerTest extends ControllerTest
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_project'));
     }
 
-    public function testCreateWithOrgID() {
-        $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Test Project 3','description'=>'Project Description','manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];
-        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_project'));
-        if(enableActiveMQ == 0){
-             $mockMessageProducer = $this->getMockMessageProducer();
-             //Message to be sent to Mockery => json_encode(array('orgname'=> 'Cleveland Black','projectname' => 'Test Project 3','description' => 'Project Description','uuid' => '')
-             // Since value of uuid changes during each project creation Mockery Message is set to Mockery::any()
-             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'PROJECT_ADDED')->once()->andReturn();
-        }
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/project', 'POST', $data);
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(201);
-        $this->setDefaultAsserts();
-        $select = "SELECT id,manager_id from ox_project where name = 'Test Project 3'";
-        $project = $this->executeQueryTest($select);
-        $select = "SELECT * from ox_user_project where user_id =".$project[0]['manager_id']." and project_id =".$project[0]['id'];
-        $oxproject = $this->executeQueryTest($select);
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($project[0]['manager_id'], 1);
-        $this->assertEquals($oxproject[0]['user_id'], 1);
-        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_project'));
-    }
-
-
     public function testCreateWithExistingProject() {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Test Project 1','description'=>'Project Description','manager_id' => '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'];

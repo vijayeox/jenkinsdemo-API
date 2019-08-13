@@ -300,35 +300,6 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($announcementGroup[1]['group_id'], 2);       
     }
 
-
-    public function testsaveGroupWithOrg(){
-         $data = ['groups' => array(['uuid' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de'],['uuid' => '153f3e9e-eb07-4ca4-be78-34f715bd50db'])];
-        $this->initAuthToken($this->adminUser);
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3/save', 'POST', $data);
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Announcement');
-        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AnnouncementController');
-        $this->assertMatchedRouteName('announcementToGroup');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-
-        $select = "SELECT id FROM ox_announcement where uuid = '9068b460-2943-4508-bd4c-2b29238700f3'";
-        $result = $this->executeQueryTest($select);
-
-        $select = "SELECT * from ox_announcement_group_mapper where announcement_id = ".$result[0]['id'];
-        $announcementGroup = $this->executeQueryTest($select);
-
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['groups']), 2);
-        $this->assertEquals($announcementGroup[0]['announcement_id'], 1);
-        $this->assertEquals($announcementGroup[0]['group_id'], 1);
-        $this->assertEquals($announcementGroup[1]['announcement_id'], 1);
-        $this->assertEquals($announcementGroup[1]['group_id'], 2);       
-    }
-
     public function testsaveGroupWithInvalidOrg(){
          $data = ['groups' => array(['uuid' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de'],['uuid' => '153f3e9e-eb07-4ca4-be78-34f715bd50db'])];
         $this->initAuthToken($this->adminUser);
