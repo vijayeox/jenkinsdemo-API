@@ -184,10 +184,11 @@ class UserService extends AbstractService
                          if($userOrg[0]['count(user_id)'] == 0){
                             $this->addUserToOrg($result[0]['id'], $data['orgid']);
                          }
-                         $orgId = $this->getUuidFromId('ox_organization',$data['orgid']);
-                         $countval = $this->updateUser($result[0]['uuid'],$data,$orgId);
+                         $orgUuid = $this->getUuidFromId('ox_organization',$data['orgid']);
+                         $orgId = $data['orgid'];
+                         $countval = $this->updateUser($result[0]['uuid'],$data,$orgUuid);
                          if(isset($data['role'])){
-                                $this->addRoleToUser($result[0]['uuid'],$data['role'],$data['orgid']);
+                                $this->addRoleToUser($result[0]['uuid'],$data['role'],$orgId);
                          }
                          if(isset($countval) == 1){
                               return $result[0]['uuid'];
@@ -429,6 +430,9 @@ class UserService extends AbstractService
         }
    
         $form = new User();
+        if(isset($data['orgid'])){
+            unset($data['orgid']);
+        }
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $userdata['uuid'] = $id;
         if(isset($data['managerid'])){
