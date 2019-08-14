@@ -112,10 +112,11 @@ class RoleController extends AbstractApiController
     * @return array success|failure response
     */
     public function delete($id){
-        $params = $this->params()->fromRoute();
-        $response = $this->roleService->deleteRole($id,$params);
-        if($response == 0){
-            return $this->getErrorResponse("Role not found", 404, ['id' => $id]);
+        try{
+            $params = $this->params()->fromRoute();
+            $response = $this->roleService->deleteRole($id,$params);
+        }catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponse();
     }

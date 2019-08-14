@@ -129,7 +129,10 @@ export default class DialogContainer extends React.Component {
       ) {
         this.notif.current.duplicateEntry();
       } else {
-        this.notif.current.failNotification();
+        this.notif.current.failNotification(
+          "Error",
+          response.message ? response.message : null
+        );
       }
     });
   };
@@ -147,7 +150,10 @@ export default class DialogContainer extends React.Component {
           behavior: "smooth",
           inline: "nearest"
         });
-        this.notif.current.uploadImage();
+        this.notif.current.customWarningNotification(
+          "No image selected",
+          "Please choose a logo for the Organization."
+        );
       } else {
         this.pushData();
       }

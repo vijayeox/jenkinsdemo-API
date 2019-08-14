@@ -149,7 +149,8 @@ class ProjectService extends AbstractService {
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : NULL;
                     if($data['reactivate'] == 1){
                         $data['isdeleted'] = 0;
-                        $count = $this->updateProject($result[0]['uuid'],$data,$params['orgId']);
+                        $orgId = $this->getUuidFromId('ox_organization',$data['org_id']);
+                        $count = $this->updateProject($result[0]['uuid'],$data,$orgId);
                         return;
                     }else{
                         throw new ServiceException("Project already exists would you like to reactivate?","project.already.exists");
@@ -208,8 +209,15 @@ class ProjectService extends AbstractService {
 
         $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
-            throw new ServiceException("Updating non-existent Group","non.existent.group");
+            throw new ServiceException("Updating non-existent Project","non.existent.project");
         }
+
+        if(isset($orgId)){
+            if($data['org_id'] != $obj->org_id){
+                throw new ServiceException("Project does not belong to the organization","project.not.found");                
+            }
+        }
+
         $form = new Project();
         if(isset($data['manager_id'])){
             $data['manager_id']=$this->getIdFromUuid('ox_user', $data['manager_id']);

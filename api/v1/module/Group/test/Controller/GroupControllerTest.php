@@ -319,6 +319,31 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($oxgroup[0]['avatar_id'], 2);
     }
 
+    public function testUpdateWithInvalidOrgID() {
+        $data = ['name' => 'Test Create Group','manager_id' => "4fd9ce37-758f-11e9-b2d5-68ecc57cde45", 'description'=>'Description Test Data'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('groups');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Group does not belong to the organization');
+    }
+
+    public function testUpdateWithInvalidGroupID() {
+        $data = ['name' => 'Test Create Group','manager_id' => "4fd9ce37-758f-11e9-b2d5-68ecc57cde45", 'description'=>'Description Test Data'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/group/2db82-4d5b-b60a-c648cf1e27de', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('groups');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Updating non existent Group');
+    }
 
     public function testUpdateByManagerWithDifferentOrgId() {
         $data = ['name' => 'Test Create Group','manager_id' => "4fd99e8e-758f-11e9-b2d5-68ecc57cde45", 'description'=>'Description Test Data'];

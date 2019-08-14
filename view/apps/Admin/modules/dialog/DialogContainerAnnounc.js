@@ -45,7 +45,7 @@ export default class DialogContainer extends React.Component {
     let helper = this.core.make("oxzion/restClient");
     let ancAddData = await helper.request(
       "v1",
-      "/announcement",
+      "organization/" + this.props.selectedOrg + "/announcement",
       {
         name: this.state.ancInEdit.name,
         media: fileCode,
@@ -108,15 +108,18 @@ export default class DialogContainer extends React.Component {
 
   editTriggerFunction(file) {
     this.editAnnouncements(file).then(response => {
-      this.props.action(response.status);
       if (response.status == "success") {
+        this.props.action(response.status);
         this.props.cancel();
       } else if (
         response.errors[0].exception.message.indexOf("name_UNIQUE") >= 0
       ) {
         this.notif.current.duplicateEntry();
       } else {
-        this.notif.current.failNotification();
+        this.notif.current.failNotification(
+          "Error",
+          response.message ? response.message : null
+        );
       }
     });
   }
@@ -154,7 +157,7 @@ export default class DialogContainer extends React.Component {
           behavior: "smooth",
           inline: "nearest"
         });
-        this.notif.current.uploadImage();
+        this.notif.current.customWarningNotification("No Media Selected", "Please select a banner for the Announcement.");
       } else {
         this.pushFile().then(response => {
           var addResponse = response.data.filename[0];
@@ -167,7 +170,10 @@ export default class DialogContainer extends React.Component {
             ) {
               this.notif.current.duplicateEntry();
             } else {
-              this.notif.current.failNotification();
+              this.notif.current.failNotification(
+                "Error",
+                response.message ? response.message : null
+              );
             }
           });
         });
@@ -264,7 +270,7 @@ export default class DialogContainer extends React.Component {
                   <label className="required-label">Start Data</label>
                   <div>
                     <DateComponent
-                      format={"dd-MMM-yyyy"}
+                      format={this.props.userPreferences.dateformat}
                       value={this.state.ancInEdit.start_date}
                       change={e => this.valueChange("start_date", e)}
                       required={true}
@@ -276,7 +282,7 @@ export default class DialogContainer extends React.Component {
                   <label className="required-label">End Date</label>
                   <div>
                     <DateComponent
-                      format={"dd-MMM-yyyy"}
+                      format={this.props.userPreferences.dateformat}
                       value={this.state.ancInEdit.end_date}
                       change={e => this.valueChange("end_date", e)}
                       required={true}

@@ -53,33 +53,53 @@ class AnnouncementService extends AbstractService{
     * </code>
     * @return integer 0|$id of Announcement Created
     */
-    public function createAnnouncement(&$data){
-        $form = new Announcement();
-        $data['uuid'] = Uuid::uuid4()->toString();
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['start_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d');
-        $data['status'] = $data['status']?$data['status']:1;
-        $data['end_date'] = isset($data['end_date'])?$data['end_date']:date('Y-m-d',strtotime("+7 day"));
-        $data['created_date'] = date('Y-m-d');
-        $form->exchangeArray($data);
-        $form->validate();
-        $this->beginTransaction();
-        $count = 0;
-        try{
-            $count = $this->table->save($form);
-            if($count == 0){
-                $this->rollback();
-                return 0;
+    public function createAnnouncement(&$data,$params = null){
+
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions create announcement");
+            }else{
+                $data['org_id'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
-            $this->commit();
-        }catch(Exception $e){
-            $this->rollback();
-            return 0;
         }
-        return $count;
+        else{
+            $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        }
+
+        try{
+            $data['name'] = isset($data['name']) ? $data['name'] : NULL;
+            $select = "SELECT uuid,name,status,end_date from ox_announcement where name = '".$data['name']."' and org_id = ".$data['org_id']." and end_date >= curdate()";
+            $result = $this->executeQuerywithParams($select)->toArray();
+            if(count($result) > 0){
+                throw new ServiceException("Announcement already exists","announcement.exists");
+            }   
+       
+
+            $form = new Announcement();
+            $data['uuid'] = Uuid::uuid4()->toString();
+            $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
+            $data['start_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d');
+            $data['status'] = $data['status']?$data['status']:1;
+            $data['end_date'] = isset($data['end_date'])?$data['end_date']:date('Y-m-d',strtotime("+7 day"));
+            $data['created_date'] = date('Y-m-d');
+            $form->exchangeArray($data);
+            $form->validate();
+            $this->beginTransaction();
+            $count = 0;
+                $count = $this->table->save($form);
+                if($count == 0){
+                    $this->rollback();
+                    throw new ServiceException("Failed to create","failed.announcement.create");
+                }
+                $id = $this->table->getLastInsertValue();
+                $data['id'] = $id;
+                $this->commit();
+            }catch(Exception $e){
+                $this->rollback();
+                throw $e;
+            }
+            return $count;
     }
     /**
     * Update Announcement
@@ -102,16 +122,31 @@ class AnnouncementService extends AbstractService{
     * </code>
     * @return array Returns the Created Announcement.
     */
-    public function updateAnnouncement($uuid,&$data) {
-        $id = $this->getAnnouncementIdBYUuid($uuid);
-        $obj = $this->table->get($id,array());
-        if(is_null($obj)){
-            return 0;
+    public function updateAnnouncement($uuid,&$data,$orgId = null) {
+        if(isset($orgId)){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($orgId != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to update announcement");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$orgId);
+            }
         }
+
+        $obj = $this->table->getByUuid($uuid,array());
+        if(is_null($obj)){
+            throw new ServiceException("Announcement not found","announcement.not.found");
+        }
+
         $originalArray = $obj->toArray();
+        if(isset($orgId)){
+            if($orgId != $originalArray['org_id']){
+                throw new ServiceException("Announcement does not belong to the organization","announcement.not.found");
+            }
+        }
+
         $form = new Announcement();
         $data = array_merge($originalArray, $data);
-        $data['id'] = $id;
+        $data['id'] = $originalArray['id'];
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
@@ -119,15 +154,14 @@ class AnnouncementService extends AbstractService{
         $groupsUpdated = 0;
         try{
             $count = $this->table->save($form); 
-            $data['id'] = $id;
+            $data['id'] = $originalArray['id'];
             if($count == 0){
-                $this->rollback();
                 return 1;
             }
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -222,41 +256,56 @@ class AnnouncementService extends AbstractService{
     * @param integer $id ID of Announcement to Delete
     * @return int 0=>Failure | $id;
     */
-    public function deleteAnnouncement($uuid){
+    public function deleteAnnouncement($uuid,$params){
+
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions delete announcement");
+            }else{
+                $params['orgId'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }
+        else{
+            $params['orgId'] = AuthContext::get(AuthConstants::ORG_ID);
+        }
+
+        $obj = $this->table->getByUuid($uuid,array());
+
         $this->beginTransaction();
         $count = 0;
         try{
-            
-            $id = $this->getAnnouncementIdBYUuid($uuid); 
-
-
             $sql = $this->getSqlObject();
             $delete = $sql->delete('ox_announcement');
-            $delete->where(['uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
+            $delete->where(['uuid' => $uuid,'org_id' => $params['orgId']]);
             $result = $this->executeUpdate($delete);
             
            
             if($result->getAffectedRows() == 0){
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Announcement not found","announcement.not.found");
             }
 
-            $select = "SELECT count(announcement_id) from `ox_announcement_group_mapper` where announcement_id = ".$id;
+            $delete = "DELETE FROM ox_attachment where uuid = '".$obj->media."'";
+            $this->executeQuerywithParams($delete);
+
+            $select = "SELECT count(announcement_id) from `ox_announcement_group_mapper` where announcement_id = ".$obj->id;
             $count = $this->executeQuerywithParams($select)->toArray();
 
             if($count[0]['count(announcement_id)'] > 0){
                     $sql = $this->getSqlObject();
                     $delete = $sql->delete('ox_announcement_group_mapper');
-                    $delete->where(['announcement_id' => $id]);
+                    $delete->where(['announcement_id' => $obj->id]);
                     $result = $this->executeUpdate($delete);
                     if($result->getAffectedRows() == 0){
                         $this->rollback();
-                        return 0;
+                       throw new ServiceException("Failed to delete","failed.announcement.delete");
                     }
             }
             $this->commit();
         }catch(Exception $e){
             $this->rollback();
+            throw $e;
         }
         return $count;
     }

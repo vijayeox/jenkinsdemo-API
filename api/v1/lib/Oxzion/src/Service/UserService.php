@@ -179,10 +179,16 @@ class UserService extends AbstractService
                      $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : 0; 
                      if($data['reactivate'] == 1){
                          $data['status'] = 'Active';
-                         $countval = $this->updateUser($result[0]['uuid'],$data,$data['orgid']);
-                         $this->addUserToOrg($result[0]['id'], $data['orgid']);
+                         $select = "SELECT count(user_id) from ox_user_org where user_id = (SELECT id from ox_user where uuid = '".$result[0]['uuid']."') and org_id = ".$data['orgid'];
+                         $userOrg = $this->executeQuerywithParams($select)->toArray();
+                         if($userOrg[0]['count(user_id)'] == 0){
+                            $this->addUserToOrg($result[0]['id'], $data['orgid']);
+                         }
+                         $orgUuid = $this->getUuidFromId('ox_organization',$data['orgid']);
+                         $orgId = $data['orgid'];
+                         $countval = $this->updateUser($result[0]['uuid'],$data,$orgUuid);
                          if(isset($data['role'])){
-                                $this->addRoleToUser($result[0]['uuid'],$data['role'],$data['orgid']);
+                                $this->addRoleToUser($result[0]['uuid'],$data['role'],$orgId);
                          }
                          if(isset($countval) == 1){
                               return $result[0]['uuid'];
@@ -403,15 +409,30 @@ class UserService extends AbstractService
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
                 ($orgId != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to assign role to user");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$orgId);    
             }
         }
 
         $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
-            return 0;
+            throw new ServiceException("User not found","user.not.found");
         }
+
+        $select = "SELECT org_id from ox_user_org where user_id = ".$obj->id;
+        $result = $this->executeQuerywithParams($select)->toArray();
+     
+        $orgArray= array_map('current', $result);
+        if(isset($orgId)){
+          if(!in_array($orgId,$orgArray)){
+             throw new ServiceException('User does not belong to the organization','user.not.found');
+          }
+        }
+   
         $form = new User();
-        
+        if(isset($data['orgid'])){
+            unset($data['orgid']);
+        }
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $userdata['uuid'] = $id;
         if(isset($data['managerid'])){
@@ -444,7 +465,7 @@ class UserService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $userdata;
     }
@@ -471,12 +492,27 @@ class UserService extends AbstractService
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
                 ($id['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to delete the user");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$id['orgId']);    
             }
         }
         $obj = $this->table->getByUuid($id['userId'], array());
         if (is_null($obj)) {
-            return 0;
+            throw new ServiceException("User not found",'user.not.found');
         }
+
+        $select = "SELECT org_id from ox_user_org where user_id = ".$obj->id;
+        $result = $this->executeQuerywithParams($select)->toArray();
+     
+        $orgArray= array_map('current', $result);
+     
+        if(isset($orgId)){
+          if(!in_array($orgId,$orgArray)){
+             throw new ServiceException('User does not belong to the organization','user.not.found');
+          }
+        }
+
+
         $org = $this->getOrg($obj->orgid);  
         $originalArray = $obj->toArray();
         $form = new User();
