@@ -5,53 +5,54 @@ use Oxzion\Model\Entity;
 
 class User extends Entity
 {
-
     protected $data = array(
-        'id' => NULL,
-        'uuid' => NULL,
-        'username' => NULL,
-        'password' => NULL,
-        'firstname' => NULL,
-        'lastname' => NULL,
-        'name' => NULL,
-        'email' => NULL,
-        'orgid' => NULL,
-        'icon' => NULL,
+        'id' => null,
+        'uuid' => null,
+        'username' => null,
+        'password' => null,
+        'firstname' => null,
+        'lastname' => null,
+        'name' => null,
+        'email' => null,
+        'orgid' => null,
+        'icon' => null,
         'status' => 'Active',
-        'country' => NULL,
-        'date_of_birth' => NULL,
-        'designation' => NULL,
-        'phone' => NULL,
-        'address' => NULL,
-        'gender' => NULL,
-        'website' => NULL,
-        'about' => NULL,
-        'interest' => NULL,
-        'hobbies' => NULL,
-        'managerid' => NULL,
-        'selfcontribute' => NULL,
-        'contribute_percent' => NULL,
-        'eid' => NULL,
-        'signature' => NULL,
+        'country' => null,
+        'date_of_birth' => null,
+        'designation' => null,
+        'phone' => null,
+        'address' => null,
+        'gender' => null,
+        'website' => null,
+        'about' => null,
+        'interest' => null,
+        'hobbies' => null,
+        'managerid' => null,
+        'selfcontribute' => null,
+        'contribute_percent' => null,
+        'eid' => null,
+        'signature' => null,
         'in_game' => '0',
         'timezone' => 'Asia/Kolkata',
-        'date_created' => NULL,
-        'date_modified' => NULL,
-        'created_by' => NULL,
-        'modified_by' => NULL,
-        'date_of_join' => NULL,
-        'preferences' => NULL,
-        'password_reset_code' => NULL,
-        'password_reset_expiry_date' => NULL,
+        'date_created' => null,
+        'date_modified' => null,
+        'created_by' => null,
+        'modified_by' => null,
+        'date_of_join' => null,
+        'preferences' => null,
+        'password_reset_code' => null,
+        'password_reset_expiry_date' => null,
     );
 
-    public function __construct($data = array()) {
+    public function __construct($data = array())
+    {
         if ($data) {
             $this->exchangeArray($data);
         }
     }
 
-    public function validate() {
+    public function validate()
+    {
         $required = array(
             'username',
             'password',
@@ -67,6 +68,4 @@ class User extends Entity
         );
         $this->validateWithParams($required);
     }
-
 }
-?>

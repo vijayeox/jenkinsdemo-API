@@ -19,14 +19,14 @@ use User\Controller\ForgotPasswordController;
 
 class UserControllerTest extends ControllerTest
 {
-
     public function setUp() : void
     {
         $this->loadConfig();
         parent::setUp();
     }
 
-    public function getMockMessageProducer(){
+    public function getMockMessageProducer()
+    {
         $organizationService = $this->getApplicationServiceLocator()->get(UserService::class);
         $mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
         $organizationService->setMessageProducer($mockMessageProducer);
@@ -51,7 +51,8 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    private function executeQueryTest($query){
+    private function executeQueryTest($query)
+    {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
@@ -60,7 +61,9 @@ class UserControllerTest extends ControllerTest
         return $resultSet->toArray();
     }
 
-    private function executeUpdate($query){
+
+    private function executeUpdate($query)
+    {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
@@ -1012,7 +1015,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']),0);
     }
 
-    public function testSaveMe(){
+    public function testSaveMe()
+    {
         $data = ['name' => 'John Holt','firstname' => 'John','lastname' => 'Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -1027,7 +1031,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['lastname'], $data['lastname']);
     }
 
-    public function testBlackListApps(){
+    public function testBlackListApps()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/me/bapp', 'GET');
         $this->assertResponseStatusCode(200);

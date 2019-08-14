@@ -11,18 +11,20 @@ use Zend\Db\Adapter\Adapter;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use Oxzion\Utils\FileUtils;
 
-
-class ResourceControllerTest extends ControllerTest{
-    
-    public function setUp() : void{
+class ResourceControllerTest extends ControllerTest
+{
+    public function setUp() : void
+    {
         $this->loadConfig();
         parent::setUp();
-    }   
-    public function getDataSet() {
+    }
+    public function getDataSet()
+    {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Attachment.yml");
         return $dataset;
     }
-    public function testResourceGet(){
+    public function testResourceGet()
+    {
         $this->initAuthToken($this->adminUser);
         $config = $this->getApplicationConfig();
         $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/announcements/";
@@ -34,6 +36,6 @@ class ResourceControllerTest extends ControllerTest{
         $this->assertControllerName(ResourceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('ResourceController');
         $this->assertMatchedRouteName('resource');
-        $this->assertNotEquals(strlen($this->getResponse()),0);
+        $this->assertNotEquals(strlen($this->getResponse()), 0);
     }
 }

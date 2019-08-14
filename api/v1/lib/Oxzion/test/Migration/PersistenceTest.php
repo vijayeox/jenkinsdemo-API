@@ -10,11 +10,9 @@ use Oxzion\Service\AbstractService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 
-
-
-
-class PersistenceTest extends ServiceTest {
-    static private $pdo = null;
+class PersistenceTest extends ServiceTest
+{
+    private static $pdo = null;
 
     // only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
     protected $traceError = true;
@@ -22,9 +20,10 @@ class PersistenceTest extends ServiceTest {
     private $database;
     private $adapter;
 
-    public function setUp() : void {
+    public function setUp() : void
+    {
         $this->loadConfig();
-        $this->data =  Array (
+        $this->data =  array(
             "appName" => 'ox_app_2',
             'UUID' => 123889,
             'description' => 'FirstApp'
@@ -39,29 +38,29 @@ class PersistenceTest extends ServiceTest {
 
         $migrationObject = new Migration($config, $this->database, $this->adapter);
         $migrationObject->initDB($this->data);
-        $dataSet = array_diff(scandir(dirname(__FILE__) ."/../Migration/"), array(".", ".."));
-        $migrationFolder = dirname(__FILE__) ."/../Migration/";
+        $dataSet = array_diff(scandir(dirname(__FILE__) ."/scripts/"), array(".", ".."));
+        $migrationFolder = dirname(__FILE__) ."/scripts/";
         $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
 
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->setRollbackOnly(true);
         $tm->beginTransaction();
 
-        if($this->getName() == 'testInsertQueryWithJoinSelect' || $this->getName() == 'testSelectQuery' || $this->getName() == 'testSelectQueryWithJoin' || $this->getName() == 'testUpdateQuery' || $this->getName() == 'testUpdateQueryWithJoin'){
+        if ($this->getName() == 'testInsertQueryWithJoinSelect' || $this->getName() == 'testSelectQuery' || $this->getName() == 'testSelectQueryWithJoin' || $this->getName() == 'testUpdateQuery' || $this->getName() == 'testUpdateQueryWithJoin') {
             $insertQuery = "INSERT INTO ox_timesheet (`name`, `client_id`, `description`, `process_id`, `date_created`,`ox_app_org_id`) VALUES ('Task1', 1, 'New Task', 2, '2019-01-02 12:00:00',1)";
             $statement = $this->adapter->query($insertQuery);
             $result = $statement->execute();
-            $update="UPDATE ox_timesheet_client SET ox_app_org_id = 1 where id = 1"; 
+            $update="UPDATE ox_timesheet_client SET ox_app_org_id = 1 where id = 1";
             $statement = $this->adapter->query($update);
             $result = $statement->execute();
-               
         }
     }
 
-    public function tearDown() : void {
+    public function tearDown() : void
+    {
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->rollback();
-        $query = "DROP DATABASE ".$this->database;    
+        $query = "DROP DATABASE ".$this->database;
         $statement = $this->adapter->query($query);
         $result = $statement->execute();
         $_REQUEST = [];
@@ -70,11 +69,12 @@ class PersistenceTest extends ServiceTest {
     /**
      * Code to check the insert for a normal query
      */
-    public function testInsertQuery () {
+    public function testInsertQuery()
+    {
         $config = $this->getApplicationConfig();
-        $persistenceObject = new Persistence($config, $this->database,$this->adapter);
+        $persistenceObject = new Persistence($config, $this->database, $this->adapter);
 
-        $insertData = Array (
+        $insertData = array(
             'name' => "Task2",
             'client_id' => 1,
             'description' => "New Task 2",
@@ -84,10 +84,10 @@ class PersistenceTest extends ServiceTest {
 VALUES ('".$insertData['name']."', ".$insertData['client_id'].", '".$insertData['description']."', ".$insertData['process_id'].", '2019-01-02 12:00:00')";
         $this->data['query'] =  $insertQuery;
         $persistenceObject->insertQuery($this->data);
-         $sqlQuery1 = "Select * from ox_timesheet where name = '" . $insertData['name'] . "' and client_id = " . $insertData['client_id'] . " and description = '" . $insertData['description'] . "' and process_id = " . $insertData['process_id'];
+        $sqlQuery1 = "Select * from ox_timesheet where name = '" . $insertData['name'] . "' and client_id = " . $insertData['client_id'] . " and description = '" . $insertData['description'] . "' and process_id = " . $insertData['process_id'];
         $statement1 = $this->adapter->query($sqlQuery1);
         $result1 = $statement1->execute();
-        while($result1->next()) {
+        while ($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
         $this->assertEquals($tableFieldName[0]['id'] > 0, true);
@@ -100,10 +100,11 @@ VALUES ('".$insertData['name']."', ".$insertData['client_id'].", '".$insertData[
     /**
      *
      */
-    public function testInsertQueryWithJoinSelect () {
+    public function testInsertQueryWithJoinSelect()
+    {
         $config = $this->getApplicationConfig();
         $persistenceObject = new Persistence($config, $this->database, $this->adapter);
-        $insertData = Array (
+        $insertData = array(
             'id' => 1,
             'name' => "Task1",
             'client_id' => 1,
@@ -118,7 +119,7 @@ VALUES ('".$insertData['name']."', ".$insertData['client_id'].", '".$insertData[
         $sqlQuery1 = "Select * from ox_timesheet where name = '" . $insertData['name'] . "' and client_id = " . $insertData['client_id'] . " and description = '" . $insertData['description'] . "' and process_id = " . $insertData['process_id'];
         $statement1 = $this->adapter->query($sqlQuery1);
         $result1 = $statement1->execute();
-        while($result1->next()) {
+        while ($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
         $this->assertEquals($tableFieldName[0]['id'] > 1, true);
@@ -128,19 +129,20 @@ VALUES ('".$insertData['name']."', ".$insertData['client_id'].", '".$insertData[
         $this->assertEquals($tableFieldName[0]['process_id'], $insertData['process_id']);
     }
 
-    public function testSelectQuery() {
+    public function testSelectQuery()
+    {
         $config = $this->getApplicationConfig();
         $this->data['query'] = "Select * from ox_timesheet where id > 0";
         $persistenceObject = new Persistence($config, $this->database, $this->adapter);
         $result1 = $persistenceObject->selectQuery($this->data);
-        $selectData = Array (
+        $selectData = array(
             'name' => "Task1",
             'client_id' => 1,
             'description' => "New Task",
             'process_id' => 2
         );
         
-        while($result1->next()) {
+        while ($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
         $this->assertEquals($tableFieldName[0]['id'] > 0, true);
@@ -150,13 +152,14 @@ VALUES ('".$insertData['name']."', ".$insertData['client_id'].", '".$insertData[
         $this->assertEquals($tableFieldName[0]['process_id'], $selectData['process_id']);
     }
 
-    public function testSelectQueryWithJoin() {
+    public function testSelectQueryWithJoin()
+    {
         $config = $this->getApplicationConfig();
         $this->data['query'] = "SELECT `ox_timesheet`.`name`, `ox_timesheet`.`client_id`, `ox_timesheet`.`description`, `ox_timesheet`.`process_id`, `ox_timesheet`.`date_created` FROM ox_timesheet 
 LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id where ox_timesheet.client_id = 1";
         $persistenceObject = new Persistence($config, $this->database, $this->adapter);
         $persistenceObject->selectQuery($this->data);
-        $selectData = Array (
+        $selectData = array(
             'name' => "Task1",
             'client_id' => 1,
             'description' => "New Task",
@@ -164,7 +167,7 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
         );
         $statement1 = $this->adapter->query($this->data['query']);
         $result1 = $statement1->execute();
-        while($result1->next()) {
+        while ($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
         $this->assertEquals($tableFieldName[0]['name'], $selectData['name']);
@@ -173,12 +176,13 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
         $this->assertEquals($tableFieldName[0]['process_id'], $selectData['process_id']);
     }
 
-    public function testUpdateQuery() {
+    public function testUpdateQuery()
+    {
         $config = $this->getApplicationConfig();
         $this->data['query'] = "UPDATE ox_timesheet set name = 'Updated Task' WHERE id > 0";
         $persistenceObject = new Persistence($config, $this->database, $this->adapter);
         $persistenceObject->updateQuery($this->data);
-        $selectData = Array (
+        $selectData = array(
             'name' => "Updated Task",
             'client_id' => 1,
             'description' => "New Task",
@@ -186,7 +190,7 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
         );
         $statement1 = $this->adapter->query("Select * from ox_timesheet");
         $result1 = $statement1->execute();
-        while($result1->next()) {
+        while ($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
         $this->assertEquals($tableFieldName[0]['id'] > 0, true);
@@ -197,7 +201,8 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
     }
 
 
-    public function testUpdateQueryWithJoin() {
+    public function testUpdateQueryWithJoin()
+    {
         $config = $this->getApplicationConfig();
         $this->data['query'] = "UPDATE ox_timesheet AS b
             INNER JOIN ox_timesheet_client AS g ON b.client_id = g.id
@@ -205,7 +210,7 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
             WHERE  (b.client_id = 1) and g.id = 1";
         $persistenceObject = new Persistence($config, $this->database, $this->adapter);
         $persistenceObject->updateQuery($this->data);
-        $selectData = Array (
+        $selectData = array(
             'name' => "Updated Task",
             'client_id' => 1,
             'description' => "New Task",
@@ -215,10 +220,10 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
         $result1 = $statement1->execute();
         $resultSet = new ResultSet();
         $resultset=$resultSet->initialize($result1);
-        while($result1->next()) {
+        while ($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
-        $this->assertEquals($tableFieldName[0]['id'] > 0,true);
+        $this->assertEquals($tableFieldName[0]['id'] > 0, true);
         $this->assertEquals($tableFieldName[0]['name'], $selectData['name']);
         $this->assertEquals($tableFieldName[0]['client_id'], $selectData['client_id']);
         $this->assertEquals($tableFieldName[0]['description'], $selectData['description']);
@@ -226,30 +231,32 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
     }
 
 
-    public function testDeleteQuery() {
+    public function testDeleteQuery()
+    {
         $config = $this->getApplicationConfig();
         $this->data['query'] = "Delete from ox_timesheet where id > 0";
         $persistenceObject = new Persistence($config, $this->database, $this->adapter);
         $persistenceObject->deleteQuery($this->data);
         $statement1 = $this->adapter->query("Select * from ox_timesheet");
         $result1 = $statement1->execute();
-        $tableFieldName = Array();
-        while($result1->next()) {
+        $tableFieldName = array();
+        while ($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
         $this->assertEquals($tableFieldName, array());
     }
 
-// //Code to delete all the enreies made to the timesheet table for testing purpose.
-    public function testDeleteAllQuery() {
+    // //Code to delete all the enreies made to the timesheet table for testing purpose.
+    public function testDeleteAllQuery()
+    {
         $config = $this->getApplicationConfig();
         $this->data['query'] = "Delete from ox_timesheet where id > 0";
-        $persistenceObject = new Persistence($config, $this->database,$this->adapter);
+        $persistenceObject = new Persistence($config, $this->database, $this->adapter);
         $persistenceObject->deleteQuery($this->data);
         $statement1 = $this->adapter->query("Select * from ox_timesheet");
         $result1 = $statement1->execute();
-        $tableFieldName = Array();
-        while($result1->next()) {
+        $tableFieldName = array();
+        while ($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
         $this->assertEquals($tableFieldName, array());

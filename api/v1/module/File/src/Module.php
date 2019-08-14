@@ -15,13 +15,15 @@ use Oxzion\Model\FileTable;
 use Oxzion\Model\CommentTable;
 use Oxzion\Model\SubscriberTable;
 
-class Module implements ConfigProviderInterface {
-
-    public function getConfig() {
+class Module implements ConfigProviderInterface
+{
+    public function getConfig()
+    {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e) {
+    public function onBootstrap(MvcEvent $e)
+    {
         $eventManager = $e->getApplication()->getEventManager();
         $sharedEventManager = $eventManager->getSharedManager();
         $moduleRouteListener = new ModuleRouteListener();
@@ -30,35 +32,45 @@ class Module implements ConfigProviderInterface {
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onRenderError'), 0);
     }
 
-    public function getServiceConfig() {
+    public function getServiceConfig()
+    {
         return [
             'factories' => [
             ],
         ];
     }
 
-    public function getControllerConfig() {
+    public function getControllerConfig()
+    {
         return [
             'factories' => [
-                Controller\CommentController::class => function($container) {
+                Controller\CommentController::class => function ($container) {
                     return new Controller\CommentController(
-                            $container->get(CommentTable::class), $container->get(\Oxzion\Service\CommentService::class), $container->get('FileLogger'),
-                        $container->get(AdapterInterface::class));
+                        $container->get(CommentTable::class),
+                        $container->get(\Oxzion\Service\CommentService::class),
+                        $container->get('FileLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
                 },
-                Controller\SubscriberController::class => function($container) {
+                Controller\SubscriberController::class => function ($container) {
                     return new Controller\SubscriberController(
-                            $container->get(SubscriberTable::class), $container->get(\Oxzion\Service\SubscriberService::class), $container->get('FileLogger'),
-                        $container->get(AdapterInterface::class));
+                        $container->get(SubscriberTable::class),
+                        $container->get(\Oxzion\Service\SubscriberService::class),
+                        $container->get('FileLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
                 },
             ],
         ];
     }
 
-    public function onDispatchError($e) {
+    public function onDispatchError($e)
+    {
         return ErrorHandler::getJsonModelError($e);
     }
 
-    public function onRenderError($e) {
+    public function onRenderError($e)
+    {
         return ErrorHandler::getJsonModelError($e);
     }
 }

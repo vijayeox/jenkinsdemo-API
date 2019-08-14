@@ -13,10 +13,12 @@ use Zend\Db\Sql\Sql;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 use Oxzion\Controller\AbstractApiControllerHelper;
+
 /**
  * Resource Controller
  */
-class ResourceController extends AbstractApiControllerHelper {
+class ResourceController extends AbstractApiControllerHelper
+{
     /**
     * @var ResourceService Instance of Attchment Service
     */
@@ -24,7 +26,8 @@ class ResourceController extends AbstractApiControllerHelper {
     /**
     * @ignore __construct
     */
-    public function __construct(ResourceService $resourceService, Logger $log, AdapterInterface $dbAdapter) {
+    public function __construct(ResourceService $resourceService, Logger $log, AdapterInterface $dbAdapter)
+    {
         $this->resourceService = $resourceService;
         $this->setIdentifierName('resourceId');
     }
@@ -34,7 +37,8 @@ class ResourceController extends AbstractApiControllerHelper {
     * @link /resource
     * @method POST
     */
-    public function create($data){
+    public function create($data)
+    {
         return $this->getInvalidMethod();
     }
     /**
@@ -43,7 +47,7 @@ class ResourceController extends AbstractApiControllerHelper {
     * @link /resource
     * @method GET
     * @param $id ID of Resource to Delete
-    * @return array $data 
+    * @return array $data
     * <code>
     * {
     *  integer id,
@@ -56,11 +60,12 @@ class ResourceController extends AbstractApiControllerHelper {
     * </code>
     * @return array Returns a JSON Response with Status Code and Created Resource.
     */
-    public function get($id){
+    public function get($id)
+    {
         $result = $this->resourceService->getResource($id);
         if (!headers_sent()) {
             header('Content-Type: application/octet-stream');
-            header("Content-Transfer-Encoding: Binary"); 
+            header("Content-Transfer-Encoding: Binary");
             header("Content-disposition: attachment; filename=\"" . basename($result) . "\"");
         }
         try {
@@ -69,7 +74,7 @@ class ResourceController extends AbstractApiControllerHelper {
             fclose($fp);
             $this->response->setStatusCode(200);
             return $this->response;
-        } catch(Exception $e){
+        } catch (Exception $e) {
             return $this->getErrorResponse("Resource not Found", 404);
         }
     }
@@ -80,7 +85,8 @@ class ResourceController extends AbstractApiControllerHelper {
     * @method GET
     * @return Error Response Array
     */
-    public function getList(){
+    public function getList()
+    {
         return $this->getInvalidMethod();
     }
 }

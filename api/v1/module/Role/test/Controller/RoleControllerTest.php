@@ -14,9 +14,10 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 
 
-
-class RoleControllerTest extends ControllerTest {
-    public function setUp() : void{
+class RoleControllerTest extends ControllerTest
+{
+    public function setUp() : void
+    {
         $this->loadConfig();
         parent::setUp();
     }
@@ -27,7 +28,8 @@ class RoleControllerTest extends ControllerTest {
         return $dataset;
     }
 
-    protected function setDefaultAsserts() {
+    protected function setDefaultAsserts()
+    {
         $this->assertModuleName('Role');
         $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
         $this->assertControllerClass('RoleController');
@@ -280,7 +282,8 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($result[1]['privilege_name'],'MANAGE_ROLE');
     }
 
-    public function testUpdatePrivilegePermission(){
+    public function testUpdatePrivilegePermission()
+    {
         $this->initAuthToken($this->adminUser);
         $data=array('name' => 'ADMIN','description' => 'Must have write control',
             'privileges'=> array(['id' => '1','privilege_name' => 'MANAGE_ANNOUNCEMENT','permission' => '15'],['id'=>'14','privilege_name'=> 'MANAGE_FORM','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'3']));
@@ -321,7 +324,8 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals(count($result),26);
     }
 
-    public function testAddNewPrivilege(){
+    public function testAddNewPrivilege()
+    {
         $this->initAuthToken($this->adminUser);
         $data=array('name' => 'ADMIN','description' => 'Must have write control',
             'privileges'=> array(['privilege_name' => 'MANAGE_FILE','permission' => '15'],['privilege_name'=> 'MANAGE_MAIL','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'15']));
@@ -332,7 +336,8 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testCreateWithExisitingRole(){
+    public function testCreateWithExisitingRole()
+    {
         $this->initAuthToken($this->adminUser);
         $data=array('name' => 'ADMIN','description' => 'Must have write control',
             'privileges'=> array(['privilege_name' => 'MANAGE_FILE','permission' => '15'],['privilege_name'=> 'MANAGE_MAIL','permission'=> '1'],['id' => '4','privilege_name' => 'MANAGE_ALERT','permission'=>'15']));
@@ -344,7 +349,8 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['message'], 'Role already exists');
     }
 
-    public function testCreate(){
+    public function testCreate()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'ADMIN_SUPER','org_id' => 2];
         $this->dispatch('/role', 'POST', $data);
@@ -355,7 +361,8 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['data']['name'], $data['name']);
     }
 
-    public function testCreateAccess() {
+    public function testCreateAccess()
+    {
         $this->initAuthToken($this->employeeUser);
         $data = ['name' => 'ADMIN_SUPER 1','org_id' => 4];
         $this->setJsonContent(json_encode($data));
@@ -371,7 +378,8 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
-    public function testUpdate() {
+    public function testUpdate()
+    {
         $data = ['name' => 'ADMINs'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -382,7 +390,8 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testUpdateRestricted() {
+    public function testUpdateRestricted()
+    {
         $data = ['name' => 'ADMINs'];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
@@ -398,7 +407,8 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
-    public function testUpdateNotFound(){
+    public function testUpdateNotFound()
+    {
         $data = ['name' => 'ADMINs'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -409,7 +419,8 @@ class RoleControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testDelete(){
+    public function testDelete()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/role/53012471-2863', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -456,4 +467,4 @@ class RoleControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
- }
+}

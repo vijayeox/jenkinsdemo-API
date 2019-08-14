@@ -13,7 +13,6 @@ use Oxzion\Service\PrivilegeService;
 use Zend\Db\Adapter\AdapterInterface;
 
 
-
 class PrivilegeControllerTest extends MainControllerTest
 {
     public function setUp() : void
@@ -99,9 +98,6 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertEquals(count($content['data']['masterPrivilege']),26);
         $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_ANNOUNCEMENT');
         $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'],'MANAGE_GROUP');
-        $this->assertEquals(count($content['data']['rolePrivilege']),7);
-        $this->assertEquals($content['data']['rolePrivilege'][0]['privilege_name'],'MANAGE_MLET');
-        $this->assertEquals($content['data']['rolePrivilege'][1]['privilege_name'],'MANAGE_CRM');
     }
 
     public function testGetMasterPrivilegeListWithInValidRolePrivilege()
@@ -130,7 +126,5 @@ class PrivilegeControllerTest extends MainControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['masterPrivilege']),23);
-        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_WORKFLOW');
-        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'],'MANAGE_WIDGET');
     }
 }

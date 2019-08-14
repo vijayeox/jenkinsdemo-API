@@ -36,7 +36,7 @@ class ForgotPasswordController extends AbstractAPIControllerHelper
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Something went wrong with password reset, please contact your administrator", 500);
         }
-        return $this->getSuccessResponseWithData($responseData, 200);
+        return $this->getSuccessResponseWithData($data, 200);
 
     }
 }

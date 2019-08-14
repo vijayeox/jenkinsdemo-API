@@ -10,6 +10,16 @@ use Zend\Log\Processor\RequestId;
 return [
     'router' => [
         'routes' => [
+            'user_added_mail' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/ox/createuser',
+                    'defaults' => [
+                        'controller' => Controller\OXCallbackController::class,
+                        'action' => 'userCreated',
+                    ],
+                ],
+            ],
             'crmaddcontactcallback' => [
                 'type'    => Segment::class,
                 'options' => [

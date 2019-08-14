@@ -28,7 +28,8 @@ class AppController extends AbstractApiController
         $this->setIdentifierName('appId');
         $this->appService = $appService;
     }
-    public function setParams($params){
+    public function setParams($params)
+    {
         $this->params = $params;
     }
     /**
@@ -142,7 +143,6 @@ class AppController extends AbstractApiController
             return $this->getErrorResponse("App not found for id - $id", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
-
     }
 
     /**
@@ -229,7 +229,7 @@ class AppController extends AbstractApiController
      * @api
      * @link /app/a
      * @method GET
-     * @return array of Apps 
+     * @return array of Apps
      */
     public function applistAction()
     {
@@ -238,7 +238,7 @@ class AppController extends AbstractApiController
         if ($response == 0 || empty($response)) {
             return $this->getErrorResponse("No Apps to display", 404);
         }
-        return $this->getSuccessResponseDataWithPagination($response['data'],$response['total']);
+        return $this->getSuccessResponseDataWithPagination($response['data'], $response['total']);
     }
 
     public function appInstallAction($data)
@@ -270,19 +270,19 @@ class AppController extends AbstractApiController
     public function workflowDeployAction()
     {
         $data=$this->extractPostData();
-        $params = array_merge($data,$this->params()->fromRoute());
-        $files = isset($_FILES['files']) ? $_FILES['files'] : NULL;
+        $params = array_merge($data, $this->params()->fromRoute());
+        $files = isset($_FILES['files']) ? $_FILES['files'] : null;
         try {
             if ($files&&isset($params['name'])) {
-                $response = $this->appService->deployWorkflow($params['appId'],$params,$files);
-                if($response == 1){
+                $response = $this->appService->deployWorkflow($params['appId'], $params, $files);
+                if ($response == 1) {
                     return $this->getErrorResponse("Error Parsing BPMN");
                 }
-                if($response == 2){
+                if ($response == 2) {
                     return $this->getErrorResponse("More Than 1 Process Found in BPMN Please Define only one Process per BPMN");
                 }
                 return $this->getSuccessResponse($response);
-             } else {
+            } else {
                 return $this->getErrorResponse("Files cannot be uploaded");
             }
         } catch (Exception $e) {
@@ -290,8 +290,9 @@ class AppController extends AbstractApiController
         }
     }
 
-    public function assignmentsAction(){
-        $params = array_merge($this->extractPostData(),$this->params()->fromRoute());
+    public function assignmentsAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $assignments = $this->appService->getAssignments($params['appId']);
         return $this->getSuccessResponseWithData($assignments);
     }
@@ -366,5 +367,4 @@ class AppController extends AbstractApiController
                 return $this->getErrorResponse("Form could not be created, please check your deployment descriptor");
             }
         }*/
-
 }

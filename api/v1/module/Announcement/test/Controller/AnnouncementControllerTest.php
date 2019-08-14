@@ -15,26 +15,29 @@ use Oxzion\Service\AbstractService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 
-
-class AnnouncementControllerTest extends ControllerTest{
-    
-    public function setUp() : void{
+class AnnouncementControllerTest extends ControllerTest
+{
+    public function setUp() : void
+    {
         $this->loadConfig();
         parent::setUp();
-    }   
-    public function getDataSet() {
+    }
+    public function getDataSet()
+    {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../../../Group/test/Dataset/Group.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Announcement.yml");
         return $dataset;
     }
 
-    protected function createDummyFile(){
+    protected function createDummyFile()
+    {
         $config = $this->getApplicationConfig();
         $tempFolder = $config['UPLOAD_FOLDER']."organization/".$this->testOrgId."/announcements/temp/";
         FileUtils::createDirectory($tempFolder);
         copy(dirname(__FILE__)."/../files/test-oxzionlogo.png", $tempFolder."test-oxzionlogo.png");
     }
-    protected function setDefaultAsserts(){
+    protected function setDefaultAsserts()
+    {
         $this->assertModuleName('Announcement');
         $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AnnouncementController');
@@ -42,7 +45,8 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    private function executeQueryTest($query){
+    private function executeQueryTest($query)
+    {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
@@ -52,7 +56,8 @@ class AnnouncementControllerTest extends ControllerTest{
     }
 
 
-    public function testGetList(){
+    public function testGetList()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement', 'GET');
         $this->assertResponseStatusCode(200);
@@ -66,7 +71,8 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
     }
 
-    public function testGetListofAll(){
+    public function testGetListofAll()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement/a', 'GET');
         $this->assertResponseStatusCode(200);
@@ -82,7 +88,8 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
     }
 
-    public function testGet(){
+    public function testGet()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'GET');
         $this->assertResponseStatusCode(200);
@@ -92,14 +99,16 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['uuid'], '9068b460-2943-4508-bd4c-2b29238700f3');
         $this->assertEquals($content['data']['name'], 'Announcement 1');
     }
-    public function testGetNotFound(){
+    public function testGetNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement/9068b460-2943-4508-bd4c', 'GET');
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-    public function testCreate(){
+    public function testCreate()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Test Announcement','status'=>1,'start_date'=>date('Y-m-d H:i:s'),'end_date'=>date('Y-m-d H:i:s',strtotime("+7 day")),'media'=>'test-oxzionlogo.png'];
         $this->setJsonContent(json_encode($data));
@@ -325,7 +334,8 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'error');
     }
     
-    public function testDelete(){
+    public function testDelete()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement/e66157ee-47de-4ed5-a78e-8a9195033f7a', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -397,7 +407,8 @@ class AnnouncementControllerTest extends ControllerTest{
         $this->assertEquals($content['total'], 1);
     }
 
-    public function testsaveGroup(){
+    public function testsaveGroup()
+    {
          $data = ['groups' => array(['uuid' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de'],['uuid' => '153f3e9e-eb07-4ca4-be78-34f715bd50db'])];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));

@@ -11,7 +11,7 @@ use Oxzion\Service\UserService;
 use User\Controller\UserController;
 use User\Controller\ForgotPasswordController;
 use Oxzion\Messaging\MessageProducer;
-
+use Mockery;
     
 
 
@@ -52,7 +52,7 @@ class ForgotPasswordControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         if(enableCamel == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'USER_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
         }
         $this->dispatch('/user/me/forgotpassword', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -60,7 +60,6 @@ class ForgotPasswordControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->resetCode = $content['data']['password_reset_code'];
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['email'], $data['email']);
     }
 
     public function testForgotPasswordWrongEmail()

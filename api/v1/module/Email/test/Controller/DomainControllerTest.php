@@ -10,7 +10,6 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
 
-
 class DomainControllerTest extends ControllerTest
 {
     public function setUp() : void
@@ -191,6 +190,4 @@ class DomainControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-
-
 }

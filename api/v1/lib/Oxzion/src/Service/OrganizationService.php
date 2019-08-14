@@ -9,18 +9,15 @@ use Oxzion\Model\Organization;
 use Oxzion\Model\OrganizationTable;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Utils\FileUtils;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Security\SecurityManager;
 use Oxzion\AccessDeniedException;
 use Oxzion\ServiceException;
 
 
-
-
 class OrganizationService extends AbstractService
 {
-
     protected $table;
     private $userService;
     private $roleService;
@@ -65,9 +62,9 @@ class OrganizationService extends AbstractService
      *   } </code>
      * @return array Returns a JSON Response with Status Code and Created Organization.
      */
-    public function createOrganization(&$data,$files)
+    public function createOrganization(&$data, $files)
     {
-        $data['uuid'] = Uuid::uuid4()->toString();
+        $data['uuid'] = UuidUtil::uuid();
         if(!isset($data['contact'])){
             throw new ServiceException("Contact Person details are required","org.contact.required");
         }
@@ -111,20 +108,20 @@ class OrganizationService extends AbstractService
                 throw new ServiceException("Failed to create new entity","failed.create.org");
             }
             $form->id = $this->table->getLastInsertValue();
-            $data['preferences'] = json_decode($data['preferences'],true);
-            $userid['id'] = $this->setupBasicOrg($form,$data['contact'],$data['preferences']);
+            $data['preferences'] = json_decode($data['preferences'], true);
+            $userid['id'] = $this->setupBasicOrg($form, $data['contact'], $data['preferences']);
 
-            if(isset($userid['id'])){
+            if (isset($userid['id'])) {
                 $update = "UPDATE `ox_organization` SET `contactid` = '".$userid['id']."' where uuid = '".$data['uuid']."'";
                 $resultSet = $this->executeQueryWithParams($update);
             }
             else{
                 throw new ServiceException("Failed to create new entity","failed.create.org");
             }
-            $this->uploadOrgLogo($data['uuid'],$files);
+            $this->uploadOrgLogo($data['uuid'], $files);
            
             $this->commit();
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $form->name, 'status' => $form->status)),'ORGANIZATION_ADDED');
+            $this->messageProducer->sendTopic(json_encode(array('orgname' => $form->name, 'status' => $form->status)), 'ORGANIZATION_ADDED');
         } catch (Exception $e) {
             $this->rollback();
             throw new ServiceException("Failed to create new entity","failed.create.org");
@@ -135,16 +132,16 @@ class OrganizationService extends AbstractService
 
 
 
-    public function getOrgLogoPath($id,$ensureDir=false){
-
+    public function getOrgLogoPath($id, $ensureDir=false)
+    {
         $baseFolder = $this->config['UPLOAD_FOLDER'];
         //TODO : Replace the User_ID with USER uuid
         $folder = $baseFolder."organization/";
-        if(isset($id)){
+        if (isset($id)) {
             $folder = $folder.$id."/";
         }
         
-        if($ensureDir && !file_exists($folder)){
+        if ($ensureDir && !file_exists($folder)) {
             FileUtils::createDirectory($folder);
         }
 
@@ -162,29 +159,28 @@ class OrganizationService extends AbstractService
      *  @param files Array of files to upload
      *  @return JSON array of filenames
     */
-    public function uploadOrgLogo($id,$file){
-        
-        if(isset($file)){
-
-           $destFile = $this->getOrgLogoPath($id,true);
-           $image = FileUtils::convetImageTypetoPNG($file);
-           if($image){
-                if(FileUtils::fileExists($destFile)){
+    public function uploadOrgLogo($id, $file)
+    {
+        if (isset($file)) {
+            $destFile = $this->getOrgLogoPath($id, true);
+            $image = FileUtils::convetImageTypetoPNG($file);
+            if ($image) {
+                if (FileUtils::fileExists($destFile)) {
                     imagepng($image, $destFile.'/logo.png');
                     $image = null;
-                }
-                else {
+                } else {
                     mkdir($destFile);
                     imagepng($image, $destFile.'/logo.png');
                     $image = null;
                 }
-            }     
+            }
         }
     }
 
 
 
-    private function setupBasicOrg(Organization $org,$contactPerson,$orgPreferences) {
+    private function setupBasicOrg(Organization $org, $contactPerson, $orgPreferences)
+    {
         
          // adding basic roles
         $returnArray['roles'] = $this->roleService->createBasicRoles($org->id);
@@ -201,13 +197,13 @@ class OrganizationService extends AbstractService
      * @param array $data
      * @return array Returns a JSON Response with Status Code and Created Organization.
      */
-    public function updateOrganization($id, &$data,$files = null)
+    public function updateOrganization($id, &$data, $files = null)
     {
         $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
             throw new ServiceException("Entity not found for UUID","org.not.found");
         }
-        if(isset($data['contactid'])){
+        if (isset($data['contactid'])) {
             $data['contactid'] = $this->userService->getUserByUuid($data['contactid']);
         }
         $org = $obj->toArray();
@@ -229,11 +225,9 @@ class OrganizationService extends AbstractService
             if ($count == 0) {
                 return 1;
             }
-            
-        }
-         catch (Exception $e) {
+        } catch (Exception $e) {
             switch (get_class($e)) {
-                case "Oxzion\ValidationException" :
+                case "Oxzion\ValidationException":
                     $this->rollback();
                     throw $e;
                     break;
@@ -243,11 +237,11 @@ class OrganizationService extends AbstractService
                     break;
             }
         }
-        if($obj->name != $data['name']){
-             $this->messageProducer->sendTopic(json_encode(array('new_orgname' => $data['name'], 'old_orgname' => $obj->name,'status' => $form->status)),'ORGANIZATION_UPDATED');
+        if ($obj->name != $data['name']) {
+            $this->messageProducer->sendTopic(json_encode(array('new_orgname' => $data['name'], 'old_orgname' => $obj->name,'status' => $form->status)), 'ORGANIZATION_UPDATED');
         }
-        if($form->status == 'InActive'){
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name,'status' => $form->status)),'ORGANIZATION_DELETED');
+        if ($form->status == 'InActive') {
+            $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name,'status' => $form->status)), 'ORGANIZATION_DELETED');
         }
         return $count;
     }
@@ -261,7 +255,6 @@ class OrganizationService extends AbstractService
      */
     public function deleteOrganization($id)
     {
-       
         $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
             return 0;
@@ -271,7 +264,7 @@ class OrganizationService extends AbstractService
         $originalArray['status'] = 'Inactive';
         $form->exchangeArray($originalArray);
         $result = $this->table->save($form);
-        $this->messageProducer->sendTopic(json_encode(array('orgname' => $originalArray['name'],'status' => $originalArray['status'])),'ORGANIZATION_DELETED');
+        $this->messageProducer->sendTopic(json_encode(array('orgname' => $originalArray['name'],'status' => $originalArray['status'])), 'ORGANIZATION_DELETED');
         return $result;
     }
 
@@ -303,14 +296,15 @@ class OrganizationService extends AbstractService
         return $response[0];
     }
 
-    public function getOrganizationIdByUuid($uuid){
+    public function getOrganizationIdByUuid($uuid)
+    {
         $select ="SELECT id from ox_organization where uuid = '".$uuid."'";
         $result = $this->executeQueryWithParams($select)->toArray();
-        if(isset($result[0])){
+        if (isset($result[0])) {
             return $result[0]['id'];
-        }else{
-            return NULL;
-        }       
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -328,7 +322,6 @@ class OrganizationService extends AbstractService
      */
     public function getOrganizationByUuid($id)
     {
-       
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_organization')
@@ -338,14 +331,15 @@ class OrganizationService extends AbstractService
 
         if (count($response) == 0) {
             return 0;
-        }else{
-        $response[0]['contactid'] = $this->getOrgContactPersonDetails($id); 
-    }
+        } else {
+            $response[0]['contactid'] = $this->getOrgContactPersonDetails($id);
+        }
     
         return $response[0];
     }
 
-    private function getOrgContactPersonDetails($id){
+    private function getOrgContactPersonDetails($id)
+    {
         $userData = array();
         $userSelect = "SELECT ou.uuid from `ox_user` as ou where ou.id = (SELECT og.contactid from `ox_organization` as og WHERE og.uuid = '".$id."')";
         $userData = $this->executeQueryWithParams($userSelect)->toArray();
@@ -403,22 +397,22 @@ class OrganizationService extends AbstractService
         $uuidList= array_unique(array_map('current', $uuidList));
         $query = "SELECT id from ox_user where uuid in ('".implode("','", $uuidList) . "')";
         $result = $this->executeQueryWithParams($query)->toArray();
-        return $result; 
+        return $result;
     }
 
 
-    public function saveUser($id,$data){
-
-        $obj = $this->table->getByUuid($id,array());
+    public function saveUser($id, $data)
+    {
+        $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
             return 0;
         }
-        if(!isset($data['userid']) || empty($data['userid'])) {
+        if (!isset($data['userid']) || empty($data['userid'])) {
             return 2;
         }
         $orgId = $obj->id;
         $userArray = $this->getUserIdList($data['userid']);
-        if($userArray){
+        if ($userArray) {
             $userSingleArray= array_unique(array_map('current', $userArray));
 
             $querystring = "SELECT u.username FROM ox_user_org as ouo 
@@ -435,8 +429,7 @@ class OrganizationService extends AbstractService
 
 
             $this->beginTransaction();
-            try{
-
+            try {
                 $query = "UPDATE ox_user as ou 
                             inner join ox_organization as org on org.id = ou.orgid
                             and ou.id != org.contactid 
@@ -467,34 +460,33 @@ class OrganizationService extends AbstractService
                 $update = "UPDATE ox_user SET orgid = $orgId WHERE id in (".implode(',', $userSingleArray).") AND orgid is NULL";
                 $resultSet = $this->executeQuerywithParams($update);
 
-                if(count($userId) > 0){
-                    $userIdArray= array_unique(array_map('current', $userId));                    
+                if (count($userId) > 0) {
+                    $userIdArray= array_unique(array_map('current', $userId));
                     $update = "UPDATE ox_user SET orgid = NULL WHERE id in (".implode(',', $userIdArray).")";
                     $resultSet = $this->executeQuerywithParams($update);
                 }
 
                 $this->commit();
-            }
-            catch(Exception $e){
+            } catch (Exception $e) {
                 $this->rollback();
                 throw $e;
             }
 
-            foreach($deletedUser as $key => $value){
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value["username"])),'USERTOORGANIZATION_DELETED');
+            foreach ($deletedUser as $key => $value) {
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value["username"])), 'USERTOORGANIZATION_DELETED');
             }
-            foreach($insertedUser as $key => $value){
-                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value["username"])),'USERTOORGANIZATION_ADDED');
+            foreach ($insertedUser as $key => $value) {
+                $this->messageProducer->sendTopic(json_encode(array('orgname' => $obj->name , 'status' => 'Active', 'username'=>$value["username"])), 'USERTOORGANIZATION_ADDED');
             }
 
             return 1;
         }
         return 0;
-
     }
 
-    public function getOrgUserList($id,$filterParams = null,$baseUrl = '') {
-        if(!isset($id)) {
+    public function getOrgUserList($id, $filterParams = null, $baseUrl = '')
+    {
+        if (!isset($id)) {
             return 0;
         }
 
@@ -537,13 +529,14 @@ class OrganizationService extends AbstractService
                      'total' => $count[0]['count(ox_user.id)']);
     }
 
-    public function getAdminUsers($filterParams, $orgId = null){
-        if(!isset($orgId)){
+    public function getAdminUsers($filterParams, $orgId = null)
+    {
+        if (!isset($orgId)) {
             $orgId = AuthContext::get(AuthConstants::ORG_UUID);
         }
-        if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-            SecurityManager::isGranted('MANAGE_MYORG_WRITE') && 
-            $orgId != AuthContext::get(AuthConstants::ORG_UUID) ) {
+        if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
+            SecurityManager::isGranted('MANAGE_MYORG_WRITE') &&
+            $orgId != AuthContext::get(AuthConstants::ORG_UUID)) {
             throw new AccessDeniedException("You do not have permissions");
         }
         
@@ -581,9 +574,9 @@ class OrganizationService extends AbstractService
                      'total' => $count[0]['count(DISTINCT ox_user.uuid)']);
     }
 
-    public function getOrgGroupsList($id,$filterParams = null){
-
-        if(!isset($id)){
+    public function getOrgGroupsList($id, $filterParams = null)
+    {
+        if (!isset($id)) {
             return 0;
         }
 
@@ -730,9 +723,9 @@ class OrganizationService extends AbstractService
     }
 
 
-    public function getOrgRolesList($id,$filterParams = null){
- 
-        if(!isset($id)){
+    public function getOrgRolesList($id, $filterParams = null)
+    {
+        if (!isset($id)) {
             return 0;
         }
 
@@ -775,27 +768,26 @@ class OrganizationService extends AbstractService
         $query =$select." ".$from." ".$where." ".$sort." ".$limit;
         $resultSet = $this->executeQuerywithParams($query)->toArray();
             
-        return array('data' => $resultSet, 
+        return array('data' => $resultSet,
                      'total' => $count[0]['count(oxr.uuid)']);
-       
     }
 
 
-    private function createWhereClause($filterArray,$fieldName = null){
-        if(isset($filterArray[0]['filter'])){
+    private function createWhereClause($filterArray, $fieldName = null)
+    {
+        if (isset($filterArray[0]['filter'])) {
             $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
             $filterList = $filterArray[0]['filter']['filters'];
-            $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,$fieldName);
+            $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic, $fieldName);
             return $where;
-        }else{
+        } else {
             return "";
         }
     }
 
-    private function createSortClause($sort,$fieldName = null){
-            $sort = FilterUtils::sortArray($sort,$fieldName);
-            return $sort;
+    private function createSortClause($sort, $fieldName = null)
+    {
+        $sort = FilterUtils::sortArray($sort, $fieldName);
+        return $sort;
     }
-
 }
-?>
