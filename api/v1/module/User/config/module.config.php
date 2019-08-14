@@ -275,6 +275,20 @@ return [
                     ],
                 ],
             ],
+            'getUserDetailList' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/organization/:orgId/user/:userId/profile',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'GET',
+                        'action' => 'getUserDetailList',
+                        'access' => [
+                            'getUserDetailList'=> ['MANAGE_USER_READ']
+                        ],
+                    ],
+                ],
+            ],
             'updateSession' => [
                 'type' => Segment::class,
                 'options' => [

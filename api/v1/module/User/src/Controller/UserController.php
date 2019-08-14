@@ -556,4 +556,10 @@ class UserController extends AbstractApiController
         $result = $this->projectService->getProjectsOfUserById($id);
         return $this->getSuccessResponseWithData($result);
     }
+
+    public function getUserDetailListAction(){
+        $params = $this->params()->fromRoute();
+        $result = $this->userService->userProfile($params);
+        return $this->getSuccessResponseWithParams($result['data'],$result['role'],200,"role");
+    }
 }

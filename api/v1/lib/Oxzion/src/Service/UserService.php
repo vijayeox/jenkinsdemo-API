@@ -495,6 +495,8 @@ class UserService extends AbstractService
             }else{
                 $orgId = $this->getIdFromUuid('ox_organization',$id['orgId']);    
             }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
         $obj = $this->table->getByUuid($id['userId'], array());
         if (is_null($obj)) {
@@ -506,11 +508,31 @@ class UserService extends AbstractService
      
         $orgArray= array_map('current', $result);
      
-        if(isset($orgId)){
-          if(!in_array($orgId,$orgArray)){
+        if(!in_array($orgId,$orgArray)){
              throw new ServiceException('User does not belong to the organization','user.not.found');
-          }
         }
+
+        $select = "SELECT contactid from ox_organization where id = ".$orgId;
+        $result1 = $this->executeQuerywithParams($select)->toArray();
+
+        if($result1[0]['contactid'] == $obj->id){
+            throw new ServiceException('Not allowed to delete Admin user','admin.user');
+        }
+
+        $select = "SELECT count(id) from ox_group where manager_id = ".$obj->id;
+        $result2 = $this->executeQuerywithParams($select)->toArray();
+
+        if($result2[0]['count(id)'] > 0){
+            throw new ServiceException('Not allowed to delete the group manager','group.manager');  
+        }
+
+        $select = "SELECT count(id) from ox_project where manager_id = ".$obj->id;
+        $result3 = $this->executeQuerywithParams($select)->toArray();
+
+        if($result3[0]['count(id)'] > 0){
+            throw new ServiceException('Not allowed to delete the project manager','project.manager');  
+        }
+
 
 
         $org = $this->getOrg($obj->orgid);  
@@ -1100,5 +1122,21 @@ class UserService extends AbstractService
         $result = $this->executeQuerywithParams($query);
         return $result->toArray();
 
+    }
+
+    public function userProfile($params){
+        $userData = $this->table->getByUuid($params['userId'], array());
+        if(is_null($userData)){
+            return array('data' => array() ,'role' => array());
+        }
+        $select = "SELECT org_id from ox_user_org where org_id = (SELECT id from ox_organization where uuid = '".$params['orgId']."') and user_id = ".$userData->id;
+        $result = $this->executeQuerywithParams($select)->toArray();
+        if(count($result) == 0){
+            return array('data' => array() ,'role' => array()); 
+        }
+        $userData = $userData ->toArray();
+        $userData['preferences'] = json_decode($userData['preferences'],true);
+        $roleData = $this->getRolesofUser($params['orgId'],$userData['id']);
+        return array('data' => $userData ,'role' => $roleData);        
     }
 }

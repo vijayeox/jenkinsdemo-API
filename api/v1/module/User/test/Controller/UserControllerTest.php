@@ -665,6 +665,38 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
+
+    public function testDeleteProjectManager()
+    {
+        $this->initAuthToken($this->adminUser);
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+        }
+        $this->dispatch('/user/768d1fb9-de9c-46c3-8d5c-23e0e484ce2e', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Not allowed to delete the project manager');
+    }
+
+    public function testDeleteGroupManager()
+    {
+        $this->initAuthToken($this->adminUser);
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+        }
+        $this->dispatch('/user/4fd9ce37-758f-11e9-b2d5-68ecc57cde45', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Not allowed to delete the group manager');
+    }
+
+    
     public function testDeleteWithOrgID()
     {
         $this->initAuthToken($this->adminUser);
@@ -707,6 +739,21 @@ class UserControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'User not found');
+    }
+
+    public function testDeleteAdminUser()
+    {
+        $this->initAuthToken($this->adminUser);
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+        }
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Not allowed to delete Admin user');
     }
 
 
@@ -1048,5 +1095,50 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data'][2]['name'],'Deepak S');
     }    
 
+    public function testgetUserProfileDetail(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/profile', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('getuserdetaillist');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'],'Bharat Gogineni');
+        $this->assertEquals($content['data']['orgid'], 1);
+        $this->assertEquals($content['role'][0]['name'],'ADMIN');
+        $this->assertEquals($content['role'][1]['name'],'MANAGER');
+    }
 
+
+    public function testgetUserProfileDetailInvalidOrg(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/5301247-4949-afb1-e69b0891c98a/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/profile', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('getuserdetaillist');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'],array());
+        $this->assertEquals($content['role'],array());
+    }
+
+    public function testgetUserProfileDetailInvalidUserId(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-758f-11e9-bcc57cde45/profile', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('getuserdetaillist');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'],array());
+        $this->assertEquals($content['role'],array());
+    }
+
+    public function testgetUserProfileDetailDifferentOrg(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/profile', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('getuserdetaillist');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'],array());
+        $this->assertEquals($content['role'],array());
+    }
 }
