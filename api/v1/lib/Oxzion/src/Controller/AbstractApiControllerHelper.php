@@ -123,9 +123,6 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     protected function getSuccessResponseWithParams(array $data = null,array $paramData = null,$code = 200,$param = null){
         $this->response->setStatusCode($code);
         $payload = ['status' => 'success'];
-        if(! is_null($message)){
-            $payload['message'] = $message;
-        }
         if(! is_null($data)){
             $payload['data'] = (array) $data;
         }
@@ -135,7 +132,6 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
             }
         }
         return new JsonModel($payload);
-       
     }
     protected function getSuccessResponse($message = null, $code = 200, array $data = null,$total = null,$role = null){
         $this->response->setStatusCode($code);
@@ -149,6 +145,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         if (! is_null($total)) {
             $payload['total'] = $total;
         }
+        return new JsonModel($payload);
     }
 
 

@@ -558,3 +558,4 @@ class UserController extends AbstractApiController
         $result = $this->userService->userProfile($params);
         return $this->getSuccessResponseWithParams($result['data'],$result['role'],200,"role");
     }
+}

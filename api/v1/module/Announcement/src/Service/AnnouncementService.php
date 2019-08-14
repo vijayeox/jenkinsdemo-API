@@ -79,7 +79,7 @@ class AnnouncementService extends AbstractService
        
 
             $form = new Announcement();
-            $data['uuid'] = Uuid::uuid4()->toString();
+            $data['uuid'] = UuidUtil::uuid();
             $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
             $data['start_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d');
             $data['status'] = $data['status']?$data['status']:1;

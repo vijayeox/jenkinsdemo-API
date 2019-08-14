@@ -46,197 +46,197 @@ class RoleControllerTest extends ControllerTest
     }
 
 
-    // public function testGetList(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/role', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals(5, count($content['data']));
-    //     $this->assertEquals($content['data'][0]['id'], 4);
-    //     $this->assertEquals($content['data'][0]['name'], 'ADMIN');
-    //     $this->assertEquals($content['data'][1]['id'], 6);
-    //     $this->assertEquals($content['data'][1]['name'], 'EMPLOYEE');
-    //     $this->assertEquals($content['data'][2]['id'], 17);
-    //     $this->assertEquals($content['data'][2]['name'], 'EMPLOYEE-2');
-    //     $this->assertEquals($content['total'],5);
-    // }
+    public function testGetList(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/role', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(5, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 4);
+        $this->assertEquals($content['data'][0]['name'], 'ADMIN');
+        $this->assertEquals($content['data'][1]['id'], 6);
+        $this->assertEquals($content['data'][1]['name'], 'EMPLOYEE');
+        $this->assertEquals($content['data'][2]['id'], 17);
+        $this->assertEquals($content['data'][2]['name'], 'EMPLOYEE-2');
+        $this->assertEquals($content['total'],5);
+    }
 
-    // public function testGetListWithQuery(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/role?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"endswith","value":"in"},{"field":"description","operator":"startswith","value":"mu"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals(1, count($content['data']));
-    //     $this->assertEquals($content['data'][0]['id'], 4);
-    //     $this->assertEquals($content['data'][0]['name'], 'ADMIN');
-    //     $this->assertEquals($content['total'], 1);
-    // }
+    public function testGetListWithQuery(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/role?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"endswith","value":"in"},{"field":"description","operator":"startswith","value":"mu"}]},"sort":[{"field":"id","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 4);
+        $this->assertEquals($content['data'][0]['name'], 'ADMIN');
+        $this->assertEquals($content['total'], 1);
+    }
 
-    // public function testGetListWithQueryPageNo(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/role?filter=[{"skip":1,"take":1}]', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals(1, count($content['data']));
-    //     $this->assertEquals($content['data'][0]['id'], 6);
-    //     $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
-    //     $this->assertEquals($content['total'], 5);
-    // }
+    public function testGetListWithQueryPageNo(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/role?filter=[{"skip":1,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 6);
+        $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
+        $this->assertEquals($content['total'], 5);
+    }
 
-    // public function testGetListWithQuerySort(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/role?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":1}]', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals(1, count($content['data']));
-    //     $this->assertEquals($content['data'][0]['id'], 6);
-    //     $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
-    //     $this->assertEquals($content['total'], 5);
-    // }
+    public function testGetListWithQuerySort(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/role?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 6);
+        $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
+        $this->assertEquals($content['total'], 5);
+    }
 
-    // public function testRolePrivilege(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/role/4/privilege', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->assertModuleName('Role');
-    //     $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
-    //     $this->assertControllerClass('RoleController');
-    //     $this->assertMatchedRouteName('roleprivilege');
-    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals(13, count($content['data']));
-    //     foreach ($content['data'] as $key => $val) {
-    //         if($val['privilege_name'] == "MANAGE_ANNOUNCEMENT"){
-    //             $this->assertEquals($val['permission'], 3);
-    //             $this->assertEquals($val['org_id'], 1);
-    //             $this->assertEquals($val['app_id'], 1);
-    //         }
-    //         if($val['privilege_name'] == "MANAGE_CRM"){
-    //             $this->assertEquals($val['permission'], 1);
-    //             $this->assertEquals($val['org_id'], 1);
-    //             $this->assertEquals($val['app_id'], 9);
-    //         }
-    //         if($val['privilege_name'] == "MANAGE_EMAIL"){
-    //             $this->assertEquals($val['permission'], 1);
-    //             $this->assertEquals($val['org_id'], 1);
-    //             $this->assertEquals($val['app_id'], 1);
-    //         }
-    //         if($val['privilege_name'] == "MANAGE_GROUP"){
-    //             $this->assertEquals($val['permission'], 3);
-    //             $this->assertEquals($val['org_id'], 1);
-    //             $this->assertEquals($val['app_id'], 1);
-    //         }
-    //         if($val['privilege_name'] == "MANAGE_MYAPP"){
-    //             $this->assertEquals($val['permission'], 3);
-    //             $this->assertEquals($val['org_id'], 1);
-    //             $this->assertEquals($val['app_id'], 3);
-    //         }
-    //         if($val['privilege_name'] == "MANAGE_ORGANIZATION"){
-    //             $this->assertEquals($val['permission'], 15);
-    //             $this->assertEquals($val['org_id'], 1);
-    //             $this->assertEquals($val['app_id'], 1);
-    //         }
-    //         if($val['privilege_name'] == "MANAGE_PROJECT"){
-    //             $this->assertEquals($val['permission'], 3);
-    //             $this->assertEquals($val['org_id'], 1);
-    //             $this->assertEquals($val['app_id'], 1);
-    //         }
-    //         if($val['privilege_name'] == "MANAGE_ROLE"){
-    //             $this->assertEquals($val['permission'], 3);
-    //             $this->assertEquals($val['org_id'], 1);
-    //             $this->assertEquals($val['app_id'], 1);
-    //         }
-    //         if($val['privilege_name'] == "MANAGE_USER"){
-    //             $this->assertEquals($val['permission'], 15);
-    //             $this->assertEquals($val['org_id'], 1);
-    //             $this->assertEquals($val['app_id'], 1);
-    //         }
-    //     }
-    // }
+    public function testRolePrivilege(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/role/4/privilege', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Role');
+        $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('RoleController');
+        $this->assertMatchedRouteName('roleprivilege');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(13, count($content['data']));
+        foreach ($content['data'] as $key => $val) {
+            if($val['privilege_name'] == "MANAGE_ANNOUNCEMENT"){
+                $this->assertEquals($val['permission'], 3);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_CRM"){
+                $this->assertEquals($val['permission'], 1);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 9);
+            }
+            if($val['privilege_name'] == "MANAGE_EMAIL"){
+                $this->assertEquals($val['permission'], 1);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_GROUP"){
+                $this->assertEquals($val['permission'], 3);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_MYAPP"){
+                $this->assertEquals($val['permission'], 3);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 3);
+            }
+            if($val['privilege_name'] == "MANAGE_ORGANIZATION"){
+                $this->assertEquals($val['permission'], 15);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_PROJECT"){
+                $this->assertEquals($val['permission'], 3);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_ROLE"){
+                $this->assertEquals($val['permission'], 3);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_USER"){
+                $this->assertEquals($val['permission'], 15);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+        }
+    }
 
-    // public function testRolePrivilegeNotFound(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/role/12345/privilege', 'GET');
-    //     $this->assertResponseStatusCode(404);
-    //     $this->assertModuleName('Role');
-    //     $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
-    //     $this->assertControllerClass('RoleController');
-    //     $this->assertMatchedRouteName('roleprivilege');
-    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error');
-    // }
-
-
-    // public function testGet(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/role/4', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals($content['data']['id'], 4);
-    //     $this->assertEquals($content['data']['name'], 'ADMIN');
-    //     $this->assertEquals(26,count($content['data']['privileges']));
-    // }
-    // public function testGetNotFound(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/role/64', 'GET');
-    //     $this->assertResponseStatusCode(404);
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error');
-    // }
-
-    // public function testCreateRole(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $data=array('name' => 'SUPER ADMIN','description' => 'Must have read and write control',
-    //         'privileges'=> array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3']));
-    //     $this->setJsonContent(json_encode($data));
-    //     $this->dispatch('/role', 'POST',$data);
-    //     $this->assertResponseStatusCode(201);
-
-    //     $select = "SELECT id from ox_role where name = 'SUPER ADMIN'";
-    //     $id = $this->executeQueryTest($select);
-
-    //     $select1 = "SELECT * from ox_role_privilege where role_id = ".$id[0]['id'];
-    //     $result = $this->executeQueryTest($select1);
-
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals($content['data']['name'],'SUPER ADMIN');
-    //     $this->assertEquals($content['data']['description'],'Must have read and write control');
-    //     $this->assertEquals($result[0]['privilege_name'],'MANAGE_ALERT');
-    //     $this->assertEquals($result[1]['privilege_name'],'MANAGE_ROLE');
-    // }
+    public function testRolePrivilegeNotFound(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/role/12345/privilege', 'GET');
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('Role');
+        $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('RoleController');
+        $this->assertMatchedRouteName('roleprivilege');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 
 
-    // public function testCreateRoleWithOrgId(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $data=array('name' => 'SUPER ADMIN','description' => 'Must have read and write control',
-    //         'privileges'=> array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3']));
-    //     $this->setJsonContent(json_encode($data));
-    //     $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role', 'POST',$data);
-    //     $this->assertResponseStatusCode(201);
-    //     $select = "SELECT id from ox_role where name = 'SUPER ADMIN'";
-    //     $id = $this->executeQueryTest($select);
+    public function testGet(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/role/4', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id'], 4);
+        $this->assertEquals($content['data']['name'], 'ADMIN');
+        $this->assertEquals(26,count($content['data']['privileges']));
+    }
+    public function testGetNotFound(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/role/64', 'GET');
+        $this->assertResponseStatusCode(404);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 
-    //     $select1 = "SELECT * from ox_role_privilege where role_id = ".$id[0]['id'];
-    //     $result = $this->executeQueryTest($select1);
+    public function testCreateRole(){
+        $this->initAuthToken($this->adminUser);
+        $data=array('name' => 'SUPER ADMIN','description' => 'Must have read and write control',
+            'privileges'=> array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3']));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/role', 'POST',$data);
+        $this->assertResponseStatusCode(201);
 
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals($content['data']['name'],'SUPER ADMIN');
-    //     $this->assertEquals($content['data']['description'],'Must have read and write control');
-    //     $this->assertEquals($result[0]['privilege_name'],'MANAGE_ALERT');
-    //     $this->assertEquals($result[1]['privilege_name'],'MANAGE_ROLE');
-    // }
+        $select = "SELECT id from ox_role where name = 'SUPER ADMIN'";
+        $id = $this->executeQueryTest($select);
+
+        $select1 = "SELECT * from ox_role_privilege where role_id = ".$id[0]['id'];
+        $result = $this->executeQueryTest($select1);
+
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'],'SUPER ADMIN');
+        $this->assertEquals($content['data']['description'],'Must have read and write control');
+        $this->assertEquals($result[0]['privilege_name'],'MANAGE_ALERT');
+        $this->assertEquals($result[1]['privilege_name'],'MANAGE_ROLE');
+    }
+
+
+    public function testCreateRoleWithOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $data=array('name' => 'SUPER ADMIN','description' => 'Must have read and write control',
+            'privileges'=> array(['privilege_name' => 'MANAGE_ADMIN','permission' => '15'],['privilege_name'=> 'MANAGE_ROLE','permission'=> '1'],['privilege_name' => 'MANAGE_ALERT','permission'=>'3']));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role', 'POST',$data);
+        $this->assertResponseStatusCode(201);
+        $select = "SELECT id from ox_role where name = 'SUPER ADMIN'";
+        $id = $this->executeQueryTest($select);
+
+        $select1 = "SELECT * from ox_role_privilege where role_id = ".$id[0]['id'];
+        $result = $this->executeQueryTest($select1);
+
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'],'SUPER ADMIN');
+        $this->assertEquals($content['data']['description'],'Must have read and write control');
+        $this->assertEquals($result[0]['privilege_name'],'MANAGE_ALERT');
+        $this->assertEquals($result[1]['privilege_name'],'MANAGE_ROLE');
+    }
 
 
     public function testCreateRoleWithPrivileges(){
