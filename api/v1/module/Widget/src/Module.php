@@ -11,13 +11,15 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 
-class Module implements ConfigProviderInterface {
-
-    public function getConfig() {
+class Module implements ConfigProviderInterface
+{
+    public function getConfig()
+    {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e) {
+    public function onBootstrap(MvcEvent $e)
+    {
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -29,7 +31,7 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
-                Model\WidgetTable::class => function($container) {
+                Model\WidgetTable::class => function ($container) {
                     $tableGateway = $container->get(Model\WidgetTableGateway::class);
                     return new Model\WidgetTable($tableGateway);
                 },
@@ -39,7 +41,7 @@ class Module implements ConfigProviderInterface {
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Widget());
                     return new TableGateway('ox_widget', $dbAdapter, null, $resultSetPrototype);
                 },
-                Service\WidgetService::class => function($container){
+                Service\WidgetService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\WidgetService($container->get('config'), $dbAdapter, $container->get(Model\WidgetTable::class));
                 },
@@ -50,9 +52,12 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
-                Controller\WidgetController::class => function($container) {
+                Controller\WidgetController::class => function ($container) {
                     return new Controller\WidgetController(
-                        $container->get(Model\WidgetTable::class),$container->get(Service\WidgetService::class),$container->get('WidgetLogger'));
+                        $container->get(Model\WidgetTable::class),
+                        $container->get(Service\WidgetService::class),
+                        $container->get('WidgetLogger')
+                    );
                 },
             ],
         ];

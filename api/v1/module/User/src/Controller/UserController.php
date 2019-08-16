@@ -29,13 +29,12 @@ use Oxzion\ServiceException;
 
 class UserController extends AbstractApiController
 {
-
     private $dbAdapter;
 
     /**
      * @ignore __construct
      */
-    public function __construct(UserTable $table, Logger $log, UserService $userService, AdapterInterface $adapterInterface, EmailService $emailService,ProjectService $projectService)
+    public function __construct(UserTable $table, Logger $log, UserService $userService, AdapterInterface $adapterInterface, EmailService $emailService, ProjectService $projectService)
     {
         parent::__construct($table, $log, __class__, User::class, EmailService::class);
         $this->setIdentifierName('userId');
@@ -91,6 +90,8 @@ class UserController extends AbstractApiController
         	While this is not exactly not found we don't have a better HTML error code for create.
              */
             return $this->getErrorResponse("Validation Errors", 406, $response);
+        } catch (AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
         }
         catch(AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(),403);
@@ -124,15 +125,13 @@ class UserController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         // This API should use the UUID
-        try{
+        try {
             // $data = $this->table->getByUuid($id,array());
             $data = $this->userService->getUserByUuid($id);
             return $this->getUserInfo($data, $params);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             return $this->getErrorResponse("User not found", 404, ['id' => $id]);
         }
-
     }
 
     /**
@@ -223,7 +222,6 @@ class UserController extends AbstractApiController
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
-
     }
 
     /**
@@ -247,7 +245,6 @@ class UserController extends AbstractApiController
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
-
     }
 
     /**
@@ -411,7 +408,6 @@ class UserController extends AbstractApiController
                 $icon = $userInfo['icon'];
                 $userInfo['icon'] = $baseUrl . "/user/profile/" . $userInfo["uuid"];
             }
-
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
 
@@ -527,10 +523,9 @@ class UserController extends AbstractApiController
             $response = ['id' => $userId];
             return $this->getErrorResponse("Failed to Update Password", 404, $response);
         }
-
     }
 
-     /**
+    /**
     * GET List Project of Current User API
     * @api
     * @link /project
@@ -538,22 +533,29 @@ class UserController extends AbstractApiController
     * @return array $dataget list of Projects by User
     * <code>status : "success|error",
     *       data :  {
-                    string name,
-                    string description,
-                    integer orgid,
-                    integer created_by,
-                    integer modified_by,
-                    dateTime date_created (ISO8601 format yyyy-mm-ddThh:mm:ss),
-                    dateTime date_modified (ISO8601 format yyyy-mm-ddThh:mm:ss),
-                    boolean isdeleted,
-                    integer id,
-                    }
+                   string name,
+                   string description,
+                   integer orgid,
+                   integer created_by,
+                   integer modified_by,
+                   dateTime date_created (ISO8601 format yyyy-mm-ddThh:mm:ss),
+                   dateTime date_modified (ISO8601 format yyyy-mm-ddThh:mm:ss),
+                   boolean isdeleted,
+                   integer id,
+                   }
     * </code>
     */
-    public function getUserProjectAction(){
+    public function getUserProjectAction()
+    {
         $params = $this->params()->fromRoute();
         $id=$params['userId'];
         $result = $this->projectService->getProjectsOfUserById($id);
         return $this->getSuccessResponseWithData($result);
+    }
+
+    public function getUserDetailListAction(){
+        $params = $this->params()->fromRoute();
+        $result = $this->userService->userProfile($params);
+        return $this->getSuccessResponseWithParams($result['data'],$result['role'],200,"role");
     }
 }

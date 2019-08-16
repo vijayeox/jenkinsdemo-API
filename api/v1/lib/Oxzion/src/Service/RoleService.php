@@ -7,7 +7,7 @@ use Oxzion\Model\Role;
 use Oxzion\Model\RoleTable;
 use Oxzion\Model\PrivilegeTable;
 use Oxzion\Service\AbstractService;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Exception;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ServiceException;
@@ -15,14 +15,14 @@ use Oxzion\Security\SecurityManager;
 
 
 
-
-class RoleService extends AbstractService {
-
+class RoleService extends AbstractService
+{
     protected $table;
     protected $modelClass;
     private $privilegeService;
 
-    public function __construct($config, $dbAdapter, RoleTable $table, PrivilegeTable $privilegeTable) {
+    public function __construct($config, $dbAdapter, RoleTable $table, PrivilegeTable $privilegeTable)
+    {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->modelClass = new Role();
@@ -55,9 +55,9 @@ class RoleService extends AbstractService {
         $data['description'] = isset($data['description'])?$data['description']:'';
         $data['privileges'] = isset($data['privileges'])?$data['privileges']:array();
         $count = 0;
-        try{
+        try {
             $this->beginTransaction();
-            if(isset($roleId)){
+            if (isset($roleId)) {
                 $update = "UPDATE `ox_role` SET `name`= '".$data['name']."' WHERE `id` = '".$roleId."' AND name not in ('ADMIN', 'MANAGER', 'EMPLOYEE') AND org_id = ".$org_id ;
                 $result1 = $this->runGenericQuery($update);
                 $update = "UPDATE `ox_role` SET `description`= '".$data['description']."' WHERE `id` = '".$roleId."' AND org_id = ".$org_id ;
@@ -74,12 +74,12 @@ class RoleService extends AbstractService {
                         throw new ServiceException("Role already exists","role.already.exists");
                 }
 
-                $data['uuid'] = Uuid::uuid4()->toString(); 
+                $data['uuid'] = UuidUtil::uuid();
                 $data['is_system_role'] = isset($data['is_system_role']) ? $data['is_system_role'] : "NULL";
                 $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`org_id`,`is_system_role`)VALUES ('".$rolename."','".$data['description']."','".$data['uuid']."',".$org_id.",".$data['is_system_role'].")";
                 $result1 = $this->runGenericQuery($insert);
                 $count = $result1->getAffectedRows();
-                if($count > 0){
+                if ($count > 0) {
                     $roleId = $result1->getGeneratedValue();
                     $data['id'] = $roleId;
                 }
@@ -91,16 +91,14 @@ class RoleService extends AbstractService {
                     $this->updateRolePrivileges($roleId, $data['privileges'],$org_id);
                 }
                 $this->commit();
-            }else{
+            } else {
                 $this->rollback();
             }
-            
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
-        return $count;   
+        return $count;
     }
 
     protected function updateRolePrivileges($roleId, &$privileges,$orgId = null) {
@@ -123,7 +121,8 @@ class RoleService extends AbstractService {
         }
     }
 
-    protected function createSystemRoleForOrg(&$data) {
+    protected function createSystemRoleForOrg(&$data)
+    {
         if (!$data['org_id']) {
             $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         }
@@ -137,19 +136,20 @@ class RoleService extends AbstractService {
                 throw new ServiceException("Failed to create basic roles","failed.create.basicroles");
             }
             $count = $this->updateDefaultRolePrivileges($data);
-            if($count == 0){
+            if ($count == 0) {
                 $this->rollback();
                 throw new ServiceException("Failed to create basic roles","failed.create.basicroles");
             }
             $this->commit();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
         return $count;
     }
 
-    public function deleteRole($id,$params){
+    public function deleteRole($id,$params)
+    {
         if(isset($params['orgId'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
@@ -173,22 +173,22 @@ class RoleService extends AbstractService {
 
         $this->beginTransaction();
         $count = 0;
-        try{
+        try {
             $count = $this->table->deleteByUuid($id);
-            if($count == 0){
+            if ($count == 0) {
                 $this->rollback();
                 throw new ServiceException("Role not found","role.not.found");
             }
             $this->commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
         return $count;
     }
 
-    public function getRoles($filterParams = null) {
-
+    public function getRoles($filterParams = null)
+    {
         $pageSize = 20;
         $offset = 0;
         $where = "";
@@ -225,7 +225,8 @@ class RoleService extends AbstractService {
                      'total' => $count);        
     }
 
-    public function getRole($id) {
+    public function getRole($id)
+    {
         $query = "SELECT * FROM ox_role WHERE ox_role.id =".$id." AND ox_role.org_id=".AuthContext::get(AuthConstants::ORG_ID);
         $result = $this->executeQuerywithParams($query);
         $queryString = "select ox_role_privilege.id, ox_role_privilege.privilege_name,ox_role_privilege.permission, ox_role_privilege.app_id,ox_app.name 
@@ -242,7 +243,6 @@ class RoleService extends AbstractService {
         }
         
         return $resp;
-
     }
 
     public function getRolePrivilege($id) {
@@ -253,7 +253,8 @@ class RoleService extends AbstractService {
             return $resultSet->toArray();
     }
 
-    public function getRolesByOrgid($orgid) {
+    public function getRolesByOrgid($orgid)
+    {
         return $this->getDataByParams('ox_role', array(), array('org_id' => $orgid));
     }
 
@@ -274,7 +275,8 @@ class RoleService extends AbstractService {
         }
     }
 
-    protected function updateDefaultRolePrivileges($role) {
+    protected function updateDefaultRolePrivileges($role)
+    {
         $count = 0;
         try{
             $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id) 
@@ -292,6 +294,4 @@ class RoleService extends AbstractService {
             throw $e;
         }
     }
-
 }
-?>

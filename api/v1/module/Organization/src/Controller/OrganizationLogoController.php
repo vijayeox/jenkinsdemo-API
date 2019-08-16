@@ -11,7 +11,8 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Service\UserService;
 
-class OrganizationLogoController extends AbstractApiControllerHelper { 
+class OrganizationLogoController extends AbstractApiControllerHelper
+{
     /**
     * @var ProfilepictureService Instance of Projectpicture Service
     */
@@ -31,19 +32,20 @@ class OrganizationLogoController extends AbstractApiControllerHelper {
     * @link /user/profile[/:profileId]
     * @method GET
     * @param $profileId ID of user
-    * @return profile picture 
+    * @return profile picture
     */
-    public function get($id){
+    public function get($id)
+    {
         $logo = "logo.png";
         $file = $this->organizationService->getOrgLogoPath($id);
         
-        if(FileUtils::fileExists($file) != 1){
-             $file = $this->organizationService->getOrgLogoPath(null);
+        if (FileUtils::fileExists($file) != 1) {
+            $file = $this->organizationService->getOrgLogoPath(null);
         }
         $file = $file . $logo;
         if (!headers_sent()) {
             header('Content-Type: image/png');
-            header("Content-Transfer-Encoding: Binary"); 
+            header("Content-Transfer-Encoding: Binary");
         }
         try {
             $fp = @fopen($file, 'rb');
@@ -51,7 +53,7 @@ class OrganizationLogoController extends AbstractApiControllerHelper {
             fclose($fp);
             $this->response->setStatusCode(200);
             return $this->response;
-        } catch(Exception $e){
+        } catch (Exception $e) {
             print_r($e->getMessage());
             return $this->getErrorResponse("Organization Logo not found", 404);
         }

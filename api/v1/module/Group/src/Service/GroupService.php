@@ -13,25 +13,23 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\OrganizationService;
 use Zend\Log\Logger;
 use Oxzion\Utils\FileUtils;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
 use Oxzion\ServiceException;
 
 
-
-
-
-class GroupService extends AbstractService {
-
+class GroupService extends AbstractService
+{
     private $table;
     private $organizationService;
     protected $logger;
-    static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
+    public static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
 
 
-    public function __construct($config, $dbAdapter, GroupTable $table,$organizationService, Logger $log) {
+    public function __construct($config, $dbAdapter, GroupTable $table, $organizationService, Logger $log)
+    {
         parent::__construct($config, $dbAdapter);
         parent::initLogger(__DIR__ . '/../../../../logs/group.log');
         $this->table = $table;
@@ -42,12 +40,13 @@ class GroupService extends AbstractService {
 
     public function setMessageProducer($messageProducer)
     {
-		$this->messageProducer = $messageProducer;
+        $this->messageProducer = $messageProducer;
     }
 
-    public function getGroupsforUser($userId,$data) {
-        if(isset($data['org_id'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+    public function getGroupsforUser($userId, $data)
+    {
+        if (isset($data['org_id'])) {
+            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to get group users");
             }
@@ -75,10 +74,10 @@ class GroupService extends AbstractService {
      *   } </code>
      * @return array Returns a JSON Response with Status Code and Created Group.
      */
-    public function getGroupByUuid($id,$data)
+    public function getGroupByUuid($id, $data)
     {
-        if(isset($data['org_id'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+        if (isset($data['org_id'])) {
+            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to get the group");
             }
@@ -136,7 +135,7 @@ class GroupService extends AbstractService {
             }   
 
             $form = new Group();
-            $data['uuid'] = Uuid::uuid4()->toString();   
+            $data['uuid'] = UuidUtil::uuid();
             $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
             $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
@@ -178,22 +177,22 @@ class GroupService extends AbstractService {
             $this->rollback();
             throw $e;
         }
-        $this->messageProducer->sendTopic(json_encode(array('groupname' => $data['name'], 'orgname'=> $org['name'])),'GROUP_ADDED');
+        $this->messageProducer->sendTopic(json_encode(array('groupname' => $data['name'], 'orgname'=> $org['name'])), 'GROUP_ADDED');
         return $count;
     }
 
 
 
-    public function getGroupLogoPath($orgId,$id,$ensureDir=false){
-
+    public function getGroupLogoPath($orgId, $id, $ensureDir=false)
+    {
         $baseFolder = $this->config['UPLOAD_FOLDER'];
         //TODO : Replace the User_ID with USER uuid
         $folder = $baseFolder."organization/".$orgId."/group/";
-        if(isset($id)){
+        if (isset($id)) {
             $folder = $folder.$id."/";
         }
 
-        if($ensureDir && !file_exists($folder)){
+        if ($ensureDir && !file_exists($folder)) {
             FileUtils::createDirectory($folder);
         }
         return $folder;
@@ -210,21 +209,20 @@ class GroupService extends AbstractService {
      *  @param files Array of files to upload
      *  @return JSON array of filenames
     */
-    public function uploadGroupLogo($orgId,$id,$file){
-        
-        if(isset($file)){
+    public function uploadGroupLogo($orgId, $id, $file)
+    {
+        if (isset($file)) {
             $image = FileUtils::convetImageTypetoPNG($file);
-            if($image){
-                if(FileUtils::fileExists($destFile)){
+            if ($image) {
+                if (FileUtils::fileExists($destFile)) {
                     imagepng($image, $destFile.'/logo.png');
                     $image = null;
-                }
-                else {
+                } else {
                     mkdir($destFile);
                     imagepng($image, $destFile.'/logo.png');
                     $image = null;
-               }
-            } 
+                }
+            }
         }
     }
 
@@ -303,9 +301,9 @@ class GroupService extends AbstractService {
                     $selectParentUUID ="SELECT uuid from ox_group where id = '".$resultSet[$x]['parent_id']."'";
                     $result = $this->executeQueryWithParams($selectParentUUID)->toArray();
                     $resultSet[$x]['parent_id']=$result[0]["uuid"];
-                }
             }
-            return array('data' => $resultSet, 
+        }
+        return array('data' => $resultSet,
                      'total' => $count);
     }
 
@@ -363,13 +361,13 @@ class GroupService extends AbstractService {
             } else {
                 throw new ServiceException("Failed to Update","failed.update.group");
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             print("Exception");
             print_r($e->getMessage());exit;
             $this->rollback();
             throw $e;
         }
-        $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])),'GROUP_UPDATED');
+        $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])), 'GROUP_UPDATED');
         return $count;
     }
 
@@ -407,15 +405,16 @@ class GroupService extends AbstractService {
         return $result;
     }
 
-    public function getUserList($id,$filterParams = null) {
-        if(isset($filterParams['org_id'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+    public function getUserList($id, $filterParams = null)
+    {
+        if (isset($filterParams['org_id'])) {
+            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($filterParams['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to get the group users list");
             }
         }
 
-        if(!isset($id)) {
+        if (!isset($id)) {
             return 0;
         }
 
@@ -433,31 +432,30 @@ class GroupService extends AbstractService {
         $cntQuery ="SELECT count(ox_user.id)".$from;
 
         if(count($filterParams) > 0 || sizeof($filterParams) > 0){
-                $filterArray = json_decode($filterParams['filter'],true); 
-                if(isset($filterArray[0]['filter'])){
-                   $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                   $filterList = $filterArray[0]['filter']['filters'];
-                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
-                }
-                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
-                    $sort = $filterArray[0]['sort'];
-                    $sort = FilterUtils::sortArray($sort,self::$fieldName);
-                }
-                $pageSize = $filterArray[0]['take'];
-                $offset = $filterArray[0]['skip'];            
+            $filterArray = json_decode($filterParams['filter'],true); 
+            if(isset($filterArray[0]['filter'])){
+                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                $filterList = $filterArray[0]['filter']['filters'];
+                $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
             }
+            if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                $sort = $filterArray[0]['sort'];
+                $sort = FilterUtils::sortArray($sort,self::$fieldName);
+            }
+            $pageSize = $filterArray[0]['take'];
+            $offset = $filterArray[0]['skip'];            
+        }
 
-            $where .= strlen($where) > 0 ? " AND ox_group.uuid = '".$id."' AND ox_group.status = 'Active'" : " WHERE ox_group.uuid = '".$id."' AND ox_group.status = 'Active'";
+        $where .= strlen($where) > 0 ? " AND ox_group.uuid = '".$id."' AND ox_group.status = 'Active'" : " WHERE ox_group.uuid = '".$id."' AND ox_group.status = 'Active'";
 
-            $sort = " ORDER BY ".$sort;
-            $limit = " LIMIT ".$pageSize." offset ".$offset;
-            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count=$resultSet->toArray()[0]['count(ox_user.id)'];
-            $query =$query." ".$from." ".$where." ".$sort." ".$limit;
-            $resultSet = $this->executeQuerywithParams($query);
-            return array('data' => $resultSet->toArray(), 
+        $sort = " ORDER BY ".$sort;
+        $limit = " LIMIT ".$pageSize." offset ".$offset;
+        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+        $count=$resultSet->toArray()[0]['count(ox_user.id)'];
+        $query =$query." ".$from." ".$where." ".$sort." ".$limit;
+        $resultSet = $this->executeQuerywithParams($query);
+        return array('data' => $resultSet->toArray(),
                      'total' => $count);
-    
     }
 
     public function saveUser($params,$data) {
@@ -493,9 +491,9 @@ class GroupService extends AbstractService {
 
         $group_id = $obj->id;
 
-        if($userArray){
+        if ($userArray) {
             $userSingleArray= array_unique(array_map('current', $userArray));
-            $queryString = "SELECT ox_user.id, ox_user.username FROM ox_user_group " . 
+            $queryString = "SELECT ox_user.id, ox_user.username FROM ox_user_group " .
                            "inner join ox_user on ox_user.id = ox_user_group.avatar_id ".
                            "where ox_user_group.id = ".$group_id.
                            " and ox_user_group.avatar_id not in (".implode(',', $userSingleArray).")";
@@ -507,24 +505,23 @@ class GroupService extends AbstractService {
                      " where u.id in (".implode(',', $userSingleArray).") and ug.avatar_id is null";
             $insertedUser = $this->executeQuerywithParams($query)->toArray();
             $this->beginTransaction();
-            try{
-                $delete="DELETE FROM ox_user_group where avatar_id not in (".implode(',', $userSingleArray).") and group_id = ".$group_id; 
+            try {
+                $delete="DELETE FROM ox_user_group where avatar_id not in (".implode(',', $userSingleArray).") and group_id = ".$group_id;
                 $result = $this->executeQuerywithParams($delete);
                 $query ="Insert into ox_user_group(avatar_id,group_id) SELECT ou.id,".$group_id." from ox_user as ou LEFT OUTER JOIN ox_user_group as our on ou.id = our.avatar_id AND our.group_id = ".$group_id." WHERE ou.id in (".implode(',', $userSingleArray).") AND our.group_id  is null";
                 
                 $resultInsert = $this->executeQuerywithParams($query);
                 $this->commit();
-            }
-            catch(Exception $e){
+            } catch (Exception $e) {
                 $this->rollback();
                 throw $e;
             }
 
-            foreach($deletedUser as $key => $value){
-                $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'], 'username' => $value['username'] )),'USERTOGROUP_DELETED');
+            foreach ($deletedUser as $key => $value) {
+                $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'], 'username' => $value['username'] )), 'USERTOGROUP_DELETED');
             }
-            foreach($insertedUser as $key => $value){
-                $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'], 'username' => $value['username'] )),'USERTOGROUP_ADDED');
+            foreach ($insertedUser as $key => $value) {
+                $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'], 'username' => $value['username'] )), 'USERTOGROUP_ADDED');
             }
             return 1;
         }

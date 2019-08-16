@@ -1,5 +1,6 @@
 <?php
 namespace Role\Controller;
+
 /**
 * Role Api
 */
@@ -25,10 +26,11 @@ class RoleController extends AbstractApiController
     /**
     * @ignore __construct
     */
-	public function __construct(RoleTable $table, RoleService $roleService, Logger $log, AdapterInterface $dbAdapter) {
-		parent::__construct($table, $log, __CLASS__, Role::class);
-		$this->setIdentifierName('roleId');
-		$this->roleService = $roleService;
+    public function __construct(RoleTable $table, RoleService $roleService, Logger $log, AdapterInterface $dbAdapter)
+    {
+        parent::__construct($table, $log, __CLASS__, Role::class);
+        $this->setIdentifierName('roleId');
+        $this->roleService = $roleService;
     }
     
     /**
@@ -58,7 +60,10 @@ class RoleController extends AbstractApiController
             $count = $this->roleService->saveRole(null,$data,$id);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
@@ -66,7 +71,7 @@ class RoleController extends AbstractApiController
         if($count == 0){
             return $this->getFailureResponse("Failed to create a new entity", $data);
         }
-        return $this->getSuccessResponseWithData($data,201);
+        return $this->getSuccessResponseWithData($data, 201);
     }
     
     /**
@@ -76,18 +81,19 @@ class RoleController extends AbstractApiController
     * @method GET
     * @return array Returns a JSON Response list of roles based on Form id.
     */
-    public function getList() {
-        $filterParams = $this->params()->fromQuery(); // empty method call  
+    public function getList()
+    {
+        $filterParams = $this->params()->fromQuery(); // empty method call
         $result = $this->roleService->getRoles($filterParams);
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
     /**
     * Update Role API
     * @api
     * @link /role[/:roleId]
     * @method PUT
-    * @param array $id ID of Role to update 
-    * @param array $data 
+    * @param array $id ID of Role to update
+    * @param array $data
     * @return array Returns a JSON Response with Status Code and Created Role.
     */
     public function update($id, $data){
@@ -96,12 +102,12 @@ class RoleController extends AbstractApiController
             $count = $this->roleService->saveRole($id,$data,$params);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
         }
-        return $this->getSuccessResponseWithData($data,200);
+        return $this->getSuccessResponseWithData($data, 200);
     }
     /**
     * Delete Role API
@@ -126,44 +132,45 @@ class RoleController extends AbstractApiController
     * @link /role[/:roleId]
     * @method GET
     * @param $id ID of Role
-    * @return array $data 
+    * @return array $data
     * @return array Returns a JSON Response with Status Code and Created Role.
     */
-    public function get($id){
+    public function get($id)
+    {
         try {
             $result = $this->roleService->getRole($id);
-        } catch (ValidationException $e) { 
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if(($result == 0)||(empty($result))){
+        if (($result == 0)||(empty($result))) {
             return $this->getErrorResponse("Role not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponseWithData($result);
     }
 
-       /**
+    /**
     * GET Role Priviledges API
     * @api
     * @link /role/:roleId/priviledges
     * @method GET
     * @param $id ID of Role
-    * @return array $data 
+    * @return array $data
     * @return array Returns a JSON Response with Status Code and Priviledges of Created Role.
     */
-    public function roleprivilegeAction(){
+    public function roleprivilegeAction()
+    {
         $role=$this->params()->fromRoute();
         $id=$role['roleId'];
         try {
             $result = $this->roleService->getRolePrivilege($id);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if(($result == 0)||(empty($result))){
+        if (($result == 0)||(empty($result))) {
             return $this->getErrorResponse("Priviledges not found", 404, ['id' => $id]);
         }
-        return $this->getSuccessResponseWithData($result);  
-    } 
-       
+        return $this->getSuccessResponseWithData($result);
+    }
 }

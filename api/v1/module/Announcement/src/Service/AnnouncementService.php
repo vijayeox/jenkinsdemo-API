@@ -9,7 +9,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\Service\OrganizationService;
 use Oxzion\AccessDeniedException;
@@ -22,7 +22,8 @@ use Oxzion\ServiceException;
 /**
  * Announcement Service
  */
-class AnnouncementService extends AbstractService{
+class AnnouncementService extends AbstractService
+{
     /**
     * @ignore ANNOUNCEMENT_FOLDER
     */
@@ -34,7 +35,8 @@ class AnnouncementService extends AbstractService{
     /**
     * @ignore __construct
     */
-    public function __construct($config, $dbAdapter, AnnouncementTable $table,OrganizationService $organizationService){
+    public function __construct($config, $dbAdapter, AnnouncementTable $table, OrganizationService $organizationService)
+    {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->organizationService = $organizationService;
@@ -77,7 +79,7 @@ class AnnouncementService extends AbstractService{
        
 
             $form = new Announcement();
-            $data['uuid'] = Uuid::uuid4()->toString();
+            $data['uuid'] = UuidUtil::uuid();
             $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
             $data['start_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d');
             $data['status'] = $data['status']?$data['status']:1;
@@ -181,13 +183,14 @@ class AnnouncementService extends AbstractService{
         $result['insert'] = $this->insertAnnouncementForGroup($announcementId,$groups);
         if($result['insert'] == 0){
             return 0;
-        }        
+        }
         return 1;
     }
     /**
     * @ignore deleteGroupsByAnnouncement
     */
-    protected function deleteGroupsByAnnouncement($announcementId,$groupIdList){
+    protected function deleteGroupsByAnnouncement($announcementId, $groupIdList)
+    {
         $rowsAffected = 0;
         foreach ($groupIdList as $key => $groupId) {
             $sql = $this->getSqlObject();
@@ -204,7 +207,8 @@ class AnnouncementService extends AbstractService{
     /**
     * @ignore getGroupsByAnnouncement
     */
-    protected function getGroupsByAnnouncement($announcementId){
+    protected function getGroupsByAnnouncement($announcementId)
+    {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_announcement_group_mapper')
@@ -215,10 +219,11 @@ class AnnouncementService extends AbstractService{
     /**
     * @ignore insertAnnouncementForGroup
     */
-    public function insertAnnouncementForGroup($announcementId, $groups){
-        if($groups){
+    public function insertAnnouncementForGroup($announcementId, $groups)
+    {
+        if ($groups) {
             $this->beginTransaction();
-            try{
+            try {
                 $groupSingleArray= array_unique(array_map('current', $groups));
                 $delete = $this->getSqlObject()
                 ->delete('ox_announcement_group_mapper')
@@ -243,10 +248,11 @@ class AnnouncementService extends AbstractService{
     }
 
 
-    protected function getAnnouncementIdBYUuid($uuid){
+    protected function getAnnouncementIdBYUuid($uuid)
+    {
         $select = "SELECT id from `ox_announcement` where uuid = '".$uuid."'";
         $id = $this->executeQuerywithParams($select)->toArray();
-        if(count($id) > 0){
+        if (count($id) > 0) {
             return $id[0]['id'];
         }
         return 0;
@@ -303,7 +309,7 @@ class AnnouncementService extends AbstractService{
                     }
             }
             $this->commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -326,7 +332,8 @@ class AnnouncementService extends AbstractService{
     * }
     * </code>
     */
-    public function getAnnouncements() {
+    public function getAnnouncements()
+    {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_announcement')
@@ -353,7 +360,8 @@ class AnnouncementService extends AbstractService{
     * }
     * </code>
     */
-    public function getAnnouncement($id) {
+    public function getAnnouncement($id)
+    {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_announcement')
@@ -368,7 +376,8 @@ class AnnouncementService extends AbstractService{
         return $response[0];
     }
 
-    public function getAnnouncementsList($filterParams){
+    public function getAnnouncementsList($filterParams)
+    {
         $where = "";
         $pageSize = 20;
         $offset = 0;
@@ -510,6 +519,5 @@ class AnnouncementService extends AbstractService{
         }
            throw new ServiceException("Entity not found","Announcemnet.not.found");  
     }
-
 }
 ?>

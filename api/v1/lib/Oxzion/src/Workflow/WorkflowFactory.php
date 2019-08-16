@@ -5,36 +5,44 @@ class WorkflowFactory
 {
     private static $instance;
 
-    protected function __construct() {
+    protected function __construct()
+    {
     }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (self::$instance === null) {
             self::$instance = new WorkflowFactory();
         }
         return self::$instance;
     }
 
-    public static function getActivity() {
+    public static function getActivity()
+    {
         return new Camunda\ActivityImpl();
     }
 
-    public static function getEventManager() {
+    public static function getEventManager()
+    {
         return new Camunda\EventManagerImpl();
     }
 
-    public static function getGroup() {
+    public static function getGroup()
+    {
         return new Camunda\GroupImpl();
     }
 
-    public static function getProcessEngine() {
+    public static function getProcessEngine()
+    {
         return new Camunda\ProcessEngineImpl();
     }
 
-    public function getProcessManager() {
+    public function getProcessManager()
+    {
         return new Camunda\ProcessManagerImpl();
     }
-    public static function getUser() {
+    public static function getUser()
+    {
         return new Camunda\UserImpl();
     }
 }

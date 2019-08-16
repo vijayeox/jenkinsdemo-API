@@ -19,14 +19,14 @@ use User\Controller\ForgotPasswordController;
 
 class UserControllerTest extends ControllerTest
 {
-
     public function setUp() : void
     {
         $this->loadConfig();
         parent::setUp();
     }
 
-    public function getMockMessageProducer(){
+    public function getMockMessageProducer()
+    {
         $organizationService = $this->getApplicationServiceLocator()->get(UserService::class);
         $mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
         $organizationService->setMessageProducer($mockMessageProducer);
@@ -51,7 +51,8 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    private function executeQueryTest($query){
+    private function executeQueryTest($query)
+    {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
@@ -60,7 +61,9 @@ class UserControllerTest extends ControllerTest
         return $resultSet->toArray();
     }
 
-    private function executeUpdate($query){
+
+    private function executeUpdate($query)
+    {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $statement = $dbAdapter->query($query);
         $result = $statement->execute();
@@ -665,6 +668,38 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
+
+    public function testDeleteProjectManager()
+    {
+        $this->initAuthToken($this->adminUser);
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+        }
+        $this->dispatch('/user/768d1fb9-de9c-46c3-8d5c-23e0e484ce2e', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Not allowed to delete the project manager');
+    }
+
+    public function testDeleteGroupManager()
+    {
+        $this->initAuthToken($this->adminUser);
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+        }
+        $this->dispatch('/user/4fd9ce37-758f-11e9-b2d5-68ecc57cde45', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Not allowed to delete the group manager');
+    }
+
+    
     public function testDeleteWithOrgID()
     {
         $this->initAuthToken($this->adminUser);
@@ -707,6 +742,21 @@ class UserControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'User not found');
+    }
+
+    public function testDeleteAdminUser()
+    {
+        $this->initAuthToken($this->adminUser);
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('username' => $this->employeeUser, 'orgname' => 'Cleveland Black')),'USER_DELETED')->once()->andReturn();
+        }
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Not allowed to delete Admin user');
     }
 
 
@@ -910,10 +960,9 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('getUserAppsAndPrivileges');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        // TO DO : Whitelisted apps for manageruser and employeeuser
         $this->assertNotEmpty($content['data']['privilege']);
         $this->assertNotEmpty($content['data']['whiteListedApps']);
-        $this->assertEquals(5,count($content['data']['whiteListedApps']));
+        $this->assertEquals(6,count($content['data']['whiteListedApps']));
     }
 
     public function testGetUserProjectWithdata()
@@ -965,7 +1014,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']),0);
     }
 
-    public function testSaveMe(){
+    public function testSaveMe()
+    {
         $data = ['name' => 'John Holt','firstname' => 'John','lastname' => 'Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -980,7 +1030,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['lastname'], $data['lastname']);
     }
 
-    public function testBlackListApps(){
+    public function testBlackListApps()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/user/me/bapp', 'GET');
         $this->assertResponseStatusCode(200);
@@ -1048,5 +1099,50 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data'][2]['name'],'Deepak S');
     }    
 
+    public function testgetUserProfileDetail(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/profile', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('getuserdetaillist');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'],'Bharat Gogineni');
+        $this->assertEquals($content['data']['orgid'], '53012471-2863-4949-afb1-e69b0891c98a');
+        $this->assertEquals($content['role'][0]['name'],'ADMIN');
+        $this->assertEquals($content['role'][1]['name'],'MANAGER');
+    }
 
+
+    public function testgetUserProfileDetailInvalidOrg(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/5301247-4949-afb1-e69b0891c98a/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/profile', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('getuserdetaillist');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'],array());
+        $this->assertEquals($content['role'],array());
+    }
+
+    public function testgetUserProfileDetailInvalidUserId(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-758f-11e9-bcc57cde45/profile', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('getuserdetaillist');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'],array());
+        $this->assertEquals($content['role'],array());
+    }
+
+    public function testgetUserProfileDetailDifferentOrg(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/profile', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('getuserdetaillist');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'],array());
+        $this->assertEquals($content['role'],array());
+    }
 }
