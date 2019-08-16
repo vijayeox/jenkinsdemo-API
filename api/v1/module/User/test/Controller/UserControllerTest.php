@@ -1108,8 +1108,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'],'Bharat Gogineni');
         $this->assertEquals($content['data']['orgid'], '53012471-2863-4949-afb1-e69b0891c98a');
-        $this->assertEquals($content['role'][0]['name'],'ADMIN');
-        $this->assertEquals($content['role'][1]['name'],'MANAGER');
+        $this->assertEquals($content['data']['role'][0]['name'],'ADMIN');
+        $this->assertEquals($content['data']['role'][1]['name'],'MANAGER');
     }
 
 
@@ -1120,8 +1120,8 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('getuserdetaillist');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'],array());
-        $this->assertEquals($content['role'],array());
+        $this->assertEquals($content['data']['data'],array());
+        $this->assertEquals($content['data']['role'],array());
     }
 
     public function testgetUserProfileDetailInvalidUserId(){
@@ -1131,8 +1131,8 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('getuserdetaillist');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'],array());
-        $this->assertEquals($content['role'],array());
+        $this->assertEquals($content['data']['data'],array());
+        $this->assertEquals($content['data']['role'],array());
     }
 
     public function testgetUserProfileDetailDifferentOrg(){
@@ -1142,7 +1142,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts('getuserdetaillist');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'],array());
-        $this->assertEquals($content['role'],array());
-    }
+        $this->assertEquals($content['data']['data'],array());
+        $this->assertEquals($content['data']['role'],array());
+     }
 }

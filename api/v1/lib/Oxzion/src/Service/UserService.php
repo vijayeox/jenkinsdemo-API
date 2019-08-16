@@ -1145,7 +1145,7 @@ class UserService extends AbstractService
         $userData['preferences'] = json_decode($userData['preferences'],true);
         $userData['orgid'] = $this->getUuidFromId('ox_organization',$userData['orgid']);
         $userData['managerid'] = $this->getUuidFromId('ox_user',$userData['managerid']);
-        $roleData = $this->getRolesofUser($params['orgId'],$userData['id']);
-        return array('data' => $userData ,'role' => $roleData);        
+        $userData['role'] = $this->getRolesofUser($params['orgId'],$userData['id']);
+        return $userData;        
     }
 }
