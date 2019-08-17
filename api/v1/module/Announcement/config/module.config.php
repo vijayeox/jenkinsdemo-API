@@ -40,7 +40,7 @@ return [
             'announcementToGroup' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/announcement/:announcementId/group',
+                    'route' => '/announcement/:announcementId/save',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'POST',

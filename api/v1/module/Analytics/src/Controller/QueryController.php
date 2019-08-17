@@ -23,7 +23,7 @@ class QueryController extends AbstractApiController
     public function __construct(QueryTable $table, QueryService $queryService, Logger $log, AdapterInterface $dbAdapter)
     {
         parent::__construct($table, $log, __class__, Query::class);
-        $this->setIdentifierName('queryId');
+        $this->setIdentifierName('queryUuid');
         $this->queryService = $queryService;
     }
 
@@ -59,23 +59,22 @@ class QueryController extends AbstractApiController
     /**
      * Update Query API
      * @api
-     * @link /analytics/query/:queryId
+     * @link /analytics/query/:queryUuid
      * @method PUT
-     * @param array $id ID of Query to update
+     * @param array $uuid ID of Query to update
      * @param array $data
      * @return array Returns a JSON Response with Status Code and Created Query.
      */
-    public function update($id, $data)
+    public function update($uuid, $data)
     {
         try {
-            $count = $this->queryService->updateQuery($id, $data);
+            $count = $this->queryService->updateQuery($uuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            print_r($response);exit;
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("Query not found for id - $id", 404);
+            return $this->getErrorResponse("Query not found for uuid - $uuid", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -83,16 +82,16 @@ class QueryController extends AbstractApiController
     /**
      * Delete Query API
      * @api
-     * @link /analytics/query/:queryId
+     * @link /analytics/query/:queryUuid
      * @method DELETE
-     * @param $id ID of Query to Delete
+     * @param $uuid ID of Query to Delete
      * @return array success|failure response
      */
-    public function delete($id)
+    public function delete($uuid)
     {
-        $response = $this->queryService->deleteQuery($id);
+        $response = $this->queryService->deleteQuery($uuid);
         if ($response == 0) {
-            return $this->getErrorResponse("Query not found for id - $id", 404, ['id' => $id]);
+            return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);
         }
         return $this->getSuccessResponse();
     }
@@ -100,7 +99,7 @@ class QueryController extends AbstractApiController
     /**
      * GET Query API
      * @api
-     * @link /analytics/query/:queryId
+     * @link /analytics/query/:queryUuid
      * @method GET
      * @param array $dataget of Query
      * @return array $data
@@ -113,15 +112,16 @@ class QueryController extends AbstractApiController
      *              ispublic : integer,
      *              created_by: integer,
      *              date_created: date,
-     *              org_id: integer
+     *              org_id: integer,
+     *              isdeleted: tinyint
      * }
      * @return array Returns a JSON Response with Status Code and Created Group.
      */
-    public function get($id)
+    public function get($uuid)
     {
-        $result = $this->queryService->getQuery($id);
+        $result = $this->queryService->getQuery($uuid);
         if ($result == 0) {
-            return $this->getErrorResponse("Query not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("Query not found", 404, ['uuid' => $uuid]);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -137,12 +137,16 @@ class QueryController extends AbstractApiController
      * @param      array[json]  $filter  (filter with logic and filters)
      * @return array $dataget list of Datasource
      * <code>status : "success|error",
-     *              id: integer
+     *              id: integer,
+     *              uuid: string,
      *              name : string,
-     *              type : string,
-     *              connection_string : string
-     *              created_by: integer
-     *              date_created: date
+     *              datasource_id : integer,
+     *              query_json : string,
+     *              ispublic : integer,
+     *              created_by: integer,
+     *              date_created: date,
+     *              org_id: integer,
+     *              isdeleted: tinyint
      * </code>
      */
     public function getList()

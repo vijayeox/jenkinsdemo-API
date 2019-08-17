@@ -7,7 +7,6 @@ use Zend\Db\TableGateway\TableGatewayInterface;
 
 class UserToken extends Entity
 {
-
     protected $data = array(
         'id' => 0,
         'user_id' => 1,

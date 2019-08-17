@@ -2,12 +2,13 @@
 
 use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;
+
 // use RuntimeException;
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
  */
-defined ( 'APPLICATION_PATH' ) || define ( 'APPLICATION_PATH', realpath ( dirname ( __FILE__ ) . '/../application' ) );
+defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 chdir(dirname(__DIR__));
 
 error_reporting(E_ALL);
@@ -22,19 +23,21 @@ if (php_sapi_name() === 'cli-server') {
     unset($path);
 }
 if (isset($_SERVER['HTTP_ORIGIN'])) {
-        // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
-        // you want to allow, and if so:
+    // Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
+    // you want to allow, and if so:
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400');    // cache for 1 day
 }
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-            // may also be using PUT, PATCH, HEAD etc
-            header("Access-Control-Allow-Methods: GET, POST,PUT,DELETE, OPTIONS");         
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) {
+        // may also be using PUT, PATCH, HEAD etc
+        header("Access-Control-Allow-Methods: GET, POST,PUT,DELETE, OPTIONS");
+    }
 
-        if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
+        header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+    }
 
     $ret = array('result' => 'OK');
     echo json_encode($ret);

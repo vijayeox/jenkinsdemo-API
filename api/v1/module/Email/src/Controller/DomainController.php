@@ -31,7 +31,6 @@ class DomainController extends AbstractApiController
 
     public function create($data)
     {
-        $data = $this->params()->fromPost();
         try {
             $count = $this->domainService->createDomain($data);
         } catch (ValidationException $e) {
@@ -91,5 +90,4 @@ class DomainController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($responseData, 200);
     }
-
 }

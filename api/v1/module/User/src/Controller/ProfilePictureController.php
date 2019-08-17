@@ -9,9 +9,8 @@ use Exception;
 use Zend\InputFilter\Input;
 use Oxzion\Utils\FileUtils;
 
-
-
-class ProfilePictureController extends AbstractApiController { 
+class ProfilePictureController extends AbstractApiController
+{
     /**
     * @var ProfilepictureService Instance of Projectpicture Service
     */
@@ -26,28 +25,28 @@ class ProfilePictureController extends AbstractApiController {
         $this->profilepictureService = $profilepictureService;
     }
 
-     /**
+    /**
     * Update Profilepicture API
     * @api
     * @link /profilepicture[/:profileId]
     * @method POST
-    * @param $id ID of Profilepicture to update 
-    * @param $data 
+    * @param $id ID of Profilepicture to update
+    * @param $data
     * @return array Returns a JSON Response with Status Code and Created Profilepicture.
     */
-    public function updateProfileAction() {
+    public function updateProfileAction()
+    {
         $this->log->info($this->logClass . ":Profile update controller");
-        $params=$this->params()->fromPost();
-        $files=substr($params['file'],strpos($params['file'],",")+1);
+        $params=$this->extractPostData();
+        $files=substr($params['file'], strpos($params['file'], ",")+1);
         $files=base64_decode($files);
         try {
             $count = $this->profilepictureService->uploadProfilepicture($files);
-
         } catch (Exception $e) {
             $this->log->err("Failed to upload profile picture", [$e]);
-            return $this->getErrorResponse("Profile picture upload failed",500);
+            return $this->getErrorResponse("Profile picture upload failed", 500);
         }
-        return $this->getSuccessResponse("Upload successfull",200);
+        return $this->getSuccessResponse("Upload successfull", 200);
         $this->log->info($this->logClass . ":Profile update controller end");
-    }    
+    }
 }

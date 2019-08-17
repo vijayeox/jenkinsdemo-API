@@ -23,7 +23,7 @@ class VisualizationController extends AbstractApiController
     public function __construct(VisualizationTable $table, VisualizationService $visualizationService, Logger $log, AdapterInterface $dbAdapter)
     {
         parent::__construct($table, $log, __class__, Visualization::class);
-        $this->setIdentifierName('visualizationId');
+        $this->setIdentifierName('visualizationUuid');
         $this->visualizationService = $visualizationService;
     }
 
@@ -56,22 +56,22 @@ class VisualizationController extends AbstractApiController
     /**
      * Update Visualization API
      * @api
-     * @link /analytics/visualization/:visualizationId
+     * @link /analytics/visualization/:visualizationUuid
      * @method PUT
-     * @param array $id ID of Visualization to update
+     * @param array $uuid ID of Visualization to update
      * @param array $data
      * @return array Returns a JSON Response with Status Code and Created Visualization.
      */
-    public function update($id, $data)
+    public function update($uuid, $data)
     {
         try {
-            $count = $this->visualizationService->updateVisualization($id, $data);
+            $count = $this->visualizationService->updateVisualization($uuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("Visualization not found for id - $id", 404);
+            return $this->getErrorResponse("Visualization not found for uuid - $uuid", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -79,16 +79,16 @@ class VisualizationController extends AbstractApiController
     /**
      * Delete Visualization API
      * @api
-     * @link /analytics/visualization/:visualizationId
+     * @link /analytics/visualization/:visualizationUuid
      * @method DELETE
-     * @param $id ID of Visualization to Delete
+     * @param $uuid ID of Visualization to Delete
      * @return array success|failure response
      */
-    public function delete($id)
+    public function delete($uuid)
     {
-        $response = $this->visualizationService->deleteVisualization($id);
+        $response = $this->visualizationService->deleteVisualization($uuid);
         if ($response == 0) {
-            return $this->getErrorResponse("Visualization not found for id - $id", 404, ['id' => $id]);
+            return $this->getErrorResponse("Visualization not found for uuid - $uuid", 404, ['uuid' => $uuid]);
         }
         return $this->getSuccessResponse();
     }
@@ -96,25 +96,25 @@ class VisualizationController extends AbstractApiController
     /**
      * GET Visualization API
      * @api
-     * @link /analytics/visualization/:visualizationId
+     * @link /analytics/visualization/:visualizationUuid
      * @method GET
      * @param array $dataget of Visualization
      * @return array $data
      * {
-     *              id: integer,
      *              uuid : string,
      *              type : string,
      *              created_by: integer,
      *              date_created: date,
-     *              org_id: integer
+     *              org_id: integer,
+     *              isdeleted: tinyint
      *   }
      * @return array Returns a JSON Response with Status Code and Created Group.
      */
-    public function get($id)
+    public function get($uuid)
     {
-        $result = $this->visualizationService->getVisualization($id);
+        $result = $this->visualizationService->getVisualization($uuid);
         if ($result == 0) {
-            return $this->getErrorResponse("Visualization not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("Visualization not found", 404, ['uuid' => $uuid]);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -130,12 +130,12 @@ class VisualizationController extends AbstractApiController
      * @param      array[json]  $filter  (filter with logic and filters)
      * @return array $dataget list of Datasource
      * <code>status : "success|error",
-     *              id: integer
      *              name : string,
      *              type : string,
      *              created_by: integer,
      *              date_created: date,
-     *              org_id: integer
+     *              org_id: integer,
+     *              isdeleted: tinyint
      * </code>
      */
     public function getList()

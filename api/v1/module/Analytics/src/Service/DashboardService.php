@@ -52,9 +52,9 @@ class DashboardService extends AbstractService
         return $count;
     }
 
-    public function updateDashboard($id, &$data)
+    public function updateDashboard($uuid, &$data)
     {
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->getByUuid($uuid, array());
         if (is_null($obj)) {
             return 0;
         }
@@ -76,32 +76,45 @@ class DashboardService extends AbstractService
         return $count;
     }
 
-    public function deleteDashboard($id)
+    public function deleteDashboard($uuid)
     {
+        $id = $this->getIdFromUuid('dashboard',$uuid);
+        $obj = $this->table->getByUuid($uuid, array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        $form = new Dashboard();
+        $data['isdeleted'] = 1;
+        $data = array_merge($obj->toArray(), $data);
+        $form->exchangeArray($data);
+        $form->validate();
         $count = 0;
         try {
+            $count = $this->table->save($form);
             $delete = $this->getSqlObject()
                 ->delete('widget_dashboard_mapper')
                 ->where(['dashboard_id' => $id]);
             $this->executeQueryString($delete);
-            $count = $this->table->delete($id);
             if ($count == 0) {
+                $this->rollback();
                 return 0;
             }
         } catch (Exception $e) {
             $this->rollback();
-            return $e->getMessage();
+            return 0;
         }
         return $count;
     }
 
-    public function getDashboard($id)
+    public function getDashboard($uuid)
     {
-        $query = "Select dashboard.*, widget_dashboard_mapper.widget_id,widget_dashboard_mapper.dimensions from dashboard INNER JOIN widget_dashboard_mapper on dashboard.id = widget_dashboard_mapper.dashboard_id where widget_dashboard_mapper.id =".$id;
-        $response = $this->executeQuerywithParams($query)->toArray();
-        foreach ($response as $key => $value) {
-        if(!empty($result[$key]['dimensions']))
-            $result[$key]['dimensions'] = json_decode($result[$key]['dimensions']);
+        $id = $this->getIdFromUuid('dashboard',$uuid);
+        try{
+            $query = "Select dashboard.uuid,dashboard.name,dashboard.ispublic,dashboard.description, dashboard.dashboard_type,dashboard.created_by,dashboard.date_created,dashboard.org_id,dashboard.isdeleted, widget_dashboard_mapper.widget_id from dashboard INNER JOIN widget_dashboard_mapper on dashboard.id = widget_dashboard_mapper.dashboard_id where dashboard.isdeleted <> 1 AND widget_dashboard_mapper.id =".$id;
+            $response = $this->executeQuerywithParams($query)->toArray();
+        }
+        catch (Exception $e) {
+            return 0;
         }
         if (count($response) == 0) {
             return 0;
@@ -114,7 +127,7 @@ class DashboardService extends AbstractService
 
             $paginateOptions = FilterUtils::paginate($params);
             $where = $paginateOptions['where'];
-            $where .= empty($where) ? "WHERE (dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR dashboard.ispublic = 1)" : " AND (dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR dashboard.ispublic = 1)";
+            $where .= empty($where) ? "WHERE dashboard.isdeleted <> 1 AND (dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR dashboard.ispublic = 1)" : " AND dashboard.isdeleted <> 1 AND (dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR dashboard.ispublic = 1)";
             $sort = " ORDER BY ".$paginateOptions['sort'];
             $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
@@ -122,13 +135,14 @@ class DashboardService extends AbstractService
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count'];
 
-            $query ="Select dashboard.*, widget_dashboard_mapper.widget_id,widget_dashboard_mapper.dimensions from dashboard INNER JOIN widget_dashboard_mapper on dashboard.id = widget_dashboard_mapper.dashboard_id ".$where." ".$sort." ".$limit;
+            $query ="Select dashboard.*, widget_dashboard_mapper.widget_id from dashboard INNER JOIN widget_dashboard_mapper on dashboard.id = widget_dashboard_mapper.dashboard_id ".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
+
             foreach ($result as $key => $value) {
-                if(!empty($result[$key]['dimensions']))
-                    $result[$key]['dimensions'] = json_decode($result[$key]['dimensions']);
+                unset($result[$key]['id']);
             }
+
             return array('data' => $result,
                      'total' => $count);
     }

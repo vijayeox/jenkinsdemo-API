@@ -14,7 +14,7 @@ return [
             'project' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project[/:projectId]',
+                    'route'    => '/project[/:projectUuid]',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'access'=>[
@@ -30,7 +30,7 @@ return [
             'projectusersave' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project/:projectId/save',
+                    'route'    => '/project/:projectUuid/save',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'method' => 'POST',
@@ -44,7 +44,7 @@ return [
             'projectuser' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project/:projectId/users',
+                    'route'    => '/project/:projectUuid/users',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'method' => 'GET',

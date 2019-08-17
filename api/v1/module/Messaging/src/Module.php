@@ -11,14 +11,15 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 
-
-class Module implements ConfigProviderInterface {
-
-    public function getConfig() {
+class Module implements ConfigProviderInterface
+{
+    public function getConfig()
+    {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e) {
+    public function onBootstrap(MvcEvent $e)
+    {
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -26,10 +27,11 @@ class Module implements ConfigProviderInterface {
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatchError'), 0);
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onRenderError'), 0);
     }
-    public function getServiceConfig() {
+    public function getServiceConfig()
+    {
         return [
             'factories' => [
-                Service\MessagingService::class => function($container){
+                Service\MessagingService::class => function ($container) {
                     return new Service\MessagingService();
                 },
             ]
@@ -40,8 +42,8 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
-                Controller\MessagingController::class => function($container) {
-                    return new Controller\MessagingController($container->get(Service\MessagingService::class),$container->get('MessagingLogger'));
+                Controller\MessagingController::class => function ($container) {
+                    return new Controller\MessagingController($container->get(Service\MessagingService::class), $container->get('MessagingLogger'));
                 },
             ],
         ];

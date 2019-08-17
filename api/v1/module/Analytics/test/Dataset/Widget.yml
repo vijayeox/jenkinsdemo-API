@@ -8,6 +8,7 @@ widget:
     created_by: 1
     date_created: '2019-06-27 07:25:06'
     org_id: 1
+    isdeleted: 0
   -
     id: 2
     uuid: '0e57b45f-5938-4e26-acd8-d65fb89e8503'
@@ -17,3 +18,4 @@ widget:
     created_by: 1
     date_created: '2019-06-27 07:25:06'
     org_id: 1
+    isdeleted: 0

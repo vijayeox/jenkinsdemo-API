@@ -11,22 +11,30 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Workflow\ProcessManager;
+use Oxzion\Workflow\WorkflowFactory;
+use Mockery;
+use Camunda\ProcessManagerImpl;
 
-    
-
-class AppControllerTest extends MainControllerTest
+class AppControllerTest extends ControllerTest
 {
-
     public function setUp() : void
     {
         $this->loadConfig();
         parent::setUp();
     }
 
+    public function getDataSet()
+    {
+        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
+        return $dataset;
+    }
 
-    public function testAppRegister(){
+
+    public function testAppRegister()
+    {
         $this->initAuthToken($this->adminUser);
-        $data = ['applist' => json_encode(array(["name" => "CRM","category" => "organization","options" => ["autostart" => "false","hidden" => "false" ]],["name"=>"Calculator","category" =>  "office","options" => ["autostart" =>  "false","hidden" => "false"]],["name" => "Calendar","category" =>  "collaboration","options" =>  ["autostart" => "false","hidden" => "false"]],["name" => "Chat","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "FileManager","category" => "office","options" => ["autostart" => "false","hidden" => "false"]],["name" => "Mail","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "MailAdmin","category" => "utilities","options" => ["autostart" => "false","hidden" => "false"]],["name" => "MyTodo","category" => "null","options" => ["autostart" => "false","hidden" => "true"]],["name" => "Textpad","category" => "office","options" => ["autostart" => "false","hidden" => "false"]]))];
+        $data = ['applist' => json_encode([["name" => "CRM","category" => "organization","options" => ["autostart" => "false","hidden" => "false" ]],["name"=>"Calculator","category" =>  "office","options" => ["autostart" =>  "false","hidden" => "false"]],["name" => "Calendar","category" =>  "collaboration","options" =>  ["autostart" => "false","hidden" => "false"]],["name" => "Chat","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "FileManager","category" => "office","options" => ["autostart" => "false","hidden" => "false"]],["name" => "Mail","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "MailAdmin","category" => "utilities","options" => ["autostart" => "false","hidden" => "false"]],["name" => "MyTodo","category" => "null","options" => ["autostart" => "false","hidden" => "true"]],["name" => "Textpad","category" => "office","options" => ["autostart" => "false","hidden" => "false"]]])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/register', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -34,14 +42,15 @@ class AppControllerTest extends MainControllerTest
         $this->assertControllerName(AppRegisterController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AppRegisterController');
         $this->assertMatchedRouteName('appregister');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');     
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testAppRegisterInvaliddata(){
+    public function testAppRegisterInvaliddata()
+    {
         $this->initAuthToken($this->adminUser);
-        $data = ['applist' => json_encode(array(["" => "CRM","category" => "organization","options" => ["autostart" => "false","hidden" => "false" ]],["name"=>"Calculator","category" =>  "office","options" => ["autostart" =>  "false","hidden" => "false"]],["name" => "Calendar","category" =>  "collaboration","" =>  ["autostart" => "false","hidden" => "false"]],["name" => "Chat","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "FileManager","category" => "office","options" => ["autostart" => "false","hidden" => "false"]],["name" => "Mail","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "MailAdmin","category" => "utilities","options" => ["autostart" => "false","hidden" => "false"]],["name" => "MyTodo","category" => "null","options" => ["autostart" => "false","hidden" => "true"]],["name" => "Textpad","category" => "office","options" => ["autostart" => "false","hidden" => "false"]]))];
+        $data = ['applist' => json_encode([["" => "CRM","category" => "organization","options" => ["autostart" => "false","hidden" => "false" ]],["name"=>"Calculator","category" =>  "office","options" => ["autostart" =>  "false","hidden" => "false"]],["name" => "Calendar","category" =>  "collaboration","" =>  ["autostart" => "false","hidden" => "false"]],["name" => "Chat","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "FileManager","category" => "office","options" => ["autostart" => "false","hidden" => "false"]],["name" => "Mail","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "MailAdmin","category" => "utilities","options" => ["autostart" => "false","hidden" => "false"]],["name" => "MyTodo","category" => "null","options" => ["autostart" => "false","hidden" => "true"]],["name" => "Textpad","category" => "office","options" => ["autostart" => "false","hidden" => "false"]]])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/register', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -49,7 +58,7 @@ class AppControllerTest extends MainControllerTest
         $this->assertControllerName(AppRegisterController::class); // as specified in router's controller name alias
         $this->assertControllerClass('AppRegisterController');
         $this->assertMatchedRouteName('appregister');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');     
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
@@ -60,27 +69,11 @@ class AppControllerTest extends MainControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app', 'GET');
-        $data = ['data' => array([
-            "name"=> "Admin",
-            "uuid"=> "946fd092-b4f7-4737-b3f5-14086541492e",
-            "description"=> null,
-            "type"=> "1",
-            "logo"=> "app.png",
-            "category"=> "utilities",
-            "date_created"=> "2019-04-03 17:13:40",
-            "date_modified"=> "2019-04-03 11:49:16",
-            "created_by"=> "1",
-            "modified_by"=> "1",
-            "status"=> 0,
-            "org_id"=> "1",
-            "start_options"=>null
-        ])];
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $diff=array_diff($data, $content);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($diff, array());
+        $this->assertNotEquals($content['data'], array());
     }
 
     protected function setDefaultAsserts()
@@ -124,9 +117,9 @@ class AppControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('applist');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 4);
+        $this->assertEquals(count($content['data']), 7);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['total'], 4);
+        $this->assertEquals($content['total'], 7);
     }
 
 
@@ -162,8 +155,8 @@ class AppControllerTest extends MainControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['data'][1]['name'], 'AppBuilder');
-        $this->assertEquals($content['total'], 4);
+        $this->assertEquals($content['data'][1]['name'], 'Analytics');
+        $this->assertEquals($content['total'], 7);
     }
 
     public function testGetAppListWithPageSize2()
@@ -179,22 +172,9 @@ class AppControllerTest extends MainControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
-        $this->assertEquals($content['data'][0]['name'], 'CRM');
-        $this->assertEquals($content['data'][1]['name'], 'MailAdmin');
-        $this->assertEquals($content['total'], 4);
-    }
-
-    public function testGetAppTypeList()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/type/1', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('App');
-        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AppController');
-        $this->assertMatchedRouteName('applisttype');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['name'], 'AppBuilder');
+        $this->assertEquals($content['data'][1]['name'], 'CRM');
+        $this->assertEquals($content['total'], 7);
     }
 
     public function testCreate()
@@ -206,15 +186,14 @@ class AppControllerTest extends MainControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['name'], $data[0]['name']);
+        $this->assertEquals($content['data']['name'], $data['name']);
     }
 
     public function testCreateWithOutTextFailure()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['org_id' => 4];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app', 'POST', null);
+        $data = [ 'type' => 2, 'org_id' => 4];
+        $this->dispatch('/app', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -225,7 +204,7 @@ class AppControllerTest extends MainControllerTest
 
     public function testCreateAccess()
     {
-        $this->initAuthToken($this->employeeUserId);
+        $this->initAuthToken($this->employeeUser);
         $data = ['name' => '5c822d497f44n', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app', 'POST', $data);
@@ -256,7 +235,7 @@ class AppControllerTest extends MainControllerTest
     public function testUpdateRestricted()
     {
         $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
-        $this->initAuthToken($this->employeeUserId);
+        $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1', 'PUT', $data);
         $this->assertResponseStatusCode(401);
@@ -302,7 +281,8 @@ class AppControllerTest extends MainControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-    public function testDeploy(){
+    public function testDeploy()
+    {
         $this->initAuthToken($this->adminUser);
         $_FILES = array(
             'files'    =>  array(
@@ -312,15 +292,27 @@ class AppControllerTest extends MainControllerTest
                 'error'     =>  0
             )
         );
+        $workflowFactory = WorkflowFactory::getInstance();
+        $processManager = $workflowFactory->getProcessManager();
+        $config = $this->getApplicationConfig();
+        $baseFolder = $config['UPLOAD_FOLDER'];
+        if (enableCamunda==0) {
+            $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
+            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/var/www/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTest.bpmn'))->once()->andReturn(array(1));
+            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
+            $workflowService->setProcessManager($mockProcessManager);
+        }
         $data = array('name'=>'NewWorkflow');
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1/deployworkflow', 'POST',$data);
+        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
+        // print_r($content);exit;
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
     }
-    public function testDeployWithOutName(){
+    public function testDeployWithOutName()
+    {
         $this->initAuthToken($this->adminUser);
         $_FILES = array(
             'files'    =>  array(
@@ -331,17 +323,45 @@ class AppControllerTest extends MainControllerTest
             )
         );
         $data = array();
-        $this->dispatch('/app/1/deployworkflow', 'POST',$data);
+        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
     }
-    public function testWithOutFile(){
+    public function testDeployFailedBpmn()
+    {
+        $this->initAuthToken($this->adminUser);
+        $_FILES = array(
+            'files'    =>  array(
+                'name'      =>  'ScriptTaskTestFail.bpmn',
+                'tmp_name'  =>  __DIR__."/../Dataset/ScriptTaskTestFail.bpmn",
+                'size'      =>  filesize(__DIR__."/../Dataset/ScriptTaskTestFail.bpmn"),
+                'error'     =>  0
+            )
+        );
+        $config = $this->getApplicationConfig();
+        $baseFolder = $config['UPLOAD_FOLDER'];
+        if (enableCamunda==0) {
+            $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
+            $mockProcessManager->expects('deploy')->with('NewWorkflow1', array('/var/www/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTestFail.bpmn'))->once()->andReturn(0);
+            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
+            $workflowService->setProcessManager($mockProcessManager);
+        }
+        $data = array('name'=>'NewWorkflow1');
+        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertEquals($content['status'], 'error');
+    }
+    public function testWithOutFile()
+    {
         $_FILES =array();
         $this->initAuthToken($this->adminUser);
         $data = array('name'=>'NewWorkflow');
-        $this->dispatch('/app/1/deployworkflow', 'POST',$data);
+        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();

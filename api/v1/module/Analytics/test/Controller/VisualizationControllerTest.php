@@ -72,7 +72,7 @@ class VisualizationControllerTest extends ControllerTest
         $data = ['type' => "test"];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/analytics/visualization/1', 'PUT', null);
+        $this->dispatch('/analytics/visualization/44f22a46-26d2-48df-96b9-c58520005817', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('visualization');
@@ -97,7 +97,7 @@ class VisualizationControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/visualization/1', 'DELETE');
+        $this->dispatch('/analytics/visualization/44f22a46-26d2-48df-96b9-c58520005817', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('visualization');
@@ -118,12 +118,12 @@ class VisualizationControllerTest extends ControllerTest
 
     public function testGet() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/visualization/1', 'GET');
+        $this->dispatch('/analytics/visualization/44f22a46-26d2-48df-96b9-c58520005817', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['type'], 'Pie Chart');
     }
 
@@ -144,10 +144,10 @@ class VisualizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['data'][0]['type'], 'Pie Chart');
         $this->assertEquals($content['data']['data'][1]['type'], 'Panel Item');
-        $this->assertEquals($content['data']['data'][1]['id'], 2);
+        $this->assertEquals($content['data']['data'][1]['uuid'], '101b3d1e-175b-43d8-ac38-485e80e6b2f3');
         $this->assertEquals($content['data']['total'],2);
     }
 
@@ -160,10 +160,10 @@ class VisualizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '101b3d1e-175b-43d8-ac38-485e80e6b2f3');
         $this->assertEquals($content['data']['data'][0]['type'], 'Panel Item');
         $this->assertEquals($content['data']['data'][1]['type'], 'Pie Chart');
-        $this->assertEquals($content['data']['data'][1]['id'], 1);
+        $this->assertEquals($content['data']['data'][1]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['total'],2);
     }
 
@@ -176,7 +176,7 @@ class VisualizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 1);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['data'][0]['type'], 'Pie Chart');
         $this->assertEquals($content['data']['data'][0]['created_by'], 1);
         $this->assertEquals($content['data']['total'],2);
@@ -191,7 +191,7 @@ class VisualizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 1);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['data'][0]['type'], 'Pie Chart');
         $this->assertEquals($content['data']['total'],1);
     }

@@ -13,7 +13,7 @@ return [
             'dataSource' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/analytics/datasource[/:dataSourceId]',
+                    'route'    => '/analytics/datasource[/:dataSourceUuid]',
                     'defaults' => [
                         'controller' => Controller\DataSourceController::class,
                         'access'=>[
@@ -29,7 +29,7 @@ return [
             'query' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/analytics/query[/:queryId]',
+                    'route'    => '/analytics/query[/:queryUuid]',
                     'defaults' => [
                         'controller' => Controller\QueryController::class,
                         'access'=>[
@@ -45,7 +45,7 @@ return [
             'visualization' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/analytics/visualization[/:visualizationId]',
+                    'route'    => '/analytics/visualization[/:visualizationUuid]',
                     'defaults' => [
                         'controller' => Controller\VisualizationController::class,
                         'access'=>[
@@ -61,7 +61,7 @@ return [
             'analytics_widget' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/analytics/widget[/:widgetId]',
+                    'route'    => '/analytics/widget[/:widgetUuid]',
                     'defaults' => [
                         'controller' => Controller\WidgetController::class,
                         'access'=>[
@@ -77,7 +77,7 @@ return [
             'dashboard' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/analytics/dashboard[/:dashboardId]',
+                    'route'    => '/analytics/dashboard[/:dashboardUuid]',
                     'defaults' => [
                         'controller' => Controller\DashboardController::class,
                         'access'=>[

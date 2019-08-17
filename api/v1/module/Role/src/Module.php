@@ -13,13 +13,15 @@ use Oxzion\Error\ErrorHandler;
 use Oxzion\Model\RoleTable;
 use Oxzion\Service\RoleService;
 
-class Module implements ConfigProviderInterface {
-
-    public function getConfig() {
+class Module implements ConfigProviderInterface
+{
+    public function getConfig()
+    {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e) {
+    public function onBootstrap(MvcEvent $e)
+    {
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -38,9 +40,10 @@ class Module implements ConfigProviderInterface {
     {
         return [
             'factories' => [
-                Controller\RoleController::class => function($container) {
+                Controller\RoleController::class => function ($container) {
                     return new Controller\RoleController(
-                        $container->get(RoleTable::class),$container->get(RoleService::class), 
+                        $container->get(RoleTable::class),
+                        $container->get(RoleService::class),
                         $container->get('RoleLogger'),
                         $container->get(AdapterInterface::class)
                     );

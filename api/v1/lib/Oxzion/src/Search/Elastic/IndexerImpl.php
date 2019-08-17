@@ -19,7 +19,7 @@ class IndexerImpl implements Indexer
         try {
             if (empty($body['org_id'])) {
                 $org_id = AuthContext::get(AuthConstants::ORG_ID);
-                $body['org_id'] = $org_id;    
+                $body['org_id'] = $org_id;
             }
             $body['type'] = $type;
             $index = $appId;
@@ -51,5 +51,4 @@ class IndexerImpl implements Indexer
             throw new Exception("Could not Delete Elastic Index", 0, $e);
         }
     }
-
 }

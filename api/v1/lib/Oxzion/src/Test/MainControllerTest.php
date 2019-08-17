@@ -17,9 +17,9 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
 {
     protected $adminUser = 'bharatgtest'; //TODO Need to put as global setup
     protected $adminUserId = 1;
-    protected $employeeUser = 'karantest';
+    protected $employeeUser = 'rakshithtest';
     protected $employeeUserId = 2;
-    protected $managerUser = 'rakshithtest';
+    protected $managerUser = 'karantest';
     protected $managerUserId = 3;
     protected $noUser = 'admin';
     protected $noUserId = 0;
@@ -43,6 +43,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     protected function setUp() : void
     {
         parent::setUp();
+        $_REQUEST = [];
         $this->setupConnection();
         $tm = $this->getTransactionManager();
         $tm->setRollbackOnly(true);
@@ -50,7 +51,8 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     }
 
     //this is required to ensure that same connection is used by dbunit and zend db
-    protected function setupConnection(){
+    protected function setupConnection()
+    {
     }
 
     /**
@@ -64,7 +66,8 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $_REQUEST = [];
     }
     
-    protected function getTransactionManager(){
+    protected function getTransactionManager()
+    {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         return TransactionManager::getInstance($dbAdapter);
     }
@@ -87,7 +90,6 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
 
     private function getJwtToken($username)
     {
-
         if (!isset($this->jwtToken[$username])) {
             $data = JwtHelper::getTokenPayload(['username'=>$username,'orgid' => $this->testOrgId]);
             $config = $this->getApplicationConfig();
@@ -126,10 +128,10 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $headers->addHeaderLine('content-type', 'application/json');
         $request->setContent($jsonData);
     }
-     /**
-     * Get the application config
-     * @return array the application config
-     */
+    /**
+    * Get the application config
+    * @return array the application config
+    */
     public function getApplicationConfig()
     {
         return $this->applicationConfig;
@@ -185,5 +187,4 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     {
         return $this->getApplication()->getServiceManager();
     }
-
 }

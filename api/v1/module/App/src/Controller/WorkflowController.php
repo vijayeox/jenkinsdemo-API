@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+
 /**
 * Workflow Api
 */
@@ -11,6 +12,7 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\View\Model\JsonModel;
+
 /**
  * Workflow Controller
  */
@@ -23,11 +25,12 @@ class WorkflowController extends AbstractApiController
     /**
     * @ignore __construct
     */
-	public function __construct(WorkflowTable $table, WorkflowService $workflowService, Logger $log, AdapterInterface $dbAdapter) {
-		parent::__construct($table, $log, __CLASS__, Workflow::class);
-		$this->setIdentifierName('workflowId');
-		$this->workflowService = $workflowService;
-	}
+    public function __construct(WorkflowTable $table, WorkflowService $workflowService, Logger $log, AdapterInterface $dbAdapter)
+    {
+        parent::__construct($table, $log, __CLASS__, Workflow::class);
+        $this->setIdentifierName('workflowId');
+        $this->workflowService = $workflowService;
+    }
     /**
     * Create Workflow API
     * @api
@@ -41,18 +44,19 @@ class WorkflowController extends AbstractApiController
     *   } </code>
     * @return array Returns a JSON Response with Status Code and Created Workflow.
     */
-    public function create($data){
+    public function create($data)
+    {
         $appId = $this->params()->fromRoute()['appId'];
-        try{
-            $count = $this->workflowService->saveWorkflow($appId,$data);
-        }catch(ValidationException $e){
+        try {
+            $count = $this->workflowService->saveWorkflow($appId, $data);
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0){
+        if ($count == 0) {
             return $this->getFailureResponse("Failed to create a new entity", $data);
         }
-        return $this->getSuccessResponseWithData($data,201);
+        return $this->getSuccessResponseWithData($data, 201);
     }
     
     /**
@@ -62,7 +66,8 @@ class WorkflowController extends AbstractApiController
     * @method GET
     * @return array Returns a JSON Response list of Workflows based on Form id.
     */
-    public function getList() {
+    public function getList()
+    {
         $appId = $this->params()->fromRoute()['appId'];
         $result = $this->workflowService->getWorkflows($appId);
         return $this->getSuccessResponseWithData($result['data']);
@@ -72,21 +77,22 @@ class WorkflowController extends AbstractApiController
     * @api
     * @link /Workflow[/:WorkflowId]
     * @method PUT
-    * @param array $id ID of Workflow to update 
-    * @param array $data 
+    * @param array $id ID of Workflow to update
+    * @param array $data
     * @return array Returns a JSON Response with Status Code and Created Workflow.
     */
-    public function update($id, $data){
-        try{
-            $count = $this->workflowService->updateWorkflow($id,$data);
-        }catch(ValidationException $e){
+    public function update($id, $data)
+    {
+        try {
+            $count = $this->workflowService->updateWorkflow($id, $data);
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0){
+        if ($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
-        return $this->getSuccessResponseWithData($data,200);
+        return $this->getSuccessResponseWithData($data, 200);
     }
     /**
     * Delete Workflow API
@@ -96,10 +102,11 @@ class WorkflowController extends AbstractApiController
     * @param $id ID of Workflow to Delete
     * @return array success|failure response
     */
-    public function delete($id){
+    public function delete($id)
+    {
         $appId = $this->params()->fromRoute()['appId'];
-        $response = $this->workflowService->deleteWorkflow($appId,$id);
-        if($response == 0){
+        $response = $this->workflowService->deleteWorkflow($appId, $id);
+        if ($response == 0) {
             return $this->getErrorResponse("Workflow not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
@@ -110,13 +117,14 @@ class WorkflowController extends AbstractApiController
     * @link /workflow[/:workflowId]
     * @method GET
     * @param $id ID of Workflow
-    * @return array $data 
+    * @return array $data
     * @return array Returns a JSON Response with Status Code and Created Workflow.
     */
-    public function get($id){
+    public function get($id)
+    {
         $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->workflowService->getWorkflow($appId,$id);
-        if($result == 0){
+        $result = $this->workflowService->getWorkflow($appId, $id);
+        if ($result == 0) {
             return $this->getErrorResponse("Workflow not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponseWithData($result);
@@ -135,9 +143,9 @@ class WorkflowController extends AbstractApiController
      */
     public function workflowFieldsAction()
     {
-        $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try {
-            $response = $this->workflowService->getFields($params['appId'],$params['workflowId']);
+            $response = $this->workflowService->getFields($params['appId'], $params['workflowId']);
             return $this->getSuccessResponseWithData($response);
         } catch (Exception $e) {
             return $this->getErrorResponse("Files cannot be uploaded!");
@@ -157,9 +165,9 @@ class WorkflowController extends AbstractApiController
      */
     public function workflowFormsAction()
     {
-        $params = array_merge($this->params()->fromPost(),$this->params()->fromRoute());
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try {
-            $response = $this->workflowService->getForms($params['appId'],$params['workflowId']);
+            $response = $this->workflowService->getForms($params['appId'], $params['workflowId']);
             return $this->getSuccessResponseWithData($response);
         } catch (Exception $e) {
             return $this->getErrorResponse("Files cannot be uploaded!");

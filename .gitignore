@@ -13,3 +13,4 @@
 /integrations/openproject/export
 /build/
 /.project
+/api/v1/composer/

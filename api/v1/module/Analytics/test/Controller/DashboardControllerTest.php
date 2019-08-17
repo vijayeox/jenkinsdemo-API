@@ -78,7 +78,7 @@ class DashboardControllerTest extends ControllerTest
         $data = ['name' => "dashboardtest", 'description' => 'descriptiontest'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/analytics/dashboard/2', 'PUT', null);
+        $this->dispatch('/analytics/dashboard/fc67ceb2-4b6f-4a33-8527-5fc6b0822988', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dashboard');
@@ -104,7 +104,7 @@ class DashboardControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/dashboard/1', 'DELETE');
+        $this->dispatch('/analytics/dashboard/fc67ceb2-4b6f-4a33-8527-5fc6b0822988', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dashboard');
@@ -125,12 +125,12 @@ class DashboardControllerTest extends ControllerTest
 
     public function testGet() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/dashboard/1', 'GET');
+        $this->dispatch('/analytics/dashboard/a59f865e-efba-472e-91f2-2ae2d8a16d36', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['uuid'], 'a59f865e-efba-472e-91f2-2ae2d8a16d36');
         $this->assertEquals($content['data']['name'], 'Dashboard1');
     }
 
@@ -151,7 +151,7 @@ class DashboardControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], 'a59f865e-efba-472e-91f2-2ae2d8a16d36');
         $this->assertEquals($content['data']['data'][0]['name'], 'Dashboard1');
         $this->assertEquals($content['data']['data'][1]['dashboard_type'], 'Document Dashboard');
         $this->assertEquals($content['data']['data'][1]['name'], 'Dashboard2');
@@ -167,7 +167,7 @@ class DashboardControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['uuid'], 'fc67ceb2-4b6f-4a33-8527-5fc6b0822988');
         $this->assertEquals($content['data']['data'][0]['name'], 'Dashboard2');
         $this->assertEquals($content['data']['data'][1]['ispublic'], 1);
         $this->assertEquals($content['data']['data'][1]['name'], 'Dashboard1');
@@ -183,7 +183,7 @@ class DashboardControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 1);
-        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['uuid'], 'fc67ceb2-4b6f-4a33-8527-5fc6b0822988');
         $this->assertEquals($content['data']['data'][0]['name'], 'Dashboard2');
         $this->assertEquals($content['data']['data'][0]['created_by'], 1);
         $this->assertEquals($content['data']['total'],2);
@@ -198,7 +198,7 @@ class DashboardControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 1);
-        $this->assertEquals($content['data']['data'][0]['id'], 2);
+        $this->assertEquals($content['data']['data'][0]['uuid'], 'fc67ceb2-4b6f-4a33-8527-5fc6b0822988');
         $this->assertEquals($content['data']['data'][0]['name'], 'Dashboard2');
         $this->assertEquals($content['data']['total'],1);
     }

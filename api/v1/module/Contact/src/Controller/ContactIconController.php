@@ -11,7 +11,8 @@ use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Service\UserService;
 use Contact\Service\ContactService;
 
-class ContactIconController extends AbstractApiControllerHelper { 
+class ContactIconController extends AbstractApiControllerHelper
+{
     /**
     * @var ProfilepictureService Instance of Projectpicture Service
     */
@@ -31,26 +32,32 @@ class ContactIconController extends AbstractApiControllerHelper {
     * @link /user/profile[/:profileId]
     * @method GET
     * @param $profileId ID of user
-    * @return profile picture 
+    * @return profile picture
     */
-    public function getIconAction(){
+    public function getIconAction()
+    {
         $params = $this->params()->fromRoute();
         $ownerid = $params['ownerId'];
-        $contactid = $params['contactId']; 
+        $contactid = $params['contactId'];
         $logo = $contactid.".png";
         $file = $this->contactService->getContactIconPath($ownerid);
-        $file = $file . $logo;
+        $iconUrl = $file.$logo;
+        if (!FileUtils::fileExists($iconUrl)) {
+            $file = $this->contactService->getContactIconPath(null);
+            $iconUrl = $file."profile.png";
+        }
+                
         if (!headers_sent()) {
             header('Content-Type: image/png');
-            header("Content-Transfer-Encoding: Binary"); 
+            header("Content-Transfer-Encoding: Binary");
         }
         try {
-            $fp = @fopen($file, 'rb');
+            $fp = @fopen($iconUrl, 'rb');
             fpassthru($fp);
             fclose($fp);
             $this->response->setStatusCode(200);
             return $this->response;
-        } catch(Exception $e){
+        } catch (Exception $e) {
             print_r($e->getMessage());
             return $this->getErrorResponse("Contact Icon not found", 404);
         }

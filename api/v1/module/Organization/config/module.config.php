@@ -36,7 +36,7 @@ return [
                         'action' => 'addUserToOrganization',
                         'access' => [
                             // SET ACCESS CONTROL
-                            'addUserToOrganization' => 'MANAGE_USER_WRITE',
+                            'addUserToOrganization' => 'MANAGE_ORGANIZATION_WRITE',
                         ],
                     ],
                 ],
@@ -60,6 +60,76 @@ return [
                         'action' => 'getListOfOrgUsers',
                         'access' => [
                             'getListOfOrgUsers'=>'MANAGE_ORGANIZATION_READ'
+                        ],
+                    ],
+                ],
+            ],
+            'getListofAdminUsers' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/organization[/:orgId]/adminusers',
+                    'defaults' => [
+                        'controller' => Controller\OrganizationController::class,
+                        'method' => 'GET',
+                        'action' => 'getListofAdminUsers',
+                        'access' => [
+                            'getListofAdminUsers'=> ['MANAGE_ORGANIZATION_WRITE', 'MANAGE_MYORG_WRITE']
+                        ],
+                    ],
+                ],
+            ],
+            'getListofOrgGroups' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/organization/:orgId/groups',
+                    'defaults' => [
+                        'controller' => Controller\OrganizationController::class,
+                        'method' => 'GET',
+                        'action' => 'getListofOrgGroups',
+                        'access' => [
+                            'getListofOrgGroups'=> ['MANAGE_ORGANIZATION_READ']
+                        ],
+                    ],
+                ],
+            ],
+            'getListofOrgProjects' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/organization/:orgId/projects',
+                    'defaults' => [
+                        'controller' => Controller\OrganizationController::class,
+                        'method' => 'GET',
+                        'action' => 'getListofOrgProjects',
+                        'access' => [
+                            'getListofOrgProjects'=> ['MANAGE_ORGANIZATION_READ']
+                        ],
+                    ],
+                ],
+            ],
+            'getListofOrgAnnouncements' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/organization/:orgId/announcements',
+                    'defaults' => [
+                        'controller' => Controller\OrganizationController::class,
+                        'method' => 'GET',
+                        'action' => 'getListofOrgAnnouncements',
+                        'access' => [
+                            'getListofOrgAnnouncements'=> ['MANAGE_ORGANIZATION_READ']
+                        ],
+                    ],
+                ],
+            ],
+            'getListofOrgRoles' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/organization/:orgId/roles',
+                    'defaults' => [
+                        'controller' => Controller\OrganizationController::class,
+                        'method' => 'GET',
+                        'action' => 'getListofOrgRoles',
+                        'access' => [
+                            'getListofOrgRoles'=> ['MANAGE_ORGANIZATION_READ']
                         ],
                     ],
                 ],

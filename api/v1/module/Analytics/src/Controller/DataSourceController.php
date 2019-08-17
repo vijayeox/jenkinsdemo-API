@@ -23,7 +23,7 @@ class DataSourceController extends AbstractApiController
     public function __construct(DataSourceTable $table, DataSourceService $dataSourceService, Logger $log, AdapterInterface $dbAdapter)
     {
         parent::__construct($table, $log, __class__, DataSource::class);
-        $this->setIdentifierName('dataSourceId');
+        $this->setIdentifierName('dataSourceUuid');
         $this->dataSourceService = $dataSourceService;
     }
 
@@ -58,16 +58,16 @@ class DataSourceController extends AbstractApiController
     /**
      * Update DataSource API
      * @api
-     * @link /analytics/dataSource/:dataSourceId
+     * @link /analytics/dataSource/:dataSourceUuid
      * @method PUT
-     * @param array $id ID of DataSource to update
+     * @param array $uuid ID of DataSource to update
      * @param array $data
      * @return array Returns a JSON Response with Status Code and Created DataSource.
      */
-    public function update($id, $data)
+    public function update($uuid, $data)
     {
         try {
-            $count = $this->dataSourceService->updateDataSource($id, $data);
+            $count = $this->dataSourceService->updateDataSource($uuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -81,16 +81,16 @@ class DataSourceController extends AbstractApiController
     /**
      * Delete DataSource API
      * @api
-     * @link /analytics/dataSource/:dataSourceId
+     * @link /analytics/dataSource/:dataSourceUuid
      * @method DELETE
-     * @param $id ID of DataSource to Delete
+     * @param $uuid ID of DataSource to Delete
      * @return array success|failure response
      */
-    public function delete($id)
+    public function delete($uuid)
     {
-        $response = $this->dataSourceService->deleteDataSource($id);
+        $response = $this->dataSourceService->deleteDataSource($uuid);
         if ($response == 0) {
-            return $this->getErrorResponse("DataSource not found for id - $id", 404, ['id' => $id]);
+            return $this->getErrorResponse("DataSource not found for uuid - $uuid", 404, ['uuid' => $uuid]);
         }
         return $this->getSuccessResponse();
     }
@@ -98,18 +98,20 @@ class DataSourceController extends AbstractApiController
     /**
      * GET DataSource API
      * @api
-     * @link /analytics/datasource/:dataSourceId
+     * @link /analytics/datasource/:dataSourceUuid
      * @method GET
      * @param array $dataget of DataSource
      * @return array $data
      * {
      *              id: integer,
+     *              uuid: string,
      *              name : string,
      *              type : string,
      *              connection_string : string,
      *              created_by: integer,
      *              date_created: date,
-     *              org_id: integer
+     *              org_id: integer,
+     *              isdeleted: tinyint
      *   }
      * @return array Returns a JSON Response with Status Code and Created Group.
      */
@@ -133,14 +135,17 @@ class DataSourceController extends AbstractApiController
      * @param      array[json]  $filter  (filter with logic and filters)
      * @return array $dataget list of Datasource
      * <code>status : "success|error",
-     *              id: integer
+     *              id: integer,
+     *              uuid: string,
      *              name : string,
      *              type : string,
-     *              connection_string : string
-     *              created_by: integer
-     *              date_created: date
+     *              connection_string : string,
+     *              created_by: integer,
+     *              date_created: date,
+     *              isdeleted: tinyint
      * </code>
      */
+
     public function getList()
     {
         $params = $this->params()->fromQuery();

@@ -29,19 +29,12 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         String statement = 'select username,firstname,lastname,email,password from ox_user where username="'+userId+'"'
         ResultSet rs = st.executeQuery(statement)
         if(rs.next()) {
+            Context.getCommandContext().disableAuthorizationCheck()
+            Context.getCommandContext().authorizationManager.checkCamundaAdmin()
             return new User(rs.getString("username"),rs.getString("email"),rs.getString("firstname"),rs.getString("lastname"),rs.getString("password"))
         }
     }
 
-    org.camunda.bpm.engine.identity.User findUserByUsername(String userName) {Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
-        Statement st = con.createStatement()
-        String statement = 'select username,firstname,lastname,email,password from ox_user where username = "'+userName+'"'
-        ResultSet rs = st.executeQuery(statement)
-        if(rs.next()) {
-            return new User(rs.getString("username"),rs.getString("email"),rs.getString("firstname"),rs.getString("lastname"),rs.getString("password"))
-        }
-    }
 
     @Override
     UserQuery createUserQuery() {
@@ -69,17 +62,17 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
         Statement st = con.createStatement()
         String statement = "select id,name,status from ox_group"
-        String orderByPart = "ORDER BY ox_group.id desc"
+        String orderByPart = ""
         if(query.orderByGroupId())
-            orderByPart = "ORDER BY ox_group.id desc"
+            orderByPart = "ORDER BY ox_group.id"
         if(query.orderByGroupName())
-            orderByPart = "ORDER BY ox_group.name desc"
+            orderByPart = "ORDER BY ox_group.name"
         if(query.orderByGroupType())
-            orderByPart = "ORDER BY ox_group.status desc"
+            orderByPart = "ORDER BY ox_group.status"
         if(query.getId() != null)
-            statement = "select id,name,status from ox_group where id=${query.getId()} ${orderByPart}"
+            statement = "select id,name,status from ox_group where id='${query.getId()}' ${orderByPart}"
         if(query.getIds() != null)
-            statement = "select id,name,status from ox_group where id IN (${query.getIds()}) ${orderByPart}"
+            statement = "select id,name,status from ox_group where id IN ('"+String.join("','", query.getIds())+"') ${orderByPart}"
         if(query.getName() != null)
             statement = "select id,name,status from ox_group where name ='${query.getName()}' ${orderByPart}"
         if(query.getName() != null)
@@ -90,12 +83,13 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
             statement = "select id,name,status from ox_group where orgid = '${query.getTenantId()}' ${orderByPart}"
         if(query.getUserId() !=null)
             statement = "select ox_group.id,ox_group.name,ox_group.status FROM ox_group LEFT JOIN ox_user_group ON ox_group.id=ox_user_group.group_id WHERE ox_user_group.avatar_id='"+query.getUserId()+"' "+orderByPart
+        print statement
         ResultSet rs = st.executeQuery(statement)
         ArrayList<Group> groups =  new ArrayList<Group>()
         while (rs.next()) {
             groups.add(new Group(rs.getString("id"), rs.getString("name"), "SYSTEM"))
         }
-        groups.add(new Group("99999",'Admin', Groups.CAMUNDA_ADMIN))
+        groups.add(new Group("99999",'admin', Groups.CAMUNDA_ADMIN))
         return groups
     }
 
@@ -109,7 +103,6 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         if(password == null) {
             return false
         }
-
         // engine can't work without users
         if(userId == null || userId.isEmpty()) {
             return false
@@ -127,6 +120,8 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         ResultSet rs = st.executeQuery(statement)
         if(rs.next()) {
             return new Group(rs.getString("id"),rs.getString("name"),rs.getString("status"))
+        } else {
+            return new Group("99999",'admin', Groups.CAMUNDA_ADMIN)
         }
     }
 
@@ -143,22 +138,23 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         Class.forName(DB_DRIVER).newInstance()
         Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
         Statement st = con.createStatement()
-        println(query.asc())
         try {
             String statement = "select username,firstname,lastname,email,password from ox_user"
-            String orderByPart = "ORDER BY ox_user.username"
-            if(query.orderByUserEmail())
-                orderByPart = "ORDER BY ox_user.email"
-            if(query.orderByUserFirstName())
-                orderByPart = "ORDER BY ox_user.firstname"
-            if(query.orderByUserLastName())
-                orderByPart = "ORDER BY ox_user.lastname"
-            if(query.orderByUserId())
-                orderByPart = "ORDER BY ox_user.username"
+            String orderByPart = ""
+            if(query.orderingProperties){
+                if(query.orderByUserEmail())
+                    orderByPart = "ORDER BY ox_user.email"
+                if(query.orderByUserFirstName())
+                    orderByPart = "ORDER BY ox_user.firstname"
+                if(query.orderByUserLastName())
+                    orderByPart = "ORDER BY ox_user.lastname"
+                if(query.orderByUserId())
+                    orderByPart = "ORDER BY ox_user.username"
+            }
             if(query.getId() != null)
-                statement = "select username,firstname,lastname,email,password from ox_user where username=${query.getId()} OR username=${query.getId()} ${orderByPart}"
+                statement = "select username,firstname,lastname,email,password from ox_user where username='${query.getId()}' ${orderByPart}"
             if(query.getIds() != null)
-                statement = "select username,firstname,lastname,email,password from ox_user where username in (${query.getIds()}) OR username in (${query.getIds()}) orderByPart}"
+                statement = "select username,firstname,lastname,email,password from ox_user where username in ('"+String.join("','", query.getIds())+"') ${orderByPart}"
             if(query.getFirstName() != null)
                 statement = "select username,firstname,lastname,email,password from ox_user where firstname='${query.getFirstName()}' ${orderByPart}"
             if(query.getFirstNameLike() != null)
@@ -174,7 +170,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
             if(query.getGroupId() != null)
                 statement = "select username,firstname,lastname,email,password FROM ox_user LEFT JOIN ox_user_group ON ox_user.id=ox_user_group.avatar_id WHERE ox_user_group.group_id=${query.getGroupId()} ${orderByPart}"
             if(query.getTenantId() != null)
-                statement = "select username,firstname,lastname,email,password FROM ox_user WHERE orgid=${query.getTenantId()} ${orderByPart}"
+                statement = "select username,firstname,lastname,email,password FROM ox_user WHERE orgid='${query.getTenantId()}' ${orderByPart}"
             ResultSet rs = st.executeQuery(statement)
             ArrayList<User> users = new ArrayList<User>()
             while(rs.next()) {
@@ -197,7 +193,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
             orderByPart = "ORDER BY ox_organization.name"
         String statement = "select id,name from ox_organization"
         if(query.getIds())
-            statement = "select id,name from ox_organization where id IN (${query.getId()}) ${orderByPart}"
+            statement = "select id,name from ox_organization where id IN ('"+String.join("','", query.getIds())+"') ${orderByPart}"
         if(query.getId() != null)
             statement = "select id,name from ox_organization where id=${query.getId()} ${orderByPart}"
         if(query.getName() != null)

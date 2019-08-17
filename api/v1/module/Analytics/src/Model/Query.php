@@ -15,7 +15,9 @@ class Query extends Entity
         'query_json' => null,
         'ispublic' => 0,
         'created_by' => 0,
-        'date_created' => null
+        'date_created' => null,
+        'org_id' => 0,
+        'isdeleted' => 0
     );
 
     public function validate()

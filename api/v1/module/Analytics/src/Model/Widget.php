@@ -15,7 +15,8 @@ class Widget extends Entity
         'ispublic' => 0,
         'created_by' => 0,
         'date_created' => null,
-        'org_id' => 0
+        'org_id' => 0,
+        'isdeleted' => 0
     );
 
     public function validate()

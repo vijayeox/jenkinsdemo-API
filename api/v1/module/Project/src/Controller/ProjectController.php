@@ -10,20 +10,22 @@ use Project\Service\ProjectService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
+use Oxzion\AccessDeniedException;
 
-class ProjectController extends AbstractApiController {	
+class ProjectController extends AbstractApiController
+{
     /**
     * @var ProjectService Instance of Project Service
     */
-	private $projectService;
+    private $projectService;
     /**
     * @ignore __construct
     */
     public function __construct(ProjectTable $table, ProjectService $projectService, Logger $log, AdapterInterface $dbAdapter)
     {
-    	parent::__construct($table, $log, __CLASS__, Project::class);
-    	$this->setIdentifierName('projectId');
-    	$this->projectService = $projectService;
+        parent::__construct($table, $log, __CLASS__, Project::class);
+        $this->setIdentifierName('projectUuid');
+        $this->projectService = $projectService;
     }
 
     /**
@@ -33,89 +35,103 @@ class ProjectController extends AbstractApiController {
     * @method POST
     * @param array $data Array of elements as shown</br>
     * <code> name : string,
-             description : string,
+    *         description : string,
     * </code>
     * @return array Returns a JSON Response with Status Code and Created Project.</br>
     * <code> status : "success|error",
     *        data : array Created Project Object
-                    string name,
-                    string description,
-                    integer orgid,
-                    integer created_by,
-                    integer modified_by,
-                    dateTime date_created (ISO8601 format yyyy-mm-ddThh:mm:ss),
-                    dateTime date_modified (ISO8601 format yyyy-mm-ddThh:mm:ss),
-                    boolean isdeleted,
-                    integer id,
+    *                string name,
+    *                string description,
+    *                integer orgid,
+    *                integer created_by,
+    *                integer modified_by,
+    *                dateTime date_created (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *                dateTime date_modified (ISO8601 format yyyy-mm-ddThh:mm:ss),
+    *                boolean isdeleted,
+    *                integer id,
     * </code>
     */
-    public function create($data) {
-    	try {
-                 $count = $this->projectService->createProject($data);
-    	} catch(ValidationException $e) {	
-    		$response = ['data' => $data, 'errors' => $e->getErrors()];
-    		return $this->getErrorResponse("Validation Errors",404, $response);
-    	}
-    	if($count == 0) {
-    		return $this->getFailureResponse("Failed to create a new entity", $data);
-    	}
-      	return $this->getSuccessResponseWithData($data,201);
+    public function create($data)
+    {
+        try {
+            $count = $this->projectService->createProject($data);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        if ($count == 0) {
+            return $this->getFailureResponse("Failed to create a new entity", $data);
+        }
+        return $this->getSuccessResponseWithData($data, 201);
     }
-     /**
+    /**
     * Update Project API
     * @api
-    * @link /project[/:projectId]
+    * @link /project[/:projectUuid]
     * @method PUT
-    * @param array $id ID of Project to update 
-    * @param array $data 
+    * @param array $id ID of Project to update
+    * @param array $data
     * <code> status : "success|error",
     *        data : {
-                    string name,
-                    string description,
-                    integer orgid,
-                    integer created_by,
-                    integer modified_by,
-                    dateTime date_created (ISO8601 format yyyy-mm-ddThh:mm:ss),
-                    dateTime date_modified (ISO8601 format yyyy-mm-ddThh:mm:ss),
-                    boolean isdeleted,
-                    integer id,
-                    }
+                   string name,
+                   string description,
+                   integer orgid,
+                   integer created_by,
+                   integer modified_by,
+                   dateTime date_created (ISO8601 format yyyy-mm-ddThh:mm:ss),
+                   dateTime date_modified (ISO8601 format yyyy-mm-ddThh:mm:ss),
+                   boolean isdeleted,
+                   integer id,
+                   }
     * </code>
     * @return array Returns a JSON Response with Status Code and Created Project.
     */
-    public function update($id, $data) {
-    	try {
-    		$count = $this->projectService->updateProject($id, $data);
-    	} catch (ValidationException $e) {
-    		$response = ['data' => $data, 'errors' => $e->getErrors()];
-    		return $this->getErrorResponse("Validation Errors",404, $response);
-    	}
-    	if($count == 0) {
-    		return $this->getErrorResponse("Entity not found for id - $id", 404);
-    	}
-    	return $this->getSuccessResponseWithData($data,200);
+    public function update($id, $data)
+    {
+        try {
+            $count = $this->projectService->updateProject($id, $data);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
+        }
+        if ($count == 0) {
+            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        }
+        if ($count == 2) {
+            return $this->getErrorResponse("Failed To Update", 404);
+        }
+        return $this->getSuccessResponseWithData($data, 200);
     }
 
 
 
-     /**
-     * GET project API
-     * @api
-     * @link /project[/:projectId]
-     * @method GET
-     * @param array $dataget of project
-     * @return array $data
-     * <code> {
-     *               id : integer,
-     *               name : string,
-     *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created Group.
-     */
+    /**
+    * GET project API
+    * @api
+    * @link /project[/:projectUuid]
+    * @method GET
+    * @param array $dataget of project
+    * @return array $data
+    * <code> {
+    *               id : integer,
+    *               name : string,
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created Group.
+    */
     public function get($id)
     {
-        $result = $this->projectService->getProjectByUuid($id);
-        if ($result == 0) {
-            return $this->getErrorResponse("Project not found", 404, ['id' => $id]);
+        $data = $this->params()->fromQuery();
+        try {
+            $result = $this->projectService->getProjectByUuid($id, $data);
+            if ($result == 0) {
+                return $this->getErrorResponse("Project not found", 404, ['id' => $id]);
+            }
+        } catch (AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -124,17 +140,24 @@ class ProjectController extends AbstractApiController {
     /**
     * Delete Project API
     * @api
-    * @link /project[/:projectId]
+    * @link /project[/:projectUuid]
     * @method DELETE
     * @param $id ID of Project to Delete
     * @return array success|failure response
     */
-    public function delete($id) {
-    	$response = $this->projectService->deleteProject($id);
-    	if($response == 0) {
-		return $this->getErrorResponse("Project not found", 404, ['id' => $id]);
-    	}
-    	return $this->getSuccessResponse();
+    public function delete($id)
+    {
+        $data = $this->params()->fromQuery();
+        try {
+            $response = $this->projectService->deleteProject($id, $data);
+            if ($response == 0) {
+                return $this->getErrorResponse("Project not found", 404, ['id' => $id]);
+            }
+        } catch (AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
+        }
+        return $this->getSuccessResponse();
     }
 
     /**
@@ -157,10 +180,16 @@ class ProjectController extends AbstractApiController {
                     }
     * </code>
     */
-    public function getList(){
-        $filterParams = $this->params()->fromQuery(); // empty method call  
-        $result = $this->projectService->getProjectList($filterParams);
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+    public function getList()
+    {
+        try {
+            $filterParams = $this->params()->fromQuery(); // empty method call
+            $result = $this->projectService->getProjectList($filterParams);
+        } catch (AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
     /**
     * GET List Project of Current User API
@@ -182,14 +211,21 @@ class ProjectController extends AbstractApiController {
                     }
     * </code>
     */
-    public function getListOfMyProjectAction(){
-        $result = $this->projectService->getProjectsOfUser();
+    public function getListOfMyProjectAction()
+    {
+        try {
+            $data = $this->params()->fromQuery();
+            $result = $this->projectService->getProjectsOfUser($data);
+        } catch (AccessDeniedException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
+        }
         return $this->getSuccessResponseWithData($result);
     }
     /**
     * Save users in a Project API
     * @api
-    * @link /project/:projectid/save
+    * @link /project/:projectUuid/save
     * @method Post
     * @param json object of userid
     * @return array $dataget list of Projects by User
@@ -197,47 +233,54 @@ class ProjectController extends AbstractApiController {
     *       data : all user id's passed back in json format
     * </code>
     */
-    public function saveUserAction() {
+    public function saveUserAction()
+    {
         $params = $this->params()->fromRoute();
-        $id=$params['projectId'];
-        $data = $this->params()->fromPost();
+        $id=$params['projectUuid'];
+        $data = $this->extractPostData();
         try {
-            $count = $this->projectService->saveUser($id,$data);
+            $count = $this->projectService->saveUser($id, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
         }
-        if($count == 0) {
+        if ($count == 0) {
             return $this->getErrorResponse("Entity not found", 404);
         }
-        if($count == 2) {
+        if ($count == 2) {
             return $this->getErrorResponse("Enter User Ids", 404);
         }
-        return $this->getSuccessResponseWithData($data,200);
+        return $this->getSuccessResponseWithData($data, 200);
     }
     /**
     * GET all users in a particular Project API
     * @api
-    * @link /project/:projectid/users
+    * @link /project/:projectuuid/users
     * @method GET
     * @return array $dataget list of Projects by User
     * <code>status : "success|error",
     *       data : all user id's in the project passed back in json format
     * </code>
     */
-    public function getListOfUsersAction() {
+    public function getListOfUsersAction()
+    {
         $project = $this->params()->fromRoute();
         $id=$project[$this->getIdentifierName()];
         $filterParams = $this->params()->fromQuery(); // empty method call
         try {
-            $count = $this->projectService->getUserList($project[$this->getIdentifierName()],$filterParams);
+            $count = $this->projectService->getUserList($project[$this->getIdentifierName()], $filterParams);
         } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
         }
-        if($count == 0) {
+        if ($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
-        return $this->getSuccessResponseDataWithPagination($count['data'],$count['total']);
+        return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
     }
 }
