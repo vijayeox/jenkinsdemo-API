@@ -43,7 +43,7 @@ class ImportService extends AbstractService
         }
         if (is_dir($archivePath)) {
             FileUtils::copy($filePath, $dataSet[2], $archivePath);
-        }else{
+        } else {
             return 3;
         }
         return 1;
@@ -58,6 +58,43 @@ class ImportService extends AbstractService
         $this->param = rtrim($this->param, ", ");
         $queryString = "call " . $storedProcedureName . "(" . $this->param . ")";
         return $this->runGenericQuery($queryString);
+    }
+
+    // Code is not in use untill we get the download feature that we need to get from the clients
+    public function uploadCSVData($storedProcedureName, $orgId, $appId, $appName, $srcURL)
+    {
+        $host = "oxzion.com";
+        $userID = "rakshith@oxzion.com";
+        $password = "sftp@rakshith";
+
+//This code will come from the deployment descriptor. I have kept it here for now.        
+        // $host = "206.107.76.164";
+        // $userID = "vbinsurance";
+        // $password = "<<InsureName>>";
+
+        $filePath = dirname(__dir__) . "/../../../data/import/" . $orgId . "/" . $appId . "/" . $appName . "/data/";
+
+        $ftp_server = $host;
+        $ftp_conn = ftp_ssl_connect($ftp_server) or die("Could not connect to $ftp_server");
+        $login = ftp_login($ftp_conn, $userID, $password);
+        $r = ftp_pasv($ftp_conn, true);
+        ftp_chdir($ftp_conn, "/");
+
+        if ($login) {
+            echo "<br>logged in successfully!";
+            $contents = ftp_nlist($ftp_conn, ".");
+            foreach ($contents as $value) {
+                // $result = ftp_fget($ftp_conn, $filePath, $value, FTP_BINARY);
+                echo $value . "<br/";
+            }
+            var_dump($contents);exit;
+        } else {
+            echo "Can't login to remote server.";exit;
+        }
+        if (ftp_close($ftp_conn)) {
+            echo "<br>Connection closed Successfully!";
+        }
+        return 1;
     }
 
 }

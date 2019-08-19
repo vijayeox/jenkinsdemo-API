@@ -24,6 +24,22 @@ class ImportController extends AbstractApiController
         $this->importService = $importService;
     }
 
+    /*
+     * POST Import the CSV fuction
+     * @api
+     * @link /app/1/importcsv
+     * @method POST
+     * @return Status mesassge based on success and failure
+     * <code>status : "success|error",
+     *       data :  {
+     * String stored_procedure_name
+     * int: org_id
+     * string: app_id
+     * string: app_name
+     * }
+     * </code>
+     */
+
     public function importCSVAction()
     {
         $params = $this->extractPostData();
@@ -31,12 +47,14 @@ class ImportController extends AbstractApiController
         $orgId = $params['org_id'];
         $appId = $params['app_id'];
         $appName = $params['app_name'];
+        $srcURL = "";
 
         try
         {
+            $uploadData = $this->importService->uploadCSVData($storedProcedureName, $orgId, $appId, $appName, $srcURL);
             $returnData = $this->importService->generateCSVData($storedProcedureName, $orgId, $appId, $appName);
-            $filePath = Array(dirname(__dir__) . "/../../../data/import/" . $orgId . "/" . $appId . "/" . $appName . "/data/");
-        
+            $filePath = array(dirname(__dir__) . "/../../../data/import/" . $orgId . "/" . $appId . "/" . $appName . "/data/");
+
             if ($returnData == 2) {
                 return $this->getFailureResponse("Cannot find the file", $filePath);
             }
