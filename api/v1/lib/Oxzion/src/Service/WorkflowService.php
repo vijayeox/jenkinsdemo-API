@@ -107,35 +107,54 @@ class WorkflowService extends AbstractService
             $this->deleteWorkflow($appId, $workFlowId);
             return 1;
         }
-        $activity = $this->getProcessManager()->parseBPMN($workFlowStorageFolder.$fileName, $appId, $workFlowId);
+        $processes = $this->getProcessManager()->parseBPMN($workFlowStorageFolder.$fileName, $appId, $workFlowId);
         $startFormId = null;
         $workFlowList = array();
         $workFlowFormIds = array();
-        if (isset($activity)) {
-            foreach ($activity as $activity) {
+        if (isset($processes)) {
+            foreach ($processes as $process) {
                 $activityData = array();
-                if (isset($activity['form']['properties'])) {
-                    $activityProperties = json_decode($activity['form']['properties'], true);
+                if (isset($process['form']['properties'])) {
+                    $formProperties = json_decode($process['form']['properties'], true);
                 }
-                $oxForm = new Activity();
-                $oxForm->exchangeArray($activity['activity']);
+                $oxForm = new Form();
+                $oxForm->exchangeArray($process['form']);
                 $oxFormProperties = $oxForm->getKeyArray();
-                if (isset($activityProperties)) {
-                    foreach ($activityProperties as $activityKey => $activityValue) {
-                        if (in_array($activityKey, $activityProperties)) {
-                            $oxForm->__set($key, $activityValue);
+                if (isset($formProperties)) {
+                    foreach ($formProperties as $formKey => $formValue) {
+                        if (in_array($formKey, $oxFormProperties)) {
+                            $oxForm->__set($formKey, $formValue);
                         }
                     }
                 }
-                $activityData = $oxForm->toArray();
+                $formData = $oxForm->toArray();
+                $formResult = $this->formService->createForm($appId, $formData);
+                $startFormId = $formData['id'];
+                if ($formResult) {
+                    if (!$this->generateFields($process['form']['fields'], $appId, $formData['id'], $workFlowId,'form')) {
+                        return 0;
+                    }
+                } else {
+                    $formResult = $this->formService->deleteForm($formData['id']);
+                    return 0;
+                }
+                foreach ($process['activity'] as $activity) {
+                    $oxActivity = new Activity();
+                $oxActivity->exchangeArray($activity);
+                $oxFormProperties = $oxActivity->getKeyArray();
+                if (isset($activityProperties)) {
+                    foreach ($activityProperties as $activityKey => $activityValue) {
+                        if (in_array($activityKey, $activityProperties)) {
+                            $oxActivity->__set($key, $activityValue);
+                        }
+                    }
+                }
+                $activityData = $oxActivity->toArray();
                 try {
                     $activityResult = $this->activityService->createActivity($appId, $activityData);
                     $activityIdArray[] = $activityData['id'];
-                    if (isset($activity['start_form'])) {
-                        $startFormId = $activity['start_form'];
-                    }
                     if ($activityResult) {
-                        if (!$this->generateFields($activity['fields'], $appId, $activityData['id'], $workFlowId)) {
+                        if (!$this->generateFields($activity['fields'], $appId, $activityData['id'], $workFlowId,'activity')) {
                             return 0;
                         }
                     } else {
@@ -148,6 +167,8 @@ class WorkflowService extends AbstractService
                     }
                     return 0;
                 }
+            }
+                
             }
         }
         if (isset($workflowName)) {
@@ -195,7 +216,7 @@ class WorkflowService extends AbstractService
         }
         return $count;
     }
-    private function generateFields($fieldsList, $appId, $activityId, $workFlowId)
+    private function generateFields($fieldsList, $appId, $activityId, $workFlowId,$type)
     {
         $i=0;
         $fieldIdArray = array();
@@ -225,7 +246,14 @@ class WorkflowService extends AbstractService
             try {
                 $fieldResult = $this->fieldService->saveField($appId, $fieldData);
                 $fieldIdArray[] = $fieldData['id'];
-                $createFormFieldEntry = $this->createActivityFieldEntry($activityId, $fieldData['id']);
+                switch ($type) {
+                    case 'activity':
+                        $createFormFieldEntry = $this->createActivityFieldEntry($activityId, $fieldData['id']);
+                        break;
+                    default:
+                        $createFormFieldEntry = $this->createFormFieldEntry($activityId, $fieldData['id']);
+                        break;
+                }
             } catch (Exception $e) {
                 foreach ($fieldIdArray as $fieldId) {
                     $id = $this->fieldService->deleteField($fieldId);
@@ -246,6 +274,18 @@ class WorkflowService extends AbstractService
         $this->beginTransaction();
         try {
             $insert = "INSERT INTO `ox_activity_field` (`activity_id`,`field_id`) VALUES ($activityId,$fieldId)";
+            $resultSet = $this->executeQuerywithParams($insert);
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            return 0;
+        }
+    }
+    private function createFormFieldEntry($formId, $fieldId)
+    {
+        $this->beginTransaction();
+        try {
+            $insert = "INSERT INTO `ox_form_field` (`form_id`,`field_id`) VALUES ($formId,$fieldId)";
             $resultSet = $this->executeQuerywithParams($insert);
             $this->commit();
         } catch (Exception $e) {
@@ -353,6 +393,16 @@ class WorkflowService extends AbstractService
         $response = $this->executeQuery($select)->toArray();
         return $response;
     }
+    public function getStartForms($appId, $workflowId)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_form')
+        ->columns(array("*"))
+        ->where(array('workflow_id' => $workflowId,'app_id'=>$appId));
+        $response = $this->executeQuery($select)->toArray();
+        return $response;
+    }
 
     public function getFile($params)
     {
@@ -382,7 +432,6 @@ class WorkflowService extends AbstractService
         if (count($response)==0) {
             return 0;
         }
-        $processKeys = array_column($response, 'process_keys');
         // foreach ($response as $workflow) {
         // print_r($workflow);
         // foreach ($workflow['process_ids'] as $process_id) {

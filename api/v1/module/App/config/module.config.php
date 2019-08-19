@@ -257,6 +257,17 @@ return [
                     ],
                 ],
             ],
+            'form_workflow' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/form/:formId/workflow',
+                    'defaults' => [
+                        'controller' => Controller\FormController::class,
+                        'action' => 'getWorkflow',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
             'importcsv' => [
                 'type' => Segment::class,
                 'options' => [

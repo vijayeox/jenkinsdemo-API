@@ -48,14 +48,14 @@ class ProcessManagerImpl implements ProcessManager
                 $fieldArray = array();
                 $formArray[$i]['form'] = $this->generateForm($startEventList->item(0), $appId, $workflowId);
                 $fields = $startEventList->item(0)->getElementsByTagNameNS(Config::camundaSpec, 'formField');
-                $formArray[$i]['fields'] = $this->generateFields($fieldArray, $fields, $appId, $workflowId);
+                $formArray[$i]['form']['fields'] = $this->generateFields($fieldArray, $fields, $appId, $workflowId);
                 $formArray[$i]['start_form'] = $startEventList->item(0)->getAttribute('id');
-                $i++;
             }
             $elementList = $element->getElementsByTagNameNs(Config::bpmnSpec, 'userTask');
+            $j=0;
             foreach ($elementList as $task) {
                 $fieldArray = array();
-                $formArray[$i]['activity'] = $this->generateActivity($task, $appId, $workflowId);
+                $formArray[$i]['activity'][$j] = $this->generateActivity($task, $appId, $workflowId);
                 $extensionElements = $task->getElementsByTagNameNS(Config::bpmnSpec, 'extensionElements');
                 foreach ($extensionElements as $eElem) {
                     $elements = $eElem->getElementsByTagNameNS(Config::camundaSpec, 'formData');
@@ -71,7 +71,8 @@ class ProcessManagerImpl implements ProcessManager
                             $fieldArray = $this->generateHiddenFields($fieldArray, $hiddenField, $appId, $workflowId);
                         }
                     }
-                    $formArray[$i]['fields'] = $fieldArray;
+                    $formArray[$i]['activity'][$j]['fields'] = $fieldArray;
+                    $j++;
                 }
                 $i++;
             }

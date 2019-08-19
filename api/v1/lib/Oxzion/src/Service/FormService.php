@@ -148,6 +148,20 @@ class FormService extends AbstractService
         }
         return $response[0];
     }
+    public function getWorkflow($formId)
+    {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_form')
+        ->columns(array("*"))
+        ->join('ox_workflow', 'ox_workflow.form_id = ox_form.id', array('workflow_id'=>'id'), 'inner')
+        ->where(array('ox_form.id' => $formId));
+        $response = $this->executeQuery($select)->toArray();
+        if (count($response)==0) {
+            return 0;
+        }
+        return $response[0];
+    }
     private function generateFields($fieldsList, $appId, $formId)
     {
         try {

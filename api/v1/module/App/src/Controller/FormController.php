@@ -121,4 +121,13 @@ class FormController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($result);
     }
+    public function getWorkflowAction()
+    {
+        $formId = $this->params()->fromRoute()['formId'];
+        $result = $this->formService->getWorkflow($formId);
+        if ($result == 0) {
+            return $this->getErrorResponse("Form not found", 404, ['id' => $id]);
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
 }
