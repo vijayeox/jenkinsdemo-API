@@ -45,7 +45,7 @@ RUN apt-get install -y redis-server
 RUN apt-get install -y gnupg && \
   curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
   apt-get update \
-  && apt-get install -y nodejs \
+  && apt-get install -y nodejs npm\
   && npm install gulp -g
 
 RUN mkdir /integrations \
