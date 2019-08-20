@@ -367,4 +367,20 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
     }
+    public function testAddToAppRegistry(){
+        $data = ['org_name' => 'Golden State Warriors', 'app_name' => 'Admin'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/app/addtoappregistry', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppRegisterController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppRegisterController');
+        $this->assertMatchedRouteName('addtoappregistry');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['org_name'], $data['org_name']);
+        $this->assertEquals($content['data']['app_name'], $data['app_name']);
+    }
 }

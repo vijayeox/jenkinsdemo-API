@@ -64,7 +64,7 @@ class OrganizationService extends AbstractService
      */
     public function createOrganization(&$data, $files)
     {
-        $data['uuid'] = UuidUtil::uuid();
+        $data['uuid'] = isset($data['uuid'])?$data['uuid']:UuidUtil::uuid();
         if(!isset($data['contact'])){
             throw new ServiceException("Contact Person details are required","org.contact.required");
         }

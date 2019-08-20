@@ -16,6 +16,7 @@ use Oxzion\Service\WorkflowService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\FieldService;
 use Oxzion\Utils\FilterUtils;
+use Oxzion\ServiceException;
 
 class AppService extends AbstractService
 {
@@ -247,7 +248,7 @@ class AppService extends AbstractService
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['status'] = App::PUBLISHED;
-        $data['uuid'] = Uuid::uuid4()->toString();
+        $data['uuid'] = isset($data['uuid'])?$data['uuid']:Uuid::uuid4()->toString();
         if (!isset($data['org_id'])) {
             return 0;
         }
@@ -463,5 +464,22 @@ class AppService extends AbstractService
         $assignments = $this->workflowService->getAssignments($appId);
         return $assignments;
         // print_r($assignments);exit;
+    }
+
+    public function addToAppRegistry($data)
+    {
+        $this->beginTransaction();
+        try{
+        $insert = " INSERT INTO ox_app_registry (`org_id`,`app_id`) 
+                    SELECT org.`id`,app.`id` FROM ox_organization as org, ox_app as app
+                    WHERE org.`name` = '".$data['org_name']."' AND app.`name` = '".$data['app_name']."'";
+        $result = $this->runGenericQuery($insert);
+        $count = $result->getAffectedRows();
+        $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            return 0;
+        }
+        return $count;
     }
 }
