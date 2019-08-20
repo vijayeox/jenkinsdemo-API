@@ -412,18 +412,19 @@ class GroupService extends AbstractService
         return $result;
     }
 
-    public function getUserList($id, $filterParams = null)
+    public function getUserList($params, $filterParams = null)
     {
-        if (isset($filterParams['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($filterParams['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
-                throw new AccessDeniedException("You do not have permissions to get the group users list");
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the user list of group");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
 
-        if (!isset($id)) {
-            return 0;
-        }
 
         $pageSize = 20;
         $offset = 0;
@@ -453,7 +454,7 @@ class GroupService extends AbstractService
             $offset = $filterArray[0]['skip'];            
         }
 
-        $where .= strlen($where) > 0 ? " AND ox_group.uuid = '".$id."' AND ox_group.status = 'Active'" : " WHERE ox_group.uuid = '".$id."' AND ox_group.status = 'Active'";
+        $where .= strlen($where) > 0 ? " AND ox_group.uuid = '".$params['groupId']."' AND ox_group.status = 'Active' AND ox_group.org_id = ".$orgId : " WHERE ox_group.uuid = '".$params['groupId']."' AND ox_group.status = 'Active' AND ox_group.org_id = ".$orgId;
 
         $sort = " ORDER BY ".$sort;
         $limit = " LIMIT ".$pageSize." offset ".$offset;

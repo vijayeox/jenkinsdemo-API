@@ -649,14 +649,53 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($content['total'],2);
     }
 
+
+    public function testgetuserlistWithOrgid() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users','GET'); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data'][0]['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data'][1]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data'][1]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['total'],2);
+    }
+
+    public function testgetuserlistWithInvalidGroupId() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/group/2db1c5a3-8a820a-c648cf1e27de/users','GET'); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals($content['data'], array());
+    }
+
+
+    public function testgetuserlistWithInvalidOrgid() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users','GET'); 
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals($content['data'], array());
+      }
+
+
+
     public function testgetuserlistByManagerWithDifferentOrgId() {
         $this->initAuthToken($this->managerUser);
-        $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"skip":1,"take":1}]&org_id=b0971de7-0387-48ea-8f29-5d3704d96a46','GET'); 
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/users?filter=[{"skip":1,"take":1}]','GET'); 
         $this->assertResponseStatusCode(403);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'You do not have permissions to get the group users list');
+        $this->assertEquals($content['message'], 'You do not have permissions to get the user list of group');
     }
  
     public function testgetuserlistWithPagesize() {
