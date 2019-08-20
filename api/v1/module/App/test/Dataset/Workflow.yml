@@ -6,6 +6,10 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 1
+ox_app_registry:
+-   
+    org_id: 1
+    app_id: 99  
 ox_field:
 -
     id: 1

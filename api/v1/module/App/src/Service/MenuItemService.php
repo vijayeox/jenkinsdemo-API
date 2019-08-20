@@ -20,11 +20,11 @@ class MenuItemService extends AbstractService
         $this->table = $table;
         $this->groupService = $groupService;
     }
-    public function saveMenuItem($appId, &$data)
+    public function saveMenuItem($appUuid, &$data)
     {
         $MenuItem = new MenuItem();
         $data['uuid'] = UuidUtil::uuid();
-        $data['app_id'] = $appId;
+        $data['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
         if (!isset($data['id'])) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
@@ -46,9 +46,9 @@ class MenuItemService extends AbstractService
                 $id = $this->table->getLastInsertValue();
                 $data['id'] = $id;
             }
+            print "Created";
             $this->commit();
         } catch (Exception $e) {
-            print_r($e->getMessage());
             switch (get_class($e)) {
              case "Oxzion\ValidationException":
                 $this->rollback();
@@ -62,13 +62,13 @@ class MenuItemService extends AbstractService
         }
         return $count;
     }
-    public function updateMenuItem($id, &$data)
+    public function updateMenuItem($menuId, &$data)
     {
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->get($menuId, array());
         if (is_null($obj)) {
             return 0;
         }
-        $data['id'] = $id;
+        $data['id'] = $menuId;
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $file = $obj->toArray();
@@ -93,12 +93,13 @@ class MenuItemService extends AbstractService
     }
 
 
-    public function deleteMenuItem($appId, $id)
+    public function deleteMenuItem($appUuid, $menuId)
     {
+        $appId = $this->getIdFromUuid('ox_app',$appUuid);
         $this->beginTransaction();
         $count = 0;
         try {
-            $count = $this->table->delete($id, ['app_id'=>$appId]);
+            $count = $this->table->delete($menuId, ['app_id'=>$appId]);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -111,20 +112,13 @@ class MenuItemService extends AbstractService
         return $count;
     }
 
-    public function getMenuItems($appId=null, $filterArray = array())
+    public function getMenuItems($appUuid=null, $filterArray = array())
     {
-        if (isset($appId)) {
-            $filterArray['app_id'] = $appId;
-        }
-
+        $filterArray['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
         $userId = AuthContext::get(AuthConstants::USER_ID);
-        $queryString = " SELECT ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu where group_id=0 AND ox_app_menu.app_id=".$appId." union select ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu LEFT JOIN ox_user_group on ox_user_group.group_id=ox_app_menu.group_id where ox_user_group.avatar_id = ".$userId." AND ox_app_menu.app_id=".$appId;
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $queryString = " SELECT ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu where group_id=0 AND ox_app_menu.app_id=".$filterArray['app_id']." union select ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu INNER JOIN ox_user_group on ox_user_group.group_id=ox_app_menu.group_id INNER JOIN ox_group on ox_group.id = ox_user_group.group_id where ox_user_group.avatar_id = ".$userId." AND ox_app_menu.app_id=".$filterArray['app_id']." AND ox_group.org_id=".$orgId;
         $resultSet = $this->executeQuerywithParams($queryString);
-
-        // $groupDetails = $this->groupService->getGroupsforUser($userId);
-        // $filterArray['group_id']= $groupDetails[0]['group_id'];
-
-        // $resultSet = $this->getDataByParams('ox_app_menu',array("*"),$filterArray,null);
         $menuList = array();
         if ($resultSet->count()) {
             $menuList = $resultSet->toArray();
@@ -136,16 +130,19 @@ class MenuItemService extends AbstractService
                     unset($menuList[$key]);
                 }
             }
+        }else{
+            return 0;
         }
         return $menuList;
     }
-    public function getMenuItem($appId, $id)
+    public function getMenuItem($appUuid, $menuId)
     {
+        $appId = $this->getIdFromUuid('ox_app',$appUuid);
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_app_menu')
         ->columns(array("*"))
-        ->where(array('id' => $id,'app_id'=>$appId));
+        ->where(array('id' => $menuId,'app_id'=>$appId));
         $response = $this->executeQuery($select)->toArray();
         if (count($response)==0) {
             return 0;
