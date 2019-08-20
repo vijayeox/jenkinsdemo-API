@@ -90,7 +90,13 @@ class AnnouncementController extends AbstractApiController
     */
     public function getList()
     {
-        $result = $this->announcementService->getAnnouncements();
+        $params = $this->params()->fromRoute();
+        try{
+             $result = $this->announcementService->getAnnouncements($params);
+        }
+        catch (AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
+        }
         return $this->getSuccessResponseWithData($result);
     }
     /**
@@ -171,9 +177,12 @@ class AnnouncementController extends AbstractApiController
     */
     public function get($id)
     {
-        $result = $this->announcementService->getAnnouncement($id);
-        if ($result == 0) {
-            return $this->getErrorResponse("Announcement not found", 404, ['id' => $id]);
+        $params = $this->params()->fromRoute();
+        try{
+            $result = $this->announcementService->getAnnouncement($id,$params);
+        }
+        catch (AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -187,7 +196,13 @@ class AnnouncementController extends AbstractApiController
     public function announcementListAction()
     {
         $filterParams = $this->params()->fromQuery();
-        $result = $this->announcementService->getAnnouncementsList($filterParams);
+        $params = $this->params()->fromRoute();
+        try{
+             $result = $this->announcementService->getAnnouncementsList($filterParams,$params); 
+        }
+        catch (AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
+        }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 
@@ -203,15 +218,6 @@ class AnnouncementController extends AbstractApiController
         }
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
-        }
-        catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),404);
-        }
-        if($count == 0) {
-            return $this->getErrorResponse("Entity not found", 404);
-        }
-        if ($count == 2) {
-            return $this->getErrorResponse("Enter Group Ids", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }

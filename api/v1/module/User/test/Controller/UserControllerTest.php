@@ -965,42 +965,6 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals(6,count($content['data']['whiteListedApps']));
     }
 
-    public function testGetUserProjectWithdata()
-    {
-        $this->initAuthToken($this->adminUser);
-        $data = ['data' => array([
-            "id" => "1",
-            "name"=> "Test Project 1",
-            "org_id"=>"1",
-            "description"=> "Description Test Data",
-            "created_by"=> "1",
-            "modified_by"=> "1",
-            "date_created"=> "2018-11-11 07:25:06",
-            "date_modified"=> "2018-12-11 07:25:06",
-            "isdeleted"=> "0",
-            "user_id"=> "1",
-            "project_id"=>"1"
-        ],[
-            "id"=> "3",
-            "name"=> "Test Project 2",
-            "org_id"=>"1",
-            "description"=> "Description Test Data",
-            "created_by"=> "1",
-            "modified_by"=> "1",
-            "date_created"=> "2018-11-11 07:25:06",
-            "date_modified"=> "2018-12-11 07:25:06",
-            "isdeleted"=> "0",
-            "user_id"=> "1",
-            "project_id"=> "2"
-        ])];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user/1/project', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts('getuserproject');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']),2);
-    }
     public function testGetUserProjectWithoutdata()
     {
         $this->initAuthToken($this->adminUser);

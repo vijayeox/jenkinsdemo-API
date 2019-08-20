@@ -40,6 +40,7 @@ class GroupController extends AbstractApiController
     * @return array $data
     * @return array Returns a JSON Response with Status Code and Created Group.
     */
+    // DEPRECATED
     public function getGroupsforUserAction()
     {
         $params = $this->params()->fromRoute();
@@ -109,8 +110,11 @@ class GroupController extends AbstractApiController
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        catch (AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -127,20 +131,13 @@ class GroupController extends AbstractApiController
         $id = $this->params()->fromRoute();
         try{
            $response = $this->groupService->deleteGroup($id);
-           if($response == 0) {
-                 return $this->getErrorResponse("Group not found", 404, ['id' => $id]);
-            }
         } catch (AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(), 403);
         }
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
         }
-        catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),404);
-        }
-
-        return $this->getSuccessResponse();
+         return $this->getSuccessResponse();
     }
 
 
@@ -161,14 +158,13 @@ class GroupController extends AbstractApiController
     */
     public function get($id)
     {
-        $data = $this->params()->fromQuery();
+        $params = $this->params()->fromRoute();
         try {
-            $result = $this->groupService->getGroupByUuid($id, $data);
-            $orgId = $this->orgService->getOrganization($result['org_id']);
-            if ($result == 0) {
-                return $this->getErrorResponse("Group not found", 404, ['id' => $id]);
+            $result = $this->groupService->getGroupByUuid($id, $params);
+            if(count($result) == 0){
+                return $this->getSuccessResponseWithData($result);
             }
-
+            $orgId = $this->orgService->getOrganization($result['org_id']);
             if ($result) {
                 $baseUrl =$this->getBaseUrl();
                 $logo = $result['logo'];

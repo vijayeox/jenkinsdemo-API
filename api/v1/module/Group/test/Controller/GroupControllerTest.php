@@ -52,7 +52,7 @@ class GroupControllerTest extends ControllerTest {
         return $resultSet->toArray();
     }
 
-    public function testgetGroupsforUser() {
+    public function testgetGroups() {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'GET');
         $this->assertResponseStatusCode(200);
@@ -63,18 +63,51 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
     }
 
-
-    public function testgetGroupsforUserNotFound() {
+    public function testgetGroupsWithOrgId() {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/group/10000', 'GET');
-        $this->assertResponseStatusCode(404);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'GET');
+        $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('groups');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
     }
 
-    public function testgetGroupsforUserByManager() {
+    public function testgetGroupsWithInValidOrgId() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('groups');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
+    }
+
+    public function testgetGroupsNotFound() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/group/10000', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('groups');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'],array());
+    }
+
+    public function testgetGroupsListWithOrgID() {
+        $this->initAuthToken($this->managerUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/group', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('groups');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testgetGroupsforByManager() {
         $this->initAuthToken($this->managerUser);
         $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/group', 'GET');
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -86,7 +119,7 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($content['message'],'You do not have permissions to get the groups list');
     }
 
-    public function testgetGroupsforUserForManager() {
+    public function testgetGroupsForManager() {
         $this->initAuthToken($this->managerUser);
         $this->dispatch('/group', 'GET');
         $this->assertResponseStatusCode(200);
@@ -100,7 +133,7 @@ class GroupControllerTest extends ControllerTest {
     }
 
   
-    public function testgetGroupsforUserForEmployee() {
+    public function testgetGroupsForEmployee() {
         $this->initAuthToken($this->employeeUser);
         $this->dispatch('/group', 'GET');
         $this->assertResponseStatusCode(401);
@@ -112,6 +145,8 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
+
+
 
 // Testing to see if the Create Group function is working as intended if all the value passed are correct.
     public function testCreate() {
@@ -504,7 +539,7 @@ class GroupControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'],'Entity not found'); 
+        $this->assertEquals($content['message'],'Group does not belong to the organization'); 
     }
 
     public function testsaveuserWithInvalidGroupId() {
@@ -520,7 +555,7 @@ class GroupControllerTest extends ControllerTest {
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'],'Group does not belong to the organization'); 
+        $this->assertEquals($content['message'],'Entity not found'); 
     }
     public function testsaveuserByManagerWithDifferentOrgId() {
         $this->initAuthToken($this->managerUser);
@@ -686,8 +721,7 @@ class GroupControllerTest extends ControllerTest {
         $this->setDefaultAsserts('groupsList');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['name'],'Test Group 3');
-        $this->assertEquals($content['data'][1]['name'],'Test Group 5');
+        $this->assertEquals($content['data'][0]['name'],'Test Group 5');
     }
 
 
@@ -700,7 +734,7 @@ class GroupControllerTest extends ControllerTest {
         $this->setDefaultAsserts('groupsList');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['total'],4);
+        $this->assertEquals($content['total'],3);
     }
     
     public function testGetExcludedGroupsListWithOrgId(){

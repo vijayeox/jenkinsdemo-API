@@ -545,6 +545,7 @@ class UserController extends AbstractApiController
                    }
     * </code>
     */
+    // DEPRECATED
     public function getUserProjectAction()
     {
         $params = $this->params()->fromRoute();

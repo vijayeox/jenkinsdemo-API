@@ -19,6 +19,7 @@ return [
                         'controller' => Controller\AnnouncementController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
+                            'get'=> 'MANAGE_ANNOUNCEMENT_READ',
                             'put'=> 'MANAGE_ANNOUNCEMENT_WRITE',
                             'post'=> 'MANAGE_ANNOUNCEMENT_WRITE',
                             'delete'=> 'MANAGE_ANNOUNCEMENT_WRITE',
@@ -29,7 +30,7 @@ return [
             'announcementList' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/announcement/a',
+                    'route' => '/[organization/:orgId/]announcement/a',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'GET',

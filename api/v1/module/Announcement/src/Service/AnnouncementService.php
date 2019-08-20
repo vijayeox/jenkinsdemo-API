@@ -334,14 +334,20 @@ class AnnouncementService extends AbstractService
     */
     public function getAnnouncements()
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_announcement')
-                ->columns(array("uuid", "name", "org_id", "status", "description", "start_date", "end_date", "media_type", "media"))
-                ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
-                ->join('ox_user_group', 'ox_announcement_group_mapper.group_id = ox_user_group.group_id',array('group_id','avatar_id'),'left')
-                ->where(array('ox_user_group.avatar_id' => AuthContext::get(AuthConstants::USER_ID)));
-        return $this->executeQuery($select)->toArray();
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the announcement list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID); 
+        }
+
+        $select = "SELECT a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id left join ox_user_group as oug on ogm.group_id = oug.group_id where oug.avatar_id = ".AuthContext::get(AuthConstants::USER_ID)." and a.org_id =".$orgId." and a.end_date >= curdate() union SELECT a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id where ogm.group_id is NULL and a.org_id =".$orgId." and a.end_date >= curdate()";
+
+        return $this->executeQuerywithParams($select)->toArray();
     }
     /**
     * GET Announcement
@@ -360,24 +366,45 @@ class AnnouncementService extends AbstractService
     * }
     * </code>
     */
-    public function getAnnouncement($id)
+    public function getAnnouncement($id,$params)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_announcement')
-        ->columns(array("uuid", "name", "org_id", "status", "description", "start_date", "end_date", "media_type", "media"))
-        ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'),'left')
-        ->join('ox_user_group', 'ox_announcement_group_mapper.group_id = ox_user_group.group_id',array('group_id','avatar_id'),'left')
-        ->where(array('ox_announcement.uuid' => $id));
-        $response = $this->executeQuery($select)->toArray();
-        if(count($response)==0){
-            return 0;
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the announcement list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);  
+            }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID); 
+        }
+
+       
+
+        $select = "SELECT DISTINCT a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id left join ox_user_group as oug on ogm.group_id=oug.group_id where a.org_id = ".$orgId." AND a.uuid = '".$id."' AND a.end_date >= curdate()";
+
+        $response = $this->executeQuerywithParams($select)->toArray();
+        if(count($response) == 0){
+            return array();
         }
         return $response[0];
     }
 
-    public function getAnnouncementsList($filterParams)
+
+    public function getAnnouncementsList($filterParams,$params)
     {
+
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the announcement list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID); 
+        }
+
         $where = "";
         $pageSize = 20;
         $offset = 0;
@@ -401,7 +428,7 @@ class AnnouncementService extends AbstractService
                 $offset = $filterArray[0]['skip'];            
             }
 
-            $where .= strlen($where) > 0 ? " AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID);
+            $where .= strlen($where) > 0 ? " AND org_id =".$orgId." AND end_date >= curdate()" : " WHERE org_id =".$orgId." AND end_date >= curdate()";
             
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
@@ -479,7 +506,7 @@ class AnnouncementService extends AbstractService
 
         $obj = $this->table->getByUuid($params['announcementId'],array());
         if (is_null($obj)) {
-            throw new ServiceException("Announcement does not belong to the organization","announcement.not.found");
+            throw new ServiceException("Announcement not found","announcement.not.found");
         }
 
         $org = $this->organizationService->getOrganization($obj->org_id);
@@ -487,7 +514,7 @@ class AnnouncementService extends AbstractService
        
         if(isset($params['orgId'])){
             if($params['orgId'] != $obj->org_id){
-               throw new ServiceException("Entity not found","Announcemnet.not.found");  
+                throw new ServiceException("Announcement does not belong to the organization","announcement.not.found");  
             }
         }
 
