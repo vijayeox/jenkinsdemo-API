@@ -128,9 +128,9 @@ class GroupController extends AbstractApiController
     * @return array success|failure response
     */
     public function delete($id) {
-        $id = $this->params()->fromRoute();
+        $params = $this->params()->fromRoute();
         try{
-           $response = $this->groupService->deleteGroup($id);
+           $response = $this->groupService->deleteGroup($params);
         } catch (AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(), 403);
         }
@@ -246,17 +246,8 @@ class GroupController extends AbstractApiController
         } catch (AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(), 403);
         }
-        catch(AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(),403);
-        }
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
-        }
-        if($count == 0) {
-            return $this->getErrorResponse("Entity not found", 404);
-        }
-        if ($count == 2) {
-            return $this->getErrorResponse("Enter User Ids", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }

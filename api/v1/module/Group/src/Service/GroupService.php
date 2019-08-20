@@ -378,17 +378,28 @@ class GroupService extends AbstractService
         return $count;
     }
 
-    public function deleteGroup($id) {
-        if(isset($id['orgId'])){
+    public function deleteGroup($params) {
+        if(isset($params['orgId'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($id['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to delete the group");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
+
+        
+
         try{
-            $obj = $this->table->getByUuid($id['groupId'],array());
+            $obj = $this->table->getByUuid($params['groupId'],array());
             if (is_null($obj)) {
                 throw new ServiceException("Entity not found","group.not.found");
+            }
+
+            if($orgId != $obj->org_id){
+                throw new ServiceException("Group does not belong to the organization","group.not.found");
             }
 
             $select = "SELECT count(id) from ox_group where parent_id = ".$obj->id;

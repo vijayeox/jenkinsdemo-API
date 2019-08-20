@@ -441,10 +441,17 @@ class AnnouncementService extends AbstractService
     }
 
 
-    public function getAnnouncementGroupList($id,$filterParams = null) {
+    public function getAnnouncementGroupList($params,$filterParams = null) {
 
-        if(!isset($id)) {
-            return 0;
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the group list of announcement");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
 
         $pageSize = 20;
@@ -475,7 +482,7 @@ class AnnouncementService extends AbstractService
 
 
 
-            $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= now() AND ox_group.status = 1" : " WHERE ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= curdate() AND ox_group.status = 1";
+            $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '".$params['announcementId']."' AND ox_announcement.end_date >= now() AND ox_group.status = 1 AND ox_announcement.org_id = ".$orgId : " WHERE ox_announcement.uuid = '".$params['announcementId']."' AND ox_announcement.end_date >= curdate() AND ox_group.status = 1 AND ox_announcement.org_id = ".$orgId;
 
             
             $sort = " ORDER BY ".$sort;

@@ -433,10 +433,6 @@ class GroupControllerTest extends ControllerTest {
 
     public function testDelete() {
         $this->initAuthToken($this->adminUser);
-        if(enableActiveMQ == 0){
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black')),'GROUP_DELETED')->once()->andReturn();
-        }
         $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
@@ -444,6 +440,18 @@ class GroupControllerTest extends ControllerTest {
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'],'Please remove the child groups before deleting the parent group');
+    }
+
+
+    public function testDeleteWithInvalidOrg() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/group/153f3e9e-eb07-4ca4-be78-34f715bd50sd', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('groups');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'Group does not belong to the organization');
     }
 
 

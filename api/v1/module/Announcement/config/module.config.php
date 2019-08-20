@@ -52,7 +52,7 @@ return [
             'announcementGroups' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/announcement/:announcementId/groups',
+                    'route' => '/[organization/:orgId/]announcement/:announcementId/groups',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'GET',

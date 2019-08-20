@@ -224,19 +224,15 @@ class AnnouncementController extends AbstractApiController
 
     public function announcementGroupsAction()
     {
-        $group = $this->params()->fromRoute();
-        $id=$group[$this->getIdentifierName()];
+        $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery(); // empty method call
         try {
-            $count = $this->announcementService->getAnnouncementGroupList($group[$this->getIdentifierName()], $filterParams);
+            $count = $this->announcementService->getAnnouncementGroupList($params, $filterParams);
         } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(), 403);
-        }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
         return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
     }
