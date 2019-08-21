@@ -28,12 +28,14 @@ ox_activity:
     id: 1
     app_id: 99
     workflow_id: 1
+    task_id: 1
     name: "Task"
   -
     id: 2
     app_id: 99
     workflow_id: 1
     name: "Test Form 2"
+    task_id: 2
 ox_activity_form:
   - 
     id: 1
@@ -95,6 +97,7 @@ ox_workflow_instance:
   -
     id: 1
     workflow_id: 1
+    process_instance_id: 1
     app_id: 99
     org_id: 1
     status: "In Progress"

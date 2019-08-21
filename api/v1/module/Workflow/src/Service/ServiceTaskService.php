@@ -46,15 +46,16 @@ class ServiceTaskService extends AbstractService
         if (isset($data['command'])) {
             switch ($data['command']) {
                 case 'mail':
-                    $this->sendMail($data);
+                    return $this->sendMail($data);
                     break;
                 case 'pdf':
-                    $this->generatePDF($data);
+                    return $this->generatePDF($data);
                     break;
                 default:
                     break;
             };
         }
+        return 1;
     }
     protected function sendMail($params)
     {

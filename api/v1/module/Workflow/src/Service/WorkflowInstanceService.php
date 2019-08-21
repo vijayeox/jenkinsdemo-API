@@ -168,13 +168,22 @@ class WorkflowInstanceService extends AbstractService
             $params['activity_id'] = $params['activityId'];
             $activityId = $params['activityId'];
         }
+        if(!isset($params['orgid'])){
+            $params['orgid'] = AuthContext::get(AuthConstants::ORG_UUID);
+        }
+        if(!isset($params['app_id'])){
+            $params['app_id'] = $workflow['app_id'];
+        }
+        if(!isset($params['created_by'])){
+            $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        }
         if (isset($id)) {
             return $this->fileService->updateFile($params, $id);
         } else {
             if ($workFlowFlag) {
                 if ($workflow['form_id']==$params['form_id'] || $params['activityId']==null) {
                     $workflowInstanceId = $this->processEngine->startProcess($workflow['process_id'], $params);
-                    $workflowInstance = $this->setupWorkflowInstance($workflowId, $workflowInstanceId['id']);
+                    $workflowInstance = $this->setupWorkflowInstance($workflowId, $workflowInstanceId['id'],$params);
                 } else {
                     $workflowInstanceId = $this->activityEngine->submitTaskForm($activityId, $params);
                 }
@@ -186,13 +195,29 @@ class WorkflowInstanceService extends AbstractService
         return 0;
     }
     
-    private function setupWorkflowInstance($workflowId, $processInstanceId)
+    public function setupWorkflowInstance($workflowId, $processInstanceId,$params =null)
     {
         $form = new WorkflowInstance();
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        if (isset($params['orgid'])) {
+            if ($org = $this->getIdFromUuid('ox_organization', $params['orgid'])) {
+                $orgId = $org;
+            } else {
+                $orgId = $params['orgid'];
+            }
+        } else {
+            $orgId = AuthContext::get(AuthConstants::ORG_UUID);
+        }
+        if (isset($params['created_by'])) {
+            if ($userId = $this->getIdFromUuid('ox_user', $params['created_by'])) {
+                $createdBy = $userId;
+            } else {
+                $createdBy = $params['created_by'];
+            }
+        } else {
+            $createdBy = AuthContext::get(AuthConstants::USER_ID);
+        }
         $dateCreated = date('Y-m-d H:i:s');
-        $createdBy = AuthContext::get(AuthConstants::USER_ID);
-        $query = "Select app_id from ox_workflow where id = $workflowId";
+        $query = "select app_id from ox_workflow where id = $workflowId";
         $resultSet = $this->executeQuerywithParams($query)->toArray();
         $data = array('workflow_id'=> $workflowId,'app_id'=> $resultSet[0]['app_id'],'org_id'=> $orgId,'process_instance_id'=>$processInstanceId,'status'=>"In Progress",'date_created'=>$dateCreated,'created_by'=>$createdBy);
         $form->exchangeArray($data);
@@ -206,15 +231,11 @@ class WorkflowInstanceService extends AbstractService
             }
             $this->commit();
             $id = $this->table->getLastInsertValue();
-            // 		$orgId = AuthContext::get(AuthConstants::ORG_ID);
-    // // TODO OX_WORKFLOW_INSTANCE UPDATE STATUS
-    // 		$insert = "INSERT INTO `ox_workflow_instance` (`workflow_id`,`app_id`,`org_id`,`process_instance_id`,`status`)".
-    // 		"(SELECT ".$workflowId.",app_id,".$orgId.",'".$processInstanceId."','In progress' from `ox_workflow` WHERE id = ".$workflowId.")";
-    // 		$resultSet = $this->executeQuerywithParams($insert);
+            $data['id'] = $id;
         } catch (Exception $e) {
             $this->rollback();
             return 0;
         }
-        return $id;
+        return $data;
     }
 }

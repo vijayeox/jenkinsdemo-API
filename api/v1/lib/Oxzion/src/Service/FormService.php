@@ -157,6 +157,8 @@ class FormService extends AbstractService
         $select = $sql->select();
         $select->from('ox_form')
         ->columns(array("*"))
+        ->join('ox_activity_form', 'ox_activity_form.form_id = ox_form.id', array(), 'left')
+        ->join('ox_activity', 'ox_activity.id = ox_activity_form.form_id', array('activity_id'=>'id'), 'left')
         ->join('ox_workflow', 'ox_workflow.form_id = ox_form.id', array('workflow_id'=>'id'), 'inner')
         ->where(array('ox_form.id' => $formId));
         $response = $this->executeQuery($select)->toArray();
@@ -168,9 +170,10 @@ class FormService extends AbstractService
     private function generateFields($fieldsList, $appId, $formId)
     {
         try {
-            $deleteFields = $this->fieldService->executeQuerywithParams($formId);
-            $delete = "DELETE from ox_form_field where form_id=".$formId.";";
-            $result = $this->executeQuerywithParams($delete);
+            $deleteFields = "DELETE ox_field from ox_field INNER JOIN ox_form_field ON ox_form_field.field_id=ox_field.id where ox_form_field.form_id=".$formId.";";
+            $deleteFields = $this->executeQuerywithParams($deleteFields);
+            $deleteFormFields = "DELETE from ox_form_field where form_id=".$formId.";";
+            $result = $this->executeQuerywithParams($deleteFormFields);
         } catch (Exception $e) {
             return 0;
         }

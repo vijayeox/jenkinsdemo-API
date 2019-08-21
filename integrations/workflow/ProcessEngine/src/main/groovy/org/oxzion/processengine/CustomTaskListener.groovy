@@ -30,22 +30,23 @@ class CustomTaskListener implements TaskListener {
 
   void notify(DelegateTask delegateTask) {
     String assignee = delegateTask.getAssignee()
-    LOGGER.info("Hello " + assignee + "! Please start to work on your task " + delegateTask.getDescription())
     Map taskDetails = [:]
     taskDetails.name = delegateTask.name
     taskDetails.assignee = delegateTask.assignee
+    taskDetails.taskId = delegateTask.getTaskDefinitionKey()
     String pattern = "dd-MM-yyyy"
     SimpleDateFormat simpleCreateDateFormat = new SimpleDateFormat(pattern)
     taskDetails.createTime = simpleCreateDateFormat.format(delegateTask.createTime)
     taskDetails.dueDate = delegateTask.dueDate ? simpleCreateDateFormat.format(delegateTask.dueDate) : delegateTask.dueDate
     def execution = delegateTask.execution
+    def processInstance = execution.getProcessInstance()
+    taskDetails.processVariables = processInstance.getVariables()
     taskDetails.activityInstanceId = execution.activityInstanceId
     taskDetails.processInstanceId = execution.processInstanceId
     taskDetails.variables = execution.getVariables()
     String json = new JsonBuilder(taskDetails ).toPrettyString()
     println json
     //TODO http callback using the base url above
-
     def connection = getConnection()
     String response
     connection.with {

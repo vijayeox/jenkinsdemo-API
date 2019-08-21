@@ -51,6 +51,8 @@ class Module implements ConfigProviderInterface
                         $container->get('config'),
                         $dbAdapter,
                         $container->get(Model\ActivityInstanceTable::class),
+                        $container->get(Service\WorkflowInstanceService::class),
+                        $container->get(\Oxzion\Workflow\WorkflowFactory::class),
                         $container->get('ActivityInstanceLogger')
                     );
                 },

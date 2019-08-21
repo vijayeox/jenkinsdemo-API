@@ -88,7 +88,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         if (enableCamunda==0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Workflow\Service\WorkflowInstanceService::class);
-            $mockProcessEngine->expects('startProcess')->with('[main]', array('name'=>'workflow3','app_id'=>1,'workflowId'=>1,'form_id'=>1,'field2'=>1))->once()->andReturn(array('id'=>1));
+            $mockProcessEngine->expects('startProcess')->with('[main]', array('name'=>'workflow3','app_id'=>1,'workflowId'=>1,'form_id'=>1,'field2'=>1,'orgid'=>'53012471-2863-4949-afb1-e69b0891c98a','created_by'=>1))->once()->andReturn(array('id'=>1));
             $workflowService->setProcessEngine($mockProcessEngine);
             $this->processId = 1;
         }

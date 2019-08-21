@@ -39,7 +39,6 @@ class ActivityService extends AbstractService
             $data['id'] = $id;
             $this->commit();
         } catch (Exception $e) {
-            print_r($e->getMessage());
             switch (get_class($e)) {
              case "Oxzion\ValidationException":
                 $this->rollback();
