@@ -25,13 +25,14 @@ class FormService extends AbstractService
         $this->fieldService = $fieldService;
     }
 
-    public function createForm($appId, &$data)
+    public function createForm($appUuid, &$data)
     {
         $form = new Form();
         $template = $this->formEngine->parseForm($data['template']);
         if (!is_array($template)) {
             return 0;
         }
+        $appId = $this->getIdFromUuid('ox_app', $appUuid);
         $template['form']['app_id'] = $appId;
         $data['name'] = $template['form']['name'];
         $template['form']['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -66,8 +67,9 @@ class FormService extends AbstractService
         }
         return $count;
     }
-    public function updateForm($appId, $id, &$data)
+    public function updateForm($appUuid, $id, &$data)
     {
+        $appId = $this->getIdFromUuid('ox_app', $appUuid);
         $obj = $this->table->get($id, array());
         if (is_null($obj)) {
             return 0;
@@ -125,8 +127,9 @@ class FormService extends AbstractService
         return $count;
     }
 
-    public function getForms($appId=null, $filterArray=array())
+    public function getForms($appUuid=null, $filterArray=array())
     {
+        $appId = $this->getIdFromUuid('ox_app', $appUuid);
         if (isset($appId)) {
             $filterArray['app_id'] = $appId;
         }

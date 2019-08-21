@@ -42,7 +42,7 @@ class MenuItemController extends AbstractApiController
         $appUuid = $this->params()->fromRoute()['appId'];
         try {
             $count = $this->menuItemService->saveMenuItem($appUuid, $data);
-        } catch (ValidationException $e) {print "create failed";
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
