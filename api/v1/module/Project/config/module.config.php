@@ -44,7 +44,7 @@ return [
             'projectuser' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project/:projectUuid/users',
+                    'route'    => '/[organization/:orgId/]project/:projectUuid/users',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'method' => 'GET',
@@ -58,7 +58,7 @@ return [
             'myproject' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project/myproject',
+                    'route'    => '/[organization/:orgId/]project/myproject',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'method' => 'GET',

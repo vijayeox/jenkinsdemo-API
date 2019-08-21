@@ -564,12 +564,14 @@ class UserService extends AbstractService
     public function getUsers($filterParams = null, $baseUrl = '',$params = null)
     {
           if(isset($params['orgId'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_READ') && 
-                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
-                throw new AccessDeniedException("You do not have permissions get the groups list");
-            }else{
-                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
-            }
+                if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_READ') && 
+                     ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                    throw new AccessDeniedException("You do not have permissions get the users list");
+                }else{
+                    $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+                }
+          }else{
+                $orgId = AuthContext::get(AuthConstants::ORG_ID);
           }
 
             $where = "";
@@ -601,12 +603,9 @@ class UserService extends AbstractService
             }
 
     
-            $where .= strlen($where) > 0 ? " AND status = 'Active'" : " WHERE status = 'Active'";
+            $where .= strlen($where) > 0 ? " AND status = 'Active' AND orgid = ".$orgId : " WHERE status = 'Active' AND orgid = ".$orgId;
 
-            if(isset($orgId)){
-              $where .= " AND orgid = ".$orgId;
-            }
-
+            
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
 

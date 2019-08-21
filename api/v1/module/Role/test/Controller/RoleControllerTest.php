@@ -45,6 +45,14 @@ class RoleControllerTest extends ControllerTest
         return $resultSet->toArray();
     }
 
+    private function executeUpdate($query)
+    {
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        return $result;
+    }
+
 
     public function testGetList(){
         $this->initAuthToken($this->adminUser);
@@ -61,6 +69,55 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['data'][2]['id'], 17);
         $this->assertEquals($content['data'][2]['name'], 'EMPLOYEE-2');
         $this->assertEquals($content['total'],5);
+    }
+
+    public function testGetListWithOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(5, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 4);
+        $this->assertEquals($content['data'][0]['name'], 'ADMIN');
+        $this->assertEquals($content['data'][1]['id'], 6);
+        $this->assertEquals($content['data'][1]['name'], 'EMPLOYEE');
+        $this->assertEquals($content['data'][2]['id'], 17);
+        $this->assertEquals($content['data'][2]['name'], 'EMPLOYEE-2');
+        $this->assertEquals($content['total'],5);
+    }
+
+
+     public function testGetListWithDifferentOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(4, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 7);
+        $this->assertEquals($content['data'][0]['name'], 'ADMIN');
+        $this->assertEquals($content['data'][1]['id'], 15);
+        $this->assertEquals($content['data'][1]['name'], 'ADMIN-3');
+        $this->assertEquals($content['data'][2]['id'], 9);
+        $this->assertEquals($content['data'][2]['name'], 'EMPLOYEE');
+        $this->assertEquals($content['data'][3]['id'], 8);
+        $this->assertEquals($content['data'][3]['name'], 'MANAGER');
+        $this->assertEquals($content['total'],4);
+    }
+
+    public function testGetListMyManagerWithDifferentOrgId(){
+        $this->initAuthToken($this->managerUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role', 'GET');
+        $this->assertResponseStatusCode(401);
+        $this->assertModuleName('Role');
+        $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('RoleController');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'],'You have no Access to this API');
     }
 
     public function testGetListWithQuery(){
@@ -102,9 +159,24 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 5);
     }
 
+    public function testGetListWithQuerySortWithOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(1, count($content['data']));
+        $this->assertEquals($content['data'][0]['id'], 6);
+        $this->assertEquals($content['data'][0]['name'], 'EMPLOYEE');
+        $this->assertEquals($content['total'], 5);
+    }
+
     public function testRolePrivilege(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/role/4/privilege', 'GET');
+         $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and org_id = 1";
+        $result = $this->executeUpdate($update);
+        $this->dispatch('/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45/privilege', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Role');
         $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
@@ -162,22 +234,104 @@ class RoleControllerTest extends ControllerTest
         }
     }
 
-    public function testRolePrivilegeNotFound(){
+
+    public function testRolePrivilegeWithOrgID(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/role/12345/privilege', 'GET');
-        $this->assertResponseStatusCode(404);
+         $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and org_id = 1";
+        $result = $this->executeUpdate($update);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45/privilege', 'GET');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
         $this->assertModuleName('Role');
         $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
         $this->assertControllerClass('RoleController');
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(13, count($content['data']));
+        foreach ($content['data'] as $key => $val) {
+            if($val['privilege_name'] == "MANAGE_ANNOUNCEMENT"){
+                $this->assertEquals($val['permission'], 3);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_CRM"){
+                $this->assertEquals($val['permission'], 1);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 9);
+            }
+            if($val['privilege_name'] == "MANAGE_EMAIL"){
+                $this->assertEquals($val['permission'], 1);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_GROUP"){
+                $this->assertEquals($val['permission'], 3);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_MYAPP"){
+                $this->assertEquals($val['permission'], 3);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 3);
+            }
+            if($val['privilege_name'] == "MANAGE_ORGANIZATION"){
+                $this->assertEquals($val['permission'], 15);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_PROJECT"){
+                $this->assertEquals($val['permission'], 3);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_ROLE"){
+                $this->assertEquals($val['permission'], 3);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+            if($val['privilege_name'] == "MANAGE_USER"){
+                $this->assertEquals($val['permission'], 15);
+                $this->assertEquals($val['org_id'], 1);
+                $this->assertEquals($val['app_id'], 1);
+            }
+        }
+    }
+
+
+    public function testRolePrivilegeWithInvalidOrgID(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45/privilege', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Role');
+        $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('RoleController');
+        $this->assertMatchedRouteName('roleprivilege');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'],array());
+    }
+
+
+    public function testRolePrivilegeNotFound(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/role/12345/privilege', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Role');
+        $this->assertControllerName(RoleController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('RoleController');
+        $this->assertMatchedRouteName('roleprivilege');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'], array());
     }
 
 
     public function testGet(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/role/4', 'GET');
+        $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and org_id = 1";
+        $result = $this->executeUpdate($update);
+        $this->dispatch('/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -186,12 +340,40 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], 'ADMIN');
         $this->assertEquals(26,count($content['data']['privileges']));
     }
+
+
+    public function testGetWithOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $update = "UPDATE ox_role SET uuid = 'a0c8bfdf-bfe6-11e9-b282-68ecc57cde45' where id = 4 and org_id = 1";
+        $result = $this->executeUpdate($update);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id'], 4);
+        $this->assertEquals($content['data']['name'], 'ADMIN');
+        $this->assertEquals(26,count($content['data']['privileges']));
+    }
+
+    public function testGetWithDifferentOrgId(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/role/a0c8bfdf-bfe6-11e9-b282-68ecc57cde45', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'],array());
+    }
+
+
     public function testGetNotFound(){
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/role/64', 'GET');
-        $this->assertResponseStatusCode(404);
+        $this->dispatch('/role/a0c8bfdf-bfe6-11e9-b282-68ec', 'GET');
+        $this->assertResponseStatusCode(200);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'],array());
     }
 
     public function testCreateRole(){

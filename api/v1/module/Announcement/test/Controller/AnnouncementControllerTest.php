@@ -64,12 +64,29 @@ class AnnouncementControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals(count($content['data']), 3);
         $this->assertEquals($content['data'][0]['uuid'], '9068b460-2943-4508-bd4c-2b29238700f3');
         $this->assertEquals($content['data'][0]['name'], 'Announcement 1');
         $this->assertEquals($content['data'][1]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
     }
+
+    public function testGetListWithOrgID()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 3);
+        $this->assertEquals($content['data'][0]['uuid'], '9068b460-2943-4508-bd4c-2b29238700f3');
+        $this->assertEquals($content['data'][0]['name'], 'Announcement 1');
+        $this->assertEquals($content['data'][1]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
+        $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
+        $this->assertEquals($content['data'][2]['name'], 'Announcement 3');
+    }
+
 
     public function testGetListofAll()
     {
@@ -88,6 +105,56 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
     }
 
+    public function testGetListofAllWithOrgId()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/a', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcementList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['uuid'], '9068b460-2943-4508-bd4c-2b29238700f3');
+        $this->assertEquals($content['data'][0]['name'], 'Announcement 1');
+        $this->assertEquals($content['data'][1]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
+        $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
+    }
+
+    public function testGetListofAllByManagerInvalidOrg()
+    {
+        $this->initAuthToken($this->managerUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/a', 'GET');
+        $this->assertResponseStatusCode(403);
+        $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcementList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'You do not have permissions to get the announcement list');
+    }
+
+
+    public function testGetListofAllByManagerValidOrg()
+    {
+        $this->initAuthToken($this->managerUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/a', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcementList');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['uuid'], '9068b460-2943-4508-bd4c-2b29238700f3');
+        $this->assertEquals($content['data'][0]['name'], 'Announcement 1');
+        $this->assertEquals($content['data'][1]['uuid'], 'e66157ee-47de-4ed5-a78e-8a9195033f7a');
+        $this->assertEquals($content['data'][1]['name'], 'Announcement 2');
+    }
+
+
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
@@ -99,13 +166,39 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['data']['uuid'], '9068b460-2943-4508-bd4c-2b29238700f3');
         $this->assertEquals($content['data']['name'], 'Announcement 1');
     }
+
+    
+    public function testGetListOrgID()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['uuid'], '9068b460-2943-4508-bd4c-2b29238700f3');
+        $this->assertEquals($content['data']['name'], 'Announcement 1');
+    }
+
+    public function testGetListWithInvalidOrgID()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/9068b460-2943-4508-bd4c-2b29238700f3', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'], array());
+    }
+
+
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/announcement/9068b460-2943-4508-bd4c', 'GET');
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['data'], array());
     }
     public function testCreate()
     {
@@ -407,6 +500,65 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 1);
     }
 
+
+    public function testGetListOfAnnouncementGroupsWithOrgId() {
+        $this->initAuthToken($this->adminUser);
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $query = "UPDATE `ox_announcement` SET `start_date` = now() ,`end_date` = '".date('Y-m-d',strtotime("+0 day"))."' where uuid ='9068b460-2943-4508-bd4c-2b29238700f3'";
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-2943-4508-bd4c-2b29238700f3/groups','GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcementgroups');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals(count($content['data']), 1);
+        $this->assertEquals($content['data'][0]['uuid'], '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de');
+        $this->assertEquals($content['data'][0]['name'], 'Test Group');
+        $this->assertEquals($content['total'], 1);
+    }
+
+
+    public function testGetListOfAnnouncementGroupsWithInvalidAnnouncementID() {
+        $this->initAuthToken($this->adminUser);
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $query = "UPDATE `ox_announcement` SET `start_date` = now() ,`end_date` = '".date('Y-m-d',strtotime("+0 day"))."' where uuid ='9068b460-2943-4508-bd4c-2b29238700f3'";
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+
+        $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/announcement/9068b460-29d4c-2b29238700f3/groups','GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcementgroups');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals($content['data'], array());
+    }
+
+    public function testGetListOfAnnouncementGroupsWithInvalidOrgId() {
+        $this->initAuthToken($this->adminUser);
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $query = "UPDATE `ox_announcement` SET `start_date` = now() ,`end_date` = '".date('Y-m-d',strtotime("+0 day"))."' where uuid ='9068b460-2943-4508-bd4c-2b29238700f3'";
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+
+        $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/announcement/9068b460-2943-4508-bd4c-2b29238700f3/groups','GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Announcement');
+        $this->assertControllerName(AnnouncementController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AnnouncementController');
+        $this->assertMatchedRouteName('announcementgroups');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success'); 
+        $this->assertEquals($content['data'], array());
+    }
+
     public function testsaveGroup()
     {
          $data = ['groups' => array(['uuid' => '2db1c5a3-8a82-4d5b-b60a-c648cf1e27de'],['uuid' => '153f3e9e-eb07-4ca4-be78-34f715bd50db'])];
@@ -479,7 +631,7 @@ class AnnouncementControllerTest extends ControllerTest
 
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Entity not found'); 
+        $this->assertEquals($content['message'], 'Announcement does not belong to the organization'); 
     }
 
     public function testsaveGroupWithInvalidAnnouncementId(){
@@ -496,7 +648,7 @@ class AnnouncementControllerTest extends ControllerTest
 
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Announcement does not belong to the organization'); 
+        $this->assertEquals($content['message'], 'Announcement not found'); 
     }
 
     public function testsaveGroupOfDifferentOrg(){
