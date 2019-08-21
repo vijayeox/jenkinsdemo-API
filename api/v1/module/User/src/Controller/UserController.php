@@ -93,9 +93,6 @@ class UserController extends AbstractApiController
         } catch (AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(), 403);
         }
-        catch(AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(),403);
-        }
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
         }
@@ -156,7 +153,7 @@ class UserController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         $id = $params['userId'];
-        return $this->getUserInfo($id, $params);
+        return $this->getUserInfo($id,$params);
     }
 
 
@@ -164,7 +161,7 @@ class UserController extends AbstractApiController
     {
         $data = $this->extractPostData();
         $id =AuthContext::get(AuthConstants::USER_UUID);
-        return $this->update($id, $data);
+        return $this->update($id,$data);
     }
 
     /**
@@ -178,7 +175,7 @@ class UserController extends AbstractApiController
     {
         $filterParams = $this->params()->fromQuery(); // empty method call
         $result = $this->userService->getUsers($filterParams, $this->getBaseUrl());
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
 
     /**
@@ -191,10 +188,12 @@ class UserController extends AbstractApiController
      */
     public function delete($id)
     {
-        $id = $this->params()->fromRoute();
-        $response = $this->userService->deleteUser($id);
-        if ($response == 0) {
-            return $this->getErrorResponse("User not found", 404, ['id' => $id]);
+        try{
+            $id = $this->params()->fromRoute();
+            $response = $this->userService->deleteUser($id);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponse();
     }
@@ -361,17 +360,20 @@ class UserController extends AbstractApiController
             $userInfo = array();
             $type = (isset($params['type'])) ? ($params['type']) : 'm';
             $options = explode('+', $type);
-            if (in_array('a', $options)) {
+            if(in_array('a', $options))
+            {
                 $userInfo = $this->userService->getUser($id);
                 $pos = array_search('m', $options);
-                if ($pos) {
+                if($pos){
                     unset($options[$pos]);
                 }
-            } else {
+            }
+            else
+            {
                 $userInfo = $this->userService->getUserWithMinimumDetails($id);
             }
             foreach ($options as $key => $value) {
-                switch ($value) {
+                switch($value) {
                     case "p":
                     $userInfo['privileges'] = $this->userService->getPrivileges($id);
                     break;
@@ -379,7 +381,7 @@ class UserController extends AbstractApiController
                     $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId($id);
                     break;
                     case "ewp":
-                    $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId($id, true);
+                    $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId($id,true);
                     break;
                     case "o":
                     $userInfo['organization'] = $this->userService->getOrganizationByUserId($id);
@@ -476,8 +478,8 @@ class UserController extends AbstractApiController
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }
-        if ($response == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($response, 200);
     }
@@ -508,7 +510,7 @@ class UserController extends AbstractApiController
         $now = Date("Y-m-d H:i:s");
         if ($date < $now) {
             return $this->getErrorResponse("The password reset code has expired, please try again", 400);
-        } else if ($resetCode !== $userDetail['password_reset_code']) {
+        } elseif ($resetCode !== $userDetail['password_reset_code']) {
             return $this->getErrorResponse("You have entered an incorrect code", 400);
         } else if (($resetCode == $userDetail['password_reset_code']) && ($newPassword == $confirmPassword)) {
             $formData = array('id' => $userId, 'password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null, 'password_reset_code' => null, 'password_reset_expiry_date' => null);
@@ -540,11 +542,18 @@ class UserController extends AbstractApiController
                    }
     * </code>
     */
+    // DEPRECATED
     public function getUserProjectAction()
     {
         $params = $this->params()->fromRoute();
         $id=$params['userId'];
         $result = $this->projectService->getProjectsOfUserById($id);
         return $this->getSuccessResponseWithData($result);
+    }
+
+    public function getUserDetailListAction(){
+        $params = $this->params()->fromRoute();
+        $result = $this->userService->userProfile($params);
+        return $this->getSuccessResponseWithData($result,200);
     }
 }

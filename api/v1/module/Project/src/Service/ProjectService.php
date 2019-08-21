@@ -40,13 +40,17 @@ class ProjectService extends AbstractService
 
 
 
-    public function getProjectList($filterParams = null)
+    public function getProjectList($filterParams = null,$params = null)
     {
-        if (isset($filterParams['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($filterParams['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to get the project list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
 
         $pageSize = 20;
@@ -57,22 +61,22 @@ class ProjectService extends AbstractService
         $cntQuery ="SELECT count(p.id) as total FROM `ox_project` as p ";
 
         if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
-            $filterArray = json_decode($filterParams['filter'], true);
-            if (isset($filterArray[0]['filter'])) {
-                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                $filterList = $filterArray[0]['filter']['filters'];
-                $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic, self::$projectFields);
-            }
-            if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
-                $sort = $filterArray[0]['sort'];
-                $sort = FilterUtils::sortArray($sort);
-            }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+                $filterArray = json_decode($filterParams['filter'], true);
+                if (isset($filterArray[0]['filter'])) {
+                    $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                    $filterList = $filterArray[0]['filter']['filters'];
+                    $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic, self::$projectFields);
+                }
+                if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];
         }
 
 
-        $where .= strlen($where) > 0 ? " AND p.isdeleted!=1" : "WHERE p.isdeleted!=1";
+        $where .= strlen($where) > 0 ? " AND p.isdeleted!=1 AND org_id =".$orgId : "WHERE p.isdeleted!=1 AND org_id = ".$orgId;
 
         $sort = " ORDER BY p.".$sort;
         $limit = " LIMIT ".$pageSize." offset ".$offset;
@@ -99,23 +103,28 @@ class ProjectService extends AbstractService
     *   } </code>
     * @return array Returns a JSON Response with Status Code and Created Project.
     */
-    public function getProjectByUuid($id)
+    public function getProjectByUuid($id,$params)
     {
-        if (isset($data['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
-                throw new AccessDeniedException("You do not have permissions to get the project");
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the project list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
+
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_project')
             ->columns(array("*"))
-            ->where(array('ox_project.uuid' => $id, 'isdeleted' => 0));
+            ->where(array('ox_project.uuid' => $id, 'ox_project.org_id' => $orgId,'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
 
         if (count($response) == 0) {
-            return 0;
+            return array();
         }
 
         return $response[0];
@@ -148,7 +157,8 @@ class ProjectService extends AbstractService
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : NULL;
                     if($data['reactivate'] == 1){
                         $data['isdeleted'] = 0;
-                        $count = $this->updateProject($result[0]['uuid'],$data,$params['orgId']);
+                        $orgId = $this->getUuidFromId('ox_organization',$data['org_id']);
+                        $count = $this->updateProject($result[0]['uuid'],$data,$orgId);
                         return;
                     }else{
                         throw new ServiceException("Project already exists would you like to reactivate?","project.already.exists");
@@ -208,8 +218,15 @@ class ProjectService extends AbstractService
 
         $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
-            throw new ServiceException("Updating non-existent Group","non.existent.group");
+            throw new ServiceException("Updating non-existent Project","non.existent.project");
         }
+
+        if(isset($orgId)){
+            if($data['org_id'] != $obj->org_id){
+                throw new ServiceException("Project does not belong to the organization","project.not.found");                
+            }
+        }
+
         $form = new Project();
         if (isset($data['manager_id'])) {
             $data['manager_id']=$this->getIdFromUuid('ox_user', $data['manager_id']);
@@ -241,20 +258,31 @@ class ProjectService extends AbstractService
         return $count;
     }
 
-    public function deleteProject($id,$data) {
-        if(isset($id['orgId'])){
+    public function deleteProject($params) {
+        if(isset($params['orgId'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($id['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to delete the project");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
-        $obj = $this->table->getByUuid($id['projectUuid'],array());
+
+
+        $obj = $this->table->getByUuid($params['projectUuid'],array());
         if (is_null($obj)) {
             throw new ServiceException("Entity not found","project.not.found");
         }
+
+        if($orgId != $obj->org_id){
+           throw new ServiceException("Project does not belong to the organization","project.not.found");
+        }
+
         $form = new Project();
         $data = $obj->toArray();
-        $data['uuid'] = $id['projectUuid'];
+        $data['uuid'] = $params['projectUuid'];
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['isdeleted'] = 1;
@@ -276,18 +304,23 @@ class ProjectService extends AbstractService
         return $count;
     }
 
-    public function getProjectsOfUser($data)
+    public function getProjectsOfUser($params)
     {
-        if (isset($data['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to get the users of project");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
+
         $userId = AuthContext::get(AuthConstants::USER_ID);
         $queryString = "select * from ox_project
             left join ox_user_project on ox_user_project.project_id = ox_project.id";
-        $where = "where ox_user_project.user_id = " . $userId." AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.isdeleted!=1";
+        $where = "where ox_user_project.user_id = " . $userId." AND ox_project.org_id=".$orgId." AND ox_project.isdeleted!=1";
         $order = "order by ox_project.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         return $resultSet->toArray();
@@ -297,23 +330,23 @@ class ProjectService extends AbstractService
     {
         $queryString = "select ox_project.* , ox_user.username as manager_username, ox_user.uuid as manager_uuid from ox_project
                 inner join ox_user_project on ox_user_project.project_id = ox_project.id inner join ox_user on ox_project.manager_id = ox_user.id";
-        $where = "where ox_user_project.user_id = " . $userId." AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.isdeleted!=1";
+        $where = "where ox_user_project.user_id = (SELECT id from ox_user where uuid = '" . $userId. "') AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.isdeleted!=1";
         $order = "order by ox_project.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         return $resultSet->toArray();
     }
 
-    public function getUserList($id, $filterParams = null)
+    public function getUserList($params, $filterParams = null)
     {
-        if (isset($filterParams['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($filterParams['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
-                throw new AccessDeniedException("You do not have permissions to get the userlist of project");
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the user list of project");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
-        }
-
-        if (!isset($id)) {
-            return 0;
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
 
         $pageSize = 20;
@@ -347,7 +380,7 @@ class ProjectService extends AbstractService
 
 
 
-        $where .= strlen($where) > 0 ? " AND ox_project.uuid = '".$id."' AND ox_project.isdeleted!=1" : " WHERE ox_project.uuid = '".$id."' AND ox_project.isdeleted!=1";
+        $where .= strlen($where) > 0 ? " AND ox_project.uuid = '".$params['projectUuid']."' AND ox_project.isdeleted!=1 AND ox_project.org_id = ".$orgId : " WHERE ox_project.uuid = '".$params['projectUuid']."' AND ox_project.isdeleted!=1 AND ox_project.org_id =".$orgId;
 
 
         $sort = " ORDER BY ".$sort;
@@ -385,7 +418,7 @@ class ProjectService extends AbstractService
         $obj = $this->table->getByUuid($params['projectUuid'],array());
 
         if (is_null($obj)) {
-            throw new ServiceException("Project does not belong to the organization","group.not.found");
+            throw new ServiceException("Entity not found","project.not.found");  
         }
 
         $org = $this->organizationService->getOrganization($obj->org_id);
@@ -393,7 +426,7 @@ class ProjectService extends AbstractService
        
         if(isset($params['orgId'])){
             if($params['orgId'] != $obj->org_id){
-               throw new ServiceException("Entity not found","project.not.found");  
+                throw new ServiceException("Project does not belong to the organization","project.not.found");
             }
         }
         if(!isset($data['userid']) || empty($data['userid'])) {

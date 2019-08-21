@@ -22,9 +22,6 @@ class AbstractService
         $this->logger = $log;
         $this->config = $config;
         $this->dbAdapter = $dbAdapter;
-        $_SERVER['REQUEST_SCHEME'] = "http";
-        $_SERVER['SERVER_NAME'] = "localhost";
-        $_SERVER['SERVER_PORT'] = "8080";
         if ($dbAdapter) {
             $this->sql = new Sql($this->dbAdapter);
         }

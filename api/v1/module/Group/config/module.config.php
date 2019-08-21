@@ -44,7 +44,7 @@ return [
            'getusers' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/group/:groupId/users',
+                    'route'    => '/[organization/:orgId/]group/:groupId/users',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'method' => 'GET',

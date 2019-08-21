@@ -58,8 +58,8 @@ class ForgotPasswordControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('forgotPassword');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->resetCode = $content['data']['password_reset_code'];
         $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['username'],'bharatgtest');
     }
 
     public function testForgotPasswordWrongEmail()
