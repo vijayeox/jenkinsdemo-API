@@ -33,7 +33,7 @@ class RoleService extends AbstractService
         if(isset($params['orgId'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
-                throw new AccessDeniedException("You do not have permissions create project");
+                throw new AccessDeniedException("You do not have permissions create/update role");
             }else{
                 $org_id = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
@@ -153,7 +153,7 @@ class RoleService extends AbstractService
         if(isset($params['orgId'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
-                throw new AccessDeniedException("You do not have permissions to delete the project");
+                throw new AccessDeniedException("You do not have permissions to delete the role");
             }else{
                 $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
@@ -187,8 +187,21 @@ class RoleService extends AbstractService
         return $count;
     }
 
-    public function getRoles($filterParams = null)
+    public function getRoles($filterParams = null,$params)
     {
+
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions get the role list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }
+        else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        }
+
         $pageSize = 20;
         $offset = 0;
         $where = "";
@@ -213,7 +226,7 @@ class RoleService extends AbstractService
             }
 
 
-            $where .= strlen($where) > 0 ? " AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : "WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID);
+            $where .= strlen($where) > 0 ? " AND org_id =".$orgId : "WHERE org_id =".$orgId;
 
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
@@ -225,16 +238,30 @@ class RoleService extends AbstractService
                      'total' => $count);        
     }
 
-    public function getRole($id)
+    public function getRole($params)
     {
-        $query = "SELECT * FROM ox_role WHERE ox_role.id =".$id." AND ox_role.org_id=".AuthContext::get(AuthConstants::ORG_ID);
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions get the role list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }
+        else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        }
+
+        $roleId = $this->getIdFromUuid('ox_role',$params['roleId']);
+        $query = "SELECT * FROM ox_role WHERE ox_role.id =".$roleId." AND ox_role.org_id=".$orgId;
         $result = $this->executeQuerywithParams($query);
         $queryString = "select ox_role_privilege.id, ox_role_privilege.privilege_name,ox_role_privilege.permission, ox_role_privilege.app_id,ox_app.name 
                             from ox_role_privilege left outer join ox_app on ox_role_privilege.app_id = ox_app.id 
-                            where ox_role_privilege.role_id = ".$id." AND ox_role_privilege.org_id=".AuthContext::get(AuthConstants::ORG_ID).
+                            where ox_role_privilege.role_id = ".$roleId." AND ox_role_privilege.org_id=".$orgId.
                             " order by ox_role_privilege.privilege_name";
         $result1 = $this->executeQuerywithParams($queryString);
         $resp = $result->toArray();
+
         if(count($resp) > 0){
             $resp = $resp[0];
             $resp['privileges'] = $result1->toArray();
@@ -245,12 +272,25 @@ class RoleService extends AbstractService
         return $resp;
     }
 
-    public function getRolePrivilege($id) {
-            $queryString = "select ox_role_privilege.id,ox_role_privilege.role_id, ox_role_privilege.privilege_name,ox_role_privilege.permission,ox_role_privilege.org_id, ox_role_privilege.app_id,ox_app.name from ox_role_privilege,ox_app";
-            $where = "where ox_role_privilege.role_id = ".$id." AND ox_role_privilege.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_role_privilege.app_id = ox_app.id"; 
-            $order = "order by ox_role_privilege.role_id";
-            $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-            return $resultSet->toArray();
+    public function getRolePrivilege($params) {
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions get the role privilege list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }
+        else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        }
+        $roleId = $this->getIdFromUuid('ox_role',$params['roleId']);
+       
+        $queryString = "select ox_role_privilege.id,ox_role_privilege.role_id, ox_role_privilege.privilege_name,ox_role_privilege.permission,ox_role_privilege.org_id, ox_role_privilege.app_id,ox_app.name from ox_role_privilege,ox_app";
+        $where = "where ox_role_privilege.role_id = ".$roleId." AND ox_role_privilege.org_id=".$orgId." AND ox_role_privilege.app_id = ox_app.id"; 
+        $order = "order by ox_role_privilege.role_id";
+        $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
+        return $resultSet->toArray();
     }
 
     public function getRolesByOrgid($orgid)

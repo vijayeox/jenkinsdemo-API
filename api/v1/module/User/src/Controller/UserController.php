@@ -93,9 +93,6 @@ class UserController extends AbstractApiController
         } catch (AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(), 403);
         }
-        catch(AccessDeniedException $e) {
-            return $this->getErrorResponse($e->getMessage(),403);
-        }
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
         }
