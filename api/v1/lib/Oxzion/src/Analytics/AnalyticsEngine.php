@@ -39,6 +39,9 @@ class AnalyticsEngine {
 	private function formatQuery($parameters) {
 		$range=null;
 		$filter=null;
+		if(!isset($parameters)){
+			return 0;
+		}
 		$datetype = (!empty($parameters['date_type']))?$parameters['date_type']:null;
 		if (!empty($parameters['date-period'])) {
 			$period = explode('/', $parameters['date-period']);
@@ -58,7 +61,6 @@ class AnalyticsEngine {
 		if (!isset($parameters['operation'])) {
 			$parameters['operation'] = 'count';
 		}
-
 		$parameters['operation'] = strtolower($parameters['operation']);
 		if ($parameters['operation'] != 'count_distinct') {
 			$operation = explode('_', $parameters['operation']);

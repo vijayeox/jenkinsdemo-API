@@ -3,7 +3,7 @@ ox_role:
     id: 15
     name: 'ADMIN-3'
     description: 'Must have read,write,create and delete control'
-    org_id: 2 
+    org_id: 2
     is_system_role: 0
     uuid: "53012471-2863"
   -
@@ -13,7 +13,7 @@ ox_role:
     org_id: 1
     is_system_role: 0
     uuid: '89a01b30-9cc9-416e-8027-1fd2083786c7'
-  - 
+  -
     id: 17
     name: 'EMPLOYEE-2'
     description: 'Must have read control'
@@ -24,10 +24,10 @@ ox_role:
 
 ox_role_privilege:
   -
-    id: 111
+    id: 188
     role_id: 5
-    privilege_name: 'MANAGE_CRMADMIN' 
+    privilege_name: 'MANAGE_CRMADMIN'
     permission: 1
     org_id: 1
     app_id: 1
-  
+

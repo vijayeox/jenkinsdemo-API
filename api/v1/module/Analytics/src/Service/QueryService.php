@@ -133,4 +133,15 @@ class QueryService extends AbstractService
             return array('data' => $result,
                      'total' => $count);
     }
+
+    public function getQueryJson($uuid)
+    {
+        $statement = "Select query_json as query from query where isdeleted <> 1 AND uuid = '".$uuid."'";
+        $resultSet = $this->executeQuerywithParams($statement);
+        $result = $resultSet->toArray();
+        if($result)
+            return $result[0];
+        else
+            return 0;
+    }
 }

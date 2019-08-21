@@ -297,6 +297,15 @@ class AppController extends AbstractApiController
         return $this->getSuccessResponseWithData($assignments);
     }
 
+    public function appQueryAction() {
+        $params = $this->params()->fromRoute();
+        try {
+            $response = $this->appService->getQuery($params['appId'],$params['queryId']);
+        } catch (Exception $e) {
+            return $this->getErrorResponse("Incorrect query specified");
+        }
+    }
+
     /**
      * Deploy App API using YAML File
      * @api

@@ -35,6 +35,7 @@ return [
     'Email',
     'Privilege',
     'Callback',
+    'FileIndexer',
     'Mlet',
     'Messaging',
     'ProspectResearch',

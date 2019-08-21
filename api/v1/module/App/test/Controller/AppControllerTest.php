@@ -27,6 +27,8 @@ class AppControllerTest extends ControllerTest
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Analytics/test/Dataset/DataSource.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Analytics/test/Dataset/Query.yml");
         return $dataset;
     }
 
@@ -367,4 +369,13 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
     }
+
+    // public function testgetQuery() {
+    //     $this->initAuthToken($this->adminUser);
+    //     $this->dispatch('/app/somerandom123/query/8f1d2819-c5ff-4426-bc40-f7a20704a738','GET');
+    //     $content = json_decode($this->getResponse()->getContent(), true);
+    //     $this->assertResponseStatusCode(200);
+    //     $this->setDefaultAsserts();
+    //     print_r($content);exit;
+    // }
 }
