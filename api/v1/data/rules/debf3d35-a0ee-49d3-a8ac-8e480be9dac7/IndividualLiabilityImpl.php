@@ -1,15 +1,15 @@
 <?php
 
-use Oxzion\Rule\RuleEngine;
+use Oxzion\AppDelegate\AppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 
-class IndividualLiabilityImpl implements RuleEngine {
+class IndividualLiabilityImpl implements AppDelegate {
     
-    public function runRule(array $data,Persistence $persistenceService=null){
+    public function execute(array $data,Persistence $persistenceService=null){
         
-        if (in_array("Checking Rule Engine", $data))
+        if (in_array("Checking App Delegate", $data))
         {
-           return "Checking Rule Engine";
+           return "Checking App Delegate";
         }
     }
 }
