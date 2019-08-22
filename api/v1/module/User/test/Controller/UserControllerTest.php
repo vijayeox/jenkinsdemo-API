@@ -946,6 +946,18 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['apps'][0]['name'], 'Admin');
     }
 
+    public function testLoggedInUserComboWithProjects()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/me/a+pr', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('loggedInUser');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['projects'][0]['name'], 'Test Project 1');
+        $this->assertEquals($content['data']['projects'][1]['uuid'], 'ced672bb-fe33-4f0a-b153-f1d182a02603');
+    }
+
     public function testUserAccess()
     {
         $this->initAuthToken($this->adminUser);
