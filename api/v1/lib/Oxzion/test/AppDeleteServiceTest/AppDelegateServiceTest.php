@@ -1,9 +1,9 @@
 <?php
-namespace Oxzion\Rule;
+namespace Oxzion\AppDelegate;
 
 use Oxzion\Test\ServiceTest;
 use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\Rule\RuleService;
+use Oxzion\AppDelegate\AppDelegateService;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Auth\AuthContext;
@@ -11,7 +11,7 @@ use Oxzion\Auth\AuthConstants;
 use Exception;
 use Oxzion\Transaction\TransactionManager;
 
-class RuleServiceTest extends ServiceTest
+class AppDelegateServiceTest extends ServiceTest
 {
     public function setUp() : void
     {
@@ -30,13 +30,13 @@ class RuleServiceTest extends ServiceTest
         $_REQUEST = [];
     }
 
-    public function testRunRule()
+    public function testDelegateExecute()
     {
-        $data = array("Checking Rule Engine","Checking1");
+        $data = array("Checking App Delegate","Checking1");
         $appId = 'debf3d35-a0ee-49d3-a8ac-8e480be9dac7';
         $config = $this->getApplicationConfig();
-        $ruleService = new RuleService($config, $this->adapter);
-        $content = $ruleService->rule($appId, 'IndividualLiabilityImpl', $data);
-        $this->assertEquals("Checking Rule Engine", $content);
+        $delegateService = new AppDelegateService($config, $this->adapter);
+        $content = $delegateService->execute($appId, 'IndividualLiabilityImpl', $data);
+        $this->assertEquals("Checking App Delegate", $content);
     }
 }
