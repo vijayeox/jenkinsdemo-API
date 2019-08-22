@@ -10,6 +10,8 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Exception;
 use Oxzion\Transaction\TransactionManager;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 class AppDelegateServiceTest extends ServiceTest
 {
@@ -34,8 +36,15 @@ class AppDelegateServiceTest extends ServiceTest
     {
         $data = array("Checking App Delegate","Checking1");
         $appId = 'debf3d35-a0ee-49d3-a8ac-8e480be9dac7';
-        $config = $this->getApplicationConfig();
-        $delegateService = new AppDelegateService($config, $this->adapter);
+        $logger = new Logger();
+                    $writer = new Stream(__DIR__ . '/../../../../logs/Delegate.log');
+                    $logger->addWriter($writer);
+
+        $delegateService = new AppDelegateService(
+                        $this->getApplicationConfig(),
+                        $this->adapter,
+                        $logger
+                    );
         $content = $delegateService->execute($appId, 'IndividualLiabilityImpl', $data);
         $this->assertEquals("Checking App Delegate", $content);
     }

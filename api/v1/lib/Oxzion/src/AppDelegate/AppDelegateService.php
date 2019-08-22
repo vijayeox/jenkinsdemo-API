@@ -1,5 +1,5 @@
 <?php
-namespace Oxzion\Rule;
+namespace Oxzion\AppDelegate;
 
 use Exception;
 use Oxzion\Service\AbstractService;
@@ -10,9 +10,9 @@ class AppDelegateService extends AbstractService
 {
     private $fileExt = ".php";
 
-    public function __construct($config, $dbAdapter)
+    public function __construct($config, $dbAdapter, $logger)
     {
-        parent::__construct($config, $dbAdapter);
+        parent::__construct($config, $dbAdapter, $logger);
         $this->delegateDir = $this->config['RULE_FOLDER'];
         if (!is_dir($this->delegateDir)) {
             mkdir($this->delegateDir, 0777, true);
@@ -25,12 +25,13 @@ class AppDelegateService extends AbstractService
             $result = $this->delegateFile($appId, $className);
             if ($result) {
                 $obj = new $className;
+                $obj->setLogger($this->logger);
                 $output = $obj->execute($dataArray, $persistenceService);
                 return $output;
             }
             return false;
         } catch (Exception $e) {
-            print_r($e->getMessage());
+            $this->logger->err($e->getMessage());
         }
         return false;
     }

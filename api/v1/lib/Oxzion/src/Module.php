@@ -5,6 +5,8 @@ namespace Oxzion;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 class Module
 {
@@ -277,10 +279,16 @@ class Module
                         $container->get(AdapterInterface::class)
                     );
                 },
-                Rule\RuleService::class => function ($container) {
-                    return new Rule\RuleService(
+                AppDelegate\AppDelegateService::class => function ($container) {
+                    print(AppDelegate\AppDelegateService::class);exit;
+                    $logger = new Logger();
+                    $writer = new Stream(__DIR__ . '/../../../logs/Delegate.log');
+                    $logger->addWriter($writer);
+
+                    return new AppDelegate\AppDelegateService(
                         $container->get('config'),
-                        $container->get(AdapterInterface::class)
+                        $container->get(AdapterInterface::class),
+                        $logger
                     );
                 },
                 Service\EmailService::class => function ($container) {
