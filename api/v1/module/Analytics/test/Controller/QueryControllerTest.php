@@ -49,7 +49,7 @@ class QueryControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['type'], $data['type']);
+        $this->assertEquals($content['data']['datasource_id'], $data['datasource_id']);
         $this->assertEquals($content['data']['connection_string'], $data['connection_string']);
         $this->assertEquals(4, $this->getConnection()->getRowCount('query'));
     }

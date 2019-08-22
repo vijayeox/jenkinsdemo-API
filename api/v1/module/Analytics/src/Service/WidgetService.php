@@ -130,7 +130,6 @@ class WidgetService extends AbstractService
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
             foreach ($result as $key => $value) {
-                $result[$key]['connection_string'] = json_decode($result[$key]['connection_string']);
                 unset($result[$key]['id']);
             }
             return array('data' => $result,

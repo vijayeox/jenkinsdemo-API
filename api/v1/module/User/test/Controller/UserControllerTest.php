@@ -594,7 +594,7 @@ class UserControllerTest extends ControllerTest
         // TO DO : Whitelisted apps for manageruser and employeeuser
         $this->assertNotEmpty($content['data']['privilege']);
         $this->assertNotEmpty($content['data']['whiteListedApps']);
-        $this->assertEquals(6, count($content['data']['whiteListedApps']));
+        $this->assertEquals(7, count($content['data']['whiteListedApps']));
     }
 
     public function testForgotPassword()

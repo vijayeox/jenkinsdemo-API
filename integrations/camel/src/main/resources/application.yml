@@ -2,7 +2,7 @@ server:
   port: 8085
 spring:
   activemq:
-    broker-url: tcp://172.26.21.225:61616
+    broker-url: tcp://172.16.1.172:61616
     user: admin
     password: admin
 smtp:

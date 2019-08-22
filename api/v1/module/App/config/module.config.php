@@ -107,6 +107,17 @@ return [
                     ],
                 ],
             ],
+            'appQuery' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/query/:queryId',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'appQuery',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
             'appform' => [
                 'type'    => Segment::class,
                 'options' => [
