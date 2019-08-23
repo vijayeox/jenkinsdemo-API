@@ -166,6 +166,17 @@ return [
                     ],
                 ],
             ],
+            'appDelegate' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/app/:appId/delegate/:delegate',
+                    'defaults' => [
+                        'controller' => Controller\AppDelegateController::class,
+                        'action' => 'delegate',
+                        'method' => 'POST'
+                    ],
+                ],
+            ],
             'appworkflow' => [
                 'type'    => Segment::class,
                 'options' => [
