@@ -12,8 +12,9 @@ class IndividualLiabilityImpl implements AppDelegate {
         $this->logger->info("executing IndividualLiability");
         if (in_array("Checking App Delegate", $data))
         {
-           return "Checking App Delegate";
+           return array("Checking App Delegate");
         }
+
     }
 }
 ?>
