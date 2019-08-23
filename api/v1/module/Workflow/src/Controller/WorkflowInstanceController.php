@@ -52,6 +52,29 @@ class WorkflowInstanceController extends AbstractApiController
                 break;
         }
     }
+    public function workflowInstanceAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        switch ($this->request->getMethod()) {
+            case 'POST':
+                unset($params['controller']);
+                unset($params['action']);
+                unset($params['access']);
+                if (isset($params['workflowInstanceId'])) {
+                    return $this->executeWorkflow($params);
+                }
+                break;
+            case 'GET':
+                return $this->getFieldData($params);
+                break;
+            case 'DELETE':
+                return $this->deleteFieldData($params);
+                break;
+            default:
+                return $this->getErrorResponse("Not Sure what you are upto");
+                break;
+        }
+    }
     private function executeWorkflow($params, $id = null)
     {
         try {

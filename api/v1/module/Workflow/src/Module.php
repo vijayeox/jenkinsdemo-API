@@ -106,6 +106,7 @@ class Module implements ConfigProviderInterface
                 Controller\ServiceTaskController::class => function ($container) {
                     return new Controller\ServiceTaskController(
                         $container->get(Service\ServiceTaskService::class),
+                        $container->get(Service\WorkflowInstanceService::class),
                         $container->get('ServiceTaskLogger')
                     );
                 },

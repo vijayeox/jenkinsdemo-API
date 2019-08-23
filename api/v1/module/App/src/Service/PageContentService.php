@@ -26,7 +26,7 @@ class PageContentService extends AbstractService
         $select = "SELECT * FROM ox_app_page where id = ".$pageId." AND app_id = ".$appId;
         $selectResult = $this->executeQuerywithParams($select)->toArray();
         if(count($selectResult)>0){
-            $queryString = " SELECT ox_page_content.type, COALESCE(ox_page_content.content,ox_form.template) as content FROM ox_page_content LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id WHERE ox_page_content.page_id = ".$pageId. " ORDER BY ox_page_content.sequence ";
+            $queryString = " SELECT ox_page_content.type,ox_form.id as form_id, COALESCE(ox_page_content.content,ox_form.template) as content FROM ox_page_content LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id WHERE ox_page_content.page_id = ".$pageId. " ORDER BY ox_page_content.sequence ";
             $result= $this->runGenericQuery($queryString);
             $resultSet->initialize($result);
             $resultSet = $resultSet->toArray();

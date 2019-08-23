@@ -138,13 +138,13 @@ class WorkflowInstanceService extends AbstractService
         $response['data'] = $resultSet->toArray();
         return $response;
     }
-    public function getWorkflowInstance($appId, $id)
+    public function getWorkflowInstance($id)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_workflow_instance')
         ->columns(array("*"))
-        ->where(array('id' => $id,'app_id'=>$appId));
+        ->where(array('id' => $id));
         $response = $this->executeQuery($select)->toArray();
         if (count($response)==0) {
             return 0;
@@ -154,12 +154,21 @@ class WorkflowInstanceService extends AbstractService
 
     public function executeWorkflow($params, $id=null)
     {
-        $workflowId = $params['workflowId'];
-        $workFlowFlag = 1;
-        $workflow = $this->workflowService->getWorkflow(null, $workflowId);
-        if (empty($workflow)) {
-            $workFlowFlag= 0;
-            return 0;
+        if(isset($params['workflowId'])){
+            $workflowId = $params['workflowId'];
+            $workFlowFlag = 1;
+            $workflow = $this->workflowService->getWorkflow(null, $workflowId);
+            if (empty($workflow)) {
+                $workFlowFlag= 0;
+                return 0;
+            }
+        } else {
+            if(isset($params['workflowInstanceId'])){
+                $workflowInstanceId = $params['workflowInstanceId'];
+                $workflowInstance = $this->getWorkflowInstance($workflowInstanceId);
+                $workflowId = $workflowInstance['workflow_id'];
+                $workflow = $this->workflowService->getWorkflow(null, $workflowId);
+            }
         }
         if (!isset($params['activityId'])) {
             $params['form_id'] = $workflow['form_id'];
@@ -194,9 +203,34 @@ class WorkflowInstanceService extends AbstractService
         }
         return 0;
     }
+    public function completeWorkflow($params){
+        $query = "SELECT * FROM `ox_workflow_instance` WHERE process_instance_id = '".$params['processInstanceId']."';";
+        $resultSet = $this->executeQuerywithParams($query)->toArray();
+        if($resultSet){
+            $workflowInstance = $resultSet[0];
+        } else {
+            return;
+        }
+        $this->beginTransaction();
+        try {
+            $updateQuery = "UPDATE ox_workflow_instance SET status = 'completed' where id = ".$workflowInstance['id'].";";
+            $update = $this->executeQuerywithParams($updateQuery);
+            $this->commit();
+        } catch (Exception $e) {
+            $this->logger->info(ActivityInstanceService::class."Workflow Instance Entry Failed".$e->getMessage());
+            $this->rollback();
+            return 0;
+        }
+        return $workflowInstance;
+    }
     
     public function setupWorkflowInstance($workflowId, $processInstanceId,$params =null)
     {
+        $query = "SELECT * FROM `ox_workflow_instance` WHERE process_instance_id = '".$processInstanceId."';";
+        $resultSet = $this->executeQuerywithParams($query)->toArray();
+        if($resultSet){
+            return $resultSet[0];
+        }
         $form = new WorkflowInstance();
         if (isset($params['orgid'])) {
             if ($org = $this->getIdFromUuid('ox_organization', $params['orgid'])) {
