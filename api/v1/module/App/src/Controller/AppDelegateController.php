@@ -22,7 +22,7 @@ class AppDelegateController extends AbstractApiControllerHelper
     /**
      * @ignore __construct
      */
-    public function __construct(AppDelegateService $appDelegateService, Logger $log)
+    public function __construct(AppDelegateService $appDelegateService, Logger $logger)
     {
         $this->appDelegateService = $appDelegateService;
         $this->logger = $logger;
