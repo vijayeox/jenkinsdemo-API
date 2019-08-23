@@ -43,7 +43,7 @@ class DashboardControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Dashboard3', 'dashboard_type' => 'DocumentDashboard', 'description' => 'description'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('dashboard'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_dashboard'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/dashboard', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -54,14 +54,14 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['dashboard_type'], $data['dashboard_type']);
         $this->assertEquals($content['data']['description'], $data['description']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('dashboard'));
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_dashboard'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Dashboard3', 'description' => 'description'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('dashboard'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_dashboard'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/dashboard', 'POST', $data);
         $this->assertResponseStatusCode(404);

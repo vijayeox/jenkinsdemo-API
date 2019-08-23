@@ -41,7 +41,7 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\DataSource());
-                    return new TableGateway('datasource', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_datasource', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\QueryService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -55,7 +55,7 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Query());
-                    return new TableGateway('query', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_query', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\VisualizationService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -69,7 +69,7 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Visualization());
-                    return new TableGateway('visualization', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_visualization', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\WidgetService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -83,7 +83,7 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Widget());
-                    return new TableGateway('widget', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_widget', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\DashboardService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -97,7 +97,7 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Dashboard());
-                    return new TableGateway('dashboard', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('ox_dashboard', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];

@@ -1,4 +1,4 @@
-dashboard:
+ox_dashboard:
   -
     id: 1
     uuid: 'a59f865e-efba-472e-91f2-2ae2d8a16d36'
@@ -21,7 +21,7 @@ dashboard:
     date_created: '2019-06-27 07:25:06'
     org_id: 1
     isdeleted: 0
-widget_dashboard_mapper:
+ox_widget_dashboard_mapper:
   -
     id: 1
     dashboard_id: 1

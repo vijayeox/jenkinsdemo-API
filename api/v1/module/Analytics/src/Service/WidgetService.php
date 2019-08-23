@@ -103,9 +103,9 @@ class WidgetService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $select->from('widget')
+        $select->from('ox_widget')
             ->columns(array('uuid','query_id','visualization_id','ispublic','created_by','date_created','org_id','isdeleted'))
-            ->where(array('widget.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
+            ->where(array('ox_widget.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
             return 0;
@@ -122,11 +122,11 @@ class WidgetService extends AbstractService
             $sort = " ORDER BY ".$paginateOptions['sort'];
             $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
-            $cntQuery ="SELECT count(id) as 'count' FROM `widget` ";
+            $cntQuery ="SELECT count(id) as 'count' FROM `ox_widget` ";
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count'];
 
-            $query ="SELECT * FROM `widget`".$where." ".$sort." ".$limit;
+            $query ="SELECT * FROM `ox_widget`".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
             foreach ($result as $key => $value) {

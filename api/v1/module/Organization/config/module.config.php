@@ -59,7 +59,7 @@ return [
                         'method' => 'GET',
                         'action' => 'getListOfOrgUsers',
                         'access' => [
-                            'getListOfOrgUsers'=>'MANAGE_ORGANIZATION_READ'
+                            'getListOfOrgUsers'=> ['MANAGE_ORGANIZATION_READ','MANAGE_GROUP_READ']
                         ],
                     ],
                 ],
@@ -73,7 +73,7 @@ return [
                         'method' => 'GET',
                         'action' => 'getListofAdminUsers',
                         'access' => [
-                            'getListofAdminUsers'=> ['MANAGE_ORGANIZATION_WRITE', 'MANAGE_MYORG_WRITE']
+                            'getListofAdminUsers'=> ['MANAGE_ORGANIZATION_READ', 'MANAGE_MYORG_WRITE']
                         ],
                     ],
                 ],
@@ -87,7 +87,7 @@ return [
                         'method' => 'GET',
                         'action' => 'getListofOrgGroups',
                         'access' => [
-                            'getListofOrgGroups'=> ['MANAGE_ORGANIZATION_READ']
+                            'getListofOrgGroups'=> ['MANAGE_GROUP_READ']
                         ],
                     ],
                 ],
@@ -101,7 +101,7 @@ return [
                         'method' => 'GET',
                         'action' => 'getListofOrgProjects',
                         'access' => [
-                            'getListofOrgProjects'=> ['MANAGE_ORGANIZATION_READ']
+                            'getListofOrgProjects'=> ['MANAGE_PROJECT_READ']
                         ],
                     ],
                 ],
@@ -115,7 +115,7 @@ return [
                         'method' => 'GET',
                         'action' => 'getListofOrgAnnouncements',
                         'access' => [
-                            'getListofOrgAnnouncements'=> ['MANAGE_ORGANIZATION_READ']
+                            'getListofOrgAnnouncements'=> ['MANAGE_ANNOUNCEMENT_READ']
                         ],
                     ],
                 ],
@@ -129,7 +129,7 @@ return [
                         'method' => 'GET',
                         'action' => 'getListofOrgRoles',
                         'access' => [
-                            'getListofOrgRoles'=> ['MANAGE_ORGANIZATION_READ']
+                            'getListofOrgRoles'=> ['MANAGE_ROLE_READ']
                         ],
                     ],
                 ],

@@ -103,9 +103,9 @@ class DataSourceService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $select->from('datasource')
+        $select->from('ox_datasource')
             ->columns(array('name','type','connection_string','created_by','date_created','org_id','isdeleted','uuid'))
-            ->where(array('datasource.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
+            ->where(array('ox_datasource.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
             return 0;
@@ -122,11 +122,11 @@ class DataSourceService extends AbstractService
             $sort = " ORDER BY ".$paginateOptions['sort'];
             $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
-            $cntQuery ="SELECT count(id) as 'count' FROM `datasource` ";
+            $cntQuery ="SELECT count(id) as 'count' FROM `ox_datasource` ";
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count'];
 
-            $query ="SELECT * FROM `datasource`".$where." ".$sort." ".$limit;
+            $query ="SELECT * FROM `ox_datasource`".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
             foreach ($result as $key => $value) {

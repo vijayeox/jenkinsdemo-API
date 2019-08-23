@@ -60,6 +60,10 @@ class ServiceTest extends TestCase
     protected function setUp()
     {
         $_REQUEST = [];
+        $_SERVER['REQUEST_SCHEME'] = "http";
+        $_SERVER['SERVER_NAME'] = "localhost";
+        $_SERVER['SERVER_PORT'] = "8080";
+    
         $this->usedConsoleBackup = Console::isConsole();
         $this->reset();
         $tm = $this->getTransactionManager();
