@@ -9,6 +9,8 @@ use Zend\Db\Table;
 use Oxzion\Utils\FileUtils;
 use PHPSQLParser\PHPSQLParser;
 use PHPSQLParser\PHPSQLCreator;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 class Persistence extends AbstractService
 {
@@ -17,12 +19,25 @@ class Persistence extends AbstractService
     /**
      * Persistence constructor.
      * @param $config
-     * @param $database
+     * @param $appname
+     * @param @appId
      */
-    public function __construct($config, $database, $adapter)
+    public function __construct($config, string $appName, string $appId)
     {
-        $this->database = $database;
-        parent::__construct($config, $adapter);
+        $this->database = $appName.'___'.$appId;
+        $dbConfig = array_merge(array(), $config['db']);
+        $dbConfig['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
+        $dbConfig['database'] = $this->database;
+        $adapter = new Adapter($dbConfig);
+        $logger = new Logger();
+        $writer = new Stream(__DIR__ . '/../../../../../logs/Persistence.log');
+        $logger->addWriter($writer);
+        parent::__construct($config, $adapter, $logger);
+    }
+
+    //this method is used only for phpunit tests. Not required to be called otherwise
+    public function setAdapter($adapter){
+        $this->dbAdapter = $adapter;
     }
 
     /**

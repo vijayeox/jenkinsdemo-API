@@ -69,8 +69,9 @@ class PersistenceTest extends ServiceTest
     public function testInsertQuery()
     {
         $config = $this->getApplicationConfig();
-        $persistenceObject = new Persistence($config, $this->database, $this->adapter);
 
+        $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
+        $persistenceObject->setAdapter($this->adapter);
         $insertData = array(
             'name' => "Task2",
             'client_id' => 1,
@@ -87,6 +88,7 @@ VALUES ('" . $insertData['name'] . "', " . $insertData['client_id'] . ", '" . $i
         while ($result1->next()) {
             $tableFieldName[] = $result1->current();
         }
+        
         $this->assertEquals($tableFieldName[0]['id'] > 0, true);
         $this->assertEquals($tableFieldName[0]['name'], $insertData['name']);
         $this->assertEquals($tableFieldName[0]['client_id'], $insertData['client_id']);
@@ -100,7 +102,8 @@ VALUES ('" . $insertData['name'] . "', " . $insertData['client_id'] . ", '" . $i
     public function testInsertQueryWithJoinSelect()
     {
         $config = $this->getApplicationConfig();
-        $persistenceObject = new Persistence($config, $this->database, $this->adapter);
+        $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
+        $persistenceObject->setAdapter($this->adapter);
         $insertData = array(
             'id' => 1,
             'name' => "Task1",
@@ -130,7 +133,8 @@ VALUES ('" . $insertData['name'] . "', " . $insertData['client_id'] . ", '" . $i
     {
         $config = $this->getApplicationConfig();
         $this->data['query'] = "Select * from ox_timesheet where id > 0";
-        $persistenceObject = new Persistence($config, $this->database, $this->adapter);
+        $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
+        $persistenceObject->setAdapter($this->adapter);
         $result1 = $persistenceObject->selectQuery($this->data);
         $selectData = array(
             'name' => "Task1",
@@ -154,8 +158,9 @@ VALUES ('" . $insertData['name'] . "', " . $insertData['client_id'] . ", '" . $i
         $config = $this->getApplicationConfig();
         $this->data['query'] = "SELECT `ox_timesheet`.`name`, `ox_timesheet`.`client_id`, `ox_timesheet`.`description`, `ox_timesheet`.`process_id`, `ox_timesheet`.`date_created` FROM ox_timesheet
 LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id where ox_timesheet.client_id = 1";
-        $persistenceObject = new Persistence($config, $this->database, $this->adapter);
+        $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
         $persistenceObject->selectQuery($this->data);
+        $persistenceObject->setAdapter($this->adapter);
         $selectData = array(
             'name' => "Task1",
             'client_id' => 1,
@@ -177,7 +182,8 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
     {
         $config = $this->getApplicationConfig();
         $this->data['query'] = "UPDATE ox_timesheet set name = 'Updated Task' WHERE id > 0";
-        $persistenceObject = new Persistence($config, $this->database, $this->adapter);
+        $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
+        $persistenceObject->setAdapter($this->adapter);
         $persistenceObject->updateQuery($this->data);
         $selectData = array(
             'name' => "Updated Task",
@@ -204,7 +210,8 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
             INNER JOIN ox_timesheet_client AS g ON b.client_id = g.id
             SET b.name = 'Updated Task', b.Description = 'New Task'
             WHERE  (b.client_id = 1) and g.id = 1";
-        $persistenceObject = new Persistence($config, $this->database, $this->adapter);
+        $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
+        $persistenceObject->setAdapter($this->adapter);
         $persistenceObject->updateQuery($this->data);
         $selectData = array(
             'name' => "Updated Task",
@@ -230,7 +237,8 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
     {
         $config = $this->getApplicationConfig();
         $this->data['query'] = "Delete from ox_timesheet where id > 0";
-        $persistenceObject = new Persistence($config, $this->database, $this->adapter);
+        $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
+        $persistenceObject->setAdapter($this->adapter);
         $persistenceObject->deleteQuery($this->data);
         $statement1 = $this->adapter->query("Select * from ox_timesheet");
         $result1 = $statement1->execute();
@@ -246,7 +254,8 @@ LEFT JOIN ox_timesheet_client ON ox_timesheet_client.id = ox_timesheet.client_id
     {
         $config = $this->getApplicationConfig();
         $this->data['query'] = "Delete from ox_timesheet where id > 0";
-        $persistenceObject = new Persistence($config, $this->database, $this->adapter);
+        $persistenceObject = new Persistence($config, $this->data["appName"], $this->data['UUID']);
+        $persistenceObject->setAdapter($this->adapter);
         $persistenceObject->deleteQuery($this->data);
         $statement1 = $this->adapter->query("Select * from ox_timesheet");
         $result1 = $statement1->execute();
