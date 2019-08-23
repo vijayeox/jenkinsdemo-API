@@ -22,6 +22,12 @@ namespace Callback\Controller;
         }
 
 
+        public function setTaskService($taskService)
+        {
+            $this->taskService = $taskService;
+        }
+
+
         public function addProjectAction()
         {
             $params = $this->extractPostData();
@@ -63,5 +69,40 @@ namespace Callback\Controller;
                 return $this->getSuccessResponseWithData($response['data']);
             }
             return $this->getErrorResponse("Update Project Failed ", 400);
+    }
+
+
+    public function createUserAction() {
+        $params = $this->extractPostData();
+        $params['projectUuid'] = isset($params['projectUuid']) ? $params['projectUuid'] : NULL;
+        $params['userData'] = isset($params['username']) ? ($params['username']) : "No User to ADD";
+        $this->log->info(TaskCallbackController::class.":User Data- ".$params['userData']);
+        $response = $this->taskService->addUserToTask($params['projectUuid'],$params['username'],$params['firstname'],$params['lastname'],$params['email'],$params['timezone']);
+        if($response['status'] == "success"){
+            $this->log->info(TaskCallbackController::class.":Added user to task");
+            return $this->getSuccessResponseWithData($response['data']);
         }
+        else {
+            $this->log->info(TaskCallbackController::class.":Deletion of User from task failed");
+            return $this->getErrorResponse("failed to delete user",400,$response['data']);
+        }
+        return $this->getErrorResponse("Adding User To Task Failure ", 400);
+    }
+
+    public function deleteUserAction() {
+        $params = $this->extractPostData();
+        $params['userData'] = isset($params['username']) ? ($params['username']) : "No User to DELETE";
+        $params['projectUuid'] = isset($params['projectUuid']) ? $params['projectUuid'] : NULL;
+        $this->log->info(TaskCallbackController::class.":User Data- ".$params['userData']);
+        $response = $this->taskService->deleteUserFromTask($params['projectUuid'],$params['username']);
+        if($response['status'] == "success"){
+            $this->log->info(TaskCallbackController::class.":Deleted User from task");
+            return $this->getSuccessResponseWithData($response['data']);
+        }
+        else {
+            $this->log->info(TaskCallbackController::class.":Deletion of User from task failed");
+            return $this->getErrorResponse("failed to delete user",400,$response['data']);
+        }
+        return $this->getErrorResponse("Adding User To Task Failure ", 400);
+    }
     }

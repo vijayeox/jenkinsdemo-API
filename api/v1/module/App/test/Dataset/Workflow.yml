@@ -6,6 +6,10 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 1
+ox_app_registry:
+-
+    org_id: 1
+    app_id: 99
 ox_field:
 -
     id: 1
@@ -85,12 +89,14 @@ ox_file:
     org_id: 1
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
+    form_id: 1
   -
     id: 2
     workflow_instance_id: 1
     org_id: 1
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
+    form_id: 1
 ox_workflow_instance:
   -
     id: 1

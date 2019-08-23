@@ -9,6 +9,8 @@ use Oxzion\Model\Organization;
 use Oxzion\Model\OrganizationTable;
 use Oxzion\Service\OrganizationService;
 use Oxzion\AccessDeniedException;
+use Oxzion\ServiceException;
+
 
 class OrganizationController extends AbstractApiController
 {
@@ -52,11 +54,8 @@ class OrganizationController extends AbstractApiController
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
-        }
-        if ($count == 2) {
-            return $this->getFailureResponse("Entity not found for UUID", $id);
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -238,16 +237,17 @@ class OrganizationController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery();
-        $orgId = isset($params['orgId']) ? $params['orgId'] : null;
-        try {
-            $result = $this->orgService->getOrgGroupsList($orgId, $filterParams);
+        $orgId = isset($params['orgId']) ? $params['orgId'] : NULL;
+        try{
+            $result = $this->orgService->getOrgGroupsList($orgId,$filterParams);
             if (!$result) {
                 return $this->getErrorResponse("Organization not found", 404);
             }
-        } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
         }
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        catch(Exception $e) {
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
 
     // /**
@@ -260,16 +260,17 @@ class OrganizationController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery();
-        $orgId = isset($params['orgId']) ? $params['orgId'] : null;
-        try {
-            $result = $this->orgService->getOrgProjectsList($orgId, $filterParams);
+        $orgId = isset($params['orgId']) ? $params['orgId'] : NULL;
+        try{
+            $result = $this->orgService->getOrgProjectsList($orgId,$filterParams);
             if (!$result) {
                 return $this->getErrorResponse("Organization not found", 404);
             }
-        } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
         }
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        catch(Exception $e) {
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
 
     // /**
@@ -282,16 +283,17 @@ class OrganizationController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery();
-        $orgId = isset($params['orgId']) ? $params['orgId'] : null;
-        try {
-            $result = $this->orgService->getOrgAnnouncementsList($orgId, $filterParams);
+        $orgId = isset($params['orgId']) ? $params['orgId'] : NULL;
+        try{
+            $result = $this->orgService->getOrgAnnouncementsList($orgId,$filterParams);
             if (!$result) {
                 return $this->getErrorResponse("Organization not found", 404);
             }
-        } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
         }
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        catch(Exception $e) {
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
 
     // /**
@@ -304,15 +306,18 @@ class OrganizationController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery();
-        $orgId = isset($params['orgId']) ? $params['orgId'] : null;
-        try {
-            $result = $this->orgService->getOrgRolesList($orgId, $filterParams);
+        $orgId = isset($params['orgId']) ? $params['orgId'] : NULL;
+        try{
+            $result = $this->orgService->getOrgRolesList($orgId,$filterParams);
             if (!$result) {
                 return $this->getErrorResponse("Organization not found", 404);
             }
-        } catch (Exception $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
         }
-        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+        catch(Exception $e) {
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
+
+
 }

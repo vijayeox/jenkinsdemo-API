@@ -14,6 +14,8 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 use Oxzion\AccessDeniedException;
+use Oxzion\ServiceException;
+
 
 /**
  * Announcement Controller
@@ -188,15 +190,20 @@ class AnnouncementController extends AbstractApiController
     public function announcementToGroupAction()
     {
         $params = $this->params()->fromRoute();
-        $id=$params['announcementId'];
         $data = $this->extractPostData();
-        try {
-            $count = $this->announcementService->saveGroup($id, $data);
+        try{
+            $count = $this->announcementService->saveGroup($params,$data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if ($count == 0) {
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        if($count == 0) {
             return $this->getErrorResponse("Entity not found", 404);
         }
         if ($count == 2) {

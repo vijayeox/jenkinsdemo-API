@@ -19,19 +19,54 @@ class PageContentService extends AbstractService
         $this->table = $table;
     }
 
-    public function getPageContent($appId, $pageId)
+    public function getPageContent($appUuid, $pageId)
     {
-        $queryString = " SELECT ox_page_content.type, COALESCE(ox_page_content.content,ox_form.template) as content FROM ox_page_content LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id WHERE ox_page_content.page_id = ".$pageId. " ORDER BY ox_page_content.sequence ";
-        $result= $this->runGenericQuery($queryString);
+        $appId = $this->getIdFromUuid('ox_app', $appUuid);
         $resultSet = new ResultSet();
-        $resultSet->initialize($result);
-        $resultSet = $resultSet->toArray();
-        if (count($resultSet)==0) {
+        $select = "SELECT * FROM ox_app_page where id = ".$pageId." AND app_id = ".$appId;
+        $selectResult = $this->executeQuerywithParams($select)->toArray();
+        if(count($selectResult)>0){
+            $queryString = " SELECT ox_page_content.type, COALESCE(ox_page_content.content,ox_form.template) as content FROM ox_page_content LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id WHERE ox_page_content.page_id = ".$pageId. " ORDER BY ox_page_content.sequence ";
+            $result= $this->runGenericQuery($queryString);
+            $resultSet->initialize($result);
+            $resultSet = $resultSet->toArray();
+            if (count($resultSet)==0) {
+                return 0;
+            }
+        }else{
             return 0;
         }
-        return $resultSet;
+        $content = array('content' => $resultSet);
+        return array_merge($selectResult[0],$content);
     }
-    public function savePageContent($appId, &$data)
+    public function savePageContent($pageId, &$data)
+    { 
+        $this->beginTransaction();
+        $counter=0;
+        try{
+            $select = "DELETE from ox_page_content where page_id = ".$pageId;
+            $result = $this->executeQuerywithParams($select);
+            foreach($data as $key => $value){
+                unset($value['id']);
+                if (!isset($value['id'])) {
+                    $value['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+                    $value['date_created'] = date('Y-m-d H:i:s');
+                }
+                $value['page_id'] = $pageId;
+                $value['sequence'] = $key+1;
+                $counter+=$this->savePageContentInternal($value);
+            }
+            $this->commit(); 
+        }
+        catch(Exception $e){
+            print_r($e->getMessage());
+            $this->rollback();
+            throw $e;
+        }
+        return $counter;
+    }
+
+    public function createPageContent(&$data)
     {
         $page = new PageContent();
         if (!isset($data['id'])) {
@@ -56,19 +91,12 @@ class PageContentService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
-            switch (get_class($e)) {
-             case "Oxzion\ValidationException":
-                $this->rollback();
-                throw $e;
-                break;
-             default:
                 $this->rollback();
                 return 0;
-                break;
             }
-        }
         return $count;
     }
+
     public function updatePageContent($id, &$data)
     {
         $obj = $this->table->get($id, array());
@@ -99,8 +127,7 @@ class PageContentService extends AbstractService
         return $count;
     }
 
-
-    public function deletePageContent($appId, $id)
+    public function deletePageContent($id)
     {
         $this->beginTransaction();
         $count = 0;
@@ -114,7 +141,6 @@ class PageContentService extends AbstractService
         } catch (Exception $e) {
             $this->rollback();
         }
-        
         return $count;
     }
 
@@ -123,9 +149,9 @@ class PageContentService extends AbstractService
         $resultSet = $this->getDataByParams('ox_page_content', array("*"), $filterArray, null);
         return $resultSet->toArray();
     }
-    public function getContent($appId, $id)
+    public function getContent($id)
     {
-        $queryString = "SELECT ox_page_content.type, COALESCE(ox_page_content.content,ox_form.template) as content,ox_form.template as form FROM ox_page_content LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id WHERE ox_page_content.id = ".$id. " ORDER BY ox_page_content.sequence ";
+        $queryString = "SELECT * FROM ox_page_content WHERE id = ".$id;
         $result= $this->runGenericQuery($queryString);
         $resultSet = new ResultSet();
         $resultSet->initialize($result);
@@ -135,5 +161,21 @@ class PageContentService extends AbstractService
         } else {
             return array();
         }
+    }
+
+    private function savePageContentInternal($data){
+        $page = new PageContent();
+        $page->exchangeArray($data);
+        $page->validate();
+        $count = 0;
+        $count = $this->table->save($page);
+        if ($count == 0) {
+            return 0;
+        }
+        if (!isset($data['id'])) {
+            $id = $this->table->getLastInsertValue();
+            $data['id'] = $id;
+        }
+        return $count;
     }
 }

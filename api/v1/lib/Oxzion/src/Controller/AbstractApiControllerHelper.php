@@ -149,8 +149,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
     }
 
     
-    protected function getSuccessStringResponse($message = null, $code = 200, $data = null)
-    {
+    protected function getSuccessStringResponse($message = null,$code = 200,$data = null){
         $this->response->setStatusCode($code);
         $payload = ['status' => 'success'];
         if (! is_null($message)) {

@@ -42,7 +42,7 @@ class WidgetControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['query_id' => 3,'visualization_id' => 2, 'ispublic' => 1];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('widget'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_widget'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/widget', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -52,14 +52,14 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['query_id'], $data['query_id']);
         $this->assertEquals($content['data']['ispublic'], $data['ispublic']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('widget'));
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_widget'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['query_id' => 3,'visualization_id' => 2];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('widget'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_widget'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/widget', 'POST', $data);
         $this->assertResponseStatusCode(404);

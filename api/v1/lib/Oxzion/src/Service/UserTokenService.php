@@ -31,7 +31,7 @@ class UserTokenService extends AbstractService
     {
         $dataSalt = self::getRefreshTokenPayload();
         try {
-            $userDetail['id'] = isset($userDetail['id']) ? $userDetail['id'] : null;
+            $userDetail['id'] = isset($userDetail['id']) ? $userDetail['id'] : NULL;
             if ($userDetail['id'] === null || $userDetail['id'] === '') {
                 return 0;
             }
@@ -54,9 +54,8 @@ class UserTokenService extends AbstractService
         $salt = uniqid(mt_rand(), true);
         return $salt;
     }
-    private function createUpdateToken($userId, $dataSalt, $id=null)
-    {
-        if (isset($this->config['refreshTokenPeriod'])) {
+    private function createUpdateToken($userId,$dataSalt,$id=null){
+        if(isset($this->config['refreshTokenPeriod'])){
             $refreshTokenPeriod = $this->config['refreshTokenPeriod'];
         } else {
             $refreshTokenPeriod = 1;

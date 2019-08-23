@@ -12,6 +12,7 @@ use App\Service\PageContentService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
+use Oxzion\ServiceException;
 
 class PageController extends AbstractApiController
 {
@@ -42,9 +43,9 @@ class PageController extends AbstractApiController
     */
     public function create($data)
     {
-        $appId = $this->params()->fromRoute()['appId'];
+        $appUuid = $this->params()->fromRoute()['appId'];
         try {
-            $count = $this->pageService->savePage($appId, $data);
+            $count = $this->pageService->savePage($appUuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -64,8 +65,8 @@ class PageController extends AbstractApiController
     */
     public function getList()
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->pageService->getPages($appId);
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $result = $this->pageService->getPages($appUuid);
         return $this->getSuccessResponseWithData($result);
     }
     /**
@@ -79,9 +80,9 @@ class PageController extends AbstractApiController
     */
     public function update($id, $data)
     {
-        $appId = $this->params()->fromRoute()['appId'];
+        $appUuid = $this->params()->fromRoute()['appId'];
         try {
-            $count = $this->pageService->updatePage($id, $data);
+            $count = $this->pageService->savePage($appUuid, $data, $id);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -101,10 +102,11 @@ class PageController extends AbstractApiController
     */
     public function delete($id)
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $response = $this->pageService->deletePage($appId, $id);
-        if ($response == 0) {
-            return $this->getErrorResponse("Page not found", 404, ['id' => $id]);
+        $appUuid = $this->params()->fromRoute()['appId'];
+        try{
+        $response = $this->pageService->deletePage($appUuid, $id);
+        } catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponse();
     }
@@ -119,8 +121,9 @@ class PageController extends AbstractApiController
     */
     public function get($pageId)
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->pageContentService->getPageContent($appId, $pageId);
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $result = $this->pageContentService->getPageContent($appUuid, $pageId);
+        // print_r($result);exit;
         if ($result == 0) {
             return $this->getErrorResponse("Page not found", 404, ['id' => $pageId]);
         }

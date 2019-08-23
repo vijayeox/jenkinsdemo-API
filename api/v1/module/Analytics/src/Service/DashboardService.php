@@ -78,7 +78,7 @@ class DashboardService extends AbstractService
 
     public function deleteDashboard($uuid)
     {
-        $id = $this->getIdFromUuid('dashboard',$uuid);
+        $id = $this->getIdFromUuid('ox_dashboard',$uuid);
         $obj = $this->table->getByUuid($uuid, array());
         if (is_null($obj)) {
             return 0;
@@ -92,7 +92,7 @@ class DashboardService extends AbstractService
         try {
             $count = $this->table->save($form);
             $delete = $this->getSqlObject()
-                ->delete('widget_dashboard_mapper')
+                ->delete('ox_widget_dashboard_mapper')
                 ->where(['dashboard_id' => $id]);
             $this->executeQueryString($delete);
             if ($count == 0) {
@@ -108,9 +108,9 @@ class DashboardService extends AbstractService
 
     public function getDashboard($uuid)
     {
-        $id = $this->getIdFromUuid('dashboard',$uuid);
+        $id = $this->getIdFromUuid('ox_dashboard',$uuid);
         try{
-            $query = "Select dashboard.uuid,dashboard.name,dashboard.ispublic,dashboard.description, dashboard.dashboard_type,dashboard.created_by,dashboard.date_created,dashboard.org_id,dashboard.isdeleted, widget_dashboard_mapper.widget_id from dashboard INNER JOIN widget_dashboard_mapper on dashboard.id = widget_dashboard_mapper.dashboard_id where dashboard.isdeleted <> 1 AND widget_dashboard_mapper.id =".$id;
+            $query = "Select ox_dashboard.uuid,ox_dashboard.name,ox_dashboard.ispublic,ox_dashboard.description, ox_dashboard.dashboard_type,ox_dashboard.created_by,ox_dashboard.date_created,ox_dashboard.org_id,ox_dashboard.isdeleted, ox_widget_dashboard_mapper.widget_id from ox_dashboard INNER JOIN ox_widget_dashboard_mapper on ox_dashboard.id = ox_widget_dashboard_mapper.dashboard_id where ox_dashboard.isdeleted <> 1 AND ox_widget_dashboard_mapper.id =".$id;
             $response = $this->executeQuerywithParams($query)->toArray();
         }
         catch (Exception $e) {
@@ -127,15 +127,15 @@ class DashboardService extends AbstractService
 
             $paginateOptions = FilterUtils::paginate($params);
             $where = $paginateOptions['where'];
-            $where .= empty($where) ? "WHERE dashboard.isdeleted <> 1 AND (dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR dashboard.ispublic = 1)" : " AND dashboard.isdeleted <> 1 AND (dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR dashboard.ispublic = 1)";
+            $where .= empty($where) ? "WHERE ox_dashboard.isdeleted <> 1 AND (ox_dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_dashboard.ispublic = 1)" : " AND ox_dashboard.isdeleted <> 1 AND (ox_dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_dashboard.ispublic = 1)";
             $sort = " ORDER BY ".$paginateOptions['sort'];
             $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
-            $cntQuery ="SELECT count(id) as 'count' FROM `dashboard` ";
+            $cntQuery ="SELECT count(id) as 'count' FROM `ox_dashboard` ";
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count'];
 
-            $query ="Select dashboard.*, widget_dashboard_mapper.widget_id from dashboard INNER JOIN widget_dashboard_mapper on dashboard.id = widget_dashboard_mapper.dashboard_id ".$where." ".$sort." ".$limit;
+            $query ="Select ox_dashboard.*, ox_widget_dashboard_mapper.widget_id from ox_dashboard INNER JOIN ox_widget_dashboard_mapper on ox_dashboard.id = ox_widget_dashboard_mapper.dashboard_id ".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
 

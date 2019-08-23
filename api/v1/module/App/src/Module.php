@@ -71,7 +71,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\PageService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PageService($container->get('config'), $dbAdapter, $container->get(Model\PageTable::class));
+                    return new Service\PageService($container->get('config'),$container->get(Service\PageContentService::class), $dbAdapter, $container->get(Model\PageTable::class));
                 },
                 Model\PageTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PageTableGateway::class);
@@ -96,6 +96,10 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\PageContent());
                     return new TableGateway('ox_page_content', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\ImportService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ImportService($container->get('config'), $dbAdapter);
                 },
             ],
         ];
@@ -177,7 +181,14 @@ class Module implements ConfigProviderInterface
                         $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
-                }
+                },
+                Controller\ImportController::class => function ($container) {
+                    return new Controller\ImportController(
+                        $container->get(Service\ImportService::class),
+                        $container->get('AppLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
             ],
         ];
     }

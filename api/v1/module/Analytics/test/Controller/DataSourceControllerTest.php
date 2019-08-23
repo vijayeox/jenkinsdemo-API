@@ -39,7 +39,7 @@ class DataSourceControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = [ 'name' => "Orocrm", 'type' => 'MySql', 'connection_string' => '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('datasource'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_datasource'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/datasource', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -50,14 +50,14 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['type'], $data['type']);
         $this->assertEquals($content['data']['connection_string'], $data['connection_string']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('datasource'));
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_datasource'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['type' => 'MySql', 'connection_string' => '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('datasource'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_datasource'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/datasource', 'POST', $data);
         $this->assertResponseStatusCode(404);

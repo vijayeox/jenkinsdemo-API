@@ -107,6 +107,17 @@ return [
                     ],
                 ],
             ],
+            'addtoappregistry' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/addtoappregistry',
+                    'defaults' => [
+                        'controller' => Controller\AppRegisterController::class,
+                        'action' => 'addToAppregistry',
+                        'method' => 'POST'
+                    ],
+                ],
+            ],
             'appQuery' => [
                 'type' => Segment::class,
                 'options' => [
@@ -265,6 +276,28 @@ return [
                         'action' => 'assignments',
                         'access'=>[
                         ],
+                    ],
+                ],
+            ],
+            'form_workflow' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/form/:formId/workflow',
+                    'defaults' => [
+                        'controller' => Controller\FormController::class,
+                        'action' => 'getWorkflow',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
+            'importcsv' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/importcsv',
+                    'defaults' => [
+                        'controller' => Controller\ImportController::class,
+                        'action' => 'importCSV',
+                        'method' => 'POST'
                     ],
                 ],
             ],

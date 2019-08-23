@@ -39,7 +39,7 @@ class VisualizationControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['type' => "BarChart"];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('visualization'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_visualization'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/visualization', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -48,14 +48,14 @@ class VisualizationControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['type'], $data['type']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('visualization'));
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_visualization'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['type' => ''];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('visualization'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_visualization'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/visualization', 'POST', $data);
         $this->assertResponseStatusCode(404);

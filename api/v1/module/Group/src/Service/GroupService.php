@@ -17,6 +17,8 @@ use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
+use Oxzion\ServiceException;
+
 
 class GroupService extends AbstractService
 {
@@ -95,60 +97,84 @@ class GroupService extends AbstractService
     }
 
 
-    public function createGroup(&$data, $files)
-    {
-        if (isset($data['org_id'])) {
-            if (SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE')) {
-                $data['org_id'] = $this->organizationService->getOrganizationIdByUuid($data['org_id']);
-            } else {
-                unset($data['org_id']);
+    public function createGroup(&$data,$files,$orgId = null) {
+        if(isset($orgId)){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($orgId != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions create group");
+            }else{
+                $data['org_id'] = $this->getIdFromUuid('ox_organization',$orgId);    
             }
         }
-        if (!isset($data['org_id'])) {
+        else{
             $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         }
-        $form = new Group();
-        $data['uuid'] = UuidUtil::uuid();
-        $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_created'] = date('Y-m-d H:i:s');
-        $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : null;
-        $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
-        $result = $this->executeQueryWithParams($select)->toArray();
-        if ($result) {
-            $data['manager_id']=$result[0]["id"];
-        }
-        if (isset($data['parent_id'])) {
-            $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
-        }
-
-        $org = $this->organizationService->getOrganization($data['org_id']);
-        $sql = $this->getSqlObject();
-        
-        $form->exchangeArray($data);
-        $form->validate();
-        $this->beginTransaction();
-        $count = 0;
+       
         try {
-            $count = $this->table->save($form);
-            $this->uploadGroupLogo($org['uuid'], $data['uuid'], $files);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
-        
-            $insert = $sql->insert('ox_user_group');
-            $insert_data = array('avatar_id' => $data['manager_id'], 'group_id' => $data['id']);
-            $insert->values($insert_data);
-            $result = $this->executeUpdate($insert);
+            $data['name'] = isset($data['name']) ? $data['name'] : NULL;
+       
+            $select = "SELECT name,uuid,status from ox_group where name = '".$data['name']."' AND org_id = ".$data['org_id'];
+         
+            $result = $this->executeQuerywithParams($select)->toArray();
 
-            $this->commit();
-        } catch (Exception $e) {
-            print_r($e->getMessage());
+            if(count($result) > 0){
+                if($data['name'] == $result[0]['name'] && $result[0]['status'] == 'Active'){
+                    throw new ServiceException("Group already exists","group.exists");
+                }
+                else if($result[0]['status'] == 'Inactive'){
+                    $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : NULL;
+                    if($data['reactivate'] == 1){
+                        $data['status'] = 'Active';
+                        $count = $this->updateGroup($result[0]['uuid'],$data,$files,$orgId);
+                        return;
+                    }else{
+                        throw new ServiceException("Group already exists would you like to reactivate?","group.already.exists");
+                    }
+                }
+            }   
+
+            $form = new Group();
+            $data['uuid'] = UuidUtil::uuid();
+            $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
+            $data['date_created'] = date('Y-m-d H:i:s');
+            $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
+            $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
+            $result = $this->executeQueryWithParams($select)->toArray();
+            if($result){
+               $data['manager_id']=$result[0]["id"];
+            }
+            if(isset($data['parent_id'])){
+                $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
+            }
+
+            $org = $this->organizationService->getOrganization($data['org_id']);
+            $sql = $this->getSqlObject();
+            
+            $form->exchangeArray($data);
+            $form->validate();
+            $this->beginTransaction();
+            $count = 0;
+                $count = $this->table->save($form);
+                $this->uploadGroupLogo($org['uuid'],$data['uuid'],$files);
+                if($count == 0) {
+                    $this->rollback();
+                    throw new ServiceException("Failed to create a new entity","failed.group.create");
+                }
+                $id = $this->table->getLastInsertValue();
+                $data['id'] = $id;
+            
+                $insert = $sql->insert('ox_user_group');
+                $insert_data = array('avatar_id' => $data['manager_id'], 'group_id' => $data['id']);
+                $insert->values($insert_data);
+                $result = $this->executeUpdate($insert);
+
+                $this->commit();
+            
+            }
+            catch(Exception $e) {
             $this->logger->err(__CLASS__.$e->getMessage());
             $this->rollback();
-            return 0;
+            throw $e;
         }
         $this->messageProducer->sendTopic(json_encode(array('groupname' => $data['name'], 'orgname'=> $org['name'])), 'GROUP_ADDED');
         return $count;
@@ -201,27 +227,29 @@ class GroupService extends AbstractService
 
 
 
-    /**
-    * GET Group Service
-    * @method getGroup
-    * @return array $data
-    * <code> {
-    *               id : integer,
-    *               name : string,
-    *               logo : string,
-    *               status : String(Active|Inactive),
-    *   } </code>
-    * @return array Returns a JSON Response with Status Code and Created Group.
-    */
-    public function getGroupList($filterParams = null)
+     /**
+     * GET Group Service
+     * @method getGroup
+     * @return array $data
+     * <code> {
+     *               id : integer,
+     *               name : string,
+     *               logo : string,
+     *               status : String(Active|Inactive),
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and Created Group.
+     */
+    public function getGroupList($filterParams = null,$params = null)
     {
-        if (isset($filterParams['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($filterParams['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
-                throw new AccessDeniedException("You do not have permissions to get the group list");
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the groups list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
         }
-
+       
         $where = "";
         $pageSize = 20;
         $offset = 0;
@@ -229,120 +257,143 @@ class GroupService extends AbstractService
 
         $cntQuery ="SELECT count(id) FROM `ox_group`";
 
-        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
-            $filterArray = json_decode($filterParams['filter'], true);
-            if (isset($filterArray[0]['filter'])) {
-                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                $filterList = $filterArray[0]['filter']['filters'];
-                $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic);
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                if(isset($filterParams['filter'])){
+                    $filterArray = json_decode($filterParams['filter'],true); 
+                    if(isset($filterArray[0]['filter'])){
+                       $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                       $filterList = $filterArray[0]['filter']['filters'];
+                       $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                    }
+                    if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                        $sort = $filterArray[0]['sort'];
+                        $sort = FilterUtils::sortArray($sort);
+                    }
+                    
+                    $pageSize = $filterArray[0]['take'];
+                    $offset = $filterArray[0]['skip']; 
+                } 
+                if(isset($filterParams['exclude'])){
+                   $where .= strlen($where) > 0 ? " AND uuid NOT in ('".implode("','", $filterParams['exclude'])."') " : " WHERE uuid NOT in ('".implode("','", $filterParams['exclude'])."') " ;
+                }          
             }
-            if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
-                $sort = $filterArray[0]['sort'];
-                $sort = FilterUtils::sortArray($sort);
-            }
-                
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
-        }
 
-        $where .= strlen($where) > 0 ? " AND status = 'Active'" : " WHERE status = 'Active'";
+            $where .= strlen($where) > 0 ? " AND status = 'Active'" : " WHERE status = 'Active'";
             
-        $sort = " ORDER BY ".$sort;
-        $limit = " LIMIT ".$pageSize." offset ".$offset;
-        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-        $count=$resultSet->toArray()[0]['count(id)'];
-        $query ="SELECT uuid,name,parent_id,org_id,manager_id,description,logo FROM `ox_group`".$where." ".$sort." ".$limit;
-        $resultSet = $this->executeQuerywithParams($query);
-        $resultSet=$resultSet->toArray();
-        for ($x=0;$x<sizeof($resultSet);$x++) {
-            $select ="SELECT uuid from ox_user where id = '".$resultSet[$x]['manager_id']."'";
-            $result = $this->executeQueryWithParams($select)->toArray();
-            $resultSet[$x]['manager_id']=$result[0]["uuid"];
-            if (isset($resultSet[$x]['parent_id'])) {
-                $selectParentUUID ="SELECT uuid from ox_group where id = '".$resultSet[$x]['parent_id']."'";
-                $result = $this->executeQueryWithParams($selectParentUUID)->toArray();
-                $resultSet[$x]['parent_id']=$result[0]["uuid"];
+            if(isset($orgId)){
+                $where .= " AND org_id =".$orgId; 
+            }
+
+
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(id)'];
+            $query ="SELECT uuid,name,parent_id,org_id,manager_id,description,logo FROM `ox_group`".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            $resultSet=$resultSet->toArray();
+            for($x=0;$x<sizeof($resultSet);$x++){
+                $select ="SELECT uuid from ox_user where id = '".$resultSet[$x]['manager_id']."'";
+                $result = $this->executeQueryWithParams($select)->toArray();
+                $resultSet[$x]['manager_id']=$result[0]["uuid"];
+                if(isset($resultSet[$x]['parent_id'])){
+                    $selectParentUUID ="SELECT uuid from ox_group where id = '".$resultSet[$x]['parent_id']."'";
+                    $result = $this->executeQueryWithParams($selectParentUUID)->toArray();
+                    $resultSet[$x]['parent_id']=$result[0]["uuid"];
             }
         }
         return array('data' => $resultSet,
                      'total' => $count);
     }
 
-    public function updateGroup($id, &$data, $files = null)
-    {
-        if (isset($data['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+    public function updateGroup ($id, &$data,$files = null,$orgId = null) {
+        if(isset($orgId)){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($orgId != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to edit the group");
-            } else {
-                $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+            }else{
+                $data['org_id'] = $this->getIdFromUuid('ox_organization',$orgId);    
             }
         }
-        $obj = $this->table->getByUuid($id, array());
+
+        $obj = $this->table->getByUuid($id,array());
         if (is_null($obj)) {
-            return 2;
+            throw new ServiceException("Updating non existent Group","non.existent.group");
         }
         $org = $this->organizationService->getOrganization($obj->org_id);
         $form = new Group();
         $data = array_merge($obj->toArray(), $data);
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
-        $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : null;
+        $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
-        if ($result) {
+        if($result){
             $data['manager_id']=$result[0]["id"];
         }
+
         $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
-        $data['parent_id'] = $data['parent_id'] == 0 ? null : $data['parent_id'];
+        $data['parent_id'] = $data['parent_id'] == 0 ? NULL : $data['parent_id'];
+
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
         try {
             $count = $this->table->save($form);
-            if (isset($files)) {
-                $this->uploadGroupLogo($org['uuid'], $id, $files);
+            if(isset($files)){
+                $this->uploadGroupLogo($org['uuid'],$id,$files);
             }
-            if ($count === 1) {
+            if($count === 1) {
                 $select = "SELECT count(id) as users from ox_user_group where avatar_id =".$data['manager_id']." AND group_id = (SELECT id from ox_group where uuid = '".$id."')";
                 $query=$this->executeQuerywithParams($select)->toArray();
-                if ($query[0]['users'] === '0') {
+                if($query[0]['users'] === '0'){
                     $insert = "INSERT INTO ox_user_group (`avatar_id`,`group_id`) VALUES (".$data['manager_id'].",(SELECT id from ox_group where uuid = '".$id."'))";
                     $query1 = $this->executeQuerywithParams($insert);
                 }
             } else {
-                return 2;
+                throw new ServiceException("Failed to Update","failed.update.group");
             }
         } catch (Exception $e) {
             print("Exception");
-            print_r($e->getMessage());
+            print_r($e->getMessage());exit;
             $this->rollback();
-            return 0;
+            throw $e;
         }
         $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])), 'GROUP_UPDATED');
         return $count;
     }
 
-    public function deleteGroup($id, $data)
-    {
-        if (isset($data['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+    public function deleteGroup($id) {
+        if(isset($id['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($id['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to delete the group");
             }
         }
-        $obj = $this->table->getByUuid($id, array());
-        if (is_null($obj)) {
-            return 0;
-        }
+        try{
+            $obj = $this->table->getByUuid($id['groupId'],array());
+            if (is_null($obj)) {
+                throw new ServiceException("Entity not found","group.not.found");
+            }
 
-        $org = $this->organizationService->getOrganization($obj->org_id);
-        $originalArray = $obj->toArray();
-        $form = new Group();
-        $originalArray['status'] = 'Inactive';
-        $form->exchangeArray($originalArray);
-        $result = $this->table->save($form);
-        $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'] )), 'GROUP_DELETED');
+            $select = "SELECT count(id) from ox_group where parent_id = ".$obj->id;
+            $result = $this->executeQuerywithParams($select)->toArray();
+
+            if($result[0]['count(id)'] > 0){
+                throw new ServiceException("Please remove the child groups before deleting the parent group","delete.parent.group");
+            }
+
+
+            $org = $this->organizationService->getOrganization($obj->org_id);
+            $originalArray = $obj->toArray();
+            $form = new Group();
+            $originalArray['status'] = 'Inactive';
+            $form->exchangeArray($originalArray);
+            $result = $this->table->save($form);
+        }catch(Exception $e){
+            throw $e;
+        }
+        $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'] )),'GROUP_DELETED');
         return $result;
     }
 
@@ -372,19 +423,19 @@ class GroupService extends AbstractService
     
         $cntQuery ="SELECT count(ox_user.id)".$from;
 
-        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
-            $filterArray = json_decode($filterParams['filter'], true);
-            if (isset($filterArray[0]['filter'])) {
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+            $filterArray = json_decode($filterParams['filter'],true); 
+            if(isset($filterArray[0]['filter'])){
                 $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
                 $filterList = $filterArray[0]['filter']['filters'];
-                $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic, self::$fieldName);
+                $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$fieldName);
             }
-            if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
+            if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                 $sort = $filterArray[0]['sort'];
-                $sort = FilterUtils::sortArray($sort, self::$fieldName);
+                $sort = FilterUtils::sortArray($sort,self::$fieldName);
             }
             $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+            $offset = $filterArray[0]['skip'];            
         }
 
         $where .= strlen($where) > 0 ? " AND ox_group.uuid = '".$id."' AND ox_group.status = 'Active'" : " WHERE ox_group.uuid = '".$id."' AND ox_group.status = 'Active'";
@@ -399,29 +450,33 @@ class GroupService extends AbstractService
                      'total' => $count);
     }
 
-    public function saveUser($id, $data)
-    {
-        if (isset($data['org_id'])) {
-            if (!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
-                ($data['org_id'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+    public function saveUser($params,$data) {
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to add users to group");
+            }else{
+                $params['orgId'] = $this->getIdFromUuid('ox_organization',$params['orgId']);
             }
         }
 
-        $obj = $this->table->getByUuid($id, array());
+        $obj = $this->table->getByUuid($params['groupId'],array());
+
         if (is_null($obj)) {
-            $this->logger->log(Logger::INFO, "Invalid group id - $id");
-            return 0;
+            $this->logger->log(Logger::INFO, "Invalid group id - ".$params['groupId']);
+            throw new ServiceException("Group does not belong to the organization","group.not.found");
         }
-        
+
+        if(isset($params['orgId'])){
+            if($params['orgId'] != $obj->org_id){
+               throw new ServiceException("Entity not found","group.not.found");  
+            }
+        }
+
         $org = $this->organizationService->getOrganization($obj->org_id);
-        if ($org['id'] != AuthContext::get(AuthConstants::ORG_ID)) {
-            $this->logger->log(Logger::WARN, "Group $id does not belong to logged in Organization");
-            return 0;
-        }
-        
-        if (!isset($data['userid']) || empty($data['userid'])) {
-            return 2;
+      
+        if(!isset($data['userid']) || empty($data['userid'])) {
+            throw new ServiceException("Enter User Ids","select.user");
         }
        
         $userArray = $this->organizationService->getUserIdList($data['userid']);
@@ -462,6 +517,6 @@ class GroupService extends AbstractService
             }
             return 1;
         }
-        return 0;
+        throw new ServiceException("Entity not found","group.not.found");
     }
 }

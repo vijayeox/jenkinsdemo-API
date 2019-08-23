@@ -1,10 +1,10 @@
 <?php
-namespace Oxzion\Import;
+namespace clients\hub\rules\Import;
 
 use Oxzion\Service\AbstractService;
 use Zend\Db\Adapter\Adapter;
 
-class ImportText extends AbstractService
+class Import extends AbstractService
 {
     private $adapter;
     public function __construct($config, $database, $adapter)
