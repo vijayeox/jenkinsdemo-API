@@ -59,13 +59,13 @@ class TemplateServiceTest extends ServiceTest
         if(!is_link($tempFolder)){
              FileUtils::createDirectory($tempFolder."/");
         }
-        $tempFile = $config['TEMPLATE_FOLDER']."/";
+        $tempFile = $config['TEMPLATE_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/";
         FileUtils::createDirectory($tempFile);
         copy(__DIR__."/template/53012471-2863-4949-afb1-e69b0891c98a/NewTemplate.tpl", $tempFile."NewTemplate.tpl");
         $TemplateService = new TemplateService($config, $this->adapter);
         $content = $TemplateService->getContent('NewTemplate', $data);
         $this->assertEquals("<p>Hello ".$data['username'].", this is a organization specific template.</p>", $content);
-        $templateName="GenericTemplate.tpl";
+        $templateName="NewTemplate.tpl";
         FileUtils::deleteFile($templateName, $tempFile);
     }
 
