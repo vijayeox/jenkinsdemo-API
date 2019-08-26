@@ -41,7 +41,7 @@ class WidgetControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['query_id' => 3,'visualization_id' => 2, 'ispublic' => 1];
+        $data = ['query_id' => 3,'visualization_id' => 2, 'ispublic' => 1 , 'name' => 'widget3'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_widget'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/widget', 'POST', $data);

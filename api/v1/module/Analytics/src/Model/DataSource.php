@@ -12,7 +12,7 @@ class DataSource extends Entity
         'uuid' => null,
         'name' => null,
         'type' => null,
-        'connection_string' => null,
+        'configuration' => null,
         'created_by' => 0,
         'date_created' => null,
         'org_id' =>null,
@@ -21,7 +21,7 @@ class DataSource extends Entity
 
     public function validate()
     {
-        $dataArray = array("name", "type", "connection_string", "created_by");
+        $dataArray = array("name", "type", "configuration");
         $this->validateWithParams($dataArray);
     }
 }

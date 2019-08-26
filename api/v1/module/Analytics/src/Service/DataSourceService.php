@@ -104,7 +104,7 @@ class DataSourceService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_datasource')
-            ->columns(array('name','type','connection_string','created_by','date_created','org_id','isdeleted','uuid'))
+            ->columns(array('name','type','configuration','created_by','date_created','org_id','isdeleted','uuid'))
             ->where(array('ox_datasource.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
@@ -130,7 +130,7 @@ class DataSourceService extends AbstractService
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
             foreach ($result as $key => $value) {
-                $result[$key]['connection_string'] = json_decode($result[$key]['connection_string']);
+                $result[$key]['configuration'] = json_decode($result[$key]['configuration']);
                 unset($result[$key]['id']);
             }
             return array('data' => $result,

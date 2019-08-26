@@ -104,7 +104,7 @@ class VisualizationService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_visualization')
-            ->columns(array('uuid','type','created_by','date_created','org_id','isdeleted'))
+            ->columns(array('uuid','name','created_by','date_created','org_id','isdeleted'))
             ->where(array('ox_visualization.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {

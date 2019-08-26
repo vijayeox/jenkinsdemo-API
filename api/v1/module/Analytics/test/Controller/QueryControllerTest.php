@@ -39,7 +39,7 @@ class QueryControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => "query4", 'datasource_id' => 1, 'query_json' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}', 'ispublic' => 1];
+        $data = ['name' => "query4", 'datasource_id' => 1, 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}', 'ispublic' => 1];
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);
@@ -50,14 +50,14 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['datasource_id'], $data['datasource_id']);
-        $this->assertEquals($content['data']['query_json'], $data['query_json']);
+        $this->assertEquals($content['data']['configuration'], $data['configuration']);
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_query'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => "query4", 'query_json' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}'];
+        $data = ['name' => "query4", 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}'];
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);

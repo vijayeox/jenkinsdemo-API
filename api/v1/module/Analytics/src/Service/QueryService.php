@@ -101,7 +101,7 @@ class QueryService extends AbstractService
 
     public function getQuery($uuid)
     {
-        $statement = "Select uuid,name,datasource_id,query_json,ispublic,created_by,date_created,org_id,isdeleted from ox_query where isdeleted <> 1 AND (uuid = '".$uuid."' and org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
+        $statement = "Select uuid,name,datasource_id,configuration,ispublic,created_by,date_created,org_id,isdeleted from ox_query where isdeleted <> 1 AND (uuid = '".$uuid."' and org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
         $resultSet = $this->executeQuerywithParams($statement);
         $result = $resultSet->toArray();
         if (count($result) == 0) {
@@ -127,7 +127,7 @@ class QueryService extends AbstractService
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
             foreach ($result as $key => $value) {
-                $result[$key]['query_json'] = json_decode($result[$key]['query_json']);
+                $result[$key]['configuration'] = json_decode($result[$key]['configuration']);
                 unset($result[$key]['id']);
             }
             return array('data' => $result,
@@ -136,7 +136,7 @@ class QueryService extends AbstractService
 
     public function getQueryJson($uuid)
     {
-        $statement = "Select query_json as query from ox_query where isdeleted <> 1 AND uuid = '".$uuid."'";
+        $statement = "Select configuration as query from ox_query where isdeleted <> 1 AND uuid = '".$uuid."'";
         $resultSet = $this->executeQuerywithParams($statement);
         $result = $resultSet->toArray();
         if($result)
