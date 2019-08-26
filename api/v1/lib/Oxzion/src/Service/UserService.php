@@ -12,7 +12,7 @@ use Oxzion\Service\EmailService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Search\Elastic\IndexerImpl;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
 use Oxzion\Utils\FilterUtils;
@@ -206,7 +206,7 @@ class UserService extends AbstractService
                 }
             }
         
-        $data['uuid'] = Uuid::uuid4()->toString();
+        $data['uuid'] = UuidUtil::uuid();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         if(isset($data['managerid'])){
@@ -1072,26 +1072,40 @@ class UserService extends AbstractService
         return $fileName[1];
     }
 
+    public function resetPassword($data){
+        $resetCode = $data['password_reset_code'];
+        $password = md5(sha1($data['new_password']));
+        $expiry = date("Y-m-d H:i:s");
+        $query = "select id from ox_user where password_reset_expiry_date > '".$expiry."' and password_reset_code = '".$resetCode."'";
+        $result = $this->executeQuerywithParams($query);
+        $result= $result->toArray();
+        if(count($result) == 0){
+            throw new ServiceException("Invalid Reset Code", "invalid.reset.code");
+        }
+        $query = "update ox_user set password = '".$password."', password_reset_code = NULL, password_reset_expiry_date = NULL where password_reset_code = '".$resetCode."'";
+        $result = $this->executeQuerywithParams($query);
+        
+    }
+
     public function sendResetPasswordCode($username)
     {
         
-        $resetPasswordCode = BosUtils::randomPassword(); // I am using the randomPassword generator to do this since it is similar to a password generation
+        $resetPasswordCode = UuidUtil::uuid();
 
         $userDetails = $this->getUserBaseProfile($username);
 
         if ($username === $userDetails['username']) {
-            $userReset['uuid'] = $id = $userDetails['uuid'];
             $userReset['email'] = $userDetails['email'];
             $userReset['firstname'] = $userDetails['firstname'];
             $userReset['lastname'] = $userDetails['lastname'];
-            $userReset['password_reset_code'] = $resetPasswordCode;
+            $userReset['url'] = $this->config['applicationUrl']."/?resetpassword=".$resetPasswordCode;
             $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
-            $userReset['modified_id'] = $userDetails['uuid'];
+            $userDetails['password_reset_expiry_date'] = $userReset['password_reset_expiry_date'];
+            $userDetails['password_reset_code'] = $resetPasswordCode;
             //Code to update the password reset and expiration time
-            $userUpdate = $this->updateUser($id, $userReset);
+            $userUpdate = $this->updateUser($userDetails['uuid'], $userDetails);
 
             if ($userUpdate) {
-                $userReset['baseurl'] = $this->config['baseUrl'];
                 $this->messageProducer->sendTopic(json_encode(array(
                     'To' => $userReset['email'],
                     'Subject' => $userReset['firstname'] . ', You login details for OX Zion!',

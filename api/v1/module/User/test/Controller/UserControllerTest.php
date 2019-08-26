@@ -62,17 +62,6 @@ class UserControllerTest extends ControllerTest
     }
 
 
-    private function executeUpdate($query)
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        return $result;
-    }
-  
-
-    
-
     public function testCreateByAdmin()
     {
         $this->initAuthToken($this->adminUser);
