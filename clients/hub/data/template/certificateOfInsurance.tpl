@@ -253,24 +253,6 @@
 			{elseif $state_id == 'NY'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/notice/NY_Notice.tpl"}</b>
-					Retroactive Date: {$effective_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$effective_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-			   to the date that the alleged negligent act, error, or omission occurred.
-			   Retroactive Date: {$effective_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$effective_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-			   to the date that the alleged negligent act, error, or omission occurred.
-			   Retroactive Date: {$effective_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$effective_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-			   to the date that the alleged negligent act, error, or omission occurred.
-			   Retroactive Date: {$effective_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$effective_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-			   to the date that the alleged negligent act, error, or omission occurred.
-			   Retroactive Date: {$effective_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$effective_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-			   to the date that the alleged negligent act, error, or omission occurred.
-			   Retroactive Date: {$effective_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$effective_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-			   to the date that the alleged negligent act, error, or omission occurred.
-			   Retroactive Date: {$effective_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$effective_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-			   to the date that the alleged negligent act, error, or omission occurred.
-			   Retroactive Date: {$effective_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$effective_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-			   to the date that the alleged negligent act, error, or omission occurred.
-			   Retroactive Date: {$effective_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$effective_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-			   to the date that the alleged negligent act, error, or omission occurred.
 				</p></center>
 			{elseif $state_id == 'OH'}
 				<center><p class = "notice">
