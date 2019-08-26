@@ -65,7 +65,8 @@ class TemplateServiceTest extends ServiceTest
         $TemplateService = new TemplateService($config, $this->adapter);
         $content = $TemplateService->getContent('NewTemplate', $data);
         $this->assertEquals("<p>Hello ".$data['username'].", this is a organization specific template.</p>", $content);
-        FileUtils::deleteDirectoryContents($tempFolder);
+        $templateName="GenericTemplate.tpl";
+        FileUtils::deleteFile($templateName, $tempFile);
     }
 
     public function testEmailTemplateNotFound()
