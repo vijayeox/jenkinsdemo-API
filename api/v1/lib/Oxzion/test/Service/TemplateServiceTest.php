@@ -35,8 +35,10 @@ class TemplateServiceTest extends ServiceTest
         $data = ['username' => 'John','uuid' => '53012471-2863-4949-afb1-e69b0891c98a'];
         AuthContext::put(AuthConstants::ORG_UUID, $data['uuid']);
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['TEMPLATE_FOLDER'].$data['uuid']."/";
-        FileUtils::createDirectory($tempFolder);
+        $tempFolder = $config['TEMPLATE_FOLDER'].$data['uuid'];
+        if(!is_link($tempFolder)){
+             FileUtils::createDirectory($tempFolder."/");
+        }
         $tempFile = $config['TEMPLATE_FOLDER']."/";
         FileUtils::createDirectory($tempFile);
         copy(__DIR__."/template/GenericTemplate.tpl", $tempFile."GenericTemplate.tpl");
@@ -53,9 +55,13 @@ class TemplateServiceTest extends ServiceTest
         $data = ['username' => 'John','uuid' => '53012471-2863-4949-afb1-e69b0891c98a'];
         AuthContext::put(AuthConstants::ORG_UUID, $data['uuid']);
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['TEMPLATE_FOLDER'].$data['uuid']."/";
-        FileUtils::createDirectory($tempFolder);
-        copy(__DIR__."/template/53012471-2863-4949-afb1-e69b0891c98a/NewTemplate.tpl", $tempFolder."NewTemplate.tpl");
+        $tempFolder = $config['TEMPLATE_FOLDER'].$data['uuid'];
+        if(!is_link($tempFolder)){
+             FileUtils::createDirectory($tempFolder."/");
+        }
+        $tempFile = $config['TEMPLATE_FOLDER']."/";
+        FileUtils::createDirectory($tempFile);
+        copy(__DIR__."/template/53012471-2863-4949-afb1-e69b0891c98a/NewTemplate.tpl", $tempFile."NewTemplate.tpl");
         $TemplateService = new TemplateService($config, $this->adapter);
         $content = $TemplateService->getContent('NewTemplate', $data);
         $this->assertEquals("<p>Hello ".$data['username'].", this is a organization specific template.</p>", $content);
@@ -67,8 +73,10 @@ class TemplateServiceTest extends ServiceTest
         $data = ['username' => 'John','uuid' => '53012471-2863-4949-afb1-e69b0891c98a'];
         AuthContext::put(AuthConstants::ORG_UUID, $data['uuid']);
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['TEMPLATE_FOLDER'].$data['uuid']."/";
-        FileUtils::createDirectory($tempFolder);
+        $tempFolder = $config['TEMPLATE_FOLDER'].$data['uuid'];
+        if(!is_link($tempFolder)){
+             FileUtils::createDirectory($tempFolder."/");
+        }
         $tempFile = $config['TEMPLATE_FOLDER']."/";
         FileUtils::createDirectory($tempFile);
         $TemplateService = new TemplateService($config, $this->adapter);

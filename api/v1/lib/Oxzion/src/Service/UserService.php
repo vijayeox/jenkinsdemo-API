@@ -235,12 +235,14 @@ class UserService extends AbstractService
             // // Code to add the user information to the Elastic Search Index
             // $result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
             // $es = $this->generateUserIndexForElastic($data);
+            $orgid = $this->getUuidFromId('ox_organization',$data['orgid']); //Template Service
             $this->commit();
             $this->messageProducer->sendTopic(json_encode(array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'email' => $data['email'],
-                'password' => $password
+                'password' => $password,
+                'orgid' => $orgid
             )), 'USER_ADDED');
             return $count;
         } catch (Exception $e) {
@@ -336,7 +338,7 @@ class UserService extends AbstractService
             $this->rollback();
             throw $e;
         }
-
+        $data['orgid'] = $org->uuid; // overriding uuid for Template Service
         $this->messageProducer->sendTopic(json_encode(array(
             'To' => $data['email'],
             'Subject' => $org->name.' created!',
@@ -798,7 +800,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_user')
-            ->columns(array('id', 'uuid', 'username', 'firstname', 'lastname', 'name', 'email'))
+            ->columns(array('id', 'uuid', 'username', 'firstname', 'lastname', 'name', 'email','orgid'))
             ->where(array('ox_user.username' => $username, 'ox_user.email' => $username), 'OR');
 
         $response = $this->executeQuery($select)->toArray();
@@ -1090,6 +1092,9 @@ class UserService extends AbstractService
             //Code to update the password reset and expiration time
             $userUpdate = $this->updateUser($id, $userReset);
 
+            $userReset['orgid'] = $this->getUuidFromId('ox_organization',$userDetails['orgid']);
+
+ 
             if ($userUpdate) {
                 $userReset['baseurl'] = $this->config['baseUrl'];
                 $this->messageProducer->sendTopic(json_encode(array(
