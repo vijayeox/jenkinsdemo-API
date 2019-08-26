@@ -27,13 +27,10 @@ class PersistenceTest extends ServiceTest
         );
 
         $config = $this->getApplicationConfig();
-        $dbConfig = $config['db'];
-        $this->database = $this->data['appName'] . "___" . $this->data['UUID'];
-        $dbConfig['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
-        $dbConfig['database'] = $this->database;
-        $this->adapter = new Adapter($dbConfig);
-
-        $migrationObject = new Migration($config, $this->database, $this->adapter);
+        
+        $migrationObject = new Migration($config, $this->data['appName'], $this->data['UUID']);
+        $this->adapter = $migrationObject->getAdapter();
+        $this->database = $migrationObject->getDatabase();
         $migrationObject->initDB($this->data);
         $dataSet = array_diff(scandir(dirname(__FILE__) . "/scripts/"), array(".", ".."));
         $migrationFolder = dirname(__FILE__) . "/scripts/";

@@ -7,6 +7,8 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Table;
 use Oxzion\Utils\FileUtils;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 class Migration extends AbstractService
 {
@@ -17,14 +19,30 @@ class Migration extends AbstractService
      * @param $config
      * @param $database
      */
-    public function __construct($config, $database, $adapter)
+    public function __construct($config, $appName, $appId)
     {
-        $this->database = $database;
-        $dbConfig = $config['db'];
-        $dbConfig['database']='mysql';
-        $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username='.$dbConfig["username"].';password='.$dbConfig["password"].'';
+        $this->database = $appName.'___'.$appId;
+        $dbConfig = array_merge(array(), $config['db']);
+        $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
+        $dbConfig['database'] = 'mysql';
         $this->mysqlAdapter = new Adapter($dbConfig);
-        parent::__construct($config, $adapter);
+        $dbConfig = array_merge(array(), $config['db']);
+        $dbConfig['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
+        $dbConfig['database'] = $this->database;
+        $adapter = new Adapter($dbConfig);
+        $logger = new Logger();
+        $writer = new Stream(__DIR__ . '/../../../../../logs/Persistence.log');
+        $logger->addWriter($writer);
+        parent::__construct($config, $adapter, $logger);
+    }
+
+    //this method is used only for phpunit tests. Not required to be called otherwise
+    public function getAdapter(){
+        return $this->dbAdapter;
+    }
+
+    public function getDatabase(){
+        return $this->database;
     }
 
     /**
