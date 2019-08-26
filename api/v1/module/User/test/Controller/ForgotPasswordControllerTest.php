@@ -12,6 +12,7 @@ use User\Controller\UserController;
 use User\Controller\ForgotPasswordController;
 use Oxzion\Messaging\MessageProducer;
 use Mockery;
+use Oxzion\Utils\UuidUtil;
     
 
 
@@ -47,7 +48,6 @@ class ForgotPasswordControllerTest extends ControllerTest
 
     public function testForgotPassword()
     {
-        $this->initAuthToken($this->managerUser);
         $data = ['username' => 'bharatgtest'];
         $this->setJsonContent(json_encode($data));
         if(enableCamel == 0){
@@ -64,7 +64,6 @@ class ForgotPasswordControllerTest extends ControllerTest
 
     public function testForgotPasswordWrongEmail()
     {
-        $this->initAuthToken($this->managerUser);
         $data = ['username' => 'wrongemail@va.com'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/me/forgotpassword', 'POST', $data);
@@ -75,4 +74,80 @@ class ForgotPasswordControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'The username entered does not match your profile username');
     } 
 
+    public function testResetPassword()
+    {
+        $expiry = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+        $resetCode = UuidUtil::uuid();
+        $query = "update ox_user set password_reset_code = '".$resetCode."', password_reset_expiry_date = '".$expiry."' where id = 6" ;
+        print($query);
+        $this->executeUpdate($query);
+        $data = ['password_reset_code' => $resetCode, 
+                 'new_password' => 'password',
+                 'confirm_password' => 'password'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/me/resetpassword', 'POST', $data);
+        $this->assertResponseStatusCode(200);      
+        $this->setDefaultAsserts('resetPassword');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        
+    }
+    
+    public function testResetPasswordMismatch()
+    {
+        $expiry = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+        $resetCode = UuidUtil::uuid();
+        $query = "update ox_user set password_reset_code = '".$resetCode."', password_reset_expiry_date = '".$expiry."' where id = 6" ;
+        print($query);
+        $this->executeUpdate($query);
+        $data = ['password_reset_code' => $resetCode, 
+                 'new_password' => 'password',
+                 'confirm_password' => 'passwordmismatch'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/me/resetpassword', 'POST', $data);
+        $this->assertResponseStatusCode(400);      
+        $this->setDefaultAsserts('resetPassword');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        
+    }
+
+    public function testResetPasswordInvalidResetCode()
+    {
+        $expiry = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+        $resetCode = UuidUtil::uuid();
+        $query = "update ox_user set password_reset_code = '".$resetCode."', password_reset_expiry_date = '".$expiry."' where id = 6" ;
+        print($query);
+        $this->executeUpdate($query);
+        $data = ['password_reset_code' => UuidUtil::uuid(), 
+                 'new_password' => 'password',
+                 'confirm_password' => 'password'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/me/resetpassword', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);      
+        $this->setDefaultAsserts('resetPassword');
+        $this->assertEquals($content['status'], 'error');
+        
+    }
+
+    public function testResetPasswordExpiredResetCode()
+    {
+        $expiry = date("Y-m-d H:i:s", strtotime("-1 minutes"));
+        $resetCode = UuidUtil::uuid();
+        $query = "update ox_user set password_reset_code = '".$resetCode."', password_reset_expiry_date = '".$expiry."' where id = 6" ;
+        print($query);
+        $this->executeUpdate($query);
+        $data = ['password_reset_code' => $resetCode, 
+                 'new_password' => 'password',
+                 'confirm_password' => 'password'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/me/resetpassword', 'POST', $data);
+        $this->assertResponseStatusCode(404);      
+        $this->setDefaultAsserts('resetPassword');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        
+    }
+    
 }

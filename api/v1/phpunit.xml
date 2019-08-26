@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true" printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinter">
     <testsuites>
-        <testsuite name="Messaging Fixtures Fixtures">
+        <!-- <testsuite name="Messaging Fixtures Fixtures">
             <directory>./module/Messaging/test</directory>
         </testsuite>
         <testsuite name="Attachment Fixtures">
@@ -28,22 +28,22 @@
         </testsuite>
         <testsuite name="Callback Fixtures">
             <directory>./module/Callback/test</directory>
-        </testsuite>
+        </testsuite> -->
         <testsuite name="User Fixtures">
-            <directory>./module/Organization/test</directory>
-            <directory>./module/Alert/test</directory>
+            <!-- <directory>./module/Organization/test</directory>
+            <directory>./module/Alert/test</directory> -->
             <directory>./module/User/test</directory>
-            <directory>./module/Email/test</directory>
+            <!-- <directory>./module/Email/test</directory>
             <directory>./module/Group/test</directory>
             <directory>./module/Contact/test</directory>
             <directory>./module/Privilege/test</directory>
             <directory>./module/Search/test</directory>
-            <directory>./module/ProspectResearch/test</directory>
+            <directory>./module/ProspectResearch/test</directory> -->
         </testsuite>
-       <testsuite name="Form File Fixtures">
+       <!-- <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
-        </testsuite>
+        </testsuite> -->
     </testsuites>
     <php>
         <ini name="memory_limit" value="250M" />

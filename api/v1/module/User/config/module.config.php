@@ -253,14 +253,14 @@ return [
                     ],
                 ],
             ],
-            'updateNewPassword' => [
+            'resetPassword' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user/me/updatenewpassword',
+                    'route' => '/user/me/resetpassword',
                     'defaults' => [
-                        'controller' => Controller\UserController::class,
+                        'controller' => Controller\ForgotPasswordController::class,
                         'method' => 'POST',
-                        'action' => 'updateNewPassword'
+                        'action' => 'resetPassword'
                     ],
                 ],
             ],
