@@ -62,7 +62,7 @@
 		       	   </div>
 	        	</div>
 	        	<div class = "in-type1"> 
-		            <p class = "ins_type"  style="margin-bottom: 0px;">Professional Liability - Claims Made Form</p>
+		            <p class = "ins_type"  style="margin-bottom: 0px;margin-left:1px;">Professional Liability - Claims Made Form</p>
 		            <p class = "ins_font">Insured's Status: {$insured_status}</p>
 		            <p class = "ins_font">${$single_limit}&nbsp&nbsp&nbsp(per occurrence)</p>
 		            <p class = "ins_font">${$annual_aggregate}</p>
@@ -88,13 +88,13 @@
     	<center><p class = "policy_notice1">Retroactive Date: {$effective_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$effective_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
 			   to the date that the alleged negligent act, error, or omission occurred.
 		</p></center>
-		<hr></hr>
-		<b><center>Physical Address {if isset($physical_address)} 
+		<hr class = "spacing1"></hr>
+		<b><center><p class = "phy_add">Physical Address {if isset($physical_address)} 
 										 : {$physical_address}
 									  {else}
 										is the same as the mailing address
 									{/if}
-			</center></b>
+			</p></center></b>
 		<hr class="hrtag1"></hr>
 		<div class = "second_content">
 			{if isset($update)}

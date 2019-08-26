@@ -73,6 +73,6 @@ class DocumentServiceTest extends ServiceTest
         $output = $generatePdf->generatePdfDocumentFromHtml($content, $header,$footer,$destination);
         $this->assertTrue(is_file($output));
         $this->assertTrue(filesize($output)>0);
-        // FileUtils::deleteFile("certificateOfInsurance.pdf", $config['TEMPLATE_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/");
+        FileUtils::deleteFile("certificateOfInsurance.pdf", $config['TEMPLATE_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/");
     }
 }
