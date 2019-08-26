@@ -178,4 +178,80 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
+
+    public function testGetListOfFilesWithQueryParameter()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
+        $this->dispatch('/app/somerandom123/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class);
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('mypolicylisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['data'], 'New File Data - Latest Completed');
+        $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['total'], 1);
+    }
+
+    public function testGetListOfFilesWithWorkflowParameter()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
+        $this->dispatch('/app/somerandom123/workflow/1/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class);
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('mypolicylisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['data'], 'New File Data - Latest Completed');
+        $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['total'], 1);
+    }
+
+    public function testGetListOfFilesWithoutFilters()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
+        $this->dispatch('/app/somerandom123/file?filter=[{"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class);
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('mypolicylisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['data'], 'New File Data - Latest Completed');
+        $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['total'], 1);
+    }
+
+    public function testGetListOfFiles()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
+        $this->dispatch('/app/somerandom123/file', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class);
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('mypolicylisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['data'], 'New File Data - Latest Completed');
+        $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['total'], 1);
+    }
 }

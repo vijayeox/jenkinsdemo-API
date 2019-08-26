@@ -11,6 +11,7 @@ use Zend\Db\Sql\Expression;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Service\FileService;
 use Oxzion\Workflow\WorkFlowFactory;
+use Oxzion\Utils\FilterUtils;
 use Exception;
 
 class WorkflowInstanceService extends AbstractService
@@ -271,5 +272,89 @@ class WorkflowInstanceService extends AbstractService
             return 0;
         }
         return $data;
+    }
+
+    public function getFileList($params, $filterParams = null)
+    {
+        if(!empty($filterParams)){
+            $filterParamsArray = json_decode($filterParams['filter'],TRUE);
+        }
+        $fieldArray = array();
+        $filterlogic = array();
+        $fields = "";
+        $sortFields = array();
+        $appId = $this->getIdFromUuid('ox_app', $params['appId']);
+
+        if(isset($params['workflowId'])){
+            $workflowId = $params['workflowId'];
+        }
+
+        $appFilter = "ox_workflow.app_id = $appId";
+        if(isset($workflowId)){
+            $appFilter .= " AND ox_workflow.id = $workflowId";
+        }
+        if (isset($filterParamsArray[0]['filter'])) {
+            $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
+            foreach($filterParamsArray[0]['filter']['filters'] as $key => $value){
+                $fields .= $fields !== "" ? "," : $fields ;
+                $fields .= "'".$value['field']."'";
+                $fieldArray[$value['field']] = $value;
+            }
+            $query = "SELECT distinct ox_field.data_type, ox_field.name
+                    from ox_workflow
+                    inner join ox_activity on ox_activity.workflow_id = ox_workflow.id
+                    inner join ox_activity_form on ox_activity_form.activity_id = ox_activity.id
+                    inner join ox_form on ox_form.id = ox_activity_form.form_id
+                    inner join ox_form_field on ox_form_field.form_id = ox_form.id
+                    inner join ox_field on ox_field.id = ox_form_field.field_id
+                    where $appFilter AND ox_field.name IN ($fields)";
+            
+            $resultSet = $this->executeQuerywithParams($query)->toArray();
+            $fields = array();
+            foreach($resultSet as $key => $value){
+                switch($value['data_type']){
+                    case 'date': 
+                        $fields[$value['name']] = "(ox_field.name = '".$value['name']."' AND CAST(ox_file_attribute.fieldvalue AS DATETIME))";
+                    break;
+                    case 'int':
+                        $fields[$value['name']]= "(ox_field.name = '".$value['name']."' AND CAST(ox_file_attribute.fieldvalue AS INT))";
+                    break;
+                    default:
+                        $fields[$value['name']]= "(ox_field.name = '".$value['name']."' AND ox_file_attribute.fieldvalue)";
+                }
+                $sortFields[$value['name']] = "ox_file_attribute.fieldvalue";
+            }
+
+            $where = FilterUtils::filterArray($filterParamsArray[0]['filter']['filters'], $filterlogic, $fields);            
+        }
+        
+        if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
+            $sort = $filterParamsArray[0]['sort'];
+            $sort = FilterUtils::sortArray($sort, $sortFields);
+        }else{
+            $sort = "";
+        }
+        if(!empty($sort)){
+            $sort = " ORDER BY ".$sort;
+        }
+        $pageSize = "LIMIT ".(isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
+        $offset = "OFFSET ".(isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
+        $where = " WHERE $appFilter AND owi.status = 'Completed' ".(isset($where) ? " AND $where" : "");
+        
+        $fromQuery = "from ox_workflow_instance as owi
+        inner join ox_workflow on ox_workflow.id = owi.workflow_id 
+        inner join ox_file as f1 on f1.workflow_instance_id = owi.id
+        inner join (SELECT workflow_instance_id,max(date_created) as date_created from ox_file 
+        group by workflow_instance_id) as f2 on f1.workflow_instance_id = f2.workflow_instance_id and f1.date_created = f2.date_created
+        inner join ox_file_attribute on ox_file_attribute.fileid = f1.id
+        inner join ox_field on ox_field.id = ox_file_attribute.fieldid";
+
+        $countQuery = "SELECT count(distinct f1.id) as `count` $fromQuery $where";
+        $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
+
+        $select = "SELECT distinct f1.data,owi.status,ox_workflow.name $fromQuery $where $sort $pageSize $offset";
+        // print_r($select);exit;
+        $resultSet = $this->executeQuerywithParams($select)->toArray();
+       return array('data' => $resultSet,'total' => $countResultSet[0]['count']);
     }
 }

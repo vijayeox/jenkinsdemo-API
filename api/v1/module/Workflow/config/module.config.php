@@ -86,6 +86,20 @@ return [
                     ],
                 ],
             ],
+            'mypolicylisting' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/[workflow/:workflowId/]file',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

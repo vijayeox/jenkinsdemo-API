@@ -23,6 +23,14 @@ ox_field:
     data_type: "integer"
     required: 1
     sequence: 1
+-
+    id: 3
+    name: "expiry_date"
+    app_id: 99
+    workflow_id: 1
+    data_type: "date"
+    required: 1
+    sequence: 1     
 ox_activity:
   -
     id: 1
@@ -67,6 +75,10 @@ ox_form_field:
     id: 2
     form_id: 1
     field_id: 2
+-
+    id: 3
+    form_id: 1
+    field_id: 3      
 ox_workflow:
   -
     id: 1
@@ -87,12 +99,28 @@ ox_file:
     org_id: 1
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
+    date_created: "2019-06-25 00:00:00"
   -
     id: 2
     workflow_instance_id: 1
     org_id: 1
-    data: "new data"
+    data: "New File Data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
+    date_created: "2019-06-28 00:00:00"
+  -
+    id: 3
+    workflow_instance_id: 2
+    org_id: 1
+    data: "New File Data - Completed"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
+    date_created: "2019-06-26 00:00:00"
+  -
+    id: 4
+    workflow_instance_id: 2
+    org_id: 1
+    data: "New File Data - Latest Completed"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9146d"
+    date_created: "2019-06-26 10:00:00"
 ox_workflow_instance:
   -
     id: 1
@@ -101,6 +129,15 @@ ox_workflow_instance:
     app_id: 99
     org_id: 1
     status: "In Progress"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+  -
+    id: 2
+    workflow_id: 1
+    process_instance_id: 1
+    app_id: 99
+    org_id: 1
+    status: "Completed"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
 ox_file_attribute:
@@ -128,6 +165,18 @@ ox_file_attribute:
     org_id: 1
     fieldvalue: 2
     fieldid: 2
+  -
+    id: 5
+    fileid: 3
+    org_id: 1
+    fieldvalue: "2030-06-20"
+    fieldid: 3
+  -
+    id: 6
+    fileid: 4
+    org_id: 1
+    fieldvalue: "2030-06-20"
+    fieldid: 3
 ox_app_menu:
   -
     id: 1
@@ -181,3 +230,9 @@ ox_app_page:
     app_id: 99
     date_created: '2019-06-26 00:00:00'
     created_by: 1
+ox_activity_instance:
+  -
+    id: 1
+    workflow_instance_id: 1
+    activity_instance_id: "[activityInstanceId]"
+    activity_id: 1

@@ -12,22 +12,18 @@ class FilterUtils
             $field = $filterList[$x]['field'];
             $field = isset($fieldMap[$field]) ? $fieldMap[$field] : $field;
             $value = $filterList[$x]['value'];
+            $operatorp1 = '';
+            $operatorp2 = '';
             if ($operator == 'startswith') {
-                $operatorp1 = '';
                 $operatorp2 = '%';
                 $operation = ' like ';
             } elseif ($operator == 'endswith') {
                 $operatorp1 = '%';
-                $operatorp2 = '';
                 $operation = ' like ';
             } elseif ($operator == 'eq') {
                 $operation = ' = ';
-                $operatorp1 = '';
-                $operatorp2 = '';
             } elseif ($operator == 'neq') {
                 $operation = ' <> ';
-                $operatorp1 = '';
-                $operatorp2 = '';
             } elseif ($operator == 'contains') {
                 $operatorp1 = '%';
                 $operatorp2 = '%';
