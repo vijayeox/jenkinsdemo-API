@@ -104,7 +104,7 @@ class VisualizationService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_visualization')
-            ->columns(array('uuid','name','created_by','date_created','org_id','isdeleted'))
+            ->columns(array('uuid','name','is_owner' => (new Expression('IF(created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'org_id','isdeleted'))
             ->where(array('ox_visualization.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
@@ -115,24 +115,23 @@ class VisualizationService extends AbstractService
 
     public function getVisualizationList($params = null)
     {
+        $paginateOptions = FilterUtils::paginate($params);
+        $where = $paginateOptions['where'];
+        $where .= empty($where) ? "WHERE isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
+        $sort = " ORDER BY ".$paginateOptions['sort'];
+        $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
-            $paginateOptions = FilterUtils::paginate($params);
-            $where = $paginateOptions['where'];
-            $where .= empty($where) ? "WHERE isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
-            $sort = " ORDER BY ".$paginateOptions['sort'];
-            $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
+        $cntQuery ="SELECT count(id) as 'count' FROM `ox_visualization` ";
+        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+        $count=$resultSet->toArray()[0]['count'];
 
-            $cntQuery ="SELECT count(id) as 'count' FROM `ox_visualization` ";
-            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count=$resultSet->toArray()[0]['count'];
-
-            $query ="SELECT * FROM `ox_visualization`".$where." ".$sort." ".$limit;
-            $resultSet = $this->executeQuerywithParams($query);
-            $result = $resultSet->toArray();
-            foreach ($result as $key => $value) {
-                unset($result[$key]['id']);
-            }
-            return array('data' => $result,
-                     'total' => $count);
+        $query ="SELECT uuid,name,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted FROM `ox_visualization`".$where." ".$sort." ".$limit;
+        $resultSet = $this->executeQuerywithParams($query);
+        $result = $resultSet->toArray();
+        foreach ($result as $key => $value) {
+            unset($result[$key]['id']);
+        }
+        return array('data' => $result,
+                 'total' => $count);
     }
 }

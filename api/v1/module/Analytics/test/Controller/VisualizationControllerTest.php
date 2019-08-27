@@ -178,7 +178,7 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']['data']), 1);
         $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['data'][0]['name'], 'Pie Chart');
-        $this->assertEquals($content['data']['data'][0]['created_by'], 1);
+        $this->assertEquals($content['data']['data'][0]['is_owner'], 'true');
         $this->assertEquals($content['data']['total'],2);
     }
 

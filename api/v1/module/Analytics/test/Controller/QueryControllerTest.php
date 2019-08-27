@@ -182,7 +182,7 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']['data']), 2);
         $this->assertEquals($content['data']['data'][0]['uuid'], '86c0cc5b-2567-4e5f-a741-f34e9f6f1af1');
         $this->assertEquals($content['data']['data'][0]['name'], 'query2');
-        $this->assertEquals($content['data']['data'][0]['created_by'], 2);
+        $this->assertEquals($content['data']['data'][0]['is_owner'], 'false');
         $this->assertEquals($content['data']['total'],3);
     }
 

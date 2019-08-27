@@ -185,7 +185,7 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']['data']), 1);
         $this->assertEquals($content['data']['data'][0]['uuid'], 'fc67ceb2-4b6f-4a33-8527-5fc6b0822988');
         $this->assertEquals($content['data']['data'][0]['name'], 'Dashboard2');
-        $this->assertEquals($content['data']['data'][0]['created_by'], 1);
+        $this->assertEquals($content['data']['data'][0]['is_owner'], 'true');
         $this->assertEquals($content['data']['total'],2);
     }
 
