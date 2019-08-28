@@ -1,0 +1,87 @@
+app:
+  -
+    name: Dive Insurance
+org:
+  - 
+    name: Vincencia & Buckley
+
+group:
+  -
+    name: Policy Holder
+  -
+    name: CSR
+
+dashboard:
+  - 
+    name: Dashboard
+    content: content/Dashboard.txt
+menu:
+  -
+    name: Home
+    group: Policy Holder
+    page: 
+      -
+        name: My Policies
+        content:
+          -
+            type: Document
+            content: content/Document.txt
+          -
+            type: Form
+            content: content/HubForm1.json
+  -
+    name: My History
+    group: Policy Holder
+    page:
+      -
+        name: All Policies
+        content:
+          -
+            type: LIST
+            content:
+              -
+                url: ""
+  -
+    name: Home
+    group: CSR
+    page:
+      -
+        name: Dashboard
+        content:
+          -
+            type: DASHBOARD
+            dashboard: Dashboard
+  -
+    name: Requests
+    group: CSR
+    page:
+      -
+        name: Requests
+        content:
+          -
+            type: LIST
+            content:
+              -
+                url: ""
+  -
+    name: Manage Policies 
+    group: CSR
+    page:
+      -
+        name: Manage Policies
+        content:
+          -
+            type: List
+            content:
+              -
+                ur: ""
+job: 
+  - 
+  import_padi: 
+    -
+      file_name: "/clients/hub/data/migrations/app/hub/data/"
+      task_name: "ox_padi_verification"
+      app_name: "hub"
+
+
+

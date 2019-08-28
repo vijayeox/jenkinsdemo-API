@@ -1,0 +1,18 @@
+{
+  "type": "application",
+  "name": "DiveInsurance",
+  "appId":"609fc9ab-bc7d-43c3-8593-03184481873f",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+  "category": null,
+  "defaultAppforOrgs" : true,
+  "server": "server.js",
+  "title": {
+    "en_EN": "Dive Insurance"
+  },
+  "description": {
+    "en_EN": "Dive Insurance"
+  },
+  "files": [
+    "main.js",
+    "main.css"
+  ]
+}                                                           
