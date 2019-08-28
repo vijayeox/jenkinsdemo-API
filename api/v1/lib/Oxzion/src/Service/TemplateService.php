@@ -7,6 +7,7 @@ use Oxzion\Service\AbstractService;
 use Oxzion\Utils\BosUtils;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
+use Oxzion\Utils\ArtifactUtils;
 
 class TemplateService extends AbstractService
 {
@@ -62,37 +63,37 @@ class TemplateService extends AbstractService
      */
     public function getContent($templateName, $data = array())
     {
-        $template = $this->getTemplatePath($templateName, $data);
+        $template = $this->setTemplateDir($templateName, $data);
         if (!$template) {
-            throw new Exception("Email Template not found!", 1);
+            throw new Exception("Template not found!", 1);
         }
         $this->client->assign($data);
 
         return $this->client->fetch($template);
     }
 
-    public function getTemplatePath($templateName, $params = array())
+    private function setTemplateDir($templateName, $params = array()){
+        $template = $templateName.$this->templateExt;
+        $templatePath = $this->getTemplatePath($template, $params);
+        if($templatePath){
+            $this->client->setTemplateDir($templatePath);
+            return $template;
+        }
+
+        return false;
+        
+    } 
+
+    public function getTemplatePath($template, $params = array())
     {
-       if (isset($params['orgid'])) {
+       if (!isset($params['orgUuid']) && isset($params['orgid'])) {
             $org = $this->getIdFromUuid('ox_organization', $params['orgid']);
             if ($org != 0) {
                 $orgUuid = $params['orgid'];
+                $params['orgUuid'] = $orgUuid;
             }
         } 
-        $orgUuid = isset($orgUuid) ? $orgUuid : AuthContext::get(AuthConstants::ORG_UUID);
-        $template = $templateName.$this->templateExt;
-        if (isset($orgUuid)) {
-            $path = $orgUuid."/".$template;
-        } else {
-            $path = $template;
-        }
-        if (is_file($this->templateDir.$path)) {
-            $this->client->setTemplateDir($this->templateDir.$orgUuid);
-            return $template;
-        } else if (is_file($this->templateDir.$template)) {
-            $this->client->setTemplateDir($this->templateDir);
-            return $template;
-        }
-        return false;
+        
+        return ArtifactUtils::getTemplatePath($this->config, $template, $params);
     }
 }
