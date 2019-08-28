@@ -56,23 +56,34 @@ class DocumentServiceTest extends ServiceTest
         $templateName="GenericTemplate.tpl";
         FileUtils::deleteFile($templateName, $tempFile);
         FileUtils::deleteFile("GenericTemplate.pdf", $config['TEMPLATE_FOLDER']);
+        FileUtils::rmDir($tempFolder);
         // TO DO DIGITAL SIGNATURE
     }
 
     public function testGenerateDocumentHub()
     {
-        $data = ['initial_title' => 'PROFESSIONAL LIABILITY CERTIFICATE OF INSURANCE','second_title' => 'CLAIMS MADE FORM','state_id' => 'NY','firstname' => 'Mohan', 'middlename' => 'Raj' ,'lastname' => 'D','address1' => 'ABC 200','address2' => 'XYZ 300','city' => 'APO','state' => 'AE','country' => 'US','zipcode' => '09522-9998','certificate_no' => '200200178','member_no' => '34567','effective_date' => '06/30/2019','expiry_date' => '6/30/2020 12:01:00 AM','insured_status'=> 'Divester','physical_address' => 'APO,AE','policy_id' => 'PPK1992899','single_limit' => '1,000,000','annual_aggregate' => '2,000,000','equipment_liability' => 'Not Included','cylinder_coverage' => 'Not Covered','update' => 1,'update_date' => '08/06/2019','pageno' => 1,'total_page' => 1,'orgid' => '53012471-2863-4949-afb1-e69b0891c98a'];
-        AuthContext::put(AuthConstants::ORG_UUID, $data['orgid']);
+        $data = ['initial_title' => 'PROFESSIONAL LIABILITY CERTIFICATE OF INSURANCE','second_title' => 'CLAIMS MADE FORM','state_id' => 'NY','firstname' => 'Mohan', 'middlename' => 'Raj' ,'lastname' => 'D','address1' => 'ABC 200','address2' => 'XYZ 300','city' => 'APO','state' => 'AE','country' => 'US','zipcode' => '09522-9998','certificate_no' => '200200178','member_no' => '34567','effective_date' => '06/30/2019','expiry_date' => '6/30/2020 12:01:00 AM','insured_status'=> 'Divester','physical_address' => 'APO,AE','policy_id' => 'PPK1992899','single_limit' => '1,000,000','annual_aggregate' => '2,000,000','equipment_liability' => 'Not Included','cylinder_coverage' => 'Not Covered','update' => 1,'update_date' => '08/06/2019','pageno' => 1,'total_page' => 1,'orgUuid' => '53012471-2863-4949-afb1-e69b0891c98a'];
+        AuthContext::put(AuthConstants::ORG_UUID, $data['orgUuid']);
         $config = $this->getApplicationConfig();
+        $tempFile = $config['TEMPLATE_FOLDER'].$data['orgUuid'];
+        $templateLocation = __DIR__."/../../../../../../clients/hub/data/template";
+        if(FileUtils::fileExists($tempFile)){
+            FileUtils::rmDir($tempFile);
+        }
+        FileUtils::symlink($templateLocation, $tempFile);
+        
         $TemplateService = new TemplateService($config, $this->adapter);
         $content = $TemplateService->getContent('certificateOfInsurance', $data);
-        $destination = $config['TEMPLATE_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/certificateOfInsurance.pdf";
-        $header = $config['TEMPLATE_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/header.html";
-        $footer = $config['TEMPLATE_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/footer.html";
+        $destination = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/certificateOfInsurance.pdf";
+        $header = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/header.html";
+        $footer = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/footer.html";
         $generatePdf = new DocumentGeneratorImpl();
-        $output = $generatePdf->generatePdfDocumentFromHtml($content, $header,$footer,$destination);
+        $output = $generatePdf->generatePdfDocumentFromHtml($content, $destination, $header, $footer);
         $this->assertTrue(is_file($output));
         $this->assertTrue(filesize($output)>0);
-        FileUtils::deleteFile("certificateOfInsurance.pdf", $config['TEMPLATE_FOLDER']."53012471-2863-4949-afb1-e69b0891c98a/");
+        FileUtils::deleteFile("certificateOfInsurance.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
+        FileUtils::unlink($tempFile);
     }
+
+
 }
