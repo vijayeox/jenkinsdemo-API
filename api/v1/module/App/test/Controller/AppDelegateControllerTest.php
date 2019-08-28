@@ -10,7 +10,25 @@ class AppDelegateControllerTest extends ControllerTest
     public function setUp() : void
     {
         $this->loadConfig();
+        $this->data = array(
+            "appName" => 'ox_client_app',
+            'UUID' => 8765765,
+            'description' => 'FirstAppOfTheClient',
+        );
+        $path = __DIR__.'/../../../../data/delegate/'.$this->data['UUID'];
+        if (!is_link($path)) {
+            symlink(__DIR__.'/../../../../../../clients/Dive Insurance/data/delegate/',$path);
+        }
         parent::setUp();
+    }
+
+    public function tearDown() : void
+    {
+        parent::tearDown();
+        $path = __DIR__.'/../../../../data/delegate/'.$this->data['UUID'];
+        if (is_link($path)) {
+            unlink($path);
+        }
     }
 
     public function getDataSet()
@@ -23,7 +41,7 @@ class AppDelegateControllerTest extends ControllerTest
     public function testDelegateExecute()
     {
         $data = array("Checking App Delegate","Checking1");
-        $appId = "debf3d35-a0ee-49d3-a8ac-8e480be9dac7";
+        $appId = "8765765";
         $delegate = 'IndividualLiabilityImpl';
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/'.$appId.'/delegate/'.$delegate, 'POST', $data);

@@ -149,6 +149,7 @@ class Migration extends AbstractService
                         $fileContent = file_get_contents($migrationFolder . $files);
                         $statement = $adapter->query($fileContent);
                         $statement->execute();
+                        $statement->getResource()->closeCursor();
                     }
                 }
 

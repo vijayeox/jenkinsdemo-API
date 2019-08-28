@@ -12,6 +12,7 @@ use Zend\Log\Writer\Stream;
 class AppDelegateService extends AbstractService
 {
     private $fileExt = ".php";
+    private $persistenceServices = array();
 
     public function __construct($config, $dbAdapter)
     {
@@ -20,18 +21,22 @@ class AppDelegateService extends AbstractService
         $logger->addWriter($writer);
 
         parent::__construct($config, $dbAdapter, $logger);
-        $this->delegateDir = $this->config['RULE_FOLDER'];
+        $this->delegateDir = $this->config['DELEGATE_FOLDER'];
         if (!is_dir($this->delegateDir)) {
             mkdir($this->delegateDir, 0777, true);
         }
     }
 
+    public function setPersistence($appId, $persistence){
+        $this->persistenceServices[$appId] = $persistence;
+    }
+
     public function execute($appId, $delegate, $dataArray=array())
     {
-        try {
+        try { 
             $result = $this->delegateFile($appId, $delegate);
             if ($result) {
-                $obj = new $delegate;
+                $obj = new $delegate; 
                 $obj->setLogger($this->logger);
                 $persistenceService = $this->getPersistence($appId);
                 $output = $obj->execute($dataArray, $persistenceService);
@@ -60,13 +65,17 @@ class AppDelegateService extends AbstractService
         return true;
     }
 
-    private function getPersistence($appId){
-        $name = $this->getAppName($appId);
-        if($name){
-            $persistence = new Persistence($this->config, $name, $appId);
+    private function getPersistence($appId){  
+        $persistence = isset($this->persistenceServices[$appId]) ? $this->persistenceServices[$appId] : NULL;
+        if(isset($persistence)){ 
             return $persistence;
+        }else{ 
+            $name = $this->getAppName($appId);
+            if($name){
+                $persistence = new Persistence($this->config, $name, $appId);
+                return $persistence;
+            }
         }
-
         return NULL;
     }
 

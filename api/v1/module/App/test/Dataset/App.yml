@@ -6,3 +6,10 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 1
+-
+    id: 200
+    name: "ox_client_app"
+    uuid: "8765765"
+    category: "OTHERS"
+    type: 2
+    status: 1

@@ -116,7 +116,7 @@ class MenuItemService extends AbstractService
         $filterArray['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
         $userId = AuthContext::get(AuthConstants::USER_ID);
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
-        $queryString = " SELECT ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu where group_id=0 AND ox_app_menu.app_id=".$filterArray['app_id']." union select ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu INNER JOIN ox_user_group on ox_user_group.group_id=ox_app_menu.group_id INNER JOIN ox_group on ox_group.id = ox_user_group.group_id where ox_user_group.avatar_id = ".$userId." AND ox_app_menu.app_id=".$filterArray['app_id']." AND ox_group.org_id=".$orgId;
+        $queryString = " SELECT ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu where group_id IS NULL AND ox_app_menu.app_id=".$filterArray['app_id']." union select ox_app_menu.icon,ox_app_menu.name,ox_app_menu.page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid from ox_app_menu INNER JOIN ox_user_group on ox_user_group.group_id=ox_app_menu.group_id INNER JOIN ox_group on ox_group.id = ox_user_group.group_id where ox_user_group.avatar_id = ".$userId." AND ox_app_menu.app_id=".$filterArray['app_id']." AND ox_group.org_id=".$orgId;
         $resultSet = $this->executeQuerywithParams($queryString);
         $menuList = array();
         if ($resultSet->count()) {
