@@ -17,7 +17,7 @@ use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ServiceException;
-
+use Oxzion\Service\AddressService;
 
 
 class UserService extends AbstractService
@@ -36,6 +36,7 @@ class UserService extends AbstractService
     private $emailService;
     private $messageProducer;
     private $templateService;
+    private $addressService;
     static $userField= array('uuid' => 'ou.uuid','username' => 'ou.username','firstname' => 'ou.firstname','lastname' => 'ou.lastname','name' => 'ou.name','email' => 'ou.email','orgid' => 'ou.orgid','date_of_birth'=>'ou.date_of_birth','designation' => 'ou.designation','phone' => 'ou.phone','address1' => 'oa.address1','address2' => 'oa.address2','city' => 'oa.city','state' => 'oa.state','country' => 'oa.country','zip' => 'oa.zip','id' => 'ou.id','gender' => 'ou.gender','website' => 'ou.website','about' => 'ou.about','managerid' => 'ou.managerid', 'timezone' => 'ou.timezone', 'date_of_join' => 'ou.date_of_join', 'interest' => 'ou.interest','preferences'=> 'ou.preferences');
 
 
@@ -44,11 +45,12 @@ class UserService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
-    public function __construct($config, $dbAdapter, UserTable $table = null, EmailService $emailService, TemplateService $templateService)
+    public function __construct($config, $dbAdapter, UserTable $table = null, AddressService $addressService, EmailService $emailService, TemplateService $templateService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->config = $config;
+        $this->addressService = $addressService;
         $this->emailService = $emailService;
         $this->templateService = $templateService;
         $this->cacheService = CacheService::getInstance();

@@ -4,6 +4,7 @@ namespace Oxzion\Service;
 use Zend\Stdlib\ArrayUtils;
 use Oxzion\Test\ServiceTest;
 use Oxzion\Service\EmailService;
+use Oxzion\Service\AddressService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Service\TemplateService;
 use Oxzion\Transaction\TransactionManager;
@@ -37,6 +38,7 @@ class UserServiceTest extends ServiceTest
             $config,
             $this->adapter,
             $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTable::class),
+            $this->getApplicationServiceLocator()->get(AddressService::class),
             $this->getApplicationServiceLocator()->get(EmailService::class),
             $this->getApplicationServiceLocator()->get(TemplateService::class)
         );
