@@ -101,11 +101,14 @@ final class Version20190827060934 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("DROP TABLE `ox_address`");
+        
         $this->addSql("ALTER TABLE ox_user ADD COLUMN `address` VARCHAR(300) NULL AFTER `status`,ADD COLUMN `country` VARCHAR(150) NULL AFTER `address`");
         $this->addSql("ALTER TABLE ox_organization ADD COLUMN `address` VARCHAR(250) NULL AFTER `name`,ADD COLUMN `city` VARCHAR(250) NULL AFTER `address`,ADD COLUMN `state` VARCHAR(250) NULL AFTER `city`,ADD COLUMN `country` VARCHAR(100) NULL AFTER `state`,ADD COLUMN `zip` VARCHAR(150) NULL AFTER `state`");
 
         $this->addSql("UPDATE ox_user as ou join ox_address as oa on ou.address_id=oa.id SET ou.address = oa.address1,ou.country=oa.country");
         $this->addSql("UPDATE ox_organization as og join ox_address as oa on og.address_id = oa.id SET og.address = oa.address1,og.city = oa.city,og.state = oa.state,og.country = oa.country,og.zip = oa.zip");
+        $this->addSql("DROP TABLE `ox_address`");
+        $this->addSql("ALTER TABLE `ox_user` DROP COLUMN `address_id`");
+        $this->addSql("ALTER TABLE `ox_organization` DROP COLUMN `address_id`");
     }
 }
