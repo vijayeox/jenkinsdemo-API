@@ -5,6 +5,33 @@ ox_user_manager:
     manager_id: 3
     created_id : 1
     date_created : '2019-06-26 00:00:00'
+
+ox_address:
+  -
+    id: 8
+    address1: 'HSR'
+    address2: 'HSR'
+    city: 'Bangalore'
+    state: 'KARNATAKA'
+    country: 'India'
+    zip: 560080
+  - 
+    id: 9
+    address1: 'Ariyalur'
+    address2: 'Coimbatore'
+    city: 'Chennai'
+    state: 'Tamil Nadu'
+    country: 'India'
+    zip: 560079
+  - 
+    id: 10
+    address1: 'Alappuzha'
+    address2: 'Ernakulam'
+    city: 'Idukki'
+    state: 'Kerala'
+    country: 'India'
+    zip: 460090
+
 ox_user:
   - 
     id: 6
@@ -17,7 +44,7 @@ ox_user:
     email: 'abcd@gmail.com'
     orgid: 1
     status: 'Inactive'
-    country: 'India'
+    address_id: 8
     date_of_birth: '1991-02-28'
     designation: 'Developer'
     phone: '+91-123456789'
@@ -36,7 +63,7 @@ ox_user:
     email: 'deepak@gmail.com'
     orgid: 1
     status: 'Active'
-    country: 'India'
+    address_id: 9
     date_of_birth: '1991-02-28'
     designation: 'Developer'
     phone: '+91-123456789'
@@ -55,7 +82,7 @@ ox_user:
     email: 'prajwal@gmail.com'
     orgid: 1
     status: 'Inactive'
-    country: 'India'
+    address_id: 10
     date_of_birth: '1991-02-28'
     designation: 'Developer'
     phone: '+91-123456789'
@@ -77,3 +104,5 @@ ox_user_org:
   -
     user_id: 8
     org_id: 1
+
+

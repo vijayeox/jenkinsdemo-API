@@ -36,6 +36,8 @@ class UserService extends AbstractService
     private $emailService;
     private $messageProducer;
     private $templateService;
+    static $userField= array('uuid' => 'ou.uuid','username' => 'ou.username','firstname' => 'ou.firstname','lastname' => 'ou.lastname','name' => 'ou.name','email' => 'ou.email','orgid' => 'ou.orgid','date_of_birth'=>'ou.date_of_birth','designation' => 'ou.designation','phone' => 'ou.phone','address1' => 'oa.address1','address2' => 'oa.address2','city' => 'oa.city','state' => 'oa.state','country' => 'oa.country','zip' => 'oa.zip','id' => 'ou.id','gender' => 'ou.gender','website' => 'ou.website','about' => 'ou.about','managerid' => 'ou.managerid', 'timezone' => 'ou.timezone', 'date_of_join' => 'ou.date_of_join', 'interest' => 'ou.interest','preferences'=> 'ou.preferences');
+
 
     public function setMessageProducer($messageProducer)
     {
@@ -206,6 +208,15 @@ class UserService extends AbstractService
                 }
             }
         
+        if(!isset($data['address1']) || !isset($data['city']) || !isset($data['country']) || !isset($data['state']) || !isset($data['zip'])){
+            throw new ServiceException("Address,city,state,country,zip fields cannot be empty","fields.required");
+        }
+
+        $data['address2'] = isset($data['address2']) ?  $data['address2'] : NULL;
+        $insert = "INSERT INTO ox_address (`address1`,`address2`,`city`,`state`,`country`,`zip`) VALUES ('".$data['address1']."','".$data['address2']."','".$data['city']."','".$data['state']."','".$data['country']."','".$data['zip']."')";
+        $addressid = $this->executeInsert($insert);
+ 
+        $data['address_id'] = $addressid;
         $data['uuid'] = Uuid::uuid4()->toString();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -216,6 +227,7 @@ class UserService extends AbstractService
         if (isset($password)) {
             $data['password'] = md5(sha1($password));
         }
+
         $form = new User($data);
         $form->validate();
         $this->beginTransaction();
@@ -432,11 +444,23 @@ class UserService extends AbstractService
           }
         }
    
+
+
         $form = new User();
         if(isset($data['orgid'])){
             unset($data['orgid']);
         }
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
+        $data['address1'] = isset($data['address1']) ?  $data['address1'] : NULL;
+        $data['address2'] = isset($data['address2']) ?  $data['address2'] : NULL;
+        $data['city'] = isset($data['city']) ?  $data['city'] : NULL;
+        $data['state'] = isset($data['state']) ?  $data['state'] : NULL;
+        $data['country'] = isset($data['country']) ?  $data['country'] : NULL;
+        $data['zip'] = isset($data['zip']) ?  $data['zip'] : NULL;
+
+        $update = "UPDATE ox_address SET address1 = '".$data['address1']."',address2 = '".$data['address2']."',city = '".$data['city']."',state = '".$data['state']."',country = '".$data['country']."',zip = '".$data['zip']."' WHERE id = ".$userdata['address_id'];
+        $result = $this->executeQuerywithParams($update);
+
         $userdata['uuid'] = $id;
         if (isset($data['managerid'])) {
             $userdata['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
@@ -536,8 +560,6 @@ class UserService extends AbstractService
             throw new ServiceException('Not allowed to delete the project manager','project.manager');  
         }
 
-
-
         $org = $this->getOrg($obj->orgid);  
         $originalArray = $obj->toArray();
         $form = new User();
@@ -551,7 +573,6 @@ class UserService extends AbstractService
         $delete = "DELETE FROM ox_user_org where user_id = ".$obj->id." AND org_id = ".$obj->orgid;
         $result1 = $this->executeQuerywithParams($delete);
 
-   
         $this->messageProducer->sendTopic(json_encode(array('username' => $obj->username ,'orgname' => $org['name'] )),'USER_DELETED');
         return $result;
     }
@@ -565,7 +586,7 @@ class UserService extends AbstractService
      */
     public function getUsers($filterParams = null, $baseUrl = '',$params = null)
     {
-          if(isset($params['orgId'])){
+         if(isset($params['orgId'])){
                 if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_READ') && 
                      ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                     throw new AccessDeniedException("You do not have permissions get the users list");
@@ -581,7 +602,13 @@ class UserService extends AbstractService
             $offset = 0;
             $sort = "name";
 
-            $cntQuery ="SELECT count(id) FROM `ox_user` ";
+            $select = "SELECT ou.uuid, ou.username, ou.firstname, ou.lastname, ou.name,
+                ou.email, ou.orgid, ou.icon, ou.date_of_birth,
+                ou.designation,ou.phone,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,ou.gender,ou.website,ou.about,
+                ou.managerid, ou.timezone, ou.date_of_join, ou.interest, ou.preferences";
+
+            $from = " FROM `ox_user` as ou join ox_address as oa on ou.address_id = oa.id ";
+            $cntQuery ="SELECT count(ou.id) ".$from;
 
             if(count($filterParams) > 0 || sizeof($filterParams) > 0){
                 if(isset($filterParams['filter'])){
@@ -589,12 +616,12 @@ class UserService extends AbstractService
                  if(isset($filterArray[0]['filter'])){
                    $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
                    $filterList = $filterArray[0]['filter']['filters'];
-                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                   $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$userField);
                  }
 
                  if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                     $sort = $filterArray[0]['sort'];
-                    $sort = FilterUtils::sortArray($sort);
+                    $sort = FilterUtils::sortArray($sort,self::$userField);
                  }
                  $pageSize = $filterArray[0]['take'];
                  $offset = $filterArray[0]['skip'];
@@ -605,19 +632,16 @@ class UserService extends AbstractService
             }
 
     
-            $where .= strlen($where) > 0 ? " AND status = 'Active' AND orgid = ".$orgId : " WHERE status = 'Active' AND orgid = ".$orgId;
+            $where .= strlen($where) > 0 ? " AND ou.status = 'Active' AND ou.orgid = ".$orgId : " WHERE ou.status = 'Active' AND ou.orgid = ".$orgId;
 
             
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
 
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count=$resultSet->toArray()[0]['count(id)'];
-            $query ="SELECT uuid, username, firstname, lastname, name,
-                email, orgid, icon, country, date_of_birth,
-                designation, phone, address, gender, website, about,
-                managerid, timezone, date_of_join, interest, preferences FROM `ox_user`".$where." ".$sort." ".$limit;
-
+            $count=$resultSet->toArray()[0]['count(ou.id)'];
+            $query =$select." ".$from." ".$where." ".$sort." ".$limit;
+          
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
             for($x=0;$x<sizeof($result);$x++) {
@@ -638,17 +662,9 @@ class UserService extends AbstractService
     public function getUser($id, $getAllFields = false)
     {
         $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_user')
-            ->columns(array(
-                "uuid", "username", "firstname", "lastname",
-                "name","email", "orgid", "icon", "country", "date_of_birth",
-                "designation", "phone", "address", "gender", "website", "about",
-                "managerid", "timezone", "date_of_join", "interest", "preferences","password",
-                "password_reset_expiry_date","password_reset_code"
-            ))  
-            ->where(array('ox_user.id' => $id, 'status' => 'Active'));
-        $response = $this->executeQuery($select)->toArray();
+        $select = "SELECT ou.uuid,ou.username,ou.firstname,ou.lastname,ou.name,ou.email,ou.orgid,ou.icon,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,ou.date_of_birth,ou.designation,ou.phone,ou.gender,ou.website,ou.about,ou.managerid,ou.timezone,ou.date_of_join,ou.interest,ou.preferences,ou.password,ou.password_reset_expiry_date,ou.password_reset_code from ox_user as ou join ox_address as oa on ou.address_id = oa.id where ou.id =".$id." and ou.status = 'Active'";
+        $response = $this->executeQuerywithParams($select)->toArray();
+    
         if (!$response) {
             return $response[0];
         }
@@ -768,12 +784,8 @@ class UserService extends AbstractService
      */
     public function getUserWithMinimumDetails($id)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_user')
-            ->columns(array('uuid', 'username', 'firstname', 'lastname', 'name', 'email', 'designation','orgid', 'phone', 'date_of_birth', 'date_of_join', 'country', 'website', 'about', 'gender', 'managerid','interest', 'address', 'icon', 'preferences'))
-            ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
-        $response = $this->executeQuery($select)->toArray();
+        $select = "SELECT ou.uuid,ou.username,ou.firstname,ou.lastname,ou.name,ou.email,ou.designation,ou.orgid,ou.phone,ou.date_of_birth,ou.date_of_join,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,ou.website,ou.about,ou.gender,ou.managerid,ou.interest,ou.icon,ou.preferences from ox_user as ou join ox_address as oa on ou.address_id = oa.id where ou.orgid = ".AuthContext::get(AuthConstants::ORG_ID)." AND ou.id = ".$id." AND ou.status = 'Active'";
+        $response = $this->executeQuerywithParams($select)->toArray();
         if (empty($response)) {
             return 0;
         }
@@ -797,13 +809,8 @@ class UserService extends AbstractService
      */
     public function getUserBaseProfile($username)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_user')
-            ->columns(array('id', 'uuid', 'username', 'firstname', 'lastname', 'name', 'email','orgid'))
-            ->where(array('ox_user.username' => $username, 'ox_user.email' => $username), 'OR');
-
-        $response = $this->executeQuery($select)->toArray();
+        $select = "SELECT ou.id,ou.uuid,ou.username,ou.firstname,ou.lastname,ou.name,ou.email,ou.orgid,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip from ox_user as ou join ox_address as oa on ou.address_id = oa.id where ou.username = '".$username."' OR ou.email = '".$username."'";
+        $response = $this->executeQuerywithParams($select)->toArray();
         if (!$response) {
             return 0;
         }
@@ -1080,7 +1087,6 @@ class UserService extends AbstractService
         $resetPasswordCode = BosUtils::randomPassword(); // I am using the randomPassword generator to do this since it is similar to a password generation
 
         $userDetails = $this->getUserBaseProfile($username);
-
         if ($username === $userDetails['username']) {
             $userReset['uuid'] = $id = $userDetails['uuid'];
             $userReset['email'] = $userDetails['email'];

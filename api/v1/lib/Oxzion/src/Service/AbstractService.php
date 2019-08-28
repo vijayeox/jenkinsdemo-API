@@ -9,6 +9,7 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Adapter\ParameterContainer;
 use Oxzion\Transaction\TransactionManager;
+use Oxzion\Utils\StringUtils;
 
 class AbstractService
 {
@@ -127,6 +128,16 @@ class AbstractService
         return $resultSet;
     }
 
+    protected function executeInsert($query)
+    {
+        if(StringUtils::startsWith($query, 'INSERT')){
+            $result = $this->executeQueryInternal($query);
+            if($result->getAffectedRows() > 0){
+                return $result->getGeneratedValue();
+            }
+        }
+        return 0;
+    }
     /**
         Query builder: Code that combines the required parameter to build the query.
         Author: Rakshith
@@ -134,16 +145,20 @@ class AbstractService
     */
     public function executeQuerywithParams($queryString, $where = null, $group = null, $order = null, $limit = null)
     {
+        $result = $this->executeQueryInternal($queryString, $where, $group, $order, $limit);
+        $resultSet = new ResultSet();
+        return $resultSet->initialize($result);
+    }
+
+    private function executeQueryInternal($queryString, $where = null, $group = null, $order = null, $limit = null){
         //Passing the required parameter to the query statement
         $adapter = $this->getAdapter();
         $query_string = $queryString . " " . $where . " " . $group . " " . $order . " " . $limit; //Combining all the parameters required to build the query statement. We will add more fields to this in the future if required.
         //        echo $query_string;exit;
         $statement = $adapter->query($query_string);
         $result = $statement->execute();
-        $resultSet = new ResultSet();
-        return $resultSet->initialize($result);
+        return $result;
     }
-
     public function create(&$data, $commit = true)
     {
         $this->modelClass->exchangeArray($data);
