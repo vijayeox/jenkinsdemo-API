@@ -115,6 +115,25 @@ class FileUtils
     {
         return filesize($directory.$fileName);
     }
+    public static function rmDir($dirPath)
+    {
+        if(is_link($dirPath)){
+            unlink($dirPath);
+        }else if(is_dir($dirPath)){
+            if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+                $dirPath .= '/';
+            }
+            $files = glob($dirPath . '*', GLOB_MARK);
+            foreach ($files as $file) {
+                if (is_dir($file)) {
+                    self::rmDir($file);
+                } else {
+                    unlink($file);
+                }
+            }
+            rmDir($dirPath);
+        }
+    }
     public static function deleteFile($fileName, $directory)
     {
         if (unlink($directory.$fileName)) {
@@ -129,7 +148,18 @@ class FileUtils
         return file_exists($fileName);
     }
 
+    public static function symlink($target, $link)
+    {
+        return symlink($target, $link);
+    }
 
+    public static function unlink($link)
+    {
+        if(is_link($link))
+        {
+            unlink($link);
+        }
+    }
     public static function convetImageTypetoPNG($file)
     {
         $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
