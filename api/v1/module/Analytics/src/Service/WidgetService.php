@@ -99,40 +99,54 @@ class WidgetService extends AbstractService
         return $count;
     }
 
-    public function getWidget($uuid)
+    public function getWidget($uuid,$params)
     {
+        $columnList = array('name','uuid','query_id','is_owner' => (new Expression('IF(created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'visualization_id','ispublic','org_id','isdeleted');
+        if(isset($params['config']))
+        {
+            $columnList = array('name','uuid','query_id','is_owner' => (new Expression('IF(created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'visualization_id','ispublic','org_id','isdeleted','configuration');
+        }
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_widget')
-            ->columns(array('uuid','query_id','visualization_id','ispublic','created_by','date_created','org_id','isdeleted'))
-            ->where(array('ox_widget.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
+            ->columns($columnList)->where(array('ox_widget.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
+        if(isset($response[0]))
+        {
+            $response['widget'] = $response[0];
+            unset($response[0]);
+        }
+        if(isset($response['widget']['configuration']))
+        {
+            $response['configuration'] = $response['widget']['configuration'];
+            unset($response['widget']['configuration']);
+        }
         if (count($response) == 0) {
             return 0;
         }
-        return $response[0];
+        return $response;
     }
 
     public function getWidgetList($params = null)
     {
+        $paginateOptions = FilterUtils::paginate($params);
+        $where = $paginateOptions['where'];
+        $where .= empty($where) ? "WHERE isdeleted <>1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND isdeleted <>1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
+        $sort = " ORDER BY ".$paginateOptions['sort'];
+        $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
-            $paginateOptions = FilterUtils::paginate($params);
-            $where = $paginateOptions['where'];
-            $where .= empty($where) ? "WHERE isdeleted <>1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND isdeleted <>1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
-            $sort = " ORDER BY ".$paginateOptions['sort'];
-            $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
+        $cntQuery ="SELECT count(id) as 'count' FROM `ox_widget` ";
+        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+        $count=$resultSet->toArray()[0]['count'];
 
-            $cntQuery ="SELECT count(id) as 'count' FROM `ox_widget` ";
-            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count=$resultSet->toArray()[0]['count'];
-
-            $query ="SELECT * FROM `ox_widget`".$where." ".$sort." ".$limit;
-            $resultSet = $this->executeQuerywithParams($query);
-            $result = $resultSet->toArray();
-            foreach ($result as $key => $value) {
-                unset($result[$key]['id']);
-            }
-            return array('data' => $result,
-                     'total' => $count);
+        $queryString = "Select name,uuid,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,ispublic,org_id,isdeleted from `ox_widget`";
+        $query =$queryString.$where." ".$sort." ".$limit;
+        $resultSet = $this->executeQuerywithParams($query);
+        $result = $resultSet->toArray();
+        foreach ($result as $key => $value) {
+            unset($result[$key]['id']);
+        }
+        return array('data' => $result,
+                 'total' => $count);
     }
 }

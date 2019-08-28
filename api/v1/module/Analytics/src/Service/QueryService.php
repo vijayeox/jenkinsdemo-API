@@ -101,7 +101,7 @@ class QueryService extends AbstractService
 
     public function getQuery($uuid)
     {
-        $statement = "Select uuid,name,datasource_id,query_json,ispublic,created_by,date_created,org_id,isdeleted from ox_query where isdeleted <> 1 AND (uuid = '".$uuid."' and org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
+        $statement = "Select uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted from ox_query where isdeleted <> 1 AND (uuid = '".$uuid."' and org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
         $resultSet = $this->executeQuerywithParams($statement);
         $result = $resultSet->toArray();
         if (count($result) == 0) {
@@ -112,31 +112,30 @@ class QueryService extends AbstractService
 
     public function getQueryList($params = null)
     {
+        $paginateOptions = FilterUtils::paginate($params);
+        $where = $paginateOptions['where'];
+        $where .= empty($where) ? "WHERE ox_query.isdeleted <> 1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND ox_query.isdeleted <> 1 AND(org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
+        $sort = " ORDER BY ".$paginateOptions['sort'];
+        $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
-            $paginateOptions = FilterUtils::paginate($params);
-            $where = $paginateOptions['where'];
-            $where .= empty($where) ? "WHERE ox_query.isdeleted <> 1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND ox_query.isdeleted <> 1 AND(org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
-            $sort = " ORDER BY ".$paginateOptions['sort'];
-            $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
+        $cntQuery ="SELECT count(id) as 'count' FROM `ox_query` ";
+        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+        $count=$resultSet->toArray()[0]['count'];
 
-            $cntQuery ="SELECT count(id) as 'count' FROM `ox_query` ";
-            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count=$resultSet->toArray()[0]['count'];
-
-            $query ="SELECT * FROM `ox_query`".$where." ".$sort." ".$limit;
-            $resultSet = $this->executeQuerywithParams($query);
-            $result = $resultSet->toArray();
-            foreach ($result as $key => $value) {
-                $result[$key]['query_json'] = json_decode($result[$key]['query_json']);
-                unset($result[$key]['id']);
-            }
-            return array('data' => $result,
-                     'total' => $count);
+        $query ="SELECT uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted FROM `ox_query`".$where." ".$sort." ".$limit;
+        $resultSet = $this->executeQuerywithParams($query);
+        $result = $resultSet->toArray();
+        foreach ($result as $key => $value) {
+            $result[$key]['configuration'] = json_decode($result[$key]['configuration']);
+            unset($result[$key]['id']);
+        }
+        return array('data' => $result,
+                 'total' => $count);
     }
 
     public function getQueryJson($uuid)
     {
-        $statement = "Select query_json as query from ox_query where isdeleted <> 1 AND uuid = '".$uuid."'";
+        $statement = "Select configuration as query from ox_query where isdeleted <> 1 AND uuid = '".$uuid."'";
         $resultSet = $this->executeQuerywithParams($statement);
         $result = $resultSet->toArray();
         if($result)

@@ -114,7 +114,8 @@ class WidgetController extends AbstractApiController
      */
     public function get($uuid)
     {
-        $result = $this->widgetService->getWidget($uuid);
+        $params = $this->params()->fromQuery();
+        $result = $this->widgetService->getWidget($uuid,$params);
         if ($result == 0) {
             return $this->getErrorResponse("Widget not found", 404, ['uuid' => $uuid]);
         }
