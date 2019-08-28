@@ -23,6 +23,7 @@ class Module
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
                         $container->get(Model\UserTable::class),
+                        $container->get(Service\AddressService::class),
                         $container->get(Service\EmailService::class),
                         $container->get(Service\TemplateService::class)
                     );
@@ -182,6 +183,7 @@ class Module
                         $container->get(AdapterInterface::class),
                         $container->get(Model\OrganizationTable::class),
                         $container->get(Service\UserService::class),
+                        $container->get(Service\AddressService::class),
                         $container->get(Service\RoleService::class),
                         $container->get(Service\PrivilegeService::class)
                     );
@@ -196,6 +198,28 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Organization());
                     return new TableGateway(
                         'ox_organization',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
+                Service\AddressService::class => function ($container) {
+                    return new Service\AddressService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Model\AddressTable::class)
+                    );
+                },
+                Model\AddressTable::class => function ($container) {
+                    return new Model\AddressTable(
+                        $container->get(Model\AddressTableGateway::class)
+                    );
+                },
+                Model\AddressTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Address());
+                    return new TableGateway(
+                        'ox_address',
                         $container->get(AdapterInterface::class),
                         null,
                         $resultSetPrototype

@@ -74,7 +74,6 @@ class OrganizationController extends AbstractApiController
         if ($result) {
             for ($x=0;$x<sizeof($result['data']);$x++) {
                 $baseUrl =$this->getBaseUrl();
-                $logo = $result['data'][$x]['logo'];
                 $result['data'][$x]['logo'] = $baseUrl . "/organization/logo/" . $result['data'][$x]['uuid'];
                 $result['data'][$x]['preferences'] = json_decode($result['data'][$x]['preferences'], true);
             }
@@ -146,7 +145,6 @@ class OrganizationController extends AbstractApiController
             return $this->getErrorResponse("Organization not found", 404, ['id' => $id]);
         } else {
             $baseUrl =$this->getBaseUrl();
-            $logo = $result['logo'];
             $result['logo'] = $baseUrl . "/organization/logo/" . $result["uuid"];
             $result['preferences'] = json_decode($result['preferences'], true);
         }

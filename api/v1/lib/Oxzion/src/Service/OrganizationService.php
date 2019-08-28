@@ -21,14 +21,16 @@ class OrganizationService extends AbstractService
     protected $table;
     private $userService;
     private $roleService;
+    private $addressService;
     protected $modelClass;
     private $messageProducer;
     private $privilegeService;
-    static $userField= array('name' => 'ox_user.name','id' => 'ox_user.id');
+    static $userField= array('name' => 'ox_user.name','id' => 'ox_user.id','city' => 'ox_address.city','country' => 'ox_address.country','address' => 'ox_address.address1','address2' => 'ox_address.address2','state' => 'ox_address.state');
     static $groupField = array('name' => 'oxg.name','description' => 'oxg.description');
     static $projectField = array('name' => 'oxp.name','description' => 'oxp.description');
     static $announcementField = array('name' => 'oxa.name','description' => 'oxa.description');
     static $roleField = array('name' => 'oxr.name','description' => 'oxr.description');
+    static $orgField = array('id' => 'og.id','uuid' => 'og.uuid','name' => 'og.name','preferences' => 'og.preferences','address1' => 'oa.address1','address2' => 'oa.address2','city' => 'oa.city','state' => 'oa.state','country' => 'oa.country','zip' => 'oa.zip','logo' => 'og.logo');
 
     
     public function setMessageProducer($messageProducer)
@@ -39,11 +41,12 @@ class OrganizationService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, OrganizationTable $table, UserService $userService, RoleService $roleService, PrivilegeService $privilegeService)
+    public function __construct($config, $dbAdapter, OrganizationTable $table, UserService $userService, AddressService $addressService,RoleService $roleService, PrivilegeService $privilegeService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->userService = $userService;
+        $this->addressService = $addressService;
         $this->roleService = $roleService;
         $this->modelClass = new Organization();
         $this->privilegeService = $privilegeService;
@@ -97,6 +100,9 @@ class OrganizationService extends AbstractService
                 throw new ServiceException("Organization already exists","org.exists");
             }
         }
+
+        $addressid = $this->addressService->addAddress($data);
+        $data['address_id'] = $addressid;
 
         $form = new Organization($data);
         $form->validate();
@@ -209,6 +215,13 @@ class OrganizationService extends AbstractService
         $org = $obj->toArray();
         $form = new Organization();
         $changedArray = array_merge($obj->toArray(), $data);
+
+        if(isset($changedArray['address_id'])){
+            $this->addressService->updateAddress($changedArray['address_id'],$data);
+        }else{
+            $addressid = $this->addressService->addAddress($data);
+            $changedArray['address_id'] = $addressid;
+        }
         $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $changedArray['date_modified'] = date('Y-m-d H:i:s');
         $form->exchangeArray($changedArray);
@@ -322,13 +335,8 @@ class OrganizationService extends AbstractService
      */
     public function getOrganizationByUuid($id)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_organization')
-            ->columns(array('uuid','name','address','city','state','country','zip','logo','preferences','contactid'))
-            ->where(array('ox_organization.uuid' => $id, 'status' => "Active"));
-        $response = $this->executeQuery($select)->toArray();
-
+        $select = "SELECT og.uuid,og.name,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid from ox_organization as og join ox_address as oa on og.address_id = oa.id WHERE og.uuid = '".$id."' AND og.status = 'Active'";
+        $response = $this->executeQuerywithParams($select)->toArray();
         if (count($response) == 0) {
             return 0;
         } else {
@@ -365,31 +373,35 @@ class OrganizationService extends AbstractService
         $offset = 0;
         $sort = "name";
 
-        $cntQuery ="SELECT count(id) FROM `ox_organization`";
+        $select = "SELECT og.uuid,og.name,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid";
+        $from = " from ox_organization as og join ox_address as oa on og.address_id = oa.id";
+
+
+        $cntQuery ="SELECT count(og.id) ".$from;
 
         if(count($filterParams) > 0 || sizeof($filterParams) > 0){
                 $filterArray = json_decode($filterParams['filter'],true);
-                $where = $this->createWhereClause($filterArray);
+                $where = $this->createWhereClause($filterArray,self::$orgField);
                 if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
-                     $sort = $this->createSortClause($filterArray[0]['sort']);
+                     $sort = $this->createSortClause($filterArray[0]['sort'],self::$orgField);
                 } 
                 $pageSize = $filterArray[0]['take'];
                 $offset = $filterArray[0]['skip'];            
             }
 
-            $where .= strlen($where) > 0 ? " AND status = 'Active'" : " WHERE status = 'Active'";
+            $where .= strlen($where) > 0 ? " AND og.status = 'Active'" : " WHERE og.status = 'Active'";
             
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray();
-            $query ="SELECT uuid,name,address,city,state,country,zip,logo,preferences,contactid FROM `ox_organization`".$where." ".$sort." ".$limit;
+            $query =$select." ".$from." ".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query)->toArray();
             for($x=0;$x<sizeof($resultSet);$x++) {
               $resultSet[$x]['contactid'] = $this->getOrgContactPersonDetails($resultSet[$x]['uuid']);
             }
             return array('data' => $resultSet, 
-                     'total' => $count[0]['count(id)']);
+                     'total' => $count[0]['count(og.id)']);
     }
 
     
@@ -496,12 +508,13 @@ class OrganizationService extends AbstractService
         $sort = "ox_user.name";
 
 
-        $query = "SELECT ox_user.uuid,ox_user.name,ox_user.country,ox_user.designation,
+        $query = "SELECT ox_user.uuid,ox_user.name,ox_address.address1,ox_address.address2,ox_address.city,ox_address.state,ox_address.country,ox_address.zip,ox_user.designation,
                                 case when (ox_organization.contactid = ox_user.id) 
                                     then 1
                                 end as is_admin";
-        $from = " FROM ox_user inner join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id";
-    
+        $from = " FROM ox_user inner join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id join ox_address on ox_user.address_id = ox_address.id";
+
+
         $cntQuery ="SELECT count(ox_user.id)".$from;
 
         if(count($filterParams) > 0 || sizeof($filterParams) > 0){

@@ -3,19 +3,16 @@ namespace Oxzion\Model;
 
 use Oxzion\Model\Entity;
 
-class Organization extends Entity
+class Address extends Entity
 {
     protected $data = array(
         'id' => null,
-        'uuid' => null,
-        'name' => null,
-        'address_id' => null,
-        'labelfile' => null,
-        'languagefile' => 'en',
-        'contactid' => null,
-        'preferences' => null,
-        'theme' => 0,
-        'status' => 'Active'
+        'address1' => null,
+        'address2' => null,
+        'city' => null,
+        'state' => null,
+        'country' => 'en',
+        'zip' => null,
     );
 
     public function __construct($data = array())
@@ -28,9 +25,11 @@ class Organization extends Entity
     public function validate()
     {
         $required = array(
-            'name',
-            'status',
-            'preferences'
+            'address1',
+            'city',
+            'state',
+            'country',
+            'zip'
         );
         $this->validateWithParams($required);
     }
