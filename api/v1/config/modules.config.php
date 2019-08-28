@@ -25,7 +25,6 @@ return [
     'Group',
     'Analytics',
     'Organization',
-    'Screen',
     'Attachment',
     'App',
     'Search',

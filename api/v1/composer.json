@@ -80,7 +80,6 @@
       "Analytics\\": "module/Analytics/src/",
       "Organization\\": "module/Organization/src/",
       "Auth\\": "module/Auth/src/",
-      "Screen\\": "module/Screen/src/",
       "Attachment\\": "module/Attachment/src/",
       "App\\": "module/App/src/",
       "Project\\": "module/Project/src/",

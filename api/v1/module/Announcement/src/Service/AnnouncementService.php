@@ -553,3 +553,4 @@ class AnnouncementService extends AbstractService
     }
  }
 }
+}
