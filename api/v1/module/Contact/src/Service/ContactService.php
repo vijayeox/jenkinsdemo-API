@@ -159,7 +159,7 @@ class ContactService extends AbstractService
         $union = " UNION ";
 
         if ($column == "-1") {
-            $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name, ou.phone as phone_1, null as phone_list, ou.email, null as email_list, org.name as company_name, null as icon_type,ou.designation,ou.country, '2' as contact_type  from ox_user as ou inner join ox_organization as org on ou.orgid = org.id";
+            $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name, ou.phone as phone_1, null as phone_list, ou.email, null as email_list, org.name as company_name, null as icon_type,ou.designation,oa.country, '2' as contact_type from ox_user as ou inner join ox_organization as org on ou.orgid = org.id inner join ox_address as oa on ou.address_id = oa.id";
         } else {
             $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name,null as icon_type, '2' as contact_type  from ox_user as ou";
         }
