@@ -46,7 +46,6 @@ class MenuItemService extends AbstractService
                 $id = $this->table->getLastInsertValue();
                 $data['id'] = $id;
             }
-            print "Created";
             $this->commit();
         } catch (Exception $e) {
             switch (get_class($e)) {

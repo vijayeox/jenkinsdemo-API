@@ -13,7 +13,7 @@ use Oxzion\Utils\RestClient;
 use FileIndexer\Service\FileIndexerService;
 use Mockery;
 
-class TaskCallbackControllerTest extends ControllerTest
+class FileIndexerControllerTest extends ControllerTest
 {
     public function setUp() : void
     {
@@ -51,8 +51,5 @@ class TaskCallbackControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('index');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        //$this->assertEquals($content['status'], 'success');
-        //$this->assertEquals($content['data']['name'], $data['projectname']);
-        //$this->assertEquals($content['data']['description'], $data['description']);
     }
 }

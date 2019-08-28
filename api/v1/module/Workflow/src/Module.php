@@ -51,6 +51,8 @@ class Module implements ConfigProviderInterface
                         $container->get('config'),
                         $dbAdapter,
                         $container->get(Model\ActivityInstanceTable::class),
+                        $container->get(Service\WorkflowInstanceService::class),
+                        $container->get(\Oxzion\Workflow\WorkflowFactory::class),
                         $container->get('ActivityInstanceLogger')
                     );
                 },
@@ -104,6 +106,7 @@ class Module implements ConfigProviderInterface
                 Controller\ServiceTaskController::class => function ($container) {
                     return new Controller\ServiceTaskController(
                         $container->get(Service\ServiceTaskService::class),
+                        $container->get(Service\WorkflowInstanceService::class),
                         $container->get('ServiceTaskLogger')
                     );
                 },

@@ -13,6 +13,7 @@ class TemplateService extends AbstractService
     private $client;
     private $templateName;
     private $templateExt = ".tpl";
+    private $templateDir;
 
     public function __construct($config, $dbAdapter)
     {
@@ -37,6 +38,7 @@ class TemplateService extends AbstractService
             mkdir($templatescDir, 0777);
         }
 
+        $this->templateDir = $templateDir;
         $this->client = new Smarty();
         // $this->client->debugging = true;
         $this->client->setCacheDir($cacheDir);
@@ -65,31 +67,30 @@ class TemplateService extends AbstractService
             throw new Exception("Email Template not found!", 1);
         }
         $this->client->assign($data);
+
         return $this->client->fetch($template);
     }
 
     public function getTemplatePath($templateName, $params = array())
     {
-        if (isset($params['orgid'])) {
-            if ($org = $this->getIdFromUuid('ox_organization', $params['orgid'])) {
-                $orgId = $org;
-            } else {
-                $orgId = $params['orgid'];
+       if (isset($params['orgid'])) {
+            $org = $this->getIdFromUuid('ox_organization', $params['orgid']);
+            if ($org != 0) {
+                $orgUuid = $params['orgid'];
             }
-        } else {
-            $orgId = AuthContext::get(AuthConstants::ORG_UUID);
-        }
-        $orgUuid = $orgId;
+        } 
+        $orgUuid = isset($orgUuid) ? $orgUuid : AuthContext::get(AuthConstants::ORG_UUID);
         $template = $templateName.$this->templateExt;
         if (isset($orgUuid)) {
-            $path = "/".$orgUuid."/".$template;
+            $path = $orgUuid."/".$template;
         } else {
-            $path = "/".$template;
+            $path = $template;
         }
-        if (is_file($this->client->getTemplateDir()[0].$path)) {
-            $this->client->setTemplateDir($this->client->getTemplateDir()[0]."/".$orgUuid);
+        if (is_file($this->templateDir.$path)) {
+            $this->client->setTemplateDir($this->templateDir.$orgUuid);
             return $template;
-        } elseif (is_file($this->client->getTemplateDir()[0]."/".$template)) {
+        } else if (is_file($this->templateDir.$template)) {
+            $this->client->setTemplateDir($this->templateDir);
             return $template;
         }
         return false;

@@ -80,11 +80,11 @@ class ActivityImpl implements Activity
     {
         $query = 'task/'.$activityId.'/submit-form';
         $params = array();
-        foreach ($parameterArray as $k => $v) {
-            $params[$k] = array('value'=>$v);
+        foreach ($parameterArray as $key => $value) {
+            $params[$key]['value'] = $value;
         }
         try {
-            $response =  $this->restClient->post($query, json_encode(array('variables'=>$params)));
+            $response =  $this->restClient->post($query, array('variables'=>$params));
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {

@@ -275,6 +275,9 @@ class AppController extends AbstractApiController
         try {
             if ($files&&isset($params['name'])) {
                 $response = $this->appService->deployWorkflow($params['appId'], $params, $files);
+                if ($response == 0) {
+                    return $this->getErrorResponse("Error Creating workflow");
+                }
                 if ($response == 1) {
                     return $this->getErrorResponse("Error Parsing BPMN");
                 }

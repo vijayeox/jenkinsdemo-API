@@ -52,6 +52,29 @@ class WorkflowInstanceController extends AbstractApiController
                 break;
         }
     }
+    public function workflowInstanceAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        switch ($this->request->getMethod()) {
+            case 'POST':
+                unset($params['controller']);
+                unset($params['action']);
+                unset($params['access']);
+                if (isset($params['workflowInstanceId'])) {
+                    return $this->executeWorkflow($params);
+                }
+                break;
+            case 'GET':
+                return $this->getFieldData($params);
+                break;
+            case 'DELETE':
+                return $this->deleteFieldData($params);
+                break;
+            default:
+                return $this->getErrorResponse("Not Sure what you are upto");
+                break;
+        }
+    }
     private function executeWorkflow($params, $id = null)
     {
         try {
@@ -91,5 +114,22 @@ class WorkflowInstanceController extends AbstractApiController
             return $this->getErrorResponse("File not found", 404);
         }
         return $this->getSuccessResponse();
+    }
+
+    public function getFileListAction()
+    { 
+        $params = $this->params()->fromRoute();
+        $filterParams = $this->params()->fromQuery();
+        try {
+            $count = $this->workflowInstanceService->getFileList($params, $filterParams);
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        catch(AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
+        return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
     }
 }

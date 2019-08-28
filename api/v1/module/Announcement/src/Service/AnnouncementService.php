@@ -55,39 +55,58 @@ class AnnouncementService extends AbstractService
     * </code>
     * @return integer 0|$id of Announcement Created
     */
-    public function createAnnouncement(&$data)
-    {
-        $form = new Announcement();
-        $data['uuid'] = UuidUtil::uuid();
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['start_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d');
-        $data['status'] = $data['status']?$data['status']:1;
-        $data['end_date'] = isset($data['end_date'])?$data['end_date']:date('Y-m-d', strtotime("+7 day"));
-        $data['created_date'] = date('Y-m-d');
-        $form->exchangeArray($data);
-        $form->validate();
-        $this->beginTransaction();
-        $count = 0;
-        try {
-            $count = $this->table->save($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
+    public function createAnnouncement(&$data,$params = null){
+
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions create announcement");
+            }else{
+                $data['org_id'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
             }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
-            $this->commit();
-        } catch (Exception $e) {
-            $this->rollback();
-            return 0;
         }
-        return $count;
+        else{
+            $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        }
+
+        try{
+            $data['name'] = isset($data['name']) ? $data['name'] : NULL;
+            $select = "SELECT uuid,name,status,end_date from ox_announcement where name = '".$data['name']."' and org_id = ".$data['org_id']." and end_date >= curdate()";
+            $result = $this->executeQuerywithParams($select)->toArray();
+            if(count($result) > 0){
+                throw new ServiceException("Announcement already exists","announcement.exists");
+            }   
+       
+
+            $form = new Announcement();
+            $data['uuid'] = UuidUtil::uuid();
+            $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
+            $data['start_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d');
+            $data['status'] = $data['status']?$data['status']:1;
+            $data['end_date'] = isset($data['end_date'])?$data['end_date']:date('Y-m-d',strtotime("+7 day"));
+            $data['created_date'] = date('Y-m-d');
+            $form->exchangeArray($data);
+            $form->validate();
+            $this->beginTransaction();
+            $count = 0;
+                $count = $this->table->save($form);
+                if($count == 0){
+                    $this->rollback();
+                    throw new ServiceException("Failed to create","failed.announcement.create");
+                }
+                $id = $this->table->getLastInsertValue();
+                $data['id'] = $id;
+                $this->commit();
+            }catch(Exception $e){
+                $this->rollback();
+                throw $e;
+            }
+            return $count;
     }
     /**
     * Update Announcement
     * @method PUT
-    * @param integer $id ID of Announcement to update
+    * @param integer $id ID of Announcement to update 
     * @param array $data Data Array as Follows:
     * @throws  Exception
     * <code>
@@ -105,52 +124,64 @@ class AnnouncementService extends AbstractService
     * </code>
     * @return array Returns the Created Announcement.
     */
-    public function updateAnnouncement($uuid, &$data)
-    {
-        $id = $this->getAnnouncementIdBYUuid($uuid);
-        $obj = $this->table->get($id, array());
-        if (is_null($obj)) {
-            return 0;
+    public function updateAnnouncement($uuid,&$data,$orgId = null) {
+        if(isset($orgId)){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($orgId != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to update announcement");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$orgId);
+            }
         }
+
+        $obj = $this->table->getByUuid($uuid,array());
+        if(is_null($obj)){
+            throw new ServiceException("Announcement not found","announcement.not.found");
+        }
+
         $originalArray = $obj->toArray();
+        if(isset($orgId)){
+            if($orgId != $originalArray['org_id']){
+                throw new ServiceException("Announcement does not belong to the organization","announcement.not.found");
+            }
+        }
+
         $form = new Announcement();
         $data = array_merge($originalArray, $data);
-        $data['id'] = $id;
+        $data['id'] = $originalArray['id'];
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
         $count = 0;
         $groupsUpdated = 0;
-        try {
-            $count = $this->table->save($form);
-            $data['id'] = $id;
-            if ($count == 0) {
-                $this->rollback();
+        try{
+            $count = $this->table->save($form); 
+            $data['id'] = $originalArray['id'];
+            if($count == 0){
                 return 1;
             }
             $this->commit();
-        } catch (Exception $e) {
+        }catch(Exception $e){
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
     /**
     * @ignore updateGroups
     */
-    protected function updateGroups($announcementId, $groups)
-    {
+    protected function updateGroups($announcementId,$groups){
         $oldGroups = array_column($this->getGroupsByAnnouncement($announcementId), 'group_id');
-        $newGroups = array_column($groups, 'id');
-        $groupsRemoved = array_diff($oldGroups, $newGroups);
-        if (count($groupsRemoved) > 0) {
-            $result['delete'] = $this->deleteGroupsByAnnouncement($announcementId, $groupsRemoved);
-            if ($result['delete']!=count($groupsRemoved)||count($groupsRemoved)==0) {
+        $newGroups = array_column($groups,'id');
+        $groupsRemoved = array_diff($oldGroups,$newGroups);  
+        if(count($groupsRemoved) > 0){
+            $result['delete'] = $this->deleteGroupsByAnnouncement($announcementId,$groupsRemoved);
+            if($result['delete']!=count($groupsRemoved)||count($groupsRemoved)==0){
                 return 0;
             }
         }
-        $result['insert'] = $this->insertAnnouncementForGroup($announcementId, $groups);
-        if ($result['insert'] == 0) {
+        $result['insert'] = $this->insertAnnouncementForGroup($announcementId,$groups);
+        if($result['insert'] == 0){
             return 0;
         }
         return 1;
@@ -166,10 +197,10 @@ class AnnouncementService extends AbstractService
             $delete = $sql->delete('ox_announcement_group_mapper');
             $delete->where(['announcement_id' => $announcementId,'group_id' => $groupId]);
             $result = $this->executeUpdate($delete);
-            if ($result->getAffectedRows() == 0) {
-                break;
+            if($result->getAffectedRows() == 0){
+                  break;
             }
-            $rowsAffected++;
+            $rowsAffected++; 
         }
         return $rowsAffected;
     }
@@ -201,18 +232,19 @@ class AnnouncementService extends AbstractService
 
                 $query ="Insert into ox_announcement_group_mapper(announcement_id,group_id) Select $announcementId, id from ox_group where ox_group.uuid in (".implode(',', $groupSingleArray).")";
                 $resultInsert = $this->runGenericQuery($query);
-                if (count($resultInsert) == 0) {
+                if(count($resultInsert) == 0){
                     $this->rollback();
                     return 0;
                 }
                 $this->commit();
-            } catch (Exception $e) {
+            }
+            catch(Exception $e){
                 $this->rollback();
                 throw $e;
             }
-            return 1;
+             return 1; 
         }
-        return 0;
+        return 0;                    
     }
 
 
@@ -230,41 +262,56 @@ class AnnouncementService extends AbstractService
     * @param integer $id ID of Announcement to Delete
     * @return int 0=>Failure | $id;
     */
-    public function deleteAnnouncement($uuid)
-    {
+    public function deleteAnnouncement($uuid,$params){
+
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions delete announcement");
+            }else{
+                $params['orgId'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }
+        else{
+            $params['orgId'] = AuthContext::get(AuthConstants::ORG_ID);
+        }
+
+        $obj = $this->table->getByUuid($uuid,array());
+
         $this->beginTransaction();
         $count = 0;
-        try {
-            $id = $this->getAnnouncementIdBYUuid($uuid);
-
-
+        try{
             $sql = $this->getSqlObject();
             $delete = $sql->delete('ox_announcement');
-            $delete->where(['uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
+            $delete->where(['uuid' => $uuid,'org_id' => $params['orgId']]);
             $result = $this->executeUpdate($delete);
-
-
-            if ($result->getAffectedRows() == 0) {
+            
+           
+            if($result->getAffectedRows() == 0){
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Announcement not found","announcement.not.found");
             }
 
-            $select = "SELECT count(announcement_id) from `ox_announcement_group_mapper` where announcement_id = ".$id;
+            $delete = "DELETE FROM ox_attachment where uuid = '".$obj->media."'";
+            $this->executeQuerywithParams($delete);
+
+            $select = "SELECT count(announcement_id) from `ox_announcement_group_mapper` where announcement_id = ".$obj->id;
             $count = $this->executeQuerywithParams($select)->toArray();
 
-            if ($count[0]['count(announcement_id)'] > 0) {
-                $sql = $this->getSqlObject();
-                $delete = $sql->delete('ox_announcement_group_mapper');
-                $delete->where(['announcement_id' => $id]);
-                $result = $this->executeUpdate($delete);
-                if ($result->getAffectedRows() == 0) {
-                    $this->rollback();
-                    return 0;
-                }
+            if($count[0]['count(announcement_id)'] > 0){
+                    $sql = $this->getSqlObject();
+                    $delete = $sql->delete('ox_announcement_group_mapper');
+                    $delete->where(['announcement_id' => $obj->id]);
+                    $result = $this->executeUpdate($delete);
+                    if($result->getAffectedRows() == 0){
+                        $this->rollback();
+                       throw new ServiceException("Failed to delete","failed.announcement.delete");
+                    }
             }
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
+            throw $e;
         }
         return $count;
     }
@@ -287,14 +334,20 @@ class AnnouncementService extends AbstractService
     */
     public function getAnnouncements()
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_announcement')
-                ->columns(array("uuid", "name", "org_id", "status", "description", "start_date", "end_date", "media_type", "media"))
-                ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'), 'left')
-                ->join('ox_user_group', 'ox_announcement_group_mapper.group_id = ox_user_group.group_id', array('group_id','avatar_id'), 'left')
-                ->where(array('ox_user_group.avatar_id' => AuthContext::get(AuthConstants::USER_ID)));
-        return $this->executeQuery($select)->toArray();
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the announcement list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID); 
+        }
+
+        $select = "SELECT a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id left join ox_user_group as oug on ogm.group_id = oug.group_id where oug.avatar_id = ".AuthContext::get(AuthConstants::USER_ID)." and a.org_id =".$orgId." and a.end_date >= curdate() union SELECT a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id where ogm.group_id is NULL and a.org_id =".$orgId." and a.end_date >= curdate()";
+
+        return $this->executeQuerywithParams($select)->toArray();
     }
     /**
     * GET Announcement
@@ -313,24 +366,45 @@ class AnnouncementService extends AbstractService
     * }
     * </code>
     */
-    public function getAnnouncement($id)
+    public function getAnnouncement($id,$params)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_announcement')
-        ->columns(array("uuid", "name", "org_id", "status", "description", "start_date", "end_date", "media_type", "media"))
-        ->join('ox_announcement_group_mapper', 'ox_announcement.id = ox_announcement_group_mapper.announcement_id', array('group_id','announcement_id'), 'left')
-        ->join('ox_user_group', 'ox_announcement_group_mapper.group_id = ox_user_group.group_id', array('group_id','avatar_id'), 'left')
-        ->where(array('ox_announcement.uuid' => $id));
-        $response = $this->executeQuery($select)->toArray();
-        if (count($response)==0) {
-            return 0;
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the announcement list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);  
+            }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID); 
+        }
+
+       
+
+        $select = "SELECT DISTINCT a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id left join ox_user_group as oug on ogm.group_id=oug.group_id where a.org_id = ".$orgId." AND a.uuid = '".$id."' AND a.end_date >= curdate()";
+
+        $response = $this->executeQuerywithParams($select)->toArray();
+        if(count($response) == 0){
+            return array();
         }
         return $response[0];
     }
 
-    public function getAnnouncementsList($filterParams)
+
+    public function getAnnouncementsList($filterParams,$params)
     {
+
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the announcement list");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID); 
+        }
+
         $where = "";
         $pageSize = 20;
         $offset = 0;
@@ -354,8 +428,8 @@ class AnnouncementService extends AbstractService
                 $offset = $filterArray[0]['skip'];
             }
 
-            $where .= strlen($where) > 0 ? " AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID);
-
+            $where .= strlen($where) > 0 ? " AND org_id =".$orgId." AND end_date >= curdate()" : " WHERE org_id =".$orgId." AND end_date >= curdate()";
+            
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
@@ -367,10 +441,17 @@ class AnnouncementService extends AbstractService
     }
 
 
-    public function getAnnouncementGroupList($id, $filterParams = null)
-    {
-        if (!isset($id)) {
-            return 0;
+    public function getAnnouncementGroupList($params,$filterParams = null) {
+
+        if(isset($params['orgId'])){
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+                throw new AccessDeniedException("You do not have permissions to get the group list of announcement");
+            }else{
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            }
+        }else{
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
 
         $pageSize = 20;
@@ -401,18 +482,19 @@ class AnnouncementService extends AbstractService
 
 
 
-            $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= now() AND ox_group.status = 1" : " WHERE ox_announcement.uuid = '".$id."' AND ox_announcement.end_date >= curdate() AND ox_group.status = 1";
+            $where .= strlen($where) > 0 ? " AND ox_announcement.uuid = '".$params['announcementId']."' AND ox_announcement.end_date >= now() AND ox_group.status = 1 AND ox_announcement.org_id = ".$orgId : " WHERE ox_announcement.uuid = '".$params['announcementId']."' AND ox_announcement.end_date >= curdate() AND ox_group.status = 1 AND ox_announcement.org_id = ".$orgId;
 
+            
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(ox_group.id)'];
+            $query =$query." ".$from." ".$where." ".$sort." ".$limit;
 
-        $sort = " ORDER BY ".$sort;
-        $limit = " LIMIT ".$pageSize." offset ".$offset;
-        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-        $count=$resultSet->toArray()[0]['count(ox_group.id)'];
-        $query =$query." ".$from." ".$where." ".$sort." ".$limit;
-
-        $resultSet = $this->executeQuerywithParams($query);
-        return array('data' => $resultSet->toArray(),
+            $resultSet = $this->executeQuerywithParams($query);
+            return array('data' => $resultSet->toArray(), 
                      'total' => $count);
+    
     }
 
 
@@ -431,14 +513,14 @@ class AnnouncementService extends AbstractService
 
         $obj = $this->table->getByUuid($params['announcementId'],array());
         if (is_null($obj)) {
-            throw new ServiceException("Announcement does not belong to the organization","announcement.not.found");
+            throw new ServiceException("Announcement not found","announcement.not.found");
         }
 
         $org = $this->organizationService->getOrganization($obj->org_id);
 
-        $obj = $this->table->getByUuid($id, array());
-        if (is_null($obj)) {
-            return 0;
+       
+        if(isset($params['orgId'])){
+            if($params['orgId'] != $obj->org_id){
         }
         if (!isset($data['groups']) || empty($data['groups'])) {
             return 2;

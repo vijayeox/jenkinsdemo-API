@@ -1,0 +1,8 @@
+ox_app:
+-
+    id: 100
+    name: "SampleApp"
+    uuid: "debf3d35-a0ee-49d3-a8ac-8e480be9dac7"
+    category: "OTHERS"
+    type: 2
+    status: 1

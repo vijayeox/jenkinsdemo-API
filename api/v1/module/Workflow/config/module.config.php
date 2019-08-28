@@ -33,6 +33,20 @@ return [
                     ],
                 ],
             ],
+            'completeActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/workflow/activitycomplete',
+                    'defaults' => [
+                        'controller' => Controller\ActivityInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'completeActivityInstance',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'serviceTaskExecution' => [
                 'type' => Segment::class,
                 'options' => [
@@ -41,6 +55,45 @@ return [
                         'controller' => Controller\ServiceTaskController::class,
                         'method' => 'POST',
                         'action' => 'execute',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'workflowIndividualInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/workflowinstance/:workflowInstanceId/activity/:activityId[/instance/:instanceId]',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'action' => 'workflowInstance',
+                        'access'=>[
+                        ],
+                    ],
+                ],
+            ],
+            'completeWorkflowInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/workflowinstance/complete',
+                    'defaults' => [
+                        'controller' => Controller\ServiceTaskController::class,
+                        'method' => 'POST',
+                        'action' => 'completeWorkflow',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            'mypolicylisting' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/[workflow/:workflowId/]file',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],

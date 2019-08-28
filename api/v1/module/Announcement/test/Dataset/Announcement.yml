@@ -19,6 +19,7 @@ ox_announcement:
     end_date: "2019-12-26 00:00:00"
     created_id: 1
     status: 1
+    media: 'test'
   -
     id: 3
     uuid: e66157ee-47de-4ed5-a78e-8a9195033abc
@@ -35,6 +36,15 @@ ox_announcement:
     org_id: 2
     created_date: "2019-06-26 00:00:00"
     end_date: "2019-12-26 00:00:00"
+    created_id: 1
+    status: 1
+  -
+    id: 5
+    uuid: e66157ee-47de-4ed5-a78e-8a9195033bdg
+    name: "Announcement 5"
+    org_id: 1
+    created_date: "2019-06-26 00:00:00"
+    end_date: "2019-06-26 00:00:00"
     created_id: 1
     status: 1
 

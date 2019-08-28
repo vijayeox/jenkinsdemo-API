@@ -301,7 +301,7 @@ class AppControllerTest extends ControllerTest
         if (enableCamunda==0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/var/www/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTest.bpmn'))->once()->andReturn(array(1));
+            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/app/api/v1/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTest.bpmn'))->once()->andReturn(array(1));
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
             $workflowService->setProcessManager($mockProcessManager);
         }
@@ -347,7 +347,7 @@ class AppControllerTest extends ControllerTest
         if (enableCamunda==0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow1', array('/var/www/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTestFail.bpmn'))->once()->andReturn(0);
+            $mockProcessManager->expects('deploy')->with('NewWorkflow1', array('/app/api/v1/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTestFail.bpmn'))->once()->andReturn(0);
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
             $workflowService->setProcessManager($mockProcessManager);
         }

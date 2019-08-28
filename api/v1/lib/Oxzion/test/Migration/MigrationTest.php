@@ -18,6 +18,7 @@ class MigrationTest extends ServiceTest
     private $data;
     private $database;
     private $adapter;
+    private $migrationObject;
 
     public function setUp(): void
     {
@@ -34,11 +35,10 @@ class MigrationTest extends ServiceTest
         }
         $this->data['appName'] = isset($this->data['appName']) ? $this->data['appName'] : null;
         $config = $this->getApplicationConfig();
-        $config = $config['db'];
-        $this->database = $this->data['appName'] . "___" . $this->data['UUID'];
-        $config['database'] = $this->database;
-        $config['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $config['host'] . ';charset=utf8;username=' . $config["username"] . ';password=' . $config["password"] . '';
-        $this->adapter = new Adapter($config);
+        
+        $this->migrationObject = new Migration($config, $this->data['appName'], $this->data['UUID']);
+        $this->adapter = $this->migrationObject->getAdapter();
+        $this->database = $this->migrationObject->getDatabase();
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->setRollbackOnly(true);
     }
@@ -53,8 +53,7 @@ class MigrationTest extends ServiceTest
     public function testInitDB()
     {
         $config = $this->getApplicationConfig();
-        $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->initDB($this->data);
+        $testCase = $this->migrationObject->initDB($this->data);
         $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' . $this->database . '"';
         $statement = $this->adapter->query($sqlQuery);
         $result = $statement->execute();
@@ -78,20 +77,17 @@ class MigrationTest extends ServiceTest
     {
         $config = $this->getApplicationConfig();
         $this->assertEquals(isset($this->data['appName']), false);
-        $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->initDB($this->data);
+        $testCase = $this->migrationObject->initDB($this->data);
         $this->assertEquals(0, $testCase);
     }
 
     public function testMigrate()
     {
         $config = $this->getApplicationConfig();
-        $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->initDB($this->data);
+        $testCase = $this->migrationObject->initDB($this->data);
         $dataSet = array_diff(scandir(dirname(__FILE__) . "/scripts/"), array(".", ".."));
         $migrationFolder = dirname(__FILE__) . "/scripts/";
-        $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
+        $testCase = $this->migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
 
         //Check to see if the version table is updated or not
         $versionArray = '1.0, 1.1';
@@ -111,8 +107,7 @@ class MigrationTest extends ServiceTest
         $this->assertEquals($this->data['appName'], 'ox_app_4');
         $dataSet = array_diff(scandir(dirname(__FILE__) . "/scripts/"), array(".", ".."));
         $migrationFolder = dirname(__FILE__) . "/scripts/";
-        $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
+        $testCase = $this->migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
         $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' . $this->database . '"';
         $dbConfig = $config['db'];
         $dbConfig['database'] = 'mysql';

@@ -125,6 +125,12 @@ class Module implements ConfigProviderInterface
                         $container->get(AdapterInterface::class)
                     );
                 },
+                Controller\AppDelegateController::class => function ($container) {
+                    return new Controller\AppDelegateController(
+                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class),
+                        $container->get('AppLogger')
+                    );
+                },
                 Controller\MenuItemController::class => function ($container) {
                     return new Controller\MenuItemController(
                         $container->get(Model\MenuItemTable::class),

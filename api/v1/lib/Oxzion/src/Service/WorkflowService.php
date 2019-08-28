@@ -67,9 +67,9 @@ class WorkflowService extends AbstractService
     {
         return $this->processManager;
     }
-    public function deploy($file, $appId, $data)
+    public function deploy($file, $appUuid, $data)
     {
-        $query = "SELECT * FROM `ox_app` WHERE uuid = '".$appId."';";
+        $query = "SELECT * FROM `ox_app` WHERE uuid = '".$appUuid."';";
         $resultSet = $this->executeQuerywithParams($query)->toArray();
         $appId = $resultSet[0]['id'];
         $baseFolder = $this->config['UPLOAD_FOLDER'];
@@ -128,7 +128,7 @@ class WorkflowService extends AbstractService
                     }
                 }
                 $formData = $oxForm->toArray();
-                $formResult = $this->formService->createForm($appId, $formData);
+                $formResult = $this->formService->createForm($appUuid, $formData);
                 $startFormId = $formData['id'];
                 if ($formResult) {
                     if (!$this->generateFields($process['form']['fields'], $appId, $formData['id'], $workFlowId,'form')) {
@@ -140,40 +140,44 @@ class WorkflowService extends AbstractService
                 }
                 foreach ($process['activity'] as $activity) {
                     $oxActivity = new Activity();
-                $oxActivity->exchangeArray($activity);
-                $oxFormProperties = $oxActivity->getKeyArray();
-                if (isset($activityProperties)) {
-                    foreach ($activityProperties as $activityKey => $activityValue) {
-                        if (in_array($activityKey, $activityProperties)) {
-                            $oxActivity->__set($key, $activityValue);
+                    $oxActivity->exchangeArray($activity);
+                    $oxFormProperties = $oxActivity->getKeyArray();
+                    if (isset($activityProperties)) {
+                        foreach ($activityProperties as $activityKey => $activityValue) {
+                            if (in_array($activityKey, $activityProperties)) {
+                                $oxActivity->__set($key, $activityValue);
+                            }
                         }
                     }
-                }
-                $activityData = $oxActivity->toArray();
-                try {
-                    $activityResult = $this->activityService->createActivity($appId, $activityData);
-                    $activityIdArray[] = $activityData['id'];
-                    if ($activityResult) {
-                        if (!$this->generateFields($activity['fields'], $appId, $activityData['id'], $workFlowId,'activity')) {
+                    $activityData = $oxActivity->toArray();
+                    try {
+                        $activityResult = $this->activityService->createActivity($appId, $activityData);
+                        $activityIdArray[] = $activityData['id'];
+                        if ($activityResult) {
+                            if (!$this->generateFields($activity['fields'], $appId, $activityData['id'], $workFlowId,'activity')) {
+                                return 0;
+                            }
+                        } else {
+                            $activityResult = $this->activityService->deleteActivity($activityData['id']);
                             return 0;
                         }
-                    } else {
-                        $activityResult = $this->activityService->deleteActivity($activityData['id']);
+                    } catch (Exception $e) {
+                        foreach ($activityIdArray as $activityCreatedId) {
+                            $id = $this->activityService->deleteActivity($activityCreatedId);
+                        }
                         return 0;
                     }
-                } catch (Exception $e) {
-                    foreach ($activityIdArray as $activityCreatedId) {
-                        $id = $this->activityService->deleteActivity($activityCreatedId);
-                    }
-                    return 0;
                 }
-            }
-                
             }
         }
         if (isset($workflowName)) {
             $deployedData = array('id'=>$workFlowId,'app_id'=>$appId,'name'=>$workflowName,'process_id'=>$processId,'form_id'=>$startFormId,'file'=>$workFlowStorageFolder.$fileName);
-            $workFlow = $this->saveWorkflow($appId, $deployedData);
+            try {
+                $workFlow = $this->saveWorkflow($appId, $deployedData);
+            } catch (Exception $e){
+                $this->deleteWorkflow($appId,$workflowId);
+                return 0;
+            }
         }
         return $deployedData?$deployedData:0;
     }

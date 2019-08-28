@@ -270,11 +270,11 @@ class FileService extends AbstractService
         $i=0;
         if (!empty($fields)) {
             foreach ($fields as $field) {
-                if ($field['required']) {
-                    if (!isset($fieldData[$field['name']])) {
-                        $required[$field['name']] = 'required';
-                    }
-                }
+                // if ($field['required']) {
+                //     if (!isset($fieldData[$field['name']])) {
+                //         $required[$field['name']] = 'required';
+                //     }
+                // }
                 if (($key = array_search($field['id'], array_column($fileArray, 'fieldid')))>-1) {
                     $keyValueFields[$i]['id'] = $fileArray[$key]['id'];
                     $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
@@ -293,11 +293,11 @@ class FileService extends AbstractService
                 $i++;
             }
         }
-        if (count($required)>0) {
-            $validationException = new ValidationException();
-            $validationException->setErrors($required);
-            throw $validationException;
-        }
+        // if (count($required)>0) {
+        //     $validationException = new ValidationException();
+        //     $validationException->setErrors($required);
+        //     throw $validationException;
+        // }
         return $keyValueFields;
     }
 }
