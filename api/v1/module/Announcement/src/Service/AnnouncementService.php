@@ -228,7 +228,7 @@ class AnnouncementService extends AbstractService
                 $delete = $this->getSqlObject()
                 ->delete('ox_announcement_group_mapper')
                 ->where(['announcement_id' => $announcementId]);
-                $result = $this->executeQueryString($delete);
+                $result = $this->executeQuery($delete);
 
                 $query ="Insert into ox_announcement_group_mapper(announcement_id,group_id) Select $announcementId, id from ox_group where ox_group.uuid in (".implode(',', $groupSingleArray).")";
                 $resultInsert = $this->runGenericQuery($query);

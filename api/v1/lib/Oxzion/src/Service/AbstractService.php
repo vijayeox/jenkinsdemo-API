@@ -118,16 +118,6 @@ class AbstractService
         return $resultSet;
     }
 
-    protected function executeQueryString($query)
-    {
-        $statement = $this->sql->prepareStatementForSqlObject($query);
-        $result = $statement->execute();
-        // build result set
-        $resultSet = new ResultSet();
-        $resultSet->initialize($result);
-        return $resultSet;
-    }
-
     protected function executeInsert($query)
     {
         if(StringUtils::startsWith($query, 'INSERT')){
