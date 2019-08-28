@@ -8,3 +8,4 @@ services:
             - "8080:80"
         volumes:
             - ../..:/app
+            - /tmp:/tmp
