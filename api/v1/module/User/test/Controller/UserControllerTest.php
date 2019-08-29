@@ -632,7 +632,7 @@ class UserControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => 'John Holt'];
+        $data = ['firstname' => 'John','lastname' => 'Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
@@ -641,12 +641,13 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['firstname'], $data['firstname']);
+        $this->assertEquals($content['data']['lastname'], $data['lastname']);
     }
 
     public function testUpdateWithAddress()
     {
-        $data = ['name' => 'John Holt','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456',];
+        $data = ['firstname' => 'John','lastname' => 'Holt','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456',];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
@@ -660,7 +661,8 @@ class UserControllerTest extends ControllerTest
         $address = $this->executeQueryTest($query);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['firstname'], $data['firstname']);
+        $this->assertEquals($content['data']['lastname'], $data['lastname']);
         $this->assertEquals($address[0]['address1'],$data['address1']);
         $this->assertEquals($address[0]['city'],$data['city']);
         $this->assertEquals($address[0]['state'],$data['state']);
@@ -669,7 +671,7 @@ class UserControllerTest extends ControllerTest
 
     public function testUpdateWithOrgID()
     {
-        $data = ['name' => 'John Holt'];
+        $data = ['firstname' => 'John','lastname' => 'Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
@@ -679,13 +681,14 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['firstname'], $data['firstname']);
+        $this->assertEquals($content['data']['lastname'], $data['lastname']);
     }
 
 
     public function testUpdateWithInvalidOrgID()
     {
-        $data = ['name' => 'John Holt'];
+        $data = ['firstname' => 'John','lastname' => 'Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
@@ -700,7 +703,7 @@ class UserControllerTest extends ControllerTest
 
     public function testUpdateWithInvalidUserid()
     {
-        $data = ['name' => 'John Holt'];
+        $data = ['firstname' => 'John','lastname' => 'Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-e9-b2d5-68ecc57cde45', 'PUT', null);
@@ -714,7 +717,7 @@ class UserControllerTest extends ControllerTest
 
     public function testUpdateNotFound()
     {
-        $data = ['name' => 'Test User'];
+        $data = ['firstname' => 'Test','lastname' => 'User'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57c6543', 'PUT', null);

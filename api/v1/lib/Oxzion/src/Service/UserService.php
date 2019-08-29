@@ -460,7 +460,7 @@ class UserService extends AbstractService
             $addressid = $this->addressService->addAddress($data);
             $userdata['address_id'] = $addressid;
         }
-
+        $userdata['name'] = $userdata['firstname']." ".$userdata['lastname'];
         $userdata['uuid'] = $id;
         if (isset($data['managerid'])) {
             $userdata['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
