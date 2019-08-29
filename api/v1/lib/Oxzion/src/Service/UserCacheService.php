@@ -132,7 +132,10 @@ class UserCacheService extends AbstractService
         if (count($response)==0) {
             return 0;
         }
-        $content = json_decode($response[0]['content'],true);
-        return $content;
+        if($content = json_decode($response[0]['content'],true)){
+            return $content;
+        } else {
+            return array('content'=>$response[0]['content']);
+        }
     }
 }

@@ -48,7 +48,7 @@ class CacheController extends AbstractApiController
         $appId = $this->params()->fromRoute()['appId'];
         $result = $this->cacheService->getCache(null,$appId,AuthContext::get(AuthConstants::USER_ID));
         if($result == 0){
-            return $this->getFailureResponse("No Data Found");
+            return $this->getErrorResponse("No Cache Data", 404);
         }
         return $this->getSuccessResponseWithData($result);
     }

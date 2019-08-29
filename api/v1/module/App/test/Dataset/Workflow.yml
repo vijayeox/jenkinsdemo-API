@@ -202,3 +202,9 @@ ox_page_content:
     content: 'content_3'
     page_id: 1
     type: 3
+ox_user_cache:
+  -
+    id: 1
+    app_id: 99
+    content: "Some Content"
+    user_id: 1
