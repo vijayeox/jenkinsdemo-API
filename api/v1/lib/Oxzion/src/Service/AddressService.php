@@ -54,7 +54,6 @@ class AddressService extends AbstractService
         $form = new Address();
         $changedArray = array_merge($obj->toArray(), $data);
         $form->exchangeArray($changedArray);
-        $form->validate();
         $this->beginTransaction();
         $count = 0;
         try {

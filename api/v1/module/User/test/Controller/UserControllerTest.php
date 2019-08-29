@@ -115,22 +115,6 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($address[0]['country'], $data['country']);
     }
 
-
-    public function testCreateByAdminWithoutAddressFields()
-    {
-        $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/user', 'POST', $data);
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'],'Address,city,state,country,zip fields cannot be empty');
-    }
-
-
     public function testCreateWithRoleOfOtherOrg()
     {
         $this->initAuthToken($this->adminUser);

@@ -9,6 +9,7 @@ use Oxzion\Utils\BosUtils;
 use Oxzion\Utils\ArrayUtils;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\EmailService;
+use Oxzion\Service\AddressService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Search\Elastic\IndexerImpl;
@@ -17,7 +18,9 @@ use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ServiceException;
-use Oxzion\Service\AddressService;
+use Oxzion\ValidationException;
+
+
 
 
 class UserService extends AbstractService
@@ -53,6 +56,7 @@ class UserService extends AbstractService
         $this->addressService = $addressService;
         $this->emailService = $emailService;
         $this->templateService = $templateService;
+        $this->addressService = $addressService;
         $this->cacheService = CacheService::getInstance();
         $this->messageProducer = MessageProducer::getInstance();
     }
@@ -210,15 +214,12 @@ class UserService extends AbstractService
                 }
             }
         
-        if(!isset($data['address1']) || !isset($data['city']) || !isset($data['country']) || !isset($data['state']) || !isset($data['zip'])){
-            throw new ServiceException("Address,city,state,country,zip fields cannot be empty","fields.required");
+        
+        if(isset($data['address1'])){
+            $addressid = $this->addressService->addAddress($data);
+            $data['address_id'] = $addressid;
         }
 
-        $data['address2'] = isset($data['address2']) ?  $data['address2'] : NULL;
-        $insert = "INSERT INTO ox_address (`address1`,`address2`,`city`,`state`,`country`,`zip`) VALUES ('".$data['address1']."','".$data['address2']."','".$data['city']."','".$data['state']."','".$data['country']."','".$data['zip']."')";
-        $addressid = $this->executeInsert($insert);
- 
-        $data['address_id'] = $addressid;
         $data['uuid'] = Uuid::uuid4()->toString();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -453,15 +454,12 @@ class UserService extends AbstractService
             unset($data['orgid']);
         }
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
-        $data['address1'] = isset($data['address1']) ?  $data['address1'] : NULL;
-        $data['address2'] = isset($data['address2']) ?  $data['address2'] : NULL;
-        $data['city'] = isset($data['city']) ?  $data['city'] : NULL;
-        $data['state'] = isset($data['state']) ?  $data['state'] : NULL;
-        $data['country'] = isset($data['country']) ?  $data['country'] : NULL;
-        $data['zip'] = isset($data['zip']) ?  $data['zip'] : NULL;
-
-        $update = "UPDATE ox_address SET address1 = '".$data['address1']."',address2 = '".$data['address2']."',city = '".$data['city']."',state = '".$data['state']."',country = '".$data['country']."',zip = '".$data['zip']."' WHERE id = ".$userdata['address_id'];
-        $result = $this->executeQuerywithParams($update);
+        if(isset($userdata['address_id'])){
+            $this->addressService->updateAddress($userdata['address_id'],$data);
+        }else{
+            $addressid = $this->addressService->addAddress($data);
+            $userdata['address_id'] = $addressid;
+        }
 
         $userdata['uuid'] = $id;
         if (isset($data['managerid'])) {

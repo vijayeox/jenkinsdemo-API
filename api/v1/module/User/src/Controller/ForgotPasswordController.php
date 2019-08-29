@@ -8,7 +8,7 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface;
-
+use Oxzion\ValidationException;
 
 
 class ForgotPasswordController extends AbstractAPIControllerHelper

@@ -161,7 +161,17 @@ class UserController extends AbstractApiController
     {
         $data = $this->extractPostData();
         $id =AuthContext::get(AuthConstants::USER_UUID);
-        return $this->update($id,$data);
+        try{
+             $result = $this->update($id,$data);
+        }
+        catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $result;
     }
 
     /**
