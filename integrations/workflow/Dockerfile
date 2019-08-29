@@ -24,7 +24,7 @@ COPY ./ProcessEngine/dist/processengine_plugin.jar /camunda/lib/
 
 ARG CAMUNDA_REPO="https://camunda.org/release/camunda-bpm/tomcat/7.9/"
 
-RUN wget --progress=bar:force:noscroll -O /tmp/camunda.tar.gz "${CAMUNDA_REPO}/camunda-bpm-${DISTRO}-${VERSION}.tar.gz"
+RUN wget --progress=bar:force:noscroll -O /tmp/camunda.tar.gz "${CAMUNDA_REPO}camunda-bpm-${DISTRO}-${VERSION}.tar.gz"
 
 # Unpack distro to /camunda directory
 RUN mkdir -p /camunda \
