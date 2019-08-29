@@ -435,6 +435,7 @@ class UserService extends AbstractService
             unset($data['orgid']);
         }
         $userdata = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
+        $userdata['name'] = $userdata['firstname']." ".$userdata['lastname'];
         $userdata['uuid'] = $id;
         if (isset($data['managerid'])) {
             $userdata['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
