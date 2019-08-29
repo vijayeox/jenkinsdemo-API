@@ -54,6 +54,8 @@ class ServiceTest extends TestCase
      */
     protected $traceError = true;
 
+    protected $dbAdapter;
+
     /**
      * Reset the application for isolation
      */
@@ -91,6 +93,18 @@ class ServiceTest extends TestCase
         //cleanup required to remove the transactionManager
         $_REQUEST = [];
     }
+
+    protected function getDbAdapter(){
+        if(!$this->dbAdapter){
+            $this->dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);    
+        }
+        
+        return $this->dbAdapter;
+    }
+
+    protected function setDbAdapter($dbAdapter){
+        $this->dbAdapter = $dbAdapter;
+    }
     /**
      * Reset the request
      *
@@ -99,7 +113,7 @@ class ServiceTest extends TestCase
     
     protected function getTransactionManager()
     {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $dbAdapter = $this->getDbAdapter();
         return TransactionManager::getInstance($dbAdapter);
     }
 

@@ -121,7 +121,8 @@
       "MessageTest\\": "lib/Oxzion/test/MessageTest",
       "PrivilegeTest\\": "module/Privilege/test/",
       "ChatCallbackTest\\": "module/Callback/test/",
-      "MessagingTest\\":"module/Messaging/test/"
+      "MessagingTest\\":"module/Messaging/test/",
+      "DiveInsuranceTest\\":"../../clients/Dive Insurance/test/"
     }
   },
   "extra": [],
