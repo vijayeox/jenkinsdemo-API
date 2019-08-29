@@ -26,14 +26,6 @@ class AuthControllerTest extends ControllerTest
         return $dataset;
     }
 
-    private function executeUpdate($query){
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        
-        return $result;
-    }
-
 
     public function testAuthentication(){
         $data = ['username' => $this->adminUser, 'password' => 'password'];

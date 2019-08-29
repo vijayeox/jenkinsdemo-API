@@ -118,6 +118,10 @@ class OrganizationService extends AbstractService
             else{
                 throw new ServiceException("Failed to create new entity","failed.create.org");
             }
+
+            $insert = "INSERT INTO ox_app_registry (`org_id`,`app_id`,`date_created`,`start_options`) SELECT ".$form->id.",id,CURRENT_TIMESTAMP(),start_options from ox_app where isdefault = 1";
+            $resultSet = $this->executeQueryWithParams($insert);
+
             $this->uploadOrgLogo($data['uuid'], $files);
            
             $this->commit();
