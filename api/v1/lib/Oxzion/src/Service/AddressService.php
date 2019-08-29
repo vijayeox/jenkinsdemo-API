@@ -38,8 +38,10 @@ class AddressService extends AbstractService
                 $this->rollback();
                 throw new ServiceException("Failed to add the address","failed.add.address");
             }
+            $this->commit();
         }
         catch(Exception $e){
+            $this->rollback();
             throw $e;
         }        
         return $this->table->getLastInsertValue();   
