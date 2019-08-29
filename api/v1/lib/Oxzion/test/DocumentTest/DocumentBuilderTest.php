@@ -44,7 +44,7 @@ class DocumentBuilderTest extends ServiceTest
         $header = "header.html";
         $footer = "footer.html";
         $tempFile = $config['TEMPLATE_FOLDER'].$data['orgUuid'];
-        $templateLocation = __DIR__."/../../../../../../clients/hub/data/template";
+        $templateLocation = __DIR__."/../../../../../../clients/Dive Insurance/data/template";
         if(FileUtils::fileExists($tempFile)){
             FileUtils::rmDir($tempFile);
         }
