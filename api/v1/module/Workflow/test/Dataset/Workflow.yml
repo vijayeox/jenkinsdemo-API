@@ -21,18 +21,49 @@ ox_field:
     app_id: 99
     workflow_id: 1
     data_type: "integer"
-    required: 0
+    required: 1
     sequence: 1
-
+-
+    id: 3
+    name: "expiry_date"
+    app_id: 99
+    workflow_id: 1
+    data_type: "date"
+    required: 1
+    sequence: 1     
+ox_activity:
+  -
+    id: 1
+    app_id: 99
+    workflow_id: 1
+    task_id: 1
+    name: "Task"
+  -
+    id: 2
+    app_id: 99
+    workflow_id: 1
+    name: "Test Form 2"
+    task_id: 2
+ox_activity_form:
+  - 
+    id: 1
+    activity_id: 1
+    form_id: 1
+  - 
+    id: 2
+    activity_id: 2
+    form_id: 2
 ox_form:
   -
     id: 1
     app_id: 99
+    template: '{"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":{}},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":{},"properties":{},"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleForm2ForTests"}'
     name: "Task"
     description: "Form Description"
   -
     id: 2
     app_id: 99
+    template: '{"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":{}},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":{},"properties":{},"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleForm1ForTests"}'
     name: "Test Form 2"
     description: "Form Description"
 ox_form_field:
@@ -44,41 +75,69 @@ ox_form_field:
     id: 2
     form_id: 1
     field_id: 2
+-
+    id: 3
+    form_id: 1
+    field_id: 3      
 ox_workflow:
   -
     id: 1
     app_id: 99
     name: "Test Workflow 1"
-    process_ids: 'sampleProcessId'
+    process_id: "[main]"
     form_id: 1
   -
     id: 2
     app_id: 99
     name: "Test Workflow 2"
-    process_ids: 'sampleProcessId'
+    process_id: "[main]"
     form_id: 1
 ox_file:
   -
     id: 1
     workflow_instance_id: 1
     org_id: 1
-    form_id: 1
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
+    date_created: "2019-06-25 00:00:00"
   -
     id: 2
     workflow_instance_id: 1
     org_id: 1
-    form_id: 2
-    data: "new data"
+    data: "New File Data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
+    date_created: "2019-06-28 00:00:00"
+  -
+    id: 3
+    workflow_instance_id: 2
+    org_id: 1
+    data: "New File Data - Completed"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
+    date_created: "2019-06-26 00:00:00"
+  -
+    id: 4
+    workflow_instance_id: 2
+    org_id: 1
+    data: "New File Data - Latest Completed"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9146d"
+    date_created: "2019-06-26 10:00:00"
 ox_workflow_instance:
   -
     id: 1
     workflow_id: 1
+    process_instance_id: 1
     app_id: 99
     org_id: 1
     status: "In Progress"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+  -
+    id: 2
+    workflow_id: 1
+    process_instance_id: 1
+    app_id: 99
+    org_id: 1
+    status: "Completed"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
 ox_file_attribute:
@@ -106,3 +165,74 @@ ox_file_attribute:
     org_id: 1
     fieldvalue: 2
     fieldid: 2
+  -
+    id: 5
+    fileid: 3
+    org_id: 1
+    fieldvalue: "2030-06-20"
+    fieldid: 3
+  -
+    id: 6
+    fileid: 4
+    org_id: 1
+    fieldvalue: "2030-06-20"
+    fieldid: 3
+ox_app_menu:
+  -
+    id: 1
+    uuid: "menu1"
+    name: "menu1"
+    app_id: 99
+    parent_id: 0
+    icon: "new data"
+    sequence: 1
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1
+  -
+    id: 2
+    uuid: "menu2"
+    name: "menu2"
+    app_id: 99
+    parent_id: 0
+    icon: "new data"
+    sequence: 2
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1
+  -
+    id: 3
+    uuid: "menu3"
+    name: "menu3"
+    app_id: 99
+    parent_id: 1
+    icon: "icon3"
+    sequence: 3
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1
+ox_app_page:
+  -
+    id: 1
+    name: "page1"
+    uuid: "page1"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1
+  -
+    id: 2
+    name: "page2"
+    uuid: "page2"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1
+  -
+    id: 3
+    name: "page3"
+    uuid: "page3"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    created_by: 1
+ox_activity_instance:
+  -
+    id: 1
+    workflow_instance_id: 1
+    activity_instance_id: "[activityInstanceId]"
+    activity_id: 1

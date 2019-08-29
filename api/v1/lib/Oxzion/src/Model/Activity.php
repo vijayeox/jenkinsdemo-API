@@ -4,19 +4,21 @@ namespace Oxzion\Model;
 use Oxzion\ValidationException;
 use Oxzion\Model\Entity;
 
-class Activity extends Entity{
-	protected $data = array(
+class Activity extends Entity
+{
+    protected $data = array(
         'id'=>0,
-        'name'=>NULL,
+        'name'=>null,
         'app_id'=>0,
+        'task_id'=>0,
         'workflow_id'=>0,
-        'activity_id' => NULL,
-        'created_by'=>NULL,
-        'modified_by'=>NULL,
-        'date_created'=>NULL,
-        'date_modified'=>NULL,
+        'created_by'=>null,
+        'modified_by'=>null,
+        'date_created'=>null,
+        'date_modified'=>null,
     );
-    public function validate(){
+    public function validate()
+    {
         $required = array('name');
         $this->validateWithParams($required);
     }

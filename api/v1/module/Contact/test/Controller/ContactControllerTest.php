@@ -12,11 +12,12 @@ use PHPUnit\Framework\TestResult;
 use Zend\Db\Sql\Sql;
 use Oxzion\Utils\FileUtils;
 use Zend\Db\Adapter\Adapter;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
 
 
 class ContactControllerTest extends ControllerTest
 {
-
     public function setUp() : void
     {
         $this->loadConfig();
@@ -27,6 +28,15 @@ class ContactControllerTest extends ControllerTest
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Contact.yml");
         return $dataset;
+    }
+
+    private function executeQueryTest($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        return $resultSet->toArray();
     }
 
     public function testCreate()
@@ -51,7 +61,7 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['owner_id'], 1);
     }
 
-//Testing to see if the Create Contact function is working as intended if all the value passed are correct.
+    //Testing to see if the Create Contact function is working as intended if all the value passed are correct.
 
     protected function setDefaultAsserts()
     {
@@ -61,7 +71,7 @@ class ContactControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-//Test Case to check the errors when the required field is not selected. Here I removed the parent_id field from the list.
+    //Test Case to check the errors when the required field is not selected. Here I removed the parent_id field from the list.
 
     public function testCreateWithoutRequiredField()
     {
@@ -158,7 +168,6 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['orgContacts'][2]['user_id'], 3);
         $this->assertEquals($content['data']['orgContacts'][2]['first_name'], 'rakshith');
         $this->assertEquals($content['data']['orgContacts'][2]['last_name'], 'amin');
-
     }
 
     public function testgetcontactsForAllColumnsSuccess()
@@ -176,7 +185,7 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['myContacts'][0]['phone_1'], '14034');
         $this->assertEquals($content['data']['myContacts'][0]['phone_list'], array('data'=>["8399547885"," 7899290200"," 123123122445"]));
         $this->assertEquals($content['data']['myContacts'][0]['email'], 'karan@myvamla.com');
-        $this->assertEquals($content['data']['myContacts'][0]['email_list'],array('data'=>["raks@va.com"," asas@ox.com"]));
+        $this->assertEquals($content['data']['myContacts'][0]['email_list'], array('data'=>["raks@va.com"," asas@ox.com"]));
         $this->assertEquals($content['data']['orgContacts'][0]['user_id'], '1');
         $this->assertEquals($content['data']['orgContacts'][0]['first_name'], 'Bharat');
         $this->assertEquals($content['data']['orgContacts'][0]['last_name'], 'Gogineni');
@@ -200,7 +209,6 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['orgContacts'][2]['phone_list'], null);
         $this->assertEquals($content['data']['orgContacts'][2]['email'], 'test@va.com');
         $this->assertEquals($content['data']['orgContacts'][2]['email_list'], null);
-
     }
 
     public function testgetcontactsWithFilter()
@@ -219,7 +227,8 @@ class ContactControllerTest extends ControllerTest
     }
 
 
-    public function testgeticonWhenIconTypeIsNotNull(){
+    public function testgeticonWhenIconTypeIsNotNull()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/contact/search?column=-1&filter=karan', 'GET');
         $this->assertResponseStatusCode(200);
@@ -230,11 +239,11 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['myContacts'][0]['first_name'], 'Karan S');
         $this->assertEquals($content['data']['myContacts'][0]['last_name'], 'Agarwal');
         $this->assertEquals($content['data']['myContacts'][0]['icon'], 'http://localhost:8080/user/profile/4fd99e8e-758f-11e9-b2d5-68ecc57cde45');
-           
     }
 
 
-    public function testContactImport(){
+    public function testContactImport()
+    {
         $this->initAuthToken($this->adminUser);
         $_FILES['file'] = array();
         $_FILES['file']['name'] = 'contact1.csv';
@@ -252,7 +261,8 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testContactImportWithInvalidColumnHeaders(){
+    public function testContactImportWithInvalidColumnHeaders()
+    {
         $this->initAuthToken($this->adminUser);
         $_FILES['file'] = array();
         $_FILES['file']['name'] = 'invalidheaders.csv';
@@ -271,7 +281,8 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Column Headers donot match...');
     }
 
-    public function testContactImportWithInvalidData(){
+    public function testContactImportWithInvalidData()
+    {
         $this->initAuthToken($this->adminUser);
         $_FILES['file'] = array();
         $_FILES['file']['name'] = 'invaliddata.csv';
@@ -288,12 +299,13 @@ class ContactControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['message'], 'Validate and Import the downloaded file');
-        $this->assertEquals(count($content['data']), 1);       
+        $this->assertEquals(count($content['data']), 1);
     }
 
-    public function testContactExport(){
+    public function testContactExport()
+    {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/contact/export', 'POST',null);
+        $this->dispatch('/contact/export', 'POST', null);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Contact');
         $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
@@ -302,10 +314,11 @@ class ContactControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['message'], 'Exported CSV Data');
-        $this->assertEquals(count($content['data']), 1);       
+        $this->assertEquals(count($content['data']), 1);
     }
 
-    public function testContactExportByUuid(){
+    public function testContactExportByUuid()
+    {
         $this->initAuthToken($this->adminUser);
         $data = ['contactUuid' => array(['uuid' => '143949cf-6696-42ad-877a-26e8119603c3'])];
         $this->dispatch('/contact/export', 'POST');
@@ -317,7 +330,41 @@ class ContactControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['message'], 'Exported CSV Data');
-        $this->assertEquals(count($content['data']), 1);       
+        $this->assertEquals(count($content['data']), 1);
     }
 
+    public function testMultipleContactDelete(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['uuid' => ['c384bdbf-48e1-4180-937a-08e5852718ea','c384bdbf-48e1-4180-937a-08e585271ng6']];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/contacts/delete', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Contact');
+        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+        $select ="SELECT * from ox_contact where owner_id = 1";
+        $result = $this->executeQueryTest($select);
+        $this->assertControllerClass('ContactController');
+        $this->assertMatchedRouteName('contactsDelete');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($result),0);
+    }
+
+    public function testConactDeleteofDifferentOwner(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['uuid' => ['143949cf-6696-42ad-877a-26e8119603c3']];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/contacts/delete', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Contact');
+        $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
+        $select ="SELECT * from ox_contact where uuid = '143949cf-6696-42ad-877a-26e8119603c3'";
+        $result = $this->executeQueryTest($select);
+        $this->assertControllerClass('ContactController');
+        $this->assertMatchedRouteName('contactsDelete');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($result),1);
+    }
+    
 }

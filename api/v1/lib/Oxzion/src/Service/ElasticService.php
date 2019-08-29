@@ -47,9 +47,8 @@ class ElasticService
         $result_obj = $this->search($params);
         if (isset($body['aggs']) && isset($result_obj['aggregations']['groupdata']['buckets'])) {
             $results = array('data' => $result_obj['aggregations']['groupdata']['buckets']);
-        } else if (isset($result_obj['aggregations'])) {
+        } elseif (isset($result_obj['aggregations'])) {
             $results = array('data' => $result_obj['aggregations']['value']['value']);
-
         } else {
             $results = array('data' => $result_obj['hits']['total']);
         }
@@ -68,58 +67,56 @@ class ElasticService
     {
         $result = $this->filterData($orgId, $appId, $params);
         return $result;
-
     }
 
     public function filterData($orgId, $appId, $searchconfig)
     {
         $boolfilter = array();
         $tmpfilter = $this->getFilters($searchconfig, $orgId);
-		if ($tmpfilter) {
-			$boolfilterquery['query']['bool']['filter'] = array($tmpfilter);
-		}	
-		$boolfilterquery['_source'] = (isset($searchconfig['select']))?$searchconfig['select']:array('*');
-		$pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:10000;
-		if(!empty($searchconfig['aggregates'])) {
-			if (!isset($searchconfig['select'])) {
-				$pagesize=0;
-			}
-			$aggs=$this->getAggregate($searchconfig['aggregates'],$boolfilterquery);	
-			if($searchconfig['group'] && !empty($searchconfig['group'])) {
-				$this->getGroups($searchconfig,$boolfilterquery,$aggs);
-			} else {
-				if($aggs){
-					$pagesize=0;
-					$boolfilterquery['aggs']=$aggs;
-				}
-			}
-		}
-		$boolfilterquery['explain'] = true;
-		$params = array('index'=>$appId,'type'=>$this->type,'body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
-		$result_obj = $this->search($params);
-		if ($searchconfig['group'] && !isset($searchconfig['select'])) {
-			$results = array('data'=>$result_obj['aggregations']['groupdata']['buckets']);
-			$results['type']='group';
-		} else if(key($searchconfig['aggregates'])=='count' && !isset($searchconfig['select'])){
-			$results = array('data'=>$result_obj['hits']['total']);
-			$results['type']='value';
-		} else if (isset($result_obj['aggregations'])){
-			$results = array('data'=>$result_obj['aggregations']['value']['value']);
-			$results['type']='value';
-		}  else {
-			$results = array();
-			foreach($result_obj['hits']['hits'] as $key=>$value){
-				$results['data'][$key] = $value['_source'];
-			//	$results['data'][$key]['id'] = $value['_source']['_id'];
-			}
-			$results['type']='list';
-		}
-		return $results;
+        if ($tmpfilter) {
+            $boolfilterquery['query']['bool']['filter'] = array($tmpfilter);
+        }
+        $boolfilterquery['_source'] = (isset($searchconfig['select']))?$searchconfig['select']:array('*');
+        $pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:10000;
+        if (!empty($searchconfig['aggregates'])) {
+            if (!isset($searchconfig['select'])) {
+                $pagesize=0;
+            }
+            $aggs=$this->getAggregate($searchconfig['aggregates'], $boolfilterquery);
+            if ($searchconfig['group'] && !empty($searchconfig['group'])) {
+                $this->getGroups($searchconfig, $boolfilterquery, $aggs);
+            } else {
+                if ($aggs) {
+                    $pagesize=0;
+                    $boolfilterquery['aggs']=$aggs;
+                }
+            }
+        }
+        $boolfilterquery['explain'] = true;
+        $params = array('index'=>$appId,'type'=>$this->type,'body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
+        $result_obj = $this->search($params);
+        if ($searchconfig['group'] && !isset($searchconfig['select'])) {
+            $results = array('data'=>$result_obj['aggregations']['groupdata']['buckets']);
+            $results['type']='group';
+        } elseif (key($searchconfig['aggregates'])=='count' && !isset($searchconfig['select'])) {
+            $results = array('data'=>$result_obj['hits']['total']);
+            $results['type']='value';
+        } elseif (isset($result_obj['aggregations'])) {
+            $results = array('data'=>$result_obj['aggregations']['value']['value']);
+            $results['type']='value';
+        } else {
+            $results = array();
+            foreach ($result_obj['hits']['hits'] as $key=>$value) {
+                $results['data'][$key] = $value['_source'];
+                //	$results['data'][$key]['id'] = $value['_source']['_id'];
+            }
+            $results['type']='list';
+        }
+        return $results;
     }
 
     protected function getGroups($searchconfig, &$boolfilterquery, $aggs)
     {
-
         $grouparray = null;
         $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 10000;
         for ($i = count($searchconfig['group']) - 1; $i >= 0; $i--) {
@@ -181,10 +178,9 @@ class ElasticService
         $aggs = null;
         if (key($aggregates) == 'count_distinct') {
             $aggs = array('value' => array("cardinality" => array("field" => $aggregates[key($aggregates)])));
-        } else if (key($aggregates) != "count") {
+        } elseif (key($aggregates) != "count") {
             //    $aggs = array('value'=>array(key($aggregates)=>array("script"=>array("inline"=>"try { return Float.parseFloat(doc['".$aggregates[key($aggregates)].".keyword'].value); } catch (NumberFormatException e) { return 0; }"))));
             $aggs = array('value' => array(key($aggregates) => array('field' => $aggregates[key($aggregates)])));
-
         }
         return $aggs;
     }
@@ -222,10 +218,8 @@ class ElasticService
             $daterange = $searchconfig['range'][key($searchconfig['range'])];
             $dates = explode("/", $daterange);
             $mustquery[] = array('range' => array(key($searchconfig['range']) => array("gte" => $dates[0], "lte" => $dates[1], "format" => "yyyy-MM-dd")));
-
         }
         return $mustquery;
-
     }
 
     protected function getFiltersByEntity($entity)
@@ -268,7 +262,6 @@ class ElasticService
     {
         $data = $this->client->search($q);
         return $data;
-
     }
 
     public function index($index, $id, $body)
@@ -287,32 +280,32 @@ class ElasticService
         } else {
             return $this->client->delete(['index' => $index, 'type' => $this->type, 'id' => $id]);
         }
-	}
-	
-	public function getBoostFields($entity){
-		switch ($entity) {
-			case 'files':
-				return array('id^6','name^4','desc_raw^0.1','assignedto^2','createdby^2');
-				break;
-			case 'formcomments':
-				return array('id^6','comment^4','title^4');
-				break;
-			case 'messages':
-				return array('id^6','subject^4','message^2');
-				break;
-			case 'ole':
-				return array('id^4','ole^6','group^3');
-				break;
-			case 'user':
-				return array('id^6','firstname^2','lastname^2','name^4','about^0.1', 'email^1', 'country^1', 'designation^1', 'company_name^1', 'address_1^1', 'address_2^1');
-				break;
-			case 'attachments':
-				return array('id^6','attachment.content^4','filename^2');
-				break;
-			default:
-				return ;
-				break;
-		}
-	}
-
+    }
+    
+    public function getBoostFields($entity)
+    {
+        switch ($entity) {
+            case 'files':
+                return array('id^6','name^4','desc_raw^0.1','assignedto^2','createdby^2');
+                break;
+            case 'formcomments':
+                return array('id^6','comment^4','title^4');
+                break;
+            case 'messages':
+                return array('id^6','subject^4','message^2');
+                break;
+            case 'ole':
+                return array('id^4','ole^6','group^3');
+                break;
+            case 'user':
+                return array('id^6','firstname^2','lastname^2','name^4','about^0.1', 'email^1', 'country^1', 'designation^1', 'company_name^1', 'address_1^1', 'address_2^1');
+                break;
+            case 'attachments':
+                return array('id^6','attachment.content^4','filename^2');
+                break;
+            default:
+                return ;
+                break;
+        }
+    }
 }

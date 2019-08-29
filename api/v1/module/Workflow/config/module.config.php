@@ -22,7 +22,7 @@ return [
             'addActivityInstance' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/activityInstance',
+                    'route' => '/callback/workflow/activityinstance',
                     'defaults' => [
                         'controller' => Controller\ActivityInstanceController::class,
                         'method' => 'POST',
@@ -33,16 +33,129 @@ return [
                     ],
                 ],
             ],
+            'completeActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/workflow/activitycomplete',
+                    'defaults' => [
+                        'controller' => Controller\ActivityInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'completeActivityInstance',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'serviceTaskExecution' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/workflow/servicetask',
+                    'defaults' => [
+                        'controller' => Controller\ServiceTaskController::class,
+                        'method' => 'POST',
+                        'action' => 'execute',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'workflowIndividualInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/workflowinstance/:workflowInstanceId/activity/:activityId[/instance/:instanceId]',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'action' => 'workflowInstance',
+                        'access'=>[
+                        ],
+                    ],
+                ],
+            ],
+            'completeWorkflowInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/workflowinstance/complete',
+                    'defaults' => [
+                        'controller' => Controller\ServiceTaskController::class,
+                        'method' => 'POST',
+                        'action' => 'completeWorkflow',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            'mypolicylisting' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/[workflow/:workflowId/]file',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [
-        'AppLogger' => [
+        'ActivityInstanceLogger' => [
             'writers' => [
                 'stream' => [
                     'name' => 'stream',
                     'priority' => \Zend\Log\Logger::ALERT,
                     'options' => [
-                        'stream' => __DIR__ . '/../../../logs/app.log',
+                        'stream' => __DIR__ . '/../../../logs/activity.log',
+                        'formatter' => [
+                            'name' => \Zend\Log\Formatter\Simple::class,
+                            'options' => [
+                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
+                            ],
+                        ],
+                        'filters' => [
+                            'priority' => \Zend\Log\Logger::INFO,],
+                    ],
+                ],
+            ],
+            'processors' => [
+                'requestid' => [
+                    'name' => \Zend\Log\Processor\RequestId::class,],
+            ],
+        ],
+        'ServiceTaskLogger' => [
+            'writers' => [
+                'stream' => [
+                    'name' => 'stream',
+                    'priority' => \Zend\Log\Logger::ALERT,
+                    'options' => [
+                        'stream' => __DIR__ . '/../../../logs/servicetask.log',
+                        'formatter' => [
+                            'name' => \Zend\Log\Formatter\Simple::class,
+                            'options' => [
+                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
+                            ],
+                        ],
+                        'filters' => [
+                            'priority' => \Zend\Log\Logger::INFO,],
+                    ],
+                ],
+            ],
+            'processors' => [
+                'requestid' => [
+                    'name' => \Zend\Log\Processor\RequestId::class,],
+            ],
+        ],
+        'WorkflowInstanceLogger' => [
+            'writers' => [
+                'stream' => [
+                    'name' => 'stream',
+                    'priority' => \Zend\Log\Logger::ALERT,
+                    'options' => [
+                        'stream' => __DIR__ . '/../../../logs/workflowinstance.log',
                         'formatter' => [
                             'name' => \Zend\Log\Formatter\Simple::class,
                             'options' => [

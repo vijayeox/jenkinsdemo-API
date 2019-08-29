@@ -55,7 +55,7 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            'user_container' => function($sm){
+            'user_container' => function ($sm) {
                 return new UserContainer();
             }
         ],

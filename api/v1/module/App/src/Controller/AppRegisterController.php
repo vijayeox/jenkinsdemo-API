@@ -20,7 +20,7 @@ class AppRegisterController extends AbstractApiControllerHelper
     /**
      * @ignore __construct
      */
-    public function __construct(AppTable $table,AppService $appService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(AppTable $table, AppService $appService, Logger $log, AdapterInterface $dbAdapter)
     {
         $this->setIdentifierName('appId');
         $this->appService = $appService;
@@ -33,7 +33,7 @@ class AppRegisterController extends AbstractApiControllerHelper
      * @param array $data
      */
     public function appregisterAction()
-    {   
+    {
         $data = $this->extractPostData();
         try {
             $count = $this->appService->registerApps($data);
@@ -41,8 +41,23 @@ class AppRegisterController extends AbstractApiControllerHelper
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0){
-          return $this->getErrorResponse("Failed to Register",404);   
+        if ($count == 0) {
+            return $this->getErrorResponse("Failed to Register", 404);
+        }
+        return $this->getSuccessResponseWithData($data, 200);
+    }
+
+    public function addToAppregistryAction()
+    {
+        $data = $this->extractPostData();
+        try{
+            $count = $this->appService->addToAppRegistry($data);
+        }catch(ValidationException $e){
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        if($count == 0){ 
+            return $this->getErrorResponse("Duplicate Entry", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }

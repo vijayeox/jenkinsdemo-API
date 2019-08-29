@@ -8,13 +8,13 @@
  * @return Json Array of Username and List of Apps
  */
 namespace Oxzion\Utils;
+
 use Ramsey\Uuid\Uuid;
 
 class UuidUtil
 {
-    public static function uuid() {
+    public static function uuid()
+    {
         return Uuid::uuid4()->toString();
     }
-
 }
-?>

@@ -6,6 +6,10 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 1
+ox_app_registry:
+-   
+    org_id: 1
+    app_id: 99  
 ox_field:
 -
     id: 1
@@ -23,7 +27,26 @@ ox_field:
     data_type: "integer"
     required: 1
     sequence: 1
-
+ox_activity:
+  -
+    id: 1
+    app_id: 99
+    workflow_id: 1
+    name: "Task"
+  -
+    id: 2
+    app_id: 99
+    workflow_id: 1
+    name: "Test Form 2"
+ox_activity_form:
+  - 
+    id: 1
+    activity_id: 1
+    form_id: 1
+  - 
+    id: 2
+    activity_id: 2
+    form_id: 2
 ox_form:
   -
     id: 1
@@ -51,27 +74,25 @@ ox_workflow:
     id: 1
     app_id: 99
     name: "Test Workflow 1"
-    process_ids: "[main]"
+    process_id: "[main]"
     form_id: 1
   -
     id: 2
     app_id: 99
     name: "Test Workflow 2"
-    process_ids: "[main]"
+    process_id: "[main]"
     form_id: 1
 ox_file:
   -
     id: 1
     workflow_instance_id: 1
     org_id: 1
-    form_id: 1
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
   -
     id: 2
     workflow_instance_id: 1
     org_id: 1
-    form_id: 2
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
 ox_workflow_instance:
@@ -161,3 +182,23 @@ ox_app_page:
     app_id: 99
     date_created: '2019-06-26 00:00:00'
     created_by: 1
+ox_page_content:
+  -
+    id: 1
+    sequence: 1
+    content: 'content_1'
+    page_id: 1
+    type: 1
+    form_id: 1
+  -
+    id: 2
+    sequence: 2
+    content: 'content_2'
+    page_id: 1
+    type: 2
+  -
+    id: 3
+    sequence: 3
+    content: 'content_3'
+    page_id: 1
+    type: 3

@@ -11,13 +11,15 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 
-class Module implements ConfigProviderInterface {
-
-    public function getConfig() {
+class Module implements ConfigProviderInterface
+{
+    public function getConfig()
+    {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e) {
+    public function onBootstrap(MvcEvent $e)
+    {
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -26,10 +28,11 @@ class Module implements ConfigProviderInterface {
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onRenderError'), 0);
     }
 
-    public function getServiceConfig() {
+    public function getServiceConfig()
+    {
         return [
             'factories' => [
-                Service\ResourceService::class => function($container){
+                Service\ResourceService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\ResourceService($container->get('config'), $dbAdapter);
                 },
@@ -37,22 +40,24 @@ class Module implements ConfigProviderInterface {
         ];
     }
 
-    public function getControllerConfig() {
+    public function getControllerConfig()
+    {
         return [
             'factories' => [
-                Controller\ResourceController::class => function($container) {
-                    return new Controller\ResourceController($container->get(Service\ResourceService::class), $container->get('ResourceLogger'),$container->get(AdapterInterface::class));
+                Controller\ResourceController::class => function ($container) {
+                    return new Controller\ResourceController($container->get(Service\ResourceService::class), $container->get('ResourceLogger'), $container->get(AdapterInterface::class));
                 },
             ],
         ];
     }
 
-    public function onDispatchError($e) {
+    public function onDispatchError($e)
+    {
         return ErrorHandler::getJsonModelError($e);
     }
 
-    public function onRenderError($e) {
+    public function onRenderError($e)
+    {
         return ErrorHandler::getJsonModelError($e);
     }
-
 }

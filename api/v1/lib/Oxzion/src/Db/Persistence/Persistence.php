@@ -9,64 +9,65 @@ use Zend\Db\Table;
 use Oxzion\Utils\FileUtils;
 use PHPSQLParser\PHPSQLParser;
 use PHPSQLParser\PHPSQLCreator;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
-
-class Persistence extends AbstractService {
+class Persistence extends AbstractService
+{
     private $database;
     
     /**
      * Persistence constructor.
      * @param $config
-     * @param $database
+     * @param $appname
+     * @param @appId
      */
-    public function __construct($config, $database, $adapter) {
-        $this->database = $database;
-        parent::__construct($config, $adapter);
-     }
+    public function __construct($config, string $appName, string $appId)
+    {
+        $this->database = $appName.'___'.$appId;
+        $dbConfig = array_merge(array(), $config['db']);
+        $dbConfig['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
+        $dbConfig['database'] = $this->database;
+        $adapter = new Adapter($dbConfig);
+        $logger = new Logger();
+        $writer = new Stream(__DIR__ . '/../../../../../logs/Persistence.log');
+        $logger->addWriter($writer);
+        parent::__construct($config, $adapter, $logger);
+    }
+
+    //this method is used only for phpunit tests. Not required to be called otherwise
+    public function setAdapter($adapter){
+        $this->dbAdapter = $adapter;
+    }
 
     /**
      * @param $sqlQuery
      * @return \Zend\Db\Adapter\Driver\ResultInterface
      */
-    public function insertQuery($sqlQuery) {
-        $parsedData = new PHPSQLParser($sqlQuery['query']);
+    public function insertQuery($sqlQuery)
+    {
+        $parsedData = new PHPSQLParser($sqlQuery);
         $parsedArray = $parsedData->parsed;
         $adapter=$this->dbAdapter;
         try {
-            if(!empty($parsedArray['INSERT'])) {
+            if (!empty($parsedArray['INSERT'])) {
                 foreach ($parsedArray['INSERT'] as $key => $insertArray) {
-                    if($insertArray['expr_type'] === 'table') {
-                        if ($insertArray['alias']) {
-                            $tableName = $insertArray['alias']['name'];
-                        } else {
-                            $tableName = $insertArray['table'];
-                        }
-                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
-                        $resultSet1 = $columnResult->execute();
-                        while ($resultSet1->next()) {
-                            $resultTableName = $resultSet1->current();
-                            $columnList = explode(",", $resultTableName['column_list']);
-                            if (!in_array('ox_app_org_id', $columnList)) {
-                                $tableResult = $adapter->query("ALTER TABLE " . $tableName . " ADD `ox_app_org_id` INT(11) NOT NULL");
-                                $tableResult->execute();
-                            }
-                        }
-                    }
-                    if($insertArray['expr_type'] === 'column-list') {
+                    if ($insertArray['expr_type'] === 'column-list') {
                         if (strpos($insertArray['base_expr'], 'ox_app_org_id') !== true) {
                             $fieldsStringAfterTrim = substr(substr($insertArray['base_expr'], 0, -1), 1);
                             $fieldValue = explode(",", $fieldsStringAfterTrim);
                             array_push($fieldValue, "`ox_app_org_id`");
                             $fieldValueWithOrg = implode(",", $fieldValue);
-                            array_push($parsedArray['INSERT'][$key]['sub_tree'],
-                                Array (
+                            array_push(
+                                $parsedArray['INSERT'][$key]['sub_tree'],
+                                array(
                                     "expr_type" => "colref",
                                     "base_expr" => "`ox_app_org_id`",
-                                    "no_quotes" => Array
-                                    (
+                                    "no_quotes" => array(
                                         "delim" => "",
-                                        "parts" => Array
-                                        (
+                                        "parts" => array(
                                             "0" => "ox_app_org_id"
                                         )
                                     )
@@ -77,17 +78,17 @@ class Persistence extends AbstractService {
                     }
                 }
             }
-            if(!empty($parsedArray['SELECT'])) {
+            if (!empty($parsedArray['SELECT'])) {
                 $SelectArrayKeys = array_keys($parsedArray['SELECT']);
                 $lastElementInSelectList = end($SelectArrayKeys);
                 $parsedArray['SELECT'][$lastElementInSelectList]['delim'] = ",";
-                $selectExpressionOperator = Array (
+                $selectExpressionOperator = array(
                     "expr_type" => "const",
                     "base_expr" => '1',
                     "sub_tree" => "",
                     "delim" => "");
                 array_push($parsedArray['SELECT'], $selectExpressionOperator);
-                if(!empty($parsedArray['FROM'])) {
+                if (!empty($parsedArray['FROM'])) {
                     foreach ($parsedArray['FROM'] as $fromkey => $queryFrom) {
                         //Code to add the orgid column to the new JOIN table if it is not there.
                         if ($queryFrom['alias']) {
@@ -96,27 +97,16 @@ class Persistence extends AbstractService {
                             $tableName = $queryFrom['table'];
                         }
                         $tableArrayList[] = $tableName;
-                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM 
-INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
-                        $resultSet1 = $columnResult->execute();
-                        while ($resultSet1->next()) {
-                            $resultTableName = $resultSet1->current();
-                            $columnList = explode(",", $resultTableName['column_list']);
-                            if (!in_array('ox_app_org_id', $columnList)) {
-                                $tableResult = $adapter->query("ALTER TABLE " . $tableName . " ADD `ox_app_org_id` INT(11) NOT NULL");
-                                $tableResult->execute();
-                            }
-                        }
                         $parsedArray = $this->getReferenceClause($parsedArray, $fromkey, $queryFrom, $tableArrayList, "FROM");
                     }
                 }
             }
             if (!empty($parsedArray['WHERE'])) {
-                $expAndOperator = Array ("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
-                $exp_const = Array ("expr_type" => "const", "base_expr" => "1", "sub_tree" => "");
-                $exp_operator = Array ("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
-                $exp_colref = Array ("expr_type" => "colref", "base_expr" => $tableArrayList[0] . ".ox_app_org_id", "sub_tree" => "", "no_quotes" =>
-                    Array( "delim" => "", "parts" => Array ("0" => $tableArrayList[0], "1" => "ox_app_org_id") )
+                $expAndOperator = array("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
+                $exp_const = array("expr_type" => "const", "base_expr" => "1", "sub_tree" => "");
+                $exp_operator = array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
+                $exp_colref = array("expr_type" => "colref", "base_expr" => $tableArrayList[0] . ".ox_app_org_id", "sub_tree" => "", "no_quotes" =>
+                    array( "delim" => "", "parts" => array("0" => $tableArrayList[0], "1" => "ox_app_org_id") )
                 );
                 array_push($parsedArray['WHERE'], $expAndOperator, $exp_colref, $exp_operator, $exp_const);
             }
@@ -126,8 +116,9 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAM
                     $fieldValue = explode(",", $fieldsStringAfterTrim);
                     array_push($fieldValue, 1);
                     $fieldValueWithOrg = implode(",", $fieldValue);
-                    array_push($parsedArray['VALUES'][$key]['data'],
-                        Array (
+                    array_push(
+                        $parsedArray['VALUES'][$key]['data'],
+                        array(
                             "expr_type" => "const",
                             "base_expr" => 1,
                             "sub_tree" => ""
@@ -146,8 +137,9 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAM
      * @param $sqlQuery
      * @return \Zend\Db\Adapter\Driver\ResultInterface
      */
-    public function updateQuery($sqlQuery) {
-        $parsedData = new PHPSQLParser($sqlQuery['query']);
+    public function updateQuery($sqlQuery)
+    {
+        $parsedData = new PHPSQLParser($sqlQuery);
         $parsedArray = $parsedData->parsed;
         $adapter=$this->dbAdapter;
         
@@ -161,21 +153,7 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAM
                             $tableName = $updateArray['table'];
                         }
                         $tableArrayList[] = $tableName;
-                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
-                        $resultSet1 = $columnResult->execute();
-                        while ($resultSet1->next()) {
-                            $resultTableName = $resultSet1->current();
-                            $columnList = explode(",", $resultTableName['column_list']);
-                            if (in_array('ox_app_org_id', $columnList)) {
-                                $expAndOperator = Array("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
-                                $exp_const = Array("expr_type" => "const", "base_expr" => "1", "sub_tree" => "");
-                                $exp_operator = Array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
-                                $exp_colref = Array("expr_type" => "colref", "base_expr" => $tableName . " . ox_app_org_id", "sub_tree" => "", "no_quotes" =>
-                                    Array("delim" => "", "parts" => Array("0" => "ox_app_org_id"))
-                                );
-                                array_push($parsedArray['WHERE'], $expAndOperator, $exp_colref, $exp_operator, $exp_const);
-                            }
-                        }
+                        $parsedArray = $this->additionOfOrgIdColumn($parsedArray,$tableName);
                     }
                     $parsedArray = $this->getReferenceClause($parsedArray, $key, $updateArray, $tableArrayList, "UPDATE");
                 }
@@ -190,13 +168,14 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAM
      * @param $sqlQuery
      * @return array
      */
-    public function selectQuery($sqlQuery) {
-        $parsedData = new PHPSQLParser($sqlQuery['query']);
+    public function selectQuery($sqlQuery)
+    {
+        $parsedData = new PHPSQLParser($sqlQuery);
         $parsedArray = $parsedData->parsed;
         $adapter=$this->dbAdapter;
         
         try {
-            if(!empty($parsedArray['FROM'])) {
+            if (!empty($parsedArray['FROM'])) {
                 foreach ($parsedArray['FROM'] as $key => $updateArray) {
                     if ($updateArray['expr_type'] === 'table') {
                         if ($updateArray['alias']) {
@@ -205,21 +184,7 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAM
                             $tableName = $updateArray['table'];
                         }
                         $tableArrayList[] = $tableName;
-                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
-                        $resultSet1 = $columnResult->execute();
-                        while($resultSet1->next()) {
-                            $resultTableName = $resultSet1->current();
-                            $columnList = explode(",", $resultTableName['column_list']);
-                            if(in_array('ox_app_org_id', $columnList)) {
-                                $expAndOperator = Array ("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
-                                $exp_const = Array ("expr_type" => "const", "base_expr" => "1", "sub_tree" => "");
-                                $exp_operator = Array ("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
-                                $exp_colref = Array ("expr_type" => "colref", "base_expr" => $tableName . " . ox_app_org_id", "sub_tree" => "", "no_quotes" =>
-                                    Array( "delim" => "", "parts" => Array ("0" => "ox_app_org_id") )
-                                );
-                                array_push($parsedArray['WHERE'], $expAndOperator, $exp_colref, $exp_operator, $exp_const);
-                            }
-                        }
+                        $parsedArray = $this->additionOfOrgIdColumn($parsedArray,$tableName);
                     }
                     $parsedArray = $this->getReferenceClause($parsedArray, $key, $updateArray, $tableArrayList, "FROM");
                 }
@@ -234,30 +199,17 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAM
      * @param $sqlQuery
      * @return \Zend\Db\Adapter\Driver\ResultInterface
      */
-    public function deleteQuery($sqlQuery) {
-        $parsedData = new PHPSQLParser($sqlQuery['query']);
+    public function deleteQuery($sqlQuery)
+    {
+        $parsedData = new PHPSQLParser($sqlQuery);
         $parsedArray = $parsedData->parsed;
         $adapter=$this->dbAdapter;
         try {
-            if(!empty($parsedArray['FROM'])) {
+            if (!empty($parsedArray['FROM'])) {
                 foreach ($parsedArray['FROM'] as $key => $updateArray) {
                     if ($updateArray['expr_type'] === 'table') {
                         $tableName = $updateArray['table'];
-                        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
-                        $resultSet1 = $columnResult->execute();
-                        while($resultSet1->next()) {
-                            $resultTableName = $resultSet1->current();
-                            $columnList = explode(",", $resultTableName['column_list']);
-                            if(in_array('ox_app_org_id', $columnList)) {
-                                $expAndOperator = Array ("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
-                                $exp_const = Array ("expr_type" => "const", "base_expr" => "1", "sub_tree" => "");
-                                $exp_operator = Array ("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
-                                $exp_colref = Array ("expr_type" => "colref", "base_expr" => "ox_app_org_id", "sub_tree" => "", "no_quotes" =>
-                                    Array( "delim" => "", "parts" => Array ("0" => "ox_app_org_id") )
-                                );
-                                array_push($parsedArray['WHERE'], $expAndOperator, $exp_colref, $exp_operator, $exp_const);
-                            }
-                        }
+                        $parsedArray = $this->additionOfOrgIdColumn($parsedArray,$tableName);
                     }
                 }
             }
@@ -267,27 +219,28 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAM
         return $queryExecute = $this->generateSQLFromArray($parsedArray);
     }
 
-    private function getReferenceClause($parsedArray, $key, $data, $tableArrayList, $queryStatement) {
+    private function getReferenceClause($parsedArray, $key, $data, $tableArrayList, $queryStatement)
+    {
         $adapter=$this->dbAdapter;
-        if(!empty($data['ref_clause'])) {
-            $expAndOperator = Array ("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
+        if (!empty($data['ref_clause'])) {
+            $expAndOperator = array("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
             array_push($parsedArray[$queryStatement][$key]['ref_clause'], $expAndOperator);
             $arrayKeys = array_keys($tableArrayList);
             $lastElementInTableList = end($arrayKeys);
-            foreach($tableArrayList as $fromkey => $tableList) {
-                $exp_colref = Array (
+            foreach ($tableArrayList as $fromkey => $tableList) {
+                $exp_colref = array(
                     "expr_type" => "colref",
                     "base_expr" => $tableList . ".ox_app_org_id",
-                    "no_quotes" => Array (
+                    "no_quotes" => array(
                         "delim" => ".",
-                        "parts" => Array("0" => $tableList, "1" => "ox_app_org_id")
+                        "parts" => array("0" => $tableList, "1" => "ox_app_org_id")
                     ),
                     "sub_tree" => "",
                 );
-                if($lastElementInTableList == $fromkey) {
+                if ($lastElementInTableList == $fromkey) {
                     array_push($parsedArray[$queryStatement][$key]['ref_clause'], $exp_colref);
                 } else {
-                    $exp_operator = Array ("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
+                    $exp_operator = array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
                     array_push($parsedArray[$queryStatement][$key]['ref_clause'], $exp_colref, $exp_operator);
                 }
             }
@@ -295,11 +248,41 @@ INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAM
         return $parsedArray;
     }
 
-    private function generateSQLFromArray($parsedArray) {
+    private function generateSQLFromArray($parsedArray)
+    {
         $adapter=$this->dbAdapter;
         $statement = new PHPSQLCreator($parsedArray);
         $statement3 = $adapter->query($statement->created);
         return $statement3->execute();
     }
 
+    private function additionOfOrgIdColumn($parsedArray,$tableName)
+    {   
+        $adapter=$this->dbAdapter;
+        $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
+        $resultSet1 = $columnResult->execute();
+        while ($resultSet1->next()) {
+            $resultTableName = $resultSet1->current();
+            $columnList = explode(",", $resultTableName['column_list']);
+            if (in_array('ox_app_org_id', $columnList)) {
+                $orgId = AuthContext::get(AuthConstants::ORG_ID);
+                $expAndOperator = array("expr_type" => "operator", "base_expr" => "and (", "sub_tree" => "");
+                $exp_const = array("expr_type" => "const", "base_expr" => $orgId, "sub_tree" => "");
+                $exp_operator = array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
+                $exp_colref = array("expr_type" => "colref", "base_expr" => $tableName . " . ox_app_org_id", "sub_tree" => "", "no_quotes" =>
+                    array( "delim" => "", "parts" => array("0" => "ox_app_org_id") )
+                );
+                array_push($parsedArray['WHERE'], $expAndOperator, $exp_colref, $exp_operator, $exp_const);
+
+                $expOrOperator = array("expr_type" => "operator", "base_expr" => "OR", "sub_tree" => "");
+                $exp_const = array("expr_type" => "const", "base_expr" => "0 )", "sub_tree" => "");
+                $exp_operator = array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
+                $exp_colref = array("expr_type" => "colref", "base_expr" => $tableName . " . ox_app_org_id", "sub_tree" => "", "no_quotes" =>
+                    array( "delim" => "", "parts" => array("0" => "ox_app_org_id") )
+                );
+                array_push($parsedArray['WHERE'], $expOrOperator, $exp_colref, $exp_operator, $exp_const);
+            }
+        } 
+        return $parsedArray;
+    }
 }

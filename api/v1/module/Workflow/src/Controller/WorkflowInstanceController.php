@@ -1,5 +1,6 @@
 <?php
 namespace Workflow\Controller;
+
 /**
 * Workflow Api
 */
@@ -19,22 +20,23 @@ class WorkflowInstanceController extends AbstractApiController
     /**
     * @ignore __construct
     */
-	public function __construct(WorkflowInstanceTable $table, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, Logger $log, AdapterInterface $dbAdapter) {
-		parent::__construct($table, $log, __CLASS__, WorkflowInstance::class);
-		$this->setIdentifierName('activityId');
-		$this->workflowInstanceService = $workflowInstanceService;
+    public function __construct(WorkflowInstanceTable $table, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, Logger $log, AdapterInterface $dbAdapter)
+    {
+        parent::__construct($table, $log, __CLASS__, WorkflowInstance::class);
+        $this->setIdentifierName('activityId');
+        $this->workflowInstanceService = $workflowInstanceService;
         $this->workflowService = $workflowService;
-	}
-	public function activityAction(){
-        $params = array_merge($this->extractPostData(),$this->params()->fromRoute());
-        // print_r($params);
+    }
+    public function activityAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         switch ($this->request->getMethod()) {
             case 'POST':
                 unset($params['controller']);
                 unset($params['action']);
                 unset($params['access']);
-                if(isset($params['instanceId'])){
-                    return $this->executeWorkflow($params,$params['instanceId']);
+                if (isset($params['instanceId'])) {
+                    return $this->executeWorkflow($params, $params['instanceId']);
                 } else {
                     return $this->executeWorkflow($params);
                 }
@@ -50,41 +52,84 @@ class WorkflowInstanceController extends AbstractApiController
                 break;
         }
     }
-    private function executeWorkflow($params,$id = null){
-        try{
-            $count = $this->workflowInstanceService->executeWorkflow($params,$id);
-        } catch (ValidationException $e){
-            $response = ['data' => $params, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
-        }
-        if($count == 0){
-            return $this->getErrorResponse("Entity Not Found Errors",404, $params);
-        }
-        if(isset($id)){
-            return $this->getSuccessResponseWithData($params,200);
-        } else {
-            return $this->getSuccessResponseWithData($params,201);
+    public function workflowInstanceAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        switch ($this->request->getMethod()) {
+            case 'POST':
+                unset($params['controller']);
+                unset($params['action']);
+                unset($params['access']);
+                if (isset($params['workflowInstanceId'])) {
+                    return $this->executeWorkflow($params);
+                }
+                break;
+            case 'GET':
+                return $this->getFieldData($params);
+                break;
+            case 'DELETE':
+                return $this->deleteFieldData($params);
+                break;
+            default:
+                return $this->getErrorResponse("Not Sure what you are upto");
+                break;
         }
     }
-    private function getFieldData($params){
-        if(isset($params['instanceId'])){
+    private function executeWorkflow($params, $id = null)
+    {
+        try {
+            $count = $this->workflowInstanceService->executeWorkflow($params, $id);
+        } catch (ValidationException $e) {
+            $response = ['data' => $params, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        if ($count == 0) {
+            return $this->getErrorResponse("Entity Not Found Errors", 404, $params);
+        }
+        if (isset($id)) {
+            return $this->getSuccessResponseWithData($params, 200);
+        } else {
+            return $this->getSuccessResponseWithData($params, 201);
+        }
+    }
+    private function getFieldData($params)
+    {
+        if (isset($params['instanceId'])) {
             $result = $this->workflowService->getFile($params);
         } else {
             return $this->getInvalidMethod();
         }
-        if($result == 0){
+        if ($result == 0) {
             return $this->getErrorResponse("File not found", 404);
         }
         return $this->getSuccessResponseWithData($result);
     }
-    private function deleteFieldData($params){
-        if(!isset($params['workflowId'])){
+    private function deleteFieldData($params)
+    {
+        if (!isset($params['workflowId'])) {
             return $this->getInvalidMethod();
         }
         $response = $this->workflowService->deleteFile($params);
-        if($response == 0){
+        if ($response == 0) {
             return $this->getErrorResponse("File not found", 404);
         }
         return $this->getSuccessResponse();
+    }
+
+    public function getFileListAction()
+    { 
+        $params = $this->params()->fromRoute();
+        $filterParams = $this->params()->fromQuery();
+        try {
+            $count = $this->workflowInstanceService->getFileList($params, $filterParams);
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        catch(AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
+        return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
     }
 }

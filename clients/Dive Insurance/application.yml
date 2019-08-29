@@ -1,0 +1,110 @@
+app:
+  -
+    name: Dive Insurance
+    id: d77ea120-b028-479b-8c6e-60476b6a4456
+org:
+  - 
+    name: Vincencia & Buckley
+    id: c1ed4200-9131-4671-b0e0-de3e27c3f609
+    email: testhub07@gmail.com
+group:
+  -
+    name: Policy Holder
+  -
+    name: CSR
+
+dashboard:
+  - 
+    name: Dashboard
+    content: content/Dashboard.txt
+menu:
+  -
+    name: Home
+    group: Policy Holder
+    page: 
+      -
+        name: My Policies
+        content:
+          -
+            type: Document
+            content: content/Document.txt
+          -
+            type: Form
+            content: content/HubForm1.json
+          -
+            type: LIST
+            content:
+              - 
+                url: ""
+  -
+    name: My History
+    group: Policy Holder
+    page:
+      -
+        name: All Policies
+        content:
+          -
+            type: LIST
+            content:
+              -
+                url: ""
+  -
+    name: Home
+    group: CSR
+    page:
+      -
+        name: Dashboard
+        content:
+          -
+            type: DASHBOARD
+            dashboard: Dashboard
+  -
+    name: Requests
+    group: CSR
+    page:
+      -
+        name: Requests
+        content:
+          -
+            type: LIST
+            content:
+              -
+                url: ""
+  -
+    name: Manage Policies 
+    group: CSR
+    page:
+      -
+        name: Manage Policies
+        content:
+          -
+            type: List
+            content:
+              -
+                ur: ""
+workflow:
+  -
+    name: Individual Liability
+    id: f0efea9e-7863-4368-a9b2-baa1a1603067
+    bpmn_file: individual_liability.bpmn
+  -
+    name: Group Liability
+    id: 76dc0348-910c-4ae8-a05a-78ba47803208
+    bpmn_file: group_liability.bpmn
+  -
+    name: Dive Store
+    id: cb99e634-de00-468d-9230-d6f77d241c5b
+    bpmn_file: dive_store.bpmn
+  -
+    name: Dive Boat
+    id: bb15e393-11b9-48ea-bc5a-5b7616047cb1
+    bpmn_file: dive_boat.bpmn
+job: 
+  - 
+  import_padi:
+    -
+      stored_procedure_name: "ox_padi_verification"
+      app_name: padi
+      upload_host_name: "206.107.76.164"
+      upload_host_user: "vbinsurance"
+      upload_user_password: "<<InsureName>>"

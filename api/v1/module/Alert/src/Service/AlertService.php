@@ -9,7 +9,8 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Exception;
 
-class AlertService extends AbstractService{
+class AlertService extends AbstractService
+{
     const ANNOUNCEMENT_FOLDER = "/announcements/";
     /**
     * @ignore ANNOUNCEMENT_FOLDER
@@ -18,7 +19,8 @@ class AlertService extends AbstractService{
     /**
     * @ignore __construct
     */
-    public function __construct($config, $dbAdapter, AlertTable $table){
+    public function __construct($config, $dbAdapter, AlertTable $table)
+    {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
@@ -36,7 +38,8 @@ class AlertService extends AbstractService{
     * </code>
     * @return integer 0|$id of Alert Created
     */
-    public function createAlert(&$data){
+    public function createAlert(&$data)
+    {
         $form = new Alert();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
@@ -46,24 +49,25 @@ class AlertService extends AbstractService{
         $form->validate();
         $this->beginTransaction();
         $count = 0;
-        try{
+        try {
             $count = $this->table->save($form);
-            if($count == 0){
+            if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $this->commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             return 0;
         }
         return $count;
     }
-    public function updateAlertStatus($status,$id){
-        $obj = $this->table->get($id,array());
-        if(is_null($obj)){
+    public function updateAlertStatus($status, $id)
+    {
+        $obj = $this->table->get($id, array());
+        if (is_null($obj)) {
             return 0;
         }
         $data['user_id'] = AuthContext::get(AuthConstants::USER_ID);
@@ -73,7 +77,7 @@ class AlertService extends AbstractService{
         $select = $sql->update('user_alert_verfication')->set($data)
                 ->where(array('user_alert_verfication.alert_id' => $data['alert_id'],'user_alert_verfication.user_id' => $data['user_id']));
         $result = $this->executeUpdate($select);
-        if($result->getAffectedRows() == 0){
+        if ($result->getAffectedRows() == 0) {
             return 0;
         } else {
             return $id;
@@ -82,7 +86,7 @@ class AlertService extends AbstractService{
     /**
     * Update Alert
     * @method PUT
-    * @param integer $id ID of Alert to update 
+    * @param integer $id ID of Alert to update
     * @param array $data Data Array as Follows:
     * @throws  Exception
     * <code>
@@ -100,9 +104,10 @@ class AlertService extends AbstractService{
     * </code>
     * @return array Returns the Created Alert.
     */
-    public function updateAlert($id,&$data){
-        $obj = $this->table->get($id,array());
-        if(is_null($obj)){
+    public function updateAlert($id, &$data)
+    {
+        $obj = $this->table->get($id, array());
+        if (is_null($obj)) {
             return 0;
         }
         $originalArray = $obj->toArray();
@@ -113,14 +118,14 @@ class AlertService extends AbstractService{
         $form->validate();
         $this->beginTransaction();
         $count = 0;
-        try{
+        try {
             $count = $this->table->save($form);
-            if($count == 0){
+            if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $this->commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
             return 0;
         }
@@ -131,12 +136,13 @@ class AlertService extends AbstractService{
     * @param integer $id ID of Alert to Delete
     * @return int 0=>Failure | $id;
     */
-    public function deleteAlert($id){
+    public function deleteAlert($id)
+    {
         $this->beginTransaction();
         $count = 0;
-        try{
+        try {
             $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
-            if($count == 0){
+            if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
@@ -144,12 +150,12 @@ class AlertService extends AbstractService{
             $delete = $sql->delete('user_alert_verfication');
             $delete->where(['alert_id' => $id]);
             $result = $this->executeUpdate($delete);
-            if($result->getAffectedRows() == 0){
+            if ($result->getAffectedRows() == 0) {
                 $this->rollback();
                 return 0;
             }
             $this->commit();
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->rollback();
         }
         return $count;
@@ -171,7 +177,8 @@ class AlertService extends AbstractService{
     * }
     * </code>
     */
-    public function getAlerts() {
+    public function getAlerts()
+    {
         $sql = $this->getSqlObject();
         $select = $sql->select()
                 ->from('ox_alert')
@@ -180,4 +187,3 @@ class AlertService extends AbstractService{
         return $this->executeQuery($select)->toArray();
     }
 }
-?>

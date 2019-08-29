@@ -16,7 +16,6 @@ use Zend\Stdlib\ArrayUtils;
 
 class ServiceTest extends TestCase
 {
-
     protected $adminUser = 'bharatgtest'; //TODO Need to put as global setup
     protected $adminUserId = 1;
     protected $employeeUser = 'rakshithtest';
@@ -61,6 +60,10 @@ class ServiceTest extends TestCase
     protected function setUp()
     {
         $_REQUEST = [];
+        $_SERVER['REQUEST_SCHEME'] = "http";
+        $_SERVER['SERVER_NAME'] = "localhost";
+        $_SERVER['SERVER_PORT'] = "8080";
+    
         $this->usedConsoleBackup = Console::isConsole();
         $this->reset();
         $tm = $this->getTransactionManager();
@@ -68,9 +71,10 @@ class ServiceTest extends TestCase
         $tm->beginTransaction();
     }
 
-    protected function loadConfig() {
+    protected function loadConfig()
+    {
         $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/autoload/global.php', include __DIR__ . '/../../../../config/autoload/local.php');
-        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php',$configOverrides);
+        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php', $configOverrides);
         $this->setApplicationConfig($configOverrides);
     }
 
@@ -84,9 +88,8 @@ class ServiceTest extends TestCase
         Console::overrideIsConsole($this->usedConsoleBackup);
         // Prevent memory leak
         $this->reset();
-            //cleanup required to remove the transactionManager
+        //cleanup required to remove the transactionManager
         $_REQUEST = [];
-    
     }
     /**
      * Reset the request
@@ -94,7 +97,8 @@ class ServiceTest extends TestCase
      * @return AbstractControllerTestCase
      */
     
-    protected function getTransactionManager(){
+    protected function getTransactionManager()
+    {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         return TransactionManager::getInstance($dbAdapter);
     }
@@ -232,7 +236,6 @@ class ServiceTest extends TestCase
         }
 
         return $this;
-
     }
 
     /**

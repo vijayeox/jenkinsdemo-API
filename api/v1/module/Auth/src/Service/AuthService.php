@@ -8,11 +8,11 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
 
-class AuthService extends AbstractService {
+class AuthService extends AbstractService
+{
+    private $table;
 
-	private $table;
-
-	public function __construct($config, $dbAdapter, $table = null)
+    public function __construct($config, $dbAdapter, $table = null)
     {
         parent::__construct($config, $dbAdapter);
         if ($table) {
@@ -27,5 +27,4 @@ class AuthService extends AbstractService {
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         return $resultSet->toArray();
     }
-
 }

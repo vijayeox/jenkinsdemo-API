@@ -12,13 +12,15 @@ use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Service\OrganizationService;
 
-class Module implements ConfigProviderInterface {
-
-    public function getConfig() {
+class Module implements ConfigProviderInterface
+{
+    public function getConfig()
+    {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e) {
+    public function onBootstrap(MvcEvent $e)
+    {
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -27,15 +29,16 @@ class Module implements ConfigProviderInterface {
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onRenderError'), 0);
     }
 
-    public function getServiceConfig() {
+    public function getServiceConfig()
+    {
         return [
             'factories' => [
-                Service\ProjectService::class => function($container){
+                Service\ProjectService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $orgService = $container->get(OrganizationService::class);
-                    return new Service\ProjectService($container->get('config'), $dbAdapter, $container->get(Model\ProjectTable::class),$orgService);
+                    return new Service\ProjectService($container->get('config'), $dbAdapter, $container->get(Model\ProjectTable::class), $orgService);
                 },
-                Model\ProjectTable::class => function($container) {
+                Model\ProjectTable::class => function ($container) {
                     $tableGateway = $container->get(Model\ProjectTableGateway::class);
                     return new Model\ProjectTable($tableGateway);
                 },
@@ -49,24 +52,29 @@ class Module implements ConfigProviderInterface {
         ];
     }
 
-    public function getControllerConfig() {
+    public function getControllerConfig()
+    {
         return [
             'factories' => [
-                Controller\ProjectController::class => function($container) {
+                Controller\ProjectController::class => function ($container) {
                     return new Controller\ProjectController(
-                            $container->get(Model\ProjectTable::class), $container->get(Service\ProjectService::class), $container->get('ProjectLogger'),
-                        $container->get(AdapterInterface::class));
+                        $container->get(Model\ProjectTable::class),
+                        $container->get(Service\ProjectService::class),
+                        $container->get('ProjectLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
                 },
             ],
         ];
     }
 
-    public function onDispatchError($e) {
+    public function onDispatchError($e)
+    {
         return ErrorHandler::getJsonModelError($e);
     }
 
-    public function onRenderError($e) {
+    public function onRenderError($e)
+    {
         return ErrorHandler::getJsonModelError($e);
     }
-
 }

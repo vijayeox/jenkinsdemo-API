@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+
 /**
 * File Api
 */
@@ -17,12 +18,13 @@ class FileController extends AbstractApiController
     /**
     * @ignore __construct
     */
-	public function __construct(FileTable $table, fileService $fileService, Logger $log, AdapterInterface $dbAdapter) {
-		parent::__construct($table, $log, __CLASS__, File::class);
-		$this->setIdentifierName('id');
-		$this->fileService = $fileService;
-	}
-	/**
+    public function __construct(FileTable $table, fileService $fileService, Logger $log, AdapterInterface $dbAdapter)
+    {
+        parent::__construct($table, $log, __CLASS__, File::class);
+        $this->setIdentifierName('id');
+        $this->fileService = $fileService;
+    }
+    /**
     * Create File API
     * @api
     * @link /app/appId/form
@@ -35,24 +37,25 @@ class FileController extends AbstractApiController
     *   } </code>
     * @return array Returns a JSON Response with Status Code and Created File.
     */
-    public function create($data){
+    public function create($data)
+    {
         $appId = $this->params()->fromRoute()['appId'];
         $formId = $this->params()->fromRoute()['formId'];
-        if($formId){
+        if ($formId) {
             $data['form_id'] = $formId;
         } else {
             return $this->getFailureResponse("Form id not Found", $data);
         }
-        try{
+        try {
             $count = $this->fileService->createFile($data);
-        } catch (ValidationException $e){
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0){
+        if ($count == 0) {
             return $this->getFailureResponse("Failed to create a new entity", $data);
         }
-        return $this->getSuccessResponseWithData($data,201);
+        return $this->getSuccessResponseWithData($data, 201);
     }
     
     /**
@@ -62,7 +65,8 @@ class FileController extends AbstractApiController
     * @method GET
     * @return array Returns a JSON Response list of Files based on Access.
     */
-    public function getList() {
+    public function getList()
+    {
         return $this->getInvalidMethod();
     }
     /**
@@ -70,29 +74,30 @@ class FileController extends AbstractApiController
     * @api
     * @link /app/appId/form[/:id]
     * @method PUT
-    * @param array $id ID of File to update 
-    * @param array $data 
+    * @param array $id ID of File to update
+    * @param array $data
     * @return array Returns a JSON Response with Status Code and Created File.
     */
-    public function update($id, $data){
+    public function update($id, $data)
+    {
         $appId = $this->params()->fromRoute()['appId'];
         $formId = $this->params()->fromRoute()['formId'];
-        if($formId){
+        if ($formId) {
             $data['form_id'] = $formId;
         }
-        if($appId){
+        if ($appId) {
             $data['app_id'] = $appId;
         }
-        try{
-            $count = $this->fileService->updateFile($data,$id);
-        }catch(ValidationException $e){
+        try {
+            $count = $this->fileService->updateFile($data, $id);
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0){
+        if ($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
-        return $this->getSuccessResponseWithData($data,200);
+        return $this->getSuccessResponseWithData($data, 200);
     }
     /**
     * Delete File API
@@ -102,9 +107,10 @@ class FileController extends AbstractApiController
     * @param $id ID of File to Delete
     * @return array success|failure response
     */
-    public function delete($id){
+    public function delete($id)
+    {
         $response = $this->fileService->deleteFile($id);
-        if($response == 0){
+        if ($response == 0) {
             return $this->getErrorResponse("File not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
@@ -115,12 +121,13 @@ class FileController extends AbstractApiController
     * @link /app/appId/form[/:id]
     * @method GET
     * @param $id ID of File
-    * @return array $data 
+    * @return array $data
     * @return array Returns a JSON Response with Status Code and Created File.
     */
-    public function get($id){
+    public function get($id)
+    {
         $result = $this->fileService->getFile($id);
-        if($result == 0){
+        if ($result == 0) {
             return $this->getErrorResponse("File not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponseWithData($result);

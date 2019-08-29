@@ -1,5 +1,6 @@
 <?php
 namespace Oxzion\Email;
+
 use Exception;
 
 /**
@@ -8,6 +9,4 @@ use Exception;
  */
 class MailException extends Exception
 {
-
-    
 }

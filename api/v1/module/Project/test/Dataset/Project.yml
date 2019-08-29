@@ -16,7 +16,7 @@ ox_project:
     uuid: ced672bb-fe33-4f0a-b153-f1d182a02603
     name: 'Test Project 2'
     org_id: 1
-    manager_id: 1
+    manager_id: 4
     description: 'Description Test Data'
     created_by: 1
     modified_by: 1

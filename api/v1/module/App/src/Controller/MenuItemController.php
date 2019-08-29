@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+
 /**
 * MenuItem Api
 */
@@ -17,12 +18,13 @@ class MenuItemController extends AbstractApiController
     /**
     * @ignore __construct
     */
-	public function __construct(MenuItemTable $table, MenuItemService $menuItemService, Logger $log, AdapterInterface $dbAdapter) {
-		parent::__construct($table, $log, __CLASS__, MenuItem::class);
-		$this->setIdentifierName('menuId');
-		$this->menuItemService = $menuItemService;
-	}
-	/**
+    public function __construct(MenuItemTable $table, MenuItemService $menuItemService, Logger $log, AdapterInterface $dbAdapter)
+    {
+        parent::__construct($table, $log, __CLASS__, MenuItem::class);
+        $this->setIdentifierName('menuId');
+        $this->menuItemService = $menuItemService;
+    }
+    /**
     * Create MenuItem API
     * @api
     * @link /app/appId/menuItem
@@ -35,18 +37,19 @@ class MenuItemController extends AbstractApiController
     *   } </code>
     * @return array Returns a JSON Response with Status Code and Created MenuItem.
     */
-    public function create($data){
-        $appId = $this->params()->fromRoute()['appId'];
-        try{
-            $count = $this->menuItemService->saveMenuItem($appId,$data);
-        } catch (ValidationException $e){
+    public function create($data)
+    {
+        $appUuid = $this->params()->fromRoute()['appId'];
+        try {
+            $count = $this->menuItemService->saveMenuItem($appUuid, $data);
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0){
+        if ($count == 0) {
             return $this->getFailureResponse("Failed to create a new entity", $data);
         }
-        return $this->getSuccessResponseWithData($data,201);
+        return $this->getSuccessResponseWithData($data, 201);
     }
     
     /**
@@ -56,9 +59,13 @@ class MenuItemController extends AbstractApiController
     * @method GET
     * @return array Returns a JSON Response list of MenuItems based on Access.
     */
-    public function getList() {
-        $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->menuItemService->getMenuItems($appId);
+    public function getList()
+    {
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $result = $this->menuItemService->getMenuItems($appUuid);
+        if($result == 0){ 
+            return $this->getErrorResponse("No Menus Found for the specified App", 404);  
+        }
         return $this->getSuccessResponseWithData($result);
     }
     /**
@@ -66,22 +73,22 @@ class MenuItemController extends AbstractApiController
     * @api
     * @link /app/appId/menuItem[/:id]
     * @method PUT
-    * @param array $id ID of MenuItem to update 
-    * @param array $data 
+    * @param array $id ID of MenuItem to update
+    * @param array $data
     * @return array Returns a JSON Response with Status Code and Created MenuItem.
     */
-    public function update($id, $data){
-        $appId = $this->params()->fromRoute()['appId'];
-        try{
-            $count = $this->menuItemService->updateMenuItem($id,$data);
-        }catch(ValidationException $e){
+    public function update($menuId, $data)
+    {
+        try {
+            $count = $this->menuItemService->updateMenuItem($menuId, $data);
+        } catch (ValidationException $e) { 
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0){
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        if ($count == 0) { 
+            return $this->getErrorResponse("Entity not found for id - $menuId", 404);
         }
-        return $this->getSuccessResponseWithData($data,200);
+        return $this->getSuccessResponseWithData($data, 200);
     }
     /**
     * Delete MenuItem API
@@ -91,11 +98,12 @@ class MenuItemController extends AbstractApiController
     * @param $id ID of MenuItem to Delete
     * @return array success|failure response
     */
-    public function delete($id){
-        $appId = $this->params()->fromRoute()['appId'];
-        $response = $this->menuItemService->deleteMenuItem($appId,$id);
-        if($response == 0){
-            return $this->getErrorResponse("MenuItem not found", 404, ['id' => $id]);
+    public function delete($menuId)
+    {
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $response = $this->menuItemService->deleteMenuItem($appUuid,$menuId);
+        if ($response == 0) { 
+            return $this->getErrorResponse("MenuItem not found", 404, ['id' => $menuId]);
         }
         return $this->getSuccessResponse();
     }
@@ -105,14 +113,15 @@ class MenuItemController extends AbstractApiController
     * @link /app/appId/menuItem[/:id]
     * @method GET
     * @param $id ID of MenuItem
-    * @return array $data 
+    * @return array $data
     * @return array Returns a JSON Response with Status Code and Created MenuItem.
     */
-    public function get($id){
-        $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->menuItemService->getMenuItem($appId,$id);
-        if($result == 0){
-            return $this->getErrorResponse("MenuItem not found", 404, ['id' => $id]);
+    public function get($menuId)
+    {
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $result = $this->menuItemService->getMenuItem($appUuid, $menuId);
+        if ($result == 0) {
+            return $this->getErrorResponse("MenuItem not found", 404, ['id' => $menuId]);
         }
         return $this->getSuccessResponseWithData($result);
     }

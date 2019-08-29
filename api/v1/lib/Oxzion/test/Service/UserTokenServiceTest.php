@@ -8,11 +8,8 @@ use Mockery;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Transaction\TransactionManager;
 
-
-
 class UserTokenServiceTest extends ServiceTest
 {
-
     public function setUp() : void
     {
         $this->loadConfig();
@@ -24,7 +21,8 @@ class UserTokenServiceTest extends ServiceTest
         $tm->beginTransaction();
     }
 
-     public function tearDown() : void {
+    public function tearDown() : void
+    {
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->rollback();
         $_REQUEST = [];
@@ -56,5 +54,3 @@ class UserTokenServiceTest extends ServiceTest
         $this->assertEquals(0, $content);
     }
 }
-
-?>

@@ -11,47 +11,79 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Test\ServiceTest;
 use Oxzion\Transaction\TransactionManager;
 
-class DocumentServiceTest extends ServiceTest{
-
-  public function setUp() : void{
-    $this->loadConfig();
-    // parent::setUp();
-    $config = $this->getApplicationConfig();
-    $this->adapter = new Adapter($config['db']);
-    $tm = TransactionManager::getInstance($this->adapter);
-    $tm->setRollbackOnly(true);
-    $tm->beginTransaction();
-
-}
-
-public function tearDown() : void {
-    $tm = TransactionManager::getInstance($this->adapter);
-    $tm->rollback();
-    $_REQUEST = [];
-}
-
-    public function testGenerateDocument(){ 
-        $data = ['username' => 'John','uuid' => '53012471-2863-4949-afb1-e69b0891c98a'];
-        AuthContext::put(AuthConstants::ORG_UUID,$data['uuid']);
+class DocumentServiceTest extends ServiceTest
+{
+    public function setUp() : void
+    {
+        $this->loadConfig();
+        // parent::setUp();
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['TEMPLATE_FOLDER'].$data['uuid']."/";
-        FileUtils::createDirectory($tempFolder);
+        $this->adapter = new Adapter($config['db']);
+        $tm = TransactionManager::getInstance($this->adapter);
+        $tm->setRollbackOnly(true);
+        $tm->beginTransaction();
+    }
+
+    public function tearDown() : void
+    {
+        $tm = TransactionManager::getInstance($this->adapter);
+        $tm->rollback();
+        $_REQUEST = [];
+    }
+
+
+    public function testGenerateDocument()
+    {
+        $data = ['username' => 'John','orgid' => '53012471-2863-4949-afb1-e69b0891c98a'];
+        AuthContext::put(AuthConstants::ORG_UUID, $data['orgid']);
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['TEMPLATE_FOLDER'].$data['orgid'];
+        if(!is_link($tempFolder)){
+             FileUtils::createDirectory($tempFolder."/");
+        }
         $tempFile = $config['TEMPLATE_FOLDER']."/";
         FileUtils::createDirectory($tempFile);
-        copy(__DIR__."/../Service/template/GenericTemplate.tpl", $tempFile."GenericTemplate.tpl"); 
+        copy(__DIR__."/../Service/template/GenericTemplate.tpl", $tempFile."GenericTemplate.tpl");
         $TemplateService = new TemplateService($config, $this->adapter);
-        $content = $TemplateService->getContent('GenericTemplate',$data);
+        $content = $TemplateService->getContent('GenericTemplate', $data);
         $destination = $config['TEMPLATE_FOLDER']."GenericTemplate.pdf";
         $options = array('initial_title' => 'Vantage agora Pdf Template','second_title' => 'Title 2','pdf_header_logo'=> '/logo_example.jpg',
         'pdf_header_logo_width'=>20,'header_text_color'=>array(139, 58, 58),'header_line_color'=>array(255, 48, 48),'footer_text_color'=>array(123, 121, 34),'footer_line_color'=>array(56, 142, 142));
         $generatePdf = new DocumentGeneratorImpl();
-        $output = $generatePdf->generateDocument($content,$destination,$options);
+        $output = $generatePdf->generateDocument($content, $destination, $options);
         $this->assertTrue(file_exists($output));
         $this->assertTrue(filesize($output)>0);
         $templateName="GenericTemplate.tpl";
-        FileUtils::deleteFile($templateName,$tempFile);
+        FileUtils::deleteFile($templateName, $tempFile);
         FileUtils::deleteFile("GenericTemplate.pdf", $config['TEMPLATE_FOLDER']);
+        FileUtils::rmDir($tempFolder);
         // TO DO DIGITAL SIGNATURE
     }
+
+    public function testGenerateDocumentDiveInsurance()
+    {
+        $data = ['initial_title' => 'PROFESSIONAL LIABILITY CERTIFICATE OF INSURANCE','second_title' => 'CLAIMS MADE FORM','state_id' => 'NY','firstname' => 'Mohan', 'middlename' => 'Raj' ,'lastname' => 'D','address1' => 'ABC 200','address2' => 'XYZ 300','city' => 'APO','state' => 'AE','country' => 'US','zipcode' => '09522-9998','certificate_no' => '200200178','member_no' => '34567','effective_date' => '06/30/2019','expiry_date' => '6/30/2020 12:01:00 AM','insured_status'=> 'Divester','physical_address' => 'APO,AE','policy_id' => 'PPK1992899','single_limit' => '1,000,000','annual_aggregate' => '2,000,000','equipment_liability' => 'Not Included','cylinder_coverage' => 'Not Covered','update' => 1,'update_date' => '08/06/2019','pageno' => 1,'total_page' => 1,'orgUuid' => '53012471-2863-4949-afb1-e69b0891c98a'];
+        AuthContext::put(AuthConstants::ORG_UUID, $data['orgUuid']);
+        $config = $this->getApplicationConfig();
+        $tempFile = $config['TEMPLATE_FOLDER'].$data['orgUuid'];
+        $templateLocation = __DIR__."/../../../../../../clients/Dive Insurance/data/template";
+        if(FileUtils::fileExists($tempFile)){
+            FileUtils::rmDir($tempFile);
+        }
+        FileUtils::symlink($templateLocation, $tempFile);
+        
+        $TemplateService = new TemplateService($config, $this->adapter);
+        $content = $TemplateService->getContent('certificateOfInsurance', $data);
+        $destination = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/certificateOfInsurance.pdf";
+        $header = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/header.html";
+        $footer = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/footer.html";
+        $generatePdf = new DocumentGeneratorImpl();
+        $output = $generatePdf->generatePdfDocumentFromHtml($content, $destination, $header, $footer);
+        $this->assertTrue(is_file($output));
+        $this->assertTrue(filesize($output)>0);
+        FileUtils::deleteFile("certificateOfInsurance.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
+        FileUtils::unlink($tempFile);
+    }
+
+
 }
-?>

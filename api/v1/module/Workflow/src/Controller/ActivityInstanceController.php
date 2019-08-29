@@ -1,5 +1,6 @@
 <?php
 namespace Workflow\Controller;
+
 /**
 * Activity Instance Api
 */
@@ -17,32 +18,59 @@ class ActivityInstanceController extends AbstractApiControllerHelper
     /**
     * @ignore __construct
     */
-	public function __construct(ActivityInstanceService $activityInstanceService, Logger $log) {
+    public function __construct(ActivityInstanceService $activityInstanceService, Logger $log)
+    {
         $this->activityInstanceService = $activityInstanceService;
         $this->log = $log;
-	}
-	 /**
+    }
+    /**
     * Activity Instance API
     * @api
     * @method POST
-    * @link /activityInstance/:Id/save
+    * @link /activityInstance
     * @return array success|failure response
     */
 
-    public function addActivityInstanceAction() { 
+    public function addActivityInstanceAction()
+    {
         $data = $this->extractPostData();
         $this->log->info(ActivityInstanceController::class.":Post Data- ". print_r(json_encode($data), true));
         try {
             $response = $this->activityInstanceService->createActivityInstanceEntry($data);
             $this->log->info(ActivityInstanceController::class.":Add Activity Instance Successful");
-            if($response == 0){
+            if ($response == 0) {
                 return $this->getErrorResponse("Entity not found", 404);
             }
             return $this->getSuccessResponseWithData($response);
         } catch (ValidationException $e) {
             $this->log->info(ActivityInstanceController::class.":Exception at Add Activity Instance-".$e->getMessage());
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+    }
+     /**
+    * Complete Activity Instance API
+    * @api
+    * @method POST
+    * @link /activitycomplete
+    * @return array success|failure response
+    */
+
+    public function completeActivityInstanceAction()
+    {
+        $data = $this->extractPostData();
+        $this->log->info(ActivityInstanceController::class.":Post Data- ". print_r(json_encode($data), true));
+        try {
+            $response = $this->activityInstanceService->completeActivityInstance($data);
+            $this->log->info(ActivityInstanceController::class.":Complete Activity Instance Successful");
+            if ($response == 0) {
+                return $this->getErrorResponse("Entity not found", 404);
+            }
+            return $this->getSuccessResponseWithData($response);
+        } catch (ValidationException $e) {
+            $this->log->info(ActivityInstanceController::class.":Exception at Add Activity Instance-".$e->getMessage());
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
     }
 }
