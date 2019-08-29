@@ -1,3 +1,30 @@
+ox_address:
+  -
+    id: 8
+    address1: 'HSR'
+    address2: 'HSR'
+    city: 'Bangalore'
+    state: 'KARNATAKA'
+    country: 'India'
+    zip: 560080
+  - 
+    id: 9
+    address1: 'Ariyalur'
+    address2: 'Coimbatore'
+    city: 'Chennai'
+    state: 'Tamil Nadu'
+    country: 'India'
+    zip: 560079
+  - 
+    id: 10
+    address1: 'Alappuzha'
+    address2: 'Ernakulam'
+    city: 'Idukki'
+    state: 'Kerala'
+    country: 'India'
+    zip: 460090
+
+
 ox_contact:
   -
     id: 1
@@ -11,9 +38,7 @@ ox_contact:
     email_list: '{"data":["raks@va.com"," asas@ox.com"]}'
     company_name: Vantage Agora
     designation: Developer
-    address_1: Banashankri 2nd Stage
-    address_2: Bangalore
-    country: India
+    address_id: 8
     owner_id: 1
     icon_type: 1
     date_created: '2019-06-26 00:00:00'
@@ -28,9 +53,7 @@ ox_contact:
     email_list: '{"data":["raks@va.com"," asas@ox.com"]}'
     company_name: Vantage Agora
     designation: Developer
-    address_1: Indiranagar
-    address_2: Bangalore
-    country: India
+    address_id: 9
     owner_id: 2
     icon_type: 0
     date_created: '2019-06-26 00:00:00'
@@ -46,9 +69,7 @@ ox_contact:
     email_list: '{"data":["raks@va.com"," asas@ox.com"]}'
     company_name: Vantage Agora
     designation: Developer
-    address_1: Banashankri 2nd Stage
-    address_2: Bangalore
-    country: India
+    address_id: 10
     owner_id: 1
     icon_type: 1
     date_created: '2019-06-26 00:00:00'

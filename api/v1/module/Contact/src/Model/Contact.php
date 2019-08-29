@@ -20,9 +20,7 @@ class Contact extends Entity
         'icon_type' => null,
         'company_name' => null,
         'designation' => null,
-        'address_1' => 0,
-        'address_2' => null,
-        'country' => null,
+        'address_id' => null,
         'owner_id' => 0,
         'date_created' => 0,
         'date_modified' => null

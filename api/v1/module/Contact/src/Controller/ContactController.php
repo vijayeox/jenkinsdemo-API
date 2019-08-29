@@ -61,11 +61,8 @@ class ContactController extends AbstractApiController
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("Failed to create a new entity", 404, $data);
-        }
-        if ($count == 2) {
-            return $this->getErrorResponse("Entity not found for UUID", 404, $id);
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }

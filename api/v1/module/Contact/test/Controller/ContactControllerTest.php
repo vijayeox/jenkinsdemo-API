@@ -30,27 +30,49 @@ class ContactControllerTest extends ControllerTest
         return $dataset;
     }
 
-
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = [ 'first_name' => "Raks", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India'];
+        $data = [ 'first_name' => "Raks", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA','address1' => 'Malleshwaram', 'address2' => 'Nagar','city' => 'Bangalore','state' => 'Karnataka','country' => 'India','zip' => '123456'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('contacts');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
+
+        $select = "SELECT * from ox_address where id = ".$content['data']['address_id'];
+        $result = $this->executeQueryTest($select);
+
+        
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['first_name'], $data['first_name']);
         $this->assertEquals($content['data']['last_name'], $data['last_name']);
         $this->assertEquals($content['data']['phone_1'], $data['phone_1']);
         $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals($content['data']['company_name'], $data['company_name']);
-        $this->assertEquals($content['data']['address_1'], $data['address_1']);
-        $this->assertEquals($content['data']['address_2'], $data['address_2']);
-        $this->assertEquals($content['data']['country'], $data['country']);
         $this->assertEquals($content['data']['owner_id'], 1);
+        $this->assertEquals($result[0]['address1'],$data['address1']);
+        $this->assertEquals($result[0]['address2'],$data['address2']);
+        $this->assertEquals($result[0]['city'],$data['city']);
+        $this->assertEquals($result[0]['state'],$data['state']);
+        $this->assertEquals($result[0]['country'],$data['country']);
+        $this->assertEquals($result[0]['zip'],$data['zip']);
+    }
+
+
+    public function testCreateWithoutAddressField()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = [ 'first_name' => "Raks", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA','country' => 'India'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/contact', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('contacts');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Address,city,state,country,zipcode fields cannot be empty');
     }
 
     //Testing to see if the Create Contact function is working as intended if all the value passed are correct.
@@ -68,7 +90,7 @@ class ContactControllerTest extends ControllerTest
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India'];
+        $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address1' => 'Malleshwaram', 'address2' => 'Nagar','city' => 'Bangalore','state' => 'Karnataka','country' => 'India','zip' => '123456'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -82,7 +104,7 @@ class ContactControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['user_id' => '3', 'first_name' => "Rakshith", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'US'];
+        $data = ['user_id' => '3', 'first_name' => "Rakshith", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA','address1' => 'Malleshwaram', 'address2' => 'Nagar','city' => 'Bangalore','state' => 'Karnataka','country' => 'India','zip' => '123456'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact/c384bdbf-48e1-4180-937a-08e5852718ea', 'POST', null);
@@ -91,19 +113,26 @@ class ContactControllerTest extends ControllerTest
         $this->assertMatchedRouteName('contacts');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
+
+        $select = "SELECT address_id from ox_contact where first_name = 'Rakshith'";
+        $id = $this->executeQueryTest($select);
+
+        $select = "SELECT * from ox_address where id = ".$id[0]['address_id'];
+        $result = $this->executeQueryTest($select);
+
         $this->assertEquals($content['data']['first_name'], $data['first_name']);
         $this->assertEquals($content['data']['last_name'], $data['last_name']);
         $this->assertEquals($content['data']['phone_1'], $data['phone_1']);
         $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals($content['data']['company_name'], $data['company_name']);
-        $this->assertEquals($content['data']['address_1'], $data['address_1']);
-        $this->assertEquals($content['data']['address_2'], $data['address_2']);
-        $this->assertEquals($content['data']['country'], $data['country']);
+        $this->assertEquals($result[0]['address1'], $data['address1']);
+        $this->assertEquals($result[0]['address2'], $data['address2']);
+        $this->assertEquals($result[0]['country'], $data['country']);
     }
 
     public function testUpdateNotFound()
     {
-        $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'US', 'owner_id' => 3];
+        $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address1' => 'Malleshwaram', 'address2' => 'Nagar','city' => 'Bangalore','state' => 'Karnataka','country' => 'India','zip' => '123456', 'owner_id' => 3];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact/10000', 'POST', null);
@@ -134,6 +163,33 @@ class ContactControllerTest extends ControllerTest
         $this->assertMatchedRouteName('contacts');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
+    }
+
+
+    public function testGetList()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/contact', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['myContacts'][0]['first_name'], 'Karan S');
+        $this->assertEquals($content['data']['myContacts'][1]['first_name'], 'Rajesh');
+        $this->assertEquals($content['data']['orgContacts'][0]['first_name'], 'Bharat');
+        $this->assertEquals($content['data']['orgContacts'][1]['first_name'], 'Karan');
+        
+    }
+
+    public function testGetListById()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/contact/c384bdbf-48e1-4180-937a-08e5852718ea', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['first_name'], 'Karan S');
     }
 
     public function testgetcontactsSuccess()

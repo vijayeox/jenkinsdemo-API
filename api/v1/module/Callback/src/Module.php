@@ -13,6 +13,7 @@ use Oxzion\Service\UserService;
 use Oxzion\Service\EmailService;
 use Oxzion\Model\EmailTable;
 use Oxzion\Service\TemplateService;
+use Oxzion\Service\AddressService;
 
 class Module implements ConfigProviderInterface
 {
@@ -49,7 +50,7 @@ class Module implements ConfigProviderInterface
                 },
                 \Contact\Service\ContactService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Contact\Service\ContactService($container->get('config'), $dbAdapter, $container->get(\Contact\Model\ContactTable::class));
+                    return new \Contact\Service\ContactService($container->get('config'), $dbAdapter, $container->get(\Contact\Model\ContactTable::class),$container->get(AddressService::class));
                 },
                 \Contact\Model\ContactTable::class => function ($container) {
                     $tableGateway = $container->get(\Contact\Model\ContactTableGateway::class);

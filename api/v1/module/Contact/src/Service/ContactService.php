@@ -15,6 +15,7 @@ use Oxzion\Service\UserService;
 use Zend\Http\Headers;
 use Zend\Http\Response\Stream;
 use Oxzion\ServiceException;
+use Oxzion\Service\AddressService;
 
 
 class ContactService extends AbstractService
@@ -22,10 +23,11 @@ class ContactService extends AbstractService
     private $table;
     public const ALL_FIELDS = "-1";
 
-    public function __construct($config, $dbAdapter, ContactTable $table)
+    public function __construct($config, $dbAdapter, ContactTable $table,AddressService $addressService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->addressService = $addressService;
     }
 
     /**
@@ -43,6 +45,14 @@ class ContactService extends AbstractService
             $data['user_id'] = null;
         }
         unset($data['uuid']);
+
+        if(!isset($data['address1'])){
+            throw new ServiceException("Address,city,state,country,zipcode fields cannot be empty","fields.required"); 
+        }
+
+        $addressid = $this->addressService->addAddress($data);
+        $data['address_id'] = $addressid;
+
         $data['uuid'] = UuidUtil::uuid();
         $data['user_id'] = (isset($data['user_id'])) ? $data['user_id'] : null;
         $data['icon_type'] = (isset($data['icon_type'])) ? $data['icon_type'] : false;
@@ -61,14 +71,14 @@ class ContactService extends AbstractService
             }
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Failed to create a new entity","failed.contact.create"); 
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -77,27 +87,24 @@ class ContactService extends AbstractService
     {
         $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
-            return 2;
+            throw new ServiceException("Contact not found","contact.not.found"); 
         }
         $form = new Contact();
-        $data = array_merge($obj->toArray(), $data);
-        $data['owner_id'] = ($data['owner_id']) ? $data['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
-        $data['date_modified'] = date('Y-m-d H:i:s');
-        $form->exchangeArray($data);
+        $contactData = array_merge($obj->toArray(), $data);
+        $contactData['owner_id'] = ($contactData['owner_id']) ? $contactData['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
+        $contactData['date_modified'] = date('Y-m-d H:i:s');
+        $this->addressService->updateAddress($contactData['address_id'],$data);
+        $form->exchangeArray($contactData);
         $form->validate();
         $count = 0;
         try {
             $count = $this->table->save($form);
             if (isset($files)) {
-                $this->uploadContactIcon($data['uuid'], $data['owner_id'], $files);
-            }
-            if ($count == 0) {
-                $this->rollback();
-                return 1;
+                $this->uploadContactIcon($contactData['uuid'], $contactData['owner_id'], $files);
             }
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -105,7 +112,7 @@ class ContactService extends AbstractService
 
     public function getContactsByUuid($uuid)
     {
-        $select = "SELECT * from `ox_contact` where uuid = '".$uuid."'";
+        $select = "SELECT oc.* ,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip from `ox_contact` as oc join ox_address as oa on oc.address_id = oa.id where uuid = '".$uuid."'";
         $result = $this->executeQuerywithParams($select)->toArray();
         if ($result == 0) {
             return 0;
@@ -144,7 +151,7 @@ class ContactService extends AbstractService
         $queryString1 = "SELECT * from (";
 
         if ($column == ContactService::ALL_FIELDS) {
-            $queryString2 = "SELECT oxc.uuid as uuid, user_id, oxc.first_name, oxc.last_name, oxc.phone_1, oxc.phone_list, oxc.email, oxc.email_list, oxc.company_name, oxc.icon_type,oxc.designation, oxc.country, '1' as contact_type from ox_contact as oxc";
+            $queryString2 = "SELECT oxc.uuid as uuid, user_id, oxc.first_name, oxc.last_name, oxc.phone_1, oxc.phone_list, oxc.email, oxc.email_list, oxc.company_name, oxc.icon_type,oxc.designation, oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip, '1' as contact_type from ox_contact as oxc join ox_address as oa on oxc.address_id = oa.id";
         } else {
             $queryString2 = "SELECT oxc.uuid as uuid,user_id, oxc.first_name, oxc.last_name, oxc.icon_type, '1' as contact_type  from ox_contact as oxc";
         }
@@ -159,7 +166,7 @@ class ContactService extends AbstractService
         $union = " UNION ";
 
         if ($column == "-1") {
-            $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name, ou.phone as phone_1, null as phone_list, ou.email, null as email_list, org.name as company_name, null as icon_type,ou.designation,oa.country, '2' as contact_type from ox_user as ou inner join ox_organization as org on ou.orgid = org.id inner join ox_address as oa on ou.address_id = oa.id";
+            $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name, ou.phone as phone_1, null as phone_list, ou.email, null as email_list, org.name as company_name, null as icon_type,ou.designation,oa.address1,oa.address2,oa.city,oa.state,oa.country, oa.zip,'2' as contact_type from ox_user as ou inner join ox_organization as org on ou.orgid = org.id inner join ox_address as oa on ou.address_id = oa.id";
         } else {
             $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name,null as icon_type, '2' as contact_type  from ox_user as ou";
         }
