@@ -29,13 +29,6 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-     private function executeUpdate($query){
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        
-        return $result;
-    }
 
     public function testGetUserPrivileges()
     {

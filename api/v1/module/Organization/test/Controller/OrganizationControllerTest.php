@@ -49,25 +49,6 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertControllerClass('OrganizationController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
-
-    private function executeQueryTest($query)
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $resultSet->initialize($result);
-        return $resultSet->toArray();
-    }
-
-    private function executeUpdate($query)
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        
-        return $result;
-    }
    
     // Testing to see if the Create Contact function is working as intended if all the value passed are correct.
 

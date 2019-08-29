@@ -30,14 +30,6 @@ class ContactControllerTest extends ControllerTest
         return $dataset;
     }
 
-    private function executeQueryTest($query){
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $resultSet->initialize($result);
-        return $resultSet->toArray();
-    }
 
     public function testCreate()
     {

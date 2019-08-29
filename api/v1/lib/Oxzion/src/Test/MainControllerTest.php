@@ -191,4 +191,23 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     {
         return $this->getApplication()->getServiceManager();
     }
+
+
+    protected function executeQueryTest($query)
+    {
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        $resultSet = new ResultSet();
+        $resultSet->initialize($result);
+        return $resultSet->toArray();
+    }
+
+    protected function executeUpdate($query)
+    {
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        return $result;
+    }
 }
