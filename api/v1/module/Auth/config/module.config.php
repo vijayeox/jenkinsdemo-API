@@ -33,6 +33,17 @@ return [
                     ],
                 ],
             ],
+            'register' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/register',
+                    'defaults' => [
+                        'controller' => Controller\AuthController::class,
+                        'action' => 'register',
+                        'method' => 'post'
+                    ],
+                ],
+            ],
             'validatetoken' => [
                 'type'    => Segment::class,
                 'options' => [

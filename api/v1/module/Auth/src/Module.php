@@ -11,6 +11,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Service\UserService;
+use Oxzion\Service\UserCacheService;
 use Oxzion\Service\UserTokenService;
 use Auth\Adapter\LoginAdapter as AuthAdapter;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as ApiAdapter;
@@ -45,7 +46,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\AuthService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AuthService($container->get('config'), $dbAdapter);
+                    return new Service\AuthService($container->get('config'), $dbAdapter,$container->get(UserService::class),$container->get(UserCacheService::class));
                 },
             ],
         ];

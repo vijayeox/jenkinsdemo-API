@@ -82,7 +82,7 @@ class AuthController extends AbstractApiControllerHelper
         if (isset($result)) {
             if ($result->isValid()) {
                 if (isset($data['username'])&&isset($data['password'])) {
-                    return $this->getJwt($data['username'], $this->userService->getUserOrg($data['username']));
+                    return $this->getJwt($data['username'], $this->userService->getUserOrg($data['username']),0);
                 } elseif (isset($data['apikey'])) {
                     return $this->getApiJwt($data['apikey']);
                 }
@@ -123,10 +123,27 @@ class AuthController extends AbstractApiControllerHelper
         }
     }
 
+    public function registerAction()
+    {
+        $data = $this->extractPostData();
+        try {
+            $result = $this->authService->executeActions($data);
+            if($result ==0){
+                return $this->getErrorResponse("There was an error while executing", 404);
+            }
+        } catch (Exception $e){
+            return $this->getErrorResponse($e->getMessage(), 404);
+        }
+        if (isset($result['auto_login'])) {
+            $result['credentials'] = $this->getJwt($result['user']['username'], $this->userService->getUserOrg($result['user']['username']),1);
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
+
     /**
      * @ignore getJwt
      */
-    private function getJwt($userName, $orgId)
+    private function getJwt($userName, $orgId,$raw=0)
     {
         $data = ['username' => $userName, 'orgid' => $orgId];
         $dataJwt = $this->getTokenPayload($data);
@@ -134,8 +151,14 @@ class AuthController extends AbstractApiControllerHelper
         $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
         $jwt = $this->generateJwtToken($dataJwt);
         if ($refreshToken != 0) {
+            if($raw){
+                return ['jwt' => $jwt,'refresh_token'=>$refreshToken,'username'=>$userName];
+            }
             return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken,'username'=>$userName]);
         } else {
+            if($raw){
+                return array();
+            }
             return $this->getErrorResponse("Login Error", 405, array());
         }
     }
