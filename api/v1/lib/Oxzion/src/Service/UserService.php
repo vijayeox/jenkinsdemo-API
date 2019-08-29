@@ -164,7 +164,7 @@ class UserService extends AbstractService
 
         try {
 
-        $select = "SELECT ou.id,ou.uuid,count(ou.id),ou.status,ou.username,ou.email,GROUP_CONCAT(ouo.org_id) from ox_user as ou inner join ox_user_org as ouo on ouo.user_id = ou.id where ou.username = '".$data['username']."' OR ou.email = '".$data['email']."' GROUP BY ou.id,ou.uuid,ou.status,ou.email";
+        $select = "SELECT ou.id,ou.uuid,count(ou.id) as org_count,ou.status,ou.username,ou.email,GROUP_CONCAT(ouo.org_id) as organisation_id from ox_user as ou inner join ox_user_org as ouo on ouo.user_id = ou.id where ou.username = '".$data['username']."' OR ou.email = '".$data['email']."' GROUP BY ou.id,ou.uuid,ou.status,ou.email";
         $result = $this->executeQuerywithParams($select)->toArray();
 
         if(count($result) > 1){
@@ -172,12 +172,9 @@ class UserService extends AbstractService
         }
 
         if(count($result) == 1){
-            $result[0]['GROUP_CONCAT(ouo.org_id)'] = isset($result[0]['GROUP_CONCAT(ouo.org_id)']) ? $result[0]['GROUP_CONCAT(ouo.org_id)'] : NULL;
-            $orgList =explode(',',$result[0]['GROUP_CONCAT(ouo.org_id)']);
-
-            $result[0]['count(ou.id)'] = isset($result[0]['count(ou.id)']) ? $result[0]['count(ou.id)'] : 0;
-
-        
+            $result[0]['organisation_id'] = isset($result[0]['organisation_id']) ? $result[0]['organisation_id'] : NULL;
+            $orgList =explode(',',$result[0]['organisation_id']);
+            $result[0]['org_count'] = isset($result[0]['org_count']) ? $result[0]['org_count'] : 0;
             if(in_array($data['orgid'],$orgList)){
                     $countval = 0;
                 if($result[0]['username'] == $data['username'] && $result[0]['status'] == 'Active'){
@@ -213,7 +210,6 @@ class UserService extends AbstractService
                     throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");
                 }
             }
-        
         
         if(isset($data['address1'])){
             $addressid = $this->addressService->addAddress($data);
@@ -616,7 +612,7 @@ class UserService extends AbstractService
                 ou.managerid, ou.timezone, ou.date_of_join, ou.interest, ou.preferences";
 
             $from = " FROM `ox_user` as ou join ox_address as oa on ou.address_id = oa.id ";
-            $cntQuery ="SELECT count(ou.id) ".$from;
+            $cntQuery ="SELECT count(ou.id) as org_count ".$from;
 
             if(count($filterParams) > 0 || sizeof($filterParams) > 0){
                 if(isset($filterParams['filter'])){
@@ -647,7 +643,7 @@ class UserService extends AbstractService
             $limit = " LIMIT ".$pageSize." offset ".$offset;
 
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count=$resultSet->toArray()[0]['count(ou.id)'];
+            $count=$resultSet->toArray()[0]['org_count'];
             $query =$select." ".$from." ".$where." ".$sort." ".$limit;
           
             $resultSet = $this->executeQuerywithParams($query);
