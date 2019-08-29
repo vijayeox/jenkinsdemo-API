@@ -2,6 +2,7 @@
 namespace Workflow;
 
 use Workflow\Controller\WorkflowInstanceController;
+use Workflow\Controller\ActivityInstanceController;
 use App\Controller\WorkflowController;
 use Zend\Stdlib\ArrayUtils;
 use Oxzion\Test\ControllerTest;
@@ -334,6 +335,66 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
         $this->assertControllerClass('WorkflowInstanceController');
         $this->assertMatchedRouteName('activityInstanceForm');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+    public function testcompleteWorkflowInstance()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['processInstanceId'=>1];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/callback/workflowinstance/complete', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('completeWorkflowInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+    public function testcompleteWorkflowInstanceFail()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['processInstanceId'=>5];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/callback/workflowinstance/complete', 'POST',$data);
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('completeWorkflowInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+    public function testcompleteActivityInstance()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'[activityInstanceId]','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'bharatgtest','type'=>'assignee')),'processInstanceId'=>1,'name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'orgid'=>$this->testOrgId)];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/callback/workflow/activitycomplete', 'POST',$data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(ActivityInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ActivityInstanceController');
+        $this->assertMatchedRouteName('completeActivityInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+    public function testcompleteActivityInstanceFail()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'csasdassd','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'bharatgtest','type'=>'assignee')),'processInstanceId'=>1,'name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'orgid'=>$this->testOrgId)];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/callback/workflow/activitycomplete', 'POST',$data);
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(ActivityInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('ActivityInstanceController');
+        $this->assertMatchedRouteName('completeActivityInstance');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');

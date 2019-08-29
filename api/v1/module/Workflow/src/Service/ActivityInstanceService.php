@@ -196,6 +196,8 @@ class ActivityInstanceService extends AbstractService
         $resultSet = $this->executeQuerywithParams($query)->toArray();
         if($resultSet){
             $workflowInstanceId = $resultSet[0]['id'];
+        } else {
+            return 0;
         }
         // Org Id from workflow instance based on the Id
         if(isset($data['processVariables'])){

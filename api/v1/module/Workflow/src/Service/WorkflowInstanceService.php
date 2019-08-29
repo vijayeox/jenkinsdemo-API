@@ -217,7 +217,7 @@ class WorkflowInstanceService extends AbstractService
         if($resultSet){
             $workflowInstance = $resultSet[0];
         } else {
-            return;
+            return 0;
         }
         $this->beginTransaction();
         try {
