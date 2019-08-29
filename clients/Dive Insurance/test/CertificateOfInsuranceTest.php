@@ -1,19 +1,19 @@
 <?php
-namespace DocumentTest;
 
 use Oxzion\Document\DocumentGeneratorImpl;
 use Oxzion\Document\DocumentBuilder;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Service\TemplateService;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Test\ServiceTest;
 use Oxzion\Transaction\TransactionManager;
 
-class DocumentBuilderTest extends ServiceTest
+class CertificateOfInsuranceTest extends ServiceTest
 {
+    
     public function setUp() : void
     {
         $this->loadConfig();
@@ -44,7 +44,7 @@ class DocumentBuilderTest extends ServiceTest
         $header = "header.html";
         $footer = "footer.html";
         $tempFile = $config['TEMPLATE_FOLDER'].$data['orgUuid'];
-        $templateLocation = __DIR__."/../../../../../../clients/Dive Insurance/data/template";
+        $templateLocation = __DIR__."/../data/template";
         if(FileUtils::fileExists($tempFile)){
             FileUtils::rmDir($tempFile);
         }
@@ -63,6 +63,4 @@ class DocumentBuilderTest extends ServiceTest
         FileUtils::deleteFile("certificateOfInsurance.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
         FileUtils::unlink($tempFile);
     }
-
-    
 }
