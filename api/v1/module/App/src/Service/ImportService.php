@@ -24,7 +24,7 @@ class ImportService extends AbstractService
     public function generateCSVData($storedProcedureName, $orgId, $appId, $appName)
     {
         $filePath = dirname(__dir__) . "/../../../data/import/" . $orgId . "/" . $appId . "/" . $appName . "/data/";
-        $archivePath = dirname(__dir__) . "/../../../data/import/" . $orgId . "/" . $appId . "/" . $appName . "/archive/"; //The path to the folder Ex: /clients/hub/data/migrations/app/hub/archive/
+        $archivePath = dirname(__dir__) . "/../../../data/import/" . $orgId . "/" . $appId . "/" . $appName . "/archive/"; //The path to the folder Ex: /clients/<App name>/data/migrations/app/<appname>/archive/
 
         $dataSet = array_diff(scandir($filePath), array(".", ".."));
         $filePath = $filePath . $dataSet[2];
