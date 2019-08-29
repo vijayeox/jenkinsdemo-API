@@ -4,5 +4,5 @@ use Oxzion\Document\DocumentBuilder;
 
 interface DocumentAppDelegate extends AppDelegate
 {
-    public function setDocumentBuilder(DocumentBuilder $documentBuilder)
+    public function setDocumentBuilder(DocumentBuilder $documentBuilder);
 }

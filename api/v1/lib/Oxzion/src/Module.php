@@ -305,7 +305,16 @@ class Module
 
                     return new AppDelegate\AppDelegateService(
                         $container->get('config'),
-                        $container->get(AdapterInterface::class)
+                        $container->get(AdapterInterface::class),
+                        $container->get(Document\DocumentBuilder::class)
+                    );
+                },
+                Document\DocumentBuilder::class => function ($container) {
+
+                    return new Document\DocumentBuilder(
+                        $container->get('config'),
+                        $container->get(Service\TemplateService::class),
+                        new Document\DocumentGeneratorImpl()
                     );
                 },
                 Service\EmailService::class => function ($container) {

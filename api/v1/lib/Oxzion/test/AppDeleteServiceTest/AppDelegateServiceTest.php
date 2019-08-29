@@ -64,7 +64,8 @@ class AppDelegateServiceTest extends ServiceTest
         $appName = $this->data['appName'];
         $config = $this->getApplicationConfig();
         
-        $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->adapter);
+        $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->adapter, 
+                                $this->getApplicationServiceLocator()->get(\Oxzion\Document\DocumentBuilder::class));
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'IndividualLiabilityImpl', $data);
         $this->assertEquals("Checking App Delegate", $content[0]);
@@ -78,7 +79,8 @@ class AppDelegateServiceTest extends ServiceTest
         $appName = $this->data['appName'];
         $config = $this->getApplicationConfig();
         
-        $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->adapter);
+        $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->adapter, 
+                                $this->getApplicationServiceLocator()->get(\Oxzion\Document\DocumentBuilder::class));
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'RateCard', $data);
         $this->assertEquals($content[0]['product'], $data['product']);

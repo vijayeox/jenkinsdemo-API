@@ -8,19 +8,23 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
+use Oxzion\Document\DocumentBuilder;
+use Oxzion\AppDelegate\DocumentAppDelegate;
 
 class AppDelegateService extends AbstractService
 {
     private $fileExt = ".php";
     private $persistenceServices = array();
+    private $documentBuilder;
 
-    public function __construct($config, $dbAdapter)
+    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null)
     {
         $logger = new Logger();
         $writer = new Stream(__DIR__ . '/../../../../logs/Delegate.log');
         $logger->addWriter($writer);
 
         parent::__construct($config, $dbAdapter, $logger);
+        $this->documentBuilder = $documentBuilder;
         $this->delegateDir = $this->config['DELEGATE_FOLDER'];
         if (!is_dir($this->delegateDir)) {
             mkdir($this->delegateDir, 0777, true);
@@ -38,6 +42,9 @@ class AppDelegateService extends AbstractService
             if ($result) {
                 $obj = new $delegate; 
                 $obj->setLogger($this->logger);
+                if(is_a($obj, DocumentAppDelegate::class)){
+                    $obj->setDocumentBuilder($this->documentBuilder);
+                }
                 $persistenceService = $this->getPersistence($appId);
                 $output = $obj->execute($dataArray, $persistenceService);
                 if(!$output){
