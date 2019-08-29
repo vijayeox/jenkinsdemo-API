@@ -141,7 +141,7 @@ class Module
                 },
                 Service\ActivityService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\ActivityService($container->get('config'), $dbAdapter, $container->get(Model\ActivityTable::class));
+                    return new Service\ActivityService($container->get('config'), $dbAdapter, $container->get(Model\ActivityTable::class),$container->get(Service\FormService::class));
                 },
                 Service\FieldService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -333,6 +333,28 @@ class Module
                 },
                 NLP\NLPEngine::class => function ($container) {
                     return new NLP\Dialogflow\NLPDialogflowV1();
+                },
+                Service\UserCacheService::class => function ($container) {
+                    return new Service\UserCacheService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Model\UserCacheTable::class)
+                    );
+                },
+                Model\UserCacheTable::class => function ($container) {
+                    return new Model\UserCacheTable(
+                        $container->get(Model\UserCacheTableGateway::class)
+                    );
+                },
+                Model\UserCacheTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\UserCache());
+                    return new TableGateway(
+                        'ox_user_cache',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
                 },
             ],
         ];

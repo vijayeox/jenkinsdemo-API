@@ -254,4 +254,88 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['status'], 'Completed');
         $this->assertEquals($content['total'], 1);
     }
+    public function testClaimActivityInstance()
+    {
+        $this->initAuthToken($this->adminUser);
+        if (enableCamunda==0) {
+            $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
+            $activityInstanceService = $this->getApplicationServiceLocator()->get(\Workflow\Service\ActivityInstanceService::class);
+            $mockActivityEngine->expects('claimActivity')->with('[activityInstanceId]', $this->adminUser)->once()->andReturn(1);
+            $activityInstanceService->setActivityEngine($mockActivityEngine);
+        }
+        $this->dispatch('/workflowinstance/1/activity/1/claim', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('claimActivityInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+    public function testClaimActivityInstanceNotFound()
+    {
+        $this->initAuthToken($this->employeeUser);
+        if (enableCamunda==0) {
+            $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
+            $activityInstanceService = $this->getApplicationServiceLocator()->get(\Workflow\Service\ActivityInstanceService::class);
+            $mockActivityEngine->expects('claimActivity')->with('[activityInstanceId]', $this->employeeUser)->once()->andReturn(1);
+            $activityInstanceService->setActivityEngine($mockActivityEngine);
+        }
+        $this->dispatch('/workflowinstance/1/activity/2/claim', 'POST');
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('claimActivityInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+    public function testClaimActivityInstanceNewUser()
+    {
+        $this->initAuthToken($this->employeeUser);
+        if (enableCamunda==0) {
+            $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
+            $activityInstanceService = $this->getApplicationServiceLocator()->get(\Workflow\Service\ActivityInstanceService::class);
+            $mockActivityEngine->expects('claimActivity')->with('[activityInstanceId]', $this->employeeUser)->once()->andReturn(1);
+            $activityInstanceService->setActivityEngine($mockActivityEngine);
+        }
+        $this->dispatch('/workflowinstance/1/activity/1/claim', 'POST');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('claimActivityInstance');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+    public function testGetActivityInstance()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/activity/[activityInstanceId]/form', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('activityInstanceForm');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id']>0, true);
+    }
+    public function testGetActivityInstanceNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/activity/99999/form', 'GET');
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('activityInstanceForm');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 }

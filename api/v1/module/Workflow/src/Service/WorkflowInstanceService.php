@@ -175,8 +175,15 @@ class WorkflowInstanceService extends AbstractService
             $params['form_id'] = $workflow['form_id'];
             $activityId = $params['form_id'];
         } else {
-            $params['activity_id'] = $params['activityId'];
-            $activityId = $params['activityId'];
+            if(isset($params['activityId'])){
+                $activityQuery = "SELECT ox_activity_instance.*,ox_activity.task_id as task_id FROM `ox_activity_instance` LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id WHERE ox_activity_instance.id='".$data['activityId']."';";
+                $activityInstance = $this->executeQuerywithParams($activityQuery)->toArray();
+                if(isset($activityInstance)&&is_array($activityInstance) && !empty($activityInstance)){
+                    $activityId = $activityInstance[0]['activity_instance_id'];
+                } else {
+                    return 0;
+                }
+            }
         }
         if(!isset($params['orgid'])){
             $params['orgid'] = AuthContext::get(AuthConstants::ORG_UUID);

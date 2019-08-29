@@ -19,6 +19,7 @@ use Oxzion\Service\FileService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\WorkflowService;
 use Group\Service\GroupService;
+use Oxzion\Service\UserCacheService;
 
 class Module implements ConfigProviderInterface
 {
@@ -191,6 +192,13 @@ class Module implements ConfigProviderInterface
                 Controller\ImportController::class => function ($container) {
                     return new Controller\ImportController(
                         $container->get(Service\ImportService::class),
+                        $container->get('AppLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\CacheController::class => function ($container) {
+                    return new Controller\CacheController(
+                        $container->get(\Oxzion\Service\UserCacheService::class),
                         $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );

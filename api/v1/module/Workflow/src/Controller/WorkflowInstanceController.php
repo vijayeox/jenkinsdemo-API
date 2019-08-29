@@ -12,20 +12,23 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\Service\WorkflowService;
+use Workflow\Service\ActivityInstanceService;
 
 class WorkflowInstanceController extends AbstractApiController
 {
     private $workflowInstanceService;
     private $workflowService;
+    private $activityInstanceService;
     /**
     * @ignore __construct
     */
-    public function __construct(WorkflowInstanceTable $table, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(WorkflowInstanceTable $table, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, Logger $log,ActivityInstanceService $activityInstanceService, AdapterInterface $dbAdapter)
     {
         parent::__construct($table, $log, __CLASS__, WorkflowInstance::class);
         $this->setIdentifierName('activityId');
         $this->workflowInstanceService = $workflowInstanceService;
         $this->workflowService = $workflowService;
+        $this->activityInstanceService = $activityInstanceService;
     }
     public function activityAction()
     {
@@ -131,5 +134,62 @@ class WorkflowInstanceController extends AbstractApiController
             return $this->getErrorResponse($e->getMessage(),403, $response);
         }
         return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
+    }
+    public function claimActivityInstanceAction()
+    {
+        $data = array_merge($this->extractPostData(),$this->params()->fromRoute());
+        $this->log->info(ActivityInstanceController::class.":Post Data- ". print_r(json_encode($data), true));
+        try {
+            $response = $this->activityInstanceService->claimActivityInstance($data);
+            $this->log->info(ActivityInstanceController::class.":Complete Activity Instance Successful");
+            if ($response == 0) {
+                return $this->getErrorResponse("Entity not found", 404);
+            }
+            return $this->getSuccessResponse();
+        } catch (ValidationException $e) {
+            $this->log->info(ActivityInstanceController::class.":Exception at Add Activity Instance-".$e->getMessage());
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+    }
+    public function activityInstanceFormAction(){
+        $data = array_merge($this->extractPostData(),$this->params()->fromRoute());
+        if(isset($data['activityInstanceId'])){
+            try {
+                $response = $this->activityInstanceService->getActivityInstanceForm($data['activityInstanceId']);
+                if ($response == 0) {
+                    return $this->getErrorResponse("Entity not found", 404);
+                }
+                return $this->getSuccessResponseWithData($response);
+            } catch (ValidationException $e) {
+                $this->log->info(ActivityInstanceController::class.":Exception at Add Activity Instance-".$e->getMessage());
+                $response = ['data' => $data, 'errors' => $e->getErrors()];
+                return $this->getErrorResponse("Validation Errors", 404, $response);
+            }
+        } else {
+            return $this->getErrorResponse("Entity not found", 404);
+        }
+    }
+    public function completeWorkflowAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        switch ($this->request->getMethod()) {
+            case 'POST':
+                if (isset($params['processInstanceId'])) {
+                    try {
+                        $response = $this->workflowInstanceService->completeWorkflow($params);
+                        if(!$response){
+                            return $this->getErrorResponse("Workflow Completion errors", 404,null);
+                        }
+                    } catch (ValidationException $e) {
+                        $response = ['data' => $params, 'errors' => $e->getErrors()];
+                        return $this->getErrorResponse("workflow Instance errors Errors", 404, $response);
+                    }
+                    return $this->getSuccessResponseWithData($response, 200);
+                } else {
+                    return $this->getErrorResponse("Process Instance Id not set", 404, $response);
+                }
+                break;
+        }
     }
 }

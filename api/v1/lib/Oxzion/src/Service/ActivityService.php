@@ -3,6 +3,7 @@ namespace Oxzion\Service;
 
 use Oxzion\Model\ActivityTable;
 use Oxzion\Model\Activity;
+use Oxzion\Service\FormService;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Service\AbstractService;
@@ -12,15 +13,24 @@ use Exception;
 
 class ActivityService extends AbstractService
 {
-    public function __construct($config, $dbAdapter, ActivityTable $table)
+    private $formService;
+    public function __construct($config, $dbAdapter, ActivityTable $table,FormService $formService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->formService = $formService;
     }
 
     public function createActivity($appId, &$data)
     {
         $activity = new Activity();
+        if(isset($data['template'])){
+            $formId = $this->formService->createForm($appId,$data);
+            $formId = $data['id'];
+            unset($data['id']);
+        } else {
+            $formId = null;
+        }
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -37,6 +47,10 @@ class ActivityService extends AbstractService
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
+            if(isset($formId)){
+                $insert = "INSERT INTO `ox_activity_form` (`activity_id`,`form_id`) VALUES (".$id.",".$formId.")";
+                $resultSet = $this->runGenericQuery($insert);
+            }
             $this->commit();
         } catch (Exception $e) {
             switch (get_class($e)) {

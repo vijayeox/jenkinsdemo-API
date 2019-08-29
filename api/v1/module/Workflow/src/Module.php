@@ -94,6 +94,7 @@ class Module implements ConfigProviderInterface
                         $container->get(Service\WorkflowInstanceService::class),
                         $container->get(WorkflowService::class),
                         $container->get('WorkflowInstanceLogger'),
+                        $container->get(Service\ActivityInstanceService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

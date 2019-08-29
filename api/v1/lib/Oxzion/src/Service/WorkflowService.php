@@ -21,6 +21,7 @@ use Oxzion\Workflow\WorkFlowFactory;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\FileService;
 use Workflow\Model\WorkflowInstance;
+use Ramsey\Uuid\Uuid;
 
 class WorkflowService extends AbstractService
 {
@@ -151,7 +152,11 @@ class WorkflowService extends AbstractService
                     }
                     $activityData = $oxActivity->toArray();
                     try {
-                        $activityResult = $this->activityService->createActivity($appId, $activityData);
+                        if(isset($activity['form'])){
+                            $formTemplate = json_decode($activity['form'],true);
+                            $activityData['template'] = $formTemplate['template'];
+                        }
+                        $activityResult = $this->activityService->createActivity($appId, $activityData,$appUuid);
                         $activityIdArray[] = $activityData['id'];
                         if ($activityResult) {
                             if (!$this->generateFields($activity['fields'], $appId, $activityData['id'], $workFlowId,'activity')) {
@@ -162,6 +167,7 @@ class WorkflowService extends AbstractService
                             return 0;
                         }
                     } catch (Exception $e) {
+                        print_r($e->getMessage());exit;
                         foreach ($activityIdArray as $activityCreatedId) {
                             $id = $this->activityService->deleteActivity($activityCreatedId);
                         }
@@ -187,6 +193,7 @@ class WorkflowService extends AbstractService
         if (!isset($data['id'])) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
+            $data['uuid'] = Uuid::uuid4()->toString();
         }
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
@@ -361,11 +368,25 @@ class WorkflowService extends AbstractService
     {
         $sql = $this->getSqlObject();
         $params = array();
-        if (isset($appId)) {
-            $params['app_id'] = $appId;
+        if(isset($params['app_id'])){
+            if ($app = $this->getIdFromUuid('ox_app', $params['app_id'])) {
+                $appId = $app;
+            } else {
+                $appId = $params['app_id'];
+            }
+        } else {
+            $appId = null;
         }
         if (isset($id)) {
-            $params['id'] = $id;
+            if ($workflow = $this->getIdFromUuid('ox_workflow', $id)) {
+                $workflowId = $workflow;
+            } else {
+                $workflowId = $id;
+            }
+            $params['id'] = $workflowId;
+        }
+        if (isset($appId)) {
+            $params['app_id'] = $appId;
         }
         $select = $sql->select();
         $select->from('ox_workflow')
@@ -397,14 +418,21 @@ class WorkflowService extends AbstractService
         $response = $this->executeQuery($select)->toArray();
         return $response;
     }
-    public function getStartForms($appId, $workflowId)
+    public function getStartForm($appId, $workflowId)
     {
         $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_form')
-        ->columns(array("*"))
-        ->where(array('workflow_id' => $workflowId,'app_id'=>$appId));
-        $response = $this->executeQuery($select)->toArray();
+        if ($app = $this->getIdFromUuid('ox_app', $appId)) {
+            $appId = $app;
+        } else {
+            $appId = $appId;
+        }
+        if ($workflow = $this->getIdFromUuid('ox_workflow', $workflowId)) {
+            $workflowId = $workflow;
+        } else {
+            $workflowId = $workflowId;
+        }
+        $select = "select ox_form.template as content,ox_form.id as id from ox_form left join ox_workflow on ox_workflow.form_id=ox_form.id left join ox_app on ox_app.id=ox_workflow.app_id where ox_workflow.id='$workflowId' and ox_app.id='$appId';";
+        $response = $this->executeQuerywithParams($select)->toArray();
         return $response;
     }
 

@@ -151,8 +151,8 @@ class UserService extends AbstractService
     public function createUser($params,&$data) {
 
         if(isset($params['orgId'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
+            if((!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) && !isset($params['commands'])) {
                 throw new AccessDeniedException("You do not have permissions create user");
             }else{
                 $data['orgid'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
@@ -162,7 +162,7 @@ class UserService extends AbstractService
             $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
         }
 
-        try {  
+        try {
 
         $select = "SELECT ou.id,ou.uuid,count(ou.id),ou.status,ou.username,ou.email,GROUP_CONCAT(ouo.org_id) from ox_user as ou inner join ox_user_org as ouo on ouo.user_id = ou.id where ou.username = '".$data['username']."' OR ou.email = '".$data['email']."' GROUP BY ou.id,ou.uuid,ou.status,ou.email";
         $result = $this->executeQuerywithParams($select)->toArray();
@@ -222,7 +222,7 @@ class UserService extends AbstractService
 
         $data['uuid'] = Uuid::uuid4()->toString();
         $data['date_created'] = date('Y-m-d H:i:s');
-        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID)?AuthContext::get(AuthConstants::USER_ID):1;
         if(isset($data['managerid'])){
             $data['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
         }
@@ -230,7 +230,15 @@ class UserService extends AbstractService
         if (isset($password)) {
             $data['password'] = md5(sha1($password));
         }
-
+        if(!isset($data['date_of_join'])){
+            $data['date_of_join'] = date('Y-m-d');
+        }
+        if(!isset($data['date_of_birth'])){
+            $data['date_of_birth'] = date('Y-m-d');
+        }
+        if(!isset($data['status'])){
+            $data['status'] = 'Active';
+        }
         $form = new User($data);
         $form->validate();
         $this->beginTransaction();

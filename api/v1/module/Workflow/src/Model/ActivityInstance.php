@@ -11,15 +11,20 @@ class ActivityInstance extends Entity
         'id'=>0 ,
         'workflow_instance_id' => 0,
         'activity_instance_id' => null,
-        'assignee' => 0,
+        'data'=>null,
+        'activity_id' => 0,
         'form_id' => 0,
+        'data' => null,
         'status' => 0,
+        'act_by_date' => null,
+        'org_id' => 0,
+        'start_date' => null
     );
     protected $attributes = array();
 
     public function validate()
     {
-        $required = array('workflow_instance_id','assignee','activity_instance_id','form_id');
+        $required = array('workflow_instance_id','activity_instance_id');
         $this->validateWithParams($required);
     }
 }

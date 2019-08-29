@@ -19,6 +19,18 @@ return [
                     ],
                 ],
             ],
+            'workflowActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/workflowinstance/:workflowInstanceId/activity/:activityId/submit',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'action' => 'activity',
+                        'access'=>[
+                        ],
+                    ],
+                ],
+            ],
             'addActivityInstance' => [
                 'type' => Segment::class,
                 'options' => [
@@ -78,9 +90,35 @@ return [
                 'options' => [
                     'route' => '/callback/workflowinstance/complete',
                     'defaults' => [
-                        'controller' => Controller\ServiceTaskController::class,
+                        'controller' => Controller\WorkflowInstanceController::class,
                         'method' => 'POST',
                         'action' => 'completeWorkflow',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            'claimActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/workflowinstance/:workflowInstanceId/activity/:activityInstanceId/claim',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'claimActivityInstance',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            'activityInstanceForm' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/activity/:activityInstanceId/form',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'activityInstanceForm',
                         'access' => [
                         ],
                     ],

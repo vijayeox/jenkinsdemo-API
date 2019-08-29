@@ -301,6 +301,28 @@ return [
                     ],
                 ],
             ],
+            'startform' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflow/:workflowId/startform',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowController::class,
+                        'action' => 'startform',
+                        'method' => 'POST'
+                    ],
+                ],
+            ],
+            'app_cache' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/cache',
+                    'defaults' => [
+                        'controller' => Controller\CacheController::class,
+                        'action' => 'cache',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

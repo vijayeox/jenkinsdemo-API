@@ -32,7 +32,11 @@ class FormService extends AbstractService
         if (!is_array($template)) {
             return 0;
         }
-        $appId = $this->getIdFromUuid('ox_app', $appUuid);
+        if ($app = $this->getIdFromUuid('ox_app', $appUuid)) {
+            $appId = $app;
+        } else {
+            $appId = $appUuid;
+        }
         $template['form']['app_id'] = $appId;
         $data['name'] = $template['form']['name'];
         $template['form']['created_by'] = AuthContext::get(AuthConstants::USER_ID);

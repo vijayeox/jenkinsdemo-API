@@ -7,7 +7,7 @@ namespace Workflow\Service;
 use Oxzion\Service\AbstractService;
 use Oxzion\Workflow\WorkFlowFactory;
 use Workflow\Model\ActivityInstanceTable;
-use Oxzion\Model\ActivityInstance;
+use Workflow\Model\ActivityInstance;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
@@ -37,6 +37,76 @@ class ActivityInstanceService extends AbstractService
         $this->activityEngine = $this->workFlowFactory->getActivity();
     }
 
+    public function setActivityEngine($activityEngine)
+    {
+        $this->activityEngine = $activityEngine;
+    }
+    public function getActivityInstanceForm($id)
+    {
+        $activityQuery = "SELECT ox_activity_instance.*,ox_activity.task_id as task_id,ox_form.template as template,ox_activity.workflow_id FROM `ox_activity_instance` LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id WHERE ox_activity_instance.activity_instance_id='".$id."';";
+        $activityInstance = $this->executeQuerywithParams($activityQuery)->toArray();
+        if (count($activityInstance)==0) {
+            return 0;
+        }
+        return $activityInstance[0];
+    }
+    public function createActivityInstance(&$data)
+    {
+        $page = new ActivityInstance();
+        $data['start_date'] = date('Y-m-d H:i:s');
+        $page->exchangeArray($data);
+        $page->validate();
+        $this->beginTransaction();
+        $count = 0;
+        try {
+            $count = $this->table->save($page);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+            if (!isset($data['id'])) {
+                $id = $this->table->getLastInsertValue();
+                $data['id'] = $id;
+            }
+            $this->commit();
+        } catch (Exception $e) {
+                $this->rollback();
+                return 0;
+            }
+        return $count;
+    }
+    public function claimActivityInstance($data){
+        $activityQuery = "SELECT ox_activity_instance.*,ox_activity.task_id as task_id FROM `ox_activity_instance` LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id WHERE ox_activity_instance.id='".$data['activityInstanceId']."';";
+        $activityInstance = $this->executeQuerywithParams($activityQuery)->toArray();
+        if(isset($activityInstance)&&is_array($activityInstance) && !empty($activityInstance)){
+            $taskId = str_replace($activityInstance[0]["task_id"].":", "", $activityInstance[0]['activity_instance_id']);
+        } else {
+            return 0;
+        }
+        try {
+            $this->activityEngine->claimActivity($taskId,AuthContext::get(AuthConstants::USERNAME));
+        } catch (Exception $e){
+            return 0;
+        }
+        $selectQuery = "SELECT * FROM `ox_activity_instance_assignee` WHERE activity_instance_id='".$data['activityInstanceId']."' and user_id=".AuthContext::get(AuthConstants::USER_ID).";";
+        $activityInstanceAssignee = $this->executeQuerywithParams($selectQuery)->toArray();
+        if(isset($activityInstanceAssignee) && is_array($activityInstanceAssignee) && !empty($activityInstanceAssignee)){
+            $this->beginTransaction();
+            try {
+                $updateQuery = "UPDATE ox_activity_instance_assignee SET assignee = 1 where id = ".$activityInstanceAssignee[0]['id'].";";
+                $update = $this->executeQuerywithParams($updateQuery);
+                $this->commit();
+            } catch (Exception $e) {
+                $this->logger->info(ActivityInstanceService::class."Creation of Activity Instance Entry Failed".$e->getMessage());
+                $this->rollback();
+                return 0;
+            }
+        } else {
+            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`) VALUES (".$data['activityInstanceId'].",".AuthContext::get(AuthConstants::USER_ID).",1)";
+            $resultSet = $this->runGenericQuery($insert);
+        }
+        return 1;
+    }
     public function createActivityInstanceEntry(&$data)
     {
         if(!isset($data['processInstanceId'])){
@@ -78,18 +148,39 @@ class ActivityInstanceService extends AbstractService
                 $activityId = $activity[0]['id'];
             }
         }
-        // Org Id from workflow instance based on the Id
-        $data['group_id'] = null;
-        if (isset($data['group_name'])) {
-            $query1 = "SELECT * FROM `ox_group` WHERE `name` = '".$data['group_name']."';";
-            $resultSet = $this->executeQuerywithParams($query1)->toArray();
-            $data['group_id'] = $resultSet[0]['id'];
-        }
-        // $data['start_date'] =  now();
         $this->beginTransaction();
         try {
-            $insert = "INSERT INTO `ox_activity_instance` (`workflow_instance_id`,`activity_id`,`activity_instance_id`,`assignee`,`group_id`,`status`,`start_date`,`org_id`) VALUES ('" .$workflowInstanceId."','".$activityId."','" .$data['activityInstanceId']."','" .$data['assignee']."','" .$data['group_id']."','created',now(),'" .$orgId."');";
-            $resultSet = $this->runGenericQuery($insert);
+            $activityInstance = array('workflow_instance_id'=>$workflowInstanceId,'activity_id'=>$activityId,'activity_instance_id'=>$data['activityInstanceId'],'status'=>'created','org_id'=>$orgId,'data'=>json_encode($data['processVariables']));
+            $activityCreated = $this->createActivityInstance($activityInstance);
+            if (isset($data['candidates'])) {
+                foreach ($data['candidates'] as $candidate) {
+                    $assignee = 0;
+                    if(isset($candidate['groupid'])){
+                        if($candidate['type']=='assignee'){
+                            $assignee = 1;
+                        }
+                        $groupQuery = $this->executeQuerywithParams("SELECT * FROM `ox_group` WHERE `name` = '".$candidate['groupid']."';")->toArray();
+                        if($groupQuery){
+                            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`group_id`,`assignee`) VALUES (".$activityInstance['id'].",".$groupQuery[0]['id'].",".$assignee.")";
+                             $resultSet = $this->runGenericQuery($insert);
+                            unset($resultSet);
+                            unset($insert);
+                        }
+                    }
+                    if(isset($candidate['userid'])){
+                        if($candidate['type']=='assignee'){
+                            $assignee = 1;
+                        }
+                        $userQuery = $this->executeQuerywithParams("SELECT * FROM `ox_user` WHERE `username` = '".$candidate['userid']."';")->toArray();
+                        if($userQuery){
+                            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`) VALUES (".$activityInstance['id'].",".$userQuery[0]['id'].",".$assignee.")";
+                            $resultSet = $this->runGenericQuery($insert);
+                            unset($resultSet);
+                            unset($insert);
+                        }
+                    }
+                }
+            }
             $this->commit();
         } catch (Exception $e) {
             $this->logger->info(ActivityInstanceService::class."Creation of Activity Instance Entry Failed".$e->getMessage());

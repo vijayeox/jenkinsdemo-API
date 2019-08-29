@@ -28,7 +28,7 @@ class ActivityInstanceControllerTest extends ControllerTest
     public function testaddactivityinstance()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'c99ac426-90ee-11e9-b683-526af7764f64','activityId'=>1 , 'assignee' => 'bharatgtest', 'group_name' => 'HR Group','processInstanceId'=>1,'name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'orgid'=>$this->testOrgId)];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'c99ac426-90ee-11e9-b683-526af7764f64','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'bharatgtest','type'=>'assignee')),'processInstanceId'=>1,'name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'orgid'=>$this->testOrgId)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activityinstance', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -42,7 +42,17 @@ class ActivityInstanceControllerTest extends ControllerTest
         }
         $this->assertEquals($tableFieldName[0]['workflow_instance_id'], $data['workflow_instance_id']);
         $this->assertEquals($tableFieldName[0]['activity_instance_id'], $data['activityInstanceId']);
-        $this->assertEquals($tableFieldName[0]['group_id'], 1);
+        $sqlQuery2 = "Select * from ox_activity_instance_assignee";
+        $statement2 = $dbAdapter->query($sqlQuery2);
+        $result2 = $statement2->execute();
+        $this->assertEquals($result2->count(), 2);
+        while ($result2->next()) {
+            $tableFieldName1[] = $result2->current();
+        }
+        $this->assertEquals($tableFieldName1[0]['assignee'], 0);
+        $this->assertEquals($tableFieldName1[0]['group_id'], 1);
+        $this->assertEquals($tableFieldName1[1]['assignee'], 1);
+        $this->assertEquals($tableFieldName1[1]['user_id'], 1);
     }
     public function testaddactivityinstanceWithoutProcessId()
     {

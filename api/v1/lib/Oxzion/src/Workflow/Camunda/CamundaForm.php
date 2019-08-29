@@ -20,8 +20,14 @@ class CamundaForm
             if (isset($properties['camunda:property'])) {
                 $formProperties = array();
                     if(isset($properties['camunda:property'])){
-                        foreach ($properties['camunda:property'] as $property) {
-                            $formProperties[$property['name']] = $property['value'];
+                        if(isset($properties['camunda:property']['name'])){
+                            $formProperties[$properties['camunda:property']['name']] = $properties['camunda:property']['value'];
+                        } else {
+                            foreach ($properties['camunda:property'] as $property) {
+                                if(isset($property['name'])){
+                                    $formProperties[$property['name']] = $property['value'];
+                                }
+                            }
                         }
                     }
                 $this->data['properties'] = json_encode($formProperties);

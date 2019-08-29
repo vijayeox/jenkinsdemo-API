@@ -1,5 +1,6 @@
 package org.oxzion.processengine
 
+import org.camunda.bpm.engine.impl.bpmn.behavior.NoneEndEventActivityBehavior
 import org.camunda.bpm.engine.impl.bpmn.behavior.UserTaskActivityBehavior
 import org.camunda.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior
@@ -18,11 +19,16 @@ class CustomProcessEngine extends AbstractBpmnParseListener {
     if(activityBehavior instanceof UserTaskActivityBehavior ){
       UserTaskActivityBehavior userTaskActivityBehavior = (UserTaskActivityBehavior) activityBehavior
       userTaskActivityBehavior.getTaskDefinition().addTaskListener("create", CustomTaskListener.getInstance())
+      userTaskActivityBehavior.getTaskDefinition().addTaskListener("complete", CustomTaskCompleteListener.getInstance())
     }
   }
   @Override
+  void parseEndEvent(Element endEventElement, ScopeImpl scope, ActivityImpl activity) {
+    ActivityBehavior activityBehavior = activity.getActivityBehavior()
+    activity.addListener("end",EndEventListener.getInstance())
+  }
+  @Override
   void parseServiceTask(Element serviceTaskElement, ScopeImpl scope, ActivityImpl activity) {
-  	print serviceTaskElement
     Element extensionElement = serviceTaskElement.element("extensionElements")
     if (extensionElement != null) {
       Element inputOutElement = extensionElement.element("inputOutput")
