@@ -1,7 +1,8 @@
 {
   "type": "application",
   "name": "DiveInsurance",
-  "appId":"609fc9ab-bc7d-43c3-8593-03184481873f",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+  "appId":"609fc9ab-bc7d-43c3-8593-03184481873f",
+  "formId":"1",
   "category": null,
   "defaultAppforOrgs" : true,
   "server": "server.js",
