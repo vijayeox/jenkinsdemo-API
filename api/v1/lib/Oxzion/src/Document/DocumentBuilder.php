@@ -30,13 +30,12 @@ class DocumentBuilder {
         $content = $this->templateService->getContent($template, $data);
         if($options && isset($options['header'])){
             $header = $options['header'];
-            $header = ArtifactUtils::getTemplatePath($this->config, $header, $data);
+            $header = ArtifactUtils::getTemplatePath($this->config, $header, $data)."/".$header;
         }
         if($options && isset($options['footer'])){
             $footer = $options['footer'] ;
-            $footer = ArtifactUtils::getTemplatePath($this->config, $footer, $data);
+            $footer = ArtifactUtils::getTemplatePath($this->config, $footer, $data)."/".$footer;
         }
-        
         return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer);
     }
 }
