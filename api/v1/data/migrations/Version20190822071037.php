@@ -70,6 +70,9 @@ final class Version20190822071037 extends AbstractMigration
         $this->addSql("DROP TRIGGER IF EXISTS `ox_file_insert`");
         $this->addSql("DROP TRIGGER IF EXISTS `ox_file_update`");
         $this->addSql("DROP TRIGGER IF EXISTS `ox_file_delete`");
+        $this->addSql("DROP TRIGGER IF EXISTS `ox_file_attribute_insert`");
+        $this->addSql("DROP TRIGGER IF EXISTS `ox_file_attribute_update`");
+        $this->addSql("DROP TRIGGER IF EXISTS `ox_file_attribute_delete`");
         $this->addSql("DROP TABLE ox_file_attributes_audit_log;");
         $this->addSql("CREATE TABLE IF NOT EXISTS `ox_file_attributes_audit_log` (
             `id` int(32) NOT NULL AUTO_INCREMENT,
