@@ -296,8 +296,18 @@ class AppController extends AbstractApiController
     public function assignmentsAction()
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        $assignments = $this->appService->getAssignments($params['appId']);
-        return $this->getSuccessResponseWithData($assignments);
+        $filterParams = $this->params()->fromQuery();
+        try {
+            $assignments = $this->appService->getAssignments($params['appId'],$filterParams);
+        }catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        catch(AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
+        return $this->getSuccessResponseDataWithPagination($assignments['data'], $assignments['total']);
     }
 
     /**

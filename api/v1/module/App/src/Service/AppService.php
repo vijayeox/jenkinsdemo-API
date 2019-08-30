@@ -459,11 +459,11 @@ class AppService extends AbstractService
 
         return 1;
     }
-    public function getAssignments($appId)
+    public function getAssignments($appUuid,$filterParams)
     {
-        $assignments = $this->workflowService->getAssignments($appId);
+        $appId = $this->getIdFromUuid('ox_app', $appUuid);
+        $assignments = $this->workflowService->getAssignments($appId,$filterParams);
         return $assignments;
-        // print_r($assignments);exit;
     }
 
     public function addToAppRegistry($data)

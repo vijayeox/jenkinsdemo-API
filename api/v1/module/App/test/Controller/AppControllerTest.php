@@ -374,7 +374,7 @@ class AppControllerTest extends ControllerTest
         $this->dispatch('/app/addtoappregistry', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
-        $this->assertControllerName(AppRegisterController::class); // as specified in router's controller name alias
+        $this->assertControllerName(AppRegisterController::class);
         $this->assertControllerClass('AppRegisterController');
         $this->assertMatchedRouteName('addtoappregistry');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
@@ -382,5 +382,51 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['org_name'], $data['org_name']);
         $this->assertEquals($content['data']['app_name'], $data['app_name']);
+    }
+    public function testGetListOfAssignments()
+    {
+        $this->initAuthToken($this->adminUser);
+        $workflowName = 'Test Workflow 1';
+        $this->dispatch('/app/somerandom123/assignments?filter=[{"filter":{"filters":[{"field":"workflow_name","operator":"eq","value":"'.$workflowName.'"}]},"sort":[{"field":"workflow_name","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200); 
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class);
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('assignments');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['workflow_name'], $workflowName);
+        $this->assertEquals($content['total'],1);
+    }
+
+    public function testGetListOfAssignmentsWithoutFiltersValues()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/somerandom123/assignments?filter=[{"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200); 
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class);
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('assignments');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'], 1);
+    }
+
+    public function testGetListOfAssignmentsWithoutFilters()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/somerandom123/assignments', 'GET');
+        $this->assertResponseStatusCode(200); 
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class);
+        $this->assertControllerClass('AppController');
+        $this->assertMatchedRouteName('assignments');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'], 1);
     }
 }

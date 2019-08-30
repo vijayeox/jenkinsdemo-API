@@ -22,6 +22,7 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Service\FileService;
 use Workflow\Model\WorkflowInstance;
 use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\FilterUtils;
 
 class WorkflowService extends AbstractService
 {
@@ -40,6 +41,7 @@ class WorkflowService extends AbstractService
     protected $processEngine;
     protected $activityEngine;
     protected $activityService;
+    static $field= array('workflow_name' => 'ox_workflow.name');
 
     public function __construct($config, $dbAdapter, WorkflowTable $table, FormService $formService, FieldService $fieldService, FileService $fileService, WorkflowFactory $workflowFactory, ActivityService $activityService)
     {
@@ -453,24 +455,48 @@ class WorkflowService extends AbstractService
         }
     }
 
-    public function getAssignments($appId)
+    public function getAssignments($appId,$filterParams)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_workflow')
-        ->columns(array("*"))
-        ->where(array('app_id'=>$appId));
-        $response = $this->executeQuery($select)->toArray();
-        if (count($response)==0) {
-            return 0;
+        $userId = AuthContext::get(AuthConstants::USER_ID);
+        if(!empty($filterParams)){
+            $filterParamsArray = json_decode($filterParams['filter'],TRUE);
         }
-        // foreach ($response as $workflow) {
-        // print_r($workflow);
-        // foreach ($workflow['process_ids'] as $process_id) {
-        // print_r(AuthContext::get(AuthConstants::USER_ID));
-        $assignments[] = $this->activityEngine->getActivitiesByUser(AuthContext::get(AuthConstants::USERNAME), array('processDefinitionKeyIn'=>implode(",", $processKeys)));
-        // }
-        // }
-        return $response;
+        $sort = "";
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+            if(isset($filterParams['filter'])){
+                $filterArray = json_decode($filterParams['filter'],true);
+                if(isset($filterArray[0]['filter'])){
+                    $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                    $filterList = $filterArray[0]['filter']['filters'];
+                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$field);
+                }
+
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort,self::$field);
+                }
+            }
+        }
+
+        $appFilter = "ox_workflow.app_id = $appId";
+        $fromQuery = "FROM ox_workflow
+                      INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_id = ox_workflow.id
+                      INNER JOIN ox_activity on ox_activity.workflow_id = ox_workflow.id
+                      INNER JOIN ox_activity_instance ON ox_activity_instance.activity_id = ox_activity.id
+                      INNER JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
+                      LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id";
+        $whereQuery = " WHERE (ox_user_group.avatar_id = $userId OR ox_activity_instance_assignee.user_id = $userId) AND $appFilter AND ox_activity_instance.status = 'In Progress'";                      
+        if(!empty($sort)){
+            $sort = " ORDER BY ".$sort;
+        }
+        $pageSize = "LIMIT ".(isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
+        $offset = "OFFSET ".(isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
+
+        $countQuery = "SELECT count(distinct ox_activity_instance.id) as `count` $fromQuery $whereQuery";
+        $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
+
+        $querySet = "SELECT distinct ox_workflow.name as workflow_name, ox_activity.name,ox_activity_instance_assignee.assignee $fromQuery $whereQuery $sort $pageSize $offset";           
+        $resultSet = $this->executeQuerywithParams($querySet)->toArray();
+        return array('data' => $resultSet,'total' => $countResultSet[0]['count']);
     }
 }
