@@ -43,15 +43,6 @@ class GroupControllerTest extends ControllerTest {
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    private function executeQueryTest($query){
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $resultSet->initialize($result);
-        return $resultSet->toArray();
-    }
-
     public function testgetGroups() {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de', 'GET');

@@ -49,25 +49,6 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertControllerClass('OrganizationController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
-
-    private function executeQueryTest($query)
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $resultSet->initialize($result);
-        return $resultSet->toArray();
-    }
-
-    private function executeUpdate($query)
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        
-        return $result;
-    }
    
     // Testing to see if the Create Contact function is working as intended if all the value passed are correct.
 
@@ -195,8 +176,11 @@ class OrganizationControllerTest extends ControllerTest
         $orgResult = $this->executeQueryTest($select); 
 
         $select = "SELECT * FROM ox_user where username ='".$contact['username']."'";
-        $usrResult = $this->executeQueryTest($select); 
-       
+        $usrResult = $this->executeQueryTest($select);
+
+        $query = "SELECT * from ox_app_registry where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
+        $appResult = $this->executeQueryTest($query);
+
         $this->assertEquals(count($role), 3);
         $this->assertEquals(count($roleResult), 1);
         $this->assertEquals(count($orgResult), 1);
@@ -208,6 +192,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($appResult[0]['app_id'],1);
     }
 
 

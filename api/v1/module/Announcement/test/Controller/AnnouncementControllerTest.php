@@ -45,17 +45,6 @@ class AnnouncementControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    private function executeQueryTest($query)
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $resultSet->initialize($result);
-        return $resultSet->toArray();
-    }
-
-
     public function testGetList()
     {
         $this->initAuthToken($this->adminUser);

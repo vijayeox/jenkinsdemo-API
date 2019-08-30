@@ -66,7 +66,7 @@ public class SendSmtpMail extends RouteBuilder {
                             }
                         }
                     }
-                }).to("smtp://{{smtp.host}}?username={{smtp.username}}&password={{smtp.password}}")
+                }).to("smtp://{{smtp.host}}?username={{smtp.username}}&password={{smtp.password}}&contentType=text/html")
             }
         })
         context.start()

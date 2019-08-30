@@ -26,17 +26,39 @@ class AuthControllerTest extends ControllerTest
         return $dataset;
     }
 
-    private function executeUpdate($query){
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        
-        return $result;
-    }
-
 
     public function testAuthentication(){
         $data = ['username' => $this->adminUser, 'password' => 'password'];
+        $this->dispatch('/auth', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('auth');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(is_null($content['data']['jwt']), false);
+        $this->assertEquals(is_null($content['data']['refresh_token']), false);
+    }
+
+     public function testAuthenticationWithSpaceAtEnd(){
+        $data = ['username' => $this->adminUser.'   ', 'password' => 'password'];
+        $this->dispatch('/auth', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('auth');
+        $this->assertControllerName(AuthController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AuthController');
+        $this->assertMatchedRouteName('auth');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(is_null($content['data']['jwt']), false);
+        $this->assertEquals(is_null($content['data']['refresh_token']), false);
+    }
+
+    public function testAuthenticationWithSpaceAtBeginning(){
+        $data = ['username' => '   '.$this->adminUser, 'password' => 'password'];
         $this->dispatch('/auth', 'POST', $data);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('auth');
