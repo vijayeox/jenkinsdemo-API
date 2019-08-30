@@ -435,7 +435,6 @@ class ContactService extends AbstractService
     }
 
 
-
     //Import Google CSV Format
     public function importContactCSV($files)
     {
@@ -580,9 +579,9 @@ class ContactService extends AbstractService
 
         if (isset($id)) {
             $uuidArray= array_map('current', $id);
-            $select = "SELECT first_name,last_name,phone_1,phone_list,email,email_list,company_name,designation,country FROM ox_contact where uuid in ('".implode("','", $uuidArray)."')";
+            $select = "SELECT oc.first_name,oc.last_name,oc.phone_1,oc.phone_list,oc.email,oc.email_list,oc.company_name,oc.designation,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip FROM ox_contact as oc join ox_address as oa on oc.address_id = oa.id where uuid in ('".implode("','", $uuidArray)."')";
         } else {
-            $select = "SELECT first_name,last_name,phone_1,phone_list,email,email_list,company_name,designation,country FROM ox_contact where owner_id = ".AuthContext::get(AuthConstants::USER_ID);
+            $select = "SELECT oc.first_name,oc.last_name,oc.phone_1,oc.phone_list,oc.email,oc.email_list,oc.company_name,oc.designation,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip FROM ox_contact as oc join ox_address as oa on oc.address_id = oa.id where owner_id = ".AuthContext::get(AuthConstants::USER_ID);
         }
         
         $result =$this->executeQueryWithParams($select)->toArray();
@@ -635,7 +634,12 @@ class ContactService extends AbstractService
 
             $finalArray[$x]['Organization 1 - Name'] = isset($result[$x]['company_name']) ? $result[$x]['company_name'] : null;
             $finalArray[$x]['Organization 1 - Title'] = isset($result[$x]['designation']) ? $result[$x]['designation'] : null;
-            $finalArray[$x]['Location'] = isset($result[$x]['country']) ? $result[$x]['country'] : null;
+            $finalArray[$x]['Address 1 - Street'] = isset($result[$x]['address1']) ? $result[$x]['address1'] : null;
+            $finalArray[$x]['Address 1 - Extended Address'] = isset($result[$x]['address2']) ? $result[$x]['address2'] : null;
+            $finalArray[$x]['Address 1 - City'] = isset($result[$x]['city']) ? $result[$x]['city'] : null;
+            $finalArray[$x]['Address 1 - Region'] = isset($result[$x]['state']) ? $result[$x]['state'] : null;
+            $finalArray[$x]['Address 1 - Country'] = isset($result[$x]['country']) ? $result[$x]['country'] : null;
+            $finalArray[$x]['Address 1 - Postal Code'] = isset($result[$x]['zip']) ? $result[$x]['zip'] : null;
             $finalArray[$x]['Name Prefix'] = null;
             $finalArray[$x]['Name Suffix'] = null;
             $finalArray[$x]['Initials'] = null;
@@ -663,7 +667,7 @@ class ContactService extends AbstractService
             $count++;
         }
 
-        array_push($headers, 'Organization 1 - Name', 'Organization 1 - Title', 'Location', 'Name Prefix', 'Name Suffix', 'Initials', 'Nickname', 'Short Name', 'Maiden Name');
+        array_push($headers, 'Organization 1 - Name', 'Organization 1 - Title', 'Address 1 - Street','Address 1 - Extended Address','Address 1 - City','Address 1 - Region','Address 1 - Country','Address 1 - Postal Code', 'Name Prefix', 'Name Suffix', 'Initials', 'Nickname', 'Short Name', 'Maiden Name');
 
         array_push($finalList, $headers);
   
