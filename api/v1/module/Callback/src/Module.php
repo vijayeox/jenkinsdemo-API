@@ -40,7 +40,7 @@ class Module implements ConfigProviderInterface
                     return new Service\ChatService($container->get('config'), $container->get('CallbackLogger'));
                 },
                 Service\CRMService::class => function ($container) {
-                    return new Service\CRMService($container->get('config'), $container->get('CallbackLogger'));
+                    return new Service\CRMService($container->get('config'), $container->get('CallbackLogger'), $container->get(\Contact\Service\ContactService::class), $container->get(UserService::class));
                 },
                 Service\CalendarService::class => function ($container) {
                     return new Service\CalendarService($container->get('config'), $container->get('CallbackLogger'));
@@ -82,7 +82,7 @@ class Module implements ConfigProviderInterface
                     return new Controller\ChatCallbackController($container->get(Service\ChatService::class), $container->get('CallbackLogger'));
                 },
                 Controller\CRMCallbackController::class => function ($container) {
-                    return new Controller\CRMCallbackController($container->get(Service\CRMService::class), $container->get(\Contact\Service\ContactService::class), $container->get(UserService::class), $container->get('CallbackLogger'));
+                    return new Controller\CRMCallbackController($container->get(Service\CRMService::class), $container->get('CallbackLogger'));
                 },
                 Controller\TaskCallbackController::class => function ($container) {
                     return new Controller\TaskCallbackController($container->get(Service\TaskService::class), $container->get('CallbackLogger'));
