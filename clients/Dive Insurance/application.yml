@@ -26,16 +26,19 @@ menu:
         name: My Policies
         content:
           -
-            type: Document
-            content: content/Document.txt
-          -
-            type: Form
-            content: content/HubForm1.json
-          -
             type: LIST
             content:
               - 
                 url: ""
+                actions:
+                  -
+                    name: "",
+                    icon: "",
+                    page: ""
+                columns:
+                  -
+                    field: "",
+                    title: ""
   -
     name: My History
     group: Policy Holder
