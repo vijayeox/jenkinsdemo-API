@@ -2,7 +2,7 @@ ox_visualization:
   -
     id: 1
     uuid: '44f22a46-26d2-48df-96b9-c58520005817'
-    name: 'Pie Chart'
+    name: 'Bar'
     created_by: 1
     date_created: '2019-06-27 07:25:06'
     org_id: 1
@@ -10,7 +10,7 @@ ox_visualization:
   -
     id: 2
     uuid: '101b3d1e-175b-43d8-ac38-485e80e6b2f3'
-    name: 'Panel Item'
+    name: 'Aggregate'
     created_by: 1
     date_created: '2019-06-27 07:25:06'
     org_id: 1

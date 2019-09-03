@@ -101,15 +101,14 @@ class WidgetService extends AbstractService
 
     public function getWidget($uuid,$params)
     {
-        $columnList = array('name','uuid','query_id','is_owner' => (new Expression('IF(created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'visualization_id','ispublic','org_id','isdeleted');
+        $columnList = array('name','uuid','query_id','is_owner' => (new Expression('IF(ox_widget.created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'visualization_id','ispublic','org_id','isdeleted');
         if(isset($params['config']))
         {
-            $columnList = array('name','uuid','query_id','is_owner' => (new Expression('IF(created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'visualization_id','ispublic','org_id','isdeleted','configuration');
+            $columnList = array('name','uuid','query_id','is_owner' => (new Expression('IF(ox_widget.created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'visualization_id','ispublic','org_id','isdeleted','configuration');
         }
         $sql = $this->getSqlObject();
         $select = $sql->select();
-        $select->from('ox_widget')
-            ->columns($columnList)->where(array('ox_widget.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
+        $select->from('ox_widget')->columns($columnList)->where(array('ox_widget.uuid' => $uuid,'ox_widget.org_id' => AuthContext::get(AuthConstants::ORG_ID),'ox_widget.isdeleted' => 0))->join('ox_visualization','ox_visualization.id = ox_widget.visualization_id',array('type' => 'name'));
         $response = $this->executeQuery($select)->toArray();
         if(isset($response[0]))
         {
@@ -131,15 +130,15 @@ class WidgetService extends AbstractService
     {
         $paginateOptions = FilterUtils::paginate($params);
         $where = $paginateOptions['where'];
-        $where .= empty($where) ? "WHERE isdeleted <>1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND isdeleted <>1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
-        $sort = " ORDER BY ".$paginateOptions['sort'];
+        $where .= empty($where) ? "WHERE ox_widget.isdeleted <>1 AND (ox_widget.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_widget.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_widget.ispublic = 1)" : " AND ox_widget.isdeleted <>1 AND (ox_widget.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_widget.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_widget.ispublic = 1)";
+        $sort = " ORDER BY ox_widget.".$paginateOptions['sort'];
         $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
         $cntQuery ="SELECT count(id) as 'count' FROM `ox_widget` ";
         $resultSet = $this->executeQuerywithParams($cntQuery.$where);
         $count=$resultSet->toArray()[0]['count'];
 
-        $queryString = "Select name,uuid,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,ispublic,org_id,isdeleted from `ox_widget`";
+        $queryString = "Select ox_widget.name,ox_widget.uuid,IF(ox_widget.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,ox_widget.ispublic,ox_widget.org_id,ox_widget.isdeleted,ox_visualization.name as type from `ox_widget` inner join ox_visualization on ox_widget.visualization_id = ox_visualization.id ";
         $query =$queryString.$where." ".$sort." ".$limit;
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();

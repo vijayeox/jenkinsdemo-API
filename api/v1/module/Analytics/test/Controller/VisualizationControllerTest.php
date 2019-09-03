@@ -38,7 +38,7 @@ class VisualizationControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => "BarChart"];
+        $data = ['name' => "Line"];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_visualization'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/visualization', 'POST', $data);
@@ -69,7 +69,7 @@ class VisualizationControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => "test"];
+        $data = ['name' => "Pie"];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/visualization/44f22a46-26d2-48df-96b9-c58520005817', 'PUT', null);
@@ -124,7 +124,7 @@ class VisualizationControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
-        $this->assertEquals($content['data']['name'], 'Pie Chart');
+        $this->assertEquals($content['data']['name'], 'Bar');
     }
 
     public function testGetNotFound() {
@@ -145,8 +145,8 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 2);
         $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
-        $this->assertEquals($content['data']['data'][0]['name'], 'Pie Chart');
-        $this->assertEquals($content['data']['data'][1]['name'], 'Panel Item');
+        $this->assertEquals($content['data']['data'][0]['name'], 'Bar');
+        $this->assertEquals($content['data']['data'][1]['name'], 'Aggregate');
         $this->assertEquals($content['data']['data'][1]['uuid'], '101b3d1e-175b-43d8-ac38-485e80e6b2f3');
         $this->assertEquals($content['data']['total'],2);
     }
@@ -161,8 +161,8 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 2);
         $this->assertEquals($content['data']['data'][0]['uuid'], '101b3d1e-175b-43d8-ac38-485e80e6b2f3');
-        $this->assertEquals($content['data']['data'][0]['name'], 'Panel Item');
-        $this->assertEquals($content['data']['data'][1]['name'], 'Pie Chart');
+        $this->assertEquals($content['data']['data'][0]['name'], 'Aggregate');
+        $this->assertEquals($content['data']['data'][1]['name'], 'Bar');
         $this->assertEquals($content['data']['data'][1]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
         $this->assertEquals($content['data']['total'],2);
     }
@@ -177,7 +177,7 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 1);
         $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
-        $this->assertEquals($content['data']['data'][0]['name'], 'Pie Chart');
+        $this->assertEquals($content['data']['data'][0]['name'], 'Bar');
         $this->assertEquals($content['data']['data'][0]['is_owner'], 'true');
         $this->assertEquals($content['data']['total'],2);
     }
@@ -185,14 +185,14 @@ class VisualizationControllerTest extends ControllerTest
     public function testGetListwithQueryParameters()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/visualization?limit=10&sort=[{"field":"id","dir":"desc"}]&filter=[{"logic":"and"},{"filters":[{"field":"name","operator":"endswith","value":"t"},{"field":"name","operator":"startswith","value":"p"}]}]', 'GET');
+        $this->dispatch('/analytics/visualization?limit=10&sort=[{"field":"id","dir":"desc"}]&filter=[{"logic":"and"},{"filters":[{"field":"name","operator":"endswith","value":"r"},{"field":"name","operator":"startswith","value":"b"}]}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 1);
         $this->assertEquals($content['data']['data'][0]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
-        $this->assertEquals($content['data']['data'][0]['name'], 'Pie Chart');
+        $this->assertEquals($content['data']['data'][0]['name'], 'Bar');
         $this->assertEquals($content['data']['total'],1);
     }
 }

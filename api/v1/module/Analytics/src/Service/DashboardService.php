@@ -135,7 +135,7 @@ class DashboardService extends AbstractService
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['count'];
 
-            $query ="Select ox_dashboard.uuid,ox_dashboard.name,ox_dashboard.ispublic,ox_dashboard.description, ox_dashboard.dashboard_type,IF(ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,ox_dashboard.org_id,ox_dashboard.isdeleted, ox_widget_dashboard_mapper.widget_id from ox_dashboard INNER JOIN ox_widget_dashboard_mapper on ox_dashboard.id = ox_widget_dashboard_mapper.dashboard_id ".$where." ".$sort." ".$limit;
+            $query ="Select ox_dashboard.id,ox_dashboard.uuid,ox_dashboard.name,ox_dashboard.ispublic,ox_dashboard.description, ox_dashboard.dashboard_type,IF(ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,ox_dashboard.org_id,ox_dashboard.isdeleted, ox_widget_dashboard_mapper.widget_id from ox_dashboard INNER JOIN ox_widget_dashboard_mapper on ox_dashboard.id = ox_widget_dashboard_mapper.dashboard_id ".$where." ".$sort." ".$limit;
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
 
