@@ -120,37 +120,37 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    // public function testUpdate(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $data = ['name' => 'Sample2','app_id' => 1];
-    //     $this->setJsonContent(json_encode($data));
-    //     $this->dispatch('/workflow/1', 'PUT', null);
-    //     $this->assertResponseStatusCode(200);
-    //     $this->assertModuleName('App');
-    //     $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
-    //     $this->assertControllerClass('WorkflowController');
-    //     $this->assertMatchedRouteName('appworkflow');
-    //     $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals($content['data']['id'], 1);
-    //     $this->assertEquals($content['data']['name'], $data['name']);
-    // }
+    public function testUpdate(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Sample2','app_id' => 1];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/workflow/1', 'PUT', null);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowController');
+        $this->assertMatchedRouteName('appworkflow');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['name'], $data['name']);
+    }
 
-    // public function testUpdateNotFound(){
-    //     $this->initAuthToken($this->adminUser);
-    //     $data = ['name' => 'Sample2'];
-    //     $this->setJsonContent(json_encode($data));
-    //     $this->dispatch('/workflow/122', 'PUT', null);
-    //     $this->assertResponseStatusCode(404);
-    //     $this->assertModuleName('App');
-    //     $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
-    //     $this->assertControllerClass('WorkflowController');
-    //     $this->assertMatchedRouteName('appworkflow');
-    //     $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-    //     $content = (array)json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error');
-    // }
+    public function testUpdateNotFound(){
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Sample2'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/workflow/122', 'PUT', null);
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('App');
+        $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowController');
+        $this->assertMatchedRouteName('appworkflow');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 
     public function testDelete()
     {
@@ -180,6 +180,43 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
+    public function testGetListOfFilesWithUserId()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
+        $this->dispatch('/app/somerandom123/workflow/1/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class);
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true); 
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['data'], 'New File Data - Latest Completed');
+        $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['total'], 1);
+    }
+
+    public function testGetListOfFilesWithUserIdNoData()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
+        $this->dispatch('/app/somerandom123/workflow/1/4fd9ce37-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class);
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true); 
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']),0);
+        $this->assertEquals($content['total'],0);
+    }
+
     public function testGetListOfFilesWithQueryParameter()
     {
         $this->initAuthToken($this->adminUser);
@@ -190,7 +227,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class);
         $this->assertControllerClass('WorkflowInstanceController');
-        $this->assertMatchedRouteName('mypolicylisting');
+        $this->assertMatchedRouteName('filelisting');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -209,7 +246,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class);
         $this->assertControllerClass('WorkflowInstanceController');
-        $this->assertMatchedRouteName('mypolicylisting');
+        $this->assertMatchedRouteName('filelisting');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -228,7 +265,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class);
         $this->assertControllerClass('WorkflowInstanceController');
-        $this->assertMatchedRouteName('mypolicylisting');
+        $this->assertMatchedRouteName('filelisting');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -247,7 +284,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class);
         $this->assertControllerClass('WorkflowInstanceController');
-        $this->assertMatchedRouteName('mypolicylisting');
+        $this->assertMatchedRouteName('filelisting');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
@@ -255,6 +292,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['status'], 'Completed');
         $this->assertEquals($content['total'], 1);
     }
+    
     public function testClaimActivityInstance()
     {
         $this->initAuthToken($this->adminUser);

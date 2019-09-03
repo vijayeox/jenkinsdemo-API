@@ -124,10 +124,10 @@ return [
                     ],
                 ],
             ],
-            'mypolicylisting' => [
+            'filelisting' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/[workflow/:workflowId/]file',
+                    'route' => '/app/:appId/[workflow/:workflowId/][:userId/]file',
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
                         'method' => 'GET',

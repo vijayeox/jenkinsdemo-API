@@ -291,7 +291,9 @@ class WorkflowInstanceService extends AbstractService
         $fields = "";
         $sortFields = array();
         $appId = $this->getIdFromUuid('ox_app', $params['appId']);
-
+        if(isset($params['userId'])){
+            $userId = $this->getIdFromUuid('ox_user',$params['userId']);
+        }
         if(isset($params['workflowId'])){
             $workflowId = $params['workflowId'];
         }
@@ -356,6 +358,11 @@ class WorkflowInstanceService extends AbstractService
         inner join ox_file_attribute on ox_file_attribute.fileid = f1.id
         inner join ox_field on ox_field.id = ox_file_attribute.fieldid";
 
+        if(isset($userId)){
+            $fromQueryWithUserId = " inner join ox_wf_user_identifier on ox_wf_user_identifier.identifier_name = ox_field.name";
+            $where = $where ." AND ox_wf_user_identifier.user_id = ".$userId;
+            $fromQuery = $fromQuery.$fromQueryWithUserId;
+        }
         $countQuery = "SELECT count(distinct f1.id) as `count` $fromQuery $where";
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
 
