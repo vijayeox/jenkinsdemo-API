@@ -47,7 +47,7 @@ class RateCardTest extends DelegateTest
     public function testRateCardExecute()
     {
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
-        $data =['product' => 'Individual Professional Liability', 'start_date' => '2019-06-30','end_date' => '2019-07-31'];
+        $data =['key' => 'Instructor', 'start_date' => '2019-07-01','end_date' => '2019-07-31'];
         $appId = $this->data['UUID'];
         $appName = $this->data['appName'];
         $config = $this->getApplicationConfig();
