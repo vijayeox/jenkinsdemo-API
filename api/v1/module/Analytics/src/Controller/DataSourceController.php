@@ -150,9 +150,6 @@ class DataSourceController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->dataSourceService->getDataSourceList($params);
-        if ($result == 0) {
-            return $this->getErrorResponse("No records found",404);
-        }
         return $this->getSuccessResponseWithData($result);
     }
 }
