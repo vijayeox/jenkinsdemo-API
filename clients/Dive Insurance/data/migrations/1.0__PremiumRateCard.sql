@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `premium_rate_card` (
               `padi_fee` DECIMAL(8,2),
               `total` DECIMAL(8,2),
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Instructor','instructor','2019-06-30', '2019-07-31',645);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Dive Master','divemaster','2019-06-30', '2019-07-31',404);

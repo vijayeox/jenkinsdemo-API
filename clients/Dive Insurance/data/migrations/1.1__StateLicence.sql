@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `state_licence` (
               `state_in_short` varchar(20) NOT NULL,
               `licence_number` varchar(500) NOT NULL,
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 INSERT INTO `state_licence` (`state`,`state_in_short`,`licence_number`) VALUES ('Armed Forces Europe', 'AE', '0757776');          
 INSERT INTO `state_licence` (`state`,`state_in_short`,`licence_number`) VALUES ('Alaska', 'AK', '18601');

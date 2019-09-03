@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS `carrier_policy` (
               `start_date` datetime NULL,
               `end_date` datetime NULL,
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 INSERT INTO `carrier_policy` (`product`,`carrier`,`policy_number`) VALUES ('Individual Professional Liability', 'Tokio Marine Specialty Insurance Company', 'PPK1992899');                      
