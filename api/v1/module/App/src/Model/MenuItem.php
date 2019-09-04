@@ -19,7 +19,7 @@ class MenuItem extends Entity
         'app_id' => 0,
         'parent_id' => 0,
         'page_id' => 0,
-        'group_id' => 0,
+        'group_id' => NULL,
         'icon' => null,
         'sequence' => 0,
         'date_created' => null,
