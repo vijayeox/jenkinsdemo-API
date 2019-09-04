@@ -39,9 +39,7 @@ class AppDelegateService extends AbstractService
     {
         try { 
             $result = $this->delegateFile($appId, $delegate);
-            // echo "Cech"; print_r($result);exit;
-            echo $result;exit;
-            if ($result === 1) {
+            if ($result) {
                 $obj = new $delegate; 
                 $obj->setLogger($this->logger);
                 if(is_a($obj, DocumentAppDelegate::class)){
@@ -64,15 +62,14 @@ class AppDelegateService extends AbstractService
     private function delegateFile($appId, $className)
     {
         $file = $className.$this->fileExt;
-        echo $path = $this->delegateDir.$appId."/".$file;exit;
+        $path = $this->delegateDir.$appId."/".$file;
         if ((file_exists($path))) {
             // include $path;
-            echo $path;exit;
             require_once($path);
         } else {
-            return 0;
+            return false;
         }
-        return 1;
+        return true;
     }
 
     private function getPersistence($appId){  
