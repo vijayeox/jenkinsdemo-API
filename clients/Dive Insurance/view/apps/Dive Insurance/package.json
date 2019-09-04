@@ -9,7 +9,6 @@
     "prepublishOnly": "npm run eslint && npm run stylelint && rm ./dist/* && npm run build"
   },
   "dependencies": {
-    "@oxzion/gui": "file:../../../../../view/gui",
     "choices.js": "^7.0.0",
     "file-loader": "^4.2.0",
     "react": "^16.8.6",

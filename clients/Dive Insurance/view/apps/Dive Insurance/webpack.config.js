@@ -1,37 +1,44 @@
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
-const mode = process.env.NODE_ENV || 'development';
-const minimize = mode === 'production';
+const mode = process.env.NODE_ENV || "development";
+const minimize = mode === "production";
 const plugins = [];
 
-if (mode === 'production') {
-  plugins.push(new OptimizeCSSAssetsPlugin({
-    cssProcessorOptions: {
-      discardComments: true
-    },
-  }));
+if (mode === "production") {
+  plugins.push(
+    new OptimizeCSSAssetsPlugin({
+      cssProcessorOptions: {
+        discardComments: true
+      }
+    })
+  );
 }
 
 module.exports = {
   mode,
-  devtool: 'source-map',
-  resolve: { alias: { 'react': path.resolve(__dirname, './node_modules', 'react') } },
+  devtool: "source-map",
+  resolve: {
+    alias: {
+      react: path.resolve(__dirname, "./node_modules", "react"),
+      OxzionGUI: path.resolve(__dirname, "../../../../../view/gui/src/")
+    }
+  },
   entry: [
-    path.resolve(__dirname, 'index.js'),
-    path.resolve(__dirname, 'index.scss')
+    path.resolve(__dirname, "index.js"),
+    path.resolve(__dirname, "index.scss")
   ],
   externals: {
-    osjs: 'OSjs'
+    osjs: "OSjs"
   },
   optimization: {
-    minimize,
+    minimize
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css'
+      filename: "[name].css",
+      chunkFilename: "[id].css"
     }),
     ...plugins
   ],
@@ -39,16 +46,18 @@ module.exports = {
     rules: [
       {
         test: /\.(svg|png|jpe?g|gif|webp)$/,
-        use: [{
-          loader: "file-loader",
-        }]
+        use: [
+          {
+            loader: "file-loader"
+          }
+        ]
       },
-       { 
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
-        loader: "url-loader?limit=10000&mimetype=application/font-woff" 
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: "url-loader?limit=10000&mimetype=application/font-woff"
       },
-      { 
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: "file-loader"
       },
       {
@@ -56,13 +65,13 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
               sourceMap: true
             }
           },
           {
-            loader: 'sass-loader',
+            loader: "sass-loader",
             options: {
               minimize,
               sourceMap: true
@@ -74,15 +83,18 @@ module.exports = {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
             presets: [
               require.resolve("@babel/preset-react"),
               require.resolve("@babel/preset-env")
             ],
-            plugins:[
+            plugins: [
               require.resolve("@babel/plugin-transform-runtime"),
-              [require.resolve("@babel/plugin-proposal-class-properties"), { "loose": false }]
+              [
+                require.resolve("@babel/plugin-proposal-class-properties"),
+                { loose: false }
+              ]
             ]
           }
         }

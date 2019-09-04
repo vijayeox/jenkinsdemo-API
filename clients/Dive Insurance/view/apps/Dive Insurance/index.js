@@ -4,7 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import merge from "deepmerge";
 import {name as applicationName,appId as application_id,formId} from './metadata.json';
-import {LeftMenuTemplate,FormRender} from "@oxzion/gui";
+import {LeftMenuTemplate,FormRender} from "./GUIComponents";
 // Our launcher
 const register = (core, args, options, metadata) => {
   // Create a new Application instance
