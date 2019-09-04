@@ -50,9 +50,6 @@ class ContactService extends AbstractService
             throw new ServiceException("Address,city,state,country,zipcode fields cannot be empty","fields.required"); 
         }
 
-        $addressid = $this->addressService->addAddress($data);
-        $data['address_id'] = $addressid;
-
         $data['uuid'] = UuidUtil::uuid();
         $data['user_id'] = (isset($data['user_id'])) ? $data['user_id'] : null;
         $data['icon_type'] = (isset($data['icon_type'])) ? $data['icon_type'] : false;
@@ -93,7 +90,6 @@ class ContactService extends AbstractService
         $contactData = array_merge($obj->toArray(), $data);
         $contactData['owner_id'] = ($contactData['owner_id']) ? $contactData['owner_id'] : AuthContext::get(AuthConstants::USER_ID);
         $contactData['date_modified'] = date('Y-m-d H:i:s');
-        $this->addressService->updateAddress($contactData['address_id'],$data);
         $form->exchangeArray($contactData);
         $form->validate();
         $count = 0;
@@ -112,7 +108,7 @@ class ContactService extends AbstractService
 
     public function getContactsByUuid($uuid)
     {
-        $select = "SELECT oc.* ,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip from `ox_contact` as oc join ox_address as oa on oc.address_id = oa.id where uuid = '".$uuid."'";
+        $select = "SELECT * from `ox_contact` where uuid = '".$uuid."'";
         $result = $this->executeQuerywithParams($select)->toArray();
         if ($result == 0) {
             return 0;
@@ -151,7 +147,7 @@ class ContactService extends AbstractService
         $queryString1 = "SELECT * from (";
 
         if ($column == ContactService::ALL_FIELDS) {
-            $queryString2 = "SELECT oxc.uuid as uuid, user_id, oxc.first_name, oxc.last_name, oxc.phone_1, oxc.phone_list, oxc.email, oxc.email_list, oxc.company_name, oxc.icon_type,oxc.designation, oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip, '1' as contact_type from ox_contact as oxc join ox_address as oa on oxc.address_id = oa.id";
+            $queryString2 = "SELECT oxc.uuid as uuid, user_id, oxc.first_name, oxc.last_name, oxc.phone_1, oxc.phone_list, oxc.email, oxc.email_list, oxc.company_name, oxc.icon_type,oxc.designation, oxc.address1,oxc.address2,oxc.city,oxc.state,oxc.country,oxc.zip, '1' as contact_type from ox_contact as oxc";
         } else {
             $queryString2 = "SELECT oxc.uuid as uuid,user_id, oxc.first_name, oxc.last_name, oxc.icon_type, '1' as contact_type  from ox_contact as oxc";
         }
@@ -435,17 +431,18 @@ class ContactService extends AbstractService
     }
 
 
-    //Import Google CSV Format
+   //Import Google CSV Format
     public function importContactCSV($files)
     {
         set_time_limit(300);
         $error_list = array();
         $error = array();
         $contact = array();
-               
+        
+        $addressJson = file_get_contents(__DIR__.'/../countryCode.json');
+        $addressJson = json_decode($addressJson,true);
+
         $file = FileUtils::storeFile($files, '/tmp/oxzion/');
-
-
         $file_handle = fopen('/tmp/oxzion/'.$file, 'r');
         $line = 1;
         $data = array();
@@ -454,9 +451,9 @@ class ContactService extends AbstractService
                 $line_of_text = fgetcsv($file_handle);
                 if ($line == 1) {
                     $columns = $line_of_text;
-                    $requiredHeaders = array('Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type','Phone 1 - Value','Organization 1 - Name','Organization 2 - Title','Location');
+                    $requiredHeaders = array('Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type','Phone 1 - Value','Organization 1 - Name','Organization 2 - Title','Address 1 - Street','Address 1 - Extended Address','Address 1 - City','Address 1 - Region','Address 1 - Country','Address 1 - Postal Code');
                     $result = array_intersect($requiredHeaders, $columns);
-                    if (count($result) != 8) {
+                    if (count($result) != 13) {
                         return 3;
                     }
                     $line++;
@@ -488,7 +485,8 @@ class ContactService extends AbstractService
                         $data['Comments'] = "Given Name and Phone 1 - Value or Email 1 - Value Fields are required";
                         array_push($error_list, $data);
                         continue;
-                    } else {
+                    }
+                    else {
                         if (isset($data['E-mail 1 - Value']) && $data['E-mail 1 - Value'] != "null" && !empty($data['E-mail 1 - Value'])) {
                             if (!preg_match('/[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z0-9]{2,5})/', $data['E-mail 1 - Value'])) {
                                 $data['Comments'] = "Invalid Email ID";
@@ -530,9 +528,18 @@ class ContactService extends AbstractService
                         }
                         $finalArray['company_name'] = $data['Organization 1 - Name'];
                         $finalArray['designation'] = $data['Organization 1 - Title'];
-                        $finalArray['country'] = $data['Location'];
+                        $finalArray['address1'] = $data['Address 1 - Street'];
+                        $finalArray['address2'] = $data['Address 1 - Extended Address'];
+                        $finalArray['city'] = $data['Address 1 - City'];
+                        $finalArray['state'] = $data['Address 1 - Region'];
+
+
+                        $finalArray['country'] = isset($addressJson[$data['Address 1 - Country']]) ? $addressJson[$data['Address 1 - Country']] : $data['Address 1 - Country'];
+
+                        $finalArray['zip'] = $data['Address 1 - Postal Code'];
                         $finalArray['icon_type'] = 0;
                         $finalArray['owner_id'] = AuthContext::get(AuthConstants::USER_ID);
+                        $finalArray['date_created'] = date('Y-m-d H:i:s');
                         array_push($contact, $finalArray);
                     }
                     if (count($contact) % 1000 == 0) {
@@ -556,8 +563,6 @@ class ContactService extends AbstractService
         return 1;
     }
 
-
-
     private function persistContacts($contact, &$error_list)
     {
         $this->beginTransaction();
@@ -568,8 +573,6 @@ class ContactService extends AbstractService
         }
     }
 
-
-
     // Export Google CSV Format
     public function exportContactCSV($id = null)
     {
@@ -579,9 +582,9 @@ class ContactService extends AbstractService
 
         if (isset($id)) {
             $uuidArray= array_map('current', $id);
-            $select = "SELECT oc.first_name,oc.last_name,oc.phone_1,oc.phone_list,oc.email,oc.email_list,oc.company_name,oc.designation,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip FROM ox_contact as oc join ox_address as oa on oc.address_id = oa.id where uuid in ('".implode("','", $uuidArray)."')";
+            $select = "SELECT first_name,last_name,phone_1,phone_list,email,email_list,company_name,designation,address1,address2,city,state,country,zip FROM ox_contact where uuid in ('".implode("','", $uuidArray)."')";
         } else {
-            $select = "SELECT oc.first_name,oc.last_name,oc.phone_1,oc.phone_list,oc.email,oc.email_list,oc.company_name,oc.designation,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip FROM ox_contact as oc join ox_address as oa on oc.address_id = oa.id where owner_id = ".AuthContext::get(AuthConstants::USER_ID);
+            $select = "SELECT first_name,last_name,phone_1,phone_list,email,email_list,company_name,designation,address1,address2,city,state,country,zip FROM ox_contact where owner_id = ".AuthContext::get(AuthConstants::USER_ID);
         }
         
         $result =$this->executeQueryWithParams($select)->toArray();
@@ -688,11 +691,12 @@ class ContactService extends AbstractService
 
     public function mutipleContactsDelete($data){
         try{
+
             if(count($data['uuid']) < 1){
                 throw new ServiceException("No Contacts to Delete","failed.create.user");
             }
             $delete = "DELETE FROM ox_contact where uuid in ('".implode("','", $data['uuid'])."') AND owner_id = ".AuthContext::get(AuthConstants::USER_ID);
-            $result = $this->executeQuerywithParams($delete);
+           $result = $this->executeQuerywithParams($delete);
         }
         catch(Exception $e){
             throw $e;

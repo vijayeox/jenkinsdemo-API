@@ -6,7 +6,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Model\Address;
-use Oxzion\Model\AddressTAble;
+use Oxzion\Model\AddressTable;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Security\SecurityManager;
 use Oxzion\AccessDeniedException;

@@ -40,11 +40,6 @@ class ContactControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('contacts');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-
-        $select = "SELECT * from ox_address where id = ".$content['data']['address_id'];
-        $result = $this->executeQueryTest($select);
-
-        
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['first_name'], $data['first_name']);
         $this->assertEquals($content['data']['last_name'], $data['last_name']);
@@ -52,12 +47,12 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals($content['data']['company_name'], $data['company_name']);
         $this->assertEquals($content['data']['owner_id'], 1);
-        $this->assertEquals($result[0]['address1'],$data['address1']);
-        $this->assertEquals($result[0]['address2'],$data['address2']);
-        $this->assertEquals($result[0]['city'],$data['city']);
-        $this->assertEquals($result[0]['state'],$data['state']);
-        $this->assertEquals($result[0]['country'],$data['country']);
-        $this->assertEquals($result[0]['zip'],$data['zip']);
+        $this->assertEquals($content['data']['address1'],$data['address1']);
+        $this->assertEquals($content['data']['address2'],$data['address2']);
+        $this->assertEquals($content['data']['city'],$data['city']);
+        $this->assertEquals($content['data']['state'],$data['state']);
+        $this->assertEquals($content['data']['country'],$data['country']);
+        $this->assertEquals($content['data']['zip'],$data['zip']);
     }
 
 
@@ -113,21 +108,14 @@ class ContactControllerTest extends ControllerTest
         $this->assertMatchedRouteName('contacts');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-
-        $select = "SELECT address_id from ox_contact where first_name = 'Rakshith'";
-        $id = $this->executeQueryTest($select);
-
-        $select = "SELECT * from ox_address where id = ".$id[0]['address_id'];
-        $result = $this->executeQueryTest($select);
-
         $this->assertEquals($content['data']['first_name'], $data['first_name']);
         $this->assertEquals($content['data']['last_name'], $data['last_name']);
         $this->assertEquals($content['data']['phone_1'], $data['phone_1']);
         $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals($content['data']['company_name'], $data['company_name']);
-        $this->assertEquals($result[0]['address1'], $data['address1']);
-        $this->assertEquals($result[0]['address2'], $data['address2']);
-        $this->assertEquals($result[0]['country'], $data['country']);
+        $this->assertEquals($content['data']['address1'], $data['address1']);
+        $this->assertEquals($content['data']['address2'], $data['address2']);
+        $this->assertEquals($content['data']['country'], $data['country']);
     }
 
     public function testUpdateNotFound()
@@ -137,7 +125,7 @@ class ContactControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact/10000', 'POST', null);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
+    $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('contacts');
         $this->assertEquals($content['status'], 'error');
@@ -300,6 +288,7 @@ class ContactControllerTest extends ControllerTest
         $_FILES['file']['error'] = 0;
         $_FILES['file']['size'] = 1007;
         $this->dispatch('/contact/import', 'POST');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Contact');
         $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
@@ -339,6 +328,7 @@ class ContactControllerTest extends ControllerTest
         $_FILES['file']['error'] = 0;
         $_FILES['file']['size'] = 1007;
         $this->dispatch('/contact/import', 'POST');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Contact');
         $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
