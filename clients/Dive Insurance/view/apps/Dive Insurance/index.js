@@ -28,8 +28,7 @@ const register = (core, args, options, metadata) => {
   };
   let appContent = null;
   getCacheData().then(response => {
-    console.log(response);
-   if(response.data){
+   if(response.data.length>0){
     getFormData(response.data.workflow_id).then(cacheResponse => {
       if(cacheResponse){
         win.render($content => ReactDOM.render(<div className='formContent'><FormRender core={core} page={response.data.page} appId={application_id} formId={cacheResponse.data[0].id} content={cacheResponse.data[0].content} data={response.data}/></div>, $content));
