@@ -107,7 +107,6 @@ job:
   import_padi:
     -
       stored_procedure_name: "ox_padi_verification"
-      app_name: padi
       upload_host_name: "206.107.76.164"
       upload_host_user: "vbinsurance"
       upload_user_password: "<<InsureName>>"

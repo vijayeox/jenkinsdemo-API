@@ -63,14 +63,14 @@ class ImportService extends AbstractService
     // Code is not in use untill we get the download feature that we need to get from the clients
     public function uploadCSVData($storedProcedureName, $orgId, $appId, $appName, $srcURL)
     {
-        $host = "oxzion.com";
-        $userID = "rakshith@oxzion.com";
-        $password = "sftp@rakshith";
+        // $host = "oxzion.com";
+        // $userID = "rakshith@oxzion.com";
+        // $password = "sftp@rakshith";
 
-//This code will come from the deployment descriptor. I have kept it here for now.        
-        // $host = "206.107.76.164";
-        // $userID = "vbinsurance";
-        // $password = "<<InsureName>>";
+//This code will come from the deployment descriptor. I have kept it here for now.
+        $host = "206.107.76.164";
+        $userID = "vbinsurance";
+        $password = "<<InsureName>>";
 
         $filePath = dirname(__dir__) . "/../../../data/import/" . $orgId . "/" . $appId . "/" . $appName . "/data/";
 
