@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `padi_data` (
             `home_phone` varchar(16) NULL,
             `work_phone` varchar(16) NULL,
             `insurance_type` varchar(6) NULL,
-            `date_expire` DATETIME NOT NULL,
+            `date_expire` DATETIME NULL,
             `rating` varchar(4) NULL,
             `email` varchar(100) NULL,
             PRIMARY KEY (`id`)

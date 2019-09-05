@@ -46,8 +46,9 @@ class CacheControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/1/cache', 'GET');
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'], array());
     }
 }

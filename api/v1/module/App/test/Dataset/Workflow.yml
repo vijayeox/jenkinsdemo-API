@@ -184,13 +184,19 @@ ox_activity_instance:
   - 
     id: 1
     activity_id: 1
+    form_id: 1
+    activity_instance_id: 1
     workflow_instance_id: 1
     status: "In Progress"
+    org_id: 1
   - 
     id: 2
     activity_id: 1
+    form_id: 1
+    activity_instance_id: 2
     workflow_instance_id: 2
     status: "Completed"
+    org_id: 1
 ox_group:
   -
     id: 1
@@ -224,6 +230,7 @@ ox_file:
     org_id: 1
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
+    
 ox_file_attribute:
   -
     id: 1

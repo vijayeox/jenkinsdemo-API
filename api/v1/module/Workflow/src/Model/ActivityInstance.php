@@ -10,7 +10,7 @@ class ActivityInstance extends Entity
     protected $data = array(
         'id'=>0 ,
         'workflow_instance_id' => 0,
-        'activity_instance_id' => null,
+        'activity_instance_id' => 0,
         'data'=>null,
         'activity_id' => 0,
         'form_id' => 0,

@@ -160,7 +160,7 @@ class Migration extends AbstractService
                     $resultTableName = $resultSet1->current();
                     $columnList = explode(",", $resultTableName['column_list']);
                     if (!in_array('ox_app_org_id', $columnList)) {
-                        $tableResult = $adapter->query("ALTER TABLE " . $resultTableName['TABLE_NAME'] . " ADD `ox_app_org_id` INT(11) NOT NULL");
+                        $tableResult = $adapter->query("ALTER TABLE " . $resultTableName['TABLE_NAME'] . " ADD `ox_app_org_id` INT(11) NOT NULL DEFAULT 0");
                         $tableResult->execute();
                     }
                 }

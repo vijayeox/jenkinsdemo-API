@@ -94,12 +94,14 @@ ox_workflow:
     name: "Test Workflow 1"
     process_id: "[main]"
     form_id: 1
+    uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4'
   -
     id: 2
     app_id: 99
     name: "Test Workflow 2"
     process_id: "[main]"
     form_id: 1
+    uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo'
 ox_file:
   -
     id: 1
@@ -245,11 +247,14 @@ ox_app_page:
     date_created: '2019-06-26 00:00:00'
     created_by: 1
 ox_activity_instance:
-  -
+  - 
     id: 1
-    workflow_instance_id: 1
-    activity_instance_id: "[activityInstanceId]"
     activity_id: 1
+    form_id: 1
+    activity_instance_id: "[activityInstanceId]"
+    workflow_instance_id: 1
+    status: "In Progress"
+    org_id: 1
 ox_activity_instance_assignee:
   -
     activity_instance_id: 1

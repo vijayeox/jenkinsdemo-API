@@ -6,7 +6,7 @@ class File extends Entity
 {
     protected $data = array(
         'id'=>0 ,
-        'org_id' => null,
+        'org_id' => 0,
         'uuid' => null,
         'data' => null,
         'workflow_instance_id' =>null,

@@ -366,8 +366,7 @@ class WorkflowInstanceService extends AbstractService
         $countQuery = "SELECT count(distinct f1.id) as `count` $fromQuery $where";
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
 
-        $select = "SELECT distinct f1.data,owi.status,ox_workflow.name $fromQuery $where $sort $pageSize $offset";
-        // print_r($select);exit;
+        $select = "SELECT distinct f1.data,owi.status,ox_workflow.name,ox_file_attribute.fieldvalue $fromQuery $where $sort $pageSize $offset";
         $resultSet = $this->executeQuerywithParams($select)->toArray();
        return array('data' => $resultSet,'total' => $countResultSet[0]['count']);
     }

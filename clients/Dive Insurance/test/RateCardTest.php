@@ -47,13 +47,13 @@ class RateCardTest extends DelegateTest
     public function testRateCardExecute()
     {
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
-        $data =['key' => 'Instructor', 'start_date' => '2019-07-01','end_date' => '2019-07-31'];
+        $data =['key' => 'instructor', 'start_date' => '2019-07-01','end_date' => '2019-07-31'];
         $appId = $this->data['UUID'];
         $appName = $this->data['appName'];
         $config = $this->getApplicationConfig();
         $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'RateCard', $data);
-        $this->assertEquals($content[0]['product'], $data['product']);
+        $this->assertEquals($content[0]['key'], $data['key']);
     }
 }

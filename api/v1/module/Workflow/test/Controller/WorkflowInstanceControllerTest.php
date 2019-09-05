@@ -303,6 +303,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
             $activityInstanceService->setActivityEngine($mockActivityEngine);
         }
         $this->dispatch('/workflowinstance/1/activity/1/claim', 'POST');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
