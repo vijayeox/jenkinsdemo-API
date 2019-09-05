@@ -68,8 +68,13 @@ class TemplateService extends AbstractService
             throw new Exception("Template not found!", 1);
         }
         $this->client->assign($data);
-
-        return $this->client->fetch($template);
+        try{
+            $content = $this->client->fetch($template);
+        }catch(Exception $e){
+            print("Error - ".$e->getMessage()."\n");
+            throw $e;
+        }
+        return $content;
     }
 
     private function setTemplateDir($templateName, $params = array()){

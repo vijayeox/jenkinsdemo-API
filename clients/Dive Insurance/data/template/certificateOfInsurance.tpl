@@ -1,5 +1,3 @@
-{assign var = 'licenseId'  value = array('AE' => '0757776','AK' => '18601','AL' => '75090','AP' => '0757776','AR' => '85796','AZ' => '381993','CA' => '0757776','CO' => '88018','CT' => '2428432','DC' => '197741','DE' => '147769','FL' => 'A273577','FM' => '0757776','GA' => '550396','GU' => '0757776','HI' => '345329','IA' => '230642','ID' => '442900','IL' => '230642','IN' => '873994','International' => '0757776','KS' => '230642','KY' => '345609','LA' => '249639','MA' => '1931743','MB' => '','MD' => '10127','ME' => 'PRN59470','MH' => '0757776','MI' => '202648','MN' => '40329255','MO' => '234899','MP' => '0757776','MS' => '9901467','MT' => '771760','NC' => '230642','ND' => '230642','NE' => '230642','NH' => '360870','NJ' => '9948948','NM' => '325128','NV' => '200636','NY' => 'EX999685-R','OH' => '671333','OK' => '185559','ON' => '','OR' => '230642','PA' => '415445','PR' => '0757776','PW' => '0757776','RI' => '1081343','SC' => '248507','SD' => '2802914','TN' => '803938','TX' => '620718','UT' => '410535','VA' => '677981','VI' => '0757776','VT' => '875974','WA' => '151305','WI' => '2612822','WV' => '230642','WY' => '241544')}
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -19,7 +17,7 @@
 						<p class ="info">La Palma, CA 90623-2538</p>
 						<p class ="info" style="margin-bottom:2px;">(714) 739-3177&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX (714) 739-3188</p>
 						<p class ="info" style="margin-bottom:2px;">(800) 223-9998</p>
-						<p class = "info">License#: {$licenseId[{$state_id}]}</p>
+						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
 					<p class = "details">{$firstname},{$middlename},{$lastname}</p>
@@ -43,8 +41,7 @@
 					<p class = "p_margin">90 DAY DISCOVERY PERIOD</p>
 				</div>
 				<hr></hr>
-				<p class = "policy">Policy issued by Tokio Marine Specialty Insurance
-				Company</p>
+				<p class = "policy">Policy issued by {$carrier}</p>
 				<p class = "policy2">Policy #: {$policy_id}</p>
 				<hr></hr>
 			</div>

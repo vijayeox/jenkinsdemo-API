@@ -266,12 +266,17 @@ class Persistence extends AbstractService
             $columnList = explode(",", $resultTableName['column_list']);
             if (in_array('ox_app_org_id', $columnList)) {
                 $orgId = AuthContext::get(AuthConstants::ORG_ID);
-                $expAndOperator = array("expr_type" => "operator", "base_expr" => "and (", "sub_tree" => "");
                 $exp_const = array("expr_type" => "const", "base_expr" => $orgId, "sub_tree" => "");
                 $exp_operator = array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
                 $exp_colref = array("expr_type" => "colref", "base_expr" => $tableName . " . ox_app_org_id", "sub_tree" => "", "no_quotes" =>
                     array( "delim" => "", "parts" => array("0" => "ox_app_org_id") )
                 );
+                if(!isset($parsedArray['WHERE'])){
+                    $parsedArray['WHERE'] = array();
+                    $expAndOperator = array("expr_type" => "operator", "base_expr" => " (", "sub_tree" => "");
+                }else{
+                    $expAndOperator = array("expr_type" => "operator", "base_expr" => "and (", "sub_tree" => "");
+                }
                 array_push($parsedArray['WHERE'], $expAndOperator, $exp_colref, $exp_operator, $exp_const);
 
                 $expOrOperator = array("expr_type" => "operator", "base_expr" => "OR", "sub_tree" => "");

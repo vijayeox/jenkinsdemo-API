@@ -69,19 +69,19 @@ class AbstractService
         $this->logger->addWriter($writer);
     }
 
-    protected function beginTransaction()
+    public function beginTransaction()
     {
         $transactionManager = TransactionManager::getInstance($this->dbAdapter);
         $transactionManager->beginTransaction();
     }
 
-    protected function commit()
+    public function commit()
     {
         $transactionManager = TransactionManager::getInstance($this->dbAdapter);
         $transactionManager->commit();
     }
 
-    protected function rollback()
+    public function rollback()
     {
         $transactionManager = TransactionManager::getInstance($this->dbAdapter);
         $transactionManager->rollback();

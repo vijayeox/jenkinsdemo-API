@@ -44,6 +44,8 @@ class AppDelegateService extends AbstractService
                 $obj->setLogger($this->logger);
                 if(is_a($obj, DocumentAppDelegate::class)){
                     $obj->setDocumentBuilder($this->documentBuilder);
+                    $destination = $this->config['TEMPLATE_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID);
+                    $obj->setDocumentDestination($destination);
                 }
                 $persistenceService = $this->getPersistence($appId);
                 $output = $obj->execute($dataArray, $persistenceService);
@@ -55,6 +57,7 @@ class AppDelegateService extends AbstractService
             return 1;
         } catch (Exception $e) {
             $this->logger->err($e->getMessage());
+            throw $e;
         }
         return 2;
     }
