@@ -170,7 +170,7 @@ class ProjectService extends AbstractService
         $sql = $this->getSqlObject();
         $form = new Project();
         //Additional fields that are needed for the create
-        $data['uuid'] = UuidUtil::uuid();
+        $data['uuid'] = "p".UuidUtil::uuid();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
