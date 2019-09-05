@@ -21,7 +21,7 @@ class ElasticIndexer extends RouteBuilder {
             public void configure() {
                 PropertiesComponent propc = getContext().getComponent("properties", PropertiesComponent.class)
                 String index=""
-                String type=""
+                String id=""
                 String operation = ""
                 propc.setLocation("classpath:oxzion.properties")
                 from("activemq:topic:elastic").process(new Processor() {
@@ -29,10 +29,10 @@ class ElasticIndexer extends RouteBuilder {
                         def jsonSlurper = new JsonSlurper()
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody() as String)
                         index = object.index as String
-                        type = object.type as String
+                        id = object.id as String
                         operation =  object.operation as String
                         exchange.getIn().setHeader("indexName", index)
-                        exchange.getIn().setHeader("type", type)
+                        exchange.getIn().setHeader("id", id)
                         exchange.getIn().setHeader("operation", operation)
                     }
                 }).to("log:notification").to("elasticsearch-rest://{{elasticsearch.clusterName}}?hostAddresses={{elasticsearch.host}}:{{elasticsearch.port}}")
