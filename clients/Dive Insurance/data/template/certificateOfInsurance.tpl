@@ -35,13 +35,13 @@
 				</div>
 				<div class = "certificate_data1">
 					<p class = "p_margin">{$certificate_no}</p>
-					<p class = "p_margin">{$member_no}</p>
-					<p class = "p_margin">{$effective_date}</p>
-					<p class = "p_margin">{$expiry_date}</p>
+					<p class = "p_margin">{$padi}</p>
+					<p class = "p_margin">{$start_date}</p>
+					<p class = "p_margin">{$end_date}</p>
 					<p class = "p_margin">90 DAY DISCOVERY PERIOD</p>
 				</div>
 				<hr></hr>
-				<p class = "policy">Policy issued by {$carrier}</p>
+				<p class = "policy">Policy issued by &nbsp{$carrier}</p>
 				<p class = "policy2">Policy #: {$policy_id}</p>
 				<hr></hr>
 			</div>
@@ -82,12 +82,12 @@
     	</div>
     	
     	<hr class="hrtag"></hr>
-    	<center><p class = "policy_notice1">Retroactive Date: {$effective_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$effective_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
+    	<center><p class = "policy_notice1">Retroactive Date: {$end_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$end_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
 			   to the date that the alleged negligent act, error, or omission occurred.
 		</p></center>
 		<hr class = "spacing1"></hr>
-		<b><center><p class = "phy_add">Physical Address {if isset($physical_address)} 
-										 : {$physical_address}
+		<b><center><p class = "phy_add">Physical Address {if $ismailingaddress} 
+										 : {$address3},{$address4}
 									  {else}
 										is the same as the mailing address
 									{/if}
