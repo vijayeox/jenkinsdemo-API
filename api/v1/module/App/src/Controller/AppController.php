@@ -275,6 +275,9 @@ class AppController extends AbstractApiController
         try {
             if ($files&&isset($params['name'])) {
                 $response = $this->appService->deployWorkflow($params['appId'], $params, $files);
+                if ($response == 0) {
+                    return $this->getErrorResponse("Error Creating workflow");
+                }
                 if ($response == 1) {
                     return $this->getErrorResponse("Error Parsing BPMN");
                 }
@@ -295,6 +298,15 @@ class AppController extends AbstractApiController
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $assignments = $this->appService->getAssignments($params['appId']);
         return $this->getSuccessResponseWithData($assignments);
+    }
+
+    public function appQueryAction() {
+        $params = $this->params()->fromRoute();
+        try {
+            $response = $this->appService->getQuery($params['appId'],$params['queryId']);
+        } catch (Exception $e) {
+            return $this->getErrorResponse("Incorrect query specified");
+        }
     }
 
     /**

@@ -10,6 +10,7 @@ class Activity extends Entity
         'id'=>0,
         'name'=>null,
         'app_id'=>0,
+        'task_id'=>0,
         'workflow_id'=>0,
         'created_by'=>null,
         'modified_by'=>null,

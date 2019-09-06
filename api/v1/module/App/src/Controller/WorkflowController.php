@@ -173,4 +173,26 @@ class WorkflowController extends AbstractApiController
             return $this->getErrorResponse("Files cannot be uploaded!");
         }
     }
+    /**
+     * GET START FORM
+     * @api
+     * @link /app/:appId/workflow/workflowId/startform
+     * @method POST
+     * @param null </br>
+     * <code>
+     * </code>
+     * @return array Returns a JSON Response with Status Code.</br>
+     * <code> status : "success|error"
+     * </code>
+     */
+    public function startformAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        try {
+            $response = $this->workflowService->getForms($params['appId'], $params['workflowId']);
+            return $this->getSuccessResponseWithData($response);
+        } catch (Exception $e) {
+            return $this->getErrorResponse("Files cannot be uploaded!");
+        }
+    }
 }

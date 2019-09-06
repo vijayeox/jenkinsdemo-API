@@ -34,7 +34,6 @@ class CustomServiceTaskListener implements ExecutionListener {
   @Override
   void notify(DelegateExecution execution) throws Exception {
     Map taskDetails = [:]
-    print execution
     taskDetails.activityInstanceId = execution.activityInstanceId
     taskDetails.processInstanceId = execution.processInstanceId
     taskDetails.variables = execution.getVariables()

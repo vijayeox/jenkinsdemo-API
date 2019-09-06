@@ -28,6 +28,16 @@
       "en_EN":"Visualization"
     }
   },
+  "dashboard": {
+    "title": {
+      "en_EN":"Dashboard"
+     }
+  },
+  "dashboardEditor": {
+    "title": {
+      "en_EN":"Edit dashboard"
+    }
+  },
   "files": [
     "main.js",
     "main.css"

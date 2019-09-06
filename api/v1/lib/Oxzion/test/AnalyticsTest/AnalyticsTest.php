@@ -57,7 +57,6 @@ class AnalyticsTest extends MainControllerTest
         }
     }
 
-
     public function testGrouping() {
         if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');
@@ -172,4 +171,4 @@ class AnalyticsTest extends MainControllerTest
         }
     }
 
-
+}

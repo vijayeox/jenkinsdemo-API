@@ -12,6 +12,7 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\InputFilter\Input;
+use Oxzion\ServiceException;
 
 /**
  * Role Controller
@@ -53,17 +54,19 @@ class RoleController extends AbstractApiController
     *   } </code>
     * @return array Returns a JSON Response with Status Code and Created Role.
     */
-    public function create($data)
-    {
-        $roleId = isset($data['roleId']) ? $data['roleId'] : null;
-        try {
-            $count = $this->roleService->saveRole($roleId, $data);
-        } catch (ValidationException $e) {
+    public function create($data){
+        $params = $this->params()->fromRoute();
+        try{
+            $count = $this->roleService->saveRole(null,$data,$params);
+        }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
+        catch(AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -78,7 +81,13 @@ class RoleController extends AbstractApiController
     public function getList()
     {
         $filterParams = $this->params()->fromQuery(); // empty method call
-        $result = $this->roleService->getRoles($filterParams);
+        $params = $this->params()->fromRoute();
+        try{
+             $result = $this->roleService->getRoles($filterParams,$params);
+        }
+        catch(AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
+        }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
     /**
@@ -90,16 +99,19 @@ class RoleController extends AbstractApiController
     * @param array $data
     * @return array Returns a JSON Response with Status Code and Created Role.
     */
-    public function update($id, $data)
-    {
-        try {
-            $count = $this->roleService->saveRole($id, $data);
-        } catch (ValidationException $e) {
+    public function update($id, $data){
+        try{
+            $params = $this->params()->fromRoute(); 
+            $count = $this->roleService->saveRole($id,$data,$params);
+        }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        catch(AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -111,11 +123,12 @@ class RoleController extends AbstractApiController
     * @param $id ID of Role to Delete
     * @return array success|failure response
     */
-    public function delete($id)
-    {
-        $response = $this->roleService->deleteRole($id);
-        if ($response == 0) {
-            return $this->getErrorResponse("Role not found", 404, ['id' => $id]);
+    public function delete($id){
+        try{
+            $params = $this->params()->fromRoute();
+            $response = $this->roleService->deleteRole($id,$params);
+        }catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponse();
     }
@@ -131,13 +144,11 @@ class RoleController extends AbstractApiController
     public function get($id)
     {
         try {
-            $result = $this->roleService->getRole($id);
+            $params = $this->params()->fromRoute();
+            $result = $this->roleService->getRole($params);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        if (($result == 0)||(empty($result))) {
-            return $this->getErrorResponse("Role not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -153,16 +164,12 @@ class RoleController extends AbstractApiController
     */
     public function roleprivilegeAction()
     {
-        $role=$this->params()->fromRoute();
-        $id=$role['roleId'];
+        $params=$this->params()->fromRoute();
         try {
-            $result = $this->roleService->getRolePrivilege($id);
+            $result = $this->roleService->getRolePrivilege($params);
         } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        if (($result == 0)||(empty($result))) {
-            return $this->getErrorResponse("Priviledges not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponseWithData($result);
     }

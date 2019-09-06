@@ -277,8 +277,9 @@ class Module
                         $container->get(AdapterInterface::class)
                     );
                 },
-                Rule\RuleService::class => function ($container) {
-                    return new Rule\RuleService(
+                AppDelegate\AppDelegateService::class => function ($container) {
+
+                    return new AppDelegate\AppDelegateService(
                         $container->get('config'),
                         $container->get(AdapterInterface::class)
                     );

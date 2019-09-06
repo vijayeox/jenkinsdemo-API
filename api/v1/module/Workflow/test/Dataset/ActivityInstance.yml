@@ -26,7 +26,7 @@ ox_workflow_instance:
     workflow_id: 1
     app_id: 2
     org_id: 1
-    process_instance_id: d0dd0ec8-9106-11e9-8991-6a75cb9aef40
+    process_instance_id: 1
     status: "In Progress"
     date_created: "2019-03-05 09:57:08"
     created_by: 1
@@ -38,4 +38,10 @@ ox_form:
     name: "Recruitment Request Created"
     created_by: 1
     date_created: "2019-03-05 09:57:08"
-
+ox_activity:
+  -
+    id: 1
+    app_id: 99
+    workflow_id: 1
+    task_id: 1
+    name: "Task"

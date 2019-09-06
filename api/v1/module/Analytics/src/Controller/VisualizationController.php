@@ -142,9 +142,6 @@ class VisualizationController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->visualizationService->getVisualizationList($params);
-        if ($result == 0) {
-            return $this->getErrorResponse("No records found",404);
-        }
         return $this->getSuccessResponseWithData($result);
     }
 }

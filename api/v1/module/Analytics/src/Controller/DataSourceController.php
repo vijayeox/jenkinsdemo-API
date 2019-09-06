@@ -73,7 +73,7 @@ class DataSourceController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("DataSource not found for id - $id", 404);
+            return $this->getErrorResponse("DataSource not found for uuid - $uuid", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -150,9 +150,6 @@ class DataSourceController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->dataSourceService->getDataSourceList($params);
-        if ($result == 0) {
-            return $this->getErrorResponse("No records found",404);
-        }
         return $this->getSuccessResponseWithData($result);
     }
 }

@@ -4,6 +4,33 @@ namespace Oxzion\Utils;
 
 class FilterUtils
 {
+    static public function paginate($params)
+    {
+        $pageSize = 20;
+        $offset = 0;
+        $sort = "id";
+        $where = "";
+
+        if(!empty($params))
+        {
+            if(!empty($params['limit']))
+                $pageSize = $params['limit'];
+            if(!empty($params['skip']))
+                $offset = $params['skip'];
+            if(isset($params['sort'])){
+                $sortArray = json_decode($params['sort'],true);
+                $sort = FilterUtils::sortArray($sortArray);
+            }
+            if(isset($params['filter'])){
+                $filterArray = call_user_func_array('array_merge',json_decode($params['filter'],true));
+                $filterlogic = isset($filterArray['logic']) ? $filterArray['logic'] : "AND" ;
+                $filterList = $filterArray['filters'];
+                $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+            }
+        }
+        return $paginate = array('pageSize' => $pageSize, 'offset' => $offset, 'sort' => $sort, 'where' => $where);
+    }
+
     public static function filterArray($filterList, $filterlogic, $fieldMap = array())
     {
         $where = "";
@@ -12,22 +39,18 @@ class FilterUtils
             $field = $filterList[$x]['field'];
             $field = isset($fieldMap[$field]) ? $fieldMap[$field] : $field;
             $value = $filterList[$x]['value'];
+            $operatorp1 = '';
+            $operatorp2 = '';
             if ($operator == 'startswith') {
-                $operatorp1 = '';
                 $operatorp2 = '%';
                 $operation = ' like ';
             } elseif ($operator == 'endswith') {
                 $operatorp1 = '%';
-                $operatorp2 = '';
                 $operation = ' like ';
             } elseif ($operator == 'eq') {
                 $operation = ' = ';
-                $operatorp1 = '';
-                $operatorp2 = '';
             } elseif ($operator == 'neq') {
                 $operation = ' <> ';
-                $operatorp1 = '';
-                $operatorp2 = '';
             } elseif ($operator == 'contains') {
                 $operatorp1 = '%';
                 $operatorp2 = '%';

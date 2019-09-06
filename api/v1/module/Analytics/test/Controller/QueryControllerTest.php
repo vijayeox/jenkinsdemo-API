@@ -39,8 +39,8 @@ class QueryControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => "query4", 'datasource_id' => 1, 'query_json' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}', 'ispublic' => 1];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('query'));
+        $data = ['name' => "query4", 'datasource_id' => 1, 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}', 'ispublic' => 1];
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -49,16 +49,16 @@ class QueryControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($content['data']['type'], $data['type']);
-        $this->assertEquals($content['data']['connection_string'], $data['connection_string']);
-        $this->assertEquals(4, $this->getConnection()->getRowCount('query'));
+        $this->assertEquals($content['data']['datasource_id'], $data['datasource_id']);
+        $this->assertEquals($content['data']['configuration'], $data['configuration']);
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_query'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => "query4", 'query_json' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}'];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('query'));
+        $data = ['name' => "query4", 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}'];
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -182,7 +182,7 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']['data']), 2);
         $this->assertEquals($content['data']['data'][0]['uuid'], '86c0cc5b-2567-4e5f-a741-f34e9f6f1af1');
         $this->assertEquals($content['data']['data'][0]['name'], 'query2');
-        $this->assertEquals($content['data']['data'][0]['created_by'], 2);
+        $this->assertEquals($content['data']['data'][0]['is_owner'], 'false');
         $this->assertEquals($content['data']['total'],3);
     }
 

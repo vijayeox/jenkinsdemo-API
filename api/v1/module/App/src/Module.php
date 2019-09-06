@@ -43,7 +43,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\AppService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class), $container->get(\Oxzion\Service\WorkflowService::class), $container->get(\Oxzion\Service\FormService::class), $container->get(\Oxzion\Service\FieldService::class));
+                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class),$container->get(\Oxzion\Service\WorkflowService::class),$container->get(\Oxzion\Service\FormService::class),$container->get(\Oxzion\Service\FieldService::class),$container->get(\Oxzion\Analytics\AnalyticsEngine::class),$container->get(\Analytics\Service\QueryService::class));
                 },
                 Model\AppTable::class => function ($container) {
                     $tableGateway = $container->get(Model\AppTableGateway::class);
@@ -71,7 +71,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\PageService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PageService($container->get('config'), $dbAdapter, $container->get(Model\PageTable::class));
+                    return new Service\PageService($container->get('config'),$container->get(Service\PageContentService::class), $dbAdapter, $container->get(Model\PageTable::class));
                 },
                 Model\PageTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PageTableGateway::class);
@@ -97,6 +97,10 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype->setArrayObjectPrototype(new Model\PageContent());
                     return new TableGateway('ox_page_content', $dbAdapter, null, $resultSetPrototype);
                 },
+                Service\ImportService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ImportService($container->get('config'), $dbAdapter);
+                },
             ],
         ];
     }
@@ -119,6 +123,12 @@ class Module implements ConfigProviderInterface
                         $container->get(Service\AppService::class),
                         $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\AppDelegateController::class => function ($container) {
+                    return new Controller\AppDelegateController(
+                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class),
+                        $container->get('AppLogger')
                     );
                 },
                 Controller\MenuItemController::class => function ($container) {
@@ -177,7 +187,14 @@ class Module implements ConfigProviderInterface
                         $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
-                }
+                },
+                Controller\ImportController::class => function ($container) {
+                    return new Controller\ImportController(
+                        $container->get(Service\ImportService::class),
+                        $container->get('AppLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
             ],
         ];
     }

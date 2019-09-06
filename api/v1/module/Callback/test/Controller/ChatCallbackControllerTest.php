@@ -50,7 +50,7 @@ namespace Callback;
             $content = (array)json_decode($this->getResponse()->getContent(), true);
             $this->assertEquals($content['status'], 'success');
         }
-        
+
         public function testAddOrgAlreadyExists()
         {
             $data = ['orgname' => 'Teams-1','status'=>'Active'];

@@ -1,10 +1,10 @@
-datasource:
+ox_datasource:
   -
     id: 1
     uuid: 7700c623-1361-4c85-8203-e255ac995c4a
     name: 'mattermost'
     type: 'MySql'
-    connection_string: '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'
+    configuration: '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'
     created_by: 1
     date_created: '2019-06-27 07:25:06'
     org_id: 1
@@ -14,7 +14,7 @@ datasource:
     uuid: cb1bebce-df33-4266-bbd6-d8da5571b10a
     name: 'reporting engine'
     type: 'Elastic'
-    connection_string: '{"data": {"username": "myUsername","password": "myPassword","host": "localhost","port": "10113"}}'
+    configuration: '{"data": {"username": "myUsername","password": "myPassword","host": "localhost","port": "10113"}}'
     created_by: 1
     date_created: '2019-06-27 07:25:06'
     org_id: 1

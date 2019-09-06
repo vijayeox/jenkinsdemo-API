@@ -62,19 +62,6 @@ class FileControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['field1'], $data['field1']);
     }
-    public function testCreateWithOutFieldFailure()
-    {
-        $this->initAuthToken($this->adminUser);
-        $data = ['field1' => '1'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/form/1/file', 'POST', null);
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Validation Errors');
-        $this->assertEquals($content['data']['errors']['field2'], 'required');
-    }
 
     public function testCreateAccess()
     {

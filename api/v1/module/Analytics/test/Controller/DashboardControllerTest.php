@@ -43,7 +43,7 @@ class DashboardControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Dashboard3', 'dashboard_type' => 'DocumentDashboard', 'description' => 'description'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('dashboard'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_dashboard'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/dashboard', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -54,14 +54,14 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['dashboard_type'], $data['dashboard_type']);
         $this->assertEquals($content['data']['description'], $data['description']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('dashboard'));
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_dashboard'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Dashboard3', 'description' => 'description'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('dashboard'));
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_dashboard'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/dashboard', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -185,7 +185,7 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']['data']), 1);
         $this->assertEquals($content['data']['data'][0]['uuid'], 'fc67ceb2-4b6f-4a33-8527-5fc6b0822988');
         $this->assertEquals($content['data']['data'][0]['name'], 'Dashboard2');
-        $this->assertEquals($content['data']['data'][0]['created_by'], 1);
+        $this->assertEquals($content['data']['data'][0]['is_owner'], 'true');
         $this->assertEquals($content['data']['total'],2);
     }
 

@@ -27,6 +27,8 @@ class AppControllerTest extends ControllerTest
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Analytics/test/Dataset/DataSource.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../../../Analytics/test/Dataset/Query.yml");
         return $dataset;
     }
 
@@ -299,7 +301,7 @@ class AppControllerTest extends ControllerTest
         if (enableCamunda==0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/var/www/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTest.bpmn'))->once()->andReturn(array(1));
+            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/app/api/v1/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTest.bpmn'))->once()->andReturn(array(1));
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
             $workflowService->setProcessManager($mockProcessManager);
         }
@@ -345,7 +347,7 @@ class AppControllerTest extends ControllerTest
         if (enableCamunda==0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow1', array('/var/www/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTestFail.bpmn'))->once()->andReturn(0);
+            $mockProcessManager->expects('deploy')->with('NewWorkflow1', array('/app/api/v1/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTestFail.bpmn'))->once()->andReturn(0);
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
             $workflowService->setProcessManager($mockProcessManager);
         }
@@ -367,4 +369,29 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
     }
+    public function testAddToAppRegistry(){
+        $data = ['org_name' => 'Golden State Warriors', 'app_name' => 'Admin'];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/app/addtoappregistry', 'POST', $data);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppRegisterController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppRegisterController');
+        $this->assertMatchedRouteName('addtoappregistry');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['org_name'], $data['org_name']);
+        $this->assertEquals($content['data']['app_name'], $data['app_name']);
+    }
+
+    // public function testgetQuery() {
+    //     $this->initAuthToken($this->adminUser);
+    //     $this->dispatch('/app/somerandom123/query/8f1d2819-c5ff-4426-bc40-f7a20704a738','GET');
+    //     $content = json_decode($this->getResponse()->getContent(), true);
+    //     $this->assertResponseStatusCode(200);
+    //     $this->setDefaultAsserts();
+    //     print_r($content);exit;
+    // }
 }

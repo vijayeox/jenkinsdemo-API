@@ -6,6 +6,8 @@ use Oxzion\Model\File;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
+use Ramsey\Uuid\Uuid;
+use Oxzion\Messaging\MessageProducer;
 use Oxzion\Utils\UuidUtil;
 use Exception;
 
@@ -17,6 +19,7 @@ class FileService extends AbstractService
     public function __construct($config, $dbAdapter, FileTable $table, FormService $formService)
     {
         parent::__construct($config, $dbAdapter);
+        $this->messageProducer = MessageProducer::getInstance();
         $this->table = $table;
     }
 
@@ -81,9 +84,11 @@ class FileService extends AbstractService
                 }
             }
             $this->commit();
-        } catch (Exception $e) {
-            switch (get_class($e)) {
-             case "Oxzion\ValidationException":
+            if(isset($data['id']))
+                $this->messageProducer->sendTopic(json_encode(array('id' => $data['id'])),'FILE_ADDED');
+        }catch(Exception $e){
+            switch (get_class ($e)) {
+             case "Oxzion\ValidationException" :
                 $this->rollback();
                 throw $e;
                 break;
@@ -141,9 +146,11 @@ class FileService extends AbstractService
                 $this->multiInsertOrUpdate('ox_file_attribute', $validFields);
             }
             $this->commit();
-        } catch (Exception $e) {
-            switch (get_class($e)) {
-                case "Oxzion\ValidationException":
+            if(isset($id))
+                $this->messageProducer->sendTopic(json_encode(array('id' => $id)),'FILE_UPDATED');
+        }catch(Exception $e){
+            switch (get_class ($e)) {
+                case "Oxzion\ValidationException" :
                     $this->rollback();
                     throw $e;
                     break;
@@ -169,6 +176,8 @@ class FileService extends AbstractService
             $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
             if ($count == 0) {
                 return 0;
+            if(isset($id))
+                $this->messageProducer->sendTopic(json_encode(array('id' => $id)),'FILE_DELETED');
             }
         } catch (Exception $e) {
             return 0;
@@ -261,11 +270,11 @@ class FileService extends AbstractService
         $i=0;
         if (!empty($fields)) {
             foreach ($fields as $field) {
-                if ($field['required']) {
-                    if (!isset($fieldData[$field['name']])) {
-                        $required[$field['name']] = 'required';
-                    }
-                }
+                // if ($field['required']) {
+                //     if (!isset($fieldData[$field['name']])) {
+                //         $required[$field['name']] = 'required';
+                //     }
+                // }
                 if (($key = array_search($field['id'], array_column($fileArray, 'fieldid')))>-1) {
                     $keyValueFields[$i]['id'] = $fileArray[$key]['id'];
                     $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
@@ -284,11 +293,11 @@ class FileService extends AbstractService
                 $i++;
             }
         }
-        if (count($required)>0) {
-            $validationException = new ValidationException();
-            $validationException->setErrors($required);
-            throw $validationException;
-        }
+        // if (count($required)>0) {
+        //     $validationException = new ValidationException();
+        //     $validationException->setErrors($required);
+        //     throw $validationException;
+        // }
         return $keyValueFields;
     }
 }

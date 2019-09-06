@@ -32,11 +32,11 @@ class ProcessEngineImpl implements ProcessEngine
     {
         $query = 'process-definition/'.$id.'/start';
         $params =array();
-        foreach ($processVariables as $key => $value) {
-            $params[$key]['value'] = $value;
-        }
         try {
             if ($processVariables) {
+                foreach ($processVariables as $key => $value) {
+                    $params[$key]['value'] = $value;
+                }
                 $response = $this->restClient->post($query, array("variables"=>$params));
             } else {
                 $response = $this->restClient->post($query);

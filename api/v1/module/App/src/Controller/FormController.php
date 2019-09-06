@@ -39,9 +39,9 @@ class FormController extends AbstractApiController
     */
     public function create($data)
     {
-        $appId = $this->params()->fromRoute()['appId'];
+        $appUuid = $this->params()->fromRoute()['appId'];
         try {
-            $count = $this->formService->createForm($appId, $data);
+            $count = $this->formService->createForm($appUuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -61,8 +61,8 @@ class FormController extends AbstractApiController
     */
     public function getList()
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->formService->getForms($appId);
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $result = $this->formService->getForms($appUuid);
         return $this->getSuccessResponseWithData($result['data']);
     }
     /**
@@ -76,9 +76,9 @@ class FormController extends AbstractApiController
     */
     public function update($id, $data)
     {
-        $appId = $this->params()->fromRoute()['appId'];
+        $appUuid = $this->params()->fromRoute()['appId'];
         try {
-            $count = $this->formService->updateForm($appId, $id, $data);
+            $count = $this->formService->updateForm($appUuid, $id, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -116,6 +116,15 @@ class FormController extends AbstractApiController
     public function get($id)
     {
         $result = $this->formService->getForm($id);
+        if ($result == 0) {
+            return $this->getErrorResponse("Form not found", 404, ['id' => $id]);
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
+    public function getWorkflowAction()
+    {
+        $formId = $this->params()->fromRoute()['formId'];
+        $result = $this->formService->getWorkflow($formId);
         if ($result == 0) {
             return $this->getErrorResponse("Form not found", 404, ['id' => $id]);
         }

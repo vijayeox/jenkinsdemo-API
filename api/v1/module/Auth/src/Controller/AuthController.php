@@ -101,7 +101,7 @@ class AuthController extends AbstractApiControllerHelper
                     $uname = isset($tokenPayload->data->username)? $tokenPayload->data->username:$tokenPayload['username'] ;
                     $orgId = isset($tokenPayload->data->orgid)? $tokenPayload->data->orgid: $tokenPayload['orgid'];
                     $userDetail = $this->userService->getUserDetailsbyUserName($uname);
-                    $userDetail['id'] = isset($userDetail['id']) ? $userDetail['id'] : null;
+                    $userDetail['id'] = isset($userDetail['id']) ? $userDetail['id'] : NULL;
                     $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($userDetail['id']);
                     if (!empty($userTokenInfo)) {
                         $data = ['username' => $uname, 'orgid' => $orgId];

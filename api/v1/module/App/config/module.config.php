@@ -107,6 +107,28 @@ return [
                     ],
                 ],
             ],
+            'addtoappregistry' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/addtoappregistry',
+                    'defaults' => [
+                        'controller' => Controller\AppRegisterController::class,
+                        'action' => 'addToAppregistry',
+                        'method' => 'POST'
+                    ],
+                ],
+            ],
+            'appQuery' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/query/:queryId',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'appQuery',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
             'appform' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -152,6 +174,17 @@ return [
                             'delete'=> 'MANAGE_FIELD_WRITE',
                             'get'=> 'MANAGE_FIELD_READ',
                         ],
+                    ],
+                ],
+            ],
+            'appDelegate' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/app/:appId/delegate/:delegate',
+                    'defaults' => [
+                        'controller' => Controller\AppDelegateController::class,
+                        'action' => 'delegate',
+                        'method' => 'POST'
                     ],
                 ],
             ],
@@ -254,6 +287,28 @@ return [
                         'action' => 'assignments',
                         'access'=>[
                         ],
+                    ],
+                ],
+            ],
+            'form_workflow' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/form/:formId/workflow',
+                    'defaults' => [
+                        'controller' => Controller\FormController::class,
+                        'action' => 'getWorkflow',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
+            'importcsv' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/importcsv',
+                    'defaults' => [
+                        'controller' => Controller\ImportController::class,
+                        'action' => 'importCSV',
+                        'method' => 'POST'
                     ],
                 ],
             ],

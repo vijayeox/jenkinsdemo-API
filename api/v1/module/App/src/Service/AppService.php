@@ -15,7 +15,10 @@ use Oxzion\Utils\ZipUtils;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\FieldService;
+use Analytics\Service\QueryService;
+use Oxzion\Analytics\AnalyticsEngine;
 use Oxzion\Utils\FilterUtils;
+use Oxzion\ServiceException;
 
 class AppService extends AbstractService
 {
@@ -28,13 +31,15 @@ class AppService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, AnalyticsEngine $analytics, QueryService $queryService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->workflowService = $workflowService;
         $this->formService = $formService;
         $this->fieldService = $fieldService;
+        $this->analytics = $analytics;
+        $this->queryService = $queryService;
     }
 
     /**
@@ -71,32 +76,32 @@ class AppService extends AbstractService
         $where = "";
         $sort = "name";
         $cntQuery ="SELECT count(id) FROM `ox_app`";
-        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
-            $filterArray = json_decode($filterParams['filter'], true);
-            if (isset($filterArray[0]['filter'])) {
-                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                $filterList = $filterArray[0]['filter']['filters'];
-                $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic);
+            if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true);
             }
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $filterArray[0]['sort'];
                 $sort = FilterUtils::sortArray($sort);
             }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
-        }
-        $where .= strlen($where) > 0 ? " AND status!=1" : "WHERE status!=1";
-        $sort = " ORDER BY ".$sort;
-        $limit = " LIMIT ".$pageSize." offset ".$offset;
-        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-        $count=$resultSet->toArray()[0]['count(id)'];
-        $query ="SELECT * FROM `ox_app` ".$where." ".$sort." ".$limit;
-        $resultSet = $this->executeQuerywithParams($query);
-        $result = $resultSet->toArray();
-        for ($x=0;$x<sizeof($result);$x++) {
-            $result[$x]['start_options'] = json_decode($result[$x]['start_options'], true);
-        }
-        return array('data' => $result,
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];
+            }
+            $where .= strlen($where) > 0 ? " AND status!=1" : "WHERE status!=1";
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count=$resultSet->toArray()[0]['count(id)'];
+            $query ="SELECT * FROM `ox_app` ".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            $result = $resultSet->toArray();
+             for($x=0;$x<sizeof($result);$x++) {
+                 $result[$x]['start_options'] = json_decode($result[$x]['start_options'],true);
+            }
+            return array('data' => $result,
                      'total' => $count);
     }
 
@@ -247,7 +252,7 @@ class AppService extends AbstractService
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['status'] = App::PUBLISHED;
-        $data['uuid'] = Uuid::uuid4()->toString();
+        $data['uuid'] = isset($data['uuid'])?$data['uuid']:Uuid::uuid4()->toString();
         if (!isset($data['org_id'])) {
             return 0;
         }
@@ -391,6 +396,14 @@ class AppService extends AbstractService
         return $this->formService->getForms($appId, $filterArray);
     }
 
+    // public function getQuery($appId,$queryId) {
+    //     $queryParameters = $this->queryService->getQueryJson($queryId);
+    //     if($queryParameters == 0){
+    //         return 0;
+    //     }
+    //     $result = $this->analytics->runQuery('kibana_sample_data_ecommerce',null,json_decode($queryParameters['query'],true));
+    // }
+
     public function registerApps($data)
     {
         $apps = json_decode($data['applist'], true);
@@ -463,5 +476,22 @@ class AppService extends AbstractService
         $assignments = $this->workflowService->getAssignments($appId);
         return $assignments;
         // print_r($assignments);exit;
+    }
+
+    public function addToAppRegistry($data)
+    {
+        $this->beginTransaction();
+        try{
+        $insert = " INSERT INTO ox_app_registry (`org_id`,`app_id`) 
+                    SELECT org.`id`,app.`id` FROM ox_organization as org, ox_app as app
+                    WHERE org.`name` = '".$data['org_name']."' AND app.`name` = '".$data['app_name']."'";
+        $result = $this->runGenericQuery($insert);
+        $count = $result->getAffectedRows();
+        $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            return 0;
+        }
+        return $count;
     }
 }

@@ -22,9 +22,6 @@ class AbstractService
         $this->logger = $log;
         $this->config = $config;
         $this->dbAdapter = $dbAdapter;
-        $_SERVER['REQUEST_SCHEME'] = "http";
-        $_SERVER['SERVER_NAME'] = "localhost";
-        $_SERVER['SERVER_PORT'] = "8080";
         if ($dbAdapter) {
             $this->sql = new Sql($this->dbAdapter);
         }
@@ -43,9 +40,23 @@ class AbstractService
                 ->columns(array("id"))
                 ->where(array('uuid' => $uuid));
         $responseID = $this->executeQuery($getID)->toArray();
-        if ($responseID) {
+        if($responseID){
             return $responseID[0]['id'];
-        } else {
+        }else{
+            return 0;
+        }
+    }
+
+    protected function getUuidFromId($table, $id){
+        $sql = $this->getSqlObject();
+        $getID= $sql->select();
+        $getID->from($table)
+                ->columns(array("uuid"))
+                ->where(array('id' => $id));
+        $responseID = $this->executeQuery($getID)->toArray();
+        if($responseID){
+            return $responseID[0]['uuid'];
+        }else{
             return 0;
         }
     }

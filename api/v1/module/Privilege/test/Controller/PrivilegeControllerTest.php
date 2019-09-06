@@ -10,6 +10,8 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\PrivilegeService;
+use Zend\Db\Adapter\AdapterInterface;
+
 
 class PrivilegeControllerTest extends MainControllerTest
 {
@@ -25,6 +27,14 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertControllerName(PrivilegeController::class); // as specified in router's controller name alias
         $this->assertControllerClass('PrivilegeController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+    }
+
+     private function executeUpdate($query){
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        
+        return $result;
     }
 
     public function testGetUserPrivileges()
@@ -66,15 +76,18 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('getMasterPrivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['masterPrivilege']), 26);
-        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'], 'MANAGE_ANNOUNCEMENT');
-        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'], 'MANAGE_GROUP');
-        $this->assertEquals($content['data']['masterPrivilege'][2]['privilege_name'], 'MANAGE_ORGANIZATION');
-        $this->assertEquals($content['data']['masterPrivilege'][3]['privilege_name'], 'MANAGE_USER');
+        $this->assertEquals(count($content['data']['masterPrivilege']),26);
+        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_ANNOUNCEMENT');
+        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'],'MANAGE_GROUP');
+        $this->assertEquals($content['data']['masterPrivilege'][2]['privilege_name'],'MANAGE_ORGANIZATION');
+        $this->assertEquals($content['data']['masterPrivilege'][3]['privilege_name'],'MANAGE_USER');
     }
 
     public function testGetMasterPrivilegeListWithRolePrivilege()
     {
+        $update = "UPDATE ox_role SET uuid = 'c04edd51-af8a-11e9-91bf-68ecc57cde45' where name ='MANAGER' and org_id = 1";
+        $result = $this->executeUpdate($update);
+
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/organization/masterprivilege/c04edd51-af8a-11e9-91bf-68ecc57cde45', 'GET');
         $this->assertResponseStatusCode(200);
@@ -82,12 +95,9 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('getMasterPrivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['masterPrivilege']), 26);
-        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'], 'MANAGE_ANNOUNCEMENT');
-        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'], 'MANAGE_GROUP');
-        $this->assertEquals(count($content['data']['rolePrivilege']), 7);
-        $this->assertEquals($content['data']['rolePrivilege'][0]['privilege_name'], 'MANAGE_MLET');
-        $this->assertEquals($content['data']['rolePrivilege'][1]['privilege_name'], 'MANAGE_CRM');
+        $this->assertEquals(count($content['data']['masterPrivilege']),26);
+        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_ANNOUNCEMENT');
+        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'],'MANAGE_GROUP');
     }
 
     public function testGetMasterPrivilegeListWithInValidRolePrivilege()
@@ -99,10 +109,10 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('getMasterPrivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['masterPrivilege']), 26);
-        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'], 'MANAGE_ANNOUNCEMENT');
-        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'], 'MANAGE_GROUP');
-        $this->assertEquals($content['data']['rolePrivilege'], array());
+        $this->assertEquals(count($content['data']['masterPrivilege']),26);
+        $this->assertEquals($content['data']['masterPrivilege'][0]['privilege_name'],'MANAGE_ANNOUNCEMENT');
+        $this->assertEquals($content['data']['masterPrivilege'][1]['privilege_name'],'MANAGE_GROUP');
+        $this->assertEquals($content['data']['rolePrivilege'],array());
     }
 
 
@@ -115,6 +125,6 @@ class PrivilegeControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('getMasterPrivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['masterPrivilege']), 23);
+        $this->assertEquals(count($content['data']['masterPrivilege']),23);
     }
 }

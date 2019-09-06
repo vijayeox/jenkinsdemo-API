@@ -57,7 +57,7 @@ class FileController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
-    
+
     /**
     * GET List Files API
     * @api

@@ -16,12 +16,14 @@ class Widget extends Entity
         'created_by' => 0,
         'date_created' => null,
         'org_id' => 0,
-        'isdeleted' => 0
+        'isdeleted' => 0,
+        'name' => null,
+        'configuration' => null
     );
 
     public function validate()
     {
-        $dataArray = array("query_id","visualization_id","ispublic");
+        $dataArray = array("query_id","visualization_id","ispublic","name");
         $this->validateWithParams($dataArray);
     }
 }

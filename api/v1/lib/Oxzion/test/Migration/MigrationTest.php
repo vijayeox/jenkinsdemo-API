@@ -1,15 +1,10 @@
 <?php
 namespace Oxzion\Db\Migration;
 
-use Oxzion\Test\ServiceTest;
-use Oxzion\Service\AbstractService;
-use Zend\Db\Adapter\Adapter;
 use Oxzion\Db\Migration\Migration;
-use PHPUnit\DbUnit\TestCaseTrait;
-use Zend\Db\Adapter\AdapterInterface;
-use PHPUnit\DbUnit\DataSet\YamlDataSet;
-use Zend\Db\Sql\Sql;
+use Oxzion\Test\ServiceTest;
 use Oxzion\Transaction\TransactionManager;
+use Zend\Db\Adapter\Adapter;
 
 class MigrationTest extends ServiceTest
 {
@@ -23,31 +18,32 @@ class MigrationTest extends ServiceTest
     private $data;
     private $database;
     private $adapter;
+    private $migrationObject;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->loadConfig();
         $this->data = array(
             "appName" => 'ox_app_2',
             'UUID' => 123889,
-            'description' => 'FirstApp'
+            'description' => 'FirstApp',
         );
         if ($this->getName() == 'testInitDBWithOutAppName') {
             unset($this->data['appName']);
-        } elseif ($this->getName() == 'testMigrateWrongAppName') {
+        } else if ($this->getName() == 'testMigrateWrongAppName') {
             $this->data['appName'] = 'ox_app_4';
         }
         $this->data['appName'] = isset($this->data['appName']) ? $this->data['appName'] : null;
         $config = $this->getApplicationConfig();
-        $config = $config['db'];
-        $this->database = $this->data['appName'] . "___" . $this->data['UUID'];
-        $config['database']=$this->database;
-        $config['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $config['host'] . ';charset=utf8;username='.$config["username"].';password='.$config["password"].'';
-        $this->adapter = new Adapter($config);
+        
+        $this->migrationObject = new Migration($config, $this->data['appName'], $this->data['UUID']);
+        $this->adapter = $this->migrationObject->getAdapter();
+        $this->database = $this->migrationObject->getDatabase();
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->setRollbackOnly(true);
     }
-    public function tearDown() : void
+
+    public function tearDown(): void
     {
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->rollback();
@@ -57,9 +53,8 @@ class MigrationTest extends ServiceTest
     public function testInitDB()
     {
         $config = $this->getApplicationConfig();
-        $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->initDB($this->data);
-        $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' .$this->database . '"';
+        $testCase = $this->migrationObject->initDB($this->data);
+        $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' . $this->database . '"';
         $statement = $this->adapter->query($sqlQuery);
         $result = $statement->execute();
         $value = $result->count();
@@ -82,20 +77,17 @@ class MigrationTest extends ServiceTest
     {
         $config = $this->getApplicationConfig();
         $this->assertEquals(isset($this->data['appName']), false);
-        $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->initDB($this->data);
+        $testCase = $this->migrationObject->initDB($this->data);
         $this->assertEquals(0, $testCase);
     }
 
     public function testMigrate()
     {
         $config = $this->getApplicationConfig();
-        $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->initDB($this->data);
-        $dataSet = array_diff(scandir(dirname(__FILE__) ."/scripts/"), array(".", ".."));
-        $migrationFolder = dirname(__FILE__) ."/scripts/";
-        $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
+        $testCase = $this->migrationObject->initDB($this->data);
+        $dataSet = array_diff(scandir(dirname(__FILE__) . "/scripts/"), array(".", ".."));
+        $migrationFolder = dirname(__FILE__) . "/scripts/";
+        $testCase = $this->migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
 
         //Check to see if the version table is updated or not
         $versionArray = '1.0, 1.1';
@@ -113,16 +105,15 @@ class MigrationTest extends ServiceTest
     {
         $config = $this->getApplicationConfig();
         $this->assertEquals($this->data['appName'], 'ox_app_4');
-        $dataSet = array_diff(scandir(dirname(__FILE__) ."/scripts/"), array(".", ".."));
-        $migrationFolder = dirname(__FILE__) ."/scripts/";
-        $migrationObject = new Migration($config, $this->database, $this->adapter);
-        $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
+        $dataSet = array_diff(scandir(dirname(__FILE__) . "/scripts/"), array(".", ".."));
+        $migrationFolder = dirname(__FILE__) . "/scripts/";
+        $testCase = $this->migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
         $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' . $this->database . '"';
         $dbConfig = $config['db'];
-        $dbConfig['database']='mysql';
-        $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username='.$dbConfig["username"].';password='.$dbConfig["password"].'';
+        $dbConfig['database'] = 'mysql';
+        $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
         $mysqlAdapter = new Adapter($dbConfig);
-        
+
         $statement = $mysqlAdapter->query($sqlQuery);
         $result = $statement->execute();
         $result = $result->count();
