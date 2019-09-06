@@ -10,19 +10,25 @@ use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Oxzion\Document\DocumentBuilder;
 use Oxzion\AppDelegate\DocumentAppDelegate;
+use Oxzion\AppDelegate\MailDelegate;
+use Oxzion\Service\TemplateService;
+use Oxzion\Messaging\MessageProducer;
 
 class AppDelegateService extends AbstractService
 {
     private $fileExt = ".php";
     private $persistenceServices = array();
     private $documentBuilder;
+    private $messageProducer;
+    private $templateService;
 
-    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null)
+    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null)
     {
         $logger = new Logger();
         $writer = new Stream(__DIR__ . '/../../../../logs/Delegate.log');
         $logger->addWriter($writer);
-
+        $this->templateService = $templateService;
+        $this->messageProducer = MessageProducer::getInstance();
         parent::__construct($config, $dbAdapter, $logger);
         $this->documentBuilder = $documentBuilder;
         $this->delegateDir = $this->config['DELEGATE_FOLDER'];
@@ -39,6 +45,7 @@ class AppDelegateService extends AbstractService
     {
         try { 
             $result = $this->delegateFile($appId, $delegate);
+           
             if ($result) {
                 $obj = new $delegate; 
                 $obj->setLogger($this->logger);
@@ -46,9 +53,13 @@ class AppDelegateService extends AbstractService
                     $obj->setDocumentBuilder($this->documentBuilder);
                     $destination = $this->config['TEMPLATE_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID);
                     $obj->setDocumentDestination($destination);
+                }else if (is_a($obj, MailDelegate::class))
+                {
+                    $obj->setTemplateService($this->templateService);
+                    $obj->setMessageProducer($this->messageProducer);
                 }
                 $persistenceService = $this->getPersistence($appId);
-                $output = $obj->execute($dataArray, $persistenceService);
+                $output = $obj->execute($dataArray,$persistenceService);
                 if(!$output){
                     $output = array();
                 }
@@ -69,6 +80,7 @@ class AppDelegateService extends AbstractService
         if ((file_exists($path))) {
             // include $path;
             require_once($path);
+
         } else {
             return false;
         }
