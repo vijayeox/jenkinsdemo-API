@@ -43,7 +43,7 @@
     "pear-pear.horde.org/Horde_Imap_Client":"*",
     "pear-pear.horde.org/Horde_Smtp":"*",
     "pear-pear.horde.org/Horde_Text_Filter": "^2.1",
-    "elasticsearch/elasticsearch": "~5.0",
+    "elasticsearch/elasticsearch": "~7.0",
     "guzzlehttp/guzzle": "~6.0",
     "greenlion/php-sql-parser": "^4.1.2",
     "nelexa/zip": "dev-master",
