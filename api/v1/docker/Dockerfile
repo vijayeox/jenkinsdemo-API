@@ -29,5 +29,6 @@ ADD http://www.phpdoc.org/phpDocumentor.phar /usr/local/bin/phpdoc
 RUN chmod 755 /usr/local/bin/phpdoc
 RUN mkdir -p /app/api/v1 && \
     mv /var/www /var/www2 && \
+    mv /var/www /var/www_old && \
     ln -s /app/api/v1 /var/www
 WORKDIR /var/www
