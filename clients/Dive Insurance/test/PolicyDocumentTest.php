@@ -6,6 +6,8 @@ use Oxzion\Auth\AuthConstants;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Oxzion\Utils\FileUtils;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
+use Oxzion\Utils\ArtifactUtils;
+use Oxzion\Encryption\Crypto;
 
 class PolicyDocumentTest extends DelegateTest
 {
@@ -56,6 +58,8 @@ class PolicyDocumentTest extends DelegateTest
 
     public function testPolicyDocument()
     {
+        $config = $this->getApplicationConfig();
+        $crypto = new Crypto();
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
         AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
         $appId = $this->data['UUID'];
@@ -71,9 +75,9 @@ class PolicyDocumentTest extends DelegateTest
                  'state' => 'Armed Forces Europe',
                  'country' => 'US',
                  'zipcode' => '09522-9998',                
-                 'member_no' => '34567',
-                 'effective_date' => '06/30/2019',
-                 'expiry_date' => '6/30/2020 12:01:00 AM',
+                 'padi' => '34567',
+                 'start_date' => '06/30/2019',
+                 'end_date' => '6/30/2020 12:01:00 AM',
                  'insured_status'=> 'Divester',
                  'physical_address' => 'APO,AE',
                  'single_limit' => '1,000,000',
@@ -85,7 +89,8 @@ class PolicyDocumentTest extends DelegateTest
                  'pageno' => 1,
                  'total_page' => 1,
                  'orgUuid' => $this->data['orgUuid'],
-                 'product' => 'Individual Professional Liability'];
+                 'product' => 'Individual Professional Liability',
+                 'ismailingaddress' => FALSE];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -95,10 +100,11 @@ class PolicyDocumentTest extends DelegateTest
         $this->assertEquals(isset($content['carrier']), true);
         $this->assertEquals(isset($content['license_number']), true);
         $this->assertEquals(isset($content['certificate_no']), true);
-        $doc = $this->tempFile."/".$content['uuid']."/";
-        $this->assertTrue(is_file($doc."certificateOfInsurance.pdf"));
-        $this->assertTrue(filesize($doc."certificateOfInsurance.pdf")>0);
+        $this->assertEquals(isset($content['policy_document']), true);
+        $doc= $crypto->decryption($content['policy_document']);
+        $this->assertTrue(is_file($doc));
+        $this->assertTrue(filesize($doc)>0);
+        $doc = substr($doc, 0, strripos($doc, '/'));
         FileUtils::rmDir($doc);
-        
     }
 }

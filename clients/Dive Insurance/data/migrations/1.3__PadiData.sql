@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `padi_data` (
             `lastname` varchar(21) NULL,
             `address1` varchar(100) NULL,
             `address2` varchar(100) NULL,
+            `address_international` varchar(200) NULL,
             `city` varchar(50) NULL,
             `state` varchar(50) NULL,
             `zip` varchar(10) NULL,
@@ -16,5 +17,8 @@ CREATE TABLE IF NOT EXISTS `padi_data` (
             `date_expire` DATETIME NULL,
             `rating` varchar(4) NULL,
             `email` varchar(100) NULL,
+            `num` varchar(100) NULL,
             PRIMARY KEY (`id`)
             ) ENGINE=InnoDB COLLATE=utf8_general_ci DEFAULT CHARSET=utf8;
+
+INSERT INTO `padi_data` (`member_number`,`firstname`,`MI`) VALUES ('2141', 'Rakshith','G');            

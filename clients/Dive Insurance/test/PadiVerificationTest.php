@@ -3,7 +3,7 @@ use Oxzion\Test\DelegateTest;
 use Oxzion\AppDelegate\AppDelegateService;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
-use PHPUnit\DbUnit\DataSet\YamlDataSet;
+use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 
 class PadiVerificationTest extends DelegateTest
 {
@@ -27,8 +27,7 @@ class PadiVerificationTest extends DelegateTest
 
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(__DIR__."/Dataset/PadiData.yml");
-        return $dataset;
+        return new DefaultDataSet();
     }
 
     public function tearDown() : void

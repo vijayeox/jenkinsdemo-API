@@ -11,6 +11,8 @@ use Oxzion\Service\FileService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
+use Oxzion\Utils\ArtifactUtils;
+use Oxzion\Encryption\Crypto;
 
 class FileController extends AbstractApiController
 {
@@ -131,5 +133,31 @@ class FileController extends AbstractApiController
             return $this->getErrorResponse("File not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponseWithData($result);
+    }
+
+    public function getDocumentAction()
+    { 
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+
+        $crypto = new Crypto();
+        $file = $crypto->decryption($params['documentName']);
+        if(file_exists($file)){
+            if (!headers_sent()) {
+                header('Content-Type: application/octet-stream');
+                header("Content-Transfer-Encoding: Binary");
+                header("Content-disposition: attachment; filename=\"" . basename($file) . "\"");
+            }
+            try {
+                $fp = @fopen($file, 'rb');
+                fpassthru($fp);
+                fclose($fp);
+                $this->response->setStatusCode(200);
+                return $this->response;
+            } catch (Exception $e) {
+                return $this->getErrorResponse("Document not Found", 404);
+            }
+        }else{
+            return $this->getErrorResponse("Document not Found", 404);
+        }
     }
 }

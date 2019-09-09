@@ -323,6 +323,17 @@ return [
                     ],
                 ],
             ],
+            'getdocument' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/app/:appId/file/:fileId/document/:documentName',
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'action' => 'getDocument',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

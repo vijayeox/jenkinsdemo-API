@@ -55,8 +55,8 @@ class AppDelegateService extends AbstractService
                 $obj->setLogger($this->logger);
                 if(is_a($obj, DocumentAppDelegate::class)){
                     $obj->setDocumentBuilder($this->documentBuilder);
-                    $destination = $this->config['TEMPLATE_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID);
-                    $obj->setDocumentDestination($destination);
+                    $destination = $this->config['TEMPLATE_FOLDER'];
+                    $obj->setTemplatePath($destination);
                 }else if (is_a($obj, MailDelegate::class))
                 {
                     $obj->setTemplateService($this->templateService);

@@ -24,6 +24,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     protected $noUser = 'admin';
     protected $noUserId = 0;
     protected $testOrgId = 1;
+    protected $testOrgUuid = "53012471-2863-4949-afb1-e69b0891c98a";
 
 
     protected $jwtToken = array();
@@ -95,7 +96,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     private function getJwtToken($username)
     {
         if (!isset($this->jwtToken[$username])) {
-            $data = JwtHelper::getTokenPayload(['username'=>$username,'orgid' => $this->testOrgId]);
+            $data = JwtHelper::getTokenPayload(['username'=>$username,'orgid' => $this->testOrgId,'orgUuid' => $this->testOrgUuid]);
             $config = $this->getApplicationConfig();
             $jwtKey = $config['jwtKey'];
             $jwtAlgo = $config['jwtAlgo'];

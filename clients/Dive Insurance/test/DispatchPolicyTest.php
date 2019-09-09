@@ -57,6 +57,9 @@ class DispatchPolicyTest extends DelegateTest
             unlink($path);
         }
         FileUtils::unlink($this->tempFile);
+        $query = "DROP DATABASE " . $this->database;
+        $statement = $this->getDbAdapter()->query($query);
+        $result = $statement->execute();
     }
 
     public function getDataSet()

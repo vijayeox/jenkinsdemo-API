@@ -19,8 +19,8 @@ _q varchar(100),
 _r varchar(100))
 BEGIN
 	
-	IF EXISTS (select * from `ox_padi_verification_pl` where member_number = _a) THEN
-	    update `ox_padi_verification_pl` set 
+	IF EXISTS (select * from `padi_data` where member_number = _a) THEN
+	    update `padi_data` set 
 		   `member_number` = _a,
 	  		`first_name` = _b,
 	  		`MI` = _c,
@@ -41,7 +41,7 @@ BEGIN
 	  		`num` = _r
    where member_number = _a;
 	  ELSE 
-	    INSERT INTO ox_padi_verification_pl (`member_number`, `first_name`, `MI`, `last_name`, `address_1`, `address_2`, `address_international`, `city`, `state`, `zip`, `country_code`, `home_phone`, `work_phone`, `insurance_type`, `date_expire`, `rating`, `email`, `num`) 
+	    INSERT INTO padi_data (`member_number`, `first_name`, `MI`, `last_name`, `address_1`, `address_2`, `address_international`, `city`, `state`, `zip`, `country_code`, `home_phone`, `work_phone`, `insurance_type`, `date_expire`, `rating`, `email`, `num`) 
    VALUES (_a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r);
 	  END IF;
  

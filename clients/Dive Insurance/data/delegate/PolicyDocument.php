@@ -4,6 +4,8 @@ use Oxzion\AppDelegate\DocumentAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Utils\ArtifactUtils;
+use Oxzion\Encryption\Crypto;
 
 class PolicyDocument implements DocumentAppDelegate
 {
@@ -24,7 +26,7 @@ class PolicyDocument implements DocumentAppDelegate
         $this->documentBuilder = $builder;
     }
 
-    public function setDocumentDestination($destination)
+    public function setTemplatePath($destination)
     {
         $this->destination = $destination;
     }
@@ -49,19 +51,19 @@ class PolicyDocument implements DocumentAppDelegate
         if(!isset($data['uuid'])){
             $data['uuid'] = UuidUtil::uuid();
         }
-        $dest = $this->destination."/".$data['uuid'];
-        FileUtils::createDirectory($dest);
-        $dest = $dest."/".$template.'.pdf';
+        $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid']);
+        $dest = $dest.$template.'.pdf';
         
         $this->documentBuilder->generateDocument($template, $data, $dest, $options);
-        
+        $crypto = new Crypto();
+        $data['policy_document'] = $crypto->encryption($dest);
         return $data;
     }
 
     private function generateCOINumber($data,$persistenceService)
     {  
         $sequence = 0;
-        $year = date('Y', strtotime($data['expiry_date']));
+        $year = date('Y', strtotime($data['end_date']));
         $persistenceService->beginTransaction();
         try{ 
             $select1 = "Select * FROM certificate_of_insurance_number WHERE product ='".$data['product']."' AND year = $year FOR UPDATE";

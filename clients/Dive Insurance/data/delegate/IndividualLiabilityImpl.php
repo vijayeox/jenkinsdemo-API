@@ -12,7 +12,7 @@ class IndividualLiabilityImpl implements DocumentAppDelegate {
     public function setDocumentBuilder($builder){
         $this->builder = $builder;
     }
-    public function setDocumentDestination($destination)
+    public function setTemplatePath($destination)
     {
         $this->destination = $destination;
     }

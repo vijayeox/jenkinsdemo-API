@@ -9,6 +9,9 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Encryption\Crypto;
 
 class FileControllerTest extends ControllerTest
 {
@@ -141,5 +144,37 @@ class FileControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testGetPdfFile()
+    {
+        $fileId ="d13d0c68-98c9-11e9-adc5-308d99c9145b";
+        $this->initAuthToken($this->adminUser);
+        $orgUuid = $this->testOrgUuid;
+        
+        $path1 = __DIR__.'/../../../../data/template/'.$orgUuid."/";
+        if (!is_dir($path1)){
+            mkdir($path1, 0777,true);
+        }
+        $path =$path1.$fileId;
+        if (!is_link($path)) {
+            
+            symlink(__DIR__.'/../../../../../../clients/Dive Insurance/test/Files',$path);
+        
+        }
+        $crypto = new Crypto();
+        $documentName = $crypto->encryption($path."/dummy.pdf");
+        $this->dispatch('/app/somerandom123/file/'.$fileId.'/document/'.$documentName, 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('getdocument');
+        $content = json_decode($this->getResponse()->getContent(), true); 
+        $this->assertNotEquals(strlen($this->getResponse()), 0);
+        if (is_link($path)) {
+            unlink($path);
+        }
+        FileUtils::rmDir($path1);
     }
 }
