@@ -8,12 +8,12 @@ use Zend\Log\Filter\Priority;
 use Zend\Log\Processor\RequestId;
 
 return [
-	'router' => [
+    'router' => [
         'routes' => [
             'mlet' => [
                 'type'    => Segment::class,
                 'options' => [
-                	'route'    => '/search',
+                    'route'    => '/search',
                     'defaults' => [
                         'controller' => Controller\SearchController::class,
                         'access'=>[
@@ -25,7 +25,7 @@ return [
                         ],
                     ],
                 ],
-            ],            
+            ],
         ],
     ],
     'log' => [

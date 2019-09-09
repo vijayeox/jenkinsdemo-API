@@ -10,6 +10,16 @@ use Zend\Log\Processor\RequestId;
 return [
     'router' => [
         'routes' => [
+            'user_added_mail' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/ox/createuser',
+                    'defaults' => [
+                        'controller' => Controller\OXCallbackController::class,
+                        'action' => 'userCreated',
+                    ],
+                ],
+            ],
             'crmaddcontactcallback' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -167,6 +177,26 @@ return [
                     'defaults' => [
                         'controller' => Controller\TaskCallbackController::class,
                         'action' => 'updateProject',
+                    ],
+                ],
+            ],
+            'ttadduserfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/addusertotasktracker',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'createUser',
+                    ],
+                ],
+            ],
+            'ttdeleteuserfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/deleteuserfromtasktracker',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'deleteUser',
                     ],
                 ],
             ],

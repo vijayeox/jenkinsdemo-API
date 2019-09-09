@@ -16,7 +16,6 @@ use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
 use Oxzion\Auth\AuthContext;
 
-
 abstract class AbstractApiController extends AbstractApiControllerHelper
 {
     protected $table;
@@ -50,7 +49,6 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
             if ($pid !== false) {
                 $filter = [$this->parentId => $pid];
             }
-
         }
         return $filter;
     }
@@ -78,17 +76,16 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
                         $authSuccessListener->loadUserDetails([AuthConstants::USERNAME => $tokenPayload->data->username, AuthConstants::ORG_ID => $tokenPayload->data->orgid]);
                         return;
                     }
-                    if($tokenPayload->data && isset($tokenPayload->data->apikey)) {
+                    if ($tokenPayload->data && isset($tokenPayload->data->apikey)) {
                         $authSuccessListener = $this->getEvent()->getApplication()->getServiceManager()->get(AuthSuccessListener::class);
                         $authSuccessListener->loadUserDetails([AuthConstants::API_KEY => $tokenPayload->data->apikey]);
                         return;
                     }
-                }else if($tokenPayload['orgid']){
+                } elseif ($tokenPayload['orgid']) {
                     unset($tokenPayload['orgid']);
                 }
                 $jsonModel = $this->getErrorResponse("Token Invalid.", 400);
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 return $this->getErrorResponse("Token Invalid. Please login again.", 401);
             }
         } else {
@@ -122,8 +119,8 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
 
         while ($result->valid()) {
             $value = $result->current();
-            if(isset($value)){
-              $data[] = $value->toArray();
+            if (isset($value)) {
+                $data[] = $value->toArray();
             }
             $result->next();
         }
@@ -156,7 +153,6 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
         } catch (Exception $e) {
             return $this->getFailureResponse("Failed to create a new entity", $e->getMessage());
         }
-
     }
 
     //PUT /controller/{id}
@@ -199,7 +195,8 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
         return $this->getSuccessResponse();
     }
 
-    protected function getConfig(){
+    protected function getConfig()
+    {
         return $this->getEvent()->getApplication()->getServiceManager()->get('Config');
     }
 }

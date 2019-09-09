@@ -14,7 +14,7 @@ return [
             'project' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project[/:projectId]',
+                    'route'    => '/[organization/:orgId/]project[/:projectUuid]',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'access'=>[
@@ -30,7 +30,7 @@ return [
             'projectusersave' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project/:projectId/save',
+                    'route'    => '/[organization/:orgId/]project/:projectUuid/save',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'method' => 'POST',
@@ -44,7 +44,7 @@ return [
             'projectuser' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project/:projectId/users',
+                    'route'    => '/[organization/:orgId/]project/:projectUuid/users',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'method' => 'GET',
@@ -58,7 +58,7 @@ return [
             'myproject' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/project/myproject',
+                    'route'    => '/[organization/:orgId/]project/myproject',
                     'defaults' => [
                         'controller' => Controller\ProjectController::class,
                         'method' => 'GET',

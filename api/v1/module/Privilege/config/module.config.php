@@ -40,13 +40,12 @@ return [
                     ],
                 ],
             ],
-            'getMasterPrivilege' => [
+            'getmasterprivilege' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/masterprivilege[/:roleId]',
+                    'route'    => '/organization[/:orgId]/masterprivilege[/:roleId]',
                     'defaults' => [
                         'controller' => Controller\PrivilegeController::class,
-                        'method' => 'GET',
                         'action' => 'getMasterPrivilege',
                     ],
                 ],

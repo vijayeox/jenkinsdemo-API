@@ -13,12 +13,14 @@ use Zend\InputFilter\Input;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Zend\Db\Sql\Expression;
+use Oxzion\Utils\FileUtils;
 use Oxzion\Service\AbstractService;
+use Oxzion\Utils\BosUtils;
+use Oxzion\ServiceException;
 
 
 class ContactController extends AbstractApiController
 {
-
     private $contactService;
 
     /**
@@ -50,21 +52,20 @@ class ContactController extends AbstractApiController
         $id = $this->params()->fromRoute();
 
         try {
-            if(!isset($id['contactId'])){
-                $count = $this->contactService->createContact($data,$files);
-            }
-            else{
-                $count = $this->contactService->updateContact($id, $data,$files);   
+            if (!isset($id['contactId'])) {
+                $count = $this->contactService->createContact($data, $files);
+            } else {
+                $count = $this->contactService->updateContact($id, $data, $files);
             }
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("Failed to create a new entity",404, $data);
+            return $this->getErrorResponse("Failed to create a new entity", 404, $data);
         }
         if ($count == 2) {
-            return $this->getErrorResponse("Entity not found for UUID",404, $id);
+            return $this->getErrorResponse("Entity not found for UUID", 404, $id);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -82,7 +83,7 @@ class ContactController extends AbstractApiController
     {
         $files = $this->params()->fromFiles('icon');
         try {
-            $count = $this->contactService->updateContact($id, $data,$files);
+            $count = $this->contactService->updateContact($id, $data, $files);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -111,23 +112,26 @@ class ContactController extends AbstractApiController
     }
 
 
-    public function get($id) {
-
+    public function get($id)
+    {
         $result = $this->contactService->getContactsByUuid($id);
         $uuid = $this->contactService->getUuidById($result[0]['owner_id']);
-        if(sizeof($result) == 0) {
+        if (sizeof($result) == 0) {
             return $this->getErrorResponse("Contact not found", 404, ['id' => $id]);
-        }
-        else{
-            $result['phone_list']=json_decode($result['phone_list'],true);
-            $result['email_list']=json_decode($result['email_list'],true);
+        } else {
+            if (isset($result[0]['phone_list']) && $result[0]['phone_list'] != "null" && !empty($result[0]['phone_list'])) {
+                $result[0]['phone_list']=json_decode($result[0]['phone_list'], true);
+            }
+            if (isset($result[0]['email_list']) && $result[0]['email_list'] != "null" && !empty($result[0]['email_list'])) {
+                $result[0]['email_list']=json_decode($result[0]['email_list'], true);
+            }
             $baseUrl =$this->getBaseUrl();
-            if($result[0]['icon_type']){
+            if ($result[0]['icon_type']) {
                 $userId = $this->contactService->getUuidById($result[0]['user_id']);
                 $result[0]['icon'] = $baseUrl . "/user/profile/" . $userId;
-            }else{
-                $result[0]['icon'] = $baseUrl . "/contact/icon/" . $result[0]["uuid"]; 
-            }     
+            } else {
+                $result[0]['icon'] = $baseUrl . "/contact/icon/" . $result[0]["uuid"];
+            }
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -168,12 +172,85 @@ class ContactController extends AbstractApiController
     public function getContactsAction()
     {
         $data = $this->params()->fromQuery();
-        if(isset($data['filter'])){
-            $result = $this->contactService->getContacts($data['column'],$data['filter']);
+        if (isset($data['filter'])) {
+            $result = $this->contactService->getContacts($data['column'], $data['filter']);
         } else {
-            $result = $this->contactService->getContacts($data['column']);;
+            $result = $this->contactService->getContacts($data['column']);
+            ;
         }
         return $this->getSuccessResponseWithData($result);
+    }
+
+    public function contactImportAction()
+    {
+        $columns = ['Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type','Phone 1 - Value','Organization 1 - Name','Organization 2 - Title','Location'];
+        if (!isset($_FILES['file'])) {
+            return $this->getErrorResponse("Add file to import", 404);
+        }
+        $result = $this->contactService->importContactCSV($_FILES['file']);
+
+        if ($result ==  3) {
+            return $this->getErrorResponse("Column Headers donot match...", 404, $columns);
+        }
+
+        if ($result == 0) {
+            return $this->getErrorResponse("Failed to insert", 404);
+        }
+        if (is_array($result)) {
+            $filename = BosUtils::randomPassword();
+            $response = $this->convertToCsv($result, $filename.'.csv');
+            return $this->getSuccessStringResponse("Validate and Import the downloaded file", 200, $response);
+        }
+
+        return $this->getSuccessResponse("Imported Successfully", 200);
+    }
+
+
+    public function convertToCsv($data, $filename)
+    {
+        FileUtils::createDirectory('/tmp/oxzion');
+        
+        $file = '/tmp/oxzion/'.$filename;
+        
+        try {
+            $fp = fopen($file, 'x');
+            foreach ($data as $line) {
+                fputcsv($fp, $line);
+            }
+            fclose($fp);
+            $fp = fopen($file, 'rb');
+            $data = file_get_contents($file);
+            fclose($fp);
+            return $data;
+        } catch (Exception $e) {
+            return $this->getErrorResponse("Resource not Found", 404);
+        }
+    }
+
+    public function contactExportAction()
+    {
+        $id = $this->extractPostData();
+
+        if (isset($id['contactUuid'])) {
+            $result = $this->contactService->exportContactCSV($id['contactUuid']);
+        } else {
+            $result = $this->contactService->exportContactCSV();
+        }
+        if (isset($result['data'])) {
+            $filename = BosUtils::randomPassword();
+            $response = $this->convertToCsv($result['data'], $filename.'.csv');
+            return $this->getSuccessStringResponse("Exported CSV Data", 200, $response);
+        }
+    }
+
+    public function contactsDeleteAction(){
+        $data = $this->extractPostData();
+        try{
+            $response = $this->contactService->mutipleContactsDelete($data);
+        }catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $this->getSuccessResponse();
     }
 }
 

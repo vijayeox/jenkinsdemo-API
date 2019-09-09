@@ -18,28 +18,30 @@ namespace Callback\Service;
             parent::__construct($config, null, $log);
             $this->logClass = __CLASS__;
         }
-        public function setEmailService($emailService){
+        public function setEmailService($emailService)
+        {
             $this->emailService = $emailService;
         }
 
-        public function sendMail($data,$attachment){
+        public function sendMail($data, $attachment)
+        {
             $emailClient = new EmailClient();
             $attachment = isset($attachment['attachment']) ? $attachment['attachment'] : false;
             $userEmail = $data['from'];
-            $smtpDetails = $this->emailService->getEmailAccountsByEmailId($userEmail,true)[0];
+            $smtpDetails = $this->emailService->getEmailAccountsByEmailId($userEmail, true)[0];
             $body = $data['body'];
-            if(is_array($attachment)){
+            if (is_array($attachment)) {
                 $attachment = array(array(
                     'file'=>$attachment['tmp_name'],
                     'bytes'=>$attachment['size'],
                     'filename'=>$attachment['name'],
                     'type'=>$attachment['type']
                 ));
-            }else {
+            } else {
                 $attachment = array();
             }
             $headers = array(
-                'to' => $data['to'],
+                'to' => isset($data['to']) ? $data['to'] : null,
                 'from' => $data['from'],
                 'subject' => $data['subject'],
             );
@@ -52,15 +54,14 @@ namespace Callback\Service;
                 'username' => $data['from'],
             );
             try {
-                if($body != strip_tags($body)){
-                    $response = $emailClient->buildAndSendMessage($body,$attachment,$headers,$smtpConfig,$opt=['html'=>true]);
+                if ($body != strip_tags($body)) {
+                    $response = $emailClient->buildAndSendMessage($body, $attachment, $headers, $smtpConfig, $opt=['html'=>true]);
                 } else {
-                    $response = $emailClient->buildAndSendMessage($body,$attachment,$headers,$smtpConfig,$opt=['html'=>false]);
+                    $response = $emailClient->buildAndSendMessage($body, $attachment, $headers, $smtpConfig, $opt=['html'=>false]);
                 }
-            } catch(Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->err($this->logClass . " Error : ".$e->getMessage());
                 return true;
             }
         }
     }
-    ?>

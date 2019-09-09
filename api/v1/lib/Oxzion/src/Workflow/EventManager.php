@@ -3,7 +3,4 @@ namespace Oxzion\Workflow;
 
 interface EventManager
 {
-
-
 }
-?>

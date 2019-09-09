@@ -11,18 +11,20 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 
-
-class ScreenControllerTest extends ControllerTest{
-    
-    public function setUp() : void{
+class ScreenControllerTest extends ControllerTest
+{
+    public function setUp() : void
+    {
         $this->loadConfig();
         parent::setUp();
-    }   
-    public function getDataSet() {
+    }
+    public function getDataSet()
+    {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Screen.yml");
         return $dataset;
     }
-    public function testGetList(){
+    public function testGetList()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/screen', 'GET');
         $this->assertResponseStatusCode(200);
@@ -40,7 +42,8 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertEquals($content['data'][1]['name'], 'Profile');
     }
 
-    public function testGetScreenWidgetList() {
+    public function testGetScreenWidgetList()
+    {
         $this->initAuthToken($this->employeeUser);
         $this->dispatch('/screen/1/widget', 'GET');
         $this->assertResponseStatusCode(401);
@@ -50,10 +53,11 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertMatchedRouteName('widgetlist');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'You have no Access to this API');       
+        $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
-    public function testGet(){
+    public function testGet()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/screen/1', 'GET');
         $this->assertResponseStatusCode(200);
@@ -66,10 +70,10 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], 'Dashboard');
-
     }
 
-    public function testGetNotFound(){
+    public function testGetNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/screen/9999', 'GET');
         $this->assertResponseStatusCode(404);
@@ -81,7 +85,8 @@ class ScreenControllerTest extends ControllerTest{
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-    public function testCreate(){
+    public function testCreate()
+    {
         $data = ['name' => 'Test Screen'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_screen'));
         $this->initAuthToken($this->adminUser);
@@ -99,7 +104,8 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_screen'));
     }
 
-    public function testScreenwidgetCreate(){
+    public function testScreenwidgetCreate()
+    {
         $data = ['widgetid' =>10,'screenid'=>1,'width'=>3,'height'=>2,'row'=>1,'column'=>3];
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_screen_widget'));
         $this->initAuthToken($this->employeeUser);
@@ -111,24 +117,26 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertControllerClass('ScreenwidgetController');
         $this->assertMatchedRouteName('screenwidget');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
 
 
-    public function testEmployeePutAccess(){
+    public function testEmployeePutAccess()
+    {
         $data = ['name' => 'Test Screen'];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/screen/1', 'PUT', null);        
+        $this->dispatch('/screen/1', 'PUT', null);
         $this->assertResponseStatusCode(401);
     }
 
-    public function testUpdate(){
+    public function testUpdate()
+    {
         $data = ['name' => 'Test Screen'];
         $this->initAuthToken($this->adminUser);
-        $this->setJsonContent(json_encode($data));        
+        $this->setJsonContent(json_encode($data));
         $this->dispatch('/screen/1', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Screen');
@@ -142,7 +150,8 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertEquals($content['data']['name'], $data['name']);
     }
 
-    public function testScreenwidgetUpdate(){
+    public function testScreenwidgetUpdate()
+    {
         $data = ['screenid'=>1,'widgetid'=>2,'userid'=>2,'width'=>3,'height'=>2,'row'=>1,'column'=>3];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
@@ -158,7 +167,8 @@ class ScreenControllerTest extends ControllerTest{
     }
 
 
-    public function testUpdateNotFound(){
+    public function testUpdateNotFound()
+    {
         $data = ['name' => 'Test Screen'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -173,7 +183,8 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testDelete(){
+    public function testDelete()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/screen/2', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -186,7 +197,8 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testScreenwidgetDelete(){
+    public function testScreenwidgetDelete()
+    {
         $this->initAuthToken($this->employeeUser);
         $this->dispatch('/screenwidget/2', 'DELETE');
         $this->assertResponseStatusCode(401);
@@ -199,13 +211,15 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
-    public function testEmployeeDelete() {
+    public function testEmployeeDelete()
+    {
         $this->initAuthToken($this->employeeUser);
-        $this->dispatch('/screen/2', 'DELETE');  
+        $this->dispatch('/screen/2', 'DELETE');
         $this->assertResponseStatusCode(401);
     }
 
-    public function testDeleteNotFound(){
+    public function testDeleteNotFound()
+    {
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/screen/99999', 'DELETE');
         $this->assertResponseStatusCode(404);
@@ -215,6 +229,6 @@ class ScreenControllerTest extends ControllerTest{
         $this->assertMatchedRouteName('screen');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');        
+        $this->assertEquals($content['status'], 'error');
     }
 }

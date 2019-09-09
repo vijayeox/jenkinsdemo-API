@@ -13,10 +13,15 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
+use Oxzion\AccessDeniedException;
+use Oxzion\ServiceException;
+
+
 /**
  * Announcement Controller
  */
-class AnnouncementController extends AbstractApiController {
+class AnnouncementController extends AbstractApiController
+{
     /**
     * @var AnnouncementService Instance of Announcement Service
     */
@@ -24,7 +29,8 @@ class AnnouncementController extends AbstractApiController {
     /**
     * @ignore __construct
     */
-    public function __construct(AnnouncementTable $table, AnnouncementService $announcementService, Logger $log, AdapterInterface $dbAdapter) {
+    public function __construct(AnnouncementTable $table, AnnouncementService $announcementService, Logger $log, AdapterInterface $dbAdapter)
+    {
         parent::__construct($table, $log, __CLASS__, Announcement::class);
         $this->setIdentifierName('announcementId');
         $this->announcementService = $announcementService;
@@ -50,14 +56,16 @@ class AnnouncementController extends AbstractApiController {
     * </code>
     */
     public function create($data) {
+        $params=$this->params()->fromRoute();
+       
         try{
-            $count = $this->announcementService->createAnnouncement($data);
+            $count = $this->announcementService->createAnnouncement($data,$params);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
         }
-        if($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data,201);
     }
@@ -80,8 +88,15 @@ class AnnouncementController extends AbstractApiController {
     * }
     * </code>
     */
-    public function getList() {
-        $result = $this->announcementService->getAnnouncements();
+    public function getList()
+    {
+        $params = $this->params()->fromRoute();
+        try{
+             $result = $this->announcementService->getAnnouncements($params);
+        }
+        catch (AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
+        }
         return $this->getSuccessResponseWithData($result);
     }
     /**
@@ -89,8 +104,8 @@ class AnnouncementController extends AbstractApiController {
     * @api
     * @link /announcement[/:announcementId]
     * @method PUT
-    * @param array $id ID of Announcement to update 
-    * @param array $data 
+    * @param array $id ID of Announcement to update
+    * @param array $data
     * <code>
     * {
     *  integer id,
@@ -108,13 +123,15 @@ class AnnouncementController extends AbstractApiController {
     */
     public function update($id, $data) {
         try{
-            $count = $this->announcementService->updateAnnouncement($id,$data);
+            $params = $this->params()->fromRoute();
+            $orgId = isset($params['orgId']) ? $params['orgId'] : NULL; 
+            $count = $this->announcementService->updateAnnouncement($id,$data,$orgId);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);
         }
-        if($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+         catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data,200);
     }
@@ -127,9 +144,12 @@ class AnnouncementController extends AbstractApiController {
     * @return array success|failure response
     */
     public function delete($id) {
-        $response = $this->announcementService->deleteAnnouncement($id);
-        if($response == 0) {
-            return $this->getErrorResponse("Announcement not found", 404, ['id' => $id]);
+        try{
+            $params = $this->params()->fromRoute();
+            $response = $this->announcementService->deleteAnnouncement($id,$params);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponse();
     }
@@ -139,7 +159,7 @@ class AnnouncementController extends AbstractApiController {
     * @link /announcement[/:announcementId]
     * @method GET
     * @param $id ID of Announcement to Delete
-    * @return array $data 
+    * @return array $data
     * <code>
     * {
     *  integer id,
@@ -155,10 +175,14 @@ class AnnouncementController extends AbstractApiController {
     * </code>
     * @return array Returns a JSON Response with Status Code and Created Announcement.
     */
-    public function get($id) {
-        $result = $this->announcementService->getAnnouncement($id);
-        if($result == 0) {
-            return $this->getErrorResponse("Announcement not found", 404, ['id' => $id]);
+    public function get($id)
+    {
+        $params = $this->params()->fromRoute();
+        try{
+            $result = $this->announcementService->getAnnouncement($id,$params);
+        }
+        catch (AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
         }
         return $this->getSuccessResponseWithData($result);
     }
@@ -169,45 +193,47 @@ class AnnouncementController extends AbstractApiController {
     * @method GET
     * @return array $dataget list of Announcements
     */
-    public function announcementListAction() {
+    public function announcementListAction()
+    {
         $filterParams = $this->params()->fromQuery();
-        $result = $this->announcementService->getAnnouncementsList($filterParams);
-        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+        $params = $this->params()->fromRoute();
+        try{
+             $result = $this->announcementService->getAnnouncementsList($filterParams,$params); 
+        }
+        catch (AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
 
-    public function announcementToGroupAction(){
+    public function announcementToGroupAction()
+    {
         $params = $this->params()->fromRoute();
-        $id=$params['announcementId'];
         $data = $this->extractPostData();
         try{
-            $count = $this->announcementService->insertAnnouncementForGroup($id,$data);
+            $count = $this->announcementService->saveGroup($params,$data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0) {
-            return $this->getErrorResponse("Entity not found", 404);
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
-        if($count == 2) {
-            return $this->getErrorResponse("Enter Group Ids", 404);
-        }
-        return $this->getSuccessResponseWithData($data,200);
+        return $this->getSuccessResponseWithData($data, 200);
     }
 
-    public function announcementGroupsAction() {
-        $group = $this->params()->fromRoute();
-        $id=$group[$this->getIdentifierName()];
+    public function announcementGroupsAction()
+    {
+        $params = $this->params()->fromRoute();
         $filterParams = $this->params()->fromQuery(); // empty method call
         try {
-            $count = $this->announcementService->getAnnouncementGroupList($group[$this->getIdentifierName()],$filterParams);
+            $count = $this->announcementService->getAnnouncementGroupList($params, $filterParams);
         } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            return $this->getErrorResponse($e->getMessage(), 403);
         }
-        if($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
-        }
-        return $this->getSuccessResponseDataWithPagination($count['data'],$count['total']);
+        return $this->getSuccessResponseDataWithPagination($count['data'], $count['total']);
     }
-
 }
