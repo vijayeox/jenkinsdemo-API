@@ -11,6 +11,8 @@ use Oxzion\Test\DelegateTest;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use Oxzion\AppDelegate\AppDelegateService;
+use Oxzion\Messaging\MessageProducer;
+use Mockery as Mockery;
 
 
 
@@ -62,6 +64,13 @@ class DispatchPolicyTest extends DelegateTest
         return new DefaultDataSet();
     }
 
+    public function getMockMessageProducer(){
+        $dispatchService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
+        $dispatchService->setMessageProducer($mockMessageProducer);
+        return $mockMessageProducer;
+    }
+
     public function testDispatchPolicy()
     {
         $data = array();
@@ -72,6 +81,10 @@ class DispatchPolicyTest extends DelegateTest
         $data['policy_document'] = __DIR__."/files/certificate.pdf";
         $data['product'] = 'Individual Professional Liability';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'DispatchPolicy', $data);

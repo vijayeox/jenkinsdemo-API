@@ -41,6 +41,10 @@ class AppDelegateService extends AbstractService
         $this->persistenceServices[$appId] = $persistence;
     }
 
+    public function setMessageProducer(MessageProducer $messageProducer){
+        $this->messageProducer = $messageProducer;
+    }
+    
     public function execute($appId, $delegate, $dataArray=array())
     {
         try { 

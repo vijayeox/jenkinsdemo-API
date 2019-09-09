@@ -52,27 +52,27 @@
       		<div class="i_type1">
         		<div class = "in-type">
 		           <b class = "ins_type">Type of Insurance</b>
-		           <div class = "ins_data">
+		           <div class = "ins_data" style="margin-top: 10px;">
 			           <p class = "ins_font"><b>COVERAGE:</b></p>
 			           <p class = "ins_font"><b>COMBINED SINGLE LIMIT:</b></p>
 			           <p class = "ins_font"><b class = "space">ANNUAL AGGREGATE:</b></p>
 		       	   </div>
 	        	</div>
 	        	<div class = "in-type1"> 
-		            <p class = "ins_type"  style="margin-bottom: 0px;margin-left:1px;">Professional Liability - Claims Made Form</p>
-		            <p class = "ins_font">Insured's Status: {$insured_status}</p>
-		            <p class = "ins_font">${$single_limit}&nbsp&nbsp&nbsp(per occurrence)</p>
-		            <p class = "ins_font">${$annual_aggregate}</p>
-	        	</div>
+		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability - Claims Made Form</p>
+			            <p class = "ins_font">Insured's Status: {$insured_status}</p>
+			            <p class = "ins_font">${$single_limit}&nbsp&nbsp&nbsp(per occurrence)</p>
+			            <p class = "ins_font">${$annual_aggregate}</p>
+		        </div>
 	     	</div>
 	     	<div class="i_type2">
-		       <div class="i-type">
+		       <div class="i-type" style="margin-top: 9px;">
 		           <p class = "ins_font">&nbsp</p>
 		           <p class = "ins_font">&nbsp</p>
 		           <p class = "ins_font"><b>Equipment Liability:</b></p>
 		           <p class = "ins_font"><b>Cylinder Coverage:</b></p>
 		       </div>
-		       <div class="i-type">
+		       <div class="i-type" style="margin-top: 9px;">
 		          <p class = "ins_font">&nbsp</p>
 		          <p class = "ins_font">&nbsp</p>
 		          <p class = "ins_font">{$equipment_liability}</p>
