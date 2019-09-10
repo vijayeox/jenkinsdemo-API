@@ -37,6 +37,7 @@ class CacheService
 
     public function set($key, $object)
     {
+        $key = $this->massageKey($key);
         if ($this->supportedDatatypes['object']) {
             $this->cache->setItem($key, $object);
         } else {
@@ -44,7 +45,8 @@ class CacheService
         }
     }
     public function get($key)
-    {
+    {   
+        $key = $this->massageKey($key);
         if ($this->supportedDatatypes['object']) {
             return $this->cache->getItem($key);
         } else {
@@ -53,6 +55,13 @@ class CacheService
     }
     public function clear($key)
     {
+        $key = $this->massageKey($key);
         $this->cache->removeItem($key);
+    }
+    protected function massageKey($key){
+        $string = [".","@"];
+        $replaced_string = ["__","__a__"];
+        $key = str_ireplace($string,$replaced_string,$key);
+        return $key;
     }
 }
