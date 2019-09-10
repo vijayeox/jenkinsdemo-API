@@ -154,7 +154,6 @@ class OrganizationControllerTest extends ControllerTest
 
         $this->dispatch('/organization', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-       
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
@@ -181,6 +180,9 @@ class OrganizationControllerTest extends ControllerTest
 
         $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id where name = 'ORGANIZATION'";
         $org = $this->executeQueryTest($select);
+        
+        $query = "SELECT * from ox_app_registry where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
+        $appResult = $this->executeQueryTest($query);
 
         $this->assertEquals(count($role), 3);
         $this->assertEquals(count($roleResult), 1);
@@ -195,6 +197,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($usrResult[0]['address_id'],NULL);
         $this->assertEquals($org[0]['address1'],$data['address1']);
+        $this->assertEquals($appResult[0]['app_id'],1);
 
     }
 

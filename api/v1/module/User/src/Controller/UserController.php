@@ -508,30 +508,6 @@ class UserController extends AbstractApiController
         return $this->getSuccessResponseWithData($responseData, 200);
     }
 
-    public function updateNewPasswordAction()
-    {
-        $data = $this->extractPostData();
-        $userId = AuthContext::get(AuthConstants::USER_ID);
-        $userDetail = $this->userService->getUser($userId,true);
-        $resetCode = $data['password_reset_code'];
-        $newPassword = md5(sha1($data['new_password']));
-        $confirmPassword = md5(sha1($data['confirm_password']));
-        $date = $userDetail['password_reset_expiry_date'];
-        $now = Date("Y-m-d H:i:s");
-        if ($date < $now) {
-            return $this->getErrorResponse("The password reset code has expired, please try again", 400);
-        } elseif ($resetCode !== $userDetail['password_reset_code']) {
-            return $this->getErrorResponse("You have entered an incorrect code", 400);
-        } else if (($resetCode == $userDetail['password_reset_code']) && ($newPassword == $confirmPassword)) {
-            $formData = array('id' => $userId, 'password' => $newPassword, 'password_reset_date' => Date("Y-m-d H:i:s"), 'otp' => null, 'password_reset_code' => null, 'password_reset_expiry_date' => null);
-            $this->update($userId, $formData);
-            return $this->getSuccessResponseWithData($data, 200);
-        } else {
-            $response = ['id' => $userId];
-            return $this->getErrorResponse("Failed to Update Password", 404, $response);
-        }
-    }
-
     /**
     * GET List Project of Current User API
     * @api

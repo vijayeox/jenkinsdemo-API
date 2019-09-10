@@ -66,6 +66,7 @@ class AuthController extends AbstractApiControllerHelper
         $data = $this->request->getPost()->toArray();
         $crypto = new Crypto();
         if (isset($data['username'])&&isset($data['password'])) {
+            $data['username']= trim($data['username']);
             $this->authAdapter->setIdentity($data['username']);
             $this->authAdapter->setCredential($data['password']);
             $result = $this->authAdapter->authenticate();
