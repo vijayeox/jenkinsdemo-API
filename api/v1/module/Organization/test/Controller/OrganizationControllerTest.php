@@ -195,7 +195,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-        $this->assertEquals($usrResult[0]['address_id'],NULL);
+        $this->assertEquals(isset($usrResult[0]['address_id']),true);
         $this->assertEquals($org[0]['address1'],$data['address1']);
         $this->assertEquals($appResult[0]['app_id'],1);
 

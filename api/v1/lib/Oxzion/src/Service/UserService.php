@@ -13,7 +13,7 @@ use Oxzion\Service\AddressService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Search\Elastic\IndexerImpl;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\AccessDeniedException;
 use Oxzion\Security\SecurityManager;
 use Oxzion\Utils\FilterUtils;
@@ -215,7 +215,7 @@ class UserService extends AbstractService
             $data['address_id'] = $addressid;
         }
 
-        $data['uuid'] = Uuid::uuid4()->toString();
+        $data['uuid'] = UuidUtil::uuid();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID)?AuthContext::get(AuthConstants::USER_ID):1;
         if(isset($data['managerid'])){
@@ -327,7 +327,7 @@ class UserService extends AbstractService
             "phone" => $contactPerson->phone,
             "company_name" => $org['name'],
             "address1" => $org['address1'],
-            "address2" => $org['address2'],
+            "address2" => isset($org['address2']) ? $org['address2'] : NULL,
             "city" => $org['city'],
             "state" => $org['state'],
             "country" => $org['country'],
@@ -1107,21 +1107,18 @@ class UserService extends AbstractService
         
         $resetPasswordCode = UuidUtil::uuid();
 
-        $userDetails = $this->getUserBaseProfile($username);
+        $userDetails = $this->getUserBaseProfile($username); 
         if ($username === $userDetails['username']) {
             $userReset['email'] = $userDetails['email'];
             $userReset['firstname'] = $userDetails['firstname'];
             $userReset['lastname'] = $userDetails['lastname'];
             $userReset['url'] = $this->config['applicationUrl']."/?resetpassword=".$resetPasswordCode;
             $userReset['password_reset_expiry_date'] = date("Y-m-d H:i:s", strtotime("+30 minutes"));
+            $userReset['orgid'] = $this->getUuidFromId('ox_organization',$userDetails['orgid']);
             $userDetails['password_reset_expiry_date'] = $userReset['password_reset_expiry_date'];
             $userDetails['password_reset_code'] = $resetPasswordCode;
             //Code to update the password reset and expiration time
-            $userUpdate = $this->updateUser($userDetails['uuid'], $userDetails);
-
-            $userReset['orgid'] = $this->getUuidFromId('ox_organization',$userDetails['orgid']);
-
- 
+            $userUpdate = $this->updateUser($userDetails['uuid'], $userDetails);      
             if ($userUpdate) {
                 $this->messageProducer->sendTopic(json_encode(array(
                     'to' => $userReset['email'],
