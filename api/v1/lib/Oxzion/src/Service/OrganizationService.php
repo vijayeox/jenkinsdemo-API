@@ -115,7 +115,8 @@ class OrganizationService extends AbstractService
             }
             $form->id = $this->table->getLastInsertValue();
             $data['preferences'] = json_decode($data['preferences'], true);
-            $userid['id'] = $this->setupBasicOrg($form, $data['contact'], $data['preferences']);
+            $data['id'] = $form->id;
+            $userid['id'] = $this->setupBasicOrg($data, $data['contact'], $data['preferences']);
 
             if (isset($userid['id'])) {
                 $update = "UPDATE `ox_organization` SET `contactid` = '".$userid['id']."' where uuid = '".$data['uuid']."'";
@@ -185,12 +186,11 @@ class OrganizationService extends AbstractService
 
 
 
-    private function setupBasicOrg(Organization $org, $contactPerson, $orgPreferences)
+    private function setupBasicOrg($org, $contactPerson, $orgPreferences)
     {
         
          // adding basic roles
-        $returnArray['roles'] = $this->roleService->createBasicRoles($org->id);
-
+        $returnArray['roles'] = $this->roleService->createBasicRoles($org['id']);
          // adding a user
         $returnArray['user'] = $this->userService->createAdminForOrg($org,$contactPerson,$orgPreferences);
         return $returnArray['user'];            

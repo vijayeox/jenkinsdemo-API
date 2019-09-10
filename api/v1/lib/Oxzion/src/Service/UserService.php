@@ -210,8 +210,7 @@ class UserService extends AbstractService
                     throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");
                 }
             }
-        
-        if(isset($data['address1'])){
+          if(isset($data['address1'])){
             $addressid = $this->addressService->addAddress($data);
             $data['address_id'] = $addressid;
         }
@@ -326,15 +325,18 @@ class UserService extends AbstractService
             "lastname" => $contactPerson->lastname,
             "email" => $contactPerson->email,
             "phone" => $contactPerson->phone,
-            "company_name" => $org->name,
-            "address_1" => $org->address,
-            "address_2" => $org->city,
-            "country" => $org->country,
+            "company_name" => $org['name'],
+            "address1" => $org['address1'],
+            "address2" => $org['address2'],
+            "city" => $org['city'],
+            "state" => $org['state'],
+            "country" => $org['country'],
+            "zip" => $org['zip'],
             "preferences" => json_encode($preferences),
             "username" => $contactPerson->username,
             "date_of_birth" => date('Y-m-d'),
             "designation" => "Admin",
-            "orgid" => $org->id,
+            "orgid" => $org['id'],
             "status" => "Active",
             "timezone" => $orgPreferences->timezone,
             "gender" => " ",
@@ -342,7 +344,7 @@ class UserService extends AbstractService
             "date_of_join" => date('Y-m-d'),
             "password" => BosUtils::randomPassword()
         );
-        $params['orgId'] = $org->uuid;
+        $params['orgId'] = $org['uuid'];
         
         $this->beginTransaction();
         try{
@@ -357,10 +359,10 @@ class UserService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        $data['orgid'] = $org->uuid; // overriding uuid for Template Service
+        $data['orgid'] = $org['uuid']; // overriding uuid for Template Service
         $this->messageProducer->sendTopic(json_encode(array(
             'To' => $data['email'],
-            'Subject' => $org->name.' created!',
+            'Subject' => $org['name'].' created!',
             'body' => $this->templateService->getContent('newAdminUser', $data)
         )), 'mail');
 
