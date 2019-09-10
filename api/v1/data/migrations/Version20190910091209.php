@@ -22,10 +22,10 @@ final class Version20190910091209 extends AbstractMigration
         
         // this up() migration is auto-generated, please modify it to your needs
 
-        $this->addSql("ALTER TABLE oxzion_api.ox_payment ADD created_date DATETIME NULL;");
-        $this->addSql("ALTER TABLE oxzion_api.ox_payment ADD modified_date DATETIME NULL;");
-        $this->addSql("ALTER TABLE oxzion_api.ox_payment ADD created_id BIGINT NULL;");
-        $this->addSql("ALTER TABLE oxzion_api.ox_payment ADD modified_id varchar(100) NULL;");
+        $this->addSql("ALTER TABLE ox_payment ADD created_date DATETIME NULL;");
+        $this->addSql("ALTER TABLE ox_payment ADD modified_date DATETIME NULL;");
+        $this->addSql("ALTER TABLE ox_payment ADD created_id BIGINT NULL;");
+        $this->addSql("ALTER TABLE ox_payment ADD modified_id varchar(100) NULL;");
 
     }
 
