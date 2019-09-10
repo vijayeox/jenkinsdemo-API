@@ -37,5 +37,6 @@ return [
     'Mlet',
     'Messaging',
     'ProspectResearch',
-    'Workflow'
+    'Workflow',
+    'Payment'
 ];

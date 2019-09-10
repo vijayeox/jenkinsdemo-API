@@ -102,6 +102,20 @@ class Module implements ConfigProviderInterface
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\ImportService($container->get('config'), $dbAdapter);
                 },
+                Service\PaymentService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\PaymentService($container->get('config'), $dbAdapter, $container->get(Model\PaymentTable::class));
+                },
+                Model\PaymentTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\PaymentTableGateway::class);
+                    return new Model\PaymentTable($tableGateway);
+                },
+                Model\PaymentTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Payment());
+                    return new TableGateway('ox_payment', $dbAdapter, null, $resultSetPrototype);
+                },
             ],
         ];
     }
@@ -199,6 +213,14 @@ class Module implements ConfigProviderInterface
                 Controller\CacheController::class => function ($container) {
                     return new Controller\CacheController(
                         $container->get(\Oxzion\Service\UserCacheService::class),
+                        $container->get('AppLogger'),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\PaymentController::class => function ($container) {
+                    return new Controller\PaymentController(
+                        $container->get(Model\PaymentTable::class),
+                        $container->get(Service\PaymentService::class),
                         $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );

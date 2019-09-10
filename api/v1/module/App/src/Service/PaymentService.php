@@ -1,6 +1,8 @@
 <?php
 namespace App\Service;
 
+use App\Model\Payment;
+use App\Model\PaymentTable;
 use Oxzion\Service\AbstractService;
 
 class PaymentService extends AbstractService
@@ -15,9 +17,61 @@ class PaymentService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter)
+    public function __construct($config, $dbAdapter, PaymentTable $table)
     {
+        $this->table = $table;
         parent::__construct($config, $dbAdapter);
+    }
+
+    public function createpayment($appId, $data)
+    {
+        try {
+            $payment = new Payment();
+            $form['app_id'] = $appId;
+            $form['payment_client'] = isset($data['client']) ? $data['client'] : null;
+            $form['api_url'] = isset($data['api_url']) ? $data['api_url'] : null;
+            $form['server_instance_name'] = isset($data['instance']) ? $data['instance'] : null;
+            $form['payment_config'] = isset($data['config']) ? $data['config'] : null;
+            $payment->exchangeArray($form);
+            $payment->validate();
+            $this->beginTransaction();
+            $count = 0;
+            $count = $this->table->save($payment);
+            $id = $this->table->getLastInsertValue();
+            $this->commit();
+        } catch (Exception $e) {
+            $e->getMessage();
+            $this->rollback();
+            throw $e;
+        }
+        return $count;
+    }
+
+    public function updatePayment($id, &$data)
+    {
+        $obj = $this->table->get($id, array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        $data['id'] = $id;
+        $changedArray = array_merge($obj->toArray(), $data);
+        $payment = new Payment();
+        $payment->exchangeArray($changedArray);
+        $payment->validate();
+        $this->beginTransaction();
+        $count = 0;
+        try {
+            $count = $this->table->save($payment);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            return 0;
+        }
+        return $count;
     }
 
     public function paymentProcessing()

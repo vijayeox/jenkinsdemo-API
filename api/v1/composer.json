@@ -94,7 +94,8 @@
       "Mlet\\": "module/Mlet/src/",
       "Messaging\\":"module/Messaging/src/",
       "ProspectResearch\\":"module/ProspectResearch/src/",
-      "Workflow\\":"module/Workflow/src/"
+      "Workflow\\":"module/Workflow/src/",
+      "Payment\\":"module/Payment/src/"
     }
   },
   "autoload-dev": {
