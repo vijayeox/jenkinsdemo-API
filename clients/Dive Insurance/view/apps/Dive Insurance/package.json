@@ -9,6 +9,7 @@
     "prepublishOnly": "npm run eslint && npm run stylelint && rm ./dist/* && npm run build"
   },
   "dependencies": {
+    "bootstrap": "^4.3.1",
     "choices.js": "^7.0.0",
     "file-loader": "^4.2.0",
     "react": "^16.8.6",

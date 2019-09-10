@@ -1,7 +1,11 @@
 .Window_DiveInsurance {
+	@import "./node_modules/bootstrap/dist/css/bootstrap.min.css";
 	.formContent{
 		height: 100%;
 	    overflow: scroll;
 	    padding: 10px;
+	}
+	.sidenav---sidenav---_2tBP{
+		overflow: auto;
 	}
 }
