@@ -37,8 +37,8 @@ namespace Callback\Service;
                 $params['company_name'] = $data['accounts']['name'];
             }
             if (isset($data['addresses']) && !empty($data['addresses'])) {
-                $params['address_1'] = $data['addresses'][0]['name'];
-                $params['address_2'] = isset($data['addresses'][1]['name']) ? $data['addresses'][1]['name'] : null;
+                $params['address1'] = $data['addresses'][0]['name'];
+                $params['address2'] = isset($data['addresses'][1]['name']) ? $data['addresses'][1]['name'] : null;
             }
             $data['owner']['username'] = isset($data['owner']['username']) ? $data['owner']['username'] : null;
             $data['assignedTo']['username'] = isset($data['assignedTo']['username']) ? $data['assignedTo']['username'] : null;
