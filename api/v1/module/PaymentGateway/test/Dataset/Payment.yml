@@ -1,14 +1,14 @@
 ox_payment:
   -
     id: 1
-    app_id: "App1"
+    app_id: "1322-1212-1212"
     payment_client: "Test1"
     api_url: "http://democlient.com"
     server_instance_name: "test1"
     payment_config: '{\"merchant_id\": \"927092398\",\"user_id\": \"u9910idjki109\",\"pincode\": \"8989\" }'
   -
     id: 2
-    app_id: "App2"
+    app_id: 1233-1212-1212"
     payment_client: "Test2"
     api_url: "http://democlient.com"
     server_instance_name: "test2"

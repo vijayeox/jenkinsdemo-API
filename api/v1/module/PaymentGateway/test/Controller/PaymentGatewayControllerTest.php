@@ -12,11 +12,13 @@ class PaymentGatewayControllerTest extends ControllerTest
         $this->loadConfig();
         parent::setUp();
     }
+
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Payment.yml");
         return $dataset;
     }
+
     protected function setDefaultAsserts()
     {
         $this->assertModuleName('PaymentGateway');
@@ -32,7 +34,7 @@ class PaymentGatewayControllerTest extends ControllerTest
 
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_payment'));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/paymentgateway/app/3', 'POST', null);
+        $this->dispatch('/paymentgateway/app/1221-1212-1212', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         // $this->assertMatchedRouteName('payment');
@@ -48,7 +50,7 @@ class PaymentGatewayControllerTest extends ControllerTest
         $data = ['api_url' => "https://api.demo.com/hosted‐payments/transaction_demo", 'server_instance_name' => "Demo", 'payment_config' => "{\"merchant_id\": \"927092398\",\"user_id\": \"u9910idjki109\",\"pincode\": \"8989\" }"];
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_payment'));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/paymentgateway/app/3', 'POST', null);
+        $this->dispatch('/paymentgateway/app/1221-1212-1212', 'POST', null);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('paymentgateway');
@@ -82,7 +84,7 @@ class PaymentGatewayControllerTest extends ControllerTest
         $data = ['payment_client' => 'convergeTest', 'api_url' => "https://api.demo.com/hosted‐payments/transaction_demo", 'server_instance_name' => "Demo23", 'payment_config' => "{\"merchant_id\": \"927092398\",\"user_id\": \"u9910idjki109\",\"pincode\": \"8989\" }"];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/paymentgateway/1/app/3', 'PUT', null);
+        $this->dispatch('/paymentgateway/1/app/1221-1212-1212', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('paymentgateway');
@@ -97,7 +99,7 @@ class PaymentGatewayControllerTest extends ControllerTest
         $data = ['name' => 'Test Payment', 'status' => 1, 'description' => 'testing'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/paymentgateway/122/app/3', 'PUT', null);
+        $this->dispatch('/paymentgateway/122/app/1212-5657-2323', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('paymentgateway');
@@ -126,5 +128,29 @@ class PaymentGatewayControllerTest extends ControllerTest
     //     $content = json_decode($this->getResponse()->getContent(), true);
     //     $this->assertEquals($content['status'], 'error');
     // }
+
+    public function testinitiatePayment()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/paymentgateway/app/1322-1212-1212/initiate', 'GET');
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('initiatepayment');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['app_id'], '1322-1212-1212');
+        $this->assertEquals($content['data'][0]['payment_client'], 'Test1');
+    }
+
+    public function testinitiateNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/paymentgateway/app/3453453453/initiate', 'GET');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('initiatepayment');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 
 }

@@ -94,8 +94,7 @@ class PaymentGatewayController extends AbstractApiController
     {
         $appId = $this->params()->fromRoute()['appId'];
         $response = $this->paymentService->getPaymentDetails($appId);
-        // print_r($response);exit;
-        if ($response == 0) {
+        if (empty($response)) {
             return $this->getErrorResponse("No Payment details for the App", 404, ['id' => $appId]);
         }
         return $this->getSuccessResponseWithData($response, 201);
