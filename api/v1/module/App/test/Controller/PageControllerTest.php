@@ -58,7 +58,7 @@ class PageControllerTest extends ControllerTest
         $this->assertEquals($content['data']['content'][0]['type'], 'Form');
         $this->assertNotEmpty($content['data']['content'][0]['content']);
         $this->assertEquals($content['data']['content'][1]['type'], 'List');
-        $this->assertEquals($content['data']['content'][1]['content'], 'content_2');
+        $this->assertNotEmpty($content['data']['content'][1]['content']);
         $this->assertEquals($content['data']['content'][2]['type'], 'Document');
         $this->assertEquals($content['data']['content'][2]['content'], 'content_3');
     }
@@ -81,7 +81,7 @@ class PageControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = json_decode('{"name":"Page Test1","description":"Page Description","content":[{"content":"<div>Page Content goes here!!!....</div>","type": "Document"},{"form_id":1,"type": "Form"}]}');
+        $data = json_decode('{"name":"Page Test1","description":"Page Description","content":[{"content":"<div>Page Content goes here!!!....</div>","type": "Document"},{"type": "List","content": {"data": "organization"}},{"form_id":1,"type": "Form"}]}');
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/somerandom123/page', 'POST', null);
         $content = (array)json_decode($this->getResponse()->getContent(), true);

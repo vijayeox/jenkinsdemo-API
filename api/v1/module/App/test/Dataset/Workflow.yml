@@ -158,14 +158,14 @@ ox_page_content:
   -
     id: 1
     sequence: 1
-    content: 'content_1'
+    content: '{"name":"content_1"}'
     page_id: 1
     type: 1
     form_id: 1
   -
     id: 2
     sequence: 2
-    content: 'content_2'
+    content: '{"name":"content_2"}'
     page_id: 1
     type: 2
   -

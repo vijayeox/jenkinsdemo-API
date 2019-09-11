@@ -36,7 +36,17 @@ class PageContentService extends AbstractService
         }else{
             return 0;
         }
-        $content = array('content' => $resultSet);
+
+        $result = array();
+        foreach($resultSet as $resultArray){
+            if($resultArray['type'] == 'List' || $resultArray['type'] == 'Form'){ 
+                $resultArray['content'] = json_decode($resultArray['content']);
+            }else{
+                $resultArray['content'] = $resultArray['content'];
+            }  
+            $result[] = $resultArray;
+        }
+        $content = array('content' => $result); 
         return array_merge($selectResult[0],$content);
     }
     public function savePageContent($pageId, &$data)
@@ -46,7 +56,10 @@ class PageContentService extends AbstractService
         try{
             $select = "DELETE from ox_page_content where page_id = ".$pageId;
             $result = $this->executeQuerywithParams($select);
-            foreach($data as $key => $value){
+            foreach($data as $key => $value){ 
+                if($value['type'] == 'List'){
+                    $value['content'] = json_encode($value['content']);
+                }
                 unset($value['id']);
                 if (!isset($value['id'])) {
                     $value['created_by'] = AuthContext::get(AuthConstants::USER_ID);
