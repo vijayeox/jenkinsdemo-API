@@ -49,7 +49,7 @@ class AppRegisterController extends AbstractApiControllerHelper
 
     public function addToAppregistryAction()
     {
-        $data = $this->extractPostData();
+        $data = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try{
             $count = $this->appService->addToAppRegistry($data);
         }catch(ValidationException $e){

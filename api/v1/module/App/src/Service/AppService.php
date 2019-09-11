@@ -468,11 +468,13 @@ class AppService extends AbstractService
 
     public function addToAppRegistry($data)
     {
+        $data['orgId'] = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID) ;
+        $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
         $this->beginTransaction();
         try{
         $insert = " INSERT INTO ox_app_registry (`org_id`,`app_id`) 
-                    SELECT org.`id`,app.`id` FROM ox_organization as org, ox_app as app
-                    WHERE org.`name` = '".$data['org_name']."' AND app.`name` = '".$data['app_name']."'";
+                    SELECT $orgId, app.`id` FROM ox_app as app
+                    WHERE app.`name` = '".$data['app_name']."'";
         $result = $this->runGenericQuery($insert);
         $count = $result->getAffectedRows();
         $this->commit();

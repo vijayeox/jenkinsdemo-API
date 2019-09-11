@@ -110,7 +110,7 @@ return [
             'addtoappregistry' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/addtoappregistry',
+                    'route' => '/app[/org/:orgId]/addtoappregistry',
                     'defaults' => [
                         'controller' => Controller\AppRegisterController::class,
                         'action' => 'addToAppregistry',
