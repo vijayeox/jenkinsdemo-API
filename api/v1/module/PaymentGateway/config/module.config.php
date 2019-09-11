@@ -1,23 +1,22 @@
 <?php
 
-namespace Payment;
+namespace PaymentGateway;
 
-use Zend\Log\Logger;
-use Zend\Router\Http\Segment;
 use Zend\Log\Formatter\Simple;
-use Zend\Log\Filter\Priority;
+use Zend\Log\Logger;
 use Zend\Log\Processor\RequestId;
+use Zend\Router\Http\Segment;
 
 return [
     'router' => [
         'routes' => [
-            'payment' => [
+            'paymentgateway' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/payment[/:paymentId]/app/:appId',
+                    'route' => '/paymentgateway[/:paymentId]/app/:appId',
                     'defaults' => [
-                        'controller' => Controller\PaymentController::class,
-                        'access'=>[
+                        'controller' => Controller\PaymentGatewayController::class,
+                        'access' => [
                             // SET ACCESS CONTROL
                             // 'put'=> 'MANAGE_ALERT_WRITE',
                             // 'post'=> 'MANAGE_ALERT_WRITE',
@@ -28,10 +27,24 @@ return [
                     ],
                 ],
             ],
+            'initiatepayment' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/paymentgateway/app/:appId/initiate',
+                    'defaults' => [
+                        'controller' => Controller\PaymentGatewayController::class,
+                        'method' => 'GET',
+                        'action' => 'initiatePayment',
+                    //     'access' => [
+                    //         'getuserlist'=>'MANAGE_GROUP_WRITE'
+                    //    ],
+                   ],
+                ],
+            ],
         ],
     ],
     'log' => [
-        'PaymentLogger' => [
+        'PaymentGatewayLogger' => [
             'writers' => [
                 'stream' => [
                     'name' => 'stream',
@@ -45,19 +58,19 @@ return [
                             ],
                         ],
                         'filters' => [
-                            'priority' => \Zend\Log\Logger::INFO,],
+                            'priority' => \Zend\Log\Logger::INFO],
                     ],
                 ],
             ],
             'processors' => [
                 'requestid' => [
-                    'name' => \Zend\Log\Processor\RequestId::class,],
+                    'name' => \Zend\Log\Processor\RequestId::class],
             ],
         ],
     ],
     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];

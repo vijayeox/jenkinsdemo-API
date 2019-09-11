@@ -39,7 +39,7 @@
             <directory>./module/Privilege/test</directory>
             <directory>./module/Search/test</directory>
             <directory>./module/ProspectResearch/test</directory>
-            <directory>./module/Payment/test</directory> 
+            <directory>./module/PaymentGateway/test</directory> 
         </testsuite>
        <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>

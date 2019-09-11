@@ -1,6 +1,6 @@
 <?php
 
-namespace Payment\Model;
+namespace PaymentGateway\Model;
 
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;

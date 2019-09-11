@@ -1,11 +1,11 @@
 <?php
-namespace Payment;
+namespace PaymentGateway;
 
 use Oxzion\Test\ControllerTest;
-use Payment\Controller\PaymentController;
+use PaymentGateway\Controller\PaymentGatewayController;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
-class PaymentControllerTest extends ControllerTest
+class PaymentGatewayControllerTest extends ControllerTest
 {
     public function setUp(): void
     {
@@ -19,9 +19,9 @@ class PaymentControllerTest extends ControllerTest
     }
     protected function setDefaultAsserts()
     {
-        $this->assertModuleName('Payment');
-        $this->assertControllerName(PaymentController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('PaymentController');
+        $this->assertModuleName('PaymentGateway');
+        $this->assertControllerName(PaymentGatewayController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('PaymentGatewayController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
@@ -29,10 +29,10 @@ class PaymentControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['payment_client' => 'convergeTest', 'api_url' => "https://api.demo.com/hosted‐payments/transaction_demo", 'server_instance_name' => "Demo", 'payment_config' => "{\"merchant_id\": \"927092398\",\"user_id\": \"u9910idjki109\",\"pincode\": \"8989\" }"];
-        
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_payment'));
+
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_payment'));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/payment/app/1', 'POST', null);
+        $this->dispatch('/paymentgateway/app/3', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         // $this->assertMatchedRouteName('payment');
@@ -46,12 +46,12 @@ class PaymentControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['api_url' => "https://api.demo.com/hosted‐payments/transaction_demo", 'server_instance_name' => "Demo", 'payment_config' => "{\"merchant_id\": \"927092398\",\"user_id\": \"u9910idjki109\",\"pincode\": \"8989\" }"];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_payment'));
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_payment'));
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/payment/app/1', 'POST', null);
+        $this->dispatch('/paymentgateway/app/3', 'POST', null);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('payment');
+        $this->assertMatchedRouteName('paymentgateway');
         $this->assertResponseStatusCode(404);
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -82,10 +82,10 @@ class PaymentControllerTest extends ControllerTest
         $data = ['payment_client' => 'convergeTest', 'api_url' => "https://api.demo.com/hosted‐payments/transaction_demo", 'server_instance_name' => "Demo23", 'payment_config' => "{\"merchant_id\": \"927092398\",\"user_id\": \"u9910idjki109\",\"pincode\": \"8989\" }"];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/payment/1/app/1', 'PUT', null);
+        $this->dispatch('/paymentgateway/1/app/3', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('payment');
+        $this->assertMatchedRouteName('paymentgateway');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
@@ -97,10 +97,10 @@ class PaymentControllerTest extends ControllerTest
         $data = ['name' => 'Test Payment', 'status' => 1, 'description' => 'testing'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/payment/122/app/1', 'PUT', null);
+        $this->dispatch('/paymentgateway/122/app/3', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('payment');
+        $this->assertMatchedRouteName('paymentgateway');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }

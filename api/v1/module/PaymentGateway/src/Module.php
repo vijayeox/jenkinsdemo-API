@@ -1,6 +1,6 @@
 <?php
 
-namespace Payment;
+namespace PaymentGateway;
 
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
@@ -54,11 +54,11 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Controller\PaymentController::class => function ($container) {
-                    return new Controller\PaymentController(
+                Controller\PaymentGatewayController::class => function ($container) {
+                    return new Controller\PaymentGatewayController(
                         $container->get(Model\PaymentTable::class),
                         $container->get(Service\PaymentService::class),
-                        $container->get('PaymentLogger'),
+                        $container->get('PaymentGatewayLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

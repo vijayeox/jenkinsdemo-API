@@ -38,5 +38,5 @@ return [
     'Messaging',
     'ProspectResearch',
     'Workflow',
-    'Payment'
+    'PaymentGateway'
 ];

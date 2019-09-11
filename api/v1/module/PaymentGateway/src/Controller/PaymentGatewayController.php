@@ -2,17 +2,17 @@
 /**
  * Payment Api
  */
-namespace Payment\Controller;
+namespace PaymentGateway\Controller;
 
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
-use Payment\Model\Payment;
-use Payment\Model\PaymentTable;
-use Payment\Service\PaymentService;
+use PaymentGateway\Model\Payment;
+use PaymentGateway\Model\PaymentTable;
+use PaymentGateway\Service\PaymentService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Log\Logger;
 
-class PaymentController extends AbstractApiController
+class PaymentGatewayController extends AbstractApiController
 {
     /**
      * @var PaymentService Instance of Payment Service
@@ -24,7 +24,7 @@ class PaymentController extends AbstractApiController
      */
     public function __construct(PaymentTable $table, PaymentService $paymentService, Logger $log, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Payment::class);
+        parent::__construct($table, $log, __CLASS__, PaymentGateway::class);
         $this->setIdentifierName('paymentId');
         $this->paymentService = $paymentService;
     }
@@ -88,5 +88,16 @@ class PaymentController extends AbstractApiController
             return $this->getErrorResponse("Payment not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
+    }
+
+    public function initiatePaymentAction()
+    {
+        $appId = $this->params()->fromRoute()['appId'];
+        $response = $this->paymentService->getPaymentDetails($appId);
+        // print_r($response);exit;
+        if ($response == 0) {
+            return $this->getErrorResponse("No Payment details for the App", 404, ['id' => $appId]);
+        }
+        return $this->getSuccessResponseWithData($response, 201);
     }
 }

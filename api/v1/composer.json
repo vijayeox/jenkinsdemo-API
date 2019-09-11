@@ -95,7 +95,7 @@
       "Messaging\\":"module/Messaging/src/",
       "ProspectResearch\\":"module/ProspectResearch/src/",
       "Workflow\\":"module/Workflow/src/",
-      "Payment\\":"module/Payment/src/"
+      "PaymentGateway\\":"module/PaymentGateway/src/"
     }
   },
   "autoload-dev": {
