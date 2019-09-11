@@ -22,4 +22,17 @@ class Visualization extends Entity
         $dataArray = array("name","created_by","date_created","org_id","uuid");
         $this->validateWithParams($dataArray);
     }
+
+    public function validateType($type)
+    {
+        if($type == 'Aggregate' || $type == 'Bar' || $type == 'Line' || $type == 'Pie')
+            return;
+        else
+        {
+            $errors = array('data' => 'Type must be Aggregate, Bar, Line or Pie');
+            $validationException = new ValidationException();
+            $validationException->setErrors($errors);
+            throw $validationException;
+        }
+    }
 }

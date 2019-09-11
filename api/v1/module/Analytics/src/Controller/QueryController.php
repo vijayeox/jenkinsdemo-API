@@ -153,9 +153,6 @@ class QueryController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->queryService->getQueryList($params);
-        if ($result == 0) {
-            return $this->getErrorResponse("No records found",404);
-        }
         return $this->getSuccessResponseWithData($result);
     }
 }

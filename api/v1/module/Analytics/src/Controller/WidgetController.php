@@ -145,9 +145,6 @@ class WidgetController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->widgetService->getWidgetList($params);
-        if ($result == 0) {
-            return $this->getErrorResponse("No records found",404);
-        }
         return $this->getSuccessResponseWithData($result);
     }
 }

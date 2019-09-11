@@ -153,9 +153,6 @@ class DashboardController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->dashboardService->getDashboardList($params);
-        if ($result == 0) {
-            return $this->getErrorResponse("No records found",404);
-        }
         return $this->getSuccessResponseWithData($result);
     }
 }

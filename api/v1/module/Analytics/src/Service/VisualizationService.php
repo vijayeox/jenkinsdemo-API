@@ -32,6 +32,7 @@ class VisualizationService extends AbstractService
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $form->exchangeArray($data);
         $form->validate();
+        $form->validateType($data['name']);
         $this->beginTransaction();
         $count = 0;
         try {
@@ -60,6 +61,8 @@ class VisualizationService extends AbstractService
         $data = array_merge($obj->toArray(), $data);
         $form->exchangeArray($data);
         $form->validate();
+        if(isset($data['name']))
+            $form->validateType($data['name']);
         $count = 0;
         try {
             $count = $this->table->save($form);
