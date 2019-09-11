@@ -32,7 +32,6 @@ class PaymentGatewayControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['payment_client' => 'convergeTest', 'api_url' => "https://api.demo.com/hosted‐payments/transaction_demo", 'server_instance_name' => "Demo", 'payment_config' => "{\"merchant_id\": \"927092398\",\"user_id\": \"u9910idjki109\",\"pincode\": \"8989\" }"];
 
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_payment'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/paymentgateway/app/1221-1212-1212', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -41,14 +40,12 @@ class PaymentGatewayControllerTest extends ControllerTest
         $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['payment_client'], $data['payment_client']);
-        // $this->assertEquals(3, $this->getConnection()->getRowCount('ox_payment'));
     }
 
     public function testCreateWithOutClientFailure()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['api_url' => "https://api.demo.com/hosted‐payments/transaction_demo", 'server_instance_name' => "Demo", 'payment_config' => "{\"merchant_id\": \"927092398\",\"user_id\": \"u9910idjki109\",\"pincode\": \"8989\" }"];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_payment'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/paymentgateway/app/1221-1212-1212', 'POST', null);
         $content = (array) json_decode($this->getResponse()->getContent(), true);

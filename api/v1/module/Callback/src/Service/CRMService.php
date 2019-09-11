@@ -54,7 +54,6 @@ namespace Callback\Service;
                 $this->logger->err(__CLASS__."->".$e->getMessage());
                 return 0;
             }
-            print_r($result);
             if ($result) {
                 return array('body'=>$params);
             } else {
