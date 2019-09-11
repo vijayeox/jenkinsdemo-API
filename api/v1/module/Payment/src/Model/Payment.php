@@ -14,10 +14,10 @@ class Payment extends Entity
         'api_url' => null,
         'server_instance_name' => null,
         'payment_config' => null,
-        'created_date' => 0,
-        'created_id' => 0,
-        'modified_date' => 0,
-        'modified_id' => 0,
+        'created_date' => null,
+        'created_id' => null,
+        'modified_date' => null,
+        'modified_id' => null,
     );
 
     public function validate()
