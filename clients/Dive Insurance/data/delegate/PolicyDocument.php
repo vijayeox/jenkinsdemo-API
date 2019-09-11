@@ -12,8 +12,8 @@ class PolicyDocument implements DocumentAppDelegate
     private $logger;
     private $documentBuilder;
     const TEMPLATE = array('Individual Professional Liability' => array('template' => 'certificateOfInsurance',
-                                                                         'header' => 'header.html',
-                                                                         'footer' => 'footer.html'));
+                                                                         'header' => 'COIheader.html',
+                                                                         'footer' => 'COIfooter.html'));
     // public function __construct(){
 
     // }

@@ -82,7 +82,7 @@
     	</div>
     	
     	<hr class="hrtag"></hr>
-    	<center><p class = "policy_notice1">Retroactive Date: {$end_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$end_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
+    	<center><p class = "policy_notice1">Retroactive Date: {$start_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$start_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
 			   to the date that the alleged negligent act, error, or omission occurred.
 		</p></center>
 		<hr class = "spacing1"></hr>
@@ -96,7 +96,7 @@
 		<div class = "second_content">
 			{if isset($update)}
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
-				<p class = "policy_status">Status of Insured : Instructor as of {$update_date}</p>
+				<p class = "policy_status">Status of Insured : {$endrosement_status} as of {$update_date}</p>
 			{/if}
 
 			<hr></hr>
@@ -107,215 +107,215 @@
 				Notice of cancelation: The premium and any taxes or fees are fully earned upon inception and no refund is granted unless cancelled by the company.If the company cancels this policy, 45 days notice will be given to the certificate holder unless cancellation is for nonpayment of premium, then 10 days notice will be provided, and any premium not earned will be returned to the certificate holder.
 			</p>
 
-			{if $state_id == 'AK'}
+			{if $state == 'Alaska'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/AK_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'AL'}
+			{elseif $state == 'Alabama'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/AL_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'AR'}
+			{elseif $state == 'Arkansas'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/AR_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'AZ'}
+			{elseif $state == 'Arizona'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/AZ_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'CO'}
+			{elseif $state == 'Colorado'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/CO_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'CT'}
+			{elseif $state == 'Connecticut'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/CT_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'DC'}
+			{elseif $state == 'District of Columbia'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/DC_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'DE'}
+			{elseif $state == 'Delaware'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/DE_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'FL'}
+			{elseif $state == 'Florida'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/FL_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'FM'}
+			{elseif $state == 'Micronesia'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/FM_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'GA'}
+			{elseif $state == 'Georgia'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/GA_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'HI'}
+			{elseif $state == 'Hawaii'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/HI_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'IA'}
+			{elseif $state == 'Iowa'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/IA_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'ID'}
+			{elseif $state == 'Idaho'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/notice/ID_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'IL'}
+			{elseif $state == 'Illinois'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/IL_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'International'}
+			{elseif $state == 'International'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/International_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'KS'}
+			{elseif $state == 'Kansas'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/KS_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'KY'}
+			{elseif $state == 'Kentucky'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/KY_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'LA'}
+			{elseif $state == 'Louisiana'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/notice/LA_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'MA'}
+			{elseif $state == 'Massachusetts'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/MA_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'MD'}
+			{elseif $state == 'Maryland'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/MD_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'ME'}
+			{elseif $state == 'Maine'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/ME_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'MH'}
+			{elseif $state == 'Marshall Islands'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/MH_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'MI'}
+			{elseif $state == 'Michigan'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/notice/MI_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'MN'}
+			{elseif $state == 'Minnesota'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/notice/MN_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'MO'}
+			{elseif $state == 'Missouri'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/MO_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'MS'}
+			{elseif $state == 'Mississippi'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/MS_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'MT'}
+			{elseif $state == 'Montana'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/MT_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'NC'}
+			{elseif $state == 'North Carolina'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/NC_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'ND'}
+			{elseif $state == 'North Dakota'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/ND_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'NE'}
+			{elseif $state == 'Nebraska'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/NE_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'NH'}
+			{elseif $state == 'New Hampshire'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/NH_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'NJ'}
+			{elseif $state == 'New Jersey'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/NJ_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'NM'}
+			{elseif $state == 'New Mexico'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/NM_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'NV'}
+			{elseif $state == 'Nevada'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/NV_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'NY'}
+			{elseif $state == 'New York'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/notice/NY_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'OH'}
+			{elseif $state == 'Ohio'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/OH_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'OK'}
+			{elseif $state == 'Oklahoma'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/OK_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'OR'}
+			{elseif $state == 'Oregon'}
 				<center><center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/OR_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'PA'}
+			{elseif $state == 'Pennsylvania'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/PA_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'PW'}
+			{elseif $state == 'Palau'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/PW_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'RI'}
+			{elseif $state == 'Rhode Island'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/RI_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'SC'}
+			{elseif $state == 'South Carolina'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/SC_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'SD'}
+			{elseif $state == 'South Dakota'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/SD_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'TN'}
+			{elseif $state == 'Tennessee'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/TN_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'TX'}
+			{elseif $state == 'Texas'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/TX_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'UT'}
+			{elseif $state == 'Utah'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/UT_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'VA'}
+			{elseif $state == 'Virginia'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/VA_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'VT'}
+			{elseif $state == 'Virgin Islands'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/notice/VT_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'WA'}
+			{elseif $state == 'Washington'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/WA_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'WI'}
+			{elseif $state == 'Wisconsin'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/WI_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'WV'}
+			{elseif $state == 'West Virginias'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/WV_Notice.tpl"}</b>
 				</p></center>
-			{elseif $state_id == 'WY'}
+			{elseif $state == 'Wyoming'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/notice/WY_Notice.tpl"}</b>
 				</p></center>

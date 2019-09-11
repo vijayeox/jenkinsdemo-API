@@ -63,9 +63,7 @@ class PolicyDocumentTest extends DelegateTest
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
         AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
         $appId = $this->data['UUID'];
-        $data = ['initial_title' => 'PROFESSIONAL LIABILITY CERTIFICATE OF INSURANCE',
-                'second_title' => 'CLAIMS MADE FORM',
-                'state_id' => 'NY',
+        $data = [
                 'firstname' => 'Mohan',
                  'middlename' => 'Raj' ,
                  'lastname' => 'D',
@@ -90,7 +88,8 @@ class PolicyDocumentTest extends DelegateTest
                  'total_page' => 1,
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Individual Professional Liability',
-                 'ismailingaddress' => FALSE];
+                 'ismailingaddress' => 0,
+                 'endrosement_status' => 'Instructor'];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);

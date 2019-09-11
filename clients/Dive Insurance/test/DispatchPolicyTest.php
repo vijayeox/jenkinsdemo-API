@@ -12,13 +12,13 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use Oxzion\AppDelegate\AppDelegateService;
 use Oxzion\Messaging\MessageProducer;
+use Oxzion\Encryption\Crypto;
 use Mockery as Mockery;
-
+use Oxzion\Db\Persistence\Persistence;
 
 
 class DispatchPolicyTest extends DelegateTest
 {
-    
     private $policyService;
     private $templateService;
 
@@ -32,9 +32,7 @@ class DispatchPolicyTest extends DelegateTest
             'description' => 'FirstAppOfTheClient',
             'orgUuid' => '53012471-2863-4949-afb1-e69b0891c98a'
         );
-        $migrationFolder = __DIR__  . "/../data/migrations/";
-        $this->doMigration($this->data,$migrationFolder);
-        
+        $this->persistence = new Persistence($config, $this->data['UUID'], $this->data['appName']);
         $path = __DIR__.'/../../../api/v1/data/delegate/'.$this->data['UUID'];
         if (!is_link($path)) {
             symlink(__DIR__.'/../data/delegate/',$path);
@@ -57,9 +55,6 @@ class DispatchPolicyTest extends DelegateTest
             unlink($path);
         }
         FileUtils::unlink($this->tempFile);
-        $query = "DROP DATABASE " . $this->database;
-        $statement = $this->getDbAdapter()->query($query);
-        $result = $statement->execute();
     }
 
     public function getDataSet()
@@ -74,14 +69,17 @@ class DispatchPolicyTest extends DelegateTest
         return $mockMessageProducer;
     }
 
-    public function testDispatchPolicy()
+    public function testDispatchIplPolicy()
     {
         $data = array();
+        $crypto = new Crypto();
         $config = $this->getApplicationConfig();
         $appId = $this->data['UUID'];
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
         $data['policy_document'] = __DIR__."/files/certificate.pdf";
+        $data['policy_document'] = $crypto->encryption($data['policy_document']);
         $data['product'] = 'Individual Professional Liability';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if(enableCamel == 0){
@@ -90,7 +88,163 @@ class DispatchPolicyTest extends DelegateTest
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
-        $content = $delegateService->execute($appId, 'DispatchPolicy', $data);
+        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $this->assertEquals($content,array());
+    }
+
+
+    public function testDispatchDbPolicy()
+    {
+        $data = array();
+        $crypto = new Crypto();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['boat_name'] = 'Orion';
+        $data['policy_document'] = __DIR__."/files/certificate.pdf";
+        $data['policy_document'] = $crypto->encryption($data['policy_document']);
+        $data['product'] = 'Dive Boat';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $this->assertEquals($content,array());
+    }
+
+     public function testDispatchDsPolicy()
+    {
+        $data = array();
+         $crypto = new Crypto();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['policy_document'] = __DIR__."/files/certificate.pdf";
+        $data['policy_document'] = $crypto->encryption($data['policy_document']);
+        $data['product'] = 'Dive Store';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $this->assertEquals($content,array());
+    }
+
+    public function testDispatchIplRenewalPolicy()
+    {
+        $data = array();
+        $crypto = new Crypto();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['store_name'] = 'ABCD';
+        $data['store_id'] = '00000';
+        $data['expiry_year'] = '2019';
+        $data['policy_document'] = __DIR__."/files/certificate.pdf";
+        $data['policy_document'] = $crypto->encryption($data['policy_document']);
+        $data['product'] = 'Dive Store';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'DispatchRenewalPolicy', $data);
+        $this->assertEquals($content,array());
+    }
+
+
+    public function testDispatchIplRenewalReminder()
+    {
+        $data = array();
+        $crypto = new Crypto();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['expiry_year'] = '2019';
+        $data['product'] = 'Individual Professional Liability';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'DispatchRenewalNotification', $data);
+        $this->assertEquals($content,array());
+    }
+
+
+    public function testDispatchIplAutoRenewal()
+    {
+        $data = array();
+        $crypto = new Crypto();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['address1'] = 'Bangalore';
+        $data['address2'] = 'Karnataka';
+        $data['city'] = 'Bangalore';
+        $data['state'] = 'Karnataka';
+        $data['zip'] = '12345';
+        $data['coverage'] = '437653';
+        $data['isequipmentliability'] = 1;
+        $data['isexcessliability'] = 0;
+        $data['credit_card_type'] = 'credit';
+        $data['card_no'] = '0000';
+        $data['card_expiry_date'] = '01/10';
+        $data['policy_period'] = 3;
+        $data['expiry_year'] = '2019';
+        $data['product'] = 'Individual Professional Liability';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'DispatchAutoRenewalNotification', $data);
+
+        $this->assertEquals($content,array());
+    }
+
+    public function testDispatchIplExpiredPolicy()
+    {
+        $data = array();
+        $crypto = new Crypto();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['expiry_year'] = '2019';
+        $data['cost'] = '1000000';
+        $data['product'] = 'Individual Professional Liability';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'DispatchExpiredNotification', $data);
         $this->assertEquals($content,array());
     }
 

@@ -1,21 +1,23 @@
 <?php
 use Oxzion\AppDelegate\MailDelegate;
-use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Messaging\MessageProducer;
+use Oxzion\Encryption\Crypto;
 
-class DispatchPolicy extends MailDelegate {
 
-    public function execute(array $data,Persistence $persistenceService)
+abstract class DispatchDocument extends MailDelegate {
+
+    protected function dispatch(array $data)
     {
         $mailOptions = array();
         $file = array();
-        $output = '';
         $mailOptions['to'] = $data['email'];
-        $mailOptions['subject'] = 'Certificate Of Insurance';
+        $mailOptions['subject'] = $data['subject'];
+        $crypto = new Crypto();
+        $data['policy_document'] = $crypto->decryption($data['policy_document']);
         $fileData = $data['policy_document'];
         $file = array($fileData);
         $mailOptions['attachments'] = $file;
-        $template = 'mailTemplate';
+        $template = $data['template'];
         $response = $this->sendMail($data,$template,$mailOptions);
         return $response;
     }
