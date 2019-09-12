@@ -21,13 +21,13 @@ class ImportService extends AbstractService
         parent::__construct($config, $dbAdapter);
     }
 
-    public function generateCSVData($storedProcedureName, $orgId, $appId, $appName)
+    public function generateCSVData($storedProcedureName, $orgId, $appId, $appName, $fileName)
     {
         $filePath = dirname(__dir__) . "/../../../data/import/" . $orgId . "/" . $appId . "/" . $appName . "/data/";
         $archivePath = dirname(__dir__) . "/../../../data/import/" . $orgId . "/" . $appId . "/" . $appName . "/archive/"; //The path to the folder Ex: /clients/<App name>/data/migrations/app/<appname>/archive/
 
         $dataSet = array_diff(scandir($filePath), array(".", ".."));
-        $filePath = $filePath . $dataSet[2];
+        $filePath = $filePath . $fileName;
         if (!file_exists($filePath)) {
             return 2;
         }
@@ -61,19 +61,20 @@ class ImportService extends AbstractService
     }
 
     // Code is not in use untill we get the download feature that we need to get from the clients
-    public function uploadCSVData($storedProcedureName, $orgId, $appId, $appName, $srcURL)
+    public function uploadCSVData($storedProcedureName, $orgId, $appId, $appName, $srcURL, $fileName)
     {
-        // $host = "oxzion.com";
-        // $userID = "rakshith@oxzion.com";
-        // $password = "sftp@rakshith";
+        $host = "oxzion.com";
+        $userID = "rakshith@oxzion.com";
+        $password = "sftp@rakshith";
 
 //This code will come from the deployment descriptor. I have kept it here for now.
-        $host = "206.107.76.164";
-        $userID = "vbinsurance";
-        $password = "<<InsureName>>";
+        // $host = "206.107.76.164";
+        // $userID = "vbinsurance";
+        // $password = "<<InsureName>>";
 
         $filePath = dirname(__dir__) . "/../../../data/import/" . $orgId . "/" . $appId . "/" . $appName . "/data/";
-
+        $f_pointer = fopen($filePath, "r");
+        // echo $filePath . $fileName;exit;
         $ftp_server = $host;
         $ftp_conn = ftp_ssl_connect($ftp_server) or die("Could not connect to $ftp_server");
         $login = ftp_login($ftp_conn, $userID, $password);
@@ -84,12 +85,19 @@ class ImportService extends AbstractService
             echo "<br>logged in successfully!";
             $contents = ftp_nlist($ftp_conn, ".");
             foreach ($contents as $value) {
-                // $result = ftp_fget($ftp_conn, $filePath, $value, FTP_BINARY);
-                echo $value . "<br/";
+                if ($fileName === $value) {
+                    // $result = ftp_fget($ftp_conn, $f_pointer, $value, FTP_BINARY);
+                    if (ftp_get($ftp_conn, $filePath.$fileName, $value, FTP_BINARY)) {
+                        echo "Successfully written to $fileName \n";
+                    } else {
+                        echo "There was a problem \n";
+                    }
+                    echo $value . "<br/>";
+                }
             }
-            var_dump($contents);exit;
         } else {
-            echo "Can't login to remote server.";exit;
+            echo "Can't login to remote server.";
+            return 0;
         }
         if (ftp_close($ftp_conn)) {
             echo "<br>Connection closed Successfully!";

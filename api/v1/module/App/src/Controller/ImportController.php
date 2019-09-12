@@ -48,11 +48,12 @@ class ImportController extends AbstractApiController
         $appId = $params['app_id'];
         $appName = $params['app_name'];
         $srcURL = "";
+        $fileName = $params['file_name'];
 
         try
         {
-            $uploadData = $this->importService->uploadCSVData($storedProcedureName, $orgId, $appId, $appName, $srcURL);
-            $returnData = $this->importService->generateCSVData($storedProcedureName, $orgId, $appId, $appName);
+            $uploadData = $this->importService->uploadCSVData($storedProcedureName, $orgId, $appId, $appName, $srcURL, $fileName);
+            $returnData = $this->importService->generateCSVData($storedProcedureName, $orgId, $appId, $appName, $fileName);
             $filePath = array(dirname(__dir__) . "/../../../data/import/" . $orgId . "/" . $appId . "/" . $appName . "/data/");
 
             if ($returnData == 2) {
