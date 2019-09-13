@@ -4,25 +4,23 @@ namespace Oxzion\Model;
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
-class Metafield extends Entity
-{
-    protected $data = array(
-        'id'=>0,
-        'name'=>null,
-        'org_id'=>null,
-        'text'=>null,
-        'data_type'=>null,
-        'options'=>null,
-        'expression'=>null,
-        'validationtext'=>null,
-        'helpertext'=>null,
-        'created_by'=>null,
-        'modified_by'=>null,
-        'date_created'=>null,
-        'date_modified'=>null,
-    );
-    public function validate()
-    {
+class Metafield extends Entity{
+	protected $data = array(
+		'id'=>0,
+		'name'=>NULL,
+		'org_id'=>NULL,
+		'text'=>NULL,
+		'data_type'=>NULL,
+		'options'=>NULL,
+		'expression'=>NULL,
+		'validationtext'=>NULL,
+		'helpertext'=>NULL,
+		'created_by'=>NULL,
+		'modified_by'=>NULL,
+		'date_created'=>NULL,
+		'date_modified'=>NULL,
+	);
+	public function validate(){
         $required = array('name','org_id','formid','data_type','sequence');
         $this->validateWithParams($required);
     }

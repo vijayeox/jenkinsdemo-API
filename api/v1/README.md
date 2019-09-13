@@ -65,16 +65,6 @@ $ docker run --network="host" -it -v $(pwd):/var/www v1_zf phpdoc
 For Windows
 $ docker run --network="host" -it -v ${PWD}:/var/www v1_zf phpdoc
 ```
-To run php code Fixer use the following command
-This will auto indent and pretify php code
-```bash
-For Linux
-$ docker run --network="host" -it -v $(pwd):/var/www v1_zf vendor/bin/php-cs-fixer fix ./module
-$ docker run --network="host" -it -v $(pwd):/var/www v1_zf vendor/bin/php-cs-fixer fix ./lib
-For Windows
-$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf vendor/bin/php-cs-fixer fix ./module
-$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf vendor/bin/php-cs-fixer fix ./lib
-```
 
 
 To connect to the container shell you can run the following command

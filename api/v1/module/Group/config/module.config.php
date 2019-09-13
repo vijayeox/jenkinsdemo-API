@@ -14,7 +14,7 @@ return [
             'groups' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/[organization/:orgId/]group[/:groupId]',
+                    'route'    => '/group[/:groupId]',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'access'=>[
@@ -44,7 +44,7 @@ return [
            'getusers' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/[organization/:orgId/]group/:groupId/users',
+                    'route'    => '/group/:groupId/users',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'method' => 'GET',
@@ -58,7 +58,7 @@ return [
            'saveusers' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/[organization/:orgId/]group/:groupId/save',
+                    'route'    => '/group/:groupId/save',
                     'defaults' => [
                         'controller' => Controller\GroupController::class,
                         'method' => 'POST',
@@ -69,17 +69,6 @@ return [
                    ],
                ],
            ],
-           'groupsList' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/[organization/:orgId/]groups/list',
-                    'defaults' => [
-                        'controller' => Controller\GroupController::class,
-                        'method' => 'POST',
-                        'action' => 'groupsList'
-                    ],
-                ],
-            ],
            'groupLogo' => [
                 'type' => Segment::class,
                 'options' => [

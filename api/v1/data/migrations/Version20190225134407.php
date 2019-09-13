@@ -4,7 +4,7 @@ namespace Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
-use Oxzion\Utils\UuidUtil;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -33,13 +33,13 @@ final class Version20190225134407 extends AbstractMigration
         $this->addSql("UPDATE `ox_role_privilege` SET `app_id`=( SELECT id from ox_app WHERE uuid = '$uniqueIdString'),org_id = 1 WHERE `privilege_name` LIKE 'MANAGE_ORGANIZATION' AND `role_id` = 1");
         $this->addSql("UPDATE `ox_role_privilege` SET `app_id`=( SELECT id from ox_app WHERE uuid = '$uniqueIdString'),org_id = 1 WHERE `privilege_name` LIKE 'MANAGE_USER' AND `role_id` = 1");
         $this->addSql("UPDATE `ox_role_privilege` SET `app_id`=( SELECT id from ox_app WHERE uuid = '$uniqueIdString'),org_id = 1 WHERE `privilege_name` LIKE 'MANAGE_PROJECT' AND `role_id` = 1");
-        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('Announcement','EXAMPLE_CATEGORY','".UuidUtil::uuid()."',2);");
-        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('App Builder','EXAMPLE_CATEGORY','".UuidUtil::uuid()."',2);");
-        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('User','EXAMPLE_CATEGORY','".UuidUtil::uuid()."',2);");
-        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('Project','EXAMPLE_CATEGORY','".UuidUtil::uuid()."',2);");
-        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('Group','EXAMPLE_CATEGORY','".UuidUtil::uuid()."',2);");
-        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('Role','EXAMPLE_CATEGORY','".UuidUtil::uuid()."',2);");
-        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('Organization','EXAMPLE_CATEGORY','".UuidUtil::uuid()."',2);");
+        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('Announcement','EXAMPLE_CATEGORY','".Uuid::uuid4()->toString()."',2);");
+        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('App Builder','EXAMPLE_CATEGORY','".Uuid::uuid4()->toString()."',2);");
+        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('User','EXAMPLE_CATEGORY','".Uuid::uuid4()->toString()."',2);");
+        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('Project','EXAMPLE_CATEGORY','".Uuid::uuid4()->toString()."',2);");
+        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('Group','EXAMPLE_CATEGORY','".Uuid::uuid4()->toString()."',2);");
+        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('Role','EXAMPLE_CATEGORY','".Uuid::uuid4()->toString()."',2);");
+        $this->addSql("INSERT INTO `ox_app` (name,category,uuid,type) VALUES ('Organization','EXAMPLE_CATEGORY','".Uuid::uuid4()->toString()."',2);");
     }
 
     public function down(Schema $schema) : void

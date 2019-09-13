@@ -5,8 +5,7 @@ namespace App\Model;
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
-class App extends Entity
-{
+class App extends Entity {
 
     //status for the apps
     const DELETED = 1;
@@ -19,25 +18,24 @@ class App extends Entity
     const MY_APP = 2;
 
     protected $data = array(
-        'id' => 0,
-        'name' => null,
+        'id' => 0,  
+        'name' => NULL,  
         'uuid' => 0,
-        'description' => null,
-        'type' => null,
-        'isdefault' => null,
-        'logo' => "default_app.png",
-        'category' => null,
-        'date_created' => null,
-        'date_modified' => null,
-        'created_by' => null,
-        'modified_by' => null,
+        'description' => NULL,
+        'type' => NULL,  
+        'isdefault' => NULL,
+        'logo' => "default_app.png",  
+        'category' => NULL,
+        'date_created' => NULL,  
+        'date_modified' => NULL,
+        'created_by' => NULL,
+        'modified_by' => NULL,
         'status' => 1,
-        'start_options' => null
+        'start_options' => NULL
     );
     
-    public function validate()
-    {
-        $dataArray = array("name", "type", "category","uuid","date_created","created_by","status");
+    public function validate(){
+        $dataArray = Array("name", "type", "category","uuid","date_created","created_by","status");
         $this->validateWithParams($dataArray);
     }
 }

@@ -15,12 +15,10 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
-
 /**
  * Attachment Controller
  */
-class AttachmentController extends AbstractApiController
-{
+class AttachmentController extends AbstractApiController {
     /**
     * @var AttachmentService Instance of Attchment Service
     */
@@ -28,9 +26,8 @@ class AttachmentController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(AttachmentTable $table, AttachmentService $attachmentService, Logger $log, AdapterInterface $dbAdapter)
-    {
-        parent::__construct($table, $log, __CLASS__, AttachmentController::class);
+    public function __construct(AttachmentTable $table,AttachmentService $attachmentService, Logger $log, AdapterInterface $dbAdapter) {
+         parent::__construct($table, $log, __CLASS__, AttachmentController::class);
         $this->attachmentService = $attachmentService;
         $this->setIdentifierName('attachmentId');
     }
@@ -52,24 +49,20 @@ class AttachmentController extends AbstractApiController
     *        data : array Created Attachment Object
     * </code>
     */
-    public function create($data)
-    {
+    public function create($data){
         $files = $this->params()->fromFiles('files');
         $filesList = array();
-        try {
-            if (!isset($files)) {
-                return $this->getSuccessResponseWithData(array("filename"=> ''), 201);
-            }
-            if ($files['name']) {
-                $filesList = $this->attachmentService->upload($data, array($files));
+        try{
+            if($files['name']){
+                $filesList = $this->attachmentService->upload($data,array($files));
             } else {
-                $filesList = $this->attachmentService->upload($data, $files);
+                $filesList = $this->attachmentService->upload($data,$files);
             }
-        } catch (ValidationException $e) {
+        }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getErrorResponse("Validation Errors",404, $response);
         }
-        return $this->getSuccessResponseWithData(array("filename"=>$filesList), 201);
+        return $this->getSuccessResponseWithData(array("filename"=>$filesList),201);
     }
     /**
     * GET Attachment API
@@ -77,7 +70,7 @@ class AttachmentController extends AbstractApiController
     * @link /attachment
     * @method GET
     * @param $id ID of Attachment to Delete
-    * @return array $data
+    * @return array $data 
     * <code>
     * {
     *  integer id,
@@ -90,8 +83,7 @@ class AttachmentController extends AbstractApiController
     * </code>
     * @return array Returns a JSON Response with Status Code and Created Attachment.
     */
-    public function get($id)
-    {
+    public function get($id){
         $result = $this->attachmentService->getAttachment($id);
         return $this->getSuccessResponseWithData($result);
     }
@@ -102,8 +94,7 @@ class AttachmentController extends AbstractApiController
     * @method GET
     * @return Error Response Array
     */
-    public function getList()
-    {
+    public function getList(){
         return $this->getInvalidMethod();
     }
 }

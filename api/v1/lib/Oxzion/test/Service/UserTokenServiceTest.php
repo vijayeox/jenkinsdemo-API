@@ -8,21 +8,23 @@ use Mockery;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Transaction\TransactionManager;
 
+
+
 class UserTokenServiceTest extends ServiceTest
 {
+
     public function setUp() : void
     {
         $this->loadConfig();
         $config = $this->getApplicationConfig();
         $this->adapter = new Adapter($config['db']);
-        $this->table = $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTokenTable::class);
+        $table = $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTokenTable::class);
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->setRollbackOnly(true);
         $tm->beginTransaction();
     }
 
-    public function tearDown() : void
-    {
+     public function tearDown() : void {
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->rollback();
         $_REQUEST = [];
@@ -49,8 +51,10 @@ class UserTokenServiceTest extends ServiceTest
         $config = $this->getApplicationConfig();
         // $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         // $table = $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTokenTable::class);
-        $userTokenService = new UserTokenService($config, $this->adapter, $this->table);
+        $userTokenService = new UserTokenService($this->config, $this->adapter, $this->table);
         $content = $userTokenService->generateRefreshToken($data, $salt);
         $this->assertEquals(0, $content);
     }
 }
+
+?>

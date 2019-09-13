@@ -1,10 +1,8 @@
 <?php
 namespace Oxzion\Messaging;
-
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Exception;
-
 class MessageProducer
 {
     private static $instance = null;
@@ -28,9 +26,9 @@ class MessageProducer
 
     public function sendTopic($message, $topic)
     {
-        try {
+        try{
             $this->client->sendMessage('/topic/' . $topic, $message);
-        } catch (Exception $e) {
+        }catch(Exception $e){
             $this->logger->log(Logger::ERR, $e->getMessage());
         }
     }

@@ -28,4 +28,5 @@ class ProspectResearchController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData(array("result" => $result), 201);
     }
+
 }

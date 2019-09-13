@@ -6,18 +6,16 @@ use Zend\View\Model\JsonModel;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 
-class ErrorHandler
-{
-    private static $logger;
+class ErrorHandler {
+	private static $logger;
     
-    public static function init()
-    {
+    static function init(){
         self::$logger = new Logger();
         $writer = new Stream(__DIR__ . '/../../../../logs/Error.log');
-        self::$logger->addWriter($writer);
+        self::$logger->addWriter($writer);  
     }
 
-    public static function onDispatchError($e)
+	public static function onDispatchError($e)
     {
         return self::getJsonModelError($e);
     }
@@ -26,13 +24,12 @@ class ErrorHandler
     {
         return self::getJsonModelError($e);
     }
-    public static function buildErrorJson($message, array $data = null)
-    {
+    public static function buildErrorJson($message, array $data = null){
         $payload = ['status' => 'error'];
-        if (! is_null($message)) {
+        if(! is_null($message)){
             $payload['message'] = $message;
         }
-        if (! is_null($data)) {
+        if(! is_null($data)){
             $payload['data'] = (array) $data;
         }
         return new JsonModel($payload);
@@ -63,8 +60,8 @@ class ErrorHandler
         );
         
         // if(isset($_ENV['ENV']) && strtolower($_ENV['ENV']) != 'production'){
-        $errorJson['error'] = $error;
-        $errorJson['exception'] = $exceptionJson;
+            $errorJson['error'] = $error;
+            $errorJson['exception'] = $exceptionJson;
         // }
         
         if ($error == 'error-router-no-match') {

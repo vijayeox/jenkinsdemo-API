@@ -34,21 +34,3 @@ ox_contact:
     owner_id: 2
     icon_type: 0
     date_created: '2019-06-26 00:00:00'
-  -
-    id: 3
-    uuid: c384bdbf-48e1-4180-937a-08e585271ng6
-    user_id: 1
-    first_name: Rajesh
-    last_name: S
-    phone_1: 09383883922
-    phone_list: '{"data":["8399547885"," 7899290200"," 123123122445"]}'
-    email: rajesh@myvamla.com
-    email_list: '{"data":["raks@va.com"," asas@ox.com"]}'
-    company_name: Vantage Agora
-    designation: Developer
-    address_1: Banashankri 2nd Stage
-    address_2: Bangalore
-    country: India
-    owner_id: 1
-    icon_type: 1
-    date_created: '2019-06-26 00:00:00'

@@ -11,28 +11,28 @@ use Exception;
 // use v1\module\Attachment\Service\AttachmentService;
 use Oxzion\Utils\FileUtils;
 
-class ProfilePictureService extends AbstractService
-{
+
+class ProfilePictureService extends AbstractService{
+    
     private $profilePic = "profile.png";
     
     /**
     * @ignore __construct
     */
-    public function __construct($config, $dbAdapter)
-    {
+    public function __construct($config, $dbAdapter){
         parent::__construct($config, $dbAdapter);
     }
 
-    public function getProfilePicturePath($id, $ensureDir=false)
-    {
+    public function getProfilePicturePath($id,$ensureDir=false){
+
         $baseFolder = $this->config['UPLOAD_FOLDER'];
         //TODO : Replace the User_ID with USER uuid
         $folder = $baseFolder."user/";
-        if (isset($id)) {
+        if(isset($id)){
             $folder = $folder.$id."/";
         }
 
-        if ($ensureDir && !file_exists($folder)) {
+        if($ensureDir && !file_exists($folder)){
             FileUtils::createDirectory($folder);
         }
 
@@ -50,12 +50,12 @@ class ProfilePictureService extends AbstractService
      *  @param files Array of files to upload
      *  @return JSON array of filenames
     */
-    public function uploadProfilepicture($file)
-    {
+    public function uploadProfilepicture($file){
         $id = AuthContext::get(AuthConstants::USER_UUID);
 
-        if (isset($file)) {
-            $destFile = $this->getProfilePicturePath($id, true);
+        if(isset($file)){
+
+            $destFile = $this->getProfilePicturePath($id,true);
 
             // move_uploaded_file($file, $destFile);
             file_put_contents($destFile, $file);

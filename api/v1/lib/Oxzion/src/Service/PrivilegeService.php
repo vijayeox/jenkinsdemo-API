@@ -8,14 +8,13 @@ use Oxzion\Model\PrivilegeTable;
 use Oxzion\ValidationException;
 use Oxzion\Service\AbstractService;
 
-class PrivilegeService extends AbstractService
-{
+class PrivilegeService extends AbstractService {
+
     protected $table;
     private $roleService;
     protected $modelClass;
 
-    public function __construct($config, $dbAdapter, PrivilegeTable $table, RoleService $roleService)
-    {
+    public function __construct($config, $dbAdapter, PrivilegeTable $table, RoleService $roleService) {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->roleService = $roleService;
@@ -23,30 +22,27 @@ class PrivilegeService extends AbstractService
     }
 
 
-    public function getMasterPrivilegeList($params = null){
+    public function getMasterPrivilegeList($params){
             
-            if(isset($params['orgId'])){
-                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);   
-            }else{
-                $orgId = AuthContext::get(AuthConstants::ORG_ID);
-            }
 
-            $select = "SELECT orp.privilege_name,orp.permission,oa.name FROM ox_role_privilege orp left join ox_app as oa on oa.id = orp.app_id
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+            $select = "SELECT orp.*,oa.name FROM ox_role_privilege orp 
+                        left join ox_app as oa on oa.id = orp.app_id  
                         WHERE orp.org_id = ".$orgId." AND orp.role_id = (SELECT r.id FROM ox_role r WHERE r.name = 'ADMIN' and r.org_id = ".$orgId.") ORDER BY orp.id";
             $resultSet = $this->executeQuerywithParams($select);
             $masterPrivilege = $resultSet->toArray();
 
             if(isset($params['roleId'])){
-                $roleId = $this->getIdFromUuid('ox_role',$params['roleId']); 
-                $select = "SELECT orp.privilege_name,orp.permission FROM ox_role_privilege orp WHERE orp.org_id = ".$orgId." AND orp.role_id =".$roleId." ORDER BY orp.id";
+                $roleId = $params['roleId']; 
+                $select = "SELECT orp.* FROM ox_role_privilege orp WHERE orp.org_id = ".$orgId." AND orp.role_id =".$roleId." ORDER BY orp.id";
                 $resultSet = $this->executeQuerywithParams($select);
                 $rolePrivilege = $resultSet->toArray();
 
-            return array('masterPrivilege' => $masterPrivilege,
+                return array('masterPrivilege' => $masterPrivilege,
                          'rolePrivilege' => $rolePrivilege);
-        }
+            }
 
-        return array('masterPrivilege' => $masterPrivilege);
+            return array('masterPrivilege' => $masterPrivilege);
     }
 
     public function getAppPrivilegeForUser($appId)
@@ -70,23 +66,25 @@ class PrivilegeService extends AbstractService
 
     public function getAppId()
     {
-        try {
+        try{
             $userId = AuthContext::get(AuthConstants::USER_ID);
             $query = "select ox_role_privilege.app_id from ox_role_privilege RIGHT JOIN ox_user_role on ox_role_privilege.role_id = ox_user_role.role_id";
             $where = "where ox_user_role.user_id = ".$userId." AND ox_role_privilege.privilege_name = 'MANAGE_ROLE'";
             $resultSet = $this->executeQuerywithParams($query, $where);
             $appIdArray= $resultSet->toArray();
-            $appId = array_unique(array_column($appIdArray, 'app_id'));
+            $appId = array_unique(array_column($appIdArray,'app_id'));
             return $appId;
-        } catch (ValidationException $e) {
+        }
+        catch (ValidationException $e) {
             return 0;
         }
     }
 
-    public function getDefaultPrivileges()
-    {
+    public function getDefaultPrivileges() {
         $query = "select p.* from ox_privilege p left join ox_app ap on ap.id = p.app_id and ap.isdefault=1";
         $result = $this->executeQuerywithParams($query);
         return $result;
     }
+
 }
+?>

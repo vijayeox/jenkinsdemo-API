@@ -11,8 +11,7 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Service\UserService;
 
-class ProfilePictureDownloadController extends AbstractApiControllerHelper
-{
+class ProfilePictureDownloadController extends AbstractApiControllerHelper { 
     /**
     * @var ProfilepictureService Instance of Projectpicture Service
     */
@@ -21,7 +20,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
     /**
     * @ignore __construct
     */
-    public function __construct(ProfilePictureService $profilepictureService, Logger $log, AdapterInterface $dbAdapter, $userService)
+    public function __construct(ProfilePictureService $profilepictureService, Logger $log, AdapterInterface $dbAdapter,$userService)
     {
         $this->setIdentifierName('profileId');
         $this->profilepictureService = $profilepictureService;
@@ -34,17 +33,16 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
     * @link /user/profile[/:profileId]
     * @method GET
     * @param $profileId ID of user
-    * @return profile picture
+    * @return profile picture 
     */
-    public function get($id)
-    {
+    public function get($id){
         $file = $this->profilepictureService->getProfilePicturePath($id);
-        if (FileUtils::fileExists($file) != 1) {
-            $file = $this->profilepictureService->getProfilePicturePath(null);
-        }
+        if(FileUtils::fileExists($file) != 1){
+             $file = $this->profilepictureService->getProfilePicturePath(null);
+         }
         if (!headers_sent()) {
             header('Content-Type: image/png');
-            header("Content-Transfer-Encoding: Binary");
+            header("Content-Transfer-Encoding: Binary"); 
         }
         try {
             $fp = @fopen($file, 'rb');
@@ -52,7 +50,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
             fclose($fp);
             $this->response->setStatusCode(200);
             return $this->response;
-        } catch (Exception $e) {
+        } catch(Exception $e){
             print_r($e->getMessage());
             return $this->getErrorResponse("Profile picture not found", 404);
         }
@@ -64,22 +62,21 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
     * @link /user/profile/username[/:username]
     * @method GET
     * @param $username of the user
-    * @return profile picture
+    * @return profile picture 
     */
-    public function profilePictureByUsernameAction()
-    {
+    public function profilePictureByUsernameAction(){
         $params = $this->params()->fromRoute();
         $file = "nonexistant_file";
-        if (isset($params['username'])) {
+        if(isset($params['username'])){
             $userInfo = $this->userService->getUserContextDetails($params['username']);
             $file = $this->profilepictureService->getProfilePicturePath($userInfo['user_uuid']);
         }
-        if (FileUtils::fileExists($file) != 1) {
-            $file = $this->profilepictureService->getProfilePicturePath(null);
-        }
+        if(FileUtils::fileExists($file) != 1){
+             $file = $this->profilepictureService->getProfilePicturePath(null);
+         }
         if (!headers_sent()) {
             header('Content-Type: image/png');
-            header("Content-Transfer-Encoding: Binary");
+            header("Content-Transfer-Encoding: Binary"); 
         }
         try {
             $fp = @fopen($file, 'rb');
@@ -87,7 +84,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
             fclose($fp);
             $this->response->setStatusCode(200);
             return $this->response;
-        } catch (Exception $e) {
+        } catch(Exception $e){
             print_r($e->getMessage());
             return $this->getErrorResponse("Profile picture not found", 404);
         }

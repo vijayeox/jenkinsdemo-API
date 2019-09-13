@@ -2,30 +2,28 @@
 namespace Oxzion\Model;
 
 use Oxzion\Model\Entity;
+class Role extends Entity {
 
-class Role extends Entity
-{
     protected $data = array(
-        'id' => null,
-        'name' => null,
+        'id' => NULL,
+        'name' => NULL,
         'org_id' => 0,
-        'description' => null,
-        'is_system_role' => null,
-        'uuid' => null
+        'description' => NULL,
+        'is_system_role' => NULL,
+        'uuid' => NULL
     );
 
-    public function __construct($data = array())
-    {
+    public function __construct($data = array()) {
         if ($data) {
             $this->exchangeArray($data);
         }
     }
 
-    public function validate()
-    {
+    public function validate() {
         $required = array(
             'name', 'uuid'
         );
         $this->validateWithParams($required);
     }
 }
+?>

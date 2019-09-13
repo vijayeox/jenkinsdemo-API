@@ -10,20 +10,18 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 
-class WidgetControllerTest extends ControllerTest
-{
-    public function setUp() : void
-    {
+
+class WidgetControllerTest extends ControllerTest{
+    
+    public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
-    }
-    public function getDataSet()
-    {
+    }   
+    public function getDataSet() {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Widget.yml");
         return $dataset;
     }
-    public function testGetList()
-    {
+    public function testGetList(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/widget', 'GET');
         $this->assertResponseStatusCode(200);
@@ -43,11 +41,11 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['name'], 'Followups');
         $this->assertEquals($content['data'][1]['defaultheight'], 2);
         $this->assertEquals($content['data'][1]['defaultwidth'], 3);
+
     }
 
 
-    public function testGet()
-    {
+    public function testGet(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/widget/1', 'GET');
         $this->assertResponseStatusCode(200);
@@ -62,8 +60,7 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], 'Announcement');
     }
 
-    public function testGetNotFound()
-    {
+    public function testGetNotFound(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/widget/9999', 'GET');
         $this->assertResponseStatusCode(404);
@@ -75,8 +72,7 @@ class WidgetControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-    public function testCreate()
-    {
+    public function testCreate(){
         $data = ['name' => 'Test Widget','defaultheight' =>5,'defaultwidth'=>1,'applicationguid'=>'abcd1234'];
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_widget'));
         $this->initAuthToken($this->adminUser);
@@ -97,8 +93,7 @@ class WidgetControllerTest extends ControllerTest
     }
 
 
-    public function testUpdate()
-    {
+    public function testUpdate(){
         $data = ['name' => 'Test Widget Update', 'defaultwidth' => 2, 'defaultheight' => 2, 'applicationguid' => '49af3ce6-98cb-11e9-adc5-308d99c9145b'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -115,8 +110,7 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
     }
 
-    public function testUpdateNotFound()
-    {
+    public function testUpdateNotFound(){
         $data = ['name' => 'Test Widget'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -131,8 +125,7 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testDelete()
-    {
+    public function testDelete(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/widget/2', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -145,8 +138,7 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testDeleteNotFound()
-    {
+    public function testDeleteNotFound(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/widget/99999', 'DELETE');
         $this->assertResponseStatusCode(404);
@@ -156,6 +148,6 @@ class WidgetControllerTest extends ControllerTest
         $this->assertMatchedRouteName('Widget');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'error');        
     }
 }

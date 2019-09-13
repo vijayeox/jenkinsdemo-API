@@ -19,15 +19,14 @@ use Oxzion\Service\EmailService;
 use Oxzion\Service\UserSessionService;
 use Project\Service\ProjectService;
 
-class Module implements ConfigProviderInterface
-{
-    public function getConfig()
-    {
+
+class Module implements ConfigProviderInterface {
+
+    public function getConfig() {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e)
-    {
+    public function onBootstrap(MvcEvent $e) {
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -47,42 +46,37 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Controller\UserController::class => function ($container) {
+                Controller\UserController::class => function($container) {
                     return new Controller\UserController(
-                        $container->get(UserTable::class),
+                        $container->get(UserTable::class), 
                         $container->get('UserLogger'),
                         $container->get(UserService::class),
                         $container->get(AdapterInterface::class),
                         $container->get(EmailService::class),
                         $container->get(ProjectService::class)
+
                     );
                 },
-                Controller\ProfilePictureController::class => function ($container) {
+                Controller\ProfilePictureController::class => function($container) {
                     return new Controller\ProfilePictureController(
                         $container->get(ProfilePictureService::class),
                         $container->get('UserLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
-                 Controller\ProfilePictureDownloadController::class => function ($container) {
-                     return new Controller\ProfilePictureDownloadController(
+                 Controller\ProfilePictureDownloadController::class => function($container) {
+                    return new Controller\ProfilePictureDownloadController(
                         $container->get(ProfilePictureService::class),
                         $container->get('UserLogger'),
                         $container->get(AdapterInterface::class),
                         $container->get(UserService::class)
                     );
-                 },
-                Controller\UserSessionController::class => function ($container) {
+                },
+                Controller\UserSessionController::class => function($container) {
                     return new Controller\UserSessionController(
                         $container->get(UserSessionService::class),
                         $container->get('UserLogger'),
                         $container->get(AdapterInterface::class)
-                    );
-                },
-                Controller\ForgotPasswordController::class => function($container) {
-                    return new Controller\ForgotPasswordController(
-                        $container->get('UserLogger'),
-                        $container->get(UserService::class)
                     );
                 },
             ],

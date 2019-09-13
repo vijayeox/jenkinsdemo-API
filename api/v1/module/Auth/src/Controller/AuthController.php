@@ -35,7 +35,7 @@ class AuthController extends AbstractApiControllerHelper
     /**
      * @ignore __construct
      */
-    public function __construct(AuthAdapter $authAdapter, ApiAdapter $apiAdapter, UserService $userService, Logger $log, UserTokenService $userTokenService, AuthService $authService)
+    public function __construct(AuthAdapter $authAdapter,ApiAdapter $apiAdapter, UserService $userService, Logger $log, UserTokenService $userTokenService, AuthService $authService)
     {
         $this->authAdapter = $authAdapter;
         $this->apiAdapter = $apiAdapter;
@@ -65,44 +65,44 @@ class AuthController extends AbstractApiControllerHelper
     {
         $data = $this->request->getPost()->toArray();
         $crypto = new Crypto();
-        if (isset($data['username'])&&isset($data['password'])) {
-            $data['username']= trim($data['username']);
+        if(isset($data['username'])&&isset($data['password'])) {
             $this->authAdapter->setIdentity($data['username']);
             $this->authAdapter->setCredential($data['password']);
             $result = $this->authAdapter->authenticate();
-        } elseif (isset($data['apikey'])) {
-            $apiSecret = array_column($this->getApiSecret($data['apikey']), 'secret');
-            if (!empty($apiSecret)) {
-                $this->apiAdapter->setIdentity($data['apikey']);
-                $this->apiAdapter->setCredential($apiSecret[0]);
-                $result = $this->apiAdapter->authenticate();
-            } else {
-                return $this->getErrorResponse("Authentication Failure - Incorrect Api Key", 404);
+        }
+        elseif (isset($data['apikey'])) {
+            $apiSecret = array_column($this->getApiSecret($data['apikey']),'secret');
+            if(!empty($apiSecret)){
+            $this->apiAdapter->setIdentity($data['apikey']);
+            $this->apiAdapter->setCredential($apiSecret[0]);
+            $result = $this->apiAdapter->authenticate();
+            }
+            else {
+                return $this->getErrorResponse("Authentication Failure - Incorrect Api Key",404);
             }
         }
-        if (isset($result)) {
+        if(isset($result)) {
             if ($result->isValid()) {
                 if (isset($data['username'])&&isset($data['password'])) {
                     return $this->getJwt($data['username'], $this->userService->getUserOrg($data['username']));
-                } elseif (isset($data['apikey'])) {
+                }
+                elseif (isset($data['apikey'])) {
                     return $this->getApiJwt($data['apikey']);
                 }
             }
         }
-        return $this->getErrorResponse("Authentication Failure - Incorrect data specified", 404);
+            return $this->getErrorResponse("Authentication Failure - Incorrect data specified",404);
     }
 
-    public function refreshtokenAction()
-    {
+    public function refreshtokenAction(){
         $data = $this->request->getPost()->toArray();
-        try {
-            if (isset($data['jwt'])) {
+        try{
+            if(isset($data['jwt'])){
                 $tokenPayload = $this->decodeJwtToken($data['jwt']);
                 if (is_array($tokenPayload) || is_object($tokenPayload)) {
                     $uname = isset($tokenPayload->data->username)? $tokenPayload->data->username:$tokenPayload['username'] ;
                     $orgId = isset($tokenPayload->data->orgid)? $tokenPayload->data->orgid: $tokenPayload['orgid'];
                     $userDetail = $this->userService->getUserDetailsbyUserName($uname);
-                    $userDetail['id'] = isset($userDetail['id']) ? $userDetail['id'] : NULL;
                     $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($userDetail['id']);
                     if (!empty($userTokenInfo)) {
                         $data = ['username' => $uname, 'orgid' => $orgId];
@@ -110,11 +110,11 @@ class AuthController extends AbstractApiControllerHelper
                         $jwt = $this->generateJwtToken($dataJwt);
                         $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
                         return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken]);
-                    } else {
+                    } else{
                         return $this->getErrorResponse("Refresh Token Expired", 404);
                     }
-                } else {
-                    return $this->getErrorResponse("JWT Token Error", 404);
+                } else{
+                        return $this->getErrorResponse("JWT Token Error", 404);
                 }
             } else {
                 return $this->getErrorResponse("JWT Token Not Found", 404);
@@ -134,30 +134,29 @@ class AuthController extends AbstractApiControllerHelper
         $userDetail = $this->userService->getUserDetailsbyUserName($userName);
         $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
         $jwt = $this->generateJwtToken($dataJwt);
-        if ($refreshToken != 0) {
+        if($refreshToken != 0){
             return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken,'username'=>$userName]);
         } else {
             return $this->getErrorResponse("Login Error", 405, array());
         }
     }
 
-    public function validatetokenAction()
-    {
+    public function validatetokenAction(){
         $data = $this->request->getPost()->toArray();
-        try {
-            if (isset($data['jwt'])) {
+        try{
+            if(isset($data['jwt'])) {
                 $tokenPayload = $this->decodeJwtToken($data['jwt']);
-                if (is_array($tokenPayload) && !is_object($tokenPayload)) {
-                    if ($tokenPayload['Error'] == 'Expired token') {
+                if(is_array($tokenPayload) && !is_object($tokenPayload)) {
+                    if($tokenPayload['Error'] == 'Expired token') {
                         return $this->getErrorResponse("Token Expired");
                     } else {
                         return $this->getErrorResponse("Token Invalid");
                     }
-                } else {
+                } else{
                     return $this->getSuccessResponse("Token Valid");
                 }
             } else {
-                return $this->getErrorResponse("JWT Token Not Found", 404);
+                    return $this->getErrorResponse("JWT Token Not Found", 404);
             }
         } catch (Exception $e) {
             return $this->getErrorResponse("Invalid JWT Token", 404);
@@ -168,28 +167,25 @@ class AuthController extends AbstractApiControllerHelper
         $data = ['apikey' => $apiKey];
         $dataJwt = $this->getTokenPayload($data);
         $jwt = $this->generateJwtToken($dataJwt);
-        if ($jwt) {
+        if($jwt)
             return $this->getSuccessResponseWithData(['jwt'=>$jwt]);
-        } else {
+        else
             return $this->getErrorResponse("Invalid JWT Token", 404, array());
-        }
     }
 
-    public function getApiSecret($apiKey)
-    {
-        $apiSecret = $this->authService->getApiSecret($apiKey);
-        return $apiSecret;
+    public function getApiSecret($apiKey) {
+         $apiSecret = $this->authService->getApiSecret($apiKey);
+         return $apiSecret;
     }
 
-    public function userprofAction()
-    {
+    public function userprofAction(){
         $data = $this->request->getPost()->toArray();
-        try {
-            if (isset($data["username"])) {
+        try{
+            if(isset($data["username"])){
                 $username = $data["username"];
                 $res =$this->userService->getUserBaseProfile($username);
 
-                if ($res == 0) {
+                if($res == 0) {
                     return $this->getErrorResponse("Invalid User", 404);
                 } else {
                     $profilePicUrl = $this->getBaseUrl() . "/user/profile/" . $res["uuid"];
@@ -198,6 +194,7 @@ class AuthController extends AbstractApiControllerHelper
             } else {
                 return $this->getErrorResponse("Invalid Request", 404);
             }
+
         } catch (Exception $e) {
             return $this->getErrorResponse("Something went wrong", 404);
         }

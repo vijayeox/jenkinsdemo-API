@@ -23,7 +23,7 @@ class CustomTaskListener implements TaskListener {
   }
   def getConnection(){
     String url = getConfig()
-    def baseUrl = new URL("${url}/callback/workflow/activityinstance")
+    def baseUrl = new URL("${url}/activityInstance")
     println baseUrl
     return baseUrl.openConnection()
   }
@@ -41,7 +41,6 @@ class CustomTaskListener implements TaskListener {
     def execution = delegateTask.execution
     taskDetails.activityInstanceId = execution.activityInstanceId
     taskDetails.processInstanceId = execution.processInstanceId
-    taskDetails.variables = execution.getVariables()
     String json = new JsonBuilder(taskDetails ).toPrettyString()
     println json
     //TODO http callback using the base url above

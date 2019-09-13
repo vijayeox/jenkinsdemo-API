@@ -11,21 +11,17 @@ use Zend\Db\Adapter\Adapter;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
-class MenuItemControllerTest extends ControllerTest
-{
-    public function setUp() : void
-    {
+class MenuItemControllerTest extends ControllerTest{
+    public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
-    }
-    public function getDataSet()
-    {
+    }   
+    public function getDataSet() {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
         return $dataset;
     }
 
-    public function testGetList()
-    {
+    public function testGetList(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/menu', 'GET');
         $this->assertResponseStatusCode(200);
@@ -37,12 +33,13 @@ class MenuItemControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][0]['id']>0, true);
         $this->assertEquals($content['data'][0]['name'], 'menu1');
+        $this->assertEquals($content['data'][1]['id']>1, true);
         $this->assertEquals($content['data'][1]['name'], 'menu2');
     }
 
-    public function testGet()
-    {
+    public function testGet(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/menu/1', 'GET');
         $this->assertResponseStatusCode(200);
@@ -57,8 +54,7 @@ class MenuItemControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], 'menu1');
     }
 
-    public function testGetNotFound()
-    {
+    public function testGetNotFound(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/menu/122', 'GET');
         $this->assertResponseStatusCode(404);
@@ -72,10 +68,9 @@ class MenuItemControllerTest extends ControllerTest
     }
 
 
-    public function testCreate()
-    {
+    public function testCreate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'menu4','app_id'=>1,'required'=>1];
+        $data = ['name' => 'menu3','app_id'=>1,'required'=>1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/99/menu', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -89,12 +84,12 @@ class MenuItemControllerTest extends ControllerTest
         $this->assertEquals($content['data']['id'] > 2, true);
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['required'], $data['required']);
+        $this->assertEquals($content['data']['data_type'], $data['data_type']);
     }
 
-    public function testCreateFailure()
-    {
+    public function testCreateFailure(){
         $this->initAuthToken($this->adminUser);
-        $data = ['required'=>1,'title' => 'menu4','sequence'=>1];
+        $data = ['required'=>1,'sequence'=>1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/99/menu', 'POST', null);
         $this->assertResponseStatusCode(404);
@@ -109,10 +104,9 @@ class MenuItemControllerTest extends ControllerTest
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
 
-    public function testUpdate()
-    {
+    public function testUpdate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['id'=>2,'title' => 'menu32','name' => 'menu23','app_id' => 99,'required'=> 0, 'sequence' => 2,'type'=>'Page'];
+        $data = ['id'=>2,'name' => 'menu23','app_id' => 99,'required'=> 0, 'sequence' => 2,'type'=>'Page'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/99/menu/2', 'PUT', null);
         $this->assertResponseStatusCode(200);
@@ -128,10 +122,9 @@ class MenuItemControllerTest extends ControllerTest
         $this->assertEquals($content['data']['sequence'], $data['sequence']);
     }
 
-    public function testUpdateNotFound()
-    {
+    public function testUpdateNotFound(){
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Sample2','title' => 'menu32', 'text' => 'Sample 2 Description'];
+        $data = ['name' => 'Sample2', 'text' => 'Sample 2 Description'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/99/menu/122', 'PUT', null);
         $this->assertResponseStatusCode(404);
@@ -144,8 +137,7 @@ class MenuItemControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testDelete()
-    {
+    public function testDelete(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/menu/1', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -155,11 +147,10 @@ class MenuItemControllerTest extends ControllerTest
         $this->assertMatchedRouteName('appmenu');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['status'], 'success');        
     }
 
-    public function testDeleteNotFound()
-    {
+    public function testDeleteNotFound(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/menu/122', 'DELETE');
         $this->assertResponseStatusCode(404);
@@ -169,6 +160,6 @@ class MenuItemControllerTest extends ControllerTest
         $this->assertMatchedRouteName('appmenu');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'error');        
     }
 }

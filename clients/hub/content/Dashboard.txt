@@ -1,1 +1,0 @@
-<p>Html content to be shown in the dashboard</p>

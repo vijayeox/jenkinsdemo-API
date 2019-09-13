@@ -1,8 +1,7 @@
 <?php
 namespace Oxzion\Auth;
 
-class AuthConstants
-{
+class AuthConstants{
     const AUTH_VERIFICATION_SUCCESS = "AUTH_VERIFICATION_SUCCESS";
     const USER_ID = "userId";
     const ORG_ID = "orgId";
@@ -13,3 +12,4 @@ class AuthConstants
     const ORG_UUID = 'orgUuid';
     const API_KEY = "apiKey";
 }
+?>

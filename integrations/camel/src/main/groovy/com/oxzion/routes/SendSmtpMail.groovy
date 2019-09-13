@@ -55,8 +55,6 @@ public class SendSmtpMail extends RouteBuilder {
                             exchange.getIn().setHeader("Subject", getContext().resolvePropertyPlaceholders("{{default.subject}}"))
                         }
                         exchange.getIn().setBody(object.body as String)
-                         
-                        exchange.getIn().setHeader("Content-Type", "text/html")
                         if(object.attachments){
                             if(object.attachments.size()>0){
                                 def attachmentList = object.attachments as ArrayList
@@ -65,10 +63,8 @@ public class SendSmtpMail extends RouteBuilder {
                                     def fileName = fileLocation.getAbsolutePath().substring(fileLocation.getAbsolutePath().lastIndexOf("\\")+1)
                                     exchange.getIn().addAttachment(fileName, new DataHandler(new FileDataSource(fileLocation)))
                                 }
-                                
                             }
                         }
-                        
                     }
                 }).to("smtp://{{smtp.host}}?username={{smtp.username}}&password={{smtp.password}}")
             }

@@ -14,12 +14,11 @@ return [
             'announcement' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]announcement[/:announcementId]',
+                    'route' => '/announcement[/:announcementId]',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
-                            'get'=> 'MANAGE_ANNOUNCEMENT_READ',
                             'put'=> 'MANAGE_ANNOUNCEMENT_WRITE',
                             'post'=> 'MANAGE_ANNOUNCEMENT_WRITE',
                             'delete'=> 'MANAGE_ANNOUNCEMENT_WRITE',
@@ -30,7 +29,7 @@ return [
             'announcementList' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]announcement/a',
+                    'route' => '/announcement/a',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'GET',
@@ -41,7 +40,7 @@ return [
             'announcementToGroup' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]announcement/:announcementId/save',
+                    'route' => '/announcement/:announcementId/group',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'POST',
@@ -52,7 +51,7 @@ return [
             'announcementGroups' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]announcement/:announcementId/groups',
+                    'route' => '/announcement/:announcementId/groups',
                     'defaults' => [
                         'controller' => Controller\AnnouncementController::class,
                         'method' => 'GET',

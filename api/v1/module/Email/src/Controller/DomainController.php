@@ -90,4 +90,5 @@ class DomainController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($responseData, 200);
     }
+
 }

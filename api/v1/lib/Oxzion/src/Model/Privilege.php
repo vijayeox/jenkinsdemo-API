@@ -15,18 +15,18 @@ class Privilege extends Entity
         'app_id' => null
     );
 
-    public function __construct($data = array())
-    {
+    public function __construct($data = array()) {
         if ($data) {
             $this->exchangeArray($data);
         }
     }
 
-    public function validate()
-    {
+    public function validate() {
         $required = array(
             "permission_allowed"
         );
         $this->validateWithParams($required);
     }
+
 }
+?>

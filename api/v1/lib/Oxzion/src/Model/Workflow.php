@@ -2,19 +2,18 @@
 namespace Oxzion\Model;
 
 use Oxzion\Model\Entity;
+class Workflow extends Entity{
 
-class Workflow extends Entity
-{
     protected $data = array(
         'id' => 0,
-        'name' => null,
-        'process_id' => null,
-        'app_id' => null,
-        'form_id' => null,
-        'file'=>null
+        'name' => NULL,
+        'process_ids' => NULL,
+        'process_keys' =>0,
+        'app_id' => NULL,
+        'form_id' => NULL,
+        'file'=>NULL
     );
-    public function validate()
-    {
+    public function validate(){
         $required = array('name','app_id');
         $this->validateWithParams($required);
     }

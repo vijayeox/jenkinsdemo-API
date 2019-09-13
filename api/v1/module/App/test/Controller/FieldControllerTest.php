@@ -11,21 +11,17 @@ use Zend\Db\Adapter\Adapter;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
-class FieldControllerTest extends ControllerTest
-{
-    public function setUp() : void
-    {
+class FieldControllerTest extends ControllerTest{
+    public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
-    }
-    public function getDataSet()
-    {
+    }   
+    public function getDataSet() {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
         return $dataset;
     }
 
-    public function testGetList()
-    {
+    public function testGetList(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/field', 'GET');
         $this->assertResponseStatusCode(200);
@@ -43,8 +39,7 @@ class FieldControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['name'], 'field2');
     }
 
-    public function testGet()
-    {
+    public function testGet(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/field/1', 'GET');
         $this->assertResponseStatusCode(200);
@@ -57,10 +52,10 @@ class FieldControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id']>0, true);
         $this->assertEquals($content['data']['name'], 'field1');
+        
     }
 
-    public function testGetNotFound()
-    {
+    public function testGetNotFound(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/field/122', 'GET');
         $this->assertResponseStatusCode(404);
@@ -71,11 +66,11 @@ class FieldControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
+        
     }
 
 
-    public function testCreate()
-    {
+    public function testCreate(){
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'field3','app_id'=>1,'required'=>1,'data_type'=>'text'];
         $this->setJsonContent(json_encode($data));
@@ -94,8 +89,7 @@ class FieldControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data_type'], $data['data_type']);
     }
 
-    public function testCreateFailure()
-    {
+    public function testCreateFailure(){
         $this->initAuthToken($this->adminUser);
         $data = ['required'=>1,'sequence'=>1,'data_type'=>'text'];
         $this->setJsonContent(json_encode($data));
@@ -112,8 +106,7 @@ class FieldControllerTest extends ControllerTest
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
 
-    public function testUpdate()
-    {
+    public function testUpdate(){
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Sample2','app_id' => 1,'required'=> 0, 'sequence' => 1];
         $this->setJsonContent(json_encode($data));
@@ -131,8 +124,7 @@ class FieldControllerTest extends ControllerTest
         $this->assertEquals($content['data']['sequence'], $data['sequence']);
     }
 
-    public function testUpdateNotFound()
-    {
+    public function testUpdateNotFound(){
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Sample2', 'text' => 'Sample 2 Description'];
         $this->setJsonContent(json_encode($data));
@@ -147,8 +139,7 @@ class FieldControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testDelete()
-    {
+    public function testDelete(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/field/1', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -158,11 +149,10 @@ class FieldControllerTest extends ControllerTest
         $this->assertMatchedRouteName('appfield');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['status'], 'success');        
     }
 
-    public function testDeleteNotFound()
-    {
+    public function testDeleteNotFound(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/99/field/122', 'DELETE');
         $this->assertResponseStatusCode(404);
@@ -172,6 +162,6 @@ class FieldControllerTest extends ControllerTest
         $this->assertMatchedRouteName('appfield');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'error');        
     }
 }

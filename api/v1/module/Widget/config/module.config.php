@@ -8,12 +8,12 @@ use Zend\Log\Filter\Priority;
 use Zend\Log\Processor\RequestId;
 
 return [
-    'router' => [
+	'router' => [
         'routes' => [
             'widget' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/widget[/:widgetId]',
+                	'route'    => '/widget[/:widgetId]',
                     'defaults' => [
                         'controller' => Controller\WidgetController::class,
                         'access'=>[
@@ -25,7 +25,7 @@ return [
                         ],
                     ],
                 ],
-            ],
+            ],            
         ],
     ],
     'log' => [

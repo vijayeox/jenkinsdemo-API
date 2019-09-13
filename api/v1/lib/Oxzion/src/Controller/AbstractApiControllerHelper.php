@@ -60,10 +60,10 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         if (! is_array($parsedParams) || empty($parsedParams)
             || (1 == count($parsedParams) && '' === reset($parsedParams))
         ) {
-            if (!empty($content)) {
+            if(!empty($content)){
                 return $content;
-            } else {
-                return json_decode(file_get_contents("php://input"), true);
+            }else{
+                return json_decode(file_get_contents("php://input"),true);
             }
         }
 
@@ -119,74 +119,45 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     protected function getSuccessResponseWithData(array $data, $code = 200){
         return $this->getSuccessResponse(null, $code, $data);
     }
-
-    protected function getSuccessResponseWithParams(array $data = null,array $paramData = null,$code = 200,$param = null){
+    protected function getSuccessResponse($message = null, $code = 200, array $data = null,$total = null){
         $this->response->setStatusCode($code);
         $payload = ['status' => 'success'];
+        if(! is_null($message)){
+            $payload['message'] = $message;
+        }
         if(! is_null($data)){
             $payload['data'] = (array) $data;
         }
-        if(! is_null($param)){
-            if(! is_null($paramData)){
-                $payload[$param] = $paramData;
-            }
-        }
-        return new JsonModel($payload);
-    }
-    protected function getSuccessResponse($message = null, $code = 200, array $data = null,$total = null,$role = null){
-        $this->response->setStatusCode($code);
-        $payload = ['status' => 'success'];
-        if (! is_null($message)) {
-            $payload['message'] = $message;
-        }
-        if (! is_null($data)) {
-            $payload['data'] = (array) $data;
-        }
-        if (! is_null($total)) {
+        if(! is_null($total)){
             $payload['total'] = $total;
         }
         return new JsonModel($payload);
     }
 
 
-    protected function getSuccessResponseDataWithPagination(array $data = null, $total, $code = 200)
-    {
-        return $this->getSuccessResponse(null, $code, $data, $total);
+    protected function getSuccessResponseDataWithPagination(array $data = null,$total,$code = 200){
+        return $this->getSuccessResponse(null, $code, $data,$total);
     }
 
     
-    protected function getSuccessStringResponse($message = null,$code = 200,$data = null){
-        $this->response->setStatusCode($code);
-        $payload = ['status' => 'success'];
-        if (! is_null($message)) {
-            $payload['message'] = $message;
-        }
-        if (! is_null($data)) {
-            $payload['data'] = (array) $data;
-        }
-        return new JsonModel($payload);
-    }
 
-    protected function getFailureResponse($message, array $data = null)
-    {
+    protected function getFailureResponse($message, array $data = null){
         return $this->getErrorResponse($message, 200, $data);
     }
-    protected function getErrorResponse($message, $code = 200, array $data = null)
-    {
+    protected function getErrorResponse($message, $code = 200, array $data = null){
         $this->response->setStatusCode($code);
-        return ErrorHandler::buildErrorJson($message, $data);
+        return ErrorHandler::buildErrorJson($message,$data);
     }
-    protected function getInvalidMethod()
-    {
-        return $this->getErrorResponse("Method Not Found", 405);
+    protected function getInvalidMethod(){
+        return $this->getErrorResponse("Method Not Found",405);
     }
 
-    protected function getConfig()
-    {
-        if (! isset($this->config)) {
+    protected function getConfig(){
+        if(! isset($this->config)){
             $this->config = $this->getEvent()->getApplication()->getServiceManager()->get('Config');
         }
 
         return $this->config;
+        
     }
 }

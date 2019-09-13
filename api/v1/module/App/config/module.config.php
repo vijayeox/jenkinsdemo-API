@@ -52,6 +52,17 @@ return [
                     ],
                 ],
             ],
+            'applisttype' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/type/:typeId',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'appListByType',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
             'appdeployxml' => [
                 'type' => Segment::class,
                 'options' => [
@@ -110,7 +121,7 @@ return [
             'appform' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/app/:appId/form[/:id]',
+                	'route'    => '/app/:appId/form[/:id]',
                     'defaults' => [
                         'controller' => Controller\FormController::class,
                         'access'=>[
@@ -119,22 +130,6 @@ return [
                             'post'=> 'MANAGE_FORM_WRITE',
                             'delete'=> 'MANAGE_FORM_WRITE',
                             'get'=> 'MANAGE_FORM_READ',
-                        ],
-                    ],
-                ],
-            ],
-            'appfile' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/app/:appId/form/:formId/file[/:id]',
-                    'defaults' => [
-                        'controller' => Controller\FileController::class,
-                        'access'=>[
-                            // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_FILE_WRITE',
-                            'post'=> 'MANAGE_FILE_WRITE',
-                            'delete'=> 'MANAGE_FILE_WRITE',
-                            'get'=> 'MANAGE_FILE_READ',
                         ],
                     ],
                 ],
@@ -158,7 +153,7 @@ return [
             'appworkflow' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/app/:appId/workflow[/:workflowId]',
+                	'route'    => '/app/:appId/workflow[/:workflowId]',
                     'defaults' => [
                         'controller' => Controller\WorkflowController::class,
                         'access'=>[
@@ -174,7 +169,7 @@ return [
             'appmenu' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/app/:appId/menu[/:menuId]',
+                	'route'    => '/app/:appId/menu[/:menuId]',
                     'defaults' => [
                         'controller' => Controller\MenuItemController::class,
                         'access'=>[
@@ -193,22 +188,6 @@ return [
                     'route' => '/app/:appId/page[/:pageId]',
                     'defaults' => [
                         'controller' => Controller\PageController::class,
-                        'access' =>[
-                            // SET ACCESS CONTROL
-                            // 'put'=> 'MANAGE_PAGE_WRITE',
-                            // 'post'=> 'MANAGE_PAGE_WRITE',
-                            // 'delete'=> 'MANAGE_PAGE_WRITE',
-                            // 'get'=> 'MANAGE_PAGE_READ',
-                        ]
-                    ]
-                ]
-            ],
-            'apppagecontent' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/pagecontent[/:pageContentId]',
-                    'defaults' => [
-                        'controller' => Controller\PageContentController::class,
                         'access' =>[
                             // SET ACCESS CONTROL
                             // 'put'=> 'MANAGE_PAGE_WRITE',
@@ -254,17 +233,6 @@ return [
                         'action' => 'assignments',
                         'access'=>[
                         ],
-                    ],
-                ],
-            ],
-            'importcsv' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/importcsv',
-                    'defaults' => [
-                        'controller' => Controller\ImportController::class,
-                        'action' => 'importCSV',
-                        'method' => 'POST'
                     ],
                 ],
             ],

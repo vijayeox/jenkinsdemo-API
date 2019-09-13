@@ -5,8 +5,8 @@ namespace Project\Model;
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
-class Project extends Entity
-{
+class Project extends Entity {
+
     protected $data = array(
         'id' => 0,
         'uuid' => 0,
@@ -21,9 +21,9 @@ class Project extends Entity
         'isdeleted'=>0
     );
 
-    public function validate()
-    {
+    public function validate() {
         $dataArray = array("name","description","manager_id");
         $this->validateWithParams($dataArray);
     }
+        
 }

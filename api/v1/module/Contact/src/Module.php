@@ -12,6 +12,7 @@ use Zend\Mvc\MvcEvent;
 
 class Module implements ConfigProviderInterface
 {
+
     public function getConfig()
     {
         return include __DIR__ . '/../config/module.config.php';
@@ -55,18 +56,14 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\ContactController::class => function ($container) {
                     return new Controller\ContactController(
-                        $container->get(Model\ContactTable::class),
-                        $container->get(Service\ContactService::class),
-                        $container->get('ContactLogger'),
-                        $container->get(AdapterInterface::class)
-                    );
+                        $container->get(Model\ContactTable::class), $container->get(Service\ContactService::class), $container->get('ContactLogger'),
+                        $container->get(AdapterInterface::class));
                 },
                 Controller\ContactIconController::class => function ($container) {
                     return new Controller\ContactIconController(
                         $container->get(Service\ContactService::class),
                         $container->get('ContactLogger'),
-                        $container->get(AdapterInterface::class)
-                    );
+                        $container->get(AdapterInterface::class));
                 },
             ],
         ];
@@ -81,4 +78,5 @@ class Module implements ConfigProviderInterface
     {
         return ErrorHandler::getJsonModelError($e);
     }
+
 }

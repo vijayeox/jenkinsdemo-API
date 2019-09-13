@@ -29,7 +29,10 @@ class ArrayUtils
             $result = array_diff($array2, $array1); //If the length of second array is bigger than the first
         } else {
             $result = array_diff($array1, $array2);//If the length of first array is bigger than the second
+
         }
         return $result;
     }
 }
+
+?>

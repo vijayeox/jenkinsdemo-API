@@ -48,21 +48,19 @@
     "greenlion/php-sql-parser": "^4.1.2",
     "nelexa/zip": "dev-master",
     "stomp-php/stomp-php": "4.*",
+    "mybuilder/phpunit-accelerator":"dev-prepare-3.0",
     "johnkary/phpunit-speedtrap":"3.1.0",
     "ext-dom": "*",
     "ext-hash": "*",
-    "ext-json": "*",
-    "smarty/smarty": "~3.1",
-    "tecnickcom/tcpdf": "^6.2.26",
-    "friendsofphp/php-cs-fixer": "^2.16@dev"
+    "ext-json": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^7",
     "zendframework/zend-test": "^3.2",
     "phpunit/dbunit": "^4",
     "mockery/mockery": "^1.2",
-    "sempro/phpunit-pretty-print": "dev-master",
-    "mybuilder/phpunit-accelerator": "dev-master"
+    "squizlabs/php_codesniffer": "^3.0@dev",
+    "smarty/smarty": "~3.1"
   },
   "autoload": {
     "psr-4": {

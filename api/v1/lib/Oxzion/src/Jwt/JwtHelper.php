@@ -40,10 +40,10 @@ class JwtHelper
         try {
             $secretKey = base64_decode($jwtKey);
             $decodedToken = JWT::decode($token, $secretKey, [$jwtAlgo]);
-        } catch (ExpiredException $e) {
+        } catch (ExpiredException $e){
             $tks = explode('.', $token);
             list($headb64, $bodyb64, $cryptob64) = $tks;
-            $payload = json_decode(JWT::urlsafeB64Decode($bodyb64), false);
+            $payload = json_decode(JWT::urlsafeB64Decode($bodyb64),false);
             return array('username'=>$payload->data->username, 'orgid'=> $payload->data->orgid, 'Error'=>$e->getMessage());
         }
         return $decodedToken;

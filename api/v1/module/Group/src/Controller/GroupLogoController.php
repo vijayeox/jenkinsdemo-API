@@ -10,8 +10,7 @@ use Zend\InputFilter\Input;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Controller\AbstractApiControllerHelper;
 
-class GroupLogoController extends AbstractApiControllerHelper
-{
+class GroupLogoController extends AbstractApiControllerHelper { 
     /**
     * @var ProfilepictureService Instance of Projectpicture Service
     */
@@ -31,17 +30,16 @@ class GroupLogoController extends AbstractApiControllerHelper
     * @link /user/profile[/:profileId]
     * @method GET
     * @param $profileId ID of user
-    * @return profile picture
+    * @return profile picture 
     */
-    public function get($id)
-    {
+    public function get($id){
         $orgId = $this->params()->fromRoute()['orgId'];
         $logo = "logo.png";
-        $file = $this->groupService->getGroupLogoPath($orgId, $id);
+        $file = $this->groupService->getGroupLogoPath($orgId,$id);
         $file = $file . $logo;
         if (!headers_sent()) {
             header('Content-Type: image/png');
-            header("Content-Transfer-Encoding: Binary");
+            header("Content-Transfer-Encoding: Binary"); 
         }
         try {
             $fp = @fopen($file, 'rb');
@@ -49,7 +47,7 @@ class GroupLogoController extends AbstractApiControllerHelper
             fclose($fp);
             $this->response->setStatusCode(200);
             return $this->response;
-        } catch (Exception $e) {
+        } catch(Exception $e){
             print_r($e->getMessage());
             return $this->getErrorResponse("Group Logo not found", 404);
         }

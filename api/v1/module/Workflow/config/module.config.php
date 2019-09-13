@@ -22,7 +22,7 @@ return [
             'addActivityInstance' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/callback/workflow/activityinstance',
+                    'route' => '/activityInstance',
                     'defaults' => [
                         'controller' => Controller\ActivityInstanceController::class,
                         'method' => 'POST',
@@ -33,76 +33,16 @@ return [
                     ],
                 ],
             ],
-            'serviceTaskExecution' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/callback/workflow/servicetask',
-                    'defaults' => [
-                        'controller' => Controller\ServiceTaskController::class,
-                        'method' => 'POST',
-                        'action' => 'execute',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                        ],
-                    ],
-                ],
-            ],
         ],
     ],
     'log' => [
-        'ActivityInstanceLogger' => [
+        'AppLogger' => [
             'writers' => [
                 'stream' => [
                     'name' => 'stream',
                     'priority' => \Zend\Log\Logger::ALERT,
                     'options' => [
-                        'stream' => __DIR__ . '/../../../logs/activity.log',
-                        'formatter' => [
-                            'name' => \Zend\Log\Formatter\Simple::class,
-                            'options' => [
-                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
-                            ],
-                        ],
-                        'filters' => [
-                            'priority' => \Zend\Log\Logger::INFO,],
-                    ],
-                ],
-            ],
-            'processors' => [
-                'requestid' => [
-                    'name' => \Zend\Log\Processor\RequestId::class,],
-            ],
-        ],
-        'ServiceTaskLogger' => [
-            'writers' => [
-                'stream' => [
-                    'name' => 'stream',
-                    'priority' => \Zend\Log\Logger::ALERT,
-                    'options' => [
-                        'stream' => __DIR__ . '/../../../logs/servicetask.log',
-                        'formatter' => [
-                            'name' => \Zend\Log\Formatter\Simple::class,
-                            'options' => [
-                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
-                            ],
-                        ],
-                        'filters' => [
-                            'priority' => \Zend\Log\Logger::INFO,],
-                    ],
-                ],
-            ],
-            'processors' => [
-                'requestid' => [
-                    'name' => \Zend\Log\Processor\RequestId::class,],
-            ],
-        ],
-        'WorkflowInstanceLogger' => [
-            'writers' => [
-                'stream' => [
-                    'name' => 'stream',
-                    'priority' => \Zend\Log\Logger::ALERT,
-                    'options' => [
-                        'stream' => __DIR__ . '/../../../logs/workflowinstance.log',
+                        'stream' => __DIR__ . '/../../../logs/app.log',
                         'formatter' => [
                             'name' => \Zend\Log\Formatter\Simple::class,
                             'options' => [

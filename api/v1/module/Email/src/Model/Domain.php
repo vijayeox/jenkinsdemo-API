@@ -28,7 +28,7 @@ class Domain extends Entity
 
     public function validate()
     {
-        $dataArray = array("name", "imap_server", "imap_port", "smtp_server", "smtp_port");
+        $dataArray = Array("name", "imap_server", "imap_port", "smtp_server", "smtp_port");
         $this->validateWithParams($dataArray);
     }
 }

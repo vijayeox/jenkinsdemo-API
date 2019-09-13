@@ -11,15 +11,15 @@ use PHPUnit\DbUnit\TestCaseTrait;
 use Zend\Stdlib\ArrayUtils;
 use PHPUnit\DbUnit\Operation\Factory;
 
-abstract class ControllerTest extends MainControllerTest
-{
-    use TestCaseTrait;
-    protected static $pdo = null;
-    protected static $connection = null;
 
-    abstract public function getDataSet();
-    
-    public function getConnection()
+abstract class ControllerTest extends MainControllerTest{
+    use TestCaseTrait;
+	static protected $pdo = null;
+	static protected $connection = null;
+
+    abstract function getDataSet();
+	
+	public function getConnection()
     {
         if (!isset(static::$pdo)) {
             $config = $this->getApplicationConfig();
@@ -31,8 +31,7 @@ abstract class ControllerTest extends MainControllerTest
     }
     
     //this is required to ensure that same connection is used by dbunit and zend db
-    protected function setupConnection()
-    {
+    protected function setupConnection(){
         $this->getConnection();
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         $dbAdapter->getDriver()->getConnection()->setResource(static::$pdo);
@@ -42,32 +41,29 @@ abstract class ControllerTest extends MainControllerTest
         return Factory::INSERT();
     }
 
-    public function reset($keepPersistence = false)
-    {
+    public function reset($keepPersistence = false){
         parent::reset($keepPersistence);
         $this->setupConnection();
     }
 
-    protected function getMockGatewayData($name, $modelClass)
-    {
-        $originalTableGateway = $this->getApplicationServiceLocator()->get($name);
-        $dbAdapter = $originalTableGateway->getAdapter();
-        $table = $originalTableGateway->getTable();
-        $resultSetPrototype = new ResultSet();
+	protected function getMockGatewayData($name, $modelClass){
+		$originalTableGateway = $this->getApplicationServiceLocator()->get($name);
+		$dbAdapter = $originalTableGateway->getAdapter();
+		$table = $originalTableGateway->getTable();
+		$resultSetPrototype = new ResultSet();
         $resultSetPrototype->setArrayObjectPrototype(new $modelClass);
                 
-        $mockTableGateway = $this->getMockObject('\Zend\Db\TableGateway\TableGateway', array($table, $dbAdapter, null, $resultSetPrototype));
-        $this->setService($name, $mockTableGateway);
-        return ['mock' => $mockTableGateway, 'resultSet' => $resultSetPrototype];
+	    $mockTableGateway = $this->getMockObject('\Zend\Db\TableGateway\TableGateway', array($table, $dbAdapter, null, $resultSetPrototype));
+	    $this->setService($name, $mockTableGateway);
+	    return ['mock' => $mockTableGateway, 'resultSet' => $resultSetPrototype];
     }
 
 
-    protected function getMockDbObject()
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $mockDbAdapter = $this->getMockObject('Zend\Db\Adapter\Adapter', [$dbAdapter->getDriver(), $dbAdapter->getPlatform()]);
-        $this->setService(AdapterInterface::class, $mockDbAdapter);
-        return ['mock' => $mockDbAdapter, 'dbAdapter' => $dbAdapter];
+    protected function getMockDbObject(){
+    	$dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+    	$mockDbAdapter = $this->getMockObject('Zend\Db\Adapter\Adapter', [$dbAdapter->getDriver(), $dbAdapter->getPlatform()]);
+    	$this->setService(AdapterInterface::class, $mockDbAdapter);
+    	return ['mock' => $mockDbAdapter, 'dbAdapter' => $dbAdapter];
     }
 
     /**
@@ -78,4 +74,6 @@ abstract class ControllerTest extends MainControllerTest
     {
         return $this->getApplication()->getServiceManager();
     }
+
+
 }

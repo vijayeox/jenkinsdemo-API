@@ -11,15 +11,13 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 
-class Module implements ConfigProviderInterface
-{
-    public function getConfig()
-    {
+class Module implements ConfigProviderInterface {
+
+    public function getConfig() {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e)
-    {
+    public function onBootstrap(MvcEvent $e) {
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -31,7 +29,7 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Model\MletTable::class => function ($container) {
+                Model\MletTable::class => function($container) {
                     $tableGateway = $container->get(Model\MletTableGateway::class);
                     return new Model\MletTable($tableGateway);
                 },
@@ -41,7 +39,7 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Mlet());
                     return new TableGateway('ox_mlet', $dbAdapter, null, $resultSetPrototype);
                 },
-                Service\MletService::class => function ($container) {
+                Service\MletService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\MletService($container->get('config'), $dbAdapter, $container->get(Model\MletTable::class), $container->get(\Oxzion\Analytics\AnalyticsEngine::class));
                 },
@@ -53,12 +51,9 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Controller\MletController::class => function ($container) {
+                Controller\MletController::class => function($container) {
                     return new Controller\MletController(
-                        $container->get(Model\MletTable::class),
-                        $container->get(Service\MletService::class),
-                        $container->get('MletLogger')
-                    );
+                        $container->get(Model\MletTable::class),$container->get(Service\MletService::class),$container->get('MletLogger'));
                 },
             ],
         ];

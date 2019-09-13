@@ -13,15 +13,14 @@ use Oxzion\Error\ErrorHandler;
 use Oxzion\Search\SearchFactory;
 use Oxzion\Search\SearchEngine;
 
-class Module implements ConfigProviderInterface
-{
-    public function getConfig()
-    {
+
+class Module implements ConfigProviderInterface {
+
+    public function getConfig() {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e)
-    {
+    public function onBootstrap(MvcEvent $e) {
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -34,11 +33,9 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Controller\SearchController::class => function ($container) {
+                Controller\SearchController::class => function($container) {
                     return new Controller\SearchController(
-                        $container->get(\Oxzion\Search\SearchEngine::class),
-                        $container->get('SearchLogger')
-                    );
+                        $container->get(\Oxzion\Search\SearchEngine::class),$container->get('SearchLogger'));
                 },
             ],
         ];

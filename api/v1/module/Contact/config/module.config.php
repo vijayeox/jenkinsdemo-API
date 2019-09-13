@@ -53,39 +53,6 @@ return [
                     ],
                 ],
             ],
-            'contactImport' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/contact/import',
-                    'defaults' => [
-                        'controller' => Controller\ContactController::class,
-                        'action' => 'contactImport',
-                        'method' => 'post',
-                    ],
-                ],
-            ],
-            'contactExport' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/contact/export[/:contactUuid]',
-                    'defaults' => [
-                        'controller' => Controller\ContactController::class,
-                        'action' => 'contactExport',
-                        'method' => 'POST',
-                    ],
-                ],
-            ],
-            'contactsDelete' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/contacts/delete',
-                    'defaults' => [
-                        'controller' => Controller\ContactController::class,
-                        'action' => 'contactsDelete',
-                        'method' => 'POST',
-                    ],
-                ],
-            ],
         ],
     ],
     'log' => [

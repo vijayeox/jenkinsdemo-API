@@ -11,15 +11,13 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 
-class Module implements ConfigProviderInterface
-{
-    public function getConfig()
-    {
+class Module implements ConfigProviderInterface {
+
+    public function getConfig() {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    public function onBootstrap(MvcEvent $e)
-    {
+    public function onBootstrap(MvcEvent $e) {
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -28,15 +26,14 @@ class Module implements ConfigProviderInterface
         $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'onRenderError'), 0);
     }
 
-    public function getServiceConfig()
-    {
+    public function getServiceConfig() {
         return [
             'factories' => [
-                Service\AttachmentService::class => function ($container) {
+                Service\AttachmentService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\AttachmentService($container->get('config'), $dbAdapter, $container->get(Model\AttachmentTable::class));
                 },
-                Model\AttachmentTable::class => function ($container) {
+                Model\AttachmentTable::class => function($container) {
                     $tableGateway = $container->get(Model\AttachmentTableGateway::class);
                     return new Model\AttachmentTable($tableGateway);
                 },
@@ -50,29 +47,24 @@ class Module implements ConfigProviderInterface
         ];
     }
 
-    public function getControllerConfig()
-    {
+    public function getControllerConfig() {
         return [
             'factories' => [
-                Controller\AttachmentController::class => function ($container) {
+                Controller\AttachmentController::class => function($container) {
                     return new Controller\AttachmentController(
-                        $container->get(Model\AttachmentTable::class),
-                        $container->get(Service\AttachmentService::class),
-                        $container->get('AttachmentLogger'),
-                        $container->get(AdapterInterface::class)
-                    );
+                            $container->get(Model\AttachmentTable::class),$container->get(Service\AttachmentService::class), $container->get('AttachmentLogger'),
+                        $container->get(AdapterInterface::class));
                 },
             ],
         ];
     }
 
-    public function onDispatchError($e)
-    {
+    public function onDispatchError($e) {
         return ErrorHandler::getJsonModelError($e);
     }
 
-    public function onRenderError($e)
-    {
+    public function onRenderError($e) {
         return ErrorHandler::getJsonModelError($e);
     }
+
 }

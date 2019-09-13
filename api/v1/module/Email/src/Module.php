@@ -15,6 +15,7 @@ use Oxzion\Model\EmailTable;
 
 class Module implements ConfigProviderInterface
 {
+
     public function getConfig()
     {
         return include __DIR__ . '/../config/module.config.php';
@@ -58,19 +59,13 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\EmailController::class => function ($container) {
                     return new Controller\EmailController(
-                        $container->get(EmailTable::class),
-                        $container->get(EmailService::class),
-                        $container->get('EmailLogger'),
-                        $container->get(AdapterInterface::class)
-                    );
+                        $container->get(EmailTable::class), $container->get(EmailService::class), $container->get('EmailLogger'),
+                        $container->get(AdapterInterface::class));
                 },
                 Controller\DomainController::class => function ($container) {
                     return new Controller\DomainController(
-                        $container->get(Model\DomainTable::class),
-                        $container->get(Service\DomainService::class),
-                        $container->get('DomainLogger'),
-                        $container->get(AdapterInterface::class)
-                    );
+                        $container->get(Model\DomainTable::class), $container->get(Service\DomainService::class), $container->get('DomainLogger'),
+                        $container->get(AdapterInterface::class));
                 },
             ],
         ];
@@ -85,4 +80,5 @@ class Module implements ConfigProviderInterface
     {
         return ErrorHandler::getJsonModelError($e);
     }
+
 }

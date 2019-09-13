@@ -5,49 +5,43 @@ use Oxzion\Utils\ValidationResult;
 use Oxzion\ValidationException;
 use Countable;
 
-abstract class Entity implements Countable
-{
+abstract class Entity implements Countable{
     protected $data;
 
-    public function __construct()
-    {
+    public function __construct() {
         // $this->import($data);
     }
 
-    public function count()
-    {
+    public function count(){
         return 1;
     }
-    public function __set($key, $val)
-    {
+    public function __set($key, $val) {
         if (array_key_exists($key, $this->data)) {
-            $this->data[$key] = ($val === '') ? null : $val;
+            $this->data[$key] = ($val === '') ? NULL : $val;
         }
     }
 
-    public function setParseData($val)
-    {
+    public function setParseData($val) {
         $this->parsedata=$val;
     }
 
-    public function __get($key)
-    {
+    public function __get($key) {
         if (array_key_exists($key, $this->data)) {
             if ($this->parsedata) {
-                //return VA_Service_Utils::parseInstanceExpression ($this->data[$key]);
-            } else {
+     			//return VA_Service_Utils::parseInstanceExpression ($this->data[$key]);
+            }
+            else {
                 return $this->data[$key];
             }
+
         }
     }
 
-    public function __isset($key)
-    {
+    public function __isset($key) {
         return (array_key_exists($key, $this->data)) ? isset($this->data[$key]) : false;
     }
 
-    public function __unset($key)
-    {
+    public function __unset($key) {
         if (array_key_exists($key, $this->data)) {
             unset($this->data[$key]);
         } else {
@@ -55,8 +49,7 @@ abstract class Entity implements Countable
         }
     }
 
-    public function getKeyArray()
-    {
+    public function getKeyArray() {
         $data = array();
         foreach ($this->data as $key => $val) {
             $data[] = $key;
@@ -68,25 +61,22 @@ abstract class Entity implements Countable
      * This method should be overridden by base classes to perform field level validations
      * this method should throw ValidationException if there are any errors
      */
-    public function validate()
-    {
+    public function validate(){
+
     }
 
-    public function import($data)
-    {
+    public function import($data) {
         foreach ($data as $key => $val) {
             $this->__set($key, $val);
         }
         return $this;
     }
 
-    public function toArray()
-    {
+    public function toArray() {
         return $this->data;
     }
 
-    public function exchangeArray($data)
-    {
+    public function exchangeArray($data) {
         // $this->data = array_intersect_key($this->data, $data);
         foreach ($data as $key => $value) {
             if (!array_key_exists($key, $this->data)) {
@@ -96,11 +86,10 @@ abstract class Entity implements Countable
         }
     }
 
-    //This function is to check if the data passed through the post command has NULL, "" and empty Value. If it has any of these then an error message is shown
-    public function validateWithParams($dataArray)
-    {
+//This function is to check if the data passed through the post command has NULL, "" and empty Value. If it has any of these then an error message is shown
+    public function validateWithParams($dataArray) {
         $errors = array();
-        foreach ($dataArray as $data) {
+        foreach($dataArray as $data) {
             if ($this->data[$data] === null || $this->data[$data] === "" || empty($this->data[$data])) {
                 $errors[$data] = 'required';
             }

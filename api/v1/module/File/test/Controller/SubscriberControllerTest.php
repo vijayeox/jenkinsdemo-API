@@ -10,27 +10,22 @@ use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
 use Oxzion\Utils\FileUtils;
 
-class SubscriberControllerTest extends ControllerTest
-{
-    public function setUp() : void
-    {
+class SubscriberControllerTest extends ControllerTest {
+    public function setUp() : void{
         $this->loadConfig();
         parent::setUp();
-    }
-    public function getDataSet()
-    {
+    }   
+    public function getDataSet() {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Subscriber.yml");
         return $dataset;
     }
-    protected function setDefaultAsserts()
-    {
+    protected function setDefaultAsserts() {
         $this->assertModuleName('File');
         $this->assertControllerName(SubscriberController::class); // as specified in router's controller name alias
         $this->assertControllerClass('SubscriberController');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
-    public function testGetList()
-    {
+   public function testGetList(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/file/1/subscriber', 'GET');
         $this->assertResponseStatusCode(200);
@@ -43,8 +38,7 @@ class SubscriberControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['id'], 2);
         $this->assertEquals($content['data'][1]['user_id'], 2);
     }
-    public function testGet()
-    {
+    public function testGet(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/file/1/subscriber/1', 'GET');
         $this->assertResponseStatusCode(200);
@@ -54,16 +48,14 @@ class SubscriberControllerTest extends ControllerTest
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['user_id'], 1);
     }
-    public function testGetNotFound()
-    {
+    public function testGetNotFound(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/file/1/subscriber/23', 'GET');
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-    public function testCreate()
-    {
+    public function testCreate(){
         $this->initAuthToken($this->adminUser);
         $data = ['user_id' => 3];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_subscriber'));
@@ -75,8 +67,7 @@ class SubscriberControllerTest extends ControllerTest
         $this->assertEquals($content['data']['user_id'], $data['user_id']);
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_subscriber'));
     }
-    public function testCreateWithOutUserFailure()
-    {
+    public function testCreateWithOutUserFailure(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/file/1/subscriber', 'POST', null);
         $this->assertResponseStatusCode(404);
@@ -87,8 +78,7 @@ class SubscriberControllerTest extends ControllerTest
         $this->assertEquals($content['data']['errors']['user_id'], 'required');
     }
 
-    public function testCreateAccess()
-    {
+    public function testCreateAccess() {
         $this->initAuthToken($this->employeeUser);
         $data = ['user_id' => 3];
         $this->setJsonContent(json_encode($data));
@@ -104,8 +94,7 @@ class SubscriberControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
         
-    public function testUpdate()
-    {
+    public function testUpdate() {
         $data = ['user_id' => 2];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -116,8 +105,7 @@ class SubscriberControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['user_id'], $data['user_id']);
     }
-    public function testUpdateRestricted()
-    {
+    public function testUpdateRestricted() {
         $data = ['user_id' => 3];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
@@ -133,8 +121,7 @@ class SubscriberControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
     
-    public function testUpdateNotFound()
-    {
+    public function testUpdateNotFound(){
         $data = ['user_id' => 3];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
@@ -145,8 +132,7 @@ class SubscriberControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testDelete()
-    {
+    public function testDelete(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/file/2/subscriber/2', 'DELETE');
         $this->assertResponseStatusCode(200);
@@ -155,14 +141,14 @@ class SubscriberControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testDeleteNotFound()
-    {
+    public function testDeleteNotFound(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/file/2/subscriber/1222', 'DELETE');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'error');        
     }
 }
+?>

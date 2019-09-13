@@ -2,8 +2,7 @@
 
 namespace Oxzion\Utils;
 
-class ZipUtils
-{
+class ZipUtils {
     /**
      * Extract the zip file from the upload form
      * @method extract

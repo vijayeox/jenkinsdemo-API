@@ -12,15 +12,16 @@
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-$host = '172.16.1.101';
-$db = 'appBuilder_oxzionapi';
-$username = 'bharat';
-$password = 'password';
+$host = '172.16.1.172';
+    $db = "oxapi";
+    $username = "root";
+    $password = "password";
 
-if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
-    $host = '172.16.1.101';
-    $db = "appBuilder_oxzionapi_test";
-    $username = "bharat";
+
+if (isset($_ENV['ENV']) && $_ENV['ENV'] == 'test') {
+   $host = '172.16.1.172';
+    $db = "oxapi";
+    $username = "root";
     $password = "password";
 }
 
@@ -51,16 +52,13 @@ return [
         'authToken' => ''
     ],
     'task' => [
-        'taskServerUrl' => 'http://localhost:3000/api/v3/',
-        'username' => 'apikey',
+        'taskServerUrl' => 'http://localhost:3000/api/v3',
         'authToken' => ''
     ],
     'calendar' => [
         'calendarServerUrl' => 'http://localhost:8075/calendar',
         'authToken' => ''
     ],
-    'applicationUrl' => 'http://localhost:8081',
-    'RULE_FOLDER'=>__DIR__.'/../../data/rules/',
     'DATA_FOLDER'=>__DIR__.'/../../data/',
     "UPLOAD_FOLDER" => __DIR__.'/../../data/uploads/',
     'TEMPLATE_FOLDER'=>__DIR__.'/../../data/template/',

@@ -5,12 +5,10 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use Oxzion\Messaging\MessageProducer;
 
-class MessageProducerTest extends TestCase
-{
-    public function testOrganizationCreationUsingTopic()
-    {
+class MessageProducerTest extends TestCase{
+    public function testOrganizationCreationUsingTopic(){
         $mp = MessageProducer::getInstance();
-        $mp->sendTopic(json_encode(array('orgname' => 'Cleveland white', 'status' => 'Active')), 'ORGANIZATION_ADDED');
+        $mp->sendTopic(json_encode(array('orgname' => 'Cleveland white', 'status' => 'Active')),'ORGANIZATION_ADDED');
     }
 
     // public function testOrganizationCreationUsingQueue(){
@@ -20,7 +18,9 @@ class MessageProducerTest extends TestCase
 
     // public function testMail(){
     //     $mp = MessageProducer::getInstance();
-    //     $mp->sendTopic(json_encode(array('to' => 'saditha@myvamla.com', 'from' => 'oxzion@oxzion.com',
+    //     $mp->sendTopic(json_encode(array('to' => 'saditha@myvamla.com', 'from' => 'oxzion@oxzion.com', 
     //                                      'subject' => "Test", 'body' => 'Test Body')),'mail');
     // }
+
 }
+?>

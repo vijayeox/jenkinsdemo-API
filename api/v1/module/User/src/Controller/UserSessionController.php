@@ -8,8 +8,10 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Service\UserSessionService;
 use Zend\Db\Sql\Sql;
 
+
 class UserSessionController extends AbstractApiController
 {
+
     private $sessionService;
 
     /**
@@ -33,11 +35,13 @@ class UserSessionController extends AbstractApiController
     public function getSessionAction()
     {
         $result = $this->sessionService->getSessionData();
-        if (!empty($result[0])) {
-            return $this->getSuccessResponseWithData(json_decode($result[0], true), 200);
-        } else {
-            return $this->getSuccessResponseWithData(array(), 200);
+        if(!empty($result[0])){
+            return $this->getSuccessResponseWithData(json_decode($result[0],true),200);
         }
+        else{
+            return $this->getSuccessResponseWithData(array(),200);
+        }
+
     }
 
     /**
@@ -57,10 +61,11 @@ class UserSessionController extends AbstractApiController
         } catch (Exception $e) {
             return $this->getErrorResponse("Update Failure", 404, array("message" -> $e->getMessage()));
         }
-        if (!empty(($data['data']))) {
-            return $this->getSuccessResponseWithData(json_decode($data['data'], true), 200);
-        } else {
-            return $this->getSuccessResponseWithData(array(), 200);
+        if(!empty(($data['data']))){
+            return $this->getSuccessResponseWithData(json_decode($data['data'],true), 200);
+        }
+        else{
+            return $this->getSuccessResponseWithData(array(),200);
         }
     }
 }

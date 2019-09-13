@@ -8,12 +8,12 @@ use Zend\Log\Filter\Priority;
 use Zend\Log\Processor\RequestId;
 
 return [
-    'router' => [
+	'router' => [
         'routes' => [
             'mlet' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/mlet[/:mletId]',
+                	'route'    => '/mlet[/:mletId]',
                     'defaults' => [
                         'controller' => Controller\MletController::class,
                         'access'=>[
@@ -25,11 +25,11 @@ return [
                         ],
                     ],
                 ],
-            ],
+            ], 
             'mletResult' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/mlet/:mletId/result',
+                	'route'    => '/mlet/:mletId/result',
                     'defaults' => [
                         'controller' => Controller\MletController::class,
                         'method' => 'POST',
@@ -39,7 +39,7 @@ return [
                        ],
                     ],
                 ],
-            ],
+            ],             
         ],
     ],
     'log' => [

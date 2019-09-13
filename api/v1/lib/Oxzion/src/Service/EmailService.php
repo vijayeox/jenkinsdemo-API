@@ -28,7 +28,6 @@ class EmailService extends AbstractService
     {
         $form = new Email();
         $userId = $data['userid'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['email'] = isset($data['email']) ? $data['email'] : NULL;
         if ($data['email']) {
             $queryString = "select id,email from email_setting_user";
             $where = "where userid = " . $userId;
@@ -94,11 +93,12 @@ class EmailService extends AbstractService
     public function getEmailAccountsByUserId($id=null)
     {
         $accounts = array();
-        if (empty($id)) {
+        if(empty($id))
+        {
             $userId = AuthContext::get(AuthConstants::USER_ID);
-        } else {
-            $userId = $id;
         }
+        else
+            $userId = $id;
 
         $queryString = "select email_setting_user.id, userid,password,email,host,email_setting_user.token,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host where email_setting_user.userid = " . $userId;
         $result = $this->executeQuerywithParams($queryString);
@@ -110,31 +110,32 @@ class EmailService extends AbstractService
         return $accounts;
     }
 
-    public function getEmailAccountsByEmailId($id=null, $pw =false)
+    public function getEmailAccountsByEmailId($id=null,$pw =false)
     {
         $accounts = array();
-        if (empty($id)) {
+        if(empty($id))
+        {
             return false;
-        } else {
-            $emailId = $id;
         }
+        else
+            $emailId = $id;
 
         $queryString = "select email_setting_user.id,userid,password,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
         $where = "where email_setting_user.email = '" . $emailId."'";
         $order = "order by email_setting_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
-        if ($pw) {
+        if($pw) {
             foreach ($resultSet->toArray() as $account) {
                 $account['password'] = TwoWayEncryption::decrypt($account['password']);
                 $accounts[] = $account;
             }
-        } else {
+        }
+        else{
             foreach ($resultSet->toArray() as $account) {
-                if ($account['password']) {
+                if($account['password'])
                     $account['authRequired'] = 1;
-                } else {
+                else
                     $account['authRequired'] = 0;
-                }
             }
             $accounts = $account;
         }
@@ -260,6 +261,7 @@ class EmailService extends AbstractService
                 $data['password'] = null;
                 return $data;
             }
+
         }
         return 0;
     }
@@ -291,5 +293,53 @@ class EmailService extends AbstractService
             return 0;
         }
         return $count;
+    }
+
+    public function sendUserEmail($userData)
+    {
+        $baseFolder = $this->config['UPLOAD_FOLDER'];
+        $mainBody = "
+            <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
+                <img src= " . $baseFolder . "'http://localhost:8081/79435fed1e7159c4c558a8192ac97fe0.png' class='CToWUd' height='35'>
+            </div>
+            <div style='line-height: 24px'>Dear " . $userData->firstname . ", </br/>
+                OX Zion has created a new ID for you, <br/>Details are below: <br/>
+                URL: <a href='http://localhost:8081' >Click here to Login! </a> <br/>
+                UserName: " . $userData->username . " <br/>
+                Password: " . $userData->password . " <br/>
+            </div>";
+
+        $mail = new Message();
+        $mail->setBody($mainBody);
+        $mail->setFrom('admin@oxzion.com', 'OX Zion Admin');
+        $mail->addTo($userData->email, $userData->firstname . " " . $userData->lastname);
+        $mail->setSubject($userData->firstname . ', You login details for OX Zion!');
+        $transport = new Mail\Transport\Sendmail();
+//        $transport->send($mail);
+        return 1;
+    }
+
+
+    public function sendPasswordResetEmail($userData)
+    {
+        $baseFolder = $this->config['UPLOAD_FOLDER'];
+        $mainBody = "
+            <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
+                <img src= " . $baseFolder . "'http://localhost:8081/79435fed1e7159c4c558a8192ac97fe0.png' class='CToWUd' height='35'>
+            </div>
+            <div style='line-height: 24px'>Dear " . $userData['firstname'] . ", </br/>
+            <h2>Password Reset Code</h2>
+                You have initiated a password reset request for your OXZion profile <br/><br/>
+                Here is your Code: " . $userData['password_reset_code'] . " <br/>
+                This code is active for the next 30 minutes only! <br/>
+            </div>";
+        $mail = new Message();
+        $mail->setBody($mainBody);
+        $mail->setFrom('admin@oxzion.com', 'OX Zion Admin');
+        $mail->addTo($userData['email'], $userData['firstname'] . " " . $userData['lastname']);
+        $mail->setSubject($userData['firstname'] . ', You login details for OX Zion!');
+        $transport = new Mail\Transport\Sendmail();
+//        $transport->send($mail);
+        return 1;
     }
 }

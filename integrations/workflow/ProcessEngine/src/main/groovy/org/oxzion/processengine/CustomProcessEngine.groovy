@@ -5,7 +5,6 @@ import org.camunda.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl
 import org.camunda.bpm.engine.impl.pvm.process.ScopeImpl
-import org.camunda.bpm.engine.delegate.ExecutionListener
 import org.camunda.bpm.engine.impl.util.xml.Element
 
 import java.util.logging.Logger
@@ -18,21 +17,6 @@ class CustomProcessEngine extends AbstractBpmnParseListener {
     if(activityBehavior instanceof UserTaskActivityBehavior ){
       UserTaskActivityBehavior userTaskActivityBehavior = (UserTaskActivityBehavior) activityBehavior
       userTaskActivityBehavior.getTaskDefinition().addTaskListener("create", CustomTaskListener.getInstance())
-    }
-  }
-  @Override
-  void parseServiceTask(Element serviceTaskElement, ScopeImpl scope, ActivityImpl activity) {
-  	print serviceTaskElement
-    Element extensionElement = serviceTaskElement.element("extensionElements")
-    if (extensionElement != null) {
-      Element inputOutElement = extensionElement.element("inputOutput")
-      if (inputOutElement != null) {
-        List<Element> inputParameters = inputOutElement.elements("inputParameter")
-        for (Element inputParameter : inputParameters) {
-            CustomServiceTaskListener serviceTaskListener = new CustomServiceTaskListener()
-            activity.addListener("start",serviceTaskListener)
-          }
-      }
     }
   }
 }

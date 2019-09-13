@@ -6,7 +6,6 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Search\SearchEngine;
 use Oxzion\Service\ElasticService;
 use Exception;
-
 class SearchEngineImpl implements SearchEngine
 {
     private $config;
@@ -66,4 +65,5 @@ class SearchEngineImpl implements SearchEngine
             throw new Exception("Error performing Elastic Search", 0, $e);
         }
     }
+
 }

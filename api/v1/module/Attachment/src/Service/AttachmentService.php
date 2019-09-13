@@ -10,14 +10,12 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Exception;
 
-class AttachmentService extends AbstractService
-{
+class AttachmentService extends AbstractService{
     private $table;
     /**
     * @ignore __construct
     */
-    public function __construct($config, $dbAdapter, AttachmentTable $table)
-    {
+    public function __construct($config, $dbAdapter, AttachmentTable $table){
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
@@ -30,21 +28,20 @@ class AttachmentService extends AbstractService
      *  @param files Array of files to upload
      *  @return JSON array of filenames
      */
-    public function upload($data, $files)
-    {
+    public function upload($data,$files){
         $fileArray = array();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
-        if (isset($data['type'])) {
+        if(isset($data['type'])){
             $fileArray = array();
-            if (isset($files)) {
+            if(isset($files)){
                 foreach ($files as  $file) {
-                    $fileArray[] = $this->constructAttachment($data, $file);
+                    $fileArray[] = $this->constructAttachment($data,$file);
                 }
             } else {
-                if (isset($data['files'])) {
+                if(isset($data['files'])){
                     foreach ($data['files'] as $key => $value) {
-                        $fileArray[] = $this->constructAttachment($data, $value);
+                        $fileArray[] = $this->constructAttachment($data,$value);
                     }
                 }
             }
@@ -54,9 +51,8 @@ class AttachmentService extends AbstractService
     /**
     * @ignore constructAttachment
     */
-    protected function constructAttachment($data, $file)
-    {
-        if (isset($file['name'])) {
+    protected function constructAttachment($data,$file){
+        if(isset($file['name'])){
             $uniqueId = uniqid();
             $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
             $data['file_name'] = $file['name'];
@@ -77,14 +73,14 @@ class AttachmentService extends AbstractService
         $form->validate();
         $count = $this->table->save($form);
         $id = $this->table->getLastInsertValue();
-        FileUtils::storeFile($file, $folderPath);
+        FileUtils::storeFile($file,$folderPath);
         return $data['uuid'];
     }
     /**
     * GET Attachment Service
     * @method GET
     * @param $id ID of Attachment to Delete
-    * @return array $data
+    * @return array $data 
     * <code>
     * {
     *  integer id,
@@ -97,8 +93,7 @@ class AttachmentService extends AbstractService
     * </code>
     * @return array Returns a JSON Response with Status Code and Created Attachment.
     */
-    public function getAttachment($id)
-    {
+    public function getAttachment($id){
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_attachment')
@@ -110,8 +105,7 @@ class AttachmentService extends AbstractService
     /**
     * @ignore constructPath
     */
-    private function constructPath($type)
-    {
+    private function constructPath($type){
         $baseFolder = $this->config['UPLOAD_FOLDER'];
         switch ($type) {
             case 'ANNOUNCEMENT':
@@ -121,3 +115,4 @@ class AttachmentService extends AbstractService
         }
     }
 }
+?>

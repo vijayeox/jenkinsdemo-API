@@ -14,17 +14,16 @@ use Zend\Db\Adapter\Adapter;
 
 class WidgetController extends AbstractApiController
 {
-    private $dbAdapter;
-    private $widgetService;
+	private $dbAdapter;
+	private $widgetService;
     /**
     * @ignore __construct
     */
-    public function __construct(WidgetTable $table, WidgetService $widgetService, Logger $log)
-    {
-        parent::__construct($table, $log, __CLASS__, Widget::class);
-        $this->widgetService=$widgetService;
-        $this->setIdentifierName('widgetId');
-    }
+	public function __construct(WidgetTable $table,WidgetService $widgetService,Logger $log){
+		parent::__construct($table, $log, __CLASS__, Widget::class);
+		$this->widgetService=$widgetService;
+		$this->setIdentifierName('widgetId');
+	}
     /**
     * GET List Widget API
     * @api
@@ -36,10 +35,11 @@ class WidgetController extends AbstractApiController
     * }
     * </code>
     */
-    public function getList()
-    {
-        $params = $this->params()->fromRoute();
-        $result = $this->widgetService->getWidgets();
-        return $this->getSuccessResponseWithData($result);
-    }
+	public function getList() {
+		$params = $this->params()->fromRoute();
+		$result = $this->widgetService->getWidgets();
+		return $this->getSuccessResponseWithData($result);
+	}
+  
+
 }

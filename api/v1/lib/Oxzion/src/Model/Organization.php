@@ -2,35 +2,32 @@
 namespace Oxzion\Model;
 
 use Oxzion\Model\Entity;
+class Organization extends Entity {
 
-class Organization extends Entity
-{
     protected $data = array(
-        'id' => null,
-        'uuid' => null,
-        'name' => null,
-        'address' => null,
-        'city' => null,
-        'state' => null,
-        'country' => null,
-        'zip' => null,
-        'labelfile' => null,
+        'id' => NULL,
+        'uuid' => NULL,
+        'name' => NULL,
+        'address' => NULL,
+        'city' => NULL,
+        'state' => NULL,
+        'country' => NULL,
+        'zip' => NULL,
+        'labelfile' => NULL,
         'languagefile' => 'en',
-        'contactid' => null,
-        'preferences' => null,
+        'contactid' => NULL,
+        'preferences' => NULL,
         'theme' => 0,
         'status' => 'Active'
     );
 
-    public function __construct($data = array())
-    {
+    public function __construct($data = array()) {
         if ($data) {
             $this->exchangeArray($data);
         }
     }
 
-    public function validate()
-    {
+    public function validate() {
         $required = array(
             'name',
             'status',
@@ -38,4 +35,6 @@ class Organization extends Entity
         );
         $this->validateWithParams($required);
     }
+
 }
+?>

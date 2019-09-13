@@ -1,1 +1,0 @@
-<p>Hello {$username}, this is a organization specific template.</p>

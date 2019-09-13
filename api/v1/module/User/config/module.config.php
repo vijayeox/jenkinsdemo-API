@@ -15,15 +15,15 @@ return [
             'user' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/[organization/:orgId/]user[/:userId][/:type]',
+                    'route' => '/user[/:userId][/:type]',
                     'defaults' => [
                         'controller' => Controller\UserController::class,
                         'access' => [
                             // SET ACCESS CONTROL
-                            'put' => ['MANAGE_USER_WRITE','MANAGE_ORGANIZATION_WRITE','MANAGE_GROUP_WRITE'],
-                            'post' => ['MANAGE_USER_WRITE','MANAGE_ORGANIZATION_WRITE','MANAGE_GROUP_WRITE'],
-                            'delete' => ['MANAGE_USER_WRITE','MANAGE_ORGANIZATION_WRITE','MANAGE_GROUP_WRITE'],
-                            'get' => ['MANAGE_USER_READ','MANAGE_ORGANIZATION_READ','MANAGE_GROUP_READ']
+                            'put' => 'MANAGE_USER_WRITE',
+                            'post' => 'MANAGE_USER_WRITE',
+                            'delete' => 'MANAGE_USER_WRITE',
+                            'get' => 'MANAGE_USER_READ',
                         ],
                     ],
                 ],
@@ -123,6 +123,21 @@ return [
                     ],
                 ],
             ],
+            'addOrganizationToUser' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/user/:userId/organization/:organizationId',
+                    'defaults' => [
+                        'controller' => Controller\UserController::class,
+                        'method' => 'POST',
+                        'action' => 'addOrganizationToUser',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            'addOrganizationToUser' => 'MANAGE_USER_WRITE',
+                        ],
+                    ],
+                ],
+            ],
             'removeUserFromGroup' => [
                 'type' => Segment::class,
                 'options' => [
@@ -190,17 +205,6 @@ return [
                     ],
                 ],
             ],
-            'usersList' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/[organization/:orgId/]users/list',
-                    'defaults' => [
-                        'controller' => Controller\UserController::class,
-                        'method' => 'POST',
-                        'action' => 'usersList'
-                    ],
-                ],
-            ],
             'changePassword' => [
                 'type' => Segment::class,
                 'options' => [
@@ -247,20 +251,20 @@ return [
                 'options' => [
                     'route' => '/user/me/forgotpassword',
                     'defaults' => [
-                        'controller' => Controller\ForgotPasswordController::class,
+                        'controller' => Controller\UserController::class,
                         'method' => 'POST',
                         'action' => 'forgotPassword'
                     ],
                 ],
             ],
-            'resetPassword' => [
+            'updateNewPassword' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/user/me/resetpassword',
+                    'route' => '/user/me/updatenewpassword',
                     'defaults' => [
-                        'controller' => Controller\ForgotPasswordController::class,
+                        'controller' => Controller\UserController::class,
                         'method' => 'POST',
-                        'action' => 'resetPassword'
+                        'action' => 'updateNewPassword'
                     ],
                 ],
             ],
@@ -272,20 +276,6 @@ return [
                         'controller' => Controller\UserSessionController::class,
                         'method' => 'GET',
                         'action' => 'getSession'
-                    ],
-                ],
-            ],
-            'getUserDetailList' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/organization/:orgId/user/:userId/profile',
-                    'defaults' => [
-                        'controller' => Controller\UserController::class,
-                        'method' => 'GET',
-                        'action' => 'getUserDetailList',
-                        'access' => [
-                            'getUserDetailList'=> ['MANAGE_USER_READ']
-                        ],
                     ],
                 ],
             ],

@@ -13,20 +13,19 @@ use Zend\InputFilter\Input;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 
-class EmailController extends AbstractApiController
-{
+class EmailController extends AbstractApiController {
     /**
     * @var EmailService Instance of Email Service
     */
-    private $emailService;
+	private $emailService;
     /**
     * @ignore __construct
     */
     public function __construct(EmailTable $table, EmailService $emailService, Logger $log, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Email::class);
-        $this->setIdentifierName('emailId');
-        $this->emailService = $emailService;
+    	parent::__construct($table, $log, __CLASS__, Email::class);
+    	$this->setIdentifierName('emailId');
+    	$this->emailService = $emailService;
     }
     /**
     * GET Email API
@@ -45,10 +44,9 @@ class EmailController extends AbstractApiController
                     }
     * </code>
     */
-    public function get($id)
-    {
+    public function get($id){
         $result = $this->emailService->getEmailAccountById($id);
-        if ($result == 0||empty($result)) {
+        if($result == 0||empty($result)){
             return $this->getErrorResponse("File not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponseWithData($result);
@@ -74,19 +72,18 @@ class EmailController extends AbstractApiController
                     integer id
     * </code>
     */
-    public function create($data)
-    {
-        try {
-            $count = $this->emailService->createOrUpdateEmailAccount($data);
-        } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
-        }
+    public function create($data) {
+    	try {
+    		$count = $this->emailService->createOrUpdateEmailAccount($data);
+    	} catch(ValidationException $e) {
+    		$response = ['data' => $data, 'errors' => $e->getErrors()];
+    		return $this->getErrorResponse("Validation Errors",404, $response);
+    	}
+    	if($count == 0) {
+    		return $this->getFailureResponse("Failed to create a new entity", $data);
+    	}
         unset($data['password']);
-        return $this->getSuccessResponseWithData($data, 201);
+    	return $this->getSuccessResponseWithData($data,201);
     }
 
     /*public function update($id, $data) {
@@ -104,11 +101,11 @@ class EmailController extends AbstractApiController
     }*/
 
     /*public function delete($id) {
-        $response = $this->emailService->deleteEmail($id);
-        if($response == 0) {
-        return $this->getErrorResponse("Email not found", 404, ['id' => $id]);
-        }
-        return $this->getSuccessResponse();
+    	$response = $this->emailService->deleteEmail($id);
+    	if($response == 0) {
+		return $this->getErrorResponse("Email not found", 404, ['id' => $id]);
+    	}
+    	return $this->getSuccessResponse();
     }*/
     /**
     * GET List Email API
@@ -127,8 +124,7 @@ class EmailController extends AbstractApiController
                     }
     * </code>
     */
-    public function getList()
-    {
+    public function getList(){
         $result = $this->emailService->getEmailAccountsByUserId();
         return $this->getSuccessResponseWithData($result);
     }
@@ -144,19 +140,18 @@ class EmailController extends AbstractApiController
     *       data : all default email data passed back in json format
     * </code>
     */
-    public function emailDefaultAction()
-    {
+    public function emailDefaultAction() {
         $id = $this->params()->fromRoute()['emailId'];
         try {
             $responseData = $this->emailService->emailDefault($id);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getErrorResponse("Validation Errors",404, $response);
         }
-        if ($responseData == 0) {
+        if($responseData == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
-        return $this->getSuccessResponseWithData($responseData, 200);
+        return $this->getSuccessResponseWithData($responseData,200);
     }
 
     /**
@@ -167,22 +162,21 @@ class EmailController extends AbstractApiController
     * @param $id ID of Email to Delete
     * @return array success|failure response
     */
-    public function deleteEmailAction()
-    {
+    public function deleteEmailAction() {
         $email = $this->params()->fromRoute()['address'];
         try {
             $responseData = $this->emailService->deleteEmail($email);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getErrorResponse("Validation Errors",404, $response);
         }
-        if ($responseData == 0) {
+        if($responseData == 0) {
             return $this->getErrorResponse("Entity not found", 404);
         }
-        return $this->getSuccessResponseWithData($responseData, 200);
+        return $this->getSuccessResponseWithData($responseData,200);
     }
 
-    /**
+     /**
     * Update Email API
     * @api
     * @link /email[/:emailId]
@@ -191,30 +185,30 @@ class EmailController extends AbstractApiController
     * @param array $data
     * <code> status : "success|error",
     *        data : {
-                   string email,
-                   string username,
-                   string host,
-                   integer isdefault,
-                   integer userid,
-                   integer id
-                   }
+                    string email,
+                    string username,
+                    string host,
+                    integer isdefault,
+                    integer userid,
+                    integer id
+                    }
     * </code>
     * @return array Returns a JSON Response with Status Code and Created Email.
     */
-    public function updateEmailAction()
-    {
+    public function updateEmailAction() {
         $request = $this->getRequest();
         $data = $this->processBodyContent($request);
         $email = $this->params()->fromRoute()['address'];
         try {
-            $responseData = $this->emailService->updateEmail($email, $data);
+            $responseData = $this->emailService->updateEmail($email,$data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getErrorResponse("Validation Errors",404, $response);
         }
-        if ($responseData == 0) {
+        if($responseData == 0) {
             return $this->getErrorResponse("Entity not found", 404);
         }
-        return $this->getSuccessResponseWithData($responseData, 200);
+        return $this->getSuccessResponseWithData($responseData,200);
     }
+
 }

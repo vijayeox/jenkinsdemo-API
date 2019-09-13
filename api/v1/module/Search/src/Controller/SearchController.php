@@ -29,4 +29,5 @@ class SearchController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData(array("result" => $result), 201);
     }
+
 }

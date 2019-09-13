@@ -43,11 +43,6 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     protected function setUp() : void
     {
         parent::setUp();
-        $_REQUEST = [];
-        $_SERVER['REQUEST_SCHEME'] = "http";
-        $_SERVER['SERVER_NAME'] = "localhost";
-        $_SERVER['SERVER_PORT'] = "8080";
-    
         $this->setupConnection();
         $tm = $this->getTransactionManager();
         $tm->setRollbackOnly(true);
@@ -55,8 +50,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     }
 
     //this is required to ensure that same connection is used by dbunit and zend db
-    protected function setupConnection()
-    {
+    protected function setupConnection(){
     }
 
     /**
@@ -70,8 +64,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $_REQUEST = [];
     }
     
-    protected function getTransactionManager()
-    {
+    protected function getTransactionManager(){
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
         return TransactionManager::getInstance($dbAdapter);
     }
@@ -94,6 +87,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
 
     private function getJwtToken($username)
     {
+
         if (!isset($this->jwtToken[$username])) {
             $data = JwtHelper::getTokenPayload(['username'=>$username,'orgid' => $this->testOrgId]);
             $config = $this->getApplicationConfig();
@@ -132,10 +126,10 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $headers->addHeaderLine('content-type', 'application/json');
         $request->setContent($jsonData);
     }
-    /**
-    * Get the application config
-    * @return array the application config
-    */
+     /**
+     * Get the application config
+     * @return array the application config
+     */
     public function getApplicationConfig()
     {
         return $this->applicationConfig;
@@ -190,24 +184,6 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     public function getApplicationServiceLocator()
     {
         return $this->getApplication()->getServiceManager();
-    }
-
-    protected function executeUpdate($query)
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        return $result;
-    }
-
-    protected function executeQueryTest($query)
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $resultSet->initialize($result);
-        return $resultSet->toArray();
     }
 
 }

@@ -4,26 +4,24 @@ namespace Group\Model;
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
-class Group extends Entity
-{
+class Group extends Entity {
     protected $data = array(
-        'id' => null,
-        'uuid' => null,
+        'id' => NULL,
+        'uuid' => NULL,
         'name'=> '',
-        'parent_id' => null,
-        'org_id' => null,
-        'manager_id' => null,
+        'parent_id' => NULL,
+        'org_id' => NULL,
+        'manager_id' => NULL,
         'description' => '',
         'status' => "Active",
-        'date_created' => null,
-        'date_modified' => null,
-        'created_id' => null,
-        'modified_id' => null
+        'date_created' => NULL,
+        'date_modified' => NULL,
+        'created_id' => NULL,
+        'modified_id' => NULL
     );
 
-    public function validate()
-    {
-        $dataArray = array("name", "manager_id", "status", "date_created", "created_id");
+    public function validate() {
+        $dataArray = Array("name", "manager_id", "status", "date_created", "created_id");
         $this->validateWithParams($dataArray);
     }
 }

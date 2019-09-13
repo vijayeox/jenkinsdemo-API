@@ -16,6 +16,7 @@ use Oxzion\Service\UserService;
 
 class Module implements ConfigProviderInterface
 {
+
     public function getConfig()
     {
         return include __DIR__ . '/../config/module.config.php';
@@ -48,15 +49,13 @@ class Module implements ConfigProviderInterface
                         $container->get(OrganizationTable::class),
                         $container->get(OrganizationService::class),
                         $container->get('OrganizationLogger'),
-                        $container->get(AdapterInterface::class)
-                    );
+                        $container->get(AdapterInterface::class));
                 },
                 Controller\OrganizationLogoController::class => function ($container) {
                     return new Controller\OrganizationLogoController(
                         $container->get(OrganizationService::class),
                         $container->get('OrganizationLogger'),
-                        $container->get(AdapterInterface::class)
-                    );
+                        $container->get(AdapterInterface::class));
                 },
             ],
         ];
