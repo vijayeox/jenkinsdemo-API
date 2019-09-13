@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace File\Controller;
 
@@ -11,7 +11,8 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 
-class CommentController extends AbstractApiController {
+class CommentController extends AbstractApiController
+{
     /**
     * @var CommentService Instance of Comment Service
     */
@@ -19,7 +20,8 @@ class CommentController extends AbstractApiController {
     /**
     * @ignore __construct
     */
-    public function __construct(CommentTable $table, CommentService $commentService, Logger $log, AdapterInterface $dbAdapter) {
+    public function __construct(CommentTable $table, CommentService $commentService, Logger $log, AdapterInterface $dbAdapter)
+    {
         parent::__construct($table, $log, __CLASS__, Comment::class);
         $this->setIdentifierName('id');
         $this->commentService = $commentService;
@@ -40,28 +42,29 @@ class CommentController extends AbstractApiController {
     *} </code>
     * @return array Returns a JSON Response with Status Code and Created Comment.
     */
-    public function create($data) {
+    public function create($data)
+    {
         $params = $this->params()->fromRoute();
-        try{
-            $count = $this->commentService->createComment($data,$params['fileId']);
-        } catch (ValidationException $e){
+        try {
+            $count = $this->commentService->createComment($data, $params['fileId']);
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0){
+        if ($count == 0) {
             return $this->getFailureResponse("Failed to create a new entity", $data);
         }
-        return $this->getSuccessResponseWithData($data,201);
-	}
+        return $this->getSuccessResponseWithData($data, 201);
+    }
     /**
     * Update Comment API
     * @api
     * @link /file/:fileId/comment[/:id]
     * @method PUT
-    * @param array $id ID of Comment to update 
-    * @param array $data 
+    * @param array $id ID of Comment to update
+    * @param array $data
     * <code> status : "success|error",
-    *        data : 
+    *        data :
                     {
                     integer id,
                     integer file_id,
@@ -77,17 +80,18 @@ class CommentController extends AbstractApiController {
     * </code>
     * @return array Returns a JSON Response with Status Code and Created Comment.
     */
-    public function update($id, $data) {
+    public function update($id, $data)
+    {
         try {
             $count = $this->commentService->updateComment($id, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0) {
+        if ($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
-        return $this->getSuccessResponseWithData($data,200);
+        return $this->getSuccessResponseWithData($data, 200);
     }
 
     /**
@@ -98,10 +102,11 @@ class CommentController extends AbstractApiController {
     * @param $id ID of Comment to Delete
     * @return array success|failure response
     */
-    public function delete($id) {
+    public function delete($id)
+    {
         $response = $this->commentService->deleteComment($id);
-        if($response == 0) {
-        return $this->getErrorResponse("Comment not found", 404, ['id' => $id]);
+        if ($response == 0) {
+            return $this->getErrorResponse("Comment not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
     }
@@ -127,23 +132,25 @@ class CommentController extends AbstractApiController {
                     }
     * </code>
     */
-    public function getList() {
+    public function getList()
+    {
         $result = $this->commentService->getComments();
         return $this->getSuccessResponseWithData($result);
     }
 
-    public function getChildListAction() {
+    public function getChildListAction()
+    {
         $params = $this->params()->fromRoute();
         $id = $params['id'];
         try {
             $count = $this->commentService->getchildren($id);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0) {
+        if ($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
-        return $this->getSuccessResponseWithData($count,200);
+        return $this->getSuccessResponseWithData($count, 200);
     }
 }

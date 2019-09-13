@@ -47,6 +47,7 @@
   .Announcement-visuals > img {
     width: auto;
     height: 100%;
+    max-width: 100%;
   }
 
   .Announcement-content {
@@ -88,6 +89,7 @@
     margin-left: 6%;
     margin-right: 6%;
     margin-bottom: 1%;
+    word-break: break-word;
   }
 
   .slider-wrapper {
@@ -124,7 +126,7 @@
     bottom: 40%;
     right: 0;
     z-index: 999;
-    color: #fff;
+    color: gray;
     opacity: 0.3;
     background-color: white;
     margin-right: 1%;
@@ -136,7 +138,7 @@
     bottom: 40%;
     left: 0;
     z-index: 999;
-    color: #fff;
+    color: gray;
     opacity: 0.3;
     background-color: white;
     margin-left: 1%;

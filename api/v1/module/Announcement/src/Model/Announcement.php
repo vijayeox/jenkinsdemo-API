@@ -5,24 +5,25 @@ namespace Announcement\Model;
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
-class Announcement extends Entity {
-
+class Announcement extends Entity
+{
     protected $data = array(
         'id' => 0,
-        'uuid' => NULL,
-        'name' => NULL,
-        'org_id' => NULL,
-        'status' => NULL,
-        'description' => NULL,
-        'start_date' => NULL,
-        'end_date' => NULL,
+        'uuid' => null,
+        'name' => null,
+        'org_id' => null,
+        'status' => null,
+        'description' => null,
+        'start_date' => null,
+        'end_date' => null,
         'created_date' => 0,
         'created_id' => 0,
-        'media_type' => NULL,
-        'media' => NULL
+        'media_type' => null,
+        'media' => null
     );
 
-    public function validate(){
+    public function validate()
+    {
         $required = array('name','org_id','status','start_date','end_date','media');
         $this->validateWithParams($required);
     }

@@ -8,17 +8,17 @@ use Zend\Log\Filter\Priority;
 use Zend\Log\Processor\RequestId;
 
 return [
-	'router' => [
+    'router' => [
         'routes' => [
             'messaging' => [
                 'type'    => Segment::class,
                 'options' => [
-                	'route'    => '/messaging',
+                    'route'    => '/messaging',
                     'defaults' => [
                         'controller' => Controller\MessagingController::class
                     ],
                 ],
-            ],            
+            ],
         ],
     ],
     'log' => [

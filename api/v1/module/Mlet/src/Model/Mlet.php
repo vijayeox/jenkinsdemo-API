@@ -1,26 +1,27 @@
 <?php
 namespace Mlet\Model;
+
 use Oxzion\Model\Entity;
 
-class Mlet extends Entity{
-
+class Mlet extends Entity
+{
     protected $data = array(
-            'id' => NULL,
-            'uuid' => NULL,
-            'appid'=>NULL,
-            'name' => NULL,
-            'description' => NULL,
-            'questiontext' => NULL , 
-            'parameters' => NULL , 
-            'orgid' => NULL,
-            'mletlist' => NULL,
-            'templateid' => NULL,
-            'querytext' => NULL,
-            'html' => NULL,
-            'doctype' => NULL,
-            'date_created' => NULL,
-            'date_modified' => NULL,            
-            'created_id' => NULL,            
-            'modified_id' => NULL,            
+            'id' => null,
+            'uuid' => null,
+            'appid'=>null,
+            'name' => null,
+            'description' => null,
+            'questiontext' => null ,
+            'parameters' => null ,
+            'orgid' => null,
+            'mletlist' => null,
+            'templateid' => null,
+            'querytext' => null,
+            'html' => null,
+            'doctype' => null,
+            'date_created' => null,
+            'date_modified' => null,
+            'created_id' => null,
+            'modified_id' => null,
     );
 }

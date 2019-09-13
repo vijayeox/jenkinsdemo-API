@@ -5,24 +5,25 @@ namespace Workflow\Model;
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;
 
-class WorkflowInstance extends Entity {
-
+class WorkflowInstance extends Entity
+{
     protected $data = array(
         'id' => 0,
-        'workflow_id' => NULL,  
+        'workflow_id' => null,
         'app_id' => 0,
         'org_id' => 0,
-        'process_instance_id' => NULL,
-        'status' => NULL,
-        'data' => NULL,
-        'date_created' => NULL,  
-        'date_modified' => NULL,
-        'created_by' => NULL,
-        'modified_by' => NULL
+        'process_instance_id' => null,
+        'status' => null,
+        'data' => null,
+        'date_created' => null,
+        'date_modified' => null,
+        'created_by' => null,
+        'modified_by' => null
     );
     
-    public function validate(){
-        $dataArray = Array("workflow_id", "app_id", "org_id", "process_instance_id", "date_created","created_by","status");
+    public function validate()
+    {
+        $dataArray = array("workflow_id", "app_id", "org_id", "process_instance_id", "date_created","created_by","status");
         $this->validateWithParams($dataArray);
     }
 }
