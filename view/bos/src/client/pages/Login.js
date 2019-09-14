@@ -473,7 +473,7 @@ export default class Login extends defaultLogin {
             ),
 
             h("div", { className: "footer-links" }, [
-              h("a", { href: "https://www.vantageagora.com" }, "About Us")
+              h("a", { href: "https://www.eoxvantage.com" }, "About Us")
             ]),
             h(
               "div",
