@@ -106,4 +106,97 @@ class PolicyDocumentTest extends DelegateTest
         $doc = substr($doc, 0, strripos($doc, '/'));
         FileUtils::rmDir($doc);
     }
+
+    public function testDiveBoatPolicyDocument()
+    {
+       $config = $this->getApplicationConfig();
+        $crypto = new Crypto();
+        $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
+        AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
+        $appId = $this->data['UUID'];
+        $data = [
+                'firstname' => 'Mohan',
+                 'middlename' => 'Raj' ,
+                 'lastname' => 'D',
+                 'address1' => 'ABC 200',
+                 'address2' => 'XYZ 300',
+                 'city' => 'APO',
+                 'state' => 'Armed Forces Europe',
+                 'country' => 'US',
+                 'zipcode' => '09522-9998',                
+                 'padi' => '34567',
+                 'start_date' => '06/30/2019',
+                 'end_date' => '6/30/2020 12:01:00 AM',
+                 'orgUuid' => $this->data['orgUuid'],
+                 'product' => 'Dive Boat',
+                 'ismailingaddress' => 0,
+                 'endrosement_status' => 'Instructor',
+                 'losspayees' => 1,
+                 'addInsurance' => 1];
+        $config = $this->getApplicationConfig();
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'PolicyDocument', $data);
+        $this->assertEquals(isset($content['uuid']), true);
+        $this->assertEquals(isset($content['policy_id']), true);
+        $this->assertEquals(isset($content['carrier']), true);
+        $this->assertEquals(isset($content['license_number']), true);
+        $this->assertEquals(isset($content['certificate_no']), true);
+        $this->assertEquals(isset($content['policy_document']), true);
+        $doc= $crypto->decryption($content['policy_document']);
+        $this->assertTrue(is_file($doc));
+        $this->assertTrue(filesize($doc)>0);
+        $doc = substr($doc, 0, strripos($doc, '/'));
+        FileUtils::rmDir($doc);
+    }
+
+
+     public function testDiveStorePolicyDocument()
+    {
+       $config = $this->getApplicationConfig();
+        $crypto = new Crypto();
+        $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
+        AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
+        $appId = $this->data['UUID'];
+        $data = [
+                'firstname' => 'Mohan',
+                 'middlename' => 'Raj' ,
+                 'lastname' => 'D',
+                 'address1' => 'ABC 200',
+                 'address2' => 'XYZ 300',
+                 'city' => 'APO',
+                 'state' => 'New Jersey',
+                 'country' => 'US',
+                 'zipcode' => '09522-9998',                
+                 'padi' => '34567',
+                 'start_date' => '06/30/2019',
+                 'end_date' => '6/30/2020 12:01:00 AM',
+                 'orgUuid' => $this->data['orgUuid'],
+                 'product' => 'Dive Store',
+                 'general_liaility' => '1,000,000',
+                 'personal_injury' =>'1,000,000',
+                 'general_liability_aggregate' => '2,000,000',
+                 'product_aggregate' => '2,000,000',
+                 'damage' => '1,000,000',
+                 'medical_expense' => 1,
+                 'owned_auto' => 0,
+                 'diving_pool_use' => 1,
+                 'travel_agent' => 0,
+                 'addInsurance' => 1];
+        $config = $this->getApplicationConfig();
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'PolicyDocument', $data);
+        $this->assertEquals(isset($content['uuid']), true);
+        $this->assertEquals(isset($content['policy_id']), true);
+        $this->assertEquals(isset($content['carrier']), true);
+        $this->assertEquals(isset($content['license_number']), true);
+        $this->assertEquals(isset($content['certificate_no']), true);
+        $this->assertEquals(isset($content['policy_document']), true);
+        $doc= $crypto->decryption($content['policy_document']);
+        $this->assertTrue(is_file($doc));
+        $this->assertTrue(filesize($doc)>0);
+        $doc = substr($doc, 0, strripos($doc, '/'));
+        FileUtils::rmDir($doc);
+    }
 }

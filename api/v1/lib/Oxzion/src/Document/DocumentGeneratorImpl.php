@@ -83,11 +83,14 @@ class DocumentGeneratorImpl implements DocumentGenerator
         
     }
 
-    public function generatePdfDocumentFromHtml($htmlContent, $destination, $header = null,$footer = null){
+    public function generatePdfDocumentFromHtml($htmlContent, $destination, $header = null,$footer = null,$data = null){
+        
         $myProjectDirectory = __DIR__."/../../../..";
         $snappy = new Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
+        // $replace = array('start_date' => $data['start_date'],'');
         $snappy->setOption("header-html",$header);
         $snappy->setOption("footer-html",$footer);
+        $snappy->setOption('replace',$data);
         $snappy->generateFromHtml($htmlContent,$destination);
         return $destination;
     }

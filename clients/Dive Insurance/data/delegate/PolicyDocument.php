@@ -11,9 +11,15 @@ class PolicyDocument implements DocumentAppDelegate
 {
     private $logger;
     private $documentBuilder;
-    const TEMPLATE = array('Individual Professional Liability' => array('template' => 'certificateOfInsurance',
+    const TEMPLATE = array('Individual Professional Liability' => array('template' => 'ProfessionalLiabilityCOI',
                                                                          'header' => 'COIheader.html',
-                                                                         'footer' => 'COIfooter.html'));
+                                                                         'footer' => 'COIfooter.html'),
+                            'Dive Boat' => array('template' => 'DiveBoatCOI',
+                                                                         'header' => 'diveBoatHeader.html',
+                                                                         'footer' => 'diveBoatFooter.html'),
+                            'Dive Store' => array('template' => 'DiveStoreCOI',
+                                                                         'header' => 'DiveStoreHeader.html',
+                                                                         'footer' => 'DiveStoreFooter.html'));
     // public function __construct(){
 
     // }
@@ -53,7 +59,6 @@ class PolicyDocument implements DocumentAppDelegate
         }
         $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid']);
         $dest = $dest.$template.'.pdf';
-        
         $this->documentBuilder->generateDocument($template, $data, $dest, $options);
         $crypto = new Crypto();
         $data['policy_document'] = $crypto->encryption($dest);

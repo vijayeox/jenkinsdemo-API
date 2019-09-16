@@ -36,6 +36,6 @@ class DocumentBuilder {
             $footer = $options['footer'] ;
             $footer = ArtifactUtils::getTemplatePath($this->config, $footer, $data)."/".$footer;
         }
-        return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer);
+        return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data);
     }
 }
