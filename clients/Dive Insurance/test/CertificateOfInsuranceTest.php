@@ -71,14 +71,14 @@ class CertificateOfInsuranceTest extends ServiceTest
         $templateService = new TemplateService($config, $this->adapter);
         $documentGenerator = new DocumentGeneratorImpl();
         $documentBuilder = new DocumentBuilder($config, $templateService, $documentGenerator);
-        $template = 'certificateOfInsurance';
+        $template = 'ProfessionalLiabilityCOI';
         $tempFile = $config['TEMPLATE_FOLDER'].$data['orgUuid'];
         $templateLocation = __DIR__."/../data/template";
         if(FileUtils::fileExists($tempFile)){
             FileUtils::rmDir($tempFile);
         }
         FileUtils::symlink($templateLocation, $tempFile);
-        $destination = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/certificateOfInsurance.pdf";
+        $destination = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/ProfessionalLiabilityCOI.pdf";
         $options = array();
         $options['header'] = "COIheader.html";
         $options['footer'] = "COIfooter.html";
@@ -89,7 +89,7 @@ class CertificateOfInsuranceTest extends ServiceTest
         }
         $this->assertTrue(is_file($output));
         $this->assertTrue(filesize($output)>0);
-        FileUtils::deleteFile("certificateOfInsurance.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
+        FileUtils::deleteFile("ProfessionalLiabilityCOI.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
         FileUtils::unlink($tempFile);
     }
 
@@ -132,14 +132,14 @@ class CertificateOfInsuranceTest extends ServiceTest
         $templateService = new TemplateService($config, $this->adapter);
         $documentGenerator = new DocumentGeneratorImpl();
         $documentBuilder = new DocumentBuilder($config, $templateService, $documentGenerator);
-        $template = 'certificateOfInsurance';
+        $template = 'ProfessionalLiabilityCOI';
         $tempFile = $config['TEMPLATE_FOLDER'].$data['orgUuid'];
         $templateLocation = __DIR__."/../data/template";
         if(FileUtils::fileExists($tempFile)){
             FileUtils::rmDir($tempFile);
         }
         FileUtils::symlink($templateLocation, $tempFile);
-        $destination = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/certificateOfInsurance.pdf";
+        $destination = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/ProfessionalLiabilityCOI.pdf";
         $options = array();
         $options['header'] = "COIheader.html";
         $options['footer'] = "COIfooter.html";
@@ -150,7 +150,7 @@ class CertificateOfInsuranceTest extends ServiceTest
         }
         $this->assertTrue(is_file($output));
         $this->assertTrue(filesize($output)>0);
-        FileUtils::deleteFile("certificateOfInsurance.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
+        FileUtils::deleteFile("ProfessionalLiabilityCOI.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
         FileUtils::unlink($tempFile);
     }
 }
