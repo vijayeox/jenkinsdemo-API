@@ -14,12 +14,24 @@ class Ratecard implements AppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {  
         $this->logger->info("Executing Rate Card");
-        $select = "Select * FROM premium_rate_card WHERE `key` ='".$data['key']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
-
+        $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
         $result = $persistenceService->selectQuery($select);
         while ($result->next()) {
-            $premiumRateCardDetails[] = $result->current();
+            $rate = $result->current();
+            if(isset($rate['key'])){
+                if(isset($rate['total'])){
+                    $premiumRateCardDetails[$rate['key']] = $rate['total'];
+                } else {
+                    $premiumRateCardDetails[$rate['key']] = $rate['premium'];
+                }
+            }
+            unset($rate);
         }
-        return $premiumRateCardDetails;
+        if(isset($premiumRateCardDetails)){
+            $returnArray = array_merge($data,$premiumRateCardDetails);
+            return $returnArray;
+        } else {
+            return $data;
+        }
     }
 }
