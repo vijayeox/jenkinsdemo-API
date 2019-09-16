@@ -1,0 +1,255 @@
+body{
+	font-family: "Times New Roman",serif;
+	font-family: normal;
+}
+
+/* footer */
+.footer_line{
+  margin-bottom: 1px;
+  margin-top:1px;
+  font-size: 13px;
+}
+.footer{
+  display: block;
+  width:100%;
+}
+
+.footer1{
+  vertical-align: top;
+  width:40%;
+  display:inline-block;
+  margin-top: 0px;
+}
+
+.footer2{
+  vertical-align: top;
+  width:10%;
+  text-align: center;
+  display:inline-block;
+  margin-top: 0px;
+  margin-left: 20px;
+  margin-right:20px;
+}
+
+.footer3{
+  vertical-align: top;
+  width:40%;
+  display:inline-block;
+  margin-top: 0px;
+  margin-left: 4%;
+}
+.hrtag{
+	background-color:black;
+	margin-bottom: 0px;
+	height: 1px;
+}
+.hrtag1{
+	background-color: black;
+	height: 1px;
+	margin-top: 0px;
+}
+.footer_title{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.img{
+	margin-top: 1px;
+	margin-bottom: 0px;
+}
+.hrtag2{
+	margin-top: 0px;
+}
+
+/* header */
+
+.line1{
+	padding: 0px;
+	margin-bottom:1px;
+	height:0.1px;
+	margin-left: 0px;
+	margin-right:0px;
+	margin-top:5px;
+}
+.line2{
+	padding: 0px;
+	margin-top:1px;
+	height:0.1px;
+	margin-left: 0px;
+	margin-right:0px;
+}
+.spacer{
+	margin:0px;
+	height:3px;
+	background-color: black;
+}
+.title1{
+	font-size: 25px;
+	margin: 0px;
+}
+
+.content{
+	width : 100%;
+	margin-bottom: 20px;
+}
+.content1{
+	float:left;
+	width : 55%;
+	display: inline-block;
+}
+.content2{
+	float:left;
+	width : 45%;
+	display: inline-block;
+}
+.caption{
+	margin-left: 20px;
+}
+.caption2{
+	margin-left:20px;
+	margin-top: 20px;
+}
+.info{
+	margin-left: 30px;
+	font-family: sans-serif;
+	font-style: normal;
+	font-size: 13px;
+	margin-bottom:1px;
+	margin-top:0px;
+	padding: 0px;
+	letter-spacing: 1px;
+}
+.caption1{
+	margin-top:10px;
+	margin-bottom: 10px;
+}
+.details{
+	margin-left: 20px;
+	font-family: sans-serif;
+	font-style: normal;
+	font-size: 13px;
+	margin-bottom:1px;
+	margin-top:0px;
+	padding: 0px;
+	letter-spacing: 1px;
+}
+.certificate_data{
+	width :35%;
+	float:left;
+	display:inline-block;
+}
+.certificate_data1{
+	width :65%;
+	float:left;
+	margin-bottom: 10px;
+	display:inline-block;
+}
+.p_margin{
+	margin-top: 0px;
+	margin-bottom: 5px;
+}
+.policy{
+	font-family: sans-serif;
+	margin-top:0px;
+	margin-bottom: 1px;
+	font-size: 16px;
+}
+.policy2{
+	font-family: sans-serif;
+	margin-top: 5px;
+	font-size: 16px;
+	margin-bottom: 0px;
+}
+.spacing{
+	margin-bottom:50px;
+	width:100%;
+	display: block;
+}
+.hr_caption{
+	margin-right: 20%;
+}
+.main_div{
+	margin-bottom: 20%;
+	padding-bottom: 5%;
+}
+
+.store_location{
+	margin: 0px !important;
+	padding: : 0px !important;
+	text-transform: uppercase !important;
+}
+.margin_div{
+	margin-top: 10% !important;
+}
+
+/*body*/
+
+.section_col{
+	margin-right: 10%;
+	margin-left: 5%;
+	width:100%;
+}
+.sec1{
+	width:60%;
+	float:left;
+	border-style: solid;
+}
+.sec2{
+	width:20%;
+	float:left;
+	border-style: solid;
+	text-align: right;
+}
+
+.sec_content{
+	margin-left: 10%;
+	width:100%;
+	margin-top: 20px;
+}
+
+.sec3{
+	margin-left: 3%;
+	width: 53%;
+	float:left;
+}
+
+.sec4{
+	width: 20%;
+	float:left;
+	text-align: right;
+}
+
+.sec_title{
+	margin-top: 2px;
+	margin-bottom: 2px;
+	font-size: 15px;
+}
+.sec_title2{
+	margin-top: 2px;
+	margin-bottom: 2px;
+	font-size: 15px;
+	font-weight: bold;
+	text-align: right;
+}
+.spacing{
+	margin-top:20%;
+}
+
+.policy_notice{
+	margin-top: 5px;
+	font-size: 13px;
+	margin-bottom:0px;
+}
+
+.addIn{
+	margin-bottom: 0px;
+	margin-top: 0px;
+}
+
+.title{
+	margin-top: 2px;
+	margin-bottom: 2px;
+	margin-left: 2px;
+}
+.notice{
+	font-size: 20px;
+}
