@@ -73,15 +73,15 @@ class DocumentServiceTest extends ServiceTest
         FileUtils::symlink($templateLocation, $tempFile);
         
         $TemplateService = new TemplateService($config, $this->adapter);
-        $content = $TemplateService->getContent('certificateOfInsurance', $data);
-        $destination = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/certificateOfInsurance.pdf";
+        $content = $TemplateService->getContent('ProfessionalLiabilityCOI', $data);
+        $destination = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/ProfessionalLiabilityCOI.pdf";
         $header = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/COIheader.html";
         $footer = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/COIfooter.html";
         $generatePdf = new DocumentGeneratorImpl();
         $output = $generatePdf->generatePdfDocumentFromHtml($content, $destination, $header, $footer);
         $this->assertTrue(is_file($output));
         $this->assertTrue(filesize($output)>0);
-        FileUtils::deleteFile("certificateOfInsurance.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
+        FileUtils::deleteFile("ProfessionalLiabilityCOI.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
         FileUtils::unlink($tempFile);
     }
 
