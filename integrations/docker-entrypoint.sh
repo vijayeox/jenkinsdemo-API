@@ -22,7 +22,7 @@ php ./bin/console oro:install --env=prod --timeout=30000 --application-url="http
 cp ./orocrm_supervisor.conf /etc/supervisor/conf.d/
 # Relative URL Issue
 mkdir -p /var/www/public/crm/public/css/themes/oro/bundles/bowerassets/font-awesome
-cp -R /var/www/public/crm/public/bundles/bowerassets/font-awesome/ /var/www/public/crm/public/css/themes/oro/bundles/bowerassets/font-awesome
+cp -R /var/www/public/crm/public/bundles/bowerassets/font-awesome/* /var/www/public/crm/public/css/themes/oro/bundles/bowerassets/font-awesome
 chmod 777 -R /var/www/
 
 service apache2 start
