@@ -144,6 +144,14 @@ class AbstractService
         return $resultSet->initialize($result);
     }
 
+    protected function executeQueryWithBindParameters($queryString, $parameters = null) {
+        $adapter = $this->getAdapter();
+        $statement = $adapter->query($queryString);
+        $result = $statement->execute($parameters ? $parameters : array());
+        $resultSet = new ResultSet();
+        return $resultSet->initialize($result);
+    }
+
     public function create(&$data, $commit = true)
     {
         $this->modelClass->exchangeArray($data);
