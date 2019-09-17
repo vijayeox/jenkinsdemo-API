@@ -20,6 +20,16 @@ return [
                     ],
                 ],
             ],
+            'deleteIndex' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/fileindexer/remove',
+                    'defaults' => [
+                        'controller' => Controller\FileIndexerController::class,
+                        'action' => 'deleteIndex',
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [

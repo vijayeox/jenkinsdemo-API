@@ -24,5 +24,27 @@ namespace FileIndexer\Controller;
 
         public function IndexAction() {
             $params = $this->extractPostData();
+            $params['id']  = isset($params['id']) ? $params['id'] : null;
+            $params['filedata'] = ($params['id']) ? ($params['id']) : "No File to index";
+            $this->log->info(FileIndexerController::class.":File Id- ".$params['filedata']);
+            $response = $this->fileIndexerService->getRelevantDetails($params['id']);
+            if ($response) {
+                $this->log->info(FileIndexerController::class.":File has been Indexed");
+                return $this->getSuccessResponseWithData($response);
+            }
+            return $this->getErrorResponse("Failure to Index File ", 400);
+        }
+
+        public function deleteIndexAction() {
+            $params = $this->extractPostData();
+            $params['id']  = isset($params['id']) ? $params['id'] : null;
+            $params['filedata'] = ($params['id']) ? ($params['id']) : "No File to index";
+            $this->log->info(FileIndexerController::class.":File Id- ".$params['filedata']);
+            $response = $this->fileIndexerService->deleteDocument($params['id']);
+            if ($response) {
+                $this->log->info(FileIndexerController::class.":File has been Deleted");
+                return $this->getSuccessResponseWithData($response);
+            }
+            return $this->getErrorResponse("Failure to Index File ", 400);
         }
     }
