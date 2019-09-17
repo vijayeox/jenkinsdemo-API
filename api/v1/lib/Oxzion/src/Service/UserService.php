@@ -1139,9 +1139,9 @@ class UserService extends AbstractService
         {
             $id = AuthContext::get(AuthConstants::USER_ID);
         }
-        $queryO = "Select org.id,org.name,org.address,org.city,org.state,org.zip,org.logo,org.labelfile,org.languagefile,org.status from ox_organization as org LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
+        $queryO = "Select org.id,org.name,oxa.address1,oxa.address2,oxa.city,oxa.state,oxa.country,oxa.zip,org.logo,org.labelfile,org.languagefile,org.status from ox_organization as org join ox_address as oxa on oxa.id = org.address_id LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
         $where = "where uo.user_id =".$id." AND org.status='Active'";
-        $resultSet = $this->executeQuerywithParams($queryO, $where);
+        $resultSet = $this->executeQuerywithParams($query, $where);
         return $resultSet->toArray();
     }
 
