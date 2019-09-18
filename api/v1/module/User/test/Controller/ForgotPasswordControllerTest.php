@@ -79,7 +79,6 @@ class ForgotPasswordControllerTest extends ControllerTest
         $expiry = date("Y-m-d H:i:s", strtotime("+30 minutes"));
         $resetCode = UuidUtil::uuid();
         $query = "update ox_user set password_reset_code = '".$resetCode."', password_reset_expiry_date = '".$expiry."' where id = 6" ;
-        print($query);
         $this->executeUpdate($query);
         $data = ['password_reset_code' => $resetCode, 
                  'new_password' => 'password',
@@ -98,7 +97,6 @@ class ForgotPasswordControllerTest extends ControllerTest
         $expiry = date("Y-m-d H:i:s", strtotime("+30 minutes"));
         $resetCode = UuidUtil::uuid();
         $query = "update ox_user set password_reset_code = '".$resetCode."', password_reset_expiry_date = '".$expiry."' where id = 6" ;
-        print($query);
         $this->executeUpdate($query);
         $data = ['password_reset_code' => $resetCode, 
                  'new_password' => 'password',
@@ -117,7 +115,6 @@ class ForgotPasswordControllerTest extends ControllerTest
         $expiry = date("Y-m-d H:i:s", strtotime("+30 minutes"));
         $resetCode = UuidUtil::uuid();
         $query = "update ox_user set password_reset_code = '".$resetCode."', password_reset_expiry_date = '".$expiry."' where id = 6" ;
-        print($query);
         $this->executeUpdate($query);
         $data = ['password_reset_code' => UuidUtil::uuid(), 
                  'new_password' => 'password',

@@ -212,6 +212,10 @@ class UserService extends AbstractService
         if(isset($data['managerid'])){
             $data['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
         }
+        if(isset($data['preferences'])){
+            $preferences = json_decode($data['preferences'],true);
+            $data['timezone'] = $preferences['timezone'];
+        }
         $password = BosUtils::randomPassword();
         if (isset($password)) {
             $data['password'] = md5(sha1($password));
@@ -429,7 +433,6 @@ class UserService extends AbstractService
              throw new ServiceException('User does not belong to the organization','user.not.found');
           }
         }
-   
         $form = new User();
         if(isset($data['orgid'])){
             unset($data['orgid']);
@@ -446,11 +449,10 @@ class UserService extends AbstractService
             if (!is_array($userdata['preferences'])) {
                 $preferences = json_decode($userdata['preferences'], true);
             } else {
-                $preferences =$userdata['preferences'];
+                $preferences = $userdata['preferences'];
             }
             if (isset($preferences['timezone'])) {
                 $userdata['timezone'] = $preferences['timezone'];
-                unset($preferences['timezone']);
             }
             $userdata['preferences'] = json_encode($preferences);
         }
