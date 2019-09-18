@@ -122,7 +122,7 @@ class DocumentGeneratorImpl implements DocumentGenerator
             array_push($finalpdf,$appendOptions);
         }
 
-        $destination = $this->mergeDocument($finalpdf,$destination);
+        $destination = $this->mergeDocuments($finalpdf,$destination);
         return $destination;
     }
     // public function generateDocumentFromFile($filePath,$destination){
