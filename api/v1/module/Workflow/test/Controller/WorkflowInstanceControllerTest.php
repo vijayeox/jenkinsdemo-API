@@ -42,7 +42,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testGetList()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/workflow/1/activity/2', 'GET');
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/activity/2', 'GET');
         $this->assertResponseStatusCode(405);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
@@ -54,7 +54,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/workflow/1/instance/1', 'GET');
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/instance/1', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
@@ -69,7 +69,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/workflow/1/instance/122', 'GET');
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/instance/122', 'GET');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
@@ -89,11 +89,11 @@ class WorkflowInstanceControllerTest extends ControllerTest
         if (enableCamunda==0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Workflow\Service\WorkflowInstanceService::class);
-            $mockProcessEngine->expects('startProcess')->with('[main]', array('name'=>'workflow3','app_id'=>1,'workflowId'=>1,'form_id'=>1,'field2'=>1,'orgid'=>'53012471-2863-4949-afb1-e69b0891c98a','created_by'=>1))->once()->andReturn(array('id'=>1));
+            $mockProcessEngine->expects('startProcess')->with('[main]', array('name'=>'workflow3','app_id'=>1,'workflowId'=>'1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4','form_id'=>1,'field2'=>1,'orgid'=>'53012471-2863-4949-afb1-e69b0891c98a','created_by'=>1))->once()->andReturn(array('id'=>1));
             $workflowService->setProcessEngine($mockProcessEngine);
             $this->processId = 1;
         }
-        $this->dispatch('/workflow/1', 'POST', $data);
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('Workflow');
@@ -109,7 +109,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['sequence'=>1];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/workflow/99', 'POST', null);
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcc89', 'POST', null);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
@@ -155,7 +155,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/workflow/1/instance/1', 'DELETE');
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/instance/1', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
@@ -169,7 +169,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/workflow/122', 'DELETE');
+        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbc454', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
@@ -185,7 +185,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
-        $this->dispatch('/app/somerandom123/workflow/1/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class);
@@ -204,7 +204,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
-        $this->dispatch('/app/somerandom123/workflow/1/4fd9ce37-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/4fd9ce37-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class);
@@ -222,7 +222,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
-        $this->dispatch('/app/somerandom123/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class);
@@ -241,7 +241,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
-        $this->dispatch('/app/somerandom123/workflow/1/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"'.$currentDate.'"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class);
@@ -260,7 +260,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
-        $this->dispatch('/app/somerandom123/file?filter=[{"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/file?filter=[{"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class);
@@ -279,7 +279,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date. ' + 1 days'));
-        $this->dispatch('/app/somerandom123/file', 'GET');
+        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/file', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Workflow');
         $this->assertControllerName(WorkflowInstanceController::class);
@@ -437,5 +437,32 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testgetFileDocumentList(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145b/document', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('filedocumentlisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data'])>0, true);
+    }
+
+    public function testgetFileDocumentListNotFound(){
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c91422/document', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('Workflow');
+        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WorkflowInstanceController');
+        $this->assertMatchedRouteName('filedocumentlisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
     }
 }

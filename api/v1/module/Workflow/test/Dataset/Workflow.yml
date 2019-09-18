@@ -2,7 +2,7 @@ ox_app:
 -
     id: 99
     name: "SampleApp"
-    uuid: "somerandom123"
+    uuid: "9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4"
     category: "OTHERS"
     type: 2
     status: 1
@@ -38,7 +38,23 @@ ox_field:
     workflow_id: 1		
     data_type: "integer"		
     required: 1		
-    sequence: 4     
+    sequence: 4 
+-
+    id: 5
+    name: "policy_document"
+    app_id: 99
+    workflow_id: 1
+    data_type: "document"
+    required: 1
+    sequence: 5 
+-		
+    id: 6		
+    name: "coi_number"		
+    app_id: 99		
+    workflow_id: 1		
+    data_type: "document"		
+    required: 1		
+    sequence: 6     
 ox_activity:
   -
     id: 1
@@ -94,6 +110,7 @@ ox_workflow:
     name: "Test Workflow 1"
     process_id: "[main]"
     form_id: 1
+    org_id: 1
     uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4'
   -
     id: 2
@@ -101,6 +118,7 @@ ox_workflow:
     name: "Test Workflow 2"
     process_id: "[main]"
     form_id: 1
+    org_id: 1
     uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo'
 ox_file:
   -
@@ -144,7 +162,7 @@ ox_workflow_instance:
   -
     id: 2
     workflow_id: 1
-    process_instance_id: 1
+    process_instance_id: 2
     app_id: 99
     org_id: 1
     status: "Completed"
@@ -193,6 +211,18 @@ ox_file_attribute:
     org_id: 1
     fieldvalue: 32552
     fieldid: 4
+  -
+    id: 8
+    fileid: 1
+    org_id: 1
+    fieldvalue: "Filename.php"
+    fieldid: 5
+  -
+    id: 9
+    fileid: 1
+    org_id: 1
+    fieldvalue: "File2.php"
+    fieldid: 6
 ox_app_menu:
   -
     id: 1

@@ -42,7 +42,8 @@ class Module implements ConfigProviderInterface
                         $container->get(Model\WorkflowInstanceTable::class),
                         $container->get(\Oxzion\Service\FileService::class),
                         $container->get(\Oxzion\Service\WorkflowService::class),
-                        $container->get(\Oxzion\Workflow\WorkflowFactory::class)
+                        $container->get(\Oxzion\Workflow\WorkflowFactory::class),
+                        $container->get('WorkflowInstanceLogger')
                     );
                 },
                 Service\ActivityInstanceService::class => function ($container) {

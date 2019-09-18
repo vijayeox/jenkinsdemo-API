@@ -149,13 +149,20 @@ class AbstractService
         $result = $statement->execute();
         return $result;
     }
-
+    protected function executeUpdateWithBindParameters($queryString, $parameters = null){
+        return $this->executeQueryWithBindParametersInternal($queryString, $parameters);
+    }
     protected function executeQueryWithBindParameters($queryString, $parameters = null) {
+        $result = $this->executeQueryWithBindParametersInternal($queryString, $parameters);
+        $resultSet = new ResultSet();
+        return $resultSet->initialize($result);
+    }
+
+    private function executeQueryWithBindParametersInternal($queryString, $parameters){
         $adapter = $this->getAdapter();
         $statement = $adapter->query($queryString);
         $result = $statement->execute($parameters ? $parameters : array());
-        $resultSet = new ResultSet();
-        return $resultSet->initialize($result);
+        return $result;
     }
 
     public function create(&$data, $commit = true)

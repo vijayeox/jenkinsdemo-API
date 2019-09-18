@@ -185,11 +185,27 @@ class WorkflowInstanceController extends AbstractApiController
                         $response = ['data' => $params, 'errors' => $e->getErrors()];
                         return $this->getErrorResponse("workflow Instance errors Errors", 404, $response);
                     }
-                    return $this->getSuccessResponseWithData($response, 200);
+                    return $this->getSuccessResponse();
                 } else {
                     return $this->getErrorResponse("Process Instance Id not set", 404, $response);
                 }
                 break;
         }
+    }
+
+    public function getFileDocumentListAction()
+    {  
+        $params = $this->params()->fromRoute();
+        try {
+            $result = $this->workflowInstanceService->getFileDocumentList($params);
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        catch(AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
+        return $this->getSuccessResponseWithData($result,200);
     }
 }

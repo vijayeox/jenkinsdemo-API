@@ -3,7 +3,7 @@
 namespace Workflow;
 
 use Zend\Router\Http\Segment;
-
+use Oxzion\Utils\UuidUtil;
 return [
     'router' => [
         'routes' => [
@@ -11,6 +11,10 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/workflow/:workflowId[/activity/:activityId][/instance/:instanceId]',
+                    'constraints' => [
+                        'workflowId' => UuidUtil::UUID_PATTERN,
+                        'activityId' => '[0-9]*',                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
                         'action' => 'activity',
@@ -23,6 +27,9 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/workflowinstance/:workflowInstanceId/activity/:activityId/submit',
+                    'constraints' => [
+                        'activityId' => UuidUtil::UUID_PATTERN,                        
+                    ],
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
                         'action' => 'activity',
@@ -77,6 +84,9 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/workflowinstance/:workflowInstanceId/activity/:activityId[/instance/:instanceId]',
+                    'constraints' => [
+                        'activityId' => UuidUtil::UUID_PATTERN,                       
+                    ],
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
                         'action' => 'workflowInstance',
@@ -128,10 +138,33 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/[workflow/:workflowId/][:userId/]file',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'workflowId' => UuidUtil::UUID_PATTERN,
+                        'userId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
                         'method' => 'GET',
                         'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'filedocumentlisting' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/document',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileDocumentList',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],
