@@ -28,12 +28,21 @@ class PolicyDocumentTest extends DelegateTest
         if (!is_link($path)) {
             symlink(__DIR__.'/../data/delegate/',$path);
         }
-        $this->tempFile = $config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'];
-        $templateLocation = __DIR__."/../data/file_docs";
+
+        $this->tempFile = $config['TEMPLATE_FOLDER'].$this->data['orgUuid'];
+        $templateLocation = __DIR__."/../data/template";
+
         if(FileUtils::fileExists($this->tempFile)){
                 FileUtils::rmDir($this->tempFile);
         }
         FileUtils::symlink($templateLocation, $this->tempFile);
+
+        $this->appFile = $config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'];
+        $templateLocation = __DIR__."/../data/file_docs";
+        if(FileUtils::fileExists($this->appFile)){
+                FileUtils::rmDir($this->appFile);
+        }
+        FileUtils::symlink($templateLocation, $this->appFile);
         parent::setUp();               
     }
 
@@ -50,6 +59,7 @@ class PolicyDocumentTest extends DelegateTest
             unlink($path);
         }
         FileUtils::unlink($this->tempFile);
+        FileUtils::unlink($this->appFile);
         $query = "DROP DATABASE " . $this->database;
         $statement = $this->getDbAdapter()->query($query);
         $result = $statement->execute();
@@ -102,8 +112,8 @@ class PolicyDocumentTest extends DelegateTest
         $doc = $config['APP_DOCUMENT_FOLDER'].$content['policy_document'];
         $this->assertTrue(is_file($doc));
         $this->assertTrue(filesize($doc)>0);
-        // $doc = substr($doc, 0, strripos($doc, '/'));
-        // FileUtils::rmDir($doc);
+        $doc = substr($doc, 0, strripos($doc, '/'));
+        FileUtils::rmDir($doc);
     }
 
     public function testDiveBoatPolicyDocument()
