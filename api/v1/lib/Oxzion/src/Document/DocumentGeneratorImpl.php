@@ -4,6 +4,8 @@ namespace Oxzion\Document;
 use Oxzion\Service\TemplateService;
 use TCPDF;
 use Knp\Snappy\Pdf;
+use setasign\Fpdi\Tcpdf\Fpdi;
+use Oxzion\Utils\FileUtils;
 
 class DocumentGeneratorImpl implements DocumentGenerator
 {
@@ -83,25 +85,83 @@ class DocumentGeneratorImpl implements DocumentGenerator
         
     }
 
-    public function generatePdfDocumentFromHtml($htmlContent, $destination, $header = null,$footer = null,$data = null){
+    public function generatePdfDocumentFromHtml($htmlContent, $destination, $header = null,$footer = null,$data = null,$append = null,$prepend = null){
         
+        $appendOptions = "";
+        $prependOptions = "";
+        $finalpdf = array();
+        $dest = $destination;
         $myProjectDirectory = __DIR__."/../../../..";
         $snappy = new Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
-        // $replace = array('start_date' => $data['start_date'],'');
         $snappy->setOption("header-html",$header);
         $snappy->setOption("footer-html",$footer);
         $snappy->setOption('replace',$data);
-        $snappy->generateFromHtml($htmlContent,$destination);
+        if(isset($append) || isset($prepend)){
+            $dest = sys_get_temp_dir().'/COI.pdf';
+            if(file_exists($dest)){
+                FileUtils::deleteFile('/COI.pdf',sys_get_temp_dir());
+            }
+        }
+        $snappy->generateFromHtml($htmlContent,$dest);
+
+        if(isset($prepend) && count($prepend) > 0){
+            foreach($prepend as $key => $value) {
+                $prependOptions = $value;
+            }
+            array_push($finalpdf,$prependOptions);
+        }
+        
+
+        array_push($finalpdf,$dest);
+
+       
+        if(isset($append) && count($append) > 0){
+            foreach($append as $key => $value) {
+                $appendOptions = $value;
+            }
+            array_push($finalpdf,$appendOptions);
+        }
+
+        $destination = $this->mergeDocument($finalpdf,$destination);
         return $destination;
     }
     // public function generateDocumentFromFile($filePath,$destination){
         
     // }
 
-    // public function mergeDocument($sourceArray,$destination){
-        
-    // }
+    public function mergeDocuments($sourceArray,$destination){
 
+        $pdf = new Fpdi();
+
+        foreach ($sourceArray AS $file) {
+            // get the page count
+            $pageCount = $pdf->setSourceFile($file);
+            // iterate through all pages
+            for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+                $pdf->setPrintHeader(false);
+                $pdf->setPrintFooter(false);
+                // import a page
+                $templateId = $pdf->importPage($pageNo);
+                // get the size of the imported page
+                $size = $pdf->getTemplateSize($templateId);
+
+                // create a page (landscape or portrait depending on the imported page size)
+                if ($size['width'] > $size['height']) {
+                    $pdf->AddPage('L', array($size['width'], $size['height']));
+                } else {
+                    $pdf->AddPage('P', array($size['width'], $size['height']));
+                }
+
+                // use the imported page
+                $pdf->useTemplate($templateId);
+            }
+        }
+        $path = $pdf->output($destination, 'F');
+
+        return $destination;
+    }
+
+   
     // public function generateDocumentWithData($sourcePdf,$destination,$data){
         
     // }

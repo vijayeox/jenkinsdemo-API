@@ -13,13 +13,14 @@ class PolicyDocument implements DocumentAppDelegate
     private $documentBuilder;
     const TEMPLATE = array('Individual Professional Liability' => array('template' => 'ProfessionalLiabilityCOI',
                                                                          'header' => 'COIheader.html',
-                                                                         'footer' => 'COIfooter.html'),
+                                                                         'footer' => 'COIfooter.html',
+                                                                         'append' => array(__DIR__.'/../template/SL Wording.pdf')),
                             'Dive Boat' => array('template' => 'DiveBoatCOI',
-                                                                         'header' => 'diveBoatHeader.html',
-                                                                         'footer' => 'diveBoatFooter.html'),
+                                                                         'header' => 'DiveBoatHeader.html',
+                                                                         'footer' => 'DiveBoatFooter.html','append' => array(__DIR__.'/../template/SL Wording.pdf')),
                             'Dive Store' => array('template' => 'DiveStoreCOI',
                                                                          'header' => 'DiveStoreHeader.html',
-                                                                         'footer' => 'DiveStoreFooter.html'));
+                                                                         'footer' => 'DiveStoreFooter.html','append' => array(__DIR__.'/../template/SL Wording.pdf')));
     // public function __construct(){
 
     // }
@@ -57,11 +58,13 @@ class PolicyDocument implements DocumentAppDelegate
         if(!isset($data['uuid'])){
             $data['uuid'] = UuidUtil::uuid();
         }
+        if($data['state'] == 'California'){
+            $options['append'] = self::TEMPLATE[$data['product']]['append'];
+        }
         $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid']);
-        $dest = $dest.$template.'.pdf';
-        $this->documentBuilder->generateDocument($template, $data, $dest, $options);
-        $crypto = new Crypto();
-        $data['policy_document'] = $crypto->encryption($dest);
+        $destAbsolute = $dest['absolutePath'].$template.'.pdf';
+        $pathsds = $this->documentBuilder->generateDocument($template, $data, $destAbsolute, $options);
+        $data['policy_document'] = $dest['relativePath'].$template.'.pdf';
         return $data;
     }
 

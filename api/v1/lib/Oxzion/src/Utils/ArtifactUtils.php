@@ -34,6 +34,6 @@ class ArtifactUtils
         if(!is_file($templateDir.$path)){
             FileUtils::createDirectory($templateDir.$path);
         }
-        return $templateDir.$path;
+        return array('absolutePath' => $templateDir.$path, 'relativePath' => $path);
     }
 }

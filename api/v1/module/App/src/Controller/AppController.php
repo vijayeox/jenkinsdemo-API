@@ -210,7 +210,7 @@ class AppController extends AbstractApiController
     public function appUploadAction()
     {
         $file_name = $_FILES["file"]["name"];
-        $destinationFolder = $this->appService->getAppUploadFolder() . "/uploads/";
+        $destinationFolder = $this->appService->getAppUploadFolder() . "uploads/";
         $target_file = $destinationFolder . $file_name;
         try {
             if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {

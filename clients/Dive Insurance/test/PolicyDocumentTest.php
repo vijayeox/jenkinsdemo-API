@@ -28,8 +28,8 @@ class PolicyDocumentTest extends DelegateTest
         if (!is_link($path)) {
             symlink(__DIR__.'/../data/delegate/',$path);
         }
-        $this->tempFile = $config['TEMPLATE_FOLDER'].$this->data['orgUuid'];
-        $templateLocation = __DIR__."/../data/template";
+        $this->tempFile = $config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'];
+        $templateLocation = __DIR__."/../data/file_docs";
         if(FileUtils::fileExists($this->tempFile)){
                 FileUtils::rmDir($this->tempFile);
         }
@@ -59,7 +59,6 @@ class PolicyDocumentTest extends DelegateTest
     public function testPolicyDocument()
     {
         $config = $this->getApplicationConfig();
-        $crypto = new Crypto();
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
         AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
         $appId = $this->data['UUID'];
@@ -70,7 +69,7 @@ class PolicyDocumentTest extends DelegateTest
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
-                 'state' => 'Armed Forces Europe',
+                 'state' => 'New Jersey',
                  'country' => 'US',
                  'zipcode' => '09522-9998',                
                  'padi' => '34567',
@@ -100,17 +99,16 @@ class PolicyDocumentTest extends DelegateTest
         $this->assertEquals(isset($content['license_number']), true);
         $this->assertEquals(isset($content['certificate_no']), true);
         $this->assertEquals(isset($content['policy_document']), true);
-        $doc= $crypto->decryption($content['policy_document']);
+        $doc = $config['APP_DOCUMENT_FOLDER'].$content['policy_document'];
         $this->assertTrue(is_file($doc));
         $this->assertTrue(filesize($doc)>0);
-        $doc = substr($doc, 0, strripos($doc, '/'));
-        FileUtils::rmDir($doc);
+        // $doc = substr($doc, 0, strripos($doc, '/'));
+        // FileUtils::rmDir($doc);
     }
 
     public function testDiveBoatPolicyDocument()
     {
-       $config = $this->getApplicationConfig();
-        $crypto = new Crypto();
+        $config = $this->getApplicationConfig();
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
         AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
         $appId = $this->data['UUID'];
@@ -121,7 +119,7 @@ class PolicyDocumentTest extends DelegateTest
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
-                 'state' => 'Armed Forces Europe',
+                 'state' => 'California',
                  'country' => 'US',
                  'zipcode' => '09522-9998',                
                  'padi' => '34567',
@@ -143,18 +141,17 @@ class PolicyDocumentTest extends DelegateTest
         $this->assertEquals(isset($content['license_number']), true);
         $this->assertEquals(isset($content['certificate_no']), true);
         $this->assertEquals(isset($content['policy_document']), true);
-        $doc= $crypto->decryption($content['policy_document']);
+        $doc = $config['APP_DOCUMENT_FOLDER'].$content['policy_document'];
         $this->assertTrue(is_file($doc));
         $this->assertTrue(filesize($doc)>0);
-        $doc = substr($doc, 0, strripos($doc, '/'));
-        FileUtils::rmDir($doc);
+        // $doc = substr($doc, 0, strripos($doc, '/'));
+        // FileUtils::rmDir($doc);
     }
 
 
-     public function testDiveStorePolicyDocument()
+    public function testDiveStorePolicyDocument()
     {
-       $config = $this->getApplicationConfig();
-        $crypto = new Crypto();
+        $config = $this->getApplicationConfig();
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
         AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
         $appId = $this->data['UUID'];
@@ -193,10 +190,10 @@ class PolicyDocumentTest extends DelegateTest
         $this->assertEquals(isset($content['license_number']), true);
         $this->assertEquals(isset($content['certificate_no']), true);
         $this->assertEquals(isset($content['policy_document']), true);
-        $doc= $crypto->decryption($content['policy_document']);
+        $doc = $config['APP_DOCUMENT_FOLDER'].$content['policy_document'];
         $this->assertTrue(is_file($doc));
         $this->assertTrue(filesize($doc)>0);
-        $doc = substr($doc, 0, strripos($doc, '/'));
-        FileUtils::rmDir($doc);
+        // $doc = substr($doc, 0, strripos($doc, '/'));
+        // FileUtils::rmDir($doc);
     }
 }

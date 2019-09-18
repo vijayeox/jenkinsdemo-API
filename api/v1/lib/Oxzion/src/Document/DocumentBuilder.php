@@ -28,6 +28,8 @@ class DocumentBuilder {
     */
     public function generateDocument($template, $data, $destination, $options){
         $content = $this->templateService->getContent($template, $data);
+        $append = array();
+        $prepend = array();
         if($options && isset($options['header'])){
             $header = $options['header'];
             $header = ArtifactUtils::getTemplatePath($this->config, $header, $data)."/".$header;
@@ -36,6 +38,15 @@ class DocumentBuilder {
             $footer = $options['footer'] ;
             $footer = ArtifactUtils::getTemplatePath($this->config, $footer, $data)."/".$footer;
         }
-        return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data);
+
+        if($options && isset($options['append'])){
+            $append = $options['append'];
+        }
+
+        if($options && isset($options['prepend'])){
+            $prepend = $options['prepend'];
+        }
+
+        return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data,$append,$prepend);
     }
 }
