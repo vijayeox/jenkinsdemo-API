@@ -39,7 +39,7 @@ class PageContentService extends AbstractService
 
         $result = array();
         foreach($resultSet as $resultArray){
-            if($resultArray['type'] == 'List' || $resultArray['type'] == 'Form'){ 
+            if($resultArray['type'] == 'List' || $resultArray['type'] == 'Form' || $resultArray['type'] == 'DocumentViewer'){ 
                 $resultArray['content'] = json_decode($resultArray['content']);
             }else{
                 $resultArray['content'] = $resultArray['content'];
@@ -57,7 +57,7 @@ class PageContentService extends AbstractService
             $select = "DELETE from ox_page_content where page_id = ".$pageId;
             $result = $this->executeQuerywithParams($select);
             foreach($data as $key => $value){ 
-                if($value['type'] == 'List'){
+                if($value['type'] == 'List' || $value['type'] == 'DocumentViewer'){
                     $value['content'] = json_encode($value['content']);
                 }
                 unset($value['id']);
