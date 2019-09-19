@@ -143,6 +143,10 @@ class UserService extends AbstractService
         $data['uuid'] = Uuid::uuid4()->toString();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        if(isset($data['preferences'])){
+            $preferences = json_decode($data['preferences'],true);
+            $data['timezone'] = $preferences['timezone'];
+        }
         $password = BosUtils::randomPassword();
         if (isset($password))
             $data['password'] = md5(sha1($password));
@@ -311,7 +315,6 @@ class UserService extends AbstractService
             }
             if (isset($preferences['timezone'])) {
                 $userdata['timezone'] = $preferences['timezone'];
-                unset($preferences['timezone']);
             }
             $userdata['preferences'] = json_encode($preferences);
         }
