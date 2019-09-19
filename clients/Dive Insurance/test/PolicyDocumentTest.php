@@ -154,8 +154,8 @@ class PolicyDocumentTest extends DelegateTest
         $doc = $config['APP_DOCUMENT_FOLDER'].$content['policy_document'];
         $this->assertTrue(is_file($doc));
         $this->assertTrue(filesize($doc)>0);
-        // $doc = substr($doc, 0, strripos($doc, '/'));
-        // FileUtils::rmDir($doc);
+        $doc = substr($doc, 0, strripos($doc, '/'));
+        FileUtils::rmDir($doc);
     }
 
 
@@ -203,7 +203,7 @@ class PolicyDocumentTest extends DelegateTest
         $doc = $config['APP_DOCUMENT_FOLDER'].$content['policy_document'];
         $this->assertTrue(is_file($doc));
         $this->assertTrue(filesize($doc)>0);
-        // $doc = substr($doc, 0, strripos($doc, '/'));
-        // FileUtils::rmDir($doc);
+        $doc = substr($doc, 0, strripos($doc, '/'));
+        FileUtils::rmDir($doc);
     }
 }
