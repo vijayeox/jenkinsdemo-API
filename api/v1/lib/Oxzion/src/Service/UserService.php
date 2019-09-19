@@ -212,6 +212,10 @@ class UserService extends AbstractService
         if(isset($data['managerid'])){
             $data['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
         }
+        if(isset($data['preferences'])){
+            $preferences = json_decode($data['preferences'],true);
+            $data['timezone'] = $preferences['timezone'];
+        }
         $password = BosUtils::randomPassword();
         if (isset($password)) {
             $data['password'] = md5(sha1($password));
@@ -450,7 +454,6 @@ class UserService extends AbstractService
             }
             if (isset($preferences['timezone'])) {
                 $userdata['timezone'] = $preferences['timezone'];
-                unset($preferences['timezone']);
             }
             $userdata['preferences'] = json_encode($preferences);
         }
