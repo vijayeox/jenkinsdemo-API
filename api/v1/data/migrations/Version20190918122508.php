@@ -21,7 +21,7 @@ final class Version20190918122508 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE ox_organization ADD FOREIGN KEY (contactid) REFERENCES ox_user(id)");
-        $this->addSql('UPDATE ox_user set preferences=\'{"currency":"USD","timezone":"United States/New York","dateformat":"dd/mm/yyyy"}\' where id in (1,2,3,4,5);');
+        $this->addSql('UPDATE ox_user set preferences=\'{"currency":"USD","timezone":"America/New_York","dateformat":"dd/mm/yyyy"}\' where id in (1,2,3,4,5);');
     }
 
     public function down(Schema $schema) : void
