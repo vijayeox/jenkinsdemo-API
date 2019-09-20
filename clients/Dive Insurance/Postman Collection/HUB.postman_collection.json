@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "05088cba-df26-4ffb-9b7f-3e2bb770b159",
+		"_postman_id": "500728b4-805c-4ee8-a503-5c64ed04eb9d",
 		"name": "HUB",
 		"description": "Hub specific data setup for developers",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -32,7 +32,7 @@
 							"formdata": [
 								{
 									"key": "username",
-									"value": "bharatgtest",
+									"value": "bharatg.test",
 									"type": "text"
 								},
 								{
@@ -385,6 +385,11 @@
 									"key": "page_id",
 									"value": "{{page_id}}",
 									"type": "text"
+								},
+								{
+									"key": "icon",
+									"value": "fa fa-user",
+									"type": "text"
 								}
 							]
 						},
@@ -427,6 +432,44 @@
 				}
 			],
 			"description": "Add ORG UUID to {{org_id}} variable\nAdd App UUID to {{app_id}} variable"
+		},
+		{
+			"name": "My Policy Files",
+			"item": [
+				{
+					"name": "GET App/file",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{auth_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/file",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"file"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Page",
@@ -499,7 +542,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"My List\",\n    \"description\": \"Listing Page\",\n    \"content\": [\n        {\n            \"type\": \"List\",\n            \"content\": \"{\\n                \\\"data\\\": \\\"organization\\\",\\n                \\\"filterable\\\": true,\\n                \\\"reorderable\\\": true,\\n                \\\"resizable\\\": true,\\n                \\\"sortable\\\": true,\\n                \\\"pageable\\\": {\\n                    \\\"buttonCount\\\": 3,\\n                    \\\"pageSizes\\\": [\\n                        10,\\n                        20,\\n                        50\\n                    ],\\n                    \\\"info\\\": true\\n                },\\n                \\\"columnConfig\\\": [\\n                    {\\n                        \\\"title\\\": \\\"Name\\\",\\n                        \\\"field\\\": \\\"name\\\"\\n                    },\\n                    {\\n                        \\\"title\\\": \\\"City\\\",\\n                        \\\"field\\\": \\\"city\\\"\\n                    }\\n                ]\\n            }\"\n        },\n        {\n            \"type\": \"List\",\n            \"content\": \"{\\n                \\\"data\\\": \\\"organization\\\",\\n                \\\"filterable\\\": true,\\n                \\\"reorderable\\\": true,\\n                \\\"resizable\\\": true,\\n                \\\"sortable\\\": true,\\n                \\\"pageable\\\": {\\n                    \\\"buttonCount\\\": 3,\\n                    \\\"pageSizes\\\": [\\n                        10,\\n                        20,\\n                        50\\n                    ],\\n                    \\\"info\\\": true\\n                },\\n                \\\"columnConfig\\\": [\\n                    {\\n                        \\\"title\\\": \\\"Name\\\",\\n                        \\\"field\\\": \\\"name\\\"\\n                    },\\n                    {\\n                        \\\"title\\\": \\\"City\\\",\\n                        \\\"field\\\": \\\"city\\\"\\n                    }\\n                ]\\n            }\"\n        },\n        {\n            \"type\": \"List\",\n            \"content\": \"{\\n                \\\"data\\\": \\\"organization\\\",\\n                \\\"filterable\\\": true,\\n                \\\"reorderable\\\": true,\\n                \\\"resizable\\\": true,\\n                \\\"sortable\\\": true,\\n                \\\"pageable\\\": {\\n                    \\\"buttonCount\\\": 3,\\n                    \\\"pageSizes\\\": [\\n                        10,\\n                        20,\\n                        50\\n                    ],\\n                    \\\"info\\\": true\\n                },\\n                \\\"columnConfig\\\": [\\n                    {\\n                        \\\"title\\\": \\\"Name\\\",\\n                        \\\"field\\\": \\\"name\\\"\\n                    },\\n                    {\\n                        \\\"title\\\": \\\"City\\\",\\n                        \\\"field\\\": \\\"city\\\"\\n                    }\\n                ]\\n            }\"\n        }\n    ]\n}"
+							"raw": "{\n    \"name\": \"My List\",\n    \"description\": \"Listing Page\",\n    \"content\": [\n        {\n            \"type\": \"List\",\n            \"content\": {\n                \"data\": \"organization\",\n                \"filterable\": true,\n                \"reorderable\": true,\n                \"pageable\": {\n                    \"buttonCount\": 3,\n                    \"pageSizes\": [\n                        10,\n                        20,\n                        50\n                    ],\n                    \"info\": true\n                },\n                \"actions\": [\n                    {\n                        \"name\": \"View\",\n                        \"page_id\": 1,\n                        \"icon\": \"fas fa-user\"\n                    }\n                ],\n                \"columnConfig\": [\n                    {\n                        \"title\": \"Name\",\n                        \"field\": \"name\"\n                    },\n                    {\n                        \"title\": \"City\",\n                        \"field\": \"city\"\n                    }\n                ]\n            }\n        }\n    ]\n}"
 						},
 						"url": {
 							"raw": "{{URL}}/app/{{app_id}}/page",
@@ -541,7 +584,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"My Policies\",\n    \"description\": \"Page Description\",\n    \"content\": [\n        {\n            \"content\": \"<p>Hi There!!!!!!!!</p><div>Have a Good Day</div>\",\n            \"type\": \"Document\"\n        }\n    ]\n}"
+							"raw": "{\n    \"name\": \"My Policies\",\n    \"description\": \"Page Description\",\n    \"icon\": \"fa fa-user\",\n    \"content\": [\n        {\n            \"content\": \"<p>Welcome to Oxzion</p>\",\n            \"type\": \"Document\"\n        }\n    ]\n}"
 						},
 						"url": {
 							"raw": "{{URL}}/app/{{app_id}}/page",
@@ -552,6 +595,133 @@
 								"app",
 								"{{app_id}}",
 								"page"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Page - DocumentViewer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Page Name\",\n    \"description\": \"Page Description\",\n    \"content\": [\n        {\n            \"content\": {\n            \t\"fileId\":\"5c5b2544-a501-416c-98da-38af2cf3ff1d\"\n            },\n            \"type\": \"DocumentViewer\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/page",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"page"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Page - List - Action Content",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"My List\",\n    \"description\": \"Listing Page\",\n    \"content\": [\n        {\n            \"type\": \"List\",\n            \"content\": {\n                \"data\": \"organization\",\n                \"filterable\": true,\n                \"reorderable\": true,\n                \"pageable\": {\n                    \"buttonCount\": 3,\n                    \"pageSizes\": [\n                        10,\n                        20,\n                        50\n                    ],\n                    \"info\": true\n                },\n                \"actions\": [\n                    {\n                        \"name\": \"view\",\n                        \"icon\": \"fas fa-user\",\n                        \"content\": [\n                            {\n                                \"content\": \"<p>Welcome to Oxzion</p>\",\n                                \"type\": \"Document\"\n                            }\n                        ]\n                    },\n                     {\n                        \"name\": \"Open Form\",\n                        \"icon\": \"fas fa-contact\",\n                        \"content\": [\n                            {\n                                \"form_id\": \"1\",\n                                \"type\": \"Form\"\n                            }\n                        ]\n                    }\n                ],\n                \"columnConfig\": [\n                    {\n                        \"title\": \"Name\",\n                        \"field\": \"name\"\n                    },\n                    {\n                        \"title\": \"City\",\n                        \"field\": \"city\"\n                    }\n                ]\n            }\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/page",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"page"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/page/18",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"page",
+								"18"
 							]
 						}
 					},
@@ -605,6 +775,49 @@
 					"response": []
 				},
 				{
+					"name": "DELETE Menu",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/menu/{{menu_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"menu",
+								"{{menu_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create Menu",
 					"request": {
 						"method": "POST",
@@ -642,6 +855,98 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dive Insurance Pages",
+			"item": [
+				{
+					"name": "My Policy Listing",
+					"item": [
+						{
+							"name": "Create Page",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"My Policies List\",\n    \"icon\": \"far fa-file-alt\",\n    \"description\": \"Shows a complete list of users policies\",\n    \"content\": [\n        {\n            \"type\": \"Document\",\n            \"content\": \"<p><h2>Personal Policies</h2></p><p></p>\"\n        },\n        {\n            \"type\": \"List\",\n            \"content\": {\n                \"data\": \"app/{{app_id}}/file\",\n                \"filterable\": true,\n                \"reorderable\": true,\n                \"resizable\": true,\n                \"pageable\": {\n                    \"buttonCount\": 3,\n                    \"pageSizes\": [\n                        10,\n                        20,\n                        50\n                    ],\n                    \"info\": true\n                },\n                \"actions\": [\n                    {\n                        \"name\": \"View\",\n                        \"page_id\": 1,\n                        \"icon\": \"fas fa-envelope-open-text\"\n                    },\n                    {\n                        \"name\": \"Claim\",\n                        \"page_id\": 2,\n                        \"icon\": \"fas fa-plus-circle\"\n                    },\n                    {\n                        \"name\": \"Cancel\",\n                        \"page_id\": 3,\n                        \"icon\": \"far fa-window-close\"\n                    }\n                ],\n                \"columnConfig\": [\n                    {\n                        \"title\": \"Name\",\n                        \"field\": \"name\"\n                    },\n                    {\n                        \"title\": \"Status\",\n                        \"field\": \"status\"\n                    },\n                    {\n                        \"title\": \"Data\",\n                        \"field\": \"data\"\n                    }\n                ]\n            }\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/page",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"page"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Menu",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "My Policies",
+											"type": "text"
+										},
+										{
+											"key": "page_id",
+											"value": "54",
+											"type": "text"
+										},
+										{
+											"key": "icon",
+											"value": "far fa-file-alt",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/menu",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"menu"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
 				}
 			]
 		}
