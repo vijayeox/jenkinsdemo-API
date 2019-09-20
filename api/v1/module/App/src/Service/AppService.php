@@ -17,7 +17,6 @@ use Oxzion\Service\FormService;
 use Oxzion\Service\FieldService;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ServiceException;
-use Symfony\Component\Yaml\Yaml;
 
 class AppService extends AbstractService
 {
@@ -26,103 +25,17 @@ class AppService extends AbstractService
     protected $workflowService;
     protected $fieldService;
     protected $formService;
-    private $pathtoyaml = '/path/to/file.yml';
 
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, $logger)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService)
     {
-        parent::__construct($config, $dbAdapter, $logger);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->workflowService = $workflowService;
         $this->formService = $formService;
         $this->fieldService = $fieldService;
-    }
-
-    public function createApp($data,$returnForm = false){
-        $form = new App();
-        $data['uuid'] = isset($data['uuid'])?$data['uuid']:Uuid::uuid4()->toString();
-        $data['date_created'] = date('Y-m-d H:i:s');
-        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['status'] = App::PUBLISHED;
-        $form->exchangeArray($data);
-        $form->validate();
-        $count = 0;
-        $this->beginTransaction();
-        try {
-            $count = $this->table->save($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $this->commit();
-        } catch (Exception $e) {
-            $this->rollback();
-            return 0;
-        }
-        if($returnForm === true)
-            return array('form' => $form->toArray(),'count' => $count);
-        else
-            return $count;
-    }
-
-    private function updateyml($yamldata, $modifieddata, $path){
-        $filename = "application.yml";
-        if(!(array_key_exists('uuid',$yamldata['app'][0]))){
-            $yamldata['app'][0]['uuid'] = $modifieddata['uuid'];
-        }
-        if(!(array_key_exists('category',$yamldata['app'][0]))){
-            $yamldata['app'][0]['category'] = $modifieddata['category'];
-        }
-        $new_yaml = Yaml::dump($yamldata, 2);
-        file_put_contents($path.$filename, $new_yaml);
-    }
-
-    private function collectappfieldsdata($data){
-        if(!(array_key_exists('type',$data[0]))){
-            $data[0]['type'] = 2;
-        }
-        if(!(array_key_exists('category',$data[0]))){
-            $data[0]['category'] = "EXAMPLE_CATEGORY";
-        }
-        return $data;
-    }
-
-    private function loadAppDescriptor($path){
-        //check if directory exists
-        $filename = "application.yml";
-        if(!(file_exists($path))){
-            throw new ServiceException("Directory not found","directory.required");
-        }
-        //check if filename exists
-        else{
-            if (!(file_exists($path.$filename))) {
-                throw new ServiceException("File not found","file.required");
-            }
-            else{
-                $yaml = Yaml::parse(file_get_contents($path.$filename));
-                if (empty($yaml)) {
-                    throw new ServiceException("File is empty","file.required");
-                }
-                else{
-                    if(!(isset($yaml['app']))){
-                        throw new ServiceException("App details does not exist in yaml", "app.required");
-                    }else {
-                        return $yaml;
-                    }
-                }
-            }
-        }
-    }
-
-    public function deployApp($params){
-        $ymldata = $this->loadAppDescriptor($params['path']);
-        // print_r($ymldata);
-        $appdata = $this->collectappfieldsdata($ymldata['app']);
-        $data = $this->createApp($appdata[0],true);
-        $this->updateyml($ymldata, $data['form'], $params['path']);
-        return $data;
     }
 
     /**
@@ -185,7 +98,7 @@ class AppService extends AbstractService
             $result[$x]['start_options'] = json_decode($result[$x]['start_options'], true);
         }
         return array('data' => $result,
-         'total' => $count);
+                     'total' => $count);
     }
 
     public function updateApp($id, &$data)
@@ -315,6 +228,56 @@ class AppService extends AbstractService
             return 0;
         }
         return $id;
+    }
+
+    /**
+     * Create App Service
+     * @method deployAppForOrg
+     * @param array $data Array of elements as shown</br>
+     * <code>
+     * </code>
+     * @return array Returns a JSON Response with Status Code and Created App.</br>
+     * <code> status : "success|error",
+     *        data : array Created App Object
+     * </code>
+     */
+    public function deployAppForOrg($data)
+    {
+        $form = new App();
+        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['date_created'] = date('Y-m-d H:i:s');
+        $data['status'] = App::PUBLISHED;
+        $data['uuid'] = isset($data['uuid'])?$data['uuid']:Uuid::uuid4()->toString();
+        if (!isset($data['org_id'])) {
+            return 0;
+        }
+        $form->exchangeArray($data);
+        $form->validate();
+        $count = 0;
+        $this->beginTransaction();
+        try {
+            $count = $this->table->save($form);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+            $id = $this->table->getLastInsertValue();
+            $data['id'] = $id;
+            $this->commit();
+        } catch (Exception $e) {
+            switch (get_class($e)) {
+             case "Oxzion\ValidationException":
+                $this->rollback();
+                return 0;
+                break;
+             default:
+                $this->rollback();
+                return 0;
+                break;
+            }
+        }
+        return $count;
     }
 
     /**
@@ -482,8 +445,8 @@ class AppService extends AbstractService
 
             for ($i = 0; $i < sizeof($idList); $i++) {
                 $insert = "INSERT INTO `ox_app_registry` (`org_id`,`app_id`,`date_created`)
-                SELECT org.id, '" . $idList[$i] . "', now() from ox_organization as org
-                where org.id not in(SELECT org_id FROM ox_app_registry WHERE app_id ='" . $idList[$i] . "')";
+                        SELECT org.id, '" . $idList[$i] . "', now() from ox_organization as org
+                            where org.id not in(SELECT org_id FROM ox_app_registry WHERE app_id ='" . $idList[$i] . "')";
                 $result = $this->runGenericQuery($insert);
             }
 
@@ -509,12 +472,12 @@ class AppService extends AbstractService
         $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
         $this->beginTransaction();
         try{
-            $insert = " INSERT INTO ox_app_registry (`org_id`,`app_id`)
-            SELECT $orgId, app.`id` FROM ox_app as app
-            WHERE app.`name` = '".$data['app_name']."'";
-            $result = $this->runGenericQuery($insert);
-            $count = $result->getAffectedRows();
-            $this->commit();
+        $insert = " INSERT INTO ox_app_registry (`org_id`,`app_id`) 
+                    SELECT $orgId, app.`id` FROM ox_app as app
+                    WHERE app.`name` = '".$data['app_name']."'";
+        $result = $this->runGenericQuery($insert);
+        $count = $result->getAffectedRows();
+        $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             return 0;
