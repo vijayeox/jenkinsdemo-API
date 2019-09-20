@@ -1,0 +1,35 @@
+body{
+	font-family: "Times New Roman",serif;
+	font-family: normal;
+}
+
+.main_div{
+  width:100%;
+  margin-top: 20%;
+}
+
+.details{
+  width:50%;
+  float:left;
+  margin-top: 10%;
+}
+
+.insure{
+  width:50%;
+  float:left;
+}
+.section{
+  width:100%;
+}
+.sec1{
+  width:50%;
+  float:left;
+}
+.sec2{
+  float:left;
+  width:50%;
+}
+.info{
+  margin-top: 1px;
+  margin-bottom: 1px;
+}

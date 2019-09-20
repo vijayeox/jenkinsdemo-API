@@ -96,7 +96,7 @@ class DocumentGeneratorImpl implements DocumentGenerator
         $snappy->setOption("header-html",$header);
         $snappy->setOption("footer-html",$footer);
         $snappy->setOption('replace',$data);
-        if(isset($append) || isset($prepend)){
+        if(isset($append) && !empty($append) || isset($prepend) && !empty($prepend)){
             $dest = sys_get_temp_dir().'/COI.pdf';
             if(file_exists($dest)){
                 FileUtils::deleteFile('/COI.pdf',sys_get_temp_dir());

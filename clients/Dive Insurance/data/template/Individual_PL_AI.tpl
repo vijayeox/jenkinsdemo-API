@@ -1,0 +1,63 @@
+{assign var=list value=$aiList|json_decode:true}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<link href= "{$smarty.current_dir}/css/template_css.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+	<div class ="body_div">
+		<div>&nbsp</div>
+		<div class = "content">
+			<div class ="content1">
+					<b class = "caption">Agent Information</b>
+					<div class = "caption1">
+						<p class ="info">Vicencia & Buckley A Division of HUB International</p>
+						<p class ="info" style="margin-bottom:2px;">Insurance Services</p>
+						<p class ="info">6 Centerpointe Drive, #350</p>
+						<p class ="info">La Palma, CA 90623-2538</p>
+						<p class ="info" style="margin-bottom:2px;">(714) 739-3177&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX (714) 739-3188</p>
+						<p class ="info" style="margin-bottom:2px;">(800) 223-9998</p>
+						<p class = "info">License#: {$license_number}</p>
+					</div>
+					<b class = "caption2">Insured's Name and Mailing Address:</b>
+					<p class = "details">{$firstname},{$middlename},{$lastname}</p>
+					<p class = "details">{$address1}</p>
+					<p class = "details">{$address2}</p>
+					<p class = "details">{$city},{$state}</p>
+					<p class = "details">{$country},{$zipcode}</p>
+			</div>
+			<div class ="content2">
+				<div class = "certificate_data">
+					<p class = "p_margin"><b>Certificate #:</b></p>
+					<p class = "p_margin"><b>Member #:</b></p>
+					<p class = "p_margin"><b>Effective Date:</b></p>
+					<p class = "p_margin"><b>Expiration Date:</b></p>
+				</div>
+				<div class = "certificate_data1">
+					<p class = "p_margin">{$certificate_no}</p>
+					<p class = "p_margin">{$padi}</p>
+					<p class = "p_margin">{$start_date|date_format:"%m/%d/%Y"}</p>
+					<p class = "p_margin">{$end_date|date_format:"%m/%d/%Y"}&nbsp12:01:00 AM</p>
+					<p class = "p_margin">90 DAY DISCOVERY PERIOD</p>
+				</div>
+				<hr></hr>
+				<p class = "policy">Policy issued by &nbsp{$carrier}</p>
+				<p class = "policy2">Policy #: {$policy_id}</p>
+				<hr></hr>
+			</div>
+		</div>
+		<div class="spacing">&nbsp</div>
+		<hr class="hrtag"></hr>
+		<div class = "ai_margin">
+	    	<b><p class = "ai_title">Additional Insured (See Additional Insured - Blanket Form):</p></b>
+	    	{foreach from=$list.name item=$value}
+	  			<p class = "ai_list">
+	    			{$value}
+	  			</p>
+			{/foreach}
+    	</div>
+	</div>
+</body>
+</html>
+

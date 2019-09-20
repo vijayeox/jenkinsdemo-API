@@ -247,3 +247,18 @@ body{
 .notice{
 	font-size: 20px;
 }
+
+/*Additional Insured*/
+.ai_title{
+	font-size: 13px;
+}
+.ai_margin{
+	margin-left: 20px;
+}
+.ai_list{
+	margin-left: 5px;
+	text-transform: uppercase;
+	margin-top:3px;
+	margin-bottom:3px;
+	letter-spacing: 1px;
+}

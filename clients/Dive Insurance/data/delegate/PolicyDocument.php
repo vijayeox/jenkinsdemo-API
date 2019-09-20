@@ -11,16 +11,31 @@ class PolicyDocument implements DocumentAppDelegate
 {
     private $logger;
     private $documentBuilder;
-    const TEMPLATE = array('Individual Professional Liability' => array('template' => 'ProfessionalLiabilityCOI',
-                                                                         'header' => 'COIheader.html',
-                                                                         'footer' => 'COIfooter.html',
-                                                                         'append' => array(__DIR__.'/../template/SL Wording.pdf')),
-                            'Dive Boat' => array('template' => 'DiveBoatCOI',
-                                                                         'header' => 'DiveBoatHeader.html',
-                                                                         'footer' => 'DiveBoatFooter.html','append' => array(__DIR__.'/../template/SL Wording.pdf')),
-                            'Dive Store' => array('template' => 'DiveStoreCOI',
-                                                                         'header' => 'DiveStoreHeader.html',
-                                                                         'footer' => 'DiveStoreFooter.html','append' => array(__DIR__.'/../template/SL Wording.pdf')));
+    // 'append' => array(__DIR__.'/../template/SL Wording.pdf'),
+    const TEMPLATE = array(
+        'Individual Professional Liability' 
+            => array('template' => 'ProfessionalLiabilityCOI',
+                     'header' => 'COIheader.html',
+                     'footer' => 'COIfooter.html',
+                     'slWording' => 'SL Wording.pdf',
+                     'policy' => 'Individual_Professional_Liability_Policy.pdf',
+                     'card' => 'PocketCard',
+                     'aiTemplate' => 'Individual_PL_AI',
+                     'blanketForm' => 'Individual_AI_Blanket_Endorsement.pdf',
+                     'aiheader' => 'IPL_AI_header.html'),
+        'Dive Boat' 
+            => array('template' => 'DiveBoatCOI',
+                     'header' => 'DiveBoatHeader.html',
+                     'footer' => 'DiveBoatFooter.html',
+                     'slWording' => 'SL Wording.pdf',
+                     'policy' => 'Dive_Boat_Policy.pdf'),
+        'Dive Store'
+            => array('template' => 'DiveStoreCOI',
+                     'header' => 'DiveStoreHeader.html',
+                     'footer' => 'DiveStoreFooter.html',
+                     'slWording' => 'SL Wording.pdf',
+                     'policy' => array('liability' => '','property' => 'Policy.pdf')));
+
     // public function __construct(){
 
     // }
@@ -51,6 +66,7 @@ class PolicyDocument implements DocumentAppDelegate
             $data['carrier'] = $policyDetails['carrier'];
         } 
         $template = self::TEMPLATE[$data['product']]['template'];
+        $policy = self::TEMPLATE[$data['product']]['policy'];
         $options = array();
         $options['header'] = self::TEMPLATE[$data['product']]['header'];
         $options['footer'] = self::TEMPLATE[$data['product']]['footer'];
@@ -58,13 +74,40 @@ class PolicyDocument implements DocumentAppDelegate
         if(!isset($data['uuid'])){
             $data['uuid'] = UuidUtil::uuid();
         }
-        if($data['state'] == 'California'){
-            $options['append'] = self::TEMPLATE[$data['product']]['append'];
-        }
+       
         $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid']);
         $destAbsolute = $dest['absolutePath'].$template.'.pdf';
-        $pathsds = $this->documentBuilder->generateDocument($template, $data, $destAbsolute, $options);
-        $data['policy_document'] = $dest['relativePath'].$template.'.pdf';
+        $this->documentBuilder->generateDocument($template, $data, $destAbsolute, $options);
+        
+        $data['coi_document'] = $dest['relativePath'].$template.'.pdf';
+        $data['policy_document'] = $dest['relativePath'].$policy;
+        if($data['state'] == 'California'){
+            $slWording = self::TEMPLATE[$data['product']]['slWording'];
+            $this->documentBuilder->copyTemplateToDestination($slWording,$dest['relativePath']);
+            $data['slWording'] = $dest['relativePath'].$slWording;
+            // $options['append'] = self::TEMPLATE[$data['product']]['append'];
+        }
+        $this->documentBuilder->copyTemplateToDestination($policy,$dest['relativePath']);
+        if(isset(self::TEMPLATE[$data['product']]['card'])){
+            $cardTemplate = self::TEMPLATE[$data['product']]['card'];
+            $cardDest = $dest['absolutePath'].$coi_number.'_Pocket_Card'.'.pdf';
+            $this->documentBuilder->generateDocument($cardTemplate,$data,$cardDest);
+            $data['card'] = $dest['relativePath'].$coi_number.'_Pocket_Card'.'.pdf';
+        } 
+
+        if(isset($data['addInsured'])){
+            $aiTemplate = self::TEMPLATE[$data['product']]['aiTemplate'];
+            $aiDest = $dest['absolutePath'].$coi_number.'_AI'.'pdf';
+            // $options['header'] = self::TEMPLATE[$data['product']]['aiheader'];
+            $this->documentBuilder->generateDocument($aiTemplate,$data,$aiDest,$options);
+            $data['ai_document'] = $dest['relativePath'].$coi_number.'_AI'.'.pdf';
+            if(isset(self::TEMPLATE[$data['product']]['blanketForm'])){
+                $blanketform = self::TEMPLATE[$data['product']]['blanketForm'];
+                $this->documentBuilder->copyTemplateToDestination($blanketform,$dest['relativePath']);
+                $data['blanket_document'] = $dest['relativePath'].$coi_number.'Individual_AI_Blanket_Endorsement.pdf';
+            }
+        }
+
         return $data;
     }
 

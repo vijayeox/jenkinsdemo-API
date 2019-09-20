@@ -11,6 +11,8 @@ use Oxzion\Service\AbstractService;
 use Oxzion\Service\TemplateService;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
+use Oxzion\Utils\FileUtils;
+
 
 class AppDelegateService extends AbstractService
 {
@@ -55,6 +57,9 @@ class AppDelegateService extends AbstractService
                 if (is_a($obj, DocumentAppDelegate::class)) {
                     $obj->setDocumentBuilder($this->documentBuilder);
                     $destination = $this->config['APP_DOCUMENT_FOLDER'];
+                    if (!file_exists($destination)) {
+                        FileUtils::createDirectory($destination);
+                    }
                     $obj->setTemplatePath($destination);
                 } else if (is_a($obj, MailDelegate::class)) {
                     $obj->setTemplateService($this->templateService);

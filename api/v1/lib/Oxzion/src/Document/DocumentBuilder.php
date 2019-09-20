@@ -4,6 +4,9 @@ namespace Oxzion\Document;
 use Oxzion\Service\TemplateService;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\Document\DocumentGenerator;
+use Oxzion\Utils\FileUtils;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
 class DocumentBuilder {
     private $templateService;
@@ -26,10 +29,12 @@ class DocumentBuilder {
     *               header - name of the header file (path will be discovered using conventions)
     *               footer - name of the footer file (path will be discovered using conventions)
     */
-    public function generateDocument($template, $data, $destination, $options){
+    public function generateDocument($template, $data, $destination, $options = null){
         $content = $this->templateService->getContent($template, $data);
         $append = array();
         $prepend = array();
+        $header = null;
+        $footer = null;
         if($options && isset($options['header'])){
             $header = $options['header'];
             $header = ArtifactUtils::getTemplatePath($this->config, $header, $data)."/".$header;
@@ -48,5 +53,12 @@ class DocumentBuilder {
         }
 
         return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data,$append,$prepend);
+    }
+
+    public function copyTemplateToDestination($template,$destination){
+        $sourcePath = $this->config['TEMPLATE_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID).'/'.$template;
+        $destinationPath = $this->config['APP_DOCUMENT_FOLDER'].$destination;
+        FileUtils::copy($sourcePath,$template,$destinationPath);
+        return;
     }
 }
