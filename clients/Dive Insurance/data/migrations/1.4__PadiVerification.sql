@@ -1,4 +1,4 @@
-CREATE DEFINER=`localhost`@`%` PROCEDURE `ox_padi_verification`(
+CREATE PROCEDURE `ox_padi_verification`(
 _a varchar(100),
 _b varchar(100),
 _c varchar(100),
@@ -21,7 +21,7 @@ BEGIN
 	
 	IF EXISTS (select * from `padi_data` where member_number = _a) THEN
 	    update `padi_data` set 
-		   `member_number` = _a,
+		    `member_number` = _a,
 	  		`first_name` = _b,
 	  		`MI` = _c,
 	  		`last_name` = _d,

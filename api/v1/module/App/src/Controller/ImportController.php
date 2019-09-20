@@ -62,12 +62,10 @@ class ImportController extends AbstractApiController
             if ($returnData == 3) {
                 return $this->getFailureResponse("File could not be moved to archive", $filePath);
             }
-
         } catch (Exception $e) {
             throw $e;
             return $this->getFailureResponse("Import Aborted, please make sure your file is in the correct format", $filePath);
         }
         return $this->getSuccessResponseWithData(array("Import Successfull!"));
     }
-
 }

@@ -39,6 +39,7 @@ class AppDelegateController extends AbstractApiControllerHelper
         $data = $this->extractPostData();
         $appId = $this->params()->fromRoute()['appId'];
         $delegate = $this->params()->fromRoute()['delegate'];
+        $this->appDelegateService->createLink($appId);
         $response = $this->appDelegateService->execute($appId, $delegate, $data);
         if ($response == 1) {
             return $this->getErrorResponse("Delegate not found", 404);

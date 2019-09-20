@@ -2,17 +2,15 @@
 namespace Oxzion\AppDelegate;
 
 use Exception;
-use Oxzion\Service\AbstractService;
-use Oxzion\Db\Persistence\Persistence;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
-use Oxzion\Document\DocumentBuilder;
 use Oxzion\AppDelegate\DocumentAppDelegate;
 use Oxzion\AppDelegate\MailDelegate;
-use Oxzion\Service\TemplateService;
+use Oxzion\Db\Persistence\Persistence;
+use Oxzion\Document\DocumentBuilder;
 use Oxzion\Messaging\MessageProducer;
+use Oxzion\Service\AbstractService;
+use Oxzion\Service\TemplateService;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 class AppDelegateService extends AbstractService
 {
@@ -37,34 +35,34 @@ class AppDelegateService extends AbstractService
         }
     }
 
-    public function setPersistence($appId, $persistence){
+    public function setPersistence($appId, $persistence)
+    {
         $this->persistenceServices[$appId] = $persistence;
     }
 
-    public function setMessageProducer(MessageProducer $messageProducer){
+    public function setMessageProducer(MessageProducer $messageProducer)
+    {
         $this->messageProducer = $messageProducer;
     }
-    
-    public function execute($appId, $delegate, $dataArray=array())
+
+    public function execute($appId, $delegate, $dataArray = array())
     {
-        try { 
+        try {
             $result = $this->delegateFile($appId, $delegate);
-           
-            if ($result) {
-                $obj = new $delegate; 
+            if ($result) { 
+                $obj = new $delegate;
                 $obj->setLogger($this->logger);
-                if(is_a($obj, DocumentAppDelegate::class)){
+                if (is_a($obj, DocumentAppDelegate::class)) {
                     $obj->setDocumentBuilder($this->documentBuilder);
                     $destination = $this->config['APP_DOCUMENT_FOLDER'];
                     $obj->setTemplatePath($destination);
-                }else if (is_a($obj, MailDelegate::class))
-                {
+                } else if (is_a($obj, MailDelegate::class)) {
                     $obj->setTemplateService($this->templateService);
                     $obj->setMessageProducer($this->messageProducer);
                 }
                 $persistenceService = $this->getPersistence($appId);
-                $output = $obj->execute($dataArray,$persistenceService);
-                if(!$output){
+                $output = $obj->execute($dataArray, $persistenceService);
+                if (!$output) {
                     $output = array();
                 }
                 return $output;
@@ -76,14 +74,14 @@ class AppDelegateService extends AbstractService
         }
         return 2;
     }
-    
+
     private function delegateFile($appId, $className)
     {
-        $file = $className.$this->fileExt;
-        $path = $this->delegateDir.$appId."/".$file;
+        $file = $className . $this->fileExt;
+        $path = $this->delegateDir . $appId . "/" . $file;
         if ((file_exists($path))) {
             // include $path;
-            require_once($path);
+            require_once $path;
 
         } else {
             return false;
@@ -91,29 +89,40 @@ class AppDelegateService extends AbstractService
         return true;
     }
 
-    private function getPersistence($appId){  
-        $persistence = isset($this->persistenceServices[$appId]) ? $this->persistenceServices[$appId] : NULL;
-        if(isset($persistence)){ 
+    private function getPersistence($appId)
+    {
+        $persistence = isset($this->persistenceServices[$appId]) ? $this->persistenceServices[$appId] : null;
+        if (isset($persistence)) {
             return $persistence;
-        }else{ 
+        } else {
             $name = $this->getAppName($appId);
-            if($name){
+            if ($name) {
                 $persistence = new Persistence($this->config, $name, $appId);
                 return $persistence;
             }
         }
-        return NULL;
+        return null;
     }
 
-    private function getAppName($appId){
+    private function getAppName($appId)
+    {
         $queryString = "Select ap.name from ox_app as ap";
-        $where = "where ap.uuid = '".$appId."'";
+        $where = "where ap.uuid = '" . $appId . "'";
         $resultSet = $this->executeQuerywithParams($queryString, $where);
         $result = $resultSet->toArray();
-        if(count($result) > 0){
+        if (count($result) > 0) {
             return $result[0]['name'];
         }
+        return null;
+    }
 
-        return NULL;
+    public function createLink($appId)
+    {
+        $path = __DIR__ . '/../../../../data/delegate/' . $appId . "";
+        $cPath = __DIR__ . '/../../../../../../clients/Dive Insurance/data/delegate';
+        if (!is_link($path)) {
+            symlink($cPath, $path);
+        }
+        return 1;
     }
 }

@@ -38,8 +38,8 @@ class AbstractService
         $sql = $this->getSqlObject();
         $getID= $sql->select();
         $getID->from($table)
-                ->columns(array("id"))
-                ->where(array('uuid' => $uuid));
+        ->columns(array("id"))
+        ->where(array('uuid' => $uuid));
         $responseID = $this->executeQuery($getID)->toArray();
         if($responseID){
             return $responseID[0]['id'];
@@ -52,8 +52,8 @@ class AbstractService
         $sql = $this->getSqlObject();
         $getID= $sql->select();
         $getID->from($table)
-                ->columns(array("uuid"))
-                ->where(array('id' => $id));
+        ->columns(array("uuid"))
+        ->where(array('id' => $id));
         $responseID = $this->executeQuery($getID)->toArray();
         if($responseID){
             return $responseID[0]['uuid'];
@@ -133,16 +133,16 @@ class AbstractService
         Author: Rakshith
         Function Name: executeQuerywithParams()
     */
-    public function executeQuerywithParams($queryString, $where = null, $group = null, $order = null, $limit = null)
-    {
-        $result = $this->executeQueryInternal($queryString, $where, $group, $order, $limit);
-        $resultSet = new ResultSet();
-        return $resultSet->initialize($result);
-    }
+        public function executeQuerywithParams($queryString, $where = null, $group = null, $order = null, $limit = null)
+        {
+            $result = $this->executeQueryInternal($queryString, $where, $group, $order, $limit);
+            $resultSet = new ResultSet();
+            return $resultSet->initialize($result);
+        }
 
-    private function executeQueryInternal($queryString, $where = null, $group = null, $order = null, $limit = null){
+        private function executeQueryInternal($queryString, $where = null, $group = null, $order = null, $limit = null){
         //Passing the required parameter to the query statement
-        $adapter = $this->getAdapter();
+            $adapter = $this->getAdapter();
         $query_string = $queryString . " " . $where . " " . $group . " " . $order . " " . $limit; //Combining all the parameters required to build the query statement. We will add more fields to this in the future if required.
         //        echo $query_string;exit;
         $statement = $adapter->query($query_string);
@@ -232,11 +232,11 @@ class AbstractService
         if (isset($joins)) {
             foreach ($joins as $key => $join) {
                 $select->join(
-                $join['table'],
-                $join['condition'],
-                (isset($join['fields'])) ? $join['fields'] : array(),
-                (isset($join['joinMethod'])) ? $join['joinMethod'] : 'join'
-            );
+                    $join['table'],
+                    $join['condition'],
+                    (isset($join['fields'])) ? $join['fields'] : array(),
+                    (isset($join['joinMethod'])) ? $join['joinMethod'] : 'join'
+                );
             }
         }
 

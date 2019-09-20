@@ -1,37 +1,133 @@
 <?php
-namespace clients\hub\rules\Import;
 
 use Oxzion\AppDelegate\AppDelegate;
 use Oxzion\Db\Persistence\Persistence;
+use App\Service\ImportService;
+use Oxzion\Utils\FileUtils;
 
-class Import extends AppDelegate
+class Import implements AppDelegate
 {
     private $logger;
+    private $persistenceService;
     public function setLogger($logger)
     {
         $this->logger = $logger;
     }
 
-    // private $adapter;
-    // public function __construct($config, $database, $adapter)
-    // {
-    //     $this->database = $database;
-    //     $dbConfig = $config['db'];
-    //     $dbConfig['database'] = 'mysql';
-    //     $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
-    //     $this->mysqlAdapter = new Adapter($dbConfig);
-    //     parent::__construct($config, $adapter);
-    // }
+    private $adapter;
 
     public function execute(array $data, Persistence $persistenceService)
     {
-        print_r($persistenceService);exit;
-        $this->logger->info("Executing Rate Card");
-        $select = "Select * FROM premium_rate_card WHERE product ='" . $data['product'] . "' AND start_date = '" . $data['start_date'] . "' AND end_date = '" . $data['end_date'] . "'";
-        $result = $persistenceService->selectQuery($select);
-        while ($result->next()) {
-            $premiumRateCardDetails[] = $result->current();
+        $this->persistenceService = $persistenceService;
+        try
+        {
+            $uploadData = $this->uploadCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['src_url'], $data['file_name']);
+
+            $returnData = $this->generateCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['file_name']);
+
+            $filePath = array(dirname(__dir__) . "/import/data/");
+
+            if ($returnData == 2) {
+                return 2;
+            }
+            if ($returnData == 3) {
+                return 3;
+            }
+        } catch (Exception $e) {
+            throw $e;
+            return $this->getFailureResponse("Import Aborted, please make sure your file is in the correct format", $filePath);
         }
-        return $premiumRateCardDetails;
+        return $data;
+    }
+
+
+    public function generateCSVData($storedProcedureName, $orgId, $appId, $appName, $fileName)
+    {
+        $fileFolder = dirname(__dir__) . "/import/data/";
+        $archivePath = dirname(__dir__) . "/import/archive/"; //The path to the folder Ex: /clients/<App name>/data/migrations/app/<appname>/archive/
+
+        $dataSet = array_diff(scandir($fileFolder), array(".", ".."));
+        $filePath = $fileFolder . $fileName;
+        if (!file_exists($filePath)) {
+            return 2;
+        }
+
+        $f_pointer = fopen($filePath, "r");
+        while (!feof($f_pointer)) {
+            $ar = fgetcsv($f_pointer);
+            if (!empty($ar)) {
+                $listStr = implode(",", $ar);
+                $data = $this->importCSVData($storedProcedureName, $ar);
+                $importData[] = $data;
+            }
+        }
+        if (is_dir($archivePath)) {
+            FileUtils::copy($filePath, $fileName, $archivePath);
+        } else {
+            return 3;
+        }
+        return 1;
+    }
+
+    public function importCSVData($storedProcedureName, $data)
+    {
+        $this->param = "";
+        foreach ($data as $val) {
+            $this->param .= "'" . trim($val) . "', ";
+        }
+        $this->param = rtrim($this->param, ", ");
+        $queryString = "call " . $storedProcedureName . "(" . $this->param . ")";
+        return $this->persistenceService->runGenericQuery($queryString);
+    }
+
+    // Code is not in use untill we get the download feature that we need to get from the clients
+    public function uploadCSVData($storedProcedureName, $orgId, $appId, $appName, $srcURL, $fileName)
+    {
+        $host = "oxzion.com";
+        $userID = "rakshith@oxzion.com";
+        $password = "sftp@rakshith";
+
+//This code will come from the deployment descriptor. I have kept it here for now.
+        // $host = "206.107.76.164";
+        // $userID = "vbinsurance";
+        // $password = "<<InsureName>>";
+
+        $filePath = dirname(__dir__) . "/import/data/";
+        $f_pointer = fopen($filePath, "r");
+        // echo $filePath . $fileName;exit;
+        $ftp_server = $host;
+        $ftp_conn = ftp_ssl_connect($ftp_server) or die("Could not connect to $ftp_server");
+        $login = ftp_login($ftp_conn, $userID, $password);
+        // ftp_set_option($ftp_conn, 1, true);
+        // echo "USEPASVADDRESS Value: " . ftp_get_option($ftp_conn, USEPASVADDRESS) ? '1' : '0';exit;
+        ftp_pasv($ftp_conn, true);
+        ftp_chdir($ftp_conn, "/");
+
+        if ($login) {
+            echo "<br>logged in successfully!";
+            $contents = ftp_nlist($ftp_conn, ".");
+            if(!empty($contents)) {
+                foreach ($contents as $value) {
+                    if ($fileName === $value) {
+                    // $result = ftp_fget($ftp_conn, $f_pointer, $value, FTP_BINARY);
+                        if (ftp_get($ftp_conn, $filePath . $fileName, $value, FTP_BINARY)) {
+                            echo "Successfully written to $fileName \n";
+                        } else {
+                            echo "There was a problem \n";
+                        }
+                    }
+                }
+            } else {
+                echo "There are no files in the folder";
+                return 0;
+            }
+        } else {
+            echo "Can't login to remote server.";
+            return 0;
+        }
+        if (ftp_close($ftp_conn)) {
+            echo "<br>Connection closed Successfully!";
+        }
+        return 1;
     }
 }

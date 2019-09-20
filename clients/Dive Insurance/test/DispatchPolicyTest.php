@@ -41,7 +41,7 @@ class DispatchPolicyTest extends DelegateTest
         $templateLocation = __DIR__."/../data/template";
 
         if(FileUtils::fileExists($this->tempFile)){
-                FileUtils::rmDir($this->tempFile);
+            FileUtils::rmDir($this->tempFile);
         }
         FileUtils::symlink($templateLocation, $this->tempFile);
         parent::setUp();               
@@ -117,10 +117,10 @@ class DispatchPolicyTest extends DelegateTest
         $this->assertEquals($content,array());
     }
 
-     public function testDispatchDsPolicy()
+    public function testDispatchDsPolicy()
     {
         $data = array();
-         $crypto = new Crypto();
+        $crypto = new Crypto();
         $config = $this->getApplicationConfig();
         $appId = $this->data['UUID'];
         $data['email'] = 'neha@myvamla.com';
