@@ -11,6 +11,10 @@ use Oxzion\ValidationException;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Log\Logger;
+use Oxzion\Utils\FileUtils;
+use Symfony\Component\Yaml\Yaml;
+use Oxzion\ServiceException;
+use Exception;
 
 class AppController extends AbstractApiController
 {
@@ -62,7 +66,7 @@ class AppController extends AbstractApiController
     public function create($data)
     {
         try {
-            $count = $this->appService->deployAppForOrg($data);
+            $count = $this->appService->createApp($data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -262,7 +266,7 @@ class AppController extends AbstractApiController
      * @method POST
      * @param null </br>
      * <code>
-     * </code>
+     * </code>-8c6e-60476b6a4456
      * @return array Returns a JSON Response with Status Code.</br>
      * <code> status : "success|error"
      * </code>
@@ -321,35 +325,21 @@ class AppController extends AbstractApiController
      * @return array Returns a JSON Response with Status Code.</br>
      * <code> status : "success|error"
      * </code>
-     */
-    /*    public function getDataFromDeploymentDescriptorUsingYML($appFolder) {
-            $appUploadFolder = $appFolder;
-            try {
-                $appUploadedZipFile = $appUploadFolder . "/uploads/App.zip";
-                $destinationFolder = $appUploadFolder . "/temp";
-                $this->appService->extractZipFilefromAppUploader($appUploadedZipFile, $destinationFolder);
-                $fileName = file_get_contents($appUploadFolder . "/temp/App/web.yml");
-            } catch (Exception $e) {
-                return $this->getErrorResponse("The files could not be extracted!");
-            }
-            $ymlArray = $this->appService->ymlToArrayParser($fileName);
-            //Code to insert the details of the app to the app table. Returns 1 or 0 for success or failure
-            $app = $this->appService->insertAppDetail($ymlArray['config']);
-            if($app === 0) {
-                return $this->getErrorResponse("App could not be installed, please check your deployment descriptor and try again!");
-            }
-            //Code to add the default privilege to the app installed.
-            $appPrivileges = $this->appService->applyAppPrivilege($ymlArray['config'], $app);
-            if($appPrivileges === 0){
-                return $this->getErrorResponse("App Privileges could not be set, please check your application and try again!");
-            }
-            $count = $this->appService->getFormInsertFormat($ymlArray['config']);
-            if ($count === 1) {
-                return $this->getSuccessResponse();
-            } else {
-                return $this->getErrorResponse("Form could not be created, please check your deployment descriptor and try again!");
-            }
-        }*/
+    */
+    public function deployAppAction() {
+        $params = $this->extractPostData();
+        try {
+            $data= $this->appService->deployApp($params);
+            return $this->getSuccessResponseWithData($data, 201);
+        } 
+        catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        catch (ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+    }
 
     /**
      * Deploy App API using XML File
@@ -380,4 +370,4 @@ class AppController extends AbstractApiController
                 return $this->getErrorResponse("Form could not be created, please check your deployment descriptor");
             }
         }*/
-}
+    }
