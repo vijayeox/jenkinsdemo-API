@@ -433,7 +433,6 @@ class UserService extends AbstractService
              throw new ServiceException('User does not belong to the organization','user.not.found');
           }
         }
-   
         $form = new User();
         if(isset($data['orgid'])){
             unset($data['orgid']);
@@ -450,7 +449,7 @@ class UserService extends AbstractService
             if (!is_array($userdata['preferences'])) {
                 $preferences = json_decode($userdata['preferences'], true);
             } else {
-                $preferences =$userdata['preferences'];
+                $preferences = $userdata['preferences'];
             }
             if (isset($preferences['timezone'])) {
                 $userdata['timezone'] = $preferences['timezone'];

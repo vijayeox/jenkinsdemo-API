@@ -157,6 +157,7 @@ class WorkflowInstanceService extends AbstractService
         $workflowId = $params['workflowId'];
         $workFlowFlag = 1;
         $workflow = $this->workflowService->getWorkflow(null, $workflowId);
+        
         if (empty($workflow)) {
             $workFlowFlag= 0;
             return 0;

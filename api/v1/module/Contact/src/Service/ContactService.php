@@ -527,6 +527,7 @@ class ContactService extends AbstractService
                         $finalArray['country'] = $data['Location'];
                         $finalArray['icon_type'] = 0;
                         $finalArray['owner_id'] = AuthContext::get(AuthConstants::USER_ID);
+                        $finalArray['date_created'] = date('Y-m-d H:i:s');
                         array_push($contact, $finalArray);
                     }
                     if (count($contact) % 1000 == 0) {

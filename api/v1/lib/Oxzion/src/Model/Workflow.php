@@ -11,7 +11,7 @@ class Workflow extends Entity
         'process_id' => null,
         'app_id' => null,
         'form_id' => null,
-        'file'=>null
+        'file'=>null,
     );
     public function validate()
     {

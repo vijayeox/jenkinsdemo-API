@@ -10,6 +10,8 @@ class File extends Entity
         'uuid' => null,
         'data' => null,
         'workflow_instance_id' =>null,
+        'activity_id' => null,
+        'form_id' => null,
         'created_by' => null,
         'modified_by' => null,
         'date_created' => null,
