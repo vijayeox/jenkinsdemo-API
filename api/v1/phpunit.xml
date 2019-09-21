@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true">
+<phpunit colors="true" printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinter">
     <testsuites>
         <testsuite name="Messaging Fixtures Fixtures">
             <directory>./module/Messaging/test</directory>
@@ -23,11 +23,8 @@
             <directory>./module/Workflow/test</directory>
         </testsuite>
         <testsuite name="Core Fixtures">
-            <directory>./lib/Oxzion/test</directory>
+            <directory>./lpib/Oxzion/test</directory>
             <directory>./module/Mlet/test</directory>
-            <directory>./lib/Oxzion/test/WorkflowTest</directory>
-            <directory>./lib/Oxzion/test/AnalyticsTest</directory>
-            <directory>./lib/Oxzion/test/NLPTest</directory>
         </testsuite>
         <testsuite name="Callback Fixtures">
             <directory>./module/Callback/test</directory>
@@ -43,13 +40,13 @@
             <directory>./module/Search/test</directory>
             <directory>./module/ProspectResearch/test</directory>
         </testsuite>
-        <testsuite name="Form File Fixtures">
+       <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
         </testsuite>
     </testsuites>
     <php>
-        <ini name="memory_limit" value="256M" />
+        <ini name="memory_limit" value="250M" />
         <const name="enableNLP" value="0"/>
         <const name="enableCamunda" value="0"/>
         <const name="enableElastic" value="0"/>

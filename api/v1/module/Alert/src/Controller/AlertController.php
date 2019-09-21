@@ -12,7 +12,8 @@ use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
 
-class AlertController extends AbstractApiController {
+class AlertController extends AbstractApiController
+{
     /**
     * @var AlertService Instance of Alert Service
     * @method string getString()
@@ -21,7 +22,8 @@ class AlertController extends AbstractApiController {
     /**
      * @ignore __construct
      */
-    public function __construct(AlertTable $table, AlertService $alertService, Logger $log, AdapterInterface $dbAdapter) {
+    public function __construct(AlertTable $table, AlertService $alertService, Logger $log, AdapterInterface $dbAdapter)
+    {
         parent::__construct($table, $log, __CLASS__, Alert::class);
         $this->setIdentifierName('alertId');
         $this->alertService = $alertService;
@@ -40,17 +42,18 @@ class AlertController extends AbstractApiController {
     *   } </code>
     * @return array Returns a JSON Response with Status Code and Created Alert.
     */
-    public function create($data){
-        try{
+    public function create($data)
+    {
+        try {
             $count = $this->alertService->createAlert($data);
-        }catch(ValidationException $e){
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0){
+        if ($count == 0) {
             return $this->getFailureResponse("Failed to create a new entity", $data);
         }
-        return $this->getSuccessResponseWithData($data,201);
+        return $this->getSuccessResponseWithData($data, 201);
     }
     /**
     * GET List Alert API
@@ -67,7 +70,8 @@ class AlertController extends AbstractApiController {
     * }
     * </code>
     */
-    public function getList() {
+    public function getList()
+    {
         $result = $this->alertService->getAlerts();
         return $this->getSuccessResponseWithData($result);
     }
@@ -76,8 +80,8 @@ class AlertController extends AbstractApiController {
     * @api
     * @link /alert[/:alertId]
     * @method PUT
-    * @param array $id ID of Alert to update 
-    * @param array $data 
+    * @param array $id ID of Alert to update
+    * @param array $data
     * <code>
     * {
     *  integer id,
@@ -88,17 +92,18 @@ class AlertController extends AbstractApiController {
     * </code>
     * @return array Returns a JSON Response with Status Code and Created Alert.
     */
-    public function update($id, $data){
-        try{
-            $count = $this->alertService->updateAlert($id,$data);
-        }catch(ValidationException $e){
+    public function update($id, $data)
+    {
+        try {
+            $count = $this->alertService->updateAlert($id, $data);
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if($count == 0){
+        if ($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);
         }
-        return $this->getSuccessResponseWithData($data,200);
+        return $this->getSuccessResponseWithData($data, 200);
     }
     /**
     * Delete Alert API
@@ -108,9 +113,10 @@ class AlertController extends AbstractApiController {
     * @param $id ID of Alert to Delete
     * @return array success|failure response
     */
-    public function delete($id) {
+    public function delete($id)
+    {
         $response = $this->alertService->deleteAlert($id);
-        if($response == 0){
+        if ($response == 0) {
             return $this->getErrorResponse("Alert not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
@@ -123,10 +129,11 @@ class AlertController extends AbstractApiController {
     * @return array success|failure response
     */
 
-    public function acceptAction() {
+    public function acceptAction()
+    {
         $params = $this->params()->fromRoute();
-        $count = $this->alertService->updateAlertStatus(1,$params[$this->getIdentifierName()]);
-        if($count==0){
+        $count = $this->alertService->updateAlertStatus(1, $params[$this->getIdentifierName()]);
+        if ($count==0) {
             return $this->getErrorResponse("Entity not found for id - ".$params[$this->getIdentifierName()], 404);
         }
         return $this->getSuccessResponse();
@@ -139,13 +146,13 @@ class AlertController extends AbstractApiController {
     * @return array success|failure response
     */
     
-    public function declineAction() {
+    public function declineAction()
+    {
         $params = $this->params()->fromRoute();
-        $count = $this->alertService->updateAlertStatus(0,$params[$this->getIdentifierName()]);
-        if($count==0){
+        $count = $this->alertService->updateAlertStatus(0, $params[$this->getIdentifierName()]);
+        if ($count==0) {
             return $this->getErrorResponse("Entity not found for id - ".$params[$this->getIdentifierName()], 404);
         }
         return $this->getSuccessResponse();
     }
-
 }

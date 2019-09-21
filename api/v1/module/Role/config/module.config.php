@@ -13,15 +13,15 @@ return [
             'role' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/role[/:roleId]',
+                    'route' => '/[organization/:orgId/]role[/:roleId]',
                     'defaults' => [
                         'controller' => Controller\RoleController::class,
                         'access' => [
                             // SET ACCESS CONTROL
-                            'put' => 'MANAGE_ROLE_WRITE',
-                            'post' => 'MANAGE_ROLE_WRITE',
-                            'delete' => 'MANAGE_ROLE_WRITE',
-                            'get' => 'MANAGE_ROLE_READ',
+                            'put' => ['MANAGE_ROLE_WRITE','MANAGE_USER_WRITE'],
+                            'post' => ['MANAGE_ROLE_WRITE','MANAGE_USER_WRITE'],
+                            'delete' => ['MANAGE_ROLE_WRITE','MANAGE_USER_WRITE'],
+                            'get' => ['MANAGE_ROLE_READ','MANAGE_USER_READ'],
                         ],
                     ],
                 ],
@@ -29,7 +29,7 @@ return [
             'roleprivilege' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/role/:roleId/privilege',
+                    'route'    => '/[organization/:orgId/]role/:roleId/privilege',
                     'defaults' => [
                         'controller' => Controller\RoleController::class,
                         'method' => 'GET',

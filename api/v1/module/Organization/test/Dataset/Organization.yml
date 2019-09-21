@@ -5,6 +5,15 @@ ox_organization:
         name: 'Sample Organization'
         status: 'Active'
         preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
+        contactid: 2
+
+  -
+        id: 4
+        uuid: 'b6499a34-c100-4e41-bece-5822adca3mnc'
+        name: 'Test Organization'
+        status: 'Inactive'
+        preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
+        contactid: 2
 
 ox_user:
   -

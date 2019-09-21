@@ -1,4 +1,4 @@
-import {Login as defaultLogin} from '../../osjs-client/index.js';
+﻿import {Login as defaultLogin} from '../../osjs-client/index.js';
 import {h, app} from 'hyperapp';
 import '../assets/scss/login.scss';
 

@@ -13,7 +13,7 @@ class MessagingController extends AbstractApiControllerHelper
      */
     private $logger;
     private $messagingService;
-    public function __construct (MessagingService $service, Logger $log)
+    public function __construct(MessagingService $service, Logger $log)
     {
         $this->logger = $log;
         $this->messagingService = $service;
@@ -31,5 +31,4 @@ class MessagingController extends AbstractApiControllerHelper
             return $this->getErrorResponse("Sending Message Error", 404, $response);
         }
     }
-
 }
