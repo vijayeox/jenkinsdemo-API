@@ -36,6 +36,7 @@
     "zendframework/zend-mail": "^2.10",
     "zendframework/zend-servicemanager": "^3.3",
     "zendframework/zend-cache": "^2.8",
+    "zendframework/zend-validator": "^2.12",
     "zendframework/zend-serializer": "^2.9",
     "zendframework/zend-inputfilter": "^2.8",
     "pear-pear.horde.org/Horde_Injector": "2.*",

@@ -8,6 +8,7 @@ use Analytics\Model\DataSource;
 use Analytics\Service\DataSourceService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
+use Oxzion\InvalidInputException;
 use Oxzion\ValidationException;
 use Zend\InputFilter\Input;
 

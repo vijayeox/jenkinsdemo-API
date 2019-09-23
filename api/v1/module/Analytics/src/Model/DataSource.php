@@ -8,20 +8,19 @@ use Oxzion\ValidationException;
 class DataSource extends Entity
 {
     protected $data = array(
-        'id' => 0,
-        'uuid' => null,
-        'name' => null,
-        'type' => null,
-        'configuration' => null,
-        'created_by' => 0,
-        'date_created' => null,
-        'org_id' =>null,
-        'isdeleted' => 0
+        'id' => array('type' => parent::INTVAL, 'value' => 0, 'readonly' => TRUE , 'required' => FALSE),
+        'uuid' => array('type' => parent::UUIDVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'name' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
+        'type' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
+        'configuration' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE, 'required' => TRUE),
+        'created_by' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'date_created' => array('type' => parent::TIMESTAMPVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'org_id' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => TRUE, 'required' => FALSE),
+        'isdeleted' => array('type' => parent::BOOLEANVAL, 'value' => null, 'readonly' => FALSE, 'required' => FALSE)
     );
 
     public function validate()
     {
-        $dataArray = array("name", "type", "configuration");
-        $this->validateWithParams($dataArray);
+        $this->completeValidation();
     }
 }

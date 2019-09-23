@@ -87,7 +87,7 @@ class Module implements ConfigProviderInterface {
                 },
                 Service\DashboardService::class => function($container){
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\DashboardService($container->get('config'), $dbAdapter, $container->get(Model\DashboardTable::class));
+                    return new Service\DashboardService($container->get('config'), $dbAdapter, $container->get(Model\DashboardTable::class),$container->get('AnalyticsLogger'));
                 },
                 Model\DashboardTable::class => function($container) {
                     $tableGateway = $container->get(Model\DashboardTableGateway::class);

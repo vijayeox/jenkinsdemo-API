@@ -1,7 +1,7 @@
 ox_datasource:
-  -
+-
     id: 1
-    uuid: 7700c623-1361-4c85-8203-e255ac995c4a
+    uuid: '7700c623-1361-4c85-8203-e255ac995c4a'
     name: 'mattermost'
     type: 'MySql'
     configuration: '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'
@@ -9,9 +9,9 @@ ox_datasource:
     date_created: '2019-06-27 07:25:06'
     org_id: 1
     isdeleted: 0
-  -
+-
     id: 2
-    uuid: cb1bebce-df33-4266-bbd6-d8da5571b10a
+    uuid: 'cb1bebce-df33-4266-bbd6-d8da5571b10a'
     name: 'reporting engine'
     type: 'Elastic'
     configuration: '{"data": {"username": "myUsername","password": "myPassword","host": "localhost","port": "10113"}}'
