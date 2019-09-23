@@ -148,6 +148,10 @@ body{
 	margin-top: 0px;
 	margin-bottom: 5px;
 }
+.p_margin1{
+  margin-top: 25px;
+  margin-bottom: 5px;
+}
 .policy{
 	font-family: sans-serif;
 	margin-top:0px;
@@ -169,7 +173,7 @@ body{
 	margin-right: 20%;
 }
 .main_div{
-	margin-bottom: 20%;
+	margin-bottom: 25%;
 	padding-bottom: 5%;
 }
 .page_value{

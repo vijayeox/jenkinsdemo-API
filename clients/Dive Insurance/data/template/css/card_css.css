@@ -33,3 +33,102 @@ body{
   margin-top: 1px;
   margin-bottom: 1px;
 }
+
+/*lapse letter*/
+.lapse_div{
+  margin-bottom: 6%;
+}
+.lapse_footer{
+  font-size: 13px;
+  letter-spacing: 1px;
+  margin-bottom: 2px; 
+}
+
+.details_div{
+  width:100%;
+  margin-bottom:30%;
+}
+
+.name_details{
+  width:65%;
+  float:left;
+  margin-left:10px;
+  text-transform: uppercase;
+}
+
+.certi_details{
+  width:30%;
+  float:left;
+  margin-left: 30px;
+}
+
+.certi_title{
+  width:40%;
+  float:left;
+}
+
+.certi_value{
+  width:30%;
+  float:left;
+}
+.lapse_body{
+  font-size: 13px;
+}
+.lapse_body1{
+  font-size: 13px;
+  margin-top: 6%;
+  margin-bottom: 4%;
+}
+.lapse_body2{
+  font-size: 13px;
+  line-height: 3;
+  letter-spacing: 1px;
+}
+.footer_title{
+  margin-top:5%;
+  font-size: 13px;
+  margin-bottom: 0px;
+  letter-spacing: 1px;
+}
+.name{
+  margin-left: 5px;
+  font-size: 13px;
+  margin-bottom: 1px;
+  margin-top: 1px;
+  line-height: 1.5;
+}
+
+.certi{
+  font-size: 13px;
+  margin-bottom: 1px;
+  margin-top: 1px;
+  line-height: 1.5;
+}
+
+.name_title{
+  margin-top:0px;
+}
+.img{
+   margin-bottom:5%;
+}
+.space{
+  margin-top:20%;
+}
+
+.spacing{
+ font-size: 13px;
+ margin-top: 5%;
+ margin-bottom: 10px;
+}
+.lapse_font{
+ font-size: 13px;
+ margin-bottom: 0px;
+ margin-top: 0px;
+ letter-spacing: 1px;
+}
+.main_div_space{
+  margin-top:80%;
+}
+.main_div{
+  height:100%;
+}
