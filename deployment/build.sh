@@ -170,7 +170,7 @@ mail()
     echo -e "${YELLOW}Building Rainloop...${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/integrations/rainloop/.env.js ./
-    docker run -t -v ${PWD}:/app -p 8081:8081 view ./dockerbuild.sh
+    docker run -t -v ${PWD}:/app view ./dockerbuild.sh
     echo -e "${GREEN}Building Rainloop Completed!${RESET}"
     #copying contents of src folder to build/integrations/rainloop
     echo -e "${YELLOW}Copying Rainloop to build folder...${RESET}"
@@ -185,7 +185,7 @@ view()
     echo -e "${YELLOW}Build UI/view${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/view/* ./
-    docker run -t -v ${PWD}:/app -p 8081:8081 view ./dockerbuild.sh
+    docker run -t -v ${PWD}:/app view ./dockerbuild.sh
     echo -e "${GREEN}Building UI/view Completed!${RESET}"
     cd ..
     #copy contents of view to build
@@ -218,7 +218,7 @@ openproject()
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/integrations/openproject/config/* ./config/
     echo -e "${YELLOW}Building Openproject...${RESET}"
-    docker run -t -v ${PWD}:/app -p 8095:80 --entrypoint ./dockerbuild.sh openproject_build
+    docker run -t -v ${PWD}:/app --entrypoint ./dockerbuild.sh openproject_build
     echo -e "${GREEN}Building Openproject Completed!${RESET}"
     echo -e "${YELLOW}Now Copying Openproject to build folder...${RESET}"
     rsync -rl --exclude=node_modules ${OXHOME}/integrations/openproject/ ${OXHOME}/build/integrations/openproject/
