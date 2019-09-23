@@ -122,7 +122,7 @@ mattermost()
         cd ${TEMP}
         rm -R integrations/mattermost/logs
         rm -R integrations/mattermost/data
-        rsync -rl --delete integrations/mattermost/ /opt/oxzion/mattermost/
+        rsync -rl integrations/mattermost/ /opt/oxzion/mattermost/
         ln -s /var/lib/oxzion/chat /opt/oxzion/mattermost/data
         ln -s /var/log/oxzion/chat /opt/oxzion/mattermost/logs
         chown oxzion:oxzion -R /opt/oxzion/mattermost
