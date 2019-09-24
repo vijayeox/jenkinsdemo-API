@@ -45,24 +45,31 @@ class ImportTest extends DelegateTest
 
     public function testImportExecute()
     {
-        $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
+        $orgId = 1;
         $appId = $this->data['UUID'];
         $appName = $this->data['appName'];
-        $data = ['stored_procedure_name' => 'ox_padi_verification', 'org_id' => $orgId, 'app_id' => $appId , 'app_name' => $appName, 'src_url'=>"", 'file_name' => "VB010B.csv"];
+        $host = "oxzion.com";
+        $userId = "rakshith@oxzion.com";
+        $password = "sftp@rakshith";
+        $data = ['stored_procedure_name' => 'ox_padi_verification', 'org_id' => $orgId, 'app_id' => $appId , 'app_name' => $appName, 'src_url'=>"http://", 'file_name' => "VB010B.csv", "host" => $host, "user_id" => $userId, "password" => $password];
         $config = $this->getApplicationConfig();
         $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'Import', $data);
+        // print_r($content);exit;
         $this->assertEquals($content['app_name'], $data['app_name']);
     }
 
 
     public function testImportExecuteWithoutFileName()
     {
-        $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
+        $orgId = 1;
         $appId = $this->data['UUID'];
         $appName = $this->data['appName'];
-        $data = ['stored_procedure_name' => 'ox_padi_verification', 'org_id' => $orgId, 'app_id' => $appId, 'app_name' => $appName, 'src_url'=>""];
+        $host = "oxzion.com";
+        $userId = "rakshith@oxzion.com";
+        $password = "sftp@rakshith";
+        $data = ['stored_procedure_name' => 'ox_padi_verification', 'org_id' => $orgId, 'app_id' => $appId, 'app_name' => $appName, 'src_url'=>"http://", "host" => $host, "user_id" => $userId, "password" => $password,  'file_name' => ""];
         $config = $this->getApplicationConfig();
         $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
         $delegateService->setPersistence($appId, $this->persistence);

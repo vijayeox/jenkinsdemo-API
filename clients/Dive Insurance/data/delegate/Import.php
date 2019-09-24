@@ -26,26 +26,22 @@ class Import implements AppDelegate
         {
             $datavalidate = $this->checkArrayEmpty($data);
             if($datavalidate === "0") {
-                // echo $datavalidate;exit;
                 return Array("status" => "Error", "data"=>$data);
             }
-            if(!empty($fileName)) {
-                $uploadData = $this->uploadCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['src_url'], $data['file_name']);
+            $uploadData = $this->uploadCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['src_url'], $data['file_name'], $data["host"], $data["user_id"], $data["password"]);
 
-                $returnData = $this->generateCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['file_name']);
+            $returnData = $this->generateCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['file_name']);
 
-                $filePath = array(dirname(__dir__) . "/import/data/");
+            $filePath = array(dirname(__dir__) . "/import/data/");
 
-                if ($returnData == 2) {
-                    return 2;
-                }
-                if ($returnData == 3) {
-                    return 3;
-                }
-            }else {
-                return 0;
+            if ($returnData == 2) {
+                return 2;
+            }
+            if ($returnData == 3) {
+                return 3;
             }
         } catch (Exception $e) {
+            throw $e;
             $this->logger->err(__CLASS__ . "->" . $e->getMessage());
             return array(0);
         }
@@ -94,15 +90,15 @@ class Import implements AppDelegate
     }
 
     // Code is not in use untill we get the download feature that we need to get from the clients
-    public function uploadCSVData($storedProcedureName, $orgId, $appId, $appName, $srcURL, $fileName)
+    public function uploadCSVData($storedProcedureName, $orgId, $appId, $appName, $srcURL, $fileName, $host, $userId, $password)
     {
-        $host = "oxzion.com";
-        $userID = "rakshith@oxzion.com";
-        $password = "sftp@rakshith";
+        // $host = "oxzion.com";
+        // $userId = "rakshith@oxzion.com";
+        // $password = "sftp@rakshith";
 
 //This code will come from the deployment descriptor. I have kept it here for now.
         // $host = "206.107.76.164";
-        // $userID = "vbinsurance";
+        // $userId = "vbinsurance";
         // $password = "<<InsureName>>";
 
         $filePath = dirname(__dir__) . "/import/data/";
@@ -110,7 +106,7 @@ class Import implements AppDelegate
         // echo $filePath . $fileName;exit;
         $ftp_server = $host;
         $ftp_conn = ftp_ssl_connect($ftp_server) or die("Could not connect to $ftp_server");
-        $login = ftp_login($ftp_conn, $userID, $password);
+        $login = ftp_login($ftp_conn, $userId, $password);
         // ftp_set_option($ftp_conn, 1, true);
         // echo "USEPASVADDRESS Value: " . ftp_get_option($ftp_conn, USEPASVADDRESS) ? '1' : '0';exit;
         ftp_pasv($ftp_conn, true);
@@ -154,7 +150,7 @@ class Import implements AppDelegate
 
  function checkArrayEmpty($array = array()) {
     foreach ($array as $element) {
-        if (!empty($element)) {
+        if (empty($element)) {
             return "0";
         }
     }
