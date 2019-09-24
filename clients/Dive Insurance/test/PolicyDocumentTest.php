@@ -172,9 +172,9 @@ class PolicyDocumentTest extends DelegateTest
         AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
         $appId = $this->data['UUID'];
         $data = [
-                'firstname' => 'Mohan',
-                 'middlename' => 'Raj' ,
-                 'lastname' => 'D',
+                 'firstname' => 'Mohan',
+                 'lastname' => 'Raj' ,
+                 'orgname' => "ABOVE AND BELOW THE SEA LLC L'S DIVE INC. & ST. THOMAS DIVING CLUB",
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
@@ -189,7 +189,13 @@ class PolicyDocumentTest extends DelegateTest
                  'ismailingaddress' => 0,
                  'endrosement_status' => 'Instructor',
                  'losspayees' => 1,
-                 'addInsurance' => 1];
+                 'addInsurance' => 1,
+                 'addInsured' => 1,
+                 'cover_letter' => 1,
+                 'manager_name' => 'Julie Joseph',
+                 'manager_email' => 'abcd@gmail.com',
+                 'aiList' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}',
+                 'nameList' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}'];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);

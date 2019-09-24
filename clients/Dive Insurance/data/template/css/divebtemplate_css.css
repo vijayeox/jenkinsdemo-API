@@ -335,3 +335,65 @@ body{
    float:left;
  }
  
+
+/*AI*/
+.ai_list{
+  margin-top: 1px;
+  margin-bottom: 1px;
+  font-size:13px;
+}
+.claims_title{
+  width:70%;
+  float:left;
+  display:inline-block;
+}
+.page_data{
+  width:30%;
+  float:left;
+  display:inline-block;
+}
+.claims{
+  position:relative;
+  top:10px;
+  left:55%;
+  margin-top: 1px;
+  font-size: 20px;
+}
+.page_no1{
+  position:relative;
+  top:1px;
+  left:70%;
+    font-size: 15px;
+}
+.cont{
+  width : 100%;
+}
+.ai_hrtag{
+  margin-top: 2%;
+  margin-bottom: 0px;
+  height:2px;
+  background-color: black;
+}
+.ai_title{
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+.certificate1{
+  width :65%;
+  float:left;
+  display:inline-block;
+}
+.main_div1{
+  margin-bottom: 15%;
+  padding-bottom: 5%;
+}
+.footer_titlex{
+  margin-top: 3px;
+  margin-bottom: 1px;
+  font-size: 13px;
+}
+.body_div_lp{
+  margin-top:2%;
+}

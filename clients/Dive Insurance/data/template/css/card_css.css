@@ -96,6 +96,7 @@ body{
   margin-bottom: 1px;
   margin-top: 1px;
   line-height: 1.5;
+  text-transform: uppercase;
 }
 
 .certi{
@@ -166,4 +167,14 @@ body{
 .footer_line{
   margin-bottom: 0px;
   margin-top: 0px;
+}
+
+/*DiveBoat CL*/
+.name1{
+  width:32%;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  word-wrap:break-word; 
+  text-transform: uppercase;
+  font-size: 13px;
 }

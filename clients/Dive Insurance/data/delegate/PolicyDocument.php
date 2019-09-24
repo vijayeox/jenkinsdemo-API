@@ -31,7 +31,17 @@ class PolicyDocument implements DocumentAppDelegate
                      'header' => 'DiveBoatHeader.html',
                      'footer' => 'DiveBoatFooter.html',
                      'slWording' => 'SL Wording.pdf',
-                     'policy' => 'Dive_Boat_Policy.pdf'),
+                     'policy' => 'Dive_Boat_Policy.pdf',
+                     'cover_letter' => 'Dive_Boat_Cover_Letter',
+                     'lheader' => 'letter_header.html',
+                     'lfooter' => 'letter_footer.html',
+                     'instruct' => 'Instructions_To_Insured.pdf',
+                     'aiTemplate' => 'DiveBoat_AI',
+                     'aiheader' => 'DiveBoat_AI_header.html',
+                     'aifooter' => 'DiveBoat_AI_footer.html',
+                     'lpTemplate' => 'DiveBoat_LP',
+                     'lpheader' => 'DiveBoat_LP_header.html',
+                     'lpfooter' => 'DiveBoat_LP_footer.html'),
         'Dive Store'
             => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                      'header' => 'DiveStoreHeader.html',
@@ -134,9 +144,9 @@ class PolicyDocument implements DocumentAppDelegate
 
         if(isset($data['addInsured'])){
             $aiTemplate = self::TEMPLATE[$data['product']]['aiTemplate'];
-            $aiDest = $dest['absolutePath'].$coi_number.'_AI'.'pdf';
+            $aiDest = $dest['absolutePath'].$coi_number.'_AI'.'.pdf';
             $options['header'] = self::TEMPLATE[$data['product']]['aiheader'];
-            if($data['product'] == 'Dive Store'){
+            if($data['product'] == 'Dive Store' || $data['product'] == 'Dive Boat'){
                 $options['footer'] = self::TEMPLATE[$data['product']]['aifooter'];
             }
             $this->documentBuilder->generateDocument($aiTemplate,$data,$aiDest,$options);
@@ -150,7 +160,7 @@ class PolicyDocument implements DocumentAppDelegate
 
         if(isset($data['lapseletter'])){
             $lapseTemplate = self::TEMPLATE[$data['product']]['ltemplate'];
-            $lapseDest = $dest['absolutePath'].$coi_number.'_Lapse_Letter'.'pdf';
+            $lapseDest = $dest['absolutePath'].$coi_number.'_Lapse_Letter'.'.pdf';
             $options['header'] = self::TEMPLATE[$data['product']]['lheader'];
             $options['footer'] = self::TEMPLATE[$data['product']]['lfooter'];
             $this->documentBuilder->generateDocument($lapseTemplate,$data,$lapseDest,$options);
@@ -159,7 +169,7 @@ class PolicyDocument implements DocumentAppDelegate
 
         if(isset($data['cover_letter'])){
             $coverTemplate = self::TEMPLATE[$data['product']]['cover_letter'];
-            $coverDest = $dest['absolutePath'].$coi_number.'_Cover_Letter'.'pdf';
+            $coverDest = $dest['absolutePath'].$coi_number.'_Cover_Letter'.'.pdf';
             $options['header'] = self::TEMPLATE[$data['product']]['lheader'];
             $options['footer'] = self::TEMPLATE[$data['product']]['lfooter'];
             $this->documentBuilder->generateDocument($coverTemplate,$data,$coverDest,$options);
