@@ -215,6 +215,8 @@ class UserService extends AbstractService
         if(isset($data['preferences'])){
             $preferences = json_decode($data['preferences'],true);
             $data['timezone'] = $preferences['timezone'];
+            unset($preferences['timezone']);
+            $data['preferences'] = json_encode($preferences);
         }
         $password = BosUtils::randomPassword();
         if (isset($password)) {
@@ -453,6 +455,7 @@ class UserService extends AbstractService
             }
             if (isset($preferences['timezone'])) {
                 $userdata['timezone'] = $preferences['timezone'];
+                unset($preferences['timezone']);
             }
             $userdata['preferences'] = json_encode($preferences);
         }
@@ -623,6 +626,7 @@ class UserService extends AbstractService
             $result = $resultSet->toArray();
             for($x=0;$x<sizeof($result);$x++) {
                  $result[$x]['preferences'] = json_decode($result[$x]['preferences'],true);
+                 $result[$x]['preferences']['timezone'] = $result[$x]['timezone'];
                  $result[$x]['icon'] = $baseUrl . "/user/profile/" . $result[$x]['uuid'];
             }
             return array('data' => $result,
@@ -772,7 +776,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_user')
-            ->columns(array('uuid', 'username', 'firstname', 'lastname', 'name', 'email', 'designation','orgid', 'phone', 'date_of_birth', 'date_of_join', 'country', 'website', 'about', 'gender', 'managerid','interest', 'address', 'icon', 'preferences'))
+            ->columns(array('uuid', 'username', 'firstname', 'lastname', 'name', 'email', 'designation','orgid', 'phone', 'timezone', 'date_of_birth', 'date_of_join', 'country', 'website', 'about', 'gender', 'managerid','interest', 'address', 'icon', 'preferences'))
             ->where(array('ox_user.orgid' => AuthContext::get(AuthConstants::ORG_ID), 'ox_user.id' => $id, 'status' => 'Active'));
         $response = $this->executeQuery($select)->toArray();
         if (empty($response)) {
@@ -780,6 +784,7 @@ class UserService extends AbstractService
         }
         $result = $response[0];
         $result['preferences'] = json_decode($response[0]['preferences']);
+        $result['preferences']['timezone'] = $result['timezone'];
         $result['orgid'] = $this->getUuidFromId('ox_organization',$result['orgid']);
         $result['managerid'] = $this->getUuidFromId('ox_user',$result['managerid']);
         if (isset($result)) {
