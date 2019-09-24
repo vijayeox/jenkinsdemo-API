@@ -19,7 +19,6 @@ return [
                         'controller' => Controller\AnnouncementController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
-                            'get'=> 'MANAGE_ANNOUNCEMENT_READ',
                             'put'=> 'MANAGE_ANNOUNCEMENT_WRITE',
                             'post'=> 'MANAGE_ANNOUNCEMENT_WRITE',
                             'delete'=> 'MANAGE_ANNOUNCEMENT_WRITE',

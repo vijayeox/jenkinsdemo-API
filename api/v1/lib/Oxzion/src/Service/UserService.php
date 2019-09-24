@@ -78,27 +78,27 @@ class UserService extends AbstractService
 
     public function getUserContextDetails($userName)
     {
-        if ($results = $this->cacheService->get($userName)) {
-            return $results;
-        }
+        // if ($results = $this->cacheService->get($userName)) {
+        //     return $results;
+        // }
 
         $select  = "SELECT ou.id,ou.name,ou.uuid as user_uuid,ou.orgid,org.uuid as org_uuid from ox_user as ou inner join ox_organization as org on ou.orgid = org.id where ou.username = '".$userName."'";
         $results = $this->executeQueryWithParams($select)->toArray();
         if (count($results) > 0) {
             $results = $results[0];
         }
-        $this->cacheService->set($userName, $results);
+        // $this->cacheService->set($userName, $results);
         return $results;
     }
 
     public function getGroups($userName)
     {
-        if ($groupData = $this->cacheService->get($userName . GROUPS)) {
-            $data = $groupData;
-        } else {
+        // if ($groupData = $this->cacheService->get($userName . GROUPS)) {
+        //     $data = $groupData;
+        // } else {
             $data = $this->getGroupsFromDb($userName);
-            $this->cacheService->set($userName . GROUPS, $data);
-        }
+            // $this->cacheService->set($userName . GROUPS, $data);
+        // }
         return $data;
     }
 
