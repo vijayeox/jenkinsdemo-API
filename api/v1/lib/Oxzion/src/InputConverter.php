@@ -2,6 +2,7 @@
 namespace Oxzion;
 use Oxzion\InvalidInputException;
 use Zend\Validator\Uuid;
+use \Datetime;
 
 class InputConverter {
 	public static function checkType($fieldname,$parameters, $name, $defaultValue=null, $type='string') {
@@ -27,6 +28,7 @@ class InputConverter {
 			case 'float':
 				if (is_numeric($value)) {
 					$numericValue = floatval($value); //Convert to numeric value.
+					return $value;
 				}
 				else {
 					throw new InvalidInputException("Parameter ${fieldname}='${value}' not an float value.","err.${fieldname}.invalid");
@@ -68,9 +70,10 @@ class InputConverter {
 			case 'boolean':
 				if(is_string($value))
 				{
-					number_format($value);
+					if($value === '0' || $value === '1')
+						$value = (int)$value;
 				}
-				elseif ((is_bool($value)) || (is_int($value) && ($value == 0)) || (is_int($value) && ($value == 1)) ) {
+				if ((is_bool($value)) || (is_int($value) && ($value == 0)) || (is_int($value) && ($value == 1)) ) {
 					return $value; //Convert to numeric value.
 				}
 				else {
