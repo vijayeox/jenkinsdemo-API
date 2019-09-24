@@ -41,7 +41,6 @@ class ImportTest extends DelegateTest
         $query = "DROP DATABASE " . $this->database;
         $statement = $this->getDbAdapter()->query($query);
         $result = $statement->execute();
-        
     }
 
     public function testImportExecute()
@@ -49,11 +48,25 @@ class ImportTest extends DelegateTest
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
         $appId = $this->data['UUID'];
         $appName = $this->data['appName'];
-        $data = ['stored_procedure_name' => 'ox_padi_verification', 'org_id' => $orgId, 'app_id' => $appId, 'app_name' => $appName, 'src_url'=>"", 'file_name' => "VB010B.csv"];
+        $data = ['stored_procedure_name' => 'ox_padi_verification', 'org_id' => $orgId, 'app_id' => $appId , 'app_name' => $appName, 'src_url'=>"", 'file_name' => "VB010B.csv"];
         $config = $this->getApplicationConfig();
         $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'Import', $data);
         $this->assertEquals($content['app_name'], $data['app_name']);
+    }
+
+
+    public function testImportExecuteWithoutFileName()
+    {
+        $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
+        $appId = $this->data['UUID'];
+        $appName = $this->data['appName'];
+        $data = ['stored_procedure_name' => 'ox_padi_verification', 'org_id' => $orgId, 'app_id' => $appId, 'app_name' => $appName, 'src_url'=>""];
+        $config = $this->getApplicationConfig();
+        $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'Import', $data);
+        $this->assertEquals($content['status'], "Error");
     }
 }

@@ -4,6 +4,8 @@ use Oxzion\AppDelegate\AppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use App\Service\ImportService;
 use Oxzion\Utils\FileUtils;
+use Zend\Log\Logger;
+use Oxzion\Error\ErrorHandler;
 
 class Import implements AppDelegate
 {
@@ -18,24 +20,34 @@ class Import implements AppDelegate
 
     public function execute(array $data, Persistence $persistenceService)
     {
+        // echo "Check";exit;
         $this->persistenceService = $persistenceService;
         try
         {
-            $uploadData = $this->uploadCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['src_url'], $data['file_name']);
-
-            $returnData = $this->generateCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['file_name']);
-
-            $filePath = array(dirname(__dir__) . "/import/data/");
-
-            if ($returnData == 2) {
-                return 2;
+            $datavalidate = $this->checkArrayEmpty($data);
+            if($datavalidate === "0") {
+                // echo $datavalidate;exit;
+                return Array("status" => "Error", "data"=>$data);
             }
-            if ($returnData == 3) {
-                return 3;
+            if(!empty($fileName)) {
+                $uploadData = $this->uploadCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['src_url'], $data['file_name']);
+
+                $returnData = $this->generateCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['file_name']);
+
+                $filePath = array(dirname(__dir__) . "/import/data/");
+
+                if ($returnData == 2) {
+                    return 2;
+                }
+                if ($returnData == 3) {
+                    return 3;
+                }
+            }else {
+                return 0;
             }
         } catch (Exception $e) {
-            throw $e;
-            return $this->getFailureResponse("Import Aborted, please make sure your file is in the correct format", $filePath);
+            $this->logger->err(__CLASS__ . "->" . $e->getMessage());
+            return array(0);
         }
         return $data;
     }
@@ -43,6 +55,7 @@ class Import implements AppDelegate
 
     public function generateCSVData($storedProcedureName, $orgId, $appId, $appName, $fileName)
     {
+        // echo "Check";print_r($fileName);exit;
         $fileFolder = dirname(__dir__) . "/import/data/";
         $archivePath = dirname(__dir__) . "/import/archive/"; //The path to the folder Ex: /clients/<App name>/data/migrations/app/<appname>/archive/
 
@@ -103,31 +116,48 @@ class Import implements AppDelegate
         ftp_pasv($ftp_conn, true);
         ftp_chdir($ftp_conn, "/");
 
-        if ($login) {
-            echo "<br>logged in successfully!";
-            $contents = ftp_nlist($ftp_conn, ".");
-            if(!empty($contents)) {
-                foreach ($contents as $value) {
-                    if ($fileName === $value) {
+
+        try {
+            if ($login) {
+                echo "<br>logged in successfully!";
+                $contents = ftp_nlist($ftp_conn, ".");
+                if(!empty($contents)) {
+                    foreach ($contents as $value) {
+                        if ($fileName === $value) {
                     // $result = ftp_fget($ftp_conn, $f_pointer, $value, FTP_BINARY);
-                        if (ftp_get($ftp_conn, $filePath . $fileName, $value, FTP_BINARY)) {
-                            echo "Successfully written to $fileName \n";
-                        } else {
-                            echo "There was a problem \n";
+                            if (ftp_get($ftp_conn, $filePath . $fileName, $value, FTP_BINARY)) {
+                                echo "Successfully written to $fileName \n";
+                            } else {
+                                return $this->getFailureResponse("Import Aborted, please make sure your file is in the correct format", $fileName);
+                                // return $fileName;
+                            }
                         }
                     }
+                } else {
+                    echo "There are no files in the folder";
+                    return 0;
                 }
             } else {
-                echo "There are no files in the folder";
+                echo "Can't login to remote server.";
                 return 0;
             }
-        } else {
-            echo "Can't login to remote server.";
-            return 0;
+            if (ftp_close($ftp_conn)) {
+                echo "<br>Connection closed Successfully!";
+            }
+        } catch(Exception $e) {
+         $this->logger->err(__CLASS__ . "->" . $e->getMessage());
+         return $this->getFailureResponse("Failed to create a new entity", $data);
+           // return 0;
+     }
+     return 1;
+ }
+
+ function checkArrayEmpty($array = array()) {
+    foreach ($array as $element) {
+        if (!empty($element)) {
+            return "0";
         }
-        if (ftp_close($ftp_conn)) {
-            echo "<br>Connection closed Successfully!";
-        }
-        return 1;
     }
+    return "1";
+}
 }
