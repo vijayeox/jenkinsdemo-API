@@ -253,3 +253,61 @@ body{
 .notice{
 	font-size: 20px;
 }
+.deduct{
+   margin-left: 5%;
+   font-size: 15px;
+   letter-spacing: 1px;
+ }
+.deduct1{
+   margin-left: 5%;
+   font-size: 15px;
+   letter-spacing: 1px;
+ }
+ .spacing1{
+  margin-bottom:30%;
+}
+.hr_nw{
+	margin-top: 30%;
+}
+
+
+/*Additional Insured*/
+.hr_value{
+	height: 2px;
+	background-color: black;
+	margin:0px;
+}
+.ai_list{
+	margin-top: 1px;
+	margin-bottom: 1px;
+	font-size:13px;
+}
+.body_div_ai{
+	margin-top: 2%;
+}
+.footer_titlex{
+	font-size: 13px;
+	margin-bottom: 0px;
+}
+.footer_note{
+	font-size:13px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+	letter-spacing: 1px;
+	text-justify:auto;
+}
+.main_div_ai{
+	margin-bottom: 35%;
+}
+
+/*Loss Payee*/
+.body_div_lp{
+	margin-left:2%;
+}
+.lp_name{
+	margin-bottom: 2px;
+	margin-top:1px;
+}
+.title2{
+	font-size: 20px;
+}
