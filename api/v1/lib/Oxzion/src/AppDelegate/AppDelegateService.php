@@ -121,13 +121,4 @@ class AppDelegateService extends AbstractService
         return null;
     }
 
-    public function createLink($appId)
-    {
-        $path = __DIR__ . '/../../../../data/delegate/' . $appId . "";
-        $cPath = __DIR__ . '/../../../../../../clients/Dive Insurance/data/delegate';
-        if (!is_link($path)) {
-            symlink($cPath, $path);
-        }
-        return 1;
-    }
 }
