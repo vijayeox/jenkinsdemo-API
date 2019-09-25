@@ -172,6 +172,7 @@ rainloop()
         echo -e "${RED}RAINLOOP was not packaged so skipping it\n${RESET}"
     else
         cd ${TEMP}
+        service apache2 stop
         rsync -rl integrations/rainloop/data/ /var/www/rainloop/data/
         rm -R integrations/rainloop/data
         rsync -rl --delete integrations/rainloop/ /var/www/rainloop/
@@ -179,6 +180,7 @@ rainloop()
         chown www-data:www-data -R /var/www/rainloop
         chown www-data:www-data -R /var/lib/oxzion/rainloop
         echo -e "${GREEN}Copying Rainloop Complete!${RESET}"
+        service apache2 start
     fi
 }
 view()
