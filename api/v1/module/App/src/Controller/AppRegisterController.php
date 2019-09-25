@@ -57,7 +57,7 @@ class AppRegisterController extends AbstractApiControllerHelper
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if($count == 0){ 
-            return $this->getErrorResponse("Duplicate Entry", 404);
+            return $this->getErrorResponse("Duplicate Entry", 409);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }

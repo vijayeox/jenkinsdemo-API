@@ -20,6 +20,7 @@ use Oxzion\Service\FormService;
 use Oxzion\Service\WorkflowService;
 use Group\Service\GroupService;
 use Oxzion\Service\UserCacheService;
+use Oxzion\Service\OrganizationService;
 
 class Module implements ConfigProviderInterface
 {
@@ -44,7 +45,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\AppService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class), $container->get(\Oxzion\Service\WorkflowService::class), $container->get(\Oxzion\Service\FormService::class), $container->get(\Oxzion\Service\FieldService::class));
+                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class), $container->get(\Oxzion\Service\WorkflowService::class), $container->get(\Oxzion\Service\FormService::class), $container->get(\Oxzion\Service\FieldService::class), $container->get(\Oxzion\Service\OrganizationService::class));
                 },
                 Model\AppTable::class => function ($container) {
                     $tableGateway = $container->get(Model\AppTableGateway::class);

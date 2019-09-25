@@ -10,7 +10,9 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\ValidationException;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
+use Oxzion\ServiceException;
 use Zend\Log\Logger;
+use Exception;
 
 class AppController extends AbstractApiController
 {
@@ -62,7 +64,7 @@ class AppController extends AbstractApiController
     public function create($data)
     {
         try {
-            $count = $this->appService->deployAppForOrg($data);
+            $count = $this->appService->createApp($data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -321,63 +323,26 @@ class AppController extends AbstractApiController
      * @return array Returns a JSON Response with Status Code.</br>
      * <code> status : "success|error"
      * </code>
-     */
-    /*    public function getDataFromDeploymentDescriptorUsingYML($appFolder) {
-            $appUploadFolder = $appFolder;
+    */
+    public function deployAppAction() {
+        $params = $this->extractPostData();
+        if(isset($params['path']))
+        {
             try {
-                $appUploadedZipFile = $appUploadFolder . "/uploads/App.zip";
-                $destinationFolder = $appUploadFolder . "/temp";
-                $this->appService->extractZipFilefromAppUploader($appUploadedZipFile, $destinationFolder);
-                $fileName = file_get_contents($appUploadFolder . "/temp/App/web.yml");
-            } catch (Exception $e) {
-                return $this->getErrorResponse("The files could not be extracted!");
+                $data= $this->appService->deployApp($params['path']);
+                return $this->getSuccessResponseWithData($data, 201);
             }
-            $ymlArray = $this->appService->ymlToArrayParser($fileName);
-            //Code to insert the details of the app to the app table. Returns 1 or 0 for success or failure
-            $app = $this->appService->insertAppDetail($ymlArray['config']);
-            if($app === 0) {
-                return $this->getErrorResponse("App could not be installed, please check your deployment descriptor and try again!");
+            catch (ValidationException $e) {
+                $response = ['data' => $data, 'errors' => $e->getErrors()];
+                return $this->getErrorResponse("Validation Errors", 404, $response);
             }
-            //Code to add the default privilege to the app installed.
-            $appPrivileges = $this->appService->applyAppPrivilege($ymlArray['config'], $app);
-            if($appPrivileges === 0){
-                return $this->getErrorResponse("App Privileges could not be set, please check your application and try again!");
+            catch (ServiceException $e){
+                return $this->getErrorResponse($e->getMessage(),404);
+            }catch(Exception $e){
+                return $this->getErrorResponse($e->getMessage(),500);
             }
-            $count = $this->appService->getFormInsertFormat($ymlArray['config']);
-            if ($count === 1) {
-                return $this->getSuccessResponse();
-            } else {
-                return $this->getErrorResponse("Form could not be created, please check your deployment descriptor and try again!");
-            }
-        }*/
-
-    /**
-     * Deploy App API using XML File
-     * @api
-     * @link /app/appdeployxml
-     * @method GET
-     * @param null </br>
-     * <code>
-     * </code>
-     * @return array Returns a JSON Response with Status Code.</br>
-     * <code> status : "success|error"
-     * </code>
-     */
-    /*    public function getDataFromDeploymentDescriptorUsingXMLAction($appFolder) {
-            try {
-                $appUploadedZipFile = $appFolder . "/uploads/App.zip";
-                $destinationFolder = $appFolder . "/temp";
-                $fileExtract = $this->appService->extractZipFilefromAppUploader($appUploadedZipFile, $destinationFolder);
-                $fileName = file_get_contents($appFolder . "/temp/App/web.xml");
-            } catch (Exception $e) {
-                return $this->getErrorResponse("The files could not be extracted!");
-            }
-            $xmlArray = $this->appService->xmlToArrayParser($fileName);
-            $count = $this->appService->getFormInsertFormat($xmlArray);
-            if ($count === 1) {
-                return $this->getSuccessResponse();
-            } else {
-                return $this->getErrorResponse("Form could not be created, please check your deployment descriptor");
-            }
-        }*/
+        }else{
+            return $this->getErrorResponse("Invalid parameters",400);
+        }
+    }
 }

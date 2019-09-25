@@ -23,6 +23,17 @@ return [
                     ],
                 ],
             ],
+            'deployapp' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/deployapp',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'deployApp',
+                        'method' => 'post'
+                    ],
+                ],
+            ],
             'appinstall' => [
                 'type' => Segment::class,
                 'options' => [
@@ -110,7 +121,7 @@ return [
             'addtoappregistry' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app[/org/:orgId]/addtoappregistry',
+                    'route' => '/app/org/:orgId/addtoappregistry',
                     'defaults' => [
                         'controller' => Controller\AppRegisterController::class,
                         'action' => 'addToAppregistry',

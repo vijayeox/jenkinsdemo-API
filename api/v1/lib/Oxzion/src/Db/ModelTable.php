@@ -28,7 +28,7 @@ abstract class ModelTable
         return $this->tableGateway->select($filter);
     }
 
-    private function init()
+    protected function init()
     {
         $this->lastInsertValue = null;
     }

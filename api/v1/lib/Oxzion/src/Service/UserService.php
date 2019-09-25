@@ -317,14 +317,14 @@ class UserService extends AbstractService
         $preferences = array(
             "soundnotification" => "true",
             "emailalerts" => "false",
-            "timezone" => $orgPreferences->timezone,
-            "dateformat" => $orgPreferences->dateformat
+            "timezone" => isset($orgPreferences->timezone) ? $orgPreferences->timezone : '',
+            "dateformat" => isset($orgPreferences->dateformat) ? $orgPreferences->dateformat : ''
         );
         $data = array(
             "firstname" => $contactPerson->firstname,
             "lastname" => $contactPerson->lastname,
             "email" => $contactPerson->email,
-            "phone" => $contactPerson->phone,
+            "phone" => isset($contactPerson->phone) ? $contactPerson->phone : '',
             "company_name" => $org['name'],
             "address1" => $org['address1'],
             "address2" => isset($org['address2']) ? $org['address2'] : NULL,
@@ -338,7 +338,7 @@ class UserService extends AbstractService
             "designation" => "Admin",
             "orgid" => $org['id'],
             "status" => "Active",
-            "timezone" => $orgPreferences->timezone,
+            "timezone" => $preferences['timezone'],
             "gender" => " ",
             "managerid" => "1",
             "date_of_join" => date('Y-m-d'),

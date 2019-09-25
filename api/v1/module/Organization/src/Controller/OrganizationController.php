@@ -42,7 +42,7 @@ class OrganizationController extends AbstractApiController
      */
     public function create($data)
     {
-        $files = $this->params()->fromFiles('logo');
+        $files = $this->params()->fromFiles('logo')?$this->params()->fromFiles('logo'):NULL;
         $id=$this->params()->fromRoute();
         try {
             if (!isset($id['orgId'])) {

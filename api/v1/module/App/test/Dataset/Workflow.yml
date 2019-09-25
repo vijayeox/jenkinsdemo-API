@@ -2,14 +2,21 @@ ox_app:
 -
     id: 99
     name: "SampleApp"
-    uuid: "somerandom123"
+    uuid: "7ab30b2d-d1da-427a-8e40-bc954b2b0f76"
+    category: "OTHERS"
+    type: 2
+    status: 1
+-
+    id: 100
+    name: "UnassignedApp"
+    uuid: "8ab30b2d-d1da-427a-8e40-bc954b2b0f87"
     category: "OTHERS"
     type: 2
     status: 1
 ox_app_registry:
--   
+-
     org_id: 1
-    app_id: 99  
+    app_id: 99
 ox_field:
 -
     id: 1
@@ -39,11 +46,11 @@ ox_activity:
     workflow_id: 1
     name: "Test Form 2"
 ox_activity_form:
-  - 
+  -
     id: 1
     activity_id: 1
     form_id: 1
-  - 
+  -
     id: 2
     activity_id: 2
     form_id: 2
@@ -181,7 +188,7 @@ ox_user_cache:
     content: "Some Content"
     user_id: 1
 ox_activity_instance:
-  - 
+  -
     id: 1
     activity_id: 1
     form_id: 1
@@ -189,7 +196,7 @@ ox_activity_instance:
     workflow_instance_id: 1
     status: "In Progress"
     org_id: 1
-  - 
+  -
     id: 2
     activity_id: 1
     form_id: 1
@@ -210,7 +217,7 @@ ox_user_group:
   -
     id: 1
     group_id: 1
-    avatar_id: 1  
+    avatar_id: 1
 ox_activity_instance_assignee:
   -
     id: 1
@@ -230,7 +237,7 @@ ox_file:
     org_id: 1
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
-    
+
 ox_file_attribute:
   -
     id: 1
@@ -255,4 +262,4 @@ ox_file_attribute:
     fileid: 2
     org_id: 1
     fieldvalue: 2
-    fieldid: 2 
+    fieldid: 2

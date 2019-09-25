@@ -32,23 +32,23 @@ class CacheControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    public function testGet()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/cache', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['content'], "Some Content");
-    }
-    public function testGetNotFound()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1/cache', 'GET');
-        $this->assertResponseStatusCode(200);
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'], array());
-    }
+    // public function testGet()
+    // {
+    //     $this->initAuthToken($this->adminUser);
+    //     $this->dispatch('/app/99/cache', 'GET');
+    //     $this->assertResponseStatusCode(200);
+    //     $this->setDefaultAsserts();
+    //     $content = json_decode($this->getResponse()->getContent(), true);
+    //     $this->assertEquals($content['status'], 'success');
+    //     $this->assertEquals($content['data']['content'], "Some Content");
+    // }
+    // public function testGetNotFound()
+    // {
+    //     $this->initAuthToken($this->adminUser);
+    //     $this->dispatch('/app/1/cache', 'GET');
+    //     $this->assertResponseStatusCode(200);
+    //     $content = json_decode($this->getResponse()->getContent(), true);
+    //     $this->assertEquals($content['status'], 'success');
+    //     $this->assertEquals($content['data'], array());
+    // }
 }

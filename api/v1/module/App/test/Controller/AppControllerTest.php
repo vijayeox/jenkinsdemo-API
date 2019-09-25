@@ -30,7 +30,6 @@ class AppControllerTest extends ControllerTest
         return $dataset;
     }
 
-
     public function testAppRegister()
     {
         $this->initAuthToken($this->adminUser);
@@ -62,8 +61,6 @@ class AppControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-
-
 
     public function testGetList()
     {
@@ -122,7 +119,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['total'], 6);
     }
 
-
     public function testGetAppListWithQuery()
     {
         $this->initAuthToken($this->adminUser);
@@ -139,7 +135,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Admin');
         $this->assertEquals($content['total'], 1);
     }
-
 
     public function testGetAppListWithPageSize()
     {
@@ -185,8 +180,75 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
+
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
+    }
+
+    public function testDeployApp()
+    {
+        copy(__DIR__.'/../sampleapp/application1.yml', __DIR__.'/../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertNotEmpty($content);
+        unlink(__DIR__.'/../sampleapp/application.yml');
+    }
+
+    public function testDeployAppNoDirectory()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp1/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertNotEmpty($content);
+    }
+
+    public function testDeployAppNoFile()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp2/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertNotEmpty($content);
+    }
+
+    public function testDeployAppNoFileData()
+    {
+        copy(__DIR__.'/../sampleapp/application2.yml', __DIR__.'/../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertNotEmpty($content);
+        unlink(__DIR__.'/../sampleapp/application.yml');
+    }
+
+    public function testDeployAppNoAppData()
+    {
+        copy(__DIR__.'/../sampleapp/application2.yml', __DIR__.'/../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertNotEmpty($content);
+        unlink(__DIR__.'/../sampleapp/application.yml');
     }
 
     public function testCreateWithOutTextFailure()
@@ -224,7 +286,7 @@ class AppControllerTest extends ControllerTest
         $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'Admin', 'logo' => 'app.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1', 'PUT', null);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -237,7 +299,7 @@ class AppControllerTest extends ControllerTest
         $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1', 'PUT', $data);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76', 'PUT', $data);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class); // as specified in router's controller name alias
@@ -254,7 +316,7 @@ class AppControllerTest extends ControllerTest
         $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/64', 'PUT', null);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f78', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -264,7 +326,7 @@ class AppControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1', 'DELETE');
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -274,7 +336,7 @@ class AppControllerTest extends ControllerTest
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/24783', 'DELETE');
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f87', 'DELETE');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
@@ -304,7 +366,7 @@ class AppControllerTest extends ControllerTest
             $workflowService->setProcessManager($mockProcessManager);
         }
         $data = array('name'=>'NewWorkflow');
-        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         // print_r($content);exit;
         $this->assertResponseStatusCode(200);
@@ -323,7 +385,7 @@ class AppControllerTest extends ControllerTest
             )
         );
         $data = array();
-        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -350,7 +412,7 @@ class AppControllerTest extends ControllerTest
             $workflowService->setProcessManager($mockProcessManager);
         }
         $data = array('name'=>'NewWorkflow1');
-        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -361,7 +423,7 @@ class AppControllerTest extends ControllerTest
         $_FILES =array();
         $this->initAuthToken($this->adminUser);
         $data = array('name'=>'NewWorkflow');
-        $this->dispatch('/app/somerandom123/deployworkflow', 'POST', $data);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -369,7 +431,6 @@ class AppControllerTest extends ControllerTest
     }
     public function testAddToAppRegistry(){
         $data = ['app_name' => 'Admin'];
-        $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/org/b0971de7-0387-48ea-8f29-5d3704d96a46/addtoappregistry', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -383,28 +444,26 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['data']['app_name'], $data['app_name']);
     }
 
-    public function testAddToAppRegistryWithoutOrg(){
-        $data = ['app_name' => 'Admin'];
-        $this->initAuthToken($this->adminUser);
+    public function testAddToAppRegistryDuplicated(){
+        $data = ['app_name' => 'SampleApp'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/addtoappregistry', 'POST', $data);
-        $this->assertResponseStatusCode(200);
+        $this->dispatch('/app/org/'.$this->testOrgUuid.'/addtoappregistry', 'POST', $data);
+        $this->assertResponseStatusCode(409);
         $this->assertModuleName('App');
         $this->assertControllerName(AppRegisterController::class);
         $this->assertControllerClass('AppRegisterController');
         $this->assertMatchedRouteName('addtoappregistry');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['app_name'], $data['app_name']);
+        $this->assertEquals($content['status'], 'error');
     }
 
     public function testGetListOfAssignments()
     {
         $this->initAuthToken($this->adminUser);
         $workflowName = 'Test Workflow 1';
-        $this->dispatch('/app/somerandom123/assignments?filter=[{"filter":{"filters":[{"field":"workflow_name","operator":"eq","value":"'.$workflowName.'"}]},"sort":[{"field":"workflow_name","dir":"asc"}],"skip":0,"take":1}]', 'GET');
-        $this->assertResponseStatusCode(200); 
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/assignments?filter=[{"filter":{"filters":[{"field":"workflow_name","operator":"eq","value":"'.$workflowName.'"}]},"sort":[{"field":"workflow_name","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class);
         $this->assertControllerClass('AppController');
@@ -419,8 +478,8 @@ class AppControllerTest extends ControllerTest
     public function testGetListOfAssignmentsWithoutFiltersValues()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/assignments?filter=[{"skip":0,"take":1}]', 'GET');
-        $this->assertResponseStatusCode(200); 
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/assignments?filter=[{"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class);
         $this->assertControllerClass('AppController');
@@ -434,8 +493,8 @@ class AppControllerTest extends ControllerTest
     public function testGetListOfAssignmentsWithoutFilters()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/assignments', 'GET');
-        $this->assertResponseStatusCode(200); 
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/assignments', 'GET');
+        $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class);
         $this->assertControllerClass('AppController');
