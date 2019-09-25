@@ -82,11 +82,7 @@ class CertificateOfInsuranceTest extends ServiceTest
         $options = array();
         $options['header'] = "COIheader.html";
         $options['footer'] = "COIfooter.html";
-        try{
-            $output = $documentBuilder->generateDocument($template, $data, $destination, $options);
-        }catch(Exception $e){
-            print($e->getMessage()); 
-        }
+        $output = $documentBuilder->generateDocument($template, $data, $destination, $options);
         $this->assertTrue(is_file($output));
         $this->assertTrue(filesize($output)>0);
         FileUtils::deleteFile("ProfessionalLiabilityCOI.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
@@ -143,11 +139,7 @@ class CertificateOfInsuranceTest extends ServiceTest
         $options = array();
         $options['header'] = "COIheader.html";
         $options['footer'] = "COIfooter.html";
-        try{
-            $output = $documentBuilder->generateDocument($template, $data, $destination, $options);
-        }catch(Exception $e){
-            print($e->getMessage()); 
-        }
+        $output = $documentBuilder->generateDocument($template, $data, $destination, $options);
         $this->assertTrue(is_file($output));
         $this->assertTrue(filesize($output)>0);
         FileUtils::deleteFile("ProfessionalLiabilityCOI.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
