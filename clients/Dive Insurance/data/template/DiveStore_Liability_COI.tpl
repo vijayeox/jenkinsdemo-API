@@ -67,7 +67,7 @@
 		<div class="spacing">&nbsp</div>
 
 		<hr></hr>
-		<b><center><p class="addIn">{if addInsurance}
+		<b><center><p class="addIn">{if !empty(additionalInsured)}
 			Certificate has Additional Insureds (See Attached)
 			{else}
 		Certificate Does Not Have Additional Insured.

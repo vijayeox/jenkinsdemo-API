@@ -104,10 +104,14 @@ class PolicyDocument implements DocumentAppDelegate
         }
        
         $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid']);
-        
-        if($data['product'] == 'Dive Store'){
+
+        if(isset(self::TEMPLATE[$data['product']]['instruct'])){
             $instruct = self::TEMPLATE[$data['product']]['instruct'];
             $this->documentBuilder->copyTemplateToDestination($instruct,$dest['relativePath']);
+            $data['instruction_document'] = $dest['relativePath'].$instruct;
+        }
+        
+        if($data['product'] == 'Dive Store'){
             if(isset($data['liability'])){
                 $template = self::TEMPLATE[$data['product']]['template']['liability'];
                 $policy = self::TEMPLATE[$data['product']]['policy']['liability'];
@@ -142,7 +146,7 @@ class PolicyDocument implements DocumentAppDelegate
             $data['card'] = $dest['relativePath'].$coi_number.'_Pocket_Card'.'.pdf';
         } 
 
-        if(isset($data['addInsured'])){
+        if(isset($data['additionalInsured'])){
             $aiTemplate = self::TEMPLATE[$data['product']]['aiTemplate'];
             $aiDest = $dest['absolutePath'].$coi_number.'_AI'.'.pdf';
             $options['header'] = self::TEMPLATE[$data['product']]['aiheader'];
@@ -173,10 +177,10 @@ class PolicyDocument implements DocumentAppDelegate
             $options['header'] = self::TEMPLATE[$data['product']]['lheader'];
             $options['footer'] = self::TEMPLATE[$data['product']]['lfooter'];
             $this->documentBuilder->generateDocument($coverTemplate,$data,$coverDest,$options);
-            $data['cover_document'] = $dest['relativePath'].$coi_number.'_Cover_Letter'.'.pdf';
+            $data['cover_letter'] = $dest['relativePath'].$coi_number.'_Cover_Letter'.'.pdf';
         }
 
-        if(isset($data['nameList'])){
+        if(isset($data['lossPayees'])){
             $lpTemplate = self::TEMPLATE[$data['product']]['lpTemplate'];
             $coverDest = $dest['absolutePath'].$coi_number.'_Loss_Payees'.'.pdf';
             $options['header'] = self::TEMPLATE[$data['product']]['lpheader'];
@@ -184,6 +188,8 @@ class PolicyDocument implements DocumentAppDelegate
             $this->documentBuilder->generateDocument($lpTemplate,$data,$coverDest,$options);
             $data['loss_payee_document'] = $dest['relativePath'].$coi_number.'_Loss_Payees'.'.pdf';
         }
+
+        print_r($data);
 
 
         return $data;

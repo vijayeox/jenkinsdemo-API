@@ -67,7 +67,7 @@
 locations (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North Carolina and all Harris
 County Texas locations. Mechanical breakdown is $2500. All other perils is $1000.</p></div>
 		<hr></hr>
-		<b><center><p class="addIn">{if addInsurance}
+		<b><center><p class="addIn">{if !empty(lossPayees)}
 			Certificate has Loss Payees (See Attached)
 			{else}
 			Certificate Does Not Have Loss Payees.

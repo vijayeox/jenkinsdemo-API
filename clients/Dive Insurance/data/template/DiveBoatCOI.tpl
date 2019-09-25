@@ -8,13 +8,13 @@
 	 <div class ="body_div">
 		<center>
       <div>
-		<p class = "title">{if $losspayees}
+		<p class = "title">{if !empty($lossPayees)}
 			CERTIFICATE HAS LOSS PAYEES (SEE ATTACHED).
 		{else}
 			CERTIFICATE DOES NOT HAVE LOSS PAYEES.
 		{/if}</p>
 
-		<p class = "title">{if $addInsurance}
+		<p class = "title">{if !empty($additionalInsured)}
 			CERTIFICATE HAS ADDITIONAL INSURED (SEE ATTACHED).
 		{else}
 			CERTIFICATE DOES NOT HAVE ADDITIONAL INSURED.

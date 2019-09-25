@@ -75,8 +75,16 @@
 		       <div class="i-type" style="margin-top: 9px;">
 		          <p class = "ins_font">&nbsp</p>
 		          <p class = "ins_font">&nbsp</p>
-		          <p class = "ins_font">{$equipment_liability}</p>
-		          <p class = "ins_font">{$cylinder_coverage}</p>
+		          <p class = "ins_font">{if equipment_liability}
+							Included
+					   {else}
+					   		Not Included
+					   {/if}</p>
+		          <p class = "ins_font">{if cylinder_coverage}
+							Included
+					   {else}
+					   		Not Covered
+					   {/if}</p>
 		       </div>
      		</div>
     	</div>
