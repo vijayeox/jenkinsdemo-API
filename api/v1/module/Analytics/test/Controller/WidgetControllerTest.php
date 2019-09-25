@@ -41,7 +41,7 @@ class WidgetControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['query_id' => 3,'visualization_id' => 2, 'ispublic' => 1 , 'name' => 'widget3'];
+        $data = ['query_id' => 3,'visualization_id' => 2, 'ispublic' => 1 , 'name' => 'widget3' , 'configuration' => 'sample configuration'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_widget'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/widget', 'POST', $data);
@@ -68,7 +68,8 @@ class WidgetControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation Errors');
-        $this->assertEquals($content['data']['errors']['ispublic'], 'required');
+        $this->assertEquals($content['data']['errors']['configuration'], 'required');
+        $this->assertEquals($content['data']['errors']['name'], 'required');
     }
 
     public function testUpdate()

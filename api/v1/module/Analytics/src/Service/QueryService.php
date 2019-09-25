@@ -30,12 +30,12 @@ class QueryService extends AbstractService
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $form->exchangeArray($data);
+        $form->exchangeWithSpecificKey($data,'value');
         $form->validate();
         $this->beginTransaction();
         $count = 0;
         try {
-            $count = $this->table->save($form);
+            $count = $this->table->save2($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -58,11 +58,11 @@ class QueryService extends AbstractService
         }
         $form = new Query();
         $data = array_merge($obj->toArray(), $data);
-        $form->exchangeArray($data);
+        $form->exchangeWithSpecificKey($data,'value',true);
         $form->validate();
         $count = 0;
         try {
-            $count = $this->table->save($form);
+            $count = $this->table->save2($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -83,11 +83,11 @@ class QueryService extends AbstractService
         $form = new Query();
         $data['isdeleted'] = 1;
         $data = array_merge($obj->toArray(), $data);
-        $form->exchangeArray($data);
+        $form->exchangeWithSpecificKey($data,'value',true);
         $form->validate();
         $count = 0;
         try {
-            $count = $this->table->save($form);
+            $count = $this->table->save2($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
