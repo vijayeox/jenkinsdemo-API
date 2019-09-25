@@ -12,7 +12,7 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use Oxzion\AppDelegate\AppDelegateService;
 use Oxzion\Messaging\MessageProducer;
-use Oxzion\Encryption\Crypto;
+use Oxzion\DelegateException;
 use Mockery as Mockery;
 use Oxzion\Db\Persistence\Persistence;
 
@@ -29,6 +29,7 @@ class DispatchPolicyTest extends DelegateTest
         $this->data = array(
             "appName" => 'ox_client_app',
             'UUID' => 8765765,
+            'fileUuid' => '53012471-2863-4949-afb1-e69b0891cabt',
             'description' => 'FirstAppOfTheClient',
             'orgUuid' => '53012471-2863-4949-afb1-e69b0891c98a'
         );
@@ -44,6 +45,18 @@ class DispatchPolicyTest extends DelegateTest
             FileUtils::rmDir($this->tempFile);
         }
         FileUtils::symlink($templateLocation, $this->tempFile);
+
+        $this->appFolder = $config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'];
+        if(!file_exists($this->appFolder)){
+            FileUtils::createDirectory($this->appFolder);
+        } 
+        $this->appFile = $this->appFolder.'/'.$this->data['fileUuid'];
+        $appLocation = __DIR__."/../test/Files";
+        if(FileUtils::fileExists($this->appFile)){
+            FileUtils::rmDir($this->appFile);
+        }
+        FileUtils::symlink($appLocation, $this->appFile);
+
         parent::setUp();               
     }
 
@@ -55,6 +68,8 @@ class DispatchPolicyTest extends DelegateTest
             unlink($path);
         }
         FileUtils::unlink($this->tempFile);
+        FileUtils::unlink($this->appFile);
+        FileUtils::rmDir($this->appFolder);
     }
 
     public function getDataSet()
@@ -72,14 +87,14 @@ class DispatchPolicyTest extends DelegateTest
     public function testDispatchIplPolicy()
     {
         $data = array();
-        $crypto = new Crypto();
         $config = $this->getApplicationConfig();
         $appId = $this->data['UUID'];
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['policy_document'] = __DIR__."/files/certificate.pdf";
-        $data['policy_document'] = $crypto->encryption($data['policy_document']);
+        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
+        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['card'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
         $data['product'] = 'Individual Professional Liability';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if(enableCamel == 0){
@@ -93,18 +108,68 @@ class DispatchPolicyTest extends DelegateTest
     }
 
 
+    public function testDispatchIplPolicyInvalidFilePath()
+    {
+        $data = array();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/cate.pdf';
+        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['product'] = 'Individual Professional Liability';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $exception = $this->expectException(DelegateException::class);       
+        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $this->assertEquals($content,array());
+    }
+
+
+    public function testDispatchIplPolicyWithoutRequiredDocument()
+    {
+        $data = array();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
+        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['product'] = 'Individual Professional Liability';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $exception = $this->expectException(DelegateException::class);
+        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $this->assertEquals($content,array());
+    }
+
+
+
+
     public function testDispatchDbPolicy()
     {
         $data = array();
-        $crypto = new Crypto();
         $config = $this->getApplicationConfig();
         $appId = $this->data['UUID'];
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
         $data['boat_name'] = 'Orion';
-        $data['policy_document'] = __DIR__."/files/certificate.pdf";
-        $data['policy_document'] = $crypto->encryption($data['policy_document']);
+        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
+        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['cover_letter'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
         $data['product'] = 'Dive Boat';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if(enableCamel == 0){
@@ -117,17 +182,67 @@ class DispatchPolicyTest extends DelegateTest
         $this->assertEquals($content,array());
     }
 
-    public function testDispatchDsPolicy()
+    public function testDispatchDbPolicyWithInvalidDocument()
     {
         $data = array();
-        $crypto = new Crypto();
         $config = $this->getApplicationConfig();
         $appId = $this->data['UUID'];
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['policy_document'] = __DIR__."/files/certificate.pdf";
-        $data['policy_document'] = $crypto->encryption($data['policy_document']);
+        $data['boat_name'] = 'Orion';
+        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/ceicate.pdf';
+        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['cover_letter'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['product'] = 'Dive Boat';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $exception = $this->expectException(DelegateException::class);
+        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $this->assertEquals($content,array());
+    }
+
+
+    public function testDispatchDbPolicyWithoutRequiredDocument()
+    {
+        $data = array();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['boat_name'] = 'Orion';
+        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
+        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['product'] = 'Dive Boat';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $exception = $this->expectException(DelegateException::class);
+        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $this->assertEquals($content,array());
+    }
+
+    public function testDispatchDsPolicy()
+    {
+        $data = array();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
+        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['cover_letter'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
         $data['product'] = 'Dive Store';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if(enableCamel == 0){
@@ -140,10 +255,56 @@ class DispatchPolicyTest extends DelegateTest
         $this->assertEquals($content,array());
     }
 
+
+    public function testDispatchDsPolicyWithInvalidDocument()
+    {
+        $data = array();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/cericate.pdf';
+        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['product'] = 'Dive Store';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $exception = $this->expectException(DelegateException::class);
+        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $this->assertEquals($content,array());
+    }
+
+    public function testDispatchDsPolicyWithoutRequiredDocument()
+    {
+        $data = array();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
+        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['product'] = 'Dive Store';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if(enableCamel == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+        }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $exception = $this->expectException(DelegateException::class);
+        $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
+        $this->assertEquals($content,array());
+    }
+
     public function testDispatchIplRenewalPolicy()
     {
         $data = array();
-        $crypto = new Crypto();
         $config = $this->getApplicationConfig();
         $appId = $this->data['UUID'];
         $data['email'] = 'neha@myvamla.com';
@@ -152,8 +313,8 @@ class DispatchPolicyTest extends DelegateTest
         $data['store_name'] = 'ABCD';
         $data['store_id'] = '00000';
         $data['expiry_year'] = '2019';
-        $data['policy_document'] = __DIR__."/files/certificate.pdf";
-        $data['policy_document'] = $crypto->encryption($data['policy_document']);
+        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
+        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
         $data['product'] = 'Dive Store';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if(enableCamel == 0){
@@ -170,7 +331,6 @@ class DispatchPolicyTest extends DelegateTest
     public function testDispatchIplRenewalReminder()
     {
         $data = array();
-        $crypto = new Crypto();
         $config = $this->getApplicationConfig();
         $appId = $this->data['UUID'];
         $data['email'] = 'neha@myvamla.com';
@@ -193,7 +353,6 @@ class DispatchPolicyTest extends DelegateTest
     public function testDispatchIplAutoRenewal()
     {
         $data = array();
-        $crypto = new Crypto();
         $config = $this->getApplicationConfig();
         $appId = $this->data['UUID'];
         $data['email'] = 'neha@myvamla.com';
@@ -228,7 +387,6 @@ class DispatchPolicyTest extends DelegateTest
     public function testDispatchIplExpiredPolicy()
     {
         $data = array();
-        $crypto = new Crypto();
         $config = $this->getApplicationConfig();
         $appId = $this->data['UUID'];
         $data['email'] = 'neha@myvamla.com';

@@ -2,27 +2,69 @@
 use Oxzion\AppDelegate\MailDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Messaging\MessageProducer;
-use Oxzion\Encryption\Crypto;
+use Oxzion\DelegateException;
+
 require_once __DIR__."/DispatchDocument.php";
 
 
 class DispatchNewPolicy extends DispatchDocument {
 
     public $template = array();
+    public $document = array();
  
     public function __construct(){
         $this->template = array(
             'Individual Professional Liability' => 'COIPolicyMailTemplate',
             'Dive Boat' => 'diveBoatPolicyMailTemplate',
             'Dive Store' => 'diveStorePolicyMailTemplate');
+        $this->document = array(
+            'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','lapse_letter','card','slWording']),
+            'Dive Boat' => array('docs' => ['policy_document','coi_document','cover_letter']),
+            'Dive Store' => array('docs' => ['policy_document','coi_document','cover_letter']));
+        $this->required = array(
+            'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','card']),
+            'Dive Boat' => array('docs' => ['policy_document','coi_document','cover_letter']),
+            'Dive Store' => array('docs' => ['policy_document','coi_document','cover_letter']));
     }
 
+    
     public function execute(array $data,Persistence $persistenceService)
     {
-        $data['template'] = $this->template[$data['product']];
-        $data['subject'] = 'Certificate Of Insurance';
-        $response = $this->dispatch($data);
+        
+            $fileData = array();
+            $errorFile = array();
+            $data['template'] = $this->template[$data['product']];
+            $document = array_keys($data);
+            $document = array_intersect($this->required[$data['product']]['docs'], $document);
+            if(count($this->required[$data['product']]['docs']) == count($document)){
+                foreach($this->document[$data['product']]['docs'] as $file){
+                    if(array_key_exists($file,$data)){
+                        $file = $this->destination.$data[$file];
+                        if(file_exists($file)){
+                            array_push($fileData, $file);         
+                        }else{
+                            $this->logger->err("File Not Found".$file);
+                            array_push($errorFile,$file);
+                        }
+                    }
+                }
+                if(count($errorFile) > 0){
+                    $error = json_encode($errorFile);
+                    $this->logger->err("Documents Not Found".$error);
+                    throw new DelegateException('Documents Not Found','file.not.found',0,$errorFile);
+                }
+            }else{
+               $this->logger->err("Required Documents are not Found");     
+               throw new DelegateException('Required Documents are not Found','file.not.found');
+            }
+
+            $data['document'] =$fileData;
+            $data['subject'] = 'Certificate Of Insurance';
+            $response = $this->dispatch($data);
         return $response;
     }
+
+
+
 }
 ?>

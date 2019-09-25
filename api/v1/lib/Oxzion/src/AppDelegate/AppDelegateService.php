@@ -62,8 +62,10 @@ class AppDelegateService extends AbstractService
                     }
                     $obj->setTemplatePath($destination);
                 } else if (is_a($obj, MailDelegate::class)) {
+                    $destination = $this->config['APP_DOCUMENT_FOLDER'];
                     $obj->setTemplateService($this->templateService);
                     $obj->setMessageProducer($this->messageProducer);
+                    $obj->setDocumentPath($destination);
                 }
                 $persistenceService = $this->getPersistence($appId);
                 $output = $obj->execute($dataArray, $persistenceService);
