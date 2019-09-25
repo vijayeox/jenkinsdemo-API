@@ -188,10 +188,6 @@ class PolicyDocument implements DocumentAppDelegate
             $this->documentBuilder->generateDocument($lpTemplate,$data,$coverDest,$options);
             $data['loss_payee_document'] = $dest['relativePath'].$coi_number.'_Loss_Payees'.'.pdf';
         }
-
-        print_r($data);
-
-
         return $data;
     }
 
