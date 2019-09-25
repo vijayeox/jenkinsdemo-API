@@ -22,11 +22,11 @@ BEGIN
 	IF EXISTS (select * from `padi_data` where member_number = _a) THEN
 	    update `padi_data` set 
 		    `member_number` = _a,
-	  		`first_name` = _b,
+	  		`firstname` = _b,
 	  		`MI` = _c,
-	  		`last_name` = _d,
-	  		`address_1` = _e,
-	  		`address_2` = _f,
+	  		`lastname` = _d,
+	  		`address1` = _e,
+	  		`address2` = _f,
 	  		`address_international` = _g,
 	  		`city` = _h,
 	  		`state` = _i,
@@ -41,7 +41,7 @@ BEGIN
 	  		`num` = _r
    where member_number = _a;
 	  ELSE 
-	    INSERT INTO padi_data (`member_number`, `first_name`, `MI`, `last_name`, `address_1`, `address_2`, `address_international`, `city`, `state`, `zip`, `country_code`, `home_phone`, `work_phone`, `insurance_type`, `date_expire`, `rating`, `email`, `num`) 
+	    INSERT INTO padi_data (`member_number`, `firstname`, `MI`, `lastname`, `address1`, `address2`, `address_international`, `city`, `state`, `zip`, `country_code`, `home_phone`, `work_phone`, `insurance_type`, `date_expire`, `rating`, `email`, `num`) 
    VALUES (_a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r);
 	  END IF;
  
