@@ -25,7 +25,7 @@
         <testsuite name="Core Fixtures">
             <directory>./lib/Oxzion/test</directory>
             <directory>./module/Mlet/test</directory>
-        </testsuite><directory>./module/Workflow/test</directory>
+        </testsuite>
         <testsuite name="Callback Fixtures">
             <directory>./module/Callback/test</directory>
         </testsuite>
@@ -45,9 +45,9 @@
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
         </testsuite>
-        <!-- <testsuite name="Dive Insurance Fixtures">
+        <testsuite name="Dive Insurance Fixtures">
             <directory>../../clients/Dive Insurance/test/</directory>
-        </testsuite> -->
+        </testsuite>
     </testsuites>
     <php>
         <ini name="memory_limit" value="250M" />
