@@ -94,7 +94,7 @@ class Import implements AppDelegate
         // $userId = "rakshith@oxzion.com";
         // $password = "sftp@rakshith";
 
-//This code will come from the deployment descriptor. I have kept it here for now.
+        //This code will come from the deployment descriptor. I have kept it here for now.
         // $host = "206.107.76.164";
         // $userId = "vbinsurance";
         // $password = "<<InsureName>>";
@@ -113,45 +113,44 @@ class Import implements AppDelegate
 
         try {
             if ($login) {
-                echo "<br>logged in successfully!";
+                //echo "<br>logged in successfully!";
                 $contents = ftp_nlist($ftp_conn, ".");
                 if(!empty($contents)) {
                     foreach ($contents as $value) {
                         if ($fileName === $value) {
                     // $result = ftp_fget($ftp_conn, $f_pointer, $value, FTP_BINARY);
                             if (ftp_get($ftp_conn, $filePath . $fileName, $value, FTP_BINARY)) {
-                                echo "Successfully written to $fileName \n";
+                                //echo "Successfully written to $fileName \n";
                             } else {
-                                return $this->getFailureResponse("Import Aborted, please make sure your file is in the correct format", $fileName);
+                                throw new \Exception("Import Aborted, please make sure your file is in the correct format - ".$fileName);
                                 // return $fileName;
                             }
                         }
                     }
                 } else {
-                    echo "There are no files in the folder";
+                    print "There are no files in the folder\n";
                     return 0;
                 }
             } else {
-                echo "Can't login to remote server.";
+                print "Can't login to remote server.\n";
                 return 0;
             }
             if (ftp_close($ftp_conn)) {
-                echo "<br>Connection closed Successfully!";
+                print "Connection closed Successfully!\n";
             }
         } catch(Exception $e) {
-           $this->logger->err(__CLASS__ . "->" . $e->getMessage());
-           return $this->getFailureResponse("Failed to create a new entity", $data);
-           // return 0;
-       }
-       return 1;
-   }
-
-   function checkArrayEmpty($array = array()) {
-    foreach ($array as $element) {
-        if (empty($element)) {
-            return "0";
+            $this->logger->err(__CLASS__ . "->" . $e->getMessage());
+            throw $e;
         }
+        return 1;
     }
-    return "1";
-}
+
+    function checkArrayEmpty($array = array()) {
+        foreach ($array as $element) {
+            if (empty($element)) {
+                return "0";
+            }
+        }
+        return "1";
+    }
 }
