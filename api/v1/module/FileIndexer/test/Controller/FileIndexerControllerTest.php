@@ -16,9 +16,12 @@ use Mockery;
 
 class FileIndexerControllerTest extends ControllerTest
 {
+    private $config;
+
     public function setUp() : void
     {
         $this->loadConfig();
+        $this->config = $this->getApplicationConfig();
         parent::setUp();
     }
 
@@ -53,7 +56,7 @@ class FileIndexerControllerTest extends ControllerTest
         $this->dispatch('/fileindexer', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
-            $mockRestClient->expects('get')->with("localhost:9200/sampleapp_index/file/2")->once()->andReturn(array("body" => json_encode(array (
+            $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/file/2")->once()->andReturn(array("body" => json_encode(array (
               '_index' => 'sampleapp_index',
               '_type' => 'file',
               '_id' => '2',
@@ -108,7 +111,7 @@ class FileIndexerControllerTest extends ControllerTest
         $this->dispatch('/fileindexer', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
-            $mockRestClient->expects('get')->with("localhost:9200/sampleapp_index/file/1")->once()->andReturn(array("body" => json_encode(array (
+            $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/file/1")->once()->andReturn(array("body" => json_encode(array (
               '_index' => 'sampleapp_index',
               '_type' => 'file',
               '_id' => '1',
@@ -163,7 +166,7 @@ class FileIndexerControllerTest extends ControllerTest
         $this->dispatch('/fileindexer', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
-            $mockRestClient->expects('get')->with("localhost:9200/sampleapp_index/file/3")->once()->andReturn(array("body" => json_encode(array (
+            $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/file/3")->once()->andReturn(array("body" => json_encode(array (
               '_index' => 'sampleapp_index',
               '_type' => 'file',
               '_id' => '2',
@@ -218,7 +221,7 @@ class FileIndexerControllerTest extends ControllerTest
         $this->dispatch('/fileindexer', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
-            $mockRestClient->expects('get')->with("localhost:9200/sampleapp_index/file/35")->once()->andReturn(array("body" => json_encode(array (
+            $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/file/35")->once()->andReturn(array("body" => json_encode(array (
               '_index' => 'sampleapp_index',
               '_type' => 'file',
               '_id' => '35',
@@ -239,20 +242,43 @@ class FileIndexerControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['id' => 1];
         $this->dispatch('/fileindexer/remove', 'POST', $data);
-        // if (enableElastic==0) {
-        //     $mockRestClient = $this->getMockRestClientForFileIndexerService();
-        //     $mockRestClient->expects('get')->with("localhost:9200/sampleapp_index/file/35")->once()->andReturn(array("body" => json_encode(array (
-        //       '_index' => 'sampleapp_index',
-        //       '_type' => 'file',
-        //       '_id' => '35',
-        //       'found' => false
-        //   ))));
-        // }
-        //$this->assertResponseStatusCode(400);
+        if (enableElastic==0) {
+            $mockRestClient = $this->getMockRestClientForFileIndexerService();
+            $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/file/1")->once()->andReturn(array("body" => json_encode(array (
+              '_index' => 'sampleapp_index',
+              '_type' => 'file',
+              '_id' => '1',
+              'found' => false,
+              ))));
+        }
+        $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('deleteIndex');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        // $this->assertEquals($content['status'], 'error');
-        // $this->assertEquals($content['message'], 'Failure to Index File ');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['fileId'], 1);
+    }
+
+    public function testDeleteWithWrongId()
+    {
+        //Scenario where file id does not exist
+        $this->initAuthToken($this->adminUser);
+        $data = ['id' => 10];
+        $this->dispatch('/fileindexer/remove', 'POST', $data);
+        if (enableElastic==0) {
+            $mockRestClient = $this->getMockRestClientForFileIndexerService();
+            $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/file/10")->once()->andReturn(array("body" => json_encode(array (
+              '_index' => 'sampleapp_index',
+              '_type' => 'file',
+              '_id' => '1',
+              'found' => false,
+              ))));
+        }
+        $this->assertResponseStatusCode(400);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('deleteIndex');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Failure to Delete File ');
     }
 }

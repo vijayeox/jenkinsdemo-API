@@ -67,16 +67,16 @@ class FileIndexerService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_app')
-            ->columns(array('name'))->join('ox_form','ox_form.app_id = ox_app.id',array(),'left')->join('ox_file','ox_file.form_id = ox_form.id',array(),'left')
+            ->columns(array('name'))->join('ox_form','ox_form.app_id = ox_app.id',array(),'inner')->join('ox_file','ox_file.form_id = ox_form.id',array(),'inner')
             ->where(array('ox_file.id' => $fileId));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
             return 0;
         }
-        $app_name = $response[0];
-        if (isset($app_name)&&isset($body)) {
+        $app_name = $response[0]['name'];
+        if (isset($app_name)) {
             $this->messageProducer->sendTopic(json_encode(array('index'=>  $app_name.'_index','id' => $fileId, 'operation' => 'Delete', 'type' => 'file')), 'elastic');
-            return $fileId;
+            return array('fileId' => $fileId);
         }
         return null;
     }
