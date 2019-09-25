@@ -20,7 +20,6 @@ class Import implements AppDelegate
 
     public function execute(array $data, Persistence $persistenceService)
     {
-        // echo "Check";exit;
         $this->persistenceService = $persistenceService;
         try
         {
@@ -51,7 +50,6 @@ class Import implements AppDelegate
 
     public function generateCSVData($storedProcedureName, $orgId, $appId, $appName, $fileName)
     {
-        // echo "Check";print_r($fileName);exit;
         $fileFolder = dirname(__dir__) . "/import/data/";
         $archivePath = dirname(__dir__) . "/import/archive/"; //The path to the folder Ex: /clients/<App name>/data/migrations/app/<appname>/archive/
 
@@ -141,14 +139,14 @@ class Import implements AppDelegate
                 echo "<br>Connection closed Successfully!";
             }
         } catch(Exception $e) {
-         $this->logger->err(__CLASS__ . "->" . $e->getMessage());
-         return $this->getFailureResponse("Failed to create a new entity", $data);
+           $this->logger->err(__CLASS__ . "->" . $e->getMessage());
+           return $this->getFailureResponse("Failed to create a new entity", $data);
            // return 0;
-     }
-     return 1;
- }
+       }
+       return 1;
+   }
 
- function checkArrayEmpty($array = array()) {
+   function checkArrayEmpty($array = array()) {
     foreach ($array as $element) {
         if (empty($element)) {
             return "0";
