@@ -783,7 +783,7 @@ class UserService extends AbstractService
             return 0;
         }
         $result = $response[0];
-        $result['preferences'] = json_decode($response[0]['preferences']);
+        $result['preferences'] = json_decode($response[0]['preferences'], true);
         $result['preferences']['timezone'] = $result['timezone'];
         $result['orgid'] = $this->getUuidFromId('ox_organization',$result['orgid']);
         $result['managerid'] = $this->getUuidFromId('ox_user',$result['managerid']);
