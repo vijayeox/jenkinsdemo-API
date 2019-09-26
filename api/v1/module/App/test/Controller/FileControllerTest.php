@@ -164,7 +164,7 @@ class FileControllerTest extends ControllerTest
         }
         $crypto = new Crypto();
         $documentName = $crypto->encryption($path."/dummy.pdf");
-        $this->dispatch('/app/somerandom123/file/'.$fileId.'/document/'.$documentName, 'GET');
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/file/'.$fileId.'/document/'.$documentName, 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(FileController::class);
