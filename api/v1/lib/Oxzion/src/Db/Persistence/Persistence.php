@@ -2,7 +2,7 @@
 
 namespace Oxzion\Db\Persistence;
 
-use Oxzion\Service\AbstractService;
+use Oxzion\Service\AbstractBaseService;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Table;
@@ -14,7 +14,7 @@ use Zend\Log\Writer\Stream;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 
-class Persistence extends AbstractService
+class Persistence extends AbstractBaseService
 {
     private $database;
     
