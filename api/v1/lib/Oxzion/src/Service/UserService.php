@@ -34,7 +34,6 @@ class UserService extends AbstractService
      * @ignore table
      */
     protected $table;
-    protected $config;
     private $cacheService;
     private $emailService;
     private $messageProducer;
@@ -52,7 +51,6 @@ class UserService extends AbstractService
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
-        $this->config = $config;
         $this->addressService = $addressService;
         $this->emailService = $emailService;
         $this->templateService = $templateService;
