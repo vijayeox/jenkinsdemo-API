@@ -40,9 +40,8 @@ class Import implements AppDelegate
                 return 3;
             }
         } catch (Exception $e) {
-            throw $e;
             $this->logger->err(__CLASS__ . "->" . $e->getMessage());
-            return array(0);
+            throw $e;
         }
         return $data;
     }
@@ -80,7 +79,9 @@ class Import implements AppDelegate
     {
         $this->param = "";
         foreach ($data as $val) {
-            $this->param .= "'" . trim($val) . "', ";
+            $val = trim($val);
+            $val = $val == '' ? "NULL" : "'" . $val . "'";
+            $this->param .= $val.", ";
         }
         $this->param = rtrim($this->param, ", ");
         $queryString = "call " . $storedProcedureName . "(" . $this->param . ")";
