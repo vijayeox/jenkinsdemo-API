@@ -23,7 +23,9 @@ abstract class AbstractBaseService
         if($log){
             $this->logger = $log;
         }else{
-            $this->initLogger(__DIR__."/../../../../logs/".get_class($this).".log");
+            $class= get_class($this);
+            $class = substr($class, strrpos($class, "\\")+1);
+            $this->initLogger(__DIR__."/../../../../logs/".$class.".log");
         }
         $this->config = $config;
     }  
