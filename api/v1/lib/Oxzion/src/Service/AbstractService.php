@@ -1,31 +1,17 @@
 <?php
 namespace Oxzion\Service;
 
-use Zend\Db\Sql\Sql;
-use Zend\Log\Logger;
 use Zend\Db\Sql\Expression;
-use Zend\Log\Writer\Stream;
 use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Adapter\ParameterContainer;
-use Oxzion\Transaction\TransactionManager;
 use Oxzion\Utils\StringUtils;
 
-class AbstractService
+abstract class AbstractService extends AbstractBaseService
 {
-    protected $sql;
-    protected $logger;
-    protected $config;
-    protected $dbAdapter;
-
+    
     protected function __construct($config, $dbAdapter, $log = null)
     {
-        $this->logger = $log;
-        $this->config = $config;
-        $this->dbAdapter = $dbAdapter;
-        if ($dbAdapter) {
-            $this->sql = new Sql($this->dbAdapter);
-        }
+        parent::__construct($config, $dbAdapter, $log);
     }
 
     protected function getBaseUrl()
@@ -62,44 +48,9 @@ class AbstractService
         }
     }
 
-    protected function initLogger($logLocation)
-    {
-        $this->logger = new Logger;
-        $writer = new Stream($logLocation);
-        $this->logger->addWriter($writer);
-    }
-
-    public function beginTransaction()
-    {
-        $transactionManager = TransactionManager::getInstance($this->dbAdapter);
-        $transactionManager->beginTransaction();
-    }
-
-    public function commit()
-    {
-        $transactionManager = TransactionManager::getInstance($this->dbAdapter);
-        $transactionManager->commit();
-    }
-
-    public function rollback()
-    {
-        $transactionManager = TransactionManager::getInstance($this->dbAdapter);
-        $transactionManager->rollback();
-    }
-
-    protected function getSqlObject()
-    {
-        return $this->sql;
-    }
-
     protected function ExpressionObject($expression)
     {
         return new Expression($expression);
-    }
-
-    protected function getAdapter()
-    {
-        return $this->dbAdapter;
     }
 
     protected function executeUpdate($query)
