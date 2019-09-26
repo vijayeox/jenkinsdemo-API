@@ -35,14 +35,14 @@ BEGIN
 	  		`home_phone` = _l,
 	  		`work_phone` = _m,
 	  		`insurance_type` = _n,
-	  		`date_expire` = _o,
+	  		`date_expire` = FROM_UNIXTIME(_o),
 	  		`rating` = _p,
 	  		`email` = _q,
 	  		`num` = _r
    where member_number = _a;
 	  ELSE 
 	    INSERT INTO padi_data (`member_number`, `firstname`, `MI`, `lastname`, `address1`, `address2`, `address_international`, `city`, `state`, `zip`, `country_code`, `home_phone`, `work_phone`, `insurance_type`, `date_expire`, `rating`, `email`, `num`) 
-   VALUES (_a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r);
+   VALUES (_a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n,FROM_UNIXTIME(_o), _p, _q, _r);
 	  END IF;
  
 END
