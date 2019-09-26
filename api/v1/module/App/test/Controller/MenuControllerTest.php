@@ -27,7 +27,7 @@ class MenuItemControllerTest extends ControllerTest
     public function testGetList()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/menu', 'GET');
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/menu', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -58,7 +58,7 @@ class MenuItemControllerTest extends ControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/menu/1', 'GET');
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/menu/1', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -91,7 +91,7 @@ class MenuItemControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'menu4','required'=>1];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/somerandom123/menu', 'POST', null);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/menu', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -161,7 +161,7 @@ class MenuItemControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/menu/1', 'DELETE');
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/menu/1', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias

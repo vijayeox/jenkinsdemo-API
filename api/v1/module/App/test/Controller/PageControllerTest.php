@@ -27,7 +27,7 @@ class PageControllerTest extends ControllerTest
     public function testGetList()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/page', 'GET');
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/page', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(PageController::class); // as specified in router's controller name alias
@@ -46,7 +46,7 @@ class PageControllerTest extends ControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/page/1', 'GET');
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/page/1', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(PageController::class); // as specified in router's controller name alias
@@ -66,7 +66,7 @@ class PageControllerTest extends ControllerTest
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/page/122', 'GET');
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/page/122', 'GET');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(PageController::class); // as specified in router's controller name alias
@@ -83,7 +83,7 @@ class PageControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = json_decode('{"name":"Page Test1","description":"Page Description","content":[{"content":"<div>Page Content goes here!!!....</div>","type": "Document"},{"type": "List","content": {"data": "organization"}},{"form_id":1,"type": "Form"}]}');
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/somerandom123/page', 'POST', null);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/page', 'POST', null);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('App');
@@ -101,7 +101,7 @@ class PageControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['app_id'=>99];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/somerandom123/page', 'POST', null);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/page', 'POST', null);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(PageController::class); // as specified in router's controller name alias
@@ -119,7 +119,7 @@ class PageControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = json_decode('{"name":"Page23","description":"Page Description","content":[{"content":"<div>Page Content goes here!!!....</div>","type": "Document"},{"form_id":1,"type": "Form"}]}');
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/somerandom123/page/2', 'PUT', null);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/page/2', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(PageController::class); // as specified in router's controller name alias
@@ -136,7 +136,7 @@ class PageControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Sample2', 'text' => 'Sample 2 Description'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/somerandom123/page/122', 'PUT', null);
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/page/122', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(PageController::class); // as specified in router's controller name alias
@@ -150,7 +150,7 @@ class PageControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/page/2', 'DELETE');
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/page/2', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(PageController::class); // as specified in router's controller name alias
@@ -164,7 +164,7 @@ class PageControllerTest extends ControllerTest
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/page/122', 'DELETE');
+        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/page/122', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(PageController::class); // as specified in router's controller name alias
