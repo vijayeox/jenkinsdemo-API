@@ -16,7 +16,7 @@ class IndividualLiabilityImpl implements DocumentAppDelegate {
     {
         $this->destination = $destination;
     }
-    public function execute(array $data,Persistence $persistenceService){ 
+    public function execute(array $data,$persistenceService){ 
         $this->logger->info("executing IndividualLiability");
         if(!$this->builder){
             return array("Document Builder Not set");
