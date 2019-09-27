@@ -35,10 +35,16 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
+    private function getFieldUuid(){       
+        $selctQuery = "SELECT * from ox_form where id=1";
+        $selectResult = $this->executeQueryTest($selctQuery);
+        return $selectResult;
+    }
+
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/form/1/file/1', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145b', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -48,7 +54,7 @@ class FileControllerTest extends ControllerTest
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/form/1/file/9999', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/202d5c14-df9a-11e9-9d36-2a2ae2dbcce4', 'GET');
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -58,7 +64,7 @@ class FileControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['field1' => '1','field2' => '2'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/form/1/file', 'POST', $data);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
@@ -71,7 +77,7 @@ class FileControllerTest extends ControllerTest
         $this->initAuthToken($this->employeeUser);
         $data = ['field1' => '1','field2' => '2'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/form/1/file', 'POST', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file', 'POST', null);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('App');
         $this->assertControllerName(FileController::class); // as specified in router's controller name alias
@@ -87,7 +93,8 @@ class FileControllerTest extends ControllerTest
         $data = ['field1' => '2','field2' => '3'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/form/1/file/1', 'PUT', null);
+        $selectResult = $this->getFieldUuid();
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/'.$selectResult[0]['uuid'].'/file/d13d0c68-98c9-11e9-adc5-308d99c9145b', 'PUT', null);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -101,7 +108,7 @@ class FileControllerTest extends ControllerTest
         $data = ['name' => 'Test File 1','app_id'=>1];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/form/1/file', 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file', 'PUT', null);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('App');
         $this->assertControllerName(FileController::class); // as specified in router's controller name alias
@@ -118,7 +125,7 @@ class FileControllerTest extends ControllerTest
         $data = ['name' => 'Test File 1','app_id'=>1];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/form/1/file/22', 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/ef993a90-df86-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -128,7 +135,7 @@ class FileControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/form/1/file/2', 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145c', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -138,7 +145,7 @@ class FileControllerTest extends ControllerTest
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/form/1/file/222', 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/ef993964-df86-11e9-8a34-2a2ae2dbcce4', 'DELETE');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
@@ -164,7 +171,7 @@ class FileControllerTest extends ControllerTest
         }
         $crypto = new Crypto();
         $documentName = $crypto->encryption($path."/dummy.pdf");
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/file/'.$fileId.'/document/'.$documentName, 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/'.$fileId.'/document/'.$documentName, 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(FileController::class);

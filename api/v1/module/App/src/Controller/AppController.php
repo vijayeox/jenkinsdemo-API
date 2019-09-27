@@ -13,6 +13,7 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ServiceException;
 use Zend\Log\Logger;
 use Exception;
+use Oxzion\Service\WorkflowService;
 
 class AppController extends AbstractApiController
 {
@@ -24,11 +25,12 @@ class AppController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(AppTable $table, AppService $appService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(AppTable $table, AppService $appService,Logger $log, AdapterInterface $dbAdapter,WorkflowService $workflowService)
     {
         parent::__construct($table, $log, __CLASS__, App::class);
         $this->setIdentifierName('appId');
         $this->appService = $appService;
+        $this->workflowService = $workflowService;
     }
     public function setParams($params)
     {
@@ -300,7 +302,7 @@ class AppController extends AbstractApiController
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $filterParams = $this->params()->fromQuery();
         try {
-            $assignments = $this->appService->getAssignments($params['appId'],$filterParams);
+            $assignments = $this->workflowService->getAssignments($params['appId'],$filterParams);
         }catch (ValidationException $e) {
             $response = ['errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors",404, $response);

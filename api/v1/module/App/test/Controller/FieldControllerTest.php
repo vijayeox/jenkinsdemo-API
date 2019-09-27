@@ -24,10 +24,15 @@ class FieldControllerTest extends ControllerTest
         return $dataset;
     }
 
+    private function getFieldUuid(){
+        $selctQuery = "SELECT * from ox_field where id=1";
+        $selectResult = $this->executeQueryTest($selctQuery);
+        return $selectResult;
+    }
     public function testGetList()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/field', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(FieldController::class); // as specified in router's controller name alias
@@ -46,7 +51,8 @@ class FieldControllerTest extends ControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/field/1', 'GET');
+        $selectResult = $this->getFieldUuid();
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/'.$selectResult[0]['uuid'], 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(FieldController::class); // as specified in router's controller name alias
@@ -62,7 +68,7 @@ class FieldControllerTest extends ControllerTest
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/field/122', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/465c8710-df82-11e9-8a34-2a2ae2dbcce0', 'GET');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(FieldController::class); // as specified in router's controller name alias
@@ -79,7 +85,7 @@ class FieldControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'field3','app_id'=>1,'required'=>1,'data_type'=>'text'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/field', 'POST', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('App');
         $this->assertControllerName(FieldController::class); // as specified in router's controller name alias
@@ -99,7 +105,7 @@ class FieldControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['required'=>1,'sequence'=>1,'data_type'=>'text'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/field', 'POST', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field', 'POST', null);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(FieldController::class); // as specified in router's controller name alias
@@ -117,7 +123,8 @@ class FieldControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Sample2','app_id' => 1,'required'=> 0, 'sequence' => 1];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/field/1', 'PUT', null);
+        $selectResult = $this->getFieldUuid();
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/'.$selectResult[0]['uuid'], 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(FieldController::class); // as specified in router's controller name alias
@@ -136,7 +143,7 @@ class FieldControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Sample2', 'text' => 'Sample 2 Description'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/field/122', 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/465c8710-df82-11e9-8a34-2a2ae2dbccb6', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(FieldController::class); // as specified in router's controller name alias
@@ -150,7 +157,8 @@ class FieldControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/field/1', 'DELETE');
+        $selectResult = $this->getFieldUuid();
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/'.$selectResult[0]['uuid'], 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(FieldController::class); // as specified in router's controller name alias
@@ -164,7 +172,7 @@ class FieldControllerTest extends ControllerTest
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/field/122', 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/465c8710-df82-11e9-8a34-2a2ae2dbccb8', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(FieldController::class); // as specified in router's controller name alias

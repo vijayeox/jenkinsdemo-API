@@ -7,6 +7,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
+use Zend\Log\Logger;
 use Exception;
 use Ramsey\Uuid\Uuid;
 use Oxzion\Utils\FileUtils;
@@ -30,9 +31,9 @@ class AppService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, $organizationService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService,$organizationService,Logger $log)
     {
-        parent::__construct($config, $dbAdapter);
+        parent::__construct($config, $dbAdapter,$log);
         $this->table = $table;
         $this->workflowService = $workflowService;
         $this->formService = $formService;
@@ -50,21 +51,31 @@ class AppService extends AbstractService
      * </code>
      */
     public function getApps()
-    {
-        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap
-        left join ox_app_registry as ar on ap.id = ar.app_id";
-        $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.status!=1";
-        $resultSet = $this->executeQuerywithParams($queryString, $where);
-        return $resultSet->toArray();
+    {   
+            try{
+                $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap
+                left join ox_app_registry as ar on ap.id = ar.app_id where ar.org_id=? and ap.status!=?";
+                $queryParams = array(AuthContext::get(AuthConstants::ORG_ID),1);
+                $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
+                return $resultSet;
+            }catch(Exception $e){
+                $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+                throw $e;
+            }
     }
 
     public function getApp($id)
-    {
-        $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap
-        left join ox_app_registry as ar on ap.id = ar.app_id";
-        $where = "where ar.org_id = " . AuthContext::get(AuthConstants::ORG_ID) . " AND ap.status!=1 AND ap.id =" . $id;
-        $resultSet = $this->executeQuerywithParams($queryString, $where);
-        return $resultSet->toArray();
+    {   
+        try{
+            $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap
+            left join ox_app_registry as ar on ap.id = ar.app_id where ar.org_id=? and ap.status!=? and ap.uuid =?";
+            $queryParams = array(AuthContext::get(AuthConstants::ORG_ID),1,$id);
+            $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
+            return $resultSet;
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
+        }
     }
     public function createApp($data,$returnForm = false){
         $form = new App();
@@ -85,7 +96,8 @@ class AppService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
         if($returnForm === true)
             return array('form' => $form->toArray(),'count' => $count);
@@ -200,10 +212,15 @@ class AppService extends AbstractService
         }
     }
     private function checkAppExists($appUuid){
-        $queryString = "Select count(id) as count from ox_app as ap where ap.uuid = :appUuid";
-        $params = array("appUuid" => $appUuid);
-        $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
-        return $result[0]['count'] != 0;
+        try{
+            $queryString = "Select count(id) as count from ox_app as ap where ap.uuid = :appUuid";
+            $params = array("appUuid" => $appUuid);
+            $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+            return $result[0]['count'] != 0;
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
+        }
     }
 
     //useless
@@ -292,8 +309,9 @@ class AppService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -320,8 +338,9 @@ class AppService extends AbstractService
                 return 0;
             }
         } catch (Exception $e) {
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -355,7 +374,8 @@ class AppService extends AbstractService
             ZipUtils::extract($appUploadedZipFile, $destinationFolder);
             $fileName = file_get_contents($appUploadFolder . "/temp/App/web.yml");
         } catch (Exception $e) {
-            return 0;
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
         $ymlArray = YMLUtils::ymlToArray($fileName);
         //Code to insert the details of the app to the app table. Returns 1 or 0 for success or failure
@@ -392,7 +412,8 @@ class AppService extends AbstractService
         try {
             $id = $this->deployAppForOrg($formData);
         } catch (ValidationException $e) {
-            return 0;
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
         return $id;
     }
@@ -414,7 +435,8 @@ class AppService extends AbstractService
                     $formData['app_id'] = $app;
                     $count = $this->createAppPrivileges($formData);
                 } catch (ValidationException $e) {
-                    return 0;
+                    $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+                    throw $e;
                 }
             }
         }
@@ -423,18 +445,23 @@ class AppService extends AbstractService
 
     private function createAppPrivileges($data)
     {
-        $sql = $this->getSqlObject();
-        $queryString = "select * from ox_role_privilege ";
-        $where = "where role_id = " . $data['role_id'] . " and privilege_name = '" . $data['privilege_name'] . "' and app_id = " . $data['app_id'] . " and permission = " . $data['permission'];
-        $resultSet = $this->executeQuerywithParams($queryString, $where);
-        $queryResult = $resultSet->toArray();
-        if (empty($queryResult)) { //Checking to see if we already have entry made to the database
-            $insert = $sql->insert('ox_role_privilege');
-            $insert->values($data);
-            $this->executeUpdate($insert);
-            return 1;
+        try{
+            $sql = $this->getSqlObject();
+            $queryString = "select * from ox_role_privilege where role_id=? and privilege_name=? and app_id=? and permission=?";
+            $queryParams = array($data['role_id'],$data['privilege_name'],$data['app_id'],$data['permission']);
+            $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
+            $queryResult = $resultSet;
+            if (empty($queryResult)) { //Checking to see if we already have entry made to the database
+                $insert = $sql->insert('ox_role_privilege');
+                $insert->values($data);
+                $this->executeUpdate($insert);
+                return 1;
+            }
+            return 0;
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
-        return 0;
     }
 
     /**
@@ -459,7 +486,8 @@ class AppService extends AbstractService
         try {
             $count = $this->formService->createForm($formData);
         } catch (ValidationException $e) {
-            return 0;
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
         return $count;
     }
@@ -571,26 +599,25 @@ class AppService extends AbstractService
             }
 
             $this->commit();
-        } catch (Exception $e) {
-            // print_r($e->getMessage());exit;
+        } catch(Exception $e) {
             $this->rollback();
-            return 0;
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
-
         return 1;
-    }
-    public function getAssignments($appUuid,$filterParams)
-    {
-        $appId = $this->getIdFromUuid('ox_app', $appUuid);
-        $assignments = $this->workflowService->getAssignments($appId,$filterParams);
-        return $assignments;
     }
 
     public function addToAppRegistry($data)
-    {
-        $data['orgId'] = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID) ;
-        $app = $this->table->getByName($data['app_name']);
-        return $this->createAppRegistry($app->uuid, $data['orgId']);
+    {   
+        $this->logger->debug("Adding App to registry");
+        try{
+            $data['orgId'] = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID) ;
+            $app = $this->table->getByName($data['app_name']);
+            return $this->createAppRegistry($app->uuid, $data['orgId']);
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
+        }
         
     }
 }

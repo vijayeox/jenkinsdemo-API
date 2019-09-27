@@ -43,9 +43,9 @@ class PageController extends AbstractApiController
     */
     public function create($data)
     {
-        $appUuid = $this->params()->fromRoute()['appId'];
+        $routeData = $this->params()->fromRoute();
         try {
-            $count = $this->pageService->savePage($appUuid, $data);
+            $count = $this->pageService->savePage($routeData, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -78,17 +78,17 @@ class PageController extends AbstractApiController
     * @param array $data
     * @return array Returns a JSON Response with Status Code and Created Page.
     */
-    public function update($id, $data)
+    public function update($pageUuid, $data)
     {
-        $appUuid = $this->params()->fromRoute()['appId'];
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try {
-            $count = $this->pageService->savePage($appUuid, $data, $id);
+            $count = $this->pageService->savePage($params, $data, $pageUuid);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+            return $this->getErrorResponse("Entity not found for id - $pageUuid", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -119,13 +119,13 @@ class PageController extends AbstractApiController
     * @return array $data
     * @return array Returns a JSON Response with Status Code and Created Page.
     */
-    public function get($pageId)
+    public function get($pageUuid)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        $result = $this->pageContentService->getPageContent($appUuid, $pageId);
+        $result = $this->pageContentService->getPageContent($appUuid, $pageUuid);
         // print_r($result);exit;
         if ($result == 0) {
-            return $this->getErrorResponse("Page not found", 404, ['id' => $pageId]);
+            return $this->getErrorResponse("Page not found", 404, ['id' => $pageUuid]);
         }
         return $this->getSuccessResponseWithData($result);
     }

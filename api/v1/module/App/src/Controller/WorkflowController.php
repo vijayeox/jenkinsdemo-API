@@ -68,8 +68,8 @@ class WorkflowController extends AbstractApiController
     */
     public function getList()
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->workflowService->getWorkflows($appId);
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $result = $this->workflowService->getWorkflows($appUuid);
         return $this->getSuccessResponseWithData($result['data']);
     }
     /**
@@ -81,16 +81,17 @@ class WorkflowController extends AbstractApiController
     * @param array $data
     * @return array Returns a JSON Response with Status Code and Created Workflow.
     */
-    public function update($id, $data)
+    public function update($workflowUuid, $data)
     {
+        $appUuid = $this->params()->fromRoute()['appId'];
         try {
-            $count = $this->workflowService->updateWorkflow($id, $data);
+            $count = $this->workflowService->updateWorkflow($appUuid,$workflowUuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+            return $this->getErrorResponse("Entity not found for id - $workflowUuid", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }

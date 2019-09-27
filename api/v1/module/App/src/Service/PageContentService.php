@@ -10,27 +10,33 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Zend\Db\ResultSet\ResultSet;
 use Exception;
+use Zend\Log\Logger;
 
 class PageContentService extends AbstractService
 {
-    public function __construct($config, $dbAdapter, PageContentTable $table)
+    public function __construct($config, $dbAdapter, PageContentTable $table,Logger $log)
     {
-        parent::__construct($config, $dbAdapter);
+        parent::__construct($config, $dbAdapter,$log);
         $this->table = $table;
     }
 
-    public function getPageContent($appUuid, $pageId)
-    {
-        $appId = $this->getIdFromUuid('ox_app', $appUuid);
-        $resultSet = new ResultSet();
-        $select = "SELECT * FROM ox_app_page where id = ".$pageId." AND app_id = ".$appId;
-        $selectResult = $this->executeQuerywithParams($select)->toArray();
+    public function getPageContent($appUuid, $pageUuid)
+    { 
+        $select = "SELECT * FROM ox_app_page 
+        left join ox_app on ox_app_page.app_id = ox_app.id
+         where ox_app_page.uuid =? and ox_app.uuid =?";
+        $selectQuery = array($pageUuid,$appUuid);
+        $selectResult = $this->executeQueryWithBindParameters($select,$selectQuery)->toArray();
         if(count($selectResult)>0){
-            $queryString = " SELECT ox_page_content.type,ox_form.id as form_id, COALESCE(ox_page_content.content,ox_form.template) as content FROM ox_page_content LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id WHERE ox_page_content.page_id = ".$pageId. " ORDER BY ox_page_content.sequence ";
-            $result= $this->runGenericQuery($queryString);
-            $resultSet->initialize($result);
-            $resultSet = $resultSet->toArray();
-            if (count($resultSet)==0) {
+            $queryString = " SELECT ox_page_content.type,ox_form.uuid as form_id, 
+            COALESCE(ox_page_content.content,ox_form.template) as content 
+            FROM ox_page_content 
+            LEFT JOIN ox_app_page on ox_app_page.id = ox_page_content.page_id
+            LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id
+             WHERE ox_app_page.uuid =? ORDER BY ox_page_content.sequence ";
+            $queryStringParams = array($pageUuid);
+            $selectResult = $this->executeQueryWithBindParameters($queryString,$queryStringParams)->toArray();
+            if (count($selectResult)==0) {
                 return 0;
             }
         }else{
@@ -38,7 +44,7 @@ class PageContentService extends AbstractService
         }
 
         $result = array();
-        foreach($resultSet as $resultArray){
+        foreach($selectResult as $resultArray){
             if($resultArray['type'] == 'List' || $resultArray['type'] == 'Form' || $resultArray['type'] == 'DocumentViewer'){ 
                 $resultArray['content'] = json_decode($resultArray['content']);
             }else{
@@ -49,13 +55,15 @@ class PageContentService extends AbstractService
         $content = array('content' => $result); 
         return array_merge($selectResult[0],$content);
     }
+
     public function savePageContent($pageId, &$data)
     { 
         $this->beginTransaction();
         $counter=0;
         try{
-            $select = "DELETE from ox_page_content where page_id = ".$pageId;
-            $result = $this->executeQuerywithParams($select);
+            $select = "DELETE from ox_page_content where page_id =?";
+            $deleteQuery = array($pageId);
+            $result = $this->executeQuerywithBindParameters($select,$deleteQuery);
             foreach($data as $key => $value){ 
                 if($value['type'] == 'List' || $value['type'] == 'DocumentViewer'){
                     $value['content'] = json_encode($value['content']);
@@ -72,8 +80,8 @@ class PageContentService extends AbstractService
             $this->commit(); 
         }
         catch(Exception $e){
-            print_r($e->getMessage());
             $this->rollback();
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
             throw $e;
         }
         return $counter;
@@ -105,7 +113,8 @@ class PageContentService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
                 $this->rollback();
-                return 0;
+                $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+                throw $e;
             }
         return $count;
     }
@@ -135,7 +144,8 @@ class PageContentService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
         return $count;
     }
@@ -153,6 +163,8 @@ class PageContentService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
         return $count;
     }
@@ -164,31 +176,43 @@ class PageContentService extends AbstractService
     }
     public function getContent($id)
     {
-        $queryString = "SELECT * FROM ox_page_content WHERE id = ".$id;
-        $result= $this->runGenericQuery($queryString);
-        $resultSet = new ResultSet();
-        $resultSet->initialize($result);
-        $resultSet = $resultSet->toArray();
-        if (isset($resultSet[0])) {
-            return $resultSet[0];
-        } else {
-            return array();
+        try{
+            $queryString = "SELECT * FROM ox_page_content WHERE id =?";
+            $selectQuery = array($id);
+            $resultSet= $this->executeQuerywithBindParameters($queryString,$selectQuery)->toArray();
+            // $resultSet = new ResultSet();
+            // $resultSet->initialize($result);
+            // $resultSet = $resultSet->toArray();
+            if (isset($resultSet[0])) {
+                return $resultSet[0];
+            } else {
+                return array();
+            }
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
     }
 
-    private function savePageContentInternal($data){
-        $page = new PageContent();
-        $page->exchangeArray($data);
-        $page->validate();
-        $count = 0;
-        $count = $this->table->save($page);
-        if ($count == 0) {
-            return 0;
+    private function savePageContentInternal($data)
+    {   
+        try{
+            $page = new PageContent();
+            $page->exchangeArray($data);
+            $page->validate();
+            $count = 0;
+            $count = $this->table->save($page);
+            if ($count == 0) {
+                return 0;
+            }
+            if (!isset($data['id'])) {
+                $id = $this->table->getLastInsertValue();
+                $data['id'] = $id;
+            }
+            return $count;
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
-        if (!isset($data['id'])) {
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
-        }
-        return $count;
     }
 }

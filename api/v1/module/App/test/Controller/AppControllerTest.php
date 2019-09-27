@@ -49,7 +49,7 @@ class AppControllerTest extends ControllerTest
     public function testAppRegisterInvaliddata()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['applist' => json_encode([["" => "CRM","category" => "organization","options" => ["autostart" => "false","hidden" => "false" ]],["name"=>"Calculator","category" =>  "office","options" => ["autostart" =>  "false","hidden" => "false"]],["name" => "Calendar","category" =>  "collaboration","" =>  ["autostart" => "false","hidden" => "false"]],["name" => "Chat","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "FileManager","category" => "office","options" => ["autostart" => "false","hidden" => "false"]],["name" => "Mail","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "MailAdmin","category" => "utilities","options" => ["autostart" => "false","hidden" => "false"]],["name" => "MyTodo","category" => "null","options" => ["autostart" => "false","hidden" => "true"]],["name" => "Textpad","category" => "office","options" => ["autostart" => "false","hidden" => "false"]]])];
+        $data = ['applist' => json_encode([["name" => "","category" => "organization","options" => ["autostart" => "false","hidden" => "false" ]],["name"=>"Calculator","category" =>  "office","options" => ["autostart" =>  "false","hidden" => "false"]],["name" => "Calendar","category" =>  "collaboration","" =>  ["autostart" => "false","hidden" => "false"]],["name" => "Chat","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "FileManager","category" => "office","options" => ["autostart" => "false","hidden" => "false"]],["name" => "Mail","category" => "collaboration","options" => ["autostart" => "true","hidden" => "true"]],["name" => "MailAdmin","category" => "utilities","options" => ["autostart" => "false","hidden" => "false"]],["name" => "MyTodo","category" => "null","options" => ["autostart" => "false","hidden" => "true"]],["name" => "Textpad","category" => "office","options" => ["autostart" => "false","hidden" => "false"]]])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/register', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -84,20 +84,20 @@ class AppControllerTest extends ControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
 
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content['data'][0]['uuid']);
-        $this->assertEquals($content['data'][0]['name'], 'Admin');
+        $this->assertEquals($content['data'][0]['name'], 'SampleApp');
     }
 
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/64', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbijkop', 'GET');
         $this->assertResponseStatusCode(404);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -114,9 +114,9 @@ class AppControllerTest extends ControllerTest
         $this->assertMatchedRouteName('applist');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 6);
+        $this->assertEquals(count($content['data']), 8);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['total'], 6);
+        $this->assertEquals($content['total'], 8);
     }
 
     public function testGetAppListWithQuery()
@@ -151,7 +151,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
         $this->assertEquals($content['data'][1]['name'], 'AppBuilder');
-        $this->assertEquals($content['total'], 6);
+        $this->assertEquals($content['total'], 8);
     }
 
     public function testGetAppListWithPageSize2()
@@ -169,7 +169,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'CRM');
         $this->assertEquals($content['data'][1]['name'], 'MailAdmin');
-        $this->assertEquals($content['total'], 6);
+        $this->assertEquals($content['total'], 8);
     }
 
     public function testCreate()
@@ -286,7 +286,7 @@ class AppControllerTest extends ControllerTest
         $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'Admin', 'logo' => 'app.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76', 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -299,7 +299,7 @@ class AppControllerTest extends ControllerTest
         $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
         $this->initAuthToken($this->employeeUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76', 'PUT', $data);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'PUT', $data);
         $this->assertResponseStatusCode(401);
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class); // as specified in router's controller name alias
@@ -316,7 +316,7 @@ class AppControllerTest extends ControllerTest
         $data = ['name' => 'Admin App', 'type' => 2, 'category' => 'EXAMPLE_CATEGORY', 'logo' => 'app.png'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f78', 'PUT', null);
+        $this->dispatch('/app/fc97bdf0-df6f-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -326,7 +326,7 @@ class AppControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76', 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -336,7 +336,7 @@ class AppControllerTest extends ControllerTest
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f87', 'DELETE');
+        $this->dispatch('/app/fc97bdf0-df6f-11e9-8a34-2a2ae2dbcce4', 'DELETE');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
@@ -366,9 +366,8 @@ class AppControllerTest extends ControllerTest
             $workflowService->setProcessManager($mockProcessManager);
         }
         $data = array('name'=>'NewWorkflow');
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/deployworkflow', 'POST', $data);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        // print_r($content);exit;
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
@@ -385,7 +384,7 @@ class AppControllerTest extends ControllerTest
             )
         );
         $data = array();
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/deployworkflow', 'POST', $data);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -412,7 +411,7 @@ class AppControllerTest extends ControllerTest
             $workflowService->setProcessManager($mockProcessManager);
         }
         $data = array('name'=>'NewWorkflow1');
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/deployworkflow', 'POST', $data);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -423,7 +422,7 @@ class AppControllerTest extends ControllerTest
         $_FILES =array();
         $this->initAuthToken($this->adminUser);
         $data = array('name'=>'NewWorkflow');
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/deployworkflow', 'POST', $data);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -462,8 +461,8 @@ class AppControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $workflowName = 'Test Workflow 1';
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/assignments?filter=[{"filter":{"filters":[{"field":"workflow_name","operator":"eq","value":"'.$workflowName.'"}]},"sort":[{"field":"workflow_name","dir":"asc"}],"skip":0,"take":1}]', 'GET');
-        $this->assertResponseStatusCode(200);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/assignments?filter=[{"filter":{"filters":[{"field":"workflow_name","operator":"eq","value":"'.$workflowName.'"}]},"sort":[{"field":"workflow_name","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200); 
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class);
         $this->assertControllerClass('AppController');
@@ -478,8 +477,8 @@ class AppControllerTest extends ControllerTest
     public function testGetListOfAssignmentsWithoutFiltersValues()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/assignments?filter=[{"skip":0,"take":1}]', 'GET');
-        $this->assertResponseStatusCode(200);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/assignments?filter=[{"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200); 
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class);
         $this->assertControllerClass('AppController');
@@ -493,8 +492,8 @@ class AppControllerTest extends ControllerTest
     public function testGetListOfAssignmentsWithoutFilters()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/assignments', 'GET');
-        $this->assertResponseStatusCode(200);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/assignments', 'GET');
+        $this->assertResponseStatusCode(200); 
         $this->assertModuleName('App');
         $this->assertControllerName(AppController::class);
         $this->assertControllerClass('AppController');

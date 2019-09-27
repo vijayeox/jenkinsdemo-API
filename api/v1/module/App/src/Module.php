@@ -45,7 +45,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\AppService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class), $container->get(\Oxzion\Service\WorkflowService::class), $container->get(\Oxzion\Service\FormService::class), $container->get(\Oxzion\Service\FieldService::class), $container->get(\Oxzion\Service\OrganizationService::class));
+                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class), $container->get(\Oxzion\Service\WorkflowService::class), $container->get(\Oxzion\Service\FormService::class), $container->get(\Oxzion\Service\FieldService::class), $container->get(\Oxzion\Service\OrganizationService::class),$container->get('AppLogger'));
                 },
                 Model\AppTable::class => function ($container) {
                     $tableGateway = $container->get(Model\AppTableGateway::class);
@@ -59,7 +59,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\MenuItemService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\MenuItemService($container->get('config'), $container->get(GroupService::class), $dbAdapter, $container->get(Model\MenuItemTable::class));
+                    return new Service\MenuItemService($container->get('config'), $container->get(GroupService::class), $dbAdapter, $container->get(Model\MenuItemTable::class),$container->get('MenuItemLogger'));
                 },
                 Model\MenuItemTable::class => function ($container) {
                     $tableGateway = $container->get(Model\MenuItemTableGateway::class);
@@ -73,7 +73,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\PageService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PageService($container->get('config'),$container->get(Service\PageContentService::class), $dbAdapter, $container->get(Model\PageTable::class));
+                    return new Service\PageService($container->get('config'),$container->get(Service\PageContentService::class), $dbAdapter, $container->get(Model\PageTable::class),$container->get('PageLogger'));
                 },
                 Model\PageTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PageTableGateway::class);
@@ -87,7 +87,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\PageContentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PageContentService($container->get('config'), $dbAdapter, $container->get(Model\PageContentTable::class));
+                    return new Service\PageContentService($container->get('config'), $dbAdapter, $container->get(Model\PageContentTable::class),$container->get('PageLogger'));
                 },
                 Model\PageContentTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PageContentTableGateway::class);
@@ -130,7 +130,8 @@ class Module implements ConfigProviderInterface
                         $container->get(Model\AppTable::class),
                         $container->get(Service\AppService::class),
                         $container->get('AppLogger'),
-                        $container->get(AdapterInterface::class)
+                        $container->get(AdapterInterface::class),
+                        $container->get(WorkflowService::class)
                     );
                 },
                 Controller\AppRegisterController::class => function ($container) {
@@ -151,7 +152,7 @@ class Module implements ConfigProviderInterface
                     return new Controller\MenuItemController(
                         $container->get(Model\MenuItemTable::class),
                         $container->get(Service\MenuItemService::class),
-                        $container->get('AppLogger'),
+                        $container->get('MenuItemLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -160,7 +161,7 @@ class Module implements ConfigProviderInterface
                         $container->get(Model\PageTable::class),
                         $container->get(Service\PageService::class),
                         $container->get(Service\PageContentService::class),
-                        $container->get('AppLogger'),
+                        $container->get('PageLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -168,7 +169,7 @@ class Module implements ConfigProviderInterface
                     return new Controller\PageContentController(
                         $container->get(Model\PageContentTable::class),
                         $container->get(Service\PageContentService::class),
-                        $container->get('AppLogger'),
+                        $container->get('PageLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

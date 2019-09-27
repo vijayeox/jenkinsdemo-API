@@ -110,12 +110,12 @@ class PageContentController extends AbstractApiController
     * @return array $data
     * @return array Returns a JSON Response with Status Code and Created PageContent.
     */
-    public function get($pageContentId)
+   /* public function get($pageContentId)
     {
         $result = $this->pageContentService->getContent($pageContentId);
         if (empty($result)) {
             return $this->getErrorResponse("Page Content not found", 404, ['id' => $pageContentId]);
         }
         return $this->getSuccessResponseWithData($result);
-    }
+    } */
 }

@@ -82,17 +82,19 @@ class FileController extends AbstractApiController
     */
     public function update($id, $data)
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $formId = $this->params()->fromRoute()['formId'];
-        if ($formId) {
-            $data['form_id'] = $formId;
+        $appUuId = $this->params()->fromRoute()['appId'];
+        $formUuId = $this->params()->fromRoute()['formId'];
+        if ($formUuId) {
+            $data['form_uuid'] = $formUuId;
         }
-        if ($appId) {
-            $data['app_id'] = $appId;
+        if ($appUuId) {
+            $data['app_uuid'] = $appUuId;
         }
         try {
             $count = $this->fileService->updateFile($data, $id);
+            // var_dump($count);exit;
         } catch (ValidationException $e) {
+            print_r($e->getMessage());exit;
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
@@ -127,7 +129,7 @@ class FileController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created File.
     */
     public function get($id)
-    {
+    {  
         $result = $this->fileService->getFile($id);
         if ($result == 0) {
             return $this->getErrorResponse("File not found", 404, ['id' => $id]);
@@ -141,6 +143,8 @@ class FileController extends AbstractApiController
 
         $crypto = new Crypto();
         $file = $crypto->decryption($params['documentName']);
+        // print_r($file);exit;
+        // var_dump(file_exists($file));
         if(file_exists($file)){
             if (!headers_sent()) {
                 header('Content-Type: application/octet-stream');
@@ -154,7 +158,8 @@ class FileController extends AbstractApiController
                 $this->response->setStatusCode(200);
                 return $this->response;
             } catch (Exception $e) {
-                return $this->getErrorResponse("Document not Found", 404);
+                print_r($e->getMessage());
+                return $this->getErrorResponse($e->getMessage(), 500);
             }
         }else{
             return $this->getErrorResponse("Document not Found", 404);

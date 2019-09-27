@@ -74,17 +74,17 @@ class FormController extends AbstractApiController
     * @param array $data
     * @return array Returns a JSON Response with Status Code and Created Form.
     */
-    public function update($id, $data)
+    public function update($formUuid, $data)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
         try {
-            $count = $this->formService->updateForm($appUuid, $id, $data);
+            $count = $this->formService->updateForm($appUuid, $formUuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+            return $this->getErrorResponse("Entity not found for id - $formUuid", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -125,8 +125,9 @@ class FormController extends AbstractApiController
     {
         $formId = $this->params()->fromRoute()['formId'];
         $result = $this->formService->getWorkflow($formId);
+        // print_r($result);exit;
         if ($result == 0) {
-            return $this->getErrorResponse("Form not found", 404, ['id' => $id]);
+            return $this->getErrorResponse("Form not found", 404, ['id' => $formId]);
         }
         return $this->getSuccessResponseWithData($result);
     }

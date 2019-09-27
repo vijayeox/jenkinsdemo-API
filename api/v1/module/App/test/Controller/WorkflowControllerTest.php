@@ -25,9 +25,9 @@ class WorkflowControllerTest extends ControllerTest
     }
 
     public function testGetList()
-    {
+    {   
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/workflow', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
@@ -46,7 +46,7 @@ class WorkflowControllerTest extends ControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/workflow/1', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
@@ -62,7 +62,7 @@ class WorkflowControllerTest extends ControllerTest
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/workflow/122', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce9', 'GET');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
@@ -79,7 +79,7 @@ class WorkflowControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'workflow3','app_id'=>1,'required'=>1];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/workflow', 'POST', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('App');
         $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
@@ -98,7 +98,7 @@ class WorkflowControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['required'=>1,'sequence'=>1];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/workflow', 'POST', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow', 'POST', null);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
@@ -114,9 +114,9 @@ class WorkflowControllerTest extends ControllerTest
     public function testUpdate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['id'=>2,'name' => 'workflow23','app_id' => 99,'required'=> 0, 'sequence' => 2,'type'=>'Page'];
+        $data = ['id'=>2,'name' => 'workflow23','app_id'=>99,'required'=> 0, 'sequence' => 2,'type'=>'Page'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/workflow/2', 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/fc0cdbbc-e024-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
@@ -135,7 +135,7 @@ class WorkflowControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Sample2', 'text' => 'Sample 2 Description'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/99/workflow/122', 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/35b79010-df8e-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
@@ -149,7 +149,7 @@ class WorkflowControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/workflow/1', 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
@@ -163,7 +163,7 @@ class WorkflowControllerTest extends ControllerTest
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/workflow/122', 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/35b79178-df8e-11e9-8a34-2a2ae2dbcce4', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias

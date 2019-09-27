@@ -3,6 +3,7 @@
 namespace App;
 
 use Zend\Router\Http\Segment;
+use Oxzion\Utils\UuidUtil;
 
 return [
     'router' => [
@@ -11,6 +12,9 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app[/:appId]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,                   
+                    ],
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'access' => [
@@ -38,6 +42,9 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/appinstall',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'installAppForOrg',
@@ -100,6 +107,9 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/deployworkflow[/:workflowId]',
+                    'constraints' => [
+                        'workflowId' => UuidUtil::UUID_PATTERN,                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'workflowDeploy',
@@ -122,6 +132,9 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/org/:orgId/addtoappregistry',
+                    'constraints' => [
+                        'orgId' => UuidUtil::UUID_PATTERN,                   
+                    ],
                     'defaults' => [
                         'controller' => Controller\AppRegisterController::class,
                         'action' => 'addToAppregistry',
@@ -133,6 +146,10 @@ return [
                 'type'    => Segment::class,
                 'options' => [
                     'route'    => '/app/:appId/form[/:id]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'id' => UuidUtil::UUID_PATTERN,                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\FormController::class,
                         'access'=>[
@@ -149,6 +166,11 @@ return [
                 'type'    => Segment::class,
                 'options' => [
                     'route'    => '/app/:appId/form/:formId/file[/:id]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'formId' => UuidUtil::UUID_PATTERN, 
+                        'id' => UuidUtil::UUID_PATTERN,                   
+                    ],
                     'defaults' => [
                         'controller' => Controller\FileController::class,
                         'access'=>[
@@ -165,6 +187,10 @@ return [
                 'type'    => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/field[/:id]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'id' => UuidUtil::UUID_PATTERN,                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\FieldController::class,
                         'access'=>[
@@ -181,6 +207,10 @@ return [
                 'type'    => Segment::class,
                 'options' => [
                     'route'    => '/app/:appId/delegate/:delegate',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'delegate' => '[A-Za-z0-9]*',                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\AppDelegateController::class,
                         'action' => 'delegate',
@@ -192,6 +222,10 @@ return [
                 'type'    => Segment::class,
                 'options' => [
                     'route'    => '/app/:appId/workflow[/:workflowId]',
+                    'constraints' => [
+                        'workflowId' => UuidUtil::UUID_PATTERN,
+                        'appId' => UuidUtil::UUID_PATTERN,                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\WorkflowController::class,
                         'access'=>[
@@ -208,6 +242,10 @@ return [
                 'type'    => Segment::class,
                 'options' => [
                     'route'    => '/app/:appId/menu[/:menuId]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'menuId' => UuidUtil::UUID_PATTERN,                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\MenuItemController::class,
                         'access'=>[
@@ -223,7 +261,12 @@ return [
             'apppage' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/page[/:pageId]',
+                    'route' => '/app/:appId[/org/:orgId]/page[/:pageId]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'orgId' => UuidUtil::UUID_PATTERN,                    
+                        'pageId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\PageController::class,
                         'access' =>[
@@ -240,6 +283,9 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/pagecontent[/:pageContentId]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\PageContentController::class,
                         'access' =>[
@@ -251,11 +297,15 @@ return [
                         ]
                     ]
                 ]
-            ],
+             ],
             'workflowfields' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/workflow/:workflowId/fields',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'workflowId' => UuidUtil::UUID_PATTERN,                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\WorkflowController::class,
                         'action' => 'workflowFields',
@@ -269,6 +319,10 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/workflow/:workflowId/forms',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'workflowId' => UuidUtil::UUID_PATTERN,                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\WorkflowController::class,
                         'action' => 'workflowForms',
@@ -282,6 +336,9 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/assignments',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,                   
+                    ],
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'assignments',
@@ -294,6 +351,10 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/form/:formId/workflow',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'formId' => UuidUtil::UUID_PATTERN,                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\FormController::class,
                         'action' => 'getWorkflow',
@@ -305,6 +366,9 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/importcsv',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,                  
+                    ],
                     'defaults' => [
                         'controller' => Controller\ImportController::class,
                         'action' => 'importCSV',
@@ -316,6 +380,10 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/workflow/:workflowId/startform',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'workflowId' => UuidUtil::UUID_PATTERN,                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\WorkflowController::class,
                         'action' => 'startform',
@@ -327,6 +395,9 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/cache',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,                  
+                    ],
                     'defaults' => [
                         'controller' => Controller\CacheController::class,
                         'action' => 'cache',
@@ -338,6 +409,10 @@ return [
                 'type'    => Segment::class,
                 'options' => [
                     'route'    => '/app/:appId/file/:fileId/document/:documentName',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,                    
+                    ],
                     'defaults' => [
                         'controller' => Controller\FileController::class,
                         'action' => 'getDocument',
@@ -355,6 +430,52 @@ return [
                     'priority' => \Zend\Log\Logger::ALERT,
                     'options' => [
                         'stream' => __DIR__ . '/../../../logs/app.log',
+                        'formatter' => [
+                            'name' => \Zend\Log\Formatter\Simple::class,
+                            'options' => [
+                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
+                            ],
+                        ],
+                        'filters' => [
+                            'priority' => \Zend\Log\Logger::INFO,],
+                    ],
+                ],
+            ],
+            'processors' => [
+                'requestid' => [
+                    'name' => \Zend\Log\Processor\RequestId::class,],
+            ],
+        ],
+        'MenuItemLogger' => [
+            'writers' => [
+                'stream' => [
+                    'name' => 'stream',
+                    'priority' => \Zend\Log\Logger::ALERT,
+                    'options' => [
+                        'stream' => __DIR__ . '/../../../logs/menuitem.log',
+                        'formatter' => [
+                            'name' => \Zend\Log\Formatter\Simple::class,
+                            'options' => [
+                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
+                            ],
+                        ],
+                        'filters' => [
+                            'priority' => \Zend\Log\Logger::INFO,],
+                    ],
+                ],
+            ],
+            'processors' => [
+                'requestid' => [
+                    'name' => \Zend\Log\Processor\RequestId::class,],
+            ],
+        ],
+        'PageLogger' => [
+            'writers' => [
+                'stream' => [
+                    'name' => 'stream',
+                    'priority' => \Zend\Log\Logger::ALERT,
+                    'options' => [
+                        'stream' => __DIR__ . '/../../../logs/page.log',
                         'formatter' => [
                             'name' => \Zend\Log\Formatter\Simple::class,
                             'options' => [

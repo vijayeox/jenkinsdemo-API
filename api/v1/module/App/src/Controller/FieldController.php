@@ -121,7 +121,7 @@ class FieldController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Field.
     */
     public function get($id)
-    {
+    {  
         $appId = $this->params()->fromRoute()['appId'];
         $result = $this->fieldService->getField($appId, $id);
         if ($result == 0) {

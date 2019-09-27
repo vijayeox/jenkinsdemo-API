@@ -116,12 +116,12 @@ class MenuItemController extends AbstractApiController
     * @return array $data
     * @return array Returns a JSON Response with Status Code and Created MenuItem.
     */
-    public function get($menuId)
+    public function get($menuUuid)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        $result = $this->menuItemService->getMenuItem($appUuid, $menuId);
+        $result = $this->menuItemService->getMenuItem($appUuid, $menuUuid);
         if ($result == 0) {
-            return $this->getErrorResponse("MenuItem not found", 404, ['id' => $menuId]);
+            return $this->getErrorResponse("MenuItem not found", 404, ['id' => $menuUuid]);
         }
         return $this->getSuccessResponseWithData($result);
     }

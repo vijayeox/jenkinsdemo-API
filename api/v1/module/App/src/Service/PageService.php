@@ -12,32 +12,36 @@ use Oxzion\Utils\UuidUtil;
 use App\Service\PageContentService;
 use Oxzion\ServiceException;
 use Exception;
+use Zend\Log\Logger;
 
 class PageService extends AbstractService
 {
-    public function __construct($config, PageContentService $pageContentService ,$dbAdapter, PageTable $table)
+    public function __construct($config, PageContentService $pageContentService ,$dbAdapter, PageTable $table, Logger $log)
     {
-        parent::__construct($config, $dbAdapter);
+        parent::__construct($config, $dbAdapter,$log);
         $this->table = $table;
         $this->pageContentService = $pageContentService;
     }
-    public function savePage($appUuid, &$data,$id = null)
-    {
+    public function savePage($routeData, &$data,$id = null)
+    {  
         $count = 0;
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
-        $data['app_id'] = $this->getIdFromUuid('ox_app', $appUuid);
-        $select = "SELECT * from ox_app_registry where org_id = '".$orgId."' AND app_id = ".$data['app_id'];
-        $result = $this->executeQuerywithParams($select)->toArray();
+        $orgId = isset($routeData['orgId'])? $this->getIdFromUuid('ox_organization', $routeData['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
+        $data['app_id'] = $this->getIdFromUuid('ox_app', $routeData['appId']);
+        $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
+        $selectQuery = array("orgId" => $orgId,"appId" => $data['app_id']);           
+        $result = $this->executeQuerywithBindParameters($select,$selectQuery)->toArray();
         if(count($result) > 0){
             $content = isset($data['content'])?$data['content']:false;
             $data['uuid'] = UuidUtil::uuid();
             if(isset($id)){
-                $querySelect = "SELECT * from ox_app_page where app_id = '".$data['app_id']."' AND id = ".$id;
-                $queryResult = $this->executeQuerywithParams($querySelect)->toArray();
+                $querySelect = "SELECT * from ox_app_page where app_id = :appId AND uuid = :uuid";
+                $whereQuery = array("appId" => $data['app_id'],"uuid" => $id);  
+                $queryResult = $this->executeQuerywithBindParameters($querySelect,$whereQuery)->toArray();
                 if(count($queryResult)>0){
-                    $deleteQuery = "DELETE from ox_page_content where page_id = ".$queryResult[0]['id'];
-                    $deleteResult = $this->executeQuerywithParams($deleteQuery);
-                    $deleteRecord = $this->table->delete($id, ['app_id'=>$data['app_id']]);
+                    $deleteQuery = "DELETE from ox_page_content where page_id = ?";
+                    $whereParams = array($queryResult[0]['id']);
+                    $deleteResult = $this->executeQuerywithBindParameters($deleteQuery,$whereParams);
+                    $deleteRecord = $this->table->delete($this->getIdFromUuid('ox_app_page', $id), ['app_id'=>$data['app_id']]);
                 }else{
                     return 0;
                 }
@@ -52,7 +56,7 @@ class PageService extends AbstractService
             $page->exchangeArray($data);
             $page->validate();
             $this->beginTransaction();
-            try {
+            try { 
                 unset($data['content']);
                 $count = $this->table->save($page);
                 if ($count == 0) {
@@ -68,8 +72,8 @@ class PageService extends AbstractService
                 }   
                 $this->commit();
             } catch (Exception $e) {
-                print_r($e->getMessage());
                 $this->rollback();
+                $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
                 throw $e;
             }
         }else{
@@ -78,18 +82,19 @@ class PageService extends AbstractService
         return $count;
     }
      
-    public function deletePage($appUuid, $id)
+    public function deletePage($appUuid, $pageUuid)
     {
-        $appId = $this->getIdFromUuid('ox_app', $appUuid);
-        $select = "SELECT * from ox_app_page where app_id = '".$appId."' AND id = ".$id;
-        $result = $this->executeQuerywithParams($select)->toArray();
+        $select = "SELECT * from ox_app_page left join ox_app on ox_app.id = ox_app_page.app_id where ox_app.uuid =? AND ox_app_page.uuid =?";
+        $whereQuery = array($appUuid,$pageUuid);
+        $result = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
         $count = 0;
         if(count($result)>0){
             $this->beginTransaction();           
         try {
-            $selectQuery = "DELETE from ox_page_content where page_id = ".$result[0]['id'];
-            $resultSet = $this->executeQuerywithParams($selectQuery);
-            $count = $this->table->delete($id, ['app_id'=>$appId]);
+            $selectQuery = "DELETE from ox_page_content where page_id = ?";
+            $selectParams = array($result[0]['id']);
+            $resultSet = $this->executeQueryWithBindParameters($selectQuery,$selectParams);
+            $count = $this->table->delete($this->getIdFromUuid('ox_app_page', $pageUuid), ['app_id'=>$this->getIdFromUuid('ox_app', $appUuid)]);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -97,6 +102,8 @@ class PageService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
     }else{
         throw new ServiceException("Page Not Found","page.not.found");
@@ -112,17 +119,19 @@ class PageService extends AbstractService
         $resultSet = $this->getDataByParams('ox_app_page', array("*"), $filterArray, null);
         return $resultSet->toArray();
     }
-    public function getPage($appId, $id)
-    {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_app_page')
-        ->columns(array("*"))
-        ->where(array('id' => $id,'app_id'=>$appId));
-        $response = $this->executeQuery($select)->toArray();
-        if (count($response)==0) {
-            return 0;
+    public function getPage($appUuid, $pageUuid)
+    {     
+        try{
+            $select = "SELECT ox_app_page.* FROM ox_app_page left join ox_app on ox_app.id = ox_app_page.app_id where ox_app_page.uuid=? and ox_app.uuid=?";
+            $whereQuery = array($pageUuid,$appUuid);
+            $response = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
+            if (count($response)==0) {
+                return 0;
+            }
+            return $response[0];
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
-        return $response[0];
     }
 }

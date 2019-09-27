@@ -27,7 +27,7 @@ class MenuItemControllerTest extends ControllerTest
     public function testGetList()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/menu', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/menu', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -44,7 +44,7 @@ class MenuItemControllerTest extends ControllerTest
     public function testGetListNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom1235/menu', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce0/menu', 'GET');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -58,7 +58,7 @@ class MenuItemControllerTest extends ControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/menu/1', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/menu/7b5b3330-df8c-11e9-8a34-2a2ae2dbcce4', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -74,7 +74,7 @@ class MenuItemControllerTest extends ControllerTest
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/menu/122', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/menu/ef993090-df86-11e9-8a34-2a2ae2dbcce4', 'GET');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -91,7 +91,7 @@ class MenuItemControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'menu4','required'=>1];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/menu', 'POST', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/menu', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -110,7 +110,7 @@ class MenuItemControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['required'=>1,'title' => 'menu4','sequence'=>1];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/somerandom123/menu', 'POST', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/menu', 'POST', null);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -128,7 +128,7 @@ class MenuItemControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['id'=>2,'title' => 'menu32','name' => 'menu23','required'=> 0, 'sequence' => 2,'type'=>'Page'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/somerandom123/menu/2', 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/menu/7b5b359c-df8c-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -147,7 +147,7 @@ class MenuItemControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'Sample2','title' => 'menu32', 'text' => 'Sample 2 Description'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/somerandom123/menu/122', 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/menu/ef992f3c-df86-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -161,7 +161,7 @@ class MenuItemControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/7ab30b2d-d1da-427a-8e40-bc954b2b0f76/menu/1', 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/menu/7b5b3330-df8c-11e9-8a34-2a2ae2dbcce4', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias
@@ -175,7 +175,7 @@ class MenuItemControllerTest extends ControllerTest
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/somerandom123/menu/122', 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/menu/ef9933d8-df86-11e9-8a34-2a2ae2dbcce4', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->assertModuleName('App');
         $this->assertControllerName(MenuItemController::class); // as specified in router's controller name alias

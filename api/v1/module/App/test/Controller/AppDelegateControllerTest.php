@@ -12,7 +12,7 @@ class AppDelegateControllerTest extends ControllerTest
         $this->loadConfig();
         $this->data = array(
             "appName" => 'ox_client_app',
-            'UUID' => 8765765,
+            'UUID' => '1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4',
             'description' => 'FirstAppOfTheClient',
         );
         $path = __DIR__.'/../../../../data/delegate/'.$this->data['UUID'];
@@ -41,7 +41,7 @@ class AppDelegateControllerTest extends ControllerTest
     public function testDelegateExecute()
     {
         $data = array("Checking App Delegate","Checking1");
-        $appId = "8765765";
+        $appId = "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4";
         $delegate = 'IndividualLiabilityImpl';
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/'.$appId.'/delegate/'.$delegate, 'POST', $data);

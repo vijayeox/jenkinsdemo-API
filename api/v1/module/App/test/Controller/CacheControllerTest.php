@@ -35,7 +35,7 @@ class CacheControllerTest extends ControllerTest
     public function testGet()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/99/cache', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/cache', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -45,7 +45,7 @@ class CacheControllerTest extends ControllerTest
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1/cache', 'GET');
+        $this->dispatch('/app/eedebfcc-df80-11e9-8a34-2a2ae2dbcce4/cache', 'GET');
         $this->assertResponseStatusCode(200);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
