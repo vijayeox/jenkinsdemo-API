@@ -10,7 +10,7 @@ return [
             'workflowInstance' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/workflow/:workflowId[/activity/:activityId][/instance/:instanceId]',
+                    'route' => '/workflow/:workflowId[/activity/:activityId]',
                     'constraints' => [
                         'workflowId' => UuidUtil::UUID_PATTERN,
                         'activityId' => '[0-9]*',                    
@@ -111,7 +111,7 @@ return [
             'claimActivityInstance' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/workflowinstance/:workflowInstanceId/activity/:activityInstanceId/claim',
+                    'route' => '/app/:appId/workflowinstance/:workflowInstanceId/activityinstance/:activityInstanceId/claim',
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
                         'method' => 'POST',
@@ -124,10 +124,10 @@ return [
             'activityInstanceForm' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/activity/:activityInstanceId/form',
+                    'route' => '/app/:appId/workflowinstance/:workflowInstanceId/activityinstance/:activityInstanceId/form',
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
-                        'method' => 'POST',
+                        'method' => 'GET',
                         'action' => 'activityInstanceForm',
                         'access' => [
                         ],

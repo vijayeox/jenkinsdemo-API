@@ -248,13 +248,19 @@ class WorkflowInstanceService extends AbstractService
         
     }
     
-    public function setupWorkflowInstance($workflowId, $processInstanceId,$params =null)
+    public function setupWorkflowInstance($workflowUuId, $processInstanceId,$params =null)
     {
         $query = "select * from ox_workflow_instance where org_id=? and process_instance_id=?";
         $queryParams = array(AuthContext::get(AuthConstants::ORG_ID),$processInstanceId);
         $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        return $resultSet;
-
+        if($resultSet){
+            return $resultSet[0];
+        }
+        if ($workflowId = $this->getIdFromUuid('ox_workflow', $workflowUuId)) {
+            $workflowId = $workflowId;
+        } else {
+            $workflowId = $workflowUuId;
+        }
         $form = new WorkflowInstance();
         if (isset($params['orgid'])) {
             if ($org = $this->getIdFromUuid('ox_organization', $params['orgid'])) {
@@ -276,8 +282,8 @@ class WorkflowInstanceService extends AbstractService
         }
         $dateCreated = date('Y-m-d H:i:s');
 
-        $query = "select app_id from ox_workflow where org_id=? and id=?";
-        $queryParams = array(AuthContext::get(AuthConstants::ORG_ID),$workflowId);
+        $query = "select app_id from ox_workflow where id=?";
+        $queryParams = array($workflowId);
         $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         if($resultSet){
             $data = array('workflow_id'=> $workflowId,'app_id'=> $resultSet[0]['app_id'],'org_id'=> $orgId,'process_instance_id'=>$processInstanceId,'status'=>"In Progress",'date_created'=>$dateCreated,'created_by'=>$createdBy);

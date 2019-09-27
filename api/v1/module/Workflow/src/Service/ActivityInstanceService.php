@@ -41,9 +41,16 @@ class ActivityInstanceService extends AbstractService
     {
         $this->activityEngine = $activityEngine;
     }
-    public function getActivityInstanceForm($id)
+    public function getActivityInstanceForm($data)
     {
-        $activityQuery = "SELECT ox_activity_instance.*,ox_activity.task_id as task_id,ox_form.template as template,ox_activity.workflow_id FROM `ox_activity_instance` LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id WHERE ox_activity_instance.activity_instance_id='".$id."';";
+        $activityQuery = "SELECT ox_activity_instance.*,ox_activity.task_id as task_id,
+        ox_form.template as template,ox_activity.workflow_id FROM `ox_activity_instance` 
+        LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id 
+        LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id 
+        LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id 
+        LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
+        WHERE ox_activity_instance.org_id =".AuthContext::get(AuthConstants::ORG_ID)." AND ox_workflow_instance.app_id=".$this->getIdFromUuid('ox_app', $data['appId'])." AND 
+        ox_activity_instance.activity_instance_id='".$data['activityInstanceId']."';";
         $activityInstance = $this->executeQuerywithParams($activityQuery)->toArray();
         if (count($activityInstance)==0) {
             return 0;
@@ -76,7 +83,7 @@ class ActivityInstanceService extends AbstractService
         return $count;
     }
     public function claimActivityInstance($data){
-        $activityQuery = "SELECT ox_activity_instance.*,ox_activity.task_id as task_id FROM `ox_activity_instance` LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id WHERE ox_activity_instance.id='".$data['activityInstanceId']."';";
+        $activityQuery = "SELECT ox_activity_instance.*,ox_activity.task_id as task_id FROM `ox_activity_instance` LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id WHERE ox_activity_instance.org_id =".AuthContext::get(AuthConstants::ORG_ID)." AND ox_workflow_instance.app_id=".$this->getIdFromUuid('ox_app', $data['appId'])." AND ox_activity_instance.activity_instance_id='".$data['activityInstanceId']."';";              
         $activityInstance = $this->executeQuerywithParams($activityQuery)->toArray();
         if(isset($activityInstance)&&is_array($activityInstance) && !empty($activityInstance)){
             $taskId = str_replace($activityInstance[0]["task_id"].":", "", $activityInstance[0]['activity_instance_id']);
@@ -84,9 +91,9 @@ class ActivityInstanceService extends AbstractService
             return 0;
         }
         try {
-            $this->activityEngine->claimActivity($taskId,AuthContext::get(AuthConstants::USERNAME));
-        } catch (Exception $e){
-            return 0;
+            $test = $this->activityEngine->claimActivity($taskId,AuthContext::get(AuthConstants::USERNAME));
+        } catch(Exception $e){ 
+            throw $e;
         }
         $selectQuery = "SELECT * FROM `ox_activity_instance_assignee` WHERE activity_instance_id='".$data['activityInstanceId']."' and user_id=".AuthContext::get(AuthConstants::USER_ID).";";
         $activityInstanceAssignee = $this->executeQuerywithParams($selectQuery)->toArray();
@@ -102,7 +109,9 @@ class ActivityInstanceService extends AbstractService
                 return 0;
             }
         } else {
-            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`) VALUES (".$data['activityInstanceId'].",".AuthContext::get(AuthConstants::USER_ID).",1)";
+            $selectQuery = "SELECT * FROM ox_activity_instance where activity_instance_id = '".$data['activityInstanceId']."' AND org_id=".AuthContext::get(AuthConstants::ORG_ID).";";
+            $resultSelect = $this->executeQuerywithParams($selectQuery)->toArray();
+            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`) VALUES ('".$resultSelect[0]['id']."',".AuthContext::get(AuthConstants::USER_ID).",1)";
             $resultSet = $this->runGenericQuery($insert);
         }
         return 1;
@@ -150,7 +159,7 @@ class ActivityInstanceService extends AbstractService
         }
         $this->beginTransaction();
         try {
-            $activityInstance = array('workflow_instance_id'=>$workflowInstanceId,'activity_id'=>$activityId,'activity_instance_id'=>$data['activityInstanceId'],'status'=>'created','org_id'=>$orgId,'data'=>json_encode($data['processVariables']));
+            $activityInstance = array('workflow_instance_id'=>$workflowInstanceId,'activity_id'=>$activityId,'activity_instance_id'=>$data['activityInstanceId'],'status'=>'In Progress','org_id'=>$orgId,'data'=>json_encode($data['processVariables']));
             $activityCreated = $this->createActivityInstance($activityInstance);
             if (isset($data['candidates'])) {
                 foreach ($data['candidates'] as $candidate) {
