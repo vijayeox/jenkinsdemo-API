@@ -56,6 +56,7 @@ class DocumentServiceTest extends ServiceTest
         $templateName="GenericTemplate.tpl";
         FileUtils::deleteFile($templateName, $tempFile);
         FileUtils::deleteFile("GenericTemplate.pdf", $config['TEMPLATE_FOLDER']);
+        // print_r($tempFolder);exit;
         FileUtils::rmDir($tempFolder);
         // TO DO DIGITAL SIGNATURE
     }

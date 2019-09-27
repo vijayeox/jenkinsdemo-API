@@ -4,6 +4,7 @@ namespace Oxzion\Utils;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\MultipartStream;
+use Exception;
 
 class RestClient
 {
@@ -60,7 +61,7 @@ class RestClient
         }
     }
     public function post($url, $formParams=array())
-    {
+    { 
         try {
             if ($formParams) {
                 $response = $this->client->request('POST', $url, ['json'=>$formParams]);
@@ -69,7 +70,7 @@ class RestClient
             }
             return $response->getBody()->getContents();
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
     public function postWithHeader($url, $formParams=array(), $headers=array())

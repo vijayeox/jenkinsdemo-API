@@ -8,6 +8,8 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Oxzion\Utils\UuidUtil;
 use Exception;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 class FileService extends AbstractService
 {
@@ -16,7 +18,10 @@ class FileService extends AbstractService
     */
     public function __construct($config, $dbAdapter, FileTable $table, FormService $formService)
     {
-        parent::__construct($config, $dbAdapter);
+        $logger = new Logger();
+        $writer = new Stream(__DIR__ . '/../../../../logs/file.log');
+        $logger->addWriter($writer);
+        parent::__construct($config, $dbAdapter,$logger);
         $this->table = $table;
     }
 
@@ -62,9 +67,7 @@ class FileService extends AbstractService
         $this->beginTransaction();
         $count = 0;
         try {
-            // echo "Ceaet file";
             $count = $this->table->save($file);
-            // var_dump($count);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -85,11 +88,13 @@ class FileService extends AbstractService
             switch (get_class($e)) {
              case "Oxzion\ValidationException":
                 $this->rollback();
+                $this->logger->log(Logger::ERR, $e->getMessage());
                 throw $e;
                 break;
              default:
                 $this->rollback();
-                return 0;
+                $this->logger->log(Logger::ERR, $e->getMessage());
+                throw $e;
                 break;
             }
         }
@@ -103,12 +108,15 @@ class FileService extends AbstractService
     * @return array Returns a JSON Response with Status Code and Created File.
     */
     public function updateFile(&$data, $id)
-    {
-        // print_r(array($data['form_id'],$id));
-        $obj = $this->table->get($id);
+    { 
+        $obj = $this->table->getByUuid($id);
         if (is_null($obj)) {
             return 0;
         }
+        $data['form_id'] = $this->getIdFromUuid('ox_form',$data['form_uuid']); 
+        $data['app_id'] = $this->getIdFromUuid('ox_app',$data['app_uuid']);
+        unset($data['form_uuid']);
+        unset($data['app_uuid']);
         if (isset($data['form_id'])) {
             $formId = $data['form_id'];
         } else {
@@ -119,38 +127,39 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
-        // print_r($obj);
         $fileObject = $obj->toArray();
-        // print_r($fileObject);
         $file = new File();
         $changedArray = array_merge($fileObject, $data);
         $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $changedArray['date_modified'] = date('Y-m-d H:i:s');
-
         $file->exchangeArray($changedArray);
         $file->validate();
         $fields = array_diff($data, $fileObject);
+        $id = $this->getIdFromUuid('ox_file',$id);
         $this->beginTransaction();
-        try {
+        try { 
             $count = $this->table->save($file);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
-            $validFields = $this->checkFields($activityId, $formId, $fields, $id);
+            $validFields = $this->checkFields($activityId, $formId, $fields, $this->getIdFromUuid('ox_file',$id));
             if ($validFields && !empty($validFields)) {
                 $this->multiInsertOrUpdate('ox_file_attribute', $validFields);
             }
             $this->commit();
-        } catch (Exception $e) {
+        } catch (Exception $e) { 
+            print_r($e->getMessage());exit;
             switch (get_class($e)) {
                 case "Oxzion\ValidationException":
                     $this->rollback();
+                    $this->logger->log(Logger::ERR, $e->getMessage());
                     throw $e;
                     break;
                 default:
                     $this->rollback();
-                    return 0;
+                    $this->logger->log(Logger::ERR, $e->getMessage());
+                    throw $e;
                     break;
             }
         }
@@ -167,30 +176,15 @@ class FileService extends AbstractService
     {
         $count = 0;
         try {
-            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
+            $count = $this->table->delete($id = $this->getIdFromUuid('ox_file',$id), ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
             if ($count == 0) {
                 return 0;
             }
         } catch (Exception $e) {
-            return 0;
+            $this->logger->log(Logger::ERR, $e->getMessage());
+            throw $e;
         }
         return $count;
-    }
-
-    /**
-    * GET List File Service
-    * @method GET
-    * @return array Returns a JSON Response with Error Message.
-    */
-    public function getFiles($formId)
-    {
-        $sql = $this->getSqlObject();
-        $select = $sql->select()
-                ->from('ox_file')
-                ->columns(array("*"))
-                ->where(array('ox_file.org_id' => AuthContext::get(AuthConstants::ORG_ID)));
-        $result = $this->executeQuery($select)->toArray();
-        return array();
     }
 
     /**
@@ -201,23 +195,28 @@ class FileService extends AbstractService
     * @return array Returns a JSON Response with Status Code and Created File.
     */
     public function getFile($id)
-    {
-        $obj = $this->table->get($id, array('org_id' => AuthContext::get(AuthConstants::ORG_ID)));
-        if ($obj) {
-            $fileArray = $obj->toArray();
-            $sql = $this->getSqlObject();
-            $select = $sql->select()
-            ->from('ox_file_attribute')
-            ->columns(array("*"))
-            ->join('ox_field', 'ox_file_attribute.fieldid = ox_field.id', array('fieldname'=>'name'), 'left')
-            ->where(array('ox_file_attribute.org_id' => AuthContext::get(AuthConstants::ORG_ID),'ox_file_attribute.fileid' => $id));
-            $result = $this->executeQuery($select)->toArray();
-            foreach ($result as $key => $value) {
-                $fileArray[$value['fieldname']] = $value['fieldvalue'];
+    { 
+        try{
+            $id = $this->getIdFromUuid('ox_file',$id);
+            $obj = $this->table->get($id, array('org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+            if ($obj) {
+                $fileArray = $obj->toArray();
+                // $sql = $this->getSqlObject();
+                $select = "SELECT ox_field.name as fieldname,ox_file_attribute.* from ox_file_attribute 
+                           left join ox_field on ox_file_attribute.fieldid = ox_field.id
+                           where ox_file_attribute.org_id=? and ox_file_attribute.fileid=?";
+                 $whereQuery = array(AuthContext::get(AuthConstants::ORG_ID),$id);
+                 $result = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
+                foreach ($result as $key => $value) {
+                    $fileArray[$value['fieldname']] = $value['fieldvalue'];
+                }
+                return $fileArray;
             }
-            return $fileArray;
+            return 0;
+        }catch(Exception $e){
+            $this->logger->log(Logger::ERR, $e->getMessage());
+            throw $e;
         }
-        return 0;
     }
     /**
     * @ignore checkFields
@@ -225,39 +224,32 @@ class FileService extends AbstractService
     protected function checkFields($activityId=null, $formId=null, $fieldData, $fileId)
     {
         $required = array();
-        $sql = $this->getSqlObject();
-        $activityFormsQuery = $sql->select();
         if (isset($activityId)) {
-            $activityFormsQuery->from('ox_activity_form')
-            ->columns(array("*"))
-            ->where(array('ox_activity_form.activity_id' => $activityId));
-            $activityForms = $this->executeQuery($activityFormsQuery)->toArray();
-            $select = $sql->select();
-            $select->from('ox_field')
-            ->columns(array("*"))
-            ->join('ox_form_field', 'ox_field.id = ox_form_field.field_id', array(), 'left')
-            ->join('ox_form', 'ox_form.id = ox_form_field.form_id', array(), 'left')
-            ->where(array('ox_form.id' => array(array_column($activityForms, 'form_id'))));
-            $fields = $this->executeQuery($select)->toArray();
+            $select = "SELECT * from ox_activity_form where ox_activity_form.activity_id=?";
+            $whereQuery = array($activityId);
+            $activityForms = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
+            $selectQuery = "SELECT ox_field.* from ox_field 
+            left join ox_form_field on ox_field.id = ox_form_field.field_id
+            left join ox_form on ox_form.id = ox_form_field.form_id
+             where ox_form.id=?";
+            $whereParams = array(array(array_column($activityForms, 'form_id')));
+            $fields = $this->executeQueryWithBindParameters($selectQuery,$whereParams)->toArray();
         } else {
             if (isset($formId)) {
-                $select = $sql->select();
-                $select->from('ox_field')
-                ->columns(array("*"))
-                ->join('ox_form_field', 'ox_field.id = ox_form_field.field_id', array(), 'left')
-                ->join('ox_form', 'ox_form.id = ox_form_field.form_id', array(), 'left')
-                ->where(array('ox_form.id' => $formId));
-                $fields = $this->executeQuery($select)->toArray();
+                $query = "SELECT ox_field.* from ox_field 
+                left join ox_form_field on ox_field.id = ox_form_field.field_id
+                left join ox_form on ox_form.id = ox_form_field.form_id
+                 where ox_form.id=?";
+                $where = array($formId);
+                $fields = $this->executeQueryWithBindParameters($query,$where)->toArray();
             } else {
                 return 0;
             }
         }
 
-        $fileFields = $sql->select();
-        $fileFields->from('ox_file_attribute')
-        ->columns(array("*"))
-        ->where(array('ox_file_attribute.fileid' => $fileId));
-        $fileArray = $this->executeQuery($fileFields)->toArray();
+        $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.fileid=?";
+        $whereParams = array($fileId);
+        $fileArray = $this->executeQueryWithBindParameters($sqlQuery,$whereParams)->toArray();
         $keyValueFields = array();
         $i=0;
         if (!empty($fields)) {

@@ -3,6 +3,7 @@ namespace Oxzion\Workflow\Camunda;
 
 use Oxzion\Workflow\Activity;
 use Oxzion\Utils\RestClient;
+use Exception;
 
 class ActivityImpl implements Activity
 {
@@ -19,13 +20,13 @@ class ActivityImpl implements Activity
     }
 
     public function getActivity($activityId)
-    {
+    { 
         try {
             $response =  $this->restClient->get("task/".$activityId);
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            return array();
+            throw $e;
         }
     }
 
@@ -35,10 +36,8 @@ class ActivityImpl implements Activity
             $queryArray = array_merge($params, array("assignee"=>$userId));
             $response =  $this->restClient->get('task?'.http_build_query($queryArray));
             $result = json_decode($response, true);
-            //  print_r($result);exit;
             return $result;
         } catch (Exception $e) {
-            // print_r($e->getMessage());
             return array();
         }
     }
@@ -46,13 +45,14 @@ class ActivityImpl implements Activity
     public function claimActivity($activityId, $userId)
     {
         $query = 'task/'.$activityId.'/claim';
-        try {
+        try { 
             $response =  $this->restClient->post($query, array('userId'=>$userId));
-            $result = json_decode($response, true);
-            return $result;
-        } catch (Exception $e) {
-            return 0;
+            $result = json_decode($response, true);            
+        } catch (Exception $e) { 
+            $error = json_decode($e->getResponse()->getBody()->getContents(), true);
+            throw new WorkflowException($error['message'], $error['type']);
         }
+        return $result;
     }
     public function unclaimActivity($activityId, $userId)
     {

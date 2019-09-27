@@ -13,12 +13,14 @@ use Oxzion\Service\FieldService;
 use Oxzion\Model\Field;
 use Oxzion\Model\FieldTable;
 use Oxzion\FormEngine\FormFactory;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 class FormService extends AbstractService
 {
-    public function __construct($config, $dbAdapter, FormTable $table, FormFactory $formEngineFactory, FieldService $fieldService)
+    public function __construct($config, $dbAdapter, FormTable $table, FormFactory $formEngineFactory, FieldService $fieldService, Logger $logger)
     {
-        parent::__construct($config, $dbAdapter);
+        parent::__construct($config, $dbAdapter,$logger);
         $this->table = $table;
         $this->formEngineFactory = $formEngineFactory;
         $this->formEngine = $this->formEngineFactory->getFormEngine();
@@ -26,7 +28,7 @@ class FormService extends AbstractService
     }
 
     public function createForm($appUuid, &$data)
-    {
+    {   
         $form = new Form();
         if(is_array($data['template'])){
             $data['template'] = json_encode($data['template']);
@@ -64,20 +66,21 @@ class FormService extends AbstractService
             switch (get_class($e)) {
              case "Oxzion\ValidationException":
                 $this->rollback();
+                 $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
                 throw $e;
                 break;
              default:
                 $this->rollback();
+                 $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
                 throw $e;
                 break;
             }
         }
         return $count;
     }
-    public function updateForm($appUuid, $id, &$data)
+    public function updateForm($appUuid, $formUuid, &$data)
     {
-        $appId = $this->getIdFromUuid('ox_app', $appUuid);
-        $obj = $this->table->get($id, array());
+        $obj = $this->table->getByUuid($formUuid);
         if (is_null($obj)) {
             return 0;
         }
@@ -99,29 +102,31 @@ class FormService extends AbstractService
                 $this->rollback();
                 return 0;
             }
-            $generateFields = $this->generateFields($template['fields'], $appId, $id);
+            $generateFields = $this->generateFields($template['fields'], $this->getIdFromUuid('ox_app', $appUuid), $this->getIdFromUuid('ox_form', $formUuid));
             $this->commit();
         } catch (Exception $e) {
             switch (get_class($e)) {
              case "Oxzion\ValidationException":
                 $this->rollback();
+                 $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
                 throw $e;
                 break;
              default:
                 $this->rollback();
-                return 0;
+                 $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+                throw $e;
                 break;
             }
         }
         return $count;
     }
 
-    public function deleteForm($id)
+    public function deleteForm($formUuid)
     {
         $this->beginTransaction();
         $count = 0;
         try {
-            $count = $this->table->delete($id, []);
+            $count = $this->table->delete($this->getIdFromUuid('ox_form', $formUuid), []);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -129,6 +134,8 @@ class FormService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
+             $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+             throw $e;
         }
         
         return $count;
@@ -136,53 +143,65 @@ class FormService extends AbstractService
 
     public function getForms($appUuid=null, $filterArray=array())
     {
-        $appId = $this->getIdFromUuid('ox_app', $appUuid);
-        if (isset($appId)) {
-            $filterArray['app_id'] = $appId;
+        
+        try{
+            $appId = $this->getIdFromUuid('ox_app', $appUuid);
+            if (isset($appId)) {
+                $filterArray['app_id'] = $appId;
+            }
+            $resultSet = $this->getDataByParams('ox_form', array("*"), $filterArray, null);
+            $response = array();
+            $response['data'] = $resultSet->toArray();
+            return $response;
+        } catch (Exception $e) {
+            $this->rollback();
+             $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+             throw $e;
         }
-        $resultSet = $this->getDataByParams('ox_form', array("*"), $filterArray, null);
-        $response = array();
-        $response['data'] = $resultSet->toArray();
-        return $response;
     }
-    public function getForm($id)
+    public function getForm($uuid)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_form')
-        ->columns(array("*"))
-        ->where(array('ox_form.id' => $id));
-        $response = $this->executeQuery($select)->toArray();
-        if (count($response)==0) {
-            return 0;
+        try{
+            $queryString = "Select * from ox_form where uuid=?";
+            $queryParams = array($uuid);
+            $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
+            if (count($resultSet)==0) {
+                return 0;
+            }
+            return $resultSet[0];
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
-        return $response[0];
     }
+
     public function getWorkflow($formId)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_form')
-        ->columns(array("*"))
-        ->join('ox_activity_form', 'ox_activity_form.form_id = ox_form.id', array(), 'left')
-        ->join('ox_activity', 'ox_activity.id = ox_activity_form.form_id', array('activity_id'=>'id'), 'left')
-        ->join('ox_workflow', 'ox_workflow.form_id = ox_form.id', array('workflow_id'=>'id'), 'inner')
-        ->where(array('ox_form.id' => $formId));
-        $response = $this->executeQuery($select)->toArray();
-        if (count($response)==0) {
-            return 0;
+        try{
+            $select = "Select ox_workflow.uuid as workflow_id,ox_form.* from ox_form inner join ox_workflow on ox_workflow.form_id = ox_form.id where ox_form.uuid =?";
+            $whereQuery = array($formId);
+            $response = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
+            if (count($response)==0) {
+                return 0;
+            }
+            return $response[0];
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
-        return $response[0];
     }
     private function generateFields($fieldsList, $appId, $formId)
     {
         try {
-            $deleteFields = "DELETE ox_field from ox_field INNER JOIN ox_form_field ON ox_form_field.field_id=ox_field.id where ox_form_field.form_id=".$formId.";";
-            $deleteFields = $this->executeQuerywithParams($deleteFields);
-            $deleteFormFields = "DELETE from ox_form_field where form_id=".$formId.";";
-            $result = $this->executeQuerywithParams($deleteFormFields);
+            $deleteFields = "DELETE ox_field from ox_field INNER JOIN ox_form_field ON ox_form_field.field_id=ox_field.id where ox_form_field.form_id=:formId;";
+            $deleteParams = array("formId" => $formId);
+            $deleteFields = $this->executeQueryWithBindParameters($deleteFields,$deleteParams);
+            $deleteFormFields = "DELETE from ox_form_field where form_id=:formId;";
+            $deleteFormParams = array("formId" => $formId);
+            $result = $this->executeQueryWithBindParameters($deleteFormFields,$deleteFormParams);
         } catch (Exception $e) {
-            return 0;
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
         $i=0;
         $fieldIdArray = array();
@@ -214,12 +233,14 @@ class FormService extends AbstractService
     {
         $this->beginTransaction();
         try {
-            $insert = "INSERT INTO `ox_form_field` (`form_id`,`field_id`) VALUES ($formId,$fieldId)";
-            $resultSet = $this->executeQuerywithParams($insert);
+            $insert = "INSERT INTO `ox_form_field` (`form_id`,`field_id`) VALUES (:formId,:fieldId)";
+            $insertParams = array("formId" => $formId,"fieldId" =>$fieldId);
+            $resultSet = $this->executeQueryWithBindParameters($insert,$insertParams);
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
     }
 }

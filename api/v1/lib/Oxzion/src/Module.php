@@ -5,13 +5,22 @@ namespace Oxzion;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 
 class Module
 {
     public function getServiceConfig()
     {
+        
         return [
             'factories' => [
+                'ServiceLogger' => function($container){
+                    $logger = new Logger();
+                    $writer = new Stream(__DIR__ . '/../../../logs/service.log');
+                    $logger->addWriter($writer);
+                    return $logger;
+                },
                 Auth\AuthContext::class => function ($container) {
                     return new Auth\AuthContext();
                 },
@@ -137,7 +146,11 @@ class Module
                 },
                 Service\FormService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\FormService($container->get('config'), $dbAdapter, $container->get(Model\FormTable::class), $container->get(FormEngine\FormFactory::class), $container->get(Service\FieldService::class));
+                    return new Service\FormService($container->get('config'), $dbAdapter, 
+                                                    $container->get(Model\FormTable::class), 
+                                                    $container->get(FormEngine\FormFactory::class), 
+                                                    $container->get(Service\FieldService::class),
+                                                    $container->get('ServiceLogger'));
                 },
                 Service\ActivityService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
