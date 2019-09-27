@@ -32,8 +32,9 @@ class ElasticIndexer extends RouteBuilder {
                         type = object.type as String
                         operation =  object.operation as String
                         exchange.getIn().setHeader("indexName", index)
-                        exchange.getIn().setHeader("type", type)
+                        exchange.getIn().setHeader("indexType", type)
                         exchange.getIn().setHeader("operation", operation)
+                        exchange.getIn().setBody(object.body);
                     }
                 }).to("log:notification").to("elasticsearch-rest://{{elasticsearch.clusterName}}?hostAddresses={{elasticsearch.host}}:{{elasticsearch.port}}")
 
