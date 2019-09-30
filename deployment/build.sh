@@ -217,7 +217,7 @@ helpapp()
     mkdir -p build/integrations/help/chat build/integrations/help/crm build/integrations/help/task
     cd ${OXHOME}/integrations/help
     echo -e "${YELLOW}Building HelpApp...${RESET}"
-    docker run -it -v ${PWD}:/app help
+    docker run -t -v ${PWD}:/app help
     echo -e "${GREEN}Building HelpApp Completed!${RESET}"
     echo -e "${YELLOW}Now Copying HelpApp to build folder...${RESET}"
     rsync -rl ${OXHOME}/integrations/help/chat/build/html/* ${OXHOME}/build/integrations/help/chat
