@@ -218,12 +218,12 @@ body{
 .div_section{
   float:left;
   margin-left: 20px;
-  width:58%;
+  width:60%;
 }
 .div_section1{
-  margin-left:5px;
+  margin-left:12%;
   float:left;
-  width:35%;
+  width:25%;
 }
 .sec1{
   width:58%;
@@ -237,18 +237,17 @@ body{
   width:32%;
   float:left;
 }
-
-
 .sec4{
   float:left;
   width:40%;
 }
 .sec5{
   float:left;
-  width:40%;
+  text-align:right;
+  width:59%;
 }
 .sec9{
-  width:58%;
+  width:57%;
   float:left;
   margin-left:15px;
 }
@@ -261,8 +260,8 @@ body{
   margin-bottom: 1px;
 }
 .sec_titl{
-  margin-top:1px;
-  margin-bottom: 1px;
+  margin-top:4px;
+  margin-bottom: 4px;
 }
 .secA{
   margin-left:15px;
@@ -272,8 +271,8 @@ body{
   margin-bottom:1px;
 }
 .hull_title{
-  margin-top:1px;
-  margin-bottom:1px;
+  margin-top:4px;
+  margin-bottom:4px;
   font-size:15px;
 }
 .hr_secA{
@@ -284,23 +283,31 @@ body{
   margin-bottom:0px;
 }
 
-
 .total{
   margin-left: 60%;
 }
 .totalp{
   float:right;
+  margin-top:2px;
+  
+  font-size:15px;
 }
 .total_hr{
   margin-left: 70%;
 }
 .nav{
-  margin-top: 1px;
-  margin-bottom:1px;
+  margin-top: 2px;
+  margin-bottom:4px;
  }
  .nav_title{
-    margin-top: 1px;
-  margin-bottom:1px;
+    margin-top: 0px;
+  margin-bottom:2px;
+  font-size:15px;
+ }
+.nav_title2{
+  margin-top: 1%;
+  margin-bottom:2px;
+  margin-left:10px;
   font-size:15px;
  }
 
@@ -323,7 +330,8 @@ body{
    float:left;
  }
  .sector4{
-   width:70%;
+   margin-left:7%;
+   width:62%;
    float:left;
  }
  .sector2{
@@ -395,5 +403,196 @@ body{
   font-size: 13px;
 }
 .body_div_lp{
+  margin-top:3%;
+}
+
+
+
+/*Quote*/
+
+.footer_line1{
+  height: 1px;
+  background-color: black;
+  margin-bottom:3px;
+  margin-top: 3%;
+}
+.qfooter_line1{
+  height: 1px;
+  margin-bottom:3px;
+  background-color: black;
+  margin-top: 3%;
+}
+.footer_para{
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  margin-top: 4px;
+  line-height: 1;
+  font-size: 15px;
+}
+
+.footer-v{
+  width:100%;
   margin-top:2%;
+  margin-left:5%;
+}
+
+.footer-1{
+  width:60%;
+  float:left;
+}
+.footer-2{
+  width:35%;
+  float:left;
+}
+
+.sign{
+  font-size: 15px;
+}
+.hrtag-1{
+  float:left;
+  width:70%;
+  height:0.5px;
+  background-color: black;
+  margin-top: 14px;
+  margin-bottom: 0px;
+}
+
+.date1{
+ font-size: 15px;
+}
+.hrtag-2{
+  float:left;
+  width:75%;
+  height:0.5px;
+  background-color: black;
+  margin-top: 14px;
+  margin-bottom: 0px;
+}
+.span_line{
+  /*text-decoration-color: black !important;
+  text-decoration-line: underline !important;*/
+  border-bottom: black;
+  border-bottom-color: black;
+}
+.c_info{
+  width:100%;
+  margin-bottom: 1%;
+  margin-top: 1%;
+}
+.c_info1{
+  width:60%;
+  float:left;
+}
+.c_info2{
+  width:40%;
+  float:left;
+}
+.box{
+  margin-right:10px;
+  border: 1px solid black;
+}
+.box_name{
+  margin-right:10px;
+}
+.p_margin{
+  margin-top:4px;
+  margin-bottom:4px;
+  font-size: 15px;
+}
+.p_margin1{
+  margin-top:3px;
+  margin-bottom:3px;
+  margin-left:27px;
+  font-size: 15px;
+}
+.p_margin2{
+  margin-top:2%;
+  margin-bottom:2px;
+  font-size: 15px;
+}
+.agent{
+  margin-top: 0px;
+  width:100%;
+}
+.agent_info{
+  margin-top: 0px;
+  width:60%;
+  float:left;
+}
+.agent_info1{
+  margin-top: 0px;
+  width:40%;
+  float:left;
+}
+.padi_margin{
+  margin-top:15%;
+}
+.hr_margin{
+  height: 0.5px;
+  background-color: black;
+  margin-top:1%;
+  margin-right:60%;
+}
+.info_margin{
+  width:70%;
+  word-wrap: break-word;
+  margin-top:2px;
+  margin-bottom:2px;
+}
+.add_margin{
+  width:45%;
+  word-wrap: break-word;
+  margin-top:2px;
+  margin-bottom:2px;
+}
+.p_info{
+  margin-top:2px;
+  margin-bottom:1px;
+}
+.c_details{
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top:2px;
+  margin-bottom:1px;
+  margin-left:2%;
+  font-size: 15px;
+}
+.footer_line2{
+  height:2px;
+  background-color: black;
+}
+.spacing_div{
+  margin-top:10%;
+}
+.hr_db{
+  margin-top:5%;
+}
+.m_div{
+  margin-top:0px;
+}
+.quote_div{
+  margin-bottom: 2%;
+}
+.agent_1{
+  margin-top: 5px;
+  margin-left:2%;
+  font-size: 15px;
+}
+.value_align{
+  text-align: right;
+  margin-top:2px;
+  margin-bottom:2px;
+  font-size:15px;
+}
+.hr_tg{
+  margin-top:9%;
+}
+.deduct{
+  margin-top:2px;
+  margin-bottom:2px;
+  font-size:15px;
+}
+.title_value{
+  margin-top: 1px;
+  margin-bottom: 1px;
 }

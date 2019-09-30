@@ -8,7 +8,7 @@
 	 <div class ="body_div">
 		<center>
       <div>
-		<p class = "title">{if !empty($lossPayees)}
+		<b><p class = "title">{if !empty($lossPayees)}
 			CERTIFICATE HAS LOSS PAYEES (SEE ATTACHED).
 		{else}
 			CERTIFICATE DOES NOT HAVE LOSS PAYEES.
@@ -18,7 +18,7 @@
 			CERTIFICATE HAS ADDITIONAL INSURED (SEE ATTACHED).
 		{else}
 			CERTIFICATE DOES NOT HAVE ADDITIONAL INSURED.
-		{/if}</p>
+		{/if}</p></b>
 
 		<p class = "title">Coverage is provided only where an Amount of Insurance or Limit of Liability is shown</p>
 		</div></center>

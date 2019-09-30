@@ -41,7 +41,12 @@ class PolicyDocument implements DocumentAppDelegate
                      'aifooter' => 'DiveBoat_AI_footer.html',
                      'lpTemplate' => 'DiveBoat_LP',
                      'lpheader' => 'DiveBoat_LP_header.html',
-                     'lpfooter' => 'DiveBoat_LP_footer.html'),
+                     'lpfooter' => 'DiveBoat_LP_footer.html',
+                     'quoteTemplate' => 'DiveBoat_Quote',
+                     'qheader' => 'DB_Quote_header.html',
+                     'qfooter' => 'DB_Quote_footer.html',
+                     'qaiHeader' => 'DB_Quote_AI_header.html',
+                     'qaniHeader' => 'DB_Quote_ANI_header.html'),
         'Dive Store'
             => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                      'header' => 'DiveStoreHeader.html',
@@ -188,6 +193,35 @@ class PolicyDocument implements DocumentAppDelegate
             $this->documentBuilder->generateDocument($lpTemplate,$data,$coverDest,$options);
             $data['loss_payee_document'] = $dest['relativePath'].$coi_number.'_Loss_Payees'.'.pdf';
         }
+
+        if(isset($data['additionalInsured'])){
+            $qTemplate = self::TEMPLATE[$data['product']]['quoteTemplate'];
+            $quoteDest = $dest['absolutePath'].$data['product'].'_Quote'.'.pdf';
+            $options['header'] = self::TEMPLATE[$data['product']]['qheader'];
+            $options['footer'] = self::TEMPLATE[$data['product']]['qfooter'];
+            $this->documentBuilder->generateDocument($qTemplate,$data,$quoteDest,$options);
+            $data['quote_document'] = $dest['relativePath'].$data['product'].'_Quote'.'.pdf';
+        }
+
+        if(isset($data['additionalInsured'])){
+            $qTemplate = self::TEMPLATE[$data['product']]['aiTemplate'];
+            $quoteDest = $dest['absolutePath'].$data['product'].'_Quote_AI'.'.pdf';
+            $options['header'] = self::TEMPLATE[$data['product']]['qaiHeader'];
+            $options['footer'] = null;
+            $this->documentBuilder->generateDocument($qTemplate,$data,$quoteDest,$options);
+            $data['quote_document'] = $dest['relativePath'].$data['product'].'_Quote_AI'.'.pdf';
+        }
+
+         if(isset($data['additionalInsured'])){
+            $qTemplate = self::TEMPLATE[$data['product']]['aiTemplate'];
+            $quoteDest = $dest['absolutePath'].$data['product'].'_Quote_ANI'.'.pdf';
+            $options['header'] = self::TEMPLATE[$data['product']]['qaniHeader'];
+            $options['footer'] = null;
+            $this->documentBuilder->generateDocument($qTemplate,$data,$quoteDest,$options);
+            $data['quote_document'] = $dest['relativePath'].$data['product'].'_Quote_ANI'.'.pdf';
+        }
+
+        
         return $data;
     }
 
