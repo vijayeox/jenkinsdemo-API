@@ -295,7 +295,7 @@ class Persistence extends AbstractService
     public function runQueryForStoredProcedure($query, $storedProcedureName)
     {
         $checkString = $this->checkForStoredProcedure($storedProcedureName);
-        if($checkString === 1){
+        if($checkString == 1){
             return $this->executeQuery($query);
         }
         return 0;
