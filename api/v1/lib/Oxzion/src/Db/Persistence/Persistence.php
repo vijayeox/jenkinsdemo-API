@@ -2,7 +2,7 @@
 
 namespace Oxzion\Db\Persistence;
 
-use Oxzion\Service\AbstractBaseService;
+use Oxzion\Service\AbstractService;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Table;
@@ -13,8 +13,9 @@ use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
+use Zend\Db\Adapter\ParameterContainer;
 
-class Persistence extends AbstractBaseService
+class Persistence extends AbstractService
 {
     private $database;
     
@@ -65,9 +66,9 @@ class Persistence extends AbstractBaseService
                                 array(
                                     "expr_type" => "colref",
                                     "base_expr" => "`ox_app_org_id`",
-                                    "no_quotes" => array(
+                                    "no_quotes" => array (
                                         "delim" => "",
-                                        "parts" => array(
+                                        "parts" => array (
                                             "0" => "ox_app_org_id"
                                         )
                                     )
@@ -250,7 +251,7 @@ class Persistence extends AbstractBaseService
 
     private function generateSQLFromArray($parsedArray)
     {
-        $adapter=$this->dbAdapter;
+        $adapter = $this->dbAdapter;
         $statement = new PHPSQLCreator($parsedArray);
         $statement3 = $adapter->query($statement->created);
         return $statement3->execute();
@@ -258,7 +259,7 @@ class Persistence extends AbstractBaseService
 
     private function additionOfOrgIdColumn($parsedArray,$tableName)
     {   
-        $adapter=$this->dbAdapter;
+        $adapter = $this->dbAdapter;
         $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
         $resultSet1 = $columnResult->execute();
         while ($resultSet1->next()) {
@@ -289,5 +290,37 @@ class Persistence extends AbstractBaseService
             }
         } 
         return $parsedArray;
+    }
+
+    public function runQueryForStoredProcedure($query, $storedProcedureName)
+    {
+        $checkString = $this->checkForStoredProcedure($storedProcedureName);
+        if($checkString === 1){
+            return $this->executeQuery($query);
+        }
+        return 0;
+    }
+
+    private function checkForStoredProcedure($storedProcedureName)
+    {
+        $query = "SHOW PROCEDURE STATUS where Db = '" . $this->database . "' and name = '". $storedProcedureName . "'";
+        $statement = $this->dbAdapter->query($query);
+        $result = $statement->execute();
+        $rowCount = $result->count();
+        if ($rowCount == 1) {
+            return 1;
+        }
+        return 0;
+    }
+
+    protected function executeQuery($query) {
+        $adapter = $this->getAdapter();
+        $driver = $adapter->getDriver();
+        $platform = $adapter->getPlatform();
+        $parameterContainer = new ParameterContainer();
+        $statementContainer = $adapter->createStatement();
+        $statementContainer->setParameterContainer($parameterContainer);
+        $statementContainer->setSql($query);
+        return $statementContainer->execute();
     }
 }

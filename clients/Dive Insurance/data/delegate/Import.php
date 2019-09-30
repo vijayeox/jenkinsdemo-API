@@ -85,7 +85,7 @@ class Import implements AppDelegate
         }
         $this->param = rtrim($this->param, ", ");
         $queryString = "call " . $storedProcedureName . "(" . $this->param . ")";
-        return $this->persistenceService->runGenericQuery($queryString);
+        return $this->persistenceService->runQueryForStoredProcedure($queryString, $storedProcedureName);
     }
 
     // Code is not in use untill we get the download feature that we need to get from the clients
