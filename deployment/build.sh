@@ -41,13 +41,14 @@ then
     echo -e "8. chat            -${YELLOW}For packaging Mattermost Chat.${RESET}"
     echo -e "9. crm             -${YELLOW}For packaging OroCRM.${RESET}"
 	echo -e "10. mail           -${YELLOW}For packaging Rainloop Mail.${RESET}"
-    echo -e "10. openproject    -${YELLOW}For packaging Rainloop Mail.${RESET}"
-	echo -e "11. --help or -h   -${YELLOW}For help.${RESET}"
-    echo -e "12. list           -${YELLOW}For list of options.${RESET}"
-    echo -e "13. deploy         -${YELLOW}For deploying to production${RESET}"
-    echo -e "14. clean          -${YELLOW}For cleaning the production server${RESET}"
-    echo -e "15. setup          -${YELLOW}For fresh setup of the production server${RESET}"
-    echo -e "16. package        -${YELLOW}For packaging existing build${RESET}"
+    echo -e "11. openproject    -${YELLOW}For packaging Rainloop Mail.${RESET}"
+    echo -e "12. openproject    -${YELLOW}For packaging Rainloop Mail.${RESET}"
+	echo -e "13. --help or -h   -${YELLOW}For help.${RESET}"
+    echo -e "14. list           -${YELLOW}For list of options.${RESET}"
+    echo -e "15. deploy         -${YELLOW}For deploying to production${RESET}"
+    echo -e "16. clean          -${YELLOW}For cleaning the production server${RESET}"
+    echo -e "17. setup          -${YELLOW}For fresh setup of the production server${RESET}"
+    echo -e "18. package        -${YELLOW}For packaging existing build${RESET}"
     exit 0
 fi
 #writing functions for different tasks
@@ -226,6 +227,22 @@ openproject()
     echo -e "${GREEN}Copying Openproject Completed!${RESET}"
 
 }
+helpapp()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory build/integrations/help...${RESET}"
+    mkdir -p build/integrations/help/chat build/integrations/help/crm build/integrations/help/task
+    cd ${OXHOME}/integrations/help
+    echo -e "${YELLOW}Building HelpApp...${RESET}"
+    docker run -it -v ${PWD}:/app help
+    echo -e "${GREEN}Building HelpApp Completed!${RESET}"
+    echo -e "${YELLOW}Now Copying HelpApp to build folder...${RESET}"
+    rsync -rl ${OXHOME}/integrations/help/chat/build/html/* ${OXHOME}/build/integrations/help/chat
+    rsync -rl ${OXHOME}/integrations/help/crm/_build/html/* ${OXHOME}/build/integrations/help/crm
+    rsync -rl ${OXHOME}/integrations/help/task/* ${OXHOME}/build/integrations/help/task
+    echo -e "${GREEN}Copying HelpApp Completed!${RESET}"
+
+}
 integrations()
 {
     camel
@@ -234,6 +251,7 @@ integrations()
     crm
     mail
     openproject
+    helpapp
     #workflow    
 }
 all()
@@ -294,6 +312,12 @@ do
                 openproject
                 package
                 break ;;
+        helpapp)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                helpapp
+                package
+                break ;;
         workflow)
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
@@ -335,13 +359,14 @@ do
                 echo -e "8. chat            -${YELLOW}For packaging Mattermost Chat.${RESET}"
                 echo -e "9. crm             -${YELLOW}For packaging OroCRM.${RESET}"
                 echo -e "10. mail           -${YELLOW}For packaging Rainloop Mail.${RESET}"
-                echo -e "10. openproject    -${YELLOW}For packaging Rainloop Mail.${RESET}"
-                echo -e "11. --help or -h   -${YELLOW}For help.${RESET}"
-                echo -e "12. list           -${YELLOW}For list of options.${RESET}"
-                echo -e "13. deploy         -${YELLOW}For deploying to production${RESET}"
-                echo -e "14. clean          -${YELLOW}For cleaning the production server${RESET}"
-                echo -e "15. setup          -${YELLOW}For fresh setup of the production server${RESET}"
-                echo -e "16. package        -${YELLOW}For packaging existing build${RESET}"
+                echo -e "11. openproject    -${YELLOW}For packaging Openproject.${RESET}"
+                echo -e "12. openproject    -${YELLOW}For packaging HelpApp.${RESET}"
+                echo -e "13. --help or -h   -${YELLOW}For help.${RESET}"
+                echo -e "14. list           -${YELLOW}For list of options.${RESET}"
+                echo -e "15. deploy         -${YELLOW}For deploying to production${RESET}"
+                echo -e "16. clean          -${YELLOW}For cleaning the production server${RESET}"
+                echo -e "17. setup          -${YELLOW}For fresh setup of the production server${RESET}"
+                echo -e "18. package        -${YELLOW}For packaging existing build${RESET}"
                 break ;;
         setup)  
                 while true; do

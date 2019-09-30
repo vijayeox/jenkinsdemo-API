@@ -252,6 +252,22 @@ openproject()
 
 
 }
+help()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying HelpApp...${RESET}"
+    if [ ! -d "./integrations/help" ] ;
+    then
+        echo -e "${RED}HelpApp was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${YELLOW}Stopping Apache...${RESET}"
+        sudo service apache2 stop
+        echo -e "${YELLOW}Copying HelpApp...${RESET}"
+        rsync -rl --delete ${TEMP}/integrations/help /var/www/help
+        echo -e "${YELLOW}Copying HelpApp Completed...${RESET}"
+        sudo service apache2 start
+        echo -e "${YELLOW}Starting Apache...${RESET}"
+}
 #calling functions accordingly
 unpack
 echo -e "${YELLOW}Now copying files to respective locations..${RESET}"
@@ -265,4 +281,5 @@ orocrm
 rainloop
 openproject
 workflow
+help
 echo -e "${GREEN}${BLINK}DEPLOYED SUCCESSFULLY${RESET}"
