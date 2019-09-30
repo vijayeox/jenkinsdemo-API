@@ -31,24 +31,7 @@ then
     echo -e "For example type \n$ ${GREEN}build.sh calendar${YELLOW}(build option) ${GREEN}abc@xyz.com${YELLOW}(server name){GREEN}~/.ssh/abc.pem${YELLOW}(identity file path)${RESET}.\nSee build option list below."
     echo -e "Type '$0 --help' or '$0 -h' for more information."
     echo -e "${BLUEBG}Argument list:${RESET}"
-    echo -e "1. all             -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
-    echo -e "2. api             -${YELLOW}For packaging API.${RESET}"
-    echo -e "3. view            -${YELLOW}For packaging UI/View.${RESET}"
-    echo -e "4. workflow        -${YELLOW}For packaging workflow.${RESET}"
-    echo -e "5. integrations    -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
-    echo -e "6. calendar        -${YELLOW}For packaging Event Calendar.${RESET}"
-	echo -e "7. camel           -${YELLOW}For packaging Apache Camel.${RESET}"
-    echo -e "8. chat            -${YELLOW}For packaging Mattermost Chat.${RESET}"
-    echo -e "9. crm             -${YELLOW}For packaging OroCRM.${RESET}"
-	echo -e "10. mail           -${YELLOW}For packaging Rainloop Mail.${RESET}"
-    echo -e "11. openproject    -${YELLOW}For packaging Rainloop Mail.${RESET}"
-    echo -e "12. openproject    -${YELLOW}For packaging Rainloop Mail.${RESET}"
-	echo -e "13. --help or -h   -${YELLOW}For help.${RESET}"
-    echo -e "14. list           -${YELLOW}For list of options.${RESET}"
-    echo -e "15. deploy         -${YELLOW}For deploying to production${RESET}"
-    echo -e "16. clean          -${YELLOW}For cleaning the production server${RESET}"
-    echo -e "17. setup          -${YELLOW}For fresh setup of the production server${RESET}"
-    echo -e "18. package        -${YELLOW}For packaging existing build${RESET}"
+    buildhelp
     exit 0
 fi
 #writing functions for different tasks
@@ -260,6 +243,27 @@ all()
    api
    view 
 }
+buildhelp()
+{
+    echo -e "1.  all             -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
+    echo -e "2.  api             -${YELLOW}For packaging API.${RESET}"
+    echo -e "3.  view            -${YELLOW}For packaging UI/View.${RESET}"
+    echo -e "4.  workflow        -${YELLOW}For packaging workflow.${RESET}"
+    echo -e "5.  integrations    -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
+    echo -e "6.  calendar        -${YELLOW}For packaging Event Calendar.${RESET}"
+    echo -e "7.  camel           -${YELLOW}For packaging Apache Camel.${RESET}"
+    echo -e "8.  chat            -${YELLOW}For packaging Mattermost Chat.${RESET}"
+    echo -e "9.  crm             -${YELLOW}For packaging OroCRM.${RESET}"
+    echo -e "10. mail            -${YELLOW}For packaging Rainloop Mail.${RESET}"
+    echo -e "11. openproject     -${YELLOW}For packaging Openproject.${RESET}"
+    echo -e "12. helpapp         -${YELLOW}For packaging HelpApp.${RESET}"
+    echo -e "13. --help or -h    -${YELLOW}For help.${RESET}"
+    echo -e "14. list            -${YELLOW}For list of options.${RESET}"
+    echo -e "15. deploy          -${YELLOW}For deploying to production${RESET}"
+    echo -e "16. clean           -${YELLOW}For cleaning the production server${RESET}"
+    echo -e "17. setup           -${YELLOW}For fresh setup of the production server${RESET}"
+    echo -e "18. package         -${YELLOW}For packaging existing build${RESET}"
+}
 #looping through case from arguments passed
 for i in $@
 do
@@ -349,24 +353,7 @@ do
                 echo -e "For argument list type ${GREEN}'$0 list'${MAGENTA} as arguments${RESET}."
                 break ;;
         --list | -l)
-                echo -e "1. all             -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
-                echo -e "2. api             -${YELLOW}For packaging API.${RESET}"
-                echo -e "3. view            -${YELLOW}For packaging UI/View.${RESET}"
-                echo -e "4. workflow        -${YELLOW}For packaging workflow.${RESET}"
-                echo -e "5. integrations    -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
-                echo -e "6. calendar        -${YELLOW}For packaging Event Calendar.${RESET}"
-                echo -e "7. camel           -${YELLOW}For packaging Apache Camel.${RESET}"
-                echo -e "8. chat            -${YELLOW}For packaging Mattermost Chat.${RESET}"
-                echo -e "9. crm             -${YELLOW}For packaging OroCRM.${RESET}"
-                echo -e "10. mail           -${YELLOW}For packaging Rainloop Mail.${RESET}"
-                echo -e "11. openproject    -${YELLOW}For packaging Openproject.${RESET}"
-                echo -e "12. openproject    -${YELLOW}For packaging HelpApp.${RESET}"
-                echo -e "13. --help or -h   -${YELLOW}For help.${RESET}"
-                echo -e "14. list           -${YELLOW}For list of options.${RESET}"
-                echo -e "15. deploy         -${YELLOW}For deploying to production${RESET}"
-                echo -e "16. clean          -${YELLOW}For cleaning the production server${RESET}"
-                echo -e "17. setup          -${YELLOW}For fresh setup of the production server${RESET}"
-                echo -e "18. package        -${YELLOW}For packaging existing build${RESET}"
+                buildhelp
                 break ;;
         setup)  
                 while true; do
