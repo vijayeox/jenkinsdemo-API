@@ -28,7 +28,7 @@ class PageContentService extends AbstractService
         $selectQuery = array($pageUuid,$appUuid);
         $selectResult = $this->executeQueryWithBindParameters($select,$selectQuery)->toArray();
         if(count($selectResult)>0){
-            $queryString = " SELECT ox_page_content.type,ox_form.uuid as form_id, 
+            $queryString = " SELECT ox_app_page.name, ox_page_content.type,ox_form.uuid as form_id, 
             COALESCE(ox_page_content.content,ox_form.template) as content 
             FROM ox_page_content 
             LEFT JOIN ox_app_page on ox_app_page.id = ox_page_content.page_id
