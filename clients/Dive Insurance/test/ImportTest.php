@@ -76,4 +76,22 @@ class ImportTest extends DelegateTest
         $content = $delegateService->execute($appId, 'Import', $data);
         $this->assertEquals($content['status'], "Error");
     }
+
+
+    public function testImportExecuteWithSelectProcedureName()
+    {
+        $orgId = 1;
+        $appId = $this->data['UUID'];
+        $appName = $this->data['appName'];
+        $host = "oxzion.com";
+        $userId = "rakshith@oxzion.com";
+        $password = "sftp@rakshith";
+        $data = ['stored_procedure_name' => 'ox_test_verification', 'org_id' => $orgId, 'app_id' => $appId, 'app_name' => $appName, 'src_url'=>"http://", "host" => $host, "user_id" => $userId, "password" => $password,  'file_name' => ""];
+        $config = $this->getApplicationConfig();
+        $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'Import', $data);
+        $this->assertEquals($content['status'], "Error");
+        $this->assertEquals($content['data']['stored_procedure_name'], $data['stored_procedure_name']);
+    }
 }
