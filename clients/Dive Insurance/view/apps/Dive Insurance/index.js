@@ -13,7 +13,10 @@ const register = (core, args, options, metadata) => {
   let win = proc.createWindow({
     id: 'HubWindow',
     title: metadata.title.en_EN,
-    dimension: {width: 400, height: 400},
+    dimension: {width: document.body.clientWidth, height: document.body.clientHeight},
+    state: {
+      maximized : true
+    },
     position: {left: 700, top: 200}
   }).on('destroy', () => proc.destroy());
   const getCacheData = async () => {
