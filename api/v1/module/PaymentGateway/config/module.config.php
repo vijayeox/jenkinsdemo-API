@@ -6,6 +6,7 @@ use Zend\Log\Formatter\Simple;
 use Zend\Log\Logger;
 use Zend\Log\Processor\RequestId;
 use Zend\Router\Http\Segment;
+use Oxzion\Utils\UuidUtil;
 
 return [
     'router' => [
@@ -13,7 +14,10 @@ return [
             'paymentgateway' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/paymentgateway[/:paymentId]/app/:appId',
+                    'route' => '/app/:appId/paymentgateway[/:paymentId]',
+                    'constraints' => [
+                        // 'appId' => UuidUtil::UUID_PATTERN,                   
+                    ],
                     'defaults' => [
                         'controller' => Controller\PaymentGatewayController::class,
                         'access' => [
@@ -27,18 +31,18 @@ return [
                     ],
                 ],
             ],
-            'initiatepayment' => [
+            'initiatepaymentprocess' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/paymentgateway/app/:appId/initiate',
+                    'route' => '/app/:appId/paymentgateway/initiate',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,                   
+                    ],
                     'defaults' => [
                         'controller' => Controller\PaymentGatewayController::class,
-                        'method' => 'GET',
-                        'action' => 'initiatePayment',
-                    //     'access' => [
-                    //         'getuserlist'=>'MANAGE_GROUP_WRITE'
-                    //    ],
-                   ],
+                        'method' => 'POST',
+                        'action' => 'initiatePaymentProcess',
+                    ],
                 ],
             ],
         ],

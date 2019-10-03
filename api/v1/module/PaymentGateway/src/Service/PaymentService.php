@@ -7,21 +7,20 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Service\AbstractService;
 use PaymentGateway\Model\Payment;
 use PaymentGateway\Model\PaymentTable;
+use Zend\Log\Logger;
+// use Oxzion\Utils\RestClient;
 
 class PaymentService extends AbstractService
 {
-    const ANNOUNCEMENT_FOLDER = "/announcements/";
-    /**
-     * @ignore ANNOUNCEMENT_FOLDER
-     */
     private $table;
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, PaymentTable $table)
+    public function __construct($config, $dbAdapter, PaymentTable $table,Logger $log)
     {
-        parent::__construct($config, $dbAdapter);
+        parent::__construct($config, $dbAdapter,$log);
         $this->table = $table;
+        $this->paymentGatewayType = $this->config['paymentGatewayType'];
     }
     /**
      * Create Payment Service
@@ -37,9 +36,10 @@ class PaymentService extends AbstractService
      * </code>
      * @return integer 0|$id of Payment Created
      */
-    public function createPayment(&$data)
-    {
+    public function createPayment(&$data,$appId)
+    {  
         $form = new Payment();
+        $data['app_id'] = $this->getIdFromUuid('ox_app',$appId);
         $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['created_date'] = date('Y-m-d H:i:s');
         $form->exchangeArray($data);
@@ -55,9 +55,10 @@ class PaymentService extends AbstractService
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $this->commit();
-        } catch (Exception $e) {
+        } catch (Exception $e) { 
             $this->rollback();
-            return 0;
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
         return $count;
     }
@@ -101,8 +102,9 @@ class PaymentService extends AbstractService
      * </code>
      * @return array Returns the Created Payment.
      */
-    public function updatePayment($id, &$data)
+    public function updatePayment($id, &$data,$appUuid)
     {
+        $data['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
         $obj = $this->table->get($id, array());
         if (is_null($obj)) {
             return 0;
@@ -124,7 +126,8 @@ class PaymentService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
         return $id;
     }
@@ -133,80 +136,98 @@ class PaymentService extends AbstractService
      * @param integer $id ID of Payment to Delete
      * @return int 0=>Failure | $id;
      */
-    public function deletePayment($id)
+    public function deletePayment($id,$appUuid)
     {
         $this->beginTransaction();
         $count = 0;
         try {
-            $count = $this->table->delete($id, ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
+            $count = $this->table->delete($id, ['app_id' => $this->getIdFromUuid('ox_app',$appUuid)]);
             if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $sql = $this->getSqlObject();
-            $delete = $sql->delete('user_alert_verfication');
-            $delete->where(['alert_id' => $id]);
-            $result = $this->executeUpdate($delete);
-            if ($result->getAffectedRows() == 0) {
                 $this->rollback();
                 return 0;
             }
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
         }
         return $count;
     }
 
-    public function paymentProcessing()
+    public function initiatePaymentProcess($appUuid,$data)
     {
-        // Set variables
-        $merchantID = "xxxxxx"; //Converge 6 or 7‐Digit Account ID *Not the 10‐Digit Elavon Merchant ID*
-        $merchantUserID = "convergeapi"; //Converge User ID *MUST FLAG AS HOSTED API USER IN CONVERGE UI*
-        $merchantPinCode = ""; //Converge PIN (64 CHAR A/N)
-        $url = "https://api.demo.convergepay.com/hosted‐payments/transaction_token"; // URL to Converge demo session token server
-        //$url = "https://api.convergepay.com/hosted‐payments/transaction_token"; // URL to Converge production session token server
-        /*Payment Field Variables*/
-// In this section, we set variables to be captured by the PHP file and passed to Converge in the curl request.
-        $firstname = $_POST['ssl_first_name']; //Post first name
-        $lastname = $_POST['ssl_last_name']; //Post first name
-        $amount = $_POST['ssl_amount']; //Post Tran Amount
-        //$merchanttxnid = $_POST['ssl_merchant_txn_id']; //Capture user‐defined ssl_merchant_txn_id as POST data
-        //$invoicenumber = $_POST['ssl_invoice_number']; //Capture user‐defined ssl_invoice_number as POST data
-        //Follow the above pattern to add additional fields to be sent in curl request below.
-        $ch = curl_init(); // initialize curl handle
-        curl_setopt($ch, CURLOPT_URL, $url); // set url to post to
-        curl_setopt($ch, CURLOPT_POST, true); // set POST method
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-// Set up the post fields. If you want to add custom fields, you would add them in Converge, and add the field name in the curlopt_postfields string
-        curl_setopt($ch, CURLOPT_POSTFIELDS,
-            "ssl_merchant_id = $merchantID" .
-            "&ssl_user_id = $merchantUserID" .
-            "&ssl_pin = $merchantPinCode" .
-            "&ssl_transaction_type = CCSALE" .
-            "&ssl_first_name = $firstname" .
-            "&ssl_last_name = $lastname" .
-            "&ssl_get_token = Y" .
-            "&ssl_add_token = Y" .
-            "&ssl_amount = $amount"
-        );
-
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        $result = curl_exec($ch); // run the curl procss
-        curl_close($ch); // Close cURL
-        echo $result; //shows the session token.
+        $paymentInfo = $this->getPaymentInfoBasedOnGatewayType($appUuid,$this->paymentGatewayType);
+        if(!empty($paymentInfo)){
+            $paymentConfigInfo = json_decode($paymentInfo[0]['payment_config']);
+            
+            $ch = curl_init(); // initialize curl handle
+            curl_setopt($ch, CURLOPT_URL, $paymentInfo[0]['api_url']); // set url to post to
+            curl_setopt($ch, CURLOPT_POST, true); // set POST method
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            // Set up the post fields. If you want to add custom fields, you would add them in Converge, and add the field name in the curlopt_postfields string
+            curl_setopt($ch, CURLOPT_POSTFIELDS,
+                "ssl_merchant_id=$paymentConfigInfo->merchant_id".
+                "&ssl_user_id=$paymentConfigInfo->user_id".
+                "&ssl_pin=$paymentConfigInfo->pincode".
+                "&ssl_transaction_type=CCSALE".
+                "&ssl_first_name=".$data['firstname'].
+                "&ssl_last_name=".$data['lastname'].
+                "&ssl_get_token=Y".
+                "&ssl_add_token=Y".
+                "&ssl_amount=".$data['amount']
+            );
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+            $result = curl_exec($ch); // run the curl procss
+            curl_close($ch); // Close cURL
+            // echo $result; //shows the session token.
+            $resultData = $this->createTransactionRecord($paymentInfo[0]['id'],$result,json_encode($data));          
+            return $result;
+        }
     }
 
     public function getPaymentDetails($appId)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select()
-            ->from('ox_payment')
-            ->columns(array("*"))
-            ->where(array('ox_payment.app_id' => $appId));
-        return $this->executeQuery($select)->toArray();
+        try{
+            $select = "SELECT * FROM `ox_payment` WHERE app_id =:appId";
+            $selectParams = array("appId" => $this->getIdFromUuid('ox_app',$appId));
+            $result = $this->executeQuerywithBindParameters($select,$selectParams)->toArray();
+            return $result;
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
+        }
+    }
+
+    private function getPaymentInfoBasedOnGatewayType($appUuid,$gatewayType)
+    {
+        try{
+            $select = "SELECT ox_payment.* FROM `ox_payment` 
+                    INNER JOIN ox_app on ox_app.id = ox_payment.app_id WHERE ox_app.uuid =:appUuid AND ox_payment.server_instance_name =:serverInstanceName";
+            $selectParams = array("appUuid" => $appUuid,"serverInstanceName" => $gatewayType);
+            return $this->executeQuerywithBindParameters($select,$selectParams)->toArray();            
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
+        }
+    }
+
+    private function createTransactionRecord($paymentId,$transactionToken,$data)
+    {
+        $this->beginTransaction();
+        try{
+            $insert = "INSERT INTO `ox_payment_trasaction` (`payment_id`,`transaction_id`,`data`) VALUES(:paymentId,:transactionToken,:jsonData);";
+            $insertParams = array("paymentId" => $paymentId,"transactionToken" => $transactionToken,"jsonData" => $data);
+            $result = $this->executeUpdateWithBindParameters($insert,$insertParams);
+            $this->commit();
+            return $result->getAffectedRows();
+        }catch(Exception $e){
+            $this->rollback();
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
+        }
     }
 }

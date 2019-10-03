@@ -24,7 +24,7 @@ class PaymentGatewayController extends AbstractApiController
      */
     public function __construct(PaymentTable $table, PaymentService $paymentService, Logger $log, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, PaymentGateway::class);
+        parent::__construct($table, $log, __CLASS__, Payment::class);
         $this->setIdentifierName('paymentId');
         $this->paymentService = $paymentService;
     }
@@ -43,11 +43,10 @@ class PaymentGatewayController extends AbstractApiController
      * @return array Returns a JSON Response with Status Code and Created Payment.
      */
     public function create($data)
-    {
+    { 
         try {
             $appId = $this->params()->fromRoute()['appId'];
-            $data['app_id'] = $appId;
-            $count = $this->paymentService->createPayment($data);
+            $count = $this->paymentService->createPayment($data,$appId);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -62,8 +61,7 @@ class PaymentGatewayController extends AbstractApiController
     {
         $appId = $this->params()->fromRoute()['appId'];
         try {
-            $data['app_id'] = $appId;
-            $count = $this->paymentService->updatePayment($id, $data);
+            $count = $this->paymentService->updatePayment($id, $data,$appId);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -83,20 +81,34 @@ class PaymentGatewayController extends AbstractApiController
      */
     public function delete($id)
     {
-        $response = $this->paymentService->deletePayment($id);
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $response = $this->paymentService->deletePayment($id,$appUuid);
         if ($response == 0) {
             return $this->getErrorResponse("Payment not found", 404, ['id' => $id]);
         }
         return $this->getSuccessResponse();
     }
 
-    public function initiatePaymentAction()
+    public function getList()
     {
         $appId = $this->params()->fromRoute()['appId'];
         $response = $this->paymentService->getPaymentDetails($appId);
         if (empty($response)) {
             return $this->getErrorResponse("No Payment details for the App", 404, ['id' => $appId]);
         }
+        return $this->getSuccessResponseWithData($response, 200);
+    }
+
+    // Initiate Payment Process
+    public function initiatePaymentProcessAction()
+    { 
+        $appId = $this->params()->fromRoute()['appId'];
+        $data = $this->extractPostData();
+        $response = $this->paymentService->initiatePaymentProcess($appId,$data);
+        if (empty($response)) {
+            return $this->getErrorResponse("Payment Initialization Failed", 404, ['id' => $appId]);
+        }
+        $response = array("token" =>$response);
         return $this->getSuccessResponseWithData($response, 201);
     }
 }
