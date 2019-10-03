@@ -200,7 +200,7 @@ class FormService extends AbstractService
      private function generateFields($fieldsList, $appId, $formId,$entityId)
     {
         try {
-            $existingFieldsQuery = "select ox_field.* from ox_field INNER JOIN ox_entity_field ON ox_entity_field.field_id=ox_field.id where ox_entity_field.entity_id=".$entityId.";";
+            $existingFieldsQuery = "select ox_field.* from ox_field where ox_field.entity_id=".$entityId.";";
             $existingFields = $this->executeQuerywithParams($existingFieldsQuery);
             if(count($existingFields) > 0){
                 $existingFields = $existingFields->toArray();
@@ -222,12 +222,12 @@ class FormService extends AbstractService
                 $oxField->exchangeArray($field);
                 $oxFieldProps = array();
                 $fieldData = $oxField->toArray();
+                $fieldData['entity_id'] = $entityId;
                 try {
                     $fieldResult = $this->fieldService->saveField($appId, $fieldData);
                     $fieldIdArray[] = $fieldData['id'];
                     $fieldsCreated[] = $fieldData;
                     $createFormFieldEntry = $this->createFormFieldEntry($formId, $fieldData['id']);
-                    $entityFieldEntry = $this->createEntityFieldEntry($entityId, $fieldData['id']);
                 } catch (Exception $e) {
                     foreach ($fieldIdArray as $fieldId) {
                         $id = $this->fieldService->deleteField($fieldId);
@@ -254,21 +254,6 @@ class FormService extends AbstractService
         try {
             $insert = "INSERT INTO `ox_form_field` (`form_id`,`field_id`) VALUES (:formId,:fieldId)";
             $insertParams = array("formId" => $formId,"fieldId" =>$fieldId);
-            $resultSet = $this->executeQueryWithBindParameters($insert,$insertParams);
-            $this->commit();
-        } catch (Exception $e) {
-            print_r($e->getMessage());exit;
-            $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-            throw $e;
-        }
-    }
-    private function createEntityFieldEntry($entityId, $fieldId)
-    {
-        $this->beginTransaction();
-        try {
-            $insert = "INSERT INTO `ox_entity_field` (`entity_id`,`field_id`) VALUES (:entityId,:fieldId)";
-            $insertParams = array("entityId" => $entityId,"fieldId" =>$fieldId);
             $resultSet = $this->executeQueryWithBindParameters($insert,$insertParams);
             $this->commit();
         } catch (Exception $e) {

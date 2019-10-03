@@ -241,7 +241,6 @@ class EntityControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals(100, $this->getConnection()->getRowCount('ox_form_field'));
         $this->assertEquals(100, $this->getConnection()->getRowCount('ox_field'));
-        $this->assertEquals(98, $this->getConnection()->getRowCount('ox_entity_field'));
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
