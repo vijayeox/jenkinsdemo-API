@@ -106,12 +106,12 @@ return [
             'appupload' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/deployworkflow[/:workflowId]',
+                    'route' => '/app/:appId/entity/:entityId/deployworkflow[/:workflowId]',
                     'constraints' => [
                         'workflowId' => UuidUtil::UUID_PATTERN,                    
                     ],
                     'defaults' => [
-                        'controller' => Controller\AppController::class,
+                        'controller' => Controller\EntityController::class,
                         'action' => 'workflowDeploy',
                         'method' => 'post'
                     ],
@@ -352,8 +352,7 @@ return [
                 'options' => [
                     'route' => '/app/:appId/form/:formId/workflow',
                     'constraints' => [
-                        'appId' => UuidUtil::UUID_PATTERN,
-                        'formId' => UuidUtil::UUID_PATTERN,                    
+                        'appId' => UuidUtil::UUID_PATTERN                
                     ],
                     'defaults' => [
                         'controller' => Controller\FormController::class,
@@ -419,6 +418,22 @@ return [
                         'method' => 'GET'
                     ],
                 ],
+            ],
+            'appentity' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/entity[/:entityId]',
+                    'defaults' => [
+                        'controller' => Controller\EntityController::class,
+                        'access' =>[
+                            // SET ACCESS CONTROL
+                            // 'put'=> 'MANAGE_PAGE_WRITE',
+                            // 'post'=> 'MANAGE_PAGE_WRITE',
+                            // 'delete'=> 'MANAGE_PAGE_WRITE',
+                            // 'get'=> 'MANAGE_PAGE_READ',
+                        ]
+                    ]
+                ]
             ],
         ],
     ],

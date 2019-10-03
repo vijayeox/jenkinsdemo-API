@@ -100,7 +100,7 @@ return [
                 'options' => [
                     'route' => '/callback/workflowinstance/complete',
                     'defaults' => [
-                        'controller' => Controller\WorkflowInstanceController::class,
+                        'controller' => Controller\WorkflowInstanceCallbackController::class,
                         'method' => 'POST',
                         'action' => 'completeWorkflow',
                         'access' => [

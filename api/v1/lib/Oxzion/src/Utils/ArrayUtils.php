@@ -25,4 +25,13 @@ class ArrayUtils
         }
         return $result;
     }
+
+    public static function multiDimensionalSearch($array, $field, $value)
+    {
+        foreach($array as $key => $item) {
+          if ( $item[$field] === $value )
+             return $item;
+        }
+        return false;
+    }
 }

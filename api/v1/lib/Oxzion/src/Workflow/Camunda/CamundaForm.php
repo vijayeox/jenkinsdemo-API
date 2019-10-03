@@ -6,12 +6,11 @@ use Oxzion\Utils\XMLUtils;
 class CamundaForm
 {
     protected $data;
-    public function __construct($form, $appId, $workflowId)
+    public function __construct($form, $appId)
     {
         $this->data['task_id'] = $form->getAttribute('id');
         $this->data['name'] = $form->getAttribute('name');
         $this->data['app_id'] = $appId;
-        $this->data['workflow_id'] = $workflowId;
         $extensionElements = $form->getElementsByTagNameNS(Config::bpmnSpec, 'extensionElements');
         $bs = XMLUtils::domToArray($form);
         if ((isset($bs['bpmn2:extensionElements'])&&isset($bs['bpmn2:extensionElements']['camunda:properties'])) || (isset($bs['bpmn:extensionElements'])&&isset($bs['bpmn:extensionElements']['camunda:properties']))) {

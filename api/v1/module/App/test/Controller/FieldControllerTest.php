@@ -83,7 +83,7 @@ class FieldControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'field3','app_id'=>1,'required'=>1,'data_type'=>'text'];
+        $data = ['name' => 'field3','entity_id'=>1,'app_id'=>1,'required'=>1,'data_type'=>'text'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field', 'POST', null);
         $this->assertResponseStatusCode(201);

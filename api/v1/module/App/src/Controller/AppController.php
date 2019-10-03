@@ -259,43 +259,7 @@ class AppController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
-    /**
-     * Upload the app from the UI and extracting the zip file in a folder that will start the installation of app.
-     * @api
-     * @link /app/:appId/deployworkflow
-     * @method POST
-     * @param null </br>
-     * <code>
-     * </code>
-     * @return array Returns a JSON Response with Status Code.</br>
-     * <code> status : "success|error"
-     * </code>
-     */
-    public function workflowDeployAction()
-    {
-        $data=$this->extractPostData();
-        $params = array_merge($data, $this->params()->fromRoute());
-        $files = isset($_FILES['files']) ? $_FILES['files'] : null;
-        try {
-            if ($files&&isset($params['name'])) {
-                $response = $this->appService->deployWorkflow($params['appId'], $params, $files);
-                if ($response == 0) {
-                    return $this->getErrorResponse("Error Creating workflow");
-                }
-                if ($response == 1) {
-                    return $this->getErrorResponse("Error Parsing BPMN");
-                }
-                if ($response == 2) {
-                    return $this->getErrorResponse("More Than 1 Process Found in BPMN Please Define only one Process per BPMN");
-                }
-                return $this->getSuccessResponse($response);
-            } else {
-                return $this->getErrorResponse("Files cannot be uploaded");
-            }
-        } catch (Exception $e) {
-            return $this->getErrorResponse("Files cannot be uploaded!");
-        }
-    }
+    
 
     public function assignmentsAction()
     {

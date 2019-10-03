@@ -10,11 +10,6 @@ use Oxzion\Test\MainControllerTest;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\Utils\FileUtils;
-use Oxzion\Workflow\ProcessManager;
-use Oxzion\Workflow\WorkflowFactory;
-use Mockery;
-use Camunda\ProcessManagerImpl;
 
 class AppControllerTest extends ControllerTest
 {
@@ -341,91 +336,6 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-    public function testDeploy()
-    {
-        $this->initAuthToken($this->adminUser);
-        $_FILES = array(
-            'files'    =>  array(
-                'name'      =>  'ScriptTaskTest.bpmn',
-                'tmp_name'  =>  __DIR__."/../Dataset/ScriptTaskTest.bpmn",
-                'size'      =>  filesize(__DIR__."/../Dataset/ScriptTaskTest.bpmn"),
-                'error'     =>  0
-            )
-        );
-        $workflowFactory = WorkflowFactory::getInstance();
-        $processManager = $workflowFactory->getProcessManager();
-        $config = $this->getApplicationConfig();
-        $baseFolder = $config['UPLOAD_FOLDER'];
-        if (enableCamunda==0) {
-            $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
-            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/app/api/v1/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTest.bpmn'))->once()->andReturn(array(1));
-            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
-            $workflowService->setProcessManager($mockProcessManager);
-        }
-        $data = array('name'=>'NewWorkflow');
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deployworkflow', 'POST', $data);
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $this->assertEquals($content['status'], 'success');
-    }
-    public function testDeployWithOutName()
-    {
-        $this->initAuthToken($this->adminUser);
-        $_FILES = array(
-            'files'    =>  array(
-                'name'      =>  'ScriptTaskTest.bpmn',
-                'tmp_name'  =>  __DIR__."/../Dataset/ScriptTaskTest.bpmn",
-                'size'      =>  filesize(__DIR__."/../Dataset/ScriptTaskTest.bpmn"),
-                'error'     =>  0
-            )
-        );
-        $data = array();
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deployworkflow', 'POST', $data);
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $this->assertEquals($content['status'], 'error');
-    }
-    public function testDeployFailedBpmn()
-    {
-        $this->initAuthToken($this->adminUser);
-        $_FILES = array(
-            'files'    =>  array(
-                'name'      =>  'ScriptTaskTestFail.bpmn',
-                'tmp_name'  =>  __DIR__."/../Dataset/ScriptTaskTestFail.bpmn",
-                'size'      =>  filesize(__DIR__."/../Dataset/ScriptTaskTestFail.bpmn"),
-                'error'     =>  0
-            )
-        );
-        $config = $this->getApplicationConfig();
-        $baseFolder = $config['UPLOAD_FOLDER'];
-        if (enableCamunda==0) {
-            $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
-            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow1', array('/app/api/v1/config/autoload/../../data/uploads/app/99/workflow/ScriptTaskTestFail.bpmn'))->once()->andReturn(0);
-            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
-            $workflowService->setProcessManager($mockProcessManager);
-        }
-        $data = array('name'=>'NewWorkflow1');
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deployworkflow', 'POST', $data);
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $this->assertEquals($content['status'], 'error');
-    }
-    public function testWithOutFile()
-    {
-        $_FILES =array();
-        $this->initAuthToken($this->adminUser);
-        $data = array('name'=>'NewWorkflow');
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/deployworkflow', 'POST', $data);
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
     }
     public function testAddToAppRegistry(){

@@ -6,6 +6,28 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 1
+ox_app_entity:
+  -
+    id: 1
+    name: "entity1"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
+    created_by: 1
+  -
+    id: 2
+    name: "entity2"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    uuid: "e13d0c68-98c9-11e9-adc5-308d99c9145b"
+    created_by: 1
+  -
+    id: 3
+    name: "entity3"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    uuid: "f13d0c68-98c9-11e9-adc5-308d99c9145b"
+    created_by: 1
 ox_field:
 -
     id: 1
@@ -112,6 +134,7 @@ ox_workflow:
     form_id: 1
     org_id: 1
     uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4'
+    entity_id: 1
   -
     id: 2
     app_id: 99
@@ -120,6 +143,7 @@ ox_workflow:
     form_id: 1
     org_id: 1
     uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo'
+    entity_id: 1
 ox_file:
   -
     id: 1

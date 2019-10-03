@@ -15,7 +15,8 @@ class File extends Entity
         'created_by' => null,
         'modified_by' => null,
         'date_created' => null,
-        'date_modified' => null
+        'date_modified' => null,
+        'entity_id'=>null
     );
     protected $attributes = array();
 

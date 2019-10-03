@@ -192,4 +192,25 @@ class WorkflowTest extends TestCase
         $this->assertEquals($data[0]['activity'][0]['fields'][0]['constraints'], '[{"name":"required","config":"true"}]');
         $this->assertNotEquals(0, $data);
     }
+
+    public function testBPMNParsingWithFormTemplate()
+    {
+        $workflowFactory = WorkflowFactory::getInstance();
+        $processManager = $workflowFactory->getProcessManager();
+        $processEngine = $workflowFactory->getProcessEngine();
+        $data = $processManager->parseBPMN(__DIR__."/Dataset/SampleBPMN.bpmn", 1, 1);
+        $this->assertEquals($data[0]['form']['name'], 'Insure Fills Online Application');
+        $this->assertEquals($data[0]['form']['app_id'], 1);
+        $this->assertEquals(count($data[0]['form']['fields']), 1);
+        $this->assertEquals($data[0]['form']['fields'][0]['name'], 'automatic_renewal');
+        $this->assertEquals($data[0]['form']['fields'][0]['text'], 'Auto Renewal?');
+        $this->assertEquals($data[0]['form']['fields'][0]['data_type'], 'boolean');
+        $this->assertEquals($data[0]['start_form'], 'StartEvent_198mssd');
+        $this->assertEquals($data[0]['activity'][0]['task_id'], 'Task_1s7qzh3');
+        $this->assertEquals($data[0]['activity'][0]['name'], 'CSR Review');
+        $this->assertEquals($data[0]['activity'][0]['app_id'], 1);
+        $this->assertEquals(count($data[0]['activity'][0]['fields']), 1);
+        $this->assertEquals($data[0]['activity'][0]['fields'][0]['name'], 'FormField_1c1vahk');
+        $this->assertNotEquals(0, $data);
+    }
 }

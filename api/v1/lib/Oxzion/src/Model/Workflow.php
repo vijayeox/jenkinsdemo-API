@@ -11,6 +11,7 @@ class Workflow extends Entity
         'process_id' => null,
         'app_id' => null,
         'form_id' => null,
+        'entity_id'=>0,
         'file'=> null,
         'uuid'=> 0,
     );

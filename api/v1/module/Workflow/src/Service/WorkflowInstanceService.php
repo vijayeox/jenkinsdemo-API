@@ -212,6 +212,9 @@ class WorkflowInstanceService extends AbstractService
         if(!isset($params['created_by'])){
             $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         }
+        if(!isset($params['entity_id'])){
+            $params['entity_id'] = $workflow['entity_id'];
+        }
         if (isset($id)) {
             return $this->fileService->updateFile($params, $id);
         } else {
@@ -232,11 +235,8 @@ class WorkflowInstanceService extends AbstractService
     public function completeWorkflow($params){
         try{
         $this->beginTransaction();
-            $updateQuery = "UPDATE ox_workflow_instance SET status=:status where process_instance_id = :workflowInstanceId 
-                            AND org_id=:orgId";
-            $updateParams = array('status' => 'completed',
-                                    'workflowInstanceId' => $params['processInstanceId'],
-                                    'orgId' => AuthContext::get(AuthConstants::ORG_ID));
+            $updateQuery = "UPDATE ox_workflow_instance SET status=:status where process_instance_id = :workflowInstanceId";
+            $updateParams = array('status' => 'completed', 'workflowInstanceId' => $params['processInstanceId']);
             $update = $this->executeUpdateWithBindParameters($updateQuery,$updateParams);
             $this->commit();
             return $update->getAffectedRows();
@@ -248,18 +248,13 @@ class WorkflowInstanceService extends AbstractService
         
     }
     
-    public function setupWorkflowInstance($workflowUuId, $processInstanceId,$params =null)
+    public function setupWorkflowInstance($workflowId, $processInstanceId,$params =null)
     {
         $query = "select * from ox_workflow_instance where org_id=? and process_instance_id=?";
         $queryParams = array(AuthContext::get(AuthConstants::ORG_ID),$processInstanceId);
         $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        if($resultSet){
-            return $resultSet[0];
-        }
-        if ($workflowId = $this->getIdFromUuid('ox_workflow', $workflowUuId)) {
-            $workflowId = $workflowId;
-        } else {
-            $workflowId = $workflowUuId;
+        if(count($resultSet)){
+            return $resultSet;
         }
         $form = new WorkflowInstance();
         if (isset($params['orgid'])) {
@@ -281,11 +276,10 @@ class WorkflowInstanceService extends AbstractService
             $createdBy = AuthContext::get(AuthConstants::USER_ID);
         }
         $dateCreated = date('Y-m-d H:i:s');
-
-        $query = "select app_id from ox_workflow where id=?";
-        $queryParams = array($workflowId);
+        $query = "select app_id from ox_workflow where id=? or uuid=?";
+        $queryParams = array($workflowId,$workflowId);
         $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        if($resultSet){
+        if(count($resultSet)){
             $data = array('workflow_id'=> $workflowId,'app_id'=> $resultSet[0]['app_id'],'org_id'=> $orgId,'process_instance_id'=>$processInstanceId,'status'=>"In Progress",'date_created'=>$dateCreated,'created_by'=>$createdBy);
             $form->exchangeArray($data);
             $form->validate();
@@ -415,7 +409,6 @@ class WorkflowInstanceService extends AbstractService
         inner join ox_app on ox_field.app_id = ox_app.id
         where ox_file.org_id=:organization and ox_app.uuid=:appUuid and ox_field.data_type=:dataType 
         and ox_file.uuid=:fileUuid';
-
         $selectQueryParams = array('organization' => AuthContext::get(AuthConstants::ORG_ID), 
                                    'appUuid' => $params['appId'],
                                    'fileUuid' => $params['fileId'],

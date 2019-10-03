@@ -34,7 +34,7 @@ class ProcessManagerImpl implements ProcessManager
             return 0;
         }
     }
-    public function parseBPMN($file, $appId, $workflowId)
+    public function parseBPMN($file, $appId)
     {
         $document = new \DOMDocument();
         $document->load($file);
@@ -46,29 +46,29 @@ class ProcessManagerImpl implements ProcessManager
             $startForm = $startEventList->item(0)->getElementsByTagNameNS(Config::camundaSpec, 'formData');
             if ($startForm) {
                 $fieldArray = array();
-                $formArray[$i]['form'] = $this->generateForm($startEventList->item(0), $appId, $workflowId);
+                $formArray[$i]['form'] = $this->generateForm($startEventList->item(0), $appId);
                 $fields = $startEventList->item(0)->getElementsByTagNameNS(Config::camundaSpec, 'formField');
-                $formArray[$i]['form']['fields'] = $this->generateFields($fieldArray, $fields, $appId, $workflowId);
+                $formArray[$i]['form']['fields'] = $this->generateFields($fieldArray, $fields, $appId);
                 $formArray[$i]['start_form'] = $startEventList->item(0)->getAttribute('id');
             }
             $elementList = $element->getElementsByTagNameNs(Config::bpmnSpec, 'userTask');
             $j=0;
             foreach ($elementList as $task) {
                 $fieldArray = array();
-                $formArray[$i]['activity'][$j] = $this->generateActivity($task, $appId, $workflowId);
+                $formArray[$i]['activity'][$j] = $this->generateActivity($task, $appId);
                 $extensionElements = $task->getElementsByTagNameNS(Config::bpmnSpec, 'extensionElements');
                 foreach ($extensionElements as $eElem) {
                     $elements = $eElem->getElementsByTagNameNS(Config::camundaSpec, 'formData');
                     if ($elements) {
                         foreach ($elements as $elem) {
                             $fields = $elem->getElementsByTagNameNS(Config::camundaSpec, 'formField');
-                            $fieldArray = $this->generateFields($fieldArray, $fields, $appId, $workflowId);
+                            $fieldArray = $this->generateFields($fieldArray, $fields, $appId);
                         }
                     }
                     $hiddenFields = $eElem->getElementsByTagNameNS(Config::camundaSpec, 'field');
                     if ($hiddenFields) {
                         foreach ($hiddenFields as $hiddenField) {
-                            $fieldArray = $this->generateHiddenFields($fieldArray, $hiddenField, $appId, $workflowId);
+                            $fieldArray = $this->generateHiddenFields($fieldArray, $hiddenField, $appId);
                         }
                     }
                     $formArray[$i]['activity'][$j]['fields'] = $fieldArray;
@@ -79,32 +79,32 @@ class ProcessManagerImpl implements ProcessManager
         }
         return $formArray;
     }
-    private function generateForm($task, $appId, $workflowId)
+    private function generateForm($task, $appId)
     {
-        $oxForm = new CamundaForm($task, $appId, $workflowId);
+        $oxForm = new CamundaForm($task, $appId);
         return $oxForm->toArray();
     }
-    private function generateActivity($task, $appId, $workflowId)
+    private function generateActivity($task, $appId)
     {
-        $oxActivity = new CamundaActivity($task, $appId, $workflowId);
+        $oxActivity = new CamundaActivity($task, $appId);
         return $oxActivity->toArray();
     }
-    private function generateFields($fieldArray, $fields, $appId, $workflowId)
+    private function generateFields($fieldArray, $fields, $appId)
     {
         foreach ($fields as $field) {
-            $oxField = new CamundaField($field, $appId, $workflowId);
+            $oxField = new CamundaField($field, $appId);
             $fieldArray[] = $oxField->toArray();
         }
         return $fieldArray;
     }
-    private function generateHiddenFields($fieldArray, $field, $appId, $workflowId)
+    private function generateHiddenFields($fieldArray, $field, $appId)
     {
         $type = $field->getElementsByTagNameNS(Config::camundaSpec, '*');
         $fieldType = $type->item(0)->localName;
         if ($fieldType == 'expression') {
-            $fieldArray[] = array('name'=>$field->getAttribute('name'),'workflow_id'=>$workflowId,'app_id'=>$appId,'text'=>$field->getAttribute('name'),'type'=>'hidden','expression'=>$type->item(0)->nodeValue);
+            $fieldArray[] = array('name'=>$field->getAttribute('name'),'app_id'=>$appId,'text'=>$field->getAttribute('name'),'type'=>'hidden','expression'=>$type->item(0)->nodeValue);
         } else {
-            $fieldArray[] = array('name'=>$field->getAttribute('name'),'workflow_id'=>$workflowId,'app_id'=>$appId,'text'=>$field->getAttribute('name'),'type'=>'hidden');
+            $fieldArray[] = array('name'=>$field->getAttribute('name'),'app_id'=>$appId,'text'=>$field->getAttribute('name'),'type'=>'hidden');
         }
         return $fieldArray;
     }

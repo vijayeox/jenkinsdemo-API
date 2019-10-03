@@ -5,12 +5,11 @@ use Oxzion\Utils\XMLUtils;
 class CamundaActivity
 {
     protected $data;
-    public function __construct($activity, $appId, $workflowId)
+    public function __construct($activity, $appId)
     {
         $this->data['task_id'] = $activity->getAttribute('id');
         $this->data['name'] = $activity->getAttribute('name');
         $this->data['app_id'] = $appId;
-        $this->data['workflow_id'] = $workflowId;
         $extensionElements = $activity->getElementsByTagNameNS(Config::bpmnSpec, 'extensionElements');
         $bs = XMLUtils::domToArray($activity);
         if ((isset($bs['bpmn2:extensionElements'])&&isset($bs['bpmn2:extensionElements']['camunda:properties'])) || (isset($bs['bpmn:extensionElements'])&&isset($bs['bpmn:extensionElements']['camunda:properties']))) {

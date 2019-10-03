@@ -17,6 +17,28 @@ ox_app_registry:
 -
     org_id: 1
     app_id: 99
+ox_app_entity:
+  -
+    id: 1
+    name: "entity1"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    uuid: "d23d0c68-98c9-11e9-adc5-308d99c9145b"
+    created_by: 1
+  -
+    id: 2
+    name: "entity2"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    uuid: "e13d0c68-98c9-11e9-adc5-308d99c9145b"
+    created_by: 1
+  -
+    id: 3
+    name: "entity3"
+    app_id: 99
+    date_created: '2019-06-26 00:00:00'
+    uuid: "f13d0c68-98c9-11e9-adc5-308d99c9145b"
+    created_by: 1
 ox_field:
 -
     id: 1
@@ -27,6 +49,7 @@ ox_field:
     workflow_id: 1
     required: 1
     sequence: 2
+    entity_id: 1
 -
     id: 2
     uuid: "465c89e0-df82-11e9-8a34-2a2ae2dbcce4"
@@ -36,17 +59,20 @@ ox_field:
     data_type: "integer"
     required: 1
     sequence: 1
+    entity_id: 1
 ox_activity:
   -
     id: 1
     app_id: 99
     workflow_id: 1
     name: "Task"
+    entity_id: 1
   -
     id: 2
     app_id: 99
     workflow_id: 1
     name: "Test Form 2"
+    entity_id: 1
 ox_activity_form:
   -
     id: 1
@@ -64,6 +90,7 @@ ox_form:
     template: '{"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":{}},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":{},"properties":{},"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleForm2ForTests"}'
     name: "Task"
     description: "Form Description"
+    entity_id: 1
   -
     id: 2
     app_id: 99
@@ -71,6 +98,7 @@ ox_form:
     template: '{"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":{}},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":{},"properties":{},"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleForm1ForTests"}'
     name: "Test Form 2"
     description: "Form Description"
+    entity_id: 1
 ox_form_field:
 -
     id: 1
@@ -87,14 +115,16 @@ ox_workflow:
     name: "Test Workflow 1"
     process_id: "[main]"
     form_id: 1
-    uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4"
+    uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4'
+    entity_id: 1
   -
     id: 2
     app_id: 99
     name: "Test Workflow 2"
     process_id: "[main]"
     form_id: 1
-    uuid: "fc0cdbbc-e024-11e9-8a34-2a2ae2dbcce4"
+    uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo'
+    entity_id: 1
 ox_workflow_instance:
   -
     id: 1

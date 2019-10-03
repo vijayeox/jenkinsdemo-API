@@ -77,7 +77,7 @@ class WorkflowControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'workflow3','app_id'=>1,'required'=>1];
+        $data = ['name' => 'workflow3','entity_id'=>1,'app_id'=>1,'required'=>1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow', 'POST', null);
         $this->assertResponseStatusCode(201);
@@ -114,9 +114,9 @@ class WorkflowControllerTest extends ControllerTest
     public function testUpdate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['id'=>2,'name' => 'workflow23','app_id'=>99,'required'=> 0, 'sequence' => 2,'type'=>'Page'];
+        $data = ['id'=>1,'name' => 'workflow23','entity_id'=>1,'app_id'=>99,'required'=> 0, 'sequence' => 2,'type'=>'Page'];
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/fc0cdbbc-e024-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(WorkflowController::class); // as specified in router's controller name alias
@@ -125,7 +125,7 @@ class WorkflowControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 2);
+        $this->assertEquals($content['data']['id'], $data['id']);
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['sequence'], $data['sequence']);
     }

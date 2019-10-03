@@ -165,19 +165,17 @@ class FileControllerTest extends ControllerTest
         }
         $path =$path1.$fileId;
         if (!is_link($path)) {
-            
             symlink(__DIR__.'/../../../../../../clients/Dive Insurance/test/Files',$path);
-        
         }
         $crypto = new Crypto();
         $documentName = $crypto->encryption($path."/dummy.pdf");
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/'.$fileId.'/document/'.$documentName, 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true); 
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(FileController::class);
         $this->assertControllerClass('FileController');
         $this->assertMatchedRouteName('getdocument');
-        $content = json_decode($this->getResponse()->getContent(), true); 
         $this->assertNotEquals(strlen($this->getResponse()), 0);
         if (is_link($path)) {
             unlink($path);

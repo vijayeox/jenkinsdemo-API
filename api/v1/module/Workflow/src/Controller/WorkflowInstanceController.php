@@ -155,28 +155,6 @@ class WorkflowInstanceController extends AbstractApiController
             return $this->getErrorResponse("Entity not found", 404);
         }
     }
-    public function completeWorkflowAction()
-    {
-        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        switch ($this->request->getMethod()) {
-            case 'POST':
-                if (isset($params['processInstanceId'])) {
-                    try {
-                        $response = $this->workflowInstanceService->completeWorkflow($params);
-                        if(!$response){
-                            return $this->getErrorResponse("Workflow Completion errors", 404,null);
-                        }
-                    } catch (ValidationException $e) {
-                        $response = ['data' => $params, 'errors' => $e->getErrors()];
-                        return $this->getErrorResponse("workflow Instance errors Errors", 404, $response);
-                    }
-                    return $this->getSuccessResponse();
-                } else {
-                    return $this->getErrorResponse("Process Instance Id not set", 404, $response);
-                }
-                break;
-        }
-    }
 
     public function getFileDocumentListAction()
     {  

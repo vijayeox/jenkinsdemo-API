@@ -59,7 +59,7 @@ class AuthService extends AbstractService
     }
     private function createUser($params,$data,$rawData){
         if(!isset($data['username'])){
-            $data['username'] = $data['email'];
+            $data['username'] = $data['firstname'].".".$data['lastname'];
         }
         try {
             $success = $this->userService->createUser($params,$data);

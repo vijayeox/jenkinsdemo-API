@@ -16,6 +16,7 @@ use Zend\Log\Logger;
 use Exception;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Document\DocumentGeneratorImpl;
+use Oxzion\AppDelegate\AppDelegateService;
 
 class ServiceTaskService extends AbstractService
 {
@@ -27,10 +28,11 @@ class ServiceTaskService extends AbstractService
     * @ignore __construct
     */
 
-    public function __construct($config, $dbAdapter, Logger $log, TemplateService $templateService)
+    public function __construct($config, $dbAdapter, Logger $log, TemplateService $templateService,AppDelegateService $appDelegateService)
     {
         $this->messageProducer = MessageProducer::getInstance();
         $this->templateService = $templateService;
+        $this->appDelegateService = $appDelegateService;
         parent::__construct($config, $dbAdapter, $log);
     }
 
@@ -48,6 +50,12 @@ class ServiceTaskService extends AbstractService
                 case 'mail':
                     return $this->sendMail($data);
                     break;
+                case 'schedule':
+                    return $this->scheduleJob($data);
+                    break;
+                case 'delegate':
+                    return $this->executeDelegate($data);
+                    break;
                 case 'pdf':
                     return $this->generatePDF($data);
                     break;
@@ -56,6 +64,20 @@ class ServiceTaskService extends AbstractService
             };
         }
         return 1;
+    }
+    protected function scheduleJob($data){
+        
+    }
+    protected function executeDelegate($data){
+        if(isset($data['app_id']) && isset($data['delegate'])){
+            $appId = $data['app_id'];
+            $delegate = $data['delegate'];
+        } else {
+            return 0;
+        }
+        $this->appDelegateService->createLink($appId);
+        $response = $this->appDelegateService->execute($appId, $delegate, $data);
+        return $response;
     }
     protected function sendMail($params)
     {

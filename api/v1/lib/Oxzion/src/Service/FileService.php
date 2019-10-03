@@ -52,6 +52,12 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
+        if(isset($workflowInstanceId)){
+            $updateQuery = "UPDATE ox_file SET latest=:latest where workflow_instance_id = :workflowInstanceId";
+            $updateParams = array('latest' => 0, 'workflowInstanceId' => $workflowInstanceId);
+            $update = $this->executeUpdateWithBindParameters($updateQuery,$updateParams);
+            $data['latest'] = 1;
+        }
         $data['data'] = $jsonData;
         $data['workflow_instance_id'] = isset($workflowInstanceId)?$workflowInstanceId:null;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -59,6 +65,7 @@ class FileService extends AbstractService
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['date_modified'] = date('Y-m-d H:i:s');
+        $data['entity_id'] = isset($data['entity_id'])?$data['entity_id']:null;
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();
         $file = new File();
         $file->exchangeArray($data);
@@ -74,7 +81,7 @@ class FileService extends AbstractService
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
-            $validFields = $this->checkFields($activityId, $formId, $fields, $id);
+            $validFields = $this->checkFields($data['entity_id'], $fields, $id);
             if ($validFields && !empty($validFields)) {
                 $this->multiInsertOrUpdate('ox_file_attribute', $validFields, ['id']);
             } else {
@@ -143,7 +150,7 @@ class FileService extends AbstractService
                 $this->rollback();
                 return 0;
             }
-            $validFields = $this->checkFields($activityId, $formId, $fields, $this->getIdFromUuid('ox_file',$id));
+            $validFields = $this->checkFields(isset($changedArray['entity_id'])?$changedArray['entity_id']:null, $fields, $this->getIdFromUuid('ox_file',$id));
             if ($validFields && !empty($validFields)) {
                 $this->multiInsertOrUpdate('ox_file_attribute', $validFields);
             }
@@ -221,32 +228,19 @@ class FileService extends AbstractService
     /**
     * @ignore checkFields
     */
-    protected function checkFields($activityId=null, $formId=null, $fieldData, $fileId)
+    protected function checkFields($entityId, $fieldData, $fileId)
     {
         $required = array();
-        if (isset($activityId)) {
-            $select = "SELECT * from ox_activity_form where ox_activity_form.activity_id=?";
-            $whereQuery = array($activityId);
-            $activityForms = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
-            $selectQuery = "SELECT ox_field.* from ox_field 
-            left join ox_form_field on ox_field.id = ox_form_field.field_id
-            left join ox_form on ox_form.id = ox_form_field.form_id
-             where ox_form.id=?";
-            $whereParams = array(array(array_column($activityForms, 'form_id')));
-            $fields = $this->executeQueryWithBindParameters($selectQuery,$whereParams)->toArray();
-        } else {
             if (isset($formId)) {
                 $query = "SELECT ox_field.* from ox_field 
-                left join ox_form_field on ox_field.id = ox_form_field.field_id
-                left join ox_form on ox_form.id = ox_form_field.form_id
+                left join ox_entity_field on ox_field.id = ox_entity_field.field_id
+                left join ox_app_entity on ox_app_entity.id = ox_entity_field.entity_id
                  where ox_form.id=?";
                 $where = array($formId);
                 $fields = $this->executeQueryWithBindParameters($query,$where)->toArray();
             } else {
                 return 0;
             }
-        }
-
         $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.fileid=?";
         $whereParams = array($fileId);
         $fileArray = $this->executeQueryWithBindParameters($sqlQuery,$whereParams)->toArray();

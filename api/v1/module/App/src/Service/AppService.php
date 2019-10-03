@@ -513,15 +513,6 @@ class AppService extends AbstractService
         return 0;
     }
 
-    public function deployWorkflow($appId, $params, $file = null)
-    {
-        if (isset($file)) {
-            return $this->workflowService->deploy($file, $appId, $params);
-        } else {
-            return 0;
-        }
-    }
-
     public function getFields($appId, $workflowId = null)
     {
         $filterArray = array();

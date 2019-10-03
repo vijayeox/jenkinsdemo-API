@@ -158,7 +158,6 @@ class FileController extends AbstractApiController
                 $this->response->setStatusCode(200);
                 return $this->response;
             } catch (Exception $e) {
-                print_r($e->getMessage());
                 return $this->getErrorResponse($e->getMessage(), 500);
             }
         }else{

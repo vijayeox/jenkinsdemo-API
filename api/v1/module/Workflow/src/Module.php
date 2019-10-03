@@ -59,7 +59,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\ServiceTaskService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\ServiceTaskService($container->get('config'), $dbAdapter, $container->get('ServiceTaskLogger'), $container->get(TemplateService::class));
+                    return new Service\ServiceTaskService($container->get('config'), $dbAdapter, $container->get('ServiceTaskLogger'), $container->get(TemplateService::class),$container->get(\Oxzion\AppDelegate\AppDelegateService::class));
                 },
                 Model\WorkflowInstanceTable::class => function ($container) {
                     $tableGateway = $container->get(Model\WorkflowInstanceTableGateway::class);
@@ -96,6 +96,14 @@ class Module implements ConfigProviderInterface
                         $container->get(WorkflowService::class),
                         $container->get('WorkflowInstanceLogger'),
                         $container->get(Service\ActivityInstanceService::class),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\WorkflowInstanceCallbackController::class => function ($container) {
+                    return new Controller\WorkflowInstanceCallbackController(
+                        $container->get(Model\WorkflowInstanceTable::class),
+                        $container->get(Service\WorkflowInstanceService::class),
+                        $container->get('WorkflowInstanceLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

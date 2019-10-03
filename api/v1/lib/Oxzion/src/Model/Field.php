@@ -12,6 +12,7 @@ class Field extends Entity
         'name'=>null,
         'text'=>null,
         'workflow_id'=>0,
+        'entity_id'=>0,
         'data_type'=>null,
         'options'=>null,
         'template'=>null,

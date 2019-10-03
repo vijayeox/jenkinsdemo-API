@@ -11,6 +11,7 @@ class Form extends Entity
         'app_id'=>0,
         'name'=>null,
         'description'=>null,
+        'entity_id'=>0,
         'template'=>null,
         'created_by'=>null,
         'modified_by'=>null,
