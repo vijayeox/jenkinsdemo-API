@@ -63,7 +63,7 @@ class ActivityInstanceController extends AbstractApiControllerHelper
         try {
             $response = $this->activityInstanceService->completeActivityInstance($data);
             $this->log->info(ActivityInstanceController::class.":Complete Activity Instance Successful");
-            if ($response == 0) {
+            if ($response == 0 || empty($response)) {
                 return $this->getErrorResponse("Entity not found", 404);
             }
             return $this->getSuccessResponseWithData($response);
