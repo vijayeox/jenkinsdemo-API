@@ -193,6 +193,7 @@ class WorkflowService extends AbstractService
         $data['app_id'] = $appId;
         if (!isset($data['id']) || $data['id']==0) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+            $data['org_id'] = isset($data['org_id']) ? $data['org_id'] :  AuthContext::get(AuthConstants::ORG_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
         }
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();
