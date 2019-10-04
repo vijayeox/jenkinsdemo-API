@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a58c76a2-01d3-4e7e-9daa-86b6c623d02f",
+		"_postman_id": "8873ced4-9fd9-4e57-b2e5-9a4c1599afd9",
 		"name": "HUB",
 		"description": "Hub specific data setup for developers",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -32,7 +32,7 @@
 							"formdata": [
 								{
 									"key": "username",
-									"value": "bharatg.test",
+									"value": "bharatgtest",
 									"type": "text"
 								},
 								{
@@ -153,6 +153,10 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{URL}}/app/a",
 							"host": [
@@ -223,8 +227,9 @@
 									"var data = jsonData.data;",
 									"",
 									"    for (var i=0; i < data.length; i++) {",
-									"        if (data[i].username === \"bharatgtest\") {",
+									"        if (data[i].name === \"hub admin\") {",
 									"            postman.setEnvironmentVariable(\"manager_id\", data[i].uuid);",
+									"            console.log(data[i].uuid);",
 									"        }",
 									"    }"
 								],
@@ -235,15 +240,19 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{URL}}/organization/{{org_id}}/user",
+							"raw": "{{URL}}/organization/{{org_id}}/users",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"organization",
 								"{{org_id}}",
-								"user"
+								"users"
 							]
 						}
 					},
@@ -423,8 +432,7 @@
 					"response": []
 				}
 			],
-			"description": "Add ORG UUID to {{org_id}} variable\nAdd App UUID to {{app_id}} variable",
-			"protocolProfileBehavior": {}
+			"description": "Add ORG UUID to {{org_id}} variable\nAdd App UUID to {{app_id}} variable"
 		},
 		{
 			"name": "My Policy Files",
@@ -444,6 +452,10 @@
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{URL}}/app/{{app_id}}/file",
 							"host": [
@@ -458,8 +470,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Page",
@@ -488,6 +499,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{URL}}/app/{{app_id}}/page",
 							"host": [
@@ -713,8 +728,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Menu",
@@ -743,6 +757,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "{{URL}}/app/{{app_id}}/menu",
 							"host": [
@@ -839,8 +857,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Dive Insurance Pages",
@@ -930,111 +947,120 @@
 							"response": []
 						}
 					],
-					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Emergency First Response",
+					"item": [
+						{
+							"name": "Create Entity",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f999b897-e91f-4c09-87a3-602162bf0346",
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"var data = jsonData.data;",
+											"postman.setEnvironmentVariable(\"entity_id\", data.id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NzAxMDI3ODQsImp0aSI6IlwvZHNPK3dXMlVtZ01PSytcL25nMHE5Z2NsY1RCRVB5ZDNGZG1Wbkdidlh2QT0iLCJuYmYiOjE1NzAxMDI3ODQsImV4cCI6MTU3MDE3NDc4NCwiZGF0YSI6eyJ1c2VybmFtZSI6ImJoYXJhdGd0ZXN0Iiwib3JnaWQiOiIxIn19.6X2Unh5X25DzaeOH02zAkzeHlecoRomsataL9f-5DYl9Rzb2JgV1-FT7og4y_dja9-f3cnFJsvq8HoKpITOGcA"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Policy\"\n}"
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/entity",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"entity"
+									]
+								},
+								"description": "Create Entity"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Workflow",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NzAxMDI3ODQsImp0aSI6IlwvZHNPK3dXMlVtZ01PSytcL25nMHE5Z2NsY1RCRVB5ZDNGZG1Wbkdidlh2QT0iLCJuYmYiOjE1NzAxMDI3ODQsImV4cCI6MTU3MDE3NDc4NCwiZGF0YSI6eyJ1c2VybmFtZSI6ImJoYXJhdGd0ZXN0Iiwib3JnaWQiOiIxIn19.6X2Unh5X25DzaeOH02zAkzeHlecoRomsataL9f-5DYl9Rzb2JgV1-FT7og4y_dja9-f3cnFJsvq8HoKpITOGcA",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Emergency First Response",
+											"type": "text"
+										},
+										{
+											"key": "files",
+											"type": "file",
+											"src": ""
+										},
+										{
+											"key": "entity_id",
+											"value": "1",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/entity/{{entity_id}}/deployworkflow",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"entity",
+										"{{entity_id}}",
+										"deployworkflow"
+									]
+								},
+								"description": "Deploy Workflow"
+							},
+							"response": []
+						}
+					],
 					"_postman_isSubFolder": true
 				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "http://localhost:8080/app/5c5b2544-a501-416c-98da-38af2cf3ff19/entity",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NzAxMDI3ODQsImp0aSI6IlwvZHNPK3dXMlVtZ01PSytcL25nMHE5Z2NsY1RCRVB5ZDNGZG1Wbkdidlh2QT0iLCJuYmYiOjE1NzAxMDI3ODQsImV4cCI6MTU3MDE3NDc4NCwiZGF0YSI6eyJ1c2VybmFtZSI6ImJoYXJhdGd0ZXN0Iiwib3JnaWQiOiIxIn19.6X2Unh5X25DzaeOH02zAkzeHlecoRomsataL9f-5DYl9Rzb2JgV1-FT7og4y_dja9-f3cnFJsvq8HoKpITOGcA",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Policy\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/app/5c5b2544-a501-416c-98da-38af2cf3ff19/entity",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"app",
-						"5c5b2544-a501-416c-98da-38af2cf3ff19",
-						"entity"
-					]
-				},
-				"description": "Create Entity"
-			},
-			"response": []
-		},
-		{
-			"name": "http://localhost:8080/app/54cdb6c8-5c7f-42f6-955d-f2ccd8ad87e6/entity/39f55c39-4364-4591-bbc8-f8c2d6cd358a/deployworkflow",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1NzAxMDI3ODQsImp0aSI6IlwvZHNPK3dXMlVtZ01PSytcL25nMHE5Z2NsY1RCRVB5ZDNGZG1Wbkdidlh2QT0iLCJuYmYiOjE1NzAxMDI3ODQsImV4cCI6MTU3MDE3NDc4NCwiZGF0YSI6eyJ1c2VybmFtZSI6ImJoYXJhdGd0ZXN0Iiwib3JnaWQiOiIxIn19.6X2Unh5X25DzaeOH02zAkzeHlecoRomsataL9f-5DYl9Rzb2JgV1-FT7og4y_dja9-f3cnFJsvq8HoKpITOGcA",
-						"type": "text"
-					},
-					{
-						"key": "",
-						"value": "",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "IPL",
-							"type": "text"
-						},
-						{
-							"key": "files",
-							"type": "file",
-							"src": "/home/goku/AppBuilder/clients/Dive Insurance/content/workflows/Individual Professional Liability/NewUserApplicationSubmission.bpmn"
-						},
-						{
-							"key": "entity_id",
-							"value": "1",
-							"type": "text",
-							"disabled": true
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:8080/app/54cdb6c8-5c7f-42f6-955d-f2ccd8ad87e6/entity/39f55c39-4364-4591-bbc8-f8c2d6cd358a/deployworkflow",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"app",
-						"54cdb6c8-5c7f-42f6-955d-f2ccd8ad87e6",
-						"entity",
-						"39f55c39-4364-4591-bbc8-f8c2d6cd358a",
-						"deployworkflow"
-					]
-				},
-				"description": "Deploy Workflow"
-			},
-			"response": []
+			]
 		}
 	],
 	"auth": {
@@ -1068,6 +1094,5 @@
 				]
 			}
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
