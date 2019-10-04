@@ -425,7 +425,7 @@ class WorkflowService extends AbstractService
         } else {
             $workflowId = $workflowId;
         }
-        $select = "select ox_form.template as content,ox_form.id as id
+        $select = "select ox_form.template as content,ox_form.uuid as id
          from ox_form
           left join ox_workflow on ox_workflow.form_id=ox_form.id 
           left join ox_app on ox_app.id=ox_workflow.app_id 
