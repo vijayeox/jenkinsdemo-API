@@ -190,7 +190,7 @@ class FormService extends AbstractService
         ->join('ox_activity_form', 'ox_activity_form.form_id = ox_form.id', array(), 'left')
         ->join('ox_activity', 'ox_activity.id = ox_activity_form.form_id', array('activity_id'=>'id'), 'left')
         ->join('ox_workflow', 'ox_workflow.form_id = ox_form.id', array('workflow_id'=>'uuid'), 'inner')
-        ->where(array('ox_form.id' => $formId));
+        ->where(array('ox_form.uuid' => $formId));
         $response = $this->executeQuery($select)->toArray();
         if (count($response)==0) {
             return 0;

@@ -352,7 +352,8 @@ return [
                 'options' => [
                     'route' => '/app/:appId/form/:formId/workflow',
                     'constraints' => [
-                        'appId' => UuidUtil::UUID_PATTERN                
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'formId' => UuidUtil::UUID_PATTERN
                     ],
                     'defaults' => [
                         'controller' => Controller\FormController::class,
