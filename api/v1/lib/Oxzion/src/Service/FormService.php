@@ -29,7 +29,7 @@ class FormService extends AbstractService
     }
 
     public function createForm($appUuid, &$data)
-    {   
+    {
         $form = new Form();
         if(is_array($data['template'])){
             $data['template'] = json_encode($data['template']);

@@ -43,7 +43,7 @@ class FileService extends AbstractService
         unset($data['workflowId']);
         $jsonData = json_encode($data);
         if (isset($data['form_id'])) {
-            $formId = $data['form_id'];
+            $formId = $this->getIdFromUuid('ox_form',$data['form_id']);
         } else {
             $formId = null;
         }
@@ -53,11 +53,13 @@ class FileService extends AbstractService
             $activityId = null;
         }
         $data['data'] = $jsonData;
+        $data['app_id'] = $this->getIdFromUuid('ox_app',$data['app_id']);
         $data['workflow_instance_id'] = isset($workflowInstanceId)?$workflowInstanceId:null;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
+        $data['form_id'] = $formId;
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['entity_id'] = isset($data['entity_id'])?$data['entity_id']:null;
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();

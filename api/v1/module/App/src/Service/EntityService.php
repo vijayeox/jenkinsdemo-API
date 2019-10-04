@@ -35,13 +35,14 @@ class EntityService extends AbstractService
             $entity = new Entity();
             if (!isset($data['id'])) {
                 $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-                $data['date_created'] = date('Y-m-d H:i:s');
+                $data['date_created'] = date('Y-m-d H:i:s'); 
             } else {
                 $querySelect = "SELECT * from ox_app_entity where app_id = '".$data['app_id']."' AND id = ".$data['id'];
                 $queryResult = $this->executeQuerywithParams($querySelect)->toArray();
                 if(count($queryResult)==0){
                     return 0;
                 }
+                $data = array_merge($queryResult[0],$data);
             }
             $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_modified'] = date('Y-m-d H:i:s');
@@ -61,7 +62,6 @@ class EntityService extends AbstractService
                 }
                 $this->commit();
             } catch (Exception $e) {
-                print_r($e->getMessage());
                 $this->rollback();
                 throw $e;
             }

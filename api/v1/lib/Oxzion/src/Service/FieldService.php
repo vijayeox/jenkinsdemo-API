@@ -25,7 +25,7 @@ class FieldService extends AbstractService
     public function saveField($appId, &$data)
     {
         $field = new Field();
-        $data['app_id'] = $appId;
+        $data['app_id'] = $this->getIdFromUuid('ox_app',$appId);
         if (!isset($data['id']) || $data['id']==0) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');

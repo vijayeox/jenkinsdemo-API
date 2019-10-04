@@ -35,7 +35,7 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    private function getFieldUuid(){       
+    private function getFieldUuid(){
         $selctQuery = "SELECT * from ox_form where id=1";
         $selectResult = $this->executeQueryTest($selctQuery);
         return $selectResult;

@@ -181,6 +181,7 @@ class WorkflowService extends AbstractService
             try {
                 $workFlow = $this->saveWorkflow($appId, $deployedData);
             } catch (Exception $e){
+                print_r($e->getMessage());exit;
                 $this->deleteWorkflow($appId,$workflowId);
                 $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
                  throw $e;
@@ -190,6 +191,13 @@ class WorkflowService extends AbstractService
     }
     public function saveWorkflow($appId, &$data)
     {
+        if(isset($appId)){
+            if ($app = $this->getIdFromUuid('ox_app', $appId)) {
+                $appId = $app;
+            }
+        } else {
+            return 0;
+        }
         $data['app_id'] = $appId;
         if (!isset($data['id']) || $data['id']==0) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);

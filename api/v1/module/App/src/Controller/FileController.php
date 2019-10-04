@@ -41,7 +41,7 @@ class FileController extends AbstractApiController
     */
     public function create($data)
     {
-        $appId = $this->params()->fromRoute()['appId'];
+        $data['app_id'] = $this->params()->fromRoute()['appId'];
         $formId = $this->params()->fromRoute()['formId'];
         if ($formId) {
             $data['form_id'] = $formId;
