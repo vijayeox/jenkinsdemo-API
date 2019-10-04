@@ -52,12 +52,6 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
-        if(isset($workflowInstanceId)){
-            $updateQuery = "UPDATE ox_file SET latest=:latest where workflow_instance_id = :workflowInstanceId";
-            $updateParams = array('latest' => 0, 'workflowInstanceId' => $workflowInstanceId);
-            $update = $this->executeUpdateWithBindParameters($updateQuery,$updateParams);
-            $data['latest'] = 1;
-        }
         $data['data'] = $jsonData;
         $data['workflow_instance_id'] = isset($workflowInstanceId)?$workflowInstanceId:null;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -116,9 +110,17 @@ class FileService extends AbstractService
     */
     public function updateFile(&$data, $id)
     { 
-        $obj = $this->table->getByUuid($id);
-        if (is_null($obj)) {
-            return 0;
+
+        if(isset($data['workflow_instance_id'])){
+            $select = "SELECT ox_file.* from ox_file 
+            where ox_file.workflow_instance_id=? ";
+            $whereQuery = array($data['workflow_instance_idk']);
+            $result = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
+        } else {
+            $obj = $this->table->getByUuid($id);
+            if (is_null($obj)) {
+                return 0;
+            } 
         }
         $data['form_id'] = $this->getIdFromUuid('ox_form',$data['form_uuid']); 
         $data['app_id'] = $this->getIdFromUuid('ox_app',$data['app_uuid']);
@@ -231,16 +233,15 @@ class FileService extends AbstractService
     protected function checkFields($entityId, $fieldData, $fileId)
     {
         $required = array();
-            if (isset($formId)) {
-                $query = "SELECT ox_field.* from ox_field 
-                left join ox_entity_field on ox_field.id = ox_entity_field.field_id
-                left join ox_app_entity on ox_app_entity.id = ox_entity_field.entity_id
-                 where ox_form.id=?";
-                $where = array($formId);
-                $fields = $this->executeQueryWithBindParameters($query,$where)->toArray();
-            } else {
-                return 0;
-            }
+        if (isset($entityId)) {
+            $query = "SELECT ox_field.* from ox_field 
+            left join ox_app_entity on ox_app_entity.id = ox_field.entity_id
+            where ox_app_entity.id=?";
+            $where = array($entityId);
+            $fields = $this->executeQueryWithBindParameters($query,$where)->toArray();
+        } else {
+            return 0;
+        }
         $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.fileid=?";
         $whereParams = array($fileId);
         $fileArray = $this->executeQueryWithBindParameters($sqlQuery,$whereParams)->toArray();

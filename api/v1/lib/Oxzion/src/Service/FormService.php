@@ -202,11 +202,7 @@ class FormService extends AbstractService
         try {
             $existingFieldsQuery = "select ox_field.* from ox_field where ox_field.entity_id=".$entityId.";";
             $existingFields = $this->executeQuerywithParams($existingFieldsQuery);
-            if(count($existingFields) > 0){
-                $existingFields = $existingFields->toArray();
-            } else {
-                $existingFields = array();
-            }
+            $existingFields = $existingFields->toArray();
         } catch (Exception $e) {
             return 0;
         }
@@ -239,9 +235,12 @@ class FormService extends AbstractService
                 $createFormFieldEntry = $this->createFormFieldEntry($formId, $foundField['id']);
             }
         }
-        foreach ($existingFields as $existingField) {
+        $existingFormFieldsQuery = "select ox_field.* from ox_field INNER JOIN ox_form_field ON ox_form_field.field_id=ox_field.id where ox_form_field.form_id=".$formId.";";
+        $existingFormFields = $this->executeQuerywithParams($existingFormFieldsQuery);
+        $existingFormFields = $existingFormFields->toArray();
+        foreach ($existingFormFields as $existingField) {
             $fieldDeleted =  ArrayUtils::multiDimensionalSearch($fieldsList,'name',$existingField['name']);
-            if(isset($fieldDeleted)){
+            if(!isset($fieldDeleted)){
                $deleteFormFields = "DELETE from ox_form_field where form_id=".$formId." and field_id=".$existingField['id'].";";
                $result = $this->executeQuerywithParams($deleteFormFields);
             }

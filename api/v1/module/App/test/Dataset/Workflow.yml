@@ -46,7 +46,6 @@ ox_field:
     name: "field1"
     app_id: 99
     data_type: "integer"
-    workflow_id: 1
     required: 1
     sequence: 2
     entity_id: 1
@@ -55,7 +54,6 @@ ox_field:
     uuid: "465c89e0-df82-11e9-8a34-2a2ae2dbcce4"
     name: "field2"
     app_id: 99
-    workflow_id: 1
     data_type: "integer"
     required: 1
     sequence: 1

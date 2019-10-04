@@ -19,12 +19,12 @@ class WorkflowInstance extends Entity
         'date_modified' => null,
         'created_by' => null,
         'modified_by' => null,
-        'parent_id' => null
+        'parent_workflow_instance_id' => null
     );
     
     public function validate()
     {
-        $dataArray = array("workflow_id", "app_id", "org_id", "process_instance_id", "date_created","created_by","status");
+        $dataArray = array("workflow_id", "app_id", "org_id", "date_created","created_by","status");
         $this->validateWithParams($dataArray);
     }
 }

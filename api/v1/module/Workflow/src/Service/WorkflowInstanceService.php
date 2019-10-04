@@ -21,6 +21,7 @@ class WorkflowInstanceService extends AbstractService
     protected $fileService;
     protected $processEngine;
     protected $activityEngine;
+    private $log;
 
     public function __construct(
         $config,
@@ -35,6 +36,7 @@ class WorkflowInstanceService extends AbstractService
         $this->table = $table;
         $this->fileService = $fileService;
         $this->workflowService = $workflowService;
+        $this->log = $log;
         $this->workFlowFactory = $workflowFactory;
         $this->processEngine = $this->workFlowFactory->getProcessEngine();
         $this->activityEngine = $this->workFlowFactory->getActivity();
@@ -220,15 +222,35 @@ class WorkflowInstanceService extends AbstractService
         } else {
             if ($workFlowFlag) {
                 if ($workflow['form_id']==$params['form_id'] || $params['activityId']==null) {
-                    $workflowInstanceId = $this->processEngine->startProcess($workflow['process_id'], $params);
-                    $workflowInstance = $this->setupWorkflowInstance($workflowId, $workflowInstanceId['id'],$params);
+                    $workflowInstance = $this->setupWorkflowInstance($workflowId, null,$params);
+                    try{
+                        $this->beginTransaction();
+                        $file = $this->fileService->createFile($params, $workflowInstance['id']);
+                        $workflowInstanceId = $this->processEngine->startProcess($workflow['process_id'], $params);
+                        $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id where id = :workflowInstanceId";
+                        $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id']);
+                        $update = $this->executeUpdateWithBindParameters($updateQuery,$updateParams);
+                        $this->commit();
+                    } catch (Exception $e) {
+                        $this->log->info(ActivityInstanceService::class."Workflow Instance Entry Failed".$e->getMessage());
+                        $this->rollback();
+                        return 0;
+                    }
                 } else {
-                    $workflowInstanceId = $this->activityEngine->submitTaskForm($activityId, $params);
+                    $query = "select * from ox_file where workflow_instance_id=?";
+                    $queryParams = array($workflowInstance['id']);
+                    $existingFile = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+                    if(isset($existingFile[0])){
+                        $file = $this->fileService->updateFile($params, $existingFile[0]['id']);
+                        $workflowInstanceId = $this->activityEngine->submitTaskForm($activityId, $params);
+                    } else {
+                        return 0;
+                    }
                 }
+                return $file;
             } else {
                 return 0;
             }
-            return $this->fileService->createFile($params, $workflowInstanceId['id']);
         }
         return 0;
     }
@@ -248,7 +270,7 @@ class WorkflowInstanceService extends AbstractService
         
     }
     
-    public function setupWorkflowInstance($workflowId, $processInstanceId,$params =null)
+    public function setupWorkflowInstance($workflowId, $processInstanceId=null,$params =null)
     {
         $query = "select * from ox_workflow_instance where org_id=? and process_instance_id=?";
         $queryParams = array(AuthContext::get(AuthConstants::ORG_ID),$processInstanceId);

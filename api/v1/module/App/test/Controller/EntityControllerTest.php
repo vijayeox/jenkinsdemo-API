@@ -239,7 +239,7 @@ class EntityControllerTest extends ControllerTest
         $data = array('name'=>'NewWorkflow');
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity/d23d0c68-98c9-11e9-adc5-308d99c9145b/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals(100, $this->getConnection()->getRowCount('ox_form_field'));
+        $this->assertEquals(183, $this->getConnection()->getRowCount('ox_form_field'));
         $this->assertEquals(100, $this->getConnection()->getRowCount('ox_field'));
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();

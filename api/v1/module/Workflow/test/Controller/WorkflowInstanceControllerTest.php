@@ -55,15 +55,19 @@ class WorkflowInstanceControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => 'workflow3','app_id'=>1,'field2'=>1];
+        $fileCount = $this->getConnection()->getRowCount('ox_file');
+        $fileAttributeCount = $this->getConnection()->getRowCount('ox_file_attribute');
         $this->setJsonContent(json_encode($data));
         if (enableCamunda==0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Workflow\Service\WorkflowInstanceService::class);
-            $mockProcessEngine->expects('startProcess')->with('[main]', array('name'=>'workflow3','app_id'=>1,'entity_id'=>1,'workflowId'=>'1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4','form_id'=>1,'field2'=>1,'orgid'=>'53012471-2863-4949-afb1-e69b0891c98a','created_by'=>1))->once()->andReturn(array('id'=>1));
+            $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andReturn(array('id'=>1));
             $workflowService->setProcessEngine($mockProcessEngine);
             $this->processId = 1;
         }
         $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
+        $this->assertEquals($fileAttributeCount+3, $this->getConnection()->getRowCount('ox_file_attribute'));
+        $this->assertEquals($fileCount+1, $this->getConnection()->getRowCount('ox_file'));
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
         $this->assertModuleName('Workflow');

@@ -21,7 +21,7 @@ use Oxzion\Workflow\WorkFlowFactory;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\FileService;
 use Workflow\Model\WorkflowInstance;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
 use Exception;
 use Zend\Log\Logger;
@@ -177,7 +177,7 @@ class WorkflowService extends AbstractService
             }
         }
         if (isset($workflowName)) {
-            $deployedData = array('id'=>$workFlowId,'app_id'=>$appId,'name'=>$workflowName,'process_id'=>$processId,'form_id'=>$startFormId,'file'=>$workFlowStorageFolder.$fileName,'entity_id'=>$entityId);
+            $deployedData = array('id'=>$workFlowId,'app_id'=>$appId,'name'=>$workflowName,'process_id'=>$processId,'form_id'=>$startFormId,'file'=>$workFlowStorageFolder.$fileName,'entity_id'=>$entityId,'uuid'=>$workflow['uuid']);
             try {
                 $workFlow = $this->saveWorkflow($appId, $deployedData);
             } catch (Exception $e){
@@ -191,11 +191,11 @@ class WorkflowService extends AbstractService
     public function saveWorkflow($appId, &$data)
     {
         $data['app_id'] = $appId;
-        if (!isset($data['id'])) {
+        if (!isset($data['id']) || $data['id']==0) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
-            $data['uuid'] = Uuid::uuid4()->toString();
         }
+        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $form = new Workflow();
