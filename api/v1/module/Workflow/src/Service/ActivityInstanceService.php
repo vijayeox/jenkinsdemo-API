@@ -143,7 +143,7 @@ class ActivityInstanceService extends AbstractService
         $queryParams = array("processInstanceId" => $data['processInstanceId']);
         $activityId = null;
         $resultSet = $this->executeQuerywithBindParameters($query,$queryParams)->toArray();
-        if(!$resultSet){
+        if(count($resultSet)==0){
             if(isset($data['processVariables'])){
                 $variables = $data['processVariables'];
                 if(isset($variables['workflow_id']) || isset($variables['workflowId'])){
@@ -151,7 +151,7 @@ class ActivityInstanceService extends AbstractService
                 } else {
                     return 0;
                 }
-                $workflowInstance = $this->workflowInstanceService->setupWorkflowInstance($workflowId,$data['processInstanceId'],$variables);
+                $workflowInstance = $this->workflowInstanceService->setupWorkflowInstance($workflowId,$data['processInstanceId'],$variables,$params['currentActivity']);
                 if(isset($data['taskId'])){
                     $activityQuery = "SELECT * FROM `ox_activity` WHERE task_id = :taskId;";
                     $activityParams = array("taskId" => $data['taskId']);
@@ -179,7 +179,7 @@ class ActivityInstanceService extends AbstractService
         }
         $this->beginTransaction();
         try {
-            $activityInstance = array('workflow_instance_id'=>$workflowInstanceId,'activity_id'=>$activityId,'activity_instance_id'=>$data['activityInstanceId'],'status'=>'In Progress','org_id'=>$orgId,'data'=>json_encode($data['processVariables']));
+            $activityInstance = array('workflow_instance_id'=>$workflowInstanceId,'activity_id'=>$activityId,'activity_instance_id'=>$data['executionActivityinstanceId'],'status'=>'In Progress','org_id'=>$orgId,'data'=>json_encode($data['processVariables']));
             $activityCreated = $this->createActivityInstance($activityInstance);
             if (isset($data['candidates'])) {
                 foreach ($data['candidates'] as $candidate) {
@@ -224,13 +224,18 @@ class ActivityInstanceService extends AbstractService
     }
     public function completeActivityInstance(&$data)
     {
-        $query = "SELECT * FROM `ox_workflow_instance` WHERE process_instance_id = :processInstanceId;";
-        $queryParams = array("processInstanceId" => $data['processInstanceId']);
-        $activityId = null;
-        $resultSet = $this->executeQuerywithBindParameters($query,$queryParams)->toArray();
-        if($resultSet){
-            $workflowInstanceId = $resultSet[0]['id'];
-        } else {
+        try {
+            $query = "SELECT * FROM `ox_workflow_instance` WHERE process_instance_id = :processInstanceId;";
+            $queryParams = array("processInstanceId" => $data['processInstanceId']);
+            $activityId = null;
+            $resultSet = $this->executeQuerywithBindParameters($query,$queryParams)->toArray();
+            if($resultSet){
+                $workflowInstanceId = $resultSet[0]['id'];
+            } else {
+                return 0;
+            }
+        } catch(Exception $e){
+            $this->logger->info(ActivityInstanceService::class."Complete Activity Instance - WorkflowInstance Does not Exist ".$e->getMessage());
             return 0;
         }
         // Org Id from workflow instance based on the Id
@@ -245,7 +250,11 @@ class ActivityInstanceService extends AbstractService
                 $activityQuery = "SELECT * FROM `ox_activity` WHERE task_id = :taskId;";
                 $queryParams = array("taskId" => $data['taskId']);
                 $activity = $this->executeQuerywithBindParameters($activityQuery,$queryParams)->toArray();
-                $activityId = $activity[0]['id'];
+                if(count($activity)>0){
+                    $activityId = $activity[0]['id'];
+                } else {
+                    return 0;
+                }
             }
             if(isset($variables['orgid'])){
                 if ($org = $this->getIdFromUuid('ox_organization', $variables['orgid'])) {
@@ -260,19 +269,21 @@ class ActivityInstanceService extends AbstractService
         and workflow_instance_id=:workflowInstanceId;";
         $selectParams = array("activityId" => $activityId, "activityInstanceId" => $data['activityInstanceId'], "workflowInstanceId" => $workflowInstanceId);
         $activityInstance = $this->executeQuerywithBindParameters($selectQuery,$selectParams)->toArray();
-        if(!empty($activityInstance)){
+        if(count($activityInstance)>0){
             $this->beginTransaction();
             try {
                 $updateQuery = "UPDATE ox_activity_instance SET status =:instanceStatus where id =:activityInstanceId ;";
                 $updateParams = array("instanceStatus" => 'completed',"activityInstanceId" => $activityInstance[0]['id']);
                 $update = $this->executeQuerywithBindParameters($updateQuery,$updateParams);
+                return $activityInstance;
                 $this->commit();
             } catch (Exception $e) {
-                $this->logger->info(ActivityInstanceService::class."Creation of Activity Instance Entry Failed".$e->getMessage());
+                $this->logger->info(ActivityInstanceService::class."Completion of Activity Instance Entry Failed".$e->getMessage());
                 $this->rollback();
-                throw $e;
+                return $e;
             }
+        } else {
+            return 0;
         }
-        return $activityInstance;
     }
 }

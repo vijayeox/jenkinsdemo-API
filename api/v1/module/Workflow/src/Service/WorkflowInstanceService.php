@@ -228,6 +228,7 @@ class WorkflowInstanceService extends AbstractService
                         $fileData = $params;
                         $file = $this->fileService->createFile($fileData, $workflowInstance['id']);
                         $params['fileId'] = $fileData['id'];
+                        $params['workflow_instance_id'] = $workflowInstance['id'];
                         $workflowInstanceId = $this->processEngine->startProcess($workflow['process_id'], $params);
                         $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id where id = :workflowInstanceId";
                         $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id']);
@@ -274,13 +275,6 @@ class WorkflowInstanceService extends AbstractService
     
     public function setupWorkflowInstance($workflowId, $processInstanceId=null,$params =null)
     {
-        $query = "select * from ox_workflow_instance where org_id=? and process_instance_id=?";
-        $queryParams = array(AuthContext::get(AuthConstants::ORG_ID),$processInstanceId);
-        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        if(count($resultSet)){
-            return $resultSet;
-        }
-        $form = new WorkflowInstance();
         if (isset($params['orgid'])) {
             if ($org = $this->getIdFromUuid('ox_organization', $params['orgid'])) {
                 $orgId = $org;
@@ -299,12 +293,26 @@ class WorkflowInstanceService extends AbstractService
         } else {
             $createdBy = AuthContext::get(AuthConstants::USER_ID);
         }
+        if($processInstanceId){
+            if(isset($params['workflow_instance_id'])){
+                $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id where id = :workflowInstanceId";
+                $updateParams = array('process_instance_id' => $processInstanceId, 'workflowInstanceId' => $params['workflow_instance_id']);
+                $update = $this->executeUpdateWithBindParameters($updateQuery,$updateParams);
+            }
+            $query = "select * from ox_workflow_instance where process_instance_id=?";
+            $queryParams = array($processInstanceId);
+            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+            if(count($resultSet)>0){
+                return $resultSet[0];
+            }
+        }
+        $form = new WorkflowInstance();
         $dateCreated = date('Y-m-d H:i:s');
         $query = "select app_id from ox_workflow where id=? or uuid=?";
         $queryParams = array($workflowId,$workflowId);
-        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        if(count($resultSet)){
-            $data = array('workflow_id'=> $workflowId,'app_id'=> $resultSet[0]['app_id'],'org_id'=> $orgId,'process_instance_id'=>$processInstanceId,'status'=>"In Progress",'date_created'=>$dateCreated,'created_by'=>$createdBy);
+        $workflowResultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        if(count($workflowResultSet)){
+            $data = array('workflow_id'=> $workflowId,'app_id'=> $workflowResultSet[0]['app_id'],'org_id'=> $orgId,'process_instance_id'=>$processInstanceId,'status'=>"In Progress",'date_created'=>$dateCreated,'created_by'=>$createdBy);
             $form->exchangeArray($data);
             $form->validate();
             $this->beginTransaction();
