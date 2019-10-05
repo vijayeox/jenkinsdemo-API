@@ -225,7 +225,9 @@ class WorkflowInstanceService extends AbstractService
                     $workflowInstance = $this->setupWorkflowInstance($workflowId, null,$params);
                     try{
                         $this->beginTransaction();
-                        $file = $this->fileService->createFile($params, $workflowInstance['id']);
+                        $fileData = $params;
+                        $file = $this->fileService->createFile($fileData, $workflowInstance['id']);
+                        $params['fileId'] = $fileData['id'];
                         $workflowInstanceId = $this->processEngine->startProcess($workflow['process_id'], $params);
                         $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id where id = :workflowInstanceId";
                         $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id']);
