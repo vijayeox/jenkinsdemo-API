@@ -36,6 +36,7 @@ class PadiVerification implements AppDelegate
             return $returnArray;
         } else {
             $returnArray['padiVerified'] = false;
+            $data = array_merge($data,$returnArray);
             return $data;
         }
     }
