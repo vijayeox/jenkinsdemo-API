@@ -99,7 +99,11 @@ class UserCacheService extends AbstractService
         $this->beginTransaction();
         $count = 0;
         try {
-            $count = $this->table->delete($id, array());
+           $originalArray = $obj->toArray();
+           $form = new UserCache();
+           $originalArray['deleted'] = 1;
+           $form->exchangeArray($originalArray);
+           $result = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
                 return 0;

@@ -10,7 +10,8 @@ class UserCache extends Entity
         'id'=>0 ,
         'app_id' => 0,
         'content' => null,
-        'user_id' => 0
+        'user_id' => 0,
+        'deleted' => 0
     );
     protected $attributes = array();
 
