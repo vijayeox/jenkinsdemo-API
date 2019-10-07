@@ -11,3 +11,4 @@ CREATE TABLE IF NOT EXISTS `carrier_policy` (
 INSERT INTO `carrier_policy` (`product`,`carrier`,`policy_number`,`start_date`,`end_date`) VALUES ('Individual Professional Liability', 'Tokio Marine Specialty Insurance Company', 'PPK1992899',"2019-06-01 00:00:00","2020-06-30 11:59:59"); 
 INSERT INTO `carrier_policy` (`product`,`carrier`,`policy_number`,`start_date`,`end_date`) VALUES ('Dive Boat', 'U.S. SPECIALTY INSURANCE COMPANY', 'CUL11137.079',"2019-07-01 00:00:00","2020-07-30 11:59:59");        
 INSERT INTO `carrier_policy` (`product`,`carrier`,`policy_number`,`start_date`,`end_date`) VALUES ('Dive Store','Tokio Marine Specialty Insurance Company','PPK1992907',"2019-06-01 00:00:00","2020-06-30 11:59:59"); 
+INSERT INTO `carrier_policy` (`product`,`carrier`,`policy_number`,`start_date`,`end_date`) VALUES ('Emergency First Response','Tokio Marine Specialty Insurance Company','PPK1992907',"2019-06-01 00:00:00","2020-06-30 11:59:59"); 

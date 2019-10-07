@@ -1,3 +1,8 @@
+{assign var=property value=$property|json_decode:true}
+{assign var=building_coverage value=$property.building_coverage}
+{assign var=equipment_breakdown value=$property.equipment_breakdown}
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -22,7 +27,7 @@
 			<div class = "sec_content">
 				<div class = "sec3">
 					<p class = "sec_title">Commercial General Liability (Each Occurrence Limit):</p>
-					<p class = "sec_title">&nbsp&nbsp&nbsp&nbsp(Sign limited to : $25,000)</p>
+					<p class = "sec_title">&nbsp&nbsp&nbsp&nbsp(Sign limited to : ${$property.content_limit})</p>
 					<p class = "sec_title">Business Income:</p>
 					<p class = "sec_title">Building Coverage:</p>
 					<p class = "sec_title">Equipment Breakdown: (Included in Contents Limit)</p>
@@ -36,9 +41,9 @@
 					<p class = "sec_title">Glass:</p>
 				</div>
 				<b><div class = "sec4">
-					<p class = "sec_title2">${$content_limit}</p>
+					<p class = "sec_title2">${$property.content_limit}</p>
 					<p></p>
-					<p class = "sec_title2">${$business_income}</p>
+					<p class = "sec_title2">${$property.business_income}</p>
 					<p class = "sec_title2">{if building_coverage}
 							Included
 					   {else}
@@ -51,14 +56,14 @@
 					   		Not Included
 					   {/if}
 					</p>
-					<p class = "sec_title2">${$dependant_prop}</p>
-					<p class = "sec_title2">${$robbery_inside}</p>
-					<p class = "sec_title2">${$robbery_outside}</p>
-					<p class = "sec_title2">${$transit_coverage}</p>
-					<p class = "sec_title2">${$emp_theft}</p>
-					<p class = "sec_title2">${$prop_others}</p>
-					<p class = "sec_title2">${$off_premises}</p>
-					<p class = "sec_title2">${$glass}</p>
+					<p class = "sec_title2">${$property.dependant_prop}</p>
+					<p class = "sec_title2">${$property.robbery_inside}</p>
+					<p class = "sec_title2">${$property.robbery_outside}</p>
+					<p class = "sec_title2">${$property.transit_coverage}</p>
+					<p class = "sec_title2">${$property.emp_theft}</p>
+					<p class = "sec_title2">${$property.prop_others}</p>
+					<p class = "sec_title2">${$property.off_premises}</p>
+					<p class = "sec_title2">${$property.glass}</p>
 				</div></b>
 			</div>
 			<div class="spacing1">&nbsp</div>

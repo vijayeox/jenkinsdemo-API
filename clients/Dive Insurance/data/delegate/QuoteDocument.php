@@ -26,6 +26,20 @@ class QuoteDocument extends PolicyDocument
                      'aifooter' => null,
                      'aniTemplate' => 'DiveBoat_ANI',
                      'aniheader' => 'DB_Quote_ANI_header.html',
-                     'anifooter' => null));
+                     'anifooter' => null),
+        'Dive Store' 
+            => array(
+                     'cover_letter' => 'Dive_Store_Cover_Letter',
+                     'lheader' => 'letter_header.html',
+                     'lfooter' => 'letter_footer.html',
+                     'aiTemplate' => 'DiveStore_AI',
+                     'aiheader' => 'DS_Quote_AI_header.html',
+                     'aifooter' => null,
+                     'aniTemplate' => 'DiveStore_ANI',
+                     'aniheader' => 'DS_Quote_ANI_header.html',
+                     'anifooter' => null,
+                     'lpTemplate' => 'DS_Quote_LP',
+                     'lpheader' => 'DS_LP_header.html',
+                     'lpfooter' => null));
     }
 }

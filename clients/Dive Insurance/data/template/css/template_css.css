@@ -262,3 +262,73 @@ body{
 	margin-bottom:3px;
 	letter-spacing: 1px;
 }
+
+/*EFR*/
+.efr_title{
+	margin:0px;
+}
+.efr_bold{
+	font-size: 30px;
+	letter-spacing: 1px;
+	margin-left: 2%;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+.efr_title2{
+	margin-top: 1px;
+	margin-bottom: 1px;
+	margin-left: 2%;
+	font-size: 15px;
+}
+.spacing_efr{
+	margin-bottom:20px;
+	width:100%;
+	display: block;
+}
+.info_efr{
+	width:70%;
+	margin-left: 30px;
+	font-family: sans-serif;
+	font-style: normal;
+	font-size: 13px;
+	margin-bottom:1px;
+	margin-top:0px;
+	padding: 0px;
+	letter-spacing: 1px;
+}
+.info_efr1{
+	width:40%;
+	margin-left: 30px;
+	font-family: sans-serif;
+	font-style: normal;
+	font-size: 13px;
+	margin-bottom:1px;
+	margin-top:0px;
+	padding: 0px;
+	letter-spacing: 1px;
+}
+.hrtag_efr{
+	margin-top: 10%;
+	margin-bottom: 0px;
+	height:0.5px;
+	background-color: black;
+}
+.i_type2_efr{
+  display: inline-block;
+  width:45%;
+  float:left;
+  margin-bottom: 7%;
+}
+.hr_efr{
+	height:2px;
+	background-color: black;
+}
+.hr_value{
+	margin-top: 3%;
+}
+.note_efr{
+	font-size:15px;
+}
+.efr_counter{
+	width:50%;
+}

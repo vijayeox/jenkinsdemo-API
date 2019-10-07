@@ -51,8 +51,7 @@ class DocumentBuilder {
         if($options && isset($options['prepend'])){
             $prepend = $options['prepend'];
         }
-
-        return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data,$append,$prepend);
+       return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data,$append,$prepend);
     }
 
     public function copyTemplateToDestination($template,$destination){

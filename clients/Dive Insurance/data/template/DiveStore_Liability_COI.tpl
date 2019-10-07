@@ -1,3 +1,9 @@
+{assign var=liability value=$liability|json_decode:true}
+{assign var=medical_expense value=$liability.medical_expense}
+{assign var=owned_auto value=$liability.owned_auto}
+{assign var=diving_pool_use value=$liability.diving_pool_use}
+{assign var=travel_agent value=$liability.travel_agent}
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -33,11 +39,11 @@
 					<p class = "sec_title">&nbsp&nbsp&nbsp&nbsp(Claims made form)</p>
 				</div>
 				<b><div class = "sec4">
-					<p class = "sec_title2">${$general_liaility}</p>
-					<p class = "sec_title2">${$personal_injury}</p>
-					<p class = "sec_title2">${$general_liability_aggregate}</p>
-					<p class = "sec_title2">${$product_aggregate}</p>
-					<p class = "sec_title2">${$damage}</p>
+					<p class = "sec_title2">${$liability.general_liaility}</p>
+					<p class = "sec_title2">${$liability.personal_injury}</p>
+					<p class = "sec_title2">${$liability.general_liability_aggregate}</p>
+					<p class = "sec_title2">${$liability.product_aggregate}</p>
+					<p class = "sec_title2">${$liability.damage}</p>
 					<p class = "sec_title2">{if medical_expense}
 							Included
 					   {else}
