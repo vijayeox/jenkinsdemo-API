@@ -1,7 +1,7 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const mode = process.env.NODE_ENV || "development";
 const minimize = mode === "production";
 const plugins = [];
@@ -21,8 +21,7 @@ module.exports = {
   devtool: "source-map",
   resolve: {
     alias: {
-      react: path.resolve(__dirname, "./node_modules", "react"),
-      OxzionGUI: path.resolve(__dirname, "../../../../../view/gui/src/")
+      react: path.resolve(__dirname, "./node_modules", "react")
     }
   },
   entry: [
@@ -36,6 +35,11 @@ module.exports = {
     minimize
   },
   plugins: [
+    new CopyWebpackPlugin([
+       {from:'public/css',to:'css'},
+       {from:'public/js',to:'js'},
+       {from:'public/img',to:'img'}
+    ]),
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css"
@@ -51,6 +55,15 @@ module.exports = {
             loader: "file-loader"
           }
         ]
+      },
+      {
+        test: /\.(html)$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            attrs: [':data-src']
+          }
+        }
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -82,19 +95,16 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
+        include: /(node_modules\/\@oxzion|.)/,
         use: {
           loader: "babel-loader",
           options: {
             presets: [
-              require.resolve("@babel/preset-react"),
-              require.resolve("@babel/preset-env")
+              '@babel/react', '@babel/env'
             ],
             plugins: [
               require.resolve("@babel/plugin-transform-runtime"),
-              [
-                require.resolve("@babel/plugin-proposal-class-properties"),
-                { loose: false }
-              ]
+              '@babel/proposal-class-properties'
             ]
           }
         }
