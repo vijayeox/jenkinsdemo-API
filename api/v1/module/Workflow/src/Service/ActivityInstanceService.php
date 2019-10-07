@@ -179,7 +179,12 @@ class ActivityInstanceService extends AbstractService
         }
         $this->beginTransaction();
         try {
-            $activityInstance = array('workflow_instance_id'=>$workflowInstanceId,'activity_id'=>$activityId,'activity_instance_id'=>$data['executionActivityinstanceId'],'status'=>'In Progress','org_id'=>$orgId,'data'=>json_encode($data['processVariables']));
+            if(isset($data['executionActivityinstanceId'])){
+                $activity_instance_id = $data['executionActivityinstanceId'];
+            } else {
+                $activity_instance_id = $data['activityInstanceId'];
+            }
+            $activityInstance = array('workflow_instance_id'=>$workflowInstanceId,'activity_id'=>$activityId,'activity_instance_id'=>$activity_instance_id,'status'=>'In Progress','org_id'=>$orgId,'data'=>json_encode($data['processVariables']));
             $activityCreated = $this->createActivityInstance($activityInstance);
             if (isset($data['candidates'])) {
                 foreach ($data['candidates'] as $candidate) {
