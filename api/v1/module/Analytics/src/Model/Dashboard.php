@@ -3,7 +3,6 @@
 namespace Analytics\Model;
 
 use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
 
 class Dashboard extends Entity
 {
@@ -17,7 +16,9 @@ class Dashboard extends Entity
         'created_by' => 0,
         'date_created' => null,
         'org_id' => 0,
-        'isdeleted' => 0
+        'isdeleted' => 0,
+        'content' => null,
+        'version' => 0
     );
 
     public function validate()

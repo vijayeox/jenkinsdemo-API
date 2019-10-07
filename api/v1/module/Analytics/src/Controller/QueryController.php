@@ -3,14 +3,10 @@
 namespace Analytics\Controller;
 
 use Zend\Log\Logger;
-use Analytics\Model\QueryTable;
 use Analytics\Model\Query;
-use Analytics\Service\QueryService;
 use Oxzion\Controller\AbstractApiController;
-use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
-use Zend\InputFilter\Input;
-
+use Oxzion\VersionMismatchException;
 
 class QueryController extends AbstractApiController
 {
@@ -20,9 +16,9 @@ class QueryController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(QueryTable $table, QueryService $queryService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct($queryService, Logger $log)
     {
-        parent::__construct($table, $log, __class__, Query::class);
+        parent::__construct(null, $log, __class__, Query::class);
         $this->setIdentifierName('queryUuid');
         $this->queryService = $queryService;
     }
@@ -46,7 +42,8 @@ class QueryController extends AbstractApiController
         $data = $this->params()->fromPost();
         try {
             $count = $this->queryService->createQuery($data);
-        } catch (ValidationException $e) {
+        }
+        catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
@@ -69,9 +66,13 @@ class QueryController extends AbstractApiController
     {
         try {
             $count = $this->queryService->updateQuery($uuid, $data);
-        } catch (ValidationException $e) {
+        }
+        catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        catch (VersionMismatchException $e) {
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
         }
         if ($count == 0) {
             return $this->getErrorResponse("Query not found for uuid - $uuid", 404);
@@ -85,11 +86,17 @@ class QueryController extends AbstractApiController
      * @link /analytics/query/:queryUuid
      * @method DELETE
      * @param $uuid ID of Query to Delete
+     * @param $version Version number of Query to delete.
      * @return array success|failure response
      */
-    public function delete($uuid)
+    public function delete($uuid, $version)
     {
-        $response = $this->queryService->deleteQuery($uuid);
+        try {
+            $response = $this->queryService->deleteQuery($uuid, $version);
+        }
+        catch (VersionMismatchException $e) {
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+        }
         if ($response == 0) {
             return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);
         }

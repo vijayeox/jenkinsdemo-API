@@ -3,14 +3,10 @@
 namespace Analytics\Controller;
 
 use Zend\Log\Logger;
-use Analytics\Model\DataSourceTable;
 use Analytics\Model\DataSource;
-use Analytics\Service\DataSourceService;
 use Oxzion\Controller\AbstractApiController;
-use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
-use Zend\InputFilter\Input;
-
+use Oxzion\VersionMismatchException;
 
 class DataSourceController extends AbstractApiController
 {
@@ -20,9 +16,9 @@ class DataSourceController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(DataSourceTable $table, DataSourceService $dataSourceService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct($dataSourceService, Logger $log)
     {
-        parent::__construct($table, $log, __class__, DataSource::class);
+        parent::__construct(null, $log, __class__, DataSource::class);
         $this->setIdentifierName('dataSourceUuid');
         $this->dataSourceService = $dataSourceService;
     }
@@ -45,7 +41,8 @@ class DataSourceController extends AbstractApiController
         $data = $this->params()->fromPost();
         try {
             $count = $this->dataSourceService->createDataSource($data);
-        } catch (ValidationException $e) {
+        }
+        catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
@@ -68,9 +65,13 @@ class DataSourceController extends AbstractApiController
     {
         try {
             $count = $this->dataSourceService->updateDataSource($uuid, $data);
-        } catch (ValidationException $e) {
+        }
+        catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        catch (VersionMismatchException $e) {
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
         }
         if ($count == 0) {
             return $this->getErrorResponse("DataSource not found for uuid - $uuid", 404);
@@ -84,11 +85,17 @@ class DataSourceController extends AbstractApiController
      * @link /analytics/dataSource/:dataSourceUuid
      * @method DELETE
      * @param $uuid ID of DataSource to Delete
+     * @param $version Version number of the DataSource to delete.
      * @return array success|failure response
      */
-    public function delete($uuid)
+    public function delete($uuid, $version)
     {
-        $response = $this->dataSourceService->deleteDataSource($uuid);
+        try {
+            $response = $this->dataSourceService->deleteDataSource($uuid, $version);
+        }
+        catch (VersionMismatchException $e) {
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+        }
         if ($response == 0) {
             return $this->getErrorResponse("DataSource not found for uuid - $uuid", 404, ['uuid' => $uuid]);
         }

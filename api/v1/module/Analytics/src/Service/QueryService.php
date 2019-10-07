@@ -17,9 +17,9 @@ class QueryService extends AbstractService
 
     private $table;
 
-    public function __construct($config, $dbAdapter, QueryTable $table)
+    public function __construct($config, $dbAdapter, QueryTable $table, $logger)
     {
-        parent::__construct($config, $dbAdapter);
+        parent::__construct($config, $dbAdapter, $logger);
         $this->table = $table;
     }
 

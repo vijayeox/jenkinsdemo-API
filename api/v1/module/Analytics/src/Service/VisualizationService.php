@@ -17,9 +17,9 @@ class VisualizationService extends AbstractService
 
     private $table;
 
-    public function __construct($config, $dbAdapter, VisualizationTable $table)
+    public function __construct($config, $dbAdapter, VisualizationTable $table, $logger)
     {
-        parent::__construct($config, $dbAdapter);
+        parent::__construct($config, $dbAdapter, $logger);
         $this->table = $table;
     }
 

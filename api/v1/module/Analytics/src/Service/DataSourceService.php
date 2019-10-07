@@ -17,9 +17,9 @@ class DataSourceService extends AbstractService
 
     private $table;
 
-    public function __construct($config, $dbAdapter, DataSourceTable $table)
+    public function __construct($config, $dbAdapter, DataSourceTable $table, $logger)
     {
-        parent::__construct($config, $dbAdapter);
+        parent::__construct($config, $dbAdapter, $logger);
         $this->table = $table;
     }
 

@@ -7,19 +7,17 @@ use Analytics\Model\Widget;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
-use Zend\Db\Sql\Expression;
 use Oxzion\Utils\FilterUtils;
 use Ramsey\Uuid\Uuid;
 use Exception;
 
 class WidgetService extends AbstractService
 {
-
     private $table;
 
-    public function __construct($config, $dbAdapter, WidgetTable $table)
+    public function __construct($config, $dbAdapter, WidgetTable $table, $logger)
     {
-        parent::__construct($config, $dbAdapter);
+        parent::__construct($config, $dbAdapter, $logger);
         $this->table = $table;
     }
 
@@ -101,27 +99,55 @@ class WidgetService extends AbstractService
 
     public function getWidget($uuid,$params)
     {
-        $columnList = array('name','uuid','query_id','is_owner' => (new Expression('IF(ox_widget.created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'visualization_id','ispublic','org_id','isdeleted');
-        if(isset($params['config']))
-        {
-            $columnList = array('name','uuid','query_id','is_owner' => (new Expression('IF(ox_widget.created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'visualization_id','ispublic','org_id','isdeleted','configuration');
+        $query = "select w.uuid, w.ispublic, w.created_by, w.date_created, w.name, w.configuration, if(w.created_by=:created_by, true, false) as is_owner, v.renderer, v.type from ox_widget w join ox_visualization v on w.visualization_id=v.id where w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid and (w.ispublic=true or w.created_by=:created_by)";
+        $queryParams = [
+            'created_by' => AuthContext::get(AuthConstants::USER_ID),
+            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'uuid' => $uuid
+        ];
+        try {
+            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+            if (count($resultSet) == 0) {
+                return 0;
+            }
+            $response = [
+                'widget' => $resultSet[0]
+            ];
+            //Widget configuration value from database is a JSON string. Convert it to object and overwrite JSON string value.
+            $response['widget']['configuration'] = json_decode($resultSet[0]["configuration"]);
         }
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_widget')->columns($columnList)->where(array('ox_widget.uuid' => $uuid,'ox_widget.org_id' => AuthContext::get(AuthConstants::ORG_ID),'ox_widget.isdeleted' => 0))->join('ox_visualization','ox_visualization.id = ox_widget.visualization_id',array('type' => 'name'));
-        $response = $this->executeQuery($select)->toArray();
-        if(isset($response[0]))
-        {
-            $response['widget'] = $response[0];
-            unset($response[0]);
-        }
-        if(isset($response['widget']['configuration']))
-        {
-            $response['configuration'] = $response['widget']['configuration'];
-            unset($response['widget']['configuration']);
-        }
-        if (count($response) == 0) {
+        catch(Exception $e) {
+            $this->logger->err($e);
             return 0;
+        }
+
+        if(isset($params['data'])) {
+//--------------------------------------------------------------------------------------------------------------------------------
+//TODO:Fetch data from elastic search and remove hard coded values below.
+            if (0 == strcmp($uuid, "2aab5e6a-5fd4-44a8-bb50-57d32ca226b0")) { //Sales YTD
+                $response['widget']['data'] = '235436';
+            }
+            if ((0 == strcmp($uuid, "bacb4ec3-5f29-49d7-ac41-978a99d014d3")) || (0 == strcmp($uuid, "ae8e3919-88a8-4eaf-9e35-d7a4408a1f8c"))) { //Sales by sales person
+                $response['widget']['data'] = [
+                    ['person'=> 'Bharat', 'sales'=> 4.2],
+                    ['person'=> 'Harsha', 'sales'=> 5.2],
+                    ['person'=> 'Mehul', 'sales'=> 15.2],
+                    ['person'=> 'Rajesh', 'sales'=> 2.9],
+                    ['person'=> 'Ravi', 'sales'=> 2.9],
+                    ['person'=> 'Yuvraj', 'sales'=> 14.2]
+                ];
+            }
+            if (0 == strcmp($uuid, "08bd8fc1-2336-423d-842a-7217a5482dc9")) { //Quarterly revenue 
+                $response['widget']['data'] = [
+                    ['quarter'=> 'Q1 2018', 'revenue'=> 4.2],
+                    ['quarter'=> 'Q2 2018', 'revenue'=> 5.4],
+                    ['quarter'=> 'Q3 2018', 'revenue'=> 3.1],
+                    ['quarter'=> 'Q4 2018', 'revenue'=> 3.8],
+                    ['quarter'=> 'Q1 2019', 'revenue'=> 4.1],
+                    ['quarter'=> 'Q2 2019', 'revenue'=> 4.7]
+                ];
+            }
+//--------------------------------------------------------------------------------------------------------------------------------
         }
         return $response;
     }

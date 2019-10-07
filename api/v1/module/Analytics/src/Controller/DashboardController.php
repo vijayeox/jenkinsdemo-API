@@ -3,14 +3,10 @@
 namespace Analytics\Controller;
 
 use Zend\Log\Logger;
-use Analytics\Model\DashboardTable;
 use Analytics\Model\Dashboard;
-use Analytics\Service\DashboardService;
 use Oxzion\Controller\AbstractApiController;
-use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ValidationException;
-use Zend\InputFilter\Input;
-
+use Oxzion\VersionMismatchException;
 
 class DashboardController extends AbstractApiController
 {
@@ -20,9 +16,9 @@ class DashboardController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(DashboardTable $table, DashboardService $dashboardService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct($dashboardService, Logger $log)
     {
-        parent::__construct($table, $log, __class__, Dashboard::class);
+        parent::__construct(null, $log, __class__, Dashboard::class);
         $this->setIdentifierName('dashboardUuid');
         $this->dashboardService = $dashboardService;
     }
@@ -46,7 +42,8 @@ class DashboardController extends AbstractApiController
         $data = $this->params()->fromPost();
         try {
             $count = $this->dashboardService->createDashboard($data);
-        } catch (ValidationException $e) {
+        }
+        catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
@@ -68,15 +65,19 @@ class DashboardController extends AbstractApiController
     public function update($uuid, $data)
     {
         try {
-            $count = $this->dashboardService->updateDashboard($uuid, $data);
-        } catch (ValidationException $e) {
+            $result = $this->dashboardService->updateDashboard($uuid, $data);
+        }
+        catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("Dashboard not found for uuid - $uuid", 404);
+        catch (VersionMismatchException $e) {
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
         }
-        return $this->getSuccessResponseWithData($data, 200);
+        if ($result == 0) {
+            return $this->getErrorResponse("Dashboard update failed for uuid - $uuid", 404);
+        }
+        return $this->getSuccessResponseWithData($result, 200);
     }
 
     /**
@@ -85,11 +86,17 @@ class DashboardController extends AbstractApiController
      * @link /analytics/dashboard/:dashboardUuid
      * @method DELETE
      * @param $uuid ID of Dashboard to Delete
+     * @param $version Version number of the dashboard to delete.
      * @return array success|failure response
      */
-    public function delete($uuid)
+    public function delete($uuid, $version)
     {
-        $response = $this->dashboardService->deleteDashboard($uuid);
+        try {
+            $response = $this->dashboardService->deleteDashboard($uuid, $version);
+        }
+        catch (VersionMismatchException $e) {
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+        }
         if ($response == 0) {
             return $this->getErrorResponse("Dashboard not found for uuid - $uuid", 404, ['uuid' => $uuid]);
         }

@@ -97,7 +97,7 @@ return [
             'writers' => [
                 'stream' => [
                     'name' => 'stream',
-                    'priority' => \Zend\Log\Logger::ALERT,
+                    'priority' => \Zend\Log\Logger::DEBUG,
                     'options' => [
                         'stream' => __DIR__ . '/../../../logs/Analytics.log',
                         'formatter' => [
@@ -107,7 +107,7 @@ return [
                             ],
                         ],
                         'filters' => [
-                            'priority' => \Zend\Log\Logger::INFO,
+                            'priority' => \Zend\Log\Logger::DEBUG,
                         ],
                     ],
                 ],
