@@ -148,8 +148,14 @@ class AbstractService
         $adapter = $this->getAdapter();
         $statement = $adapter->query($queryString);
         $result = $statement->execute($parameters ? $parameters : array());
-        $resultSet = new ResultSet();
-        return $resultSet->initialize($result);
+        if ($result->isQueryResult() || ($result->getFieldCount() > 0)) {
+            $resultSet = new ResultSet();
+            return $resultSet->initialize($result);
+        }
+        else {
+            //return $result->count();
+            return $result->getAffectedRows();
+        }
     }
 
     public function create(&$data, $commit = true)
