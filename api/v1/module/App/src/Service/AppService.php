@@ -89,7 +89,6 @@ class AppService extends AbstractService
                 }
                 $pageSize = $filterArray[0]['take'];
                 $offset = $filterArray[0]['skip'];
-            }
             $where .= strlen($where) > 0 ? " AND status!=1" : "WHERE status!=1";
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;

@@ -3,11 +3,20 @@ namespace Oxzion\Model;
 
 use Oxzion\Utils\ValidationResult;
 use Oxzion\ValidationException;
+use Oxzion\InputConverter;
+use Oxzion\InvalidInputException;
 use Countable;
 
 abstract class Entity implements Countable
 {
     protected $data;
+    const INTVAL = 'int';
+    const FLOATVAL = 'float';
+    const DATETYPEVAL = 'datetype';
+    const UUIDVAL = 'uuid';
+    const TIMESTAMPVAL = 'timestamp';
+    const STRINGVAL = 'string';
+    const BOOLEANVAL = 'boolean';
 
     public function __construct()
     {
@@ -96,6 +105,33 @@ abstract class Entity implements Countable
         }
     }
 
+    public function exchangeWithSpecificKey($data,$keyname,$validation = false)
+    {
+        $errors = array();
+        foreach ($data as $key => $value){
+            if (!array_key_exists($key, $this->data)) {
+                continue;
+            }
+            if($validation == true)
+            {
+                if(array_key_exists('readonly', $this->data[$key]))
+                    $this->data[$key][$keyname] = $value;
+                else
+                    $errors[$key] = 'readonly';
+            }
+            else {
+                $this->data[$key][$keyname] = $value;
+            }
+        }
+        if (count($errors) > 0) {
+            $validationException = new ValidationException();
+            $validationException->setErrors($errors);
+            throw $validationException;
+        } else {
+            return;
+        }
+    }
+
     //This function is to check if the data passed through the post command has NULL, "" and empty Value. If it has any of these then an error message is shown
     public function validateWithParams($dataArray)
     {
@@ -103,6 +139,82 @@ abstract class Entity implements Countable
         foreach ($dataArray as $data) {
             if ($this->data[$data] === null || $this->data[$data] === "" || empty($this->data[$data])) {
                 $errors[$data] = 'required';
+            }
+        }
+        if (count($errors) > 0) {
+            $validationException = new ValidationException();
+            $validationException->setErrors($errors);
+            throw $validationException;
+        } else {
+            return;
+        }
+    }
+
+    public function completeValidation() {
+        $this->typeChecker();
+        $this->checkRequireFields();
+    }
+
+    public function typeChecker()
+    {
+        $data = $this->data;
+        $errors = array();
+        $inputConverter = new InputConverter();
+        foreach ($data as $key => $value) {
+            try{
+                if($data[$key]['type']==null || $data[$key]['type']==" " || empty($data[$key]['type']))
+                {
+                    throw new InvalidInputException("Parameter ${key} is not Not specified.", "err.${key}.invalid");
+                }
+                else
+                {
+                    switch ($data[$key]['type']) {
+                        case 'int':
+                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::INTVAL);
+                            break;
+                        case 'float':
+                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::FLOATVAL);
+                            break;
+                        case 'datetype':
+                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::DATETYPEVAL);
+                            break;
+                        case 'uuid':
+                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::UUIDVAL);
+                            break;
+                        case 'timestamp':
+                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::TIMESTAMPVAL);
+                            break;
+                        case 'string':
+                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::STRINGVAL);
+                            break;
+                        case 'boolean':
+                            $data[$key]['value'] = $inputConverter->checkType($key,$data[$key],'value',$data[$key]['value'],self::BOOLEANVAL);
+                            break;
+                        default:
+                            throw new InvalidInputException("Parameter ${key} is not a proper value.", "err.${key}.invalid");
+                            break;
+                    }
+                }
+            } catch(InvalidInputException $e)
+            {
+                array_push($errors, array('message' => $e->getMessage(),'messageCode' => $e->getMessageCode()));
+            }
+        }
+        if (count($errors) > 0) {
+            $validationException = new ValidationException();
+            $validationException->setErrors($errors);
+            throw $validationException;
+        }
+    }
+
+    public function checkRequireFields()
+    {
+        $data = $this->data;
+        $errors = $dataArray = array();
+        foreach ($data as $key => $value) {
+            if($data[$key]['required'] == true && empty($data[$key]['value']))
+            {
+                $errors[$key] = 'required';
             }
         }
         if (count($errors) > 0) {

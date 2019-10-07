@@ -1,0 +1,43 @@
+sample:
+  id:
+    type: 'int'
+    value1: 1
+    value2: -23
+    value3: 'wrong value'
+    value4: null
+  uuid:
+    type: 'uuid'
+    value1: '26e31d53-7ac7-4279-8377-7a6cd5be6789'
+    value2: '71afcc76-cd01-4928-98f2-e52f791fca83'
+    value3: 'wrong value'
+    value4: null
+  name:
+    type: 'string'
+    value1: 'string1'
+    value2: 'string2'
+    value3: 23
+    value4: null
+  date_created:
+    type: 'timestamp'
+    value1: '2018-11-11 07:25:06'
+    value2: '2019-04-21 07:25:06'
+    value3: 'wrong value'
+    value4: null
+  date:
+    type: 'datetype'
+    value1: '2019-03-23'
+    value2: '2020-01-28'
+    value3: 'wrong value'
+    value4: null
+  aggregate:
+    type: 'float'
+    value1: 23.34
+    value2: -44.0
+    value3: 'wrong value'
+    value4: null
+  isdeleted:
+    type: 'boolean'
+    value1: true
+    value2: false
+    value3: 'wrong value'
+    value4: null

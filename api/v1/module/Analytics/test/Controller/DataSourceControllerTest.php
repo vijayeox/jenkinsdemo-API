@@ -38,7 +38,7 @@ class DataSourceControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = [ 'name' => "Orocrm", 'type' => 'MySql', 'configuration' => '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'];
+        $data = ['name' => "Orocrm", 'type' => 'MySql', 'configuration' => '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'];
         $this->assertEquals(2, $this->getConnection()->getRowCount('ox_datasource'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/datasource', 'POST', $data);

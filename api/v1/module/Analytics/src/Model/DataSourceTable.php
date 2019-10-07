@@ -12,7 +12,12 @@ class DataSourceTable extends ModelTable {
         parent::__construct($tableGateway);
     }
 
+    // The following save function will be deprecated. It will be replaced by save2
     public function save(Entity $data) {
         return $this->internalSave($data->toArray());
+    }
+
+    public function save2(Entity $data) {
+        return $this->internalSave2($data->toArray());
     }
 }
