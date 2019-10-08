@@ -107,7 +107,7 @@ class PolicyDocumentTest extends DelegateTest
         $doc = substr($doc, 0, strripos($doc, '/'));
         $files = glob($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'].'/'.$content['uuid'].'/'."*");
         $filecount = count($files);
-        $this->assertEquals($filecount,4);
+        $this->assertEquals($filecount,5);
         FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
     }
 
@@ -213,7 +213,7 @@ class PolicyDocumentTest extends DelegateTest
         $doc = substr($doc, 0, strripos($doc, '/'));
         $files = glob($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'].'/'.$content['uuid'].'/'."*");
         $filecount = count($files);
-        $this->assertEquals($filecount,4);
+        $this->assertEquals($filecount,5);
         FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
     }
 
@@ -429,6 +429,26 @@ class PolicyDocumentTest extends DelegateTest
                  'cover_letter' => 1,
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
+                 'vessel_name' => 'LETTS DIVE',
+                 'vessel_year' => '1778',
+                 'vessel_length' => '30',
+                 'vessel_hp' => '300',
+                 'hull_type' => 'FIBER',
+                 'hull_mfg' => 'HOPPER',
+                 'vessel_sno' => '18000F888',
+                 'limit_ins' => '90,000.00',
+                 'personnal_effects' => '500.00/$5,000.00',
+                 'passengers' => '18',
+                 'crew_on_boat' => '2',
+                 'crew_in_water' => 1,
+                 'protection_liability_amt' => '1,000,000.00',
+                 'medical_pay' => '5,000',
+                 'total_premium' => '7,754.00',
+                 'padi_admin_fee' => '75.00',
+                 'navigation_limit_note' => 'WATERS OF PUERTO RICO AND THE U.S. VIRGIN ISLANDS NOT MORE THAN THREE (3) MILES FROM A HARBOR OF SAFE REFUGE. THE VESSEL MAY NOT CARRY PASSENGERS BETWEEN PUERTO RICO AND THE U.S. VIRGIN ISLANDS.',
+                 'personal_effect_deduct' => '500.00',
+                 'liability_ins_deduct' => '1,000.00',
+                 'medical_deduct' => '100.00'
                  ];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -472,8 +492,30 @@ class PolicyDocumentTest extends DelegateTest
                  'cover_letter' => 1,
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
-                 'additionalInsured' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}',
-                 'lossPayees' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}'];
+                 'vessel_name' => 'LETTS DIVE',
+                 'vessel_year' => '1778',
+                 'vessel_length' => '30',
+                 'vessel_hp' => '300',
+                 'hull_type' => 'FIBER',
+                 'hull_mfg' => 'HOPPER',
+                 'vessel_sno' => '18000F888',
+                 'limit_ins' => '90,000.00',
+                 'personnal_effects' => '500.00/$5,000.00',
+                 'passengers' => '18',
+                 'crew_on_boat' => '2',
+                 'crew_in_water' => 1,
+                 'protection_liability_amt' => '1,000,000.00',
+                 'medical_pay' => '5,000',
+                 'total_premium' => '7,754.00',
+                 'padi_admin_fee' => '75.00',
+                 'navigation_limit_note' => 'WATERS OF PUERTO RICO AND THE U.S. VIRGIN ISLANDS NOT MORE THAN THREE (3) MILES FROM A HARBOR OF SAFE REFUGE. THE VESSEL MAY NOT CARRY PASSENGERS BETWEEN PUERTO RICO AND THE U.S. VIRGIN ISLANDS.',
+                 'personal_effect_deduct' => '500.00',
+                 'liability_ins_deduct' => '1,000.00',
+                 'medical_deduct' => '100.00',
+                 'additionalInsured' => array("LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"),
+                 'manager_name' => 'Julie Joseph',
+                 'manager_email' => 'abcd@gmail.com',
+                 'lossPayees' => array("LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)")];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);

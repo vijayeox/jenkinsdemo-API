@@ -29,13 +29,13 @@
         <p class = "hull"><b>Hull</b></p>
         <div class = "section1">
           <div class = "sectiona">
-            <p class="hull_title">Name of Vessel: </p>
-            <p class="hull_title"><span>Year Built:&nbsp&nbsp&nbsp&nbsp 12345&nbsp&nbsp&nbsp    </span><span>Length:&nbsp&nbsp&nbsp&nbsp23&nbsp&nbsp&nbsp     </span><span>HP:&nbsp&nbsp&nbsp&nbsp78</span></p>
-            <p class="hull_title">S/N: &nbsp&nbsp234546464675</p>
+            <p class="hull_title">Name of Vessel: {$vessel_name}</p>
+            <p class="hull_title"><span>Year Built:&nbsp&nbsp&nbsp&nbsp {$vessel_year}&nbsp&nbsp&nbsp</span><span>Length:&nbsp&nbsp&nbsp&nbsp{$vessel_length}&nbsp&nbsp&nbsp     </span><span>HP:&nbsp&nbsp&nbsp&nbsp{$vessel_hp}</span></p>
+            <p class="hull_title">S/N: &nbsp&nbsp{$vessel_sno}</p>
           </div>
           <div class = "sectionb">
-            <p class="hull_title">Hull Type: </p>
-            <p class="hull_title">Mfg: &nbsp&nbspjhfjhfv75</p>  
+            <p class="hull_title">Hull Type: {$hull_type}</p>
+            <p class="hull_title">Mfg: &nbsp&nbsp{$hull_mfg}</p>  
           </div>
         </div>
         <div class = "section_div">
@@ -45,14 +45,28 @@
                       <p class="hull_title">Limit of Insurance - Tender/Dinghy:</p>
                   </div>
                   <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p></div>
-                  <div class="sec3"><p class="hull_title">$280,000.00</p><p class="hull_title">N/A</p></div>
+                  <div class="sec3">
+                  	<p class="value_align">{if isset($limit_ins)}
+                  						${$limit_ins}
+                  					{else}
+                  						N/A
+                  					{/if}</p>
+                   <p class="value_align">{if isset($limit_ins_tender)}
+                  						${$limit_ins_tender}
+                  					{else}
+                  						N/A
+                  					{/if}</p></div>
           </div>
           <div class = "div_section1">
                   <div class="sec4">
                       <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                       <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                   </div>
-                  <div class="sec5"><p class="hull_title">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp$280,000.00</p><p class="hull_title">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspN/A</p></div>
+                   <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if limit_ins_premium}
+                  						Included
+                  					{else}
+                  						N/A
+                  					{/if}</p></div>
           </div>
         </div>
     </div>
@@ -66,13 +80,21 @@
                           <p class="hull_title">Limit of Insurance:</p>
                       </div>
                       <div class="sec2"><p class="hull_title">US</p></div>
-                      <div class="sec3"><p class="hull_title">$280,000.00</p></div>
+                     <div class="sec3"><p class="value_align">{if isset($trailer_amt)}
+                  						${$trailer_amt}
+                  					{else}
+                  						N/A
+                  					{/if}</p></div>
               </div>
               <div class = "div_section1">
                       <div class="sec4">
                           <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                     </div>
-                      <div class="sec5"><p class="hull_title">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp$280,000.00</p></div>
+                     <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if trailer_value_premium}
+                  						Included
+                  					{else}
+                  						N/A
+                  					{/if}</p></div>
               </div>
         </div>
     </div>
@@ -85,7 +107,11 @@
                       <p class="hull_title">Limit per Item/per Occurence:</p>
                   </div>
                    <div class="sec2"><p class="hull_title">US</p></div>
-                  <div class="sec3"><p class="hull_title">$500.00/$5,000.00</p></div>
+                 <div class="sec3"><p class="value_align">{if isset($personnal_effects)}
+                  						${$personnal_effects}
+                  					{else}
+                  						N/A
+                  					{/if}</p></div>
         </div>
         <div class="div_section1"></div>
     </div>
@@ -97,7 +123,7 @@
 
 <p class = "sec_title"><b>SECTION B - LIABILITY INSURANCE </b>(Including Defense Costs) </p>
 <div class ="secB">
-<p class = "sec_titl"><span>Maximum Number:           </span><span>Passengers:     49</span><span>Crew on Boat:    2</span><span>Crew in Water:     0</span></p>    
+<p class = "sec_titl"><span>Maximum Number:       &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    </span><span>Passengers:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$passengers}</span><span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspCrew on Boat:   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {$crew_on_boat}</span><span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspCrew in Water:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$crew_in_water}</span></p>  
       <div class = "section_divi">
           <div class = "div_section">
                   <div class="sec1">
@@ -106,7 +132,21 @@
                       <p class="hull_title">Limit of Insurance - Crew in the Water:</p>
                   </div>
                   <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p><p class="hull_title">US</p></div>
-                  <div class="sec3"><p class="hull_title">$1,000,000.00</p><p class="hull_title">$1,000,000.00</p><p class="hull_title">Not Covered</p></div>
+                  <div class="sec3"><p class="value_align">{if isset($protection_liability_amt)}
+                  						${$protection_liability_amt}
+                  					{else}
+                  						Not Covered
+                  					{/if}</p>
+                  	<p class="value_align">{if isset($crew_liability_amt)}
+                  						${$crew_liability_amt}
+                  					{else}
+                  						Not Covered
+                  					{/if}</p>
+                  	<p class="value_align">{if isset($crew_water_liability_amt)}
+                  						${$crew_water_liability_amt}
+                  					{else}
+                  						Not Covered
+                  					{/if}</p></div>
           </div>
           <div class = "div_section1">
                   <div class="sec4">
@@ -114,8 +154,15 @@
                       <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                       <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                   </div>
-                  <div class="sec5"><p class="hull_title">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="hull_title">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="hull_title">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspN/A</p></div>
-          </div>
+                  <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if crew_liability_premium}
+                  						Included
+                  					{else}
+                  						N/A
+                  					{/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if water_crew_premium}
+                  						Included
+                  					{else}
+                  						N/A
+                  					{/if}</p></div>
     </div>
 </div>
 <p class = "sec_title"><b>SECTION C - MEDICAL PAYMENTS </b></p>
@@ -125,7 +172,11 @@
                       <p class="hull_title">Limit of Insurance - Protection & Indemnity:</p>
                   </div>
                   <div class="sec2"><p class="hull_title">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspUS</p></div>
-                  <div class="sec3"><p class="hull_title">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp$1,000,000.00</p></div>
+                  <div class="sec3"><p class="value_align">{if isset($medical_pay)}
+                  						${$medical_pay}
+                  					{else}
+                  						Not Covered
+                  					{/if}</p></div>
           </div>
           <div class = "div_section1">
                   <div class="sec4">
@@ -138,15 +189,14 @@
 <div>&nbsp</div>
     <hr></hr>
     <div class = "total">
-      <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >$10,965.00</span></p>
+      <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$total_premium}</span></p>
       <hr class="total_hr"></hr>
-      <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">$75.00</span></p>
+      <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padi_admin_fee}</span></p>
     </div>
 <hr class = "sec_title"></hr>
 <p class="nav"><b>Navigation Limits:</b></p>
 <p class="nav_title">While the Vessel is afloat, this policy covers only losses which occur within the navigation limits specified below:</p>
-<p class="nav_title">PHILIPPINE SEA; ISLAND OF GUAM; NOT MORE THAN 20 MILES FROM A HARBOR OF SAFE REFUGE, WITHIN 3 NAUTICAL MILES FROM
-SHORE, FRON RITIDIAN POINT IN THE NORTH, THENCE WESTWARD, TO TANGON ROCK, COCOS LAGOON, IN THE SOUTH.</p>
+<p class="nav_title2">{$navigation_limit_note}</p>
 
 <p><b>Deductibles:</b></p>
 <div>
@@ -159,9 +209,21 @@ SHORE, FRON RITIDIAN POINT IN THE NORTH, THENCE WESTWARD, TO TANGON ROCK, COCOS 
           <p>Personal Effects:</p>
         </div>
         <div class ="sector2">
-          <p>N/A</p>
-          <p>N/A</p>
-          <p>$500.00</p>
+          <p  class="value_align">{if isset($tender_deduct)}
+                  						${$tender_deduct}
+                  					{else}
+                  						N/A
+                  					{/if}</p>
+          <p class="value_align">{if isset($trailer_deduct)}
+                  						${$trailer_deduct}
+                  					{else}
+                  						N/A
+                  					{/if}</p>
+          <p class="value_align">{if isset($personal_effect_deduct)}
+                  						${$personal_effect_deduct}
+                  					{else}
+                  						N/A
+                  					{/if}</p>
         </div>
     </div>
     <div class = "sector3">
@@ -171,9 +233,17 @@ SHORE, FRON RITIDIAN POINT IN THE NORTH, THENCE WESTWARD, TO TANGON ROCK, COCOS 
           <p>SECTION C - MEDICAL PAYMENTS</p>
       </div>
         <div class = "sector5">
-          <p>$1,000.00</p>
-          <p>&nbsp</p>
-          <p>$100.00</p>
+           <p class="value_align">{if isset($liability_ins_deduct)}
+                  						${$liability_ins_deduct}
+                  					{else}
+                  						N/A
+                  					{/if}</p>
+          <p class="value_align">&nbsp</p>
+          <p class="value_align">{if isset($medical_deduct)}
+                  						${$medical_deduct}
+                  					{else}
+                  						N/A
+                  					{/if}</p>
         </div>
     </div>
   </div>

@@ -274,11 +274,13 @@ class PolicyDocument implements DocumentAppDelegate
             $options['footer'] = $this->template[$data['product']]['aifooter'];
             $this->documentBuilder->generateDocument($aiTemplate,$data,$aiDest,$options);
             $data['ai_document'] = $dest['relativePath'].$data['product'].'_AI'.'.pdf';
-            if(isset(self::TEMPLATE[$data['product']]['blanketForm'])){
+        }
+
+
+        if(isset(self::TEMPLATE[$data['product']]['blanketForm'])){
                 $blanketform = self::TEMPLATE[$data['product']]['blanketForm'];
                 $this->documentBuilder->copyTemplateToDestination($blanketform,$dest['relativePath']);
                 $data['blanket_document'] = $dest['relativePath'].$coi_number.'Individual_AI_Blanket_Endorsement.pdf';
-            }
         }
 
         if(isset($data['additionalNamedInsured'])){
