@@ -38,8 +38,9 @@ class AuthService extends AbstractService
         $rawData = $params;
         if(isset($data['commands'])){
             $commands = json_decode($data['commands']);
+            $params = $data;
             foreach ($commands as $command) {
-                $params = $this->performCommand($command,$data,$data,$rawData);
+                $params = $this->performCommand($command,$params,$data,$rawData);
             }
         }
         return $params;
@@ -73,7 +74,7 @@ class AuthService extends AbstractService
                 throw new Exception("Error Creating User", 1);
             }
         } catch(Exception $e){
-            throw new Exception("Error Creating User", 1);
+            throw $e;
         }
         return 0;
     }
