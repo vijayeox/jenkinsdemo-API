@@ -12,6 +12,8 @@ use Oxzion\Service\TemplateService;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
 
 class AppDelegateService extends AbstractService
@@ -21,6 +23,7 @@ class AppDelegateService extends AbstractService
     private $documentBuilder;
     private $messageProducer;
     private $templateService;
+    private $organizationService;
 
     public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null)
     {
@@ -50,6 +53,7 @@ class AppDelegateService extends AbstractService
     public function execute($appId, $delegate, $dataArray = array())
     {
         try {
+            $this->updateOrganizationContext($dataArray);
             $result = $this->delegateFile($appId, $delegate);
             if ($result) { 
                 $obj = new $delegate;
@@ -82,6 +86,13 @@ class AppDelegateService extends AbstractService
         return 2;
     }
 
+    private function updateOrganizationContext($data){
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        if(!$orgId && isset($data['orgId'])){
+            $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
+            AuthContext::put(AuthConstants::ORG_ID, $orgId);
+        }
+    }
     private function delegateFile($appId, $className)
     {
         $file = $className . $this->fileExt;

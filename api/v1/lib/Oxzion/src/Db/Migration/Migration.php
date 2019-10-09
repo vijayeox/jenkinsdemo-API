@@ -22,6 +22,7 @@ class Migration extends AbstractService
     public function __construct($config, $appName, $appId)
     {
         $this->database = $appName.'___'.$appId;
+        $this->database = str_replace('-', '', $this->database);
         $dbConfig = array_merge(array(), $config['db']);
         $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
         $dbConfig['database'] = 'mysql';

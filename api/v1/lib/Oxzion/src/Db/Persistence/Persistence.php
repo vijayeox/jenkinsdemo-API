@@ -18,7 +18,7 @@ use Zend\Db\Adapter\ParameterContainer;
 class Persistence extends AbstractService
 {
     private $database;
-    
+
     /**
      * Persistence constructor.
      * @param $config
@@ -28,6 +28,7 @@ class Persistence extends AbstractService
     public function __construct($config, string $appName, string $appId)
     {
         $this->database = $appName.'___'.$appId;
+        $this->database = str_replace('-', '', $this->database);
         $dbConfig = array_merge(array(), $config['db']);
         $dbConfig['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
         $dbConfig['database'] = $this->database;
@@ -143,7 +144,7 @@ class Persistence extends AbstractService
         $parsedData = new PHPSQLParser($sqlQuery);
         $parsedArray = $parsedData->parsed;
         $adapter=$this->dbAdapter;
-        
+
         try {
             if (!empty($parsedArray['UPDATE'])) {
                 foreach ($parsedArray['UPDATE'] as $key => $updateArray) {
@@ -174,7 +175,7 @@ class Persistence extends AbstractService
         $parsedData = new PHPSQLParser($sqlQuery);
         $parsedArray = $parsedData->parsed;
         $adapter=$this->dbAdapter;
-        
+
         try {
             if (!empty($parsedArray['FROM'])) {
                 foreach ($parsedArray['FROM'] as $key => $updateArray) {
@@ -258,7 +259,7 @@ class Persistence extends AbstractService
     }
 
     private function additionOfOrgIdColumn($parsedArray,$tableName)
-    {   
+    {
         $adapter = $this->dbAdapter;
         $columnResult = $adapter->query("SELECT TABLE_NAME, GROUP_CONCAT(COLUMN_NAME) as column_list FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name LIKE '$tableName' GROUP BY TABLE_NAME");
         $resultSet1 = $columnResult->execute();
@@ -267,28 +268,34 @@ class Persistence extends AbstractService
             $columnList = explode(",", $resultTableName['column_list']);
             if (in_array('ox_app_org_id', $columnList)) {
                 $orgId = AuthContext::get(AuthConstants::ORG_ID);
-                $exp_const = array("expr_type" => "const", "base_expr" => $orgId, "sub_tree" => "");
-                $exp_operator = array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
-                $exp_colref = array("expr_type" => "colref", "base_expr" => $tableName . " . ox_app_org_id", "sub_tree" => "", "no_quotes" =>
-                    array( "delim" => "", "parts" => array("0" => "ox_app_org_id") )
-                );
+                if($orgId){
+                    $exp_const = array("expr_type" => "const", "base_expr" => $orgId, "sub_tree" => "");
+                    $exp_operator = array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
+                    $exp_colref = array("expr_type" => "colref", "base_expr" => $tableName . " . ox_app_org_id", "sub_tree" => "", "no_quotes" =>
+                        array( "delim" => "", "parts" => array("0" => "ox_app_org_id") )
+                    );
+                }
                 if(!isset($parsedArray['WHERE'])){
                     $parsedArray['WHERE'] = array();
                     $expAndOperator = array("expr_type" => "operator", "base_expr" => " (", "sub_tree" => "");
                 }else{
                     $expAndOperator = array("expr_type" => "operator", "base_expr" => "and (", "sub_tree" => "");
                 }
-                array_push($parsedArray['WHERE'], $expAndOperator, $exp_colref, $exp_operator, $exp_const);
-
-                $expOrOperator = array("expr_type" => "operator", "base_expr" => "OR", "sub_tree" => "");
+                if($orgId){
+                    array_push($parsedArray['WHERE'], $expAndOperator, $exp_colref, $exp_operator, $exp_const);
+                    $expOrOperator = array("expr_type" => "operator", "base_expr" => "OR", "sub_tree" => "");
+                    array_push($parsedArray['WHERE'], $expOrOperator);
+                }else{
+                    array_push($parsedArray['WHERE'], $expAndOperator);
+                }
                 $exp_const = array("expr_type" => "const", "base_expr" => "0 )", "sub_tree" => "");
                 $exp_operator = array("expr_type" => "operator", "base_expr" => "=", "sub_tree" => "");
                 $exp_colref = array("expr_type" => "colref", "base_expr" => $tableName . " . ox_app_org_id", "sub_tree" => "", "no_quotes" =>
                     array( "delim" => "", "parts" => array("0" => "ox_app_org_id") )
                 );
-                array_push($parsedArray['WHERE'], $expOrOperator, $exp_colref, $exp_operator, $exp_const);
+                array_push($parsedArray['WHERE'], $exp_colref, $exp_operator, $exp_const);
             }
-        } 
+        }
         return $parsedArray;
     }
 
