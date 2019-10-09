@@ -137,8 +137,8 @@ class AuthController extends AbstractApiControllerHelper
         }
         if (isset($result['auto_login'])) {
             $result['credentials'] = $this->getJwt($result['user']['username'], $this->userService->getUserOrg($result['user']['username']),1);
-        }
-        return $this->getSuccessResponseWithData($result);
+        } 
+        return $this->getSuccessResponseWithData($result['credentials']);
     }
 
     /**
