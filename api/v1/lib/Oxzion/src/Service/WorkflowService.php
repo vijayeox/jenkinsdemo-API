@@ -181,7 +181,6 @@ class WorkflowService extends AbstractService
             try {
                 $workFlow = $this->saveWorkflow($appId, $deployedData);
             } catch (Exception $e){
-                print_r($e->getMessage());exit;
                 $this->deleteWorkflow($appId,$workflowId);
                 $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
                  throw $e;
