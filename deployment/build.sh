@@ -22,6 +22,29 @@ CYAN="\e[96m"
 BLINK="\e[5m"
 INVERT="\e[7m"
 RESET="\e[0m"
+
+#help function to print help message
+buildhelp()
+{
+    echo -e "1.  all             -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
+    echo -e "2.  api             -${YELLOW}For packaging API.${RESET}"
+    echo -e "3.  view            -${YELLOW}For packaging UI/View.${RESET}"
+    echo -e "4.  workflow        -${YELLOW}For packaging workflow.${RESET}"
+    echo -e "5.  integrations    -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
+    echo -e "6.  calendar        -${YELLOW}For packaging Event Calendar.${RESET}"
+    echo -e "7.  camel           -${YELLOW}For packaging Apache Camel.${RESET}"
+    echo -e "8.  chat            -${YELLOW}For packaging Mattermost Chat.${RESET}"
+    echo -e "9.  crm             -${YELLOW}For packaging OroCRM.${RESET}"
+    echo -e "10. mail            -${YELLOW}For packaging Rainloop Mail.${RESET}"
+    echo -e "11. openproject     -${YELLOW}For packaging Openproject.${RESET}"
+    echo -e "12. helpapp         -${YELLOW}For packaging HelpApp.${RESET}"
+    echo -e "13. --help or -h    -${YELLOW}For help.${RESET}"
+    echo -e "14. list            -${YELLOW}For list of options.${RESET}"
+    echo -e "15. deploy          -${YELLOW}For deploying to production${RESET}"
+    echo -e "16. clean           -${YELLOW}For cleaning the production server${RESET}"
+    echo -e "17. setup           -${YELLOW}For fresh setup of the production server${RESET}"
+    echo -e "18. package         -${YELLOW}For packaging existing build${RESET}"
+}
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
 #if [ -z "$1" ] || [ -z "$2" ];
@@ -243,27 +266,7 @@ all()
    api
    view 
 }
-buildhelp()
-{
-    echo -e "1.  all             -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
-    echo -e "2.  api             -${YELLOW}For packaging API.${RESET}"
-    echo -e "3.  view            -${YELLOW}For packaging UI/View.${RESET}"
-    echo -e "4.  workflow        -${YELLOW}For packaging workflow.${RESET}"
-    echo -e "5.  integrations    -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
-    echo -e "6.  calendar        -${YELLOW}For packaging Event Calendar.${RESET}"
-    echo -e "7.  camel           -${YELLOW}For packaging Apache Camel.${RESET}"
-    echo -e "8.  chat            -${YELLOW}For packaging Mattermost Chat.${RESET}"
-    echo -e "9.  crm             -${YELLOW}For packaging OroCRM.${RESET}"
-    echo -e "10. mail            -${YELLOW}For packaging Rainloop Mail.${RESET}"
-    echo -e "11. openproject     -${YELLOW}For packaging Openproject.${RESET}"
-    echo -e "12. helpapp         -${YELLOW}For packaging HelpApp.${RESET}"
-    echo -e "13. --help or -h    -${YELLOW}For help.${RESET}"
-    echo -e "14. list            -${YELLOW}For list of options.${RESET}"
-    echo -e "15. deploy          -${YELLOW}For deploying to production${RESET}"
-    echo -e "16. clean           -${YELLOW}For cleaning the production server${RESET}"
-    echo -e "17. setup           -${YELLOW}For fresh setup of the production server${RESET}"
-    echo -e "18. package         -${YELLOW}For packaging existing build${RESET}"
-}
+
 #looping through case from arguments passed
 for i in $@
 do
