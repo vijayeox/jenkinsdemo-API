@@ -115,8 +115,8 @@ class WorkflowService extends AbstractService
                 return 1;
             }
         } catch (Exception $e) {
-            $this->deleteWorkflow($appId, $workFlowId);
             $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->deleteWorkflow($appId, $workFlowId);
             throw $e;
         }
         $processes = $this->getProcessManager()->parseBPMN($workFlowStorageFolder.$fileName, $appId);
