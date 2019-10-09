@@ -31,7 +31,7 @@ class ProcessManagerImpl implements ProcessManager
                 return 0;
             }
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
     public function parseBPMN($file, $appId)
