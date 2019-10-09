@@ -200,35 +200,6 @@ class AppController extends AbstractApiController
     }
 
     /**
-     * Upload the app from the UI and extracting the zip file in a folder that will start the installation of app.
-     * @api
-     * @link /app/appdeployyml
-     * @method GET
-     * @param null </br>
-     * <code>
-     * </code>
-     * @return array Returns a JSON Response with Status Code.</br>
-     * <code> status : "success|error"
-     * </code>
-     */
-    public function appUploadAction()
-    {
-        $file_name = $_FILES["file"]["name"];
-        $destinationFolder = $this->appService->getAppUploadFolder() . "uploads/";
-        $target_file = $destinationFolder . $file_name;
-        try {
-            if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
-                $this->appService->getDataFromDeploymentDescriptorUsingYML($this->appService->getAppUploadFolder());
-                return $this->getSuccessResponse();
-            } else {
-                return $this->getErrorResponse("Files cannot be uploaded");
-            }
-        } catch (Exception $e) {
-            return $this->getErrorResponse("Files cannot be uploaded!");
-        }
-    }
-
-    /**
      * GET App API
      * @api
      * @link /app/a
@@ -305,9 +276,11 @@ class AppController extends AbstractApiController
             catch (ServiceException $e){
                 return $this->getErrorResponse($e->getMessage(),404);
             }catch(Exception $e){
+                print_r($e->getMessage());exit;
                 return $this->getErrorResponse($e->getMessage(),500);
             }
         }else{
+            print_r($e->getMessage());exit;
             return $this->getErrorResponse("Invalid parameters",400);
         }
     }

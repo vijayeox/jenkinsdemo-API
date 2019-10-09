@@ -70,17 +70,6 @@ return [
                     ],
                 ],
             ],
-            'appdeployxml' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/appdeployxml',
-                    'defaults' => [
-                        'controller' => Controller\AppController::class,
-                        'action' => 'getDataFromDeploymentDescriptorUsingXML',
-                        'method' => 'get'
-                    ],
-                ],
-            ],
             'appdeployyml' => [
                 'type' => Segment::class,
                 'options' => [
