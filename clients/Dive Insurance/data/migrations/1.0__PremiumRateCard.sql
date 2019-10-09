@@ -514,7 +514,7 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$350,001 to $500,000','', '2020-03-01', '2020-03-31',2080);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', 'Over $500,000','', '2020-03-01', '2020-03-31',2310);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', 'Up to $25,000','', '2020-04-01', '2020-04-30',347);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$25,001 to $50,000', '2020-04-01', '2020-04-30',572);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$25,001 to $50,000','',  '2020-04-01', '2020-04-30',572);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$50,001 to $100,000','', '2020-04-01', '2020-04-30',728);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$100,001 to $150,000','', '2020-04-01', '2020-04-30',884);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$150,001 to $200,000', '', '2020-04-01', '2020-04-30',1143);
@@ -523,7 +523,7 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$350,001 to $500,000','', '2020-04-01', '2020-04-30',1560);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', 'Over $500,000','', '2020-04-01', '2020-04-30',1733);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', 'Up to $25,000','', '2020-05-01', '2020-05-31',231);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$25,001 to $50,000', '2020-05-01', '2020-05-31',381);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$25,001 to $50,000','', '2020-05-01', '2020-05-31',381);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$50,001 to $100,000','', '2020-05-01', '2020-05-31',485);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$100,001 to $150,000','', '2020-05-01', '2020-05-31',589);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$150,001 to $200,000', '', '2020-05-01', '2020-05-31',762);
@@ -532,7 +532,7 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$350,001 to $500,000','', '2020-05-01', '2020-05-31',1040);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', 'Over $500,000','', '2020-05-01', '2020-05-31',1155);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', 'Up to $25,000','', '2020-06-01', '2020-06-30',116);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$25,001 to $50,000', '2020-06-01', '2020-06-30',191);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$25,001 to $50,000','', '2020-06-01', '2020-06-30',191);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$50,001 to $100,000','', '2020-06-01', '2020-06-30',243);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$100,001 to $150,000','', '2020-06-01', '2020-06-30',295);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$150,001 to $200,000', '', '2020-06-01', '2020-06-30',381);
@@ -540,11 +540,11 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$250,001 to $350,000','', '2020-06-01', '2020-06-30',485);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', '$350,001 to $500,000','', '2020-06-01', '2020-06-30',520);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Group Professional Liability', 'Over $500,000','', '2020-06-01', '2020-06-30',578);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`) VALUES ('Group Professional Liability', '1M XS', '2019-06-30', '2020-06-30',0.8,'PERCENT');
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`) VALUES ('Group Professional Liability', '2M XS', '2019-06-30', '2020-06-30',1.55,'PERCENT');
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`) VALUES ('Group Professional Liability', '3M XS', '2019-06-30', '2020-06-30',2,'PERCENT');
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`) VALUES ('Group Professional Liability', '4M XS', '2019-06-30', '2020-06-30',2.5,'PERCENT');
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`) VALUES ('Group Professional Liability', '9M XS', '2019-06-30', '2020-06-30',4.35,'PERCENT');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`) VALUES ('Group Professional Liability', '1M XS', '', '2019-06-30', '2020-06-30',0.8,'PERCENT');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`) VALUES ('Group Professional Liability', '2M XS', '', '2019-06-30', '2020-06-30',1.55,'PERCENT');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`) VALUES ('Group Professional Liability', '3M XS', '', '2019-06-30', '2020-06-30',2,'PERCENT');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`) VALUES ('Group Professional Liability', '4M XS', '', '2019-06-30', '2020-06-30',2.5,'PERCENT');
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`,`type`) VALUES ('Group Professional Liability', '9M XS', '', '2019-06-30', '2020-06-30',4.35,'PERCENT');
 
 
 UPDATE `premium_rate_card` SET `tax`=28,`padi_fee`=26 ,`total`=699 WHERE `premium`=645 AND coverage = 'Instructor';     
