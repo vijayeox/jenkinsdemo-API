@@ -8,6 +8,8 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
 
+use function GuzzleHttp\json_decode;
+
 class AuthService extends AbstractService
 {
     private $table;
@@ -34,9 +36,10 @@ class AuthService extends AbstractService
             $data = $params;
         }
         $rawData = $params;
-        if(isset($params['commands'])){
-            foreach ($params['commands'] as $command) {
-                $params = $this->performCommand($command,$params,$data,$rawData);
+        if(isset($data['commands'])){
+            $commands = json_decode($data['commands']);
+            foreach ($commands as $command) {
+                $params = $this->performCommand($command,$data,$data,$rawData);
             }
         }
         return $params;
