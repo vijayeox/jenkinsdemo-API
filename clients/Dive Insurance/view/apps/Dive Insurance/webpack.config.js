@@ -21,7 +21,8 @@ module.exports = {
   devtool: "source-map",
   resolve: {
     alias: {
-      react: path.resolve(__dirname, "./node_modules", "react")
+      react: path.resolve(__dirname, "./node_modules", "react"),
+      OxzionGUI: path.resolve(__dirname, "../../../../../view/gui/src/")
     }
   },
   entry: [

@@ -4,7 +4,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import merge from "deepmerge";
 import {name as applicationName,appId as application_id,formId} from './metadata.json';
-import {LeftMenuTemplate,FormRender} from "@oxzion/gui";
+import LeftMenuTemplate from "OxzionGUI/LeftMenuTemplate";
+import FormRender from "OxzionGUI/components/App/FormRender";
 // Our launcher
 const register = (core, args, options, metadata) => {
   // Create a new Application instance
@@ -51,11 +52,12 @@ const register = (core, args, options, metadata) => {
   proc.request('/test', {method: 'post'})
   .then(response => console.log(response));
   getCacheData().then(cacheResponse => {
-   if(cacheResponse.data && cacheResponse.data.workflow_id){
-    getFormData(cacheResponse.data.workflow_id).then(formResponse => {
+   if(cacheResponse.data && cacheResponse.data.data.workflow_uuid){
+    getFormData(cacheResponse.data.data.workflow_uuid).then(formResponse => {
       if(formResponse && formResponse.data.length > 0){
         cacheId = cacheResponse['id'];
-        win.render($content => ReactDOM.render(<div className='formContent'><FormRender postSubmitCallback={postSubmitCallback} core={core} page={cacheResponse.data.page} appId={application_id} formId={formResponse.data[0].id} content={JSON.parse(formResponse.data[0].content)} data={cacheResponse.data}/></div>, $content));
+        win.render($content => ReactDOM.render(<div className='formContent'><FormRender postSubmitCallback={postSubmitCallback} core={core} 
+        page={cacheResponse.data.data.page} appId={application_id} formId={formResponse.data[0].id} content={JSON.parse(formResponse.data[0].content)} data={cacheResponse.data.data}/></div>, $content));
       } else {
         win.render($content => ReactDOM.render(<LeftMenuTemplate core={core} appId={application_id}/>, $content));
       }

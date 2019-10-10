@@ -9,7 +9,6 @@
     "prepublishOnly": "npm run eslint && npm run stylelint && rm ./dist/* && npm run build"
   },
   "dependencies": {
-    "@oxzion/gui": "file:../../../../../view/gui",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "choices.js": "^7.0.0",
     "copy-webpack-plugin": "^5.0.4",
