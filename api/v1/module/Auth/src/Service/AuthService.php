@@ -88,10 +88,11 @@ class AuthService extends AbstractService
         if(!isset($user)){
             throw new Exception("Cache Creation Failed", 1);
         }
-        $appId = 0;
         if(isset($params['app_id'])){
             if ($app = $this->getIdFromUuid('ox_app', $params['app_id'])) {
                 $appId = $app;
+            } else {
+                $appId = $params['app_id'];
             }
         } else {
             $appId = null;
