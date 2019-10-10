@@ -138,8 +138,8 @@ class WorkflowInstanceService extends AbstractService
     public function getWorkflowInstances($appId=null, $filterArray = array())
     {
         try{
-            $query = "select * from ox_workflow_instance where org_id=? and app_id=?";
-            $queryParams = array(AuthContext::get(AuthConstants::ORG_ID),$appId);
+            $query = "select * from ox_workflow_instance where app_id=?";
+            $queryParams = array($appId);
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             return $resultSet;
         }
@@ -190,7 +190,7 @@ class WorkflowInstanceService extends AbstractService
                     $query = "select ox_activity_instance.*, ox_activity.task_id as task_id 
                               FROM `ox_activity_instance` 
                               LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id 
-                              WHERE ox_activity_instance.id=? and org_id=?";
+                              WHERE ox_activity_instance.id=? and ox_activity_instance.org_id=?";
                     $queryParams = array($data['activityId'],AuthContext::get(AuthConstants::ORG_ID));
                     $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
                     if(isset($activityInstance)&&is_array($activityInstance) && !empty($activityInstance)){
@@ -353,7 +353,6 @@ class WorkflowInstanceService extends AbstractService
         $queryParams = array();
         $appFilter = "ox_workflow.app_id =:appId";
         $queryParams['appId'] = $appId;
-        $queryParams['orgId'] = AuthContext::get(AuthConstants::ORG_ID);                    
             
         if(isset($workflowId)){
             $appFilter .= " AND ox_workflow.uuid =:workflowId";
@@ -376,7 +375,7 @@ class WorkflowInstanceService extends AbstractService
                     inner join ox_form on ox_form.id = ox_activity_form.form_id
                     inner join ox_form_field on ox_form_field.form_id = ox_form.id
                     inner join ox_field on ox_field.id = ox_form_field.field_id
-                    where ox_workflow.org_id=:orgId AND $appFilter  AND ox_field.name IN ($fields)"; 
+                    where $appFilter  AND ox_field.name IN ($fields)"; 
                     
             $resultSet = $this->executeQueryWithBindParameters($query,array_merge($queryParams, $fieldParams))->toArray(); 
             
@@ -409,7 +408,7 @@ class WorkflowInstanceService extends AbstractService
         }
         $pageSize = "LIMIT ".(isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET ".(isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
-        $where = " WHERE ox_workflow.org_id=:orgId AND $appFilter AND owi.status = 'Completed' ".(isset($where) ? " AND $where" : "");
+        $where = " WHERE $appFilter AND owi.status = 'Completed' ".(isset($where) ? " AND $where" : "");
         $fromQuery = "from ox_workflow_instance as owi
         inner join ox_workflow on ox_workflow.id = owi.workflow_id 
         inner join ox_file as f1 on f1.workflow_instance_id = owi.id
@@ -426,9 +425,9 @@ class WorkflowInstanceService extends AbstractService
         }
         $countQuery = "SELECT count(distinct f1.id) as `count` $fromQuery $where";
         $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
-
+        // print_r($countQuery);exit;
         $select = "SELECT distinct f1.data,f1.uuid as fileId,owi.status,owi.process_instance_id as workflowInstanceId,ox_workflow.name,ox_file_attribute.fieldvalue $fromQuery $where $sort $pageSize $offset";
-
+// print_r($select);exit;
         $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
        return array('data' => $resultSet,'total' => $countResultSet[0]['count']);
     }

@@ -131,7 +131,6 @@ ox_workflow:
     name: "Test Workflow 1"
     process_id: "[main]"
     form_id: 1
-    org_id: 1
     uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4'
     entity_id: 1
   -
@@ -140,7 +139,6 @@ ox_workflow:
     name: "Test Workflow 2"
     process_id: "[main]"
     form_id: 1
-    org_id: 1
     uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo'
     entity_id: 1
 ox_file:
