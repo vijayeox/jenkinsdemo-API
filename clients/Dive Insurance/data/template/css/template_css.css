@@ -23,18 +23,21 @@ body{
 	background-color: black;
 }
 .title1{
-	font-size: 25px;
+	font-size: 20px;
 	margin: 0px;
 }
 .title2{
 	width:100%;
 }
 .claims_title{
+	margin-top: -4px;
+	margin-bottom: -2px;
 	width:70%;
 	float:left;
 	display:inline-block;
 }
 .page_value{
+	margin-top: -3px;
 	width:30%;
 	float:left;
 	display:inline-block;
@@ -49,8 +52,8 @@ body{
 .page_no{
 	position:relative;
 	top:1px;
-	left:70%;
-    font-size: 15px;
+	left:64%;
+    font-size: 13px;
 }
 .content{
 	width : 100%;
@@ -96,14 +99,15 @@ body{
 	margin-top:0px;
 	padding: 0px;
 	letter-spacing: 1px;
+	text-transform: uppercase;
 }
 .certificate_data{
-	width :35%;
+	width :45%;
 	float:left;
 	display:inline-block;
 }
 .certificate_data1{
-	width :65%;
+	width :55%;
 	float:left;
 	margin-bottom: 10px;
 	display:inline-block;
@@ -131,18 +135,18 @@ body{
 }
 .i_type{
   width:100%;
-  margin-bottom: 2px;
+  margin-bottom: 3%;
 }
 .i_type1{
   display: inline-block;
-  width:55%;
+  width:60%;
   float:left;
   margin-bottom: 5px;
 }
 
 .i_type2{
   display: inline-block;
-  width:45%;
+  width:40%;
   float:left;
   margin-bottom: 5px;
 }
@@ -152,11 +156,11 @@ body{
   float:left;
 }
 .in-type{
-	width: 45%;
+	width: 55%;
 	float:left;
 }
 .in-type1{
-	width: 55%;
+	width: 45%;
 	float:left;
 }
 .ins_type{
@@ -179,7 +183,7 @@ body{
 }
 .policy_notice1{
 	margin-top: 5px;
-	font-size: 15px;
+	font-size: 12px;
 	margin-bottom:0px;
 	margin-left: 30px;
 	margin-right: 30px;
@@ -215,7 +219,7 @@ body{
 }
 .policy_notice{
 	margin-top: 1px;
-	font-size: 15px;
+	font-size: 12px;
 }
 .footer{
 	width:100%;
@@ -297,7 +301,7 @@ body{
 	letter-spacing: 1px;
 }
 .info_efr1{
-	width:40%;
+	width:50%;
 	margin-left: 30px;
 	font-family: sans-serif;
 	font-style: normal;
@@ -331,4 +335,170 @@ body{
 }
 .efr_counter{
 	width:50%;
+}
+
+
+/*Group*/
+.p_border{
+	border:1px solid;
+	margin-bottom: 0px;
+	font-size: 13px;
+}
+.ghr_value{
+	margin-top: 25%;
+}
+.gcontent{
+	width : 100%;
+	margin-bottom: 2%;
+}
+.gpolicy_notice1{
+	font-size: 12px;
+	margin-bottom:0px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 0px;
+	text-align: center;
+}
+.ghrtag_efr{
+	margin-bottom: 0px;
+	height:0.5px;
+	background-color: black;
+}
+.gi_type1{
+  display: inline-block;
+  width:70%;
+  float:left;
+  margin-bottom: 5px;
+}
+
+.gi_type2{
+  display: inline-block;
+  width:30%;
+  float:left;
+  margin-bottom: 5px;
+}
+.gi_type{
+  width:100%;
+  margin-bottom: 11%;
+}
+.ai_list{
+	margin-top: 1px;
+	margin-bottom: 1px;
+	font-size:13px;
+	text-transform: uppercase;
+}
+.grp_add{
+	font-size: 15px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+.grp_hr_value{
+	margin-top: 3%;
+}
+.footer_html{
+	font-size: 13px;
+}
+.named_div{
+  width:100%;
+}
+.named_div1{
+  width:10%;
+  float:left;
+}
+.named_div2{
+  width:25%;
+  float:left;
+}
+.named_div3{
+  width:20%;
+  float:left;
+}
+.named_div4{
+  width:10%;
+  float:left;
+}
+.named_div5{
+  width:5%;
+  float:left;
+}
+.named_div6{
+  width:15%;
+  float:left;
+}
+.named_div7{
+  width:15%;
+  float:left;
+}
+.div_spacing{
+	margin-top:10%;
+}
+.t_title{
+	float:left;
+	margin-top: 1px;
+	margin-bottom: 1px;
+	font-size: 13px;
+}
+
+.t_title1{
+	float:left;
+	margin-top: 1px;
+	margin-bottom: 1px;
+	font-size: 15px;
+}
+
+/* footer */
+.footer_line{
+  margin-bottom: 1px;
+  margin-top:1px;
+  font-size: 13px;
+}
+.gfooter{
+  display: block;
+  width:100%;
+}
+
+.gfooter1{
+  vertical-align: top;
+  width:40%;
+  display:inline-block;
+  margin-top: 0px;
+}
+
+.gfooter2{
+  vertical-align: top;
+  width:10%;
+  text-align: center;
+  display:inline-block;
+  margin-top: 0px;
+  margin-left: 20px;
+  margin-right:20px;
+}
+
+.gfooter3{
+  vertical-align: top;
+  width:40%;
+  display:inline-block;
+  margin-top: 0px;
+  margin-left: 4%;
+}
+.ghrtag{
+	background-color:black;
+	margin-bottom: 0px;
+	height: 1px;
+}
+.ghrtag1{
+	background-color: black;
+	height: 1px;
+	margin-top: 0px;
+}
+.gfooter_title{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+.gimg{
+	margin-top: 1px;
+	margin-bottom: 0px;
+}
+.ghrtag2{
+	margin-top: 0px;
 }

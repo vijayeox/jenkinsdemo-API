@@ -85,7 +85,7 @@ class DocumentGeneratorImpl implements DocumentGenerator
         
     }
 
-    public function generatePdfDocumentFromHtml($htmlContent, $destination, $header = null,$footer = null,$data = null,$append = null,$prepend = null){
+    public function generatePdfDocumentFromHtml($htmlContent, $destination, $header = null,$footer = null,$data = null,$append = null,$prepend = null,$generateOptions = null){
         
         $appendOptions = "";
         $prependOptions = "";
@@ -93,6 +93,9 @@ class DocumentGeneratorImpl implements DocumentGenerator
         $dest = $destination;
         $myProjectDirectory = __DIR__."/../../../..";
         $snappy = new Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
+        if(isset($generateOptions['disable_smart_shrinking'])){
+            $snappy->setOption("disable-smart-shrinking",true);
+        }
         $snappy->setOption("header-html",$header);
         $snappy->setOption("footer-html",$footer);
         $snappy->setOption('replace',$data);

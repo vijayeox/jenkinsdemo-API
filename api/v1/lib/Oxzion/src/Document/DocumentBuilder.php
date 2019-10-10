@@ -35,6 +35,7 @@ class DocumentBuilder {
         $prepend = array();
         $header = null;
         $footer = null;
+        $generateOptions = array();
         if($options && isset($options['header'])){
             $header = $options['header'];
             $header = ArtifactUtils::getTemplatePath($this->config, $header, $data)."/".$header;
@@ -51,7 +52,11 @@ class DocumentBuilder {
         if($options && isset($options['prepend'])){
             $prepend = $options['prepend'];
         }
-       return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data,$append,$prepend);
+
+        if($options && isset($options['generateOptions'])){
+            $generateOptions = $options['generateOptions'];
+        }
+       return $this->documentGenerator->generatePdfDocumentFromHtml($content, $destination, $header, $footer,$data,$append,$prepend,$generateOptions);
     }
 
     public function copyTemplateToDestination($template,$destination){

@@ -116,7 +116,14 @@ class PolicyDocument implements DocumentAppDelegate
                      'slWording' => 'SL Wording.pdf',
                      'aiTemplate' => 'EFR_AI',
                      'aiheader' => 'EFR_AI_header.html',
-                     'aifooter' => 'EFR_AI_footer.html'));
+                     'aifooter' => 'EFR_AI_footer.html'),
+        'Group Professional Liability'
+            => array('template' => 'Group_PL_COI',
+                     'header' => 'Group_header.html',
+                     'footer' => 'Group_footer.html',
+                     'nTemplate' => 'Group_PL_NI',
+                     'nheader' => 'Group_NI_header.html',
+                     'nfooter' => 'Group_NI_footer.html'));
     }
 
 
@@ -215,8 +222,18 @@ class PolicyDocument implements DocumentAppDelegate
             $data['additionalNamedInsured'] = json_encode(array('name' => $data['additionalNamedInsured']));
         }
 
-        $destAbsolute = $dest['absolutePath'].$template.'.pdf';
+        if(isset($data['groupAdditionalInsured'])){
+            $data['groupAdditionalInsured'] = json_encode(array('name' => $data['groupAdditionalInsured']));
+        }
 
+        if(isset($data['namedInsured'])){
+            $data['namedInsured'] = json_encode($data['namedInsured']);
+        }
+
+        $destAbsolute = $dest['absolutePath'].$template.'.pdf';
+        if($template == 'Group_PL_COI'){
+            $options['generateOptions'] = array('disable_smart_shrinking' => 1);
+        }
         $this->documentBuilder->generateDocument($template, $data, $destAbsolute, $options);
         
         $data['coi_document'] = $dest['relativePath'].$template.'.pdf';
@@ -290,6 +307,15 @@ class PolicyDocument implements DocumentAppDelegate
             $options['footer'] =  $this->template[$data['product']]['anifooter'];
             $this->documentBuilder->generateDocument($aniTemplate,$data,$aniDest,$options);
             $data['ani_document'] = $dest['relativePath'].$data['product'].'_ANI'.'.pdf';
+        }
+
+        if(isset($data['namedInsured'])){
+            $aniTemplate =  $this->template[$data['product']]['nTemplate'];
+            $aniDest = $dest['absolutePath'].$data['product'].'_NI'.'.pdf';
+            $options['header'] =  $this->template[$data['product']]['nheader'];
+            $options['footer'] =  $this->template[$data['product']]['nfooter'];
+            $this->documentBuilder->generateDocument($aniTemplate,$data,$aniDest,$options);
+            $data['ani_document'] = $dest['relativePath'].$data['product'].'_NI'.'.pdf';
         }
 
         
