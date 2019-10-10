@@ -35,7 +35,7 @@ class CertificateOfInsuranceTest extends ServiceTest
     public function testGenerateDocumentHubWithSameAddress()
     {
         $data = [
-            'firstname' => 'Mohan', 
+            'firstname' => 'Mohan',
             'middlename' => 'Raj' ,
             'lastname' => 'D',
             'address1' => 'ABC 200',

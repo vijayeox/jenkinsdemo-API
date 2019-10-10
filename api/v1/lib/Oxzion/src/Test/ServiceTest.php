@@ -69,7 +69,7 @@ class ServiceTest extends TestCase
         $this->usedConsoleBackup = Console::isConsole();
         $this->reset();
         $tm = $this->getTransactionManager();
-        $tm->setRollbackOnly(true);
+        //$tm->setRollbackOnly(true);
         $tm->beginTransaction();
     }
 
@@ -86,7 +86,7 @@ class ServiceTest extends TestCase
     protected function tearDown()
     {
         $tm = $this->getTransactionManager();
-        $tm->rollback();
+        //$tm->rollback();
         Console::overrideIsConsole($this->usedConsoleBackup);
         // Prevent memory leak
         $this->reset();

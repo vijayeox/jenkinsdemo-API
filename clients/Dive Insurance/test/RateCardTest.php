@@ -8,13 +8,13 @@ use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 
 class RateCardTest extends DelegateTest
 {
-    
+
     public function setUp() : void
     {
         $this->loadConfig();
         $this->data = array(
-            "appName" => 'ox_client_app',
-            'UUID' => 8765765,
+            "appName" => 'DiveInsurance',
+            'UUID' => 'b269b348-7623-4a9e-85a1-772628f0d497',
             'description' => 'FirstAppOfTheClient',
         );
         $migrationFolder = __DIR__  . "/../data/migrations/";
@@ -23,7 +23,7 @@ class RateCardTest extends DelegateTest
         if (!is_link($path)) {
             symlink(__DIR__.'/../data/delegate/',$path);
         }
-        parent::setUp();               
+        parent::setUp();
     }
 
     public function getDataSet()
@@ -40,8 +40,8 @@ class RateCardTest extends DelegateTest
         }
         $query = "DROP DATABASE " . $this->database;
         $statement = $this->getDbAdapter()->query($query);
-        $result = $statement->execute();
-        
+      //  $result = $statement->execute();
+
     }
 
     public function testRateCardExecute()
