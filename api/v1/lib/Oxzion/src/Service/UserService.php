@@ -1045,6 +1045,7 @@ class UserService extends AbstractService
                     (SELECT DISTINCT orp.privilege_name from ox_role_privilege as orp JOIN
                     ox_user_role as ou on orp.role_id = ou.role_id AND ou.user_id =".$userId." and orp.org_id = ".$orgId.") urp ON app.privilege_name = urp.privilege_name GROUP BY app.uuid,app.name) a WHERE a.app_count = 0 union SELECT oa.uuid, oa.name FROM ox_app oa LEFT JOIN
                     `ox_app_registry` ar on oa.id = ar.app_id and ar.org_id =".$orgId." WHERE org_id IS NULL";
+        $this->logger->info("Query - ".$query);
         $result = $this->executeQuerywithParams($query);
         $result= $result->toArray();
         $arr = array();
