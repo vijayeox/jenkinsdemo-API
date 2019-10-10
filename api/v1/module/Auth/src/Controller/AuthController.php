@@ -133,12 +133,13 @@ class AuthController extends AbstractApiControllerHelper
                 return $this->getErrorResponse("There was an error while executing", 404);
             }
         } catch (Exception $e){
+            $this->log->err("Error".$e->getMessage());
             return $this->getErrorResponse($e->getMessage(), 404);
         }
         if (isset($result['auto_login'])) {
-            $result['credentials'] = $this->getJwt($result['user']['username'], $this->userService->getUserOrg($result['user']['username']),1);
+            $result = $this->getJwt($result['user']['username'], $this->userService->getUserOrg($result['user']['username']),1);
         } 
-        return $this->getSuccessResponseWithData($result['credentials']);
+        return $this->getSuccessResponseWithData($result);
     }
 
     /**

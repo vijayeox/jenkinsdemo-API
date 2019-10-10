@@ -37,7 +37,7 @@ class AuthService extends AbstractService
         }
         $rawData = $params;
         if(isset($data['commands'])){
-            $commands = json_decode($data['commands']);
+            $commands = json_decode($data['commands'],true);
             $params = $data;
             foreach ($commands as $command) {
                 $params = $this->performCommand($command,$params,$data,$rawData);
@@ -66,7 +66,7 @@ class AuthService extends AbstractService
             $data['username'] = $data['firstname'].".".$data['lastname'];
         }
         try {
-            $success = $this->userService->createUser($params,$data);
+            $success = $this->userService->createUser($params,$data,true);
             if($success){
                 $params['user'] = $data;
                 return $params;

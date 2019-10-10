@@ -146,18 +146,21 @@ class UserService extends AbstractService
      *        data : array Created User Object
      * </code>
      */
-    public function createUser($params,&$data) {
-
-        if(isset($params['orgId'])){
-            if((!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) && !isset($params['commands'])) {
-                throw new AccessDeniedException("You do not have permissions create user");
-            }else{
-                $data['orgid'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+    public function createUser($params,&$data,$register = false) {
+        if(!$register){
+            if(isset($params['orgId'])){
+                if((!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                    ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) && !isset($params['commands'])) {
+                    throw new AccessDeniedException("You do not have permissions create user");
+                }else{
+                    $data['orgid'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+                }
             }
-        }
-        else{
-            $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
+            else{
+                $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
+            }
+        }else{
+             $data['orgid'] = $this->getIdFromUuid('ox_organization',$data['orgId']);  
         }
 
         try {

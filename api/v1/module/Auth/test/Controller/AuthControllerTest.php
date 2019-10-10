@@ -385,7 +385,7 @@ class AuthControllerTest extends ControllerTest
     }
     public function testRegister()
     {
-        $data = '{"data":{"firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false,"orgId":"53012471-2863-4949-afb1-e69b0891c98a","commands":["create_user","store_cache_data","sign_in"]}';
+        $data = '{"data":{"orgId":"53012471-2863-4949-afb1-e69b0891c98a","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","commands" : "[\"create_user\",\"store_cache_data\",\"sign_in\"]","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data,true));
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -395,14 +395,13 @@ class AuthControllerTest extends ControllerTest
         $this->assertMatchedRouteName('register');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
-        $this->assertArrayHasKey('data',$content['data']);
-        $this->assertArrayHasKey('credentials',$content['data']);
-        $this->assertArrayHasKey('cache_data',$content['data']);
-        $this->assertArrayHasKey('user',$content['data']);
+        $this->assertArrayHasKey('jwt',$content['data']);
+        $this->assertArrayHasKey('refresh_token',$content['data']);
+        $this->assertArrayHasKey('username',$content['data']);
     }
     public function testRegisterWithoutCredentialsCommand()
     {
-        $data = '{"data":{"firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false,"orgId":"53012471-2863-4949-afb1-e69b0891c98a","commands":["create_user","store_cache_data"]}';
+        $data = '{"data":{"orgId":"53012471-2863-4949-afb1-e69b0891c98a","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","commands":"[\"create_user\",\"store_cache_data\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data,true));
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -412,12 +411,11 @@ class AuthControllerTest extends ControllerTest
         $this->assertMatchedRouteName('register');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
-        $this->assertArrayHasKey('data',$content['data']);
-        $this->assertArrayNotHasKey('credentials',$content['data']);
+        $this->assertArrayHasKey('cache_data',$content['data']);
     }
     public function testRegisterWithoutCacheCommand()
     {
-        $data = '{"data":{"firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false,"orgId":"53012471-2863-4949-afb1-e69b0891c98a","commands":["create_user"]}';
+        $data = '{"data":{"orgId":"53012471-2863-4949-afb1-e69b0891c98a","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","commands":"[\"create_user\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatgoku@gmail.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data,true));
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -427,12 +425,11 @@ class AuthControllerTest extends ControllerTest
         $this->assertMatchedRouteName('register');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
-        $this->assertArrayHasKey('data',$content['data']);
         $this->assertArrayNotHasKey('cache_data',$content['data']);
     }
     public function testRegisterWithOnlyCacheCommand()
     {
-        $data = '{"data":{"username":"bharatgtest"},"username":"bharatgtest","dummdata":"dummy","commands":["store_cache_data"]}';
+        $data = '{"data":{"username":"bharatgtest","commands":"[\"store_cache_data\"]"},"username":"bharatgtest","dummdata":"dummy"}';
         $this->dispatch('/register', 'POST', json_decode($data,true));
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
@@ -442,12 +439,11 @@ class AuthControllerTest extends ControllerTest
         $this->assertMatchedRouteName('register');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
-        $this->assertArrayHasKey('data',$content['data']);
         $this->assertArrayHasKey('cache_data',$content['data']);
     }
     public function testRegisterWithOnlyCacheCommandNoUser()
     {
-        $data = '{"data":{"username":"bharatgtest"},"username":"goku","dummdata":"dummy","commands":["store_cache_data"]}';
+        $data = '{"data":{"username":"bhatgtest","commands":"[\"store_cache_data\"]"},"username":"goku","dummdata":"dummy"}';
         $this->dispatch('/register', 'POST', json_decode($data,true));
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
@@ -461,7 +457,7 @@ class AuthControllerTest extends ControllerTest
     }
     public function testRegisterUserExists()
     {
-        $data = '{"data":{"firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatg@myvamla.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false,"orgId":"b0971de7-0387-48ea-8f29-5d3704d96321","commands":["create_user","store_cache_data","sign_in"]}';
+        $data = '{"data":{"orgId":"b0971de7-0387-48ea-8f29-5d3704d96321","firstname":"Bharat","lastname":"Gogineni","address1":"66,1st cross,2nd main,H.A.L 3r","address2":"PES University Campus,","city":"Bangalore","zip":"560075","commands":"[\"create_user\",\"store_cache_data\",\"sign_in\"]","state":"AR","country":"India","sameasmailingaddress":false,"address3":"Bangalore","address4":"PES University Campus,","phonenumber":"(973) 959-1462","mobilephone":"(973) 959-1462","fax":"","email":"bharatg@myvamla.com","submit":true},"metadata":{"timezone":"Asia/Calcutta","offset":330,"referrer":"","browserName":"Netscape","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36","pathName":"/static/1/","onLine":true},"state":"submitted","saved":false}';
         $this->dispatch('/register', 'POST', json_decode($data,true));
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
@@ -471,6 +467,6 @@ class AuthControllerTest extends ControllerTest
         $this->assertMatchedRouteName('register');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Error Creating User');
+        $this->assertEquals($content['message'], 'Username or Email ID Exist in other Organization');
     }
 }
