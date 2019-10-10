@@ -38,7 +38,6 @@ class AuthService extends AbstractService
         $rawData = $params;
         if(isset($data['commands'])){
             $commands = json_decode($data['commands'],true);
-            $params = $data;
             foreach ($commands as $command) {
                 $params = $this->performCommand($command,$params,$data,$rawData);
             }
@@ -71,7 +70,7 @@ class AuthService extends AbstractService
                 $params['user'] = $data;
                 return $params;
             } else {
-                throw new Exception("Error Creating User", 1);
+                throw new Exception("Error Creating User.", 1);
             }
         } catch(Exception $e){
             throw $e;
@@ -88,9 +87,8 @@ class AuthService extends AbstractService
         if(!isset($user)){
             throw new Exception("Cache Creation Failed", 1);
         }
-        $appId = 0;
-        if(isset($params['app_id'])){
-            if ($app = $this->getIdFromUuid('ox_app', $params['app_id'])) {
+        if(isset($data['app_id'])){
+            if ($app = $this->getIdFromUuid('ox_app', $data['app_id'])) {
                 $appId = $app;
             }
         } else {

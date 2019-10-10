@@ -147,24 +147,27 @@ class UserService extends AbstractService
      * </code>
      */
     public function createUser($params,&$data,$register = false) {
-        if(!$register){
-            if(isset($params['orgId'])){
-                if((!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
-                    ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) && !isset($params['commands'])) {
-                    throw new AccessDeniedException("You do not have permissions create user");
-                }else{
-                    $data['orgid'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+            if(!$register){
+                if(isset($params['orgId'])){
+                        if((!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+                            ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) && !isset($params['commands'])) {
+                            throw new AccessDeniedException("You do not have permissions create user");
+                         }else{
+                             $data['orgid'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+                        }
                 }
+                else{
+                    $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
+                }
+            }else{
+                $data['orgid'] = $this->getIdFromUuid('ox_organization',$data['orgId']);
             }
-            else{
-                $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
-            }
-        }else{
-             $data['orgid'] = $this->getIdFromUuid('ox_organization',$data['orgId']);  
-        }
 
         try {
 
+        if(isset($data['id'])){
+            unset($data['id']);
+        }
         $select = "SELECT ou.id,ou.uuid,count(ou.id) as org_count,ou.status,ou.username,ou.email,GROUP_CONCAT(ouo.org_id) as organisation_id from ox_user as ou inner join ox_user_org as ouo on ouo.user_id = ou.id where ou.username = '".$data['username']."' OR ou.email = '".$data['email']."' GROUP BY ou.id,ou.uuid,ou.status,ou.email";
         $result = $this->executeQuerywithParams($select)->toArray();
 
@@ -177,7 +180,7 @@ class UserService extends AbstractService
             $orgList =explode(',',$result[0]['organisation_id']);
             $result[0]['org_count'] = isset($result[0]['org_count']) ? $result[0]['org_count'] : 0;
             if(in_array($data['orgid'],$orgList)){
-                    $countval = 0;
+                $countval = 0;
                 if($result[0]['username'] == $data['username'] && $result[0]['status'] == 'Active'){
                     throw new ServiceException("Username Exist","duplicate.username");
                 }else if($result[0]['email'] == $data['email'] && $result[0]['status'] == 'Active'){
@@ -214,7 +217,7 @@ class UserService extends AbstractService
           if(isset($data['address1'])){
             $addressid = $this->addressService->addAddress($data);
             $data['address_id'] = $addressid;
-        }
+            }
 
         $data['uuid'] = UuidUtil::uuid();
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -235,6 +238,7 @@ class UserService extends AbstractService
         if(!isset($data['status'])){
             $data['status'] = 'Active';
         }
+
         $form = new User($data);
         $form->validate();
         $this->beginTransaction();
@@ -245,8 +249,10 @@ class UserService extends AbstractService
                 throw new ServiceException("Failed to create a new entity","failed.create.user");
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
-
-            $this->addUserToOrg($form->id, $form->orgid);
+            $add = $this->addUserToOrg($form->id, $form->orgid);
+            
+            $query = "select * from ox_user_org where user_id = ".$form->id;
+            $result = $this->executeQuerywithParams($query)->toArray();
             if(isset($data['role'])){
                 $this->addRoleToUser($data['uuid'],$data['role'],$form->orgid);
             }
