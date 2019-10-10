@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-let reactRender = require('./reactRender');
 // Methods OS.js server requires
 
 require('@babel/register')({
@@ -20,6 +19,7 @@ module.exports = (core, proc) => ({
     });
     const app = express()
     core.app.use('/public', express.static(path.resolve(__dirname, 'public')));
+    let reactRender = require('./reactRender');
     reactRender(core,proc);
     // WebSocket Route example (see index.js)
     core.app.ws(proc.resource('/socket'), (ws, req) => {
