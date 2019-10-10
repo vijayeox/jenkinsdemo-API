@@ -42,27 +42,34 @@ $('.tab a').on('click', function (e) {
   
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-  Formio.createForm(
-    document.getElementById("formio"),
-    JSON.parse(formContent)
-  ).then(function(form) {
+document.addEventListener("DOMContentLoaded", function(){
+
+  function autoLogin(data){
+    localStorage.setItem("User",JSON.stringify({"key": data.username,"timestamp": new Date()}));
+    localStorage.setItem("AUTH_token",JSON.stringify({"key": data.jwt,"timestamp": new Date()}));
+    localStorage.setItem("REFRESH_token",JSON.stringify({"key": data.refresh_token,"timestamp": new Date()}));
+    window.location.href = window.location.origin;
+  }
+
+Formio.createForm(document.getElementById('formio'), JSON.parse(formContent)).then(function(form) {
     // Prevent the submission from going to the form.io server.
     form.nosubmit = true;
     // Triggered when they click the submit button.
-    form.on("submit", function(submission) {
+    form.on('submit', function(submission) {
       var response = fetch(baseUrl + "register", {
-        body: JSON.stringify(submission),
-        headers: {
-          "content-type": "application/json"
-        },
-        method: "POST",
-        mode: "cors"
-      }).then(response => {
-        form.emit("submitDone", submission);
-        return response.json();
-      });
-      console.log(response);
+          body: JSON.stringify(submission),
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST',
+          mode: 'cors',
+        }).then(response => {
+          form.emit('submitDone', submission)
+          return response.json();
+        });
+        response.then(res => {
+          autoLogin(res.data);
+        })
     });
     form.on("callDelegate", changed => {
       var component = form.getComponent(event.target.id);
