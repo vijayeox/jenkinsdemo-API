@@ -7,13 +7,13 @@ use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 
 class PadiVerificationTest extends DelegateTest
 {
-
+    
     public function setUp() : void
     {
         $this->loadConfig();
         $this->data = array(
-            "appName" => 'DiveInsurance',
-            'UUID' => 'b269b348-7623-4a9e-85a1-772628f0d497',
+            "appName" => 'ox_client_app',
+            'UUID' => 8765765,
             'description' => 'FirstAppOfTheClient',
         );
         $migrationFolder = __DIR__  . "/../data/migrations/";
@@ -22,7 +22,7 @@ class PadiVerificationTest extends DelegateTest
         if (!is_link($path)) {
             symlink(__DIR__.'/../data/delegate/',$path);
         }
-        parent::setUp();
+        parent::setUp();               
     }
 
     public function getDataSet()
@@ -40,19 +40,19 @@ class PadiVerificationTest extends DelegateTest
         $query = "DROP DATABASE " . $this->database;
         $statement = $this->getDbAdapter()->query($query);
         $result = $statement->execute();
-
+        
     }
 
-    // public function testPadiVerification()
-    // {
-    //     $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
-    //     $data =['member_number' => '2141'];
-    //     $appId = $this->data['UUID'];
-    //     $appName = $this->data['appName'];
-    //     $config = $this->getApplicationConfig();
-    //     $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
-    //     $delegateService->setPersistence($appId, $this->persistence);
-    //     $content = $delegateService->execute($appId, 'PadiVerification', $data);
-    //     $this->assertEquals($content['member_number'], $data['member_number']);
-    // }
+    public function testPadiVerification()
+    {
+        $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
+        $data =['member_number' => '2141'];
+        $appId = $this->data['UUID'];
+        $appName = $this->data['appName'];
+        $config = $this->getApplicationConfig();
+        $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'PadiVerification', $data);
+        $this->assertEquals($content['member_number'], $data['member_number']);
+    }
 }

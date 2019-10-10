@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true" printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinter">
     <testsuites>
-        <!-- <testsuite name="Messaging Fixtures Fixtures">
+        <testsuite name="Messaging Fixtures Fixtures">
             <directory>./module/Messaging/test</directory>
         </testsuite>
         <testsuite name="Attachment Fixtures">
@@ -21,12 +21,12 @@
         <testsuite name="App Fixtures">
             <directory>./module/App/test</directory>
             <directory>./module/Workflow/test</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Core Fixtures">
             <directory>./lib/Oxzion/test</directory>
-            <!-- <directory>./module/Mlet/test</directory> -->
+            <directory>./module/Mlet/test</directory>
         </testsuite>
-        <!-- <testsuite name="Callback Fixtures">
+        <testsuite name="Callback Fixtures">
             <directory>./module/Callback/test</directory>
         </testsuite>
         <testsuite name="User Fixtures">
@@ -44,13 +44,13 @@
        <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Dive Insurance Fixtures">
             <directory>../../clients/Dive Insurance/test/</directory>
         </testsuite>
     </testsuites>
     <php>
-        <ini name="memory_limit" value="700M" />
+        <ini name="memory_limit" value="250M" />
         <const name="enableNLP" value="0"/>
         <const name="enableCamunda" value="0"/>
         <const name="enableElastic" value="0"/>
