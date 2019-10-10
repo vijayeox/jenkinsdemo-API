@@ -42,47 +42,54 @@ $('.tab a').on('click', function (e) {
   
 });
 
-document.addEventListener("DOMContentLoaded", function(){
-
-Formio.createForm(document.getElementById('formio'), JSON.parse(formContent)).then(function(form) {
+document.addEventListener("DOMContentLoaded", function() {
+  Formio.createForm(
+    document.getElementById("formio"),
+    JSON.parse(formContent)
+  ).then(function(form) {
     // Prevent the submission from going to the form.io server.
     form.nosubmit = true;
     // Triggered when they click the submit button.
-    form.on('submit', function(submission) {
-      var response = fetch('http://localhost:8080/register', {
-          body: JSON.stringify(submission),
-          headers: {
-            'content-type': 'application/json'
-          },
-          method: 'POST',
-          mode: 'cors',
-        }).then(response => {
-          form.emit('submitDone', submission)
-          return response.json();
-        });
-        console.log(response);
+    form.on("submit", function(submission) {
+      var response = fetch(baseUrl + "register", {
+        body: JSON.stringify(submission),
+        headers: {
+          "content-type": "application/json"
+        },
+        method: "POST",
+        mode: "cors"
+      }).then(response => {
+        form.emit("submitDone", submission);
+        return response.json();
+      });
+      console.log(response);
     });
-    form.on('callDelegate', (changed) => {
-        var component = form.getComponent(event.target.id);
-        if(component){
+    form.on("callDelegate", changed => {
+      var component = form.getComponent(event.target.id);
+      if (component) {
         var properties = component.component.properties;
-        if(properties){
-          if(properties['delegate']){
+        if (properties) {
+          if (properties["delegate"]) {
             $.ajax({
               type: "POST",
               async: false,
-              url: baseUrl+'app/'+appId+'/delegate/'+properties['delegate'],
+              url:
+                baseUrl +
+                "app/" +
+                appId +
+                "/delegate/" +
+                properties["delegate"],
               data: changed,
               success: function(response) {
-                if(response.data){
+                if (response.data) {
                   form.submission = { data: response.data };
                   form.triggerChange();
                 }
               }
             });
-            };
+          }
         }
-        }
-      });
-});
+      }
+    });
+  });
 });
