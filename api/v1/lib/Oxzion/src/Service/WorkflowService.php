@@ -358,38 +358,27 @@ class WorkflowService extends AbstractService
         return $response;
     }
 
-    public function getWorkflow($appId=null, $id=null)
+    public function getWorkflow($id, $appId = null)
     {
-        $sql = $this->getSqlObject();
         $params = array();
+        $where = "where wf.uuid = :id";
+        $params['id'] = $id; 
+
         if(isset($params['app_id'])){
-            if ($app = $this->getIdFromUuid('ox_app', $params['app_id'])) {
-                $appId = $app;
-            } else {
-                $appId = $params['app_id'];
-            }
-        } else {
-            $appId = null;
+            $where .= " and app.uuid = :appId";
+            $params['appId'] = $appId;
+            
         }
-        if (isset($id)) {
-            if ($workflow = $this->getIdFromUuid('ox_workflow', $id)) {
-                $workflowId = $workflow;
-            } else {
-                $workflowId = $id;
-            }
-            $params['id'] = $workflowId;
-        }
-        if (isset($appId)) {
-            $params['app_id'] = $appId;
-        }
-        $select = $sql->select();
-        $select->from('ox_workflow')
-        ->columns(array("*"))
-        ->where($params);
-        $response = $this->executeQuery($select)->toArray();
+        
+        $query = "select app.uuid as app_id, wf.uuid as id, wf.name, wf.form_id, wf.process_id, wf.entity_id
+                    from ox_workflow wf inner join ox_app as app on app.id = wf.app_id
+                    $where";
+        $response = $this->executeQueryWithBindParameters($query, $params)->toArray();
+        
         if (count($response)==0) {
             return 0;
         }
+
         return $response[0];
     }
 

@@ -151,13 +151,19 @@ class FormService extends AbstractService
     {
         
         try{
-            $appId = $this->getIdFromUuid('ox_app', $appUuid);
-            if (isset($appId)) {
-                $filterArray['app_id'] = $appId;
+            $where = "";
+            $params = array();
+            if (isset($appUuid)) {
+                $where ."where app.uuid = :appId";
+                $params['appId'] = $appUuid;
             }
-            $resultSet = $this->getDataByParams('ox_form', array("*"), $filterArray, null);
+            //TODO handle the $filterArray using FilterUtils
+            $query = "select f.name, f.template, e.uuid as entity_id, f.uuid as form_id from 
+                      ox_form as f inner join ox_app_entity as e on e.id = f.entity_id
+                      inner join ox_app as app on app.id = f.app_id
+                      $where";
             $response = array();
-            $response['data'] = $resultSet->toArray();
+            $response['data'] = $this->executeQueryWithBindParameters($query, $params)->toArray();
             return $response;
         } catch (Exception $e) {
             $this->rollback();

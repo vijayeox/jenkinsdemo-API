@@ -124,7 +124,7 @@ class WorkflowController extends AbstractApiController
     public function get($id)
     {
         $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->workflowService->getWorkflow($appId, $id);
+        $result = $this->workflowService->getWorkflow($id, $appId);
         if ($result == 0) {
             return $this->getErrorResponse("Workflow not found", 404, ['id' => $id]);
         }

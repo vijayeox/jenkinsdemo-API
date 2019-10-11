@@ -168,7 +168,7 @@ class WorkflowInstanceService extends AbstractService
         if(isset($params['workflowId'])){
             $workflowId = $params['workflowId'];
             $workFlowFlag = 1;
-            $workflow = $this->workflowService->getWorkflow(null, $workflowId);
+            $workflow = $this->workflowService->getWorkflow($workflowId);
             if (empty($workflow)) {
                 $workFlowFlag= 0;
                 return 0;
@@ -178,33 +178,34 @@ class WorkflowInstanceService extends AbstractService
                 $workflowInstanceId = $params['workflowInstanceId'];
                 $workflowInstance = $this->getWorkflowInstance($workflowInstanceId);
                 $workflowId = $workflowInstance['workflow_id'];
-                $workflow = $this->workflowService->getWorkflow(null, $workflowId);
+                $workflow = $this->workflowService->getWorkflow($workflowId);
             }
         }
         if (!isset($params['activityId'])) {
             $params['form_id'] = $workflow['form_id'];
             $activityId = $params['form_id'];
         } else {
-            if(isset($params['activityId'])){
-                try{
-                    $query = "select ox_activity_instance.*, ox_activity.task_id as task_id 
-                              FROM `ox_activity_instance` 
-                              LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id 
-                              WHERE ox_activity_instance.id=? and ox_activity_instance.org_id=?";
-                    $queryParams = array($data['activityId'],AuthContext::get(AuthConstants::ORG_ID));
-                    $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-                    if(isset($activityInstance)&&is_array($activityInstance) && !empty($activityInstance)){
-                        $activityId = $activityInstance[0]['activity_instance_id'];
-                    } else {
-                        return 0;
-                    }
-                }
-                catch (Exception $e) {
-                    $this->log->err($e);
+            try{
+                $query = "select ox_activity_instance.*, ox_activity.task_id as task_id 
+                          FROM `ox_activity_instance` 
+                          LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id 
+                          WHERE ox_activity_instance.id=? and ox_activity_instance.org_id=?";
+                $queryParams = array($data['activityId'],AuthContext::get(AuthConstants::ORG_ID));
+                $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+                if(isset($activityInstance)&&is_array($activityInstance) && !empty($activityInstance)){
+                    $activityId = $activityInstance[0]['activity_instance_id'];
+                } else {
                     return 0;
                 }
             }
+            catch (Exception $e) {
+                $this->log->err($e);
+                return 0;
+            }
+        
         }
+
+
         if(!isset($params['orgid'])){
             $params['orgid'] = AuthContext::get(AuthConstants::ORG_UUID);
         }
@@ -217,9 +218,11 @@ class WorkflowInstanceService extends AbstractService
         if(!isset($params['entity_id'])){
             $params['entity_id'] = $workflow['entity_id'];
         }
+
         if (isset($id)) {
             return $this->fileService->updateFile($params, $id);
         } else {
+            
             if ($workFlowFlag) {
                 if ($workflow['form_id']==$params['form_id'] || $params['activityId']==null) {
                     $workflowInstance = $this->setupWorkflowInstance($workflowId, null,$params);
