@@ -22,10 +22,16 @@ class FieldService extends AbstractService
         parent::__construct($config, $dbAdapter,$logger);
         $this->table = $table;
     }
-    public function saveField($appId, &$data)
+    public function saveField($appUUId, &$data)
     {
         $field = new Field();
-        $data['app_id'] = $this->getIdFromUuid('ox_app',$appId);
+        $data['app_id'] = $this->getIdFromUuid('ox_app',$appUUId);
+        if($app = $this->getIdFromUuid('ox_app',$appUUId)){
+            $appId = $app;
+        } else {
+            $appId = $appUUId;
+        }
+        $data['app_id'] = $appId;
         if (!isset($data['id']) || $data['id']==0) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
