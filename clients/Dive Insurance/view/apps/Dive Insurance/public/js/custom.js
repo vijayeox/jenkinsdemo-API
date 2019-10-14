@@ -56,6 +56,7 @@ Formio.createForm(document.getElementById('formio'), JSON.parse(formContent)).th
     form.nosubmit = true;
     // Triggered when they click the submit button.
     form.on('submit', function(submission) {
+      submission.data.app_id=appId;
       var response = fetch(baseUrl + "register", {
           body: JSON.stringify(submission),
           headers: {
