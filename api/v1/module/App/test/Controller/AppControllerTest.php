@@ -235,7 +235,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $content['data']['contact']['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $content['data']['contact']['lastname']);
         $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 27);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 25);
         $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
         $this->assertEquals(isset($usrResult[0]['address_id']),true);
@@ -386,7 +386,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $content['data']['contact']['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $content['data']['contact']['lastname']);
         $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 27);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 25);
         $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
         $this->assertEquals(isset($usrResult[0]['address_id']),true);
@@ -434,7 +434,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $content['data']['contact']['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $content['data']['contact']['lastname']);
         $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 23);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 25);
         $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
         $this->assertEquals(isset($usrResult[0]['address_id']),true);
@@ -479,7 +479,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $content['data']['contact']['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $content['data']['contact']['lastname']);
         $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 23);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 25);
         $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
         $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
         $this->assertEquals(isset($usrResult[0]['address_id']),true);
