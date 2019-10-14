@@ -30,7 +30,7 @@ class AnalyticsTest extends MainControllerTest
             $this->setSearchData();
             $config = $this->getApplicationConfig();
             $this->setupData();
-            sleep (1) ;
+            sleep (2) ;
         }
     }
 
@@ -41,11 +41,10 @@ class AnalyticsTest extends MainControllerTest
     }
 
     public function createIndex($indexer,$body) {
-        $type = 'type';
-        $app_id = $body['app_id'];
+        $app_name = $body['app_name'];
         $id = $body['id'];
         AuthContext::put(AuthConstants::ORG_ID, $body['org_id']);
-        $return=$indexer->index($app_id, $id, $type, $body);
+        $return=$indexer->index($app_name, $id, null, $body);   //entity_name is taken from the body, so passing null
     }
 
     public function setupData()
@@ -161,13 +160,43 @@ class AnalyticsTest extends MainControllerTest
         $this->assertEquals($results[1]['value'], "1");
     }
 
+    public function testWorkflowData() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['group'=>'field3','field'=>'field5','operation'=>'avg'];
+        $results = $ae->runQuery('sampleapp', 'TaskSystem', $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results[0]['name'], "field3text");
+        $this->assertEquals($results[0]['value'], "15");
+        $this->assertEquals($results[0]['grouplist'], "field3");
+        $this->assertEquals($results[1]['name'], "cfield3text");
+        $this->assertEquals($results[1]['value'], "30");
+        $this->assertEquals($results[1]['grouplist'], "field3");
+    }
+
+    public function testCrmDataWithFilter() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['Filter-owner_username'=>'bharatg','operation'=>'count'];
+        $results = $ae->runQuery('crm', 'Lead', $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results, 2);
+    }
+
     public function tearDown()
     {
          parent::tearDown();
          if(enableElastic!=0){
             $indexer=  $this->getApplicationServiceLocator()->get(Indexer::class);
-            $return1=$indexer->delete('11_test','all');
-            $return2=$indexer->delete('12_test','all');
+            $return1=$indexer->delete('11_test_index','all');
+            $return2=$indexer->delete('12_test_index','all');
+            $return3=$indexer->delete('sampleapp_index','all');
         }
     }
 

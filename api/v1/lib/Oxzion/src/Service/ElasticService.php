@@ -49,6 +49,7 @@ class ElasticService
             $results = array('data' => $result_obj['aggregations']['groupdata']['buckets']);
         } else if (isset($result_obj['aggregations'])) {
             $results = array('data' => $result_obj['aggregations']['value']['value']);
+
         } else {
             $results = array('data' => $result_obj['hits']['total']);
         }
@@ -63,26 +64,27 @@ class ElasticService
         return $result;
     }
 
-    public function getQueryResults($orgId, $appId, $params)
+    public function getQueryResults($orgId, $app_name, $params)
     {
-        $result = $this->filterData($orgId, $appId, $params);
+        $result = $this->filterData($orgId, $app_name, $params);
         return $result;
+
     }
 
-    public function filterData($orgId, $appId, $searchconfig)
+    public function filterData($orgId, $app_name, $searchconfig)
     {
         $boolfilter = array();
         $tmpfilter = $this->getFilters($searchconfig, $orgId);
 		if ($tmpfilter) {
 			$boolfilterquery['query']['bool']['filter'] = array($tmpfilter);
-		}
+		}	
 		$boolfilterquery['_source'] = (isset($searchconfig['select']))?$searchconfig['select']:array('*');
 		$pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:10000;
 		if(!empty($searchconfig['aggregates'])) {
 			if (!isset($searchconfig['select'])) {
 				$pagesize=0;
 			}
-			$aggs=$this->getAggregate($searchconfig['aggregates'],$boolfilterquery);
+			$aggs=$this->getAggregate($searchconfig['aggregates'],$boolfilterquery);	
 			if($searchconfig['group'] && !empty($searchconfig['group'])) {
 				$this->getGroups($searchconfig,$boolfilterquery,$aggs);
 			} else {
@@ -93,7 +95,7 @@ class ElasticService
 			}
 		}
 		$boolfilterquery['explain'] = true;
-		$params = array('index'=>$appId,'type'=>$this->type,'body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
+		$params = array('index'=>$app_name.'_index','type'=>$this->type,'body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
 		$result_obj = $this->search($params);
 		if ($searchconfig['group'] && !isset($searchconfig['select'])) {
 			$results = array('data'=>$result_obj['aggregations']['groupdata']['buckets']);
@@ -117,6 +119,7 @@ class ElasticService
 
     protected function getGroups($searchconfig, &$boolfilterquery, $aggs)
     {
+
         $grouparray = null;
         $size = (isset($searchconfig['pagesize'])) ? $searchconfig['pagesize'] : 10000;
         for ($i = count($searchconfig['group']) - 1; $i >= 0; $i--) {
@@ -178,9 +181,10 @@ class ElasticService
         $aggs = null;
         if (key($aggregates) == 'count_distinct') {
             $aggs = array('value' => array("cardinality" => array("field" => $aggregates[key($aggregates)])));
-        } elseif (key($aggregates) != "count") {
+        } else if (key($aggregates) != "count") {
             //    $aggs = array('value'=>array(key($aggregates)=>array("script"=>array("inline"=>"try { return Float.parseFloat(doc['".$aggregates[key($aggregates)].".keyword'].value); } catch (NumberFormatException e) { return 0; }"))));
             $aggs = array('value' => array(key($aggregates) => array('field' => $aggregates[key($aggregates)])));
+
         }
         return $aggs;
     }
@@ -200,17 +204,17 @@ class ElasticService
                 }
 
                 if (!is_array($value)) {
-                    if ($type == 'value') {
+              //      if ($type == 'value') {
                         $mustquery[] = array('match' => array($key => array('query' => $value, 'operator' => 'and')));
-                    } else {
-                        $mustquery[] = array('term' => array($key . "_key" => $value));
-                    }
+              //      } else {
+              //          $mustquery[] = array('term' => array($key . "_key" => $value));
+              //      }
                 } else {
-                    if ($type == 'value') {
+              //      if ($type == 'value') {
                         $mustquery[] = array('terms' => array($key => array_values($value)));
-                    } else {
-                        $mustquery[] = array('terms' => array($key . "_key" => array_values($value)));
-                    }
+              //      } else {
+              //          $mustquery[] = array('terms' => array($key . "_key" => array_values($value)));
+              //      }
                 }
             }
         }
@@ -218,8 +222,10 @@ class ElasticService
             $daterange = $searchconfig['range'][key($searchconfig['range'])];
             $dates = explode("/", $daterange);
             $mustquery[] = array('range' => array(key($searchconfig['range']) => array("gte" => $dates[0], "lte" => $dates[1], "format" => "yyyy-MM-dd")));
+
         }
         return $mustquery;
+
     }
 
     protected function getFiltersByEntity($entity)
@@ -260,8 +266,10 @@ class ElasticService
 
     public function search($q)
     {
+   //     print_r($q);
         $data = $this->client->search($q);
         return $data;
+
     }
 
     public function index($index, $id, $body)
@@ -281,7 +289,7 @@ class ElasticService
             return $this->client->delete(['index' => $index, 'type' => $this->type, 'id' => $id]);
         }
 	}
-
+	
 	public function getBoostFields($entity){
 		switch ($entity) {
 			case 'files':

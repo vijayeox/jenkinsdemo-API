@@ -36,11 +36,11 @@ class MletControllerTest extends ControllerTest
 
     public function createIndex($indexer, $body)
     {
-        $type = 'type';
-        $app_id = $body['app_id'];
+        $entity_name = 'test';
+        $app_name = $body['app_name'];
         $id = $body['id'];
         AuthContext::put(AuthConstants::ORG_ID, $body['org_id']);
-        $return=$indexer->index($app_id, $id, $type, $body);
+        $return=$indexer->index($app_name, $id, $entity_name, $body);
     }
 
     public function setupData()
@@ -93,7 +93,7 @@ class MletControllerTest extends ControllerTest
         $this->dispatch('/mlet/1/result', 'POST');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['result']['data'], 1450.75);
+        $this->assertEquals($content['data']['result']['data'], 950.50);
     }
 
     public function testCountResults()
@@ -107,7 +107,7 @@ class MletControllerTest extends ControllerTest
         $this->dispatch('/mlet/5/result', 'POST');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['result']['data'], 4);
+        $this->assertEquals($content['data']['result']['data'], 3);
     }
 
     public function testListResults()
@@ -120,9 +120,9 @@ class MletControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/mlet/3/result', 'POST');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals(count($content['data']['result']['data']), 5);
+        $this->assertEquals(count($content['data']['result']['data']), 4);
         $this->assertEquals($content['data']['result']['data'], [['amount' => 50.5,'name' => 'testing document'],['amount' => 600,'name' => 'New document'],
-        ['amount' => 500.25,'name' => 'west document'],['amount' => 100,'name' => 'test document'],['amount' => 200,'name' => 'different document']]);
+        ['amount' => 100,'name' => 'test document'],['amount' => 200,'name' => 'different document']]);
     }
 
     public function testGroupResults()
@@ -136,7 +136,7 @@ class MletControllerTest extends ControllerTest
         $this->dispatch('/mlet/4/result', 'POST');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals(count($content['data']['result']['data']), 2);
-        $this->assertEquals($content['data']['result']['data'], [['name' => 'John Doe','value' => 1400.25,'grouplist' => 'created_by'],[
+        $this->assertEquals($content['data']['result']['data'], [['name' => 'John Doe','value' => 900,'grouplist' => 'created_by'],[
             'name' => 'Mike Price','value' => 50.5,'grouplist' => 'created_by']]);
     }
 
@@ -150,7 +150,7 @@ class MletControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/mlet/4/result', 'POST');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['data']['result']['data'], [['name' => 'John Doe','value' => 1400.25,'grouplist' => 'created_by']]);
+        $this->assertEquals($content['data']['result']['data'], [['name' => 'John Doe','value' => 900,'grouplist' => 'created_by']]);
     }
     
 
@@ -159,8 +159,8 @@ class MletControllerTest extends ControllerTest
         parent::tearDown();
         if (enableElastic!=0) {
             $indexer=  $this->getApplicationServiceLocator()->get(Indexer::class);
-            $return1=$indexer->delete('11_test', 'all');
-            $return2=$indexer->delete('12_test', 'all');
+            $return1=$indexer->delete('11_test_index', 'all');
+            $return2=$indexer->delete('12_test_index', 'all');
         }
     }
 }

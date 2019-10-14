@@ -247,7 +247,7 @@ class Module
                 },
                 Analytics\AnalyticsEngine::class => function ($container) {
                     $config = $container->get('config');
-                    return new Analytics\AnalyticsEngine($config);
+                    return new Analytics\Elastic\AnalyticsEngineImpl($config);
                 },
                 Search\SearchEngine::class => function ($container) {
                     $config = $container->get('config');

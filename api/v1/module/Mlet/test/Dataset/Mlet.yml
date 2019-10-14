@@ -2,6 +2,7 @@ ox_mlet:
   -
     id: 1
     orgid: 1
+    appuuid: 11_test
     name: mletsum
     description: mlet to test Sum
     created_id: 1
@@ -12,6 +13,7 @@ ox_mlet:
   -
     id: 2
     orgid: 2
+    appuuid: 11_test
     name: mletcount
     description: mlet to test count for org 2
     created_id: 1
@@ -22,6 +24,7 @@ ox_mlet:
   -
     id: 3
     orgid: 1
+    appuuid: 11_test
     name: mletlist
     description: mlet to test list
     created_id: 1
@@ -32,6 +35,7 @@ ox_mlet:
   -
     id: 4
     orgid: 1
+    appuuid: 11_test
     name: mletgroup
     description: mlet to test group
     created_id: 1
@@ -42,6 +46,7 @@ ox_mlet:
   -
     id: 5
     orgid: 1
+    appuuid: 11_test
     name: mletcount
     description: mlet to test count for org 1
     created_id: 1

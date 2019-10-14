@@ -8,7 +8,7 @@ class Mlet extends Entity
     protected $data = array(
             'id' => null,
             'uuid' => null,
-            'appid'=>null,
+            'appuuid'=>null,
             'name' => null,
             'description' => null,
             'questiontext' => null ,
