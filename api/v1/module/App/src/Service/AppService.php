@@ -9,7 +9,7 @@ use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
 use Zend\Log\Logger;
 use Exception;
-use Ramsey\Uuid\Uuid;
+use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\YMLUtils;
 use Oxzion\Utils\ZipUtils;
@@ -19,6 +19,7 @@ use Oxzion\Service\FieldService;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ServiceException;
 use Symfony\Component\Yaml\Yaml;
+use Zend\Db\Sql\Expression;
 
 class AppService extends AbstractService
 {
@@ -51,21 +52,21 @@ class AppService extends AbstractService
      * </code>
      */
     public function getApps()
-    {   
-            try{
-                $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap
-                left join ox_app_registry as ar on ap.id = ar.app_id where ar.org_id=? and ap.status!=?";
-                $queryParams = array(AuthContext::get(AuthConstants::ORG_ID),1);
-                $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
-                return $resultSet;
-            }catch(Exception $e){
-                $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-                throw $e;
-            }
+    {
+        try{
+            $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap
+            left join ox_app_registry as ar on ap.id = ar.app_id where ar.org_id=? and ap.status!=?";
+            $queryParams = array(AuthContext::get(AuthConstants::ORG_ID),1);
+            $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
+            return $resultSet;
+        }catch(Exception $e){
+            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            throw $e;
+        }
     }
 
     public function getApp($id)
-    {   
+    {
         try{
             $queryString = "Select ap.name,ap.uuid,ap.description,ap.type,ap.logo,ap.category,ap.date_created,ap.date_modified,ap.created_by,ap.modified_by,ap.status,ar.org_id,ar.start_options from ox_app as ap
             left join ox_app_registry as ar on ap.id = ar.app_id where ar.org_id=? and ap.status!=? and ap.uuid =?";
@@ -79,7 +80,7 @@ class AppService extends AbstractService
     }
     public function createApp($data,$returnForm = false){
         $form = new App();
-        $data['uuid'] = isset($data['uuid'])?$data['uuid']:Uuid::uuid4()->toString();
+        $data['uuid'] = isset($data['uuid'])?$data['uuid']:UuidUtil::uuid();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['status'] = App::PUBLISHED;
@@ -105,7 +106,16 @@ class AppService extends AbstractService
             return $count;
     }
 
-    private function updateyml($yamldata, $modifieddata, $path){
+    private function updateymlfororg($yamldata, $modifieddata, $path){
+        $filename = "application.yml";
+        if(!(array_key_exists('uuid',$yamldata['org']))){
+            $yamldata['app'][0]['uuid'] = $modifieddata['uuid'];
+        }
+        $new_yaml = Yaml::dump($yamldata, 2);
+        file_put_contents($path.$filename, $new_yaml);
+    }
+
+    private function updateymlforapp($yamldata, $modifieddata, $path){
         $filename = "application.yml";
         if(!(array_key_exists('uuid',$yamldata['app'][0]))){
             $yamldata['app'][0]['uuid'] = $modifieddata['uuid'];
@@ -147,9 +157,6 @@ class AppService extends AbstractService
                     if(!(isset($yaml['app']))){
                         throw new ServiceException("App details does not exist in yaml", "app.required");
                     }else {
-                        if(!isset($yaml['app'][0]['uuid'])){
-                            $yaml['app'][0]['uuid'] = Uuid::uuid4();
-                        }
                         return $yaml;
                     }
                 }
@@ -162,22 +169,16 @@ class AppService extends AbstractService
         $appdata = $this->collectappfieldsdata($ymldata['app'])[0];
         $this->beginTransaction();
         try{
-            $appUuid = $appdata['uuid'];
-            if (!$this->checkAppExists($appUuid)) {
-                $data = $this->createApp($appdata,true);
-            }
-            else{
-                $this->updateApp($appUuid, $appdata);
-            }
-            $this->updateyml($ymldata, $data['form'], $path);
+            $appUuid = $this->checkAppExists($appdata);
+            $this->updateymlforapp($ymldata, $appdata, $path);
             if(isset($ymldata['org'])){
-                $this->processOrg($ymldata['org'][0],NULL);
-                $this->createAppRegistry($appUuid, $ymldata['org'][0]['uuid']);
+                $data = $this->processOrg($ymldata['org'][0],NULL);
+                //$this->updateymlfororg($ymldata, $data, $path);
+                $result = $this->createAppRegistry($appUuid, $ymldata['org'][0]['uuid']);
             }
-            // $this->checkAppPrivileges($appUuid);
-            //check if privileges are in db
-            //if not add to privileges table
-            //and add to role_privileges table for admin role of that org
+            if(isset($ymldata['privilege'])){
+                $this->createAppPrivileges($appUuid, $ymldata['privilege']);
+            }
             //check if menu exists and add to app menu table
             //check if workflow given if so deployworkflow
             //check form fields if not found add to fields table fpr the app.
@@ -194,7 +195,7 @@ class AppService extends AbstractService
 
     private function processOrg(&$orgData){
         if(!isset($orgData['uuid'])){
-            $orgData['uuid'] = Uuid::uuid4()->toString();
+            $orgData['uuid'] = UuidUtil::uuid();
         }
         if(!isset($orgData['contact'])){
             $orgData['contact']=array();
@@ -210,44 +211,114 @@ class AppService extends AbstractService
         if($result == 0){
             throw new ServiceException("Organization could not be saved");
         }
+        return $orgData;
     }
-    private function checkAppExists($appUuid){
+    private function checkAppExists(&$appdata){
         try{
-            $queryString = "Select count(id) as count from ox_app as ap where ap.uuid = :appUuid";
-            $params = array("appUuid" => $appUuid);
+            $queryString = "Select ap.uuid,ap.name as name from ox_app as ap where ap.name = :appName";
+            $params = array("appName" => $appdata['name']);
+
+            if(isset($appdata['uuid'])){
+                $queryString .= " OR ap.uuid = :appId";
+                $params['appId'] = $appdata['uuid'];
+            }
+
             $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
-            return $result[0]['count'] != 0;
+            if(count($result) == 0){
+                $data = $this->createApp($appdata, true);
+                $appdata['uuid'] = $data['form']['uuid'];
+            }
+            else{
+                if(isset($appdata['uuid'])){
+                    if($appdata['uuid'] == $result[0]['uuid']){
+                        if($appdata['name'] != $result[0]['name']){
+                            $this->updateApp($appdata['uuid'], $appdata);
+                        }
+                    }else{
+                        throw new ServiceException("App Already Exists", 'duplicate.app');
+                    }
+                }else{
+                    if($appdata['name'] == $result[0]['name']){
+                        $appdata['uuid'] = $result[0]['uuid'];
+                    }
+                }
+            }
+            return $appdata['uuid'];
         }catch(Exception $e){
             $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
             throw $e;
         }
     }
 
-    //useless
-    // private function checkAppPrivileges($appUuid)
-    // {
-    //     $app_id = $this->getIdFromUuid('ox_app', $appUuid);
-    //     //check if app_id exists
-    //     $queryString = "select ar.app_id from ox_privileges as ar
-    //     inner join ox_app as ap on ap.id = ar.app_id";
-    //     $params = array("appid" => $app_id);
-    //     $resultSet = $this->executeQueryWithBindParameters($queryString, $params);
-    //     $queryResult = $resultSet->toArray();
-    //     if(isset($queryResult)){
-    //             //check if priviledges exist
-    //         $queryString = "select permission_allowed from ox_privileges as pr where pr.app_id = :appid";
-    //         $params = array("appid" => $app_id);
-    //         $resultSet = $this->executeQueryWithBindParameters($queryString, $params);
-    //         $queryResult = $resultSet->toArray();
-    //         if (empty($queryResult)) {
-    //             // $insert = $sql->insert('ox_privilege');
-    //             // $insert->values($data);
-    //             // $this->executeUpdate($insert);
-    //             return 1;
-    //         }
-    //         return 0;
-    //     }
-    // }
+    private function createAppPrivileges($appUuid, &$privilegedata)
+    {
+        $privilegearray = array_unique(array_column($privilegedata, 'name'));
+        $list = "'" . implode( "', '", $privilegearray) . "'";
+
+        $idresult = $this->getIdFromUuid('ox_app',$appUuid);
+
+        // find the records which are not from the list of privileges for the particular app
+        $queryString = "SELECT count(*) FROM ox_privilege as pr WHERE pr.app_id = :appid AND pr.name NOT IN (".$list.")";
+        $params = array("appid" => $idresult);
+        $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+
+        if(!empty($result[0]['count(*)'])){
+            // delete from ox_app_menu
+            $queryString = "UPDATE ox_app_menu AS mn INNER JOIN ox_privilege AS pr ON mn.privilege_id = pr.id INNER JOIN ox_app AS ap ON pr.app_id = ap.id SET mn.privilege_id = NULL WHERE mn.app_id = :appid AND pr.name NOT IN (".$list.")";
+            $params = array("appid" => $idresult);
+            $result = $this->executeQueryWithBindParameters($queryString, $params);
+
+            //delete from ox_role_privilege
+            $queryString = "DELETE rp FROM ox_role_privilege as rp INNER JOIN ox_app as ap ON rp.app_id = ap.id WHERE ap.uuid = :appUuid AND rp.privilege_name NOT IN (".$list.")";
+            $params = array("appUuid" => $appUuid);
+            $result = $this->executeQueryWithBindParameters($queryString, $params);
+
+            //delete from ox_privilege
+            $queryString = "DELETE FROM ox_privilege WHERE app_id = :appid AND name NOT IN (".$list.")";
+            $params = array("appid" => $idresult);
+            $result = $this->executeQueryWithBindParameters($queryString, $params);
+
+            $queryString = "SELECT * FROM ox_privilege WHERE app_id = :appid";
+            $params = array("appid" => $idresult);
+            $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+        }
+
+        //get difference of the list and table privileges
+        $queryString = "SELECT pr.name FROM ox_privilege as pr
+        WHERE pr.app_id = :appid AND pr.name IN (".$list.")";
+        $params = array("appid" => $idresult);
+        $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+        $existingprivileges = array_column($result, 'name');
+        $privilegesToBeAdded = array_diff($privilegearray,$existingprivileges);
+
+        $sql = $this->getSqlObject();
+        //if any new privileges to be added
+        if(!(empty($privilegesToBeAdded))){
+            foreach ($privilegesToBeAdded as $key => $value) {
+                $insert = $sql->insert('ox_privilege');
+                $permission = 3;
+                $insert_data = array('name' => $value,'app_id' => $idresult,'permission_allowed' => $permission);
+                $insert->values($insert_data);
+                $result = $this->executeUpdate($insert);
+                $query = "insert into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id)
+                select r.id, '$value', $permission, r.org_id, reg.app_id
+                from ox_role as r inner join
+                ox_app_registry reg on r.org_id = reg.org_id
+                where reg.app_id = :appId and r.name = 'ADMIN'";
+                $params = array('appId' => $idresult);
+                $result = $this->executeUpdateWithBindParameters($query, $params);
+            }
+            $queryString = "SELECT pr.name from ox_privilege as pr
+            WHERE pr.app_id = :appid";
+            $params = array("appid" => $idresult);
+            $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+
+            $queryString = "SELECT privilege_name from ox_role_privilege
+            WHERE ox_role_privilege.app_id = :appid";
+            $params = array("appid" => $idresult);
+            $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+        }
+    }
 
     public function getAppList($filterParams = null)
     {
@@ -282,7 +353,7 @@ class AppService extends AbstractService
             $result[$x]['start_options'] = json_decode($result[$x]['start_options'], true);
         }
         return array('data' => $result,
-                     'total' => $count);
+           'total' => $count);
     }
 
     public function updateApp($id, &$data)
@@ -353,49 +424,6 @@ class AppService extends AbstractService
         return $upload = $this->config["APP_UPLOAD_FOLDER"];
     }
 
-    // I am not doing anything here because we dont know how the app installation process will be when we do that, so I am creating a place holder to use for the future.
-    // The purpose of this function is to give permission and privileges to the app that is getting istalled in the OS
-
-    /**
-     * Deploy App API using YAML File
-     * @param $appFolder </br>
-     * <code>
-     * </code>
-     * @return array Returns a JSON Response with Status Code.</br>
-     * <code> status : "success|error"
-     * </code>
-     */
-    public function getDataFromDeploymentDescriptorUsingYML($appFolder)
-    {
-        $appUploadFolder = $appFolder;
-        try {
-            $appUploadedZipFile = $appUploadFolder . "/uploads/App.zip";
-            $destinationFolder = $appUploadFolder . "/temp";
-            ZipUtils::extract($appUploadedZipFile, $destinationFolder);
-            $fileName = file_get_contents($appUploadFolder . "/temp/App/web.yml");
-        } catch (Exception $e) {
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-            throw $e;
-        }
-        $ymlArray = YMLUtils::ymlToArray($fileName);
-        //Code to insert the details of the app to the app table. Returns 1 or 0 for success or failure
-        $app = $this->insertAppDetail($ymlArray['config']);
-        if ($app === 0) {
-            return 0;
-        }
-        $appPrivileges = $this->applyAppPrivilege($ymlArray['config'], $app);
-
-        if ($appPrivileges === 0) {
-            return 0;
-        }
-        $count = $this->getFormInsertFormat($ymlArray['config']);
-        if ($count === 1) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
     /**
      * @param $appData
      * @return array|int
@@ -416,52 +444,6 @@ class AppService extends AbstractService
             throw $e;
         }
         return $id;
-    }
-
-    /**
-     * @param $appData
-     * @param $app
-     * @return int
-     */
-    public function applyAppPrivilege($appData, $app)
-    {
-        $count = 0;
-        if (!empty($appData['app-privilege'])) {
-            foreach ($appData['app-privilege'] as $privilege) {
-                try {
-                    $formData['role_id'] = $privilege['privilege-role'];
-                    $formData['privilege_name'] = $privilege['privilege-name'];
-                    $formData['permission'] = $privilege['privilege-permission'];
-                    $formData['app_id'] = $app;
-                    $count = $this->createAppPrivileges($formData);
-                } catch (ValidationException $e) {
-                    $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-                    throw $e;
-                }
-            }
-        }
-        return $count;
-    }
-
-    private function createAppPrivileges($data)
-    {
-        try{
-            $sql = $this->getSqlObject();
-            $queryString = "select * from ox_role_privilege where role_id=? and privilege_name=? and app_id=? and permission=?";
-            $queryParams = array($data['role_id'],$data['privilege_name'],$data['app_id'],$data['permission']);
-            $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
-            $queryResult = $resultSet;
-            if (empty($queryResult)) { //Checking to see if we already have entry made to the database
-                $insert = $sql->insert('ox_role_privilege');
-                $insert->values($data);
-                $this->executeUpdate($insert);
-                return 1;
-            }
-            return 0;
-        }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-            throw $e;
-        }
     }
 
     /**
@@ -509,7 +491,6 @@ class AppService extends AbstractService
             $result = $this->executeUpdateWithBindParameters($insert, $params);
             return $result->getAffectedRows();
         }
-
         return 0;
     }
 
@@ -565,7 +546,7 @@ class AppService extends AbstractService
                     if (isset($apps[$x]['uuid']) && $apps[$x]['uuid'] == "NULL") {
                         $apps[$x]['uuid'] = null;
                     }
-                    $data['uuid'] = isset($apps[$x]['uuid'])? $apps[$x]['uuid'] : Uuid::uuid4()->toString();
+                    $data['uuid'] = isset($apps[$x]['uuid'])? $apps[$x]['uuid'] : UuidUtil::uuid();
                     $form->exchangeArray($data);
                     $form->validate();
                     $count += $this->table->save($form);
@@ -599,7 +580,7 @@ class AppService extends AbstractService
     }
 
     public function addToAppRegistry($data)
-    {   
+    {
         $this->logger->debug("Adding App to registry");
         try{
             $data['orgId'] = isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID) ;
@@ -609,6 +590,6 @@ class AppService extends AbstractService
             $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
             throw $e;
         }
-        
+
     }
 }

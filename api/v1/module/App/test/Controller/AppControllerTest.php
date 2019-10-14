@@ -30,9 +30,9 @@ class AppControllerTest extends ControllerTest
     public function getDataSet()
     {
         $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
-        // if($this->getName() == 'testDeployAppOrgDataWithoutPreferences'){
-        //     $dataset->addYamlFile(dirname(__FILE__) . "/../../Dataset/App.yml");
-        // }
+        if($this->getName() == 'testDeployAppWithWrongUuidInDatabase' || $this->getName() == 'testDeployAppWithWrongNameInDatabase' || $this->getName() == 'testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase' || $this->getName() == 'testDeployAppAddExtraPrivilegesInDBFromYML' || $this->getName() == 'testDeployAppDeleteExtraPrivilegesInDBNotInYML') {
+            $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/App2.yml");
+        }
         return $dataset;
     }
 
@@ -189,7 +189,7 @@ class AppControllerTest extends ControllerTest
 
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
-    }
+   }
 
     public function testDeployApp()
     {
@@ -200,41 +200,104 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        // $query = "SELECT id from ox_organization where uuid = '".$content['data']['uuid']."'";
-        // $orgid = $this->executeQueryTest($query);
-        // $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
-        // $role = $this->executeQueryTest($query);
-        // for($x=0;$x<sizeof($role);$x++){
-        //     $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =".$role[$x]['id']."
-        //         AND uuid = '".$content['data']['uuid']."')";
-        //     $rolePrivilegeResult[] = $this->executeQueryTest($query);
-        // }
-        // $select = "SELECT * FROM ox_user_role where role_id =".$role[0]['id'];
-        // $roleResult = $this->executeQueryTest($select);
-        // $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$content['data']['uuid']."')";
-        // $orgResult = $this->executeQueryTest($select);
-        // $select = "SELECT * FROM ox_user where username ='".$content['data']['contact']['username']."'";
-        // $usrResult = $this->executeQueryTest($select);
-        // $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id where name = '".$content['data']['name']."'";
-        // $org = $this->executeQueryTest($select);
-        // $query = "SELECT * from ox_app_registry where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
-        // $appResult = $this->executeQueryTest($query);
-        // $this->assertEquals(count($role), 3);
-        // $this->assertEquals(count($roleResult), 1);
-        // $this->assertEquals(count($orgResult), 1);
-        // $this->assertEquals($usrResult[0]['firstname'], $content['data']['contact']['firstname']);
-        // $this->assertEquals($usrResult[0]['lastname'], $content['data']['contact']['lastname']);
-        // $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        // $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 23);
-        // $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
-        // $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
-        // $this->assertEquals(isset($usrResult[0]['address_id']),true);
-        // $this->assertEquals($org[0]['address1'],$content['data']['address1']);
-        // $this->assertEquals($appResult[0]['app_id'],1);
+        $filename = "application.yml";
+        $path = __DIR__.'/../sampleapp/';
+        $yaml = Yaml::parse(file_get_contents($path.$filename));
+        $appName = $yaml['app'][0]['name'];
+        $query = "SELECT name from ox_app where name = '".$appName."'";
+        $appname = $this->executeQueryTest($query);
+        $query = "SELECT count(uuid) as appuuidcount from ox_app where name = '".$appName."'";
+        $appUuid = $this->executeQueryTest($query);
+        $query = "SELECT id from ox_organization where uuid = '".$content['data']['uuid']."'";
+        $orgid = $this->executeQueryTest($query);
+        $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
+        $role = $this->executeQueryTest($query);
+        for($x=0;$x<sizeof($role);$x++){
+            $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =".$role[$x]['id']."
+                AND uuid = '".$content['data']['uuid']."')";
+            $rolePrivilegeResult[] = $this->executeQueryTest($query);
+        }
+        $select = "SELECT * FROM ox_user_role where role_id =".$role[0]['id'];
+        $roleResult = $this->executeQueryTest($select);
+        $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$content['data']['uuid']."')";
+        $orgResult = $this->executeQueryTest($select);
+        $select = "SELECT * FROM ox_user where username ='".$content['data']['contact']['username']."'";
+        $usrResult = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id where name = '".$content['data']['name']."'";
+        $org = $this->executeQueryTest($select);
+        $query = "SELECT * from ox_app_registry where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
+        $appResult = $this->executeQueryTest($query);
+        $this->assertEquals($appname[0]['name'], $appName);
+        $this->assertEquals($appUuid[0]['appuuidcount'], 1);
+        $this->assertEquals(count($role), 3);
+        $this->assertEquals(count($roleResult), 1);
+        $this->assertEquals(count($orgResult), 1);
+        $this->assertEquals($usrResult[0]['firstname'], $content['data']['contact']['firstname']);
+        $this->assertEquals($usrResult[0]['lastname'], $content['data']['contact']['lastname']);
+        $this->assertEquals($usrResult[0]['designation'], 'Admin');
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 27);
+        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
+        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
+        $this->assertEquals(isset($usrResult[0]['address_id']),true);
+        $this->assertEquals($org[0]['address1'],$content['data']['address1']);
+        $this->assertEquals($appResult[0]['app_id'],1);
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content);
         unlink(__DIR__.'/../sampleapp/application.yml');
 
+    }
+
+    public function testDeployAppWithWrongUuidInDatabase()
+    {
+        copy(__DIR__.'/../sampleapp/application8.yml', __DIR__.'/../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        unlink(__DIR__.'/../sampleapp/application.yml');
+    }
+
+    public function testDeployAppWithWrongNameInDatabase()
+    {
+        copy(__DIR__.'/../sampleapp/application9.yml', __DIR__.'/../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $filename = "application.yml";
+        $path = __DIR__.'/../sampleapp/';
+        $yaml = Yaml::parse(file_get_contents($path.$filename));
+        $appName = $yaml['app'][0]['name'];
+        $query = "SELECT name from ox_app where name = '".$appName."'";
+        $app = $this->executeQueryTest($query);
+        $this->assertEquals($app[0]['name'], $appName);
+        $this->assertEquals($content['status'], 'success');
+        unlink(__DIR__.'/../sampleapp/application.yml');
+    }
+
+    public function testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase()
+    {
+        copy(__DIR__.'/../sampleapp/application10.yml', __DIR__.'/../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $filename = "application.yml";
+        $path = __DIR__.'/../sampleapp/';
+        $yaml = Yaml::parse(file_get_contents($path.$filename));
+        $appName = $yaml['app'][0]['name'];
+        $query = "SELECT name from ox_app where name = '".$appName."'";
+        $app = $this->executeQueryTest($query);
+        $this->assertEquals($app[0]['name'], $appName);
+        $this->assertEquals($content['status'], 'success');
+        unlink(__DIR__.'/../sampleapp/application.yml');
     }
 
     public function testDeployAppNoDirectory()
@@ -289,6 +352,52 @@ class AppControllerTest extends ControllerTest
         unlink(__DIR__.'/../sampleapp/application.yml');
     }
 
+    public function testDeployAppWithAppNameExistingAndNoUuid()
+    {
+        copy(__DIR__.'/../sampleapp/application1.yml', __DIR__.'/../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $query = "SELECT id from ox_organization where uuid = '".$content['data']['uuid']."'";
+        $orgid = $this->executeQueryTest($query);
+        $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
+        $role = $this->executeQueryTest($query);
+        for($x=0;$x<sizeof($role);$x++){
+            $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =".$role[$x]['id']."
+                AND uuid = '".$content['data']['uuid']."')";
+            $rolePrivilegeResult[] = $this->executeQueryTest($query);
+        }
+        $select = "SELECT * FROM ox_user_role where role_id =".$role[0]['id'];
+        $roleResult = $this->executeQueryTest($select);
+        $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$content['data']['uuid']."')";
+        $orgResult = $this->executeQueryTest($select);
+        $select = "SELECT * FROM ox_user where username ='".$content['data']['contact']['username']."'";
+        $usrResult = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id where name = '".$content['data']['name']."'";
+        $org = $this->executeQueryTest($select);
+        $query = "SELECT * from ox_app_registry where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
+        $appResult = $this->executeQueryTest($query);
+        $this->assertEquals(count($role), 3);
+        $this->assertEquals(count($roleResult), 1);
+        $this->assertEquals(count($orgResult), 1);
+        $this->assertEquals($usrResult[0]['firstname'], $content['data']['contact']['firstname']);
+        $this->assertEquals($usrResult[0]['lastname'], $content['data']['contact']['lastname']);
+        $this->assertEquals($usrResult[0]['designation'], 'Admin');
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 27);
+        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
+        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
+        $this->assertEquals(isset($usrResult[0]['address_id']),true);
+        $this->assertEquals($org[0]['address1'],$content['data']['address1']);
+        $this->assertEquals($appResult[0]['app_id'],1);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertNotEmpty($content);
+        unlink(__DIR__.'/../sampleapp/application.yml');
+
+    }
+
     public function testDeployAppOrgDataWithoutUuid()
     {
         copy(__DIR__.'/../sampleapp/application4.yml', __DIR__.'/../sampleapp/application.yml');
@@ -299,38 +408,38 @@ class AppControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
 
-        // $query = "SELECT uuid from ox_organization where name = '".$content['data']['name']."'";
-        // $orgUuid = $this->executeQueryTest($query);
+        $query = "SELECT uuid from ox_organization where name = '".$content['data']['name']."'";
+        $orgUuid = $this->executeQueryTest($query);
 
-        // $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '".$orgUuid[0]['uuid']."')";
-        // $role = $this->executeQueryTest($query);
-        // for($x=0;$x<sizeof($role);$x++){
-        //     $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =".$role[$x]['id']."
-        //         AND uuid = '".$orgUuid[0]['uuid']."')";
-        //     $rolePrivilegeResult[] = $this->executeQueryTest($query);
-        // }
-        // $select = "SELECT * FROM ox_user_role where role_id =".$role[0]['id'];
-        // $roleResult = $this->executeQueryTest($select);
-        // $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$orgUuid[0]['uuid']."')";
-        // $orgResult = $this->executeQueryTest($select);
-        // $select = "SELECT * FROM ox_user where username ='".$content['data']['contact']['username']."'";
-        // $usrResult = $this->executeQueryTest($select);
-        // $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id where name = '".$content['data']['name']."'";
-        // $org = $this->executeQueryTest($select);
-        // $query = "SELECT * from ox_app_registry where org_id = (SELECT id from ox_organization where uuid = '".$orgUuid[0]['uuid']."')";
-        // $appResult = $this->executeQueryTest($query);
-        // $this->assertEquals(count($role), 3);
-        // $this->assertEquals(count($roleResult), 1);
-        // $this->assertEquals(count($orgResult), 1);
-        // $this->assertEquals($usrResult[0]['firstname'], $content['data']['contact']['firstname']);
-        // $this->assertEquals($usrResult[0]['lastname'], $content['data']['contact']['lastname']);
-        // $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        // $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 23);
-        // $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
-        // $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
-        // $this->assertEquals(isset($usrResult[0]['address_id']),true);
-        // $this->assertEquals($org[0]['address1'],$content['data']['address1']);
-        // $this->assertEquals($appResult[0]['app_id'],1);
+        $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '".$orgUuid[0]['uuid']."')";
+        $role = $this->executeQueryTest($query);
+        for($x=0;$x<sizeof($role);$x++){
+            $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =".$role[$x]['id']."
+                AND uuid = '".$orgUuid[0]['uuid']."')";
+            $rolePrivilegeResult[] = $this->executeQueryTest($query);
+        }
+        $select = "SELECT * FROM ox_user_role where role_id =".$role[0]['id'];
+        $roleResult = $this->executeQueryTest($select);
+        $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$orgUuid[0]['uuid']."')";
+        $orgResult = $this->executeQueryTest($select);
+        $select = "SELECT * FROM ox_user where username ='".$content['data']['contact']['username']."'";
+        $usrResult = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id where name = '".$content['data']['name']."'";
+        $org = $this->executeQueryTest($select);
+        $query = "SELECT * from ox_app_registry where org_id = (SELECT id from ox_organization where uuid = '".$orgUuid[0]['uuid']."')";
+        $appResult = $this->executeQueryTest($query);
+        $this->assertEquals(count($role), 3);
+        $this->assertEquals(count($roleResult), 1);
+        $this->assertEquals(count($orgResult), 1);
+        $this->assertEquals($usrResult[0]['firstname'], $content['data']['contact']['firstname']);
+        $this->assertEquals($usrResult[0]['lastname'], $content['data']['contact']['lastname']);
+        $this->assertEquals($usrResult[0]['designation'], 'Admin');
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 23);
+        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
+        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
+        $this->assertEquals(isset($usrResult[0]['address_id']),true);
+        $this->assertEquals($org[0]['address1'],$content['data']['address1']);
+        $this->assertEquals($appResult[0]['app_id'],1);
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content);
         unlink(__DIR__.'/../sampleapp/application.yml');
@@ -345,37 +454,37 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        // $query = "SELECT uuid from ox_organization where name = '".$content['data']['name']."'";
-        // $orgUuid = $this->executeQueryTest($query);
-        // $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '".$orgUuid[0]['uuid']."')";
-        // $role = $this->executeQueryTest($query);
-        // for($x=0;$x<sizeof($role);$x++){
-        //     $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =".$role[$x]['id']."
-        //         AND uuid = '".$orgUuid[0]['uuid']."')";
-        //     $rolePrivilegeResult[] = $this->executeQueryTest($query);
-        // }
-        // $select = "SELECT * FROM ox_user_role where role_id =".$role[0]['id'];
-        // $roleResult = $this->executeQueryTest($select);
-        // $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$orgUuid[0]['uuid']."')";
-        // $orgResult = $this->executeQueryTest($select);
-        // $select = "SELECT * FROM ox_user where username ='".$content['data']['contact']['username']."'";
-        // $usrResult = $this->executeQueryTest($select);
-        // $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id where name = '".$content['data']['name']."'";
-        // $org = $this->executeQueryTest($select);
-        // $query = "SELECT * from ox_app_registry where org_id = (SELECT id from ox_organization where uuid = '".$orgUuid[0]['uuid']."')";
-        // $appResult = $this->executeQueryTest($query);
-        // $this->assertEquals(count($role), 3);
-        // $this->assertEquals(count($roleResult), 1);
-        // $this->assertEquals(count($orgResult), 1);
-        // $this->assertEquals($usrResult[0]['firstname'], $content['data']['contact']['firstname']);
-        // $this->assertEquals($usrResult[0]['lastname'], $content['data']['contact']['lastname']);
-        // $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        // $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 23);
-        // $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
-        // $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
-        // $this->assertEquals(isset($usrResult[0]['address_id']),true);
-        // $this->assertEquals($org[0]['address1'],$content['data']['address1']);
-        // $this->assertEquals($appResult[0]['app_id'],1);
+        $query = "SELECT uuid from ox_organization where name = '".$content['data']['name']."'";
+        $orgUuid = $this->executeQueryTest($query);
+        $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '".$orgUuid[0]['uuid']."')";
+        $role = $this->executeQueryTest($query);
+        for($x=0;$x<sizeof($role);$x++){
+            $query = "SELECT count(id) from ox_role_privilege where org_id = (SELECT id from ox_organization where role_id =".$role[$x]['id']."
+                AND uuid = '".$orgUuid[0]['uuid']."')";
+            $rolePrivilegeResult[] = $this->executeQueryTest($query);
+        }
+        $select = "SELECT * FROM ox_user_role where role_id =".$role[0]['id'];
+        $roleResult = $this->executeQueryTest($select);
+        $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$orgUuid[0]['uuid']."')";
+        $orgResult = $this->executeQueryTest($select);
+        $select = "SELECT * FROM ox_user where username ='".$content['data']['contact']['username']."'";
+        $usrResult = $this->executeQueryTest($select);
+        $select = "SELECT * from ox_address join ox_organization on ox_address.id = ox_organization.address_id where name = '".$content['data']['name']."'";
+        $org = $this->executeQueryTest($select);
+        $query = "SELECT * from ox_app_registry where org_id = (SELECT id from ox_organization where uuid = '".$orgUuid[0]['uuid']."')";
+        $appResult = $this->executeQueryTest($query);
+        $this->assertEquals(count($role), 3);
+        $this->assertEquals(count($roleResult), 1);
+        $this->assertEquals(count($orgResult), 1);
+        $this->assertEquals($usrResult[0]['firstname'], $content['data']['contact']['firstname']);
+        $this->assertEquals($usrResult[0]['lastname'], $content['data']['contact']['lastname']);
+        $this->assertEquals($usrResult[0]['designation'], 'Admin');
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 23);
+        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
+        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
+        $this->assertEquals(isset($usrResult[0]['address_id']),true);
+        $this->assertEquals($org[0]['address1'],$content['data']['address1']);
+        $this->assertEquals($appResult[0]['app_id'],1);
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content);
         unlink(__DIR__.'/../sampleapp/application.yml');
@@ -395,6 +504,53 @@ class AppControllerTest extends ControllerTest
         unlink(__DIR__.'/../sampleapp/application.yml');
     }
 
+    public function testDeployAppAddExtraPrivilegesInDatabaseFromYml()
+    {
+         copy(__DIR__.'/../sampleapp/application1.yml', __DIR__.'/../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $filename = "application.yml";
+        $path = __DIR__.'/../sampleapp/';
+        $yaml = Yaml::parse(file_get_contents($path.$filename));
+        $privilegearray = array_unique(array_column($yaml['privilege'], 'name'));
+        $appid = "SELECT id FROM ox_app WHERE name = '".$yaml['app'][0]['name']."'";
+        $idresult = $this->executeQueryTest($appid);
+        $queryString = "SELECT name FROM ox_privilege WHERE app_id = '".$idresult[0]['id']."'";
+        $result = $this->executeQueryTest($queryString);
+        $DBprivilege = array_unique(array_column($result, 'name'));
+        $this->assertEquals($privilegearray, $DBprivilege);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertNotEmpty($content);
+        unlink(__DIR__.'/../sampleapp/application.yml');
+    }
+
+    public function testDeployAppDeleteExtraPrivilegesInDatabaseNotInYml()
+    {
+         copy(__DIR__.'/../sampleapp/application1.yml', __DIR__.'/../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $filename = "application.yml";
+        $path = __DIR__.'/../sampleapp/';
+        $yaml = Yaml::parse(file_get_contents($path.$filename));
+        $appid = "SELECT id FROM ox_app WHERE name = '".$yaml['app'][0]['name']."'";
+        $idresult = $this->executeQueryTest($appid);
+        $queryString = "SELECT name FROM ox_privilege WHERE app_id = '".$idresult[0]['id']."'";
+        $result = $this->executeQueryTest($queryString);
+        $DBprivilege = array_unique(array_column($result, 'name'));
+        $list = "'" . implode( "', '", $DBprivilege) . "'";
+        $this->assertNotEquals($list, 'MANAGE');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertNotEmpty($content);
+        unlink(__DIR__.'/../sampleapp/application.yml');
+    }
 
     public function testCreateWithOutTextFailure()
     {
@@ -488,7 +644,7 @@ class AppControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
-    
+
     public function testAddToAppRegistry(){
         $data = ['app_name' => 'Admin'];
         $this->setJsonContent(json_encode($data));
