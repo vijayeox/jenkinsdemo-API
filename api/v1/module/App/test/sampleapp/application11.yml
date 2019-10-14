@@ -1,5 +1,5 @@
 app:
-    - { name: 'Div', uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641, category: EXAMPLE_CATEGORY }
+    - { name: 'Dive Insurance', category: EXAMPLE_CATEGORY }
 org:
     - { name: 'Vincencia & Buckley',
         email: testhub07@gmail.com,
@@ -9,9 +9,6 @@ org:
         state: CA,
         zip: 90623,
         country: 'United States' }
-privilege:
-    - { name: 'MANAGE_POLICY_APPROVAL' }
-    - { name: 'MANAGE_MY_POLICY' }
 dashboard:
     - { name: Dashboard, content: content/Dashboard.txt }
 menu:

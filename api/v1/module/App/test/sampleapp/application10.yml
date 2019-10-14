@@ -12,8 +12,6 @@ org:
 privilege:
     - { name: 'MANAGE_POLICY_APPROVAL' }
     - { name: 'MANAGE_MY_POLICY' }
-    - { name: 'Manage_p' }
-    - { name: 'Manage_a' }
 dashboard:
     - { name: Dashboard, content: content/Dashboard.txt }
 menu:

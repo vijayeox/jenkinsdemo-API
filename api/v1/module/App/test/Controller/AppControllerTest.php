@@ -504,6 +504,20 @@ class AppControllerTest extends ControllerTest
         unlink(__DIR__.'/../sampleapp/application.yml');
     }
 
+    public function testDeployAppWithoutPrivilegesInYml()
+    {
+        copy(__DIR__.'/../sampleapp/application6.yml', __DIR__.'/../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertNotEmpty($content);
+        unlink(__DIR__.'/../sampleapp/application.yml');
+    }
+
     public function testDeployAppAddExtraPrivilegesInDatabaseFromYml()
     {
          copy(__DIR__.'/../sampleapp/application1.yml', __DIR__.'/../sampleapp/application.yml');
