@@ -116,6 +116,10 @@ mattermost()
     then
         echo -e "${RED}MATTERMOST was not packaged so skipping it\n${RESET}"
     else
+    	echo -e "${YELLOW}Backing up current configurations${RESET}"
+    	cp /opt/oxzion/mattermost/config/config.json ${TEMP}/integrations/mattermost/mattermost-server/config/config.json
+    	cp /opt/oxzion/mattermost/config/config.json /home/ubuntu/env/integrations/mattermost/mattermost-server/config/config.json
+    	echo -e "${GREEN}Backing up current configurations completed${RESET}"
         echo -e "${GREEN}Stopping Mattermost service${RESET}"
         systemctl stop mattermost
         echo -e "${YELLOW}Stopped!${RESET}"
