@@ -73,16 +73,18 @@ h1 {
 }
 
 .labelField {
-  position: absolute;
+  position: relative;
   -webkit-transform: translateY(6px);
   transform: translateY(6px);
   left: 13px;
-  color: rgba(255, 255, 255, 0.5);
   transition: all 0.25s ease;
   -webkit-backface-visibility: hidden;
   pointer-events: none;
   font-size: 22px;
+  top: 36px;
+  left: -80px;
 } */
+
 label .req {
   margin: 2px;
   color: #053b6d;
@@ -91,15 +93,17 @@ label .req {
 label.active {
   -webkit-transform: translateY(50px);
   transform: translateY(50px);
-  left: 2px;
   font-size: 14px;
+  top: -45px;
+  position: relative;
+  left: -108px;
 }
 label.active .req {
   opacity: 0;
 }
 
 label.highlight {
-  color: #ffffff;
+  color: #434343;
 }
 
 .inputField, textarea {
@@ -111,7 +115,6 @@ label.highlight {
   background: none;
   background-image: none;
   border: 1px solid #a0b3b0;
-  color: #ffffff;
   border-radius: 0;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
@@ -128,7 +131,7 @@ textarea {
 
 .field-wrap {
   position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .top-row:after {
@@ -176,4 +179,9 @@ textarea {
 .forgot {
   margin-top: -20px;
   text-align: right;
+}
+
+.inputDiv {
+  text-align: -webkit-center;
+  text-align: -moz-center;
 }

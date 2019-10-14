@@ -32,13 +32,13 @@ export default class Register extends React.Component {
 							<div id="login">   
 								<h1>Welcome Back!</h1>
 								<form action="/" method="post">
-									<div className="field-wrap">
+									<div className="field-wrap inputDiv">
 										<label className="labelField">
 											Username<span className="req">*</span>
 										</label>
 										<input className="inputField" type="email" required autoComplete="off" />
 									</div>
-									<div className="field-wrap">
+									<div className="field-wrap inputDiv">
 										<label className="labelField">
 											Password<span className="req">*</span>
 										</label>
