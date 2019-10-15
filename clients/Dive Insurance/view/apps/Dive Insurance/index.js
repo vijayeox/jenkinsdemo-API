@@ -60,11 +60,7 @@ const register = (core, args, options, metadata) => {
     );
     return cacheData;
   };
-  const getTestData = async () => {
-    const response = await proc.request("/test", { method: "post" });
-    console.log(response);
-  };
-  getTestData();
+
   const postSubmitCallback = data => {
     console.log(data);
     // if(cacheId){
@@ -72,43 +68,39 @@ const register = (core, args, options, metadata) => {
     //   return proc;
     // }
   };
-  // Creates a HTTP call (see server.js)
-  proc
-    .request("/test", { method: "post" })
-    .then(response => console.log(response));
+
   getCacheData().then(cacheResponse => {
-    if (cacheResponse.data && cacheResponse.data.data) {
-      if (cacheResponse.data.data.workflow_uuid) {
-        getFormData(cacheResponse.data.data.workflow_uuid).then(
-          formResponse => {
-            if (formResponse && formResponse.data.length > 0) {
-              cacheId = cacheResponse["id"];
-              win.render($content =>
-                ReactDOM.render(
-                  <div className="formContent">
-                    <FormRender
-                      postSubmitCallback={postSubmitCallback}
-                      core={core}
-                      page={cacheResponse.data.data.page}
-                      appId={application_id}
-                      formId={formResponse.data[0].id}
-                      content={JSON.parse(formResponse.data[0].content)}
-                      data={cacheResponse.data.data}
-                    />
-                  </div>,
-                  $content
-                )
+    var cache = cacheResponse.data;
+    if (cache && cache.data) {
+      if (cache.data.workflow_uuid) {
+        getFormData(cache.data.workflow_uuid).then(formResponse => {
+          if (formResponse && formResponse.data.length > 0) {
+            cacheId = cacheResponse["id"];
+            win.render($content => {
+              ReactDOM.render(
+                <div className="formContent">
+                  <FormRender
+                    postSubmitCallback={postSubmitCallback}
+                    core={core}
+                    page={cache.data.page}
+                    appId={application_id}
+                    formId={formResponse.data[0].id}
+                    content={JSON.parse(formResponse.data[0].content)}
+                    data={cache.data}
+                  />
+                </div>,
+                $content
               );
-            } else {
-              win.render($content =>
-                ReactDOM.render(
-                  <LeftMenuTemplate core={core} appId={application_id} />,
-                  $content
-                )
-              );
-            }
+            });
+          } else {
+            win.render($content =>
+              ReactDOM.render(
+                <LeftMenuTemplate core={core} appId={application_id} />,
+                $content
+              )
+            );
           }
-        );
+        });
       }
     } else {
       win.render($content =>
