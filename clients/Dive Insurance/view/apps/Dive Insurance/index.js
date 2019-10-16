@@ -40,6 +40,16 @@ const register = (core, args, options, metadata) => {
     );
     return cacheData;
   };
+  const deleteCacheData = async () => {
+    let helper = core.make("oxzion/restClient");
+    let cacheData = await helper.request(
+      "v1",
+      "/app/" + application_id + "/cache",
+      {},
+      "delete"
+    );
+    return cacheData;
+  };
   const updateCacheData = async cacheId => {
     let helper = core.make("oxzion/restClient");
     let cacheData = await helper.request(
@@ -62,11 +72,12 @@ const register = (core, args, options, metadata) => {
   };
 
   const postSubmitCallback = data => {
-    console.log(data);
-    // if(cacheId){
-    //   win.render($content => ReactDOM.render(<LeftMenuTemplate core={core} appId={application_id}/>, $content));
-    //   return proc;
-    // }
+    deleteCacheData().then(response => {
+      if (response.status == "success") {
+        proc.destroy();
+        core.run("DiveInsurance");
+      }
+    });
   };
 
   getCacheData().then(cacheResponse => {
