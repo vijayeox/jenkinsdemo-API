@@ -14,6 +14,7 @@ use Zend\Db\Sql\Expression;
 use Exception;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
+use Oxzion\ServiceException;
 
 /**
  * UserCache Controller
@@ -90,27 +91,29 @@ class UserCacheService extends AbstractService
         return $count;
     }
 
-    public function deleteUserCache($id)
+    public function deleteUserCache($appId = null)
     {
-        $obj = $this->table->get($id, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        $this->beginTransaction();
-        $count = 0;
+        $sql = $this->getSqlObject();
+        $params = array();
+        $userId = AuthContext::get(AuthConstants::USER_ID);
         try {
-           $originalArray = $obj->toArray();
-           $form = new UserCache();
-           $originalArray['deleted'] = 1;
-           $form->exchangeArray($originalArray);
-           $result = $this->table->save($form);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
+            if (isset($userId)) {
+                $params['user_id'] = $userId;
             }
-            $this->commit();
-        } catch (Exception $e) {
-            $this->rollback();
+            if (isset($appId)) {
+                $params['app_id'] = $this->getIdFromUuid('ox_app', $appId);
+                if($params['app_id'] === 0)
+                {
+                    throw new Exception("appId is incorrect",0);
+                }
+            }
+            $update = $sql->update();
+            $update->table('ox_user_cache')
+            ->set(array('deleted'=> 1))
+            ->where($params);
+            $response = $this->executeUpdate($update);
+            return 0;
+        } catch(Exception $e){
             $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
             throw $e;
         }

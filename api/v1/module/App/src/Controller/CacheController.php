@@ -9,6 +9,8 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Log\Logger;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
+use Oxzion\ServiceException;
+use Exception;
 
 class CacheController extends AbstractApiController
 {
@@ -53,4 +55,17 @@ class CacheController extends AbstractApiController
         return $this->getSuccessResponseWithData($result);
     }
 
+    public function cacheDeleteAction()
+    {
+        $appId = $this->params()->fromRoute()['appId'];
+        try{
+            $result = $this->cacheService->deleteUserCache($appId);
+        }
+        catch(Exception $e) {
+            return $this->getErrorResponse("The cache deletion has failed",400);
+        }
+        if($result == 0){
+            return $this->getSuccessResponse("The cache has been successfully deleted");
+        }
+    }
 }

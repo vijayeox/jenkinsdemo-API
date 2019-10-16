@@ -219,6 +219,7 @@ ox_user_cache:
     app_id: 99
     content: "Some Content"
     user_id: 1
+    deleted: 0
 ox_activity_instance:
   -
     id: 1

@@ -394,6 +394,20 @@ return [
                     ],
                 ],
             ],
+            'remove_app_cache' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/deletecache',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,                  
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\CacheController::class,
+                        'action' => 'cacheDelete',
+                        'method' => 'DELETE'
+                    ],
+                ],
+            ],
             'getdocument' => [
                 'type'    => Segment::class,
                 'options' => [
