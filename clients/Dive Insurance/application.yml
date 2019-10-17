@@ -1,9 +1,10 @@
 app:
   - name: "Dive Insurance"
-    id: d77ea120-b028-479b-8c6e-60476b6a4456
+    uuid: d77ea120-b028-479b-8c6e-60476b6a4456
+    description: "App for Dive Insurance"
 org:
   - name: "Vincencia & Buckley"
-    id: c1ed4200-9131-4671-b0e0-de3e27c3f609
+    uuid: c1ed4200-9131-4671-b0e0-de3e27c3f609
     email: testhub07@gmail.com
 group:
   - name: "Policy Holder"
