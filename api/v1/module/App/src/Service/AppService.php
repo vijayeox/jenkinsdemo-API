@@ -20,6 +20,7 @@ use Oxzion\Utils\FilterUtils;
 use Oxzion\ServiceException;
 use Symfony\Component\Yaml\Yaml;
 use Zend\Db\Sql\Expression;
+use Oxzion\Db\Migration\Migration;
 
 class AppService extends AbstractService
 {
@@ -109,13 +110,13 @@ class AppService extends AbstractService
     private function updateymlfororg($yamldata, $modifieddata, $path){
         $filename = "application.yml";
         if(!(array_key_exists('uuid',$yamldata['org']))){
-            $yamldata['app'][0]['uuid'] = $modifieddata['uuid'];
+            $yamldata['org'][0]['uuid'] = $modifieddata['uuid'];
         }
         $new_yaml = Yaml::dump($yamldata, 2);
         file_put_contents($path.$filename, $new_yaml);
     }
 
-    private function updateymlforapp($yamldata, $modifieddata, $path){
+    private function updateymlforapp(&$yamldata, $modifieddata, $path){
         $filename = "application.yml";
         if(!(array_key_exists('uuid',$yamldata['app'][0]))){
             $yamldata['app'][0]['uuid'] = $modifieddata['uuid'];
@@ -165,20 +166,24 @@ class AppService extends AbstractService
     }
 
     public function deployApp($path){
-        $ymldata = $this->loadAppDescriptor($path);
-        $appdata = $this->collectappfieldsdata($ymldata['app'])[0];
+        $ymlData = $this->loadAppDescriptor($path);
+        $appData = $this->collectappfieldsdata($ymlData['app'])[0];
         $this->beginTransaction();
         try{
-            $appUuid = $this->checkAppExists($appdata);
-            $this->updateymlforapp($ymldata, $appdata, $path);
-            if(isset($ymldata['org'])){
-                $data = $this->processOrg($ymldata['org'][0],NULL);
-                //$this->updateymlfororg($ymldata, $data, $path);
-                $result = $this->createAppRegistry($appUuid, $ymldata['org'][0]['uuid']);
+            $appUuid = $this->checkAppExists($appData);
+            $this->updateymlforapp($ymlData, $appData, $path);
+            if(isset($ymlData['org'])){
+                $data = $this->processOrg($ymlData['org'][0],NULL);
+                $this->updateymlfororg($ymlData, $data, $path);
+                $result = $this->createAppRegistry($appUuid, $ymlData['org'][0]['uuid']);
             }
-            if(isset($ymldata['privilege'])){
-                $this->createAppPrivileges($appUuid, $ymldata['privilege']);
+            if(isset($ymlData['privilege'])){
+                $this->createAppPrivileges($appUuid, $ymlData['privilege']);
             }
+            $this->performMigration($path, $ymlData['app'][0]);
+            // if(isset($ymldata['menu'])){
+            //     $this->createAppMenu($appUuid, $ymldata['privilege']);
+            // }
             //check if menu exists and add to app menu table
             //check if workflow given if so deployworkflow
             //check form fields if not found add to fields table fpr the app.
@@ -189,8 +194,18 @@ class AppService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        // print_r($data); exit;
-        return $data;
+    }
+
+    private function performMigration($appPath, $data){
+        $appName = $data['name'];
+        $appId = $data['uuid'];
+        $description = isset($data['description']) ? $data['description'] : $appName;
+        $migration = new Migration($this->config, $appName, $appId, $description);
+        $migrationFolder = $this->config['CLIENT_FOLDER'].$appName."/data/migrations";
+        $fileList = array_diff(scandir($migrationFolder), array(".", ".."));
+        if(count($fileList)>0){
+            $migration->migrate(realpath($migrationFolder));
+        }
     }
 
     private function processOrg(&$orgData){
@@ -277,10 +292,6 @@ class AppService extends AbstractService
             $queryString = "DELETE FROM ox_privilege WHERE app_id = :appid AND name NOT IN (".$list.")";
             $params = array("appid" => $idresult);
             $result = $this->executeQueryWithBindParameters($queryString, $params);
-
-            $queryString = "SELECT * FROM ox_privilege WHERE app_id = :appid";
-            $params = array("appid" => $idresult);
-            $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
         }
 
         //get difference of the list and table privileges
@@ -289,9 +300,9 @@ class AppService extends AbstractService
         $params = array("appid" => $idresult);
         $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
         $existingprivileges = array_column($result, 'name');
-        $privilegesToBeAdded = array_diff($privilegearray,$existingprivileges);
-
+        $privilegesToBeAdded = array_diff($privilegearray, $existingprivileges);
         $sql = $this->getSqlObject();
+        
         //if any new privileges to be added
         if(!(empty($privilegesToBeAdded))){
             foreach ($privilegesToBeAdded as $key => $value) {
@@ -308,15 +319,6 @@ class AppService extends AbstractService
                 $params = array('appId' => $idresult);
                 $result = $this->executeUpdateWithBindParameters($query, $params);
             }
-            $queryString = "SELECT pr.name from ox_privilege as pr
-            WHERE pr.app_id = :appid";
-            $params = array("appid" => $idresult);
-            $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
-
-            $queryString = "SELECT privilege_name from ox_role_privilege
-            WHERE ox_role_privilege.app_id = :appid";
-            $params = array("appid" => $idresult);
-            $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
         }
     }
 
@@ -488,6 +490,7 @@ class AppService extends AbstractService
         if ($resultSet[0]['count'] == 0) {
             $insert =  "INSERT into ox_app_registry (app_id, org_id, start_options)
             select ap.id, org.id, ap.start_options from ox_app as ap, ox_organization as org where ap.uuid = :appId and org.uuid = :orgId";
+            $params = array("appId" => $appId, "orgId" => $orgId);
             $result = $this->executeUpdateWithBindParameters($insert, $params);
             return $result->getAffectedRows();
         }

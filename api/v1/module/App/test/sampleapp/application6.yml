@@ -1,10 +1,12 @@
 app:
-    - { name: 'Dive Insurance', uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641, category: EXAMPLE_CATEGORY }
+    - { name: 'DummyDive', uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641, category: EXAMPLE_CATEGORY }
 org:
     - { name: 'Vincencia & Buckley', uuid: c1ed4200-9131-4671-b0e0-de3e27c3f609, email: testhub07@gmail.com, contact: { username: csradmin, firstname: CSR, lastname: admin, email: testhub07@gmail.com, phone: '' }, address1: '6 bCenterpoint', address2: Dr., city: 'La Palma', state: CA, zip: 90623, country: 'United States' }
 privilege:
     - { name: 'MANAGE_POLICY_APPROVAL' }
     - { name: 'MANAGE_MY_POLICY' }
+    - { name: 'MANAGE_M' }
+    - { name: 'MANAGE_p' }
 dashboard:
     - { name: Dashboard, content: content/Dashboard.txt }
 menu:
