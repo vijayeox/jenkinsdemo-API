@@ -168,7 +168,7 @@ class WidgetService extends AbstractService
             if ($resultSet[0]['type'] == 'inline') {
                 $response['widget']['data'] = '235436';
             }
-            if (($resultSet[0]['type'] == 'barChart') || ($resultSet[0]['type'] == 'lineChart')) {
+            if (($resultSet[0]['type'] == 'barChart') || ($resultSet[0]['type'] == 'pieChart')) {
                 $response['widget']['data'] = [
                     ['person'=> 'Bharat', 'sales'=> 4.2],
                     ['person'=> 'Harsha', 'sales'=> 5.2],
@@ -178,7 +178,7 @@ class WidgetService extends AbstractService
                     ['person'=> 'Yuvraj', 'sales'=> 14.2]
                 ];
             }
-            if ($resultSet[0]['type'] == 'pieChart') {
+            if ($resultSet[0]['type'] == 'lineChart') {
                 $response['widget']['data'] = [
                     ['quarter'=> 'Q1 2018', 'revenue'=> 4.2],
                     ['quarter'=> 'Q2 2018', 'revenue'=> 5.4],
