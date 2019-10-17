@@ -41,7 +41,7 @@ class DashboardController extends AbstractApiController
     {
         $data = $this->params()->fromPost();
         try {
-            $count = $this->dashboardService->createDashboard($data);
+            $data['uuid'] = $this->dashboardService->createDashboard($data);
         }
         catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
@@ -80,19 +80,22 @@ class DashboardController extends AbstractApiController
         return $this->getSuccessResponseWithData($result, 200);
     }
 
+    public function delete($uuid) {
+        throw new Exception('Deleting without version number is not allowed. Use */deleteWithVersion?version=<version> URL.');
+    }
+
     /**
      * Delete Dashboard API
      * @api
      * @link /analytics/dashboard/:dashboardUuid
      * @method DELETE
      * @param $uuid ID of Dashboard to Delete
-     * @param $version Version number of the dashboard to delete.
      * @return array success|failure response
      */
-    public function delete($uuid, $version)
+    public function deleteWithVersion($uuid, $data)
     {
         try {
-            $response = $this->dashboardService->deleteDashboard($uuid, $version);
+            $response = $this->dashboardService->deleteDashboard($uuid, $data['version']);
         }
         catch (VersionMismatchException $e) {
             return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);

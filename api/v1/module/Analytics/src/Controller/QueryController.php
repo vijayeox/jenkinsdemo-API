@@ -80,19 +80,22 @@ class QueryController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
 
+    public function delete($uuid) {
+        throw new Exception('Deleting without version number is not allowed. Use */deleteWithVersion?version=<version> URL.');
+    }
+
     /**
      * Delete Query API
      * @api
      * @link /analytics/query/:queryUuid
      * @method DELETE
      * @param $uuid ID of Query to Delete
-     * @param $version Version number of Query to delete.
      * @return array success|failure response
      */
-    public function delete($uuid, $version)
+    public function deleteWithVersion($uuid)
     {
         try {
-            $response = $this->queryService->deleteQuery($uuid, $version);
+            $response = $this->queryService->deleteQuery($uuid, $data['version']);
         }
         catch (VersionMismatchException $e) {
             return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);

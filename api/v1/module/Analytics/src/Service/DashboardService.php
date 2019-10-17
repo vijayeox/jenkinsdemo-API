@@ -25,20 +25,20 @@ class DashboardService extends AbstractService
 
     public function createDashboard(&$data)
     {
+        $newDashboardUuid = Uuid::uuid4()->toString();
         $queryParams = [
-            'uuid'           => Uuid::uuid4()->toString(),
+            'uuid'           => $newDashboardUuid,
             'date_created'   => date('Y-m-d H:i:s'),
             'org_id'         => AuthContext::get(AuthConstants::ORG_ID),
             'created_by'     => AuthContext::get(AuthConstants::USER_ID),
             'version'        => 0,
             'isdeleted'      => false,
-            'dashboard_type' => 'html'
+            'dashboard_type' => 'html',
+            'name'           => $data['name'],
+            'ispublic'       => isset($data['ispublic']) ? $data['ispublic'] : false,
+            'description'    => $data['description'],
+            'content'        => $data['content']
         ];
-
-        $queryParams['name'] = $data['name'];
-        $queryParams['ispublic'] = isset($data['ispublic']) ? $data['ispublic'] : false;
-        $queryParams['description'] = $data['description'];
-        $queryParams['content'] = $data['content'];
 
         $query = 'insert into ox_dashboard (uuid, name, ispublic, description, dashboard_type, created_by, date_created, org_id, isdeleted, content) values (:uuid, :name, :ispublic, :description, :dashboard_type, :created_by, :date_created, :org_id, :isdeleted, :content)';
 
@@ -46,7 +46,7 @@ class DashboardService extends AbstractService
             $this->beginTransaction();
             $result = $this->executeQueryWithBindParameters($query, $queryParams);
             $this->commit();
-            return $result;
+            return $newDashboardUuid;
         }
         catch (ZendDbException $e) {
             try {

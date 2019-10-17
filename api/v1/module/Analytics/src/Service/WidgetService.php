@@ -21,31 +21,47 @@ class WidgetService extends AbstractService
         $this->table = $table;
     }
 
-    public function createWidget(&$data)
+    public function createWidget($data)
     {
-        $form = new Widget();
-        $data['uuid'] = Uuid::uuid4()->toString();
-        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_created'] = date('Y-m-d H:i:s');
-        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $form->exchangeWithSpecificKey($data,'value');
-        $form->validate();
-        $this->beginTransaction();
-        $count = 0;
+        $newWidgetUuid = Uuid::uuid4()->toString();
+        $query = 'INSERT INTO ox_widget (uuid, query_id, visualization_id, ispublic, created_by, date_created, org_id, isdeleted, name, configuration, version) VALUES (:uuid, (SELECT query_id FROM ox_widget oqw WHERE oqw.uuid=:oldWidgetUuid AND oqw.org_id=:org_id), (SELECT visualization_id FROM ox_widget ovw WHERE ovw.uuid=:oldWidgetUuid AND ovw.org_id=:org_id), :ispublic, :created_by, :date_created, :org_id, :isdeleted, :name, :configuration, :version)';
+        $queryParams = [
+            'created_by'    => AuthContext::get(AuthConstants::USER_ID),
+            'date_created'  => date('Y-m-d H:i:s'),
+            'org_id'        => AuthContext::get(AuthConstants::ORG_ID),
+            'version'       => 0,
+            'ispublic'      => true,
+            'isdeleted'     => false,
+            'uuid'          => $newWidgetUuid,
+            'oldWidgetUuid' => $data['uuid'],
+            'name'          => $data['name'],
+            'configuration' => $data['configuration']
+        ];
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
+            $this->beginTransaction();
+            $result = $this->executeQueryWithBindParameters($query, $queryParams);
+            if (1 == $result) {
+                $this->commit();
+                return $newWidgetUuid;
+            }
+            else {
+                $this->logger->err('Unexpected result. Transaction rolled back.', $result);
                 $this->rollback();
                 return 0;
             }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
-            $this->commit();
-        } catch (Exception $e) {
-            $this->rollback();
+        }
+        catch (ZendDbException $e) {
+            $this->logger->err('Database exception occurred.');
+            $this->logger->err($e);
+            try {
+                $this->rollback();
+            }
+            catch (ZendDbException $ee) {
+                $this->logger->err('Database exception occurred when rolling back transaction.');
+                $this->logger->err($ee);
+            }
             return 0;
         }
-        return $count;
     }
 
     public function updateWidget($uuid, &$data)
@@ -97,6 +113,31 @@ class WidgetService extends AbstractService
         return $count;
     }
 
+    public function getWidgetByName($name) {
+        $query = 'select w.uuid, w.ispublic, w.created_by, w.date_created, w.name, w.configuration, if(w.created_by=:created_by, true, false) as is_owner, v.renderer, v.type from ox_widget w join ox_visualization v on w.visualization_id=v.id where w.isdeleted=false and w.org_id=:org_id and w.name=:name and (w.ispublic=true or w.created_by=:created_by)';
+        $queryParams = [
+            'created_by' => AuthContext::get(AuthConstants::USER_ID),
+            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'name' => $name
+        ];
+        try {
+            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+            if (count($resultSet) == 0) {
+                return 0;
+            }
+            $response = [
+                'widget' => $resultSet[0]
+            ];
+            //Widget configuration value from database is a JSON string. Convert it to object and overwrite JSON string value.
+            $response['widget']['configuration'] = json_decode($resultSet[0]["configuration"]);
+        }
+        catch(Exception $e) {
+            $this->logger->err($e);
+            return 0;
+        }
+        return $response;
+    }
+
     public function getWidget($uuid,$params)
     {
         $query = "select w.uuid, w.ispublic, w.created_by, w.date_created, w.name, w.configuration, if(w.created_by=:created_by, true, false) as is_owner, v.renderer, v.type from ox_widget w join ox_visualization v on w.visualization_id=v.id where w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid and (w.ispublic=true or w.created_by=:created_by)";
@@ -124,10 +165,10 @@ class WidgetService extends AbstractService
         if(isset($params['data'])) {
 //--------------------------------------------------------------------------------------------------------------------------------
 //TODO:Fetch data from elastic search and remove hard coded values below.
-            if (0 == strcmp($uuid, "2aab5e6a-5fd4-44a8-bb50-57d32ca226b0")) { //Sales YTD
+            if ($resultSet[0]['type'] == 'inline') {
                 $response['widget']['data'] = '235436';
             }
-            if ((0 == strcmp($uuid, "bacb4ec3-5f29-49d7-ac41-978a99d014d3")) || (0 == strcmp($uuid, "ae8e3919-88a8-4eaf-9e35-d7a4408a1f8c"))) { //Sales by sales person
+            if (($resultSet[0]['type'] == 'barChart') || ($resultSet[0]['type'] == 'lineChart')) {
                 $response['widget']['data'] = [
                     ['person'=> 'Bharat', 'sales'=> 4.2],
                     ['person'=> 'Harsha', 'sales'=> 5.2],
@@ -137,7 +178,7 @@ class WidgetService extends AbstractService
                     ['person'=> 'Yuvraj', 'sales'=> 14.2]
                 ];
             }
-            if (0 == strcmp($uuid, "08bd8fc1-2336-423d-842a-7217a5482dc9")) { //Quarterly revenue 
+            if ($resultSet[0]['type'] == 'pieChart') {
                 $response['widget']['data'] = [
                     ['quarter'=> 'Q1 2018', 'revenue'=> 4.2],
                     ['quarter'=> 'Q2 2018', 'revenue'=> 5.4],

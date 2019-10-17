@@ -77,19 +77,22 @@ class VisualizationController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
 
+    public function delete($uuid) {
+        throw new Exception('Deleting without version number is not allowed. Use */deleteWithVersion?version=<version> URL.');
+    }
+
     /**
      * Delete Visualization API
      * @api
      * @link /analytics/visualization/:visualizationUuid
      * @method DELETE
      * @param $uuid ID of Visualization to Delete
-     * @param $version Version number of Visualization to delete.
      * @return array success|failure response
      */
-    public function delete($uuid, $version)
+    public function deleteWithVersion($uuid)
     {
         try {
-            $response = $this->visualizationService->deleteVisualization($uuid. $version);
+            $response = $this->visualizationService->deleteVisualization($uuid. $data['version']);
         }
         catch (VersionMismatchException $e) {
             return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);

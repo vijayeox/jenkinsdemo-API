@@ -79,19 +79,22 @@ class DataSourceController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
 
+    public function delete($uuid) {
+        throw new Exception('Deleting without version number is not allowed. Use */deleteWithVersion?version=<version> URL.');
+    }
+
     /**
      * Delete DataSource API
      * @api
      * @link /analytics/dataSource/:dataSourceUuid
      * @method DELETE
      * @param $uuid ID of DataSource to Delete
-     * @param $version Version number of the DataSource to delete.
      * @return array success|failure response
      */
-    public function delete($uuid, $version)
+    public function deleteWithVersion($uuid, $data)
     {
         try {
-            $response = $this->dataSourceService->deleteDataSource($uuid, $version);
+            $response = $this->dataSourceService->deleteDataSource($uuid, , $data['version']);
         }
         catch (VersionMismatchException $e) {
             return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);

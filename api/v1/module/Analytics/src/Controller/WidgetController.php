@@ -37,18 +37,19 @@ class WidgetController extends AbstractApiController
      */
     public function create($data)
     {
-        $data = $this->params()->fromPost();
         try {
-            $count = $this->widgetService->createWidget($data);
+            $result = $this->widgetService->createWidget($data);
+            $strResult = "${result}";
+            if ($strResult != '0') {
+                $data['newWidgetUuid'] = $result;
+                return $this->getSuccessResponseWithData($data, 201);
+            }
         }
         catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getErrorResponse('Validation Errors', 404, $response);
         }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
-        }
-        return $this->getSuccessResponseWithData($data, 201);
+        return $this->getFailureResponse('Failed to create a new entity', $data);
     }
 
     /**
@@ -78,19 +79,23 @@ class WidgetController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
 
+    public function delete($uuid) {
+        throw new Exception('Deleting without version number is not allowed. Use */deleteWithVersion?version=<version> URL.');
+    }
+
     /**
      * Delete Widget API
      * @api
      * @link /analytics/widget/:widgetUuid
      * @method DELETE
      * @param $uuid ID of Widget to Delete
-     * @param $version Version number of widget to delete.
      * @return array success|failure response
      */
-    public function delete($uuid, $version)
+    public function deleteWithVersion($uuid)
     {
+        $params = $this->params()->fromQuery();
         try {
-            $response = $this->widgetService->deleteWidget($uuid, $version);
+            $response = $this->widgetService->deleteWidget($uuid, $params['version']);
         }
         catch (VersionMismatchException $e) {
             return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
@@ -121,7 +126,12 @@ class WidgetController extends AbstractApiController
     public function get($uuid)
     {
         $params = $this->params()->fromQuery();
-        $result = $this->widgetService->getWidget($uuid,$params);
+        if ($uuid == 'byName') {
+            $result = $this->widgetService->getWidgetByName($params['name']);
+        }
+        else {
+            $result = $this->widgetService->getWidget($uuid,$params);
+        }
         if ($result == 0) {
             return $this->getErrorResponse("Widget not found", 404, ['uuid' => $uuid]);
         }
