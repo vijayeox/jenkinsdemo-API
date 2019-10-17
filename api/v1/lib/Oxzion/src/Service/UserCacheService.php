@@ -140,6 +140,7 @@ class UserCacheService extends AbstractService
         if (isset($id)) {
             $params['id'] = $id;
         }
+        $params['deleted']=0;
         $select = $sql->select();
         $select->from('ox_user_cache')
         ->columns(array("*"))
