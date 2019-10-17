@@ -59,6 +59,15 @@ menu:
       name: "All Policies"
       description: "Shows all the policies"
       content: [{ type: List, content: { route: "app/{{app_id}}/file" } }]
+  - name: "Verify PADI details"
+    page:
+      name: "Verify PADI details"
+      description: "Lets CSR to input and check PADI Data"
+      content:
+        [
+          { content: "<h3>Verify PADI Details</h3>", type: "Document" },
+          { form_id: "{{form_id}}", type: "Form" },
+        ]
   - name: Home
     group: CSR
     page:
