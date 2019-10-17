@@ -183,7 +183,7 @@ class AnalyticsTest extends MainControllerTest
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
-        $parameters = ['Filter-owner_username'=>'bharatg','operation'=>'count'];
+        $parameters = ['filter'=>['owner_username'=>'bharatg'],'operation'=>'count'];
         $results = $ae->runQuery('crm', 'Lead', $parameters);
         $results = $results['data'];
         $this->assertEquals($results, 2);

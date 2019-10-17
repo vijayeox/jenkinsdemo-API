@@ -19,7 +19,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
         try {
 			$orgId = AuthContext::get(AuthConstants::ORG_ID);
 			if ($entity_name) {
-				$parameters['Filter-entity_name']=$entity_name;
+				$parameters['filter']['entity_name']=$entity_name;
 			}
 			$query = $this->formatQuery($parameters);
             $elasticService = new ElasticService($this->config);
@@ -114,36 +114,8 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 		}
 		if (!isset($parameters['skipdate']) && $datetype)
 			$range[$datetype] = $startdate . "/" . $enddate;
-		foreach ($parameters as $key => $value) {
-			if (strstr($key, 'Filter')) {
-
-				list($k1, $keycolumn) = explode('-', $key);
-		//		list($temp, $type) = explode('_', $k1);
-		//		if (strtolower($type) == 'value') {
-		//			$filtertype = 'value';
-		//		} else {
-		//			$filtertype = 'key';
-		//		}
-
-				$value = rtrim($value, ',');
-				$options = explode(',', $value);
-
-				asort($options);
-				if ($keycolumn) $keycolumn = strtolower($keycolumn);
-				if ($options[0] !== null) {
-					if (count($options) > 1) {
-						$filter[$keycolumn] = $options;
-					} else {
-						if ($options[0] != 'all') {  
-				//			if ($filtertype == 'value') {
-				//				$filter[$keycolumn . '__value'] = $options[0];
-				//			} else {
-								$filter[$keycolumn] = $options[0];
-				//			}
-						}
-					}
-				}
-			}
+		if (isset($parameters['filter'])) {
+			$filter = $parameters['filter'];
 		}
 		$this->hasGroup = (empty($group)) ? 0 : 1;
 		if (!empty($group)) $group = array_map('strtolower', $group);

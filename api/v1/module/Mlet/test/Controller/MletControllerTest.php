@@ -145,7 +145,7 @@ class MletControllerTest extends ControllerTest
         if (enableElastic==0) {
             $this->markTestSkipped('Only Integration Test');
         }
-        $data = ["Filter_value-created_by"=>"John Doe"];
+        $data = ["filter" =>["created_by"=>"John Doe"]];
         $this->setJsonContent(json_encode($data));
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/mlet/4/result', 'POST');

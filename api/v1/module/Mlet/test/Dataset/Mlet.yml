@@ -53,4 +53,4 @@ ox_mlet:
     modified_id: 1
     date_created: 2019/01/01
     date_modified: 2019/01/05
-    parameters: '{"date_type":"date_created","date-period":"2018-01-01/2019-12-12","operation":"count","Filter_value-created_by":"John Doe"}'
+    parameters: '{"date_type":"date_created","date-period":"2018-01-01/2019-12-12","operation":"count","filter":{"created_by":"John Doe"}}'
