@@ -44,7 +44,7 @@ const register = (core, args, options, metadata) => {
     let helper = core.make("oxzion/restClient");
     let cacheData = await helper.request(
       "v1",
-      "/app/" + application_id + "/cache",
+      "/app/" + application_id + "/deletecache",
       {},
       "delete"
     );
