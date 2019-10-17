@@ -9,32 +9,51 @@ use Zend\Db\Table;
 use Oxzion\Utils\FileUtils;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
+use Exception;
 
 class Migration extends AbstractService
 {
     private $database;
+    private $appName;
+    private $appId;
     private $mysqlAdapter;
+    private $description;
     /**
      * Migration constructor.
      * @param $config
      * @param $database
      */
-    public function __construct($config, $appName, $appId)
+    public function __construct($config, $appName, $appId, $description)
     {
-        $this->database = $appName.'___'.$appId;
-        $this->database = str_replace('-', '', $this->database);
+        $this->description = $description;
+        $this->appName = $appName;
+        $this->appId = $appId;
+        $this->database = self::getDatabaseName($appName, $appId);
         $dbConfig = array_merge(array(), $config['db']);
         $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
         $dbConfig['database'] = 'mysql';
         $this->mysqlAdapter = new Adapter($dbConfig);
-        $dbConfig = array_merge(array(), $config['db']);
-        $dbConfig['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
-        $dbConfig['database'] = $this->database;
-        $adapter = new Adapter($dbConfig);
+        $adapter = self::createAdapter($config, $this->database);
         $logger = new Logger();
         $writer = new Stream(__DIR__ . '/../../../../../logs/Persistence.log');
         $logger->addWriter($writer);
         parent::__construct($config, $adapter, $logger);
+        $this->initDB();
+    }
+
+    public static function createAdapter($config, $database){
+        $dbConfig = $config['db'];
+        $dbConfig['dsn'] = 'mysql:dbname=' . $database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
+        $dbConfig['database'] = $database;
+        $adapter = new Adapter($dbConfig);
+        return $adapter;
+    }
+
+    public static function getDatabaseName($appName, $appId)
+    {
+        $database = $appName.'___'.$appId;
+        $database = str_replace(' ', '', $database); // Replaces all spaces with hyphens.
+        return preg_replace('/[^A-Za-z0-9\_]/', '', $database, -1); // Removes special chars.
     }
 
     //this method is used only for phpunit tests. Not required to be called otherwise
@@ -50,15 +69,15 @@ class Migration extends AbstractService
      * @param $data
      * @return int
      */
-    public function initDB($data)
+    private function initDB()
     {
         $adapter = $this->mysqlAdapter;
-        $return = 0;
+        if ($this->appName === null || $this->appName === "" || $this->appId === null || $this->appId === "")
+        {
+            throw new Exception("appName and appId cannot be empty!");
+        }
+        
         try {
-            if ($data['appName'] === null || $data['appName'] === "" || $data['UUID'] === null || $data['UUID'] === "") {
-                $this->rollback();
-                return 0;
-            }
             $adapter->getDriver()->getConnection()->beginTransaction();
             $checkVersion = $this->checkDB(); //Code to check if the App Version is already installed.
             if (($checkVersion == 0)) {
@@ -66,8 +85,7 @@ class Migration extends AbstractService
                 $statement = $this->mysqlAdapter->query($sqlQuery);
                 $result = $statement->execute();
                 if ($result) {
-                    $appVersion = $this->insertAppVersion($data);
-                    $return = 1;
+                    $appVersion = $this->insertAppVersion();
                 } else {
                     //this method is not there!!!!!
                     //$this->updateMigration();
@@ -79,9 +97,9 @@ class Migration extends AbstractService
             }
         } catch (Exception $e) {
             $adapter->getDriver()->getConnection()->rollback();
+            throw $e;
         }
 
-        return $return;
     }
 
     /**
@@ -97,10 +115,9 @@ class Migration extends AbstractService
     }
 
     /**
-     * @param $data
      * @return \Zend\Db\Adapter\Driver\ResultInterface
      */
-    private function insertAppVersion($data)
+    private function insertAppVersion()
     {
         //The code to add the app version information to the table, after it is been installed into the OXZion system.
         $adapter = $this->dbAdapter;
@@ -132,14 +149,15 @@ class Migration extends AbstractService
      * @param $data
      * @return int
      */
-    public function migrationSql($fileList, $migrationFolder, $data)
+    public function migrate($migrationFolder)
     {
         //The code to add the app version information to the table, after it is been installed into the OXZion system.
         try {
-            $checkDb = $this->checkDB($data);
+            $checkDb = $this->checkDB();
             if ($checkDb == 1) {
                 $this->beginTransaction();
                 $adapter = $this->dbAdapter;
+                $fileList = array_diff(scandir($migrationFolder), array(".", ".."));
                 sort($fileList);
                 foreach ($fileList as $files) {
                     $versionExp = explode("__", $files);
@@ -147,7 +165,7 @@ class Migration extends AbstractService
                     $result1 = $statement1->execute();
                     if ($result1->getAffectedRows() === 0) {
                         $versionArray[] = $versionExp[0];
-                        $fileContent = file_get_contents($migrationFolder . $files);
+                        $fileContent = file_get_contents($migrationFolder."/".$files);
                         $statement = $adapter->query($fileContent);
                         $statement->execute();
                         $statement->getResource()->closeCursor();
@@ -172,19 +190,20 @@ class Migration extends AbstractService
                         $statement1 = $adapter->query("Select id from ox_app_migration_version where version_number = '$ver'");
                         $result1 = $statement1->execute();
                         if ($result1->getAffectedRows() === 0) {
-                            $sqlQuery = "INSERT into ox_app_migration_version (version_number, date_created, description) VALUES('" . $ver . "', '" . Date('Y-m-d H:i:s') . "', '" . $data['description'] . "')";
+                            $sqlQuery = "INSERT into ox_app_migration_version (version_number, date_created, description) VALUES('" . $ver . "', '" . Date('Y-m-d H:i:s') . "', '" . $this->description . "')";
                             $statement3 = $adapter->query($sqlQuery);
                             $statement3->execute();
                         }
                     }
                 }
             } else {
-                return 0;
+                throw new Exception("Database not found");
             }
             return 1;
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            // print_r($e->getMessage());
+            throw $e;
         }
     }
 }

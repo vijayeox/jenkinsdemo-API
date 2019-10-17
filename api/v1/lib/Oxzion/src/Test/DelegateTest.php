@@ -33,16 +33,13 @@ abstract class DelegateTest extends ServiceTest
         $this->appName = $data['appName']; 
         $this->description = $data['description'];
         $config = $this->getApplicationConfig();
-        $this->migrationObject = new Migration($config, $this->appName, $this->appUuid);
+        $this->migrationObject = new Migration($config, $this->appName, $this->appUuid, $this->description);
         $adapter = $this->migrationObject->getAdapter();
         $this->setDbAdapter($adapter);
         $this->persistence = new Persistence($config, $this->appName, $this->appUuid);
         $this->persistence->setAdapter($adapter);
         $this->database = $this->migrationObject->getDatabase();
-        $dataArray = array('appName' => $this->appName,'UUID'=> $this->appUuid,'description' => $this->description);
-        $this->migrationObject->initDB($dataArray);
-        $dataSet = array_diff(scandir($migrationFolder), array(".", ".."));
-        $testCase = $this->migrationObject->migrationSql($dataSet, $migrationFolder, $dataArray);
+        $testCase = $this->migrationObject->migrate($migrationFolder);
         
      }
     

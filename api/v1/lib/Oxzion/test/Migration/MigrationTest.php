@@ -5,6 +5,7 @@ use Oxzion\Db\Migration\Migration;
 use Oxzion\Test\ServiceTest;
 use Oxzion\Transaction\TransactionManager;
 use Zend\Db\Adapter\Adapter;
+use Exception;
 
 class MigrationTest extends ServiceTest
 {
@@ -30,30 +31,30 @@ class MigrationTest extends ServiceTest
         );
         if ($this->getName() == 'testInitDBWithOutAppName') {
             unset($this->data['appName']);
-        } else if ($this->getName() == 'testMigrateWrongAppName') {
-            $this->data['appName'] = 'ox_app_4';
+        }else{
+            $config = $this->getApplicationConfig();
+
+            $this->migrationObject = new Migration($config, $this->data['appName'], $this->data['UUID'], $this->data['description']);
+            $this->adapter = $this->migrationObject->getAdapter();
+            $this->database = $this->migrationObject->getDatabase();
+            $tm = TransactionManager::getInstance($this->adapter);
+            $tm->setRollbackOnly(true);
         }
-        $this->data['appName'] = isset($this->data['appName']) ? $this->data['appName'] : null;
-        $config = $this->getApplicationConfig();
-        
-        $this->migrationObject = new Migration($config, $this->data['appName'], $this->data['UUID']);
-        $this->adapter = $this->migrationObject->getAdapter();
-        $this->database = $this->migrationObject->getDatabase();
-        $tm = TransactionManager::getInstance($this->adapter);
-        $tm->setRollbackOnly(true);
+
     }
 
     public function tearDown(): void
     {
-        $tm = TransactionManager::getInstance($this->adapter);
-        $tm->rollback();
+        if($this->getName() != 'testInitDBWithOutAppName'){
+            $tm = TransactionManager::getInstance($this->adapter);
+            $tm->rollback();
+        }
         $_REQUEST = [];
     }
 
     public function testInitDB()
     {
         $config = $this->getApplicationConfig();
-        $testCase = $this->migrationObject->initDB($this->data);
         $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' . $this->database . '"';
         $statement = $this->adapter->query($sqlQuery);
         $result = $statement->execute();
@@ -77,17 +78,16 @@ class MigrationTest extends ServiceTest
     {
         $config = $this->getApplicationConfig();
         $this->assertEquals(isset($this->data['appName']), false);
-        $testCase = $this->migrationObject->initDB($this->data);
-        $this->assertEquals(0, $testCase);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("appName and appId cannot be empty!");
+        $this->migrationObject = new Migration($config, "", $this->data['UUID'], $this->data['description']);
     }
 
     public function testMigrate()
     {
         $config = $this->getApplicationConfig();
-        $testCase = $this->migrationObject->initDB($this->data);
-        $dataSet = array_diff(scandir(dirname(__FILE__) . "/scripts/"), array(".", ".."));
         $migrationFolder = dirname(__FILE__) . "/scripts/";
-        $testCase = $this->migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
+        $testCase = $this->migrationObject->migrate($migrationFolder);
 
         //Check to see if the version table is updated or not
         $versionArray = '1.0, 1.1';
@@ -101,22 +101,4 @@ class MigrationTest extends ServiceTest
         $this->assertEquals($tableFieldName[1]['version_number'], "1.1");
     }
 
-    public function testMigrateWrongAppName()
-    {
-        $config = $this->getApplicationConfig();
-        $this->assertEquals($this->data['appName'], 'ox_app_4');
-        $dataSet = array_diff(scandir(dirname(__FILE__) . "/scripts/"), array(".", ".."));
-        $migrationFolder = dirname(__FILE__) . "/scripts/";
-        $testCase = $this->migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
-        $sqlQuery = 'SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = "' . $this->database . '"';
-        $dbConfig = $config['db'];
-        $dbConfig['database'] = 'mysql';
-        $dbConfig['dsn'] = 'mysql:dbname=mysql;host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
-        $mysqlAdapter = new Adapter($dbConfig);
-
-        $statement = $mysqlAdapter->query($sqlQuery);
-        $result = $statement->execute();
-        $result = $result->count();
-        $this->assertEquals($result, "0");
-    }
 }

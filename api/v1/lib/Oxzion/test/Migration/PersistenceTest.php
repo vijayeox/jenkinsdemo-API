@@ -30,13 +30,11 @@ class PersistenceTest extends ServiceTest
 
         $config = $this->getApplicationConfig();
         
-        $migrationObject = new Migration($config, $this->data['appName'], $this->data['UUID']);
+        $migrationObject = new Migration($config, $this->data['appName'], $this->data['UUID'], $this->data['description']);
         $this->adapter = $migrationObject->getAdapter();
         $this->database = $migrationObject->getDatabase();
-        $migrationObject->initDB($this->data);
-        $dataSet = array_diff(scandir(dirname(__FILE__) . "/scripts/"), array(".", ".."));
         $migrationFolder = dirname(__FILE__) . "/scripts/";
-        $testCase = $migrationObject->migrationSql($dataSet, $migrationFolder, $this->data);
+        $testCase = $migrationObject->migrate($migrationFolder);
 
         $tm = TransactionManager::getInstance($this->adapter);
         $tm->setRollbackOnly(true);
