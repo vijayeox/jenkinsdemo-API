@@ -58,6 +58,15 @@ ox_field:
     required: 1
     sequence: 1
     entity_id: 1
+-
+    id: 3
+    uuid: "1ee410e8-f0e1-11e9-81b4-2a2ae2dbcce4"
+    name: "field3"
+    app_id: 99
+    data_type: "integer"
+    required: 1
+    sequence: 1
+    entity_id: 1    
 ox_activity:
   -
     id: 1
@@ -274,25 +283,25 @@ ox_file:
 ox_file_attribute:
   -
     id: 1
-    fileid: 1
+    file_id: 1
     org_id: 1
-    fieldvalue: 1
-    fieldid: 1
+    field_value: 1
+    field_id: 1
   -
     id: 2
-    fileid: 1
+    file_id: 1
     org_id: 1
-    fieldvalue: 1
-    fieldid: 2
+    field_value: 1
+    field_id: 2
   -
     id: 3
-    fileid: 1
+    file_id: 1
     org_id: 1
-    fieldvalue: 2
-    fieldid: 2
+    field_value: 2
+    field_id: 2
   -
     id: 4
-    fileid: 2
+    file_id: 2
     org_id: 1
-    fieldvalue: 2
-    fieldid: 2
+    field_value: 2
+    field_id: 2
