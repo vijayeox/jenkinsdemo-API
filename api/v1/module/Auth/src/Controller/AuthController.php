@@ -13,6 +13,7 @@ use Firebase\JWT\JWT;
 use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
 use Exception;
+use Oxzion\ServiceException;
 
 class AuthController extends AbstractApiControllerHelper
 {
@@ -132,7 +133,10 @@ class AuthController extends AbstractApiControllerHelper
             if($result ==0){
                 return $this->getErrorResponse("There was an error while executing", 404);
             }
-        } catch (Exception $e){
+        }catch(ServiceException $e){
+            $this->log->err("Error".$e->getMessage());
+            return $this->getErrorResponse($e->getMessage(),404);
+        }catch (Exception $e){
             $this->log->err("Error".$e->getMessage());
             return $this->getErrorResponse($e->getMessage(), 404);
         }
