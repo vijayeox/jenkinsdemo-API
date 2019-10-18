@@ -129,7 +129,8 @@ class QueryController extends AbstractApiController
      */
     public function get($uuid)
     {
-        $result = $this->queryService->getQuery($uuid);
+        $params = $this->params()->fromQuery();
+        $result = $this->queryService->getQuery($uuid, $params);
         if ($result == 0) {
             return $this->getErrorResponse("Query not found", 404, ['uuid' => $uuid]);
         }

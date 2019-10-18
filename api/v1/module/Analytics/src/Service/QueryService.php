@@ -11,6 +11,7 @@ use Zend\Db\Sql\Expression;
 use Oxzion\Utils\FilterUtils;
 use Ramsey\Uuid\Uuid;
 use Exception;
+use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class QueryService extends AbstractService
 {
@@ -99,15 +100,62 @@ class QueryService extends AbstractService
         return $count;
     }
 
-    public function getQuery($uuid)
+    public function getQuery($uuid, $params)
     {
-        $statement = "Select uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted from ox_query where isdeleted <> 1 AND (uuid = '".$uuid."' and org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
-        $resultSet = $this->executeQuerywithParams($statement);
-        $result = $resultSet->toArray();
-        if (count($result) == 0) {
+        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, if(q.created_by=:created_by, true, false) as is_owner, q.isdeleted, d.uuid as datasource_uuid from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.uuid=:uuid and (q.ispublic=true or q.created_by=:created_by)';
+        $queryParams = [
+            'created_by' => AuthContext::get(AuthConstants::USER_ID),
+            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'uuid' => $uuid
+        ];
+        try {
+            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+            if (count($resultSet) == 0) {
+                return 0;
+            }
+            $response = [
+                'query' => $resultSet[0]
+            ];
+            //Query configuration value from database is a JSON string. Convert it to object and overwrite JSON string value.
+            $response['query']['configuration'] = json_decode($resultSet[0]["configuration"]);
+        }
+        catch (ZendDbException $e) {
+            $this->logger->err('Database exception occurred.');
+            $this->logger->err($e);
             return 0;
         }
-        return array('data' => $result);
+
+        if(isset($params['data'])) {
+//--------------------------------------------------------------------------------------------------------------------------------
+//TODO:Fetch data from elastic search and remove hard coded values below.
+            if ($uuid == 'bf0a8a59-3a30-4021-aa79-726929469b07') {
+                //Sales YTD
+                $response['query']['data'] = '235436';
+            }
+            if (($uuid == '3c0c8e99-9ec8-4eac-8df5-9d6ac09628e7') || ($uuid == '3c0c8e99-9ec8-4eac-8df5-9d6ac09628e7')) {
+                //Sales by sales person
+                $response['query']['data'] = [
+                    ['person'=> 'Bharat', 'sales'=> 4.2],
+                    ['person'=> 'Harsha', 'sales'=> 5.2],
+                    ['person'=> 'Mehul', 'sales'=> 15.2],
+                    ['person'=> 'Rajesh', 'sales'=> 2.9],
+                    ['person'=> 'Ravi', 'sales'=> 2.9],
+                    ['person'=> 'Yuvraj', 'sales'=> 14.2]
+                ];
+            }
+            if ($uuid == '45933c62-6933-43da-bbb2-59e6f331e8db') {
+                $response['query']['data'] = [
+                    ['quarter'=> 'Q1 2018', 'revenue'=> 4.2],
+                    ['quarter'=> 'Q2 2018', 'revenue'=> 5.4],
+                    ['quarter'=> 'Q3 2018', 'revenue'=> 3.1],
+                    ['quarter'=> 'Q4 2018', 'revenue'=> 3.8],
+                    ['quarter'=> 'Q1 2019', 'revenue'=> 4.1],
+                    ['quarter'=> 'Q2 2019', 'revenue'=> 4.7]
+                ];
+            }
+//--------------------------------------------------------------------------------------------------------------------------------
+        }
+        return $response;
     }
 
     public function getQueryList($params = null)
