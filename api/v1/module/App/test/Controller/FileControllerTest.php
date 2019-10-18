@@ -142,17 +142,6 @@ class FileControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testDeleteNotFound()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file/ef993964-df86-11e9-8a34-2a2ae2dbcce4', 'DELETE');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
     public function testGetPdfFile()
     {
         $fileId ="d13d0c68-98c9-11e9-adc5-308d99c9145b";

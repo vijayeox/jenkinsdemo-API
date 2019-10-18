@@ -11,6 +11,7 @@ use Zend\Db\Sql\Expression;
 use Exception;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
+use Oxzion\ServiceException;
 
 class FieldService extends AbstractService
 {
@@ -24,6 +25,7 @@ class FieldService extends AbstractService
     }
     public function saveField($appUUId, &$data)
     {
+        $this->logger->info("Entering to saveField method in FieldService");
         $field = new Field();
         $data['app_id'] = $this->getIdFromUuid('ox_app',$appUUId);
         if($app = $this->getIdFromUuid('ox_app',$appUUId)){
@@ -71,6 +73,7 @@ class FieldService extends AbstractService
     }
     public function updateField($id, &$data)
     {   
+        $this->logger->info("Entering to updateField method in FieldService ");
         $obj = $this->table->getByUuid($id);
         if (is_null($obj)) {
             return 0;
@@ -102,40 +105,25 @@ class FieldService extends AbstractService
     
     
     public function deleteField($appId, $id)
-    {
+    {       
+        $this->logger->info("Entering to deleteField method in FieldService");
         $id = $this->getIdFromUuid('ox_field',$id);
         $this->beginTransaction();
         $count = 0;
         try {
-            $count = $this->table->delete($id, ['app_id'=>$this->getIdFromUuid('ox_app',$appId)]);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
+            $select = "SELECT * FROM ox_file_attribute WHERE field_id = :fieldId";
+            $selectParams = array('fieldId' => $id);
+            $result = $this->executeQueryWithBindParameters($select,$selectParams)->toArray();
+            if(!empty($result)){
+                throw new ServiceException("Field Cannot be deleted","cannot.delete.field");
+            }else{
+                $count = $this->table->delete($id, ['app_id'=>$this->getIdFromUuid('ox_app',$appId)]);
+                if ($count == 0) {
+                    $this->rollback();
+                    return 0;
+                }
+                $this->commit();
             }
-            $this->commit();
-        } catch (Exception $e) {
-            $this->rollback();
-            $this->logger->log(Logger::ERR, $e->getMessage());
-            throw $e;
-        }
-        
-        return $count;
-    }
-    public function deleteFields($formId)
-    {
-        $this->beginTransaction();
-        $count = 0;
-        try {
-            $delete = "DELETE ox_field from ox_field 
-            INNER JOIN ox_form_field ON ox_form_field.field_id=ox_field.id 
-            where ox_form_field.form_id=:formId";
-            $deleteQuery = array("formId" => $formId);
-            $result = $this->executeQueryWithBindParameters($delete,$deleteQuery);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             $this->logger->log(Logger::ERR, $e->getMessage());
@@ -147,6 +135,7 @@ class FieldService extends AbstractService
     
     public function getFields($appId=null, $filterArray = array())
     {
+        $this->logger->info("Entering to getFields method in FieldService");
         try{
             if (isset($appId)) {
                 $filterArray['app_id'] = $this->getIdFromUuid('ox_app',$appId);
@@ -162,6 +151,7 @@ class FieldService extends AbstractService
     }
     public function getField($appId, $id)
     { 
+        $this->logger->info("Entering to getField method in FieldService");
         try{
             $queryString = "Select ox_field.* from ox_field 
             left join ox_app on ox_app.id = ox_field.app_id

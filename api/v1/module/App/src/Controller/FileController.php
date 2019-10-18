@@ -13,6 +13,7 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\Encryption\Crypto;
+use Oxzion\ServiceException;
 
 class FileController extends AbstractApiController
 {
@@ -94,7 +95,6 @@ class FileController extends AbstractApiController
             $count = $this->fileService->updateFile($data, $id);
             // var_dump($count);exit;
         } catch (ValidationException $e) {
-            print_r($e->getMessage());exit;
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
@@ -113,7 +113,11 @@ class FileController extends AbstractApiController
     */
     public function delete($id)
     {
-        $response = $this->fileService->deleteFile($id);
+        try{
+            $response = $this->fileService->deleteFile($id);
+        } catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
         if ($response == 0) {
             return $this->getErrorResponse("File not found", 404, ['id' => $id]);
         }

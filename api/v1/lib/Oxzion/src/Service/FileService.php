@@ -87,7 +87,7 @@ class FileService extends AbstractService
                 }
             }
             $this->commit();
-        } catch (Exception $e) {
+        } catch (Exception $e) { 
             switch (get_class($e)) {
              case "Oxzion\ValidationException":
                 $this->rollback();
@@ -117,17 +117,24 @@ class FileService extends AbstractService
             $select = "SELECT ox_file.* from ox_file 
             where ox_file.workflow_instance_id=? ";
             $whereQuery = array($data['workflow_instance_idk']);
-            $result = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
+            $obj = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
+            if (is_null($obj)) {
+                return 0;
+            }
         } else {
             $obj = $this->table->getByUuid($id);
             if (is_null($obj)) {
                 return 0;
             } 
         }
-        $data['form_id'] = $this->getIdFromUuid('ox_form',$data['form_uuid']); 
-        $data['app_id'] = $this->getIdFromUuid('ox_app',$data['app_uuid']);
-        unset($data['form_uuid']);
-        unset($data['app_uuid']);
+        if(isset($data['form_uuid'])){
+            $data['form_id'] = $this->getIdFromUuid('ox_form',$data['form_uuid']); 
+            unset($data['form_uuid']);
+        }
+        if(isset($data['app_uuid'])){
+            $data['app_id'] = $this->getIdFromUuid('ox_app',$data['app_uuid']);
+            unset($data['app_uuid']);
+        }
         if (isset($data['form_id'])) {
             $formId = $data['form_id'];
         } else {
@@ -139,41 +146,43 @@ class FileService extends AbstractService
             $activityId = null;
         }
         $fileObject = $obj->toArray();
+        foreach($data as $key => $dataelement){
+            if(is_array($dataelement) || is_bool($dataelement)){
+                $data[$key] = json_encode($dataelement);
+            }
+        }
+        $fields = array_diff($data,$fileObject);
         $file = new File();
-        $changedArray = array_merge($fileObject, $data);
-        $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $changedArray['date_modified'] = date('Y-m-d H:i:s');
-        $file->exchangeArray($changedArray);
+        $fileObject['data'] =  json_encode($data);
+        $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $fileObject['date_modified'] = date('Y-m-d H:i:s');
+        $file->exchangeArray($fileObject);
         $file->validate();
-        $fields = array_diff($data, $fileObject);
         $id = $this->getIdFromUuid('ox_file',$id);
         $this->beginTransaction();
-        try { 
+        try {  
+            $this->logger->info("Entering to Update File -".print_r($file,true)."\n");
             $count = $this->table->save($file);
             if ($count == 0) {
+                $this->logger->info("$count - files got updated \n");
                 $this->rollback();
                 return 0;
             }
-            $validFields = $this->checkFields(isset($changedArray['entity_id'])?$changedArray['entity_id']:null, $fields, $this->getIdFromUuid('ox_file',$id));
+            $validFields = $this->checkFields(isset($fileObject['entity_id'])?$fileObject['entity_id']:null, $fields,$id);
+            $this->logger->info(print_r($validFields,true)."are the list of valid fields.\n");
             if ($validFields && !empty($validFields)) {
+                $query = "Delete from ox_file_attribute where file_id = :fileId";
+                $queryWhere = array("fileId" => $id);
+                $result = $this->executeQueryWithBindParameters($query,$queryWhere);
                 $this->multiInsertOrUpdate('ox_file_attribute', $validFields);
             }
+            $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
         } catch (Exception $e) { 
-            print_r($e->getMessage());exit;
-            switch (get_class($e)) {
-                case "Oxzion\ValidationException":
-                    $this->rollback();
-                    $this->logger->log(Logger::ERR, $e->getMessage());
-                    throw $e;
-                    break;
-                default:
-                    $this->rollback();
-                    $this->logger->log(Logger::ERR, $e->getMessage());
-                    throw $e;
-                    break;
-            }
-        }
+                $this->logger->log(Logger::ERR, $e->getMessage());
+                $this->rollback();
+                throw $e;                   
+            }        
         return $id;
     }
 
@@ -184,20 +193,24 @@ class FileService extends AbstractService
     * @return array success|failure response
     */
     public function deleteFile($id)
-    {
-        $count = 0;
-        try {
-            $count = $this->table->delete($id = $this->getIdFromUuid('ox_file',$id), ['org_id' => AuthContext::get(AuthConstants::ORG_ID)]);
-            if ($count == 0) {
-                return 0;
-            }
-        } catch (Exception $e) {
+    {   
+        $params['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $sql = $this->getSqlObject();
+        $params = array();
+        try{
+            $params['uuid'] = $id;
+            $update = $sql->update();
+            $update->table('ox_file')
+            ->set(array('is_active'=> 0))
+            ->where($params);
+            $response = $this->executeUpdate($update);
+            return 1;
+        } catch (Exception $e) { print_r($e->getMessage());exit;
             $this->logger->log(Logger::ERR, $e->getMessage());
             throw $e;
         }
-        return $count;
     }
-
+    
     /**
     * GET File Service
     * @method getFile
@@ -209,18 +222,9 @@ class FileService extends AbstractService
     { 
         try{
             $id = $this->getIdFromUuid('ox_file',$id);
-            $obj = $this->table->get($id, array('org_id' => AuthContext::get(AuthConstants::ORG_ID)));
+            $obj = $this->table->get($id, array('is_active' => 1,'org_id' => AuthContext::get(AuthConstants::ORG_ID)));
             if ($obj) {
                 $fileArray = $obj->toArray();
-                // $sql = $this->getSqlObject();
-                $select = "SELECT ox_field.name as fieldname,ox_file_attribute.* from ox_file_attribute 
-                           left join ox_field on ox_file_attribute.fieldid = ox_field.id
-                           where ox_file_attribute.org_id=? and ox_file_attribute.fileid=?";
-                 $whereQuery = array(AuthContext::get(AuthConstants::ORG_ID),$id);
-                 $result = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
-                foreach ($result as $key => $value) {
-                    $fileArray[$value['fieldname']] = $value['fieldvalue'];
-                }
                 return $fileArray;
             }
             return 0;
@@ -234,51 +238,46 @@ class FileService extends AbstractService
     */
     protected function checkFields($entityId, $fieldData, $fileId)
     {
+        $this->logger->info("Entering into checkFields method");
         $required = array();
         if (isset($entityId)) {
             $query = "SELECT ox_field.* from ox_field 
             left join ox_app_entity on ox_app_entity.id = ox_field.entity_id
             where ox_app_entity.id=?";
             $where = array($entityId);
+            $this->logger->info("Executing query - $query with  params".print_r($where,true));
             $fields = $this->executeQueryWithBindParameters($query,$where)->toArray();
+            $this->logger->info("Query result".print_r($fields,true));
         } else {
             return 0;
         }
-        $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.fileid=?";
+        $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.file_id=?";
         $whereParams = array($fileId);
+        $this->logger->info("Executing query - $sqlQuery with  params".print_r($whereParams,true));
         $fileArray = $this->executeQueryWithBindParameters($sqlQuery,$whereParams)->toArray();
+        $this->logger->info("Query result".print_r($fileArray,true));
         $keyValueFields = array();
-        $i=0;
+        $i=0;        
         if (!empty($fields)) {
             foreach ($fields as $field) {
-                // if ($field['required']) {
-                //     if (!isset($fieldData[$field['name']])) {
-                //         $required[$field['name']] = 'required';
-                //     }
-                // }
-                if (($key = array_search($field['id'], array_column($fileArray, 'fieldid')))>-1) {
+                if (($key = array_search($field['id'], array_column($fileArray, 'field_id')))>-1) {
+                    // Update the existing record
                     $keyValueFields[$i]['id'] = $fileArray[$key]['id'];
-                    $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
-                    $keyValueFields[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-                    $keyValueFields[$i]['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
                 } else {
-                    $keyValueFields[$i]['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-                    $keyValueFields[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-                    $keyValueFields[$i]['date_created'] = date('Y-m-d H:i:s');
-                    $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
-                    $keyValueFields[$i]['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+                    // Insert the Record
+                    $keyValueFields[$i]['id'] = "";
                 }
-                $keyValueFields[$i]['fieldvalue'] = isset($fieldData[$field['name']])?$fieldData[$field['name']]:null;
-                $keyValueFields[$i]['fieldid'] = $field['id'];
-                $keyValueFields[$i]['fileid'] = $fileId;
+                $keyValueFields[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
+                $keyValueFields[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
+                $keyValueFields[$i]['date_created'] = (!isset($fileArray[$key]['date_created']) ? date('Y-m-d H:i:s') : $fileArray[$key]['date_created']);
+                $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
+                $keyValueFields[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+                $keyValueFields[$i]['field_value'] = isset($fieldData[$field['name']])?$fieldData[$field['name']]:null;
+                $keyValueFields[$i]['field_id'] = $field['id'];
+                $keyValueFields[$i]['file_id'] = $fileId;
                 $i++;
             }
         }
-        // if (count($required)>0) {
-        //     $validationException = new ValidationException();
-        //     $validationException->setErrors($required);
-        //     throw $validationException;
-        // }
         return $keyValueFields;
     }
 }

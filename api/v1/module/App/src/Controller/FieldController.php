@@ -12,6 +12,7 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\View\Model\JsonModel;
+use Oxzion\ServiceException;
 
 /**
  * Field Controller
@@ -103,9 +104,13 @@ class FieldController extends AbstractApiController
     * @return array success|failure response
     */
     public function delete($id)
-    {
+    {  
         $appId = $this->params()->fromRoute()['appId'];
-        $response = $this->fieldService->deleteField($appId, $id);
+        try{
+            $response = $this->fieldService->deleteField($appId, $id);
+        } catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
         if ($response == 0) {
             return $this->getErrorResponse("Field not found", 404, ['id' => $id]);
         }
