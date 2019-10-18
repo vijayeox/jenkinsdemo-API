@@ -210,7 +210,7 @@ class FormService extends AbstractService
             $existingFields = $this->executeQuerywithParams($existingFieldsQuery);
             $existingFields = $existingFields->toArray();
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
         $fieldsCreated = array();
         $fieldIdArray = array();

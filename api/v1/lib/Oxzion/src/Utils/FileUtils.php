@@ -12,7 +12,7 @@ class FileUtils
         // create the directory.
         if (!is_dir($directory)) {
             if (!mkdir($directory, 0777, true)) {
-                throw new \Exception('Could not create directory for uploads: ' . error_get_last());
+                throw new \Exception("Could not create directory $directory: " . error_get_last());
             }
         }
     }

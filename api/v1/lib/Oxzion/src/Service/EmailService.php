@@ -60,7 +60,7 @@ class EmailService extends AbstractService
                             }
                         } catch (Exception $e) {
                             $this->rollback();
-                            return 0;
+                            throw $e;
                         }
                         return $count;
                     }
@@ -86,7 +86,7 @@ class EmailService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -227,7 +227,7 @@ class EmailService extends AbstractService
                 return 0;
             }
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -288,7 +288,7 @@ class EmailService extends AbstractService
             }
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
