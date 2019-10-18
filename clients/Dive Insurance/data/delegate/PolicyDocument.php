@@ -170,9 +170,9 @@ class PolicyDocument implements DocumentAppDelegate
         if(!isset($data['uuid'])){
             $data['uuid'] = UuidUtil::uuid();
         }
-       
-        $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid']);
-
+        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));        
+        $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid'],array('orgUuid' => $orgUuid));
+        
         if(isset($this->template[$data['product']]['instruct'])){
             $instruct = $this->template[$data['product']]['instruct'];
             $this->documentBuilder->copyTemplateToDestination($instruct,$dest['relativePath']);
