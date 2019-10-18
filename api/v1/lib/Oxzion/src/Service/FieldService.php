@@ -149,6 +149,7 @@ class FieldService extends AbstractService
             throw $e;
         }
     }
+
     public function getField($appId, $id)
     { 
         $this->logger->info("Entering to getField method in FieldService");

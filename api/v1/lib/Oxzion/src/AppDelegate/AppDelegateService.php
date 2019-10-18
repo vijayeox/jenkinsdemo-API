@@ -55,7 +55,7 @@ class AppDelegateService extends AbstractService
         try {
             $this->updateOrganizationContext($dataArray);
             $result = $this->delegateFile($appId, $delegate);
-            if ($result) { 
+            if ($result) {
                 $obj = new $delegate;
                 $obj->setLogger($this->logger);
                 if (is_a($obj, DocumentAppDelegate::class)) {

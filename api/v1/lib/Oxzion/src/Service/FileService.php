@@ -1,15 +1,15 @@
 <?php
 namespace Oxzion\Service;
 
-use Oxzion\Model\FileTable;
-use Oxzion\Model\File;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
-use Oxzion\ValidationException;
-use Oxzion\Utils\UuidUtil;
 use Exception;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Model\File;
+use Oxzion\Model\FileTable;
+use Oxzion\Utils\UuidUtil;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
+use Oxzion\AppDelegate\AppDelegateService;
 
 class FileService extends AbstractService
 {
@@ -21,29 +21,31 @@ class FileService extends AbstractService
         $logger = new Logger();
         $writer = new Stream(__DIR__ . '/../../../../logs/file.log');
         $logger->addWriter($writer);
-        parent::__construct($config, $dbAdapter,$logger);
+        parent::__construct($config, $dbAdapter, $logger);
         $this->table = $table;
+        $this->config = $config;
+        $this->dbAdapter = $dbAdapter;
     }
 
     /**
-    * Create File Service
-    * @method createFile
-    * @param array $data Array of elements as shown
-    * <code> {
-    *               id : integer,
-    *               name : string,
-    *               formid : integer,
-    *               Fields from Form
-    *   } </code>
-    * @return array Returns a JSON Response with Status Code and Created File.
-    */
-    public function createFile(&$data, $workflowInstanceId=null)
+     * Create File Service
+     * @method createFile
+     * @param array $data Array of elements as shown
+     * <code> {
+     *               id : integer,
+     *               name : string,
+     *               formid : integer,
+     *               Fields from Form
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and Created File.
+     */
+    public function createFile(&$data, $workflowInstanceId = null)
     {
         unset($data['submit']);
         unset($data['workflowId']);
         $jsonData = json_encode($data);
         if (isset($data['form_id'])) {
-            $formId = $this->getIdFromUuid('ox_form',$data['form_id']);
+            $formId = $this->getIdFromUuid('ox_form', $data['form_id']);
         } else {
             $formId = null;
         }
@@ -53,16 +55,16 @@ class FileService extends AbstractService
             $activityId = null;
         }
         $data['data'] = $jsonData;
-        $data['app_id'] = $this->getIdFromUuid('ox_app',$data['app_id']);
-        $data['workflow_instance_id'] = isset($workflowInstanceId)?$workflowInstanceId:null;
+        $data['app_id'] = $this->getIdFromUuid('ox_app', $data['app_id']);
+        $data['workflow_instance_id'] = isset($workflowInstanceId) ? $workflowInstanceId : null;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['form_id'] = $formId;
         $data['date_modified'] = date('Y-m-d H:i:s');
-        $data['entity_id'] = isset($data['entity_id'])?$data['entity_id']:null;
-        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();
+        $data['entity_id'] = isset($data['entity_id']) ? $data['entity_id'] : null;
+        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
         $file = new File();
         $file->exchangeArray($data);
         $file->validate();
@@ -89,12 +91,12 @@ class FileService extends AbstractService
             $this->commit();
         } catch (Exception $e) { 
             switch (get_class($e)) {
-             case "Oxzion\ValidationException":
+                case "Oxzion\ValidationException":
                 $this->rollback();
                 $this->logger->log(Logger::ERR, $e->getMessage());
                 throw $e;
                 break;
-             default:
+                default:
                 $this->rollback();
                 $this->logger->log(Logger::ERR, $e->getMessage());
                 throw $e;
@@ -103,18 +105,19 @@ class FileService extends AbstractService
         }
         return $count;
     }
-    /**
-    * Update File Service
-    * @method updateFile
-    * @param array $id ID of File to update
-    * @param array $data
-    * @return array Returns a JSON Response with Status Code and Created File.
-    */
-    public function updateFile(&$data, $id)
-    { 
 
-        if(isset($data['workflow_instance_id'])){
-            $select = "SELECT ox_file.* from ox_file 
+    /**
+     * Update File Service
+     * @method updateFile
+     * @param array $id ID of File to update
+     * @param array $data
+     * @return array Returns a JSON Response with Status Code and Created File.
+     */
+    public function updateFile(&$data, $id)
+    {
+
+        if (isset($data['workflow_instance_id'])) {
+            $select = "SELECT ox_file.* from ox_file
             where ox_file.workflow_instance_id=? ";
             $whereQuery = array($data['workflow_instance_idk']);
             $obj = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
@@ -125,7 +128,7 @@ class FileService extends AbstractService
             $obj = $this->table->getByUuid($id);
             if (is_null($obj)) {
                 return 0;
-            } 
+            }
         }
         if(isset($data['form_uuid'])){
             $data['form_id'] = $this->getIdFromUuid('ox_form',$data['form_uuid']); 
@@ -187,11 +190,11 @@ class FileService extends AbstractService
     }
 
     /**
-    * Delete File Service
-    * @method deleteFile
-    * @param $id ID of File to Delete
-    * @return array success|failure response
-    */
+     * Delete File Service
+     * @method deleteFile
+     * @param $id ID of File to Delete
+     * @return array success|failure response
+     */
     public function deleteFile($id)
     {   
         $params['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -212,12 +215,12 @@ class FileService extends AbstractService
     }
     
     /**
-    * GET File Service
-    * @method getFile
-    * @param $id ID of File
-    * @return array $data
-    * @return array Returns a JSON Response with Status Code and Created File.
-    */
+     * GET File Service
+     * @method getFile
+     * @param $id ID of File
+     * @return array $data
+     * @return array Returns a JSON Response with Status Code and Created File.
+     */
     public function getFile($id)
     { 
         try{
@@ -228,20 +231,21 @@ class FileService extends AbstractService
                 return $fileArray;
             }
             return 0;
-        }catch(Exception $e){
+        } catch (Exception $e) {
             $this->logger->log(Logger::ERR, $e->getMessage());
             throw $e;
         }
     }
+
     /**
-    * @ignore checkFields
-    */
+     * @ignore checkFields
+     */
     protected function checkFields($entityId, $fieldData, $fileId)
     {
         $this->logger->info("Entering into checkFields method");
         $required = array();
         if (isset($entityId)) {
-            $query = "SELECT ox_field.* from ox_field 
+            $query = "SELECT ox_field.* from ox_field
             left join ox_app_entity on ox_app_entity.id = ox_field.entity_id
             where ox_app_entity.id=?";
             $where = array($entityId);
@@ -279,5 +283,67 @@ class FileService extends AbstractService
             }
         }
         return $keyValueFields;
+    }
+
+    public function checkFollowUpFiles($appId, $data)
+    {
+        $fieldWhereQuery = $this->generateFieldWhereStatement($data);
+        $queryStr = "Select * from ox_file as a
+        join ox_form as b on (a.entity_id = b.entity_id)
+        join ox_form_field as c on (c.form_id = b.id)
+        join ox_field as d on (c.field_id = d.id)
+        join ox_app as f on (f.id = b.app_id)
+        " . $fieldWhereQuery['joinQuery'] . "
+        where f.id = " . $data['app_id'] . " and b.id = " . $data['form_id'] . " and (" . $fieldWhereQuery['whereQuery'] . ") group by a.id";
+        $dataList = $this->getActivePolicies($queryStr);
+        // $this->sendEmail($appId, $dataList); //Commenting this line
+        return $dataList;
+    }
+
+    private function generateFieldWhereStatement($data)
+    {
+        $prefix = 1;
+        $whereQuery = "";
+        $joinQuery = "";
+        $returnQuery = Array();
+        $fieldList = $data['field_list'];
+        foreach ($fieldList as $key => $val) {
+            $tablePrefix = "tblf" . $prefix;
+            $fieldId = $this->getFieldDetaild($key, $data['entity_id']);
+            $joinQuery .= "left join ox_file_attribute as " . $tablePrefix . " on (a.id =". $tablePrefix . ".fileid) ";
+            $whereQuery .= $tablePrefix . ".fieldid =" . $fieldId['id'] . " and " . $tablePrefix . ".fieldvalue ='" . $val . "' and ";
+            $prefix += 1;
+        }
+        $whereQuery .= '1';
+        return $returnQuery = Array("joinQuery" => $joinQuery, "whereQuery" => $whereQuery);
+    }
+
+    private function getFieldDetaild($fieldName, $entityId)
+    {
+        $queryStr = "select * from ox_field where name = '" . $fieldName . "' and entity_id = " . $entityId . "";
+        $resultSet = $this->executeQuerywithParams($queryStr);
+        $dataSet = $resultSet->toArray();
+        if (count($dataSet) == 0) {
+            return 0;
+        }
+        return $dataSet[0];
+    }
+
+    private function getActivePolicies($queryStr)
+    {
+        $resultSet = $this->executeQuerywithParams($queryStr);
+        return $dataSet = $resultSet->toArray();
+    }
+
+    // Code to run through the list of all the active policies and and send email to the Insureds
+    private function sendEmail($appId, $data)
+    {
+        $delegateService = new AppDelegateService($this->config, $this->dbAdapter);
+        $content = $delegateService->execute($appId, 'DispatchRenewalPolicy', $data);
+        print_r($content);exit;
+        return 1;
+        // foreach ($data as $d) {
+
+        // }
     }
 }

@@ -27,7 +27,7 @@ abstract class MailDelegate implements AppDelegate
 	}
 
 	protected function sendMail(array $data,string $template,array $mailOptions)
-    {     
+    {
         $mailOptions['body'] = $this->templateService->getContent($template,$data);
         $userMail = $this->messageProducer->sendTopic(json_encode($mailOptions), 'mail');
     }

@@ -73,6 +73,7 @@ Formio.createForm(document.getElementById('formio'), JSON.parse(formContent)).th
         })
     });
     form.on("callDelegate", changed => {
+      console.log(appId);
       var component = form.getComponent(event.target.id);
       if (component) {
         var properties = component.component.properties;
@@ -84,7 +85,7 @@ Formio.createForm(document.getElementById('formio'), JSON.parse(formContent)).th
               url:
                 baseUrl +
                 "app/" +
-                appId +
+                "a214bf2b-285b-4507-8eb7-4e89bfc3ecca" +
                 "/delegate/" +
                 properties["delegate"],
               data: changed,

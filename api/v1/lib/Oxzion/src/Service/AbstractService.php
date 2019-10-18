@@ -9,7 +9,7 @@ use Exception;
 
 abstract class AbstractService extends AbstractBaseService
 {
-    
+
     protected function __construct($config, $dbAdapter, $log = null)
     {
         parent::__construct($config, $dbAdapter, $log);
@@ -19,7 +19,7 @@ abstract class AbstractService extends AbstractBaseService
     {
         return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
     }
-    
+
     protected function getIdFromUuid($table, $uuid)
     {
         $sql = $this->getSqlObject();
@@ -80,6 +80,7 @@ abstract class AbstractService extends AbstractBaseService
         }
         return 0;
     }
+
     /**
         Query builder: Code that combines the required parameter to build the query.
         Author: Rakshith
@@ -101,9 +102,11 @@ abstract class AbstractService extends AbstractBaseService
         $result = $statement->execute();
         return $result;
     }
+
     protected function executeUpdateWithBindParameters($queryString, $parameters = null){
         return $this->executeQueryWithBindParametersInternal($queryString, $parameters);
     }
+
     protected function executeQueryWithBindParameters($queryString, $parameters = null) {
         $result = $this->executeQueryWithBindParametersInternal($queryString, $parameters);
         $resultSet = new ResultSet();

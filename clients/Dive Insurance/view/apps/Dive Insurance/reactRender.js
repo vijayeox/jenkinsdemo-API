@@ -15,8 +15,9 @@ module.exports = function(core,proc) {
           const params = { productName: req.params.productName,proc:proc,core:core}
         const component = ReactDOMServer.renderToString(<Register {...params} />);
         const appId = proc.metadata.appId;
+        console.log(proc.metadata.appId);
         const html = `<!doctype html><html><head><title>Vicencia & Buckley</title><meta charSet="UTF-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" /> 
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="stylesheet" type="text/css" href="../css/custom.css" />
       <link rel="stylesheet" href="../css/bootstrap.min.css" />
