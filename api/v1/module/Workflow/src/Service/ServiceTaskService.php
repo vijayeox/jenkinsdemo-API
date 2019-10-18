@@ -43,21 +43,21 @@ class ServiceTaskService extends AbstractService
 
 
     public function runCommand($data)
-    {
+    {  
         //TODO Execute Service Task Methods
-        if (isset($data['command'])) {
-            switch ($data['command']) {
+        if (isset($data['variables']) && isset($data['variables']['command'])) {
+            switch ($data['variables']['command']) {
                 case 'mail':
-                    return $this->sendMail($data);
+                    return $this->sendMail($data['variables']);
                     break;
                 case 'schedule':
-                    return $this->scheduleJob($data);
+                    return $this->scheduleJob($data['variables']);
                     break;
                 case 'delegate':
-                    return $this->executeDelegate($data);
+                    return $this->executeDelegate($data['variables']);
                     break;
                 case 'pdf':
-                    return $this->generatePDF($data);
+                    return $this->generatePDF($data['variables']);
                     break;
                 default:
                     break;
@@ -68,14 +68,13 @@ class ServiceTaskService extends AbstractService
     protected function scheduleJob($data){
         
     }
-    protected function executeDelegate($data){
+    protected function executeDelegate($data){        
         if(isset($data['app_id']) && isset($data['delegate'])){
             $appId = $data['app_id'];
             $delegate = $data['delegate'];
         } else {
             return 0;
         }
-        $this->appDelegateService->createLink($appId);
         $response = $this->appDelegateService->execute($appId, $delegate, $data);
         return $response;
     }
@@ -153,7 +152,7 @@ class ServiceTaskService extends AbstractService
                 return;
             }
             $generatePdf = new DocumentGeneratorImpl();
-            return $generatePdf->generateDocument($body, $destination, $options);
+            return array('document_path' => $generatePdf->generateDocument($body, $destination, $options));
         } else {
             return;
         }

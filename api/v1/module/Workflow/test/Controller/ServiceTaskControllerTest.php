@@ -39,11 +39,11 @@ class ServiceTaskControllerTest extends ControllerTest
     public function testServiceTaskMailExecution()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['command'=>'mail' , 'to' => 'bharatgtest@myvamla.com', 'body' => 'create a new body','subject'=>'NewSubject'];
+        $data['variables']  = ['command'=>'mail' , 'to' => 'bharatgtest@myvamla.com', 'body' => 'create a new body','subject'=>'NewSubject'];
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('To'=>$data['to'],'Subject'=>$data['subject'],'body'=>$data['body'],'attachments'=>null)), 'mail')->once()->andReturn(123);
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('To'=>$data['variables']['to'],'Subject'=>$data['variables']['subject'],'body'=>$data['variables']['body'],'attachments'=>null)), 'mail')->once()->andReturn(123);
         }
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -52,7 +52,7 @@ class ServiceTaskControllerTest extends ControllerTest
     public function testServiceTaskWithoutSubjectExecution()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['command'=>'mail' , 'to' => 'bharatgtest@myvamla.com', 'body' => 'create a new body'];
+        $data['variables']  = ['command'=>'mail' , 'to' => 'bharatgtest@myvamla.com', 'body' => 'create a new body'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -62,7 +62,7 @@ class ServiceTaskControllerTest extends ControllerTest
     public function testServiceTaskWithoutRecepientMailExecution()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['command'=>'mail' , 'body' => 'create a new body','subject'=>'NewSubject'];
+        $data['variables']  = ['command'=>'mail' , 'body' => 'create a new body','subject'=>'NewSubject'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -78,7 +78,7 @@ class ServiceTaskControllerTest extends ControllerTest
         $tempFile = $config['TEMPLATE_FOLDER']."/";
         FileUtils::createDirectory($tempFile);
         copy(__DIR__."/../Dataset/GenericTemplate.tpl", $tempFile."GenericTemplate.tpl");
-        $params = ['command'=>'pdf' , 'template' => 'GenericTemplate','orgid'=>1,'options'=>array('initial_title' => 'Vantage agora Pdf Template','second_title' => 'Title 2','pdf_header_logo'=> '/logo_example.jpg','pdf_header_logo_width'=>20,'header_text_color'=>array(139, 58, 58),'header_line_color'=>array(255, 48, 48),'footer_text_color'=>array(123, 121, 34),'footer_line_color'=>array(56, 142, 142)),'destination'=>$config['TEMPLATE_FOLDER']."GenericTemplate.pdf"];
+        $params['variables']  = ['command'=>'pdf' , 'template' => 'GenericTemplate','orgid'=>1,'options'=>array('initial_title' => 'Vantage agora Pdf Template','second_title' => 'Title 2','pdf_header_logo'=> '/logo_example.jpg','pdf_header_logo_width'=>20,'header_text_color'=>array(139, 58, 58),'header_line_color'=>array(255, 48, 48),'footer_text_color'=>array(123, 121, 34),'footer_line_color'=>array(56, 142, 142)),'destination'=>$config['TEMPLATE_FOLDER']."GenericTemplate.pdf"];
         $this->setJsonContent(json_encode($params));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $params);
         $this->assertResponseStatusCode(200);
@@ -89,7 +89,7 @@ class ServiceTaskControllerTest extends ControllerTest
     public function testServiceTaskPDFInvalidTemplateExecution()
     {
         $config = $this->getApplicationConfig();
-        $params = ['command'=>'pdf' , 'template' => 'GenericTemplate','orgid'=>1,'options'=>array('initial_title' => 'Vantage agora Pdf Template','second_title' => 'Title 2','pdf_header_logo'=> '/logo_example.jpg','pdf_header_logo_width'=>20,'header_text_color'=>array(139, 58, 58),'header_line_color'=>array(255, 48, 48),'footer_text_color'=>array(123, 121, 34),'footer_line_color'=>array(56, 142, 142)),'destination'=>$config['TEMPLATE_FOLDER']."GenericTemplate.pdf"];
+        $params['variables']  = ['command'=>'pdf' , 'template' => 'GenericTemplate','orgid'=>1,'options'=>array('initial_title' => 'Vantage agora Pdf Template','second_title' => 'Title 2','pdf_header_logo'=> '/logo_example.jpg','pdf_header_logo_width'=>20,'header_text_color'=>array(139, 58, 58),'header_line_color'=>array(255, 48, 48),'footer_text_color'=>array(123, 121, 34),'footer_line_color'=>array(56, 142, 142)),'destination'=>$config['TEMPLATE_FOLDER']."GenericTemplate.pdf"];
         $this->setJsonContent(json_encode($params));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $params);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -99,7 +99,7 @@ class ServiceTaskControllerTest extends ControllerTest
     public function testServiceTaskPDFInvalidDestinationExecution()
     {
         $config = $this->getApplicationConfig();
-        $params = ['command'=>'pdf' , 'template' => 'GenericTemplate','orgid'=>1,'options'=>array('initial_title' => 'Vantage agora Pdf Template','second_title' => 'Title 2','pdf_header_logo'=> '/logo_example.jpg','pdf_header_logo_width'=>20,'header_text_color'=>array(139, 58, 58),'header_line_color'=>array(255, 48, 48),'footer_text_color'=>array(123, 121, 34),'footer_line_color'=>array(56, 142, 142)),'destination'=>$config['TEMPLATE_FOLDER']."GenericTemplate.pdf"];
+        $params['variables'] = ['command'=>'pdf' , 'template' => 'GenericTemplate','orgid'=>1,'options'=>array('initial_title' => 'Vantage agora Pdf Template','second_title' => 'Title 2','pdf_header_logo'=> '/logo_example.jpg','pdf_header_logo_width'=>20,'header_text_color'=>array(139, 58, 58),'header_line_color'=>array(255, 48, 48),'footer_text_color'=>array(123, 121, 34),'footer_line_color'=>array(56, 142, 142)),'destination'=>$config['TEMPLATE_FOLDER']."GenericTemplate.pdf"];
         $this->setJsonContent(json_encode($params));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $params);
         $content = json_decode($this->getResponse()->getContent(), true);
