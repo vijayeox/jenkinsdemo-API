@@ -130,11 +130,11 @@ class QueryService extends AbstractService
 //TODO:Fetch data from elastic search and remove hard coded values below.
             if ($uuid == 'bf0a8a59-3a30-4021-aa79-726929469b07') {
                 //Sales YTD
-                $response['query']['data'] = '235436';
+                $data = '235436';
             }
-            if (($uuid == '3c0c8e99-9ec8-4eac-8df5-9d6ac09628e7') || ($uuid == '3c0c8e99-9ec8-4eac-8df5-9d6ac09628e7')) {
+            if ($uuid == '3c0c8e99-9ec8-4eac-8df5-9d6ac09628e7') {
                 //Sales by sales person
-                $response['query']['data'] = [
+                $data = [
                     ['person'=> 'Bharat', 'sales'=> 4.2],
                     ['person'=> 'Harsha', 'sales'=> 5.2],
                     ['person'=> 'Mehul', 'sales'=> 15.2],
@@ -144,7 +144,8 @@ class QueryService extends AbstractService
                 ];
             }
             if ($uuid == '45933c62-6933-43da-bbb2-59e6f331e8db') {
-                $response['query']['data'] = [
+                //Quarterly revenue target
+                $data = [
                     ['quarter'=> 'Q1 2018', 'revenue'=> 4.2],
                     ['quarter'=> 'Q2 2018', 'revenue'=> 5.4],
                     ['quarter'=> 'Q3 2018', 'revenue'=> 3.1],
@@ -153,6 +154,21 @@ class QueryService extends AbstractService
                     ['quarter'=> 'Q2 2019', 'revenue'=> 4.7]
                 ];
             }
+            if ($uuid == '69f7732a-998a-41bb-ab89-aa7c434cb327') {
+                //Revenue YTD
+                $data = '786421';
+            }
+            if ($uuid == 'de5c309d-6bd6-494f-8c34-b85ac109a301') {
+                //Product sales
+                $data = [
+                    ['product'=>'Audio player', 'sales'=>1.3],
+                    ['product'=>'Video player', 'sales'=>3.2],
+                    ['product'=>'Sports shoe', 'sales'=>2.8],
+                    ['product'=>'Gym cap', 'sales'=>0.87],
+                    ['product'=>'Baseball cap', 'sales'=>0.4]
+                ];
+            }
+            $response['query']['data'] = $data;
 //--------------------------------------------------------------------------------------------------------------------------------
         }
         return $response;
