@@ -240,7 +240,7 @@ abstract class AbstractService extends AbstractBaseService
                 $updateQuotedValue[] = ($platform->quoteIdentifier($column)) . '=' . ('VALUES(' . ($platform->quoteIdentifier($column)) . ')');
             }
         }
-        $this->logger->info("Update quted val -".print_r($updateQuotedValue));
+        $this->logger->info("Update quted val -".print_r($updateQuotedValue,true));
         /* Preparation insert data */
         $insertQuotedValue = [];
         $insertQuotedColumns = [];
@@ -257,9 +257,9 @@ abstract class AbstractService extends AbstractBaseService
             $insertQuotedValue[] = '(' . implode(',', $oneValueData) . ')';
         }
         /* Preparation sql query */
-        $this->logger->info("Insert quted val -".print_r($insertQuotedValue));
-        $this->logger->info("Insert quted columns -".print_r($insertQuotedColumns));
-        $this->logger->info("Paramertrs con -".print_r($parameterContainer->getNamedArray()));
+        $this->logger->info("Insert quted val -".print_r($insertQuotedValue,true));
+        $this->logger->info("Insert quted columns -".print_r($insertQuotedColumns,true));
+        $this->logger->info("Paramertrs con -".print_r($parameterContainer->getNamedArray(),true));
         $query = sprintf($sqlStringTemplate, $tableName, implode(',', $insertQuotedColumns), implode(',', array_values($insertQuotedValue)), implode(',', array_values($updateQuotedValue)));
         $this->logger->info("Prepared SQL query - $query");
         $statementContainer->setSql($query);
