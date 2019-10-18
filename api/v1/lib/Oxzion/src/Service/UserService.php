@@ -1183,4 +1183,25 @@ class UserService extends AbstractService
         $userData['role'] = $this->getRolesofUser($params['orgId'],$userData['id']);
         return $userData;        
     }
+
+    public function checkAndCreateUser($params,&$data,$register = false){
+        if(!isset($data['username'])){
+            $data['username'] = $data['email'];
+        }
+        $query = "SELECT id,uuid,username,email FROM ox_user WHERE username=:username OR email=:email";
+        $queryParams = array("username" => $data['username'],
+                             "email" => $data['email']);
+        $result = $this->executeQuerywithBindParameters($query,$queryParams)->toArray(); 
+        if(count($result) == 0){
+           return $this->createUser($params,$data,$register);
+        }
+        if($data['email'] == $result[0]['email']){
+            $data['username'] = $result[0]['username'];
+            $data['id'] = $result[0]['id'];
+            $data['uuid'] = $result[0]['uuid'];
+            return 1;
+        }else{
+            throw new ServiceException("Username Used","username.exists");
+        }
+    }
 }
