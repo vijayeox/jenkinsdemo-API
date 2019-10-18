@@ -61,18 +61,16 @@ class AuthService extends AbstractService
         return $params;
     }
     private function createUser($params,$data,$rawData){
-        if(!isset($data['username'])){
-            $data['username'] = $data['firstname'].".".$data['lastname'];
-        }
         try {
-            $success = $this->userService->createUser($params,$data,true);
+            $success = $this->userService->checkAndCreateUser($params,$data,true);
             if($success){
                 $params['user'] = $data;
                 return $params;
             } else {
                 throw new Exception("Error Creating User.", 1);
             }
-        } catch(Exception $e){
+        } 
+        catch(Exception $e){
             throw $e;
         }
         return 0;
