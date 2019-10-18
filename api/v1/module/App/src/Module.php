@@ -45,7 +45,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\AppService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class), $container->get(\Oxzion\Service\WorkflowService::class), $container->get(\Oxzion\Service\FormService::class), $container->get(\Oxzion\Service\FieldService::class), $container->get(\Oxzion\Service\OrganizationService::class),$container->get('AppLogger'));
+                    return new Service\AppService($container->get('config'), $dbAdapter, $container->get(Model\AppTable::class), $container->get(\Oxzion\Service\WorkflowService::class), $container->get(\Oxzion\Service\FormService::class), $container->get(\Oxzion\Service\FieldService::class), $container->get(\Oxzion\Service\OrganizationService::class));
                 },
                 Model\AppTable::class => function ($container) {
                     $tableGateway = $container->get(Model\AppTableGateway::class);
@@ -59,7 +59,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\MenuItemService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\MenuItemService($container->get('config'), $container->get(GroupService::class), $dbAdapter, $container->get(Model\MenuItemTable::class),$container->get('MenuItemLogger'));
+                    return new Service\MenuItemService($container->get('config'), $container->get(GroupService::class), $dbAdapter, $container->get(Model\MenuItemTable::class));
                 },
                 Model\MenuItemTable::class => function ($container) {
                     $tableGateway = $container->get(Model\MenuItemTableGateway::class);
@@ -73,7 +73,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\PageService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PageService($container->get('config'),$container->get(Service\PageContentService::class), $dbAdapter, $container->get(Model\PageTable::class),$container->get('PageLogger'));
+                    return new Service\PageService($container->get('config'),$container->get(Service\PageContentService::class), $dbAdapter, $container->get(Model\PageTable::class));
                 },
                 Model\PageTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PageTableGateway::class);
@@ -102,9 +102,7 @@ class Module implements ConfigProviderInterface
                 Service\PageContentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\PageContentService($container->get('config'), 
-                    $dbAdapter, 
-                    $container->get(Model\PageContentTable::class),
-                    $container->get('PageLogger'));
+                    $dbAdapter, $container->get(Model\PageContentTable::class));
                 },
                 Model\PageContentTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PageContentTableGateway::class);
@@ -116,24 +114,7 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype->setArrayObjectPrototype(new Model\PageContent());
                     return new TableGateway('ox_page_content', $dbAdapter, null, $resultSetPrototype);
                 },
-                Service\ImportService::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\ImportService($container->get('config'), $dbAdapter);
-                },
-                Service\PaymentService::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PaymentService($container->get('config'), $dbAdapter, $container->get(Model\PaymentTable::class));
-                },
-                Model\PaymentTable::class => function ($container) {
-                    $tableGateway = $container->get(Model\PaymentTableGateway::class);
-                    return new Model\PaymentTable($tableGateway);
-                },
-                Model\PaymentTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Payment());
-                    return new TableGateway('ox_payment', $dbAdapter, null, $resultSetPrototype);
-                },
+                
             ],
         ];
     }
@@ -146,7 +127,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\AppController(
                         $container->get(Model\AppTable::class),
                         $container->get(Service\AppService::class),
-                        $container->get('AppLogger'),
                         $container->get(AdapterInterface::class),
                         $container->get(WorkflowService::class)
                     );
@@ -155,21 +135,18 @@ class Module implements ConfigProviderInterface
                     return new Controller\AppRegisterController(
                         $container->get(Model\AppTable::class),
                         $container->get(Service\AppService::class),
-                        $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
                 Controller\AppDelegateController::class => function ($container) {
                     return new Controller\AppDelegateController(
-                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class),
-                        $container->get('AppLogger')
+                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class)
                     );
                 },
                 Controller\MenuItemController::class => function ($container) {
                     return new Controller\MenuItemController(
                         $container->get(Model\MenuItemTable::class),
                         $container->get(Service\MenuItemService::class),
-                        $container->get('MenuItemLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -178,7 +155,6 @@ class Module implements ConfigProviderInterface
                         $container->get(Model\PageTable::class),
                         $container->get(Service\PageService::class),
                         $container->get(Service\PageContentService::class),
-                        $container->get('PageLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -186,7 +162,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\PageContentController(
                         $container->get(Model\PageContentTable::class),
                         $container->get(Service\PageContentService::class),
-                        $container->get('PageLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -194,7 +169,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\FormController(
                         $container->get(FormTable::class),
                         $container->get(FormService::class),
-                        $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -202,7 +176,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\FileController(
                         $container->get(FileTable::class),
                         $container->get(FileService::class),
-                        $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -210,7 +183,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\FieldController(
                         $container->get(FieldTable::class),
                         $container->get(FieldService::class),
-                        $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -218,21 +190,18 @@ class Module implements ConfigProviderInterface
                     return new Controller\WorkflowController(
                         $container->get(WorkflowTable::class),
                         $container->get(WorkflowService::class),
-                        $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
                 Controller\ImportController::class => function ($container) {
                     return new Controller\ImportController(
                         $container->get(Service\ImportService::class),
-                        $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
                 Controller\CacheController::class => function ($container) {
                     return new Controller\CacheController(
                         $container->get(\Oxzion\Service\UserCacheService::class),
-                        $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -240,7 +209,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\PaymentController(
                         $container->get(Model\PaymentTable::class),
                         $container->get(Service\PaymentService::class),
-                        $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -248,7 +216,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\EntityController(
                         $container->get(Model\EntityTable::class),
                         $container->get(Service\EntityService::class),
-                        $container->get('AppLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

@@ -1,7 +1,6 @@
 <?php
 namespace Callback\Controller;
 
-    use Zend\Log\Logger;
     use Oxzion\Controller\AbstractApiControllerHelper;
     use Oxzion\ValidationException;
     use Zend\Db\Adapter\AdapterInterface;
@@ -15,10 +14,10 @@ namespace Callback\Controller;
         // /**
         // * @ignore __construct
         // */
-        public function __construct(TaskService $taskService, Logger $log)
+        public function __construct(TaskService $taskService)
         {
             $this->taskService = $taskService;
-            $this->log = $log;
+            $this->log = $this->getLogger();
         }
 
 

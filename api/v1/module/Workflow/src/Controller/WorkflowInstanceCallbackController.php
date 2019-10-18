@@ -4,7 +4,6 @@ namespace Workflow\Controller;
 /**
 * Workflow Api
 */
-use Zend\Log\Logger;
 use Workflow\Model\WorkflowInstanceTable;
 use Workflow\Model\WorkflowInstance;
 use Workflow\Service\WorkflowInstanceService;
@@ -19,13 +18,15 @@ class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
     private $workflowInstanceService;
     private $workflowService;
     private $activityInstanceService;
+    private $log;
     /**
     * @ignore __construct
     */
-    public function __construct(WorkflowInstanceTable $table, WorkflowInstanceService $workflowInstanceService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(WorkflowInstanceTable $table, WorkflowInstanceService $workflowInstanceService, AdapterInterface $dbAdapter)
     {
         $this->setIdentifierName('activityId');
         $this->workflowInstanceService = $workflowInstanceService;
+        $this->log = $this->getLogger();
     }
     public function completeWorkflowAction()
     {

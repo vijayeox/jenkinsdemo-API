@@ -1,7 +1,6 @@
 <?php
 namespace Screen\Controller;
 
-use Zend\Log\Logger;
 use Screen\Model\Screen;
 use Screen\Model\ScreenTable;
 use Screen\Service\ScreenService;
@@ -20,9 +19,9 @@ class ScreenController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(ScreenTable $table, ScreenService $screenService, Logger $log)
+    public function __construct(ScreenTable $table, ScreenService $screenService)
     {
-        parent::__construct($table, $log, __CLASS__, Screen::class);
+        parent::__construct($table, Screen::class);
         $this->screenService = $screenService;
         $this->setIdentifierName('id');
     }

@@ -2,7 +2,7 @@
 namespace Oxzion\AppDelegate;
 
 use Oxzion\Db\Persistence\Persistence;
-use Zend\Log\Logger;
+use Logger;
 
 interface AppDelegate
 {

@@ -9,7 +9,6 @@ return [
     'Zend\InputFilter',
     'Zend\Filter',
     'Zend\Serializer',
-    'Zend\Log',
     'Zend\Db',
     'Zend\Router',
     'Zend\Validator',

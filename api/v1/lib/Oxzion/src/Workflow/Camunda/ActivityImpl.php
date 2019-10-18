@@ -3,9 +3,8 @@ namespace Oxzion\Workflow\Camunda;
 
 use Oxzion\Workflow\Activity;
 use Oxzion\Utils\RestClient;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
 use Exception;
+use Logger;
 
 class ActivityImpl implements Activity
 {
@@ -16,15 +15,13 @@ class ActivityImpl implements Activity
     {
         $class= get_class($this);
         $class = substr($class, strrpos($class, "\\")+1);
-        $this->initLogger(__DIR__."/../../../../../logs/".$class.".log");
+        $this->initLogger();
         $this->restClient = new RestClient(Config::ENGINE_URL);
     }
 
-    protected function initLogger($logLocation)
+    protected function initLogger()
     {
-        $this->logger = new Logger();
-        $writer = new Stream($logLocation);
-        $this->logger->addWriter($writer);
+        $this->logger = Logger::getLogger(__CLASS__);
     }
 
     public function setRestClient($restClient)

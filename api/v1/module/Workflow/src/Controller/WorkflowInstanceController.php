@@ -4,7 +4,6 @@ namespace Workflow\Controller;
 /**
 * Workflow Api
 */
-use Zend\Log\Logger;
 use Workflow\Model\WorkflowInstanceTable;
 use Workflow\Model\WorkflowInstance;
 use Workflow\Service\WorkflowInstanceService;
@@ -23,9 +22,9 @@ class WorkflowInstanceController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(WorkflowInstanceTable $table, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, Logger $log,ActivityInstanceService $activityInstanceService, AdapterInterface $dbAdapter)
+    public function __construct(WorkflowInstanceTable $table, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, ActivityInstanceService $activityInstanceService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, WorkflowInstance::class);
+        parent::__construct($table, WorkflowInstance::class);
         $this->setIdentifierName('activityId');
         $this->workflowInstanceService = $workflowInstanceService;
         $this->workflowService = $workflowService;
@@ -116,20 +115,20 @@ class WorkflowInstanceController extends AbstractApiController
     public function claimActivityInstanceAction()
     {
         $data = array_merge($this->extractPostData(),$this->params()->fromRoute());
-        $this->log->info(ActivityInstanceController::class.":Post Data- ". print_r(json_encode($data), true));
+        $this->log->info("Post Data- ". print_r(json_encode($data), true));
         try {
             $response = $this->activityInstanceService->claimActivityInstance($data);
-            $this->log->info(ActivityInstanceController::class.":Complete Activity Instance Successful");
+            $this->log->info("Complete Activity Instance Successful");
             if ($response == 0) {
                 return $this->getErrorResponse("Entity not found", 404);
             }
             return $this->getSuccessResponse();
         } catch (ValidationException $e) {
-            $this->log->info(ActivityInstanceController::class.":Exception at Add Activity Instance-".$e->getMessage());
+            $this->log->info("Exception at Add Activity Instance-".$e->getMessage());
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }catch(WorkflowException $e){ 
-            $this->log->info(ActivityInstanceController::class.":-Error while claiming - ".$e->getReason().": ". $e->getMessage());
+            $this->log->info("-Error while claiming - ".$e->getReason().": ". $e->getMessage());
             if($e->getReason() == 'TaskAlreadyClaimedException'){
                 return $this->getErrorResponse("Task is already claimed", 409);    
             }
@@ -147,7 +146,7 @@ class WorkflowInstanceController extends AbstractApiController
                 }
                 return $this->getSuccessResponseWithData($response);
             } catch (ValidationException $e) {
-                $this->log->info(ActivityInstanceController::class.":Exception at Add Activity Instance-".$e->getMessage());
+                $this->log->info("Exception at Add Activity Instance-".$e->getMessage());
                 $response = ['data' => $data, 'errors' => $e->getErrors()];
                 return $this->getErrorResponse("Validation Errors", 404, $response);
             }

@@ -5,7 +5,6 @@
 
 namespace Announcement\Controller;
 
-use Zend\Log\Logger;
 use Announcement\Model\AnnouncementTable;
 use Announcement\Model\Announcement;
 use Announcement\Service\AnnouncementService;
@@ -29,9 +28,9 @@ class AnnouncementController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(AnnouncementTable $table, AnnouncementService $announcementService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(AnnouncementTable $table, AnnouncementService $announcementService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Announcement::class);
+        parent::__construct($table, Announcement::class);
         $this->setIdentifierName('announcementId');
         $this->announcementService = $announcementService;
     }

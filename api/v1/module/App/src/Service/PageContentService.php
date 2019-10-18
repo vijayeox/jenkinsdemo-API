@@ -10,13 +10,12 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Zend\Db\ResultSet\ResultSet;
 use Exception;
-use Zend\Log\Logger;
 
 class PageContentService extends AbstractService
 {
-    public function __construct($config, $dbAdapter, PageContentTable $table,Logger $log)
+    public function __construct($config, $dbAdapter, PageContentTable $table)
     {
-        parent::__construct($config, $dbAdapter,$log);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
 

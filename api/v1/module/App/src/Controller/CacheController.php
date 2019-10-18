@@ -6,7 +6,6 @@ use App\Service\ImportService;
 use Oxzion\Service\UserCacheService;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
-use Zend\Log\Logger;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\ServiceException;
@@ -22,9 +21,9 @@ class CacheController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(UserCacheService $cacheService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(UserCacheService $cacheService, AdapterInterface $dbAdapter)
     {
-        parent::__construct(null, $log, __CLASS__, null);
+        parent::__construct(null, null);
         $this->setIdentifierName('appId');
         $this->cacheService = $cacheService;
     }

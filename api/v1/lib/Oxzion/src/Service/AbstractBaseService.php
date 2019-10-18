@@ -4,8 +4,7 @@ namespace Oxzion\Service;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Transaction\TransactionManager;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
+use Logger;
 
 abstract class AbstractBaseService 
 {
@@ -14,27 +13,14 @@ abstract class AbstractBaseService
     protected $logger;
     protected $config;
     
-    protected function __construct($config, $dbAdapter, $log = null)
+    protected function __construct($config, $dbAdapter)
     {
         $this->dbAdapter = $dbAdapter;
         if ($dbAdapter) {
             $this->sql = new Sql($this->dbAdapter);
         }
-        if($log){
-            $this->logger = $log;
-        }else{
-            $class= get_class($this);
-            $class = substr($class, strrpos($class, "\\")+1);
-            $this->initLogger(__DIR__."/../../../../logs/".$class.".log");
-        }
+        $this->logger = Logger::getLogger(get_class($this));
         $this->config = $config;
-    }  
-
-    protected function initLogger($logLocation)
-    {
-        $this->logger = new Logger();
-        $writer = new Stream($logLocation);
-        $this->logger->addWriter($writer);
     }  
 
     public function beginTransaction()

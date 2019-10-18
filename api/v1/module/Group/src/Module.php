@@ -38,7 +38,7 @@ class Module implements ConfigProviderInterface
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $orgService = $container->get(OrganizationService::class);
                     $userService = $container->get(UserService::class);
-                    return new Service\GroupService($container->get('config'), $dbAdapter, $container->get(Model\GroupTable::class), $orgService, $container->get('GroupLogger'));
+                    return new Service\GroupService($container->get('config'), $dbAdapter, $container->get(Model\GroupTable::class), $orgService);
                 },
                 Model\GroupTable::class => function ($container) {
                     $tableGateway = $container->get(Model\GroupTableGateway::class);
@@ -62,7 +62,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\GroupController(
                         $container->get(Model\GroupTable::class),
                         $container->get(Service\GroupService::class),
-                        $container->get('GroupLogger'),
                         $container->get(AdapterInterface::class),
                         $container->get(OrganizationService::class)
                     );
@@ -70,7 +69,6 @@ class Module implements ConfigProviderInterface
                 Controller\GroupLogoController::class => function ($container) {
                     return new Controller\GroupLogoController(
                         $container->get(Service\GroupService::class),
-                        $container->get('GroupLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

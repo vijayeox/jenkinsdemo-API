@@ -1,7 +1,6 @@
 <?php
 namespace Widget\Controller;
 
-use Zend\Log\Logger;
 use Widget\Model\Widget;
 use Widget\Model\WidgetTable;
 use Widget\Service\WidgetService;
@@ -19,9 +18,9 @@ class WidgetController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(WidgetTable $table, WidgetService $widgetService, Logger $log)
+    public function __construct(WidgetTable $table, WidgetService $widgetService)
     {
-        parent::__construct($table, $log, __CLASS__, Widget::class);
+        parent::__construct($table, Widget::class);
         $this->widgetService=$widgetService;
         $this->setIdentifierName('widgetId');
     }

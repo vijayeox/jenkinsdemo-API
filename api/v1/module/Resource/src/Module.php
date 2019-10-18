@@ -45,7 +45,7 @@ class Module implements ConfigProviderInterface
         return [
             'factories' => [
                 Controller\ResourceController::class => function ($container) {
-                    return new Controller\ResourceController($container->get(Service\ResourceService::class), $container->get('ResourceLogger'), $container->get(AdapterInterface::class));
+                    return new Controller\ResourceController($container->get(Service\ResourceService::class), $container->get(AdapterInterface::class));
                 },
             ],
         ];

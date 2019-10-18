@@ -70,15 +70,13 @@ class Module implements ConfigProviderInterface
                 Controller\ScreenController::class => function ($container) {
                     return new Controller\ScreenController(
                         $container->get(Model\ScreenTable::class),
-                        $container->get(Service\ScreenService::class),
-                        $container->get('ScreenLogger')
+                        $container->get(Service\ScreenService::class)
                     );
                 },
                 Controller\ScreenwidgetController::class => function ($container) {
                     return new Controller\ScreenwidgetController(
                         $container->get(Model\ScreenwidgetTable::class),
-                        $container->get(Service\ScreenwidgetService::class),
-                        $container->get('ScreenLogger')
+                        $container->get(Service\ScreenwidgetService::class)
                     );
                 },
             ],

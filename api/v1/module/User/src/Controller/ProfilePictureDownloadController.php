@@ -1,7 +1,6 @@
 <?php
 namespace User\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Service\ProfilePictureService;
 use Zend\Db\Adapter\AdapterInterface;
@@ -21,7 +20,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
     /**
     * @ignore __construct
     */
-    public function __construct(ProfilePictureService $profilepictureService, Logger $log, AdapterInterface $dbAdapter, $userService)
+    public function __construct(ProfilePictureService $profilepictureService, AdapterInterface $dbAdapter, $userService)
     {
         $this->setIdentifierName('profileId');
         $this->profilepictureService = $profilepictureService;
@@ -53,7 +52,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
             $this->response->setStatusCode(200);
             return $this->response;
         } catch (Exception $e) {
-            print_r($e->getMessage());
+            $this->log-error($e->getMessage(), $e);
             return $this->getErrorResponse("Profile picture not found", 404);
         }
     }
@@ -88,7 +87,7 @@ class ProfilePictureDownloadController extends AbstractApiControllerHelper
             $this->response->setStatusCode(200);
             return $this->response;
         } catch (Exception $e) {
-            print_r($e->getMessage());
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Profile picture not found", 404);
         }
     }

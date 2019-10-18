@@ -44,7 +44,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\RoleController(
                         $container->get(RoleTable::class),
                         $container->get(RoleService::class),
-                        $container->get('RoleLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

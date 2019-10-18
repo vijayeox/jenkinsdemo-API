@@ -1,15 +1,12 @@
 <?php
 namespace Oxzion\Service;
 
-use Exception;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
 use Oxzion\Utils\UuidUtil;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
-use Oxzion\AppDelegate\AppDelegateService;
+use Exception;
 
 class FileService extends AbstractService
 {
@@ -18,10 +15,7 @@ class FileService extends AbstractService
     */
     public function __construct($config, $dbAdapter, FileTable $table, FormService $formService)
     {
-        $logger = new Logger();
-        $writer = new Stream(__DIR__ . '/../../../../logs/file.log');
-        $logger->addWriter($writer);
-        parent::__construct($config, $dbAdapter, $logger);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->config = $config;
         $this->dbAdapter = $dbAdapter;
@@ -89,19 +83,10 @@ class FileService extends AbstractService
                 }
             }
             $this->commit();
-        } catch (Exception $e) { 
-            switch (get_class($e)) {
-                case "Oxzion\ValidationException":
-                $this->rollback();
-                $this->logger->log(Logger::ERR, $e->getMessage());
-                throw $e;
-                break;
-                default:
-                $this->rollback();
-                $this->logger->log(Logger::ERR, $e->getMessage());
-                throw $e;
-                break;
-            }
+        } catch (Exception $e) {
+            $this->rollback();
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
         }
         return $count;
     }
@@ -182,10 +167,10 @@ class FileService extends AbstractService
             $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
         } catch (Exception $e) { 
-                $this->logger->log(Logger::ERR, $e->getMessage());
-                $this->rollback();
-                throw $e;                   
-            }        
+            $this->rollback();
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
         return $id;
     }
 
@@ -209,7 +194,7 @@ class FileService extends AbstractService
             $response = $this->executeUpdate($update);
             return 1;
         } catch (Exception $e) { print_r($e->getMessage());exit;
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -231,8 +216,8 @@ class FileService extends AbstractService
                 return $fileArray;
             }
             return 0;
-        } catch (Exception $e) {
-            $this->logger->log(Logger::ERR, $e->getMessage());
+        }catch(Exception $e){
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -295,6 +280,7 @@ class FileService extends AbstractService
         join ox_app as f on (f.id = b.app_id)
         " . $fieldWhereQuery['joinQuery'] . "
         where f.id = " . $data['app_id'] . " and b.id = " . $data['form_id'] . " and (" . $fieldWhereQuery['whereQuery'] . ") group by a.id";
+        $this->logger->info("Executing query - $queryStr");
         $dataList = $this->getActivePolicies($queryStr);
         // $this->sendEmail($appId, $dataList); //Commenting this line
         return $dataList;

@@ -10,7 +10,6 @@ use PaymentGateway\Model\Payment;
 use PaymentGateway\Model\PaymentTable;
 use PaymentGateway\Service\PaymentService;
 use Zend\Db\Adapter\AdapterInterface;
-use Zend\Log\Logger;
 
 class PaymentGatewayController extends AbstractApiController
 {
@@ -22,9 +21,9 @@ class PaymentGatewayController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(PaymentTable $table, PaymentService $paymentService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(PaymentTable $table, PaymentService $paymentService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Payment::class);
+        parent::__construct($table, Payment::class);
         $this->setIdentifierName('paymentId');
         $this->paymentService = $paymentService;
     }

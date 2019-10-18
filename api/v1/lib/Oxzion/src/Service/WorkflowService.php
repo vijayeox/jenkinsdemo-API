@@ -24,8 +24,6 @@ use Workflow\Model\WorkflowInstance;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
 use Exception;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
 
 class WorkflowService extends AbstractService
 {
@@ -48,10 +46,7 @@ class WorkflowService extends AbstractService
 
     public function __construct($config, $dbAdapter, WorkflowTable $table, FormService $formService, FieldService $fieldService, FileService $fileService, WorkflowFactory $workflowFactory, ActivityService $activityService)
     {
-        $logger = new Logger();
-        $writer = new Stream(__DIR__ . '/../../../../logs/workflowservice.log');
-        $logger->addWriter($writer);
-        parent::__construct($config, $dbAdapter,$logger);
+        parent::__construct($config, $dbAdapter);
         $this->baseFolder = $this->config['UPLOAD_FOLDER'];
         $this->table = $table;
         $this->config = $config;
@@ -115,7 +110,7 @@ class WorkflowService extends AbstractService
                 return 1;
             }
         } catch (Exception $e) {
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             $this->deleteWorkflow($appId, $workFlowId);
             throw $e;
         }
@@ -170,7 +165,7 @@ class WorkflowService extends AbstractService
                         foreach ($activityIdArray as $activityCreatedId) {
                             $id = $this->activityService->deleteActivity($activityCreatedId);
                         }
-                        $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+                        $this->logger->error($e->getMessage(), $e);
                         throw $e;
                     }
                 }
@@ -182,8 +177,8 @@ class WorkflowService extends AbstractService
                 $workFlow = $this->saveWorkflow($appId, $deployedData);
             } catch (Exception $e){
                 $this->deleteWorkflow($appId,$workflowId);
-                $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-                 throw $e;
+                $this->logger->error($e->getMessage(), $e);
+                throw $e;
             }
         }
         return $deployedData?$deployedData:0;
@@ -223,18 +218,9 @@ class WorkflowService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
-            switch (get_class($e)) {
-                case "Oxzion\ValidationException":
-                $this->rollback();
-                $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-                throw $e;;
-                break;
-                default:
-                $this->rollback();
-                $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-                throw $e;
-                break;
-            }
+            $this->rollback();
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
         }
         return $count;
     }
@@ -291,7 +277,7 @@ class WorkflowService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -321,7 +307,7 @@ class WorkflowService extends AbstractService
             $this->commit();
         } catch (Exception $e) { 
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $count;
@@ -340,7 +326,7 @@ class WorkflowService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         
@@ -390,7 +376,7 @@ class WorkflowService extends AbstractService
             $response = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
             return $response;
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -403,7 +389,7 @@ class WorkflowService extends AbstractService
             $response = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
             return $response;
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }

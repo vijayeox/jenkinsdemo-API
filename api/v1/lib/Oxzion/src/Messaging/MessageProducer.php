@@ -1,8 +1,7 @@
 <?php
 namespace Oxzion\Messaging;
 
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
+use Logger;
 use Exception;
 
 class MessageProducer
@@ -13,9 +12,7 @@ class MessageProducer
     private function __construct()
     {
         $this->client = new Client();
-        $this->logger = new Logger;
-        $writer = new Stream(__DIR__ . '/../../../../logs/Messaging.log');
-        $this->logger->addWriter($writer);
+        $this->logger = Logger::getLogger(__CLASS__);
     }
 
     public static function getInstance()
@@ -31,7 +28,7 @@ class MessageProducer
         try {
             $this->client->sendMessage('/topic/' . $topic, $message);
         } catch (Exception $e) {
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
         }
     }
     public function sendQueue($message, $queue)

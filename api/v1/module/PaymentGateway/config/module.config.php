@@ -2,9 +2,6 @@
 
 namespace PaymentGateway;
 
-use Zend\Log\Formatter\Simple;
-use Zend\Log\Logger;
-use Zend\Log\Processor\RequestId;
 use Zend\Router\Http\Segment;
 use Oxzion\Utils\UuidUtil;
 
@@ -44,31 +41,6 @@ return [
                         'action' => 'initiatePaymentProcess',
                     ],
                 ],
-            ],
-        ],
-    ],
-    'log' => [
-        'PaymentGatewayLogger' => [
-            'writers' => [
-                'stream' => [
-                    'name' => 'stream',
-                    'priority' => \Zend\Log\Logger::ALERT,
-                    'options' => [
-                        'stream' => __DIR__ . '/../../../logs/payment.log',
-                        'formatter' => [
-                            'name' => \Zend\Log\Formatter\Simple::class,
-                            'options' => [
-                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
-                            ],
-                        ],
-                        'filters' => [
-                            'priority' => \Zend\Log\Logger::INFO],
-                    ],
-                ],
-            ],
-            'processors' => [
-                'requestid' => [
-                    'name' => \Zend\Log\Processor\RequestId::class],
             ],
         ],
     ],

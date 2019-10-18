@@ -34,7 +34,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\PaymentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PaymentService($container->get('config'), $dbAdapter, $container->get(Model\PaymentTable::class),$container->get('PaymentGatewayLogger'));
+                    return new Service\PaymentService($container->get('config'), $dbAdapter, $container->get(Model\PaymentTable::class));
                 },
                 Model\PaymentTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PaymentTableGateway::class);
@@ -58,7 +58,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\PaymentGatewayController(
                         $container->get(Model\PaymentTable::class),
                         $container->get(Service\PaymentService::class),
-                        $container->get('PaymentGatewayLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

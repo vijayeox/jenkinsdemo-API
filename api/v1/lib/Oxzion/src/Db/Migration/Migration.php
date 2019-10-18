@@ -7,8 +7,6 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Table;
 use Oxzion\Utils\FileUtils;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
 use Exception;
 
 class Migration extends AbstractService
@@ -34,10 +32,7 @@ class Migration extends AbstractService
         $dbConfig['database'] = 'mysql';
         $this->mysqlAdapter = new Adapter($dbConfig);
         $adapter = self::createAdapter($config, $this->database);
-        $logger = new Logger();
-        $writer = new Stream(__DIR__ . '/../../../../../logs/Persistence.log');
-        $logger->addWriter($writer);
-        parent::__construct($config, $adapter, $logger);
+        parent::__construct($config, $adapter);
         $this->initDB();
     }
 

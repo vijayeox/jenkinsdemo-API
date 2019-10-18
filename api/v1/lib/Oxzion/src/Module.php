@@ -5,22 +5,37 @@ namespace Oxzion;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
+use Zend\ModuleManager\ModuleEvent;
+use Zend\ModuleManager\ModuleManager;
+use Logger;
 
 class Module
 {
+    private static $logInitialized = false;
+    public function init(ModuleManager $moduleManager)
+    {
+        $events = $moduleManager->getEventManager();
+        // Registering a listener at default priority, 1, which will trigger
+        // after the ConfigListener merges config.
+        $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'));
+    }
+
+    public function onMergeConfig(ModuleEvent $e)
+    {
+        $configListener = $e->getConfigListener();
+        $config         = $configListener->getMergedConfig(false);
+        if(!self::$logInitialized){
+            self::$logInitialized = true;
+            Logger::configure($config['logger']);
+
+        
+        }
+    }
     public function getServiceConfig()
     {
         
         return [
             'factories' => [
-                'ServiceLogger' => function($container){
-                    $logger = new Logger();
-                    $writer = new Stream(__DIR__ . '/../../../logs/service.log');
-                    $logger->addWriter($writer);
-                    return $logger;
-                },
                 Auth\AuthContext::class => function ($container) {
                     return new Auth\AuthContext();
                 },
@@ -149,8 +164,7 @@ class Module
                     return new Service\FormService($container->get('config'), $dbAdapter, 
                                                     $container->get(Model\FormTable::class), 
                                                     $container->get(FormEngine\FormFactory::class), 
-                                                    $container->get(Service\FieldService::class),
-                                                    $container->get('ServiceLogger'));
+                                                    $container->get(Service\FieldService::class));
                 },
                 Service\ActivityService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);

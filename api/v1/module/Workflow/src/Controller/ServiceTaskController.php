@@ -4,7 +4,6 @@ namespace Workflow\Controller;
 /**
 * Activity Instance Api
 */
-use Zend\Log\Logger;
 use Workflow\Model\ServiceTaskInstance;
 use Workflow\Service\ServiceTaskService;
 use Workflow\Service\WorkflowInstanceService;
@@ -16,15 +15,14 @@ class ServiceTaskController extends AbstractApiControllerHelper
     private $serviceTaskService;
     private $workflowInstanceService;
     private $log;
-    
     /**
     * @ignore __construct
     */
-    public function __construct(ServiceTaskService $serviceTaskService,WorkflowInstanceService $workflowInstanceService, Logger $log)
+    public function __construct(ServiceTaskService $serviceTaskService,WorkflowInstanceService $workflowInstanceService)
     {
         $this->serviceTaskService = $serviceTaskService;
         $this->workflowInstanceService = $workflowInstanceService;
-        $this->log = $log;
+        $this->log = $this->getLogger();
     }
     /**
     * Activity Instance API
@@ -37,20 +35,20 @@ class ServiceTaskController extends AbstractApiControllerHelper
     public function executeAction()
     {
         $data = $this->extractPostData();
-        $this->log->info(ServiceTask::class.":Post Data- ". print_r(json_encode($data), true));
+        $this->log->info("Post Data- ". print_r(json_encode($data), true));
         try {
             $response = $this->serviceTaskService->runCommand($this->extractPostData());
             if($response == 1){
                 return $this->getSuccessResponse();
             }
             if ($response) {
-                $this->log->info(ServiceTask::class.":Workflow Step Successfully Executed");
+                $this->log->info("Workflow Step Successfully Executed");
                 return $this->getSuccessResponseWithData($response, 200);
             } else {
                 return $this->getErrorResponse("Failed to perform Service Task", 200);
             }
         } catch (ValidationException $e) {
-            $this->log->info(ServiceTask::class.":Exception while Performing Service Task-".$e->getMessage());
+            $this->log->info("Exception while Performing Service Task-".$e->getMessage());
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }

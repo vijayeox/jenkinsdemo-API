@@ -55,8 +55,7 @@ class Module implements ConfigProviderInterface
                 Controller\WidgetController::class => function ($container) {
                     return new Controller\WidgetController(
                         $container->get(Model\WidgetTable::class),
-                        $container->get(Service\WidgetService::class),
-                        $container->get('WidgetLogger')
+                        $container->get(Service\WidgetService::class)
                     );
                 },
             ],

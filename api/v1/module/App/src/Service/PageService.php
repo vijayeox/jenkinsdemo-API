@@ -12,13 +12,12 @@ use Oxzion\Utils\UuidUtil;
 use App\Service\PageContentService;
 use Oxzion\ServiceException;
 use Exception;
-use Zend\Log\Logger;
 
 class PageService extends AbstractService
 {
-    public function __construct($config, PageContentService $pageContentService ,$dbAdapter, PageTable $table, Logger $log)
+    public function __construct($config, PageContentService $pageContentService ,$dbAdapter, PageTable $table)
     {
-        parent::__construct($config, $dbAdapter,$log);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->pageContentService = $pageContentService;
     }

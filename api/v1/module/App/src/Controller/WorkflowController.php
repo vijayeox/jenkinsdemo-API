@@ -4,7 +4,6 @@ namespace App\Controller;
 /**
 * Workflow Api
 */
-use Zend\Log\Logger;
 use Oxzion\Model\Workflow;
 use Oxzion\Model\WorkflowTable;
 use Oxzion\Service\WorkflowService;
@@ -25,9 +24,9 @@ class WorkflowController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(WorkflowTable $table, WorkflowService $workflowService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(WorkflowTable $table, WorkflowService $workflowService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Workflow::class);
+        parent::__construct($table, Workflow::class);
         $this->setIdentifierName('workflowId');
         $this->workflowService = $workflowService;
     }

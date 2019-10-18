@@ -1,7 +1,6 @@
 <?php
 namespace Organization\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
@@ -19,9 +18,9 @@ class OrganizationController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(OrganizationTable $table, OrganizationService $orgService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(OrganizationTable $table, OrganizationService $orgService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Organization::class);
+        parent::__construct($table, Organization::class);
         $this->setIdentifierName('orgId');
         $this->orgService = $orgService;
     }

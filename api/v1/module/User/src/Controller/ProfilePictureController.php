@@ -1,7 +1,6 @@
 <?php
 namespace User\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Service\ProfilePictureService;
 use Zend\Db\Adapter\AdapterInterface;
@@ -18,9 +17,9 @@ class ProfilePictureController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(ProfilePictureService $profilepictureService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(ProfilePictureService $profilepictureService, AdapterInterface $dbAdapter)
     {
-        parent::__construct(null, $log, __class__, null);
+        parent::__construct(null, null);
         $this->setIdentifierName('profileId');
         $this->profilepictureService = $profilepictureService;
     }
@@ -36,17 +35,17 @@ class ProfilePictureController extends AbstractApiController
     */
     public function updateProfileAction()
     {
-        $this->log->info($this->logClass . ":Profile update controller");
+        $this->log->info("Profile update controller");
         $params=$this->extractPostData();
         $files=substr($params['file'], strpos($params['file'], ",")+1);
         $files=base64_decode($files);
         try {
             $count = $this->profilepictureService->uploadProfilepicture($files);
         } catch (Exception $e) {
-            $this->log->err("Failed to upload profile picture", [$e]);
+            $this->log->error("Failed to upload profile picture", $e);
             return $this->getErrorResponse("Profile picture upload failed", 500);
         }
         return $this->getSuccessResponse("Upload successfull", 200);
-        $this->log->info($this->logClass . ":Profile update controller end");
+        $this->log->info("Profile update controller end");
     }
 }

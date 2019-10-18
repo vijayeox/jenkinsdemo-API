@@ -11,7 +11,6 @@ use Oxzion\ValidationException;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\ServiceException;
-use Zend\Log\Logger;
 use Exception;
 use Oxzion\Service\WorkflowService;
 
@@ -25,9 +24,9 @@ class AppController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(AppTable $table, AppService $appService,Logger $log, AdapterInterface $dbAdapter,WorkflowService $workflowService)
+    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter,WorkflowService $workflowService)
     {
-        parent::__construct($table, $log, __CLASS__, App::class);
+        parent::__construct($table, App::class);
         $this->setIdentifierName('appId');
         $this->appService = $appService;
         $this->workflowService = $workflowService;

@@ -4,7 +4,6 @@
 */
 namespace Resource\Controller;
 
-use Zend\Log\Logger;
 use Resource\Service\ResourceService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Utils\Query;
@@ -26,7 +25,7 @@ class ResourceController extends AbstractApiControllerHelper
     /**
     * @ignore __construct
     */
-    public function __construct(ResourceService $resourceService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(ResourceService $resourceService, AdapterInterface $dbAdapter)
     {
         $this->resourceService = $resourceService;
         $this->setIdentifierName('resourceId');

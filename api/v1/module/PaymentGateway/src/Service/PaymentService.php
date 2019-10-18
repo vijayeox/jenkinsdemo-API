@@ -7,7 +7,6 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Service\AbstractService;
 use PaymentGateway\Model\Payment;
 use PaymentGateway\Model\PaymentTable;
-use Zend\Log\Logger;
 // use Oxzion\Utils\RestClient;
 
 class PaymentService extends AbstractService
@@ -16,9 +15,9 @@ class PaymentService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, PaymentTable $table,Logger $log)
+    public function __construct($config, $dbAdapter, PaymentTable $table)
     {
-        parent::__construct($config, $dbAdapter,$log);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->paymentGatewayType = $this->config['paymentGatewayType'];
     }
@@ -57,7 +56,7 @@ class PaymentService extends AbstractService
             $this->commit();
         } catch (Exception $e) { 
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $count;
@@ -126,7 +125,7 @@ class PaymentService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $id;
@@ -149,7 +148,7 @@ class PaymentService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $count;
@@ -197,7 +196,7 @@ class PaymentService extends AbstractService
             $result = $this->executeQuerywithBindParameters($select,$selectParams)->toArray();
             return $result;
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -210,7 +209,7 @@ class PaymentService extends AbstractService
             $selectParams = array("appUuid" => $appUuid,"serverInstanceName" => $gatewayType);
             return $this->executeQuerywithBindParameters($select,$selectParams)->toArray();            
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -226,7 +225,7 @@ class PaymentService extends AbstractService
             return $result->getAffectedRows();
         }catch(Exception $e){
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }

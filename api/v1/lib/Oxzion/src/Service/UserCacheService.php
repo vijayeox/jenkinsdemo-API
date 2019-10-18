@@ -12,8 +12,6 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Exception;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
 use Oxzion\ServiceException;
 
 /**
@@ -31,10 +29,7 @@ class UserCacheService extends AbstractService
 
     public function __construct($config, $dbAdapter, UserCacheTable $table)
     {
-        $logger = new Logger();
-        $writer = new Stream(__DIR__ . '/../../../../logs/usercache.log');
-        $logger->addWriter($writer);
-        parent::__construct($config, $dbAdapter,$logger);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
 
@@ -58,7 +53,7 @@ class UserCacheService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $count;
@@ -85,7 +80,7 @@ class UserCacheService extends AbstractService
             }
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $count;
@@ -114,7 +109,7 @@ class UserCacheService extends AbstractService
             $response = $this->executeUpdate($update);
             return 0;
         } catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }

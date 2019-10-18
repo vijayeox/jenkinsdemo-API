@@ -11,7 +11,6 @@ use Zend\Db\Sql\Expression;
 use Exception;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\OrganizationService;
-use Zend\Log\Logger;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
@@ -24,18 +23,15 @@ class GroupService extends AbstractService
 {
     private $table;
     private $organizationService;
-    protected $logger;
     public static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
 
 
-    public function __construct($config, $dbAdapter, GroupTable $table, $organizationService, Logger $log)
+    public function __construct($config, $dbAdapter, GroupTable $table, $organizationService)
     {
         parent::__construct($config, $dbAdapter);
-        parent::initLogger(__DIR__ . '/../../../../logs/group.log');
         $this->table = $table;
         $this->messageProducer = MessageProducer::getInstance();
         $this->organizationService = $organizationService;
-        $this->logger = $log;
     }
 
     public function setMessageProducer($messageProducer)
@@ -182,7 +178,7 @@ class GroupService extends AbstractService
             
             }
             catch(Exception $e) {
-            $this->logger->err(__CLASS__.$e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             $this->rollback();
             throw $e;
         }
@@ -490,7 +486,7 @@ class GroupService extends AbstractService
         $obj = $this->table->getByUuid($params['groupId'],array());
 
         if (is_null($obj)) {
-            $this->logger->log(Logger::INFO, "Invalid group id - ".$params['groupId']);
+            $this->logger->info("Invalid group id - ".$params['groupId']);
             throw new ServiceException("Entity not found","group.not.found");   
         }
 

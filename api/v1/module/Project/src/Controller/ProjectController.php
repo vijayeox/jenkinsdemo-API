@@ -2,7 +2,6 @@
 
 namespace Project\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
 use Project\Model\ProjectTable;
 use Project\Model\Project;
@@ -23,9 +22,9 @@ class ProjectController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(ProjectTable $table, ProjectService $projectService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(ProjectTable $table, ProjectService $projectService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Project::class);
+        parent::__construct($table, Project::class);
         $this->setIdentifierName('projectUuid');
         $this->projectService = $projectService;
     }

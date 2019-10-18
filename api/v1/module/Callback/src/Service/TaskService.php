@@ -6,7 +6,6 @@ namespace Callback\Service;
     use Oxzion\Service\AbstractService;
     use Oxzion\ValidationException;
     use Oxzion\Utils\RestClient;
-    use Zend\Log\Logger;
     use Exception;
 
     class TaskService extends AbstractService
@@ -19,9 +18,9 @@ namespace Callback\Service;
         }
 
 
-        public function __construct($config, Logger $log)
+        public function __construct($config)
         {
-            parent::__construct($config, null, $log);
+            parent::__construct($config, null);
             $taskServerUrl = $this->config['task']['taskServerUrl'];
             $this->restClient = new RestClient($this->config['task']['taskServerUrl'], array('auth'=>array($this->config['task']['username'],$this->config['task']['authToken'])));
         }
@@ -34,7 +33,7 @@ namespace Callback\Service;
                 $projectData = json_decode($response['body'], true);
                 return $projectData;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info(TaskService::class."Failed to create new entity".$e);
+                $this->logger->error("Failed to create new entity", $e);
             }
         }
 
@@ -45,7 +44,7 @@ namespace Callback\Service;
                 $projectData = json_decode($response['body'], true);
                 return $projectData;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info(TaskService::class."Failed to Delete entity".$e);
+                $this->logger->error("Failed to Delete entity", $e);
             }
         }
 
@@ -56,7 +55,7 @@ namespace Callback\Service;
                 $projectData = json_decode($response['body'], true);
                 return $projectData;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info(TaskService::class."Failed to Update entity".$e);
+                $this->logger->error("Failed to Update entity", $e);
             }
         }
 
@@ -69,7 +68,7 @@ namespace Callback\Service;
                     return $projectData;
                 }
             } catch (Exception $e) {
-                $this->logger->info(TaskService::class."Failed to create new entity".$e);
+                $this->logger->error("Failed to create new entity", $e);
             }
             return 0;
         }
@@ -81,7 +80,7 @@ namespace Callback\Service;
                 $projectData = json_decode($response['body'], true);
                 return $projectData;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info(TaskService::class."Failed to create new entity".$e);
+                $this->logger->error("Failed to create new entity", $e);
             }
         }
     }

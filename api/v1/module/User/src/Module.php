@@ -50,7 +50,6 @@ class Module implements ConfigProviderInterface
                 Controller\UserController::class => function ($container) {
                     return new Controller\UserController(
                         $container->get(UserTable::class),
-                        $container->get('UserLogger'),
                         $container->get(UserService::class),
                         $container->get(AdapterInterface::class),
                         $container->get(EmailService::class),
@@ -60,14 +59,12 @@ class Module implements ConfigProviderInterface
                 Controller\ProfilePictureController::class => function ($container) {
                     return new Controller\ProfilePictureController(
                         $container->get(ProfilePictureService::class),
-                        $container->get('UserLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
                  Controller\ProfilePictureDownloadController::class => function ($container) {
                      return new Controller\ProfilePictureDownloadController(
                         $container->get(ProfilePictureService::class),
-                        $container->get('UserLogger'),
                         $container->get(AdapterInterface::class),
                         $container->get(UserService::class)
                     );
@@ -75,13 +72,11 @@ class Module implements ConfigProviderInterface
                 Controller\UserSessionController::class => function ($container) {
                     return new Controller\UserSessionController(
                         $container->get(UserSessionService::class),
-                        $container->get('UserLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
                 Controller\ForgotPasswordController::class => function($container) {
                     return new Controller\ForgotPasswordController(
-                        $container->get('UserLogger'),
                         $container->get(UserService::class)
                     );
                 },

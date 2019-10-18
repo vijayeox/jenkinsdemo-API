@@ -12,7 +12,6 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Oxzion\Service\TemplateService;
-use Zend\Log\Logger;
 use Exception;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Document\DocumentGeneratorImpl;
@@ -28,12 +27,12 @@ class ServiceTaskService extends AbstractService
     * @ignore __construct
     */
 
-    public function __construct($config, $dbAdapter, Logger $log, TemplateService $templateService,AppDelegateService $appDelegateService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService,AppDelegateService $appDelegateService)
     {
         $this->messageProducer = MessageProducer::getInstance();
         $this->templateService = $templateService;
         $this->appDelegateService = $appDelegateService;
-        parent::__construct($config, $dbAdapter, $log);
+        parent::__construct($config, $dbAdapter);
     }
 
     public function setMessageProducer($messageProducer)

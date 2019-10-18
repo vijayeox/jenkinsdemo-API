@@ -7,11 +7,17 @@ use Zend\View\Model\JsonModel;
 use Oxzion\Jwt\JwtHelper;
 use Oxzion\Error\ErrorHandler;
 use Zend\Stdlib\RequestInterface as Request;
+use Logger;
+
 abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
     private $config;
     protected function getBaseUrl() {
         return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
+    }
+
+    protected function getLogger(){
+        return Logger::getLogger('Controller');
     }
     /**
      * Check Request object have Authorization token or not 

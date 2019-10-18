@@ -43,7 +43,7 @@ class Module implements ConfigProviderInterface
         return [
             'factories' => [
                 Controller\MessagingController::class => function ($container) {
-                    return new Controller\MessagingController($container->get(Service\MessagingService::class), $container->get('MessagingLogger'));
+                    return new Controller\MessagingController($container->get(Service\MessagingService::class));
                 },
             ],
         ];

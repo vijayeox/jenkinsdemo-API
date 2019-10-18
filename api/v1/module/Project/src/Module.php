@@ -60,7 +60,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\ProjectController(
                         $container->get(Model\ProjectTable::class),
                         $container->get(Service\ProjectService::class),
-                        $container->get('ProjectLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

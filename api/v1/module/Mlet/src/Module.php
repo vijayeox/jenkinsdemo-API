@@ -56,8 +56,7 @@ class Module implements ConfigProviderInterface
                 Controller\MletController::class => function ($container) {
                     return new Controller\MletController(
                         $container->get(Model\MletTable::class),
-                        $container->get(Service\MletService::class),
-                        $container->get('MletLogger')
+                        $container->get(Service\MletService::class)
                     );
                 },
             ],

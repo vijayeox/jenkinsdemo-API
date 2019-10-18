@@ -1,7 +1,6 @@
 <?php
 namespace Callback\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
@@ -13,14 +12,16 @@ class OXCallbackController extends AbstractApiControllerHelper
     private $messageProducer;
     private $templateService;
     private $config;
+    private $log;
     // /**
     // * @ignore __construct
     // */
-    public function __construct(TemplateService $templateService, $config, Logger $log)
+    public function __construct(TemplateService $templateService, $config)
     {
         $this->templateService = $templateService;
         $this->messageProducer = MessageProducer::getInstance();
         $this->config = $config;
+        $this->log = $this->getLogger();
     }
 
     public function userCreatedAction()

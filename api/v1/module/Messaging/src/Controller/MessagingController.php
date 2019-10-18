@@ -3,7 +3,6 @@ namespace Messaging\Controller;
 
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Messaging\MessageProducer;
-use Zend\Log\Logger;
 use Messaging\Service\MessagingService;
 
 class MessagingController extends AbstractApiControllerHelper
@@ -12,7 +11,7 @@ class MessagingController extends AbstractApiControllerHelper
      * @ignore __construct
      */
     private $messagingService;
-    public function __construct(MessagingService $service, Logger $log)
+    public function __construct(MessagingService $service)
     {
         $this->messagingService = $service;
     }

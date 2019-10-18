@@ -59,6 +59,7 @@ return [
         'calendarServerUrl' => 'http://localhost:8075/calendar',
         'authToken' => ''
     ],
+    
     'DELEGATE_FOLDER'=>__DIR__.'/../../data/delegate/',
     'applicationUrl' => 'http://localhost:8081',
     'RULE_FOLDER'=>__DIR__.'/../../data/rules/',

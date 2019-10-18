@@ -4,7 +4,6 @@ namespace App\Controller;
 /**
 * Entity Api
 */
-use Zend\Log\Logger;
 use App\Model\Entity;
 use App\Model\EntityTable;
 use App\Service\EntityService;
@@ -21,9 +20,9 @@ class EntityController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(EntityTable $table, EntityService $entityService,  Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(EntityTable $table, EntityService $entityService,  AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Entity::class);
+        parent::__construct($table, Entity::class);
         $this->setIdentifierName('entityId');
         $this->entityService = $entityService;
     }

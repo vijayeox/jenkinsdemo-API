@@ -1,7 +1,6 @@
 <?php
 namespace Contact\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
 use Exception;
@@ -17,13 +16,15 @@ class ContactIconController extends AbstractApiControllerHelper
     * @var ProfilepictureService Instance of Projectpicture Service
     */
     private $contactService;
+    private $log;
     /**
     * @ignore __construct
     */
-    public function __construct(ContactService $contactService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(ContactService $contactService, AdapterInterface $dbAdapter)
     {
         $this->setIdentifierName('contactId');
         $this->contactService = $contactService;
+        $this->log = $this->getLogger();
     }
 
     /**
@@ -58,7 +59,7 @@ class ContactIconController extends AbstractApiControllerHelper
             $this->response->setStatusCode(200);
             return $this->response;
         } catch (Exception $e) {
-            print_r($e->getMessage());
+            $this->log->error("Error getting Icon", $e);
             return $this->getErrorResponse("Contact Icon not found", 404);
         }
     }

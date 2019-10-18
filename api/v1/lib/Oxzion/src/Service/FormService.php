@@ -13,15 +13,13 @@ use Oxzion\Service\FieldService;
 use Oxzion\Model\Field;
 use Oxzion\Model\FieldTable;
 use Oxzion\FormEngine\FormFactory;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
 use Oxzion\Utils\ArrayUtils;
 
 class FormService extends AbstractService
 {
-    public function __construct($config, $dbAdapter, FormTable $table, FormFactory $formEngineFactory, FieldService $fieldService, Logger $logger)
+    public function __construct($config, $dbAdapter, FormTable $table, FormFactory $formEngineFactory, FieldService $fieldService)
     {
-        parent::__construct($config, $dbAdapter,$logger);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->formEngineFactory = $formEngineFactory;
         $this->formEngine = $this->formEngineFactory->getFormEngine();
@@ -68,18 +66,10 @@ class FormService extends AbstractService
             $data['fields'] = $generateFields;
             $this->commit();
         } catch (Exception $e) {
-            switch (get_class($e)) {
-             case "Oxzion\ValidationException":
-                $this->rollback();
-                 $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-                throw $e;
-                break;
-             default:
-                $this->rollback();
-                 $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-                throw $e;
-                break;
-            }
+            $this->rollback();
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+            
         }
         return $count;
     }
@@ -111,18 +101,9 @@ class FormService extends AbstractService
             $generateFields = $this->generateFields($template['fields'], $this->getIdFromUuid('ox_app', $appUuid), $this->getIdFromUuid('ox_form', $formUuid),$existingForm['entity_id']);
             $this->commit();
         } catch (Exception $e) {
-            switch (get_class($e)) {
-             case "Oxzion\ValidationException":
-                $this->rollback();
-                 $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-                throw $e;
-                break;
-             default:
-                $this->rollback();
-                 $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-                throw $e;
-                break;
-            }
+            $this->rollback();
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
         }
         return $count;
     }
@@ -140,8 +121,8 @@ class FormService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-             $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-             throw $e;
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
         }
         
         return $count;
@@ -167,8 +148,8 @@ class FormService extends AbstractService
             return $response;
         } catch (Exception $e) {
             $this->rollback();
-             $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
-             throw $e;
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
         }
     }
     public function getForm($uuid)
@@ -182,7 +163,7 @@ class FormService extends AbstractService
             }
             return $resultSet[0];
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -263,7 +244,7 @@ class FormService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }

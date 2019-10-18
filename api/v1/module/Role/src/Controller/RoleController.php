@@ -4,7 +4,6 @@ namespace Role\Controller;
 /**
 * Role Api
 */
-use Zend\Log\Logger;
 use Oxzion\Model\Role;
 use Oxzion\Model\RoleTable;
 use Oxzion\Service\RoleService;
@@ -26,9 +25,9 @@ class RoleController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(RoleTable $table, RoleService $roleService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(RoleTable $table, RoleService $roleService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Role::class);
+        parent::__construct($table, Role::class);
         $this->setIdentifierName('roleId');
         $this->roleService = $roleService;
     }

@@ -2,7 +2,6 @@
 namespace Callback\Service;
 
     use Oxzion\Service\AbstractService;
-    use Zend\Log\Logger;
     use Oxzion\Email\EmailClient;
     use Exception;
     use Horde_Exception;
@@ -11,12 +10,10 @@ namespace Callback\Service;
     {
         protected $dbAdapter;
         protected $emailService;
-        private $logClass;
-
-        public function __construct($config, Logger $log)
+        
+        public function __construct($config)
         {
-            parent::__construct($config, null, $log);
-            $this->logClass = __CLASS__;
+            parent::__construct($config, null);
         }
         public function setEmailService($emailService)
         {
@@ -60,7 +57,7 @@ namespace Callback\Service;
                     $response = $emailClient->buildAndSendMessage($body, $attachment, $headers, $smtpConfig, $opt=['html'=>false]);
                 }
             } catch (Exception $e) {
-                $this->logger->err($this->logClass . " Error : ".$e->getMessage());
+                $this->logger->error(" Error : ".$e->getMessage(), $e);
                 return true;
             }
         }

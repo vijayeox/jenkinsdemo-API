@@ -1,7 +1,6 @@
 <?php
 namespace Callback\Controller;
 
-    use Zend\Log\Logger;
     use Oxzion\Controller\AbstractApiControllerHelper;
     use Oxzion\ValidationException;
     use Zend\Db\Adapter\AdapterInterface;
@@ -13,12 +12,14 @@ namespace Callback\Controller;
     class CRMCallbackController extends AbstractApiControllerHelper
     {
         private $crmService;
+        private $log;
         // /**
         // * @ignore __construct
         // */
-        public function __construct(CRMService $crmService, Logger $log)
+        public function __construct(CRMService $crmService)
         {
             $this->crmService = $crmService;
+            $this->log = $this->getLogger();
         }
         
         public function setCRMService($crmService)

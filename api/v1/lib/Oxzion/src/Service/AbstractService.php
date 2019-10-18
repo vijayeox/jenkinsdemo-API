@@ -9,10 +9,10 @@ use Exception;
 
 abstract class AbstractService extends AbstractBaseService
 {
-
-    protected function __construct($config, $dbAdapter, $log = null)
+    
+    protected function __construct($config, $dbAdapter)
     {
-        parent::__construct($config, $dbAdapter, $log);
+        parent::__construct($config, $dbAdapter);
     }
 
     protected function getBaseUrl()

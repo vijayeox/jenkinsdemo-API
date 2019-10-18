@@ -2,7 +2,6 @@
 
 namespace Contact\Controller;
 
-use Zend\Log\Logger;
 use Contact\Model\ContactTable;
 use Contact\Model\Contact;
 use Contact\Service\ContactService;
@@ -26,9 +25,9 @@ class ContactController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(ContactTable $table, ContactService $contactService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(ContactTable $table, ContactService $contactService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __class__, Contact::class);
+        parent::__construct($table, Contact::class);
         $this->setIdentifierName('contactId');
         $this->contactService = $contactService;
     }

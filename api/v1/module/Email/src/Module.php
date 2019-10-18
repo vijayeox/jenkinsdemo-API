@@ -60,7 +60,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\EmailController(
                         $container->get(EmailTable::class),
                         $container->get(EmailService::class),
-                        $container->get('EmailLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -68,7 +67,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\DomainController(
                         $container->get(Model\DomainTable::class),
                         $container->get(Service\DomainService::class),
-                        $container->get('DomainLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

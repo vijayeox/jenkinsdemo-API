@@ -3,7 +3,6 @@ namespace ProspectResearch\Controller;
 
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ProspectResearch\InfoEngine;
-use Zend\Log\Logger;
 
 class ProspectResearchController extends AbstractApiController
 {
@@ -12,7 +11,7 @@ class ProspectResearchController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(InfoEngine $infoEngine, Logger $log)
+    public function __construct(InfoEngine $infoEngine)
     {
         parent::__construct(null, $log, __CLASS__, null);
         $this->infoEngine = $infoEngine;

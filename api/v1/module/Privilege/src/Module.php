@@ -43,7 +43,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\PrivilegeController(
                         $container->get(PrivilegeTable::class),
                         $container->get(PrivilegeService::class),
-                        $container->get('PrivilegeLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

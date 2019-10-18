@@ -3,7 +3,6 @@
 namespace Auth\Controller;
 
 use Auth\Service\AuthService;
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Encryption\Crypto;
 use Zend\View\Model\JsonModel;
@@ -36,11 +35,11 @@ class AuthController extends AbstractApiControllerHelper
     /**
      * @ignore __construct
      */
-    public function __construct(AuthAdapter $authAdapter, ApiAdapter $apiAdapter, UserService $userService, Logger $log, UserTokenService $userTokenService, AuthService $authService)
+    public function __construct(AuthAdapter $authAdapter, ApiAdapter $apiAdapter, UserService $userService, UserTokenService $userTokenService, AuthService $authService)
     {
         $this->authAdapter = $authAdapter;
         $this->apiAdapter = $apiAdapter;
-        $this->log = $log;
+        $this->log = $this->getLogger();
         $this->userService = $userService;
         $this->userTokenService = $userTokenService;
         $this->authService = $authService;
@@ -121,6 +120,7 @@ class AuthController extends AbstractApiControllerHelper
                 return $this->getErrorResponse("JWT Token Not Found", 404);
             }
         } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Invalid JWT Token", 404);
         }
     }
@@ -134,10 +134,10 @@ class AuthController extends AbstractApiControllerHelper
                 return $this->getErrorResponse("There was an error while executing", 404);
             }
         }catch(ServiceException $e){
-            $this->log->err("Error".$e->getMessage());
+            $this->log->error("Error".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(),404);
         }catch (Exception $e){
-            $this->log->err("Error".$e->getMessage());
+            $this->log->error("Error".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
         }
         if (isset($result['auto_login'])) {
@@ -188,6 +188,7 @@ class AuthController extends AbstractApiControllerHelper
                 return $this->getErrorResponse("JWT Token Not Found", 404);
             }
         } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Invalid JWT Token", 404);
         }
     }
@@ -227,6 +228,7 @@ class AuthController extends AbstractApiControllerHelper
                 return $this->getErrorResponse("Invalid Request", 404);
             }
         } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Something went wrong", 404);
         }
     }

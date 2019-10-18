@@ -10,14 +10,13 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Oxzion\Utils\UuidUtil;
 use Exception;
-use Zend\Log\Logger;
 use Group\Service\GroupService;
 
 class MenuItemService extends AbstractService
 {
-    public function __construct($config, Groupservice $groupService, $dbAdapter, MenuItemTable $table,Logger $log)
+    public function __construct($config, Groupservice $groupService, $dbAdapter, MenuItemTable $table)
     {
-        parent::__construct($config, $dbAdapter,$log);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->groupService = $groupService;
     }

@@ -9,7 +9,6 @@ namespace Callback\Service;
     use Oxzion\Utils\RestClient;
     use Contact\Service\ContactService;
 
-    use Zend\Log\Logger;
     use Exception;
 
     class CRMService extends AbstractService
@@ -18,9 +17,9 @@ namespace Callback\Service;
         protected $contactService;
         protected $userService;
 
-        public function __construct($config, Logger $log, ContactService $contactService, UserService $userService)
+        public function __construct($config, ContactService $contactService, UserService $userService)
         {
-            parent::__construct($config, null, $log);
+            parent::__construct($config, null);
             $this->contactService = $contactService;
             $this->userService = $userService;
         }
@@ -51,7 +50,7 @@ namespace Callback\Service;
             try {
                 $result = $this->contactService->createContact($params);
             } catch (Exception $e) {
-                $this->logger->err(__CLASS__."->".$e->getMessage());
+                $this->logger->error($e->getMessage(), $e);
                 return 0;
             }
             if ($result) {

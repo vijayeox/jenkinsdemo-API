@@ -1,7 +1,6 @@
 <?php
 namespace Organization\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Service\OrganizationService;
 use Zend\Db\Adapter\AdapterInterface;
@@ -20,7 +19,7 @@ class OrganizationLogoController extends AbstractApiControllerHelper
     /**
     * @ignore __construct
     */
-    public function __construct(OrganizationService $organizationService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(OrganizationService $organizationService, AdapterInterface $dbAdapter)
     {
         $this->setIdentifierName('orgId');
         $this->organizationService = $organizationService;

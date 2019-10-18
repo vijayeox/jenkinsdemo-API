@@ -4,7 +4,6 @@ namespace App\Controller;
 /**
 * Form Api
 */
-use Zend\Log\Logger;
 use Oxzion\Model\Form;
 use Oxzion\Model\FormTable;
 use Oxzion\Service\FormService;
@@ -18,9 +17,9 @@ class FormController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(FormTable $table, FormService $formService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(FormTable $table, FormService $formService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Form::class);
+        parent::__construct($table, Form::class);
         $this->setIdentifierName('id');
         $this->formService = $formService;
     }

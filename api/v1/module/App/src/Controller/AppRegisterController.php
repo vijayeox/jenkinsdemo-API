@@ -8,7 +8,7 @@ use App\Service\AppService;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiControllerHelper;
-use Zend\Log\Logger;
+
 
 class AppRegisterController extends AbstractApiControllerHelper
 {
@@ -16,13 +16,14 @@ class AppRegisterController extends AbstractApiControllerHelper
      * @var AppService Instance of AppService Service
      */
     private $appService;
-
+    private $log;
     /**
      * @ignore __construct
      */
-    public function __construct(AppTable $table, AppService $appService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter)
     {
         $this->setIdentifierName('appId');
+        $this->log = $this->getLogger();
         $this->appService = $appService;
     }
     /**

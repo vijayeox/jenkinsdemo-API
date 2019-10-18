@@ -9,8 +9,6 @@ use Oxzion\Document\DocumentBuilder;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\TemplateService;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
@@ -27,12 +25,9 @@ class AppDelegateService extends AbstractService
 
     public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null)
     {
-        $logger = new Logger();
-        $writer = new Stream(__DIR__ . '/../../../../logs/Delegate.log');
-        $logger->addWriter($writer);
         $this->templateService = $templateService;
         $this->messageProducer = MessageProducer::getInstance();
-        parent::__construct($config, $dbAdapter, $logger);
+        parent::__construct($config, $dbAdapter);
         $this->documentBuilder = $documentBuilder;
         $this->delegateDir = $this->config['DELEGATE_FOLDER'];
         if (!is_dir($this->delegateDir)) {
@@ -80,7 +75,7 @@ class AppDelegateService extends AbstractService
             }
             return 1;
         } catch (Exception $e) {
-            $this->logger->err($e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return 2;

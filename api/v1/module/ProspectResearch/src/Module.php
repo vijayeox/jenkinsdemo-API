@@ -36,8 +36,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\ProspectResearchController::class => function ($container) {
                     return new Controller\ProspectResearchController(
-                        $container->get(\Oxzion\ProspectResearch\InfoEngine::class),
-                        $container->get('ProspectResearchLogger')
+                        $container->get(\Oxzion\ProspectResearch\InfoEngine::class)
                     );
                 },
             ],

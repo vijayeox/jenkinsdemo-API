@@ -4,7 +4,6 @@
 */
 namespace Attachment\Controller;
 
-use Zend\Log\Logger;
 use Attachment\Service\AttachmentService;
 use Zend\Db\Adapter\AdapterInterface;
 use Attachment\Model\AttachmentTable;
@@ -28,9 +27,9 @@ class AttachmentController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(AttachmentTable $table, AttachmentService $attachmentService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(AttachmentTable $table, AttachmentService $attachmentService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, AttachmentController::class);
+        parent::__construct($table, AttachmentController::class);
         $this->attachmentService = $attachmentService;
         $this->setIdentifierName('attachmentId');
     }

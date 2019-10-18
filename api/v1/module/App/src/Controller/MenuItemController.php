@@ -4,7 +4,6 @@ namespace App\Controller;
 /**
 * MenuItem Api
 */
-use Zend\Log\Logger;
 use App\Model\MenuItem;
 use App\Model\MenuItemTable;
 use App\Service\MenuItemService;
@@ -18,9 +17,9 @@ class MenuItemController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(MenuItemTable $table, MenuItemService $menuItemService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(MenuItemTable $table, MenuItemService $menuItemService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, MenuItem::class);
+        parent::__construct($table, MenuItem::class);
         $this->setIdentifierName('menuId');
         $this->menuItemService = $menuItemService;
     }

@@ -47,14 +47,12 @@ class Module implements ConfigProviderInterface
                     return new Controller\OrganizationController(
                         $container->get(OrganizationTable::class),
                         $container->get(OrganizationService::class),
-                        $container->get('OrganizationLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
                 Controller\OrganizationLogoController::class => function ($container) {
                     return new Controller\OrganizationLogoController(
                         $container->get(OrganizationService::class),
-                        $container->get('OrganizationLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

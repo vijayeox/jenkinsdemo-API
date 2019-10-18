@@ -7,7 +7,6 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
-use Zend\Log\Logger;
 use Exception;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FileUtils;
@@ -33,9 +32,9 @@ class AppService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService,$organizationService,Logger $log)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService,$organizationService)
     {
-        parent::__construct($config, $dbAdapter,$log);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->workflowService = $workflowService;
         $this->formService = $formService;
@@ -61,7 +60,7 @@ class AppService extends AbstractService
             $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
             return $resultSet;
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -75,7 +74,7 @@ class AppService extends AbstractService
             $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
             return $resultSet;
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -98,7 +97,7 @@ class AppService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         if($returnForm === true)
@@ -260,7 +259,7 @@ class AppService extends AbstractService
             }
             return $appdata['uuid'];
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -382,7 +381,7 @@ class AppService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             $this->rollback();
             throw $e;
         }
@@ -411,7 +410,7 @@ class AppService extends AbstractService
                 return 0;
             }
         } catch (Exception $e) {
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             $this->rollback();
             throw $e;
         }
@@ -442,7 +441,7 @@ class AppService extends AbstractService
         try {
             $id = $this->deployAppForOrg($formData);
         } catch (ValidationException $e) {
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $id;
@@ -470,7 +469,7 @@ class AppService extends AbstractService
         try {
             $count = $this->formService->createForm($formData);
         } catch (ValidationException $e) {
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $count;
@@ -576,7 +575,7 @@ class AppService extends AbstractService
             $this->commit();
         } catch(Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return 1;
@@ -590,7 +589,7 @@ class AppService extends AbstractService
             $app = $this->table->getByName($data['app_name']);
             return $this->createAppRegistry($app->uuid, $data['orgId']);
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
 

@@ -36,8 +36,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\SearchController::class => function ($container) {
                     return new Controller\SearchController(
-                        $container->get(\Oxzion\Search\SearchEngine::class),
-                        $container->get('SearchLogger')
+                        $container->get(\Oxzion\Search\SearchEngine::class)
                     );
                 },
             ],

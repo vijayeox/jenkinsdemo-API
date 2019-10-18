@@ -43,8 +43,7 @@ class Module implements ConfigProviderInterface
                         $container->get(\Oxzion\Service\FileService::class),
                         $container->get(\Oxzion\Service\UserService::class),
                         $container->get(\Oxzion\Service\WorkflowService::class),
-                        $container->get(\Oxzion\Workflow\WorkflowFactory::class),
-                        $container->get('WorkflowInstanceLogger')
+                        $container->get(\Oxzion\Workflow\WorkflowFactory::class)
                     );
                 },
                 Service\ActivityInstanceService::class => function ($container) {
@@ -54,13 +53,12 @@ class Module implements ConfigProviderInterface
                         $dbAdapter,
                         $container->get(Model\ActivityInstanceTable::class),
                         $container->get(Service\WorkflowInstanceService::class),
-                        $container->get(\Oxzion\Workflow\WorkflowFactory::class),
-                        $container->get('ActivityInstanceLogger')
+                        $container->get(\Oxzion\Workflow\WorkflowFactory::class)
                     );
                 },
                 Service\ServiceTaskService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\ServiceTaskService($container->get('config'), $dbAdapter, $container->get('ServiceTaskLogger'), $container->get(TemplateService::class),$container->get(\Oxzion\AppDelegate\AppDelegateService::class));
+                    return new Service\ServiceTaskService($container->get('config'), $dbAdapter, $container->get(TemplateService::class),$container->get(\Oxzion\AppDelegate\AppDelegateService::class));
                 },
                 Model\WorkflowInstanceTable::class => function ($container) {
                     $tableGateway = $container->get(Model\WorkflowInstanceTableGateway::class);
@@ -95,7 +93,6 @@ class Module implements ConfigProviderInterface
                         $container->get(Model\WorkflowInstanceTable::class),
                         $container->get(Service\WorkflowInstanceService::class),
                         $container->get(WorkflowService::class),
-                        $container->get('WorkflowInstanceLogger'),
                         $container->get(Service\ActivityInstanceService::class),
                         $container->get(AdapterInterface::class)
                     );
@@ -104,21 +101,18 @@ class Module implements ConfigProviderInterface
                     return new Controller\WorkflowInstanceCallbackController(
                         $container->get(Model\WorkflowInstanceTable::class),
                         $container->get(Service\WorkflowInstanceService::class),
-                        $container->get('WorkflowInstanceLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
                 Controller\ActivityInstanceController::class => function ($container) {
                     return new Controller\ActivityInstanceController(
-                        $container->get(Service\ActivityInstanceService::class),
-                        $container->get('ActivityInstanceLogger')
+                        $container->get(Service\ActivityInstanceService::class)
                     );
                 },
                 Controller\ServiceTaskController::class => function ($container) {
                     return new Controller\ServiceTaskController(
                         $container->get(Service\ServiceTaskService::class),
-                        $container->get(Service\WorkflowInstanceService::class),
-                        $container->get('ServiceTaskLogger')
+                        $container->get(Service\WorkflowInstanceService::class)
                     );
                 },
             ],

@@ -61,7 +61,6 @@ class Module implements ConfigProviderInterface
                         $container->get(Adapter\LoginAdapter::class),
                         $container->get(ApiAdapter::class),
                         $container->get(UserService::class),
-                        $container->get('AuthLogger'),
                         $container->get(UserTokenService::class),
                         $container->get(Service\AuthService::class)
                     );

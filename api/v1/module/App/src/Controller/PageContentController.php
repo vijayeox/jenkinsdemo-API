@@ -4,7 +4,6 @@ namespace App\Controller;
 /**
 * PageContent Api
 */
-use Zend\Log\Logger;
 use App\Model\PageContent;
 use App\Model\PageContentTable;
 use App\Service\PageContentService;
@@ -18,9 +17,9 @@ class PageContentController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(PageContentTable $table, PageContentService $pageContentService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(PageContentTable $table, PageContentService $pageContentService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, PageContent::class);
+        parent::__construct($table, PageContent::class);
         $this->setIdentifierName('pageContentId');
         $this->pageContentService = $pageContentService;
     }

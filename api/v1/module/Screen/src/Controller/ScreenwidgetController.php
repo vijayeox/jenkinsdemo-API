@@ -1,7 +1,6 @@
 <?php
 namespace Screen\Controller;
 
-use Zend\Log\Logger;
 use Screen\Model\Screenwidget;
 use Screen\Model\ScreenwidgetTable;
 use Screen\Service\ScreenwidgetService;
@@ -23,9 +22,9 @@ class ScreenwidgetController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(ScreenwidgetTable $table, ScreenwidgetService $screenwidgetService, Logger $log)
+    public function __construct(ScreenwidgetTable $table, ScreenwidgetService $screenwidgetService)
     {
-        parent::__construct($table, $log, __CLASS__, Screenwidget::class);
+        parent::__construct($table, Screenwidget::class);
         $this->screenwidgetService=$screenwidgetService;
         $this->setIdentifierName('id');
     }

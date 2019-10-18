@@ -8,19 +8,14 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
-use Exception;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
 use Oxzion\ServiceException;
+use Exception;
 
 class FieldService extends AbstractService
 {
     public function __construct($config, $dbAdapter, FieldTable $table)
     {
-        $logger = new Logger();
-        $writer = new Stream(__DIR__ . '/../../../../logs/field.log');
-        $logger->addWriter($writer);
-        parent::__construct($config, $dbAdapter,$logger);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
     public function saveField($appUUId, &$data)
@@ -56,18 +51,9 @@ class FieldService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
-            switch (get_class($e)) {
-                case "Oxzion\ValidationException":
-                $this->rollback();
-                $this->logger->log(Logger::ERR, $e->getMessage());
-                throw $e;
-                break;
-                default:
-                $this->rollback();
-                $this->logger->log(Logger::ERR, $e->getMessage());
-                throw $e;
-                break;
-            }
+            $this->logger->error($e->getMessage(), $e);
+            $this->rollback();
+            throw $e;
         }
         return $count;
     }
@@ -97,7 +83,7 @@ class FieldService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $count;
@@ -126,7 +112,7 @@ class FieldService extends AbstractService
             }
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         
@@ -145,7 +131,7 @@ class FieldService extends AbstractService
             $response['data'] = $resultSet->toArray();
             return $response;
         }catch(Exception $e){
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -164,7 +150,7 @@ class FieldService extends AbstractService
             }
             return $resultSet[0];
         }catch(Exception $e){
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }

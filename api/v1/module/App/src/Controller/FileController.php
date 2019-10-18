@@ -4,7 +4,6 @@ namespace App\Controller;
 /**
 * File Api
 */
-use Zend\Log\Logger;
 use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
 use Oxzion\Service\FileService;
@@ -21,9 +20,9 @@ class FileController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(FileTable $table, fileService $fileService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(FileTable $table, fileService $fileService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, File::class);
+        parent::__construct($table, File::class);
         $this->setIdentifierName('id');
         $this->fileService = $fileService;
     }

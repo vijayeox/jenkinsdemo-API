@@ -60,7 +60,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\AnnouncementController(
                         $container->get(Model\AnnouncementTable::class),
                         $container->get(Service\AnnouncementService::class),
-                        $container->get('AnnouncementLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

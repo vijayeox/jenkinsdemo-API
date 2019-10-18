@@ -9,8 +9,6 @@ use Zend\Db\Table;
 use Oxzion\Utils\FileUtils;
 use PHPSQLParser\PHPSQLParser;
 use PHPSQLParser\PHPSQLCreator;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Zend\Db\Adapter\ParameterContainer;
@@ -33,10 +31,7 @@ class Persistence extends AbstractService
         $dbConfig['dsn'] = 'mysql:dbname=' . $this->database . ';host=' . $dbConfig['host'] . ';charset=utf8;username=' . $dbConfig["username"] . ';password=' . $dbConfig["password"] . '';
         $dbConfig['database'] = $this->database;
         $adapter = new Adapter($dbConfig);
-        $logger = new Logger();
-        $writer = new Stream(__DIR__ . '/../../../../../logs/Persistence.log');
-        $logger->addWriter($writer);
-        parent::__construct($config, $adapter, $logger);
+        parent::__construct($config, $adapter);
     }
 
     //this method is used only for phpunit tests. Not required to be called otherwise

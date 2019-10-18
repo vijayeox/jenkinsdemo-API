@@ -12,7 +12,6 @@ use Oxzion\Service\WorkflowService;
 use Oxzion\Service\FileService;
 use Oxzion\Workflow\WorkFlowFactory;
 use Oxzion\Utils\FilterUtils;
-use Zend\Log\Logger;
 use Exception;
 use Oxzion\Service\UserService;
 
@@ -23,8 +22,7 @@ class WorkflowInstanceService extends AbstractService
     protected $processEngine;
     protected $userService;
     protected $activityEngine;
-    private $log;
-
+    
     public function __construct(
         $config,
         $dbAdapter,
@@ -32,14 +30,12 @@ class WorkflowInstanceService extends AbstractService
         FileService $fileService,
         UserService $userService,
         WorkflowService $workflowService,
-        WorkflowFactory $workflowFactory,
-        Logger $log
+        WorkflowFactory $workflowFactory
     ) {
-        parent::__construct($config, $dbAdapter, $log);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->fileService = $fileService;
         $this->workflowService = $workflowService;
-        $this->log = $log;
         $this->workFlowFactory = $workflowFactory;
         $this->processEngine = $this->workFlowFactory->getProcessEngine();
         $this->activityEngine = $this->workFlowFactory->getActivity();
@@ -113,7 +109,7 @@ class WorkflowInstanceService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->log->err($e);
+            $this->logger->error($e->getMessage(), $e);
             return 0;
         }
         return $count;
@@ -133,7 +129,7 @@ class WorkflowInstanceService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->log->err($e);
+            $this->logger->error($e->getMessage(), $e);
         }
         
         return $count;
@@ -148,7 +144,7 @@ class WorkflowInstanceService extends AbstractService
             return $resultSet;
         }
         catch (Exception $e) {
-            $this->log->err($e);
+            $this->logger->error($e->getMessage(), $e);
             return 0;
         }
 
@@ -162,7 +158,7 @@ class WorkflowInstanceService extends AbstractService
             return $resultSet;
         }
         catch (Exception $e) {
-            $this->log->err($e);
+            $this->logger->error($e->getMessage(), $e);
             return 0;
         }
     }
@@ -207,9 +203,9 @@ class WorkflowInstanceService extends AbstractService
                     return 0;
                 }
             }
-            catch (Exception $e) { 
-                $this->log->err($e);
-                throw $e;
+            catch (Exception $e) {
+                $this->logger->error($e->getMessage(), $e);
+                return 0;
             }
         
         }
@@ -247,7 +243,7 @@ class WorkflowInstanceService extends AbstractService
                         $this->setupIdentityField($params);
                         $this->commit();
                     } catch (Exception $e) {
-                        $this->log->info(ActivityInstanceService::class."Workflow Instance Entry Failed".$e->getMessage());
+                        $this->logger->info("Workflow Instance Entry Failed".$e->getMessage());
                         $this->rollback();
                         return 0;
                     }
@@ -261,7 +257,7 @@ class WorkflowInstanceService extends AbstractService
                     $existingFile = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
                     if(isset($existingFile[0])){
                         $file = $this->fileService->updateFile($params, $existingFile[0]['uuid']);
-                        $this->log->info("Update file result - $file \n");
+                        $this->logger->info("Update file result - $file \n");
                         $workflowInstanceId = $this->activityEngine->submitTaskForm($activityId, $params);
                         if($workflowInstanceId != 0){
                             return $params;
@@ -272,7 +268,7 @@ class WorkflowInstanceService extends AbstractService
                         return 0;
                     }
                 }
-                $this->log->info("Completed the executeWorkflow with the result - $file \n");
+                $this->logger->info("Completed the executeWorkflow with the result - $file \n");
                 return $file;
             } else {
                 return 0;
@@ -295,7 +291,7 @@ class WorkflowInstanceService extends AbstractService
                 $resultSet = $this->executeQueryWithBindParameters($query,$queryParams);
                 $this->commit();
             }catch (Exception $e) { 
-                $this->log->err($e);
+                $this->logger->error($e->getMessage(), $e);
                 $this->rollback();
                 throw $e;
             }
@@ -310,7 +306,7 @@ class WorkflowInstanceService extends AbstractService
             $this->commit();
             return $update->getAffectedRows();
         } catch (Exception $e) {
-            $this->log->info(ActivityInstanceService::class."Workflow Instance Entry Failed".$e->getMessage());
+            $this->logger->info("Workflow Instance Entry Failed".$e->getMessage());
             $this->rollback();
             return 0;
         }
@@ -371,8 +367,8 @@ class WorkflowInstanceService extends AbstractService
                 $data['id'] = $id;
             } catch (Exception $e) {
                 $this->rollback();
-                $this->log->err($e);
-                throw $e;
+                $this->logger->error($e->getMessage(), $e);
+                return 0;
             }
             return $data;
         }
@@ -491,7 +487,7 @@ class WorkflowInstanceService extends AbstractService
             return $selectResultSet;
         }
         catch(Exception $e) {
-            $this->log->err($e);
+            $this->logger->error($e->getMessage(), $e);
             return 0;
         }
     }

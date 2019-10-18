@@ -4,7 +4,6 @@ namespace App\Controller;
 /**
 * Field Api
 */
-use Zend\Log\Logger;
 use Oxzion\Model\Field;
 use Oxzion\Model\FieldTable;
 use Oxzion\Service\FieldService;
@@ -26,9 +25,9 @@ class FieldController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(FieldTable $table, FieldService $fieldService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(FieldTable $table, FieldService $fieldService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Field::class);
+        parent::__construct($table, Field::class);
         $this->setIdentifierName('id');
         $this->fieldService = $fieldService;
     }

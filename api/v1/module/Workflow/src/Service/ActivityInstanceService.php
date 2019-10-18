@@ -12,7 +12,6 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
-use Zend\Log\Logger;
 use Exception;
 
 class ActivityInstanceService extends AbstractService
@@ -28,9 +27,9 @@ class ActivityInstanceService extends AbstractService
     */
 
     public function __construct($config, $dbAdapter, ActivityInstanceTable $table,WorkflowInstanceService $workflowInstanceService,
-        WorkflowFactory $workflowFactory, Logger $log)
+        WorkflowFactory $workflowFactory)
     {
-        parent::__construct($config, $dbAdapter, $log);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->workflowInstanceService = $workflowInstanceService;
         $this->workFlowFactory = $workflowFactory;
@@ -131,7 +130,7 @@ class ActivityInstanceService extends AbstractService
                 $update = $this->executeQuerywithBindParameters($updateQuery,$updateParams);
                 $this->commit();
             } catch (Exception $e) {
-                $this->logger->info(ActivityInstanceService::class."Creation of Activity Instance Entry Failed".$e->getMessage());
+                $this->logger->info("Creation of Activity Instance Entry Failed".$e->getMessage());
                 $this->rollback();
                 throw $e;
             }
@@ -238,9 +237,8 @@ class ActivityInstanceService extends AbstractService
                 }
             }
             $this->commit();
-        } catch (Exception $e) { 
-            // print_r($e->getMessage());exit;
-            $this->logger->info(ActivityInstanceService::class."Creation of Activity Instance Entry Failed".$e->getMessage());
+        } catch (Exception $e) {
+            $this->logger->info("Creation of Activity Instance Entry Failed".$e->getMessage());
             $this->rollback();
             throw $e;
         }
@@ -260,8 +258,8 @@ class ActivityInstanceService extends AbstractService
                 return 0;
             }
         } catch(Exception $e){
-            $this->logger->info(ActivityInstanceService::class."Complete Activity Instance - WorkflowInstance Does not Exist ".$e->getMessage());
-            throw $e;
+            $this->logger->info("Complete Activity Instance - WorkflowInstance Does not Exist ".$e->getMessage());
+            return 0;
         }
         // Org Id from workflow instance based on the Id
         if(isset($data['processVariables'])){
@@ -307,7 +305,7 @@ class ActivityInstanceService extends AbstractService
                 $this->commit();
                 return $activityInstance;                
             } catch (Exception $e) {
-                $this->logger->info(ActivityInstanceService::class."Completion of Activity Instance Entry Failed".$e->getMessage());
+                $this->logger->info("Completion of Activity Instance Entry Failed".$e->getMessage());
                 $this->rollback();
                 return $e;
             }

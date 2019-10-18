@@ -1,7 +1,6 @@
 <?php
 namespace Group\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
 use Group\Service\GroupService;
 use Zend\Db\Adapter\AdapterInterface;
@@ -19,7 +18,7 @@ class GroupLogoController extends AbstractApiControllerHelper
     /**
     * @ignore __construct
     */
-    public function __construct(GroupService $groupService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(GroupService $groupService, AdapterInterface $dbAdapter)
     {
         $this->setIdentifierName('groupId');
         $this->groupService = $groupService;
@@ -50,7 +49,7 @@ class GroupLogoController extends AbstractApiControllerHelper
             $this->response->setStatusCode(200);
             return $this->response;
         } catch (Exception $e) {
-            print_r($e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             return $this->getErrorResponse("Group Logo not found", 404);
         }
     }
