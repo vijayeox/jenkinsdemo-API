@@ -196,58 +196,58 @@ ox_workflow_instance:
 ox_file_attribute:
   -
     id: 1
-    fileid: 1
+    file_id: 1
     org_id: 1
-    fieldvalue: 1
-    fieldid: 1
+    field_value: 1
+    field_id: 1
   -
     id: 2
-    fileid: 1
+    file_id: 1
     org_id: 1
-    fieldvalue: 1
-    fieldid: 2
+    field_value: 1
+    field_id: 2
   -
     id: 3
-    fileid: 1
+    file_id: 1
     org_id: 1
-    fieldvalue: 2
-    fieldid: 2
+    field_value: 2
+    field_id: 2
   -
     id: 4
-    fileid: 2
+    file_id: 2
     org_id: 1
-    fieldvalue: 2
-    fieldid: 2
+    field_value: 2
+    field_id: 2
   -
     id: 5
-    fileid: 3
+    file_id: 3
     org_id: 1
-    fieldvalue: "2030-06-20"
-    fieldid: 3
+    field_value: "2030-06-20"
+    field_id: 3
   -
     id: 6
-    fileid: 4
+    file_id: 4
     org_id: 1
-    fieldvalue: "2030-06-20"
-    fieldid: 3
+    field_value: "2030-06-20"
+    field_id: 3
   -
     id: 7
-    fileid: 4
+    file_id: 4
     org_id: 1
-    fieldvalue: 32552
-    fieldid: 4
+    field_value: 32552
+    field_id: 4
   -
     id: 8
-    fileid: 1
+    file_id: 1
     org_id: 1
-    fieldvalue: "Filename.php"
-    fieldid: 5
+    field_value: "Filename.php"
+    field_id: 5
   -
     id: 9
-    fileid: 1
+    file_id: 1
     org_id: 1
-    fieldvalue: "File2.php"
-    fieldid: 6
+    field_value: "File2.php"
+    field_id: 6
 ox_app_menu:
   -
     id: 1
@@ -318,7 +318,7 @@ ox_activity_instance_assignee:
 ox_wf_user_identifier:		
   -		
     id: 1		
-    workflow_id: 1		
+    workflow_instance_id: 1		
     user_id: 1		
     identifier_name: "padi_number"		
     identifier:  32552 
