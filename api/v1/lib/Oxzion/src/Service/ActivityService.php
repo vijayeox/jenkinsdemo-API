@@ -60,7 +60,7 @@ class ActivityService extends AbstractService
                 break;
              default:
                 $this->rollback();
-                return 0;
+                throw $e;
                 break;
             }
         }
@@ -96,7 +96,7 @@ class ActivityService extends AbstractService
                 break;
              default:
                 $this->rollback();
-                return 0;
+                throw $e;
                 break;
             }
         }
@@ -116,6 +116,7 @@ class ActivityService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
+            throw $e;
         }
         
         return $count;

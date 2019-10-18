@@ -59,7 +59,7 @@ class CommentService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -86,7 +86,7 @@ class CommentService extends AbstractService
             }
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -114,7 +114,7 @@ class CommentService extends AbstractService
             }
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }

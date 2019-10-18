@@ -11,6 +11,7 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Security\SecurityManager;
 use Oxzion\AccessDeniedException;
 use Oxzion\ServiceException;
+use Exception;
 
 
 class AddressService extends AbstractService
