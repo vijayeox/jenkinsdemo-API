@@ -45,7 +45,6 @@ class FileServiceTest extends ServiceTest
         $fileService = new FileService($this->getApplicationConfig(), $this->getDbAdapter(), $this->table, $this->form);
         $content = $fileService->checkFollowUpFiles($appId, $data);
         // print_r($content);exit;
-        // the salt value comes from refresh token test data
         $this->assertEquals($data['app_id'], $content[0]['app_id']);
     }
 }
