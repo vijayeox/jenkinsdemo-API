@@ -10,6 +10,7 @@ use Oxzion\ValidationException;
 use Oxzion\Utils\FilterUtils;
 use Ramsey\Uuid\Uuid;
 use Exception;
+use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
 class WidgetService extends AbstractService
 {
@@ -131,7 +132,8 @@ class WidgetService extends AbstractService
             //Widget configuration value from database is a JSON string. Convert it to object and overwrite JSON string value.
             $response['widget']['configuration'] = json_decode($resultSet[0]["configuration"]);
         }
-        catch(Exception $e) {
+        catch (ZendDbException $e) {
+            $this->logger->err('Database exception occurred.');
             $this->logger->err($e);
             return 0;
         }
@@ -140,7 +142,7 @@ class WidgetService extends AbstractService
 
     public function getWidget($uuid,$params)
     {
-        $query = "select w.uuid, w.ispublic, w.created_by, w.date_created, w.name, w.configuration, if(w.created_by=:created_by, true, false) as is_owner, v.renderer, v.type from ox_widget w join ox_visualization v on w.visualization_id=v.id where w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid and (w.ispublic=true or w.created_by=:created_by)";
+        $query = "select w.uuid, w.ispublic, w.created_by, w.date_created, w.name, w.configuration, if(w.created_by=:created_by, true, false) as is_owner, q.uuid as query_uuid, v.renderer, v.type from ox_widget w join ox_visualization v on w.visualization_id=v.id join ox_query q on w.query_id=q.id where w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid and (w.ispublic=true or w.created_by=:created_by)";
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -157,7 +159,8 @@ class WidgetService extends AbstractService
             //Widget configuration value from database is a JSON string. Convert it to object and overwrite JSON string value.
             $response['widget']['configuration'] = json_decode($resultSet[0]["configuration"]);
         }
-        catch(Exception $e) {
+        catch (ZendDbException $e) {
+            $this->logger->err('Database exception occurred.');
             $this->logger->err($e);
             return 0;
         }

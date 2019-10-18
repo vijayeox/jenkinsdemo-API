@@ -49,6 +49,8 @@ class DashboardService extends AbstractService
             return $newDashboardUuid;
         }
         catch (ZendDbException $e) {
+            $this->logger->err('Database exception occurred.');
+            $this->logger->err($e);
             try {
                 $this->rollback();
             }
@@ -56,8 +58,6 @@ class DashboardService extends AbstractService
                 $this->logger->err('Database exception occurred when rolling back transaction.');
                 $this->logger->err($ee);
             }
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
             return 0;
         }
     }
@@ -121,6 +121,8 @@ class DashboardService extends AbstractService
             }
         }
         catch(ZendDbException $e) {
+            $this->logger->err('Database exception occurred.');
+            $this->logger->err($e);
             try {
                 $this->rollback();
             }
@@ -128,8 +130,6 @@ class DashboardService extends AbstractService
                 $this->logger->err('Database exception occurred when rolling back transaction.');
                 $this->logger->err($ee);
             }
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
             return 0;
         }
     }
@@ -150,6 +150,8 @@ class DashboardService extends AbstractService
             return $result;
         }
         catch (ZendDbException $e) {
+            $this->logger->err('Database exception occurred.');
+            $this->logger->err($e);
             try {
                 $this->rollback();
             }
@@ -157,8 +159,6 @@ class DashboardService extends AbstractService
                 $this->logger->err('Database exception occurred when rolling back transaction.');
                 $this->logger->err($ee);
             }
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
             return 0;
         }
     }
