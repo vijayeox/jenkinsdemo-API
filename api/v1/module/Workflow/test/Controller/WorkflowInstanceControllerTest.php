@@ -309,7 +309,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id']>0, true);
+        $this->assertEquals(count($content['data'])>0, true);
     }
     public function testGetActivityInstanceNotFound()
     {

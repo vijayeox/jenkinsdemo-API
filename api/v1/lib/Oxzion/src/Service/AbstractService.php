@@ -5,6 +5,7 @@ use Zend\Db\Sql\Expression;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\ParameterContainer;
 use Oxzion\Utils\StringUtils;
+use Exception;
 
 abstract class AbstractService extends AbstractBaseService
 {
@@ -134,7 +135,7 @@ abstract class AbstractService extends AbstractBaseService
             }
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -225,6 +226,7 @@ abstract class AbstractService extends AbstractBaseService
 
     public function multiInsertOrUpdate($tableName, array $data, array $excludedColumns = array())
     {
+        $this->logger->info("Entering into multiInsertOrUpdate method");
         $sqlStringTemplate = 'INSERT INTO %s (%s) VALUES %s ON DUPLICATE KEY UPDATE %s';
         $adapter = $this->getAdapter();
         $driver = $adapter->getDriver();
@@ -238,6 +240,7 @@ abstract class AbstractService extends AbstractBaseService
                 $updateQuotedValue[] = ($platform->quoteIdentifier($column)) . '=' . ('VALUES(' . ($platform->quoteIdentifier($column)) . ')');
             }
         }
+        $this->logger->info("Update quted val -".print_r($updateQuotedValue));
         /* Preparation insert data */
         $insertQuotedValue = [];
         $insertQuotedColumns = [];
@@ -254,7 +257,11 @@ abstract class AbstractService extends AbstractBaseService
             $insertQuotedValue[] = '(' . implode(',', $oneValueData) . ')';
         }
         /* Preparation sql query */
+        $this->logger->info("Insert quted val -".print_r($insertQuotedValue));
+        $this->logger->info("Insert quted columns -".print_r($insertQuotedColumns));
+        $this->logger->info("Paramertrs con -".print_r($parameterContainer->getNamedArray()));
         $query = sprintf($sqlStringTemplate, $tableName, implode(',', $insertQuotedColumns), implode(',', array_values($insertQuotedValue)), implode(',', array_values($updateQuotedValue)));
+        $this->logger->info("Prepared SQL query - $query");
         $statementContainer->setSql($query);
         return $statementContainer->execute();
     }

@@ -41,6 +41,7 @@ class Module implements ConfigProviderInterface
                         $dbAdapter,
                         $container->get(Model\WorkflowInstanceTable::class),
                         $container->get(\Oxzion\Service\FileService::class),
+                        $container->get(\Oxzion\Service\UserService::class),
                         $container->get(\Oxzion\Service\WorkflowService::class),
                         $container->get(\Oxzion\Workflow\WorkflowFactory::class),
                         $container->get('WorkflowInstanceLogger')

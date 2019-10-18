@@ -87,8 +87,9 @@ class AppDelegateService extends AbstractService
     }
 
     private function updateOrganizationContext($data){
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        $orgId = AuthContext::get(AuthConstants::ORG_UUID);
         if(!$orgId && isset($data['orgId'])){
+            AuthContext::put(AuthConstants::ORG_UUID, $data['orgId']);
             $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
             AuthContext::put(AuthConstants::ORG_ID, $orgId);
         }

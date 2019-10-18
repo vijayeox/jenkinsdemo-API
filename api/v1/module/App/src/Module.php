@@ -101,7 +101,10 @@ class Module implements ConfigProviderInterface
                 },
                 Service\PageContentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PageContentService($container->get('config'), $dbAdapter, $container->get(Model\PageContentTable::class),$container->get('PageLogger'));
+                    return new Service\PageContentService($container->get('config'), 
+                    $dbAdapter, 
+                    $container->get(Model\PageContentTable::class),
+                    $container->get('PageLogger'));
                 },
                 Model\PageContentTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PageContentTableGateway::class);

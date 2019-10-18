@@ -93,7 +93,7 @@ class WorkflowService extends AbstractService
                 $this->saveWorkflow($appId, $data);
                 $workflow = $data;
             } catch (Exception $e) {
-                return 0;
+                throw $e;
             }
             $workFlowId = $data['id'];
         } else {
@@ -476,10 +476,13 @@ class WorkflowService extends AbstractService
                       INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
                       INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_id = ox_workflow.id
                       INNER JOIN ox_activity on ox_activity.workflow_id = ox_workflow.id
-                      INNER JOIN ox_activity_instance ON ox_activity_instance.activity_id = ox_activity.id
-                      INNER JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
+                      INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id
+                      LEFT JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
                       LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id";
-        $whereQuery = " WHERE (ox_user_group.avatar_id = $userId OR ox_activity_instance_assignee.user_id = $userId) AND $appFilter AND ox_activity_instance.status = 'In Progress'";                      
+        $whereQuery = " WHERE (ox_user_group.avatar_id = $userId 
+                                OR ox_activity_instance_assignee.user_id = $userId 
+                                OR ox_activity_instance_assignee.group_id is null) 
+                            AND $appFilter AND ox_activity_instance.status = 'In Progress'";                      
         if(!empty($sort)){
             $sort = " ORDER BY ".$sort;
         }
@@ -492,8 +495,8 @@ class WorkflowService extends AbstractService
         $querySet = "SELECT distinct ox_workflow.name as workflow_name,
         ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId,
          ox_activity.name as activityName,
-        CASE WHEN ox_activity_instance_assignee.group_id is null then false
-        else true end as to_be_claimed  $fromQuery $whereQuery $sort $pageSize $offset";   
+        CASE WHEN ox_activity_instance_assignee.user_id is not null then false
+        else true end as to_be_claimed  $fromQuery $whereQuery $sort $pageSize $offset";
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
         return array('data' => $resultSet,'total' => $countResultSet[0]['count']);
     }
