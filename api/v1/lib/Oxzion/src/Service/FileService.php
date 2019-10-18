@@ -310,8 +310,8 @@ class FileService extends AbstractService
         foreach ($fieldList as $key => $val) {
             $tablePrefix = "tblf" . $prefix;
             $fieldId = $this->getFieldDetaild($key, $data['entity_id']);
-            $joinQuery .= "left join ox_file_attribute as " . $tablePrefix . " on (a.id =". $tablePrefix . ".fileid) ";
-            $whereQuery .= $tablePrefix . ".fieldid =" . $fieldId['id'] . " and " . $tablePrefix . ".fieldvalue ='" . $val . "' and ";
+            $joinQuery .= "left join ox_file_attribute as " . $tablePrefix . " on (a.id =". $tablePrefix . ".file_id) ";
+            $whereQuery .= $tablePrefix . ".field_id =" . $fieldId['id'] . " and " . $tablePrefix . ".field_value ='" . $val . "' and ";
             $prefix += 1;
         }
         $whereQuery .= '1';
