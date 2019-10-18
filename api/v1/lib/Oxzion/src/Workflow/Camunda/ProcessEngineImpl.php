@@ -3,6 +3,7 @@ namespace Oxzion\Workflow\Camunda;
 
 use Oxzion\Workflow\ProcessEngine;
 use Oxzion\Utils\RestClient;
+use Exception;
 
 class ProcessEngineImpl implements ProcessEngine
 {
@@ -24,7 +25,7 @@ class ProcessEngineImpl implements ProcessEngine
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
 
@@ -47,8 +48,9 @@ class ProcessEngineImpl implements ProcessEngine
             } else {
                 return 0;
             }
-        } catch (Exception $e) {
-            return 0;
+        } catch (Exception $e) { 
+            print_r($e->getMessage());exit;
+            throw $e;
         }
     }
 

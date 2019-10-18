@@ -6,6 +6,7 @@ use Oxzion\Utils\RestClient;
 use Sabre\Xml\Service;
 use Oxzion\Service\FormService;
 use Oxzion\Utils\XMLUtils;
+use Exception;
 
 class ProcessManagerImpl implements ProcessManager
 {
@@ -121,7 +122,7 @@ class ProcessManagerImpl implements ProcessManager
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
 }

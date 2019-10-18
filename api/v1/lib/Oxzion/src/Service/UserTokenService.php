@@ -46,7 +46,7 @@ class UserTokenService extends AbstractService
                 }
             }
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
     public static function getRefreshTokenPayload()

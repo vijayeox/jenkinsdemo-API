@@ -79,7 +79,7 @@ class PrivilegeService extends AbstractService
             $appId = array_unique(array_column($appIdArray, 'app_id'));
             return $appId;
         } catch (ValidationException $e) {
-            return 0;
+            throw $e;
         }
     }
 
