@@ -17,7 +17,21 @@ ox_payment:
   -
     id: 1
     app_id: 99
-    payment_client: "convergepay"
+    org_id: 1
+    payment_client: "ConvergePay"
     api_url: "https://demo.convergepay.com/hosted-payments/transaction_token"
     server_instance_name: "DEMO"
     payment_config: '{"merchant_id": "011454","user_id": "webpage","pincode": "DT808D" }'
+  -
+    id: 2
+    app_id: 100
+    org_id: 1
+    payment_client: "SomePay"
+    api_url: "https://demo.convergepay.com/hosted-payments/transaction_token"
+    server_instance_name: "DEMO"
+    payment_config: '{"merchant_id": "011454","user_id": "webpage","pincode": "DT808D" }'
+ox_payment_transaction:
+  -
+    id: 1
+    payment_id: 1
+    data: "{'something':'cool'}"

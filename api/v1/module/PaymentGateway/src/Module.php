@@ -10,6 +10,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
+use Oxzion\Service\PaymentService;
 
 class Module implements ConfigProviderInterface
 {
@@ -32,9 +33,9 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Service\PaymentService::class => function ($container) {
+                PaymentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PaymentService($container->get('config'), $dbAdapter, $container->get(Model\PaymentTable::class));
+                    return new PaymentService($container->get('config'), $dbAdapter, $container->get(Model\PaymentTable::class), $container->get(Model\PaymentTransactionTable::class));
                 },
                 Model\PaymentTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PaymentTableGateway::class);
@@ -45,6 +46,16 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Payment());
                     return new TableGateway('ox_payment', $dbAdapter, null, $resultSetPrototype);
+                },
+                Model\PaymentTransactionTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\PaymentTransactionTableGateway::class);
+                    return new Model\PaymentTransactionTable($tableGateway);
+                },
+                Model\PaymentTransactionTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Payment());
+                    return new TableGateway('ox_payment_transaction', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];
@@ -57,7 +68,7 @@ class Module implements ConfigProviderInterface
                 Controller\PaymentGatewayController::class => function ($container) {
                     return new Controller\PaymentGatewayController(
                         $container->get(Model\PaymentTable::class),
-                        $container->get(Service\PaymentService::class),
+                        $container->get(PaymentService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

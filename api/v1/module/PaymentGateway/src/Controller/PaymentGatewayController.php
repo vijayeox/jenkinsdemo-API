@@ -8,8 +8,9 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use PaymentGateway\Model\Payment;
 use PaymentGateway\Model\PaymentTable;
-use PaymentGateway\Service\PaymentService;
+use Oxzion\Service\PaymentService;
 use Zend\Db\Adapter\AdapterInterface;
+use Oxzion\ServiceException;
 
 class PaymentGatewayController extends AbstractApiController
 {
@@ -103,11 +104,28 @@ class PaymentGatewayController extends AbstractApiController
     { 
         $appId = $this->params()->fromRoute()['appId'];
         $data = $this->extractPostData();
-        $response = $this->paymentService->initiatePaymentProcess($appId,$data);
-        if (empty($response)) {
-            return $this->getErrorResponse("Payment Initialization Failed", 404, ['id' => $appId]);
+        try {
+            $response = $this->paymentService->initiatePaymentProcess($appId,$data);
+            if (empty($response)) {
+                return $this->getErrorResponse("Payment Initialization Failed", 404, ['id' => $appId]);
+            }
+            $response = $response;
+        } catch(Exception $e){
+            return $this->getErrorResponse("Payment Initialization Failed", 400, ['id' => $appId]);
+        } catch(ServiceException $e){
+            return $this->getErrorResponse("Payment Initialization Failed", 400, ['id' => $appId]);
         }
-        $response = array("token" =>$response);
+        return $this->getSuccessResponseWithData($response, 201);
+    }
+    public function updateTransactionStatusAction(){
+        $appId = $this->params()->fromRoute()['appId'];
+        $transactionId = $this->params()->fromRoute()['transactionId'];
+        $data = $this->extractPostData();
+        $response = $this->paymentService->processPayment($appId,$transactionId,$data);
+        if (empty($response)) {
+            return $this->getErrorResponse("Transaction Details Failed", 404, ['id' => $appId]);
+        }
+        $response = $response;
         return $this->getSuccessResponseWithData($response, 201);
     }
 }

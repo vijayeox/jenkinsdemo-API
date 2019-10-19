@@ -42,6 +42,20 @@ return [
                     ],
                 ],
             ],
+            'updatetransactionstatus' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/transaction/:transactionId/status',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\PaymentGatewayController::class,
+                        'method' => 'POST',
+                        'action' => 'updateTransactionStatus',
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [
