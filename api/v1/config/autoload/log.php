@@ -9,7 +9,7 @@
                 'loggers' => [
                     'ControllerLogger' => [
                         'level' => 'INFO',
-                        'appenders' => ['request']
+                        'appenders' => ['default']
                     ],
                     'OxzionLogger' => [
                         'level' => 'INFO',
@@ -29,19 +29,19 @@
                             'file' => __DIR__."/../../logs/application.log",
                             'append' => true
                         ]
-                    ],
-                    'request' => [
-                        'class' => 'LoggerAppenderDailyFile',
-                        'layout' => [
-                            'class' => 'LoggerLayoutPattern',
-                            'params' => [
-                                'conversionPattern' => '%date(d:m:Y H:i:s,u) [%pid] From:%server{REMOTE_ADDR}:%server{REMOTE_PORT} Request:[%request]%n%ex'
-                            ]
-                        ],
-                        'params' => [
-                            'file' => __DIR__."/../../logs/request.log",
-                            'append' => true
-                        ]
+                    // ],
+                    // 'request' => [
+                    //     'class' => 'LoggerAppenderDailyFile',
+                    //     'layout' => [
+                    //         'class' => 'LoggerLayoutPattern',
+                    //         'params' => [
+                    //             'conversionPattern' => '%date(d:m:Y H:i:s,u) [%pid] From:%server{REMOTE_ADDR}:%server{REMOTE_PORT} Request:[%request]%n%ex'
+                    //         ]
+                    //     ],
+                    //     'params' => [
+                    //         'file' => __DIR__."/../../logs/request.log",
+                    //         'append' => true
+                    //     ]
                     ]
                 ]
             ]
