@@ -23,7 +23,7 @@
             <directory>./module/Workflow/test</directory>
         </testsuite>
         <testsuite name="Core Fixtures">
-            <directory>./lib/Oxzion/test/Service</directory>
+            <directory>./lib/Oxzion/test</directory>
             <directory>./module/Mlet/test</directory>
         </testsuite>
         <testsuite name="Callback Fixtures">
