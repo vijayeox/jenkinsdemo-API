@@ -58,7 +58,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\ServiceTaskService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\ServiceTaskService($container->get('config'), $dbAdapter, $container->get(TemplateService::class),$container->get(\Oxzion\AppDelegate\AppDelegateService::class));
+                    return new Service\ServiceTaskService($container->get('config'), $dbAdapter, $container->get(TemplateService::class),$container->get(\Oxzion\AppDelegate\AppDelegateService::class),$container->get(\Oxzion\Service\FileService::class));
                 },
                 Model\WorkflowInstanceTable::class => function ($container) {
                     $tableGateway = $container->get(Model\WorkflowInstanceTableGateway::class);

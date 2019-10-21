@@ -1,12 +1,13 @@
 <?php
 namespace Oxzion\Service;
 
-use Exception;
-use Oxzion\Auth\AuthConstants;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
+use Oxzion\Model\File;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\ValidationException;
 use Oxzion\Utils\UuidUtil;
+use Exception;
 
 class FileService extends AbstractService
 {
@@ -99,13 +100,13 @@ class FileService extends AbstractService
      * @return array Returns a JSON Response with Status Code and Created File.
      */
     public function updateFile(&$data, $id)
-    {
+    { 
 
-        if (isset($data['workflow_instance_id'])) {
-            $select = "SELECT ox_file.* from ox_file
+        if(isset($data['workflow_instance_id'])){
+            $select = "SELECT ox_file.* from ox_file 
             where ox_file.workflow_instance_id=? ";
-            $whereQuery = array($data['workflow_instance_idk']);
-            $obj = $this->executeQueryWithBindParameters($select, $whereQuery)->toArray();
+            $whereQuery = array($data['workflow_instance_id']);
+            $obj = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray()[0];
             if (is_null($obj)) {
                 return 0;
             }
@@ -193,7 +194,7 @@ class FileService extends AbstractService
                 ->where($params);
             $response = $this->executeUpdate($update);
             return 1;
-        } catch (Exception $e) {print_r($e->getMessage());exit;
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
@@ -221,10 +222,9 @@ class FileService extends AbstractService
             throw $e;
         }
     }
-
     /**
-     * @ignore checkFields
-     */
+    * @ignore checkFields
+    */
     protected function checkFields($entityId, $fieldData, $fileId)
     {
         $this->logger->info("Entering into checkFields method");
@@ -254,7 +254,7 @@ class FileService extends AbstractService
                     $keyValueFields[$i]['id'] = $fileArray[$key]['id'];
                 } else {
                     // Insert the Record
-                    $keyValueFields[$i]['id'] = "";
+                    //$keyValueFields[$i]['id'] = "";
                 }
                 $keyValueFields[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
                 $keyValueFields[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
