@@ -10,6 +10,8 @@ use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Oxzion\Utils\FilterUtils;
 use Ramsey\Uuid\Uuid;
+use Oxzion\Analytics\Elastic\AnalyticsEngineImpl;
+
 use Exception;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 
@@ -17,11 +19,13 @@ class QueryService extends AbstractService
 {
 
     private $table;
+    private $datasourceService;
 
-    public function __construct($config, $dbAdapter, QueryTable $table, $logger)
+    public function __construct($config, $dbAdapter, QueryTable $table, $logger, $datasourceService)
     {
         parent::__construct($config, $dbAdapter, $logger);
         $this->table = $table;
+        $this->datasourceService = $datasourceService;
     }
 
     public function createQuery(&$data)
@@ -207,4 +211,36 @@ class QueryService extends AbstractService
         else
             return 0;
     }
+
+    public function executeAnalyticsQuery($uuid) {
+        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, q.isdeleted, d.uuid as datasource_uuid from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.uuid=:uuid';
+        $queryParams = [
+            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'uuid' => $uuid
+        ];
+        try {
+            $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+            if (count($resultSet) == 0) {
+                return 0;
+            }
+            $config = $resultSet[0]["configuration"];
+            $ds_uuid = $resultSet[0]['datasource_uuid'];
+            
+            $analyticsEngine = $this->datasourceService->getAnalyticsEngine($ds_uuid);
+            $parameters = json_decode($config,1);
+            $app_name = $parameters['app_name'];
+            if (isset($parameters['entity_name'])) {
+                $entity_name = $parameters['entity_name'];
+            } else {
+                $entity_name = null;
+            }
+            $result = $analyticsEngine->runQuery($app_name,$entity_name,$parameters);
+
+        } catch(Exception $e) {
+            return 0;
+        }
+
+        return $result;
+    }
+
 }

@@ -23,7 +23,7 @@ class DashboardService extends AbstractService
         $this->table = $table;
     }
 
-    public function createDashboard(&$data)
+    public function createDashboard($data)
     {
         $newDashboardUuid = Uuid::uuid4()->toString();
         $queryParams = [

@@ -12,6 +12,8 @@ use Oxzion\Utils\FilterUtils;
 use Ramsey\Uuid\Uuid;
 use Exception;
 
+use function GuzzleHttp\json_decode;
+
 class DataSourceService extends AbstractService
 {
 
@@ -134,5 +136,28 @@ class DataSourceService extends AbstractService
         }
         return array('data' => $result,
                  'total' => $count);
+    }
+
+    public function getAnalyticsEngine($uuid) {
+        $sql = $this->getSqlObject();
+        $select = $sql->select();
+        $select->from('ox_datasource')
+            ->columns(array('id','name','type','configuration','org_id','isdeleted','uuid'))
+            ->where(array('uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
+        $response = $this->executeQuery($select)->toArray();
+        if (count($response) == 0) {
+            return 0;
+        }
+        $type = $response[0]['type'];
+        
+        $config = json_decode($response[0]['configuration'],1);
+        
+        switch($type) {
+            case 'Elastic':
+                $elasticConfig['elasticsearch'] = $config['data'];
+                $analyticsObject = new  \Oxzion\Analytics\Elastic\AnalyticsEngineImpl($elasticConfig);
+                break;
+        }
+        return $analyticsObject;
     }
 }

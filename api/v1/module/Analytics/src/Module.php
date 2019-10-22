@@ -51,8 +51,9 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $config = $container->get('config');
                     $table = $container->get(Model\QueryTable::class);
+                    $datasourceService = $container->get(Service\DataSourceService::class);
                     $logger = $container->get('AnalyticsLogger');
-                    $service = new Service\QueryService($config, $dbAdapter, $table, $logger);
+                    $service = new Service\QueryService($config, $dbAdapter, $table, $logger,$datasourceService);
                     return new \Oxzion\ServiceLogWrapper($service, $logger);
                 },
                 Model\QueryTable::class => function($container) {
@@ -88,7 +89,8 @@ class Module implements ConfigProviderInterface {
                     $config = $container->get('config');
                     $table = $container->get(Model\WidgetTable::class);
                     $logger = $container->get('AnalyticsLogger');
-                    $service = new Service\WidgetService($config, $dbAdapter, $table, $logger);
+                    $queryService = $container->get(Service\QueryService::class);
+                    $service = new Service\WidgetService($config, $dbAdapter, $table, $logger, $queryService);
                     return new \Oxzion\ServiceLogWrapper($service, $logger);
                 },
                 Model\WidgetTable::class => function($container) {
