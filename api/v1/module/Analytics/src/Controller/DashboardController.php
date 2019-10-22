@@ -39,9 +39,11 @@ class DashboardController extends AbstractApiController
      */
     public function create($data)
     {
-        $data = $this->params()->fromPost();
+        $count = 0;
         try {
             $data['uuid'] = $this->dashboardService->createDashboard($data);
+            $data['version'] = 0;
+            $count = 1;
         }
         catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
