@@ -94,7 +94,7 @@ class DataSourceController extends AbstractApiController
     public function deleteWithVersion($uuid, $data)
     {
         try {
-            $response = $this->dataSourceService->deleteDataSource($uuid, , $data['version']);
+            $response = $this->dataSourceService->deleteDataSource($uuid,$data['version']);
         }
         catch (VersionMismatchException $e) {
             return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);

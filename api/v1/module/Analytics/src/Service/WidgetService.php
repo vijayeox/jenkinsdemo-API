@@ -8,18 +8,22 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Oxzion\Utils\FilterUtils;
+use Oxzion\Analytics\AnalyticsEngine;
 use Ramsey\Uuid\Uuid;
 use Exception;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
+use Zend\Mvc\Application;
 
 class WidgetService extends AbstractService
 {
     private $table;
+    private $queryService;
 
-    public function __construct($config, $dbAdapter, WidgetTable $table, $logger)
+    public function __construct($config, $dbAdapter, WidgetTable $table, $logger, $queryService)
     {
         parent::__construct($config, $dbAdapter, $logger);
         $this->table = $table;
+        $this->queryService  = $queryService;
     }
 
     public function createWidget($data)
@@ -174,7 +178,10 @@ class WidgetService extends AbstractService
         }
 
         if(isset($params['data'])) {
-//--------------------------------------------------------------------------------------------------------------------------------
+            $query_uuid = $resultSet[0]['query_uuid'];
+            $data = $this->queryService->executeAnalyticsQuery($query_uuid);
+            
+            //--------------------------------------------------------------------------------------------------------------------------------
 //TODO:Fetch data from elastic search and remove hard coded values below.
             $testUuid = $resultSet[0]['query_uuid'];
             if ($testUuid == 'bf0a8a59-3a30-4021-aa79-726929469b07') {
@@ -222,6 +229,7 @@ class WidgetService extends AbstractService
         }
         return $response;
     }
+
 
     public function getWidgetList($params = null)
     {
