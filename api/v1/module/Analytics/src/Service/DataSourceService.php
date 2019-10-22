@@ -25,7 +25,7 @@ class DataSourceService extends AbstractService
         $this->table = $table;
     }
 
-    public function createDataSource(&$data)
+    public function createDataSource($data)
     {
         $form = new DataSource();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -52,7 +52,7 @@ class DataSourceService extends AbstractService
         return $count;
     }
 
-    public function updateDataSource($uuid, &$data)
+    public function updateDataSource($uuid, $data)
     {
         $obj = $this->table->getByUuid($uuid, array());
         if (is_null($obj)) {

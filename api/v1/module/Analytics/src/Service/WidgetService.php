@@ -37,10 +37,15 @@ class WidgetService extends AbstractService
             'ispublic'      => true,
             'isdeleted'     => false,
             'uuid'          => $newWidgetUuid,
-            'oldWidgetUuid' => $data['uuid'],
             'name'          => $data['name'],
             'configuration' => $data['configuration']
         ];
+        if (isset($data['uuid'])) {
+            $queryParams['oldWidgetUuid'] = $data['uuid'];
+        } else {
+            $queryParams['oldWidgetUuid'] = '';
+        }
+
         $queryIdInsert = '';
         if (isset($data['query_uuid'])) {
             $queryIdInsert = '(SELECT id FROM ox_query oq WHERE oq.uuid=:query_uuid AND oq.org_id=:org_id)';
@@ -77,7 +82,7 @@ class WidgetService extends AbstractService
         }
     }
 
-    public function updateWidget($uuid, &$data)
+    public function updateWidget($uuid, $data)
     {
         $obj = $this->table->getByUuid($uuid, array());
         if (is_null($obj)) {
@@ -179,7 +184,12 @@ class WidgetService extends AbstractService
 
         if(isset($params['data'])) {
             $query_uuid = $resultSet[0]['query_uuid'];
-            $data = $this->queryService->executeAnalyticsQuery($query_uuid);
+            $queryData = $this->queryService->executeAnalyticsQuery($query_uuid);
+            if (isset($queryData['data'])) {
+                $data = $queryData['data'];
+            } else {
+                $data = 0;
+            }
             
             //--------------------------------------------------------------------------------------------------------------------------------
 //TODO:Fetch data from elastic search and remove hard coded values below.

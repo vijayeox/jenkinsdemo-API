@@ -40,7 +40,7 @@ class DashboardService extends AbstractService
             'content'        => $data['content']
         ];
 
-        $query = 'insert into ox_dashboard (uuid, name, ispublic, description, dashboard_type, created_by, date_created, org_id, isdeleted, content) values (:uuid, :name, :ispublic, :description, :dashboard_type, :created_by, :date_created, :org_id, :isdeleted, :content)';
+        $query = 'insert into ox_dashboard (uuid, name, ispublic, description, dashboard_type, created_by, date_created, org_id, isdeleted, content ,version) values (:uuid, :name, :ispublic, :description, :dashboard_type, :created_by, :date_created, :org_id, :isdeleted, :content, :version)';
 
         try {
             $this->beginTransaction();
@@ -110,7 +110,7 @@ class DashboardService extends AbstractService
                     'user_id' => AuthContext::get(AuthConstants::USER_ID)
                 ];
                 $versionResult = $this->executeQueryWithBindParameters($versionQuery, $versionQueryParams)->toArray();
-                if (is_array($versionResult)) {
+                if (isset($versionResult[0])) {
                     $versionFromDatabase = $versionResult[0]['version'];
                     if ($versionFromDatabase != $version) {
                         $this->logger->err('Version number mismatch. Exception thrown.');

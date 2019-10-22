@@ -28,7 +28,7 @@ class QueryService extends AbstractService
         $this->datasourceService = $datasourceService;
     }
 
-    public function createQuery(&$data)
+    public function createQuery($data)
     {
         $form = new Query();
         $data['uuid'] = Uuid::uuid4()->toString();
@@ -55,7 +55,7 @@ class QueryService extends AbstractService
         return $count;
     }
 
-    public function updateQuery($uuid, &$data)
+    public function updateQuery($uuid, $data)
     {
         $obj = $this->table->getByUuid($uuid, array());
         if (is_null($obj)) {

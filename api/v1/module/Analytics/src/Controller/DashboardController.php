@@ -47,7 +47,7 @@ class DashboardController extends AbstractApiController
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        if ($count == 0) {
+        if (empty($data['uuid'])) {
             return $this->getFailureResponse("Failed to create a new entity", $data);
         }
         return $this->getSuccessResponseWithData($data, 201);
