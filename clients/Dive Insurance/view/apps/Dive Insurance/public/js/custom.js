@@ -84,7 +84,7 @@ Formio.createForm(document.getElementById('formio'), JSON.parse(formContent)).th
               url:
                 baseUrl +
                 "app/" +
-                "a214bf2b-285b-4507-8eb7-4e89bfc3ecca" +
+                appId +
                 "/delegate/" +
                 properties["delegate"],
               data: changed,
