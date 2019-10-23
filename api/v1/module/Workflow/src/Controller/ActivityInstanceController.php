@@ -15,6 +15,7 @@ class ActivityInstanceController extends AbstractApiControllerHelper
 {
     private $activityInstanceService;
     private $workflowInstanceService;
+    private $log;
     /**
     * @ignore __construct
     */
@@ -23,6 +24,7 @@ class ActivityInstanceController extends AbstractApiControllerHelper
     {
         $this->activityInstanceService = $activityInstanceService;
         $this->workflowInstanceService = $workflowInstanceService;
+        $this->log = $this->getLogger();
     }
     /**
     * Activity Instance API
