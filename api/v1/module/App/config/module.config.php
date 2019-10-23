@@ -380,6 +380,19 @@ return [
                     ],
                 ],
             ],
+            'storecache' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/storecache[/:cacheId]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,                  
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\CacheController::class,
+                        'action' => 'store'
+                    ],
+                ],
+            ],
             'app_cache' => [
                 'type' => Segment::class,
                 'options' => [
@@ -389,15 +402,14 @@ return [
                     ],
                     'defaults' => [
                         'controller' => Controller\CacheController::class,
-                        'action' => 'cache',
-                        'method' => 'GET'
+                        'action' => 'cache'
                     ],
                 ],
             ],
             'remove_app_cache' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/deletecache',
+                    'route' => '/app/:appId/deletecache[/:cacheId]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,                  
                     ],

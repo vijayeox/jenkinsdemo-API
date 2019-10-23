@@ -33,11 +33,23 @@ class UserCacheService extends AbstractService
         $this->table = $table;
     }
 
-    public function createUserCache(&$data)
+    public function storeUserCache($appUuId,&$params)
     {
+        if ($app = $this->getIdFromUuid('ox_app', $appUuId)) {
+            $appId = $app;
+        } else {
+            $appId = $appUuId;
+        }
+        if(isset($params['cacheId'])){
+            $obj = $this->table->get($params['cacheId'], array());
+            if(count($obj->toArray())>0){
+                $data['id'] = $params['cacheId'];
+            }
+        }
         $form = new UserCache();
-        $data['date_created'] = date('Y-m-d H:i:s');
-        $data['date_modified'] = date('Y-m-d H:i:s');
+        $data['app_id'] = $appId;
+        $data['content'] = isset($params['content'])?$params['user_id']:json_encode($params);
+        $data['user_id'] = isset($params['user_id'])?$params['user_id']:AuthContext::get(AuthConstants::USER_ID);
         $form->exchangeArray($data);
         $form->validate();
         $this->beginTransaction();
@@ -48,15 +60,17 @@ class UserCacheService extends AbstractService
                 $this->rollback();
                 return 0;
             }
-            $id = $this->table->getLastInsertValue();
-            $data['id'] = $id;
+            if(!isset($data['id'])){
+                $id = $this->table->getLastInsertValue();
+                $data['id'] = $id;
+            }
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        return $count;
+        return $data;
     }
 
     public function updateUserCache($id, &$data)
@@ -86,7 +100,7 @@ class UserCacheService extends AbstractService
         return $count;
     }
 
-    public function deleteUserCache($appId = null)
+    public function deleteUserCache($appId = null,$cacheParams = null)
     {
         $sql = $this->getSqlObject();
         $params = array();
@@ -100,6 +114,12 @@ class UserCacheService extends AbstractService
                 if($params['app_id'] === 0)
                 {
                     throw new Exception("appId is incorrect",0);
+                }
+            }
+            if(isset($cacheParams['cacheId'])){
+                $obj = $this->table->get($cacheParams['cacheId'], array());
+                if(count($obj->toArray())>0){
+                    $params['id'] = $cacheParams['cacheId'];
                 }
             }
             $update = $sql->update();

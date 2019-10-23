@@ -35,9 +35,17 @@ class PaymentEngineImpl implements PaymentEngine
         return $result;
     }
     public function handleTransaction($data){
-        $return['transaction_id'] = $data['ssl_txn_id'];
-        $return['transaction_status'] = $data['ssl_token_response']; 
-        $return['data'] = json_encode($data);
+        if(isset($data['ssl_token_response'])){
+            $return['transaction_id'] = $data['ssl_txn_id'];
+            $return['transaction_status'] = $data['ssl_token_response']; 
+            $return['data'] = json_encode($data);
+        } else {
+            if(isset($data['errorCode'])){
+                $return['transaction_id'] = null;
+                $return['transaction_status'] = $data['errorName']; 
+                $return['data'] = json_encode($data);
+            }  
+        }
         return $return;
     }
 }

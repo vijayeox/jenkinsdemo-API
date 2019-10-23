@@ -43,6 +43,31 @@ class CacheController extends AbstractApiController
      * }
      * </code>
      */
+    /**
+    * Create Entity API
+    * @api
+    * @link /app/appId/cache
+    * @method POST
+    * @param array $data Array of elements as shown
+    * <code> {
+    *               data : integer,
+    *               name : string,
+    *               Fields from Entity
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created Entity.
+    */
+    public function storeAction()
+    {
+        $data = array_merge($this->extractPostData(),$this->params()->fromRoute());
+        $appUuid = $this->params()->fromRoute()['appId'];
+        try {
+            $data = $this->cacheService->storeUserCache($appUuid, $data);
+        } catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        return $this->getSuccessResponseWithData($data, 201);
+    }
 
     public function cacheAction()
     {
