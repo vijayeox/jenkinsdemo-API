@@ -37,7 +37,7 @@ class ServiceTaskService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, Logger $log, TemplateService $templateService,AppDelegateService $appDelegateService,FileService $fileService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService,AppDelegateService $appDelegateService,FileService $fileService)
     {
         $this->messageProducer = MessageProducer::getInstance();
         $this->templateService = $templateService;
@@ -58,6 +58,7 @@ class ServiceTaskService extends AbstractService
 
     public function runCommand($data)
     {  
+        $this->logger->info("RUN COMMAND  ------".json_encode($data));
         //TODO Execute Service Task Methods
         if (isset($data['variables']) && isset($data['variables']['command'])) {
             $command = $data['variables']['command'];
