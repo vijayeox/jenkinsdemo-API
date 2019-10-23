@@ -79,7 +79,7 @@ class RestClient
             $response = $this->client->request('POST', $url, ['headers' => $headers,'json' => $formParams]);
             return array('body'=>$response->getBody()->getContents(),'headers'=>$response->getHeaders());
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
 
@@ -89,7 +89,7 @@ class RestClient
             $response = $this->client->request('DELETE', $url, ['headers' => $headers,'json' => $formParams]);
             return array('body'=>$response->getBody()->getContents(),'headers'=>$response->getHeaders());
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
 
@@ -99,7 +99,7 @@ class RestClient
             $response = $this->client->request('PUT', $url, ['headers' => $headers,'json' => $formParams]);
             return array('body'=>$response->getBody()->getContents(),'headers'=>$response->getHeaders());
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
 

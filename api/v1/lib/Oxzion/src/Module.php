@@ -27,8 +27,6 @@ class Module
         if(!self::$logInitialized){
             self::$logInitialized = true;
             Logger::configure($config['logger']);
-
-        
         }
     }
     public function getServiceConfig()

@@ -10,6 +10,8 @@ $ ./gradlew build
 
 $ cd ../ProcessEngine/
 $ ./gradlew build
+$ mkdir -p dist
+$ cp build/libs/processengine_plugin-1.0.jar dist/processengine_plugin.jar 
 
 To build the docker container
 $ docker build -t workflow .

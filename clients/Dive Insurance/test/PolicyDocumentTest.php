@@ -75,7 +75,7 @@ class PolicyDocumentTest extends DelegateTest
                  'city' => 'APO',
                  'state' => 'California',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',                
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',

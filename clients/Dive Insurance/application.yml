@@ -99,6 +99,9 @@ workflow:
   - name: "Dive Boat"
     id: bb15e393-11b9-48ea-bc5a-5b7616047cb1
     bpmn_file: dive_boat.bpmn
+  - name: "Individual Liability Auto Renewal"
+    id: 91cb9e10-5845-4379-97c9-f9486b702bd6
+    bpmn_file: IPLAutoRenewal.bpmn
 job:
   - import_padi:
       - {

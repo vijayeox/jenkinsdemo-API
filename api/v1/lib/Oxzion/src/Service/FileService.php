@@ -101,7 +101,6 @@ class FileService extends AbstractService
      */
     public function updateFile(&$data, $id)
     { 
-
         if(isset($data['workflow_instance_id'])){
             $select = "SELECT ox_file.* from ox_file 
             where ox_file.workflow_instance_id=? ";
@@ -112,6 +111,7 @@ class FileService extends AbstractService
             }
         } else {
             $obj = $this->table->getByUuid($id);
+            $obj = $obj->toArray();
             if (is_null($obj)) {
                 return 0;
             }
@@ -134,24 +134,27 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
-        $fileObject = $obj->toArray();
-        foreach ($data as $key => $dataelement) {
-            if (is_array($dataelement) || is_bool($dataelement)) {
+        $fileObject = $obj;
+        foreach($data as $key => $dataelement){
+            if(is_array($dataelement) || is_bool($dataelement)){
                 $data[$key] = json_encode($dataelement);
             }
         }
-        $fields = array_diff($data, $fileObject);
+
+        $fields = array_diff($data,json_decode($fileObject['data'],true));
         $file = new File();
         $fileObject['data'] = json_encode($data);
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
+
         $file->exchangeArray($fileObject);
         $file->validate();
         $id = $this->getIdFromUuid('ox_file', $id);
         $this->beginTransaction();
-        try {
-            $this->logger->info("Entering to Update File -" . print_r($file, true) . "\n");
+        try {  
+            $this->logger->info("Entering to Update File -".print_r($file,true)."\n");
             $count = $this->table->save($file);
+
             if ($count == 0) {
                 $this->logger->info("$count - files got updated \n");
                 $this->rollback();
@@ -210,11 +213,21 @@ class FileService extends AbstractService
     public function getFile($id)
     {
         try {
-            $id = $this->getIdFromUuid('ox_file', $id);
-            $obj = $this->table->get($id, array('is_active' => 1, 'org_id' => AuthContext::get(AuthConstants::ORG_ID)));
-            if ($obj) {
-                $fileArray = $obj->toArray();
-                return $fileArray;
+            $this->logger->info("FILE ID  ------".print_r($id,true));
+            $params = array('id' => $id,
+                            'active' => 1,
+                            'orgId' => AuthContext::get(AuthConstants::ORG_ID));
+            $select  = "SELECT * from ox_file where uuid = :id AND is_active = :active AND org_id = :orgId";
+            $this->logger->info("Executing query $select with params ".print_r($params,true));
+            
+            $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+            $this->logger->info("FILE DATA ------".print_r($result,true));
+            if(count($result) > 0){
+                $this->logger->info("FILE ID  ------".print_r($result,true));
+                if($result[0]['data']){
+                    $result[0]['data'] = json_decode($result[0]['data'], true);
+                }
+                return $result;
             }
             return 0;
         } catch (Exception $e) {

@@ -26,7 +26,7 @@ return [
             'workflowActivityInstance' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/workflowinstance/:workflowInstanceId/activity/:activityId/submit',
+                    'route' => '/workflowinstance/:workflowInstanceId/activity/:activityInstanceId/submit',
                     'constraints' => [
                         'activityId' => UuidUtil::UUID_PATTERN,                        
                     ],
@@ -80,17 +80,15 @@ return [
                     ],
                 ],
             ],
-            'workflowIndividualInstance' => [
+            'startWorkflowInstance' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/workflowinstance/:workflowInstanceId/activity/:activityId[/instance/:instanceId]',
-                    'constraints' => [
-                        'activityId' => UuidUtil::UUID_PATTERN,                       
-                    ],
+                    'route' => '/callback/workflowinstance/start',
                     'defaults' => [
-                        'controller' => Controller\WorkflowInstanceController::class,
-                        'action' => 'workflowInstance',
-                        'access'=>[
+                        'controller' => Controller\WorkflowInstanceCallbackController::class,
+                        'method' => 'POST',
+                        'action' => 'startWorkflow',
+                        'access' => [
                         ],
                     ],
                 ],

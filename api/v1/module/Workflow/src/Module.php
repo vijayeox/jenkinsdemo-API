@@ -12,6 +12,8 @@ use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Service\TemplateService;
+use Oxzion\Service\FileService;
+use Oxzion\Service\UserService;
 
 class Module implements ConfigProviderInterface
 {
@@ -43,7 +45,8 @@ class Module implements ConfigProviderInterface
                         $container->get(\Oxzion\Service\FileService::class),
                         $container->get(\Oxzion\Service\UserService::class),
                         $container->get(\Oxzion\Service\WorkflowService::class),
-                        $container->get(\Oxzion\Workflow\WorkflowFactory::class)
+                        $container->get(\Oxzion\Workflow\WorkflowFactory::class),
+                        $container->get(Service\ActivityInstanceService::class)
                     );
                 },
                 Service\ActivityInstanceService::class => function ($container) {
@@ -52,13 +55,13 @@ class Module implements ConfigProviderInterface
                         $container->get('config'),
                         $dbAdapter,
                         $container->get(Model\ActivityInstanceTable::class),
-                        $container->get(Service\WorkflowInstanceService::class),
                         $container->get(\Oxzion\Workflow\WorkflowFactory::class)
                     );
                 },
                 Service\ServiceTaskService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\ServiceTaskService($container->get('config'), $dbAdapter, $container->get(TemplateService::class),$container->get(\Oxzion\AppDelegate\AppDelegateService::class),$container->get(\Oxzion\Service\FileService::class));
+                    return new Service\ServiceTaskService($container->get('config'), $dbAdapter, $container->get(TemplateService::class), $container->get(TemplateService::class),
+                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class),$container->get(\Oxzion\Service\FileService::class));
                 },
                 Model\WorkflowInstanceTable::class => function ($container) {
                     $tableGateway = $container->get(Model\WorkflowInstanceTableGateway::class);
@@ -106,7 +109,8 @@ class Module implements ConfigProviderInterface
                 },
                 Controller\ActivityInstanceController::class => function ($container) {
                     return new Controller\ActivityInstanceController(
-                        $container->get(Service\ActivityInstanceService::class)
+                        $container->get(Service\ActivityInstanceService::class),
+                        $container->get(Service\WorkflowInstanceService::class)
                     );
                 },
                 Controller\ServiceTaskController::class => function ($container) {

@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RequestMapping
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @RestController
 class JobListener {
-
+    private static final Logger logger = LoggerFactory.getLogger(JobListener.class);
     @Autowired
     JobSchedulerHelper jobHelper
     
@@ -40,6 +42,7 @@ class JobListener {
     Map setupJob(@RequestBody  Map<String, Object> payload/*,@RequestHeader("Authorization") Object auth*/ ) {
         /*payload.put("Authorization",auth)*/
 
+        logger.info("RequestMapping - $payload");
         JobSchedulerResponse jobSchedulerResponse = new JobSchedulerResponse()
 
         if (payload.containsKey('job')) {
