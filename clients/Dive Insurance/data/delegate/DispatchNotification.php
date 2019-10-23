@@ -13,6 +13,8 @@ abstract class DispatchNotification extends MailDelegate {
 
     protected function dispatch(array $data)
     {
+        $this->logger->info("DISPATCH DATA".print_r($data,true));
+       
    	    $mailOptions = array();
         $mailOptions['to'] = $data['email'];
         $mailOptions['subject'] = $data['subject'];

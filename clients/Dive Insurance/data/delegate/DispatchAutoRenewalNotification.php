@@ -8,7 +8,7 @@ require_once __DIR__."/DispatchNotification.php";
 
 class DispatchAutoRenewalNotification extends DispatchNotification {
 
-    public $template = array();
+    public $template;
  
     public function __construct(){
         $this->template = array(
