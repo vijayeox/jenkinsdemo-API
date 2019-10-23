@@ -1,14 +1,20 @@
 package org.oxzion.processengine
 
 import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.delegate.ExecutionListener
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class CustomServiceTaskListener implements ExecutionListener {
+  private static final Logger logger = LoggerFactory.getLogger(CustomServiceTaskListener.class);
 
   private static CustomServiceTaskListener instance = null
 
   protected CustomServiceTaskListener() { }
+
+  def jsonSlurper = new JsonSlurper()
 
   static CustomServiceTaskListener getInstance() {
     if(instance == null) {
@@ -19,7 +25,7 @@ class CustomServiceTaskListener implements ExecutionListener {
   def getConnection(){
     String url = getConfig()
     def baseUrl = new URL("${url}/callback/workflow/servicetask")
-    println baseUrl
+    logger.info("Opening connection to ${baseUrl}")
     return baseUrl.openConnection()
   }
 
@@ -41,8 +47,8 @@ class CustomServiceTaskListener implements ExecutionListener {
     taskDetails.parentInstanceId = execution.getParentActivityInstanceId()
     taskDetails.parentActivity = execution.getParentId()
     String json = new JsonBuilder(taskDetails ).toPrettyString()
-    println json
     def connection = getConnection()
+    logger.info("Posting data - ${json}")
     String response
     connection.with {
       doOutput = true
@@ -53,7 +59,19 @@ class CustomServiceTaskListener implements ExecutionListener {
       response = inputStream.withReader{ reader ->
         reader.text
       }
-      println response
+
+      logger.info("Response received - ${response}")
+      def responseValue = jsonSlurper.parseText(response)
+      if(responseValue.status == "success"){
+          if(taskDetails.variables.return == "true"){
+            def responseData = responseValue.data
+            execution.setVariables(responseData) 
+            logger.info("Response received - ${execution.getVariables()}")
+          }
+      }else{
+         //TODO ERROR HANDLER
+         logger.error("ERROR");
+      }
     }
   }
 }

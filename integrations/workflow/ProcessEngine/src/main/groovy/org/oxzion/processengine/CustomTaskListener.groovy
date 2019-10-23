@@ -25,7 +25,7 @@ class CustomTaskListener implements TaskListener {
   def getConnection(){
     String url = getConfig()
     def baseUrl = new URL("${url}/callback/workflow/activityinstance")
-    println baseUrl
+    logger.info("Opening connection to ${baseUrl}")
     return baseUrl.openConnection()
   }
 
@@ -63,8 +63,7 @@ class CustomTaskListener implements TaskListener {
     taskDetails.currentActivity = execution.getCurrentActivityId()
     taskDetails.parent = execution.getParentId()
     String json = new JsonBuilder(taskDetails ).toPrettyString()
-    println json
-    //TODO http callback using the base url above
+    logger.info("Posting data - ${json}")
     def connection = getConnection()
     String response
     connection.with {
@@ -76,7 +75,7 @@ class CustomTaskListener implements TaskListener {
       response = inputStream.withReader{ reader ->
         reader.text
       }
-      println response
+      logger.info("Response received - ${response}")
     }
   }
   private def getConfig(){

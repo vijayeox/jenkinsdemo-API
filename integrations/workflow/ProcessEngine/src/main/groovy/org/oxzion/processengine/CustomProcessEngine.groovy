@@ -23,9 +23,14 @@ class CustomProcessEngine extends AbstractBpmnParseListener {
     }
   }
   @Override
+  void parseStartEvent(Element startEventElement, ScopeImpl scope, ActivityImpl activity) {
+    ActivityBehavior activityBehavior = activity.getActivityBehavior()
+    activity.addListener("start",EventListener.getInstance("start"))
+  }
+  @Override
   void parseEndEvent(Element endEventElement, ScopeImpl scope, ActivityImpl activity) {
     ActivityBehavior activityBehavior = activity.getActivityBehavior()
-    activity.addListener("end",EndEventListener.getInstance())
+    activity.addListener("end",EventListener.getInstance("end"))
   }
   @Override
   void parseServiceTask(Element serviceTaskElement, ScopeImpl scope, ActivityImpl activity) {
