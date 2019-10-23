@@ -23,7 +23,7 @@ class VisualizationService extends AbstractService
         $this->table = $table;
     }
 
-    public function createVisualization(&$data)
+    public function createVisualization($data)
     {
         $form = new Visualization();
         $data['uuid'] = Uuid::uuid4()->toString();
@@ -51,7 +51,7 @@ class VisualizationService extends AbstractService
         return $count;
     }
 
-    public function updateVisualization($uuid, &$data)
+    public function updateVisualization($uuid, $data)
     {
         $obj = $this->table->getByUuid($uuid, array());
         if (is_null($obj)) {
