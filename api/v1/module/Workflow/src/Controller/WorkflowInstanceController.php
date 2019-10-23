@@ -38,11 +38,7 @@ class WorkflowInstanceController extends AbstractApiController
                 unset($params['controller']);
                 unset($params['action']);
                 unset($params['access']);
-                if (isset($params['instanceId'])) {
-                    return $this->executeWorkflow($params, $params['instanceId']);
-                } else {
-                    return $this->executeWorkflow($params);
-                }
+                return $this->executeWorkflow($params);
                 break;
             case 'GET':
                 return $this->getInvalidMethod();
@@ -55,33 +51,14 @@ class WorkflowInstanceController extends AbstractApiController
                 break;
         }
     }
-    public function workflowInstanceAction()
+
+
+    private function executeWorkflow($params)
     {
-        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        switch ($this->request->getMethod()) {
-            case 'POST':
-                unset($params['controller']);
-                unset($params['action']);
-                unset($params['access']);
-                if (isset($params['workflowInstanceId'])) {
-                    return $this->executeWorkflow($params);
-                }
-                break;
-            case 'GET':
-                return $this->getInvalidMethod();
-                break;
-            case 'DELETE':
-                return $this->getInvalidMethod();
-                break;
-            default:
-                return $this->getErrorResponse("Not Sure what you are upto");
-                break;
-        }
-    }
-    private function executeWorkflow($params, $id = null)
-    {
+        $this->log->info("executeWorkflow");
+        $this->updateOrganizationContext($params);
         try {
-            $count = $this->workflowInstanceService->executeWorkflow($params, $id);
+            $count = $this->workflowInstanceService->executeWorkflow($params);
         } catch (ValidationException $e) {
             $response = ['data' => $params, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);

@@ -12,6 +12,7 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
+use Oxzion\EntityNotFoundException;
 use Exception;
 
 class ActivityInstanceService extends AbstractService
@@ -19,19 +20,16 @@ class ActivityInstanceService extends AbstractService
     /**
     * @var ActivityInstanceService Instance of Task Service
     */
-    private $workflowInstanceService;
     protected $workflowFactory;
     protected $activityEngine;
     /**
     * @ignore __construct
     */
 
-    public function __construct($config, $dbAdapter, ActivityInstanceTable $table,WorkflowInstanceService $workflowInstanceService,
-        WorkflowFactory $workflowFactory)
+    public function __construct($config, $dbAdapter, ActivityInstanceTable $table,WorkflowFactory $workflowFactory)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
-        $this->workflowInstanceService = $workflowInstanceService;
         $this->workFlowFactory = $workflowFactory;
         $this->activityEngine = $this->workFlowFactory->getActivity();
     }
@@ -158,39 +156,19 @@ class ActivityInstanceService extends AbstractService
         $activityId = null;
         $resultSet = $this->executeQuerywithBindParameters($query,$queryParams)->toArray();
         if(count($resultSet)==0){
-            if(isset($data['processVariables'])){
-                $variables = $data['processVariables'];
-                if(isset($variables['workflow_id']) || isset($variables['workflowId'])){
-                    $workflowId = isset($variables['workflow_id'])?$variables['workflow_id']:$variables['workflowId'];
-                } else {
-                    return 0;
-                }
-                $workflowInstance = $this->workflowInstanceService->setupWorkflowInstance($workflowId,$data['processInstanceId'],$variables);
-                if(isset($data['taskId'])){
-                    $activityQuery = "SELECT * FROM `ox_activity` WHERE task_id = :taskId;";
-                    $activityParams = array("taskId" => $data['taskId']);
-                    $activity = $this->executeQuerywithBindParameters($activityQuery,$activityParams)->toArray();
-                    $activityId = $activity[0]['id'];
-                }
-                if(isset($variables['orgId'])){
-                    if ($org = $this->getIdFromUuid('ox_organization', $variables['orgId'])) {
-                        $orgId = $org;
-                    } else {
-                        $orgId = $variables['orgId'];
-                    }
-                }
-                $workflowInstanceId = $workflowInstance['id'];
-            }
-        } else {
-            $workflowInstanceId = $resultSet[0]['id'];
-            $orgId = $resultSet[0]['org_id'];
-            if(isset($data['taskId'])){
-                $activityQuery = "SELECT * FROM `ox_activity` WHERE task_id = :taskId;";
-                $activityParams = array("taskId" => $data['taskId']);
-                $activity = $this->executeQuerywithBindParameters($activityQuery,$activityParams)->toArray();
-                $activityId = $activity[0]['id'];
-            }
+            print("THROW Exception on EntityNotFoundException");
+            throw new EntityNotFoundException("WorkflowInstance Not Found");
         }
+
+        $workflowInstanceId = $resultSet[0]['id'];
+        $orgId = $resultSet[0]['org_id'];
+        if(isset($data['taskId'])){
+            $activityQuery = "SELECT * FROM `ox_activity` WHERE task_id = :taskId;";
+            $activityParams = array("taskId" => $data['taskId']);
+            $activity = $this->executeQuerywithBindParameters($activityQuery,$activityParams)->toArray();
+            $activityId = $activity[0]['id'];
+        }
+    
         $this->beginTransaction();
         try {
             if(isset($data['activityInstanceId'])){
@@ -207,9 +185,7 @@ class ActivityInstanceService extends AbstractService
                         if($candidate['type']=='assignee'){
                             $assignee = 1;
                         }
-                        // print_r($candidate['userid']);exit;
                         $groupQuery = $this->executeQuerywithParams("SELECT * FROM `ox_group` WHERE `name` = '".$candidate['groupid']."';")->toArray();
-            // print_r($groupQuery);exit;
                         if($groupQuery){
                             $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`group_id`,`assignee`) 
                             VALUES (:activityInstanceId,:groupId,:assignee)";
@@ -224,7 +200,6 @@ class ActivityInstanceService extends AbstractService
                             $assignee = 1;
                         }
                         $userQuery = $this->executeQuerywithParams("SELECT * FROM `ox_user` WHERE `username` = '".$candidate['userid']."';")->toArray();
-                        // print_r($userQuery);exit;
                         if($userQuery){
                             $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`) 
                             VALUES (:activityInstanceId,:userId,:assignee)";
@@ -311,6 +286,29 @@ class ActivityInstanceService extends AbstractService
             }
         } else {
             return 0;
+        }
+    }
+
+    public function getActivityInstance($activityInstanceId,$workflowInstanceId){
+        try{
+            $query = "select ox_activity_instance.*, ox_activity.task_id as task_id 
+                      FROM `ox_activity_instance` 
+                      LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id 
+                      LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id 
+                      WHERE ox_activity_instance.activity_instance_id=? and ox_activity_instance.org_id=? and ox_workflow_instance.process_instance_id=?";
+            $queryParams = array($activityInstanceId,AuthContext::get(AuthConstants::ORG_ID),$workflowInstanceId);
+            $activityInstance = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+            $this->logger->info("getActivityInstance -> activityInstance - ".print_r($activityInstance, true));
+            
+            if(isset($activityInstance) && (is_array($activityInstance) && !empty($activityInstance))){
+                return $activityInstance[0];
+            } else {
+                throw new EntityNotFoundException("activity instance not found for ".$activityInstanceId);
+            }
+        }
+        catch (Exception $e) {
+            $this->logger->err($e);
+            throw $e;
         }
     }
 }

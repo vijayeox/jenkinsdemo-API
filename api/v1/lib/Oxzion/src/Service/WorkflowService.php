@@ -156,8 +156,8 @@ class WorkflowService extends AbstractService
                         if(isset($activity['form'])){
                             $formTemplate = json_decode($activity['form'],true);
                             $activityData['template'] = $formTemplate['template'];
-                            $activityData['entity_id'] = $entityId;
                         }
+                        $activityData['entity_id'] = $entityId;
                         $activityData['workflow_id'] = $workFlowId;
                         $activityResult = $this->activityService->createActivity($appId, $activityData,$appUuid);
                         $activityIdArray[] = $activityData['id'];
@@ -335,7 +335,7 @@ class WorkflowService extends AbstractService
 
     public function getWorkflows($appUuid=null, $filterArray = array())
     {
-        if (isset($appId)) {
+        if (isset($appUuid)) {
             $filterArray['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
         }
         $resultSet = $this->getDataByParams('ox_workflow', array("*"), $filterArray, null);

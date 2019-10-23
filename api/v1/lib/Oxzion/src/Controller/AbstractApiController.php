@@ -14,7 +14,7 @@ use Oxzion\Auth\AuthSuccessListener;
 use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
 use Oxzion\Auth\AuthContext;
-use Logger;
+
 abstract class AbstractApiController extends AbstractApiControllerHelper
 {
     protected $table;
@@ -197,5 +197,14 @@ abstract class AbstractApiController extends AbstractApiControllerHelper
     protected function getConfig()
     {
         return $this->getEvent()->getApplication()->getServiceManager()->get('Config');
+    }
+
+    protected function updateOrganizationContext($data){
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        if(!$orgId && isset($data['orgId'])){
+         	AuthContext::put(AuthConstants::ORG_UUID, $data['orgId']);
+            $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
+            AuthContext::put(AuthConstants::ORG_ID, $orgId);
+        }
     }
 }

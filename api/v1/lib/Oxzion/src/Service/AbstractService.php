@@ -19,7 +19,7 @@ abstract class AbstractService extends AbstractBaseService
     {
         return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
     }
-
+    
     protected function getIdFromUuid($table, $uuid)
     {
         $sql = $this->getSqlObject();
@@ -260,9 +260,9 @@ abstract class AbstractService extends AbstractBaseService
             $insertQuotedValue[] = '(' . implode(',', $oneValueData) . ')';
         }
         /* Preparation sql query */
-        $this->logger->info("Insert quted val -".print_r($insertQuotedValue,true));
-        $this->logger->info("Insert quted columns -".print_r($insertQuotedColumns,true));
-        $this->logger->info("Paramertrs con -".print_r($parameterContainer->getNamedArray(),true));
+        $this->logger->info("Insert qouted val -".print_r($insertQuotedValue,true));
+        $this->logger->info("Insert qouted columns -".print_r($insertQuotedColumns,true));
+        $this->logger->info("Parameters -".print_r($parameterContainer->getNamedArray(),true));
         $query = sprintf($sqlStringTemplate, $tableName, implode(',', $insertQuotedColumns), implode(',', array_values($insertQuotedValue)), implode(',', array_values($updateQuotedValue)));
         $this->logger->info("Prepared SQL query - $query");
         $statementContainer->setSql($query);

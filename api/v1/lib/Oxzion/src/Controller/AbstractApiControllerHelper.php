@@ -7,8 +7,9 @@ use Zend\View\Model\JsonModel;
 use Oxzion\Jwt\JwtHelper;
 use Oxzion\Error\ErrorHandler;
 use Zend\Stdlib\RequestInterface as Request;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Logger;
-
 abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
     private $config;
@@ -45,7 +46,6 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         if ($this->requestHasContentType($request, AbstractRestfulController::CONTENT_TYPE_JSON)) {
             return $this->create($this->jsonDecode($request->getContent()));
         }
-
         $data = $request->getPost()->toArray();
         if(sizeof($data) == 0){
             $data =json_decode(file_get_contents("php://input"),true);
@@ -194,5 +194,14 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         }
 
         return $this->config;
+    }
+
+    protected function updateOrganizationContext($data){
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        if(!$orgId && isset($data['orgId'])){
+            AuthContext::put(AuthConstants::ORG_UUID, $data['orgId']);
+            $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
+            AuthContext::put(AuthConstants::ORG_ID, $orgId);
+        }
     }
 }

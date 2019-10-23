@@ -9,6 +9,8 @@ use Workflow\Service\ServiceTaskService;
 use Workflow\Service\WorkflowInstanceService;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\ValidationException;
+use Oxzion\EntityNotFoundException;
+use Exception;
 
 class ServiceTaskController extends AbstractApiControllerHelper
 {
@@ -34,23 +36,31 @@ class ServiceTaskController extends AbstractApiControllerHelper
 
     public function executeAction()
     {
+
         $data = $this->extractPostData();
-        $this->log->info("Post Data- ". print_r(json_encode($data), true));
+        $this->log->info(ServiceTask::class.":Post Data- ". print_r(json_encode($data), true));
         try {
-            $response = $this->serviceTaskService->runCommand($this->extractPostData());
-            if($response == 1){
-                return $this->getSuccessResponse();
-            }
-            if ($response) {
-                $this->log->info("Workflow Step Successfully Executed");
+
+            $response = $this->serviceTaskService->runCommand($data);
+            if ($response && is_array($response)) {
+                $this->log->info(ServiceTask::class.":Workflow Step Successfully Executed - ".print_r($response, true));
                 return $this->getSuccessResponseWithData($response, 200);
             } else {
-                return $this->getErrorResponse("Failed to perform Service Task", 200);
+                return $this->getSuccessResponse();
             }
         } catch (ValidationException $e) {
-            $this->log->info("Exception while Performing Service Task-".$e->getMessage());
+            $this->log->info(ServiceTask::class.":Exception while Performing Service Task-".$e->getMessage());
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        }catch (EntityNotFoundException $e){
+            $this->log->info(ServiceTask::class.":Entity Not found -".$e->getMessage());
+            $response = ['data' => $data];
+            return $this->getErrorResponse($e->getMessage(), 404, $response);
+        }
+        catch (Exception $e){
+            $this->log->err(ServiceTask::class.":Entity Not found -".$e->getMessage());
+            $response = ['data' => $data];
+            return $this->getErrorResponse($e->getMessage(), 500, $response);
         }
     }
     public function completeWorkflowAction()
