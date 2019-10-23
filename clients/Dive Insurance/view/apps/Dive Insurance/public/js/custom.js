@@ -45,6 +45,7 @@ $('.tab a').on('click', function (e) {
 document.addEventListener("DOMContentLoaded", function(){
 
   function autoLogin(data){
+    localStorage.clear();
     localStorage.setItem("User",JSON.stringify({"key": data.username,"timestamp": new Date()}));
     localStorage.setItem("AUTH_token",JSON.stringify({"key": data.jwt,"timestamp": new Date()}));
     localStorage.setItem("REFRESH_token",JSON.stringify({"key": data.refresh_token,"timestamp": new Date()}));
