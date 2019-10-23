@@ -199,7 +199,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     protected function updateOrganizationContext($data){
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
         if(!isset($orgId)){
-           return;
+            return;
         }
         if(!$orgId && isset($data['orgId'])){
             AuthContext::put(AuthConstants::ORG_UUID, $data['orgId']);
