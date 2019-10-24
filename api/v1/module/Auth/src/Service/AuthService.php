@@ -93,7 +93,7 @@ class AuthService extends AbstractService
             $appId = null;
         }
         $cacheData = array('user_id'=>$user['id'],'content'=>json_encode($rawData),'app_id'=>$appId);
-        $userCache = $this->userCacheService->createUserCache($cacheData);
+        $userCache = $this->userCacheService->storeUserCache($appId,$cacheData);
         $params['cache_data'] = $cacheData;
         return $params;
     }
