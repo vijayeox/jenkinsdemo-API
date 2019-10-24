@@ -72,7 +72,7 @@ class PageService extends AbstractService
                 $this->commit();
             } catch (Exception $e) {
                 $this->rollback();
-                $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+                $this->logger->error($e->getMessage(), $e);
                 throw $e;
             }
         }else{
@@ -101,7 +101,7 @@ class PageService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }else{
@@ -129,7 +129,7 @@ class PageService extends AbstractService
             }
             return $response[0];
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }

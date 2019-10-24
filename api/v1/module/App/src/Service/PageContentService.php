@@ -80,7 +80,7 @@ class PageContentService extends AbstractService
         }
         catch(Exception $e){
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(),$e);
             throw $e;
         }
         return $counter;
@@ -112,7 +112,7 @@ class PageContentService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
                 $this->rollback();
-                $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+                $this->logger->error($e->getMessage(), $e);
                 throw $e;
             }
         return $count;
@@ -143,7 +143,7 @@ class PageContentService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $count;
@@ -162,7 +162,7 @@ class PageContentService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $count;
@@ -188,7 +188,7 @@ class PageContentService extends AbstractService
                 return array();
             }
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -210,7 +210,7 @@ class PageContentService extends AbstractService
             }
             return $count;
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }

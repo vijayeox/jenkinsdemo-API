@@ -53,16 +53,16 @@ class MenuItemService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             switch (get_class($e)) {
              case "Oxzion\ValidationException":
                 $this->rollback();
-                $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+                $this->logger->error($e->getMessage(), $e);
                 throw $e;
                 break;
              default:
                 $this->rollback();
-                $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+                $this->logger->error($e->getMessage(), $e);
                 throw $e;
                 break;
             }
@@ -94,7 +94,7 @@ class MenuItemService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $count;
@@ -114,7 +114,7 @@ class MenuItemService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         
@@ -171,7 +171,7 @@ class MenuItemService extends AbstractService
             }
             return $response[0];
         }catch(Exception $e){
-            $this->logger->err($e->getMessage()."-".$e->getTraceAsString());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }

@@ -307,7 +307,8 @@ class ActivityInstanceService extends AbstractService
             }
         }
         catch (Exception $e) {
-            $this->logger->err($e);
+            $this->logger->error($e->getMessage(), $e);
+            
             throw $e;
         }
     }

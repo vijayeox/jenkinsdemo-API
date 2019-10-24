@@ -40,7 +40,7 @@ class Import implements AppDelegate
                 return 3;
             }
         } catch (Exception $e) {
-            $this->logger->err(__CLASS__ . "->" . $e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return $data;
@@ -140,7 +140,7 @@ class Import implements AppDelegate
                 print "Connection closed Successfully!\n";
             }
         } catch(Exception $e) {
-            $this->logger->err(__CLASS__ . "->" . $e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
         return 1;
