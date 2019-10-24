@@ -29,6 +29,7 @@ class WidgetService extends AbstractService
     public function createWidget($data)
     {
         $newWidgetUuid = Uuid::uuid4()->toString();
+        $oldWidgetUuid = $data['uuid'];
         $queryParams = [
             'created_by'    => AuthContext::get(AuthConstants::USER_ID),
             'date_created'  => date('Y-m-d H:i:s'),
@@ -40,11 +41,6 @@ class WidgetService extends AbstractService
             'name'          => $data['name'],
             'configuration' => $data['configuration']
         ];
-        if (isset($data['uuid'])) {
-            $queryParams['oldWidgetUuid'] = $data['uuid'];
-        } else {
-            $queryParams['oldWidgetUuid'] = '';
-        }
 
         $queryIdInsert = '';
         if (isset($data['query_uuid'])) {
@@ -53,8 +49,18 @@ class WidgetService extends AbstractService
         }
         else {
             $queryIdInsert = '(SELECT query_id FROM ox_widget oqw WHERE oqw.uuid=:oldWidgetUuid AND oqw.org_id=:org_id)';
+            $queryParams['oldWidgetUuid'] = $oldWidgetUuid;
         }
-        $query = "INSERT INTO ox_widget (uuid, query_id, visualization_id, ispublic, created_by, date_created, org_id, isdeleted, name, configuration, version) VALUES (:uuid, ${queryIdInsert}, (SELECT visualization_id FROM ox_widget ovw WHERE ovw.uuid=:oldWidgetUuid AND ovw.org_id=:org_id), :ispublic, :created_by, :date_created, :org_id, :isdeleted, :name, :configuration, :version)";
+        if (isset($data['visualization_uuid'])) {
+            $visualizationIdInsert = '(SELECT id FROM ox_visualization ov WHERE ov.uuid=:visualization_uuid AND ov.org_id=:org_id)';
+            $queryParams['visualization_uuid'] = $data['visualization_uuid'];
+        }
+        else {
+            $visualizationIdInsert = '(SELECT visualization_id FROM ox_widget ovw WHERE ovw.uuid=:oldWidgetUuid AND ovw.org_id=:org_id)';
+            $queryParams['oldWidgetUuid'] = $oldWidgetUuid;
+        }
+
+        $query = "INSERT INTO ox_widget (uuid, query_id, visualization_id, ispublic, created_by, date_created, org_id, isdeleted, name, configuration, version) VALUES (:uuid, ${queryIdInsert}, ${visualizationIdInsert}, :ispublic, :created_by, :date_created, :org_id, :isdeleted, :name, :configuration, :version)";
         try {
             $this->beginTransaction();
             $result = $this->executeQueryWithBindParameters($query, $queryParams);
