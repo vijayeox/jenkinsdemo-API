@@ -48,7 +48,7 @@ class UserCacheService extends AbstractService
         }
         $form = new UserCache();
         $data['app_id'] = $appId;
-        $data['content'] = isset($params['content'])?$params['user_id']:json_encode($params);
+        $data['content'] = isset($params['content'])?$params['content']:json_encode($params);
         $data['user_id'] = isset($params['user_id'])?$params['user_id']:AuthContext::get(AuthConstants::USER_ID);
         $form->exchangeArray($data);
         $form->validate();
