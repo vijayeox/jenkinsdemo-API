@@ -23,8 +23,11 @@ RUN apt-get update \
  && mv /var/www/html /var/www/public \
  && curl -sS https://getcomposer.org/installer \
   | php -- --install-dir=/usr/local/bin --filename=composer
-RUN apt-get update \
- && apt-get clean
+#Installing nodejs
+RUN rm -rf /var/lib/apt/lists/* && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+ && apt-get update \
+ && apt-get install -y nodejs
+RUN apt-get clean
 ADD http://www.phpdoc.org/phpDocumentor.phar /usr/local/bin/phpdoc
 RUN chmod 755 /usr/local/bin/phpdoc
 RUN mkdir -p /app/api/v1 && \
