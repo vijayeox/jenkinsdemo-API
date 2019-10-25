@@ -6,6 +6,8 @@ use Elasticsearch\ClientBuilder;
 use Oxzion\Service\ElasticService;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
+use Oxzion\Analytics;
+use Oxzion\Analytics\AnalyticsPostProcessing;
 
 class AnalyticsEngineImpl implements AnalyticsEngine {
 	private $config;
@@ -24,7 +26,6 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			$query = $this->formatQuery($parameters);
             $elasticService = new ElasticService($this->config);
 			$result = $elasticService->getQueryResults($orgId,$app_name,$query);
-			
 			if ($result['type']=='group') {
 				$result['data'] = $this->flattenResult($result,$query);
 			} else {
@@ -34,6 +35,9 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 				if (isset($query['displaylist'])) {
 					$result['displaylist'] = $query['displaylist'];
 				}
+			}
+			if (isset($parameters['expression']) ||  isset($parameters['round']) ) {
+				$result = AnalyticsPostProcessing::postProcess($result,$parameters);
 			}
 			return $result;
 			
@@ -202,6 +206,8 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 		}
 		return $finalresult;
 	}
+
+
 
 }
 ?>

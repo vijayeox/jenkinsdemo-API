@@ -200,4 +200,50 @@ class AnalyticsTest extends MainControllerTest
         }
     }
 
+    public function testExpressionWithGrouping() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['group'=>'created_by','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created','expression'=>'/10'];
+        $results = $ae->runQuery('11_test', null, $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results[0]['name'], "John Doe");
+        $this->assertEquals($results[0]['value'], "80");
+        $this->assertEquals($results[0]['grouplist'], "created_by");
+        $this->assertEquals($results[1]['name'], "Mike Price");
+        $this->assertEquals($results[1]['value'], "5.05");
+        $this->assertEquals($results[1]['grouplist'], "created_by");
+    }
+
+    public function testRoundingWithGrouping() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['group'=>'created_by','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created','expression'=>'*23/53','round'=>'2'];
+        $results = $ae->runQuery('11_test', null, $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results[0]['name'], "John Doe");
+        $this->assertEquals($results[0]['value'], "347.17");
+        $this->assertEquals($results[0]['grouplist'], "created_by");
+        $this->assertEquals($results[1]['name'], "Mike Price");
+        $this->assertEquals($results[1]['value'], "21.92");
+        $this->assertEquals($results[1]['grouplist'], "created_by");
+    }
+
+    public function testExpressionsNoGroups() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['operation'=>'sum','field'=>'amount','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created','expression'=>'*10'];
+        $results = $ae->runQuery('11_test', null, $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results,9505);
+    }
+
 }
