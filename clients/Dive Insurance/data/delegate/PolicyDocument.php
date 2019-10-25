@@ -140,7 +140,8 @@ class PolicyDocument implements DocumentAppDelegate
         $this->destination = $destination;
     }
     public function execute(array $data,Persistence $persistenceService)
-    { 
+    {     
+        $this->logger->info("Template Data Source - ".print_r($data, true));
         $date = ''; 
         $this->logger->info("Executing Policy Document");
         $coi_number = $this->generateCOINumber($data,$persistenceService);

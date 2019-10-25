@@ -65,7 +65,7 @@ class TemplateService extends AbstractService
     {
         $template = $this->setTemplateDir($templateName, $data);
         if (!$template) {
-            throw new Exception("Template not found!", 1);
+            throw new Exception("Template not found!");
         }
         $this->client->assign($data);
         try{
@@ -80,6 +80,8 @@ class TemplateService extends AbstractService
     private function setTemplateDir($templateName, $params = array()){
         $template = $templateName.$this->templateExt;
         $templatePath = $this->getTemplatePath($template, $params);
+        $this->logger->info("template - $templatePath/$template");
+        
         if($templatePath){
             $this->client->setTemplateDir($templatePath);
             return $template;
@@ -91,10 +93,11 @@ class TemplateService extends AbstractService
 
     public function getTemplatePath($template, $params = array())
     {
-       if (!isset($params['orgUuid']) && isset($params['orgid'])) {
-            $org = $this->getIdFromUuid('ox_organization', $params['orgid']);
+        $this->logger->info("Params - ".print_r($params, true));
+       if (!isset($params['orgUuid']) && isset($params['orgId'])) {
+            $org = $this->getIdFromUuid('ox_organization', $params['orgId']);
             if ($org != 0) {
-                $orgUuid = $params['orgid'];
+                $orgUuid = $params['orgId'];
                 $params['orgUuid'] = $orgUuid;
             }
         } 
