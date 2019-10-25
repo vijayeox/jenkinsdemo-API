@@ -19,6 +19,7 @@ use Mockery;
 use Camunda\ProcessManagerImpl;
 use Symfony\Component\Yaml\Yaml;
 use Oxzion\Db\Migration\Migration;
+use FileSystemIterator;
 
 class AppControllerTest extends ControllerTest
 {
@@ -203,7 +204,14 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployApp()
     {
+        $config = $this->getApplicationConfig();
         copy(__DIR__.'/../sampleapp/application1.yml', __DIR__.'/../sampleapp/application.yml');
+        $target = __DIR__.'/../Dataset/SampleApp';
+        $link = __DIR__.'/../sampleapp/view/apps/SampleApp';
+        if(is_link($link)){
+            unlink($link);
+        }
+        symlink($target, $link);
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -221,34 +229,52 @@ class AppControllerTest extends ControllerTest
         $appUuid = $this->executeQueryTest($query);
         $appUuidCount = count($appUuid[0]);
         $appUuid = $appUuid[0]['uuid'];
+        $query = "SELECT id from ox_app where uuid = '".$appUuid."'";
+        $appId = $this->executeQueryTest($query);
+        $appId = $appId[0]['id'];
         $query = "SELECT count(name),status,uuid from ox_organization where name = '".$yaml['org'][0]['name']."'";
         $orgid = $this->executeQueryTest($query);
-        $query = "SELECT count(*) from ox_app_registry where app_id = (SELECT id from ox_app where uuid = '".$appUuid."')";
+        $query = "SELECT count(id) as count from ox_app_registry where app_id = '".$appId."'";
         $appRegistryResult = $this->executeQueryTest($query);
+        $query = "SELECT count(name) as count FROM ox_privilege WHERE app_id = '".$appId."'";
+        $privilege = $this->executeQueryTest($query);
+        $query = "SELECT count(privilege_name) as count from ox_role_privilege WHERE app_id = '".$appId."'";
+        $rolePrivilege = $this->executeQueryTest($query);
 
+        $this->assertEquals($privilege[0]['count'],2);
+        $this->assertEquals($rolePrivilege[0]['count'],2);
         $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
         $this->assertEquals($appname[0]['name'], $appName);
         $this->assertEquals($appUuid, $YmlappUuid);
         $this->assertEquals($appUuidCount, 1);
-        $this->assertEquals($appRegistryResult[0]['count(*)'],1);
+        $this->assertEquals($appRegistryResult[0]['count'],1);
         $this->assertEquals($content['status'], 'success');
+        $template = $config['TEMPLATE_FOLDER'].$orgid[0]['uuid'];
+        $delegate = $config['DELEGATE_FOLDER'].$appUuid;
+        $this->assertEquals(file_exists($template), TRUE);
+        $this->assertEquals(file_exists($delegate), TRUE);
+        $apps = $config['APPS_FOLDER'];
+        if(file_exists($apps) && is_dir($apps)){
+            $files = new FileSystemIterator($apps);
+            foreach ($files as $file) {
+                if(is_link($file)){
+                    $dist = "/dist/";
+                    $nodemodules = "/node_modules/";
+                    $this->assertEquals(file_exists($file.$dist), TRUE);
+                    $this->assertEquals(file_exists($file.$nodemodules), TRUE);
+                }
+            }
+        }
         unlink(__DIR__.'/../sampleapp/application.yml');
+        unlink($link);
         $this->cleanDb($appName, $YmlappUuid);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
 
     public function testDeployAppWithoutOptionalFieldsInYml()
     {
         copy(__DIR__.'/../sampleapp/application5.yml', __DIR__.'/../sampleapp/application.yml');
         $config = $this->getApplicationConfig();
-        $foldername = 'DummyDive/';
-        $tempfolder = $config['CLIENT_FOLDER'].$foldername;
-        FileUtils::createDirectory($tempfolder);
-        FileUtils::createDirectory($tempfolder."data/");
-        FileUtils::createDirectory($tempfolder."data/migrations/");
-        copy(__DIR__.'/../Dataset/dummydata.sql', $tempfolder."data/migrations/dummyData.sql");;
-        chmod($tempfolder, 0777);
-        chmod($tempfolder."data/", 0777);
-        chmod($tempfolder."data/migrations/", 0777);
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -260,32 +286,57 @@ class AppControllerTest extends ControllerTest
         $yaml = Yaml::parse(file_get_contents($path.$filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
-        $query = "SELECT name from ox_app where name = '".$appName."'";
-        $appname = $this->executeQueryTest($query);
-        $query = "SELECT uuid from ox_app where name = '".$appName."'";
-        $appUuid = $this->executeQueryTest($query);
-        $appUuidCount = count($appUuid[0]);
-        $this->assertEquals($appname[0]['name'], $appName);
-        $this->assertEquals($appUuid[0]['uuid'], $YmlappUuid);
-        $this->assertEquals($appUuidCount, 1);
+        $query = "SELECT name, uuid from ox_app where name = '".$appName."'";
+        $appdata = $this->executeQueryTest($query);
+        $this->assertEquals($appdata[0]['name'], $appName);
+        $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
+        $delegate = $config['DELEGATE_FOLDER'].$YmlappUuid;
+        $this->assertEquals(file_exists($delegate), TRUE);
+        $apps = $config['APPS_FOLDER'];
+        if(file_exists($apps) && is_dir($apps)){
+            $files = new FileSystemIterator($apps);
+            foreach ($files as $file) {
+                if(is_link($file)){
+                    $dist = "/dist/";
+                    $nodemodules = "/node_modules/";
+                    $this->assertEquals(file_exists($file.$dist), false);
+                    $this->assertEquals(file_exists($file.$nodemodules), false);
+                }
+            }
+        }
         unlink(__DIR__.'/../sampleapp/application.yml');
-        FileUtils::rmdir($tempfolder);
         $this->cleanDb($appName, $YmlappUuid);
+        $this->unlinkFolders($YmlappUuid, $appName);
+    }
+
+    private function unlinkFolders($appId, $appName, $orgId = null){
+        $config = $this->getApplicationConfig();
+        $file = $config['DELEGATE_FOLDER'].$appId;
+        if(is_link($file)){
+            print_r("unlink from delegate folder");
+            unlink($file);
+        }
+        if($orgId){
+            $file = $config['TEMPLATE_FOLDER'].$orgId;
+            if(is_link($file)){
+                print_r("unlink from template folder");
+                unlink($file);
+            }
+        }
+        $apps = $config['APPS_FOLDER'];
+        if(file_exists($apps) && is_dir($apps)){
+            $files = new FileSystemIterator($apps);
+            foreach ($files as $file) {
+                if(is_link($file)){
+                unlink($file);
+                }
+            }
+        }
     }
 
     public function testDeployAppWithWrongUuidInDatabase()
     {
-        $config = $this->getApplicationConfig();
-        $foldername = 'DummyDive/';
-        $tempfolder = $config['CLIENT_FOLDER'].$foldername;
-        FileUtils::createDirectory($tempfolder);
-        FileUtils::createDirectory($tempfolder."data/");
-        FileUtils::createDirectory($tempfolder."data/migrations/");
-        copy(__DIR__.'/../Dataset/dummydata.sql', $tempfolder."data/migrations/dummyData.sql");;
-        chmod($tempfolder, 0777);
-        chmod($tempfolder."data/", 0777);
-        chmod($tempfolder."data/migrations/", 0777);
         copy(__DIR__.'/../sampleapp/application8.yml', __DIR__.'/../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
@@ -295,21 +346,11 @@ class AppControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         unlink(__DIR__.'/../sampleapp/application.yml');
-        FileUtils::rmdir($tempfolder);
     }
 
     public function testDeployAppWithWrongNameInDatabase()
     {
         $config = $this->getApplicationConfig();
-        $foldername = 'DummyDive/';
-        $tempfolder = $config['CLIENT_FOLDER'].$foldername;
-        FileUtils::createDirectory($tempfolder);
-        FileUtils::createDirectory($tempfolder."data/");
-        FileUtils::createDirectory($tempfolder."data/migrations/");
-        copy(__DIR__.'/../Dataset/dummydata.sql', $tempfolder."data/migrations/dummyData.sql");;
-        chmod($tempfolder, 0777);
-        chmod($tempfolder."data/", 0777);
-        chmod($tempfolder."data/migrations/", 0777);
         copy(__DIR__.'/../sampleapp/application9.yml', __DIR__.'/../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
@@ -322,27 +363,29 @@ class AppControllerTest extends ControllerTest
         $yaml = Yaml::parse(file_get_contents($path.$filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
-        $query = "SELECT name from ox_app where name = '".$appName."'";
-        $app = $this->executeQueryTest($query);
-        $this->assertEquals($app[0]['name'], $appName);
+        $query = "SELECT name, uuid from ox_app where name = '".$appName."'";
+        $appdata = $this->executeQueryTest($query);
+        $this->assertEquals($appdata[0]['name'], $appName);
+        $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
         $this->assertEquals($content['status'], 'success');
+        $query = "SELECT count(name),status,uuid from ox_organization where name = '".$yaml['org'][0]['name']."'";
+        $orgid = $this->executeQueryTest($query);
+        $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
+        $template = $config['TEMPLATE_FOLDER'].$orgid[0]['uuid'];
+        $delegate = $config['DELEGATE_FOLDER'].$YmlappUuid;
+        $this->assertEquals(file_exists($template), true);
+        $this->assertEquals(file_exists($delegate), true);
+        if(!isset($yaml['org'][0]['uuid'])){
+            $yaml['org'][0]['uuid'] = null;
+        }
         unlink(__DIR__.'/../sampleapp/application.yml');
         $this->cleanDb($appName, $YmlappUuid);
-        FileUtils::rmdir($tempfolder);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
 
     public function testDeployAppWithNameAndNoUuidInYMLButNameandUuidInDatabase()
     {
         $config = $this->getApplicationConfig();
-        $foldername = 'DummyDive/';
-        $tempfolder = $config['CLIENT_FOLDER'].$foldername;
-        FileUtils::createDirectory($tempfolder);
-        FileUtils::createDirectory($tempfolder."data/");
-        FileUtils::createDirectory($tempfolder."data/migrations/");
-        copy(__DIR__.'/../Dataset/dummydata.sql', $tempfolder."data/migrations/dummyData.sql");;
-        chmod($tempfolder, 0777);
-        chmod($tempfolder."data/", 0777);
-        chmod($tempfolder."data/migrations/", 0777);
         copy(__DIR__.'/../sampleapp/application10.yml', __DIR__.'/../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
@@ -350,19 +393,27 @@ class AppControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
         $filename = "application.yml";
         $path = __DIR__.'/../sampleapp/';
         $yaml = Yaml::parse(file_get_contents($path.$filename));
         $this->assertEquals(isset($yaml['app'][0]['uuid']), true);
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
-        $query = "SELECT uuid from ox_app where name = '".$appName."'";
-        $app = $this->executeQueryTest($query);
-        $this->assertEquals($app[0]['uuid'], $YmlappUuid);
+        $query = "SELECT name, uuid from ox_app where name = '".$appName."'";
+        $appdata = $this->executeQueryTest($query);
+        $this->assertEquals($appdata[0]['name'], $appName);
+        $this->assertEquals($appdata[0]['uuid'], $YmlappUuid);
+        $this->assertEquals($content['status'], 'success');
+        $query = "SELECT count(name),status,uuid from ox_organization where name = '".$yaml['org'][0]['name']."'";
+        $orgid = $this->executeQueryTest($query);
+        $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
+        $template = $config['TEMPLATE_FOLDER'].$orgid[0]['uuid'];
+        $delegate = $config['DELEGATE_FOLDER'].$YmlappUuid;
+        $this->assertEquals(file_exists($template), true);
+        $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
         $this->cleanDb($appName, $YmlappUuid);
-        FileUtils::rmdir($tempfolder);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
 
     public function testDeployAppNoDirectory()
@@ -416,15 +467,6 @@ class AppControllerTest extends ControllerTest
     public function testDeployAppOrgDataWithoutUuidAndContactAndPreferencesInYml()
     {
         $config = $this->getApplicationConfig();
-        $foldername = 'DummyDive/';
-        $tempfolder = $config['CLIENT_FOLDER'].$foldername;
-        FileUtils::createDirectory($tempfolder);
-        FileUtils::createDirectory($tempfolder."data/");
-        FileUtils::createDirectory($tempfolder."data/migrations/");
-        copy(__DIR__.'/../Dataset/dummydata.sql', $tempfolder."data/migrations/dummyData.sql");;
-        chmod($tempfolder, 0777);
-        chmod($tempfolder."data/", 0777);
-        chmod($tempfolder."data/migrations/", 0777);
         copy(__DIR__.'/../sampleapp/application4.yml', __DIR__.'/../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
@@ -441,24 +483,22 @@ class AppControllerTest extends ControllerTest
         $this->assertNotEmpty($yaml['org'][0]['contact']);
         $this->assertEquals($yaml['org'][0]['preferences'], '{}');
         $this->assertEquals($content['status'], 'success');
+        $query = "SELECT count(name),status,uuid from ox_organization where name = '".$yaml['org'][0]['name']."'";
+        $orgid = $this->executeQueryTest($query);
+        $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
+        $template = $config['TEMPLATE_FOLDER'].$orgid[0]['uuid'];
+        $delegate = $config['DELEGATE_FOLDER'].$YmlappUuid;
+        $this->assertEquals(file_exists($template), true);
+        $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
         $this->cleanDb($appName, $YmlappUuid);
-        FileUtils::rmdir($tempfolder);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
 
     public function testDeployAppAddExtraPrivilegesInDatabaseFromYml()
     {
         $config = $this->getApplicationConfig();
-        $foldername = 'DummyDive/';
-        $tempfolder = $config['CLIENT_FOLDER'].$foldername;
-        FileUtils::createDirectory($tempfolder);
-        FileUtils::createDirectory($tempfolder."data/");
-        FileUtils::createDirectory($tempfolder."data/migrations/");
-        copy(__DIR__.'/../Dataset/dummydata.sql', $tempfolder."data/migrations/dummyData.sql");;
-        chmod($tempfolder, 0777);
-        chmod($tempfolder."data/", 0777);
-        chmod($tempfolder."data/migrations/", 0777);
-         copy(__DIR__.'/../sampleapp/application6.yml', __DIR__.'/../sampleapp/application.yml');
+        copy(__DIR__.'/../sampleapp/application6.yml', __DIR__.'/../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -476,26 +516,24 @@ class AppControllerTest extends ControllerTest
         $queryString = "SELECT name FROM ox_privilege WHERE app_id = '".$idresult[0]['id']."'";
         $result = $this->executeQueryTest($queryString);
         $DBprivilege = array_unique(array_column($result, 'name'));
+        $query = "SELECT count(name),status,uuid from ox_organization where name = '".$yaml['org'][0]['name']."'";
+        $orgid = $this->executeQueryTest($query);
+        $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
         $this->assertEquals($privilegearray, $DBprivilege);
         $this->assertEquals($content['status'], 'success');
+        $template = $config['TEMPLATE_FOLDER'].$orgid[0]['uuid'];
+        $delegate = $config['DELEGATE_FOLDER'].$YmlappUuid;
+        $this->assertEquals(file_exists($template), true);
+        $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
         $this->cleanDb($appName, $YmlappUuid);
-        FileUtils::rmdir($tempfolder);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
 
     public function testDeployAppDeleteExtraPrivilegesInDatabaseNotInYml()
     {
         $config = $this->getApplicationConfig();
-        $foldername = 'DummyDive/';
-        $tempfolder = $config['CLIENT_FOLDER'].$foldername;
-        FileUtils::createDirectory($tempfolder);
-        FileUtils::createDirectory($tempfolder."data/");
-        FileUtils::createDirectory($tempfolder."data/migrations/");
-        copy(__DIR__.'/../Dataset/dummydata.sql', $tempfolder."data/migrations/dummyData.sql");;
-        chmod($tempfolder, 0777);
-        chmod($tempfolder."data/", 0777);
-        chmod($tempfolder."data/migrations/", 0777);
-         copy(__DIR__.'/../sampleapp/application6.yml', __DIR__.'/../sampleapp/application.yml');
+        copy(__DIR__.'/../sampleapp/application6.yml', __DIR__.'/../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
@@ -513,12 +551,18 @@ class AppControllerTest extends ControllerTest
         $result = $this->executeQueryTest($queryString);
         $DBprivilege = array_unique(array_column($result, 'name'));
         $list = "'" . implode( "', '", $DBprivilege) . "'";
+        $query = "SELECT count(name),status,uuid from ox_organization where name = '".$yaml['org'][0]['name']."'";
+        $orgid = $this->executeQueryTest($query);
+        $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
         $this->assertNotEquals($list, 'MANAGE');
         $this->assertEquals($content['status'], 'success');
-        $this->assertNotEmpty($content);
+        $template = $config['TEMPLATE_FOLDER'].$orgid[0]['uuid'];
+        $delegate = $config['DELEGATE_FOLDER'].$YmlappUuid;
+        $this->assertEquals(file_exists($template), true);
+        $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
         $this->cleanDb($appName, $YmlappUuid);
-        FileUtils::rmdir($tempfolder);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
 
     public function testCreateWithOutTextFailure()

@@ -20,6 +20,7 @@ use Oxzion\ServiceException;
 use Symfony\Component\Yaml\Yaml;
 use Zend\Db\Sql\Expression;
 use Oxzion\Db\Migration\Migration;
+use FileSystemIterator;
 
 class AppService extends AbstractService
 {
@@ -171,17 +172,21 @@ class AppService extends AbstractService
         try{
             $appUuid = $this->checkAppExists($appData);
             $this->updateymlforapp($ymlData, $appData, $path);
+            $orgId = null;
             if(isset($ymlData['org'])){
                 $data = $this->processOrg($ymlData['org'][0],NULL);
+                $orgId = $data['uuid'];
                 $this->updateymlfororg($ymlData, $data, $path);
                 $result = $this->createAppRegistry($appUuid, $ymlData['org'][0]['uuid']);
             }
             if(isset($ymlData['privilege'])){
-                $this->createAppPrivileges($appUuid, $ymlData['privilege']);
+                $this->createAppPrivileges($appUuid, $ymlData['privilege'], $orgId);
             }
             $this->performMigration($path, $ymlData['app'][0]);
-            // if(isset($ymldata['menu'])){
-            //     $this->createAppMenu($appUuid, $ymldata['privilege']);
+            $appName = $ymlData['app'][0]['name'];
+            $this->setupLinks($path, $appName, $appUuid, $orgId);
+            // if(isset($ymlData['workflow'])){
+            //     $this->;
             // }
             //check if menu exists and add to app menu table
             //check if workflow given if so deployworkflow
@@ -195,15 +200,96 @@ class AppService extends AbstractService
         }
     }
 
+    private function setupLinks($path, $appName, $appId, $orgId = null){
+        $link = $this->config['DELEGATE_FOLDER'].$appId;
+        $target = $path."/data/delegate";
+        if(is_link($link)){
+            FileUtils::unlink($link);
+        }
+        if(file_exists($target)){
+            print_r("setup link to delegate");
+            $this->setupLink($target, $link);
+        }
+        if($orgId){
+            $link =$this->config['TEMPLATE_FOLDER'].$orgId;
+            $target = $path."/data/template";
+            if(is_link($link)){
+                FileUtils::unlink($link);
+            }
+            if(file_exists($target)){
+                $this->setupLink($target, $link);
+            }
+        }
+        $apps = $path."view/apps/";
+        $flag = 0;
+        if(file_exists($apps) && is_dir($apps)){
+            $files = new FileSystemIterator($apps);
+            if ((iterator_count($files)) == 1){
+                foreach ($files as $file) {
+                    if($file->isDir()){
+                        $target = $file->getPathName();
+                        $link = $this->config['APPS_FOLDER'].$file->getFilename();
+                        if(is_link($link)){
+                            unlink($link);
+                        }
+                        if(file_exists($target)){
+                            $this->setupLink($target, $link);
+                            $this->executeCommands($link);
+                            $flag = 1;
+                        }
+                    }
+                }
+            }
+            else if ((iterator_count($files)) > 1){
+                throw new Exception("Cannot setup symlink as more than one app exists");
+            }
+            if($flag == 1){
+                $runDiscover = $this->executePackageDiscover();
+            }
+        }
+    }
+
+    private function executePackageDiscover(){
+        $app = $this->config['APPS_FOLDER'];
+        $command_one = "cd ".$app."../bos/";
+        $command = $app."../bos/";
+        if(!file_exists($command."src/client/local.js")){
+            copy($command.'src/client/local.js.example', $command.'src/client/local.js');
+        }
+        $command_two = "npm install";
+        $command_three = "npm run build";
+        $command_four = "npm run package:discover";
+        exec($command_one." && ".$command_two." && ".$command_three." && ".$command_four, $output, $return);
+    }
+
+    private function executeCommands($link){
+        $link = str_replace(' ', '\ ', $link);
+        $command_one = "cd ".$link;
+        $command_two = "npm install";
+        $command_three = "npm run build";
+        exec($command_one." && ".$command_two." && ".$command_three, $output, $return);
+    }
+
+    private function setupLink($target, $link){
+        if(file_exists($link)){
+            throw new Exception("Cannot setup $target, as folder $link already exists");
+        }
+        if(!is_link($link)){
+            $this->logger->info("setting up link $link with $target");
+            FileUtils::symlink($target, $link);
+        }
+    }
     private function performMigration($appPath, $data){
         $appName = $data['name'];
         $appId = $data['uuid'];
         $description = isset($data['description']) ? $data['description'] : $appName;
         $migration = new Migration($this->config, $appName, $appId, $description);
-        $migrationFolder = $this->config['CLIENT_FOLDER'].$appName."/data/migrations";
-        $fileList = array_diff(scandir($migrationFolder), array(".", ".."));
-        if(count($fileList)>0){
-            $migration->migrate(realpath($migrationFolder));
+        if(file_exists($appPath."/data/migrations/")){
+            $migrationFolder = $appPath."/data/migrations/";
+            $fileList = array_diff(scandir($migrationFolder), array(".", ".."));
+            if(count($fileList)>0){
+                $migration->migrate(realpath($migrationFolder));
+            }
         }
     }
 
@@ -242,7 +328,8 @@ class AppService extends AbstractService
                 $data = $this->createApp($appdata, true);
                 $appdata['uuid'] = $data['form']['uuid'];
             }
-            else{
+            else
+            {
                 if(isset($appdata['uuid'])){
                     if($appdata['uuid'] == $result[0]['uuid']){
                         if($appdata['name'] != $result[0]['name']){
@@ -264,7 +351,7 @@ class AppService extends AbstractService
         }
     }
 
-    private function createAppPrivileges($appUuid, &$privilegedata)
+    private function createAppPrivileges($appUuid, &$privilegedata, $orgId = null)
     {
         $privilegearray = array_unique(array_column($privilegedata, 'name'));
         $list = "'" . implode( "', '", $privilegearray) . "'";
@@ -301,7 +388,7 @@ class AppService extends AbstractService
         $existingprivileges = array_column($result, 'name');
         $privilegesToBeAdded = array_diff($privilegearray, $existingprivileges);
         $sql = $this->getSqlObject();
-        
+
         //if any new privileges to be added
         if(!(empty($privilegesToBeAdded))){
             foreach ($privilegesToBeAdded as $key => $value) {
@@ -310,14 +397,23 @@ class AppService extends AbstractService
                 $insert_data = array('name' => $value,'app_id' => $idresult,'permission_allowed' => $permission);
                 $insert->values($insert_data);
                 $result = $this->executeUpdate($insert);
-                $query = "insert into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id)
-                select r.id, '$value', $permission, r.org_id, reg.app_id
-                from ox_role as r inner join
-                ox_app_registry reg on r.org_id = reg.org_id
-                where reg.app_id = :appId and r.name = 'ADMIN'";
+
+                // $queryString = "SELECT * from ox_privilege where name = '".$value."' and app_id = :appId";
+                // $params = array('appId' => $idresult);
+                // $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+
+                $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id)
+                SELECT r.id, '".$value."', ".$permission.", r.org_id, reg.app_id
+                FROM ox_role AS r INNER JOIN
+                ox_app_registry AS reg ON r.org_id = reg.org_id
+                WHERE reg.app_id = :appId and r.name = 'ADMIN'";
                 $params = array('appId' => $idresult);
                 $result = $this->executeUpdateWithBindParameters($query, $params);
             }
+            // $queryString = "SELECT count(*) from ox_role_privilege where app_id = :appId";
+            // $params = array('appId' => $idresult);
+            // $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+            // print_r($result);exit;
         }
     }
 
@@ -354,7 +450,7 @@ class AppService extends AbstractService
             $result[$x]['start_options'] = json_decode($result[$x]['start_options'], true);
         }
         return array('data' => $result,
-           'total' => $count);
+         'total' => $count);
     }
 
     public function updateApp($id, &$data)

@@ -269,22 +269,22 @@ class AppController extends AbstractApiController
                 return $this->getSuccessResponse(200);
             }
             catch (ValidationException $e) {
-                // print_r($e->getMessage());exit;
+                print_r($e->getMessage());
                 // print_r($e->getTraceAsString());
                 $response = ['data' => $data, 'errors' => $e->getErrors()];
                 return $this->getErrorResponse("Validation Errors", 404, $response);
             }
             catch (ServiceException $e){
-                // print_r($e->getMessage());
+                print_r($e->getMessage());
                 // print_r($e->getTraceAsString());
                 return $this->getErrorResponse($e->getMessage(),404);
             }catch(Exception $e){
-                // print_r($e->getMessage());exit;
+                print_r($e->getMessage());
                 // print_r($e->getTraceAsString());
                 return $this->getErrorResponse($e->getMessage(),500);
             }
         }else{
-            // print_r($e->getMessage());exit;
+            print_r($e->getMessage());
             // print_r($e->getTraceAsString());
             return $this->getErrorResponse("Invalid parameters",400);
         }
