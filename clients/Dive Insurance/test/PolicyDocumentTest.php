@@ -87,7 +87,7 @@ class PolicyDocumentTest extends DelegateTest
                  'cylinder_coverage' => 0,
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Individual Professional Liability',
-                 'ismailingaddress' => 0,
+                 'sameasmailingaddress' => 0,
                  'endrosement_status' => 'Instructor',
                  'update' => 1,
                  'update_date' => '08/06/2019'];
@@ -141,7 +141,7 @@ class PolicyDocumentTest extends DelegateTest
                  'update_date' => '08/06/2019',
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Individual Professional Liability',
-                 'ismailingaddress' => 0,
+                 'sameasmailingaddress' => 0,
                  'endrosement_status' => 'Instructor',
                  'additionalInsured' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}',
                  'lapseletter' => 1];
@@ -195,7 +195,7 @@ class PolicyDocumentTest extends DelegateTest
                  'update_date' => '08/06/2019',
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Individual Professional Liability',
-                 'ismailingaddress' => 0,
+                 'sameasmailingaddress' => 0,
                  'endrosement_status' => 'Instructor'];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -424,7 +424,7 @@ class PolicyDocumentTest extends DelegateTest
                  'end_date' => '2020-06-30',
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Dive Boat',
-                 'ismailingaddress' => 0,
+                 'sameasmailingaddress' => 0,
                  'endrosement_status' => 'Instructor',
                  'cover_letter' => 1,
                  'manager_name' => 'Julie Joseph',

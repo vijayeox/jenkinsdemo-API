@@ -20,7 +20,7 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$firstname},{$middlename},{$lastname}</p>
+					<p class = "details">{$firstname},{$initial},{$lastname}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
 					<p class = "details">{$city},{$state}</p>
@@ -94,7 +94,7 @@
 			   to the date that the alleged negligent act, error, or omission occurred.
 		</p></center>
 		<hr class = "spacing1"></hr>
-		<b><center><p class = "phy_add">Physical Address {if $ismailingaddress} 
+		<b><center><p class = "phy_add">Physical Address {if $sameasmailingaddress} 
 										 : {$address3},{$address4}
 									  {else}
 										is the same as the mailing address
