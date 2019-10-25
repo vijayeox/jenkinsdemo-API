@@ -37,7 +37,7 @@ class ActivityImpl implements Activity
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(),$e);
             throw $e;
         }
     }
@@ -51,7 +51,7 @@ class ActivityImpl implements Activity
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(),$e);
             return array();
         }
     }
@@ -78,7 +78,7 @@ class ActivityImpl implements Activity
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(),$e);
             throw $e;
         }
     }
@@ -91,7 +91,7 @@ class ActivityImpl implements Activity
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(),$e);
             throw $e;
         }
     }
@@ -109,7 +109,7 @@ class ActivityImpl implements Activity
             $this->logger->info("submitTaskForm method result - $result \n");
             return $result;
         } catch (Exception $e) {
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(),$e);
             throw $e;
         }
     }
@@ -123,7 +123,7 @@ class ActivityImpl implements Activity
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(),$e);
             throw $e;
         }
     }
@@ -136,7 +136,7 @@ class ActivityImpl implements Activity
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->logger->error($e->getMessage(),$e);
             return array();
         }
     }
