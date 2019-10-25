@@ -33,6 +33,8 @@ class WorkflowInstanceController extends AbstractApiController
     public function activityAction()
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $this->log->info(print_r($params,true));
+        $this->log->info("ACTIVITY ACTION");
         switch ($this->request->getMethod()) {
             case 'POST':
                 unset($params['controller']);
@@ -55,10 +57,12 @@ class WorkflowInstanceController extends AbstractApiController
 
     private function executeWorkflow($params)
     {
+        $this->log->info(print_r($params,true));
         $this->log->info("executeWorkflow");
-        $this->updateOrganizationContext($params);
+        $this->workflowInstanceService->updateOrganizationContext($params);
         try {
             $count = $this->workflowInstanceService->executeWorkflow($params);
+            $this->log->info(WorkflowInstanceController::class."ExecuteWorkflow Response  - ". print_r($count, true));
         } catch (ValidationException $e) {
             $response = ['data' => $params, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);

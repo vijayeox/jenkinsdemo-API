@@ -6,11 +6,13 @@ import org.camunda.bpm.engine.delegate.TaskListener
 import org.camunda.bpm.engine.task.IdentityLink
 
 import java.text.SimpleDateFormat
-import java.util.logging.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+  
 
 
 class CustomTaskListener implements TaskListener {
-  private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+  private static final Logger logger = LoggerFactory.getLogger(CustomTaskListener.class);
 
   private static CustomTaskListener instance = null
 

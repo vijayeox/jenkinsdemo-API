@@ -6,6 +6,10 @@ use Oxzion\DelegateException;
 
 abstract class DispatchNotification extends MailDelegate {
 
+    public function __construct(){
+        parent::__construct();
+    }
+    
 	public function setDocumentPath($destination)
     {
         $this->destination = $destination;

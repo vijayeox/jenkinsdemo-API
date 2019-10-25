@@ -20,6 +20,7 @@ use Oxzion\Utils\RestClient;
 use Oxzion\EntityNotFoundException;
 use Oxzion\Service\FileService;
 
+
 class ServiceTaskService extends AbstractService
 {
     /**
@@ -56,14 +57,15 @@ class ServiceTaskService extends AbstractService
     
 
 
-    public function runCommand($data)
+    public function runCommand(&$data)
     {  
         $this->logger->info("RUN COMMAND  ------".json_encode($data));
         //TODO Execute Service Task Methods
         if (isset($data['variables']) && isset($data['variables']['command'])) {
+            $this->logger->info("COMMAND  ------".print_r($data['variables']['command'],true));
             $command = $data['variables']['command'];
             unset($data['variables']['command']);
-            return $this->processCommand($command,$data['variables']);
+            return $this->processCommand($data['variables'],$command);
         }else if(isset($data['variables']) && isset($data['variables']['commands'])){
             $commands = $data['variables']['commands'];
             unset($data['variables']['commands']);
@@ -73,15 +75,49 @@ class ServiceTaskService extends AbstractService
                 $command = $commandJson['command'];
                 unset($commandJson['command']);
                 $variables = array_merge($inputData, $commandJson);
+                $this->logger->info(ServiceTaskService::class.print_r($variables,true));
                 $result = $this->processCommand($command, $variables);
                 if(is_array($result)){
                     $inputData = $result;
                 }
+                $this->logger->info(ServiceTaskService::class.print_r($inputData,true));
             }
             return $variables;
         }
         return 1;
     }
+
+
+        protected function processCommand(&$data,$command){
+        switch ($command) {
+            case 'mail':
+                $this->logger->info("SEND MAIL");
+                return $this->sendMail($data);
+                break;
+            case 'schedule':
+                $this->logger->info("SCHEDULE JOB");
+                return $this->scheduleJob($data);
+                break;
+            case 'delegate':
+                $this->logger->info("DELEGATE");
+                return $this->executeDelegate($data);
+                break;
+            case 'pdf':
+                $this->logger->info("PDF");
+                return $this->generatePDF($data);
+                break;
+            case 'fileSave':
+                $this->logger->info("FILE SAVE");
+                return $this->fileSave($data);
+            case 'file':
+                $this->logger->info("FILE DATA");
+                return $this->extractFileData($data);
+            default:
+                break;
+        };
+    }
+
+
     protected function scheduleJob(&$data){
         $this->logger->info("DATA  ------".json_encode($data));
         $jobUrl = $data['jobUrl'];
@@ -90,6 +126,10 @@ class ServiceTaskService extends AbstractService
         $this->logger->info("jobUrl - $jobUrl, url -$url");
         if(isset($data['fileId'])){
             $data['previous_fileId'] = $data['fileId']; 
+        }
+        if(isset($data['workflowId'])){
+            $data['parent_workflow_id'] = $data['workflowId'];
+            unset($data['workflowId']);
         }
         unset($data['jobUrl'],$data['cron'],$data['command'],$data['url']);
         $this->logger->info("JOB DATA ------".json_encode($data));
@@ -102,33 +142,14 @@ class ServiceTaskService extends AbstractService
             if($data['automatic_renewal'] == true){
                 $data['automatic_renewal_jobid'] = $response['JobId'];
             }
+
+            $this->logger->info("Schedule JOB DATA - ".print_r($data,true));
             //TODO save JobId to file
             return $response;
         }
 
         //TODO log error
         
-    }
-
-    protected function processCommand($command,$data){
-        switch ($command) {
-            case 'mail':
-                return $this->sendMail($data);
-                break;
-            case 'schedule':
-                return $this->scheduleJob($data);
-                break;
-            case 'delegate':
-                return $this->executeDelegate($data);
-                break;
-            case 'pdf':
-                return $this->generatePDF($data);
-                break;
-            case 'fileSave':
-                return $this->fileSave($data);
-            default:
-                break;
-        };
     }
     
     protected function fileSave($data){
@@ -138,7 +159,8 @@ class ServiceTaskService extends AbstractService
       return $this->fileService->updateFile($data,$result[0]['uuid']);
     }
 
-    protected function executeDelegate($data){        
+    protected function executeDelegate($data){    
+        $this->logger->info("EXECUTE DELEGATE ---- ".print_r($data,true));    
         if(isset($data['app_id']) && isset($data['delegate'])){
             $appId = $data['app_id'];
             $delegate = $data['delegate'];
@@ -146,6 +168,8 @@ class ServiceTaskService extends AbstractService
         } else {
             return 0;
         }
+        $this->logger->info("DELEGATE ---- ".print_r($delegate,true));    
+        $this->logger->info("DELEGATE APP ID---- ".print_r($appId,true));    
         $response = $this->appDelegateService->execute($appId, $delegate, $data);
         return $response;
     }
@@ -230,23 +254,12 @@ class ServiceTaskService extends AbstractService
         }
     }
 
-
-    protected function updateOrganizationContext($data){
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
-        if(!$orgId && isset($data['orgId'])){
-            $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
-            AuthContext::put(AuthConstants::ORG_ID, $orgId);
-        }
-    }
-
     protected function extractFileData(&$data){
         $this->logger->info("File Data  ------".print_r($data,true));
         $this->updateOrganizationContext($data);
-
         if(isset($data['previous_fileId'])){
-            $result = $this->fileService->getFile($data['previous_fileId']);    
-            $this->logger->info("JSON FILE DATA  ------".print_r($result,true));
-        
+            $result = $this->fileService->getFile($data['previous_fileId']);  
+            $this->logger->info("EXTRACT FILE DATA result".print_r($result,true));  
             if(count($result) == 0){
                 throw new EntityNotFoundException("File ".$data['previous_fileId']." not found");
             }

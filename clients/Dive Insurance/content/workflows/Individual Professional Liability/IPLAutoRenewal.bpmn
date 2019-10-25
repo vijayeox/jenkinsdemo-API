@@ -4,12 +4,33 @@
     <bpmn:startEvent id="StartEvent_1" name="Auto Renewal Process">
       <bpmn:outgoing>SequenceFlow_1xtw30t</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:serviceTask id="Task_1c3tgij" name="File Process" camunda:expression="0">
+    <bpmn:serviceTask id="Task_1c3tgij" name="File Process" camunda:jobPriority="1" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="command">file</camunda:inputParameter>
           <camunda:inputParameter name="return">true</camunda:inputParameter>
         </camunda:inputOutput>
+        <camunda:executionListener event="end">
+          <camunda:script scriptFormat="groovy">def variables = execution.getVariables();       if(variables.containsKey("process_reminder")){
+                if(variables.process_reminder == "true" || variables.process_reminder == true){
+                 execution.setVariable("process_reminder",true); 
+                }else{
+                    execution.setVariable("process_reminder",false); 
+                }
+              }else{
+                 execution.setVariable("process_reminder",false); 
+              }
+
+def value = execution.getVariables();       if(value.containsKey("automatic_renewal")){
+                if(value.automatic_renewal == "true" || value.automatic_renewal == true){
+                 execution.setVariable("automatic_renewal",true); 
+                }else{
+                    execution.setVariable("automatic_renewal",false); 
+                }
+              }else{
+                 execution.setVariable("automatic_renewal",false); 
+              }</camunda:script>
+        </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1xtw30t</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ci4dol</bpmn:outgoing>
@@ -30,20 +51,21 @@
       <bpmn:incoming>SequenceFlow_1971e9o</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1971e9o" name="No" sourceRef="ExclusiveGateway_0u9ks76" targetRef="EndEvent_0fhqfe9">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false or automatic_renewal=="false"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="ExclusiveGateway_13cbcil" name="Send Reminder">
       <bpmn:incoming>SequenceFlow_1lffxqf</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_00p8t1y</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_1bn7sfo</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0zeliih</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_1lffxqf" name="Yes" sourceRef="ExclusiveGateway_0u9ks76" targetRef="ExclusiveGateway_13cbcil">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==true or automatic_renewal=="true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="EndEvent_1nih0u1">
       <bpmn:incoming>SequenceFlow_1jwvs8e</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Task_13h2goq" name="Send Notification" camunda:expression="0">
+    <bpmn:serviceTask id="Task_13h2goq" name="Send Notification" camunda:asyncBefore="true" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="command">delegate</camunda:inputParameter>
@@ -64,21 +86,21 @@
           <camunda:inputParameter name="cron">
             <camunda:script scriptFormat="groovy">def expiryDate = execution.getVariable('expiry_date')
 def expiryYear = new Date().parse('yyyy-MM-dd', expiryDate)
-def cron = '0 0/1 0 ? * * *'</camunda:script>
+def cron = '0 0/2 * * * ? *'</camunda:script>
           </camunda:inputParameter>
-          <camunda:inputParameter name="send_reminder">false</camunda:inputParameter>
+          <camunda:inputParameter name="process_reminder">true</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0xaiuo7</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1jwvs8e</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_00p8t1y" name="Yes" sourceRef="ExclusiveGateway_13cbcil" targetRef="Task_13h2goq">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${send_reminder==true}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${(process_reminder == false or process_reminder == "false") and  (send_reminder == "true" or send_reminder == true)}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0xaiuo7" sourceRef="Task_13h2goq" targetRef="Task_0zqzv90" />
     <bpmn:sequenceFlow id="SequenceFlow_1jwvs8e" sourceRef="Task_0zqzv90" targetRef="EndEvent_1nih0u1" />
     <bpmn:sequenceFlow id="SequenceFlow_1bn7sfo" name="No" sourceRef="ExclusiveGateway_13cbcil" targetRef="Task_1rdb4rd">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${send_reminder==false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${process_reminder == true or process_reminder == "true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="EndEvent_1f7bqcc">
       <bpmn:incoming>SequenceFlow_06ys4y1</bpmn:incoming>
@@ -107,13 +129,17 @@ def cron = '0 0/1 0 ? * * *'</camunda:script>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0pa5iqa" sourceRef="Task_15c71xx" targetRef="Task_06k8ofo" />
     <bpmn:endEvent id="EndEvent_1bara2v" name="Insurance Application Completed">
-      <bpmn:incoming>SequenceFlow_0k3uo3f</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0rxxw79</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:serviceTask id="Task_06k8ofo" name="Policy and COI document Generation" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="command">delegate</camunda:inputParameter>
-          <camunda:inputParameter name="delegate">PolicyDocument</camunda:inputParameter>
+          <camunda:inputParameter name="commands">
+            <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate":"PolicyDocument"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0nj6fgf</bpmn:incoming>
@@ -131,7 +157,7 @@ def cron = '0 0/1 0 ? * * *'</camunda:script>
           <camunda:inputParameter name="cron">
             <camunda:script scriptFormat="groovy">def expiryDate = execution.getVariable('expiry_date')
 def expiryYear = new Date().parse('yyyy-MM-dd', expiryDate)
-def cron = '0 0/1 0 ? * * *'</camunda:script>
+def cron = '0 0/20 0 ? * * *'</camunda:script>
           </camunda:inputParameter>
           <camunda:inputParameter name="send_reminder">true</camunda:inputParameter>
         </camunda:inputOutput>
@@ -139,173 +165,168 @@ def cron = '0 0/1 0 ? * * *'</camunda:script>
       <bpmn:incoming>SequenceFlow_0aq896k</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0pa5iqa</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0rxxw79" sourceRef="Task_06k8ofo" targetRef="Task_0i9n5aj" />
-    <bpmn:sequenceFlow id="SequenceFlow_0k3uo3f" sourceRef="Task_0i9n5aj" targetRef="EndEvent_1bara2v" />
-    <bpmn:serviceTask id="Task_0i9n5aj" name="Send mail to insured" camunda:expression="0">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="command">delegate</camunda:inputParameter>
-          <camunda:inputParameter name="delegate">DispatchNewPolicy</camunda:inputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_0rxxw79</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0k3uo3f</bpmn:outgoing>
-    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0rxxw79" sourceRef="Task_06k8ofo" targetRef="EndEvent_1bara2v" />
+    <bpmn:endEvent id="EndEvent_07g5cxv">
+      <bpmn:incoming>SequenceFlow_0zeliih</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0zeliih" sourceRef="ExclusiveGateway_13cbcil" targetRef="EndEvent_07g5cxv">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${(send_reminder == "false" or send_reminder == false) and (process_reminder  == "false" or process_reminder == false)}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1jsc7lc">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="179" y="99" width="36" height="36" />
+        <dc:Bounds x="179" y="209" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="164" y="142" width="69" height="27" />
+          <dc:Bounds x="164" y="252" width="69" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0cvx9e1_di" bpmnElement="Task_1c3tgij">
-        <dc:Bounds x="270" y="77" width="100" height="80" />
+        <dc:Bounds x="270" y="187" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_0u9ks76_di" bpmnElement="ExclusiveGateway_0u9ks76" isMarkerVisible="true">
-        <dc:Bounds x="465" y="92" width="50" height="50" />
+        <dc:Bounds x="465" y="202" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="457" y="62" width="69" height="14" />
+          <dc:Bounds x="457" y="172" width="69" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1xtw30t_di" bpmnElement="SequenceFlow_1xtw30t">
-        <di:waypoint x="215" y="117" />
-        <di:waypoint x="270" y="117" />
+        <di:waypoint x="215" y="227" />
+        <di:waypoint x="270" y="227" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0ci4dol_di" bpmnElement="SequenceFlow_0ci4dol">
-        <di:waypoint x="370" y="117" />
-        <di:waypoint x="465" y="117" />
+        <di:waypoint x="370" y="227" />
+        <di:waypoint x="465" y="227" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="396" y="99" width="45" height="14" />
+          <dc:Bounds x="396" y="209" width="45" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_0fhqfe9_di" bpmnElement="EndEvent_0fhqfe9">
-        <dc:Bounds x="472" y="192" width="36" height="36" />
+        <dc:Bounds x="472" y="302" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="468" y="235" width="46" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1971e9o_di" bpmnElement="SequenceFlow_1971e9o">
-        <di:waypoint x="490" y="142" />
-        <di:waypoint x="490" y="192" />
+        <di:waypoint x="490" y="252" />
+        <di:waypoint x="490" y="302" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="498" y="164" width="14" height="14" />
+          <dc:Bounds x="498" y="274" width="14" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ExclusiveGateway_13cbcil_di" bpmnElement="ExclusiveGateway_13cbcil" isMarkerVisible="true">
-        <dc:Bounds x="615" y="92" width="50" height="50" />
+        <dc:Bounds x="615" y="202" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="604" y="62" width="77" height="14" />
+          <dc:Bounds x="604" y="172" width="77" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1lffxqf_di" bpmnElement="SequenceFlow_1lffxqf">
-        <di:waypoint x="515" y="117" />
-        <di:waypoint x="615" y="117" />
+        <di:waypoint x="515" y="227" />
+        <di:waypoint x="615" y="227" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="556" y="99" width="19" height="14" />
+          <dc:Bounds x="556" y="209" width="19" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_1nih0u1_di" bpmnElement="EndEvent_1nih0u1">
-        <dc:Bounds x="622" y="472" width="36" height="36" />
+        <dc:Bounds x="622" y="582" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0xh59i6_di" bpmnElement="Task_13h2goq">
-        <dc:Bounds x="590" y="210" width="100" height="80" />
+        <dc:Bounds x="590" y="320" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_16wawai_di" bpmnElement="Task_0zqzv90">
-        <dc:Bounds x="590" y="341" width="100" height="80" />
+        <dc:Bounds x="590" y="451" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_00p8t1y_di" bpmnElement="SequenceFlow_00p8t1y">
-        <di:waypoint x="640" y="142" />
-        <di:waypoint x="640" y="210" />
+        <di:waypoint x="640" y="252" />
+        <di:waypoint x="640" y="320" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="646" y="173" width="19" height="14" />
+          <dc:Bounds x="646" y="283" width="19" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0xaiuo7_di" bpmnElement="SequenceFlow_0xaiuo7">
-        <di:waypoint x="640" y="290" />
-        <di:waypoint x="640" y="341" />
+        <di:waypoint x="640" y="400" />
+        <di:waypoint x="640" y="451" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1jwvs8e_di" bpmnElement="SequenceFlow_1jwvs8e">
-        <di:waypoint x="640" y="421" />
-        <di:waypoint x="640" y="472" />
+        <di:waypoint x="640" y="531" />
+        <di:waypoint x="640" y="582" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1bn7sfo_di" bpmnElement="SequenceFlow_1bn7sfo">
-        <di:waypoint x="665" y="117" />
-        <di:waypoint x="790" y="117" />
+        <di:waypoint x="665" y="227" />
+        <di:waypoint x="790" y="227" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="721" y="99" width="14" height="14" />
+          <dc:Bounds x="721" y="209" width="14" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_1f7bqcc_di" bpmnElement="EndEvent_1f7bqcc">
-        <dc:Bounds x="822" y="252" width="36" height="36" />
+        <dc:Bounds x="822" y="362" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_06ys4y1_di" bpmnElement="SequenceFlow_06ys4y1">
-        <di:waypoint x="840" y="157" />
-        <di:waypoint x="840" y="252" />
+        <di:waypoint x="840" y="267" />
+        <di:waypoint x="840" y="362" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="846" y="203" width="68" height="14" />
+          <dc:Bounds x="846" y="313" width="68" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_1ypbci3_di" bpmnElement="Task_1rdb4rd">
-        <dc:Bounds x="790" y="77" width="100" height="80" />
+        <dc:Bounds x="790" y="187" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_1k37933_di" bpmnElement="ExclusiveGateway_1k37933" isMarkerVisible="true">
-        <dc:Bounds x="1015" y="92" width="50" height="50" />
+        <dc:Bounds x="1015" y="202" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1007" y="62" width="69" height="14" />
+          <dc:Bounds x="1007" y="172" width="69" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0g4fm7i_di" bpmnElement="SequenceFlow_0g4fm7i">
-        <di:waypoint x="890" y="117" />
-        <di:waypoint x="1015" y="117" />
+        <di:waypoint x="890" y="227" />
+        <di:waypoint x="1015" y="227" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="930" y="99" width="47" height="14" />
+          <dc:Bounds x="930" y="209" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0nj6fgf_di" bpmnElement="SequenceFlow_0nj6fgf">
-        <di:waypoint x="1065" y="117" />
-        <di:waypoint x="1250" y="117" />
+        <di:waypoint x="1065" y="227" />
+        <di:waypoint x="1250" y="227" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1151" y="99" width="14" height="14" />
+          <dc:Bounds x="1151" y="209" width="14" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0aq896k_di" bpmnElement="SequenceFlow_0aq896k">
-        <di:waypoint x="1040" y="142" />
-        <di:waypoint x="1040" y="330" />
-        <di:waypoint x="1110" y="330" />
+        <di:waypoint x="1040" y="252" />
+        <di:waypoint x="1040" y="440" />
+        <di:waypoint x="1110" y="440" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1046" y="233" width="19" height="14" />
+          <dc:Bounds x="1046" y="343" width="19" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0pa5iqa_di" bpmnElement="SequenceFlow_0pa5iqa">
-        <di:waypoint x="1210" y="330" />
-        <di:waypoint x="1300" y="330" />
-        <di:waypoint x="1300" y="157" />
+        <di:waypoint x="1210" y="440" />
+        <di:waypoint x="1300" y="440" />
+        <di:waypoint x="1300" y="267" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="EndEvent_1bara2v_di" bpmnElement="EndEvent_1bara2v">
-        <dc:Bounds x="1712" y="99" width="36" height="36" />
+        <dc:Bounds x="1522" y="209" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1704" y="142" width="54" height="40" />
+          <dc:Bounds x="1514" y="252" width="54" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_02auqg8_di" bpmnElement="Task_06k8ofo">
-        <dc:Bounds x="1250" y="77" width="100" height="80" />
+        <dc:Bounds x="1250" y="187" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_0002c4t_di" bpmnElement="Task_15c71xx">
-        <dc:Bounds x="1110" y="290" width="100" height="80" />
+        <dc:Bounds x="1110" y="400" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0rxxw79_di" bpmnElement="SequenceFlow_0rxxw79">
-        <di:waypoint x="1350" y="117" />
-        <di:waypoint x="1470" y="117" />
+        <di:waypoint x="1350" y="227" />
+        <di:waypoint x="1522" y="227" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0k3uo3f_di" bpmnElement="SequenceFlow_0k3uo3f">
-        <di:waypoint x="1570" y="117" />
-        <di:waypoint x="1712" y="117" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_0kpm8q6_di" bpmnElement="Task_0i9n5aj">
-        <dc:Bounds x="1470" y="77" width="100" height="80" />
+      <bpmndi:BPMNShape id="EndEvent_07g5cxv_di" bpmnElement="EndEvent_07g5cxv">
+        <dc:Bounds x="622" y="82" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0zeliih_di" bpmnElement="SequenceFlow_0zeliih">
+        <di:waypoint x="640" y="202" />
+        <di:waypoint x="640" y="118" />
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

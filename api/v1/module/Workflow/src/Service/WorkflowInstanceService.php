@@ -158,7 +158,9 @@ class WorkflowInstanceService extends AbstractService
     public function getWorkflowInstance($id)
     {
         try{
-            $query = "select * from ox_workflow_instance where org_id=? and process_instance_id=?";
+            $query = "select oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.org_id,ow.uuid as workflow_id from ox_workflow_instance as oxi join ox_workflow as ow on oxi.workflow_id = ow.id where oxi.org_id=? and oxi.process_instance_id=?";
+
+            // $query = "SELECT * from ox_workflow_instance where org_id=? and process_instance_id=?";
             $queryParams = array(AuthContext::get(AuthConstants::ORG_ID),$id);
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             $this->logger->info("WorkflowInstance ----------".print_r($resultSet,true));
@@ -185,16 +187,21 @@ class WorkflowInstanceService extends AbstractService
             $params['entity_id'] = $workflow['entity_id'];
         }
         $workflowInstance = $this->setupWorkflowInstance($workflowId, null,$params);
+        $this->logger->info("SETUP WORKFLOW RESPONSE DATA ----- ".print_r($workflowInstance,true));
 
         try{ 
             $this->beginTransaction();
+            $this->logger->info("BEGIN TRANSACTION");
             $fileData = $params;
             $file = $this->fileService->createFile($fileData, $workflowInstance['id']);
             $query = "SELECT * from ox_file";
             $result = $this->executeQueryWithBindParameters($query,array())->toArray();
             $params['fileId'] = $fileData['uuid'];
             $params['workflow_instance_id'] = $workflowInstance['id'];
+            $this->logger->info(WorkflowInstanceService::class."Data Passed to Start Process ----- Params : ".print_r($params,true)."Workflow Process Id : ".print_r($workflow['process_id']));
             $workflowInstanceId = $this->processEngine->startProcess($workflow['process_id'], $params);
+            $this->logger->info(WorkflowInstanceService::class."START PROCESS ----- ".print_r($workflowInstanceId,true));
+
             // var_dump($workflowInstanceId);exit;
             $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id where id = :workflowInstanceId";
             $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id']);
@@ -205,6 +212,8 @@ class WorkflowInstanceService extends AbstractService
             $this->rollback();
             throw $e;
         }
+        $this->logger->info("FILE DATA ----- ".print_r($file,true));
+
         return $file;
     }
 
@@ -232,14 +241,17 @@ class WorkflowInstanceService extends AbstractService
     private function submitActivity($params){
         $workflowInstanceId = $params['workflowInstanceId'];
         $workflowInstance = $this->getWorkflowInstance($workflowInstanceId);
+        $this->logger->info(WorkflowInstanceService::class."Get WorkflowInstance -----".print_r($workflowInstance,true));
         if(isset($workflowInstance[0])){
             $workflowId = $workflowInstance[0]['workflow_id'];
             $workflow = $this->workflowService->getWorkflow($workflowId);
+            $this->logger->info(WorkflowInstanceService::class."Get Workflow -----".print_r($workflow,true));
         } else {
             throw new EntityNotFoundException("workflow instance not found for $workflowInstanceId");
         }
         
         $activityInstance = $this->activityInstanceService->getActivityInstance($params['activityInstanceId'],$workflowInstanceId);
+        $this->logger->info(WorkflowInstanceService::class."Get ActivityInstance -----".print_r($activityInstance,true));
         $activityId = $activityInstance['activity_instance_id'];
         if(!isset($params['app_id'])){
             $params['app_id'] = $workflow['app_id'];
@@ -252,11 +264,12 @@ class WorkflowInstanceService extends AbstractService
         $queryParams = array($workflowInstance[0]['id']);
         $existingFile = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         if(isset($existingFile[0])){
+            $this->logger->info(WorkflowInstanceService::class."FILE UPDATE-----".print_r($existingFile,true));
             $file = $this->fileService->updateFile($params, $existingFile[0]['uuid']);
              $workflowInstanceId = $this->activityEngine->submitTaskForm($activityId, $params);
 
         } else {
-            throw new EntityNotFoundException("No file found for workflow instance ".$workflowInstance['id'] );
+            throw new EntityNotFoundException("No file EntityNotFoundExceptiond for workflow instance ".$workflowInstance['id'] );
         }
          return $file;
         
@@ -271,7 +284,7 @@ class WorkflowInstanceService extends AbstractService
             $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         }
 
-        if(isset($params['workflowId'])){
+        if(isset($params['workflowId']) && !isset($params['workflowInstanceId'])){
             return $this->startWorkflow($params);
         } 
         if(!isset($params['workflowInstanceId'])){
@@ -280,7 +293,6 @@ class WorkflowInstanceService extends AbstractService
         if (!isset($params['activityInstanceId'])) {
             throw new InvalidParameterException("Activity instance id required");
         }
-        
         return $this->submitActivity($params);
         
     }
@@ -372,6 +384,7 @@ class WorkflowInstanceService extends AbstractService
             $this->beginTransaction();
             try {
                 $count = $this->table->save($form);
+                $this->logger->info("WorkFlow Instance Form DATA INSERTED--- ".print_r($count,true));
                 if ($count == 0) {
                     $this->rollback();
                     return 0;
@@ -379,7 +392,7 @@ class WorkflowInstanceService extends AbstractService
                 $this->commit();
                 $id = $this->table->getLastInsertValue();
                 $data['id'] = $id;
-
+                $this->logger->info("SET UP WORKFLOW DATA--- ".print_r($data,true));
             } catch (Exception $e) {
                 $this->logger->info("SET UP WORKFLOW Exception -- ".$e->getMessage()." Trace -- ".$e->getTraceAsString());
                 $this->rollback();

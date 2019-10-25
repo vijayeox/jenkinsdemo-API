@@ -1,15 +1,15 @@
 <?php
 
 use Oxzion\AppDelegate\DocumentAppDelegate;
+use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\Encryption\Crypto;
 
-class PolicyDocument implements DocumentAppDelegate
+class PolicyDocument extends AbstractAppDelegate implements DocumentAppDelegate
 {
-    private $logger;
     private $documentBuilder;
     protected $type;
     protected $template;
@@ -124,12 +124,9 @@ class PolicyDocument implements DocumentAppDelegate
                      'nTemplate' => 'Group_PL_NI',
                      'nheader' => 'Group_NI_header.html',
                      'nfooter' => 'Group_NI_footer.html'));
+        parent::__construct();
     }
 
-
-    public function setLogger($logger){
-        $this->logger = $logger;
-    }
     public function setDocumentBuilder($builder){
         
         $this->documentBuilder = $builder;
@@ -318,7 +315,7 @@ class PolicyDocument implements DocumentAppDelegate
             $this->documentBuilder->generateDocument($aniTemplate,$data,$aniDest,$options);
             $data['ani_document'] = $dest['relativePath'].$data['product'].'_NI'.'.pdf';
         }
-
+        $this->logger->info("DATA".print_r($data,true));
         
         return $data;
     }

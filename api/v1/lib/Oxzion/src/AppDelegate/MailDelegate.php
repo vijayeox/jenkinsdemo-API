@@ -7,17 +7,16 @@ use Oxzion\Service\TemplateService;
 use Logger;
 
 
-abstract class MailDelegate implements AppDelegate
+abstract class MailDelegate extends AbstractAppDelegate
 {
 
-	protected $logger;
 	private $messageProducer;
 	private $templateService;
 
-	public function setLogger(Logger $logger){
-		 $this->logger = $logger;
+	public function __construct(){
+		parent::__construct();
 	}
-
+	
 	public function setMessageProducer(MessageProducer $messageProducer){
 		$this->messageProducer = $messageProducer;
 	}
@@ -28,6 +27,10 @@ abstract class MailDelegate implements AppDelegate
 
 	protected function sendMail(array $data,string $template,array $mailOptions)
     {
+    	$this->logger->info("SEND MAIL ----".print_r($data,true));
+    	$orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));
+    	$data['orgUuid'] = $orgUuid;
+
         $mailOptions['body'] = $this->templateService->getContent($template,$data);
         $userMail = $this->messageProducer->sendTopic(json_encode($mailOptions), 'mail');
     }

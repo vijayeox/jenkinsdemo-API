@@ -13,10 +13,12 @@ class DispatchAutoRenewalNotification extends DispatchNotification {
     public function __construct(){
         $this->template = array(
             'Individual Professional Liability' => 'COIAutoRenewalNotiMailTemplate');
+        parent::__construct();
     }
 
     public function execute(array $data,Persistence $persistenceService)
     {
+        $this->logger->info("DispatchAutoRenewalNotification");
         $data['template'] = $this->template[$data['product']];
         $data['subject'] = 'Policy Auto Renewal';
         $response = $this->dispatch($data);

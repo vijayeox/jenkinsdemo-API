@@ -10,6 +10,7 @@ use Workflow\Service\WorkflowInstanceService;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\ValidationException;
 use Oxzion\EntityNotFoundException;
+use Logger;
 
 class ActivityInstanceController extends AbstractApiControllerHelper
 {
@@ -24,7 +25,7 @@ class ActivityInstanceController extends AbstractApiControllerHelper
     {
         $this->activityInstanceService = $activityInstanceService;
         $this->workflowInstanceService = $workflowInstanceService;
-        $this->log = $this->getLogger();
+        $this->log = Logger::getLogger(__CLASS__);
     }
     /**
     * Activity Instance API

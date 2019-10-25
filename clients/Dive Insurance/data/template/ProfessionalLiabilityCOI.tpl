@@ -20,7 +20,7 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$firstname},{$initial},{$lastname}</p>
+					<p class = "details">{$initial},{$firstname},{$lastname}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
 					<p class = "details">{$city},{$state}</p>
@@ -36,8 +36,8 @@
 				<div class = "certificate_data1">
 					<p class = "p_margin">{$certificate_no}</p>
 					<p class = "p_margin">{$padi}</p>
-					<p class = "p_margin">{$start_date}</p>
-					<p class = "p_margin">{$end_date}</p>
+					<p class = "p_margin">{$start_date|date_format:"%m/%d/%Y"}</p>
+					<p class = "p_margin">{$end_date|date_format:"%m/%d/%Y"}</p>
 					<p class = "p_margin">90 DAY DISCOVERY PERIOD</p>
 				</div>
 				<hr></hr>

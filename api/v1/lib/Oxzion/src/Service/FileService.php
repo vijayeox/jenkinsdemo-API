@@ -36,6 +36,7 @@ class FileService extends AbstractService
      */
     public function createFile(&$data, $workflowInstanceId = null)
     {
+        $this->logger->info("CREATE FILE");
         unset($data['submit']);
         unset($data['workflowId']);
         $jsonData = json_encode($data);
@@ -49,6 +50,7 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
+        $this->logger->info("FILE ---- ".print_r($data,true));
         $data['data'] = $jsonData;
         $data['app_id'] = $this->getIdFromUuid('ox_app', $data['app_id']);
         $data['workflow_instance_id'] = isset($workflowInstanceId) ? $workflowInstanceId : null;
@@ -62,11 +64,16 @@ class FileService extends AbstractService
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
         $file = new File();
         $file->exchangeArray($data);
+        $this->logger->info("FILE EXCHANGE---- ".print_r($file,true));
         $file->validate();
         $fields = array_diff_assoc($data, $file->toArray());
+        $this->logger->info("FIELD DATA ----- ".print_r($fields,true));
         $this->beginTransaction();
+
         $count = 0;
+        $this->logger->info("COUNT ----".print_r($count,true));
         try {
+            $this->logger->info("FILE DATA ----- ".print_r($file,true));
             $count = $this->table->save($file);
             if ($count == 0) {
                 $this->rollback();
@@ -74,6 +81,7 @@ class FileService extends AbstractService
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
+            $this->logger->info("FILE DATA ----- ".print_r($data,true));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
             if ($validFields && !empty($validFields)) {
                 $this->multiInsertOrUpdate('ox_file_attribute', $validFields, ['id']);

@@ -6,7 +6,7 @@
 <body>         
 	<div class="main_div">
 		<div class = "details">
-			<p class = "info">{$lastname},{$firstname}</p>
+			<p class = "info">{$lastname},{$firstname},{$initial}</p>
 			<p class = "info">{$address1},{$address2}</p>
 			<p class = "info">{$city},{$state}</p>
 			<p class = "info">{$country},{$zip}</p>

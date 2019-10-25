@@ -36,14 +36,9 @@ class CustomProcessEngine extends AbstractBpmnParseListener {
   void parseServiceTask(Element serviceTaskElement, ScopeImpl scope, ActivityImpl activity) {
     Element extensionElement = serviceTaskElement.element("extensionElements")
     if (extensionElement != null) {
-      Element inputOutElement = extensionElement.element("inputOutput")
-      if (inputOutElement != null) {
-        List<Element> inputParameters = inputOutElement.elements("inputParameter")
-        for (Element inputParameter : inputParameters) {
-            CustomServiceTaskListener serviceTaskListener = new CustomServiceTaskListener()
-            activity.addListener("start",serviceTaskListener)
-          }
-      }
+      Element executionListener = extensionElement.element("executionListener")
+      CustomServiceTaskListener serviceTaskListener = new CustomServiceTaskListener()
+      activity.addListener("start",serviceTaskListener)
     }
   }
 }

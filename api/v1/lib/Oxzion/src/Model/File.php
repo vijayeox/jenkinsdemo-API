@@ -5,7 +5,7 @@ namespace Oxzion\Model;
 class File extends Entity
 {
     protected $data = array(
-        'id'=>0 ,
+        'id'=> null,
         'org_id' => 0,
         'uuid' => null,
         'data' => null,

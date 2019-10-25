@@ -3,11 +3,14 @@
 namespace Oxzion\Utils;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
+use Logger;
 
 class ArtifactUtils
 {
+    public static $logger;
     public static function getTemplatePath($config, $template, $params = array())
     {
+        print("in gettemplatePath");
         $templateDir = $config['TEMPLATE_FOLDER']; 
         $orgUuid = isset($params['orgUuid']) ? $params['orgUuid'] : AuthContext::get(AuthConstants::ORG_UUID);
         if (isset($orgUuid)) {
@@ -15,6 +18,7 @@ class ArtifactUtils
         } else {
             $path = $template;
         }
+        self::$logger->info("path - $path");
         if (is_file($templateDir.$path)) {
             return $templateDir.$orgUuid;
         }else if (is_file($templateDir.$template)) {
@@ -37,3 +41,5 @@ class ArtifactUtils
         return array('absolutePath' => $templateDir.$path, 'relativePath' => $path);
     }
 }
+
+ArtifactUtils::$logger = Logger::getLogger('Oxzion\Utils\ArtifactUtils');

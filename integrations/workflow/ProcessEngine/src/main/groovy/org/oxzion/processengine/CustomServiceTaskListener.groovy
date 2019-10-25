@@ -47,31 +47,37 @@ class CustomServiceTaskListener implements ExecutionListener {
     taskDetails.parentInstanceId = execution.getParentActivityInstanceId()
     taskDetails.parentActivity = execution.getParentId()
     String json = new JsonBuilder(taskDetails ).toPrettyString()
-    def connection = getConnection()
-    logger.info("Posting data - ${json}")
-    String response
-    connection.with {
-      doOutput = true
-      requestMethod = 'POST'
-      outputStream.withWriter { writer ->
-        writer << json
-      }
-      response = inputStream.withReader{ reader ->
-        reader.text
-      }
+    try{
+      logger.info("Custom Service Task Listener -- ${taskDetails.variables.command}")
+      def connection = getConnection()
+      logger.info("Posting data - ${json}")
+      String response
+      connection.with {
+        doOutput = true
+        requestMethod = 'POST'
+        outputStream.withWriter { writer ->
+          writer << json
+        }
+        response = inputStream.withReader{ reader ->
+          reader.text
+        }
 
-      logger.info("Response received - ${response}")
-      def responseValue = jsonSlurper.parseText(response)
-      if(responseValue.status == "success"){
-          if(taskDetails.variables.return == "true"){
-            def responseData = responseValue.data
-            execution.setVariables(responseData) 
-            logger.info("Response received - ${execution.getVariables()}")
-          }
-      }else{
-         //TODO ERROR HANDLER
-         logger.error("ERROR");
+        logger.info("Response received - ${response}")
+        def responseValue = jsonSlurper.parseText(response)
+        if(responseValue.status == "success"){
+            if(taskDetails.variables.return == "true"){
+              def responseData = responseValue.data
+              responseData = responseData.putAll(responseData)
+              execution.setVariables(responseData)
+              logger.info("Response received - ${execution.getVariables()}")
+            }
+        }else{
+           //TODO ERROR HANDLER
+           logger.error("ERROR");
+        }
       }
-    }
+      }catch(Exception e){
+          logger.error("Custom Service Task Listener Exception-- Message : ${e.getMessage()},   Trace : ${e.getStackTrace()}")
+      } 
   }
 }

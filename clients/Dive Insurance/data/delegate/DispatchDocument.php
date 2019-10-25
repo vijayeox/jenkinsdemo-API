@@ -4,6 +4,9 @@ use Oxzion\AppDelegate\MailDelegate;
 abstract class DispatchDocument extends MailDelegate
 {
 
+    public function __construct(){
+        parent::__construct();
+    }
     public function setDocumentPath($destination)
     {
         $this->destination = $destination;

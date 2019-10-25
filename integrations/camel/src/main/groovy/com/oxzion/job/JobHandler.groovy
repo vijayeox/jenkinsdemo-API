@@ -115,7 +115,7 @@ class JobHandler extends QuartzJobBean {
             postAuth.setRequestProperty("Content-Type", "application/json")
             postAuth.getOutputStream().write(message.getBytes("UTF-8"))
             def postAuthRC = postAuth.getResponseCode()
-            logger.info("The Response of authorization api call is = ${postAuthRC}")
+            logger.info("The Response of api call is = ${postAuthRC}")
             if (postAuthRC.equals(200)) {
                 auth_success_json = postAuth.getInputStream().getText()
             }

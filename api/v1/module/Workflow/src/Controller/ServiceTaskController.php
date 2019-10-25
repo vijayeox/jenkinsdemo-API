@@ -58,7 +58,7 @@ class ServiceTaskController extends AbstractApiControllerHelper
             return $this->getErrorResponse($e->getMessage(), 404, $response);
         }
         catch (Exception $e){
-            $this->log->error("Entity Not found -".$e->getMessage(), $e);
+            $this->log->error(ServiceTask::class.":Entity Not found -".$e->getMessage());
             $response = ['data' => $data];
             return $this->getErrorResponse($e->getMessage(), 500, $response);
         }

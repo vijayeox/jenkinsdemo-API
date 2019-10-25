@@ -5,6 +5,8 @@ use Zend\Db\Sql\Expression;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\ParameterContainer;
 use Oxzion\Utils\StringUtils;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 use Exception;
 
 abstract class AbstractService extends AbstractBaseService
@@ -279,5 +281,19 @@ abstract class AbstractService extends AbstractBaseService
         $statementContainer->setParameterContainer($parameterContainer);
         $statementContainer->setSql($query);
         return $statementContainer->execute();
+    }
+
+    public function updateOrganizationContext($data){
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);
+        if(!isset($orgId) && !$orgId && isset($data['orgId'])){
+            AuthContext::put(AuthConstants::ORG_UUID, $data['orgId']);
+            $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
+            AuthContext::put(AuthConstants::ORG_ID, $orgId);
+            $select  = "SELECT ou.id,ou.uuid from ox_user as ou join ox_organization as org on org.contactid = ou.id where org.id = :orgId";
+            $params = array("orgId" => $orgId);
+            $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
+            AuthContext::put(AuthConstants::USER_ID, $result[0]['id']);
+            AuthContext::put(AuthConstants::USER_UUID, $result[0]['uuid']);
+        }
     }
 }

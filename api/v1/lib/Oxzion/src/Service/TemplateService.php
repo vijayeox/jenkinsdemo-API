@@ -63,13 +63,19 @@ class TemplateService extends AbstractService
      */
     public function getContent($templateName, $data = array())
     {
+
+        $this->logger->info("Template Name:".$templateName);
+        $this->logger->info("Data context".print_r($data,true));
+
         $template = $this->setTemplateDir($templateName, $data);
+        $this->logger->info("Template Directory:".print_r($template,true));
         if (!$template) {
             throw new Exception("Template not found!");
         }
         $this->client->assign($data);
         try{
             $content = $this->client->fetch($template);
+            $this->logger->info("TEMPLATE CONTENT".print_r($content,true));
         }catch(Exception $e){
             print("Error - ".$e->getMessage()."\n");
             throw $e;
@@ -78,9 +84,10 @@ class TemplateService extends AbstractService
     }
 
     private function setTemplateDir($templateName, $params = array()){
+        $this->logger->info("in setTemplateDir");
         $template = $templateName.$this->templateExt;
         $templatePath = $this->getTemplatePath($template, $params);
-        $this->logger->info("template - $templatePath/$template");
+       $this->logger->info("template - $templatePath/$template");
         
         if($templatePath){
             $this->client->setTemplateDir($templatePath);
@@ -101,7 +108,7 @@ class TemplateService extends AbstractService
                 $params['orgUuid'] = $orgUuid;
             }
         } 
-        
+        $this->logger->info("In getTemplatePath");
         return ArtifactUtils::getTemplatePath($this->config, $template, $params);
     }
 }
