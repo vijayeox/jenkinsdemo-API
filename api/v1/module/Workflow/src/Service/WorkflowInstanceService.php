@@ -177,6 +177,7 @@ class WorkflowInstanceService extends AbstractService
         $workflowId = $params['workflowId'];
         $workflow = $this->workflowService->getWorkflow($workflowId);
         if (empty($workflow)) {
+            $this->logger->info("EMPTY WORKFLOW --- ");
             return 0;
         }
         $params['form_id'] = $workflow['form_id'];
@@ -202,7 +203,7 @@ class WorkflowInstanceService extends AbstractService
             }
             $this->beginTransaction();
             $file = $this->fileService->createFile($fileData, $workflowInstance['id']);
-            $this->logger->info("File created - WIn");
+            $this->logger->info("File created -".$file);
             $params['fileId'] = $fileData['uuid'];
             $params['workflow_instance_id'] = $workflowInstance['id'];
             $this->logger->info("Checking something".print_r($workflow['process_id'],true));

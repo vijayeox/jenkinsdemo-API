@@ -71,7 +71,6 @@ class FileService extends AbstractService
         $this->beginTransaction();
 
         $count = 0;
-        $this->logger->info("COUNT ----".print_r($count,true));
         try {
             if($parentId){
                 if(!$this->setFileLatest($parentId, 0)){
@@ -79,15 +78,18 @@ class FileService extends AbstractService
                 }
             }
             $count = $this->table->save($file);
+            $this->logger->info("COUNT  FILE DATA----".$count);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
             }
             $id = $this->table->getLastInsertValue();
+            $this->logger->info("FILE ID DATA".$id);
             $data['id'] = $id;
             $this->logger->info("FILE DATA ----- ".print_r($data,true));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
             if (!$validFields || empty($validFields)) {
+                $this->logger->info("FILE Validation ----- ");
                 return 0;
             }            
             $this->logger->info("Check Fields - ".print_r($validFields,true));
@@ -294,7 +296,7 @@ class FileService extends AbstractService
     */
     protected function checkFields($entityId, $fieldData, $fileId)
     {
-        $this->logger->info("Entering into checkFields method");
+        $this->logger->info("Entering into checkFields method---EntityId : ".$entityId);
         $required = array();
         if (isset($entityId)) {
             $query = "SELECT ox_field.* from ox_field
@@ -305,6 +307,7 @@ class FileService extends AbstractService
             $fields = $this->executeQueryWithBindParameters($query, $where)->toArray();
             $this->logger->info("Query result" . print_r($fields, true));
         } else {
+            $this->logger->info("No Entity ID");
             return 0;
         }
         $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.file_id=?";

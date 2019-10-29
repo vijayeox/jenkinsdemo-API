@@ -163,8 +163,8 @@ class ActivityInstanceService extends AbstractService
         $workflowInstanceId = $resultSet[0]['id'];
         $orgId = $resultSet[0]['org_id'];
         if(isset($data['taskId'])){
-            $activityQuery = "SELECT * FROM `ox_activity` WHERE task_id = :taskId;";
-            $activityParams = array("taskId" => $data['taskId']);
+            $activityQuery = "SELECT * FROM `ox_activity` WHERE workflow_id = :workflowId;";
+            $activityParams = array("workflowId" => $resultSet[0]['workflow_id']);
             $activity = $this->executeQuerywithBindParameters($activityQuery,$activityParams)->toArray();
             $activityId = $activity[0]['id'];
         }
@@ -244,9 +244,10 @@ class ActivityInstanceService extends AbstractService
             } else {
                 return 0;
             }
-            if(isset($data['taskId'])){
-                $activityQuery = "SELECT * FROM `ox_activity` WHERE task_id = :taskId;";
-                $queryParams = array("taskId" => $data['taskId']);
+            if(isset($workflowId)){
+                $activityQuery = "SELECT a.* FROM `ox_activity` as a 
+                        inner join ox_workflow as w on w.id = a.workflow_id  WHERE w.uuid = :workflowId;";
+                $queryParams = array("workflowId" => $workflowId);
                 $this->logger->info("Executing Activity query - $activityQuery with params ". json_encode($queryParams));                        
                 $activity = $this->executeQuerywithBindParameters($activityQuery,$queryParams)->toArray();
                 if(count($activity)>0){

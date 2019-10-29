@@ -462,14 +462,15 @@ class WorkflowService extends AbstractService
                       INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
                       INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_id = ox_workflow.id
                       INNER JOIN ox_activity on ox_activity.workflow_id = ox_workflow.id
-                      INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id
+                      INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
                       LEFT JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
                       LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id";
         $whereQuery = " WHERE (ox_user_group.avatar_id = $userId 
                                 OR ox_activity_instance_assignee.user_id = $userId 
                                 OR ox_activity_instance_assignee.group_id is null
                                 OR ox_activity_instance_assignee.id is null) 
-                            AND $appFilter AND ox_activity_instance.status = 'In Progress'";                      
+                            AND $appFilter AND ox_activity_instance.status = 'In Progress'
+                            AND ox_workflow_instance.org_id = ".AuthContext::get(AuthConstants::ORG_ID);                      
         if(!empty($sort)){
             $sort = " ORDER BY ".$sort;
         }
