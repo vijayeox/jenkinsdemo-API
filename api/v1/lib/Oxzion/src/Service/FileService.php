@@ -131,12 +131,16 @@ class FileService extends AbstractService
             where ox_file.workflow_instance_id=? ";
             $whereQuery = array($data['workflow_instance_id']);
             $obj = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray()[0];
+            if (is_null($obj)) {
+                return 0;
+            }
         } else {
             $obj = $this->table->getByUuid($id);
+            if (is_null($obj)) {
+                return 0;
+            }
             $obj = $obj->toArray();
-        }
-        if (is_null($obj)) {
-            return 0;
+            
         }
         if (isset($data['form_uuid'])) {
             $data['form_id'] = $this->getIdFromUuid('ox_form', $data['form_uuid']);
@@ -256,7 +260,7 @@ class FileService extends AbstractService
                 if($result[0]['data']){
                     $result[0]['data'] = json_decode($result[0]['data'], true);
                 }
-                return $result;
+                return $result[0];
             }
             return 0;
         } catch (Exception $e) {
