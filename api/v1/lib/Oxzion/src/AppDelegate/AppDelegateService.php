@@ -56,6 +56,7 @@ class AppDelegateService extends AbstractService
                     if (!file_exists($destination)) {
                         FileUtils::createDirectory($destination);
                     }
+                    $this->logger->info("Document template location - $destination");
                     $obj->setTemplatePath($destination);
                 } else if (is_a($obj, MailDelegate::class)) {
                     $this->logger->info(AppDelegateService::class."MAIL DELEGATE ---");

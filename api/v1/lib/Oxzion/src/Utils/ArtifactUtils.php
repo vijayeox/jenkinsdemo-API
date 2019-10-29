@@ -10,15 +10,15 @@ class ArtifactUtils
     public static $logger;
     public static function getTemplatePath($config, $template, $params = array())
     {
-        print("in gettemplatePath");
         $templateDir = $config['TEMPLATE_FOLDER']; 
         $orgUuid = isset($params['orgUuid']) ? $params['orgUuid'] : AuthContext::get(AuthConstants::ORG_UUID);
+        self::$logger->info("Org Uuid - $orgUuid");
         if (isset($orgUuid)) {
             $path = $orgUuid."/".$template;
         } else {
             $path = $template;
         }
-        self::$logger->info("path - $path");
+        self::$logger->info("Path - $path, template directory - $templateDir,template - $template");
         if (is_file($templateDir.$path)) {
             return $templateDir.$orgUuid;
         }else if (is_file($templateDir.$template)) {
@@ -42,4 +42,4 @@ class ArtifactUtils
     }
 }
 
-ArtifactUtils::$logger = Logger::getLogger('Oxzion\Utils\ArtifactUtils');
+ArtifactUtils::$logger  = Logger::getLogger(__CLASS__);

@@ -7,16 +7,18 @@ use Oxzion\Document\DocumentGenerator;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
+use Logger;
 
 class DocumentBuilder {
     private $templateService;
     private $documentGenerator;
     private $config;
-
+    private $logger;
     public function __construct($config, TemplateService $templateService, DocumentGenerator $documentGenerator){
         $this->config = $config;
         $this->templateService = $templateService;
         $this->documentGenerator = $documentGenerator;
+        $this->logger = Logger::getLogger(__CLASS__);
     }
 
     /**
@@ -30,7 +32,9 @@ class DocumentBuilder {
     *               footer - name of the footer file (path will be discovered using conventions)
     */
     public function generateDocument($template, $data, $destination, $options = null){
+        $this->logger->info("Template - $template");
         $content = $this->templateService->getContent($template, $data);
+        $this->logger->info("Content  - $content");
         $append = array();
         $prepend = array();
         $header = null;
