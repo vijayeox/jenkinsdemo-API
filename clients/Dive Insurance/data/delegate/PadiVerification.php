@@ -28,6 +28,14 @@ class PadiVerification implements AppDelegate
             while ($result->next()) {
                 $response[] = $result->current();
             }
+            
+            $selectQuery = "Select state FROM state_license WHERE state_in_short ='".$response[0]['state']."'";  
+            $resultSet = $persistenceService->selectQuery($selectQuery);
+            while ($resultSet->next()) {
+                $stateDetails[] = $resultSet->current();
+            }
+            $response[0]['state'] = $stateDetails[0]['state'];
+
             if(isset($response[0]['country_code'])){
                 $response[0]['country'] = Country::codeToCountryName($response[0]['country_code']);
             }
