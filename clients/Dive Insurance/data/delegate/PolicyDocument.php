@@ -170,7 +170,7 @@ class PolicyDocument extends AbstractAppDelegate implements DocumentAppDelegate
         }
         $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));        
         $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid'],array('orgUuid' => $orgUuid));
-        
+        $data['orgUuid'] = $orgUuid;
         if(isset($this->template[$data['product']]['instruct'])){
             $instruct = $this->template[$data['product']]['instruct'];
             $this->documentBuilder->copyTemplateToDestination($instruct,$dest['relativePath']);
@@ -207,7 +207,11 @@ class PolicyDocument extends AbstractAppDelegate implements DocumentAppDelegate
                 $data['policy_document'] = $dest['relativePath'].$policy;
             }
         }
-        
+
+        if(isset($data['endorsement_options'])){
+            $data['endorsement_options'] = json_encode($data['endorsement_options']);
+        }
+
         if(isset($data['lossPayees'])){
             $data['lossPayees'] = json_encode(array('name' => $data['lossPayees']));
         }
@@ -233,7 +237,6 @@ class PolicyDocument extends AbstractAppDelegate implements DocumentAppDelegate
             $options['generateOptions'] = array('disable_smart_shrinking' => 1);
         }
         $this->documentBuilder->generateDocument($template, $data, $destAbsolute, $options);
-        
         $data['coi_document'] = $dest['relativePath'].$template.'.pdf';
         
         if($data['state'] == 'California'){
