@@ -308,6 +308,8 @@ class WorkflowInstanceService extends AbstractService
         if (!isset($params['activityInstanceId'])) {
             throw new InvalidParameterException("Activity instance id required");
         }
+
+        $this->logger->info("SUBMIT ACTIVITY");
         return $this->submitActivity($params);
         
     }

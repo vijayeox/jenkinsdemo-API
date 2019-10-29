@@ -141,7 +141,9 @@ class PolicyDocument extends AbstractAppDelegate implements DocumentAppDelegate
         $this->logger->info("Template Data Source - ".print_r($data, true));
         $date = ''; 
         $this->logger->info("Executing Policy Document");
-        $coi_number = $this->generateCOINumber($data,$persistenceService);
+        if($this->type != "quote"){
+            $coi_number = $this->generateCOINumber($data,$persistenceService);
+        }
         $license_number = $this->getLicenseNumber($data,$persistenceService);
         $policyDetails = $this->getPolicyDetails($data,$persistenceService);
         $data['certificate_no'] = $coi_number;
@@ -298,7 +300,7 @@ class PolicyDocument extends AbstractAppDelegate implements DocumentAppDelegate
         if(isset(self::TEMPLATE[$data['product']]['blanketForm'])){
                 $blanketform = self::TEMPLATE[$data['product']]['blanketForm'];
                 $this->documentBuilder->copyTemplateToDestination($blanketform,$dest['relativePath']);
-                $data['blanket_document'] = $dest['relativePath'].$coi_number.'Individual_AI_Blanket_Endorsement.pdf';
+                $data['blanket_document'] = $dest['relativePath'].'Individual_AI_Blanket_Endorsement.pdf';
         }
 
         if(isset($data['additionalNamedInsured'])){

@@ -1,1 +1,1 @@
-callback.Url = 'http://localhost:8080'
+callback.Url = 'http://172.16.1.95:8080'

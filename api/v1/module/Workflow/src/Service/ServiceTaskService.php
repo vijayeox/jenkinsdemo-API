@@ -69,6 +69,7 @@ class ServiceTaskService extends AbstractService
         }else if(isset($data['variables']) && isset($data['variables']['commands'])){
             $this->logger->info("Service Task Service - Comamnds");
             $commands = $data['variables']['commands'];
+            $this->logger->info("COMMAND LIST ------".print_r($commands,true));
             unset($data['variables']['commands']);
             $inputData = $data['variables'];
             foreach($commands as $index => $value){
@@ -77,6 +78,7 @@ class ServiceTaskService extends AbstractService
                 unset($commandJson['command']);
                 $variables = array_merge($inputData, $commandJson);
                 $this->logger->info(ServiceTaskService::class.print_r($variables,true));
+                $this->logger->info("COMMAND LIST ------".$command);
                 $result = $this->processCommand($variables, $command);
                 if(is_array($result)){
                     $inputData = $result;
@@ -90,6 +92,7 @@ class ServiceTaskService extends AbstractService
 
 
         protected function processCommand(&$data,$command){
+            $this->logger->info("PROCESS COMMAND : command --- ".$command);
         switch ($command) {
             case 'mail':
                 $this->logger->info("SEND MAIL");
@@ -140,12 +143,16 @@ class ServiceTaskService extends AbstractService
         $this->logger->info("Response - ".print_r($response,true));
         if(isset($response['body'])){
             $response = json_decode($response['body'], true);
-            if($data['automatic_renewal'] == true){
+            if($data['automatic_renewal'] == true || $data['automatic_renewal'] == "true"){
                 $data['automatic_renewal_jobid'] = $response['JobId'];
             }
-
             $this->logger->info("Schedule JOB DATA - ".print_r($data,true));
-            //TODO save JobId to file
+            $this->logger->info("FILE ID --".$data['fileId']);
+            $fileData = json_encode($data);
+            $params = array("filedata" => $fileData,"fileUuid" => $data['fileId']);
+            $query = "UPDATE ox_file SET data = :filedata where uuid = :fileUuid";
+            $this->executeQueryWithBindParameters($query,$params);
+
             return $response;
         }
 

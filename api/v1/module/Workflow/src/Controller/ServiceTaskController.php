@@ -38,6 +38,7 @@ class ServiceTaskController extends AbstractApiControllerHelper
     {
 
         $data = $this->extractPostData();
+        $this->serviceTaskService->updateOrganizationContext($data['variables']);
         $this->log->info(ServiceTask::class.":Post Data- ". print_r(json_encode($data), true));
         $this->serviceTaskService->updateOrganizationContext($data['variables']);
         try {

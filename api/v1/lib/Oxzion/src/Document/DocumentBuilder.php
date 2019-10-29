@@ -8,7 +8,6 @@ use Oxzion\Utils\FileUtils;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Logger;
-
 class DocumentBuilder {
     private $templateService;
     private $documentGenerator;
@@ -65,6 +64,7 @@ class DocumentBuilder {
 
     public function copyTemplateToDestination($template,$destination){
         $sourcePath = $this->config['TEMPLATE_FOLDER'].AuthContext::get(AuthConstants::ORG_UUID).'/'.$template;
+        $this->logger->info("copyTemplateToDestination".$sourcePath);
         $destinationPath = $this->config['APP_DOCUMENT_FOLDER'].$destination;
         FileUtils::copy($sourcePath,$template,$destinationPath);
         return;
