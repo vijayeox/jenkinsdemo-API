@@ -1,10 +1,7 @@
 <?php
 namespace Oxzion\AppDelegate;
-use Oxzion\Document\DocumentBuilder;
 use Oxzion\Messaging\MessageProducer;
-use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Service\TemplateService;
-use Logger;
 
 
 abstract class MailDelegate extends AbstractAppDelegate

@@ -108,7 +108,7 @@ class TemplateService extends AbstractService
                 $params['orgUuid'] = $orgUuid;
             }
         } 
-        $this->logger->info("In getTemplatePath");
+        $this->logger->debug("In getTemplatePath");
         return ArtifactUtils::getTemplatePath($this->config, $template, $params);
     }
 }
