@@ -276,9 +276,6 @@ class AppService extends AbstractService
             else if ($folderCount > 1){
                 throw new Exception("Cannot setup symlink as more than one app exists");
             }
-            else if ($folderCOunt < 1 ){
-            	throw new Exception(" Cannot setup symlink as no App exists");
-            }
             if($flag == 1){
                 $runDiscover = $this->executePackageDiscover();
             }
