@@ -467,7 +467,8 @@ class WorkflowService extends AbstractService
                       LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id";
         $whereQuery = " WHERE (ox_user_group.avatar_id = $userId 
                                 OR ox_activity_instance_assignee.user_id = $userId 
-                                OR ox_activity_instance_assignee.group_id is null) 
+                                OR ox_activity_instance_assignee.group_id is null
+                                OR ox_activity_instance_assignee.id is null) 
                             AND $appFilter AND ox_activity_instance.status = 'In Progress'";                      
         if(!empty($sort)){
             $sort = " ORDER BY ".$sort;
@@ -483,6 +484,7 @@ class WorkflowService extends AbstractService
          ox_activity.name as activityName,
         CASE WHEN ox_activity_instance_assignee.user_id is not null then false
         else true end as to_be_claimed  $fromQuery $whereQuery $sort $pageSize $offset";
+        $this->logger->info("Executing query - $querySet");
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
         return array('data' => $resultSet,'total' => $countResultSet[0]['count']);
     }
