@@ -12,7 +12,7 @@
 			<p class="name1">{$address1}</p>
 			<p class="name1">{$address2}</p>
 			<p class="name1">{$city},{$state}</p>
-			<p class="name1">{$country},{$zipcode}</p>
+			<p class="name1">{$country},{$zip}</p>
 		</div>
 
 		<p>Dear <span class ="rgaard1">{$firstname}&nbsp{$lastname}</span></p>

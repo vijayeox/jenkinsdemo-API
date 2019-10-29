@@ -21,11 +21,11 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$firstname},{$middlename},{$lastname}</p>
+					<p class = "details">{$firstname},{$initial},{$lastname}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
 					<p class = "details">{$city},{$state}</p>
-					<p class = "details">{$country},{$zipcode}</p>
+					<p class = "details">{$country},{$zip}</p>
 			</div>
 			<div class ="content2">
 				<div class = "certificate_data">

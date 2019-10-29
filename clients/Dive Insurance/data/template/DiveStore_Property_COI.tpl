@@ -12,7 +12,7 @@
 <body>
 	<div class ="body_div">
 	  <hr class = "s_hrtag"></hr>
-      <center><b>Store Location:&nbsp<span class ="store_location"> {$address1},{$address2},{$city},{$state},{$country},{$zipcode}</span></b></center>
+      <center><b>Store Location:&nbsp<span class ="store_location"> {$address1},{$address2},{$city},{$state},{$country},{$zip}</span></b></center>
       <hr class = "s_hrtag"></hr>
       <br/>
 		<div class="section_col">

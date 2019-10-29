@@ -35,7 +35,7 @@
 					<p class = "c_details">{$address1}</p>
 					<p class = "c_details">{$address2}</p>
 					<p class = "c_details">{$city},{$state}</p>
-					<p class = "c_details">{$country},{$zipcode}</p>
+					<p class = "c_details">{$country},{$zip}</p>
       </div>
       <div class = "agent_info1">
         <p class ="padi_margin"><b>Member#:</b> {$padi}

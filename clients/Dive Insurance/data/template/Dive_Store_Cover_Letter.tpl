@@ -12,7 +12,7 @@
 			<p class="name">{$address1}</p>
 			<p class="name">{$address2}</p>
 			<p class="name">{$city},{$state}</p>
-			<p class="name">{$country},{$zipcode}</p>
+			<p class="name">{$country},{$zip}</p>
 		</div>
 
 		<p class = "rgard">RE: PADI SPONSORED DIVE CENTER INSURANCE</p>
