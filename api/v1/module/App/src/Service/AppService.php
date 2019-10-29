@@ -15,6 +15,7 @@ use Oxzion\Utils\ZipUtils;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Service\FormService;
 use Oxzion\Service\FieldService;
+use Oxzion\Service\EntityService;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ServiceException;
 use Symfony\Component\Yaml\Yaml;
@@ -186,7 +187,7 @@ class AppService extends AbstractService
             $appName = $ymlData['app'][0]['name'];
             $this->setupLinks($path, $appName, $appUuid, $orgId);
             // if(isset($ymlData['workflow'])){
-            //     $this->;
+            //     $this->processWorkflow($ymlData);
             // }
             //check if menu exists and add to app menu table
             //check if workflow given if so deployworkflow
@@ -200,6 +201,33 @@ class AppService extends AbstractService
         }
     }
 
+    private function processWorkflow(&$yamlData){
+        $workflowData = $yamlData['workflow'];
+        foreach ($workflowData as $value) {
+            // print_r($value);
+            $this->checkData($value);
+            $checkIfEntityExists = $this->entityService->getEntityByName($yamlData['app'][0]['uuid'], $value['entity']);
+            if($checkIfEntityExists){
+                print_r($checkIfEntityExists);exit;
+            }
+        }
+    }
+
+    private function checkData($data){
+        $data['uuid'] = isset($data['uuid'])?$data['uuid']:UuidUtil::uuid();
+        if(!(isset($data['bpmn_file']))){
+            throw new Exception("Bpmn file does not exist");
+        }
+        if(!isset($data['name'])){
+            $data['name'] = str_replace('.bpmn', '', $data['bpmn_file']); // Replaces all .bpmn with no space.
+            $data['name'] = preg_replace('/[^A-Za-z0-9]/', '', $data['name'], -1); // Removes special chars.
+            print_r($data);
+        }
+        if(!isset($data['entity'])){
+            throw new Exception("Entity is not defined in yml.");
+        }
+    }
+
     private function setupLinks($path, $appName, $appId, $orgId = null){
         $link = $this->config['DELEGATE_FOLDER'].$appId;
         $target = $path."/data/delegate";
@@ -207,7 +235,6 @@ class AppService extends AbstractService
             FileUtils::unlink($link);
         }
         if(file_exists($target)){
-            print_r("setup link to delegate");
             $this->setupLink($target, $link);
         }
         if($orgId){
@@ -222,9 +249,15 @@ class AppService extends AbstractService
         }
         $apps = $path."view/apps/";
         $flag = 0;
+        $folderCount = 0;
         if(file_exists($apps) && is_dir($apps)){
             $files = new FileSystemIterator($apps);
-            if ((iterator_count($files)) == 1){
+            foreach ($files as $file) {
+                if($file->isDir()){
+                    $folderCount += 1;
+                }
+            }
+            if ($folderCount == 1){
                 foreach ($files as $file) {
                     if($file->isDir()){
                         $target = $file->getPathName();
@@ -240,8 +273,11 @@ class AppService extends AbstractService
                     }
                 }
             }
-            else if ((iterator_count($files)) > 1){
+            else if ($folderCount > 1){
                 throw new Exception("Cannot setup symlink as more than one app exists");
+            }
+            else if ($folderCOunt < 1 ){
+            	throw new Exception(" Cannot setup symlink as no App exists");
             }
             if($flag == 1){
                 $runDiscover = $this->executePackageDiscover();
@@ -450,7 +486,7 @@ class AppService extends AbstractService
             $result[$x]['start_options'] = json_decode($result[$x]['start_options'], true);
         }
         return array('data' => $result,
-         'total' => $count);
+           'total' => $count);
     }
 
     public function updateApp($id, &$data)

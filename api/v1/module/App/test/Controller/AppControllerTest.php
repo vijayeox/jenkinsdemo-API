@@ -205,7 +205,6 @@ class AppControllerTest extends ControllerTest
     public function testDeployApp()
     {
         $config = $this->getApplicationConfig();
-        unlink(__DIR__.'/../sampleapp/view/apps/junkFile.html');
         copy(__DIR__.'/../sampleapp/application1.yml', __DIR__.'/../sampleapp/application.yml');
         $target = __DIR__.'/../Dataset/SampleApp';
         $link = __DIR__.'/../sampleapp/view/apps/SampleApp';
