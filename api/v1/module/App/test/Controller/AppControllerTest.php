@@ -205,6 +205,7 @@ class AppControllerTest extends ControllerTest
     public function testDeployApp()
     {
         $config = $this->getApplicationConfig();
+        unlink(__DIR__.'/../sampleapp/view/apps/junkFile.html');
         copy(__DIR__.'/../sampleapp/application1.yml', __DIR__.'/../sampleapp/application.yml');
         $target = __DIR__.'/../Dataset/SampleApp';
         $link = __DIR__.'/../sampleapp/view/apps/SampleApp';
@@ -314,13 +315,11 @@ class AppControllerTest extends ControllerTest
         $config = $this->getApplicationConfig();
         $file = $config['DELEGATE_FOLDER'].$appId;
         if(is_link($file)){
-            print_r("unlink from delegate folder");
             unlink($file);
         }
         if($orgId){
             $file = $config['TEMPLATE_FOLDER'].$orgId;
             if(is_link($file)){
-                print_r("unlink from template folder");
                 unlink($file);
             }
         }
