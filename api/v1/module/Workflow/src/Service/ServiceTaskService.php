@@ -271,7 +271,7 @@ class ServiceTaskService extends AbstractService
             if(count($result) == 0){
                 throw new EntityNotFoundException("File ".$data['previous_fileId']." not found");
             }
-            return $result[0]['data'];
+            return $result['data'];
         }else{
             return;
         }
