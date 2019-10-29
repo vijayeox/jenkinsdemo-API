@@ -417,23 +417,6 @@ class WorkflowService extends AbstractService
         return $response;
     }
 
-    // public function getFile($params)
-    // {
-    //     if (isset($params['instanceId'])) {
-    //         return $this->fileService->getFile($params['instanceId']);
-    //     } else {
-    //         return 0;
-    //     }
-    // }
-    // public function deleteFile($params)
-    // {
-    //     if (isset($params['instanceId'])) {
-    //         return $this->fileService->deleteFile($params['instanceId']);
-    //     } else {
-    //         return 0;
-    //     }
-    // }
-
     public function getAssignments($appId,$filterParams)
     {
         $userId = AuthContext::get(AuthConstants::USER_ID);
