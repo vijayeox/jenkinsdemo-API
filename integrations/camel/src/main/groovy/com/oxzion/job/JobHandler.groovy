@@ -38,8 +38,8 @@ class JobHandler extends QuartzJobBean {
             if (jobDataMap.JobData.job.url) {
                     String authresponse = postAuth('apikey='+env.getProperty("apikey"))
                     def jwt = slurper.parseText(authresponse)
-                    if((jobDataMap.JobData.job.data).isEmpty())
-                        urlResponse = get(jobDataMap.JobData.job.url, "Bearer " + jwt.data.jwt)
+                    if((jobDataMap.JobData.job.data).isEmpty()){
+                        urlResponse = get(jobDataMap.JobData.job.url, "Bearer " + jwt.data.jwt)}
                     else{
                         urlResponse = post(jobDataMap.JobData.job.url,"Bearer "+jwt.data.jwt,jobDataMap.JobData.job.data)
                     }
@@ -62,6 +62,7 @@ class JobHandler extends QuartzJobBean {
 
     public String postAuth(String data)
     {
+        logger.info("Url to connect - ${env.getProperty('authorization-url')}")
         def postAuth = new URL(env.getProperty("authorization-url")).openConnection()
         def message = data
         try{

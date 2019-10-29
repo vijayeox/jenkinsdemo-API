@@ -28,6 +28,16 @@ class JobSchedulerHelper {
         }
     }
 
+    def cancelJob(String jobId, String jobGroup) {
+            try {
+                JobKey jobKey = JobKey.jobKey(jobId, jobGroup)
+                def check = scheduler.deleteJob(jobKey)
+                return check
+            } catch(Exception ex){
+                logger.error("JOB HANDLER CANCEL (EXCEPTION) --- ${ex}")
+            }
+    }
+
     private JobDetail buildJobDetail(Map jobDataObj) {
         if(!jobDataObj.isEmpty()) {
             JobDataMap jobDataMap = new JobDataMap()

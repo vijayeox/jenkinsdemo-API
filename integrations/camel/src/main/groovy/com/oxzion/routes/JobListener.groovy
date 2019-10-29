@@ -42,7 +42,7 @@ class JobListener {
     Map setupJob(@RequestBody  Map<String, Object> payload/*,@RequestHeader("Authorization") Object auth*/ ) {
         /*payload.put("Authorization",auth)*/
 
-        logger.info("RequestMapping - $payload");
+        logger.info("RequestMapping - $payload")
         JobSchedulerResponse jobSchedulerResponse = new JobSchedulerResponse()
 
         if (payload.containsKey('job')) {
@@ -66,5 +66,32 @@ class JobListener {
         jobSchedulerResponse.setParams(true, "Job Scheduled Successfully!", jobDetail.getKey().getName(), jobDetail.getKey().getGroup())
         return jobSchedulerResponse.getAll()
     }
+    /**
+     *
+     * @param payload
+     * {
+     *     jobId : string
+     *     jobGroup : string
+     * }
+     * @return
+     */
+    @RequestMapping(value ="/canceljob",method = RequestMethod.POST, consumes = "application/json")
+        Map cancelJob(@RequestBody  Map<String, Object> payload ) {
+        logger.info("RequestMapping - $payload")
+        JobSchedulerResponse jobSchedulerResponse = new JobSchedulerResponse()
+        if (payload.containsKey('jobid')) {
+            if(payload.containsKey('jobgroup')) {
+                def check = jobHelper.cancelJob(payload.jobid, payload.jobgroup)
+                if (check)
+                    jobSchedulerResponse.setParams(true, "Job Canceled Successfully!", payload.jobid, payload.jobgroup)
+                else
+                    jobSchedulerResponse.setParams(false, "Failed to cancel job")
+            }
+        }
+        else
+            jobSchedulerResponse.setParams(false,"Data incorrectly specified")
 
+        return jobSchedulerResponse.getAll()
+    }
 }
+
