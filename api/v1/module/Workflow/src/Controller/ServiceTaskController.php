@@ -39,6 +39,7 @@ class ServiceTaskController extends AbstractApiControllerHelper
 
         $data = $this->extractPostData();
         $this->log->info(ServiceTask::class.":Post Data- ". print_r(json_encode($data), true));
+        $this->serviceTaskService->updateOrganizationContext($data['variables']);
         try {
 
             $response = $this->serviceTaskService->runCommand($data);
@@ -49,7 +50,7 @@ class ServiceTaskController extends AbstractApiControllerHelper
                 return $this->getSuccessResponse();
             }
         } catch (ValidationException $e) {
-            $this->log->info(ServiceTask::class.":Exception while Performing Service Task-".$e->getMessage());
+            $this->log->error(ServiceTask::class.":Exception while Performing Service Task-".$e->getMessage(),$e);
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }catch (EntityNotFoundException $e){
