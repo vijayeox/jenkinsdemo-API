@@ -67,6 +67,7 @@ class ServiceTaskService extends AbstractService
             unset($data['variables']['command']);
             return $this->processCommand($data['variables'],$command);
         }else if(isset($data['variables']) && isset($data['variables']['commands'])){
+            $this->logger->info("Service Task Service - Comamnds");
             $commands = $data['variables']['commands'];
             unset($data['variables']['commands']);
             $inputData = $data['variables'];
@@ -76,7 +77,7 @@ class ServiceTaskService extends AbstractService
                 unset($commandJson['command']);
                 $variables = array_merge($inputData, $commandJson);
                 $this->logger->info(ServiceTaskService::class.print_r($variables,true));
-                $result = $this->processCommand($command, $variables);
+                $result = $this->processCommand($variables, $command);
                 if(is_array($result)){
                     $inputData = $result;
                 }
