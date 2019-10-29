@@ -234,7 +234,7 @@ class ActivityInstanceService extends AbstractService
             }
         } catch(Exception $e){
             $this->logger->info("Complete Activity Instance - WorkflowInstance Does not Exist ".$e->getMessage());
-            return 0;
+            throw $e;
         }
         // Org Id from workflow instance based on the Id
         if(isset($data['processVariables'])){
@@ -291,6 +291,7 @@ class ActivityInstanceService extends AbstractService
 
     public function getActivityInstance($activityInstanceId,$workflowInstanceId){
         try{
+            $this->logger->info("getActivityInstance - ");
             $query = "select ox_activity_instance.*, ox_activity.task_id as task_id 
                       FROM `ox_activity_instance` 
                       LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id 
