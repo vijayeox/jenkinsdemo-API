@@ -39,28 +39,28 @@ class ServiceTaskController extends AbstractApiControllerHelper
 
         $data = $this->extractPostData();
         $this->serviceTaskService->updateOrganizationContext($data['variables']);
-        $this->log->info(ServiceTask::class.":Post Data- ". print_r(json_encode($data), true));
+        $this->log->info(":Post Data- ". print_r(json_encode($data), true));
         $this->serviceTaskService->updateOrganizationContext($data['variables']);
         try {
 
             $response = $this->serviceTaskService->runCommand($data);
             if ($response && is_array($response)) {
-                $this->log->info(ServiceTask::class.":Workflow Step Successfully Executed - ".print_r($response, true));
+                $this->log->info(":Workflow Step Successfully Executed - ".print_r($response, true));
                 return $this->getSuccessResponseWithData($response, 200);
             } else {
                 return $this->getSuccessResponse();
             }
         } catch (ValidationException $e) {
-            $this->log->error(ServiceTask::class.":Exception while Performing Service Task-".$e->getMessage(),$e);
+            $this->log->error(":Exception while Performing Service Task-".$e->getMessage(),$e);
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 406, $response);
         }catch (EntityNotFoundException $e){
-            $this->log->info(ServiceTask::class.":Entity Not found -".$e->getMessage());
+            $this->log->info(":Entity Not found -".$e->getMessage());
             $response = ['data' => $data];
             return $this->getErrorResponse($e->getMessage(), 404, $response);
         }
         catch (Exception $e){
-            $this->log->error(ServiceTask::class.":Entity Not found -".$e->getMessage());
+            $this->log->error(":Entity Not found -".$e->getMessage());
             $response = ['data' => $data];
             return $this->getErrorResponse($e->getMessage(), 500, $response);
         }
