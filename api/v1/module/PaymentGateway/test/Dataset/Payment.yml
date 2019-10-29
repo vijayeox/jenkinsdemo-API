@@ -19,6 +19,7 @@ ox_payment:
     app_id: 99
     org_id: 1
     payment_client: "ConvergePay"
+    js_url: "https://demo.convergepay.com/hosted-payments/Checkout.js"
     api_url: "https://demo.convergepay.com/hosted-payments/transaction_token"
     server_instance_name: "DEMO"
     payment_config: '{"merchant_id": "011454","user_id": "webpage","pincode": "DT808D" }'
@@ -27,6 +28,7 @@ ox_payment:
     app_id: 100
     org_id: 1
     payment_client: "SomePay"
+    js_url: "https://demo.convergepay.com/hosted-payments/Checkout.js"
     api_url: "https://demo.convergepay.com/hosted-payments/transaction_token"
     server_instance_name: "DEMO"
     payment_config: '{"merchant_id": "011454","user_id": "webpage","pincode": "DT808D" }'
