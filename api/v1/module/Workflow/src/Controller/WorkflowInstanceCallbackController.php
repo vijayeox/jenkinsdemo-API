@@ -40,8 +40,12 @@ class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
                             return $this->getErrorResponse("Workflow Completion errors", 404,null);
                         }
                     } catch (ValidationException $e) {
+                        $this->log->error($e->getMessage(), $e);
                         $response = ['data' => $params, 'errors' => $e->getErrors()];
                         return $this->getErrorResponse("workflow Instance errors Errors", 404, $response);
+                    }catch (Exception $e){
+                        $this->log->error($e->getMessage(), $e);
+                        return $this->getErrorResponse($e->getMessage(), 500, $response);
                     }
                     return $this->getSuccessResponse();
                 } else {
@@ -61,6 +65,7 @@ class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
             return $this->getSuccessResponse();
         }
         catch (ValidationException $e) {
+            $this->log->error($e->getMessage(), $e);
             $response = ['data' => $params, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("workflow Instance errors Errors", 404, $response);
         }   

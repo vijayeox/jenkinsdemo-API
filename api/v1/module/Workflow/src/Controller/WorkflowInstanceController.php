@@ -13,6 +13,7 @@ use Oxzion\ValidationException;
 use Oxzion\Service\WorkflowService;
 use Workflow\Service\ActivityInstanceService;
 use Oxzion\Workflow\Camunda\WorkflowException;
+use Exception;
 
 class WorkflowInstanceController extends AbstractApiController
 {
@@ -64,13 +65,17 @@ class WorkflowInstanceController extends AbstractApiController
             $count = $this->workflowInstanceService->executeWorkflow($params);
             $this->log->info(WorkflowInstanceController::class."ExecuteWorkflow Response  - ". print_r($count, true));
         } catch (ValidationException $e) {
-            $response = ['data' => $params, 'errors' => $e->getErrors()];
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(),$e);
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Errors", 404, $response);
         }
         if ($count == 0) {
             return $this->getErrorResponse("Entity Not Found Errors", 404, $params);
         }
-        if (isset($id)) {
+        if (isset($params['id'])) {
             return $this->getSuccessResponseWithData($params, 200);
         } else {
             return $this->getSuccessResponseWithData($params, 201);
