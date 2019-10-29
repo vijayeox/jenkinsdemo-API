@@ -1,16 +1,12 @@
 <?php
 
-use Oxzion\AppDelegate\DocumentAppDelegate;
-use Oxzion\Db\Persistence\Persistence;
-use Oxzion\Utils\UuidUtil;
-use Oxzion\Utils\FileUtils;
-use Oxzion\Utils\ArtifactUtils;
-use Oxzion\Encryption\Crypto;
+
 require_once __DIR__."/PolicyDocument.php";
 
 class QuoteDocument extends PolicyDocument
 {
     public function __construct(){
+        parent::__construct();
         $this->type = 'quote';
         $this->template = array(
         'Dive Boat' 
@@ -41,5 +37,6 @@ class QuoteDocument extends PolicyDocument
                      'lpTemplate' => 'DS_Quote_LP',
                      'lpheader' => 'DS_LP_header.html',
                      'lpfooter' => null));
+        
     }
 }

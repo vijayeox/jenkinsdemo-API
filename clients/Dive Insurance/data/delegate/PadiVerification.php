@@ -1,14 +1,13 @@
 <?php
 
-use Oxzion\AppDelegate\AppDelegate;
+use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\Country;
 
-class PadiVerification implements AppDelegate
+class PadiVerification extends AbstractAppDelegate
 {
-    private $logger;
-    public function setLogger($logger){
-        $this->logger = $logger;
+    public function __construct(){
+        parent::__construct();
     }
 
     // Padi Verification is performed here

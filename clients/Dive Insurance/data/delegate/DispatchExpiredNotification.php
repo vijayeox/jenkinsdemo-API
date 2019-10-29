@@ -13,6 +13,7 @@ class DispatchExpiredNotification extends DispatchNotification {
     public function __construct(){
         $this->template = array(
             'Individual Professional Liability' => 'COIExpiredNoticeMailTemplate');
+            parent::__construct();
     }
 
     public function execute(array $data,Persistence $persistenceService)

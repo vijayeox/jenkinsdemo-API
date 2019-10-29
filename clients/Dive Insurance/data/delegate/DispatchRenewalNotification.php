@@ -13,6 +13,7 @@ class DispatchRenewalNotification extends DispatchNotification {
     public function __construct(){
         $this->template = array(
             'Individual Professional Liability' => 'COIRenewelReminderMailTemplate');
+        parent::__construct();
     }
 
     public function execute(array $data,Persistence $persistenceService)

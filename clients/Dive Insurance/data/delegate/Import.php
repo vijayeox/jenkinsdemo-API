@@ -1,22 +1,16 @@
 <?php
 
-use Oxzion\AppDelegate\AppDelegate;
+use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
-use App\Service\ImportService;
 use Oxzion\Utils\FileUtils;
-use Zend\Log\Logger;
-use Oxzion\Error\ErrorHandler;
 
-class Import implements AppDelegate
+class Import extends AbstractAppDelegate
 {
-    private $logger;
     private $persistenceService;
-    public function setLogger($logger)
-    {
-        $this->logger = $logger;
-    }
 
-    private $adapter;
+    public function __construct(){
+        parent::__construct();
+    }
 
     public function execute(array $data, Persistence $persistenceService)
     {
@@ -47,7 +41,7 @@ class Import implements AppDelegate
     }
 
 
-    public function generateCSVData($storedProcedureName, $orgId, $appId, $appName, $fileName)
+    public function generateCSVData($storedProcedureName, $fileName)
     {
         $fileFolder = dirname(__dir__) . "/import/data/";
         $archivePath = dirname(__dir__) . "/import/archive/"; //The path to the folder Ex: /clients/<App name>/data/migrations/app/<appname>/archive/

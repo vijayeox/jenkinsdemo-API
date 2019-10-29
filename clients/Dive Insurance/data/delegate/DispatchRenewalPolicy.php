@@ -12,6 +12,8 @@ class DispatchRenewalPolicy extends DispatchDocument
     {
         $this->template = array(
             'Dive Store' => 'diveStoreRenewalMailTemplate');
+        parent::__construct();
+        
     }
 
     public function execute(array $data, Persistence $persistenceService)

@@ -1,14 +1,11 @@
 <?php
 
-use Oxzion\AppDelegate\DocumentAppDelegate;
-use Oxzion\AppDelegate\AbstractAppDelegate;
+use Oxzion\AppDelegate\AbstractDocumentAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\UuidUtil;
-use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\ArtifactUtils;
-use Oxzion\Encryption\Crypto;
 
-class PolicyDocument extends AbstractAppDelegate implements DocumentAppDelegate
+class PolicyDocument extends AbstractDocumentAppDelegate
 {
     private $documentBuilder;
     protected $type;
@@ -68,6 +65,7 @@ class PolicyDocument extends AbstractAppDelegate implements DocumentAppDelegate
                      'lpfooter' => 'DiveStore_LP_footer.html'));
 
     public function __construct(){
+        parent::__construct();
         $this->type = 'policy';
         $this->template = array(
         'Individual Professional Liability' 
@@ -124,7 +122,7 @@ class PolicyDocument extends AbstractAppDelegate implements DocumentAppDelegate
                      'nTemplate' => 'Group_PL_NI',
                      'nheader' => 'Group_NI_header.html',
                      'nfooter' => 'Group_NI_footer.html'));
-        parent::__construct();
+       
     }
 
     public function setDocumentBuilder($builder){
@@ -143,10 +141,10 @@ class PolicyDocument extends AbstractAppDelegate implements DocumentAppDelegate
         $this->logger->info("Executing Policy Document");
         if($this->type != "quote"){
             $coi_number = $this->generateCOINumber($data,$persistenceService);
+            $data['certificate_no'] = $coi_number;
         }
         $license_number = $this->getLicenseNumber($data,$persistenceService);
         $policyDetails = $this->getPolicyDetails($data,$persistenceService);
-        $data['certificate_no'] = $coi_number;
         $data['license_number'] = $license_number;
         $date=date_create($data['start_date']);
         $data['start_date'] = date_format($date,"m/d/Y");

@@ -1,14 +1,13 @@
 <?php
 
-use Oxzion\AppDelegate\DocumentAppDelegate;
-use Oxzion\Db\Persistence\Persistence;
+use Oxzion\AppDelegate\AbstractDocumentAppDelegate;
 
-class IndividualLiabilityImpl implements DocumentAppDelegate {
-    private $logger;
+class IndividualLiabilityImpl extends AbstractDocumentAppDelegate {
     private $builder;
-    public function setLogger($logger){
-        $this->logger = $logger;
+    public function __construct(){
+        parent::__construct();
     }
+
     public function setDocumentBuilder($builder){
         $this->builder = $builder;
     }
@@ -16,7 +15,7 @@ class IndividualLiabilityImpl implements DocumentAppDelegate {
     {
         $this->destination = $destination;
     }
-    public function execute(array $data,$persistenceService){ 
+    public function execute(array $data, $persistenceService){ 
         $this->logger->info("executing IndividualLiability");
         if(!$this->builder){
             return array("Document Builder Not set");

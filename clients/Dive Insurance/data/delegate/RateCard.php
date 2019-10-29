@@ -1,13 +1,12 @@
 <?php
 
-use Oxzion\AppDelegate\AppDelegate;
+use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 
-class Ratecard implements AppDelegate
+class Ratecard extends AbstractAppDelegate
 {
-    private $logger;
-    public function setLogger($logger){
-        $this->logger = $logger;
+    public function __construct(){
+        parent::__construct();
     }
 
     // Premium Calculation values are fetched here
