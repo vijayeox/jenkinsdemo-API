@@ -262,9 +262,6 @@ abstract class AbstractService extends AbstractBaseService
             $insertQuotedValue[] = '(' . implode(',', $oneValueData) . ')';
         }
         /* Preparation sql query */
-        $this->logger->info("Insert qouted val -".print_r($insertQuotedValue,true));
-        $this->logger->info("Insert qouted columns -".print_r($insertQuotedColumns,true));
-        $this->logger->info("Parameters -".print_r($parameterContainer->getNamedArray(),true));
         $query = sprintf($sqlStringTemplate, $tableName, implode(',', $insertQuotedColumns), implode(',', array_values($insertQuotedValue)), implode(',', array_values($updateQuotedValue)));
         $this->logger->info("Prepared SQL query - $query");
         $statementContainer->setSql($query);
@@ -284,8 +281,8 @@ abstract class AbstractService extends AbstractBaseService
     }
 
     public function updateOrganizationContext($data){
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
-        if(!isset($orgId) && !$orgId && isset($data['orgId'])){
+        $orgId = AuthContext::get(AuthConstants::ORG_ID);            
+        if(!isset($orgId) && isset($data['orgId'])){
             AuthContext::put(AuthConstants::ORG_UUID, $data['orgId']);
             $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
             AuthContext::put(AuthConstants::ORG_ID, $orgId);
