@@ -48,7 +48,7 @@
         <testsuite name="Dive Insurance Fixtures">
             <directory>../../clients/Dive Insurance/test/</directory>
         </testsuite>
-    </testsuites>
+    </testsuites> 
     <php>
         <ini name="memory_limit" value="250M" />
         <const name="enableNLP" value="0"/>
