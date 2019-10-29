@@ -36,14 +36,14 @@ class CertificateOfInsuranceTest extends ServiceTest
     {
         $data = [
             'firstname' => 'Mohan', 
-            'middlename' => 'Raj' ,
+            'initial' => 'Raj' ,
             'lastname' => 'D',
             'address1' => 'ABC 200',
             'address2' => 'XYZ 300',
             'city' => 'APO',
             'state' => 'District of Columbia',
             'country' => 'US',
-            'zipcode' => '09522-9998',
+            'zip' => '09522-9998',
             'certificate_no' => '200200178',
             'member_no' => '34567',
             'insured_status'=> 'Divester',
@@ -93,14 +93,14 @@ class CertificateOfInsuranceTest extends ServiceTest
     {
         $data = [
             'firstname' => 'Mohan', 
-            'middlename' => 'Raj' ,
+            'initial' => 'Raj' ,
             'lastname' => 'D',
             'address1' => 'ABC 200',
             'address2' => 'XYZ 300',
             'city' => 'APO',
             'state' => 'District of Columbia',
             'country' => 'US',
-            'zipcode' => '09522-9998',
+            'zip' => '09522-9998',
             'certificate_no' => '200200178',
             'member_no' => '34567',
             'insured_status'=> 'Divester',

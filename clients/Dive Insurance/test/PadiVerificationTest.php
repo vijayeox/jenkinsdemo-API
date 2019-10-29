@@ -46,7 +46,7 @@ class PadiVerificationTest extends DelegateTest
     public function testPadiVerification()
     {
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
-        $data =['member_number' => '2141'];
+        $data =['member_number' => '2141', 'state'=> 'FL'];
         $appId = $this->data['UUID'];
         $appName = $this->data['appName'];
         $config = $this->getApplicationConfig();

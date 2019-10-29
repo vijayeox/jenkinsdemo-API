@@ -68,7 +68,7 @@ class PolicyDocumentTest extends DelegateTest
         $appId = $this->data['UUID'];
         $data = [
                 'firstname' => 'Mohan',
-                 'middlename' => 'Raj' ,
+                 'initial' => 'Raj' ,
                  'lastname' => 'D',
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
@@ -87,7 +87,7 @@ class PolicyDocumentTest extends DelegateTest
                  'cylinder_coverage' => 0,
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Individual Professional Liability',
-                 'sameasmailingaddress' => 0,
+                 'sameasmailingaddress' => 1,
                  'endrosement_status' => 'Instructor',
                  'update' => 1,
                  'update_date' => '08/06/2019'];
@@ -120,14 +120,14 @@ class PolicyDocumentTest extends DelegateTest
         $appId = $this->data['UUID'];
         $data = [
                 'firstname' => 'Mohan',
-                 'middlename' => 'Raj' ,
+                 'initial' => 'Raj' ,
                  'lastname' => 'D',
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
                  'state' => 'California',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
@@ -141,7 +141,7 @@ class PolicyDocumentTest extends DelegateTest
                  'update_date' => '08/06/2019',
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Individual Professional Liability',
-                 'sameasmailingaddress' => 0,
+                 'sameasmailingaddress' => 1,
                  'endrosement_status' => 'Instructor',
                  'additionalInsured' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}',
                  'lapseletter' => 1];
@@ -174,14 +174,14 @@ class PolicyDocumentTest extends DelegateTest
         $appId = $this->data['UUID'];
         $data = [
                 'firstname' => 'Mohan',
-                 'middlename' => 'Raj' ,
+                 'initial' => 'Raj' ,
                  'lastname' => 'D',
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
                  'state' => 'California',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
@@ -195,7 +195,7 @@ class PolicyDocumentTest extends DelegateTest
                  'update_date' => '08/06/2019',
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Individual Professional Liability',
-                 'sameasmailingaddress' => 0,
+                 'sameasmailingaddress' => 1,
                  'endrosement_status' => 'Instructor'];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -233,7 +233,7 @@ class PolicyDocumentTest extends DelegateTest
                  'city' => 'APO',
                  'state' => 'California',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
@@ -271,7 +271,7 @@ class PolicyDocumentTest extends DelegateTest
         $this->assertEquals(isset($content['policy_id']), true);
         $this->assertEquals(isset($content['carrier']), true);
         $this->assertEquals(isset($content['license_number']), true);
-        $this->assertEquals(isset($content['certificate_no']), true);
+        $this->assertEquals(isset($content['certificate_no']), false);
         $doc = $config['APP_DOCUMENT_FOLDER'].$content['coi_document'];
         $this->assertTrue(is_file($doc));
         $this->assertTrue(filesize($doc)>0);
@@ -295,7 +295,7 @@ class PolicyDocumentTest extends DelegateTest
                  'city' => 'APO',
                  'state' => 'California',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
@@ -357,7 +357,7 @@ class PolicyDocumentTest extends DelegateTest
                  'city' => 'APO',
                  'state' => 'California',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                   'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
@@ -418,13 +418,13 @@ class PolicyDocumentTest extends DelegateTest
                  'city' => 'APO',
                  'state' => 'California',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Dive Boat',
-                 'sameasmailingaddress' => 0,
+                 'sameasmailingaddress' => 1,
                  'endrosement_status' => 'Instructor',
                  'cover_letter' => 1,
                  'manager_name' => 'Julie Joseph',
@@ -483,7 +483,7 @@ class PolicyDocumentTest extends DelegateTest
                  'city' => 'APO',
                  'state' => 'California',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
@@ -542,14 +542,14 @@ class PolicyDocumentTest extends DelegateTest
         $appId = $this->data['UUID'];
         $data = [
                 'firstname' => 'Mohan',
-                 'middlename' => 'Raj' ,
+                 'initial' => 'Raj' ,
                  'lastname' => 'D',
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
                  'state' => 'New Jersey',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
@@ -593,14 +593,14 @@ class PolicyDocumentTest extends DelegateTest
         $appId = $this->data['UUID'];
         $data = [
                 'firstname' => 'Mohan',
-                 'middlename' => 'Raj' ,
+                 'initial' => 'Raj' ,
                  'lastname' => 'D',
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
                  'state' => 'New Jersey',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
@@ -637,14 +637,14 @@ class PolicyDocumentTest extends DelegateTest
         $appId = $this->data['UUID'];
         $data = [
                 'firstname' => 'Mohan',
-                 'middlename' => 'Raj' ,
+                 'initial' => 'Raj' ,
                  'lastname' => 'D',
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
                  'state' => 'California',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
@@ -684,14 +684,14 @@ class PolicyDocumentTest extends DelegateTest
         $appId = $this->data['UUID'];
         $data = [
                 'firstname' => 'Mohan',
-                 'middlename' => 'Raj' ,
+                 'initial' => 'Raj' ,
                  'lastname' => 'D',
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
                  'state' => 'California',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
@@ -732,14 +732,14 @@ class PolicyDocumentTest extends DelegateTest
         $appId = $this->data['UUID'];
         $data = [
                 'firstname' => 'Mohan',
-                 'middlename' => 'Raj' ,
+                 'initial' => 'Raj' ,
                  'lastname' => 'D',
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
                  'state' => 'New Jersey',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
@@ -779,14 +779,14 @@ class PolicyDocumentTest extends DelegateTest
         $appId = $this->data['UUID'];
         $data = [
                 'firstname' => 'Mohan',
-                 'middlename' => 'Raj' ,
+                 'initial' => 'Raj' ,
                  'lastname' => 'D',
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
                  'state' => 'New Jersey',
                  'country' => 'US',
-                 'zipcode' => '09522-9998',
+                 'zip' => '09522-9998',
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
