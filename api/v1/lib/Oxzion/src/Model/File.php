@@ -16,13 +16,17 @@ class File extends Entity
         'modified_by' => null,
         'date_created' => null,
         'date_modified' => null,
-        'entity_id'=>null
+        'entity_id'=>null,
+        'parent_id'=>null,
+        'latest'=>1,
+        'is_active'=>1,
+        
     );
     protected $attributes = array();
 
     public function validate()
     {
-        $required = array('uuid', 'org_id','data', 'created_by', 'date_created');
+        $required = array('uuid', 'org_id','data', 'created_by', 'date_created', 'entity_id');
         $this->validateWithParams($required);
     }
 }

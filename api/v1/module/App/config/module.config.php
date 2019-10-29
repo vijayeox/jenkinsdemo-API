@@ -424,6 +424,21 @@ return [
                     ],
                 ],
             ],
+            'fileData' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflowInstance/:workflowInstanceId',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'workflowId' => UuidUtil::UUID_PATTERN,                    
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'action' => 'getFileData',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
             'appentity' => [
                 'type' => Segment::class,
                 'options' => [

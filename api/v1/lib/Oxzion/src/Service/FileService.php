@@ -36,10 +36,8 @@ class FileService extends AbstractService
      */
     public function createFile(&$data, $workflowInstanceId = null)
     {
-        $this->logger->info("CREATE FILE");
-        unset($data['submit']);
-        unset($data['workflowId']);
-        $jsonData = json_encode($data);
+        $this->logger->info("Data CreateFile- ".print_r($data,true));
+        $parentId = isset($data['parent_id']) ? $data['parent_id'] : null;
         if (isset($data['form_id'])) {
             $formId = $this->getIdFromUuid('ox_form', $data['form_id']);
         } else {
@@ -50,8 +48,8 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
-        $this->logger->info("FILE ---- ".print_r($data,true));
-        $data['data'] = $jsonData;
+        $this->cleanData($data);
+        $jsonData = json_encode($data);
         $data['app_id'] = $this->getIdFromUuid('ox_app', $data['app_id']);
         $data['workflow_instance_id'] = isset($workflowInstanceId) ? $workflowInstanceId : null;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -59,21 +57,27 @@ class FileService extends AbstractService
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['form_id'] = $formId;
+        $data['parent_id'] = $parentId;
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['entity_id'] = isset($data['entity_id']) ? $data['entity_id'] : null;
-        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();   
+        $data['data'] = $jsonData;
         $file = new File();
         $file->exchangeArray($data);
-        $this->logger->info("FILE EXCHANGE---- ".print_r($file,true));
-        $file->validate();
+        $this->logger->info("Data From Fileservice - ".print_r($data,true));
+        $this->logger->info("File data From Fileservice - ".print_r($file->toArray(),true));
         $fields = array_diff_assoc($data, $file->toArray());
-        $this->logger->info("FIELD DATA ----- ".print_r($fields,true));
+        $file->validate();
         $this->beginTransaction();
 
         $count = 0;
         $this->logger->info("COUNT ----".print_r($count,true));
         try {
-            $this->logger->info("FILE DATA ----- ".print_r($file,true));
+            if($parentId){
+                if(!$this->setFileLatest($parentId, 0)){
+                    throw new Exception("Could not update latest for parent file ".$data['parent_id']);
+                }
+            }
             $count = $this->table->save($file);
             if ($count == 0) {
                 $this->rollback();
@@ -83,16 +87,15 @@ class FileService extends AbstractService
             $data['id'] = $id;
             $this->logger->info("FILE DATA ----- ".print_r($data,true));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
-            if ($validFields && !empty($validFields)) {
-                $this->multiInsertOrUpdate('ox_file_attribute', $validFields, ['id']);
-            } else {
-                if (!empty($validFields)) {
-                    $this->rollback();
-                    return 0;
-                }
-            }
+            if (!$validFields || empty($validFields)) {
+                return 0;
+            }            
+            $this->logger->info("Check Fields - ".print_r($validFields,true));
+            $this->multiInsertOrUpdate('ox_file_attribute', $validFields, ['id']);
+            $this->logger->info("Created successfully  - file record");
             $this->commit();
         } catch (Exception $e) {
+            $this->logger->info("erorororor  - file record");
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
@@ -100,6 +103,18 @@ class FileService extends AbstractService
         return $count;
     }
 
+    private function setFileLatest($fileId, $isLatest){
+
+            // $selectQuery = "Select data_type from ox_field where id=:fieldId;";
+            // $queryParams = array("fieldId" => );
+            // $resultSet = $this->executeQueryWithBindParameters($selectQuery,$queryParams)->toArray();
+        $query = "update ox_file set latest = :latest where id = :fileId";
+        $params = array('latest' => $isLatest, 'fileId' => $fileId);
+        $result = $this->executeUpdateWithBindParameters($query, $params);
+        // print_r("UpdateFileLatest - \n");
+        // print_r($result->getAffectedRows());
+        return $result->getAffectedRows() > 0;
+    }
     /**
      * Update File Service
      * @method updateFile
@@ -114,15 +129,12 @@ class FileService extends AbstractService
             where ox_file.workflow_instance_id=? ";
             $whereQuery = array($data['workflow_instance_id']);
             $obj = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray()[0];
-            if (is_null($obj)) {
-                return 0;
-            }
         } else {
             $obj = $this->table->getByUuid($id);
             $obj = $obj->toArray();
-            if (is_null($obj)) {
-                return 0;
-            }
+        }
+        if (is_null($obj)) {
+            return 0;
         }
         if (isset($data['form_uuid'])) {
             $data['form_id'] = $this->getIdFromUuid('ox_form', $data['form_uuid']);
@@ -142,25 +154,32 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
-        $fileObject = $obj;
+        $fileObject = json_decode($obj['data'],true);
+
+        foreach($fileObject as $key =>$fileObjectValue){
+            if(is_array($fileObjectValue) || is_bool($fileObjectValue)){
+                $fileObject[$key] = json_encode($fileObjectValue);
+            }
+        }
+
         foreach($data as $key => $dataelement){
             if(is_array($dataelement) || is_bool($dataelement)){
                 $data[$key] = json_encode($dataelement);
             }
         }
-
-        $fields = array_diff($data,json_decode($fileObject['data'],true));
+        
+        $fields = array_diff($data,$fileObject);
         $file = new File();
+        $fileObject = $obj;
         $fileObject['data'] = json_encode($data);
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
-
         $file->exchangeArray($fileObject);
         $file->validate();
         $id = $this->getIdFromUuid('ox_file', $id);
         $this->beginTransaction();
-        try {  
-            $this->logger->info("Entering to Update File -".print_r($file,true)."\n");
+        try {
+            $this->logger->info("Entering to Update File -" . print_r($file, true) . "\n");
             $count = $this->table->save($file);
 
             if ($count == 0) {
@@ -225,7 +244,7 @@ class FileService extends AbstractService
             $params = array('id' => $id,
                             'active' => 1,
                             'orgId' => AuthContext::get(AuthConstants::ORG_ID));
-            $select  = "SELECT * from ox_file where uuid = :id AND is_active = :active AND org_id = :orgId";
+            $select  = "SELECT uuid, data  from ox_file where uuid = :id AND is_active = :active AND org_id = :orgId";
             $this->logger->info("Executing query $select with params ".print_r($params,true));
             
             $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
@@ -243,6 +262,33 @@ class FileService extends AbstractService
             throw $e;
         }
     }
+
+    public function getFileByWorkflowInstanceId($workflowInstanceId,$isProcessInstanceId = true)
+    { 
+        if($isProcessInstanceId){
+            $where = "ox_workflow_instance.process_instance_id=:workflowInstanceId";
+        }else{
+            $where = "ox_workflow_instance.id=:workflowInstanceId";
+        }
+        try{
+            $select = "SELECT ox_file.id,ox_file.data from ox_file 
+                       inner join ox_workflow_instance on ox_workflow_instance.id = ox_file.workflow_instance_id
+                       where ox_file.org_id=:orgId and $where and ox_file.is_active =:isActive";
+            $whereQuery = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),
+                                "workflowInstanceId" => $workflowInstanceId,
+                                "isActive" => 1);
+            $result = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
+            if(count($result) > 0){                    
+                return $result[0];
+            }
+            return 0;
+        }catch(Exception $e){
+            $this->logger->log(Logger::ERR, $e->getMessage());
+            throw $e;
+        }
+    }
+
+
     /**
     * @ignore checkFields
     */
@@ -277,6 +323,10 @@ class FileService extends AbstractService
                     // Insert the Record
                     //$keyValueFields[$i]['id'] = "";
                 }
+                if($field['data_type'] == 'selectboxes' && isset($fieldData[$field['name']])){
+                    
+                    $fieldData[$field['name']] = json_encode($fieldData[$field['name']]);
+                }
                 $keyValueFields[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
                 $keyValueFields[$i]['created_by'] = (empty($fileArray[$key]['created_by']) ? AuthContext::get(AuthConstants::USER_ID) : $fileArray[$key]['created_by']);
                 $keyValueFields[$i]['date_created'] = (!isset($fileArray[$key]['date_created']) ? date('Y-m-d H:i:s') : $fileArray[$key]['date_created']);
@@ -288,6 +338,7 @@ class FileService extends AbstractService
                 $i++;
             }
         }
+        $this->logger->info("Key Values - " . print_r($keyValueFields, true));
         return $keyValueFields;
     }
 
@@ -347,10 +398,30 @@ class FileService extends AbstractService
     {
         $delegateService = new AppDelegateService($this->config, $this->dbAdapter);
         $content = $delegateService->execute($appId, 'DispatchRenewalPolicy', $data);
-        print_r($content);exit;
+        // print_r($content);exit;
         return 1;
         // foreach ($data as $d) {
 
         // }
+    }
+
+    private function cleanData($params){
+        unset($params['workflowInsatnceId']);
+        unset($params['parentWorkflowInsatnceId']);
+        unset($params['activityId']);
+        unset($params['workflowId']);
+        unset($params['form_id']);
+        unset($params['fileId']);
+        unset($params['app_id']);
+        unset($params['org_id']);
+        unset($params['created_by']);
+        unset($params['date_modified']);
+        unset($params['entity_id']);
+        unset($params['parent_id']);
+        unset($params['submit']);
+        unset($params['workflowId']);
+        
+        return $params;
+        
     }
 }

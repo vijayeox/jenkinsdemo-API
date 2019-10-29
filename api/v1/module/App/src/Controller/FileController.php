@@ -146,8 +146,6 @@ class FileController extends AbstractApiController
 
         $crypto = new Crypto();
         $file = $crypto->decryption($params['documentName']);
-        // print_r($file);exit;
-        // var_dump(file_exists($file));
         if(file_exists($file)){
             if (!headers_sent()) {
                 header('Content-Type: application/octet-stream');
@@ -167,4 +165,20 @@ class FileController extends AbstractApiController
             return $this->getErrorResponse("Document not Found", 404);
         }
     }
+
+    public function getFileDataAction(){
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        try{
+            $result = $this->fileService->getFileByWorkflowInstanceId($params['workflowInstanceId']);
+            if($result == 0){
+                return $this->getErrorResponse("File not found", 404, ['id' => $params['workflowInstanceId']]);
+            }
+            return $this->getSuccessResponseWithData($result, 200);
+
+        }catch(Exception $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+
+    }
+
 }
