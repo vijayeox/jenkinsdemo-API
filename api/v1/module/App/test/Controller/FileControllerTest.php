@@ -49,7 +49,7 @@ class FileControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['uuid'], 'd13d0c68-98c9-11e9-adc5-308d99c9145b');
     }
     public function testGetNotFound()
     {
