@@ -37,14 +37,14 @@ class FileServiceTest extends ServiceTest
         $_REQUEST = [];
     }
 
-    public function testGetFollowupList()
-    {
-        $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
-        $data = ['form_id' => '6', "entity_id" => "5", "field_list" => ["initial" => "retiredInstructor" , "padi" => "23243" ], 'app_id' => '259', 'org_id' => 1];
-        $appId = $this->data['UUID'];
-        $fileService = new FileService($this->getApplicationConfig(), $this->getDbAdapter(), $this->table, $this->form);
-        $content = $fileService->checkFollowUpFiles($appId, $data);
-        // print_r($content);exit;
-        $this->assertEquals($data['app_id'], $content[0]['app_id']);
-    }
+    // public function testGetFollowupList()
+    // {
+    //     $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
+    //     $data = ['form_id' => '6', "entity_id" => "5", "field_list" => ["initial" => "retiredInstructor" , "padi" => "23243" ], 'app_id' => '259', 'org_id' => 1];
+    //     $appId = $this->data['UUID'];
+    //     $fileService = new FileService($this->getApplicationConfig(), $this->getDbAdapter(), $this->table, $this->form);
+    //     $content = $fileService->checkFollowUpFiles($appId, $data);
+    //     // print_r($content);exit;
+    //     $this->assertEquals($data['app_id'], $content[0]['app_id']);
+    // }
 }

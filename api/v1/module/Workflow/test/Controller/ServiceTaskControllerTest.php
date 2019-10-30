@@ -52,7 +52,8 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('To'=>$data['variables']['to'],'Subject'=>$data['variables']['subject'],'body'=>$data['variables']['body'],'attachments'=>null)), 'mail')->once()->andReturn(123);
+            $payload = json_encode(array('to'=>$data['variables']['to'],'subject'=>$data['variables']['subject'],'body'=>$data['variables']['body'],'attachments'=>null));
+            $mockMessageProducer->expects('sendTopic')->with($payload, 'mail')->once()->andReturn(123);
         }
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -65,8 +66,10 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(406);
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['data']['errors']['subject'], 'required');
     }
     public function testServiceTaskWithoutRecepientMailExecution()
     {
@@ -75,8 +78,10 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(406);
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['data']['errors']['to'], 'required');
     }
     public function testServiceTaskPDFExecution()
     {
@@ -102,8 +107,9 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($params));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $params);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(500);
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Template not found!');
     }
     public function testServiceTaskPDFInvalidDestinationExecution()
     {
@@ -112,8 +118,9 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($params));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $params);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(500);
         $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Template not found!');
     }
 
     public function testServiceTaskSchedule()
