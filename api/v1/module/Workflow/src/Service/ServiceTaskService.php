@@ -187,11 +187,8 @@ class ServiceTaskService extends AbstractService
             $orgId = isset($params['orgId'])?$params['orgId']:1;
             $template = isset($params['template'])?$params['template']:0;
             if ($template) {
-                try {
-                    $body = $this->templateService->getContent($template, $params);
-                } catch (Exception $e) {
-                    return;
-                }
+                $body = $this->templateService->getContent($template, $params);
+                
             } else {
                 if (isset($params['body'])) {
                     $body = $params['body'];
@@ -199,26 +196,33 @@ class ServiceTaskService extends AbstractService
                     $body = null;
                 }
             }
+            $errors = array();
             if (isset($params['to'])) {
                 $recepients = $params['to'];
             } else {
-                return;
+                $errors['to'] = 'required';
             }
             if (isset($params['subject'])) {
                 $subject = $params['subject'];
             } else {
-                return;
+                $errors['subject'] = 'required';
             }
             if (isset($params['attachments'])) {
                 $attachments = $params['attachments'];
             }
-
-            $this->messageProducer->sendTopic(json_encode(array(
+            if (count($errors) > 0) {
+                $validationException = new ValidationException();
+                $validationException->setErrors($errors);
+                throw $validationException;
+            }
+            $payload = json_encode(array(
                 'to' => $recepients,
                 'subject' => $subject,
                 'body' => $body,
                 'attachments' => isset($attachments)?$attachments:null
-            )), 'mail');
+            ));
+            $this->logger->info("Payload for mail -> $payload");
+            $this->messageProducer->sendTopic($payload, 'mail');
             return 1;
         } else {
             return;
@@ -230,11 +234,8 @@ class ServiceTaskService extends AbstractService
             $orgId = isset($params['orgid'])?$params['orgid']:1;
             $template = isset($params['template'])?$params['template']:0;
             if ($template) {
-                try {
-                    $body = $this->templateService->getContent($template, $params);
-                } catch (Exception $e) {
-                    return;
-                }
+                $body = $this->templateService->getContent($template, $params);
+                
             } else {
                 if (isset($params['body'])) {
                     $body = $params['body'];
@@ -264,17 +265,20 @@ class ServiceTaskService extends AbstractService
 
     protected function extractFileData(&$data){
         $this->logger->info("File Data  ------".print_r($data,true));
-        $this->updateOrganizationContext($data);
-        if(isset($data['previous_fileId'])){
-            $result = $this->fileService->getFile($data['previous_fileId']);  
-            $this->logger->info("EXTRACT FILE DATA result".print_r($result,true));  
-            if(count($result) == 0){
-                throw new EntityNotFoundException("File ".$data['previous_fileId']." not found");
-            }
-            return $result['data'];
+        if(isset($data['fileId_fieldName']) && isset($data[$data['fileId_fieldName']]) ){
+            $fileId = $data[$data['fileId_fieldName']];
+        }else if(isset($data['fileId']) ){
+            $fileId = $data['fileId'];
         }else{
-            return;
+            throw new EntityNotFoundException("File Id not provided");
         }
+
+        $result = $this->fileService->getFile($fileId);
+        $this->logger->info("EXTRACT FILE DATA result".print_r($result,true));  
+        if(count($result) == 0){
+            throw new EntityNotFoundException("File ".$fileId." not found");
+        }
+        return $result['data'];
         
     }
 }
