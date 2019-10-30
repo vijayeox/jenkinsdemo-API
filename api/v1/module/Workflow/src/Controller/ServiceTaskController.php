@@ -28,6 +28,31 @@ class ServiceTaskController extends AbstractApiControllerHelper
     }
     /**
     * Activity Instance API
+    * Supported commands
+    *           mail : JSON containing the following fields
+    *                   to : <recipients>
+    *                   subject : <subject text>
+    *                   body : <Email body>
+    *                   atachments : <path to the files to be attached>
+    *           schedule : Sets up a scheduled job using the values provided as below
+    *                   url : The action to be called on the scheduler api
+    *                   cron : The cron expression for triggering the job
+    *                   jobUrl : The url to be invoked when the job is triggered
+    *                   rest of the data is sent as payload to the job 
+    *
+    *           delegate : execute the Delegate component provided in the 
+    *                       'delegate' property 
+    *
+    *           fileSave : save the data passed to the file corresponding to the 
+    *                       'workflow_instance_id' property received in teh data
+    *
+    *           file : checks to get the fileId from the field specified in 
+    *                   'fileId_fieldName' attribute. 
+    *                  If not provided will use the value in 'fileId' attribute in the data 
+    *                  else throws EntityNotFoundException
+    *               
+    *           
+    *
     * @api
     * @method POST
     * @link /execute/servicetask
@@ -40,7 +65,6 @@ class ServiceTaskController extends AbstractApiControllerHelper
         $data = $this->extractPostData();
         $this->serviceTaskService->updateOrganizationContext($data['variables']);
         $this->log->info(":Post Data- ". print_r(json_encode($data), true));
-        $this->serviceTaskService->updateOrganizationContext($data['variables']);
         try {
 
             $response = $this->serviceTaskService->runCommand($data);
@@ -60,7 +84,7 @@ class ServiceTaskController extends AbstractApiControllerHelper
             return $this->getErrorResponse($e->getMessage(), 404, $response);
         }
         catch (Exception $e){
-            $this->log->error(":Entity Not found -".$e->getMessage());
+            $this->log->error(":Error -".$e->getMessage(), $e);
             $response = ['data' => $data];
             return $this->getErrorResponse($e->getMessage(), 500, $response);
         }
