@@ -340,7 +340,7 @@ class FileService extends AbstractService
                     $keyValueFields[$i]['id'] = null;
                 }
                 $fieldProperties = json_decode($field['template'],true);
-               $this->logger->info("FIELD PROPERTIES - ".print_r($fieldProperties,true));
+                $this->logger->info("FIELD PROPERTIES - ".print_r($fieldProperties,true));
                 if(!$fieldProperties['persistent']){
                     if(isset($fieldData[$field['name']])){
                         unset($fieldData[$field['name']]);
