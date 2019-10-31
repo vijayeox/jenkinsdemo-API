@@ -333,7 +333,6 @@ class PolicyDocumentTest extends DelegateTest
         $this->assertEquals(isset($content['policy_id']), true);
         $this->assertEquals(isset($content['carrier']), true);
         $this->assertEquals(isset($content['license_number']), true);
-        $this->assertEquals(isset($content['certificate_no']), true);
         $doc = $config['APP_DOCUMENT_FOLDER'].$content['coi_document'];
         $this->assertTrue(is_file($doc));
         $this->assertTrue(filesize($doc)>0);
@@ -392,7 +391,6 @@ class PolicyDocumentTest extends DelegateTest
         $this->assertEquals(isset($content['policy_id']), true);
         $this->assertEquals(isset($content['carrier']), true);
         $this->assertEquals(isset($content['license_number']), true);
-        $this->assertEquals(isset($content['certificate_no']), true);
         $doc = $config['APP_DOCUMENT_FOLDER'].$content['coi_document'];
         $this->assertTrue(is_file($doc));
         $this->assertTrue(filesize($doc)>0);
