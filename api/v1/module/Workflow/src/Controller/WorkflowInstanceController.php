@@ -14,6 +14,8 @@ use Oxzion\Service\WorkflowService;
 use Workflow\Service\ActivityInstanceService;
 use Oxzion\Workflow\Camunda\WorkflowException;
 use Exception;
+use Oxzion\EntityNotFoundException;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class WorkflowInstanceController extends AbstractApiController
 {
@@ -31,55 +33,56 @@ class WorkflowInstanceController extends AbstractApiController
         $this->workflowService = $workflowService;
         $this->activityInstanceService = $activityInstanceService;
     }
-    public function activityAction()
+
+    public function startWorkflowAction()
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        $this->log->info(print_r($params,true));
-        $this->log->info("ACTIVITY ACTION");
-        switch ($this->request->getMethod()) {
-            case 'POST':
-                unset($params['controller']);
-                unset($params['action']);
-                unset($params['access']);
-                return $this->executeWorkflow($params);
-                break;
-            case 'GET':
-                return $this->getInvalidMethod();
-                break;
-            case 'DELETE':
-                return $this->getInvalidMethod();
-                break;
-            default:
-                return $this->getErrorResponse("Not Sure what you are upto");
-                break;
-        }
-    }
-
-
-    private function executeWorkflow($params)
-    {
         $this->log->info(print_r($params,true));
         $this->log->info("executeWorkflow");
         $this->workflowInstanceService->updateOrganizationContext($params);
         try {
-            $count = $this->workflowInstanceService->executeWorkflow($params);
+            $count = $this->workflowInstanceService->startWorkflow($params);
             $this->log->info(WorkflowInstanceController::class."ExecuteWorkflow Response  - ". print_r($count, true));
         } catch (ValidationException $e) {
             $response = ['data' => $params, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        }catch (EntityNotFoundException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Entity Not Found", 404, $response);
         }catch(Exception $e){
             $this->log->error($e->getMessage(),$e);
             $response = ['data' => $params, 'errors' => $e->getMessage()];
-            return $this->getErrorResponse("Errors", 404, $response);
+            return $this->getErrorResponse("Errors", 500, $response);
         }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity Not Found Errors", 404, $params);
+        
+        return $this->getSuccessResponseWithData($params, 200);
+        
+    }
+
+
+    public function submitAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $this->log->info(print_r($params,true));
+        $this->workflowInstanceService->updateOrganizationContext($params);
+        try {
+            $count = $this->workflowInstanceService->submitActivity($params);
+            $this->log->info(WorkflowInstanceController::class."SubmitActivity Response  - ". print_r($count, true));
+        }catch (ValidationException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        }catch (InvalidParameterException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Invalid Parameter", 406, $response);
+        }catch (EntityNotFoundException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Entity Not Found", 404, $response);
+        }catch(Exception $e){
+            $this->log->error($e->getMessage(),$e);
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Errors", 500, $response);
         }
-        if (isset($params['id'])) {
-            return $this->getSuccessResponseWithData($params, 200);
-        } else {
-            return $this->getSuccessResponseWithData($params, 201);
-        }
+        return $this->getSuccessResponseWithData($params, 200);
     }
 
     public function getFileListAction()

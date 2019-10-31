@@ -17,7 +17,8 @@ return [
                     ],
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
-                        'action' => 'activity',
+                        'method' => 'POST',
+                        'action' => 'startWorkflow',
                         'access'=>[
                         ],
                     ],
@@ -32,7 +33,8 @@ return [
                     ],
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
-                        'action' => 'activity',
+                        'method' => 'POST',
+                        'action' => 'submit',
                         'access'=>[
                         ],
                     ],

@@ -330,6 +330,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $persistenceService->beginTransaction();
         try{ 
             $select1 = "Select * FROM certificate_of_insurance_number WHERE product ='".$data['product']."' AND year = $year FOR UPDATE";
+            $this->logger->info("QUERY POLICY - ".print_r($select1,true));
             $result1 = $persistenceService->selectQuery($select1); 
             while ($result1->next()) {
                     $details[] = $result1->current();

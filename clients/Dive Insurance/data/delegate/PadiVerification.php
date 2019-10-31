@@ -20,7 +20,7 @@ class PadiVerification extends AbstractAppDelegate
         if(!isset($data['member_number'])){
             return;
         }
-        $select = "Select firstname, MI, lastname, email, address1, address2, city, state, country_code, zip, home_phone, work_phone, num as mobilephone FROM padi_data WHERE member_number ='".$data['member_number']."'";  
+        $select = "Select firstname, MI as initial, lastname, email, address1, address2, city, state, country_code, zip, home_phone, work_phone, num as mobilephone FROM padi_data WHERE member_number ='".$data['member_number']."'";  
         $result = $persistenceService->selectQuery($select);
         if($result->count() > 0){
             $response = array();
@@ -33,7 +33,9 @@ class PadiVerification extends AbstractAppDelegate
             while ($resultSet->next()) {
                 $stateDetails[] = $resultSet->current();
             }
-            $response[0]['state'] = $stateDetails[0]['state'];
+            if(isset($stateDetails)){
+                $response[0]['state'] = $stateDetails[0]['state'];
+            }
 
             if(isset($response[0]['country_code'])){
                 $response[0]['country'] = Country::codeToCountryName($response[0]['country_code']);

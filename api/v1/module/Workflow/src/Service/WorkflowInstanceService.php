@@ -172,13 +172,23 @@ class WorkflowInstanceService extends AbstractService
         }
     }
 
-    private function startWorkflow($params){
+    public function startWorkflow($params){
         $this->logger->info("Starting StartWorkflow method");
+        
+        if(!isset($params['workflowId'])){
+            throw new EntityNotFoundException("No workflow or workflow instance id provided");
+        }
+        if(!isset($params['orgId'])){
+            $params['orgId'] = AuthContext::get(AuthConstants::ORG_UUID);
+        }
+        if(!isset($params['created_by'])){
+            $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        }
         $workflowId = $params['workflowId'];
         $workflow = $this->workflowService->getWorkflow($workflowId);
         if (empty($workflow)) {
             $this->logger->info("EMPTY WORKFLOW --- ");
-            return 0;
+            throw new EntityNotFoundException("No workflow found for workflow $workflowId");
         }
         $params['form_id'] = $workflow['form_id'];
         $activityId = $params['form_id'];
@@ -251,8 +261,22 @@ class WorkflowInstanceService extends AbstractService
         }
     }
 
-    private function submitActivity($params){
+    public function submitActivity($params){
         $this->logger->info("submitActivity method - ");
+        if(!isset($params['workflowInstanceId'])){
+            throw new InvalidParameterException("No workflow or workflow instance id provided");
+        }
+        if (!isset($params['activityInstanceId'])) {
+            throw new InvalidParameterException("Activity instance id required");
+        }
+        if(!isset($params['orgId'])){
+            $params['orgId'] = AuthContext::get(AuthConstants::ORG_UUID);
+        }
+        if(!isset($params['created_by'])){
+            $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        }
+        
+       
         $workflowInstanceId = $params['workflowInstanceId'];
         $workflowInstance = $this->getWorkflowInstance($workflowInstanceId);
         $this->logger->info(WorkflowInstanceService::class."Get WorkflowInstance -----".print_r($workflowInstance,true));
@@ -283,37 +307,13 @@ class WorkflowInstanceService extends AbstractService
              $workflowInstanceId = $this->activityEngine->submitTaskForm($activityId, $params);
 
         } else {
-            throw new EntityNotFoundException("No file EntityNotFoundExceptiond for workflow instance ".$workflowInstance['id'] );
+            throw new EntityNotFoundException("No file EntityNotFoundExceptiond for workflow instance ".$workflowInstanceId );
         }
         $this->logger->info("Submit activity Completed- ".print_r($file,true));
-         return $file;
+        return $file;
         
     }
-    public function executeWorkflow($params)
-    {
-        $this->logger->info("ExecuteWorkFlow -----".print_r($params,true));
-        if(!isset($params['orgId'])){
-            $params['orgId'] = AuthContext::get(AuthConstants::ORG_UUID);
-        }
-        if(!isset($params['created_by'])){
-            $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        }
 
-        if(isset($params['workflowId']) && !isset($params['workflowInstanceId'])){
-            return $this->startWorkflow($params);
-        } 
-        $this->logger->info("Start workflow completed -----".print_r($params,true));
-        if(!isset($params['workflowInstanceId'])){
-            throw new InvalidParameterException("No workflow or workflow instance id provided");
-        }
-        if (!isset($params['activityInstanceId'])) {
-            throw new InvalidParameterException("Activity instance id required");
-        }
-
-        $this->logger->info("SUBMIT ACTIVITY");
-        return $this->submitActivity($params);
-        
-    }
 
     public function initiateWorkflow($data){
         $this->logger->info("Workflow Instance Start".print_r($data,true));

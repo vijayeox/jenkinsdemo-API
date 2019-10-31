@@ -7,6 +7,7 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\EntityNotFoundException;
 use Exception;
 
 class FileService extends AbstractService
@@ -88,6 +89,7 @@ class FileService extends AbstractService
             $data['id'] = $id;
             $this->logger->info("FILE DATA ----- ".print_r($data,true));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
+            $this->updateFileData($id, $fields);
             if (!$validFields || empty($validFields)) {
                 $this->logger->info("FILE Validation ----- ");
                 return 0;
@@ -105,6 +107,12 @@ class FileService extends AbstractService
         return $count;
     }
 
+    private function updateFileData($id, $data){
+        $query = "update ox_file set data = :data where id = :id";
+        $params = array('data' => json_encode($data), 'id' => $id);
+        $result = $this->executeUpdateWithBindParameters($query, $params);
+        return $result->getAffectedRows() > 0;
+    }
     private function setFileLatest($fileId, $isLatest){
 
             // $selectQuery = "Select data_type from ox_field where id=:fieldId;";
@@ -132,12 +140,12 @@ class FileService extends AbstractService
             $whereQuery = array($data['workflow_instance_id']);
             $obj = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray()[0];
             if (is_null($obj)) {
-                return 0;
+                throw new EntityNotFoundException("File Id not found -- ".$id);
             }
         } else {
             $obj = $this->table->getByUuid($id);
             if (is_null($obj)) {
-                return 0;
+                throw new EntityNotFoundException("File Id not found -- ".$id);
             }
             $obj = $obj->toArray();
             
@@ -180,20 +188,17 @@ class FileService extends AbstractService
         $fileObject['data'] = json_encode($data);
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
-        $file->exchangeArray($fileObject);
-        $file->validate();
+        
         $id = $this->getIdFromUuid('ox_file', $id);
         $this->beginTransaction();
         try {
             $this->logger->info("Entering to Update File -" . print_r($file, true) . "\n");
-            $count = $this->table->save($file);
-
-            if ($count == 0) {
-                $this->logger->info("$count - files got updated \n");
-                $this->rollback();
-                return 0;
-            }
             $validFields = $this->checkFields(isset($fileObject['entity_id']) ? $fileObject['entity_id'] : null, $fields, $id);
+            //$fileObject['data'] = json_encode($fields);
+            $file->exchangeArray($fileObject);
+            $file->validate();
+            $count = $this->table->save($file);
+            
             $this->logger->info(print_r($validFields, true) . "are the list of valid fields.\n");
             if ($validFields && !empty($validFields)) {
                 $query = "Delete from ox_file_attribute where file_id = :fileId";
@@ -298,7 +303,7 @@ class FileService extends AbstractService
     /**
     * @ignore checkFields
     */
-    protected function checkFields($entityId, $fieldData, $fileId)
+    protected function checkFields($entityId, &$fieldData, $fileId)
     {
         $this->logger->info("Entering into checkFields method---EntityId : ".$entityId);
         $required = array();
@@ -329,6 +334,14 @@ class FileService extends AbstractService
                 } else {
                     // Insert the Record
                     //$keyValueFields[$i]['id'] = "";
+                }
+                $fieldProperties = json_decode($field['template'],true);
+               $this->logger->info("FIELD PROPERTIES - ".print_r($fieldProperties,true));
+                if(!$fieldProperties['persistent']){
+                    if(isset($fieldData[$field['name']])){
+                        unset($fieldData[$field['name']]);
+                    }
+                    continue;
                 }
                 if($field['data_type'] == 'selectboxes' && isset($fieldData[$field['name']])){
                     
