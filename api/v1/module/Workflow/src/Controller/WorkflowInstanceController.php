@@ -107,13 +107,13 @@ class WorkflowInstanceController extends AbstractApiController
         $this->log->info("Post Data- ". print_r(json_encode($data), true));
         try {
             $response = $this->activityInstanceService->claimActivityInstance($data);
-            $this->log->info("Complete Activity Instance Successful");
+            $this->log->info("Claim Activity Instance Successful");
             if ($response == 0) {
                 return $this->getErrorResponse("Entity not found", 404);
             }
             return $this->getSuccessResponse();
         } catch (ValidationException $e) {
-            $this->log->info("Exception at Add Activity Instance-".$e->getMessage());
+            $this->log->info("Exception at claim Activity Instance-".$e->getMessage());
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }catch(WorkflowException $e){ 
@@ -135,7 +135,7 @@ class WorkflowInstanceController extends AbstractApiController
                 }
                 return $this->getSuccessResponseWithData($response);
             } catch (ValidationException $e) {
-                $this->log->info("Exception at Add Activity Instance-".$e->getMessage());
+                $this->log->info("Exception while getting Activity Instance form-".$e->getMessage());
                 $response = ['data' => $data, 'errors' => $e->getErrors()];
                 return $this->getErrorResponse("Validation Errors", 404, $response);
             }

@@ -91,7 +91,7 @@ class ActivityInstanceController extends AbstractApiControllerHelper
         $this->log->info("Post Data- ". print_r(json_encode($data), true));
         try {
             $response = $this->activityInstanceService->completeActivityInstance($data);
-            $this->log->info("Complete Activity Instance Successful");
+            $this->log->info("Complete Activity Instance response - ".print_r($response, true));
             if ($response == 0 || empty($response)) {
                 return $this->getErrorResponse("Entity not found", 404);
             }
