@@ -172,7 +172,7 @@ class FileService extends AbstractService
         $fileObject = json_decode($obj['data'],true);
 
         foreach($fileObject as $key =>$fileObjectValue){
-            if(is_array($fileObjectValue) || is_bool($fileObjectValue)){
+            if(is_array($fileObjectValue)){
                 $fileObject[$key] = json_encode($fileObjectValue);
             }
         }
@@ -185,17 +185,20 @@ class FileService extends AbstractService
         
         $fields = array_diff($data,$fileObject);
         $file = new File();
+        $id = $this->getIdFromUuid('ox_file', $id);
+        $validFields = $this->checkFields(isset($obj['entity_id']) ? $obj['entity_id'] : null, $fields, $id);
+        $dataArray = array_merge($fileObject,$fields);
+
         $fileObject = $obj;
-        $fileObject['data'] = json_encode($data);
+        $this->cleanData($dataArray);
+        $fileObject['data'] = json_encode($dataArray);
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
         
-        $id = $this->getIdFromUuid('ox_file', $id);
         $this->beginTransaction();
         try {
             $this->logger->info("Entering to Update File -" . print_r($file, true) . "\n");
-            $validFields = $this->checkFields(isset($fileObject['entity_id']) ? $fileObject['entity_id'] : null, $fields, $id);
-            //$fileObject['data'] = json_encode($fields);
+            
             $file->exchangeArray($fileObject);
             $file->validate();
             $count = $this->table->save($file);
@@ -336,15 +339,14 @@ class FileService extends AbstractService
                     // Insert the Record
                     $keyValueFields[$i]['id'] = null;
                 }
-
                 $fieldProperties = json_decode($field['template'],true);
-                $this->logger->info("FIELD PROPERTIES - ".print_r($fieldProperties,true));
-                // if(!$fieldProperties['persistent']){
-                //     if(isset($fieldData[$field['name']])){
-                //         unset($fieldData[$field['name']]);
-                //     }
-                //     continue;
-                // }
+               $this->logger->info("FIELD PROPERTIES - ".print_r($fieldProperties,true));
+                if(!$fieldProperties['persistent']){
+                    if(isset($fieldData[$field['name']])){
+                        unset($fieldData[$field['name']]);
+                    }
+                    continue;
+                }
                 if($field['data_type'] == 'selectboxes' && isset($fieldData[$field['name']])){
                     
                     $fieldData[$field['name']] = json_encode($fieldData[$field['name']]);
