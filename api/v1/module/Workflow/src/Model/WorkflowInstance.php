@@ -8,7 +8,7 @@ use Oxzion\ValidationException;
 class WorkflowInstance extends Entity
 {
     protected $data = array(
-        'id' => 0,
+        'id' => null,
         'workflow_id' => null,
         'app_id' => 0,
         'org_id' => 0,
