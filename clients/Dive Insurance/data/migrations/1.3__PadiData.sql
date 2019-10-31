@@ -21,4 +21,4 @@ CREATE TABLE IF NOT EXISTS `padi_data` (
             PRIMARY KEY (`id`)
             ) ENGINE=InnoDB COLLATE=utf8_general_ci DEFAULT CHARSET=utf8;
 
-INSERT INTO `padi_data` (`member_number`,`firstname`,`MI`,`country_code`) VALUES ('2141', 'Rakshith','G','AF');
+INSERT INTO `padi_data` (`member_number`,`firstname`,`MI`,`country_code`, `state`) VALUES ('2141', 'Rakshith','G','AF', 'FL');
