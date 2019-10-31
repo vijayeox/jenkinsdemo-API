@@ -13,6 +13,7 @@ use Oxzion\ValidationException;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\Encryption\Crypto;
 use Oxzion\ServiceException;
+use Oxzion\EntityNotFoundException;
 
 class FileController extends AbstractApiController
 {
@@ -53,9 +54,8 @@ class FileController extends AbstractApiController
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
+        }catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -96,6 +96,10 @@ class FileController extends AbstractApiController
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        catch (EntityNotFoundException $e) {
+            $response = ['data' => $data, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Entity Not Found", 404, $response);
         }
         if ($count == 0) {
             return $this->getErrorResponse("Entity not found for id - $id", 404);

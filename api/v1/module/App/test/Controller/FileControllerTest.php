@@ -62,7 +62,7 @@ class FileControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['field1' => '1','field2' => '2'];
+        $data = ['field1' => '1','field2' => '2','entity_id' => 1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/465c8ff8-df82-11e9-8a34-2a2ae2dbcce4/file', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);

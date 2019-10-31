@@ -8,6 +8,7 @@ use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\EntityNotFoundException;
+use Oxzion\ServiceException;
 use Exception;
 
 class FileService extends AbstractService
@@ -81,8 +82,7 @@ class FileService extends AbstractService
             $count = $this->table->save($file);
             $this->logger->info("COUNT  FILE DATA----".$count);
             if ($count == 0) {
-                $this->rollback();
-                return 0;
+                throw new ServiceException("File Creation Failed","file.create.failed");
             }
             $id = $this->table->getLastInsertValue();
             $this->logger->info("FILE ID DATA".$id);
@@ -92,7 +92,7 @@ class FileService extends AbstractService
             $this->updateFileData($id, $fields);
             if (!$validFields || empty($validFields)) {
                 $this->logger->info("FILE Validation ----- ");
-                return 0;
+                throw new ValidationException("Validation Errors".print_r($fields,true));
             }            
             $this->logger->info("Check Fields - ".print_r($validFields,true));
             $this->multiInsertOrUpdate('ox_file_attribute', $validFields, ['id']);
@@ -168,6 +168,7 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
+
         $fileObject = json_decode($obj['data'],true);
 
         foreach($fileObject as $key =>$fileObjectValue){
@@ -333,16 +334,17 @@ class FileService extends AbstractService
                     $keyValueFields[$i]['id'] = $fileArray[$key]['id'];
                 } else {
                     // Insert the Record
-                    //$keyValueFields[$i]['id'] = "";
+                    $keyValueFields[$i]['id'] = null;
                 }
+
                 $fieldProperties = json_decode($field['template'],true);
-               $this->logger->info("FIELD PROPERTIES - ".print_r($fieldProperties,true));
-                if(!$fieldProperties['persistent']){
-                    if(isset($fieldData[$field['name']])){
-                        unset($fieldData[$field['name']]);
-                    }
-                    continue;
-                }
+                $this->logger->info("FIELD PROPERTIES - ".print_r($fieldProperties,true));
+                // if(!$fieldProperties['persistent']){
+                //     if(isset($fieldData[$field['name']])){
+                //         unset($fieldData[$field['name']]);
+                //     }
+                //     continue;
+                // }
                 if($field['data_type'] == 'selectboxes' && isset($fieldData[$field['name']])){
                     
                     $fieldData[$field['name']] = json_encode($fieldData[$field['name']]);
