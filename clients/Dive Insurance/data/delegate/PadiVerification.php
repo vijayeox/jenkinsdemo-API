@@ -30,6 +30,7 @@ class PadiVerification extends AbstractAppDelegate
             
             $selectQuery = "Select state FROM state_license WHERE state_in_short ='".$response[0]['state']."'";  
             $resultSet = $persistenceService->selectQuery($selectQuery);
+            $stateDetails = array();
             while ($resultSet->next()) {
                 $stateDetails[] = $resultSet->current();
             }
