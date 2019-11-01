@@ -9,14 +9,21 @@ use Stomp\Transport\Message;
 class Client extends StompClient
 {
     protected $stomp;
-    public function __construct()
+    public function __construct($config)
     {
-        $this->stomp = new StompClient(Constants::CONNECTION_HOST);
-        return $this->stomp;
+        $this->stomp = new StompClient($config['amqp']['host']);
+        // return $this->stomp;
     }
     public function sendMessage($destination, $message)
     {
-        return $this->stomp->send($destination, new Message($message));
+        try{
+            // $connection = $this->stomp->connect();
+            $result = $this->stomp->send($destination, new Message($message));
+        } catch( Exception $e){
+            print_r('test');
+            print_r('error'.$e->getMessage());exit;
+        }
+        // return $this->stomp->send($destination, new Message($message));
     }
     public function subscribe($destination, $subscriptionId = null, $ack = 'auto', $selector = null, $durable = false)
     {

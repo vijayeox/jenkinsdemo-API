@@ -26,11 +26,11 @@ class GroupService extends AbstractService
     public static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
 
 
-    public function __construct($config, $dbAdapter, GroupTable $table, $organizationService)
+    public function __construct($config, $dbAdapter, GroupTable $table, $organizationService,$messageProducer)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
         $this->organizationService = $organizationService;
     }
 

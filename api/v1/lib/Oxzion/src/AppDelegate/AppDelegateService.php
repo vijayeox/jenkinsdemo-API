@@ -20,10 +20,10 @@ class AppDelegateService extends AbstractService
     private $templateService;
     private $organizationService;
 
-    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null)
+    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null,MessageProducer $messageProducer)
     {
         $this->templateService = $templateService;
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
         parent::__construct($config, $dbAdapter);
         $this->documentBuilder = $documentBuilder;
         $this->delegateDir = $this->config['DELEGATE_FOLDER'];

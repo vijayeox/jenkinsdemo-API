@@ -14,6 +14,7 @@ use Oxzion\Service\EmailService;
 use Oxzion\Model\EmailTable;
 use Oxzion\Service\TemplateService;
 use Oxzion\Service\AddressService;
+use Oxzion\Messaging\MessageProducer;
 
 class Module implements ConfigProviderInterface
 {
@@ -87,7 +88,7 @@ class Module implements ConfigProviderInterface
                     return new Controller\TaskCallbackController($container->get(Service\TaskService::class));
                 },
                 Controller\OXCallbackController::class => function ($container) {
-                    return new Controller\OXCallbackController($container->get(TemplateService::class), $container->get('config'));
+                    return new Controller\OXCallbackController($container->get(TemplateService::class), $container->get('config'), $container->get(MessageProducer::class));
                 },
                 Controller\CalendarCallbackController::class => function ($container) {
                     return new Controller\CalendarCallbackController($container->get(Service\CalendarService::class), $container->get(EmailService::class), $container->get('config'));

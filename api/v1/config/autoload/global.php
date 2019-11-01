@@ -42,6 +42,9 @@ return [
         'user'=>'elastic',
         'password'=>'hvqr9799/'
     ],
+    'amqp' => [
+        'host' => 'tcp://172.16.1.101:61613'
+    ],
     'chat' => [
         'chatServerUrl' => 'http://localhost:8065/',
         'authToken' => ''
@@ -79,5 +82,5 @@ return [
     'jwtAlgo' => 'HS512',
     'authRequiredText' => 'Authentication Required',
     'refreshTokenPeriod' => '7',
-    'paymentGatewayType'=>'DEMO',
+    'paymentGatewayType'=>'DEMO'
 ];

@@ -16,10 +16,10 @@ class OXCallbackController extends AbstractApiControllerHelper
     // /**
     // * @ignore __construct
     // */
-    public function __construct(TemplateService $templateService, $config)
+    public function __construct(TemplateService $templateService, $config,MessageProducer $messageProducer)
     {
         $this->templateService = $templateService;
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
         $this->config = $config;
         $this->log = $this->getLogger();
     }

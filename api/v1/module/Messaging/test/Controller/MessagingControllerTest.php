@@ -3,11 +3,12 @@ namespace Messaging;
 
 use Messaging\Controller\MessagingController;
 use PHPUnit\DbUnit\TestCaseTrait;
-use Oxzion\Test\MainControllerTest;
+use Oxzion\Test\ControllerTest;
 use Oxzion\Messaging\MessageProducer;
+use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use Mockery;
 
-class MessagingControllerTest extends MainControllerTest
+class MessagingControllerTest extends ControllerTest
 {
     private $mockMessageProducer = null;
 
@@ -18,6 +19,10 @@ class MessagingControllerTest extends MainControllerTest
         $config = $this->getApplicationConfig();
         $this->mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
         $this->mockMessageProducer->expects('getInstance')->once()->andReturn($this->mockMessageProducer);
+    }
+    public function getDataSet()
+    {
+        return new DefaultDataSet();
     }
 
     public function getMockMessageProducer()
@@ -43,7 +48,7 @@ class MessagingControllerTest extends MainControllerTest
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('topic' => 'test_topic', 'param1' => 'value1','param2'=>'value2')), 'test_topic')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('topic' => 'test_topic', 'param1' => 'value1','param2'=>'value2')), 'test_topic')->once()->andReturn(true);
         }
         $this->dispatch('/messaging', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -51,9 +56,6 @@ class MessagingControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('messaging');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['result']['topic'], $data['topic']);
-        $this->assertEquals($content['data']['result']['param1'], $data['param1']);
-        $this->assertEquals($content['data']['result']['param2'], $data['param2']);
     }
     public function testQueueCreate()
     {
@@ -61,7 +63,7 @@ class MessagingControllerTest extends MainControllerTest
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendQueue')->with(json_encode(array('queue' => 'test_queue', 'param1' => 'value1','param2'=>'value2')), 'test_queue')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(json_encode(array('queue' => 'test_queue', 'param1' => 'value1','param2'=>'value2')), 'test_queue')->once()->andReturn(true);
         }
         $this->dispatch('/messaging', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -69,9 +71,6 @@ class MessagingControllerTest extends MainControllerTest
         $this->assertMatchedRouteName('messaging');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['result']['queue'], $data['queue']);
-        $this->assertEquals($content['data']['result']['param1'], $data['param1']);
-        $this->assertEquals($content['data']['result']['param2'], $data['param2']);
     }
     public function testFail()
     {

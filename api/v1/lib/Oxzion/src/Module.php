@@ -47,7 +47,8 @@ class Module
                         $container->get(Model\UserTable::class),
                         $container->get(Service\AddressService::class),
                         $container->get(Service\EmailService::class),
-                        $container->get(Service\TemplateService::class)
+                        $container->get(Service\TemplateService::class),
+                        $container->get(Messaging\MessageProducer::class)
                     );
                 },
                 Model\UserTable::class => function ($container) {
@@ -210,7 +211,8 @@ class Module
                         $container->get(Service\UserService::class),
                         $container->get(Service\AddressService::class),
                         $container->get(Service\RoleService::class),
-                        $container->get(Service\PrivilegeService::class)
+                        $container->get(Service\PrivilegeService::class),
+                        $container->get(Messaging\MessageProducer::class)
                     );
                 },
                 Model\OrganizationTable::class => function ($container) {
@@ -332,7 +334,8 @@ class Module
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
                         $container->get(Document\DocumentBuilder::class),
-                        $container->get(Service\TemplateService::class)
+                        $container->get(Service\TemplateService::class),
+                        $container->get(Messaging\MessageProducer::class)
                     );
                 },
                 Document\DocumentBuilder::class => function ($container) {
@@ -381,6 +384,28 @@ class Module
                         null,
                         $resultSetPrototype
                     );
+                },
+                Model\ErrorLogTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\ErrorLogTableGateway::class);
+                    return new Model\ErrorLogTable($tableGateway);
+                },
+                Model\ErrorLogTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\ErrorLog());
+                    return new TableGateway('ox_error_log', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\ErrorLogService::class => function ($container) {
+                    return new Service\ErrorLogService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Model\ErrorLogTable::class)
+                    );
+                },
+                Messaging\MessageProducer::class => function ($container) {
+                    $config = $container->get('config');
+                    return new Messaging\MessageProducer($config,
+                        $container->get(Service\ErrorLogService::class));
                 },
             ],
         ];

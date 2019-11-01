@@ -11,7 +11,6 @@ use Oxzion\Service\AbstractService;
 use Oxzion\Service\EmailService;
 use Oxzion\Service\AddressService;
 use Oxzion\Service\TemplateService;
-use Oxzion\Messaging\MessageProducer;
 use Oxzion\Search\Elastic\IndexerImpl;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\AccessDeniedException;
@@ -19,9 +18,7 @@ use Oxzion\Security\SecurityManager;
 use Oxzion\Utils\FilterUtils;
 use Oxzion\ServiceException;
 use Oxzion\ValidationException;
-
-
-
+use Oxzion\Messaging\MessageProducer;
 
 class UserService extends AbstractService
 {
@@ -47,7 +44,7 @@ class UserService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
-    public function __construct($config, $dbAdapter, UserTable $table = null, AddressService $addressService, EmailService $emailService, TemplateService $templateService)
+    public function __construct($config, $dbAdapter, UserTable $table = null, AddressService $addressService, EmailService $emailService, TemplateService $templateService,MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -56,7 +53,7 @@ class UserService extends AbstractService
         $this->templateService = $templateService;
         $this->addressService = $addressService;
         $this->cacheService = CacheService::getInstance();
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
     }
 
     /**
@@ -262,7 +259,7 @@ class UserService extends AbstractService
             // $es = $this->generateUserIndexForElastic($data);
             $orgid = $this->getUuidFromId('ox_organization',$data['orgid']); //Template Service
             $this->commit();
-            $this->messageProducer->sendTopic(json_encode(array(
+            $this->messageProducer->sendQueue(json_encode(array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'email' => $data['email'],

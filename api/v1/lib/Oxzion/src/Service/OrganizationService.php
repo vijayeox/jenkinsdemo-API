@@ -41,7 +41,7 @@ class OrganizationService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, OrganizationTable $table, UserService $userService, AddressService $addressService,RoleService $roleService, PrivilegeService $privilegeService)
+    public function __construct($config, $dbAdapter, OrganizationTable $table, UserService $userService, AddressService $addressService,RoleService $roleService, PrivilegeService $privilegeService,MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -50,7 +50,7 @@ class OrganizationService extends AbstractService
         $this->roleService = $roleService;
         $this->modelClass = new Organization();
         $this->privilegeService = $privilegeService;
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
     }
 
     /**

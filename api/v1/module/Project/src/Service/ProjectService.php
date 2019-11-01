@@ -30,11 +30,11 @@ class ProjectService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
-    public function __construct($config, $dbAdapter, ProjectTable $table, $organizationService)
+    public function __construct($config, $dbAdapter, ProjectTable $table, $organizationService,MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
         $this->organizationService = $organizationService;
     }
 

@@ -38,9 +38,9 @@ class ServiceTaskService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService,AppDelegateService $appDelegateService,FileService $fileService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService,AppDelegateService $appDelegateService,FileService $fileService,MessageProducer $messageProducer)
     {
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
         $this->fileService = $fileService;
         $this->appDelegateService = $appDelegateService;

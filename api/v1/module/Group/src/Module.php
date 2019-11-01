@@ -12,6 +12,7 @@ use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Service\OrganizationService;
 use Oxzion\Service\UserService;
+use Oxzion\Messaging\MessageProducer;
 
 class Module implements ConfigProviderInterface
 {
@@ -38,7 +39,7 @@ class Module implements ConfigProviderInterface
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $orgService = $container->get(OrganizationService::class);
                     $userService = $container->get(UserService::class);
-                    return new Service\GroupService($container->get('config'), $dbAdapter, $container->get(Model\GroupTable::class), $orgService);
+                    return new Service\GroupService($container->get('config'), $dbAdapter, $container->get(Model\GroupTable::class), $orgService,$container->get(MessageProducer::class));
                 },
                 Model\GroupTable::class => function ($container) {
                     $tableGateway = $container->get(Model\GroupTableGateway::class);

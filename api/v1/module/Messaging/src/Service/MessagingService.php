@@ -6,9 +6,9 @@ use Oxzion\Messaging\MessageProducer;
 
 class MessagingService
 {
-    public function __construct()
+    public function __construct(MessageProducer $messageProducer)
     {
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
     }
 
 
@@ -21,23 +21,23 @@ class MessagingService
     {
         if (isset($data['topic'])) {
             try {
-                $this->messageProducer->sendTopic(json_encode($data), $data['topic']);
-                $result = $data;
+                $response = $this->messageProducer->sendTopic(json_encode($data), $data['topic']);
+                $response = true;
             } catch (Exception $e) {
-                return 0;
+                return false;
             }
         } else {
             if (isset($data['queue'])) {
                 try {
                     $this->messageProducer->sendQueue(json_encode($data), $data['queue']);
-                    $result = $data;
+                    $response = true;
                 } catch (Exception $e) {
-                    return 0;
+                    return false;
                 }
             } else {
-                return 0;
+                return false;
             }
         }
-        return $result;
+        return $response;
     }
 }

@@ -10,6 +10,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
+use Oxzion\Messaging\MessageProducer;
 
 class Module implements ConfigProviderInterface
 {
@@ -32,7 +33,7 @@ class Module implements ConfigProviderInterface
         return [
             'factories' => [
                 Service\MessagingService::class => function ($container) {
-                    return new Service\MessagingService();
+                    return new Service\MessagingService($container->get(MessageProducer::class));
                 },
             ]
         ];
