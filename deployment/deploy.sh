@@ -150,6 +150,7 @@ orocrm()
         echo -e "${YELLOW}Installing Assets for CRM${RESET}"
         chown ubuntu:ubuntu -R integrations/crm
         runuser -l ubuntu -c "php ${TEMP}/integrations/crm/bin/console oro:assets:install"
+        runuser -l ubuntu -c "php ${TEMP}/integrations/bin/console oro:migration:load --force"
         mkdir -p integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome
         rsync -rl --delete integrations/crm/public/bundles/bowerassets/font-awesome/ integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome/
         rm -R integrations/crm/var/logs
