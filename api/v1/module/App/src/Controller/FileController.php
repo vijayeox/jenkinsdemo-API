@@ -12,8 +12,6 @@ use Oxzion\ServiceException;
 use Oxzion\Service\FileService;
 use Oxzion\ValidationException;
 use Oxzion\Utils\ArtifactUtils;
-use Oxzion\Encryption\Crypto;
-use Oxzion\ServiceException;
 use Oxzion\EntityNotFoundException;
 
 class FileController extends AbstractApiController
