@@ -26,8 +26,9 @@
                             ]
                         ],
                         'params' => [
-                            'file' => __DIR__."/../../logs/application.log",
-                            'append' => true
+                            'file' => __DIR__."/../../logs/application-%s.log",
+                            'append' => true,
+                            'datePattern' => 'Y-m-d'
                         ]
                     // ],
                     // 'request' => [
