@@ -2,13 +2,14 @@
 namespace App\Controller;
 
 /**
-* File Api
-*/
+ * File Api
+ */
+use Oxzion\Controller\AbstractApiController;
+use Oxzion\Encryption\Crypto;
 use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
+use Oxzion\ServiceException;
 use Oxzion\Service\FileService;
-use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\Encryption\Crypto;
@@ -19,8 +20,8 @@ class FileController extends AbstractApiController
 {
     private $fileService;
     /**
-    * @ignore __construct
-    */
+     * @ignore __construct
+     */
     public function __construct(FileTable $table, fileService $fileService, AdapterInterface $dbAdapter)
     {
         parent::__construct($table, File::class);
@@ -28,18 +29,18 @@ class FileController extends AbstractApiController
         $this->fileService = $fileService;
     }
     /**
-    * Create File API
-    * @api
-    * @link /app/appId/form
-    * @method POST
-    * @param array $data Array of elements as shown
-    * <code> {
-    *               id : integer,
-    *               name : string,
-    *               Fields from File
-    *   } </code>
-    * @return array Returns a JSON Response with Status Code and Created File.
-    */
+     * Create File API
+     * @api
+     * @link /app/appId/form
+     * @method POST
+     * @param array $data Array of elements as shown
+     * <code> {
+     *               id : integer,
+     *               name : string,
+     *               Fields from File
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and Created File.
+     */
     public function create($data)
     {
         $data['app_id'] = $this->params()->fromRoute()['appId'];
@@ -59,27 +60,27 @@ class FileController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
-    
+
     /**
-    * GET List Files API
-    * @api
-    * @link /app/appId/form
-    * @method GET
-    * @return array Returns a JSON Response list of Files based on Access.
-    */
+     * GET List Files API
+     * @api
+     * @link /app/appId/form
+     * @method GET
+     * @return array Returns a JSON Response list of Files based on Access.
+     */
     public function getList()
     {
         return $this->getInvalidMethod();
     }
     /**
-    * Update File API
-    * @api
-    * @link /app/appId/form[/:id]
-    * @method PUT
-    * @param array $id ID of File to update
-    * @param array $data
-    * @return array Returns a JSON Response with Status Code and Created File.
-    */
+     * Update File API
+     * @api
+     * @link /app/appId/form[/:id]
+     * @method PUT
+     * @param array $id ID of File to update
+     * @param array $data
+     * @return array Returns a JSON Response with Status Code and Created File.
+     */
     public function update($id, $data)
     {
         $appUuId = $this->params()->fromRoute()['appId'];
@@ -107,19 +108,19 @@ class FileController extends AbstractApiController
         return $this->getSuccessResponseWithData($data, 200);
     }
     /**
-    * Delete File API
-    * @api
-    * @link /app/appId/form[/:id]
-    * @method DELETE
-    * @param $id ID of File to Delete
-    * @return array success|failure response
-    */
+     * Delete File API
+     * @api
+     * @link /app/appId/form[/:id]
+     * @method DELETE
+     * @param $id ID of File to Delete
+     * @return array success|failure response
+     */
     public function delete($id)
     {
-        try{
+        try {
             $response = $this->fileService->deleteFile($id);
-        } catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),404);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
         }
         if ($response == 0) {
             return $this->getErrorResponse("File not found", 404, ['id' => $id]);
@@ -127,16 +128,16 @@ class FileController extends AbstractApiController
         return $this->getSuccessResponse();
     }
     /**
-    * GET File API
-    * @api
-    * @link /app/appId/form[/:id]
-    * @method GET
-    * @param $id ID of File
-    * @return array $data
-    * @return array Returns a JSON Response with Status Code and Created File.
-    */
+     * GET File API
+     * @api
+     * @link /app/appId/form[/:id]
+     * @method GET
+     * @param $id ID of File
+     * @return array $data
+     * @return array Returns a JSON Response with Status Code and Created File.
+     */
     public function get($id)
-    {  
+    {
         $result = $this->fileService->getFile($id);
         if ($result == 0) {
             return $this->getErrorResponse("File not found", 404, ['id' => $id]);
@@ -145,7 +146,7 @@ class FileController extends AbstractApiController
     }
 
     public function getDocumentAction()
-    { 
+    {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
 
         $crypto = new Crypto();
@@ -165,7 +166,7 @@ class FileController extends AbstractApiController
             } catch (Exception $e) {
                 return $this->getErrorResponse($e->getMessage(), 500);
             }
-        }else{
+        } else {
             return $this->getErrorResponse("Document not Found", 404);
         }
     }
@@ -182,6 +183,11 @@ class FileController extends AbstractApiController
         }catch(Exception $e){
             return $this->getErrorResponse($e->getMessage(),404);
         }
+
+    }
+
+     public function sendReminderAction($data)
+    {
 
     }
 

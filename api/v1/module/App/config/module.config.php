@@ -455,6 +455,19 @@ return [
                     ]
                 ]
             ],
+            'fileremainder' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/remainder',
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'action' => 'sendReminder',
+                        'method' => 'POST',
+                        'access'=>[
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

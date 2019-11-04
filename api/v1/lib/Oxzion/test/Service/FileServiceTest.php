@@ -1,10 +1,7 @@
 <?php
 namespace Oxzion\Service;
 
-use Oxzion\Auth\AuthConstants;
 // use Oxzion\Service\FormService;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Service\FileService;
 use Oxzion\Test\ServiceTest;
 use Oxzion\Transaction\TransactionManager;
 use Zend\Db\Adapter\Adapter;
