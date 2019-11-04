@@ -3,6 +3,7 @@
 use Oxzion\AppDelegate\AbstractAppDelegate;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Utils\FileUtils;
+use Oxzion\DelegateException;
 
 class Import extends AbstractAppDelegate
 {
@@ -21,18 +22,11 @@ class Import extends AbstractAppDelegate
             if($datavalidate === "0") {
                 return Array("status" => "Error", "data"=>$data);
             }
-            $uploadData = $this->uploadCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['src_url'], $data['file_name'], $data["host"], $data["user_id"], $data["password"]);
+            $this->uploadCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['src_url'], $data['file_name'], $data["host"], $data["user_id"], $data["password"]);
 
-            $returnData = $this->generateCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['file_name']);
+            $this->generateCSVData($data['stored_procedure_name'], $data['org_id'], $data['app_id'], $data['app_name'], $data['file_name']);
 
             $filePath = array(dirname(__dir__) . "/import/data/");
-
-            if ($returnData == 2) {
-                return 2;
-            }
-            if ($returnData == 3) {
-                return 3;
-            }
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
@@ -41,7 +35,7 @@ class Import extends AbstractAppDelegate
     }
 
 
-    public function generateCSVData($storedProcedureName, $fileName)
+    public function generateCSVData($storedProcedureName, $orgId, $appId, $appName, $fileName)
     {
         $fileFolder = dirname(__dir__) . "/import/data/";
         $archivePath = dirname(__dir__) . "/import/archive/"; //The path to the folder Ex: /clients/<App name>/data/migrations/app/<appname>/archive/
@@ -49,7 +43,7 @@ class Import extends AbstractAppDelegate
         $dataSet = array_diff(scandir($fileFolder), array(".", ".."));
         $filePath = $fileFolder . $fileName;
         if (!file_exists($filePath)) {
-            return 2;
+            throw new DelegateException("File Doesnot exists in the path".$filePath,"file.not.exists");
         }
 
         $f_pointer = fopen($filePath, "r");
@@ -64,7 +58,7 @@ class Import extends AbstractAppDelegate
         if (is_dir($archivePath)) {
             FileUtils::copy($filePath, $fileName, $archivePath);
         } else {
-            return 3;
+            throw new DelegateException("Directory doesnot exists -- ".$archivePath,"directory.not.exists");
         }
         return 1;
     }
@@ -123,15 +117,13 @@ class Import extends AbstractAppDelegate
                         }
                     }
                 } else {
-                    print "There are no files in the folder\n";
-                    return 0;
+                    throw new DelegateException("There are no files in the folder","file.not.found");
                 }
             } else {
-                print "Can't login to remote server.\n";
-                return 0;
+                throw new DelegateException("Can't login to remote server.","login.failed");
             }
-            if (ftp_close($ftp_conn)) {
-                print "Connection closed Successfully!\n";
+            if (!ftp_close($ftp_conn)) {
+                throw new DelegateException("Can't login to remote server.","login.failed");   
             }
         } catch(Exception $e) {
             $this->logger->error($e->getMessage(), $e);

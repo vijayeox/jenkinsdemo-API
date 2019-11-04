@@ -53,7 +53,7 @@ class ImportTest extends DelegateTest
         $password = "sftp@rakshith";
         $data = ['stored_procedure_name' => 'ox_padi_verification', 'org_id' => $orgId, 'app_id' => $appId , 'app_name' => $appName, 'src_url'=>"http://", 'file_name' => "VB010B.csv", "host" => $host, "user_id" => $userId, "password" => $password];
         $config = $this->getApplicationConfig();
-        $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'Import', $data);
         // print_r($content);exit;
@@ -71,7 +71,7 @@ class ImportTest extends DelegateTest
         $password = "sftp@rakshith";
         $data = ['stored_procedure_name' => 'ox_padi_verification', 'org_id' => $orgId, 'app_id' => $appId, 'app_name' => $appName, 'src_url'=>"http://", "host" => $host, "user_id" => $userId, "password" => $password,  'file_name' => ""];
         $config = $this->getApplicationConfig();
-        $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'Import', $data);
         $this->assertEquals($content['status'], "Error");
@@ -88,7 +88,7 @@ class ImportTest extends DelegateTest
         $password = "sftp@rakshith";
         $data = ['stored_procedure_name' => 'ox_test_verification', 'org_id' => $orgId, 'app_id' => $appId, 'app_name' => $appName, 'src_url'=>"http://", "host" => $host, "user_id" => $userId, "password" => $password,  'file_name' => ""];
         $config = $this->getApplicationConfig();
-        $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'Import', $data);
         $this->assertEquals($content['status'], "Error");
