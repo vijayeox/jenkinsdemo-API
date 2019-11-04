@@ -9,6 +9,7 @@ use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Service\TemplateService;
 use Oxzion\Transaction\TransactionManager;
 use Zend\Db\Adapter\Adapter;
+use Oxzion\Messaging\MessageProducer;
 
 class UserServiceTest extends ServiceTest
 {
@@ -40,7 +41,8 @@ class UserServiceTest extends ServiceTest
             $this->getApplicationServiceLocator()->get(\Oxzion\Model\UserTable::class),
             $this->getApplicationServiceLocator()->get(AddressService::class),
             $this->getApplicationServiceLocator()->get(EmailService::class),
-            $this->getApplicationServiceLocator()->get(TemplateService::class)
+            $this->getApplicationServiceLocator()->get(TemplateService::class),
+            $this->getApplicationServiceLocator()->get(MessageProducer::class)
         );
     }
 
