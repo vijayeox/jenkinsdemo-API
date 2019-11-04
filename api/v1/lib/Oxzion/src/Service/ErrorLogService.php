@@ -33,7 +33,7 @@ class ErrorLogService extends AbstractService
                 return 0;
             }
             $this->commit();
-            return $id;
+            return $this->table->getLastInsertValue();
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             $this->rollback();
