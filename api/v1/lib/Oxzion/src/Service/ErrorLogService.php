@@ -23,7 +23,6 @@ class ErrorLogService extends AbstractService
         $this->logger->info("Entering to saving Error method in ErrorLogService");
         $errorLog = new ErrorLog();
         $errorLog->exchangeArray(array('error_type'=>$type,'error_trace'=>$errorTrace,'payload'=>$payload,'params'=>$params,'date_created'=>date('Y-m-d H:i:s')));
-        // $errorLog->validate();
         $this->beginTransaction();
         $count = 0;
         try {
@@ -33,7 +32,7 @@ class ErrorLogService extends AbstractService
                 return 0;
             }
             $this->commit();
-            return $this->table->getLastInsertValue();
+            return $this->table->getLastInsertValue();  
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             $this->rollback();

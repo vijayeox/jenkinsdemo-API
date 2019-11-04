@@ -50,7 +50,8 @@ class PadiVerificationTest extends DelegateTest
         $appId = $this->data['UUID'];
         $appName = $this->data['appName'];
         $config = $this->getApplicationConfig();
-        $delegateService = new AppDelegateService($this->getApplicationConfig(),$this->getDbAdapter());
+
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'PadiVerification', $data);
         $this->assertEquals($content['member_number'], $data['member_number']);
