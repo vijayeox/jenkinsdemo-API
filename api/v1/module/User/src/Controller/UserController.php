@@ -77,7 +77,6 @@ class UserController extends AbstractApiController
      */
     public function create($data)
     {
-
         try {
             $params = $this->params()->fromRoute();
             $count = $this->userService->createUser($params,$data);

@@ -17,7 +17,7 @@ use Oxzion\EntityNotFoundException;
 use Oxzion\InvalidParameterException;
 use Workflow\Service\ActivityInstanceService;
 use Oxzion\Service\UserService;
-
+use Oxzion\ServiceException;
 
 class WorkflowInstanceService extends AbstractService
 {
@@ -186,6 +186,7 @@ class WorkflowInstanceService extends AbstractService
         }
         $workflowId = $params['workflowId'];
         $workflow = $this->workflowService->getWorkflow($workflowId);
+
         if (empty($workflow)) {
             $this->logger->info("EMPTY WORKFLOW --- ");
             throw new EntityNotFoundException("No workflow found for workflow $workflowId");
@@ -199,6 +200,7 @@ class WorkflowInstanceService extends AbstractService
             $params['entity_id'] = $workflow['entity_id'];
         }
         $workflowInstance = $this->setupWorkflowInstance($workflowId, null,$params);
+
         $this->logger->info("SETUP WORKFLOW RESPONSE DATA ----- ".print_r($workflowInstance,true));
 
 
@@ -380,7 +382,7 @@ class WorkflowInstanceService extends AbstractService
                 $updateParams = array('process_instance_id' => $processInstanceId, 'workflowInstanceId' => $params['workflow_instance_id']);
                 $update = $this->executeUpdateWithBindParameters($updateQuery,$updateParams);
             }
-            $query = "select * from ox_workflow_instance where process_instance_id=?";
+             $query = "select * from ox_workflow_instance where process_instance_id=?";
             $queryParams = array($processInstanceId);
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if(count($resultSet)>0){
@@ -394,7 +396,6 @@ class WorkflowInstanceService extends AbstractService
         $query = "select app_id, id from ox_workflow where id=? or uuid=?";
         $queryParams = array($workflowId,$workflowId);
         $workflowResultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-
         if(count($workflowResultSet)){
             $data = array('workflow_id'=> $workflowResultSet[0]['id'],'app_id'=> $workflowResultSet[0]['app_id'],'org_id'=> $orgId,'process_instance_id'=>$processInstanceId,'status'=>"In Progress",'date_created'=>$dateCreated,'created_by'=>$createdBy);
             if(isset($params['parentWorkflowInstanceId'])){
@@ -414,7 +415,7 @@ class WorkflowInstanceService extends AbstractService
                 $this->logger->info("WorkFlow Instance Form DATA INSERTED--- ".print_r($count,true));
                 if ($count == 0) {
                     $this->rollback();
-                    return 0;
+                    throw new ServiceException("WorkFlow Instance Create Failed","workflow.instance.failed");
                 }
                 $this->commit();
                 $id = $this->table->getLastInsertValue();

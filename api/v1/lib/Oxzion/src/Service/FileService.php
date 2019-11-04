@@ -185,7 +185,7 @@ class FileService extends AbstractService
             }
         }
 
-        $fields = array_diff($data, json_decode($fileObject['data'], true));
+        $fields = array_diff($data,$fileObject);
         $file = new File();
         $id = $this->getIdFromUuid('ox_file', $id);
         $validFields = $this->checkFields(isset($obj['entity_id']) ? $obj['entity_id'] : null, $fields, $id);

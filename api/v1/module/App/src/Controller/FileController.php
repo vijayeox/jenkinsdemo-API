@@ -13,6 +13,8 @@ use Oxzion\Service\FileService;
 use Oxzion\ValidationException;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\EntityNotFoundException;
+use Zend\Db\Adapter\AdapterInterface;
+
 
 class FileController extends AbstractApiController
 {
@@ -149,6 +151,7 @@ class FileController extends AbstractApiController
 
         $crypto = new Crypto();
         $file = $crypto->decryption($params['documentName']);
+        print_r($file);
         if(file_exists($file)){
             if (!headers_sent()) {
                 header('Content-Type: application/octet-stream');
@@ -165,6 +168,7 @@ class FileController extends AbstractApiController
                 return $this->getErrorResponse($e->getMessage(), 500);
             }
         } else {
+            print("FILE NOT");
             return $this->getErrorResponse("Document not Found", 404);
         }
     }
