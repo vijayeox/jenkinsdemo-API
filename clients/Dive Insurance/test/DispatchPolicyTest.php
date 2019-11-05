@@ -91,7 +91,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -113,7 +113,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -136,7 +136,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -161,7 +161,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -185,7 +185,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -209,7 +209,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -233,7 +233,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -255,7 +255,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -278,7 +278,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -304,7 +304,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -325,7 +325,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -358,7 +358,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -381,7 +381,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(), 'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
         }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
