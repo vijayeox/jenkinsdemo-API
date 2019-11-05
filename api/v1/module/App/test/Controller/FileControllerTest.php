@@ -70,6 +70,8 @@ class FileControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['field1'], $data['field1']);
+        //TODO add ox_file_attribute table data verification
+        //TODO add ox_file data column verification
     }
 
     public function testCreateAccess()
@@ -102,6 +104,8 @@ class FileControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['field1'], $data['field1']);
         $this->assertEquals($content['data']['field2'], $data['field2']);
+        //TODO add ox_file_attribute table data 
+        //TODO add ox_file data column verification
     }
     public function testUpdateRestricted()
     {
