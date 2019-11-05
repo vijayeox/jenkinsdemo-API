@@ -38,7 +38,7 @@ class FileService extends AbstractService
      */
     public function createFile(&$data, $workflowInstanceId = null)
     {
-        $this->logger->info("Data CreateFile- " . print_r($data, true));
+        $this->logger->info("Data CreateFile- " . json_encode($data));
         $parentId = isset($data['parent_id']) ? $data['parent_id'] : null;
         if (isset($data['form_id'])) {
             $formId = $this->getIdFromUuid('ox_form', $data['form_id']);
@@ -66,8 +66,8 @@ class FileService extends AbstractService
         $data['data'] = $jsonData;
         $file = new File();
         $file->exchangeArray($data);
-        $this->logger->info("Data From Fileservice - " . print_r($data, true));
-        $this->logger->info("File data From Fileservice - " . print_r($file->toArray(), true));
+        $this->logger->info("Data From Fileservice - " . json_encode($data));
+        $this->logger->info("File data From Fileservice - " . json_encode($file->toArray()));
         $fields = array_diff_assoc($data, $file->toArray());
         $file->validate();
         $this->beginTransaction();
@@ -87,14 +87,14 @@ class FileService extends AbstractService
             $id = $this->table->getLastInsertValue();
             $this->logger->info("FILE ID DATA" . $id);
             $data['id'] = $id;
-            $this->logger->info("FILE DATA ----- " . print_r($data, true));
+            $this->logger->info("FILE DATA ----- " . json_encode($data));
             $validFields = $this->checkFields($data['entity_id'], $fields, $id);
             $this->updateFileData($id, $fields);
             if (!$validFields || empty($validFields)) {
                 $this->logger->info("FILE Validation ----- ");
-                throw new ValidationException("Validation Errors" . print_r($fields, true));
+                throw new ValidationException("Validation Errors" . json_encode($fields));
             }
-            $this->logger->info("Check Fields - " . print_r($validFields, true));
+            $this->logger->info("Check Fields - " . json_encode($validFields));
             $this->multiInsertOrUpdate('ox_file_attribute', $validFields, ['id']);
             $this->logger->info("Created successfully  - file record");
             $this->commit();
@@ -199,13 +199,13 @@ class FileService extends AbstractService
 
         $this->beginTransaction();
         try {
-            $this->logger->info("Entering to Update File -" . print_r($file, true) . "\n");
+            $this->logger->info("Entering to Update File -" . json_encode($file) . "\n");
 
             $file->exchangeArray($fileObject);
             $file->validate();
             $count = $this->table->save($file);
 
-            $this->logger->info(print_r($validFields, true) . "are the list of valid fields.\n");
+            $this->logger->info(json_encode($validFields) . "are the list of valid fields.\n");
             if ($validFields && !empty($validFields)) {
                 $query = "Delete from ox_file_attribute where file_id = :fileId";
                 $queryWhere = array("fileId" => $id);
@@ -257,17 +257,17 @@ class FileService extends AbstractService
     public function getFile($id)
     {
         try {
-            $this->logger->info("FILE ID  ------" . print_r($id, true));
+            $this->logger->info("FILE ID  ------" . json_encode($id));
             $params = array('id' => $id,
                 'active' => 1,
                 'orgId' => AuthContext::get(AuthConstants::ORG_ID));
             $select = "SELECT uuid, data  from ox_file where uuid = :id AND is_active = :active AND org_id = :orgId";
-            $this->logger->info("Executing query $select with params " . print_r($params, true));
+            $this->logger->info("Executing query $select with params " . json_encode($params));
 
             $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
-            $this->logger->info("FILE DATA ------" . print_r($result, true));
+            $this->logger->info("FILE DATA ------" . json_encode($result));
             if (count($result) > 0) {
-                $this->logger->info("FILE ID  ------" . print_r($result, true));
+                $this->logger->info("FILE ID  ------" . json_encode($result));
                 if ($result[0]['data']) {
                     $result[0]['data'] = json_decode($result[0]['data'], true);
                 }
@@ -317,18 +317,18 @@ class FileService extends AbstractService
             left join ox_app_entity on ox_app_entity.id = ox_field.entity_id
             where ox_app_entity.id=?";
             $where = array($entityId);
-            $this->logger->info("Executing query - $query with  params" . print_r($where, true));
+            $this->logger->info("Executing query - $query with  params" . json_encode($where));
             $fields = $this->executeQueryWithBindParameters($query, $where)->toArray();
-            $this->logger->info("Query result" . print_r($fields, true));
+            $this->logger->info("Query result" . json_encode($fields));
         } else {
             $this->logger->info("No Entity ID");
             return 0;
         }
         $sqlQuery = "SELECT * from ox_file_attribute where ox_file_attribute.file_id=?";
         $whereParams = array($fileId);
-        $this->logger->info("Executing query - $sqlQuery with  params" . print_r($whereParams, true));
+        $this->logger->info("Executing query - $sqlQuery with  params" . json_encode($whereParams));
         $fileArray = $this->executeQueryWithBindParameters($sqlQuery, $whereParams)->toArray();
-        $this->logger->info("Query result" . print_r($fileArray, true));
+        $this->logger->info("Query result" . json_encode($fileArray));
         $keyValueFields = array();
         $i = 0;
         if (!empty($fields)) {
@@ -341,7 +341,7 @@ class FileService extends AbstractService
                     $keyValueFields[$i]['id'] = null;
                 }
                 $fieldProperties = json_decode($field['template'], true);
-                $this->logger->info("FIELD PROPERTIES - " . print_r($fieldProperties, true));
+                $this->logger->info("FIELD PROPERTIES - " . json_encode($fieldProperties));
                 if (!$fieldProperties['persistent']) {
                     if (isset($fieldData[$field['name']])) {
                         unset($fieldData[$field['name']]);
@@ -363,7 +363,7 @@ class FileService extends AbstractService
                 $i++;
             }
         }
-        $this->logger->info("Key Values - " . print_r($keyValueFields, true));
+        $this->logger->info("Key Values - " . json_encode($keyValueFields));
         return $keyValueFields;
     }
 
