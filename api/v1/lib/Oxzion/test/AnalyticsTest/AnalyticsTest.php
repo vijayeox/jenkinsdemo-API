@@ -67,10 +67,8 @@ class AnalyticsTest extends MainControllerTest
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe");
         $this->assertEquals($results[0]['value'], "800");
-        $this->assertEquals($results[0]['grouplist'], "created_by");
         $this->assertEquals($results[1]['name'], "Mike Price");
         $this->assertEquals($results[1]['value'], "50.5");
-        $this->assertEquals($results[1]['grouplist'], "created_by");
     }
 
     public function testDoubleGrouping() {
@@ -84,10 +82,8 @@ class AnalyticsTest extends MainControllerTest
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe - A");
         $this->assertEquals($results[0]['value'], "200");
-        $this->assertEquals($results[0]['grouplist'][0], "John Doe");
         $this->assertEquals($results[2]['name'], "Mike Price - A");
         $this->assertEquals($results[2]['value'], "50.5");
-        $this->assertEquals($results[2]['grouplist'][0], "Mike Price");
     }
 
     public function testDoubleGroupingCount() {
@@ -101,10 +97,8 @@ class AnalyticsTest extends MainControllerTest
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe - A");
         $this->assertEquals($results[0]['value'], "1");
-        $this->assertEquals($results[0]['grouplist'][0], "John Doe");
         $this->assertEquals($results[2]['name'], "Mike Price - A");
         $this->assertEquals($results[2]['value'], "1");
-        $this->assertEquals($results[2]['grouplist'][0], "Mike Price");
     }
 
     public function testLists() {
@@ -171,10 +165,8 @@ class AnalyticsTest extends MainControllerTest
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "field3text");
         $this->assertEquals($results[0]['value'], "15");
-        $this->assertEquals($results[0]['grouplist'], "field3");
         $this->assertEquals($results[1]['name'], "cfield3text");
         $this->assertEquals($results[1]['value'], "30");
-        $this->assertEquals($results[1]['grouplist'], "field3");
     }
 
     public function testCrmDataWithFilter() {
@@ -211,10 +203,8 @@ class AnalyticsTest extends MainControllerTest
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe");
         $this->assertEquals($results[0]['value'], "80");
-        $this->assertEquals($results[0]['grouplist'], "created_by");
         $this->assertEquals($results[1]['name'], "Mike Price");
         $this->assertEquals($results[1]['value'], "5.05");
-        $this->assertEquals($results[1]['grouplist'], "created_by");
     }
 
     public function testRoundingWithGrouping() {
@@ -228,10 +218,8 @@ class AnalyticsTest extends MainControllerTest
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe");
         $this->assertEquals($results[0]['value'], "347.17");
-        $this->assertEquals($results[0]['grouplist'], "created_by");
         $this->assertEquals($results[1]['name'], "Mike Price");
         $this->assertEquals($results[1]['value'], "21.92");
-        $this->assertEquals($results[1]['grouplist'], "created_by");
     }
 
     public function testExpressionsNoGroups() {

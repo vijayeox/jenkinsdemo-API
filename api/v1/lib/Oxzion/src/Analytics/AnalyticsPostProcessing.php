@@ -7,36 +7,37 @@ use Hamcrest\Type\IsNumeric;
 class AnalyticsPostProcessing
 {
 
-    public static function postProcess($results, $parameters)
+    public static function postProcess($resultData, $parameters)
     {
 
         $expression = "";
         $round = null;
+
         if (isset($parameters['expression'])) {
             $expression = $parameters['expression'];
         }
         if (isset($parameters['round'])) {
             $round = $parameters['round'];
         }
-
-        if (is_array($results['data'])) {
-            foreach ($results['data'] as $key => $data) {
+        $finalResults = $resultData;
+        if (is_array($resultData)) {
+            foreach ($resultData as $key => $data) {
                 $value = $data['value'];
                 eval("\$value=\$value" . $expression . ";");
                 if ($round !== null && is_numeric($value)) {
                     $value = round($value, $round);
                 }
-                $results['data'][$key]['value'] = $value;
+                $finalResults[$key]['value'] = $value;
             }
         } else {
-            $value = $results['data'];
+            $value = $resultData;
             eval("\$value=\$value" . $expression . ";");
             if ($round !== null && is_numeric($value)) {
                 $value = round($value, $round);
             }
-            $results['data'] = $value;
+            $finalResults = $value;
         }
-        return ($results);
+        return $finalResults;
     }
 
 }

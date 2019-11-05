@@ -26,20 +26,24 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			$query = $this->formatQuery($parameters);
             $elasticService = new ElasticService($this->config);
 			$result = $elasticService->getQueryResults($orgId,$app_name,$query);
+			$finalResult['meta'] = $query;
+			$finalResult['meta']['type'] = $result['type'];
 			if ($result['type']=='group') {
-				$result['data'] = $this->flattenResult($result,$query);
+				$finalResult['data'] = $this->flattenResult($result['data'],$query);
 			} else {
+				$finalResult['data']  = $result['data'];
 				if (isset($query['select'])) {
-					   $result['list'] = $query['select'];
+					   $finalResult['meta']['list'] = $query['select'];
 				}
 				if (isset($query['displaylist'])) {
-					$result['displaylist'] = $query['displaylist'];
+					$finalResult['meta']['displaylist'] = $query['displaylist'];
 				}
 			}
 			if (isset($parameters['expression']) ||  isset($parameters['round']) ) {
-				$result = AnalyticsPostProcessing::postProcess($result,$parameters);
+				$finalResult['data'] = AnalyticsPostProcessing::postProcess($finalResult['data'],$parameters);
 			}
-			return $result;
+
+			return $finalResult;
 			
         } catch (Exception $e) {
             throw new Exception("Error performing Elastic Search", 0, $e);
@@ -161,7 +165,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 				} else {
 					$value = $data['value']['value'];
 				}
-				$finalresult[] = array('name'=>$key.' - '.$data['key'],'value'=>$value,'grouplist'=>array_merge ($grouplist,array($data['key'])));
+				$finalresult[] = array('name'=>$key.' - '.$data['key'],'value'=>$value);
 			}
 		} else {
 			foreach($result as $data) {
@@ -174,13 +178,13 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 		}
 	}
 
-	public function flattenResult($result,$config){
+	public function flattenResult($resultData,$config){
 		$finalresult = array();
 		$operation = key($config['aggregates']);
 		$qtrtranslate = array('Jan'=>'Q1','Apr'=>'Q2','Jul'=>'Q3','Oct'=>'Q4');
 		if (isset($config['group'])) {
 			if (count($config['group'])==1) {
-				foreach($result['data'] as $data ) {
+				foreach($resultData as $data ) {
 					if (substr($config['group'][0],0,7)=='period-') {
 						$name = $data['key_as_string'];
 						if ($config['group'][0]=='period-quarter') {
@@ -196,18 +200,20 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 					} else {
 						$value = $data['value']['value'];
 					}
-					$finalresult[]=array('name'=>$name,'value'=>$value,'grouplist'=>$config['group'][0]);
+					$finalresult[]=array('name'=>$name,'value'=>$value);
 				}
 			} else {
-				$this->flattenmultigroups($finalresult,$result['data'],$config,count($config['group'])-1,0);
+				$this->flattenmultigroups($finalresult,$resultData,$config,count($config['group'])-1,0);
 			}
 		} else {
-			$finalresult[] = array('name'=>$config['field'],'value'=>$result['data']);
+			$finalresult[] = array('name'=>$config['field'],'value'=>$resultData);
 		}
 		return $finalresult;
 	}
 
+	public function getMetaData($parameters) {
 
+	}
 
 }
 ?>

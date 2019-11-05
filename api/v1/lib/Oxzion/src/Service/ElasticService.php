@@ -27,7 +27,49 @@ class ElasticService
         $clientsettings['scheme'] = $config['elasticsearch']['scheme'];
         $this->core = $config['elasticsearch']['core'];
         $this->type = $config['elasticsearch']['type'];
+
         $this->client = ClientBuilder::create()->setHosts(array($clientsettings))->build();
+    }
+
+    public function create($indexName,$fieldList,$settings) {
+
+        $typemapper = ['int'=>'integer','text'=>'text'];
+
+        if (isset($settings['shrads'])) {
+            $shrads = $settings['shrads'];
+        } else {
+            $shrads = 1;
+        }
+        if (isset($settings['replicas'])) {
+            $replicas = $settings['replicas'];
+        } else {
+            $replicas = 1;
+        }
+
+
+       foreach ($fieldList as $field) {
+           $type =  (isset($typemapper[$field['type']])) ? $typemapper[$field['type']]:$field['type'];
+           $fieldProperties[$field['name']]=['type'=>$type];
+       }
+       $client = ClientBuilder::create()->build();
+       $params = [
+            'index' => $indexName,
+            'body' => [
+                'settings' => [
+                    'number_of_shards' => $shrads,
+                    'number_of_replicas' => $replicas
+                ],
+                'mappings' => [
+                    '_source' => [
+                        'enabled' => true
+                    ],
+                    'properties' => $fieldProperties
+                ]
+            ]
+        ];
+
+        // Create the index with mappings and settings now
+        $response = $client->indices()->create($params);
     }
 
     public function getSettings()
