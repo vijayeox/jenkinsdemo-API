@@ -28,7 +28,7 @@ class OXCallbackController extends AbstractApiControllerHelper
     {
         $params = $this->extractPostData();
         $params['baseurl'] = $this->config['baseUrl'];
-        $this->messageProducer->sendTopic(json_encode(array(
+        $this->messageProducer->sendQueue(json_encode(array(
             'to' => $params['email'],
             'subject' => 'Your login details for OX Zion!!',
             'body' => $this->templateService->getContent('newUser', $params)

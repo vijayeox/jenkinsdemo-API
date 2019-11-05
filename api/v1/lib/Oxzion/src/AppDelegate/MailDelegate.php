@@ -29,6 +29,6 @@ abstract class MailDelegate extends AbstractAppDelegate
     	$data['orgUuid'] = $orgUuid;
 
         $mailOptions['body'] = $this->templateService->getContent($template,$data);
-        $userMail = $this->messageProducer->sendTopic(json_encode($mailOptions), 'mail');
+        $userMail = $this->messageProducer->sendQueue(json_encode($mailOptions), 'mail');
     }
 }

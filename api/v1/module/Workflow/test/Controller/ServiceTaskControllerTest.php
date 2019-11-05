@@ -53,7 +53,7 @@ class ServiceTaskControllerTest extends ControllerTest
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
             $payload = json_encode(array('to'=>$data['variables']['to'],'subject'=>$data['variables']['subject'],'body'=>$data['variables']['body'],'attachments'=>null));
-            $mockMessageProducer->expects('sendTopic')->with($payload, 'mail')->once()->andReturn(123);
+            $mockMessageProducer->expects('sendQueue')->with($payload, 'mail')->once()->andReturn(123);
         }
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $this->assertResponseStatusCode(200);

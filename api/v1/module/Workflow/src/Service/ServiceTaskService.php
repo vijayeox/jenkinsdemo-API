@@ -222,7 +222,7 @@ class ServiceTaskService extends AbstractService
                 'attachments' => isset($attachments)?$attachments:null
             ));
             $this->logger->info("Payload for mail -> $payload");
-            $this->messageProducer->sendTopic($payload, 'mail');
+            $this->messageProducer->sendQueue($payload, 'mail');
             return 1;
         } else {
             return;

@@ -259,7 +259,7 @@ class UserService extends AbstractService
             // $es = $this->generateUserIndexForElastic($data);
             $orgid = $this->getUuidFromId('ox_organization',$data['orgid']); //Template Service
             $this->commit();
-            $this->messageProducer->sendQueue(json_encode(array(
+            $this->messageProducer->sendTopic(json_encode(array(
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'email' => $data['email'],
@@ -364,7 +364,7 @@ class UserService extends AbstractService
             throw $e;
         }
         $data['orgid'] = $org['uuid']; // overriding uuid for Template Service
-        $this->messageProducer->sendTopic(json_encode(array(
+        $this->messageProducer->sendQueue(json_encode(array(
             'To' => $data['email'],
             'Subject' => $org['name'].' created!',
             'body' => $this->templateService->getContent('newAdminUser', $data)
@@ -1125,7 +1125,7 @@ class UserService extends AbstractService
             //Code to update the password reset and expiration time
             $userUpdate = $this->updateUser($userDetails['uuid'], $userDetails);      
             if ($userUpdate) {
-                $this->messageProducer->sendTopic(json_encode(array(
+                $this->messageProducer->sendQueue(json_encode(array(
                     'to' => $userReset['email'],
                     'subject' => $userReset['firstname'] . ', You login details for OX Zion!',
                     'body' => $this->templateService->getContent('resetPassword', $userReset)
