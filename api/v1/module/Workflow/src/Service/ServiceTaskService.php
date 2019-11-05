@@ -102,6 +102,10 @@ class ServiceTaskService extends AbstractService
                 $this->logger->info("SCHEDULE JOB");
                 return $this->scheduleJob($data);
                 break;
+            case 'cancelJob':
+                $this->logger->info("CLEAR JOB");
+                return $this->cancelJob($data);
+                break;
             case 'delegate':
                 $this->logger->info("DELEGATE");
                 return $this->executeDelegate($data);
@@ -141,10 +145,10 @@ class ServiceTaskService extends AbstractService
         $this->logger->info("JOB PAYLOAD ------".print_r($jobPayload,true));
         $response = $this->restClient->postWithHeader($url,$jobPayload);
         $this->logger->info("Response - ".print_r($response,true));
-        if(isset($response['body'])){
-            $response = json_decode($response['body'], true);
-            if($data['automatic_renewal'] == true || $data['automatic_renewal'] == "true"){
-                $data['automatic_renewal_jobid'] = $response['JobId'];
+            if(isset($response['body'])){
+                 $response = json_decode($response['body'], true);
+                 $data['jobId'] = $response['JobId'];
+                 $data['jobGroup'] = $response['JobGroup'];
             }
             $this->logger->info("Schedule JOB DATA - ".print_r($data,true));
             $this->logger->info("FILE ID --".$data['fileId']);
@@ -154,12 +158,19 @@ class ServiceTaskService extends AbstractService
             $this->executeQueryWithBindParameters($query,$params);
 
             return $response;
-        }
+        }  
 
-        //TODO log error
-        
+    protected function canceljob(&$data){
+        $this->logger->info("DATA  ------".json_encode($data));
+        $url = $data['url'];
+
+        $jobPayload = array('jobid' => $data['jobId'],'jobgroup' => $data['jobGroup']);
+        unset($data['url'],$data['jobId'],$data['jobGroup']);
+        $response = $this->restClient->postWithHeader($url,$jobPayload);
+        $this->logger->info("Response - ".print_r($response,true));
+        return $response; 
     }
-    
+
     protected function fileSave($data){
       $select = "Select uuid from ox_file where workflow_instance_id=:workflowInstanceId;";
       $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
