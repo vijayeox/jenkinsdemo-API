@@ -108,6 +108,7 @@ label.highlight {
 
 .formio-component-submit .submit-success::after{
   font-size: 12px;
+  top: 2px;
 }
 
 .inputField, textarea {

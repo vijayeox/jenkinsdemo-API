@@ -36,7 +36,7 @@ export default class Register extends React.Component {
 										<label className="labelField">
 											Username<span className="req">*</span>
 										</label>
-										<input className="inputField" type="email" required autoComplete="off" />
+										<input className="inputField" required autoComplete="off" />
 									</div>
 									<div className="field-wrap inputDiv">
 										<label className="labelField">
@@ -44,7 +44,7 @@ export default class Register extends React.Component {
 										</label>
 										<input className="inputField" type="password" required autoComplete="off" />
 									</div>
-									<p className="forgot"><a href="#">Forgot Password?</a></p>
+									<p className="forgot"><a href="#">Forgot Password?</a></p>      
 									<button className="button button-block">Log In</button>
 								</form>
 							</div>
