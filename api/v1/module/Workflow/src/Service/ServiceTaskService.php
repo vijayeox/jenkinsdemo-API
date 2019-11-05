@@ -147,8 +147,10 @@ class ServiceTaskService extends AbstractService
         $this->logger->info("Response - ".print_r($response,true));
             if(isset($response['body'])){
                  $response = json_decode($response['body'], true);
-                 $data['jobId'] = $response['JobId'];
-                 $data['jobGroup'] = $response['JobGroup'];
+                 $jobName = $data['jobName'];
+                 unset($data['jobName']);
+                 $jobData = array("jobId" => $response['JobId'],"jobGroup" => $response['JobGroup']);
+                 $data[$jobName] = json_encode($jobData);
             }
             $this->logger->info("Schedule JOB DATA - ".print_r($data,true));
             $this->logger->info("FILE ID --".$data['fileId']);
@@ -156,16 +158,17 @@ class ServiceTaskService extends AbstractService
             $params = array("filedata" => $fileData,"fileUuid" => $data['fileId']);
             $query = "UPDATE ox_file SET data = :filedata where uuid = :fileUuid";
             $this->executeQueryWithBindParameters($query,$params);
-
             return $response;
         }  
 
     protected function canceljob(&$data){
+
         $this->logger->info("DATA  ------".json_encode($data));
         $url = $data['url'];
-
-        $jobPayload = array('jobid' => $data['jobId'],'jobgroup' => $data['jobGroup']);
-        unset($data['url'],$data['jobId'],$data['jobGroup']);
+        $jobName = $data['jobName'];
+        $JobData = json_decode($data[$jobName],true);
+        $jobPayload = array('jobid' => $JobData['jobId'],'jobgroup' => $JobData['jobGroup']);
+        unset($data['url'],$data[$jobName]);
         $response = $this->restClient->postWithHeader($url,$jobPayload);
         $this->logger->info("Response - ".print_r($response,true));
         return $response; 
