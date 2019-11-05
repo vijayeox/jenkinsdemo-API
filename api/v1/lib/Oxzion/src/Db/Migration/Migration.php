@@ -127,11 +127,12 @@ class Migration extends AbstractService
                   `date_modified` datetime NULL,
                   `description` varchar(10000),
                   PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;";
+                ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;";
             $statement1 = $adapter->query($createQuery);
             $result = $statement1->execute();
             $this->commit();
         } catch (Exception $e) {
+            print_r($e->getMessage());exit;
             $this->rollback();
             throw $e;
         }

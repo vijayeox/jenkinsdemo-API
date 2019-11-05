@@ -221,7 +221,7 @@ class AppService extends AbstractService
         if(!isset($data['name'])){
             $data['name'] = str_replace('.bpmn', '', $data['bpmn_file']); // Replaces all .bpmn with no space.
             $data['name'] = preg_replace('/[^A-Za-z0-9]/', '', $data['name'], -1); // Removes special chars.
-            print_r($data);
+            // print_r($data);
         }
         if(!isset($data['entity'])){
             throw new Exception("Entity is not defined in yml.");
