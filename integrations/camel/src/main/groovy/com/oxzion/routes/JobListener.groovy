@@ -85,7 +85,7 @@ class JobListener {
                 if (check)
                     jobSchedulerResponse.setParams(true, "Job Canceled Successfully!", payload.jobid, payload.jobgroup)
                 else
-                    jobSchedulerResponse.setParams(false, "Failed to cancel job")
+                    throw new NotFoundException()
             }
         }
         else

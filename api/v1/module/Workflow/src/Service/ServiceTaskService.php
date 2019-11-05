@@ -91,7 +91,7 @@ class ServiceTaskService extends AbstractService
     }
 
 
-        protected function processCommand(&$data,$command){
+    protected function processCommand(&$data,$command){
             $this->logger->info("PROCESS COMMAND : command --- ".$command);
         switch ($command) {
             case 'mail':
@@ -162,14 +162,26 @@ class ServiceTaskService extends AbstractService
         }  
 
     protected function canceljob(&$data){
-
-        $this->logger->info("DATA  ------".json_encode($data));
-        $url = $data['url'];
-        $jobName = $data['jobName'];
-        $JobData = json_decode($data[$jobName],true);
-        $jobPayload = array('jobid' => $JobData['jobId'],'jobgroup' => $JobData['jobGroup']);
-        unset($data['url'],$data[$jobName]);
-        $response = $this->restClient->postWithHeader($url,$jobPayload);
+        try{
+            $this->logger->info("DATA  ------".json_encode($data));
+            $url = $data['url'];
+            $jobName = $data['jobName'];
+            $JobData = json_decode($data[$jobName],true);
+            $jobPayload = array('jobid' => $JobData['jobId'],'jobgroup' => $JobData['jobGroup']);
+            unset($data['url'],$data[$jobName]);
+            $response = $this->restClient->postWithHeader($url,$jobPayload);
+        }
+        catch(Exception $e){
+            $this->logger->info("CLEAR JOB RESPONSE ---- ".print_r($e->getMessage(),true)); 
+            $res = explode('response:',$e->getMessage())[1];
+            $res = explode(',"path"',$res)[0];
+            $res = $res."}";
+            $res = json_decode($res,true);
+            if($res['status'] == 404){
+                throw new EntityNotFoundException($res['message']);
+            }
+            throw $e;
+        }
         $this->logger->info("Response - ".print_r($response,true));
         return $response; 
     }

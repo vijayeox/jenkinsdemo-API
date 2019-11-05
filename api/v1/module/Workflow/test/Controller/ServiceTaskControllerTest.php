@@ -12,6 +12,7 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use Zend\Db\Adapter\AdapterInterface;
 use Workflow\Service\ServiceTaskService;
 use Oxzion\Utils\FileUtils;
+use Exception;
 use Mockery;
 
 class ServiceTaskControllerTest extends ControllerTest
@@ -141,7 +142,7 @@ class ServiceTaskControllerTest extends ControllerTest
     public function testServiceTaskCancelJob()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd","processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","variables" => array("firstname" => "Neha","policy_period" => "1year","card_expiry_date" => "10/24","city" => "Bangalore","orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" => "1","card_no" => "1234","state" => "karnataka","app_id" => "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" => "560030","coverage" => "100000","product" => "Individual Professional Liability","address2" => "dhgdhdh","address1" => "hjfjhfjfjfhfg","expiry_date" => "2020-06-30","form_id" =>"0","entity_id" => "1","created_by"=> "1","url" => "canceljob","command" =>"cancelJob","jobName" => "autoRenewalJob","autoRenewalJob" => '{"jobId":"f4f7833e-7e34-4b00-bcab-ef6048e7fbcb","jobGroup":"Job"}',"expiry_year" => "2019","orgid" => "53012471-2863-4949-afb1-e69b0891c98a","lastname" => "Rai","isexcessliability" => "1","workflow_instance_id" => "142","credit_card_type" => "credit","workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925","fileId"=> "134","email" => 'bharat@gmail.com'),"parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd","processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","variables" => array("firstname" => "Neha","policy_period" => "1year","card_expiry_date" => "10/24","city" => "Bangalore","orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" => "1","card_no" => "1234","state" => "karnataka","app_id" => "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" => "560030","coverage" => "100000","product" => "Individual Professional Liability","address2" => "dhgdhdh","address1" => "hjfjhfjfjfhfg","expiry_date" => "2020-06-30","form_id" =>"0","entity_id" => "1","created_by"=> "1","url" => "canceljob","command" =>"cancelJob","jobName" => "autoRenewalJob","autoRenewalJob" => '{"jobId":"14b5370e-a580-4b80-a17a-a13be8b47ee0","jobGroup":"Job"}',"expiry_year" => "2019","orgid" => "53012471-2863-4949-afb1-e69b0891c98a","lastname" => "Rai","isexcessliability" => "1","workflow_instance_id" => "142","credit_card_type" => "credit","workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925","fileId"=> "134","email" => 'bharat@gmail.com'),"parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
 
         $this->setJsonContent(json_encode($data));
         if (enableCamel == 0) {
@@ -150,5 +151,23 @@ class ServiceTaskControllerTest extends ControllerTest
         }
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $this->assertResponseStatusCode(200);
+    }
+
+     public function testServiceTaskCancelInvalidJob()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd","processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","variables" => array("firstname" => "Neha","policy_period" => "1year","card_expiry_date" => "10/24","city" => "Bangalore","orgUuid" => "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" => "1","card_no" => "1234","state" => "karnataka","app_id" => "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" => "560030","coverage" => "100000","product" => "Individual Professional Liability","address2" => "dhgdhdh","address1" => "hjfjhfjfjfhfg","expiry_date" => "2020-06-30","form_id" =>"0","entity_id" => "1","created_by"=> "1","url" => "canceljob","command" =>"cancelJob","jobName" => "autoRenewalJob","autoRenewalJob" => '{"jobId":"f4f7833e-7e34-4b00-bcab-ef6048e7fbcb","jobGroup":"Job"}',"expiry_year" => "2019","orgid" => "53012471-2863-4949-afb1-e69b0891c98a","lastname" => "Rai","isexcessliability" => "1","workflow_instance_id" => "142","credit_card_type" => "credit","workflowId" => "a01a6776-431a-401e-9288-6acf3b2f3925","fileId"=> "134","email" => 'bharat@gmail.com'),"parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd","parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+
+        $this->setJsonContent(json_encode($data));
+        if (enableCamel == 0) {
+            $mockRestClient = $this->getMockRestClientForScheduleService();
+            $exception = Mockery::Mock('\GuzzleHttp\Exception\ClientException');
+            $request = Mockery::Mock('\Psr\Http\Message\RequestInterface');
+            $exception = new \GuzzleHttp\Exception\ClientException('Client error: `POST http://172.16.1.95:8085/canceljob` resulted in a `404 Not Found` response:{"timestamp":"2019-11-05T13:06:56.308+0000","status":404,"error":"Not Found","message":"Job Does not Exists","path":"/ca (truncated...)', $request);
+            $mockRestClient->expects('postWithHeader')->with("canceljob",array('jobid' => 'f4f7833e-7e34-4b00-bcab-ef6048e7fbcb', 'jobgroup' => 'Job'))->once()->andThrow($exception);
+        }
+        $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(404);
     }
 }
