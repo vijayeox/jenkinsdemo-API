@@ -35,6 +35,7 @@ class JobHandler extends QuartzJobBean {
             JobDataMap jobDataMap = jobExecutionContext.getMergedJobDataMap()
             String urlResponse
             def slurper = new JsonSlurper()
+            jobDataMap.JobData = slurper.parseText(jobDataMap.JobData)
             if (jobDataMap.JobData.job.url) {
                     String authresponse = postAuth('apikey='+env.getProperty("apikey"))
                     def jwt = slurper.parseText(authresponse)

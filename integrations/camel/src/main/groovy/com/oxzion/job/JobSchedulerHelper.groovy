@@ -1,5 +1,6 @@
 package com.oxzion.job
 
+import groovy.json.JsonOutput
 import org.quartz.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -28,6 +29,9 @@ class JobSchedulerHelper {
         }
     }
 
+    def setupEntity(JobDetail jobDetail){
+        println(jobDetail)
+    }
     def cancelJob(String jobId, String jobGroup) {
             try {
                 JobKey jobKey = JobKey.jobKey(jobId, jobGroup)
@@ -41,7 +45,8 @@ class JobSchedulerHelper {
     private JobDetail buildJobDetail(Map jobDataObj) {
         if(!jobDataObj.isEmpty()) {
             JobDataMap jobDataMap = new JobDataMap()
-            jobDataMap.put("JobData",jobDataObj)
+            def jobDataJson = JsonOutput.toJson(jobDataObj)
+            jobDataMap.put("JobData",jobDataJson)
             return JobBuilder.newJob(JobHandler.class)
                     .withIdentity(UUID.randomUUID().toString(), "Job")
                     .withDescription("Job")

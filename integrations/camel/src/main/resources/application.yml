@@ -12,17 +12,14 @@ spring:
           jobStore:
             class: org.quartz.impl.jdbcjobstore.JobStoreTX
             driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-            isClustered: true
+            isClustered: false
             misfireThreshold: 60000
-            tablePrefix: qrtz_
+            tablePrefix: QRTZ_
             useProperties: true
           plugin:
             shutdownHook:
               class: org.quartz.plugins.management.ShutdownHookPlugin
               cleanShutdown: true
-          scheduler:
-            instanceId: AUTO
-            instanceName: quartz-demo-app
           threadPool:
             threadCount: 20
     jdbc:
@@ -32,7 +29,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     password: password
     platform: org.hibernate.dialect.MySQL5Dialect
-    url: jdbc:mysql://localhost:3306/quartz_demo_db
+    url: jdbc:mysql://172.16.1.172:3306/quartz_demo_db
     username: root
   jpa:
     open-in-view: false
