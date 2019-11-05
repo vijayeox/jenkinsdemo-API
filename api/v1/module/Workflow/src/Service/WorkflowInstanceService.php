@@ -185,8 +185,9 @@ class WorkflowInstanceService extends AbstractService
             $params['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         }
         $workflowId = $params['workflowId'];
-        $workflow = $this->workflowService->getWorkflow($workflowId);
 
+
+        $workflow = $this->workflowService->getWorkflow($workflowId);
         if (empty($workflow)) {
             $this->logger->info("EMPTY WORKFLOW --- ");
             throw new EntityNotFoundException("No workflow found for workflow $workflowId");
@@ -427,6 +428,7 @@ class WorkflowInstanceService extends AbstractService
                 $this->logger->error($e->getMessage(), $e);
                 throw $e;
             }
+
             return $data;
         }
     }

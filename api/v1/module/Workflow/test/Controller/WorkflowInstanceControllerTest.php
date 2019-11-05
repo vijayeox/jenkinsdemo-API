@@ -45,8 +45,9 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $data = ['name' => 'workflow3','app_id'=>1,'field2'=>1];
         $fileCount = $this->getConnection()->getRowCount('ox_file');
         $fileAttributeCount = $this->getConnection()->getRowCount('ox_file_attribute');
+
         $this->setJsonContent(json_encode($data));
-        if (enableCamunda==0) {
+        if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Workflow\Service\WorkflowInstanceService::class);
             $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andReturn(array('id'=>1));
@@ -54,6 +55,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
             $this->processId = 1;
         }
         $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4', 'POST', $data);
+
         $this->assertEquals($fileAttributeCount+3, $this->getConnection()->getRowCount('ox_file_attribute'));
         $this->assertEquals($fileCount+1, $this->getConnection()->getRowCount('ox_file'));
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -84,7 +86,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
 
     public function testUpdate(){
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'[activityInstanceId]','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'bharatgtest','type'=>'assignee')),'processInstanceId'=>1,'name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'orgid'=>$this->testOrgId)];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'Task_1s7qzh3:8c1318d8-ee65-11e9-bb94-36ce75a0ce0e','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'bharatgtest','type'=>'assignee')),'processInstanceId'=>1,'name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflow_id'=>'1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4','orgid'=>$this->testOrgId)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activitycomplete', 'POST',$data);
         $this->assertResponseStatusCode(200);
@@ -96,6 +98,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
+   
     public function testcompleteActivityInstanceFail()
     {
         $this->initAuthToken($this->adminUser);

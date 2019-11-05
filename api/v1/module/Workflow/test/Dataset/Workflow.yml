@@ -34,6 +34,7 @@ ox_field:
     name: "field1"
     app_id: 99
     data_type: "integer"
+    template: "{\"persistent\" : \"true\"}"
     required: 1
     sequence: 2
     entity_id: 1
@@ -42,6 +43,7 @@ ox_field:
     name: "field2"
     app_id: 99
     data_type: "integer"
+    template: "{\"persistent\" : \"true\"}"
     required: 1
     sequence: 1
     entity_id: 1
@@ -50,6 +52,7 @@ ox_field:
     name: "expiry_date"
     app_id: 99
     data_type: "date"
+    template: "{\"persistent\" : \"true\"}"
     required: 1
     sequence: 1 
     entity_id: 1
@@ -57,7 +60,8 @@ ox_field:
     id: 4		
     name: "padi_number"		
     app_id: 99		
-    data_type: "integer"		
+    data_type: "integer"	
+    template: "{\"persistent\" : \"true\"}"	
     required: 1		
     sequence: 4 
 -
@@ -65,13 +69,15 @@ ox_field:
     name: "policy_document"
     app_id: 99
     data_type: "document"
+    template: "{\"persistent\" : \"true\"}"
     required: 1
     sequence: 5 
 -		
     id: 6		
     name: "coi_number"		
     app_id: 99		
-    data_type: "document"		
+    data_type: "document"	
+    template: "{\"persistent\" : \"true\"}"	
     required: 1		
     sequence: 6     
 ox_activity:
@@ -129,7 +135,7 @@ ox_workflow:
     id: 1
     app_id: 99
     name: "Test Workflow 1"
-    process_id: "[main]"
+    process_id: "Process_1dx3jli:3:931b7c8b-fef7-11e9-89d4-0294414e067f"
     form_id: 1
     uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4'
     entity_id: 1
@@ -306,7 +312,7 @@ ox_activity_instance:
     id: 1
     activity_id: 1
     form_id: 1
-    activity_instance_id: "[activityInstanceId]"
+    activity_instance_id: "Task_1s7qzh3:8c1318d8-ee65-11e9-bb94-36ce75a0ce0e"
     workflow_instance_id: 1
     status: "In Progress"
     org_id: 1
