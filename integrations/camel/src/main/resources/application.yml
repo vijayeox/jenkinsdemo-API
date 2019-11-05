@@ -2,7 +2,7 @@ server:
   port: 8085
 spring:
   activemq:
-    broker-url: tcp://172.26.21.225:61616
+    broker-url: tcp://172.16.1.172:61616
     user: admin
     password: admin
   quartz:
@@ -22,8 +22,6 @@ spring:
               cleanShutdown: true
           scheduler:
             instanceId: AUTO
-            instanceIdGenerator:
-              class: com.helixz.quartz.demo.component.CustomQuartzInstanceIdGenerator
             instanceName: quartz-demo-app
           threadPool:
             threadCount: 20
@@ -31,7 +29,7 @@ spring:
       initialize-schema: never
     job-store-type: jdbc
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
     password: password
     platform: org.hibernate.dialect.MySQL5Dialect
     url: jdbc:mysql://localhost:3306/quartz_demo_db
