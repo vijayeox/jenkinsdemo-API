@@ -1,5 +1,11 @@
 server:
   port: 8085
+flyway:
+  password: password
+  schemas: quartz_demo_db
+  url: jdbc:h2:mem:DATABASE
+  user: root
+  baseline-on-migrate: true
 spring:
   activemq:
     broker-url: tcp://localhost:61616
@@ -29,9 +35,14 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     password: password
     platform: org.hibernate.dialect.MySQL5Dialect
-    url: jdbc:mysql://localhost:3306/quartz_demo_db
+    url: jdbc:mysql://172.16.1.172:3306/quartz_demo_db?useSSL=false
     username: root
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: validate
     open-in-view: false
     show-sql: true
 smtp:
