@@ -83,7 +83,7 @@ class PageService extends AbstractService
      
     public function deletePage($appUuid, $pageUuid)
     {
-        $select = "SELECT * from ox_app_page left join ox_app on ox_app.id = ox_app_page.app_id where ox_app.uuid =? AND ox_app_page.uuid =?";
+        $select = "SELECT ox_app_page.* from ox_app_page left join ox_app on ox_app.id = ox_app_page.app_id where ox_app.uuid =? AND ox_app_page.uuid =?";
         $whereQuery = array($appUuid,$pageUuid);
         $result = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
         $count = 0;
