@@ -20,28 +20,3 @@ ox_app:
     date_created: "2019-03-05 09:57:08"
     created_by: 1
 
-ox_workflow_instance:
--
-    id: 1
-    workflow_id: 1
-    app_id: 2
-    org_id: 1
-    process_instance_id: 1
-    status: "In Progress"
-    date_created: "2019-03-05 09:57:08"
-    created_by: 1
-ox_form:
--
-    id: 1
-    app_id: 2
-    uuid: 3e94fdd7-9106-11e9-875f-283a4d5cd637
-    name: "Recruitment Request Created"
-    created_by: 1
-    date_created: "2019-03-05 09:57:08"
-ox_activity:
-  -
-    id: 1
-    app_id: 99
-    workflow_id: 1
-    task_id: 1
-    name: "Task"

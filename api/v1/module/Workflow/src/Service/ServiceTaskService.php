@@ -128,9 +128,14 @@ class ServiceTaskService extends AbstractService
 
     protected function scheduleJob(&$data){
         $this->logger->info("DATA  ------".json_encode($data));
+        if(!isset($data['jobUrl']) || !isset($data['cron']) || !isset($data['url']) || !isset($data['jobName'])){
+            $this->logger->info("jobUrl/Cron/Url/JobName Not Specified");
+            throw new EntityNotFoundException("JobUrl or Cron Expression or URL or JobName Not Specified");
+        }
         $jobUrl = $data['jobUrl'];
         $cron  = $data['cron'];
         $url = $data['url'];
+
         $this->logger->info("jobUrl - $jobUrl, url -$url");
         if(isset($data['fileId'])){
             $data['previous_fileId'] = $data['fileId']; 
@@ -165,20 +170,32 @@ class ServiceTaskService extends AbstractService
         try{
             $this->logger->info("DATA  ------".json_encode($data));
             $url = $data['url'];
+            if(!isset($data['jobName'])){
+                throw new EntityNotFoundException("Job Name Not Specified");
+            }
             $jobName = $data['jobName'];
+            if(!isset($data[$jobName])){
+                throw new EntityNotFoundException("Job ".$jobName." Not Specified");
+            }
             $JobData = json_decode($data[$jobName],true);
+            if(!isset($JobData['jobId']) || !isset($JobData['jobGroup']))
+            {
+                throw new EntityNotFoundException("Job Id or Job Group Not Specified");
+            }
             $jobPayload = array('jobid' => $JobData['jobId'],'jobgroup' => $JobData['jobGroup']);
             unset($data['url'],$data[$jobName]);
             $response = $this->restClient->postWithHeader($url,$jobPayload);
         }
         catch(Exception $e){
             $this->logger->info("CLEAR JOB RESPONSE ---- ".print_r($e->getMessage(),true)); 
-            $res = explode('response:',$e->getMessage())[1];
-            $res = explode(',"path"',$res)[0];
-            $res = $res."}";
-            $res = json_decode($res,true);
-            if($res['status'] == 404){
-                throw new EntityNotFoundException($res['message']);
+            if(strpos($e->getMessage(),'response') !== false){
+                $res = explode('response:',$e->getMessage())[1];
+                $res = explode(',"path"',$res)[0];
+                $res = $res."}";
+                $res = json_decode($res,true);
+                if($res['status'] == 404){
+                    throw new EntityNotFoundException($res['message']);
+                }
             }
             throw $e;
         }
@@ -187,10 +204,21 @@ class ServiceTaskService extends AbstractService
     }
 
     protected function fileSave($data){
-      $select = "Select uuid from ox_file where workflow_instance_id=:workflowInstanceId;";
-      $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
-      $result = $this->executeQueryWithBindParameters($select,$selectParams)->toArray();
-      return $this->fileService->updateFile($data,$result[0]['uuid']);
+      try{
+          $this->logger->info("File Save Service Start".print_r($data,true));
+          $select = "Select uuid from ox_file where workflow_instance_id=:workflowInstanceId;";
+          $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
+          $result = $this->executeQueryWithBindParameters($select,$selectParams)->toArray();
+           if(count($result) == 0){
+             $this->logger->info("File Save ---- Workflow Instance Id Not Found"); 
+             throw new EntityNotFoundException("Workflow Instance Id Not Found");
+          }
+          return $this->fileService->updateFile($data,$result[0]['uuid']);
+        }
+        catch(Exception $e){
+            $this->logger->info("File Save ---- Exception".print_r($e->getMessage(),true));
+            throw $e;
+        }
     }
 
     protected function executeDelegate($data){    
@@ -200,7 +228,8 @@ class ServiceTaskService extends AbstractService
             $delegate = $data['delegate'];
             unset($data['delegate']);
         } else {
-            return 0;
+            $this->logger->info("App Id or Delegate Not Specified");    
+            throw new EntityNotFoundException("App Id or Delegate Not Specified");
         }
         $this->logger->info("DELEGATE ---- ".print_r($delegate,true));    
         $this->logger->info("DELEGATE APP ID---- ".print_r($appId,true));    
