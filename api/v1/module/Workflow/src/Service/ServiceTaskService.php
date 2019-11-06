@@ -209,7 +209,7 @@ class ServiceTaskService extends AbstractService
           $select = "Select uuid from ox_file where workflow_instance_id=:workflowInstanceId;";
           $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
           $result = $this->executeQueryWithBindParameters($select,$selectParams)->toArray();
-           if(count($result) == 0){
+          if(count($result) == 0){
              $this->logger->info("File Save ---- Workflow Instance Id Not Found"); 
              throw new EntityNotFoundException("Workflow Instance Id Not Found");
           }
