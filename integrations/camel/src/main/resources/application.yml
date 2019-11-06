@@ -1,10 +1,6 @@
 server:
   port: 8085
 flyway:
-  password: password
-  schemas: quartz_demo_db
-  url: jdbc:h2:mem:DATABASE
-  user: root
   baseline-on-migrate: true
 spring:
   activemq:
@@ -33,10 +29,10 @@ spring:
     job-store-type: jdbc
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    password: password
     platform: org.hibernate.dialect.MySQL5Dialect
-    url: jdbc:mysql://172.16.1.172:3306/quartz_demo_db?useSSL=false
+    url: jdbc:mysql://localhost:3306/quartz_db?useSSL=false
     username: root
+    password: password
   jpa:
     properties:
       hibernate:
@@ -48,10 +44,10 @@ spring:
 smtp:
   host: localhost
   port: 25
-  username: bharatgoku@gmail.com
-  password: goku7569
+  username: 
+  password: 
   from:
-    email: bharatgoku@gmail.com
+    email: support@eoxvantage.com
 contentType: text/html
 camel:
   component:
