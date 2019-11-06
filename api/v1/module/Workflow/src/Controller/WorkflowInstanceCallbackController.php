@@ -55,7 +55,7 @@ class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
         }
     }
 
-    public function startWorkflowAction(){
+    public function initiateWorkflowAction(){
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try {
             $response = $this->workflowInstanceService->initiateWorkflow($params);
@@ -68,6 +68,11 @@ class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
             $this->log->error($e->getMessage(), $e);
             $response = ['data' => $params, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("workflow Instance errors Errors", 404, $response);
+        }  
+        catch (InvalidParameterException $e) {
+            $this->log->error($e->getMessage(), $e);
+            $response = ['data' => $params, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Invalid Data", 404, $response);
         }   
     }
 }

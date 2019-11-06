@@ -82,14 +82,14 @@ return [
                     ],
                 ],
             ],
-            'startWorkflowInstance' => [
+            'initiateWorkflow' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/callback/workflowinstance/start',
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceCallbackController::class,
                         'method' => 'POST',
-                        'action' => 'startWorkflow',
+                        'action' => 'initiateWorkflow',
                         'access' => [
                         ],
                     ],
