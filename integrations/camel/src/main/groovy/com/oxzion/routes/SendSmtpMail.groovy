@@ -25,11 +25,17 @@ public class SendSmtpMail extends RouteBuilder {
     @Override
     void configure() throws Exception {
         CamelContext context = new DefaultCamelContext()
+        PropertiesComponent pc = getContext().getComponent("properties", PropertiesComponent.class)
+        pc.setLocation("classpath:mail.properties")
+        def smtpserver = ""
+        if(System.getenv('SMTP_HOST')){
+            smtpserver = "smtp://"+System.getenv('SMTP_HOST')+"?username="+System.getenv('SMTP_HOST')+"&password="+System.getenv('SMTP_HOST')+")"
+        } else {
+            smtpserver = "smtp://{{smtp.host}}?username={{smtp.username}}&password={{smtp.password}}"
+        }
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
-                PropertiesComponent pc = getContext().getComponent("properties", PropertiesComponent.class)
-                pc.setLocation("classpath:mail.properties")
                 from("activemq:queue:mail").doTry().process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
                         def jsonSlurper = new JsonSlurper()
@@ -83,14 +89,14 @@ public class SendSmtpMail extends RouteBuilder {
                         String mysqlDateString = formatter.format(now)
                         def jsonparams = new JsonBuilder(params).toPrettyString()
                         def stackTrace = new JsonBuilder(exception).toPrettyString()
-                        def sql = Sql.newInstance(System.getenv('DB_HOST'), System.getenv('DB_USER'), System.getenv('DB_PASS'), "com.mysql.jdbc.Driver")
+                        def sql = Sql.newInstance(System.getenv('DB_HOST')?System.getenv('DB_HOST'):'{{db.host}}', System.getenv('DB_USER')?System.getenv('DB_USER'):'{{db.user}}', System.getenv('DB_PASS')?System.getenv('DB_PASS'):'{{db.password}}', "com.mysql.jdbc.Driver")
                         // insert data
                         sql.execute("INSERT INTO ox_error_log (error_type, error_trace,payload,date_created,params) values ('activemq', ${stackTrace},${exchange.getMessage().getBody()},${mysqlDateString}, ${jsonparams})")
                         // close connection
                         sql.close()
                         System.out.println("handling ex")
                     }
-                }).log("Received body ").handled(true).to("smtp://"+System.getenv('SMTP_HOST')+"?username="+System.getenv('SMTP_HOST')+"&password="+System.getenv('SMTP_HOST')+")")
+                }).log("Received body ").handled(true).to(smtpserver)
             }
         })
         context.start()
