@@ -1,15 +1,18 @@
 package com.oxzion
 
-import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
+import java.util.Collections
 
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
 //CHECKSTYLE:OFF
 @SpringBootApplication
-@EnableAutoConfiguration
 
 class Application{
-    public static void main(String[] args){
-        SpringApplication.run Application, args
+    static void main(String[] args){
+        print(System.getenv())
+        SpringApplication app = new SpringApplication(Application.class)
+        app.setDefaultProperties(Collections
+                .singletonMap("server.port", System.getenv('SERVER_PORT')))
+        app.run(args)
     }
 }

@@ -41,6 +41,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-activemq'
 	implementation 'org.codehaus.groovy:groovy'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.18'
+	compile group: 'org.codehaus.groovy', name: 'groovy-sql', version: '2.5.8'
 	compile group: 'org.apache.activemq', name: 'activemq-camel', version: '5.15.8'
 	compile group: 'org.apache.camel', name: 'camel-jms', version: '2.23.1'
 	compile group: 'com.fasterxml', name: 'jackson-module-json-org', version: '0.9.1'

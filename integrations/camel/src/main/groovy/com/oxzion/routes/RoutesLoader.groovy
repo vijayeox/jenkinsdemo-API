@@ -1,12 +1,17 @@
 package com.oxzion.routes
 
-
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
+import groovy.sql.*
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.impl.DefaultCamelContext
 import org.springframework.stereotype.Component
+
+import java.util.Date
+import java.text.SimpleDateFormat
 
 @Component
 class RoutesLoader extends RouteBuilder{
@@ -30,7 +35,7 @@ class RoutesLoader extends RouteBuilder{
                         exchange.getIn().setHeader(Exchange.HTTP_METHOD, "POST")
                         println("payload - ${exchange.getMessage().getBody()}")
                     }
-                })
+                }).doTry()
                 // .setHeader(Exchange.CONTENT_TYPE, constant("application/json")).setHeader(Exchange.HTTP_METHOD, constant("POST"))
                     // .process(new Processor() {
                     //     public void process(Exchange exchange) throws Exception {
@@ -45,7 +50,25 @@ class RoutesLoader extends RouteBuilder{
                    // .to("log:DEBUG?showBody=true&showHeaders=true")
                     route.to.each{
                         try{
-                            definition.to(it).to("log:DEBUG?showBody=true&showHeaders=true")
+                            definition.to(it).to("log:DEBUG?showBody=true&showHeaders=true").doCatch(Exception.class).process(new Processor() {
+
+                                void process(Exchange exchange) throws Exception {
+                                    Exception exception = (Exception) exchange.getProperty(Exchange.EXCEPTION_CAUGHT)
+                                    Date now = new Date()
+                                    String pattern = "yyyy-MM-dd HH:mm:ss"
+                                    SimpleDateFormat formatter = new SimpleDateFormat(pattern)
+                                    String mysqlDateString = formatter.format(now)
+                                    def params = [to: it]
+                                    def jsonparams = new JsonBuilder(params).toPrettyString()
+                                    def stackTrace = new JsonBuilder(exception).toPrettyString()
+                                    def sql = Sql.newInstance(System.getenv('DB_HOST'), System.getenv('DB_USER'), System.getenv('DB_PASS'), "com.mysql.jdbc.Driver")
+                                    // insert data
+                                    sql.execute("INSERT INTO ox_error_log (error_type, error_trace,payload,date_created,params) values ('activemq', ${stackTrace},${exchange.getMessage().getBody()},${mysqlDateString}, ${jsonparams})")
+                                    // close connection
+                                    sql.close()
+                                    System.out.println("handling ex")
+                                }
+                            }).log("Received body ").handled(true)
                         }catch(Exception e){
                             println "Error when invoking ${it} - ${e.printStackTrace()}"
                         }

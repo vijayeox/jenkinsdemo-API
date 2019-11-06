@@ -1,6 +1,8 @@
 package com.oxzion.routes
 
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
+import groovy.sql.*
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Component
 
 import javax.activation.DataHandler
 import javax.activation.FileDataSource
+import java.text.SimpleDateFormat
 
 /**
  * Client for sending mails over smtp.
@@ -27,7 +30,7 @@ public class SendSmtpMail extends RouteBuilder {
             public void configure() {
                 PropertiesComponent pc = getContext().getComponent("properties", PropertiesComponent.class)
                 pc.setLocation("classpath:mail.properties")
-                from("activemq:topic:mail").process(new Processor() {
+                from("activemq:queue:mail").doTry().process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
                         def jsonSlurper = new JsonSlurper()
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody() as String)
@@ -70,7 +73,24 @@ public class SendSmtpMail extends RouteBuilder {
                         }
                         
                     }
-                }).to("smtp://{{smtp.host}}?username={{smtp.username}}&password={{smtp.password}}")
+                }).doCatch(Exception.class).process(new Processor() {
+                    void process(Exchange exchange) throws Exception {
+                        Exception exception = (Exception) exchange.getProperty(Exchange.EXCEPTION_CAUGHT)
+                        Date now = new Date()
+                        String pattern = "yyyy-MM-dd HH:mm:ss"
+                        def params = [to: 'mail']
+                        SimpleDateFormat formatter = new SimpleDateFormat(pattern)
+                        String mysqlDateString = formatter.format(now)
+                        def jsonparams = new JsonBuilder(params).toPrettyString()
+                        def stackTrace = new JsonBuilder(exception).toPrettyString()
+                        def sql = Sql.newInstance(System.getenv('DB_HOST'), System.getenv('DB_USER'), System.getenv('DB_PASS'), "com.mysql.jdbc.Driver")
+                        // insert data
+                        sql.execute("INSERT INTO ox_error_log (error_type, error_trace,payload,date_created,params) values ('activemq', ${stackTrace},${exchange.getMessage().getBody()},${mysqlDateString}, ${jsonparams})")
+                        // close connection
+                        sql.close()
+                        System.out.println("handling ex")
+                    }
+                }).log("Received body ").handled(true).to("smtp://"+System.getenv('SMTP_HOST')+"?username="+System.getenv('SMTP_HOST')+"&password="+System.getenv('SMTP_HOST')+")")
             }
         })
         context.start()
