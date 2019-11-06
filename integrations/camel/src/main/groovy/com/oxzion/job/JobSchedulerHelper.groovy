@@ -29,9 +29,6 @@ class JobSchedulerHelper {
         }
     }
 
-    def setupEntity(JobDetail jobDetail){
-        println(jobDetail)
-    }
     def cancelJob(String jobId, String jobGroup) {
             try {
                 JobKey jobKey = JobKey.jobKey(jobId, jobGroup)
