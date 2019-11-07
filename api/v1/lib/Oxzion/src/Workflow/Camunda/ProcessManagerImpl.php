@@ -73,10 +73,10 @@ class ProcessManagerImpl implements ProcessManager
                         }
                     }
                     $formArray[$i]['activity'][$j]['fields'] = $fieldArray;
-                    $j++;
                 }
-                $i++;
+                $j++;
             }
+            $i++;
         }
         return $formArray;
     }
