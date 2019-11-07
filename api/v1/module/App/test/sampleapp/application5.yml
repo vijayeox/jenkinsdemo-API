@@ -1,2 +1,2 @@
 app:
-    - { name: 'DummyDive', category: EXAMPLE_CATEGORY }
+    - { name: 'DummyDive', uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641, category: EXAMPLE_CATEGORY }

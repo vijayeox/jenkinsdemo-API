@@ -26,9 +26,8 @@ menu:
     - { name: Requests, group: CSR, page: [{ name: Requests, content: [{ type: LIST, content: [{ url: '' }] }] }] }
     - { name: 'Manage Policies', group: CSR, page: [{ name: 'Manage Policies', content: [{ type: List, content: [{ ur: '' }] }] }] }
 workflow:
-    - { name: 'Individual Liability', uuid: f0efea9e-7863-4368-a9b2-baa1a1603067, bpmn_file: individual_liability.bpmn, entity:  }
-    - { name: 'Group Liability', uuid: 76dc0348-910c-4ae8-a05a-78ba47803208, bpmn_file: group_liability.bpmn }
-    - { name: 'Dive Store', uuid: cb99e634-de00-468d-9230-d6f77d241c5b, bpmn_file: dive_store.bpmn }
-    - { name: 'Dive Boat', uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1, bpmn_file: dive_boat.bpmn }
+    - { name: 'Individual Liability', uuid: f0efea9e-7863-4368-a9b2-baa1a1603067, bpmn_file: Individual Professional Liability/SampleBPMN.bpmn, entity: dummyEntity1 }
+    - { name: 'Dive Store', uuid: cb99e634-de00-468d-9230-d6f77d241c5b, bpmn_file: Dive Store/SampleBPMN.bpmn, entity: dummyEntity3 }
+    - { name: 'Dive Boat', uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1, bpmn_file: Dive Boat/SampleBPMN.bpmn, entity: dummyEntity4 }
 job:
     - { import_padi: [{ stored_procedure_name: ox_padi_verification, upload_host_name: 206.107.76.164, upload_host_user: vbinsurance, upload_user_password: '<<InsureName>>' }] }
