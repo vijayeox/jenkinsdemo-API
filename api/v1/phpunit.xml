@@ -58,6 +58,8 @@
         <const name="enableActiveMQ" value="0"/>
         <const name="enableCamel" value="0"/>
         <const name="enableProspectResearch" value="0"/>
+        <const name="enableCamundaForDeployApp" value="0"/>
+        <const name="enableBosUtilsExecMethodForDeployApp" value="0"/>
     </php>
     <listeners>
         <listener class="\MyBuilder\PhpunitAccelerator\TestListener"/>
