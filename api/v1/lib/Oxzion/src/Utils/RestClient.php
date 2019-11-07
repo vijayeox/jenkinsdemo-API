@@ -55,7 +55,8 @@ class RestClient
         $params = ['headers' => ['Connection' => 'close','Content-Type' => 'multipart/form-data; boundary='.$boundary,],'body' => new MultipartStream($multipart_form, $boundary),];
         try {
             $response = $this->client->post($url, $params);
-            return $response->getBody()->getContents();
+            $var = $response->getBody()->getContents();
+            return $var;
         } catch (ServerException $e) {
             return $e->getMessage();
         }

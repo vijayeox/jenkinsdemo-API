@@ -48,11 +48,9 @@ class EntityControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 3);
+        $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['id']>0, true);
         $this->assertEquals($content['data'][0]['name'], 'entity1');
-        $this->assertEquals($content['data'][1]['id']>1, true);
-        $this->assertEquals($content['data'][1]['name'], 'entity2');
     }
 
     public function testGet()
@@ -127,7 +125,7 @@ class EntityControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = json_decode('{"name":"Entity23","description":"Entity Description","content":[{"content":"<div>Entity Content goes here!!!....</div>","type": "Document"},{"form_id":1,"type": "Form"}]}');
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity/2', 'PUT', null);
+        $this->dispatch('/app/8ab30b2d-d1da-427a-8e40-bc954b2b0f87/entity/2', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(EntityController::class); // as specified in router's controller name alias
@@ -158,7 +156,7 @@ class EntityControllerTest extends ControllerTest
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity/2', 'DELETE');
+        $this->dispatch('/app/8ab30b2d-d1da-427a-8e40-bc954b2b0f87/entity/2', 'DELETE');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(EntityController::class); // as specified in router's controller name alias
@@ -201,7 +199,7 @@ class EntityControllerTest extends ControllerTest
         if (enableCamunda==0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/app/api/v1/config/autoload/../../data/uploads/app/99/entity/ScriptTaskTest.bpmn'))->once()->andReturn(array(1));
+            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/app/api/v1/config/autoload/../../data/uploads/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity/ScriptTaskTest.bpmn'))->once()->andReturn(array(1));
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
             $workflowService->setProcessManager($mockProcessManager);
         }
@@ -232,7 +230,7 @@ class EntityControllerTest extends ControllerTest
         if (enableCamunda==0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/app/api/v1/config/autoload/../../data/uploads/app/99/entity/SampleBPMN.bpmn'))->once()->andReturn(array(1));
+            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/app/api/v1/config/autoload/../../data/uploads/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity/SampleBPMN.bpmn'))->once()->andReturn(array(1));
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn($parsingResult);
             $workflowService->setProcessManager($mockProcessManager);
         }
@@ -277,7 +275,7 @@ class EntityControllerTest extends ControllerTest
         if (enableCamunda==0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow1', array('/app/api/v1/config/autoload/../../data/uploads/app/99/entity/ScriptTaskTestFail.bpmn'))->once()->andReturn(0);
+            $mockProcessManager->expects('deploy')->with('NewWorkflow1', array('/app/api/v1/config/autoload/../../data/uploads/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity/ScriptTaskTestFail.bpmn'))->once()->andReturn(0);
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
             $workflowService->setProcessManager($mockProcessManager);
         }

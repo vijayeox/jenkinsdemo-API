@@ -270,22 +270,26 @@ class AppController extends AbstractApiController
             }
             catch (ValidationException $e) {
                 // print_r($e->getMessage());
-                // print_r($e->getTraceAsString());
+                $this->log->error($e->getMessage(), $e);
+                // print_r($e->getTraceAsString());exit;
                 $response = ['data' => $data, 'errors' => $e->getErrors()];
-                return $this->getErrorResponse("Validation Errors", 404, $response);
+                return $this->getErrorResponse("Validation Errors", 406, $response);
             }
             catch (ServiceException $e){
                 // print_r($e->getMessage());
-                // print_r($e->getTraceAsString());
-                return $this->getErrorResponse($e->getMessage(),404);
+                $this->log->error($e->getMessage(), $e);
+                // print_r($e->getTraceAsString());exit;
+                return $this->getErrorResponse($e->getMessage(),406);
             }catch(Exception $e){
                 // print_r($e->getMessage());
-                // print_r($e->getTraceAsString());
+                $this->log->error($e->getMessage(), $e);
+                // print_r($e->getTraceAsString());exit;
                 return $this->getErrorResponse($e->getMessage(),500);
             }
         }else{
             // print_r($e->getMessage());
-            // print_r($e->getTraceAsString());
+            $this->log->error("Path not provided");
+            // print_r($e->getTraceAsString());exit;
             return $this->getErrorResponse("Invalid parameters",400);
         }
     }

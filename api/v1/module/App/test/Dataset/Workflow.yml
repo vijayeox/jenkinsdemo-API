@@ -8,8 +8,15 @@ ox_app:
     status: 4
 -
     id: 100
-    name: "UnassignedApp"
+    name: "UnassignedApp1"
     uuid: "8ab30b2d-d1da-427a-8e40-bc954b2b0f87"
+    category: "OTHERS"
+    type: 2
+    status: 4
+-
+    id: 101
+    name: "UnassignedApp2"
+    uuid: "8ab30b2d-d1da-427a-8e40-bc954b2b0f89"
     category: "OTHERS"
     type: 2
     status: 4
@@ -28,14 +35,14 @@ ox_app_entity:
   -
     id: 2
     name: "entity2"
-    app_id: 99
+    app_id: 100
     date_created: '2019-06-26 00:00:00'
     uuid: "e13d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
   -
     id: 3
     name: "entity3"
-    app_id: 99
+    app_id: 101
     date_created: '2019-06-26 00:00:00'
     uuid: "f13d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1

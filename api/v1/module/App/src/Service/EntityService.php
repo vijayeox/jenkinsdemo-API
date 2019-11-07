@@ -9,10 +9,12 @@ use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Utils\FileUtils;
 use App\Service\EntityContentService;
 use Oxzion\ServiceException;
 use Oxzion\Service\WorkflowService;
 use Exception;
+use Oxzion\EntityNotFoundException;
 
 class EntityService extends AbstractService
 {
@@ -25,48 +27,40 @@ class EntityService extends AbstractService
     public function saveEntity($appUuid, &$data,$id = null)
     {
         $count = 0;
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);
         $data['app_id'] = $this->getIdFromUuid('ox_app', $appUuid);
-        $select = "SELECT * from ox_app_registry where org_id = '".$orgId."' AND app_id = ".$data['app_id'];
-        $result = $this->executeQuerywithParams($select)->toArray();
-        if(count($result) > 0){
-            $content = isset($data['content'])?$data['content']:false;
-            $data['uuid'] = UuidUtil::uuid();
-            $entity = new Entity();
+        $data['uuid'] = isset($data['uuid'])?$data['uuid']:UuidUtil::uuid();
+        $entity = new Entity();
+        try{
             if (!isset($data['id'])) {
                 $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-                $data['date_created'] = date('Y-m-d H:i:s'); 
+                $data['date_created'] = date('Y-m-d H:i:s');
             } else {
                 $querySelect = "SELECT * from ox_app_entity where app_id = '".$data['app_id']."' AND id = ".$data['id'];
                 $queryResult = $this->executeQuerywithParams($querySelect)->toArray();
                 if(count($queryResult)==0){
-                    return 0;
+                    throw new EntityNotFoundException("Entity not found for -".$data['id']. " for app $appUuid");
                 }
                 $data = array_merge($queryResult[0],$data);
+                $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+                $data['date_modified'] = date('Y-m-d H:i:s');
             }
-            $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-            $data['date_modified'] = date('Y-m-d H:i:s');
-            $entity->exchangeArray($data);
-            $entity->validate();
-            $this->beginTransaction();
-            try {
-                unset($data['content']);
-                $count = $this->table->save($entity);
-                if ($count == 0) {
-                    $this->rollback();
-                    return 0;
-                }
-                if (!isset($data['id'])) {
-                    $id = $this->table->getLastInsertValue();
-                    $data['id'] = $id;
-                }
-                $this->commit();
-            } catch (Exception $e) {
-                $this->rollback();
-                throw $e;
+        }
+        catch (Exception $e) {
+            throw $e;
+        }
+        $entity->exchangeArray($data);
+        $entity->validate();
+        $this->beginTransaction();
+        try {
+            $count = $this->table->save($entity);
+            if (!isset($data['id'])) {
+                $id = $this->table->getLastInsertValue();
+                $data['id'] = $id;
             }
-        }else{
-            throw new ServiceException("App Does not belong to the org","app.fororgnot.found");
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
         }
         return $count;
     }
@@ -112,12 +106,26 @@ class EntityService extends AbstractService
         }
         return $resultSet[0];
     }
+
+    public function getEntityByName($appId, $entityName){
+        $queryString = "SELECT en.* FROM ox_app_entity AS en INNER JOIN ox_app AS ap ON ap.id = en.app_id WHERE ap.uuid = :appId and en.name = :entityName";
+        $params = array("entityName" => $entityName, "appId" => $appId);
+        $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+        if (count($result) == 0) {
+            return null;
+        }
+        return $result[0];
+    }
+
     public function deployWorkflow($appId, $id,$params, $file = null)
     {
+        $baseFolder = $this->config['UPLOAD_FOLDER'];
         $entity = $this->getEntity($appId,$id);
         if($entity){
             if (isset($file)) {
-                return $this->workflowService->deploy($file, $appId, $params,$entity['id']);
+                $workFlowStorageFolder = $baseFolder."app/".$appId."/entity/";
+                $fileName = FileUtils::storeFile($file, $workFlowStorageFolder);
+                return $this->workflowService->deploy($workFlowStorageFolder.$fileName, $appId, $params,$entity['id']);
             } else {
                 return 0;
             }

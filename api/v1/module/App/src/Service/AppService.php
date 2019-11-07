@@ -17,6 +17,7 @@ use Oxzion\Service\FormService;
 use Oxzion\Service\FieldService;
 use Oxzion\Service\EntityService;
 use Oxzion\Utils\FilterUtils;
+use Oxzion\Utils\BosUtils;
 use Oxzion\ServiceException;
 use Symfony\Component\Yaml\Yaml;
 use Zend\Db\Sql\Expression;
@@ -31,10 +32,11 @@ class AppService extends AbstractService
     protected $fieldService;
     protected $formService;
     protected $organizationService;
+    protected $entityService;
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService,$organizationService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, $organizationService, $entityService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -42,6 +44,7 @@ class AppService extends AbstractService
         $this->formService = $formService;
         $this->fieldService = $fieldService;
         $this->organizationService = $organizationService;
+        $this->entityService = $entityService;
     }
 
     /**
@@ -173,22 +176,25 @@ class AppService extends AbstractService
         try{
             $appUuid = $this->checkAppExists($appData);
             $this->updateymlforapp($ymlData, $appData, $path);
-            $orgId = null;
+
+            $queryString = "UPDATE ox_app SET status = ".App::IN_DRAFT." WHERE ox_app.uuid = :appUuid";
+            $params = array("appUuid" => $appUuid);
+            $result = $this->executeQueryWithBindParameters($queryString, $params);
+
+            $orgUuid = null;
             if(isset($ymlData['org'])){
                 $data = $this->processOrg($ymlData['org'][0],NULL);
-                $orgId = $data['uuid'];
+                $orgUuid = $data['uuid'];
                 $this->updateymlfororg($ymlData, $data, $path);
                 $result = $this->createAppRegistry($appUuid, $ymlData['org'][0]['uuid']);
             }
             if(isset($ymlData['privilege'])){
-                $this->createAppPrivileges($appUuid, $ymlData['privilege'], $orgId);
+                $this->createAppPrivileges($appUuid, $ymlData['privilege'], $orgUuid);
             }
             $this->performMigration($path, $ymlData['app'][0]);
             $appName = $ymlData['app'][0]['name'];
-            $this->setupLinks($path, $appName, $appUuid, $orgId);
-            // if(isset($ymlData['workflow'])){
-            //     $this->processWorkflow($ymlData);
-            // }
+            $this->setupLinks($path, $appName, $appUuid, $orgUuid);
+            $this->processWorkflow($ymlData, $path, $orgUuid);
             //check if menu exists and add to app menu table
             //check if workflow given if so deployworkflow
             //check form fields if not found add to fields table fpr the app.
@@ -201,27 +207,35 @@ class AppService extends AbstractService
         }
     }
 
-    private function processWorkflow(&$yamlData){
-        $workflowData = $yamlData['workflow'];
-        foreach ($workflowData as $value) {
-            // print_r($value);
-            $this->checkData($value);
-            $checkIfEntityExists = $this->entityService->getEntityByName($yamlData['app'][0]['uuid'], $value['entity']);
-            if($checkIfEntityExists){
-                print_r($checkIfEntityExists);exit;
+    private function processWorkflow(&$yamlData, $path,  $orgUuid = NULL){
+        if(isset($yamlData['workflow'])) {
+            $appUuid = $yamlData['app'][0]['uuid'];
+            $orgId = $this->getIdFromUuid('ox_organization', $orgUuid);
+            $workflowData = $yamlData['workflow'];
+            foreach ($workflowData as $value) {
+                $this->checkWorkflowData($value);
+                $entity = $this->entityService->getEntityByName($yamlData['app'][0]['uuid'], $value['entity']);
+                if(!$entity) {
+                    $entity = array('name' => $value['entity']);
+                    $result = $this->entityService->saveEntity($yamlData['app'][0]['uuid'], $entity);
+                }
+                if(isset($value['uuid']) && isset($entity['id'])) {
+                    $bpmnFilePath = $path."contents/workflows/".$value['bpmn_file'];
+                    $result = $this->workflowService->deploy($bpmnFilePath, $appUuid, $value, $entity['id']);
+                }
             }
         }
     }
 
-    private function checkData($data){
+    private function checkWorkflowData(&$data){
         $data['uuid'] = isset($data['uuid'])?$data['uuid']:UuidUtil::uuid();
         if(!(isset($data['bpmn_file']))){
             throw new Exception("Bpmn file does not exist");
         }
         if(!isset($data['name'])){
             $data['name'] = str_replace('.bpmn', '', $data['bpmn_file']); // Replaces all .bpmn with no space.
-            $data['name'] = preg_replace('/[^A-Za-z0-9]/', '', $data['name'], -1); // Removes special chars.
-            // print_r($data);
+            $data['name'] = str_replace(' ', '_', $data['bpmn_file']); // Replaces all spaces
+            $data['name'] = preg_replace('/[^A-Za-z0-9\_]/', '', $data['name'], -1); // Removes special chars.
         }
         if(!isset($data['entity'])){
             throw new Exception("Entity is not defined in yml.");
@@ -292,7 +306,7 @@ class AppService extends AbstractService
         $command_two = "npm install";
         $command_three = "npm run build";
         $command_four = "npm run package:discover";
-        exec($command_one." && ".$command_two." && ".$command_three." && ".$command_four, $output, $return);
+        BosUtils::execCommand($command_one." && ".$command_two." && ".$command_three." && ".$command_four);
     }
 
     private function executeCommands($link){
@@ -300,7 +314,7 @@ class AppService extends AbstractService
         $command_one = "cd ".$link;
         $command_two = "npm install";
         $command_three = "npm run build";
-        exec($command_one." && ".$command_two." && ".$command_three, $output, $return);
+        BosUtils::execCommand($command_one." && ".$command_two." && ".$command_three);
     }
 
     private function setupLink($target, $link){
@@ -620,6 +634,10 @@ class AppService extends AbstractService
             select ap.id, org.id, ap.start_options from ox_app as ap, ox_organization as org where ap.uuid = :appId and org.uuid = :orgId";
             $params = array("appId" => $appId, "orgId" => $orgId);
             $result = $this->executeUpdateWithBindParameters($insert, $params);
+            // $queryString = "SELECT * FROM ox_app_registry AS ar INNER JOIN ox_app as ap on ap.id = ar.app_id INNER JOIN ox_organization as org on org.id = ar.org_id where ap.uuid = :appId and org.uuid = :orgId";
+            // $params = array("appId" => $appId, "orgId" => $orgId);
+            // $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+            // print_r($result);exit;
             return $result->getAffectedRows();
         }
         return 0;

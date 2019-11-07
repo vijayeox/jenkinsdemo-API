@@ -39,6 +39,15 @@ class AppControllerTest extends ControllerTest
         return $dataset;
     }
 
+    public function getMockProcessManager()
+    {
+        $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
+        $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
+        $workflowService->setProcessManager($mockProcessManager);
+        return $mockProcessManager;
+    }
+
+
     public function cleanDb($appName, $appId) : void
     {
         $database = Migration::getDatabaseName($appName, $appId);
@@ -46,6 +55,7 @@ class AppControllerTest extends ControllerTest
         $statement = Migration::createAdapter($this->getApplicationConfig(), $database)->query($query);
         $result = $statement->execute();
     }
+
 
     public function testAppRegister()
     {
@@ -131,9 +141,9 @@ class AppControllerTest extends ControllerTest
         $this->assertMatchedRouteName('applist');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 8);
+        $this->assertEquals(count($content['data']), 9);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
-        $this->assertEquals($content['total'], 8);
+        $this->assertEquals($content['total'], 9);
     }
 
     public function testGetAppListWithQuery()
@@ -168,7 +178,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'Admin');
         $this->assertEquals($content['data'][1]['name'], 'AppBuilder');
-        $this->assertEquals($content['total'], 8);
+        $this->assertEquals($content['total'], 9);
     }
 
     public function testGetAppListWithPageSize2()
@@ -186,7 +196,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 2);
         $this->assertEquals($content['data'][0]['name'], 'CRM');
         $this->assertEquals($content['data'][1]['name'], 'MailAdmin');
-        $this->assertEquals($content['total'], 8);
+        $this->assertEquals($content['total'], 9);
     }
 
     public function testCreate()
@@ -204,7 +214,6 @@ class AppControllerTest extends ControllerTest
 
     public function testDeployApp()
     {
-        $config = $this->getApplicationConfig();
         copy(__DIR__.'/../sampleapp/application1.yml', __DIR__.'/../sampleapp/application.yml');
         $target = __DIR__.'/../Dataset/SampleApp';
         $link = __DIR__.'/../sampleapp/view/apps/SampleApp';
@@ -213,6 +222,16 @@ class AppControllerTest extends ControllerTest
         }
         symlink($target, $link);
         $this->initAuthToken($this->adminUser);
+        if (enableCamundaForDeployApp == 0) {
+            $mockProcessManager = $this->getMockProcessManager();
+            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:159:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
+            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
+        }
+        if (enableBosUtilsExecMethodForDeployApp == 0) {
+            $mockBosUtils = Mockery::mock('\Oxzion\Utils\BosUtils');
+            $mockBosUtils->expects('randomPassword')->withAnyArgs()->once()->andReturn('12345678');
+            $mockBosUtils->expects('execCommand')->withAnyArgs()->times(3)->andReturn();
+        }
         $data = ['path' => __DIR__.'/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -240,7 +259,6 @@ class AppControllerTest extends ControllerTest
         $privilege = $this->executeQueryTest($query);
         $query = "SELECT count(privilege_name) as count from ox_role_privilege WHERE app_id = '".$appId."'";
         $rolePrivilege = $this->executeQueryTest($query);
-
         $this->assertEquals($privilege[0]['count'],2);
         $this->assertEquals($rolePrivilege[0]['count'],2);
         $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
@@ -249,22 +267,32 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($appUuidCount, 1);
         $this->assertEquals($appRegistryResult[0]['count'],1);
         $this->assertEquals($content['status'], 'success');
+        $config = $this->getApplicationConfig();
         $template = $config['TEMPLATE_FOLDER'].$orgid[0]['uuid'];
         $delegate = $config['DELEGATE_FOLDER'].$appUuid;
         $this->assertEquals(file_exists($template), TRUE);
         $this->assertEquals(file_exists($delegate), TRUE);
         $apps = $config['APPS_FOLDER'];
-        if(file_exists($apps) && is_dir($apps)){
-            $files = new FileSystemIterator($apps);
-            foreach ($files as $file) {
-                if(is_link($file)){
-                    $dist = "/dist/";
-                    $nodemodules = "/node_modules/";
-                    $this->assertEquals(file_exists($file.$dist), TRUE);
-                    $this->assertEquals(file_exists($file.$nodemodules), TRUE);
+        if(enableBosUtilsExecMethodForDeployApp != 0){
+            if(file_exists($apps) && is_dir($apps)){
+                $files = new FileSystemIterator($apps);
+                foreach ($files as $file) {
+                    if(is_link($file)){
+                        $dist = "/dist/";
+                        $nodemodules = "/node_modules/";
+                        $this->assertEquals(file_exists($file.$dist), TRUE);
+                        $this->assertEquals(file_exists($file.$nodemodules), TRUE);
+                    }
                 }
             }
         }
+        $query = "SELECT * from ox_workflow where app_id = ".$appId;
+        $workflow = $this->executeQueryTest($query);
+        // When workflow is actually deployed, uncomment the below to assert.(when mocking isn't done)
+        // $this->assertEquals(count($workflow),3);
+        // foreach ($workflow as $wf) {
+        //     $this->assertNotEmpty($wf['process_id']);
+        // }
         unlink(__DIR__.'/../sampleapp/application.yml');
         unlink($link);
         $this->cleanDb($appName, $YmlappUuid);
@@ -310,26 +338,21 @@ class AppControllerTest extends ControllerTest
         $this->unlinkFolders($YmlappUuid, $appName);
     }
 
-    private function unlinkFolders($appId, $appName, $orgId = null){
+    private function unlinkFolders($appUuid, $appName, $orgUuid = null){
         $config = $this->getApplicationConfig();
-        $file = $config['DELEGATE_FOLDER'].$appId;
+        $file = $config['DELEGATE_FOLDER'].$appUuid;
         if(is_link($file)){
             unlink($file);
         }
-        if($orgId){
-            $file = $config['TEMPLATE_FOLDER'].$orgId;
+        if($orgUuid){
+            $file = $config['TEMPLATE_FOLDER'].$orgUuid;
             if(is_link($file)){
                 unlink($file);
             }
         }
-        $apps = $config['APPS_FOLDER'];
-        if(file_exists($apps) && is_dir($apps)){
-            $files = new FileSystemIterator($apps);
-            foreach ($files as $file) {
-                if(is_link($file)){
-                unlink($file);
-                }
-            }
+        $app = $config['APPS_FOLDER'].'SampleApp';
+        if(is_link($app)){
+            unlink($app);
         }
     }
 
@@ -339,7 +362,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -419,7 +442,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp1/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -430,7 +453,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp2/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -442,7 +465,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -455,7 +478,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
@@ -558,6 +581,25 @@ class AppControllerTest extends ControllerTest
         $delegate = $config['DELEGATE_FOLDER'].$YmlappUuid;
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
+        unlink(__DIR__.'/../sampleapp/application.yml');
+        $this->cleanDb($appName, $YmlappUuid);
+        $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
+    }
+
+    public function testDeploAppWithNoEntityInYml(){
+        copy(__DIR__.'/../sampleapp/application7.yml', __DIR__.'/../sampleapp/application.yml');
+        $this->initAuthToken($this->adminUser);
+        $data = ['path' => __DIR__.'/../sampleapp/'];
+        $this->dispatch('/app/deployapp', 'POST', $data);
+        $this->assertResponseStatusCode(500);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $filename = "application.yml";
+        $path = __DIR__.'/../sampleapp/';
+        $yaml = Yaml::parse(file_get_contents($path.$filename));
+        $appName = $yaml['app'][0]['name'];
+        $YmlappUuid = $yaml['app'][0]['uuid'];
+        $this->assertEquals($content['status'], 'error');
         unlink(__DIR__.'/../sampleapp/application.yml');
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);

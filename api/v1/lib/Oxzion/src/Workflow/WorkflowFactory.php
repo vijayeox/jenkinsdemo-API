@@ -5,7 +5,7 @@ class WorkflowFactory
 {
     private static $instance;
 
-    protected function __construct()
+    private function __construct()
     {
     }
 
@@ -17,22 +17,22 @@ class WorkflowFactory
         return self::$instance;
     }
 
-    public static function getActivity()
+    public function getActivity()
     {
         return new Camunda\ActivityImpl();
     }
 
-    public static function getEventManager()
+    public function getEventManager()
     {
         return new Camunda\EventManagerImpl();
     }
 
-    public static function getGroup()
+    public function getGroup()
     {
         return new Camunda\GroupImpl();
     }
 
-    public static function getProcessEngine()
+    public function getProcessEngine()
     {
         return new Camunda\ProcessEngineImpl();
     }
@@ -41,7 +41,7 @@ class WorkflowFactory
     {
         return new Camunda\ProcessManagerImpl();
     }
-    public static function getUser()
+    public function getUser()
     {
         return new Camunda\UserImpl();
     }

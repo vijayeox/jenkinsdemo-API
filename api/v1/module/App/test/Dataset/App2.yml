@@ -61,3 +61,9 @@ ox_role_privilege:
     privilege_name: 'MANAGE_POLICY_APPROVAL'
     permission: 3
     app_id: 240
+ox_app_entity:
+-
+    name: 'Individual Liability'
+    app_id: 240
+    created_by: 1
+    date_created: '2019-10-04 18:10:47'
