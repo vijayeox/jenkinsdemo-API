@@ -227,8 +227,8 @@ class AppControllerTest extends ControllerTest
             $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:159:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
         }
-        if (enableBosUtilsExecMethodForDeployApp == 0) {
-            $mockBosUtils = Mockery::mock('\Oxzion\Utils\BosUtils');
+        if (enableExecUtils == 0) {
+            $mockBosUtils = Mockery::mock('alias:\Oxzion\Utils\ExecUtils');
             $mockBosUtils->expects('randomPassword')->withAnyArgs()->once()->andReturn('12345678');
             $mockBosUtils->expects('execCommand')->withAnyArgs()->times(3)->andReturn();
         }
@@ -273,7 +273,7 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($template), TRUE);
         $this->assertEquals(file_exists($delegate), TRUE);
         $apps = $config['APPS_FOLDER'];
-        if(enableBosUtilsExecMethodForDeployApp != 0){
+        if(enableExecUtils != 0){
             if(file_exists($apps) && is_dir($apps)){
                 $files = new FileSystemIterator($apps);
                 foreach ($files as $file) {

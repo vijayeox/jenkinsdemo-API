@@ -17,7 +17,7 @@ use Oxzion\Service\FormService;
 use Oxzion\Service\FieldService;
 use Oxzion\Service\EntityService;
 use Oxzion\Utils\FilterUtils;
-use Oxzion\Utils\BosUtils;
+use Oxzion\Utils\ExecUtils;
 use Oxzion\ServiceException;
 use Symfony\Component\Yaml\Yaml;
 use Zend\Db\Sql\Expression;
@@ -196,7 +196,6 @@ class AppService extends AbstractService
             $this->setupLinks($path, $appName, $appUuid, $orgUuid);
             $this->processWorkflow($ymlData, $path, $orgUuid);
             //check if menu exists and add to app menu table
-            //check if workflow given if so deployworkflow
             //check form fields if not found add to fields table fpr the app.
             //if job given setup quartz job
             // $this->updateyml($ymldata, $data['form'], $path);
@@ -306,7 +305,7 @@ class AppService extends AbstractService
         $command_two = "npm install";
         $command_three = "npm run build";
         $command_four = "npm run package:discover";
-        BosUtils::execCommand($command_one." && ".$command_two." && ".$command_three." && ".$command_four);
+        ExecUtils::execCommand($command_one." && ".$command_two." && ".$command_three." && ".$command_four);
     }
 
     private function executeCommands($link){
@@ -314,7 +313,7 @@ class AppService extends AbstractService
         $command_one = "cd ".$link;
         $command_two = "npm install";
         $command_three = "npm run build";
-        BosUtils::execCommand($command_one." && ".$command_two." && ".$command_three);
+        ExecUtils::execCommand($command_one." && ".$command_two." && ".$command_three);
     }
 
     private function setupLink($target, $link){
