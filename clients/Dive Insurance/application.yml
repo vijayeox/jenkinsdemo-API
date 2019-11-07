@@ -6,6 +6,11 @@ org:
   - name: "Vincencia & Buckley"
     uuid: c1ed4200-9131-4671-b0e0-de3e27c3f609
     email: testhub07@gmail.com
+privilege:
+  - { name: 'MANAGE_POLICY_APPROVAL' }
+  - { name: 'MANAGE_MY_POLICY' }
+role:
+  - {name: 'Policy Holder', default: true, privileges: [name: 'MANAGE_MY_POLICY', permission: 1]}
 group:
   - name: "Policy Holder"
   - name: CSR
@@ -89,16 +94,16 @@ menu:
 workflow:
   - name: "Individual Liability"
     id: f0efea9e-7863-4368-a9b2-baa1a1603067
-    bpmn_file: individual_liability.bpmn
+    bpmn_file: "Individual Professional Liability/NewUserApplicationSubmission.bpmn"
   - name: "Group Liability"
     id: 76dc0348-910c-4ae8-a05a-78ba47803208
     bpmn_file: group_liability.bpmn
   - name: "Dive Store"
     id: cb99e634-de00-468d-9230-d6f77d241c5b
-    bpmn_file: dive_store.bpmn
+    bpmn_file: Dive Store/dive_store.bpmn
   - name: "Dive Boat"
     id: bb15e393-11b9-48ea-bc5a-5b7616047cb1
-    bpmn_file: dive_boat.bpmn
+    bpmn_file: Dive Shop/dive_boat.bpmn
   - name: "Individual Liability Auto Renewal"
     id: 91cb9e10-5845-4379-97c9-f9486b702bd6
     bpmn_file: IPLAutoRenewal.bpmn
