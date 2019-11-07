@@ -190,7 +190,7 @@ ox_workflow_instance:
   -
     id: 1
     workflow_id: 1
-    process_instance_id: 1
+    process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
     app_id: 99
     org_id: 1
     status: "In Progress"
@@ -318,7 +318,7 @@ ox_activity_instance:
     id: 1
     activity_id: 1
     form_id: 1
-    activity_instance_id: "Task_1s7qzh3:8c1318d8-ee65-11e9-bb94-36ce75a0ce0e"
+    activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0778"
     workflow_instance_id: 1
     status: "In Progress"
     org_id: 1

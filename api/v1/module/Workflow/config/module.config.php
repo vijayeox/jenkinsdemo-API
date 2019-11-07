@@ -29,7 +29,8 @@ return [
                 'options' => [
                     'route' => '/workflowinstance/:workflowInstanceId/activity/:activityInstanceId/submit',
                     'constraints' => [
-                        'activityId' => UuidUtil::UUID_PATTERN,                        
+                        'activityInstanceId' => UuidUtil::UUID_PATTERN,   
+                        'workflowInstanceId' => UuidUtil::UUID_PATTERN,                    
                     ],
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,

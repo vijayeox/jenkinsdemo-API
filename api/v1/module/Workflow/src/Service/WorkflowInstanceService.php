@@ -51,6 +51,11 @@ class WorkflowInstanceService extends AbstractService
     {
         $this->processEngine = $processEngine;
     }
+
+    public function setActivityEngine($activityEngine)
+    {
+        $this->activityEngine = $activityEngine;
+    }
     public function saveWorkflowInstance($appId, &$data)
     {
         $WorkflowInstance = new WorkflowInstance();
