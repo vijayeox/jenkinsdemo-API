@@ -40,6 +40,12 @@ class FileService extends AbstractService
     {
         $this->logger->info("Data CreateFile- " . json_encode($data));
         $parentId = isset($data['parent_id']) ? $data['parent_id'] : null;
+        if(isset($data['uuid'])){
+            $fileId = $this->getIdFromUuid('ox_file', $data['uuid']);
+            if($fileId){
+                unset($data['uuid']);
+            }
+        }
         if (isset($data['form_id'])) {
             $formId = $this->getIdFromUuid('ox_form', $data['form_id']);
         } else {
@@ -50,9 +56,9 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
-        $this->cleanData($data);
+        $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
+        $fields = $data = $this->cleanData($data);
         $jsonData = json_encode($data);
-        $data['app_id'] = $this->getIdFromUuid('ox_app', $data['app_id']);
         $data['workflow_instance_id'] = isset($workflowInstanceId) ? $workflowInstanceId : null;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -61,14 +67,14 @@ class FileService extends AbstractService
         $data['form_id'] = $formId;
         $data['parent_id'] = $parentId;
         $data['date_modified'] = date('Y-m-d H:i:s');
-        $data['entity_id'] = isset($data['entity_id']) ? $data['entity_id'] : null;
+        $data['entity_id'] = $entityId;
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
         $data['data'] = $jsonData;
         $file = new File();
         $file->exchangeArray($data);
-        $this->logger->info("Data From Fileservice - " . json_encode($data));
-        $this->logger->info("File data From Fileservice - " . json_encode($file->toArray()));
-        $fields = array_diff_assoc($data, $file->toArray());
+        $this->logger->info("Data From Fileservice - " . print_r($data, true));
+        $this->logger->info("File data From Fileservice - " . print_r($file->toArray(), true));
+        // $fields = array_diff_assoc($data, $file->toArray());
         $file->validate();
         $this->beginTransaction();
 
@@ -192,7 +198,7 @@ class FileService extends AbstractService
         $dataArray = array_merge($fileObject, $fields);
 
         $fileObject = $obj;
-        $this->cleanData($dataArray);
+        $dataArray = $this->cleanData($dataArray);
         $fileObject['data'] = json_encode($dataArray);
         $fileObject['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $fileObject['date_modified'] = date('Y-m-d H:i:s');
@@ -457,20 +463,31 @@ class FileService extends AbstractService
 
     private function cleanData($params)
     {
-        unset($params['workflowInsatnceId']);
-        unset($params['parentWorkflowInsatnceId']);
+        unset($params['workflowInstanceId']);
+        unset($params['activityInstanceId']);
+        unset($params['workflow_instance_id']);
+        unset($params['formId']);
+        unset($params['workflow_uuid']);
+        unset($params['page']);
+        unset($params['parentWorkflowInstanceId']);
         unset($params['activityId']);
         unset($params['workflowId']);
         unset($params['form_id']);
         unset($params['fileId']);
         unset($params['app_id']);
         unset($params['org_id']);
+        unset($params['orgId']);
         unset($params['created_by']);
         unset($params['date_modified']);
         unset($params['entity_id']);
         unset($params['parent_id']);
         unset($params['submit']);
-        unset($params['workflowId']);
+        unset($params['controller']);
+        unset($params['method']);
+        unset($params['action']);
+        unset($params['access']);
+        unset($params['uuid']);
+        unset($params['commands']);
 
         return $params;
 
