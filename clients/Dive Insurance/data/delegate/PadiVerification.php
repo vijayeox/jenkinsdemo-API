@@ -36,11 +36,6 @@ class PadiVerification extends AbstractAppDelegate
             if(isset($stateDetails)){
                 $response[0]['state'] = $stateDetails[0]['state'];
             }
-            if(isset($response[0]['initial']))
-            {
-                $response[0]['MI'] = $response[0]['initial'];
-                unset($response[0]['initial']);
-            }
             if(isset($response[0]['country_code'])){
                 $response[0]['country'] = Country::codeToCountryName($response[0]['country_code']);
             }

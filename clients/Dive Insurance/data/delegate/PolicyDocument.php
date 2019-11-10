@@ -165,6 +165,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $options['footer'] = $this->template[$data['product']]['footer'];
         }
 
+        if(isset($data['fileId'])){
+            $data['uuid'] = $data['fileId'];
+        }
         if(!isset($data['uuid'])){
             $data['uuid'] = UuidUtil::uuid();
         }
@@ -236,6 +239,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         if($template == 'Group_PL_COI'){
             $options['generateOptions'] = array('disable_smart_shrinking' => 1);
         }
+        // print_r($template);exit;
         $this->documentBuilder->generateDocument($template, $data, $destAbsolute, $options);
         $data['coi_document'] = $dest['relativePath'].$template.'.pdf';
         

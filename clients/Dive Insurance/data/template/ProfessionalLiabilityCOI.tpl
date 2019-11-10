@@ -103,6 +103,7 @@
 		<hr class="hrtag1"></hr>
 		<div class = "second_content">
 			{if isset($update)}
+			{assign var=endrosement value=$endorsement_options|json_decode:true}
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
 				<p class = "policy_status">Status of Insured : {$endrosement_status} as of {$update_date}</p>
 			{/if}

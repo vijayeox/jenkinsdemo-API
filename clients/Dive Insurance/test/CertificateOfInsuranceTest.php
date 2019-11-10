@@ -64,7 +64,10 @@ class CertificateOfInsuranceTest extends ServiceTest
             'padi' => '12345',
             'start_date' => '06/30/2019',
             'end_date' => '6/30/2020',
-            'endrosement_status' => 'Instructor'
+            'endrosement_status' => 'Instructor',
+            'endorsement_options'=>'{"modify_personalInformation"=>true,
+                                     "modify_coverage"=> false,
+                                     "modify_additionalInsured"=> false}'
         ];
         AuthContext::put(AuthConstants::ORG_UUID, $data['orgUuid']);
         $config = $this->getApplicationConfig();
@@ -121,7 +124,10 @@ class CertificateOfInsuranceTest extends ServiceTest
             'padi' => '12345',
             'start_date' => '06/30/2019',
             'end_date' => '6/30/2020',
-            'endrosement_status' => 'Instructor'
+            'endrosement_status' => 'Instructor',
+            'endorsement_options'=>'{"modify_personalInformation"=>true,
+                                     "modify_coverage"=> false,
+                                     "modify_additionalInsured"=> false}'
         ];
         AuthContext::put(AuthConstants::ORG_UUID, $data['orgUuid']);
         $config = $this->getApplicationConfig();

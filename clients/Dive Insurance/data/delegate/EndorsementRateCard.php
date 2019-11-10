@@ -10,7 +10,7 @@ class EndorsementRatecard extends AbstractAppDelegate
     }
 
     public function execute(array $data,Persistence $persistenceService)
-    {  
+    {
         $this->logger->info("Executing Endorsement Rate Card");
         if(!isset($data['previous_careerCoverage'])){
             $data['previous_careerCoverage'] = $data['careerCoverage'];

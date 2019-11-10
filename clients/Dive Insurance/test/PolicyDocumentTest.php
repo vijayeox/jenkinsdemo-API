@@ -89,6 +89,9 @@ class PolicyDocumentTest extends DelegateTest
                  'product' => 'Individual Professional Liability',
                  'sameasmailingaddress' => 1,
                  'endrosement_status' => 'Instructor',
+                 'endorsement_options'=>'{"modify_personalInformation"=>true,
+                                          "modify_coverage"=> false,
+                                          "modify_additionalInsured"=> false}',
                  'update' => 1,
                  'update_date' => '08/06/2019'];
         $config = $this->getApplicationConfig();
@@ -143,6 +146,9 @@ class PolicyDocumentTest extends DelegateTest
                  'product' => 'Individual Professional Liability',
                  'sameasmailingaddress' => 1,
                  'endrosement_status' => 'Instructor',
+                 'endorsement_options'=>'{"modify_personalInformation"=>true,
+                                          "modify_coverage"=> false,
+                                          "modify_additionalInsured"=> false}',
                  'additionalInsured' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}',
                  'lapseletter' => 1];
         $config = $this->getApplicationConfig();
@@ -196,7 +202,8 @@ class PolicyDocumentTest extends DelegateTest
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Individual Professional Liability',
                  'sameasmailingaddress' => 1,
-                 'endrosement_status' => 'Instructor'];
+                 'endrosement_status' => 'Instructor',
+                 'endorsement_options'=>'{"modify_personalInformation"=>true,"modify_coverage"=> false,"modify_additionalInsured"=> false}'];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
