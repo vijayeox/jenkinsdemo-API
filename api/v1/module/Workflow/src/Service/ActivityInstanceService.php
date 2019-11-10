@@ -41,9 +41,9 @@ class ActivityInstanceService extends AbstractService
     public function getActivityInstanceForm($data)
     {
         $activityQuery = "SELECT ox_workflow_instance.process_instance_id as workflow_instance_id,
-        ox_activity_instance.activity_instance_id, 
+        ox_activity_instance.activity_instance_id,
         ox_activity_instance.status as status,
-        ox_file.data,
+        ox_file.data,ox_app.uuid as app_id,ox_file.uuid,
         ox_activity_instance.org_id,ox_activity_instance.activity_id,ox_form.uuid as form_id,ox_activity.task_id as task_id,
         ox_form.template as template,ox_activity.workflow_id FROM `ox_activity_instance` 
         LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id 
@@ -51,6 +51,7 @@ class ActivityInstanceService extends AbstractService
         LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id         
         LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
         LEFT JOIN ox_file on ox_file.workflow_instance_id=ox_workflow_instance.id
+        LEFT JOIN ox_app on ox_app.id = ox_form.app_id
         WHERE ox_activity_instance.org_id =:orgId AND ox_workflow_instance.app_id=:appId AND 
         ox_activity_instance.activity_instance_id=:activityInstanceId;";
         $activityParams = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),"appId" => $this->getIdFromUuid('ox_app', $data['appId']),"activityInstanceId" => $data['activityInstanceId']);
@@ -59,7 +60,13 @@ class ActivityInstanceService extends AbstractService
         if (count($activityInstance)==0) {
             return 0;
         }
-        return $activityInstance[0];
+        
+        $activityform = $activityInstance[0];
+        $data = json_decode($activityform['data'],true);
+        $data['uuid'] = $activityform['uuid'];
+        unset($activityform['uuid']);
+        $activityform['data'] = json_encode($data);
+        return $activityform;
     }
     public function createActivityInstance(&$data)
     {

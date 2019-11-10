@@ -29,7 +29,7 @@ class ActivityInstanceControllerTest extends ControllerTest
     public function testaddactivityinstance()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'Task_1s7qzh3:8c1318d8-ee65-11e9-bb94-36ce75a0ce0e','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'bharatgtest','type'=>'assignee')),'processInstanceId'=>1,'name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'orgid'=>$this->testOrgId)];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'3f6622fd-0124-11ea-a8a0-22e8105c0778','activityId'=>1 , 'candidates' => array(array('groupid'=>'HR Group','type'=>'candidate'),array('userid'=>'bharatgtest','type'=>'assignee')),'processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778','name'=>'Recruitment Request Created', 'status' => 'Active','taskId'=>1,'processVariables'=>array('workflowId'=>1,'orgid'=>$this->testOrgId)];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/activityinstance', 'POST', $data);
         $this->assertResponseStatusCode(200);
@@ -76,7 +76,7 @@ class ActivityInstanceControllerTest extends ControllerTest
     public function testCompleteinstanceWithoutProcessId()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'[activityInstanceId]','activityId'=>1 ,'processInstanceId'=>1, 'assignee' => 'bharatgtest', 'group_name' => 'HR Group','name'=>'Recruitment Request Created', 'status' => 'completed','taskId'=>1];
+        $data = ['workflow_instance_id' => 1, 'activityInstanceId' =>'[activityInstanceId]','activityId'=>1 ,'processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778', 'assignee' => 'bharatgtest', 'group_name' => 'HR Group','name'=>'Recruitment Request Created', 'status' => 'completed','taskId'=>1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/complete', 'POST', $data);
         $this->assertResponseStatusCode(404);

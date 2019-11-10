@@ -41,7 +41,7 @@ class WorkflowInstanceCallbackControllerTest extends ControllerTest
 
     public function testcompleteWorkflowInstance()
     {
-        $data = ['processInstanceId'=>1];
+        $data = ['processInstanceId'=>'3f20b5c5-0124-11ea-a8a0-22e8105c0778'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflowinstance/complete', 'POST',$data);
         $this->assertResponseStatusCode(200);

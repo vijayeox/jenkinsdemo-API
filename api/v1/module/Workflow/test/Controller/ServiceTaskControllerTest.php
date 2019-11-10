@@ -240,7 +240,7 @@ class ServiceTaskControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertEquals($content['status'], 'success');
-        unset($data['variables']['command'],$data['variables']['orgid'],$data['variables']['fileId']);
+        unset($data['variables']['command'],$data['variables']['orgid'],$data['variables']['fileId'],$data['variables']['app_id'],$data['variables']['form_id'],$data['variables']['created_by'],$data['variables']['entity_id'],$data['variables']['workflow_instance_id'],$data['variables']['workflowId']);
         $this->assertEquals($data['variables'], json_decode($result[0]['data'],true));
     }
 
