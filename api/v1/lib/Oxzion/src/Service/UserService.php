@@ -1185,14 +1185,22 @@ class UserService extends AbstractService
         if(!isset($data['username'])){
             $data['username'] = $data['email'];
         }
+
+        if(!isset($data['role'])){
+            $query = "SELECT ox_role.uuid from ox_role left join ox_organization on ox_organization.id = ox_role.org_id where ox_role.default_role=:defaultRole and ox_organization.uuid=:orgId";
+            $params = array("defaultRole" => 1, "orgId" => $data['orgId']);
+            $resultSet = $this->executeQueryWithBindParameters($query,$params)->toArray();
+            $data['role'] = array(['id' => $resultSet[0]['uuid']]);
+        }
         $query = "SELECT id,uuid,username,email FROM ox_user WHERE username=:username OR email=:email";
         $queryParams = array("username" => $data['username'],
                              "email" => $data['email']);
-        $result = $this->executeQuerywithBindParameters($query,$queryParams)->toArray(); 
+        $this->logger->info("Check user query $query with Params".json_encode($queryParams));
+        $result = $this->executeQuerywithBindParameters($query,$queryParams)->toArray();
         if(count($result) == 0){
            return $this->createUser($params,$data,$register);
         }
-        if($data['email'] == $result[0]['email']){
+        if($data['email'] == $result[0]['email'] && AuthContext::get(AuthConstants::USER_ID)){
             $data['username'] = $result[0]['username'];
             $data['id'] = $result[0]['id'];
             $data['uuid'] = $result[0]['uuid'];
