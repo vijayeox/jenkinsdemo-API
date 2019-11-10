@@ -22,7 +22,7 @@ $ docker run --network="host" -it -v ${PWD}:/workspace/app -v ${PWD}/../../:/app
 To run into the container shell +
 +++++++++++++++++++++++++++++++++
 
-$ docker run --network="host" -v ${PWD}:/workspace/app -v --env-file .env ${PWD}/../../:/app -it --entrypoint bash camel 
+$ docker run --network="host" -v ${PWD}:/workspace/app -v ${PWD}/../../:/app -it --entrypoint bash camel 
 
 To verify if activeMq is up browse to http://localhost:8161/
 To verify if scheduler app is up browse to http://localhost:8085/

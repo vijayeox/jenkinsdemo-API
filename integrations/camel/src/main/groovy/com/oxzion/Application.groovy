@@ -12,13 +12,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 
 class Application{
     static void main(String[] args){
-        if(System.getenv('SERVER_PORT')){
-            SpringApplication app = new SpringApplication(Application.class)
-            app.setDefaultProperties(Collections
-                    .singletonMap("server.port", System.getenv('SERVER_PORT')))
-            app.run(args)
-        } else {
-            SpringApplication.run Application, args
-        }
+        SpringApplication.run Application, args
     }
 }
