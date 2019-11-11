@@ -20,8 +20,16 @@ class FormioField
         if (isset($field['placeholder'])) {
             $this->data['helpertext'] = $field['placeholder'];
         }
+        if(isset($field['properties']) && count($field['properties'])){
+            if(isset($field['properties']['data_type'])){
+                $this->data['data_type'] = $field['properties']['data_type'];
+            }
+        }
         if (isset($field['validate'])) {
             $this->data['required'] = isset($field['validate']['required'])?$field['validate']['required']:0;
+        }
+        if(isset($field['protected']) && $field['protected']==1){
+            $this->data = null;
         }
     }
     public function toArray()
