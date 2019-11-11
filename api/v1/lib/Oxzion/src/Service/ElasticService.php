@@ -117,8 +117,9 @@ class ElasticService
     {
         $boolfilter = array();
         $tmpfilter = $this->getFilters($searchconfig, $orgId);
+        
 		if ($tmpfilter) {
-			$boolfilterquery['query']['bool']['filter'] = array($tmpfilter);
+			$boolfilterquery['query']['bool'] = $tmpfilter;
 		}	
 		$boolfilterquery['_source'] = (isset($searchconfig['select']))?$searchconfig['select']:array('*');
 		$pagesize = isset($searchconfig['pagesize'])?$searchconfig['pagesize']:10000;
@@ -157,6 +158,53 @@ class ElasticService
 			$results['type']='list';
 		}
 		return $results;
+    }
+    
+//    {"OR",{"==",["department","DEP1"},{"==",["department","DEP2"}}
+//    {"==", ["department", "DEP1" ]},
+//    {">=", ["sale_date", "2019-10-01"]},
+ //   {"<=", ["sale_date", "2019-10-31"]},
+
+
+    protected function createFilter($filter,$key) {
+        $elasticOutput = null;
+        if ($filter!==null) {
+        $symMapping = ['>'=>'gt','>='=>'gte','<'=>'lt','<='=>'lte'];
+        $boolMapping = ['OR'=>'should','NOT'=>'must_not','AND'=>'must'];
+            if (strtoupper($key)=='OR' OR strtoupper($key)=='NOT' OR strtoupper($key)=='AND') {
+                $condition = $boolMapping[strtoupper($key)];
+                foreach($filter as $subFilter) {
+                    if (strtoupper($key)=='NOT' && !is_array($subFilter)) {
+                        $tempQuery = $this->createFilter($subFilter,key($filter));  //if NOt, then you do not need array since it is only 1
+                    } else {
+                        $tempQuery = $this->createFilter($subFilter[key($subFilter)],key($subFilter));
+                    }
+                    $subQuery['bool'][$condition][] = $tempQuery;
+                }
+        } else {
+            if (is_array($filter)) {
+                $symb = $filter[1];
+                $value = $filter[0];
+                if ($symb=="=="){                
+                       if (!is_array($value)) {
+                        $subQuery['match'] = array($key => array('query' => $value, 'operator' => 'and'));
+                        } else {
+                            $subQuery['terms'] = array($key => array_values($value));
+                        }    
+                    } else {
+                        $subQuery['range'] = array($key => array($symMapping[$symb] => $value));
+                    }
+            } else {
+                $value = $filter;
+                if (!is_array($value)) {
+                        $subQuery['match'] = array($key => array('query' => $value, 'operator' => 'and'));
+                      } else {
+                        $subQuery['terms'] = array($key => array_values($value));
+                      }
+                  }
+            }
+        }
+        return $subQuery;
     }
 
     protected function getGroups($searchconfig, &$boolfilterquery, $aggs)
@@ -231,39 +279,25 @@ class ElasticService
         return $aggs;
     }
 
+
+
     protected function getFilters($searchconfig, $orgId)
     {
-        $mustquery[] = ['term' => ['org_id' => $orgId]];
+        $mustquery['must'][] = ['term' => ['org_id' => $orgId]];
         if (!empty($searchconfig['aggregates'])) {
             $aggregates = $searchconfig['aggregates'];
-            $mustquery[] = array('exists' => array('field' => $aggregates[key($aggregates)]));
+            $mustquery['must'][] = array('exists' => array('field' => $aggregates[key($aggregates)]));
         }
-        if ($searchconfig['filter']) {
-            foreach ($searchconfig['filter'] as $key => $value) {
-                $type = '';
-                if (strpos($key, '__') !== false) {
-                    list($key, $type) = explode('__', $key);
-                }
-
-                if (!is_array($value)) {
-              //      if ($type == 'value') {
-                        $mustquery[] = array('match' => array($key => array('query' => $value, 'operator' => 'and')));
-              //      } else {
-              //          $mustquery[] = array('term' => array($key . "_key" => $value));
-              //      }
-                } else {
-              //      if ($type == 'value') {
-                        $mustquery[] = array('terms' => array($key => array_values($value)));
-              //      } else {
-              //          $mustquery[] = array('terms' => array($key . "_key" => array_values($value)));
-              //      }
-                }
+        if (!empty($searchconfig['filter'])) {
+            foreach ($searchconfig['filter'] as $key=>$filter) {
+                $filterArry = $this->createFilter($filter,$key);
+                $mustquery['must'][] = $filterArry;
             }
         }
         if ($searchconfig['range']) {
             $daterange = $searchconfig['range'][key($searchconfig['range'])];
             $dates = explode("/", $daterange);
-            $mustquery[] = array('range' => array(key($searchconfig['range']) => array("gte" => $dates[0], "lte" => $dates[1], "format" => "yyyy-MM-dd")));
+            $mustquery['must'][] = array('range' => array(key($searchconfig['range']) => array("gte" => $dates[0], "lte" => $dates[1], "format" => "yyyy-MM-dd")));
 
         }
         return $mustquery;
@@ -308,7 +342,7 @@ class ElasticService
 
     public function search($q)
     {
-   //     print_r($q);
+      //   print_r($q);
         $data = $this->client->search($q);
         return $data;
 

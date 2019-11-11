@@ -93,12 +93,12 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			}
 		} 
 		if ($field) { 
-			$aggregates[$operation[0]] = strtolower($field); 
+			$aggregates[$operation[0]] = $field; 
 		} 
 		else {
 				if (!isset($parameters['list'])) {
 					if (!empty($group)) {
-						$aggregates[$operation[0]] = strtolower($group[0]); 				
+						$aggregates[$operation[0]] = $group[0]; 				
 				} else {
 						$aggregates[$operation[0]] = '_id';
 				}

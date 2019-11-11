@@ -16,6 +16,8 @@ use Oxzion\Test\MainControllerTest;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 
+use function GuzzleHttp\json_encode;
+
 class AnalyticsTest extends MainControllerTest
 {
     private $dataset;
@@ -175,10 +177,66 @@ class AnalyticsTest extends MainControllerTest
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
-        $parameters = ['filter'=>['owner_username'=>'bharatg'],'operation'=>'count'];
+        $parameters = ['filter'=>['AND'=>
+                 [
+                     ['numberOfEmployees'=>[5,'<=']],
+                     ['OR'=>
+                        [
+                            ['owner_username'=>'bharatg'],
+                            ['owner_username'=>'mehul']
+                        ]
+                     ]
+                ]],'operation'=>'count'];
         $results = $ae->runQuery('crm', 'Lead', $parameters);
         $results = $results['data'];
         $this->assertEquals($results, 2);
+    }
+
+
+    public function testCrmComplexFilterNot() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['filter'=>['NOT'=>
+                 [
+                     ['numberOfEmployees'=>[5,'>=']]
+                ]],'operation'=>'count'];
+        $results = $ae->runQuery('crm', 'Lead', $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results, 1);
+    }
+
+    public function testCrmComplexFilterSymbols() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['filter'=>['AND'=>
+                 [
+                     ['numberOfEmployees'=>[4,'>']],
+                     ['numberOfEmployees'=>[10,'<']],
+                ]],'operation'=>'sum','field'=>'numberOfEmployees'];
+        $results = $ae->runQuery('crm', 'Lead', $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results, 13.0);
+    }
+
+    public function testCrmComplexFilterNotNoArray() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['filter'=>['NOT'=>
+                 [
+                     'owner_username'=>'bharatg'
+                ]],'operation'=>'count'];
+        $results = $ae->runQuery('crm', 'Lead', $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results, 1);
     }
 
     public function tearDown()

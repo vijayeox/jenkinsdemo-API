@@ -236,7 +236,7 @@ ox_analysis:
     jobTitle: 'Manager'
     companyName: 'ABC Solutions'
     website: 'eoxvantage.com'
-    numberOfEmployees: 8
+    numberOfEmployees: 4
     industry: 'Insurance'
     createdAt: 2019/08/30
     updatedAt: 2019/08/30
@@ -276,7 +276,7 @@ ox_analysis:
     jobTitle: 'Manager'
     companyName: 'ABC Solutions'
     website: 'eoxvantage.com'
-    numberOfEmployees: 8
+    numberOfEmployees: 5
     industry: 'Insurance'
     createdAt: 2019/08/30
     updatedAt: 2019/08/30
