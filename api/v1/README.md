@@ -148,3 +148,18 @@ server {
 Restart the nginx, now you should be ready to go!
 
 
+### MySQL Setup
+
+1) Change bind address in /etc/mysql/my.cnf
+
+Add the following lines:
+
+[mysqld]
+bind-address=0.0.0.0
+
+2) Grant priveleges through mysql command line
+
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'password';
+mysql> flush privileges;
+
+3) Restart mysql service
