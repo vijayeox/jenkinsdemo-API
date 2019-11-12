@@ -205,6 +205,12 @@ class Module implements ConfigProviderInterface
                         $container->get(AdapterInterface::class)
                     );
                 },
+                Controller\ErrorController::class => function ($container) {
+                    return new Controller\ErrorController(
+                        $container->get(\Oxzion\Service\ErrorLogService::class),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
                 Controller\PaymentController::class => function ($container) {
                     return new Controller\PaymentController(
                         $container->get(Model\PaymentTable::class),

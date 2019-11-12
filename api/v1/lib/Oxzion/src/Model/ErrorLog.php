@@ -10,7 +10,7 @@ class ErrorLog extends Entity
         'id'=>0,
         'error_type'=>null,
         'error_trace'=>null,
-        'payload'=>0,
+        'payload'=>null,
         'params'=>null,
         'date_created'=>null
     );
