@@ -177,16 +177,16 @@ class FileService extends AbstractService
             $activityId = null;
         }
 
-        $fileObject = json_decode($obj['data'],true);
+        $fileObject = json_decode($obj['data'], true);
 
-        foreach($fileObject as $key =>$fileObjectValue){
-            if(is_array($fileObjectValue)){
+        foreach ($fileObject as $key => $fileObjectValue) {
+            if (is_array($fileObjectValue)) {
                 $fileObject[$key] = json_encode($fileObjectValue);
             }
         }
 
-        foreach($data as $key => $dataelement){
-            if(is_array($dataelement) || is_bool($dataelement)){
+        foreach ($data as $key => $dataelement) {
+            if (is_array($dataelement) || is_bool($dataelement)) {
                 $data[$key] = json_encode($dataelement);
             }
         }
@@ -399,9 +399,8 @@ class FileService extends AbstractService
         return $dataList;
     }
 
-    private function generateFieldWhereStatement($data)
+    public function generateFieldWhereStatement($data)
     {
-        // print_r($data);exit;
         $prefix = 1;
         $whereQuery = "";
         $joinQuery = "";
@@ -427,10 +426,15 @@ class FileService extends AbstractService
         return $returnQuery = array("joinQuery" => $joinQuery, "whereQuery" => $whereQuery);
     }
 
-    private function getFieldDetaild($fieldName, $entityId)
+    public function getFieldDetaild($fieldName, $entityId = null)
     {
         try {
-            $queryStr = "select * from ox_field where name = '" . $fieldName . "' and entity_id = " . $entityId . "";
+            if($entityId){
+                $entityWhere = "entity_id = " . $entityId . "";
+            } else {
+                $entityWhere = "1";
+            }
+            $queryStr = "select * from ox_field where name = '" . $fieldName . "' and " . $entityWhere . "";
             $resultSet = $this->executeQuerywithParams($queryStr);
             $dataSet = $resultSet->toArray();
             if (count($dataSet) == 0) {

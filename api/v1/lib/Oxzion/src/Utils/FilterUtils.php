@@ -8,7 +8,7 @@ class FilterUtils
     public static function filterArray($filterList, $filterlogic, $fieldMap = array())
     {
         $where = "";
-        for ($x=0;$x<sizeof($filterList);$x++) {
+        for ($x = 0; $x < sizeof($filterList); $x++) {
             $operator = $filterList[$x]['operator'];
             $field = $filterList[$x]['field'];
             $field = isset($fieldMap[$field]) ? $fieldMap[$field] : $field;
@@ -34,10 +34,10 @@ class FilterUtils
                 $operatorp2 = '%';
                 $operation = ' NOT LIKE ';
             } elseif ($operator == 'isnull' || $operator == 'isempty') {
-                $value='';
+                $value = '';
                 $operation = ' = ';
             } elseif ($operator == 'isnotnull' || $operator == 'isnotempty') {
-                $value='';
+                $value = '';
                 $operation = ' <> ';
             } elseif ($operator == 'lte') {
                 $operation = ' <= ';
@@ -52,17 +52,17 @@ class FilterUtils
                 $operatorp2 = '%';
                 $operation = ' like ';
             }
-            if ($value == 'null'||$value==null||$value==''&&$operator) {
+            if ($value == 'null' || $value == null || $value == '' && $operator) {
                 if ($operator == 'isnotnull' || $operator == 'isnotempty') {
-                    $where .= strlen($where) == 0  ? $field." is NOT NULL" : " ".$filterlogic." ".$field." is NOT NULL";
+                    $where .= strlen($where) == 0 ? $field . " is NOT NULL" : " " . $filterlogic . " " . $field . " is NOT NULL";
                 } else {
-                    $where .= strlen($where) == 0 ? $field." is NULL" : " ".$filterlogic." ".$field." is NULL";
+                    $where .= strlen($where) == 0 ? $field . " is NULL" : " " . $filterlogic . " " . $field . " is NULL";
                 }
             } else {
-                $where .= strlen($where) == 0 ? $field." ".$operation."'".$operatorp1.$value.$operatorp2."'" : " ".$filterlogic." ".$field." ".$operation."'".$operatorp1.$value.$operatorp2."'";
+                $where .= strlen($where) == 0 ? $field . " " . $operation . "'" . $operatorp1 . $value . $operatorp2 . "'" : " " . $filterlogic . " " . $field . " " . $operation . "'" . $operatorp1 . $value . $operatorp2 . "'";
             }
-            if (substr($where, 0, strlen(" ".$filterlogic)) == " ".$filterlogic) {
-                $where=substr_replace($where, '', 1, strlen(" ".$filterlogic));
+            if (substr($where, 0, strlen(" " . $filterlogic)) == " " . $filterlogic) {
+                $where = substr_replace($where, '', 1, strlen(" " . $filterlogic));
             }
         }
         return $where;
@@ -71,7 +71,7 @@ class FilterUtils
     public static function processFilters($filterList, $filterlogic, $fieldMap = array(), &$params)
     {
         $where = "";
-        for ($x=0;$x<sizeof($filterList);$x++) {
+        for ($x = 0; $x < sizeof($filterList); $x++) {
             $operator = $filterList[$x]['operator'];
             $field = $filterList[$x]['field'];
             $field = isset($fieldMap[$field]) ? $fieldMap[$field] : $field;
@@ -97,10 +97,10 @@ class FilterUtils
                 $operatorp2 = '%';
                 $operation = ' NOT LIKE ';
             } elseif ($operator == 'isnull' || $operator == 'isempty') {
-                $value='';
+                $value = '';
                 $operation = ' = ';
             } elseif ($operator == 'isnotnull' || $operator == 'isnotempty') {
-                $value='';
+                $value = '';
                 $operation = ' <> ';
             } elseif ($operator == 'lte') {
                 $operation = ' <= ';
@@ -115,18 +115,18 @@ class FilterUtils
                 $operatorp2 = '%';
                 $operation = ' like ';
             }
-            if ($value == 'null'||$value==null||$value==''&&$operator) {
+            if ($value == 'null' || $value == null || $value == '' && $operator) {
                 if ($operator == 'isnotnull' || $operator == 'isnotempty') {
-                    $where .= strlen($where) == 0  ? $field." is NOT NULL" : " ".$filterlogic." ".$field." is NOT NULL";
+                    $where .= strlen($where) == 0 ? $field . " is NOT NULL" : " " . $filterlogic . " " . $field . " is NOT NULL";
                 } else {
-                    $where .= strlen($where) == 0 ? $field." is NULL" : " ".$filterlogic." ".$field." is NULL";
+                    $where .= strlen($where) == 0 ? $field . " is NULL" : " " . $filterlogic . " " . $field . " is NULL";
                 }
             } else {
-                $where .= strlen($where) == 0 ? $field." ".$operation.":filter".$x : " ".$filterlogic." ".$field." ".$operation.":filter".$x;
-                $params['filter'.$x] = $operatorp1.$value.$operatorp2;
+                $where .= strlen($where) == 0 ? $field . " " . $operation . ":filter" . $x : " " . $filterlogic . " " . $field . " " . $operation . ":filter" . $x;
+                $params['filter' . $x] = $operatorp1 . $value . $operatorp2;
             }
-            if (substr($where, 0, strlen(" ".$filterlogic)) == " ".$filterlogic) {
-                $where=substr_replace($where, '', 1, strlen(" ".$filterlogic));
+            if (substr($where, 0, strlen(" " . $filterlogic)) == " " . $filterlogic) {
+                $where = substr_replace($where, '', 1, strlen(" " . $filterlogic));
             }
         }
         return $where;
@@ -140,7 +140,7 @@ class FilterUtils
                 $value['dir'] = 'desc';
             }
             $value['field'] = isset($fieldMap[$value['field']]) ? $fieldMap[$value['field']] : $value['field'];
-            $sSort .= strlen($sSort) == 0 ? $value['field']." ". $value['dir'] : " ," .$value['field']." ". $value['dir'];
+            $sSort .= strlen($sSort) == 0 ? $value['field'] . " " . $value['dir'] : " ," . $value['field'] . " " . $value['dir'];
         }
 
         return $sSort;

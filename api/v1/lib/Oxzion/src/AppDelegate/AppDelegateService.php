@@ -20,7 +20,7 @@ class AppDelegateService extends AbstractService
     private $templateService;
     private $organizationService;
 
-    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null,MessageProducer $messageProducer)
+    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null, MessageProducer $messageProducer)
     {
         $this->templateService = $templateService;
         $this->messageProducer = $messageProducer;
