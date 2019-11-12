@@ -2,8 +2,9 @@
 
 namespace Workflow;
 
-use Zend\Router\Http\Segment;
 use Oxzion\Utils\UuidUtil;
+use Zend\Router\Http\Segment;
+
 return [
     'router' => [
         'routes' => [
@@ -13,13 +14,13 @@ return [
                     'route' => '/workflow/:workflowId[/activity/:activityId]',
                     'constraints' => [
                         'workflowId' => UuidUtil::UUID_PATTERN,
-                        'activityId' => '[0-9]*',                    
+                        'activityId' => '[0-9]*',
                     ],
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
                         'method' => 'POST',
                         'action' => 'startWorkflow',
-                        'access'=>[
+                        'access' => [
                         ],
                     ],
                 ],
@@ -29,14 +30,14 @@ return [
                 'options' => [
                     'route' => '/workflowinstance/:workflowInstanceId/activity/:activityInstanceId/submit',
                     'constraints' => [
-                        'activityInstanceId' => UuidUtil::UUID_PATTERN,   
-                        'workflowInstanceId' => UuidUtil::UUID_PATTERN,                    
+                        'activityInstanceId' => UuidUtil::UUID_PATTERN,
+                        'workflowInstanceId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
                         'method' => 'POST',
                         'action' => 'submit',
-                        'access'=>[
+                        'access' => [
                         ],
                     ],
                 ],
@@ -177,6 +178,6 @@ return [
     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];
