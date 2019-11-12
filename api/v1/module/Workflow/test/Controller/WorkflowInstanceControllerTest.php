@@ -151,7 +151,6 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertMatchedRouteName('filelisting');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
-        // print_r($content);exit;
         $this->assertEquals($content['status'], 'success');
         // $this->assertEquals($content['data'][0]['data'], 'New File Data - Latest Completed');
         $this->assertEquals($content['data'][0]['status'], 'Completed');
@@ -270,7 +269,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         // $this->assertEquals($content['data'][0]['data'], 'New File Data - Latest Completed');
         $this->assertEquals($content['data'][0]['status'], 'Completed');
-        $this->assertEquals($content['total'], 1);
+        $this->assertEquals($content['total'], 4);
     }
 
     public function testClaimActivityInstance()
