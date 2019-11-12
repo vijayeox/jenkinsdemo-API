@@ -522,8 +522,6 @@ class WorkflowInstanceService extends AbstractService
         }
 
         $where .= " 1";
-
-        // echo $where;exit;
         $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery $where";
         $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
 
