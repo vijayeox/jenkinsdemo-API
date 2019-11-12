@@ -1,10 +1,11 @@
 {
   "type": "application",
   "name": "DiveInsurance",
-  "appId":"5c5b2544-a501-416c-98da-38af2cf3ff1a",
+  "appId":"d77ea120-b028-479b-8c6e-60476b6a4456",
   "formId":"1",
   "category": null,
-  "defaultAppforOrgs" : true,
+  "autostart": true,
+  "defaultAppforOrgs" : false,
   "server": "server.js",
   "title": {
     "en_EN": "Dive Insurance"
@@ -16,4 +17,4 @@
     "main.js",
     "main.css"
   ]
-}                                                           
+}
