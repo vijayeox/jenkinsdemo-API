@@ -96,7 +96,8 @@
       "Messaging\\":"module/Messaging/src/",
       "ProspectResearch\\":"module/ProspectResearch/src/",
       "Workflow\\":"module/Workflow/src/",
-      "PaymentGateway\\":"module/PaymentGateway/src/"
+      "PaymentGateway\\":"module/PaymentGateway/src/",
+      "ErrorLog\\":"module/ErrorLog/src/"
     }
   },
   "autoload-dev": {
@@ -124,7 +125,8 @@
       "PrivilegeTest\\": "module/Privilege/test/",
       "ChatCallbackTest\\": "module/Callback/test/",
       "MessagingTest\\":"module/Messaging/test/",
-      "DiveInsuranceTest\\":"../../clients/Dive Insurance/test/"
+      "DiveInsuranceTest\\":"../../clients/Dive Insurance/test/",
+      "ErrorLogTest\\":"module/ErrorLog/test/"
     }
   },
   "extra": [],

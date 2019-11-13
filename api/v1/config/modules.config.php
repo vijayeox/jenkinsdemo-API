@@ -37,5 +37,6 @@ return [
     'Messaging',
     'ProspectResearch',
     'Workflow',
-    'PaymentGateway'
+    'PaymentGateway',
+    'ErrorLog',
 ];

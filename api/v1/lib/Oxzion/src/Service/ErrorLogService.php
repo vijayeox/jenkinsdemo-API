@@ -42,4 +42,40 @@ class ErrorLogService extends AbstractService
         }
         return $count;
     }
+    public function getErrorList($filterParams=array()){
+        $where = "";
+        $pageSize = 20;
+        $offset = 0;
+        $sort = "date_created";
+        $select = "SELECT id,error_type,error_trace,payload,date_created,params";
+        $from = " FROM `ox_error_log` ";
+        $cntQuery ="SELECT count(id) as error_count ".$from;
+        if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+            if(isset($filterParams['filter'])){
+               $filterArray = json_decode($filterParams['filter'],true);
+               if(isset($filterArray[0]['filter'])){
+                    $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                    $filterList = $filterArray[0]['filter']['filters'];
+                    $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$userField);
+                }
+                if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort,self::$userField);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];
+            }
+           }
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+            $count = $resultSet->toArray()[0]['error_count'];
+            $query = $select." ".$from." ".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            $result = $resultSet->toArray();
+            for($x=0;$x<sizeof($result);$x++) {
+
+            }
+        return array('data' => $result,'total' => $count);
+    }
 }
