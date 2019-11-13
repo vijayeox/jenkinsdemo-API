@@ -79,12 +79,7 @@ def value = execution.getVariables();       if(value.containsKey("automatic_rene
     <bpmn:serviceTask id="Task_0zqzv90" name="Setup Auto Renewal Process" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="commands">
-            <camunda:list>
-              <camunda:value>{"command":"delegate","delegate":"RenewalPreprocess"}</camunda:value>
-              <camunda:value>{"command":"schedule"}</camunda:value>
-            </camunda:list>
-          </camunda:inputParameter>
+          <camunda:inputParameter name="command">schedule</camunda:inputParameter>
           <camunda:inputParameter name="url">setupjob</camunda:inputParameter>
           <camunda:inputParameter name="jobUrl">
             <camunda:script scriptFormat="groovy">def jobUrl = '/workflow/dd8b4dcb-fb08-467e-9032-22ca812d528f'</camunda:script>
@@ -95,6 +90,19 @@ def value = execution.getVariables();       if(value.containsKey("automatic_rene
           <camunda:inputParameter name="process_reminder">true</camunda:inputParameter>
           <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>
         </camunda:inputOutput>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">def variables = execution.getVariables()
+def fileId = variables.fileId
+def workflowId = variables.workflowId
+if(fileId){
+  execution.setVariable("previous_fileId",fileId)
+} 
+if(workflowId){
+  execution.setVariable("parent_workflow_id",workflowId) 
+}
+execution.removeVariable("workflowId")
+execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
+        </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0xaiuo7</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1jwvs8e</bpmn:outgoing>
@@ -159,12 +167,7 @@ def value = execution.getVariables();       if(value.containsKey("automatic_rene
     <bpmn:serviceTask id="Task_15c71xx" name="Schedule a reminder mail for Auto Renewal" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="commands">
-            <camunda:list>
-              <camunda:value>{"command":"delegate","delegate":"RenewalPreprocess"}</camunda:value>
-              <camunda:value>{"command":"schedule"}</camunda:value>
-            </camunda:list>
-          </camunda:inputParameter>
+          <camunda:inputParameter name="command">schedule</camunda:inputParameter>
           <camunda:inputParameter name="url">setupjob</camunda:inputParameter>
           <camunda:inputParameter name="jobUrl">
             <camunda:script scriptFormat="groovy">def jobUrl = '/workflow/dd8b4dcb-fb08-467e-9032-22ca812d528f'</camunda:script>
@@ -175,6 +178,19 @@ def value = execution.getVariables();       if(value.containsKey("automatic_rene
           <camunda:inputParameter name="send_reminder">true</camunda:inputParameter>
           <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>
         </camunda:inputOutput>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">def variables = execution.getVariables()
+def fileId = variables.fileId
+def workflowId = variables.workflowId
+if(fileId){
+  execution.setVariable("previous_fileId",fileId)
+} 
+if(workflowId){
+  execution.setVariable("parent_workflow_id",workflowId) 
+}
+execution.removeVariable("workflowId")
+execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
+        </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0aq896k</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0pa5iqa</bpmn:outgoing>
