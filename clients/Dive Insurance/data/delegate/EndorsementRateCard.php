@@ -11,9 +11,12 @@ class EndorsementRatecard extends AbstractAppDelegate
 
     public function execute(array $data,Persistence $persistenceService)
     {
-        $this->logger->info("Executing Endorsement Rate Card");
+        $this->logger->info("Executing Endorsement Rate Card".json_encode($data));
         if(!isset($data['previous_careerCoverage'])){
             $data['previous_careerCoverage'] = $data['careerCoverage'];
+        }
+        if(!isset($data['update_date'])){
+            $data['update_date'] =  date("Y-m-d H:i:s");
         }
         $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['previous_careerCoverage']."' AND start_date <= '".$data['update_date']."'";
         $result = $persistenceService->selectQuery($select);
