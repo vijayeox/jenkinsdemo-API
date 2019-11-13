@@ -409,19 +409,6 @@ return [
                     ],
                 ],
             ],
-            'errorLog' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/error',
-                    'constraints' => [
-                        'appId' => UuidUtil::UUID_PATTERN,                  
-                    ],
-                    'defaults' => [
-                        'controller' => Controller\ErrorController::class,
-                        'action' => 'log'
-                    ],
-                ],
-            ],
             'getdocument' => [
                 'type'    => Segment::class,
                 'options' => [
