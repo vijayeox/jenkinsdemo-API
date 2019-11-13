@@ -54,11 +54,8 @@ class ServiceTaskService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
-    
-
-
     public function runCommand(&$data)
-    {  
+    {
         $this->logger->info("RUN COMMAND  ------".json_encode($data));
         //TODO Execute Service Task Methods
         if (isset($data['variables']) && isset($data['variables']['command'])) {
@@ -137,13 +134,6 @@ class ServiceTaskService extends AbstractService
         $url = $data['url'];
 
         $this->logger->info("jobUrl - $jobUrl, url -$url");
-        if(isset($data['fileId'])){
-            $data['previous_fileId'] = $data['fileId']; 
-        }
-        if(isset($data['workflowId'])){
-            $data['parent_workflow_id'] = $data['workflowId'];
-            unset($data['workflowId']);
-        }
         unset($data['jobUrl'],$data['cron'],$data['command'],$data['url']);
         $this->logger->info("JOB DATA ------".json_encode($data));
         $jobPayload = array("job" => array("url" => $this->config['baseUrl'].$jobUrl, "data" => $data),"schedule" => array("cron" => $cron));
@@ -158,13 +148,12 @@ class ServiceTaskService extends AbstractService
                  $data[$jobName] = json_encode($jobData);
             }
             $this->logger->info("Schedule JOB DATA - ".print_r($data,true));
-            $this->logger->info("FILE ID --".$data['fileId']);
             $fileData = json_encode($data);
             $params = array("filedata" => $fileData,"fileUuid" => $data['fileId']);
             $query = "UPDATE ox_file SET data = :filedata where uuid = :fileUuid";
             $this->executeQueryWithBindParameters($query,$params);
             return $response;
-        }  
+        }
 
     protected function canceljob(&$data){
         try{
@@ -200,7 +189,7 @@ class ServiceTaskService extends AbstractService
             throw $e;
         }
         $this->logger->info("Response - ".print_r($response,true));
-        return $response; 
+        return $response;
     }
 
     protected function fileSave($data){
@@ -221,29 +210,29 @@ class ServiceTaskService extends AbstractService
         }
     }
 
-    protected function executeDelegate($data){    
-        $this->logger->info("EXECUTE DELEGATE ---- ".print_r($data,true));    
+    protected function executeDelegate($data){
+        $this->logger->info("EXECUTE DELEGATE ---- ".print_r($data,true));
         if(isset($data['app_id']) && isset($data['delegate'])){
             $appId = $data['app_id'];
             $delegate = $data['delegate'];
             unset($data['delegate']);
         } else {
-            $this->logger->info("App Id or Delegate Not Specified");    
+            $this->logger->info("App Id or Delegate Not Specified");
             throw new EntityNotFoundException("App Id or Delegate Not Specified");
         }
-        $this->logger->info("DELEGATE ---- ".print_r($delegate,true));    
-        $this->logger->info("DELEGATE APP ID---- ".print_r($appId,true));    
+        $this->logger->info("DELEGATE ---- ".print_r($delegate,true));
+        $this->logger->info("DELEGATE APP ID---- ".print_r($appId,true));
         $response = $this->appDelegateService->execute($appId, $delegate, $data);
         return $response;
     }
     protected function sendMail($params)
-    {   
+    {
         if (isset($params)) {
             $orgId = isset($params['orgId'])?$params['orgId']:1;
             $template = isset($params['template'])?$params['template']:0;
             if ($template) {
                 $body = $this->templateService->getContent($template, $params);
-                
+
             } else {
                 if (isset($params['body'])) {
                     $body = $params['body'];
@@ -290,7 +279,7 @@ class ServiceTaskService extends AbstractService
             $template = isset($params['template'])?$params['template']:0;
             if ($template) {
                 $body = $this->templateService->getContent($template, $params);
-                
+
             } else {
                 if (isset($params['body'])) {
                     $body = $params['body'];
@@ -329,11 +318,11 @@ class ServiceTaskService extends AbstractService
         }
 
         $result = $this->fileService->getFile($fileId);
-        $this->logger->info("EXTRACT FILE DATA result".print_r($result,true));  
+        $this->logger->info("EXTRACT FILE DATA result".print_r($result,true));
         if(count($result) == 0){
             throw new EntityNotFoundException("File ".$fileId." not found");
         }
         return $result['data'];
-        
+
     }
 }
