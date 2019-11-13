@@ -210,29 +210,29 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['policy_document'] = $dest['relativePath'].$policy;
             }
         }
-
+        $temp =$data;
         if(isset($data['endorsement_options'])){
-            $data['endorsement_options'] = json_encode($data['endorsement_options']);
+            $temp['endorsement_options'] = json_encode($data['endorsement_options']);
         }
 
         if(isset($data['lossPayees'])){
-            $data['lossPayees'] = json_encode(array('name' => $data['lossPayees']));
+            $temp['lossPayees'] = json_encode(array('name' => $data['lossPayees']));
         }
-            
+
         if(isset($data['additionalInsured'])){
-            $data['additionalInsured'] = json_encode(array('name' => $data['additionalInsured']));
+            $temp['additionalInsured'] = json_encode(array('name' => $data['additionalInsured']));
         }
 
         if(isset($data['additionalNamedInsured'])){
-            $data['additionalNamedInsured'] = json_encode(array('name' => $data['additionalNamedInsured']));
+            $temp['additionalNamedInsured'] = json_encode(array('name' => $data['additionalNamedInsured']));
         }
 
         if(isset($data['groupAdditionalInsured'])){
-            $data['groupAdditionalInsured'] = json_encode(array('name' => $data['groupAdditionalInsured']));
+            $temp['groupAdditionalInsured'] = json_encode(array('name' => $data['groupAdditionalInsured']));
         }
 
         if(isset($data['namedInsured'])){
-            $data['namedInsured'] = json_encode($data['namedInsured']);
+            $temp['namedInsured'] = json_encode($data['namedInsured']);
         }
 
         $destAbsolute = $dest['absolutePath'].$template.'.pdf';
@@ -240,9 +240,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $options['generateOptions'] = array('disable_smart_shrinking' => 1);
         }
         // print_r($template);exit;
-        $this->documentBuilder->generateDocument($template, $data, $destAbsolute, $options);
+        $this->documentBuilder->generateDocument($template, $temp, $destAbsolute, $options);
         $data['coi_document'] = $dest['relativePath'].$template.'.pdf';
-        
+
         if($data['state'] == 'California'){
             if(isset($this->template[$data['product']]['slWording'])){
                 $slWording = $this->template[$data['product']]['slWording'];
@@ -254,13 +254,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         if(isset($policy)){
             $this->documentBuilder->copyTemplateToDestination($policy,$dest['relativePath']);
         }
-        
+
         if(isset($this->template[$data['product']]['card'])){
             $cardTemplate = $this->template[$data['product']]['card'];
             $cardDest = $dest['absolutePath'].$coi_number.'_Pocket_Card'.'.pdf';
             $this->documentBuilder->generateDocument($cardTemplate,$data,$cardDest);
             $data['card'] = $dest['relativePath'].$coi_number.'_Pocket_Card'.'.pdf';
-        } 
+        }
 
         // if(isset($data['lapseletter'])){
         //     $lapseTemplate = self::TEMPLATE[$data['product']]['ltemplate'];
@@ -323,7 +323,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $data['ani_document'] = $dest['relativePath'].$data['product'].'_NI'.'.pdf';
         }
         $this->logger->info("DATA".print_r($data,true));
-        
         return $data;
     }
 
