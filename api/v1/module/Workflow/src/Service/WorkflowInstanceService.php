@@ -174,7 +174,7 @@ class WorkflowInstanceService extends AbstractService
 
     public function startWorkflow($params)
     {
-        $this->logger->info("Starting StartWorkflow method");
+        $this->logger->info("Starting StartWorkflow method params - ".json_encode($params));
 
         if (!isset($params['workflowId'])) {
             throw new EntityNotFoundException("No workflow or workflow instance id provided");
@@ -205,8 +205,8 @@ class WorkflowInstanceService extends AbstractService
         $this->logger->info("SETUP WORKFLOW RESPONSE DATA ----- " . print_r($workflowInstance, true));
 
         try {
+            $params = $this->cleanData($params);
             $fileData = $params;
-
             if (isset($workflowInstance['parent_workflow_instance_id'])) {
                 $fileDataResult = $this->fileService->getFileByWorkflowInstanceId($workflowInstance['parent_workflow_instance_id'], false);
                 $oldFileData = json_decode($fileDataResult['data'], true);
@@ -227,10 +227,8 @@ class WorkflowInstanceService extends AbstractService
             $this->logger->info("Query1 - $updateQuery with Parametrs - " . print_r($updateParams, true));
             $update = $this->executeUpdateWithBindParameters($updateQuery, $updateParams);
             $this->setupIdentityField($params);
-            $this->logger->info("Completed somthing");
             $this->commit();
         } catch (Exception $e) {
-            $this->logger->info("Mulpa somthing");
             $this->logger->error($e->getMessage(), $e);
             $this->rollback();
             throw $e;
@@ -256,7 +254,6 @@ class WorkflowInstanceService extends AbstractService
                 $resultSet = $this->executeQueryWithBindParameters($query, $queryParams);
                 $this->commit();
             } catch (Exception $e) {
-                $this->logger->info("errrrrrrrrrrrrrrrrrrr");
                 $this->logger->error($e->getMessage(), $e);
                 $this->rollback();
                 throw $e;
@@ -393,8 +390,8 @@ class WorkflowInstanceService extends AbstractService
         $this->logger->info("SET UP Workflow Instance (CREATE NEW WORKFLOW INSTANCE)");
         $form = new WorkflowInstance();
         $dateCreated = date('Y-m-d H:i:s');
-        $query = "select app_id, id from ox_workflow where id=? or uuid=?";
-        $queryParams = array($workflowId, $workflowId);
+        $query = "select app_id, id from ox_workflow where uuid=:uuid";
+        $queryParams = array("uuid" => $workflowId);
         $workflowResultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
 
         if (count($workflowResultSet)) {
@@ -525,7 +522,7 @@ class WorkflowInstanceService extends AbstractService
         $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery $where";
         $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
 
-        $select = "SELECT a.data, a.uuid as fileId, g.status, g.process_instance_id as workflowInstanceId, h.name $fromQuery $where group by a.id $sort $pageSize $offset";
+        $select = "SELECT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name $fromQuery $where group by a.id $sort $pageSize $offset";
         $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
         return array('data' => $resultSet, 'total' => $countResultSet[0]['count']);
     }
@@ -622,5 +619,17 @@ class WorkflowInstanceService extends AbstractService
             "operator1" => $operatorp1,
             "operator2" => $operatorp2,
         );
+    }
+
+    private function cleanData($params)
+    {
+        unset($params['submit']);
+        unset($params['controller']);
+        unset($params['method']);
+        unset($params['action']);
+        unset($params['access']);
+
+        return $params;
+
     }
 }
