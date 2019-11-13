@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component
 
 import javax.activation.DataHandler
 import javax.activation.FileDataSource
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Client for sending mails over smtp.
@@ -23,6 +25,7 @@ import javax.activation.FileDataSource
 @EnableConfigurationProperties
 
 public class SendSmtpMail extends RouteBuilder {
+    private static final Logger logger = LoggerFactory.getLogger(SendSmtpMail.class);
     @Override
     void configure() throws Exception {
         CamelContext context = new DefaultCamelContext()
@@ -37,6 +40,7 @@ public class SendSmtpMail extends RouteBuilder {
                         def jsonSlurper = new JsonSlurper()
                         def messageIn  = exchange.getIn()
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody() as String)
+                        logger.info("Processing Email with payload ${object}")
                         def toList = ""
                         if(object.to){
                             def recepientList = object.to instanceof String ? [object.to] : object.to as ArrayList
@@ -74,7 +78,6 @@ public class SendSmtpMail extends RouteBuilder {
                                     def fileName = fileLocation.getAbsolutePath().substring(fileLocation.getAbsolutePath().lastIndexOf("\\")+1)
                                     messageIn.addAttachment(fileName, new DataHandler(new FileDataSource(fileLocation)))
                                 }
-                                
                             }
                         }
                     }
