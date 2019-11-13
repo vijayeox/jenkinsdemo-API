@@ -21,6 +21,7 @@ class MessageProducer
 
     public function sendTopic($message, $topic)
     {
+        $this->logger->info("Topic is ---".$topic." with payload ".$message);
         try {
             $result = $this->client->sendMessage('/topic/' . $topic, $message);
         } catch (Exception $e) {
@@ -32,6 +33,7 @@ class MessageProducer
     }
     public function sendQueue($message, $queue)
     {
+        $this->logger->info("Queue is ---".$queue." with payload ".$message);
         try {
             $result = $this->client->sendMessage('/queue/' . $queue, $message);
         } catch (Exception $e){
