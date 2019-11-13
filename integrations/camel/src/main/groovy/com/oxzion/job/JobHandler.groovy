@@ -37,11 +37,15 @@ class JobHandler extends QuartzJobBean {
             def slurper = new JsonSlurper()
             jobDataMap.JobData = slurper.parseText(jobDataMap.JobData)
             if (jobDataMap.JobData.job.url) {
+                logger.info("Executing Job with url")
                     String authresponse = postAuth('apikey='+env.getProperty("apikey"))
                     def jwt = slurper.parseText(authresponse)
                     if((jobDataMap.JobData.job.data).isEmpty()){
                         urlResponse = get(jobDataMap.JobData.job.url, "Bearer " + jwt.data.jwt)}
                     else{
+                        logger.info("Executing Job with values ${jobDataMap.JobData.job.url}")
+                        logger.info("Executing Jwt ${jwt.data.jwt}")
+                        logger.info("SOmething -- ${jobDataMap.JobData.job.data}")
                         urlResponse = post(jobDataMap.JobData.job.url,"Bearer "+jwt.data.jwt,jobDataMap.JobData.job.data)
                     }
                     logger.info("Execute Internal URL response ----- ${urlResponse}")
@@ -102,7 +106,7 @@ class JobHandler extends QuartzJobBean {
         }
     }
 
-    public String post(String url, String jwt,LinkedHashMap dataMap)
+    public String post(String url, String jwt,Map dataMap)
     {
         def jsonDefaultOutput = new JsonGenerator.Options().build()
         def jsonDefaultResult = jsonDefaultOutput.toJson(dataMap)
@@ -111,6 +115,7 @@ class JobHandler extends QuartzJobBean {
             if(!url.contains('auth'))
                 postAuth.setRequestProperty("Authorization",jwt)
             def message = jsonDefaultResult.toString()
+            logger.info("The message of api call is = ${message}")
             String auth_success_json
             postAuth.setRequestMethod("POST")
             postAuth.setDoOutput(true)
