@@ -7,19 +7,14 @@ org:
     uuid: c1ed4200-9131-4671-b0e0-de3e27c3f609
     email: testhub07@gmail.com
 privilege:
-  - { name: 'MANAGE_POLICY_APPROVAL' }
-  - { name: 'MANAGE_MY_POLICY' }
+  - { name: 'MANAGE_POLICY_APPROVAL', permission : 3 }
+  - { name: 'MANAGE_MY_POLICY', permission : 3 }
 role:
-  - {name: 'Policy Holder', default: true, privileges: [name: 'MANAGE_MY_POLICY', permission: 1]}
-group:
-  - name: "Policy Holder"
-  - name: CSR
-dashboard:
-  - name: Dashboard
-    content: content/Dashboard.txt
+  - {name: 'Policy Holder', default: true, privileges: [name: 'MANAGE_MY_POLICY', permission: 3]}
 menu:
   - name: Home
-    group: "Policy Holder"
+    privilee: "MANAGE_MY_POLICY_WRITE"
+    icon: 'fa-home'
     page:
       name: "My Policies"
       description: "Shows a list of users policies"
@@ -59,7 +54,7 @@ menu:
           },
         ]
   - name: "My History"
-    group: "Policy Holder"
+    privilege: "MANAGE_MY_POLICY_READ"
     page:
       name: "All Policies"
       description: "Shows all the policies"
@@ -74,19 +69,19 @@ menu:
           { form_id: "{{form_id}}", type: "Form" },
         ]
   - name: Home
-    group: CSR
+    privilege: MANAGE_POLICY_APPROVAL_READ
     page:
       name: Dashboard
       description: "Shows dashboard"
       content: [{ type: Dashboard, dashboard: Dashboard }]
   - name: Requests
-    group: CSR
+    privilege: MANAGE_POLICY_APPROVAL_WRITE
     page:
       name: Requests
       description: "Shows requests"
       content: [{ type: List, content: { route: "" } }]
   - name: "Manage Policies"
-    group: CSR
+    privilege: MANAGE_POLICY_APPROVAL_WRITE
     page:
       name: "Manage Policies"
       description: "Page to manage policies"
