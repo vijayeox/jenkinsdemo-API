@@ -65,6 +65,7 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['subject'], 'required');
     }
+    
     public function testServiceTaskWithoutRecepientMailExecution()
     {
         $this->initAuthToken($this->adminUser);
@@ -77,6 +78,7 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['to'], 'required');
     }
+
     public function testServiceTaskPDFExecution()
     {
         $data = ['uuid' => '53012471-2863-4949-afb1-e69b0891c98a'];
@@ -94,6 +96,7 @@ class ServiceTaskControllerTest extends ControllerTest
         FileUtils::deleteFile($templateName, $tempFile);
         FileUtils::deleteFile("GenericTemplate.pdf", $config['TEMPLATE_FOLDER']);
     }
+
     public function testServiceTaskPDFInvalidTemplateExecution()
     {
         $config = $this->getApplicationConfig();
@@ -105,6 +108,7 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Template not found!');
     }
+
     public function testServiceTaskPDFInvalidDestinationExecution()
     {
         $config = $this->getApplicationConfig();
