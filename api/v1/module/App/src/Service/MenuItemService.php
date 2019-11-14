@@ -25,6 +25,9 @@ class MenuItemService extends AbstractService
         $MenuItem = new MenuItem();
         $data['uuid'] = UuidUtil::uuid();
         $data['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
+        if(isset($data['page_id'])){
+            $data['page_id'] = $this->getIdFromUuid('ox_app_page',$data['page_id']);
+        }
         if(isset($data['privilege_name'])){
             $select = "SELECT id FROM ox_privilege WHERE name = '".$data['privilege_name']."'";
             $selectResult = $this->executeQuerywithParams($select)->toArray();
@@ -34,7 +37,7 @@ class MenuItemService extends AbstractService
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
         }
-        $data['icon'] = isset($data['icon']) ? $data['icon'] : "DummyIcon";
+        $data['icon'] = isset($data['icon']) ? $data['icon'] : "fas fa-border-all";
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $MenuItem->exchangeArray($data);
