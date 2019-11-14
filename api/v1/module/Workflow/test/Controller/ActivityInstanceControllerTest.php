@@ -37,7 +37,7 @@ class ActivityInstanceControllerTest extends ControllerTest
         $sqlQuery1 = "Select * from ox_activity_instance";
         $statement1 = $dbAdapter->query($sqlQuery1);
         $result1 = $statement1->execute();
-        $this->assertEquals($result1->count(), 2);
+        $this->assertEquals($result1->count(), 4);
         while ($result1->next()) {
             $tableFieldName[] = $result1->current();
         }

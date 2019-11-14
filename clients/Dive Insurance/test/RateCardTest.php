@@ -56,4 +56,18 @@ class RateCardTest extends DelegateTest
         $content = $delegateService->execute($appId, 'RateCard', $data);
         $this->assertEquals($content['product'], $data['product']);
     }
+
+
+    public function testEndorsementRateCardExecute()
+    {
+        $orgId = AuthContext::put(AuthConstants::ORG_ID, 3);
+        $data =['careerCoverage' => 'divemasterAssistantInstructorAssistingOnly' ,'product' =>'Individual Professional Liability', 'update_date' => '2020-06-01'];
+        $appId = $this->data['UUID'];
+        $appName = $this->data['appName'];
+        $config = $this->getApplicationConfig();
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'EndorsementRateCard', $data);
+        $this->assertEquals($content['product'], $data['product']);
+    }
 }

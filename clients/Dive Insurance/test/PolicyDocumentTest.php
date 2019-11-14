@@ -79,7 +79,7 @@ class PolicyDocumentTest extends DelegateTest
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
-                 'insured_status'=> 'Divester',
+                 'careerCoverage'=> 'Divester',
                  'physical_address' => 'APO,AE',
                  'single_limit' => '1,000,000',
                  'annual_aggregate' => '2,000,000',
@@ -134,7 +134,7 @@ class PolicyDocumentTest extends DelegateTest
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
-                 'insured_status'=> 'Divester',
+                 'careerCoverage'=> 'Divester',
                  'physical_address' => 'APO,AE',
                  'single_limit' => '1,000,000',
                  'annual_aggregate' => '2,000,000',
@@ -191,7 +191,7 @@ class PolicyDocumentTest extends DelegateTest
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
-                 'insured_status'=> 'Divester',
+                 'careerCoverage'=> 'Divester',
                  'physical_address' => 'APO,AE',
                  'single_limit' => '1,000,000',
                  'annual_aggregate' => '2,000,000',
@@ -519,10 +519,10 @@ class PolicyDocumentTest extends DelegateTest
                  'personal_effect_deduct' => '500.00',
                  'liability_ins_deduct' => '1,000.00',
                  'medical_deduct' => '100.00',
-                 'additionalInsured' => array("LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"),
+                 'additionalInsured' => '{"LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"}',
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
-                 'lossPayees' => array("LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)")];
+                 'lossPayees' => '{"LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"}'];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -613,11 +613,11 @@ class PolicyDocumentTest extends DelegateTest
                  'end_date' => '2020-06-30',
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Dive Store',
-                 'property' => array('content_limit' => '80,000', 'business_income' => '40,000','building_coverage' => 1,'equipment_breakdown' => 1,'dependant_prop' => '5,000','robbery_inside' => '2,500','robbery_outside' => '2,500','transit_coverage' => '10,000','emp_theft' => '5,000','prop_others' => '25,000','off_premises' => '10,000','glass' => '5,000','property' => 1,'cover_letter' => 1,'storename' => 'HUB INTERNATIONAL'),
+                 'property' => json_encode(array('content_limit' => '80,000', 'business_income' => '40,000','building_coverage' => 1,'equipment_breakdown' => 1,'dependant_prop' => '5,000','robbery_inside' => '2,500','robbery_outside' => '2,500','transit_coverage' => '10,000','emp_theft' => '5,000','prop_others' => '25,000','off_premises' => '10,000','glass' => '5,000','property' => 1,'cover_letter' => 1,'storename' => 'HUB INTERNATIONAL')),
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
-                 'additionalInsured' => array("LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"),
-                 'lossPayees' => array("COMMUNITY BANK OF ELMHURST-300 W.BUTTERFIELD RD. ELMHURST, IL 60126- (LOAN #1000477-1 AND LOAN#133183-1)","COMMUNITY BANK OF ELMHURST-300 W.BUTTERFIELD RD. ELMHURST, IL 60126- (LOAN #1000477-1 AND LOAN#133183-1)")];
+                 'additionalInsured' => '{"LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"}',
+                 'lossPayees' => '{"COMMUNITY BANK OF ELMHURST-300 W.BUTTERFIELD RD. ELMHURST, IL 60126- (LOAN #1000477-1 AND LOAN#133183-1)","COMMUNITY BANK OF ELMHURST-300 W.BUTTERFIELD RD. ELMHURST, IL 60126- (LOAN #1000477-1 AND LOAN#133183-1)"}'];
 
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -655,7 +655,7 @@ class PolicyDocumentTest extends DelegateTest
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
-                 'insured_status'=> 'Divester',
+                 'careerCoverage'=> 'Divester',
                  'physical_address' => 'APO,AE',
                  'single_limit' => '1,000,000',
                  'annual_aggregate' => '2,000,000',
@@ -702,7 +702,7 @@ class PolicyDocumentTest extends DelegateTest
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
-                 'insured_status'=> 'Divester',
+                 'careerCoverage'=> 'Divester',
                  'physical_address' => 'APO,AE',
                  'single_limit' => '1,000,000',
                  'annual_aggregate' => '2,000,000',
@@ -750,7 +750,7 @@ class PolicyDocumentTest extends DelegateTest
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
-                 'insured_status'=> 'Divester',
+                 'careerCoverage'=> 'Divester',
                  'physical_address' => 'APO,AE',
                  'single_limit' => '1,000,000',
                  'annual_aggregate' => '2,000,000',
@@ -797,7 +797,7 @@ class PolicyDocumentTest extends DelegateTest
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
-                 'insured_status'=> 'Divester',
+                 'careerCoverage'=> 'Divester',
                  'physical_address' => 'APO,AE',
                  'single_limit' => '1,000,000',
                  'annual_aggregate' => '2,000,000',
@@ -805,8 +805,8 @@ class PolicyDocumentTest extends DelegateTest
                  'cylinder_coverage' => 0,
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Group Professional Liability',
-                 'groupAdditionalInsured' => array("LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"),
-                 'namedInsured' => array(0 =>array('memberid' => '000048','name' => 'MU LI','status' => 'Swim Instructor','effective_date' => '2020-06-30','upgrade' => 0),1 => array('memberid' => '000048','name' => 'MU LI','status' => 'Swim Instructor','effective_date' => '2020-06-30','upgrade' => 0))];
+                 'groupAdditionalInsured' => '{"LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"}',
+                 'namedInsured' => json_encode(array(0 =>array('memberid' => '000048','name' => 'MU LI','status' => 'Swim Instructor','effective_date' => '2020-06-30','upgrade' => 0),1 => array('memberid' => '000048','name' => 'MU LI','status' => 'Swim Instructor','effective_date' => '2020-06-30','upgrade' => 0)))];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);

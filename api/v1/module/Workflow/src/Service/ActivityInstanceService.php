@@ -112,7 +112,7 @@ class ActivityInstanceService extends AbstractService
             $taskId = str_replace($activityInstance[0]["task_id"].":", "", $activityInstance[0]['activity_instance_id']);
             //print "taskId - $taskId";
         } else {
-            print("No data found");
+            $this->logger->info("No data found");
             return 0;
         }
         try {

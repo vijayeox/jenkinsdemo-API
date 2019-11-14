@@ -157,7 +157,7 @@ ox_workflow_instance:
     created_by: 1
   - id: 3
     workflow_id: 1
-    process_instance_id: 2
+    process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0790"
     app_id: 99
     org_id: 1
     status: "In Progress"
@@ -165,7 +165,7 @@ ox_workflow_instance:
     created_by: 1
   - id: 4
     workflow_id: 1
-    process_instance_id: 2
+    process_instance_id: 1
     app_id: 99
     org_id: 1
     status: "In Progress"
@@ -218,15 +218,15 @@ ox_file_attribute:
     field_value: 8
     field_id: 2
   - id: 10
-    file_id: 3
+    file_id: 1
     org_id: 1
     field_value: 47
-    field_id: 2
+    field_id: 5
   - id: 11
-    file_id: 4
+    file_id: 1
     org_id: 1
     field_value: 6
-    field_id: 2
+    field_id: 6
 ox_app_menu:
   - id: 1
     uuid: "menu1"
@@ -290,10 +290,10 @@ ox_activity_instance:
     status: "Completed"
     org_id: 1
   - id: 3
-    activity_id: 3
+    activity_id: 1
     form_id: 1
     activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0722"
-    workflow_instance_id: 3
+    workflow_instance_id: 4
     status: "In Progress"
     org_id: 1
 ox_activity_instance_assignee:
