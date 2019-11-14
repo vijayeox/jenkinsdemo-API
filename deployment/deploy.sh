@@ -146,19 +146,23 @@ orocrm()
         echo -e "${RED}CRM was not packaged so skipping it\n${RESET}"
     else    
         systemctl stop supervisor
+        mkdir -p /var/www/crm
         cd ${TEMP}
         echo -e "${YELLOW}Installing Assets for CRM${RESET}"
         chown ubuntu:ubuntu -R integrations/crm
+        npm install --prefix integrations/crm/build
         runuser -l ubuntu -c "php ${TEMP}/integrations/crm/bin/console oro:assets:install"
         runuser -l ubuntu -c "php ${TEMP}/integrations/bin/console oro:migration:load --force"
         mkdir -p integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome
         rsync -rl --delete integrations/crm/public/bundles/bowerassets/font-awesome/ integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome/
-        rm -R integrations/crm/var/logs
-        rsync -rl --delete integrations/crm/var/ /var/www/crm/var/
+        if [ ! -L "/var/www/crm/var" ] ;
+        then
+            ln -s /var/lib/oxzion/crm /var/www/crm/var
+            ln -s /var/log/oxzion/crm /var/lib/oxzion/crm/logs    
+        fi
         rm -R integrations/crm/var
+        cp -P /var/www/crm/var integrations/crm/var 
         rsync -rl --delete integrations/crm/ /var/www/crm/
-        ln -s /var/lib/oxzion/crm /var/www/crm/var
-        ln -s /var/log/oxzion/crm /var/lib/oxzion/crm/logs
         chown www-data:www-data -R /var/lib/oxzion/crm
         rsync -rl --delete /var/www/crm/orocrm_supervisor.conf /etc/supervisor/conf.d/
         echo -e "${GREEN}Copying CRM Complete!${RESET}"
