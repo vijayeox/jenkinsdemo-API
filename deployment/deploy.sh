@@ -278,7 +278,25 @@ helpapp()
         echo -e "${YELLOW}Starting Apache...${RESET}"
     fi
 }
-
+#on-hold
+edms()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EDMS...${RESET}"
+    if [ ! -d "./integrations/edms" ] ;
+    then
+        echo -e "${RED}EDMS was not packaged so skipping it\n${RESET}"
+    else
+        cd ${TEMP}/integrations/edms/mayan
+        echo -e "${YELLOW}Creating edms data folder...${RESET}"
+        ln -s /var/lib/oxzion/edms ./media
+        rsync -rl --delete ${TEMP}/integrations/edms/ /var/www/edms/
+        echo -e "${YELLOW}Taking ownership as www-data...${RESET}"
+        chown www-data:www-data -R /var/www/edms
+        chown www-data:www-data -R /var/lib/oxzion/edms
+        echo -e "${GREEN}Copying edms Complete!${RESET}"
+    fi
+}
 #calling functions accordingly
 unpack
 echo -e "${YELLOW}Now copying files to respective locations..${RESET}"
@@ -293,4 +311,5 @@ rainloop
 openproject
 workflow
 helpapp
+#edms
 echo -e "${GREEN}${BLINK}DEPLOYED SUCCESSFULLY${RESET}"

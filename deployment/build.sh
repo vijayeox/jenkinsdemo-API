@@ -38,12 +38,13 @@ buildhelp()
     echo -e "10. mail            -${YELLOW}For packaging Rainloop Mail.${RESET}"
     echo -e "11. openproject     -${YELLOW}For packaging Openproject.${RESET}"
     echo -e "12. helpapp         -${YELLOW}For packaging HelpApp.${RESET}"
-    echo -e "13. --help or -h    -${YELLOW}For help.${RESET}"
-    echo -e "14. list            -${YELLOW}For list of options.${RESET}"
-    echo -e "15. deploy          -${YELLOW}For deploying to production${RESET}"
-    echo -e "16. clean           -${YELLOW}For cleaning the production server${RESET}"
-    echo -e "17. setup           -${YELLOW}For fresh setup of the production server${RESET}"
-    echo -e "18. package         -${YELLOW}For packaging existing build${RESET}"
+    echo -e "13. edms         -${YELLOW}For packaging EDMS.${RESET}"
+    echo -e "14. --help or -h    -${YELLOW}For help.${RESET}"
+    echo -e "15. list            -${YELLOW}For list of options.${RESET}"
+    echo -e "16. deploy          -${YELLOW}For deploying to production${RESET}"
+    echo -e "17. clean           -${YELLOW}For cleaning the production server${RESET}"
+    echo -e "18. setup           -${YELLOW}For fresh setup of the production server${RESET}"
+    echo -e "19. package         -${YELLOW}For packaging existing build${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -249,6 +250,17 @@ helpapp()
     echo -e "${GREEN}Copying HelpApp Completed!${RESET}"
 
 }
+#on-hold
+edms()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory build/integrations/edms...${RESET}"
+    mkdir -p build/integrations/edms
+    echo -e "${YELLOW}Copying edms to build folder...${RESET}"
+    rsync -rl --delete ${OXHOME}/integrations/edms/mayan-edms/ ${OXHOME}/build/integrations/edms/
+    echo -e "${GREEN}Copying edms Completed!${RESET}"
+
+}
 integrations()
 {
     camel
@@ -258,6 +270,7 @@ integrations()
     mail
     openproject
     helpapp
+    #edms
     #workflow    
 }
 all()
@@ -325,6 +338,12 @@ do
                 helpapp
                 package
                 break ;;
+        edms)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                edms
+                package
+                break ;;
         workflow)
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
@@ -344,12 +363,13 @@ do
                 package
                 break ;;
         --help | -h)
-                echo -e "${BLINK}${CYAN}  _____  __ ________ ___  _   _   ____  _   _ ___ _     ____  "
-                echo -e " / _ \ \/ /|__  /_ _/ _ \| \ | | | __ )| | | |_ _| |   |  _ \ "
-                echo -e "| | | \  /   / / | | | | |  \| | |  _ \| | | || || |   | | | |"
-                echo -e "| |_| /  \  / /_ | | |_| | |\  | | |_) | |_| || || |___| |_| |"
-                echo -e " \___/_/\_\/____|___\___/|_| \_| |____/ \___/|___|_____|____/ "
-                echo -e "                                                              ${RESET}"
+                echo -e "${BLINK}${CYAN}███████╗ ██████╗ ██╗  ██╗    ██████╗ ██╗   ██╗██╗██╗     ██████╗ 
+██╔════╝██╔═══██╗╚██╗██╔╝    ██╔══██╗██║   ██║██║██║     ██╔══██╗
+█████╗  ██║   ██║ ╚███╔╝     ██████╔╝██║   ██║██║██║     ██║  ██║
+██╔══╝  ██║   ██║ ██╔██╗     ██╔══██╗██║   ██║██║██║     ██║  ██║
+███████╗╚██████╔╝██╔╝ ██╗    ██████╔╝╚██████╔╝██║███████╗██████╔╝
+╚══════╝ ╚═════╝ ╚═╝  ╚═╝    ╚═════╝  ╚═════╝ ╚═╝╚══════╝╚═════╝ 
+                                                                 ${RESET}"
                 echo -e "This script is made to package oxzion3.0 to production build." 
                 echo -e "This script takes 3 arguments to build oxzion-3.0.\nFirst the ${YELLOW}Build Option${RESET} Second the ${YELLOW}Server hostname${RESET} and third the${YELLOW}IdentityFile Path$RESET"
                 echo -e "For example type \n$ ${GREEN}build.sh calendar$YELLOW(build option) ${GREEN}abc@xyz.com$YELLOW(server name)${GREEN} ~/.ssh/abc.pem${YELLOW}(identity file path)${RESET}"
