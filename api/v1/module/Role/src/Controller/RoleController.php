@@ -56,7 +56,7 @@ class RoleController extends AbstractApiController
     public function create($data){
         $params = $this->params()->fromRoute();
         try{
-            $count = $this->roleService->saveRole(null,$data,$params);
+            $count = $this->roleService->saveRole($params, $data);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -101,7 +101,7 @@ class RoleController extends AbstractApiController
     public function update($id, $data){
         try{
             $params = $this->params()->fromRoute(); 
-            $count = $this->roleService->saveRole($id,$data,$params);
+            $count = $this->roleService->saveRole($params, $data, $id);
         }catch(ValidationException $e){
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);

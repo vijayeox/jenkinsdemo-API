@@ -11,8 +11,6 @@ class MigrationTest extends ServiceTest
 {
 //    use TestCaseTrait;
 
-    private static $pdo = null;
-
     // only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
     private $conn = null;
     protected $traceError = true;

@@ -251,7 +251,7 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT id from ox_app where uuid = '".$appUuid."'";
         $appId = $this->executeQueryTest($query);
         $appId = $appId[0]['id'];
-        $query = "SELECT count(name),status,uuid from ox_organization where name = '".$yaml['org'][0]['name']."'";
+        $query = "SELECT count(name),status,uuid,id from ox_organization where name = '".$yaml['org'][0]['name']."'";
         $orgid = $this->executeQueryTest($query);
         $query = "SELECT count(id) as count from ox_app_registry where app_id = '".$appId."'";
         $appRegistryResult = $this->executeQueryTest($query);
@@ -259,8 +259,20 @@ class AppControllerTest extends ControllerTest
         $privilege = $this->executeQueryTest($query);
         $query = "SELECT count(privilege_name) as count from ox_role_privilege WHERE app_id = '".$appId."'";
         $rolePrivilege = $this->executeQueryTest($query);
-        $this->assertEquals($privilege[0]['count'],2);
-        $this->assertEquals($rolePrivilege[0]['count'],2);
+        $query = "SELECT count(id) as count from ox_role WHERE org_id = '".$orgid[0]['id']."'";
+        $role = $this->executeQueryTest($query);
+        $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_MY_POLICY2' and app_id = '".$appId."'";
+        $roleprivilege1 = $this->executeQueryTest($query);
+        $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_MY_POLICY' and app_id = '".$appId."'";
+        $roleprivilege2 = $this->executeQueryTest($query);
+        $query = "SELECT count(role_id) as count FROM ox_role_privilege WHERE privilege_name = 'MANAGE_POLICY_APPROVAL' and app_id = '".$appId."'";
+        $roleprivilege3 = $this->executeQueryTest($query);
+        $this->assertEquals($roleprivilege1[0]['count'],2);
+        $this->assertEquals($roleprivilege2[0]['count'],2);
+        $this->assertEquals($roleprivilege3[0]['count'],2);
+        $this->assertEquals($role[0]['count'],5);
+        $this->assertEquals($privilege[0]['count'],3);
+        $this->assertEquals($rolePrivilege[0]['count'],6);
         $this->assertEquals($orgid[0]['uuid'], $yaml['org'][0]['uuid']);
         $this->assertEquals($appname[0]['name'], $appName);
         $this->assertEquals($appUuid, $YmlappUuid);
@@ -289,10 +301,12 @@ class AppControllerTest extends ControllerTest
         $query = "SELECT * from ox_workflow where app_id = ".$appId;
         $workflow = $this->executeQueryTest($query);
         // When workflow is actually deployed, uncomment the below to assert.(when mocking isn't done)
-        // $this->assertEquals(count($workflow),3);
-        // foreach ($workflow as $wf) {
-        //     $this->assertNotEmpty($wf['process_id']);
-        // }
+        if(enableCamundaForDeployApp == 1) {
+            $this->assertEquals(count($workflow),3);
+            foreach ($workflow as $wf) {
+                $this->assertNotEmpty($wf['process_id']);
+            }
+        }
         unlink(__DIR__.'/../sampleapp/application.yml');
         unlink($link);
         $this->cleanDb($appName, $YmlappUuid);
@@ -586,12 +600,17 @@ class AppControllerTest extends ControllerTest
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
 
-    public function testDeploAppWithNoEntityInYml(){
+    public function testDeployAppWithNoEntityInYml(){
         copy(__DIR__.'/../sampleapp/application7.yml', __DIR__.'/../sampleapp/application.yml');
         $this->initAuthToken($this->adminUser);
+        if (enableCamundaForDeployApp == 0) {
+            $mockProcessManager = $this->getMockProcessManager();
+            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:159:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
+            $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
+        }
         $data = ['path' => __DIR__.'/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
-        $this->assertResponseStatusCode(500);
+        $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $filename = "application.yml";
@@ -599,7 +618,7 @@ class AppControllerTest extends ControllerTest
         $yaml = Yaml::parse(file_get_contents($path.$filename));
         $appName = $yaml['app'][0]['name'];
         $YmlappUuid = $yaml['app'][0]['uuid'];
-        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'success');
         unlink(__DIR__.'/../sampleapp/application.yml');
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);

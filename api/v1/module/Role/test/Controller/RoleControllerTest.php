@@ -571,18 +571,6 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'You have no Access to this API');
     }
 
-    public function testUpdateNotFound()
-    {
-        $data = ['name' => 'ADMINs'];
-        $this->initAuthToken($this->adminUser);
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/role/64', 'PUT', null);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);

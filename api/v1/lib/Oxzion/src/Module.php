@@ -101,8 +101,7 @@ class Module
                     return new Service\PrivilegeService(
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
-                        $container->get(Model\PrivilegeTable::class),
-                        $container->get(Service\RoleService::class)
+                        $container->get(Model\PrivilegeTable::class)
                     );
                 },
                 Model\PrivilegeTable::class => function ($container) {

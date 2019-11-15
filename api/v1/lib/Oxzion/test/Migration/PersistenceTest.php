@@ -11,7 +11,6 @@ use Oxzion\Auth\AuthConstants;
 
 class PersistenceTest extends ServiceTest
 {
-    private static $pdo = null;
 
     // only instantiate PHPUnit_Extensions_Database_DB_IDatabaseConnection once per test
     protected $traceError = true;

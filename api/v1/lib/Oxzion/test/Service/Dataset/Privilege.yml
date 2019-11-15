@@ -1,0 +1,50 @@
+ox_app:
+-
+    id: 240
+    name: "DummyDive"
+    uuid: "6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641"
+    category: "EXAMPLE_CATEGORY"
+    type: 2
+    status: 1
+ox_organization:
+-   id: 120
+    name: "dummyOrg"
+    status: "active"
+ox_app_registry:
+-
+    org_id: 120
+    app_id: 240
+ox_privilege:
+-
+    id: 300
+    name: "MANAGE_POLICY_APPROVAL"
+    permission_allowed: 3
+    app_id: 240
+-
+    id: 301
+    name: "MANAGE_MY_POLICY"
+    permission_allowed: 3
+    app_id: 240
+-
+    id: 302
+    name: "MANAGE"
+    permission_allowed: 3
+    app_id: 240
+-
+    id: 303
+    name: "MANAGE_S"
+    permission_allowed: 3
+    app_id: 240
+ox_role_privilege:
+-
+    id: 200
+    role_id: 1
+    privilege_name: "MANAGE_POLICY_APPROVAL"
+    permission: 3
+    app_id: 240
+ox_role:
+-   id: 30
+    org_id: 120
+    name: "ADMIN"
+    uuid: "99d91b61-ff95-11e9-be5f-485f99be1ba7"
+    default_role: 0

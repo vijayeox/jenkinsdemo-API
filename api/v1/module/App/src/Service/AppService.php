@@ -33,10 +33,11 @@ class AppService extends AbstractService
     protected $formService;
     protected $organizationService;
     protected $entityService;
+    private $privilegeService;
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, $organizationService, $entityService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, $organizationService, $entityService, $privilegeService, $roleService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -45,6 +46,8 @@ class AppService extends AbstractService
         $this->fieldService = $fieldService;
         $this->organizationService = $organizationService;
         $this->entityService = $entityService;
+        $this->privilegeService = $privilegeService;
+        $this->roleService = $roleService;
     }
 
     /**
@@ -180,10 +183,9 @@ class AppService extends AbstractService
             $queryString = "UPDATE ox_app SET status = ".App::IN_DRAFT." WHERE ox_app.uuid = :appUuid";
             $params = array("appUuid" => $appUuid);
             $result = $this->executeQueryWithBindParameters($queryString, $params);
-
             $orgUuid = null;
             if(isset($ymlData['org'])){
-                $data = $this->processOrg($ymlData['org'][0],NULL);
+                $data = $this->processOrg($ymlData['org'][0]);
                 $orgUuid = $data['uuid'];
                 $this->updateymlfororg($ymlData, $data, $path);
                 $result = $this->createAppRegistry($appUuid, $ymlData['org'][0]['uuid']);
@@ -191,6 +193,7 @@ class AppService extends AbstractService
             if(isset($ymlData['privilege'])){
                 $this->createAppPrivileges($appUuid, $ymlData['privilege'], $orgUuid);
             }
+            $returnData = $this->createRole($ymlData);
             $this->performMigration($path, $ymlData['app'][0]);
             $appName = $ymlData['app'][0]['name'];
             $this->setupLinks($path, $appName, $appUuid, $orgUuid);
@@ -212,15 +215,18 @@ class AppService extends AbstractService
             $orgId = $this->getIdFromUuid('ox_organization', $orgUuid);
             $workflowData = $yamlData['workflow'];
             foreach ($workflowData as $value) {
-                $this->checkWorkflowData($value);
-                $entity = $this->entityService->getEntityByName($yamlData['app'][0]['uuid'], $value['entity']);
-                if(!$entity) {
-                    $entity = array('name' => $value['entity']);
-                    $result = $this->entityService->saveEntity($yamlData['app'][0]['uuid'], $entity);
-                }
-                if(isset($value['uuid']) && isset($entity['id'])) {
-                    $bpmnFilePath = $path."contents/workflows/".$value['bpmn_file'];
-                    $result = $this->workflowService->deploy($bpmnFilePath, $appUuid, $value, $entity['id']);
+                $result = 0;
+                $result = $this->checkWorkflowData($value);
+                if($result == 0){
+                    $entity = $this->entityService->getEntityByName($yamlData['app'][0]['uuid'], $value['entity']);
+                    if(!$entity) {
+                        $entity = array('name' => $value['entity']);
+                        $result = $this->entityService->saveEntity($yamlData['app'][0]['uuid'], $entity);
+                    }
+                    if(isset($value['uuid']) && isset($entity['id'])) {
+                        $bpmnFilePath = $path."contents/workflows/".$value['bpmn_file'];
+                        $result = $this->workflowService->deploy($bpmnFilePath, $appUuid, $value, $entity['id']);
+                    }
                 }
             }
         }
@@ -229,7 +235,8 @@ class AppService extends AbstractService
     private function checkWorkflowData(&$data){
         $data['uuid'] = isset($data['uuid'])?$data['uuid']:UuidUtil::uuid();
         if(!(isset($data['bpmn_file']))){
-            throw new Exception("Bpmn file does not exist");
+            $this->logger->warn("BPMN file not specified, hence deploy failed! ");
+            return 1;
         }
         if(!isset($data['name'])){
             $data['name'] = str_replace('.bpmn', '', $data['bpmn_file']); // Replaces all .bpmn with no space.
@@ -237,7 +244,8 @@ class AppService extends AbstractService
             $data['name'] = preg_replace('/[^A-Za-z0-9\_]/', '', $data['name'], -1); // Removes special chars.
         }
         if(!isset($data['entity'])){
-            throw new Exception("Entity is not defined in yml.");
+            $this->logger->warn("Entity not given, deploy failed ! ");
+            return 1;
         }
     }
 
@@ -339,6 +347,27 @@ class AppService extends AbstractService
         }
     }
 
+    private function createRole($yamlData){
+        if (isset($yamlData['role'])){
+            if (!(isset($yamlData['org'][0]['uuid']))){
+                $this->logger->warn("Organization not provided not processing roles!");
+                return;
+            }
+            $appUuid = $yamlData['app'][0]['uuid'];
+            $appId = $this->getIdFromUuid('ox_app', $appUuid);
+            $params['orgId'] = $yamlData['org'][0]['uuid'];
+            $roles = $yamlData['role'];
+            foreach($roles as $role){
+                if(!isset($role['name'])){
+                    $this->logger->warn("Role name not provided continuing!");
+                    continue;
+                }
+                $role['uuid'] = isset($role['uuid'])?$role['uuid']:UuidUtil::uuid();
+                $result = $this->roleService->saveRole($params, $role, $role['uuid']);
+            }
+        }
+    }
+
     private function processOrg(&$orgData){
         if(!isset($orgData['uuid'])){
             $orgData['uuid'] = UuidUtil::uuid();
@@ -397,70 +426,17 @@ class AppService extends AbstractService
         }
     }
 
-    private function createAppPrivileges($appUuid, &$privilegedata, $orgId = null)
+    private function createAppPrivileges($appUuid, $privilegedata, $orgId = null)
     {
         $privilegearray = array_unique(array_column($privilegedata, 'name'));
         $list = "'" . implode( "', '", $privilegearray) . "'";
 
-        $idresult = $this->getIdFromUuid('ox_app',$appUuid);
-
-        // find the records which are not from the list of privileges for the particular app
-        $queryString = "SELECT count(*) FROM ox_privilege as pr WHERE pr.app_id = :appid AND pr.name NOT IN (".$list.")";
-        $params = array("appid" => $idresult);
-        $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
-
-        if(!empty($result[0]['count(*)'])){
-            // delete from ox_app_menu
-            $queryString = "UPDATE ox_app_menu AS mn INNER JOIN ox_privilege AS pr ON mn.privilege_id = pr.id INNER JOIN ox_app AS ap ON pr.app_id = ap.id SET mn.privilege_id = NULL WHERE mn.app_id = :appid AND pr.name NOT IN (".$list.")";
-            $params = array("appid" => $idresult);
-            $result = $this->executeQueryWithBindParameters($queryString, $params);
-
-            //delete from ox_role_privilege
-            $queryString = "DELETE rp FROM ox_role_privilege as rp INNER JOIN ox_app as ap ON rp.app_id = ap.id WHERE ap.uuid = :appUuid AND rp.privilege_name NOT IN (".$list.")";
-            $params = array("appUuid" => $appUuid);
-            $result = $this->executeQueryWithBindParameters($queryString, $params);
-
-            //delete from ox_privilege
-            $queryString = "DELETE FROM ox_privilege WHERE app_id = :appid AND name NOT IN (".$list.")";
-            $params = array("appid" => $idresult);
-            $result = $this->executeQueryWithBindParameters($queryString, $params);
-        }
-
-        //get difference of the list and table privileges
-        $queryString = "SELECT pr.name FROM ox_privilege as pr
-        WHERE pr.app_id = :appid AND pr.name IN (".$list.")";
-        $params = array("appid" => $idresult);
-        $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
-        $existingprivileges = array_column($result, 'name');
-        $privilegesToBeAdded = array_diff($privilegearray, $existingprivileges);
-        $sql = $this->getSqlObject();
-
-        //if any new privileges to be added
-        if(!(empty($privilegesToBeAdded))){
-            foreach ($privilegesToBeAdded as $key => $value) {
-                $insert = $sql->insert('ox_privilege');
-                $permission = 3;
-                $insert_data = array('name' => $value,'app_id' => $idresult,'permission_allowed' => $permission);
-                $insert->values($insert_data);
-                $result = $this->executeUpdate($insert);
-
-                // $queryString = "SELECT * from ox_privilege where name = '".$value."' and app_id = :appId";
-                // $params = array('appId' => $idresult);
-                // $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
-
-                $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id)
-                SELECT r.id, '".$value."', ".$permission.", r.org_id, reg.app_id
-                FROM ox_role AS r INNER JOIN
-                ox_app_registry AS reg ON r.org_id = reg.org_id
-                WHERE reg.app_id = :appId and r.name = 'ADMIN'";
-                $params = array('appId' => $idresult);
-                $result = $this->executeUpdateWithBindParameters($query, $params);
-            }
-            // $queryString = "SELECT count(*) from ox_role_privilege where app_id = :appId";
-            // $params = array('appId' => $idresult);
-            // $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
-            // print_r($result);exit;
-        }
+        $appId = $this->getIdFromUuid('ox_app',$appUuid);
+        // delete from ox_app_menu
+        $queryString = "UPDATE ox_app_menu AS mn INNER JOIN ox_privilege AS pr ON mn.privilege_id = pr.id INNER JOIN ox_app AS ap ON pr.app_id = ap.id SET mn.privilege_id = NULL WHERE mn.app_id = :appid AND pr.name NOT IN (".$list.")";
+        $params = array("appid" => $appId);
+        $result = $this->executeQueryWithBindParameters($queryString, $params);
+        $this->privilegeService->saveAppPrivileges($appId, $privilegedata);
     }
 
     public function getAppList($filterParams = null)
@@ -633,10 +609,6 @@ class AppService extends AbstractService
             select ap.id, org.id, ap.start_options from ox_app as ap, ox_organization as org where ap.uuid = :appId and org.uuid = :orgId";
             $params = array("appId" => $appId, "orgId" => $orgId);
             $result = $this->executeUpdateWithBindParameters($insert, $params);
-            // $queryString = "SELECT * FROM ox_app_registry AS ar INNER JOIN ox_app as ap on ap.id = ar.app_id INNER JOIN ox_organization as org on org.id = ar.org_id where ap.uuid = :appId and org.uuid = :orgId";
-            // $params = array("appId" => $appId, "orgId" => $orgId);
-            // $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
-            // print_r($result);exit;
             return $result->getAffectedRows();
         }
         return 0;

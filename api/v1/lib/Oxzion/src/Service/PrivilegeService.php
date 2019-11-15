@@ -11,14 +11,12 @@ use Oxzion\Service\AbstractService;
 class PrivilegeService extends AbstractService
 {
     protected $table;
-    private $roleService;
     protected $modelClass;
 
-    public function __construct($config, $dbAdapter, PrivilegeTable $table, RoleService $roleService)
+    public function __construct($config, $dbAdapter, PrivilegeTable $table)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
-        $this->roleService = $roleService;
         $this->modelClass = new Privilege();
     }
 
@@ -88,5 +86,60 @@ class PrivilegeService extends AbstractService
         $query = "select p.* from ox_privilege p left join ox_app ap on ap.id = p.app_id and ap.isdefault=1";
         $result = $this->executeQuerywithParams($query);
         return $result;
+    }
+
+    public function saveAppPrivileges($appId, $privileges){
+        $this->logger->info("appid - $appId, privileges - ".json_encode($privileges));
+        try{
+            $this->beginTransaction();
+            $privilegearray = array_unique(array_column($privileges, 'name'));
+            $list = "'" . implode( "', '", $privilegearray) . "'";
+
+            $queryString = "DELETE rp FROM ox_role_privilege as rp INNER JOIN ox_app as ap ON rp.app_id = ap.id WHERE ap.id = :appid AND rp.privilege_name NOT IN (".$list.")";
+            $params = array("appid" => $appId);
+            $this->logger->info("Executing query $queryString with params ".json_encode($params));
+            $result = $this->executeQueryWithBindParameters($queryString, $params);
+
+            //delete from ox_privilege
+            $queryString = "DELETE FROM ox_privilege WHERE app_id = :appid AND name NOT IN (".$list.")";
+            $params = array("appid" => $appId);
+            $this->logger->info("Executing query $queryString with params ".json_encode($params));
+            $result = $this->executeQueryWithBindParameters($queryString, $params);
+
+            //get difference of the list and table privileges
+            $queryString = "SELECT pr.name FROM ox_privilege as pr
+            WHERE pr.app_id = :appid AND pr.name IN (".$list.")";
+            $params = array("appid" => $appId);
+            $this->logger->info("Executing query $queryString with params ".json_encode($params));
+            $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
+            $existingprivileges = array_column($result, 'name');
+            $sql = $this->getSqlObject();
+
+            $query = "SELECT count(*) from ox_role_privilege where app_id = :appId ";
+            $params = array("appId" => $appId);
+            $queryresult = $this->executeQueryWithBindParameters($query, $params)->toArray();
+            //if any new privileges to be added
+            if(!(empty($privileges))){
+                foreach ($privileges as $value) {
+                    if(!in_array($value['name'], $existingprivileges)){
+                        $query = "INSERT INTO ox_privilege (name, permission_allowed, app_id) VALUES (:name, :permission,:appid)";
+                        $params = array("name" => $value['name'], "permission" => $value['permission'], "appid" =>$appId );
+                        $result = $this->executeQueryWithBindParameters($query, $params);
+
+                        $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id)
+                        SELECT r.id, '".$value['name']."', ".$value['permission'].", r.org_id, reg.app_id
+                        FROM ox_role AS r INNER JOIN
+                        ox_app_registry AS reg ON r.org_id = reg.org_id
+                        WHERE reg.app_id = :appId and r.name = 'ADMIN'";
+                        $params = array("appId" => $appId);
+                        $result = $this->executeQueryWithBindParameters($query, $params);
+                    }
+                }
+            }
+            $this->commit();
+        }catch(Exception $e){
+            $this->rollback();
+            throw $e;
+        }
     }
 }

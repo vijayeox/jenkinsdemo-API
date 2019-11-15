@@ -13,10 +13,12 @@ org:
         preferences: { currency: INR, timezone: Kolkata, dateformat: dd/mm/yy },
         country: 'United States' }
 privilege:
-    - { name: 'MANAGE_POLICY_APPROVAL' }
-    - { name: 'MANAGE_MY_POLICY' }
+    - { name: 'MANAGE_POLICY_APPROVAL', permission: 7 }
+    - { name: 'MANAGE_MY_POLICY', permission: 7 }
+    - { name: 'MANAGE_MY_POLICY2', permission: 5}
 role:
-    - {name: 'Policy Holder', default: true, privileges: [name: 'MANAGE_MY_POLICY', permission: 1]}
+    - {name: 'Policy Holder', default: true, privileges: [{privilege_name: 'MANAGE_MY_POLICY', permission: 3},{privilege_name: 'MANAGE_MY_POLICY2', permission: 5}]}
+    - {name: 'CSR', privileges: [{privilege_name: 'MANAGE_POLICY_APPROVAL', permission: 5}]}
 dashboard:
     - { name: Dashboard, content: content/Dashboard.txt }
 menu:

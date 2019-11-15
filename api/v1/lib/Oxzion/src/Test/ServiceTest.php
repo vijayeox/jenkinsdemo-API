@@ -68,6 +68,7 @@ class ServiceTest extends TestCase
     
         $this->usedConsoleBackup = Console::isConsole();
         $this->reset();
+        $this->setupConnection();
         $tm = $this->getTransactionManager();
         $tm->setRollbackOnly(true);
         $tm->beginTransaction();
@@ -78,6 +79,11 @@ class ServiceTest extends TestCase
         $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/autoload/global.php', include __DIR__ . '/../../../../config/autoload/local.php');
         $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php', $configOverrides);
         $this->setApplicationConfig($configOverrides);
+    }
+
+    //this is required to ensure that same connection is used by dbunit and zend db
+    protected function setupConnection()
+    {
     }
 
     /**
