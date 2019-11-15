@@ -10,7 +10,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     private $documentBuilder;
     protected $type;
     protected $template;
-    // 'append' => array(__DIR__.'/../template/SL Wording.pdf'),
     const TEMPLATE = array(
         'Individual Professional Liability' 
             => array('template' => 'ProfessionalLiabilityCOI',
@@ -78,7 +77,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                      'aiTemplate' => 'Individual_PL_AI',
                      'blanketForm' => 'Individual_AI_Blanket_Endorsement.pdf',
                      'aiheader' => 'IPL_AI_header.html',
-                     'aifooter' => null),
+                     'aifooter' => null,
+                     'iplScuba' => 'PL Scuba Fit Endorsement.pdf',
+                     'iplCylinder' => 'PL Cylinder Endorsement.pdf',
+                     'iplEquipment' => 'PL Equipment Liability Endorsement.pdf'),
         'Dive Boat' 
             => array('template' => 'DiveBoatCOI',
                      'header' => 'DiveBoatHeader.html',
@@ -143,6 +145,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $coi_number = $this->generateCOINumber($data,$persistenceService);
             $data['certificate_no'] = $coi_number;
         }
+        
+
         $license_number = $this->getLicenseNumber($data,$persistenceService);
         $policyDetails = $this->getPolicyDetails($data,$persistenceService);
         $data['license_number'] = $license_number;
@@ -150,6 +154,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $data['start_date'] = date_format($date,"m/d/Y");
         $date=date_create($data['end_date']);
         $data['end_date'] = date_format($date,"m/d/Y");
+
+
+        if($this->type == 'lapse'){
+            $lapseTemplate = self::TEMPLATE[$data['product']]['ltemplate'];
+            $lapseDest = $dest['absolutePath'].$coi_number.'_Lapse_Letter'.'.pdf';
+            $options['header'] = self::TEMPLATE[$data['product']]['lheader'];
+            $options['footer'] = self::TEMPLATE[$data['product']]['lfooter'];
+            $this->documentBuilder->generateDocument($lapseTemplate,$data,$lapseDest,$options);
+            $data['lapse_document'] = $dest['relativePath'].$coi_number.'_LapseLetter'.'.pdf';
+            return $data;
+        }
 
         if($policyDetails){
             $data['policy_id'] = $policyDetails['policy_number'];
@@ -210,7 +225,49 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['policy_document'] = $dest['relativePath'].$policy;
             }
         }
-        $temp =$data;
+      
+
+        if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])){
+            $coverageList = array();
+            array_push($coverageList,$data['careerCoverage']);
+            if($data['scubaFit'] == "scubaFitInstructor"){
+                 $scubaFit =  $this->template[$data['product']]['iplScuba'];
+                 $this->documentBuilder->copyTemplateToDestination($scubaFit,$dest['relativePath']);
+                 $data['scuba_fit_document'] = $dest['relativePath'].$scubaFit;
+                 array_push($coverageList,$data['scubaFit']);
+            }else{
+                $data['scubaFitVal'] = null;
+            }
+            if($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor"){
+                $cylinder = $this->template[$data['product']]['iplCylinder'];
+                $this->documentBuilder->copyTemplateToDestination($cylinder,$dest['relativePath']);
+                $data['cylinder_document'] = $dest['relativePath'].$cylinder;
+                array_push($coverageList,$data['cylinder']);
+            }else{
+                $data['cylinderVal'] = 'Not Covered';
+            }
+            if($data['equipment'] == "equipmentLiabilityCoverage"){
+                $equipment =  $this->template[$data['product']]['iplEquipment'];
+                $this->documentBuilder->copyTemplateToDestination($equipment,$dest['relativePath']);
+                $data['equipment_liability_document'] = $dest['relativePath'].$equipment;
+                $data['equipmentVal'] = 'Included';
+           }else{
+                $data['equipmentVal'] = 'Not Included';
+           }
+           $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
+           $result = json_decode($result,true);
+         
+           if(isset($result[$data['scubaFit']])){
+                $data['scubaFitVal'] = $result[$data['scubaFit']];
+           }
+           if(isset($result[$data['cylinder']])){
+                $data['cylinderVal'] = $result[$data['cylinder']];
+           }
+           $data['careerCoverageVal'] = $result[$data['careerCoverage']];
+        }    
+
+
+   	  	$temp =$data;
         if(isset($data['endorsement_options'])){
             $temp['endorsement_options'] = json_encode($data['endorsement_options']);
         }
@@ -239,8 +296,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         if($template == 'Group_PL_COI'){
             $options['generateOptions'] = array('disable_smart_shrinking' => 1);
         }
-        // print_r($template);exit;
         $this->documentBuilder->generateDocument($template, $temp, $destAbsolute, $options);
+
         $data['coi_document'] = $dest['relativePath'].$template.'.pdf';
 
         if($data['state'] == 'California'){
@@ -261,15 +318,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $this->documentBuilder->generateDocument($cardTemplate,$data,$cardDest);
             $data['card'] = $dest['relativePath'].$coi_number.'_Pocket_Card'.'.pdf';
         }
-
-        // if(isset($data['lapseletter'])){
-        //     $lapseTemplate = self::TEMPLATE[$data['product']]['ltemplate'];
-        //     $lapseDest = $dest['absolutePath'].$coi_number.'_Lapse_Letter'.'.pdf';
-        //     $options['header'] = self::TEMPLATE[$data['product']]['lheader'];
-        //     $options['footer'] = self::TEMPLATE[$data['product']]['lfooter'];
-        //     $this->documentBuilder->generateDocument($lapseTemplate,$data,$lapseDest,$options);
-        //     $data['lapse_document'] = $dest['relativePath'].$coi_number.'_LapseLetter'.'.pdf';
-        // }
 
         if(isset($data['cover_letter']) && $data['cover_letter']){
             $coverTemplate = $this->template[$data['product']]['cover_letter'];
@@ -358,6 +406,19 @@ class PolicyDocument extends AbstractDocumentAppDelegate
          return $coi_number;
     }
 
+
+
+    private function getCoverageName($data,$product,$persistenceService){
+        $selectQuery = "SELECT group_concat(distinct concat('\"',`key`,'\":\"',coverage,'\"')) as name FROM premium_rate_card WHERE `key` in ('".implode("','", $data) . "')  AND product = '".$product."'";
+        $resultQuery = $persistenceService->selectQuery($selectQuery);
+        while ($resultQuery->next()) {
+            $coverageName[] = $resultQuery->current();
+        }
+        if($resultQuery->count()!=0){
+            return '{'.$coverageName[0]['name'].'}';
+        }
+
+    }
     private function getLicenseNumber($data,$persistenceService)
     {
         $selectQuery = "Select * FROM state_license WHERE state = '".$data['state']."'";

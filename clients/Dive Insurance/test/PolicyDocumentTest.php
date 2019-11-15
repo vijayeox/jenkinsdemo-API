@@ -79,19 +79,187 @@ class PolicyDocumentTest extends DelegateTest
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
-                 'careerCoverage'=> 'Divester',
                  'physical_address' => 'APO,AE',
                  'single_limit' => '1,000,000',
                  'annual_aggregate' => '2,000,000',
-                 'equipment_liability' => 0,
-                 'cylinder_coverage' => 0,
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Individual Professional Liability',
                  'sameasmailingaddress' => 1,
+                 'careerCoverage' => 'instructor',
+                 'cylinder'=> 'cylinderInspector',
+                 'equipment'=> 'equipmentLiabilityCoverage',
+                 'scubaFit' => 'scubaFitInstructor',
                  'endrosement_status' => 'Instructor',
                  'endorsement_options'=>'{"modify_personalInformation"=>true,
                                           "modify_coverage"=> false,
-                                          "modify_additionalInsured"=> false}',
+                                          "modify_additionalInsured" => false}',
+                 'update' => 1,
+                 'update_date' => '08/06/2019'];
+        $config = $this->getApplicationConfig();
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'PolicyDocument', $data);
+        $this->assertEquals(isset($content['uuid']), true);
+        $this->assertEquals(isset($content['policy_id']), true);
+        $this->assertEquals(isset($content['carrier']), true);
+        $this->assertEquals(isset($content['license_number']), true);
+        $this->assertEquals(isset($content['certificate_no']), true);
+        $this->assertEquals(isset($content['policy_document']), true);
+        $doc = $config['APP_DOCUMENT_FOLDER'].$content['coi_document'];
+        $this->assertTrue(is_file($doc));
+        $this->assertTrue(filesize($doc)>0);
+        $doc = substr($doc, 0, strripos($doc, '/'));
+        $files = glob($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'].'/'.$content['uuid'].'/'."*");
+        $filecount = count($files);
+        $this->assertEquals($filecount,8);
+        FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
+    }
+
+    public function testPolicyDocumentWithScuba()
+    {
+        $config = $this->getApplicationConfig();
+        $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
+        AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
+        $appId = $this->data['UUID'];
+        $data = [
+                'firstname' => 'Mohan',
+                 'initial' => 'Raj' ,
+                 'lastname' => 'D',
+                 'address1' => 'ABC 200',
+                 'address2' => 'XYZ 300',
+                 'city' => 'APO',
+                 'state' => 'California',
+                 'country' => 'US',
+                 'zip' => '09522-9998',                
+                 'padi' => '34567',
+                 'start_date' => '2019-06-01',
+                 'end_date' => '2020-06-30',
+                 'physical_address' => 'APO,AE',
+                 'single_limit' => '1,000,000',
+                 'annual_aggregate' => '2,000,000',
+                 'orgUuid' => $this->data['orgUuid'],
+                 'product' => 'Individual Professional Liability',
+                 'sameasmailingaddress' => 1,
+                 'careerCoverage' => 'instructor',
+                 'scubaFit' => 'scubaFitInstructor',
+                 'cylinder'=> 'cylinderInspectorOrInstructorDeclined',
+                 'equipment'=> 'equipmentLiabilityCoverageDeclined',
+                 'endrosement_status' => 'Instructor',
+                 'endorsement_options'=>'{"modify_personalInformation"=>true,
+                                          "modify_coverage"=> false,
+                                          "modify_additionalInsured" => false}',
+                 'update' => 1,
+                 'update_date' => '08/06/2019'];
+        $config = $this->getApplicationConfig();
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'PolicyDocument', $data);
+        $this->assertEquals(isset($content['uuid']), true);
+        $this->assertEquals(isset($content['policy_id']), true);
+        $this->assertEquals(isset($content['carrier']), true);
+        $this->assertEquals(isset($content['license_number']), true);
+        $this->assertEquals(isset($content['certificate_no']), true);
+        $this->assertEquals(isset($content['policy_document']), true);
+        $doc = $config['APP_DOCUMENT_FOLDER'].$content['coi_document'];
+        $this->assertTrue(is_file($doc));
+        $this->assertTrue(filesize($doc)>0);
+        $doc = substr($doc, 0, strripos($doc, '/'));
+        $files = glob($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'].'/'.$content['uuid'].'/'."*");
+        $filecount = count($files);
+        $this->assertEquals($filecount,6);
+        FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
+    }
+
+
+    public function testPolicyDocumentWithCylinder()
+    {
+        $config = $this->getApplicationConfig();
+        $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
+        AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
+        $appId = $this->data['UUID'];
+        $data = [
+                'firstname' => 'Mohan',
+                 'initial' => 'Raj' ,
+                 'lastname' => 'D',
+                 'address1' => 'ABC 200',
+                 'address2' => 'XYZ 300',
+                 'city' => 'APO',
+                 'state' => 'California',
+                 'country' => 'US',
+                 'zip' => '09522-9998',                
+                 'padi' => '34567',
+                 'start_date' => '2019-06-01',
+                 'end_date' => '2020-06-30',
+                 'physical_address' => 'APO,AE',
+                 'single_limit' => '1,000,000',
+                 'annual_aggregate' => '2,000,000',
+                 'orgUuid' => $this->data['orgUuid'],
+                 'product' => 'Individual Professional Liability',
+                 'sameasmailingaddress' => 1,
+                 'careerCoverage' => 'instructor',
+                 'scubaFit' => 'scubaFitInstructorDeclined',
+                 'cylinder'=> 'cylinderInspectorAndInstructor',
+                 'equipment'=> 'equipmentLiabilityCoverageDeclined',
+                 'endrosement_status' => 'Instructor',
+                 'endorsement_options'=>'{"modify_personalInformation"=>true,
+                                          "modify_coverage"=> false,
+                                          "modify_additionalInsured" => false}',
+                 'update' => 1,
+                 'update_date' => '08/06/2019'];
+        $config = $this->getApplicationConfig();
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'PolicyDocument', $data);
+        $this->assertEquals(isset($content['uuid']), true);
+        $this->assertEquals(isset($content['policy_id']), true);
+        $this->assertEquals(isset($content['carrier']), true);
+        $this->assertEquals(isset($content['license_number']), true);
+        $this->assertEquals(isset($content['certificate_no']), true);
+        $this->assertEquals(isset($content['policy_document']), true);
+        $doc = $config['APP_DOCUMENT_FOLDER'].$content['coi_document'];
+        $this->assertTrue(is_file($doc));
+        $this->assertTrue(filesize($doc)>0);
+        $doc = substr($doc, 0, strripos($doc, '/'));
+        $files = glob($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'].'/'.$content['uuid'].'/'."*");
+        $filecount = count($files);
+        $this->assertEquals($filecount,6);
+        FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
+    }
+
+
+    public function testPolicyDocumentWithInstructor()
+    {
+        $config = $this->getApplicationConfig();
+        $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
+        AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
+        $appId = $this->data['UUID'];
+        $data = [
+                'firstname' => 'Mohan',
+                 'initial' => 'Raj' ,
+                 'lastname' => 'D',
+                 'address1' => 'ABC 200',
+                 'address2' => 'XYZ 300',
+                 'city' => 'APO',
+                 'state' => 'California',
+                 'country' => 'US',
+                 'zip' => '09522-9998',                
+                 'padi' => '34567',
+                 'start_date' => '2019-06-01',
+                 'end_date' => '2020-06-30',
+                 'physical_address' => 'APO,AE',
+                 'single_limit' => '1,000,000',
+                 'annual_aggregate' => '2,000,000',
+                 'orgUuid' => $this->data['orgUuid'],
+                 'product' => 'Individual Professional Liability',
+                 'sameasmailingaddress' => 1,
+                 'careerCoverage' => 'instructor',
+                 'scubaFit' => 'scubaFitInstructorDeclined',
+                 'cylinder'=> 'cylinderInspectorOrInstructorDeclined',
+                 'equipment'=> 'equipmentLiabilityCoverageDeclined',
+                 'endrosement_status' => 'Instructor',
+                 'endorsement_options'=>'{"modify_personalInformation"=>true,
+                                          "modify_coverage"=> false,
+                                          "modify_additionalInsured" => false}',
                  'update' => 1,
                  'update_date' => '08/06/2019'];
         $config = $this->getApplicationConfig();
@@ -134,22 +302,23 @@ class PolicyDocumentTest extends DelegateTest
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
-                 'careerCoverage'=> 'Divester',
                  'physical_address' => 'APO,AE',
                  'single_limit' => '1,000,000',
                  'annual_aggregate' => '2,000,000',
-                 'equipment_liability' => 'Not Included',
-                 'cylinder_coverage' => 'Not Covered',
                  'update' => 1,
                  'update_date' => '08/06/2019',
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Individual Professional Liability',
                  'sameasmailingaddress' => 1,
+                 'careerCoverage' => 'instructor',
+                 'scubaFit' => 'scubaFitInstructorDeclined',
+                 'cylinder'=> 'cylinderInspectorOrInstructorDeclined',
+                 'equipment'=> 'equipmentLiabilityCoverageDeclined',
                  'endrosement_status' => 'Instructor',
                  'endorsement_options'=>'{"modify_personalInformation"=>true,
                                           "modify_coverage"=> false,
                                           "modify_additionalInsured"=> false}',
-                 'additionalInsured' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}',
+                 'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
                  'lapseletter' => 1];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -191,18 +360,19 @@ class PolicyDocumentTest extends DelegateTest
                  'padi' => '34567',
                  'start_date' => '2019-06-01',
                  'end_date' => '2020-06-30',
-                 'careerCoverage'=> 'Divester',
                  'physical_address' => 'APO,AE',
                  'single_limit' => '1,000,000',
                  'annual_aggregate' => '2,000,000',
-                 'equipment_liability' => 'Not Included',
-                 'cylinder_coverage' => 'Not Covered',
                  'update' => 1,
                  'update_date' => '08/06/2019',
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Individual Professional Liability',
                  'sameasmailingaddress' => 1,
                  'endrosement_status' => 'Instructor',
+                 'careerCoverage' => 'instructor',
+                 'scubaFit' => 'scubaFitInstructorDeclined',
+                 'cylinder'=> 'cylinderInspectorOrInstructorDeclined',
+                 'equipment'=> 'equipmentLiabilityCoverageDeclined',
                  'endorsement_options'=>'{"modify_personalInformation"=>true,"modify_coverage"=> false,"modify_additionalInsured"=> false}'];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);

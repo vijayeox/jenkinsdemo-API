@@ -2,21 +2,19 @@
 <html>
 <head>
 <link href= "{$smarty.current_dir}/css/template_css.css" rel="stylesheet" type="text/css" />
-
+<script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script>
 </head>
-<body>
-	<div class ="body_div">
+<body onload = "agentInfo()">
+	<div class ="body_div"> 
 		<div>&nbsp</div>
 		<div class = "content">
 			<div class ="content1">
 					<b class = "caption">Agent Information</b>
 					<div class = "caption1">
-						<p class ="info">Vicencia & Buckley A Division of HUB International</p>
-						<p class ="info" style="margin-bottom:2px;">Insurance Services</p>
-						<p class ="info">6 Centerpointe Drive, #350</p>
-						<p class ="info">La Palma, CA 90623-2538</p>
-						<p class ="info" style="margin-bottom:2px;">(714) 739-3177&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX (714) 739-3188</p>
-						<p class ="info" style="margin-bottom:2px;">(800) 223-9998</p>
+						<p class ="info" id = "nameVal"></p>
+						<p class ="info" id = "addressVal"></p>
+						<p class ="info" style="margin-bottom:2px;"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
+						<p class ="info" id = "phone2Val" style="margin-bottom:2px;"></p>
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
@@ -60,7 +58,7 @@
 	        	</div>
 	        	<div class = "in-type1"> 
 		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability - Claims Made Form</p>
-			            <p class = "ins_font">Insured's Status: {$careerCoverage}</p>
+			            <p class = "ins_font">Insured's Status: {$careerCoverage} {if $scubaFitVal} <span> and {$scubaFitVal} </span>{/if}</p>
 			            <p class = "ins_font">${$single_limit}&nbsp&nbsp&nbsp(per occurrence)</p>
 			            <p class = "ins_font">${$annual_aggregate}</p>
 		        </div>
@@ -75,16 +73,8 @@
 		       <div class="i-type" style="margin-top: 9px;">
 		          <p class = "ins_font">&nbsp</p>
 		          <p class = "ins_font">&nbsp</p>
-		          <p class = "ins_font">{if equipment_liability}
-							Included
-					   {else}
-					   		Not Included
-					   {/if}</p>
-		          <p class = "ins_font">{if cylinder_coverage}
-							Included
-					   {else}
-					   		Not Covered
-					   {/if}</p>
+		          <p class = "ins_font">{$equipmentVal}</p>
+		          <p class = "ins_font">{$cylinderVal}</p>
 		       </div>
      		</div>
     	</div>

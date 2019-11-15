@@ -1,4 +1,4 @@
-{* COI Auto Renewal Notification Template *}
+  {* COI Auto Renewal Notification Template *}
 
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
