@@ -28,11 +28,6 @@ class MenuItemService extends AbstractService
         if(isset($data['page_id'])){
             $data['page_id'] = $this->getIdFromUuid('ox_app_page',$data['page_id']);
         }
-        if(isset($data['privilege_name'])){
-            $select = "SELECT id FROM ox_privilege WHERE name = '".$data['privilege_name']."'";
-            $selectResult = $this->executeQuerywithParams($select)->toArray();
-            $data['privilege_id'] = $selectResult[0]['id'];
-        }
         if (!isset($data['id'])) {
             $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
@@ -44,7 +39,7 @@ class MenuItemService extends AbstractService
         $MenuItem->validate();
         $this->beginTransaction();
         $count = 0;
-        try { 
+        try {
             $count = $this->table->save($MenuItem);
             if ($count == 0) {
                 $this->rollback();
@@ -120,38 +115,31 @@ class MenuItemService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-        
         return $count;
     }
 
     public function getMenuItems($appUuid=null, $filterArray = array())
     {
         $filterArray['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
-        // $userId = AuthContext::get(AuthConstants::USER_ID);
-        // $orgId = AuthContext::get(AuthConstants::ORG_ID);
-        $queryString = " SELECT ox_app_menu.icon,ox_app_menu.name,ox_app_page.uuid as page_id,
-        ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid 
-        FROM ox_app_menu
-         INNER JOIN ox_app_registry ON ox_app_registry.app_id = ox_app_menu.app_id 
-         LEFT JOIN ox_app_page ON ox_app_page.id = ox_app_menu.page_id
-         WHERE ox_app_menu.privilege_id IS NULL 
-         AND ox_app_registry.org_id = :orgId 
-         AND ox_app_menu.app_id= :appId
-         UNION select ox_app_menu.icon,ox_app_menu.name,ox_app_page.uuid as page_id,ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid 
-         from ox_app_menu 
-         INNER JOIN ox_privilege on ox_privilege.id = ox_app_menu.privilege_id 
-         INNER JOIN ox_role_privilege on ox_role_privilege.privilege_name = ox_privilege.name 
-         INNER JOIN ox_user_role on ox_user_role.role_id = ox_role_privilege.role_id
-         LEFT JOIN ox_app_page ON ox_app_page.id = ox_app_menu.page_id
-         where ox_user_role.user_id = :userId AND ox_role_privilege.org_id = :orgId
-          AND ox_app_menu.app_id= :appId";
-        $whereQuery = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),"appId" => $filterArray['app_id'],"userId" =>AuthContext::get(AuthConstants::USER_ID));
+        $queryString = "SELECT ox_app_menu.icon,ox_app_menu.name,ox_app_page.uuid as page_id,
+                        ox_app_menu.parent_id,ox_app_menu.sequence,ox_app_menu.uuid,ox_app_menu.privilege_name
+                        FROM ox_app_menu
+                        INNER JOIN ox_app_registry ON ox_app_registry.app_id = ox_app_menu.app_id
+                        LEFT JOIN ox_app_page ON ox_app_page.id = ox_app_menu.page_id
+                        where ox_app_registry.org_id = :orgId
+                        AND ox_app_menu.app_id= :appId;";
+        $whereQuery = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),"appId" => $filterArray['app_id']);
+        $this->logger->info("Get Menu Query $queryString with params".json_encode($whereQuery));
         $resultSet = $this->executeQueryWithBindParameters($queryString,$whereQuery);
         $menuList = array();
         if ($resultSet->count()) {
             $menuList = $resultSet->toArray();
             $i = 0;
             foreach ($menuList as $key => $menuItem) {
+                if(isset($menuItem['privilege_name']) && $menuItem['privilege_name']!="" && (!AuthContext::isPrivileged($menuItem['privilege_name']))){
+                    unset($menuList[$key]);
+                    continue;
+                }
                 if (isset($menuItem['parent_id']) && $menuItem['parent_id'] != 0) {
                     $parentKey = array_search($menuItem['parent_id'], array_column($menuList, 'id'));
                     $menuList[$parentKey]['submenu'][] = $menuItem;
@@ -161,7 +149,7 @@ class MenuItemService extends AbstractService
         }else{
             return 0;
         }
-        return $menuList;
+        return array_values($menuList);
     }
     public function getMenuItem($appUuid, $menuUuid)
     {
