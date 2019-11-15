@@ -87,10 +87,6 @@ class LapseLetterTest extends DelegateTest
         $delegateService->setPersistence($appId, $this->persistence);
         $content = $delegateService->execute($appId, 'LapseLetter', $data);
         $this->assertEquals(isset($content['uuid']), true);
-        // $doc = $config['APP_DOCUMENT_FOLDER'].$content['lapse_document'];
-        // $this->assertTrue(is_file($doc));
-        // $this->assertTrue(filesize($doc)>0);
-        // $doc = substr($doc, 0, strripos($doc, '/'));
         $files = glob($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'].'/'.$content['uuid'].'/'."*");
         $filecount = count($files);
         $this->assertEquals($filecount,1);
