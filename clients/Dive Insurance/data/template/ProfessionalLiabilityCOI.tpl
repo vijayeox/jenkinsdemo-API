@@ -58,7 +58,7 @@
 	        	</div>
 	        	<div class = "in-type1"> 
 		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability - Claims Made Form</p>
-			            <p class = "ins_font">Insured's Status: {$careerCoverage} {if $scubaFitVal} <span> and {$scubaFitVal} </span>{/if}</p>
+			            <p class = "ins_font">Insured's Status: {$careerCoverage} {if isset($scubaFitVal)} <span> and {$scubaFitVal} </span>{/if}</p>
 			            <p class = "ins_font">${$single_limit}&nbsp&nbsp&nbsp(per occurrence)</p>
 			            <p class = "ins_font">${$annual_aggregate}</p>
 		        </div>
@@ -73,8 +73,17 @@
 		       <div class="i-type" style="margin-top: 9px;">
 		          <p class = "ins_font">&nbsp</p>
 		          <p class = "ins_font">&nbsp</p>
-		          <p class = "ins_font">{$equipmentVal}</p>
-		          <p class = "ins_font">{$cylinderVal}</p>
+		          <p class = "ins_font">{if isset($equipmentVal)}
+		          			{$equipmentVal}
+		          		{else}
+		          			Not Included
+		          		{/if}</p>
+		          <p class = "ins_font">{if isset($cylinderVal)}
+		          			{$cylinderVal}
+		          		{else}
+		          			Not Covered
+		          		{/if}
+		          </p>
 		       </div>
      		</div>
     	</div>

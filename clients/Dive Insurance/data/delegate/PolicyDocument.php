@@ -141,20 +141,26 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $this->logger->info("Template Data Source - ".print_r($data, true));
         $date = ''; 
         $this->logger->info("Executing Policy Document");
-        if($this->type != "quote"){
+        if($this->type != "quote" || $this->type != "lapse"){
             $coi_number = $this->generateCOINumber($data,$persistenceService);
             $data['certificate_no'] = $coi_number;
         }
         
-
-        $license_number = $this->getLicenseNumber($data,$persistenceService);
-        $policyDetails = $this->getPolicyDetails($data,$persistenceService);
-        $data['license_number'] = $license_number;
         $date=date_create($data['start_date']);
         $data['start_date'] = date_format($date,"m/d/Y");
         $date=date_create($data['end_date']);
         $data['end_date'] = date_format($date,"m/d/Y");
 
+        if(isset($data['fileId'])){
+            $data['uuid'] = $data['fileId'];
+        }
+        if(!isset($data['uuid'])){
+            $data['uuid'] = UuidUtil::uuid();
+        }
+        
+        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));        
+        $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid'],array('orgUuid' => $orgUuid));
+        $data['orgUuid'] = $orgUuid;
 
         if($this->type == 'lapse'){
             $lapseTemplate = self::TEMPLATE[$data['product']]['ltemplate'];
@@ -165,6 +171,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $data['lapse_document'] = $dest['relativePath'].$coi_number.'_LapseLetter'.'.pdf';
             return $data;
         }
+
+
+        $license_number = $this->getLicenseNumber($data,$persistenceService);
+        $policyDetails = $this->getPolicyDetails($data,$persistenceService);
+        $data['license_number'] = $license_number;
 
         if($policyDetails){
             $data['policy_id'] = $policyDetails['policy_number'];
@@ -180,15 +191,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $options['footer'] = $this->template[$data['product']]['footer'];
         }
 
-        if(isset($data['fileId'])){
-            $data['uuid'] = $data['fileId'];
-        }
-        if(!isset($data['uuid'])){
-            $data['uuid'] = UuidUtil::uuid();
-        }
-        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));        
-        $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid'],array('orgUuid' => $orgUuid));
-        $data['orgUuid'] = $orgUuid;
+        
         if(isset($this->template[$data['product']]['instruct'])){
             $instruct = $this->template[$data['product']]['instruct'];
             $this->documentBuilder->copyTemplateToDestination($instruct,$dest['relativePath']);
@@ -230,30 +233,35 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])){
             $coverageList = array();
             array_push($coverageList,$data['careerCoverage']);
-            if($data['scubaFit'] == "scubaFitInstructor"){
+            if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor"){
                  $scubaFit =  $this->template[$data['product']]['iplScuba'];
                  $this->documentBuilder->copyTemplateToDestination($scubaFit,$dest['relativePath']);
                  $data['scuba_fit_document'] = $dest['relativePath'].$scubaFit;
                  array_push($coverageList,$data['scubaFit']);
-            }else{
-                $data['scubaFitVal'] = null;
             }
-            if($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor"){
+            // else{
+            //     $data['scubaFitVal'] = null;
+            // }
+            if(isset($data['cylinder']) && ($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor")){
                 $cylinder = $this->template[$data['product']]['iplCylinder'];
                 $this->documentBuilder->copyTemplateToDestination($cylinder,$dest['relativePath']);
                 $data['cylinder_document'] = $dest['relativePath'].$cylinder;
                 array_push($coverageList,$data['cylinder']);
-            }else{
-                $data['cylinderVal'] = 'Not Covered';
             }
-            if($data['equipment'] == "equipmentLiabilityCoverage"){
+
+            // else{
+            //     $data['cylinder'] = null;
+            // }
+            if(isset($data['equipment']) && $data['equipment'] == "equipmentLiabilityCoverage"){
                 $equipment =  $this->template[$data['product']]['iplEquipment'];
                 $this->documentBuilder->copyTemplateToDestination($equipment,$dest['relativePath']);
                 $data['equipment_liability_document'] = $dest['relativePath'].$equipment;
                 $data['equipmentVal'] = 'Included';
-           }else{
-                $data['equipmentVal'] = 'Not Included';
            }
+
+           // else{
+           //      $data['equipmentVal'] = 'Not Included';
+           // }
            $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
            $result = json_decode($result,true);
          
@@ -277,7 +285,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
 
         if(isset($data['additionalInsured'])){
-            $temp['additionalInsured'] = json_encode(array('name' => $data['additionalInsured']));
+            $temp['additionalInsured'] = json_encode($data['additionalInsured']);
         }
 
         if(isset($data['additionalNamedInsured'])){

@@ -2,6 +2,7 @@
 <html>
 <head>
 <link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script>
 <script>
   function subst() {
       var vars = {};
@@ -25,6 +26,7 @@
               }
           }
       }
+      agentInfo();
   }
   </script>
 </head>
@@ -52,10 +54,8 @@
       <div class ="content1">
           <b class = "caption">Agent Information</b>
           <div class = "caption1">
-            <p class ="info">Vicencia & Buckley A Division of HUB International</p>
-            <p class ="info" style="margin-bottom:2px;">Insurance Services</p>
-            <p class ="info">6 Centerpointe Drive, #350</p>
-            <p class ="info">La Palma, CA 90623-2538</p>
+            <p class ="info" id="nameVal"></p>
+            <p class ="info" id = "addressVal"></p>
            </div>
           <hr class ="hr_caption"></hr>
           <b class = "caption2">Insured's Name and Mailing Address:</b>

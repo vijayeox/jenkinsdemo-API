@@ -10,7 +10,7 @@
   	<div class = "details_div">
 		<div class ="name_details">
 			<p class = "name_title">NAME AND ADDRESS OF INSURED(S):</p>
-			<p class="name">{$lastname},{$firstname}</p>
+			<p class="name">{$lastname},{$firstname},{$initial}</p>
 			<p class="name">{$address1}</p>
 			<p class="name">{$address2}</p>
 			<p class="name">{$city},{$state}</p>

@@ -2,15 +2,17 @@
 <html>
 <head>
 <link href= "{$smarty.current_dir}/css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script>
+
 </head>
-<body>
+<body onload = "agentInfo()">
   <div class = "m_div">
     <div class = "agent">
       <div class = "agent_info">
         <b class = "agent_info_title">Agent Information</b>
         <div class = "agent_1">
-			<p class ="info_margin">Vicencia & Buckley A Division of HUB International Insurance Services</p>
-			<p class ="add_margin">6 Centerpointe Drive, #350 La Palma, CA 90623-2538</p>
+			<p class ="info_margin" id ="nameVal"></p>
+			<p class ="add_margin" id = "addressVal"></p>
             <p></p>
 			<p class = "p_info">License#: {$license_number}</p>
 				</div>
@@ -18,8 +20,8 @@
       <div class ="agent_info1">
         <b class = "agent_info2">Agent Contact Information</b>
         <div class = "agent_1">
-	        <p class ="p_info">(714) 739-3177&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX (714) 739-3188</p>
-					<p class ="p_info">(800) 223-9998</p>
+	        <p class ="p_info"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
+					<p class ="p_info" id = "phone2Val"></p>
 	        <p class ="p_info">www.diveinsurance.com</p>
 	        <p class ="p_info">diveboat@diveinsurance.com</p>
 	        <p class ="p_info">Policy period from {$start_date} to {$end_date}</p>

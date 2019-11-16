@@ -1,7 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
+<link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script>
 <script>
   function subst() {
       var vars = {};
@@ -25,6 +26,7 @@
               }
           }
       }
+      agentInfo();
   }
   </script>
 </head>
@@ -44,12 +46,10 @@
       <div class ="content1">
           <b class = "caption">Agent Information</b>
           <div class = "caption1">
-            <p class ="info">Vicencia & Buckley A Division of HUB International</p>
-            <p class ="info" style="margin-bottom:2px;">Insurance Services</p>
-            <p class ="info">6 Centerpointe Drive, #350</p>
-            <p class ="info">La Palma, CA 90623-2538</p>
-            <p class ="info" style="margin-bottom:2px;">(714) 739-3177&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX (714) 739-3188</p>
-            <p class ="info" style="margin-bottom:2px;">(800) 223-9998</p>
+            <p class ="info" id = "nameVal"></p>
+            <p class ="info" id = "addressVal"></p>
+           <p class ="info" style="margin-bottom:2px;"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
+            <p class ="info" id = "phone2Val" style="margin-bottom:2px;"></p>
            </div>
           <hr class ="hr_caption"></hr>
           <b class = "caption2">Insured's Name and Mailing Address:</b>
