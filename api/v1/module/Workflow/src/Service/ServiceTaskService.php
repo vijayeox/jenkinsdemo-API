@@ -268,7 +268,7 @@ class ServiceTaskService extends AbstractService
         }
     }
     
-    protected function generatePDF($params)
+    protected function generatePDF(&$params)
     {
         if (isset($params)) {
             $orgId = isset($params['orgid']) ? $params['orgid'] : 1;
@@ -297,7 +297,8 @@ class ServiceTaskService extends AbstractService
                 return;
             }
             $generatePdf = new DocumentGeneratorImpl();
-            return array('document_path' => $generatePdf->generateDocument($body, $destination, $options));
+            $params['document_path'] = $generatePdf->generateDocument($body, $destination, $options);
+            return $params;
         } else {
             return;
         }

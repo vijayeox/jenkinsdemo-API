@@ -251,4 +251,36 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Workflow Instance Id Not Found');
     }
+
+
+    public function testExtractFile()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ["activityInstanceId" => "Task_1bw1uyk:651f1320-ef09-11e9-a364-62be4f9e1bfd", "processInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "variables" => array("command" => "file", "orgId" => "53012471-2863-4949-afb1-e69b0891c98a","fileId" => "d13d0c68-98c9-11e9-adc5-308d99c9145b"), "parentInstanceId" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd", "parentActivity" => "651eebfb-ef09-11e9-a364-62be4f9e1bfd"];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(is_array($content['data']), true);
+    }
+
+    public function testServiceTaskCommands()
+    {
+        $data = ['uuid' => '53012471-2863-4949-afb1-e69b0891c98a'];
+        $config = $this->getApplicationConfig();
+        $tempFolder = $config['TEMPLATE_FOLDER'] . "53012471-2863-4949-afb1-e69b0891c98a/";
+        FileUtils::createDirectory($tempFolder);
+        $tempFile = $config['TEMPLATE_FOLDER'] . "/";
+        FileUtils::createDirectory($tempFile);
+        copy(__DIR__ . "/../Dataset/GenericTemplate.tpl", $tempFile . "GenericTemplate.tpl");
+        $params['variables'] = ['commands' => array('{"command":"pdf"}','{"command":"file"}'), 'template' => 'GenericTemplate', 'orgid' => 1, 'options' => array('initial_title' => 'Vantage agora Pdf Template', 'second_title' => 'Title 2', 'pdf_header_logo' => '/logo_example.jpg', 'pdf_header_logo_width' => 20, 'header_text_color' => array(139, 58, 58), 'header_line_color' => array(255, 48, 48), 'footer_text_color' => array(123, 121, 34), 'footer_line_color' => array(56, 142, 142)), 'destination' => $config['TEMPLATE_FOLDER'] . "GenericTemplate.pdf","orgId" => "53012471-2863-4949-afb1-e69b0891c98a","fileId" => "d13d0c68-98c9-11e9-adc5-308d99c9145b"];
+        $this->setJsonContent(json_encode($params));
+        $this->dispatch('/callback/workflow/servicetask', 'POST', $params);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200); 
+        $templateName = "GenericTemplate.tpl";
+        FileUtils::deleteFile($templateName, $tempFile);
+        FileUtils::deleteFile("GenericTemplate.pdf", $config['TEMPLATE_FOLDER']);
+    }
 }
