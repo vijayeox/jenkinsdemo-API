@@ -30,7 +30,15 @@ ox_field:
     workflow_id: 1
     data_type: "date"
     required: 1
-    sequence: 1     
+    sequence: 1 
+-       
+    id: 4       
+    name: "padi_number"     
+    app_id: 99      
+    workflow_id: 1      
+    data_type: "integer"        
+    required: 1     
+    sequence: 4     
 ox_activity:
   -
     id: 1
@@ -177,6 +185,12 @@ ox_file_attribute:
     org_id: 1
     fieldvalue: "2030-06-20"
     fieldid: 3
+  -
+    id: 7
+    fileid: 4
+    org_id: 1
+    fieldvalue: 32552
+    fieldid: 4
 ox_app_menu:
   -
     id: 1
@@ -231,8 +245,23 @@ ox_app_page:
     date_created: '2019-06-26 00:00:00'
     created_by: 1
 ox_activity_instance:
-  -
+  - 
     id: 1
-    workflow_instance_id: 1
-    activity_instance_id: "[activityInstanceId]"
     activity_id: 1
+    form_id: 1
+    activity_instance_id: "[activityInstanceId]"
+    workflow_instance_id: 1
+    status: "In Progress"
+    org_id: 1
+ox_activity_instance_assignee:
+  -
+    activity_instance_id: 1
+    user_id: 1
+    assignee: 1
+ox_wf_user_identifier:      
+  -     
+    id: 1       
+    workflow_id: 1      
+    user_id: 1      
+    identifier_name: "padi_number"      
+    identifier:  32552 

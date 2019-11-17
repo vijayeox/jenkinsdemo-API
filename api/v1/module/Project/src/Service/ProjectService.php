@@ -170,7 +170,7 @@ class ProjectService extends AbstractService
         $sql = $this->getSqlObject();
         $form = new Project();
         //Additional fields that are needed for the create
-        $data['uuid'] = UuidUtil::uuid();
+        $data['uuid'] = "p".UuidUtil::uuid();
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
@@ -330,7 +330,7 @@ class ProjectService extends AbstractService
     {
         $queryString = "select ox_project.* , ox_user.username as manager_username, ox_user.uuid as manager_uuid from ox_project
                 inner join ox_user_project on ox_user_project.project_id = ox_project.id inner join ox_user on ox_project.manager_id = ox_user.id";
-        $where = "where ox_user_project.user_id = (SELECT id from ox_user where uuid = '" . $userId. "') AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.isdeleted!=1";
+        $where = "where ox_user_project.user_id ='" . $userId. "' AND ox_project.org_id=".AuthContext::get(AuthConstants::ORG_ID)." AND ox_project.isdeleted!=1";
         $order = "order by ox_project.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         return $resultSet->toArray();

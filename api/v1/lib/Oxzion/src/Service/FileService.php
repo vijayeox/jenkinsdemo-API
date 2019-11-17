@@ -131,6 +131,7 @@ class FileService extends AbstractService
         $changedArray = array_merge($fileObject, $data);
         $changedArray['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $changedArray['date_modified'] = date('Y-m-d H:i:s');
+
         $file->exchangeArray($changedArray);
         $file->validate();
         $fields = array_diff($data, $fileObject);
@@ -279,7 +280,7 @@ class FileService extends AbstractService
                     $keyValueFields[$i]['id'] = $fileArray[$key]['id'];
                     $keyValueFields[$i]['date_modified'] = date('Y-m-d H:i:s');
                     $keyValueFields[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-                    ;
+                    $keyValueFields[$i]['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
                 } else {
                     $keyValueFields[$i]['created_by'] = AuthContext::get(AuthConstants::USER_ID);
                     $keyValueFields[$i]['modified_by'] = AuthContext::get(AuthConstants::USER_ID);

@@ -116,13 +116,17 @@ mattermost()
     then
         echo -e "${RED}MATTERMOST was not packaged so skipping it\n${RESET}"
     else
+    	echo -e "${YELLOW}Backing up current configurations${RESET}"
+    	cp /opt/oxzion/mattermost/config/config.json ${TEMP}/integrations/mattermost/mattermost-server/config/config.json
+    	cp /opt/oxzion/mattermost/config/config.json /home/ubuntu/env/integrations/mattermost/mattermost-server/config/config.json
+    	echo -e "${GREEN}Backing up current configurations completed${RESET}"
         echo -e "${GREEN}Stopping Mattermost service${RESET}"
         systemctl stop mattermost
         echo -e "${YELLOW}Stopped!${RESET}"
         cd ${TEMP}
         rm -R integrations/mattermost/logs
         rm -R integrations/mattermost/data
-        rsync -rl --delete integrations/mattermost/ /opt/oxzion/mattermost/
+        rsync -rl integrations/mattermost/ /opt/oxzion/mattermost/
         ln -s /var/lib/oxzion/chat /opt/oxzion/mattermost/data
         ln -s /var/log/oxzion/chat /opt/oxzion/mattermost/logs
         chown oxzion:oxzion -R /opt/oxzion/mattermost
@@ -142,18 +146,23 @@ orocrm()
         echo -e "${RED}CRM was not packaged so skipping it\n${RESET}"
     else    
         systemctl stop supervisor
+        mkdir -p /var/www/crm
         cd ${TEMP}
         echo -e "${YELLOW}Installing Assets for CRM${RESET}"
         chown ubuntu:ubuntu -R integrations/crm
+        npm install --prefix integrations/crm/build
         runuser -l ubuntu -c "php ${TEMP}/integrations/crm/bin/console oro:assets:install"
+        runuser -l ubuntu -c "php ${TEMP}/integrations/bin/console oro:migration:load --force"
         mkdir -p integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome
         rsync -rl --delete integrations/crm/public/bundles/bowerassets/font-awesome/ integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome/
-        rm -R integrations/crm/var/logs
-        rsync -rl --delete integrations/crm/var/ /var/www/crm/var/
+        if [ ! -L "/var/www/crm/var" ] ;
+        then
+            ln -s /var/lib/oxzion/crm /var/www/crm/var
+            ln -s /var/log/oxzion/crm /var/lib/oxzion/crm/logs    
+        fi
         rm -R integrations/crm/var
+        cp -P /var/www/crm/var integrations/crm/var 
         rsync -rl --delete integrations/crm/ /var/www/crm/
-        ln -s /var/lib/oxzion/crm /var/www/crm/var
-        ln -s /var/log/oxzion/crm /var/lib/oxzion/crm/logs
         chown www-data:www-data -R /var/lib/oxzion/crm
         rsync -rl --delete /var/www/crm/orocrm_supervisor.conf /etc/supervisor/conf.d/
         echo -e "${GREEN}Copying CRM Complete!${RESET}"
@@ -172,6 +181,7 @@ rainloop()
         echo -e "${RED}RAINLOOP was not packaged so skipping it\n${RESET}"
     else
         cd ${TEMP}
+        service apache2 stop
         rsync -rl integrations/rainloop/data/ /var/www/rainloop/data/
         rm -R integrations/rainloop/data
         rsync -rl --delete integrations/rainloop/ /var/www/rainloop/
@@ -179,6 +189,7 @@ rainloop()
         chown www-data:www-data -R /var/www/rainloop
         chown www-data:www-data -R /var/lib/oxzion/rainloop
         echo -e "${GREEN}Copying Rainloop Complete!${RESET}"
+        service apache2 start
     fi
 }
 view()
@@ -250,6 +261,42 @@ openproject()
 
 
 }
+helpapp()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying HelpApp...${RESET}"
+    if [ ! -d "./integrations/help" ] ;
+    then
+        echo -e "${RED}HelpApp was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${YELLOW}Stopping Apache...${RESET}"
+        sudo service apache2 stop
+        echo -e "${YELLOW}Copying HelpApp...${RESET}"
+        rsync -rl --delete ${TEMP}/integrations/help/ /var/www/help/
+        echo -e "${YELLOW}Copying HelpApp Completed...${RESET}"
+        sudo service apache2 start
+        echo -e "${YELLOW}Starting Apache...${RESET}"
+    fi
+}
+#on-hold
+edms()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EDMS...${RESET}"
+    if [ ! -d "./integrations/edms" ] ;
+    then
+        echo -e "${RED}EDMS was not packaged so skipping it\n${RESET}"
+    else
+        cd ${TEMP}/integrations/edms/mayan
+        echo -e "${YELLOW}Creating edms data folder...${RESET}"
+        ln -s /var/lib/oxzion/edms ./media
+        rsync -rl --delete ${TEMP}/integrations/edms/ /var/www/edms/
+        echo -e "${YELLOW}Taking ownership as www-data...${RESET}"
+        chown www-data:www-data -R /var/www/edms
+        chown www-data:www-data -R /var/lib/oxzion/edms
+        echo -e "${GREEN}Copying edms Complete!${RESET}"
+    fi
+}
 #calling functions accordingly
 unpack
 echo -e "${YELLOW}Now copying files to respective locations..${RESET}"
@@ -263,4 +310,6 @@ orocrm
 rainloop
 openproject
 workflow
+helpapp
+#edms
 echo -e "${GREEN}${BLINK}DEPLOYED SUCCESSFULLY${RESET}"

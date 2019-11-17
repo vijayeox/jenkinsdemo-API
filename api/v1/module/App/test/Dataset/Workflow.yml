@@ -115,22 +115,12 @@ ox_file_attribute:
     fieldid: 1
   -
     id: 2
-    fileid: 1
+    workflow_id: 1
+    app_id: 99
     org_id: 1
-    fieldvalue: 1
-    fieldid: 2
-  -
-    id: 3
-    fileid: 1
-    org_id: 1
-    fieldvalue: 2
-    fieldid: 2
-  -
-    id: 4
-    fileid: 2
-    org_id: 1
-    fieldvalue: 2
-    fieldid: 2
+    status: "Completed"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
 ox_app_menu:
   -
     id: 1
@@ -139,6 +129,7 @@ ox_app_menu:
     app_id: 99
     parent_id: 0
     icon: "new data"
+    group_id: 1
     sequence: 1
     date_created: '2019-06-26 00:00:00'
     created_by: 1
@@ -148,6 +139,7 @@ ox_app_menu:
     name: "menu2"
     app_id: 99
     parent_id: 0
+    group_id: 1
     icon: "new data"
     sequence: 2
     date_created: '2019-06-26 00:00:00'
@@ -159,6 +151,7 @@ ox_app_menu:
     app_id: 99
     parent_id: 1
     icon: "icon3"
+    group_id: 1
     sequence: 3
     date_created: '2019-06-26 00:00:00'
     created_by: 1
@@ -198,9 +191,64 @@ ox_page_content:
     content: 'content_2'
     page_id: 1
     type: 2
+    form_id: 1
   -
     id: 3
     sequence: 3
     content: 'content_3'
     page_id: 1
     type: 3
+    form_id: 1
+ox_file:
+  -
+    id: 1
+    workflow_instance_id: 1
+    org_id: 1
+    data: "new data"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
+  -
+    id: 2
+    workflow_instance_id: 1
+    org_id: 1
+    data: "new data"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
+ox_file_attribute:
+  -
+    id: 1
+    fileid: 1
+    org_id: 1
+    fieldvalue: 1
+    fieldid: 1
+  -
+    id: 2
+    fileid: 1
+    org_id: 1
+    fieldvalue: 1
+    fieldid: 2
+  -
+    id: 3
+    fileid: 1
+    org_id: 1
+    fieldvalue: 2
+    fieldid: 2
+  -
+    id: 4
+    fileid: 2
+    org_id: 1
+    fieldvalue: 2
+    fieldid: 2
+
+ox_group:
+  -
+    id: 1
+    uuid: "1141cac2-cb14-11e9-a32f-2a2ae2dbcce4"
+    name: Test group
+    org_id: 1
+    manager_id: 1
+    created_id: 1
+    date_created: '2019-06-26 00:00:00'
+ox_user_group:
+  -
+    id: 1
+    group_id: 1
+    avatar_id: 1  

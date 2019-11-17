@@ -51,32 +51,12 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-    private function executeQueryTest($query)
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        $resultSet = new ResultSet();
-        $resultSet->initialize($result);
-        return $resultSet->toArray();
-    }
 
-
-    private function executeUpdate($query)
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        return $result;
-    }
-  
-
-    
 
     public function testCreateByAdmin()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073']),'preferences' => '{"soundnotification":"true","emailalerts":"false","timezone":"Africa/Tripoli","dateformat":"dd/MM/yyyy"}'];
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -88,7 +68,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
 
-        $query = "SELECT id from ox_user where username = '" .$data['username']."'";
+        $query = "SELECT id,timezone from ox_user where username = '" .$data['username']."'";
         $userId = $this->executeQueryTest($query);
 
         $query = "SELECT * from ox_user_org where user_id = ".$userId[0]['id'];
@@ -106,6 +86,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($userRole[0]['user_id'], $userId[0]['id']);
         $this->assertEquals($userRole[0]['role_id'], 16);
         $this->assertEquals($userRole[1]['role_id'], 17);
+        $this->assertEquals($userId[0]['timezone'], 'Africa/Tripoli');
     }
 
 
@@ -578,7 +559,7 @@ class UserControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => 'John Holt'];
+        $data = ['firstname' => 'John','lastname' => 'Holt','preferences' => '{"soundnotification":"true","emailalerts":"false","timezone":"Africa/Tripoli","dateformat":"dd/MM/yyyy"}'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
@@ -587,13 +568,14 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['firstname'], $data['firstname']);
+        $this->assertEquals($content['data']['lastname'], $data['lastname']);
     }
 
 
     public function testUpdateWithOrgID()
     {
-        $data = ['name' => 'John Holt'];
+        $data = ['firstname' => 'John','lastname' => 'Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
@@ -603,13 +585,14 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
-        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['firstname'], $data['firstname']);
+        $this->assertEquals($content['data']['lastname'], $data['lastname']);
     }
 
 
     public function testUpdateWithInvalidOrgID()
     {
-        $data = ['name' => 'John Holt'];
+        $data = ['firstname' => 'John','lastname' => 'Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
@@ -624,7 +607,7 @@ class UserControllerTest extends ControllerTest
 
     public function testUpdateWithInvalidUserid()
     {
-        $data = ['name' => 'John Holt'];
+        $data = ['firstname' => 'John','lastname' => 'Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user/4fd99e8e-e9-b2d5-68ecc57cde45', 'PUT', null);
@@ -638,7 +621,7 @@ class UserControllerTest extends ControllerTest
 
     public function testUpdateNotFound()
     {
-        $data = ['name' => 'Test User'];
+        $data = ['firstname' => 'Test','lastname' => 'User'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57c6543', 'PUT', null);
@@ -944,6 +927,18 @@ class UserControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['apps'][0]['name'], 'Admin');
+    }
+
+    public function testLoggedInUserComboWithProjects()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user/me/a+pr', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('loggedInUser');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['projects'][0]['name'], 'Test Project 1');
+        $this->assertEquals($content['data']['projects'][1]['uuid'], 'ced672bb-fe33-4f0a-b153-f1d182a02603');
     }
 
     public function testUserAccess()
