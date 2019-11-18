@@ -138,6 +138,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     }
     public function execute(array $data,Persistence $persistenceService)
     {     
+        $documents = array();
         $this->logger->info("Template Data Source - ".print_r($data, true));
         $date = ''; 
         $this->logger->info("Executing Policy Document");
@@ -168,7 +169,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $options['header'] = self::TEMPLATE[$data['product']]['lheader'];
             $options['footer'] = self::TEMPLATE[$data['product']]['lfooter'];
             $this->documentBuilder->generateDocument($lapseTemplate,$data,$lapseDest,$options);
-            $data['lapse_document'] = $dest['relativePath'].$coi_number.'_LapseLetter'.'.pdf';
+            $documents['lapse_document'] = $dest['relativePath'].$coi_number.'_LapseLetter'.'.pdf'; 
             return $data;
         }
 
@@ -183,6 +184,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         } 
         
     
+        
         $options = array();
         if(isset($this->template[$data['product']]['header'])){
             $options['header'] = $this->template[$data['product']]['header'];
@@ -195,7 +197,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         if(isset($this->template[$data['product']]['instruct'])){
             $instruct = $this->template[$data['product']]['instruct'];
             $this->documentBuilder->copyTemplateToDestination($instruct,$dest['relativePath']);
-            $data['instruction_document'] = $dest['relativePath'].$instruct;
+            $documents['instruction_document'] = $dest['relativePath'].$instruct;
         }
         
         if(isset($data['liability'])){
@@ -204,7 +206,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             if(isset($this->template[$data['product']]['policy'])){
                 $policy = $this->template[$data['product']]['policy']['liability'];
-                $data['policy_document'] = $dest['relativePath'].$policy;
+                $documents['policy_document'] = $dest['relativePath'].$policy;
             }
             $data['liability'] = json_encode($data['liability']);
         }
@@ -216,7 +218,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             if(isset($this->template[$data['product']]['policy'])){
                 $policy = $this->template[$data['product']]['policy']['property'];
-                $data['policy_document'] = $dest['relativePath'].$policy;
+                $documents['policy_document'] = $dest['relativePath'].$policy;
             }
             $data['property'] = json_encode($data['property']);
         }
@@ -225,7 +227,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $template = $this->template[$data['product']]['template'];
                 if(isset($this->template[$data['product']]['policy'])){
                 $policy = $this->template[$data['product']]['policy'];
-                $data['policy_document'] = $dest['relativePath'].$policy;
+                $documents['policy_document'] = $dest['relativePath'].$policy;
             }
         }
       
@@ -236,32 +238,22 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor"){
                  $scubaFit =  $this->template[$data['product']]['iplScuba'];
                  $this->documentBuilder->copyTemplateToDestination($scubaFit,$dest['relativePath']);
-                 $data['scuba_fit_document'] = $dest['relativePath'].$scubaFit;
+                 $documents['scuba_fit_document'] = $dest['relativePath'].$scubaFit;
                  array_push($coverageList,$data['scubaFit']);
             }
-            // else{
-            //     $data['scubaFitVal'] = null;
-            // }
             if(isset($data['cylinder']) && ($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor")){
                 $cylinder = $this->template[$data['product']]['iplCylinder'];
                 $this->documentBuilder->copyTemplateToDestination($cylinder,$dest['relativePath']);
-                $data['cylinder_document'] = $dest['relativePath'].$cylinder;
+                $documents['cylinder_document'] = $dest['relativePath'].$cylinder;
                 array_push($coverageList,$data['cylinder']);
             }
 
-            // else{
-            //     $data['cylinder'] = null;
-            // }
             if(isset($data['equipment']) && $data['equipment'] == "equipmentLiabilityCoverage"){
                 $equipment =  $this->template[$data['product']]['iplEquipment'];
                 $this->documentBuilder->copyTemplateToDestination($equipment,$dest['relativePath']);
-                $data['equipment_liability_document'] = $dest['relativePath'].$equipment;
+                $documents['equipment_liability_document'] = $dest['relativePath'].$equipment;
                 $data['equipmentVal'] = 'Included';
            }
-
-           // else{
-           //      $data['equipmentVal'] = 'Not Included';
-           // }
            $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
            $result = json_decode($result,true);
          
@@ -286,10 +278,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
         if(isset($data['additionalInsured'])){
             $temp['additionalInsured'] = json_encode($data['additionalInsured']);
+              unset($data['additionalInsured']);
         }
-
+ 
         if(isset($data['additionalNamedInsured'])){
             $temp['additionalNamedInsured'] = json_encode(array('name' => $data['additionalNamedInsured']));
+          
         }
 
         if(isset($data['groupAdditionalInsured'])){
@@ -306,25 +300,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
         $this->documentBuilder->generateDocument($template, $temp, $destAbsolute, $options);
 
-        $data['coi_document'] = $dest['relativePath'].$template.'.pdf';
+        $documents['coi_document'] = $dest['relativePath'].$template.'.pdf';
 
         if($data['state'] == 'California'){
             if(isset($this->template[$data['product']]['slWording'])){
                 $slWording = $this->template[$data['product']]['slWording'];
                 $this->documentBuilder->copyTemplateToDestination($slWording,$dest['relativePath']);
-                $data['slWording'] = $dest['relativePath'].$slWording;
+                $documents['slWording'] = $dest['relativePath'].$slWording;
             }
-            // $options['append'] = self::TEMPLATE[$data['product']]['append'];
         }
         if(isset($policy)){
             $this->documentBuilder->copyTemplateToDestination($policy,$dest['relativePath']);
         }
-
         if(isset($this->template[$data['product']]['card'])){
             $cardTemplate = $this->template[$data['product']]['card'];
             $cardDest = $dest['absolutePath'].$coi_number.'_Pocket_Card'.'.pdf';
-            $this->documentBuilder->generateDocument($cardTemplate,$data,$cardDest);
-            $data['card'] = $dest['relativePath'].$coi_number.'_Pocket_Card'.'.pdf';
+            $this->documentBuilder->generateDocument($cardTemplate,$temp,$cardDest);
+            $documents['card'] = $dest['relativePath'].$coi_number.'_Pocket_Card'.'.pdf';
         }
 
         if(isset($data['cover_letter']) && $data['cover_letter']){
@@ -332,8 +324,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $coverDest = $dest['absolutePath'].$coi_number.'_Cover_Letter'.'.pdf';
             $options['header'] = $this->template[$data['product']]['lheader'];
             $options['footer'] = $this->template[$data['product']]['lfooter'];
-            $this->documentBuilder->generateDocument($coverTemplate,$data,$coverDest,$options);
-            $data['cover_letter'] = $dest['relativePath'].$coi_number.'_Cover_Letter'.'.pdf';
+            $this->documentBuilder->generateDocument($coverTemplate,$temp,$coverDest,$options);
+            $documents['cover_letter'] = $dest['relativePath'].$coi_number.'_Cover_Letter'.'.pdf';
         }
 
         if(isset($data['lossPayees'])){
@@ -341,8 +333,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $coverDest = $dest['absolutePath'].$coi_number.'_Loss_Payees'.'.pdf';
             $options['header'] = self::TEMPLATE[$data['product']]['lpheader'];
             $options['footer'] = self::TEMPLATE[$data['product']]['lpfooter'];
-            $this->documentBuilder->generateDocument($lpTemplate,$data,$coverDest,$options);
-            $data['loss_payee_document'] = $dest['relativePath'].$coi_number.'_Loss_Payees'.'.pdf';
+            $this->documentBuilder->generateDocument($lpTemplate,$temp,$coverDest,$options);
+            $documents['loss_payee_document'] = $dest['relativePath'].$coi_number.'_Loss_Payees'.'.pdf';
         }
 
         if(isset($data['additionalInsured'])){
@@ -350,15 +342,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $aiDest = $dest['absolutePath'].$data['product'].'_AI'.'.pdf';
             $options['header'] = $this->template[$data['product']]['aiheader'];
             $options['footer'] = $this->template[$data['product']]['aifooter'];
-            $this->documentBuilder->generateDocument($aiTemplate,$data,$aiDest,$options);
-            $data['ai_document'] = $dest['relativePath'].$data['product'].'_AI'.'.pdf';
+            $this->documentBuilder->generateDocument($aiTemplate,$temp,$aiDest,$options);
+            $documents['ai_document'] = $dest['relativePath'].$data['product'].'_AI'.'.pdf';
         }
 
 
         if(isset(self::TEMPLATE[$data['product']]['blanketForm'])){
                 $blanketform = self::TEMPLATE[$data['product']]['blanketForm'];
                 $this->documentBuilder->copyTemplateToDestination($blanketform,$dest['relativePath']);
-                $data['blanket_document'] = $dest['relativePath'].'Individual_AI_Blanket_Endorsement.pdf';
+                $documents['blanket_document'] = $dest['relativePath'].'Individual_AI_Blanket_Endorsement.pdf';
         }
 
         if(isset($data['additionalNamedInsured'])){
@@ -366,8 +358,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $aniDest = $dest['absolutePath'].$data['product'].'_ANI'.'.pdf';
             $options['header'] =  $this->template[$data['product']]['aniheader'];
             $options['footer'] =  $this->template[$data['product']]['anifooter'];
-            $this->documentBuilder->generateDocument($aniTemplate,$data,$aniDest,$options);
-            $data['ani_document'] = $dest['relativePath'].$data['product'].'_ANI'.'.pdf';
+            $this->documentBuilder->generateDocument($aniTemplate,$temp,$aniDest,$options);
+            $documents['ani_document'] = $dest['relativePath'].$data['product'].'_ANI'.'.pdf';
         }
 
         if(isset($data['namedInsured'])){
@@ -375,10 +367,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $aniDest = $dest['absolutePath'].$data['product'].'_NI'.'.pdf';
             $options['header'] =  $this->template[$data['product']]['nheader'];
             $options['footer'] =  $this->template[$data['product']]['nfooter'];
-            $this->documentBuilder->generateDocument($aniTemplate,$data,$aniDest,$options);
-            $data['ani_document'] = $dest['relativePath'].$data['product'].'_NI'.'.pdf';
+            $this->documentBuilder->generateDocument($aniTemplate,$temp,$aniDest,$options);
+            $documents['ani_document'] = $dest['relativePath'].$data['product'].'_NI'.'.pdf';
         }
         $this->logger->info("DATA".print_r($data,true));
+        $data['documents'] = $documents;
         return $data;
     }
 

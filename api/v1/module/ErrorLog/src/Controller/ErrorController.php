@@ -114,4 +114,9 @@ class ErrorController extends AbstractApiControllerHelper
         $result = $this->errorService->getErrorList($filterParams);
         return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
+    public function retryAction() {
+        $errorId = $this->params()->fromRoute()['errorId'];
+        $result = $this->errorService->retryError($errorId);
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
+    }
 }

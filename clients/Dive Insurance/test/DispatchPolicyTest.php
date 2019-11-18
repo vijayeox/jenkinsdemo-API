@@ -15,7 +15,7 @@ class DispatchPolicyTest extends DelegateTest
     public function setUp(): void
     {
         $this->loadConfig();
-        $config = $this->getApplicationConfig();
+        $this->config = $this->getApplicationConfig();
         $this->data = array(
             "appName" => 'ox_client_app',
             'UUID' => 8765765,
@@ -23,12 +23,12 @@ class DispatchPolicyTest extends DelegateTest
             'description' => 'FirstAppOfTheClient',
             'orgUuid' => '53012471-2863-4949-afb1-e69b0891c98a',
         );
-        $this->persistence = new Persistence($config, $this->data['UUID'], $this->data['appName']);
+        $this->persistence = new Persistence( $this->config, $this->data['UUID'], $this->data['appName']);
         $path = __DIR__ . '/../../../api/v1/data/delegate/' . $this->data['UUID'];
         if (!is_link($path)) {
             symlink(__DIR__ . '/../data/delegate/', $path);
         }
-        $this->tempFile = $config['TEMPLATE_FOLDER'] . $this->data['orgUuid'];
+        $this->tempFile =  $this->config['TEMPLATE_FOLDER'] . $this->data['orgUuid'];
         $templateLocation = __DIR__ . "/../data/template";
 
         if (FileUtils::fileExists($this->tempFile)) {
@@ -36,7 +36,7 @@ class DispatchPolicyTest extends DelegateTest
         }
         FileUtils::symlink($templateLocation, $this->tempFile);
 
-        $this->appFolder = $config['APP_DOCUMENT_FOLDER'] . $this->data['orgUuid'];
+        $this->appFolder =  $this->config['APP_DOCUMENT_FOLDER'] . $this->data['orgUuid'];
         if (!file_exists($this->appFolder)) {
             FileUtils::createDirectory($this->appFolder);
         }
@@ -46,8 +46,27 @@ class DispatchPolicyTest extends DelegateTest
             FileUtils::rmDir($this->appFile);
         }
         FileUtils::symlink($appLocation, $this->appFile);
-
+        $this->chmod_r(dirname($this->config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']."/".$this->data['fileUuid']."/"), 777, 777);
         parent::setUp();
+    }
+
+
+    function chmod_r($dir, $dirPermissions, $filePermissions) {
+      $dp = opendir($dir);
+       while($file = readdir($dp)) {
+         if (($file == ".") || ($file == ".."))
+            continue;
+        $fullPath = $dir."/".$file;
+
+         if(is_dir($fullPath)) {
+            chmod($fullPath, $dirPermissions);
+            $this->chmod_r($fullPath, $dirPermissions, $filePermissions);
+         } else {
+            chmod($fullPath, $filePermissions);
+         }
+
+       }
+     closedir($dp);
     }
 
     public function tearDown(): void
@@ -83,10 +102,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
-        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
-        $data['card'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
-        $data['blanket_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','card' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','blanket_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Individual Professional Liability';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
@@ -107,19 +123,14 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/cate.pdf';
-        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/cert.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','card' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','blanket_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Individual Professional Liability';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
-        if (enableCamel == 0) {
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
-        }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
-        $exception = $this->expectException(DelegateException::class);
+        $this->expectException(DelegateException::class);
+        $this->expectExceptionMessage("Documents Not Found");
         $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
-        $this->assertEquals($content, array());
     }
 
     public function testDispatchIplPolicyWithoutRequiredDocument()
@@ -130,19 +141,14 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
-        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Individual Professional Liability';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
-        if (enableCamel == 0) {
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
-        }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
-        $exception = $this->expectException(DelegateException::class);
+        $this->expectException(DelegateException::class);
+        $this->expectExceptionMessage("Required Documents are not Found");
         $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
-        $this->assertEquals($content, array());
     }
 
     public function testDispatchDbPolicy()
@@ -154,9 +160,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
         $data['boat_name'] = 'Orion';
-        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
-        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
-        $data['cover_letter'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Boat';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
@@ -178,18 +182,13 @@ class DispatchPolicyTest extends DelegateTest
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
         $data['boat_name'] = 'Orion';
-        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/ceicate.pdf';
-        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
-        $data['cover_letter'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/ceicate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Boat';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
-        if (enableCamel == 0) {
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
-        }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $exception = $this->expectException(DelegateException::class);
+        $this->expectExceptionMessage("Documents Not Found");
         $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
         $this->assertEquals($content, array());
     }
@@ -203,17 +202,13 @@ class DispatchPolicyTest extends DelegateTest
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
         $data['boat_name'] = 'Orion';
-        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
-        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Boat';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
-        if (enableCamel == 0) {
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
-        }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
-        $exception = $this->expectException(DelegateException::class);
+        $this->expectException(DelegateException::class);
+        $this->expectExceptionMessage("Required Documents are not Found");
         $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
         $this->assertEquals($content, array());
     }
@@ -226,9 +221,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
-        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
-        $data['cover_letter'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document'=>'53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Store';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
@@ -249,17 +242,13 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/cericate.pdf';
-        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['documents'] =  array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/cericate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Store';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
-        if (enableCamel == 0) {
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
-        }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $exception = $this->expectException(DelegateException::class);
+        $this->expectExceptionMessage("Documents Not Found");
         $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
         $this->assertEquals($content, array());
     }
@@ -272,17 +261,13 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['policy_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf';
-        $data['coi_document'] = '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf';
+        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Store';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
-        if (enableCamel == 0) {
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
-        }
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
-        $exception = $this->expectException(DelegateException::class);
+        $this->expectException(DelegateException::class);
+        $this->expectExceptionMessage("Required Documents are not Found");
         $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
         $this->assertEquals($content, array());
     }

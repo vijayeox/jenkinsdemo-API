@@ -40,7 +40,7 @@ class RoutesLoader extends RouteBuilder{
                                     def params = [to: it]
                                     def jsonparams = new JsonBuilder(params).toPrettyString()
                                     def stackTrace = new JsonBuilder(exception).toPrettyString()
-                                    ErrorLog.log('activemq',stackTrace,exchange.getMessage().getBody().toString(),jsonparams)
+                                    ErrorLog.log('activemq_topic',stackTrace,exchange.getMessage().getBody().toString(),jsonparams);
                                     System.out.println("handling ex")
                                 }
                             }).log("Received body ")

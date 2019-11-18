@@ -8,6 +8,25 @@ use Zend\Router\Http\Method;
 return [
     'router' => [
         'routes' => [
+            'ox_error_retry' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/errorlog/:errorId/retry',
+                    'method' => 'POST',
+                    'defaults' => [
+                        'controller' => Controller\RetryController::class,
+                        'action' => 'retry',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            'put' => '',
+                            'post' => '',
+                            'delete' => '',
+                            'get' => '',
+                            'retry' => '',
+                        ],
+                    ],
+                ],
+            ],
             'ox_error_log' => [
                 'type' => Segment::class,
                 'options' => [
