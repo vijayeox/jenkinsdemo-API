@@ -1,7 +1,7 @@
 #!/bin/bash
 #This script is used to deploy build.zip to respective folders
 # exit when any command fails
-#set -e
+set -e
 #trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
 #going back to oxzion3.0 root directory
 cd ../
@@ -145,13 +145,17 @@ orocrm()
     then
         echo -e "${RED}CRM was not packaged so skipping it\n${RESET}"
     else    
+        cd ${TEMP}
         systemctl stop supervisor
         mkdir -p /var/www/crm
-        cd ${TEMP}
-        echo -e "${YELLOW}Installing Assets for CRM${RESET}"
         chown ubuntu:ubuntu -R integrations/crm
-        npm install --prefix integrations/crm/build
+        echo -e "${YELLOW}Installing composer libraries in ${CYAN}crm/vendor${RESET}"
+        runuser -l ubuntu -c "composer install -d ${TEMP}/integrations/crm"
+        echo -e "${YELLOW}Installing node_modules in ${CYAN}crm/build${RESET}"
+        runuser -l ubuntu -c "npm install --prefix ${TEMP}/integrations/crm/build --verbose"
+        echo -e "${YELLOW}Installing Assets for CRM now${RESET}"
         runuser -l ubuntu -c "php ${TEMP}/integrations/crm/bin/console oro:assets:install"
+        echo -e "${YELLOW}Loading migrations now${RESET}"
         runuser -l ubuntu -c "php ${TEMP}/integrations/bin/console oro:migration:load --force"
         mkdir -p integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome
         rsync -rl --delete integrations/crm/public/bundles/bowerassets/font-awesome/ integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome/

@@ -162,7 +162,6 @@ crm()
     echo -e "${YELLOW}Building orocrm${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/integrations/orocrm/* ./orocrm/
-    docker run -t --network="host" -v ${PWD}:/integrations -v /var/lib/oxzion/rainloop/data:/var/www/public/rainloop/data --entrypoint ./orocrm/docker-build.sh integrations
     echo -e "${GREEN}Building orocrm Completed!${RESET}"
     #copying orocrm to build
     echo -e "${YELLOW}Copying Orocrm to build folder....${RESET}"
