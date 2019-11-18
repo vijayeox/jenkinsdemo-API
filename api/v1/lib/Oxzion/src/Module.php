@@ -398,13 +398,13 @@ class Module
                     return new Service\ErrorLogService(
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
-                        $container->get(Model\ErrorLogTable::class)
+                        $container->get(Model\ErrorLogTable::class),
+                        $container->get(Service\UserCacheService::class)
                     );
                 },
                 Messaging\MessageProducer::class => function ($container) {
                     $config = $container->get('config');
-                    return new Messaging\MessageProducer($config,
-                        $container->get(Service\ErrorLogService::class));
+                    return new Messaging\MessageProducer($config,$container->get(Service\ErrorLogService::class));
                 },
             ],
         ];

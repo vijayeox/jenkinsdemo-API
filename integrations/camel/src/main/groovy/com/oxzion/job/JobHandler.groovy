@@ -2,6 +2,8 @@ package com.oxzion.job
 
 import com.oxzion.activemq.Publisher
 import com.oxzion.activemq.Sender
+import com.oxzion.routes.ErrorLog
+import groovy.json.JsonBuilder
 import org.quartz.JobDataMap
 import org.quartz.JobExecutionContext
 import org.quartz.JobExecutionException
@@ -62,6 +64,11 @@ class JobHandler extends QuartzJobBean {
             }
         }catch(Exception ex){
             logger.error("Execute Internal Exception ---- ${ex}")
+            def jsonparams = new JsonBuilder(jobDataMap.JobData.job).toPrettyString()
+            def payload = new JsonBuilder(jobDataMap.JobData).toPrettyString()
+            def stackTrace = new JsonBuilder(ex).toPrettyString()
+            ErrorLog.log('schedule_job',stackTrace,payload,jsonparams)
+            System.out.println("handling ex")
         }
     }
 

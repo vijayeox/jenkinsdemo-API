@@ -87,7 +87,7 @@ public class SendSmtpMail extends RouteBuilder {
                         def params = [to: 'mail']
                         def jsonparams = new JsonBuilder(params).toPrettyString()
                         def stackTrace = new JsonBuilder(exception).toPrettyString()
-                        ErrorLog.log('activemq',stackTrace,exchange.getMessage().getBody().toString(),jsonparams)
+                        ErrorLog.log('activemq_queue',stackTrace,exchange.getMessage().getBody().toString(),jsonparams)
                         System.out.println("handling ex")
                     }
                 })

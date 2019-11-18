@@ -49,7 +49,7 @@ smtp:
   from:
     email: support@eoxvantage.com
 db:
-  host: jdbc:mysql://localhost/appBuilder_oxzionapi_test
+  host: jdbc:mysql://192.168.43.133/appBuilder_oxzionapi_test
   user: bharat
   password: password
 contentType: text/html
@@ -61,4 +61,4 @@ camel:
       host: localhost
       port: 8081
 apikey: 0cb6fd4c-40a5-11e9-a30d-1c1b0d785c98
-authorization-url: http://localhost:8080/auth
+authorization-url: http://192.168.43.133:8080/auth

@@ -18,6 +18,9 @@ class MessageProducer
         $this->logger = Logger::getLogger(__CLASS__);
         $this->errorLogService = $errorLogService;
     }
+    public static function getInstance($config,$errorLogService){
+        return (new self($config,$errorLogService));
+    }
 
     public function sendTopic($message, $topic)
     {
