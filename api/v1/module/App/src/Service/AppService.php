@@ -446,12 +446,8 @@ class AppService extends AbstractService
         $where = "";
         $sort = "name";
         $cntQuery ="SELECT count(id) FROM `ox_app`";
-        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
-            $filterArray = json_decode($filterParams['filter'], true);
-            if (isset($filterArray[0]['filter'])) {
-                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
-                $filterList = $filterArray[0]['filter']['filters'];
-                $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic);
+            if(count($filterParams) > 0 || sizeof($filterParams) > 0){
+                $filterArray = json_decode($filterParams['filter'],true);
             }
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $filterArray[0]['sort'];
@@ -631,6 +627,14 @@ class AppService extends AbstractService
         }
         return $this->formService->getForms($appId, $filterArray);
     }
+
+    // public function getQuery($appId,$queryId) {
+    //     $queryParameters = $this->queryService->getQueryJson($queryId);
+    //     if($queryParameters == 0){
+    //         return 0;
+    //     }
+    //     $result = $this->analytics->runQuery('kibana_sample_data_ecommerce',null,json_decode($queryParameters['query'],true));
+    // }
 
     public function registerApps($data)
     {

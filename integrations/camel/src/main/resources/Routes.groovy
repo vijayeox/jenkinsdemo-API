@@ -29,8 +29,11 @@ routes {
         ['from':'activemq:topic:USERTOGROUP_ADDED', 'to':["${callback.URL}/callback/chat/addusertochannel"]],
         ['from':'activemq:topic:USERTOGROUP_DELETED', 'to':["${callback.URL}/callback/chat/removeuserfromchannel"]],
         ['from':'activemq:topic:ADD_CALENDAR_EVENT', 'to':["${callback.URL}/callback/calendar/addevent"]],
-        ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}/callback/ox/createuser"]]
-        
+        ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}/callback/ox/createuser"]],
+
+        ['from':'activemq:topic:FILE_ADDED', 'to':["${callback.URL}/fileindexer"]],
+        ['from':'activemq:topic:FILE_UPDATED', 'to':["${callback.URL}/fileindexer"]],
+        ['from':'activemq:topic:FILE_DELETED', 'to':["${callback.URL}/fileindexer"]]
         // ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}"]],
         // ['from':'activemq:topic:USER_DELETED', 'to':["${callback.URL}"]]
     ]

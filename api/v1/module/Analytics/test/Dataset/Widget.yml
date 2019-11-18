@@ -1,0 +1,25 @@
+ox_widget:
+  -
+    id: 1
+    uuid: '51e881c3-040d-44d8-9295-f2c3130bafbc'
+    query_id: 1
+    visualization_id: 2
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'widget1'
+    configuration: 'sample config'
+  -
+    id: 2
+    uuid: '0e57b45f-5938-4e26-acd8-d65fb89e8503'
+    query_id: 2
+    visualization_id: 1
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'widget2'
+    configuration: 'sample config2'

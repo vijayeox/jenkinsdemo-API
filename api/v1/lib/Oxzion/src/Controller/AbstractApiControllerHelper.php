@@ -180,7 +180,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     protected function getErrorResponse($message, $code = 200, array $data = null)
     {
         $this->response->setStatusCode($code);
-        return ErrorHandler::buildErrorJson($message, $data);
+        return ErrorHandler::buildErrorJson($message, $data, $code);
     }
     protected function getInvalidMethod()
     {

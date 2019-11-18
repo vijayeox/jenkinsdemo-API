@@ -358,7 +358,7 @@ class ContactControllerTest extends ControllerTest
     public function testContactExportByUuid()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['contactUuid' => array(['uuid' => '143949cf-6696-42ad-877a-26e8119603c3'])];
+        $data = ['143949cf-6696-42ad-877a-26e8119603c3'];
         $this->dispatch('/contact/export', 'POST');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Contact');
@@ -373,7 +373,7 @@ class ContactControllerTest extends ControllerTest
 
     public function testMultipleContactDelete(){
         $this->initAuthToken($this->adminUser);
-        $data = ['uuid' => ['c384bdbf-48e1-4180-937a-08e5852718ea','c384bdbf-48e1-4180-937a-08e585271ng6']];
+        $data = ['c384bdbf-48e1-4180-937a-08e5852718ea'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contacts/delete', 'POST',$data);
         $this->assertResponseStatusCode(200);
@@ -385,12 +385,12 @@ class ContactControllerTest extends ControllerTest
         $this->assertMatchedRouteName('contactsDelete');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($result),0);
+        $this->assertEquals(count($result),1);
     }
 
     public function testConactDeleteofDifferentOwner(){
         $this->initAuthToken($this->adminUser);
-        $data = ['uuid' => ['143949cf-6696-42ad-877a-26e8119603c3']];
+        $data = ['143949cf-6696-42ad-877a-26e8119603c3'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contacts/delete', 'POST',$data);
         $this->assertResponseStatusCode(200);

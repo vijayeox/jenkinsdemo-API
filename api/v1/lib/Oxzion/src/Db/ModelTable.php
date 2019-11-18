@@ -136,4 +136,32 @@ abstract class ModelTable
             return $e->getMessage();
         }
     }
+
+    protected function internalSave2(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if(!empty($value['value']))
+                $data[$key] = $value['value'];
+            else
+                unset($data[$key]);
+        }
+        $this->init();
+        $id = null;
+        if (!empty($data['id'])) {
+            $id = $data['id'];
+        }
+        try {
+            if (is_null($id) || $id === 0 || empty($id)) {
+                $rows = $this->tableGateway->insert($data);
+                if (!isset($rows)) {
+                    return 0;
+                }
+                $this->lastInsertValue = $this->tableGateway->getLastInsertValue();
+                return $rows;
+            }
+            return $this->tableGateway->update($data, ['id' => $id]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

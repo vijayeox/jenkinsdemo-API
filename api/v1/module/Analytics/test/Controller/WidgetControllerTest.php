@@ -1,0 +1,267 @@
+<?php
+namespace Analytics;
+
+use Analytics\Controller\WidgetController;
+use Analytics\Model;
+use Oxzion\Test\ControllerTest;
+use PHPUnit\DbUnit\DataSet\YamlDataSet;
+use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
+use Oxzion\Search\Indexer;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+
+class WidgetControllerTest extends ControllerTest
+{
+
+    public function setUp() : void
+    {
+        $this->loadConfig();
+        parent::setUp();
+
+    }
+
+    public function createIndex($indexer, $body)
+    {
+        $entity_name = 'test';
+        $app_name = $body['app_name'];
+        $id = $body['id'];
+        AuthContext::put(AuthConstants::ORG_ID, $body['org_id']);
+        $return=$indexer->index($app_name, $id, $entity_name, $body);
+    }
+
+    public function setElasticData()
+    {
+        $parser = new SymfonyYamlParser();
+        $eDataset = $parser->parseYaml(dirname(__FILE__)."/../Dataset/Elastic.yml");
+        $indexer=  $this->getApplicationServiceLocator()->get(Indexer::class);
+  //      $indexer->delete('sampleapp_index', 'all');
+  //      $indexer->delete('crm_index', 'all');
+        sleep(1);
+        $dataset = $eDataset['ox_elastic'];
+        foreach ($dataset as $body) {
+            $this->createIndex($indexer, $body);
+        }
+    }
+
+    public function getDataSet()
+    {
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/DataSource.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Query.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Visualization.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Widget.yml");
+        return $dataset;
+    }
+
+    protected function setDefaultAsserts()
+    {
+        $this->assertModuleName('Analytics');
+        $this->assertControllerName(WidgetController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('WidgetController');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+    }
+
+    public function testCreate()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['query_uuid' => '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1','visualization_id' => 2, 'ispublic' => 1 , 'name' => 'widget3' , 'configuration' => 'sample configuration'];
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_widget'));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/widget', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('analytics_widget');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['query_id'], $data['query_id']);
+        $this->assertEquals($content['data']['ispublic'], $data['ispublic']);
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_widget'));
+    }
+
+    public function testCreateWithoutRequiredField()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['query_id' => 3,'visualization_id' => 2];
+        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_widget'));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/widget', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('analytics_widget');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Validation Errors');
+        $this->assertEquals($content['data']['errors']['configuration'], 'required');
+        $this->assertEquals($content['data']['errors']['name'], 'required');
+    }
+
+    public function testUpdate()
+    {
+        $data = ['visualization_id' => 1];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc', 'PUT', null);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('analytics_widget');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['visualization_id'], $data['visualization_id']);
+    }
+
+    public function testUpdateNotFound()
+    {
+        $data = ['visualization_id' => 1];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/widget/1000', 'PUT', null);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('analytics_widget');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testDelete()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc', 'DELETE');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('analytics_widget');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+    }
+
+    public function testDeleteNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/10000', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('analytics_widget');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testGet() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['widget']['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
+//        $this->assertEquals($content['data']['widget']['query_id'],1);
+ //       $this->assertEquals($content['data']['widget']['visualization_id'],2);
+    }
+
+    public function testGetWithParams() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?config=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['widget']['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
+        $this->assertEquals($content['data']['widget']['ispublic'],1);
+     //   $this->assertEquals($content['data']['configuration'],'sample config');
+    }
+
+ 
+    public function testGetWithData() {
+        if (enableElastic!=0) {
+            $this->setElasticData();
+            sleep(1) ;
+        }
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['widget']['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
+        $this->assertEquals($content['data']['widget']['data']['0']['name'], 'cfield3text');
+        $this->assertEquals($content['data']['widget']['data']['0']['value'], '35');
+     }
+
+    public function testGetWithConfig() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?config=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['widget']['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
+    }
+
+    public function testGetNotFound() {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget/100', 'GET');
+        $this->assertResponseStatusCode(404);
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testGetList()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
+        $this->assertEquals($content['data']['data'][0]['is_owner'], 'true');
+        $this->assertEquals($content['data']['data'][0]['name'], 'widget1');
+        $this->assertEquals($content['data']['data'][1]['name'], 'widget2');
+        $this->assertEquals($content['data']['data'][0]['org_id'], 1);
+        $this->assertEquals($content['data']['data'][1]['uuid'], '0e57b45f-5938-4e26-acd8-d65fb89e8503');
+        $this->assertEquals($content['data']['total'],2);
+    }
+
+    public function testGetListWithSort()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget?sort=[{"field":"visualization_id","dir":"asc"}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']['data']), 2);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '0e57b45f-5938-4e26-acd8-d65fb89e8503');
+        $this->assertEquals($content['data']['data'][0]['name'], 'widget2');
+        $this->assertEquals($content['data']['data'][1]['name'], 'widget1');
+        $this->assertEquals($content['data']['data'][1]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
+        $this->assertEquals($content['data']['total'],2);
+    }
+
+     public function testGetListSortWithPageSize()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget?skip=1&limit=10&sort=[{"field":"visualization_id","dir":"asc"}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']['data']), 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
+        $this->assertEquals($content['data']['data'][0]['name'], 'widget1');
+        $this->assertEquals($content['data']['data'][0]['org_id'], 1);
+        $this->assertEquals($content['data']['total'],2);
+    }
+
+    public function testGetListwithQueryParameters()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/widget?limit=10&sort=[{"field":"id","dir":"desc"}]&filter=[{"logic":"and"},{"filters":[{"field":"visualization_id","operator":"neq","value":"2"}]}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']['data']), 1);
+        $this->assertEquals($content['data']['data'][0]['uuid'], '0e57b45f-5938-4e26-acd8-d65fb89e8503');
+        $this->assertEquals($content['data']['data'][0]['name'], 'widget2');
+        $this->assertEquals($content['data']['total'],1);
+    }
+}

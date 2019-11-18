@@ -16,6 +16,8 @@ use Oxzion\Test\MainControllerTest;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 
+use function GuzzleHttp\json_encode;
+
 class AnalyticsTest extends MainControllerTest
 {
     private $dataset;
@@ -26,14 +28,13 @@ class AnalyticsTest extends MainControllerTest
     {
         $this->loadConfig();
         parent::setUp();
-        if (enableElastic!=0) {
+        if(enableElastic!=0){
             $this->setSearchData();
             $config = $this->getApplicationConfig();
             $this->setupData();
-            sleep(1) ;
+            sleep (2) ;
         }
     }
-    
 
     public function setSearchData()
     {
@@ -41,13 +42,11 @@ class AnalyticsTest extends MainControllerTest
         $this->dataset = $parser->parseYaml(dirname(__FILE__)."/Dataset/Analytics.yml");
     }
 
-    public function createIndex($indexer, $body)
-    {
-        $type = 'type';
-        $app_id = $body['app_id'];
+    public function createIndex($indexer,$body) {
+        $app_name = $body['app_name'];
         $id = $body['id'];
         AuthContext::put(AuthConstants::ORG_ID, $body['org_id']);
-        $return=$indexer->index($app_id, $id, $type, $body);
+        $return=$indexer->index($app_name, $id, null, $body);   //entity_name is taken from the body, so passing null
     }
 
     public function setupData()
@@ -59,10 +58,8 @@ class AnalyticsTest extends MainControllerTest
         }
     }
 
-    
-    public function testGrouping()
-    {
-        if (enableElastic==0) {
+    public function testGrouping() {
+        if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
@@ -72,15 +69,12 @@ class AnalyticsTest extends MainControllerTest
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe");
         $this->assertEquals($results[0]['value'], "800");
-        $this->assertEquals($results[0]['grouplist'], "created_by");
         $this->assertEquals($results[1]['name'], "Mike Price");
         $this->assertEquals($results[1]['value'], "50.5");
-        $this->assertEquals($results[1]['grouplist'], "created_by");
     }
 
-    public function testDoubleGrouping()
-    {
-        if (enableElastic==0) {
+    public function testDoubleGrouping() {
+        if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
@@ -90,15 +84,12 @@ class AnalyticsTest extends MainControllerTest
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe - A");
         $this->assertEquals($results[0]['value'], "200");
-        $this->assertEquals($results[0]['grouplist'][0], "John Doe");
         $this->assertEquals($results[2]['name'], "Mike Price - A");
         $this->assertEquals($results[2]['value'], "50.5");
-        $this->assertEquals($results[2]['grouplist'][0], "Mike Price");
     }
 
-    public function testDoubleGroupingCount()
-    {
-        if (enableElastic==0) {
+    public function testDoubleGroupingCount() {
+        if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
@@ -108,15 +99,12 @@ class AnalyticsTest extends MainControllerTest
         $results = $results['data'];
         $this->assertEquals($results[0]['name'], "John Doe - A");
         $this->assertEquals($results[0]['value'], "1");
-        $this->assertEquals($results[0]['grouplist'][0], "John Doe");
         $this->assertEquals($results[2]['name'], "Mike Price - A");
         $this->assertEquals($results[2]['value'], "1");
-        $this->assertEquals($results[2]['grouplist'][0], "Mike Price");
     }
 
-    public function testLists()
-    {
-        if (enableElastic==0) {
+    public function testLists() {
+        if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
@@ -129,9 +117,8 @@ class AnalyticsTest extends MainControllerTest
         $this->assertEquals($results[0]['created_by'], "Mike Price");
     }
 
-    public function testAggregatesNoGroups()
-    {
-        if (enableElastic==0) {
+    public function testAggregatesNoGroups() {
+        if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
@@ -139,12 +126,11 @@ class AnalyticsTest extends MainControllerTest
         $parameters = ['operation'=>'sum','field'=>'amount','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
-        $this->assertEquals($results, 950.5);
+        $this->assertEquals($results,950.5);
     }
 
-    public function testOnlyFilters()
-    {
-        if (enableElastic==0) {
+    public function testOnlyFilters() {
+        if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
@@ -155,9 +141,8 @@ class AnalyticsTest extends MainControllerTest
         $this->assertEquals($results, 4);
     }
 
-    public function testDefaultField()
-    {
-        if (enableElastic==0) {
+    public function testDefaultField() {
+        if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
@@ -171,13 +156,140 @@ class AnalyticsTest extends MainControllerTest
         $this->assertEquals($results[1]['value'], "1");
     }
 
+    public function testWorkflowData() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['group'=>'field3','field'=>'field5','operation'=>'avg'];
+        $results = $ae->runQuery('sampleapp', 'TaskSystem', $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results[0]['name'], "field3text");
+        $this->assertEquals($results[0]['value'], "15");
+        $this->assertEquals($results[1]['name'], "cfield3text");
+        $this->assertEquals($results[1]['value'], "30");
+    }
+
+    public function testCrmDataWithFilter() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['filter'=>['AND'=>
+                 [
+                     ['numberOfEmployees'=>[5,'<=']],
+                     ['OR'=>
+                        [
+                            ['owner_username'=>'bharatg'],
+                            ['owner_username'=>'mehul']
+                        ]
+                     ]
+                ]],'operation'=>'count'];
+        $results = $ae->runQuery('crm', 'Lead', $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results, 2);
+    }
+
+
+    public function testCrmComplexFilterNot() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['filter'=>['NOT'=>
+                 [
+                     ['numberOfEmployees'=>[5,'>=']]
+                ]],'operation'=>'count'];
+        $results = $ae->runQuery('crm', 'Lead', $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results, 1);
+    }
+
+    public function testCrmComplexFilterSymbols() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['filter'=>['AND'=>
+                 [
+                     ['numberOfEmployees'=>[4,'>']],
+                     ['numberOfEmployees'=>[10,'<']],
+                ]],'operation'=>'sum','field'=>'numberOfEmployees'];
+        $results = $ae->runQuery('crm', 'Lead', $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results, 13.0);
+    }
+
+    public function testCrmComplexFilterNotNoArray() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['filter'=>['NOT'=>
+                 [
+                     'owner_username'=>'bharatg'
+                ]],'operation'=>'count'];
+        $results = $ae->runQuery('crm', 'Lead', $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results, 1);
+    }
+
     public function tearDown()
     {
-        parent::tearDown();
-        if (enableElastic!=0) {
+         parent::tearDown();
+         if(enableElastic!=0){
             $indexer=  $this->getApplicationServiceLocator()->get(Indexer::class);
-            $return1=$indexer->delete('11_test', 'all');
-            $return2=$indexer->delete('12_test', 'all');
+            $return1=$indexer->delete('11_test_index','all');
+            $return2=$indexer->delete('12_test_index','all');
+            $return3=$indexer->delete('sampleapp_index','all');
         }
     }
+
+    public function testExpressionWithGrouping() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['group'=>'created_by','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created','expression'=>'/10'];
+        $results = $ae->runQuery('11_test', null, $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results[0]['name'], "John Doe");
+        $this->assertEquals($results[0]['value'], "80");
+        $this->assertEquals($results[1]['name'], "Mike Price");
+        $this->assertEquals($results[1]['value'], "5.05");
+    }
+
+    public function testRoundingWithGrouping() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['group'=>'created_by','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created','expression'=>'*23/53','round'=>'2'];
+        $results = $ae->runQuery('11_test', null, $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results[0]['name'], "John Doe");
+        $this->assertEquals($results[0]['value'], "347.17");
+        $this->assertEquals($results[1]['name'], "Mike Price");
+        $this->assertEquals($results[1]['value'], "21.92");
+    }
+
+    public function testExpressionsNoGroups() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 1);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['operation'=>'sum','field'=>'amount','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created','expression'=>'*10'];
+        $results = $ae->runQuery('11_test', null, $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results,9505);
+    }
+
 }

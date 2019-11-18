@@ -482,7 +482,7 @@ class ContactService extends AbstractService
                         || (empty($data['Phone 1 - Value']) && empty($data['E-mail 1 - Value']))
                         || ($data['Phone 1 - Value'] == "null" && empty($data['E-mail 1 - Value']))
                         || ($data['E-mail 1 - Value'] == "null" && empty($data['Phone 1 - Value']))) {
-                        $data['Comments'] = "Given Name and Phone 1 - Value or Email 1 - Value Fields are required";
+                        $data['Comments'] = "Given Name and Phone 1 - Value or E-mail 1 - Value Fields are required";
                         array_push($error_list, $data);
                         continue;
                     }
@@ -514,6 +514,7 @@ class ContactService extends AbstractService
                             }
                         }
                         unset($email,$phone);
+                        $data['Additional Name'] = isset($data['Additional Name']) ? $data['Additional Name'] : ' ';
                         $finalArray['uuid'] = UuidUtil::uuid();
                         $finalArray['first_name'] = $data['Given Name'] ." ".$data['Additional Name'];
                         $finalArray['last_name'] = $data['Family Name'];
@@ -635,6 +636,7 @@ class ContactService extends AbstractService
                 }
             }
 
+            $finalArray[$x]['Address 1 - Formatted'] = isset($result[$x]['address_1']) ? $result[$x]['address_1'] : null;
             $finalArray[$x]['Organization 1 - Name'] = isset($result[$x]['company_name']) ? $result[$x]['company_name'] : null;
             $finalArray[$x]['Organization 1 - Title'] = isset($result[$x]['designation']) ? $result[$x]['designation'] : null;
             $finalArray[$x]['Address 1 - Street'] = isset($result[$x]['address1']) ? $result[$x]['address1'] : null;
@@ -673,7 +675,6 @@ class ContactService extends AbstractService
         array_push($headers, 'Organization 1 - Name', 'Organization 1 - Title', 'Address 1 - Street','Address 1 - Extended Address','Address 1 - City','Address 1 - Region','Address 1 - Country','Address 1 - Postal Code', 'Name Prefix', 'Name Suffix', 'Initials', 'Nickname', 'Short Name', 'Maiden Name');
 
         array_push($finalList, $headers);
-  
         for ($l=0;$l<sizeof($finalArray);$l++) {
             $export = array();
             for ($k=0;$k<sizeof($headers);$k++) {

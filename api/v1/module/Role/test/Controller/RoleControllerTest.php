@@ -166,7 +166,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(13, count($content['data']));
+        $this->assertEquals(18, count($content['data']));
         foreach ($content['data'] as $key => $val) {
             if($val['privilege_name'] == "MANAGE_ANNOUNCEMENT"){
                 $this->assertEquals($val['permission'], 3);

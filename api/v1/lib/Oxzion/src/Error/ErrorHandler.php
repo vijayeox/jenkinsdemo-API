@@ -23,9 +23,12 @@ class ErrorHandler
     {
         return self::getJsonModelError($e);
     }
-    public static function buildErrorJson($message, array $data = null)
+    public static function buildErrorJson($message, array $data = null, $errorCode = 0)
     {
         $payload = ['status' => 'error'];
+        if ($errorCode != 0) {
+            $payload['errorCode'] = $errorCode;
+        }
         if (! is_null($message)) {
             $payload['message'] = $message;
         }

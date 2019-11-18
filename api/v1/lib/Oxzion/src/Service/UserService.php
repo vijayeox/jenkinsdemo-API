@@ -222,6 +222,12 @@ class UserService extends AbstractService
         if(isset($data['managerid'])){
             $data['managerid'] = $this->getIdFromUuid('ox_user', $data['managerid']);
         }
+        if(isset($data['preferences'])){
+            $preferences = json_decode($data['preferences'],true);
+            $data['timezone'] = $preferences['timezone'];
+            unset($preferences['timezone']);
+            $data['preferences'] = json_encode($preferences);
+        }
         $password = BosUtils::randomPassword();
         if (isset($password)) {
             $data['password'] = md5(sha1($password));
@@ -274,20 +280,20 @@ class UserService extends AbstractService
     }
 
 
-    public function addRoleToUser($id,$role,$orgId){
-        $obj = $this->table->getByUuid($id,array());
+    public function addRoleToUser($id, $role, $orgId)
+    {
+        $obj = $this->table->getByUuid($id, array());
         if (is_null($obj)) {
-            throw new ServiceException("Failed to create a new entity","failed.create.user");
+            return 0;
         }
-        if(!isset($role) || empty($role)) {
-            throw new ServiceException("User should be assigned to atleast one role","failed.create.addrole");
+        if (!isset($role) || empty($role)) {
+            return 2;
         }
         $userId = $obj->id;
         
-        if($role){
+        if ($role) {
             $roleSingleArray= array_map('current', $role);
-            try{
-               
+            try {
                 $delete = "DELETE our FROM ox_user_role as our
                             inner join ox_role as oro on our.role_id = oro.id where oro.uuid not in ('".implode("','", $roleSingleArray)."') and our.user_id = ".$userId." and oro.org_id =".$orgId;
 
@@ -297,8 +303,7 @@ class UserService extends AbstractService
 
                
                 $resultInsert = $this->runGenericQuery($query);
-            }
-            catch(Exception $e){
+            } catch (Exception $e) {
                 throw $e;
             }
             return 1;
@@ -306,7 +311,8 @@ class UserService extends AbstractService
         throw new ServiceException("Failed to create a new entity","failed.create.user");
     }
 
-    private function getRoleIdList($uuidList){
+    private function getRoleIdList($uuidList)
+    {
         $uuidList= array_unique(array_map('current', $uuidList));
         $query = "SELECT id from ox_role where uuid in ('".implode("','", $uuidList) . "')";
         $result = $this->executeQueryWithParams($query)->toArray();
@@ -481,7 +487,7 @@ class UserService extends AbstractService
             if (!is_array($userdata['preferences'])) {
                 $preferences = json_decode($userdata['preferences'], true);
             } else {
-                $preferences =$userdata['preferences'];
+                $preferences = $userdata['preferences'];
             }
             if (isset($preferences['timezone'])) {
                 $userdata['timezone'] = $preferences['timezone'];
@@ -656,6 +662,7 @@ class UserService extends AbstractService
             $result = $resultSet->toArray();
             for($x=0;$x<sizeof($result);$x++) {
                  $result[$x]['preferences'] = json_decode($result[$x]['preferences'],true);
+                 $result[$x]['preferences']['timezone'] = $result[$x]['timezone'];
                  $result[$x]['icon'] = $baseUrl . "/user/profile/" . $result[$x]['uuid'];
             }
             return array('data' => $result,
@@ -800,7 +807,8 @@ class UserService extends AbstractService
             return 0;
         }
         $result = $response[0];
-        $result['preferences'] = json_decode($response[0]['preferences']);
+        $result['preferences'] = json_decode($response[0]['preferences'], true);
+        $result['preferences']['timezone'] = $result['timezone'];
         $result['orgid'] = $this->getUuidFromId('ox_organization',$result['orgid']);
         $result['managerid'] = $this->getUuidFromId('ox_user',$result['managerid']);
         if (isset($result)) {

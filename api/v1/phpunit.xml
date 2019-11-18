@@ -8,6 +8,10 @@
             <directory>./module/Attachment/test</directory>
             <directory>./module/Resource/test</directory>
         </testsuite>
+        <testsuite name="Analytics Fixtures">
+            <directory>./module/Analytics/test</directory>
+            <directory>./module/FileIndexer/test</directory>
+        </testsuite>
         <testsuite name="Home Page Fixtures">
             <directory>./module/Auth/test</directory>
             <directory>./module/Screen/test</directory>
@@ -50,7 +54,7 @@
         </testsuite>
     </testsuites> 
     <php>
-        <ini name="memory_limit" value="250M" />
+        <ini name="memory_limit" value="500M" />
         <const name="enableNLP" value="0"/>
         <const name="enableCamunda" value="0"/>
         <const name="enableElastic" value="0"/>

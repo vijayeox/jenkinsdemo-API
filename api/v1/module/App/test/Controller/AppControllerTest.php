@@ -792,4 +792,13 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['total'], 1);
     }
+
+    // public function testgetQuery() {
+    //     $this->initAuthToken($this->adminUser);
+    //     $this->dispatch('/app/somerandom123/query/8f1d2819-c5ff-4426-bc40-f7a20704a738','GET');
+    //     $content = json_decode($this->getResponse()->getContent(), true);
+    //     $this->assertResponseStatusCode(200);
+    //     $this->setDefaultAsserts();
+    //     print_r($content);exit;
+    // }
 }

@@ -22,6 +22,30 @@ CYAN="\e[96m"
 BLINK="\e[5m"
 INVERT="\e[7m"
 RESET="\e[0m"
+
+#help function to print help message
+buildhelp()
+{
+    echo -e "1.  all             -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
+    echo -e "2.  api             -${YELLOW}For packaging API.${RESET}"
+    echo -e "3.  view            -${YELLOW}For packaging UI/View.${RESET}"
+    echo -e "4.  workflow        -${YELLOW}For packaging workflow.${RESET}"
+    echo -e "5.  integrations    -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
+    echo -e "6.  calendar        -${YELLOW}For packaging Event Calendar.${RESET}"
+    echo -e "7.  camel           -${YELLOW}For packaging Apache Camel.${RESET}"
+    echo -e "8.  chat            -${YELLOW}For packaging Mattermost Chat.${RESET}"
+    echo -e "9.  crm             -${YELLOW}For packaging OroCRM.${RESET}"
+    echo -e "10. mail            -${YELLOW}For packaging Rainloop Mail.${RESET}"
+    echo -e "11. openproject     -${YELLOW}For packaging Openproject.${RESET}"
+    echo -e "12. helpapp         -${YELLOW}For packaging HelpApp.${RESET}"
+    echo -e "13. edms         -${YELLOW}For packaging EDMS.${RESET}"
+    echo -e "14. --help or -h    -${YELLOW}For help.${RESET}"
+    echo -e "15. list            -${YELLOW}For list of options.${RESET}"
+    echo -e "16. deploy          -${YELLOW}For deploying to production${RESET}"
+    echo -e "17. clean           -${YELLOW}For cleaning the production server${RESET}"
+    echo -e "18. setup           -${YELLOW}For fresh setup of the production server${RESET}"
+    echo -e "19. package         -${YELLOW}For packaging existing build${RESET}"
+}
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
 #if [ -z "$1" ] || [ -z "$2" ];
@@ -31,23 +55,7 @@ then
     echo -e "For example type \n$ ${GREEN}build.sh calendar${YELLOW}(build option) ${GREEN}abc@xyz.com${YELLOW}(server name){GREEN}~/.ssh/abc.pem${YELLOW}(identity file path)${RESET}.\nSee build option list below."
     echo -e "Type '$0 --help' or '$0 -h' for more information."
     echo -e "${BLUEBG}Argument list:${RESET}"
-    echo -e "1. all             -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
-    echo -e "2. api             -${YELLOW}For packaging API.${RESET}"
-    echo -e "3. view            -${YELLOW}For packaging UI/View.${RESET}"
-    echo -e "4. workflow        -${YELLOW}For packaging workflow.${RESET}"
-    echo -e "5. integrations    -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
-    echo -e "6. calendar        -${YELLOW}For packaging Event Calendar.${RESET}"
-	echo -e "7. camel           -${YELLOW}For packaging Apache Camel.${RESET}"
-    echo -e "8. chat            -${YELLOW}For packaging Mattermost Chat.${RESET}"
-    echo -e "9. crm             -${YELLOW}For packaging OroCRM.${RESET}"
-	echo -e "10. mail           -${YELLOW}For packaging Rainloop Mail.${RESET}"
-    echo -e "10. openproject    -${YELLOW}For packaging Rainloop Mail.${RESET}"
-	echo -e "11. --help or -h   -${YELLOW}For help.${RESET}"
-    echo -e "12. list           -${YELLOW}For list of options.${RESET}"
-    echo -e "13. deploy         -${YELLOW}For deploying to production${RESET}"
-    echo -e "14. clean          -${YELLOW}For cleaning the production server${RESET}"
-    echo -e "15. setup          -${YELLOW}For fresh setup of the production server${RESET}"
-    echo -e "16. package        -${YELLOW}For packaging existing build${RESET}"
+    buildhelp
     exit 0
 fi
 #writing functions for different tasks
@@ -170,7 +178,7 @@ mail()
     echo -e "${YELLOW}Building Rainloop...${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/integrations/rainloop/.env.js ./
-    docker run -t -v ${PWD}:/app -p 8081:8081 view ./dockerbuild.sh
+    docker run -t -v ${PWD}:/app view ./dockerbuild.sh
     echo -e "${GREEN}Building Rainloop Completed!${RESET}"
     #copying contents of src folder to build/integrations/rainloop
     echo -e "${YELLOW}Copying Rainloop to build folder...${RESET}"
@@ -185,7 +193,7 @@ view()
     echo -e "${YELLOW}Build UI/view${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/view/* ./
-    docker run -t -v ${PWD}:/app -p 8081:8081 view ./dockerbuild.sh
+    docker run -t -v ${PWD}:/app view ./dockerbuild.sh
     echo -e "${GREEN}Building UI/view Completed!${RESET}"
     cd ..
     #copy contents of view to build
@@ -218,12 +226,39 @@ openproject()
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/integrations/openproject/config/* ./config/
     echo -e "${YELLOW}Building Openproject...${RESET}"
-    docker run -t -v ${PWD}:/app -p 8095:80 --entrypoint ./dockerbuild.sh openproject_build
+    docker run -t -v ${PWD}:/app --entrypoint ./dockerbuild.sh openproject_build
     echo -e "${GREEN}Building Openproject Completed!${RESET}"
     echo -e "${YELLOW}Now Copying Openproject to build folder...${RESET}"
     rsync -rl --exclude=node_modules ${OXHOME}/integrations/openproject/ ${OXHOME}/build/integrations/openproject/
     rm -rf ${OXHOME}/build/integrations/openproject/files ${OXHOME}/build/integrations/openproject/log
     echo -e "${GREEN}Copying Openproject Completed!${RESET}"
+
+}
+helpapp()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory build/integrations/help...${RESET}"
+    mkdir -p build/integrations/help/chat build/integrations/help/crm build/integrations/help/task
+    cd ${OXHOME}/integrations/help
+    echo -e "${YELLOW}Building HelpApp...${RESET}"
+    docker run -t -v ${PWD}:/app help
+    echo -e "${GREEN}Building HelpApp Completed!${RESET}"
+    echo -e "${YELLOW}Now Copying HelpApp to build folder...${RESET}"
+    rsync -rl ${OXHOME}/integrations/help/chat/build/html/* ${OXHOME}/build/integrations/help/chat
+    rsync -rl ${OXHOME}/integrations/help/crm/_build/html/* ${OXHOME}/build/integrations/help/crm
+    rsync -rl ${OXHOME}/integrations/help/task/* ${OXHOME}/build/integrations/help/task
+    echo -e "${GREEN}Copying HelpApp Completed!${RESET}"
+
+}
+#on-hold
+edms()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory build/integrations/edms...${RESET}"
+    mkdir -p build/integrations/edms
+    echo -e "${YELLOW}Copying edms to build folder...${RESET}"
+    rsync -rl --delete ${OXHOME}/integrations/edms/mayan-edms/ ${OXHOME}/build/integrations/edms/
+    echo -e "${GREEN}Copying edms Completed!${RESET}"
 
 }
 integrations()
@@ -234,6 +269,8 @@ integrations()
     crm
     mail
     openproject
+    helpapp
+    #edms
     #workflow    
 }
 all()
@@ -242,6 +279,7 @@ all()
    api
    view 
 }
+
 #looping through case from arguments passed
 for i in $@
 do
@@ -294,6 +332,18 @@ do
                 openproject
                 package
                 break ;;
+        helpapp)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                helpapp
+                package
+                break ;;
+        edms)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                edms
+                package
+                break ;;
         workflow)
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
@@ -313,35 +363,20 @@ do
                 package
                 break ;;
         --help | -h)
-                echo -e "${BLINK}${CYAN}  _____  __ ________ ___  _   _   ____  _   _ ___ _     ____  "
-                echo -e " / _ \ \/ /|__  /_ _/ _ \| \ | | | __ )| | | |_ _| |   |  _ \ "
-                echo -e "| | | \  /   / / | | | | |  \| | |  _ \| | | || || |   | | | |"
-                echo -e "| |_| /  \  / /_ | | |_| | |\  | | |_) | |_| || || |___| |_| |"
-                echo -e " \___/_/\_\/____|___\___/|_| \_| |____/ \___/|___|_____|____/ "
-                echo -e "                                                              ${RESET}"
+                echo -e "${BLINK}${CYAN}███████╗ ██████╗ ██╗  ██╗    ██████╗ ██╗   ██╗██╗██╗     ██████╗ 
+██╔════╝██╔═══██╗╚██╗██╔╝    ██╔══██╗██║   ██║██║██║     ██╔══██╗
+█████╗  ██║   ██║ ╚███╔╝     ██████╔╝██║   ██║██║██║     ██║  ██║
+██╔══╝  ██║   ██║ ██╔██╗     ██╔══██╗██║   ██║██║██║     ██║  ██║
+███████╗╚██████╔╝██╔╝ ██╗    ██████╔╝╚██████╔╝██║███████╗██████╔╝
+╚══════╝ ╚═════╝ ╚═╝  ╚═╝    ╚═════╝  ╚═════╝ ╚═╝╚══════╝╚═════╝ 
+                                                                 ${RESET}"
                 echo -e "This script is made to package oxzion3.0 to production build." 
                 echo -e "This script takes 3 arguments to build oxzion-3.0.\nFirst the ${YELLOW}Build Option${RESET} Second the ${YELLOW}Server hostname${RESET} and third the${YELLOW}IdentityFile Path$RESET"
                 echo -e "For example type \n$ ${GREEN}build.sh calendar$YELLOW(build option) ${GREEN}abc@xyz.com$YELLOW(server name)${GREEN} ~/.ssh/abc.pem${YELLOW}(identity file path)${RESET}"
                 echo -e "For argument list type ${GREEN}'$0 list'${MAGENTA} as arguments${RESET}."
                 break ;;
         --list | -l)
-                echo -e "1. all             -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
-                echo -e "2. api             -${YELLOW}For packaging API.${RESET}"
-                echo -e "3. view            -${YELLOW}For packaging UI/View.${RESET}"
-                echo -e "4. workflow        -${YELLOW}For packaging workflow.${RESET}"
-                echo -e "5. integrations    -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
-                echo -e "6. calendar        -${YELLOW}For packaging Event Calendar.${RESET}"
-                echo -e "7. camel           -${YELLOW}For packaging Apache Camel.${RESET}"
-                echo -e "8. chat            -${YELLOW}For packaging Mattermost Chat.${RESET}"
-                echo -e "9. crm             -${YELLOW}For packaging OroCRM.${RESET}"
-                echo -e "10. mail           -${YELLOW}For packaging Rainloop Mail.${RESET}"
-                echo -e "10. openproject    -${YELLOW}For packaging Rainloop Mail.${RESET}"
-                echo -e "11. --help or -h   -${YELLOW}For help.${RESET}"
-                echo -e "12. list           -${YELLOW}For list of options.${RESET}"
-                echo -e "13. deploy         -${YELLOW}For deploying to production${RESET}"
-                echo -e "14. clean          -${YELLOW}For cleaning the production server${RESET}"
-                echo -e "15. setup          -${YELLOW}For fresh setup of the production server${RESET}"
-                echo -e "16. package        -${YELLOW}For packaging existing build${RESET}"
+                buildhelp
                 break ;;
         setup)  
                 while true; do

@@ -17,6 +17,7 @@ use Oxzion\Auth\AuthContext;
 
 abstract class AbstractApiController extends AbstractApiControllerHelper
 {
+//TODO: Remove $table variable - it is not used anywhere! Also, controllers should not directly talk to database. (RaviH).
     protected $table;
     protected $log;
     protected $logClass;

@@ -18,6 +18,7 @@ class FileService extends AbstractService
     public function __construct($config, $dbAdapter, FileTable $table, FormService $formService)
     {
         parent::__construct($config, $dbAdapter);
+        $this->messageProducer = MessageProducer::getInstance();
         $this->table = $table;
         $this->config = $config;
         $this->dbAdapter = $dbAdapter;

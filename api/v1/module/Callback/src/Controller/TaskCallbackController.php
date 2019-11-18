@@ -47,7 +47,7 @@ namespace Callback\Controller;
 
             $params['projectdata'] = isset($params['uuid']) ? ($params['uuid']) : "No Project to Delete";
             $this->log->info(TaskCallbackController::class.":Project Data- ".$params['projectdata']);
-         
+
             $response = $this->taskService->deleteProjectFromTask($params['uuid']);
             if ($response) {
                 $this->log->info(TaskCallbackController::class.":Project Deleted Successfully");

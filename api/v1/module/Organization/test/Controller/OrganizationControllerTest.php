@@ -158,7 +158,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        
+
         $query = "SELECT * from ox_role where org_id = (SELECT id from ox_organization where uuid = '".$content['data']['uuid']."')";
         $role = $this->executeQueryTest($query);
 
@@ -497,7 +497,7 @@ class OrganizationControllerTest extends ControllerTest
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
 
-        
+
 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
@@ -534,7 +534,7 @@ class OrganizationControllerTest extends ControllerTest
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')),'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
 
-        
+
 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
@@ -573,7 +573,7 @@ class OrganizationControllerTest extends ControllerTest
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('orgname' => 'Cleveland Black', 'status' => 'Active', 'username' => 'rakshith')), 'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
 
-        
+
 
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts('addUserToOrganization');
@@ -622,10 +622,10 @@ class OrganizationControllerTest extends ControllerTest
 
         $select = "SELECT * FROM ox_user_org where org_id = (SELECT id from ox_organization where uuid ='".$uuid."')";
         $orgResult = $this->executeQueryTest($select);
-        
+
         $select = "SELECT count(id) from ox_user where orgid is NULL";
         $orgCount = $this->executeQueryTest($select);
-        
+
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($orgResult), 2);
         $this->assertEquals($orgResult[0]['user_id'], 6);
@@ -637,7 +637,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($orgCount[0]['count(id)'], 1);
     }
 
-    
+
 
     public function testAddUserToOrganizationWithDifferentUser()
     {

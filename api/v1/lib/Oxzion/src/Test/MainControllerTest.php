@@ -48,7 +48,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $_SERVER['REQUEST_SCHEME'] = "http";
         $_SERVER['SERVER_NAME'] = "localhost";
         $_SERVER['SERVER_PORT'] = "8080";
-    
+
         $this->setupConnection();
         $tm = $this->getTransactionManager();
         $tm->setRollbackOnly(true);
@@ -70,7 +70,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         parent::tearDown();
         $_REQUEST = [];
     }
-    
+
     protected function getTransactionManager()
     {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);

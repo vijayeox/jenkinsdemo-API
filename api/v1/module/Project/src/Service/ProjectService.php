@@ -43,11 +43,11 @@ class ProjectService extends AbstractService
     public function getProjectList($filterParams = null,$params = null)
     {
         if(isset($params['orgId'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to get the project list");
             }else{
-                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);
             }
         }else{
             $orgId = AuthContext::get(AuthConstants::ORG_ID);
@@ -106,11 +106,11 @@ class ProjectService extends AbstractService
     public function getProjectByUuid($id,$params)
     {
         if(isset($params['orgId'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to get the project list");
             }else{
-                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);
             }
         }else{
             $orgId = AuthContext::get(AuthConstants::ORG_ID);
@@ -132,11 +132,11 @@ class ProjectService extends AbstractService
 
     public function createProject(&$data,$params = null) {
         if(isset($params['orgId'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions create project");
             }else{
-                $data['org_id'] = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+                $data['org_id'] = $this->getIdFromUuid('ox_organization',$params['orgId']);
             }
         }
         else{
@@ -144,9 +144,9 @@ class ProjectService extends AbstractService
         }
         try {
             $data['name'] = isset($data['name']) ? $data['name'] : NULL;
-       
+
             $select = "SELECT count(id),name,uuid,isdeleted from ox_project where name = '".$data['name']."' AND org_id = ".$data['org_id'];
-         
+
             $result = $this->executeQuerywithParams($select)->toArray();
 
             if($result[0]['count(id)'] > 0){
@@ -165,7 +165,7 @@ class ProjectService extends AbstractService
                     }
                 }
             }
-     
+
 
         $sql = $this->getSqlObject();
         $form = new Project();
@@ -208,11 +208,11 @@ class ProjectService extends AbstractService
 
     public function updateProject ($id, $data,$orgId = null) {
         if(isset($orgId)){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($orgId != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to edit the project");
             }else{
-                $data['org_id'] = $this->getIdFromUuid('ox_organization',$orgId);    
+                $data['org_id'] = $this->getIdFromUuid('ox_organization',$orgId);
             }
         }
 
@@ -223,7 +223,7 @@ class ProjectService extends AbstractService
 
         if(isset($orgId)){
             if($data['org_id'] != $obj->org_id){
-                throw new ServiceException("Project does not belong to the organization","project.not.found");                
+                throw new ServiceException("Project does not belong to the organization","project.not.found");
             }
         }
 
@@ -260,11 +260,11 @@ class ProjectService extends AbstractService
 
     public function deleteProject($params) {
         if(isset($params['orgId'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to delete the project");
             }else{
-                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);
             }
         }else{
             $orgId = AuthContext::get(AuthConstants::ORG_ID);
@@ -307,11 +307,11 @@ class ProjectService extends AbstractService
     public function getProjectsOfUser($params)
     {
         if(isset($params['orgId'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to get the users of project");
             }else{
-                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);
             }
         }else{
             $orgId = AuthContext::get(AuthConstants::ORG_ID);
@@ -339,11 +339,11 @@ class ProjectService extends AbstractService
     public function getUserList($params, $filterParams = null)
     {
         if(isset($params['orgId'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to get the user list of project");
             }else{
-                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);    
+                $orgId = $this->getIdFromUuid('ox_organization',$params['orgId']);
             }
         }else{
             $orgId = AuthContext::get(AuthConstants::ORG_ID);
@@ -356,7 +356,7 @@ class ProjectService extends AbstractService
 
 
          $query = "SELECT ox_user.uuid,ox_user.name,
-                                case when (ox_project.manager_id = ox_user.id) 
+                                case when (ox_project.manager_id = ox_user.id)
                                     then 1
                                 end as is_manager";
         $from = " FROM ox_user left join ox_user_project on ox_user.id = ox_user_project.user_id left join ox_project on ox_project.id = ox_user_project.project_id";
@@ -407,7 +407,7 @@ class ProjectService extends AbstractService
     public function saveUser($params,$data) {
 
         if(isset($params['orgId'])){
-            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && 
+            if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') &&
                 ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to add users to project");
             }else{
@@ -418,12 +418,12 @@ class ProjectService extends AbstractService
         $obj = $this->table->getByUuid($params['projectUuid'],array());
 
         if (is_null($obj)) {
-            throw new ServiceException("Entity not found","project.not.found");  
+            throw new ServiceException("Entity not found","project.not.found");
         }
 
         $org = $this->organizationService->getOrganization($obj->org_id);
 
-       
+
         if(isset($params['orgId'])){
             if($params['orgId'] != $obj->org_id){
                 throw new ServiceException("Project does not belong to the organization","project.not.found");
@@ -432,7 +432,7 @@ class ProjectService extends AbstractService
         if(!isset($data['userid']) || empty($data['userid'])) {
              throw new ServiceException("Enter User Ids","select.user");
         }
-        
+
         $userArray = $this->organizationService->getUserIdList($data['userid']);
 
         $projectId = $obj->id;

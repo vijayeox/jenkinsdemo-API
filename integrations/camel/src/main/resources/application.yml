@@ -62,3 +62,6 @@ camel:
       port: 8081
 apikey: 0cb6fd4c-40a5-11e9-a30d-1c1b0d785c98
 authorization-url: http://localhost:8080/auth
+elastic:
+  host: localhost
+  port: 9200

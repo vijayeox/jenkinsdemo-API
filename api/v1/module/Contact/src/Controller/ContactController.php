@@ -227,8 +227,8 @@ class ContactController extends AbstractApiController
     {
         $id = $this->extractPostData();
 
-        if (isset($id['contactUuid'])) {
-            $result = $this->contactService->exportContactCSV($id['contactUuid']);
+        if (isset($id)) {
+            $result = $this->contactService->exportContactCSV($id);
         } else {
             $result = $this->contactService->exportContactCSV();
         }
