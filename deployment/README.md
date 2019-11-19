@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>OXZION-3.0 BUILD AND DEPLOY</h1>
+  <h1>EOS-3.0 BUILD AND DEPLOY</h1>
   <p>
     To package and deploy oxzion-3.0 to production.
   </p>
