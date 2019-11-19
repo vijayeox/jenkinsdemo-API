@@ -17,9 +17,9 @@ class DashboardService extends AbstractService
 {
     private $table;
 
-    public function __construct($config, $dbAdapter, DashboardTable $table, $logger)
+    public function __construct($config, $dbAdapter, DashboardTable $table)
     {
-        parent::__construct($config, $dbAdapter, $logger);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
 
@@ -93,13 +93,10 @@ class DashboardService extends AbstractService
         try {
             $this->beginTransaction();
             $result = $this->executeQueryWithBindParameters($updateQuery, $updateQueryParams);
-            if (1 == $result) { //If 1 row is updated.
+            if ($result->count()==1) { //If 1 row is updated.
                 $this->commit();
-                return [
-                    'dashboard' => [
-                        'version' => $newVersion
-                    ]
-                ];
+                $response = array_merge($data,array('version'=>$newVersion));
+                return $response;
             }
             else {
                 $this->rollback();
@@ -122,6 +119,7 @@ class DashboardService extends AbstractService
             }
         }
         catch(ZendDbException $e) {
+
             $this->logger->err('Database exception occurred.');
             $this->logger->err($e);
             try {
@@ -148,7 +146,7 @@ class DashboardService extends AbstractService
             $this->beginTransaction();
             $result = $this->executeQueryWithBindParameters($query, $queryParams);
             $this->commit();
-            return $result;
+            return 1;
         }
         catch (ZendDbException $e) {
             $this->logger->err('Database exception occurred.');
@@ -190,40 +188,36 @@ class DashboardService extends AbstractService
 
     public function getDashboardList($params = null)
     {
-        $query = 'SELECT uuid,name,description FROM ox_dashboard';
-        $queryParams = [];
-        try {
-            $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-            return $result;
-        }
-        catch (ZendDbException $e) {
-            $this->logger->err('Database exception occurred. Query and parameters:');
-            $this->logger->err($query);
-            $this->logger->err($queryParams);
-            $this->logger->err($e);
-            return 0;
-        }
+        // $query = 'SELECT uuid,name,description FROM ox_dashboard';
+        // $queryParams = [];
+        // try {
+        //     $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+        //     return $result;
+        // }
+        // catch (ZendDbException $e) {
+        //     $this->logger->err('Database exception occurred. Query and parameters:');
+        //     $this->logger->err($query);
+        //     $this->logger->err($queryParams);
+        //     $this->logger->err($e);
+        //     return 0;
+        // }
+       $paginateOptions = FilterUtils::paginate($params);
+       $where = $paginateOptions['where'];
+       $where .= empty($where) ? "WHERE ox_dashboard.isdeleted <> 1 AND (ox_dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_dashboard.ispublic = 1)" : " AND ox_dashboard.isdeleted <> 1 AND (ox_dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_dashboard.ispublic = 1)";
+       $sort = " ORDER BY ".$paginateOptions['sort'];
+       $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
+       $cntQuery ="SELECT count(id) as 'count' FROM `ox_dashboard` ";
+       $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+       $count=$resultSet->toArray()[0]['count'];
 
-
-//        $paginateOptions = FilterUtils::paginate($params);
-//        $where = $paginateOptions['where'];
-//        $where .= empty($where) ? "WHERE ox_dashboard.isdeleted <> 1 AND (ox_dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_dashboard.ispublic = 1)" : " AND ox_dashboard.isdeleted <> 1 AND (ox_dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_dashboard.ispublic = 1)";
-//        $sort = " ORDER BY ".$paginateOptions['sort'];
-//        $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
-//
-//        $cntQuery ="SELECT count(id) as 'count' FROM `ox_dashboard` ";
-//        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-//        $count=$resultSet->toArray()[0]['count'];
-//
-//        $query ="Select ox_dashboard.id,ox_dashboard.uuid,ox_dashboard.name,ox_dashboard.ispublic,ox_dashboard.description, ox_dashboard.dashboard_type,IF(ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,ox_dashboard.org_id,ox_dashboard.isdeleted, ox_widget_dashboard_mapper.widget_id from ox_dashboard INNER JOIN ox_widget_dashboard_mapper on ox_dashboard.id = ox_widget_dashboard_mapper.dashboard_id ".$where." ".$sort." ".$limit;
-//        $resultSet = $this->executeQuerywithParams($query);
-//        $result = $resultSet->toArray();
-//        foreach ($result as $key => $value) {
-//            unset($result[$key]['id']);
-//        }
-//
-//        return array('data' => $result,
-//                     'total' => $count);
+       $query ="Select ox_dashboard.id,ox_dashboard.uuid,ox_dashboard.name,ox_dashboard.ispublic,ox_dashboard.description, ox_dashboard.dashboard_type,IF(ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,ox_dashboard.org_id,ox_dashboard.isdeleted, ox_widget_dashboard_mapper.widget_id from ox_dashboard INNER JOIN ox_widget_dashboard_mapper on ox_dashboard.id = ox_widget_dashboard_mapper.dashboard_id ".$where." ".$sort." ".$limit;
+       $resultSet = $this->executeQuerywithParams($query);
+       $result = $resultSet->toArray();
+       foreach ($result as $key => $value) {
+           unset($result[$key]['id']);
+       }
+       return array('data' => $result,
+                    'total' => $count);
     }
 }
 

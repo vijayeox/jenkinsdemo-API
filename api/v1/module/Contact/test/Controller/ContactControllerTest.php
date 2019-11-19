@@ -29,11 +29,11 @@ class ContactControllerTest extends ControllerTest
         $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Contact.yml");
         return $dataset;
     }
-
+    
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = [ 'first_name' => "Raks", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA','address1' => 'Malleshwaram', 'address2' => 'Nagar','city' => 'Bangalore','state' => 'Karnataka','country' => 'India','zip' => '123456'];
+        $data = [ 'first_name' => "Raks", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -46,28 +46,10 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['phone_1'], $data['phone_1']);
         $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals($content['data']['company_name'], $data['company_name']);
+        $this->assertEquals($content['data']['address_1'], $data['address_1']);
+        $this->assertEquals($content['data']['address_2'], $data['address_2']);
+        $this->assertEquals($content['data']['country'], $data['country']);
         $this->assertEquals($content['data']['owner_id'], 1);
-        $this->assertEquals($content['data']['address1'],$data['address1']);
-        $this->assertEquals($content['data']['address2'],$data['address2']);
-        $this->assertEquals($content['data']['city'],$data['city']);
-        $this->assertEquals($content['data']['state'],$data['state']);
-        $this->assertEquals($content['data']['country'],$data['country']);
-        $this->assertEquals($content['data']['zip'],$data['zip']);
-    }
-
-
-    public function testCreateWithoutAddressField()
-    {
-        $this->initAuthToken($this->adminUser);
-        $data = [ 'first_name' => "Raks", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA','country' => 'India'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/contact', 'POST', $data);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
-        $this->assertMatchedRouteName('contacts');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Address,city,state,country,zipcode fields cannot be empty');
     }
 
     //Testing to see if the Create Contact function is working as intended if all the value passed are correct.
@@ -85,7 +67,7 @@ class ContactControllerTest extends ControllerTest
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address1' => 'Malleshwaram', 'address2' => 'Nagar','city' => 'Bangalore','state' => 'Karnataka','country' => 'India','zip' => '123456'];
+        $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'India'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -99,7 +81,7 @@ class ContactControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['user_id' => '3', 'first_name' => "Rakshith", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA','address1' => 'Malleshwaram', 'address2' => 'Nagar','city' => 'Bangalore','state' => 'Karnataka','country' => 'India','zip' => '123456'];
+        $data = ['user_id' => '3', 'first_name' => "Rakshith", 'last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'US'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact/c384bdbf-48e1-4180-937a-08e5852718ea', 'POST', null);
@@ -113,19 +95,19 @@ class ContactControllerTest extends ControllerTest
         $this->assertEquals($content['data']['phone_1'], $data['phone_1']);
         $this->assertEquals($content['data']['email'], $data['email']);
         $this->assertEquals($content['data']['company_name'], $data['company_name']);
-        $this->assertEquals($content['data']['address1'], $data['address1']);
-        $this->assertEquals($content['data']['address2'], $data['address2']);
+        $this->assertEquals($content['data']['address_1'], $data['address_1']);
+        $this->assertEquals($content['data']['address_2'], $data['address_2']);
         $this->assertEquals($content['data']['country'], $data['country']);
     }
 
     public function testUpdateNotFound()
     {
-        $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address1' => 'Malleshwaram', 'address2' => 'Nagar','city' => 'Bangalore','state' => 'Karnataka','country' => 'India','zip' => '123456', 'owner_id' => 3];
+        $data = ['last_name' => 'Iddya', 'phone_1' => '9810029938', 'email' => 'raks@va.com', 'company_name' => 'VA', 'address_1' => 'Malleshwaram', 'address_2' => 'Bangalore', 'country' => 'US', 'owner_id' => 3];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/contact/10000', 'POST', null);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-    $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('contacts');
         $this->assertEquals($content['status'], 'error');
@@ -151,33 +133,6 @@ class ContactControllerTest extends ControllerTest
         $this->assertMatchedRouteName('contacts');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-    }
-
-
-    public function testGetList()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/contact', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['myContacts'][0]['first_name'], 'Karan S');
-        $this->assertEquals($content['data']['myContacts'][1]['first_name'], 'Rajesh');
-        $this->assertEquals($content['data']['orgContacts'][0]['first_name'], 'Bharat');
-        $this->assertEquals($content['data']['orgContacts'][1]['first_name'], 'Karan');
-        
-    }
-
-    public function testGetListById()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/contact/c384bdbf-48e1-4180-937a-08e5852718ea', 'GET');
-        $this->assertResponseStatusCode(200);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['first_name'], 'Karan S');
     }
 
     public function testgetcontactsSuccess()
@@ -289,12 +244,12 @@ class ContactControllerTest extends ControllerTest
         $_FILES['file']['size'] = 1007;
         $this->dispatch('/contact/import', 'POST');
         $content = json_decode($this->getResponse()->getContent(), true);
+        // print_r($content);exit;
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Contact');
         $this->assertControllerName(ContactController::class); // as specified in router's controller name alias
         $this->assertControllerClass('ContactController');
         $this->assertMatchedRouteName('contactImport');
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
@@ -328,7 +283,6 @@ class ContactControllerTest extends ControllerTest
         $_FILES['file']['error'] = 0;
         $_FILES['file']['size'] = 1007;
         $this->dispatch('/contact/import', 'POST');
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('Contact');
         $this->assertControllerName(ContactController::class); // as specified in router's controller name alias

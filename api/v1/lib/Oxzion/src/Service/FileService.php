@@ -9,16 +9,17 @@ use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
 use Oxzion\ServiceException;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Messaging\MessageProducer;
 
 class FileService extends AbstractService
 {
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService)
+    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService,MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
         $this->table = $table;
         $this->config = $config;
         $this->dbAdapter = $dbAdapter;

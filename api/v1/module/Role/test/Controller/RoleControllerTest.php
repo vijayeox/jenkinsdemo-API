@@ -230,7 +230,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(13, count($content['data']));
+        $this->assertEquals(18, count($content['data']));
         foreach ($content['data'] as $key => $val) {
             if($val['privilege_name'] == "MANAGE_ANNOUNCEMENT"){
                 $this->assertEquals($val['permission'], 3);
@@ -320,7 +320,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 4);
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(26,count($content['data']['privileges']));
+        $this->assertEquals(31,count($content['data']['privileges']));
     }
 
 
@@ -335,7 +335,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 4);
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(26,count($content['data']['privileges']));
+        $this->assertEquals(31,count($content['data']['privileges']));
     }
 
     public function testGetWithDifferentOrgId(){
@@ -465,7 +465,7 @@ class RoleControllerTest extends ControllerTest
 
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'],'ADMIN');
-        $this->assertEquals(count($result),26);
+        $this->assertEquals(count($result),31);
     }
 
     public function testUpdatePrivilegePermissionWithOrgID(){
@@ -485,7 +485,7 @@ class RoleControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'],'ADMIN');
-        $this->assertEquals(count($result),26);
+        $this->assertEquals(count($result),31);
     }
 
     public function testAddNewPrivilege()

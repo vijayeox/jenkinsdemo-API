@@ -33,11 +33,7 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Service\ContactService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\ContactService(
-                        $container->get('config'), 
-                        $dbAdapter, 
-                        $container->get(Model\ContactTable::class,
-                        $container->get(Service\AddressService::class)));
+                    return new Service\ContactService($container->get('config'), $dbAdapter, $container->get(Model\ContactTable::class));
                 },
                 Model\ContactTable::class => function ($container) {
                     $tableGateway = $container->get(Model\ContactTableGateway::class);

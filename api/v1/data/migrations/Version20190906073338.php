@@ -36,7 +36,7 @@ final class Version20190906073338 extends AbstractMigration
 
         $this->addSql("ALTER TABLE `ox_activity_instance` ADD CONSTRAINT activity_instance_references_form FOREIGN KEY (form_id) REFERENCES ox_form(id)");
         $this->addSql("ALTER TABLE `ox_activity_instance` ADD CONSTRAINT activity_instance_references_org FOREIGN KEY (org_id) REFERENCES ox_organization(id)");
-        $this->addSql("ALTER TABLE `ox_activity_instance` ADD CONSTRAINT activity_instance_references_group FOREIGN KEY (group_id) REFERENCES ox_group(id)");
+        // $this->addSql("ALTER TABLE `ox_activity_instance` ADD CONSTRAINT activity_instance_references_group FOREIGN KEY (group_id) REFERENCES ox_group(id)");
         $this->addSql("ALTER TABLE `ox_activity_instance` ADD CONSTRAINT activity_instance_references_activity FOREIGN KEY (activity_id) REFERENCES ox_activity(id)");
 
         $this->addSql("ALTER TABLE `ox_activity` ADD CONSTRAINT activity_references_app FOREIGN KEY (app_id) REFERENCES ox_app(id)");

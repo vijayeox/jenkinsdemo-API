@@ -13,7 +13,6 @@ class ActivityInstance extends Entity
         'activity_instance_id' => 0,
         'data'=>null,
         'activity_id' => 0,
-        'form_id' => 0,
         'data' => null,
         'status' => 0,
         'act_by_date' => null,

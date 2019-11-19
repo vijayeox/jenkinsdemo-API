@@ -24,7 +24,7 @@ class App extends Entity
         'uuid' => 0,
         'description' => null,
         'type' => null,
-        'isdefault' => null,
+        'isdefault' => 0,
         'logo' => "default_app.png",
         'category' => null,
         'date_created' => null,

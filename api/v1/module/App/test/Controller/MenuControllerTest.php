@@ -11,7 +11,7 @@ use Zend\Db\Adapter\Adapter;
 use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
-class MenuItemControllerTest extends ControllerTest
+class MenuControllerTest extends ControllerTest
 {
     public function setUp() : void
     {

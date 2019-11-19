@@ -10,6 +10,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use FileIndexer\Service\FileIndexerService;
+use Oxzion\Messaging\MessageProducer;
 
 class Module implements ConfigProviderInterface
 {
@@ -33,7 +34,7 @@ class Module implements ConfigProviderInterface
         return [
             'factories' => [
                 Service\FileIndexerService::class => function ($container) {
-                    return new Service\FileIndexerService($container->get('config'),$container->get(AdapterInterface::class), $container->get('fileIndexerLogger'));
+                    return new Service\FileIndexerService($container->get('config'),$container->get(AdapterInterface::class),$container->get(MessageProducer::class));
                 },
             ],
         ];
@@ -44,7 +45,7 @@ class Module implements ConfigProviderInterface
         return [
             'factories' => [
                 Controller\FileIndexerController::class => function ($container) {
-                    return new Controller\FileIndexerController($container->get(Service\FileIndexerService::class), $container->get('fileIndexerLogger'));
+                    return new Controller\FileIndexerController($container->get(Service\FileIndexerService::class));
                 },
             ],
         ];

@@ -75,18 +75,18 @@ class DashboardControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => "dashboardtest", 'description' => 'descriptiontest', 'version'=>0];
+        $data = ['name' => "dashboardtest", 'description' => 'descriptiontest', 'version'=>1];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/dashboard/fc67ceb2-4b6f-4a33-8527-5fc6b0822988', 'PUT', null);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dashboard');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['dashboard']['version'], 1);
-     //   $this->assertEquals($content['data']['name'], $data['name']);
-     //   $this->assertEquals($content['data']['description'], $data['description']);
+        $this->assertEquals($content['data']['version'], 2);
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['description'], $data['description']);
     }
 
     public function testUpdateNotFound()
@@ -95,21 +95,21 @@ class DashboardControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/dashboard/1000', 'PUT', null);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dashboard');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
 
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/dashboard/fc67ceb2-4b6f-4a33-8527-5fc6b0822988', 'DELETE');
+        $this->dispatch('/analytics/dashboard/fc67ceb2-4b6f-4a33-8527-5fc6b0822988?version=1', 'DELETE');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dashboard');
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
 
@@ -156,7 +156,7 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Dashboard1');
         $this->assertEquals($content['data'][1]['description'], 'Description');
         $this->assertEquals($content['data'][1]['name'], 'Dashboard2');
-      //  $this->assertEquals($content['total'],2);
+        $this->assertEquals($content['total'],2);
     }
 
     public function testGetListWithSort()
@@ -172,7 +172,7 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['name'], 'Dashboard2');
         $this->assertEquals($content['data'][1]['ispublic'], 1);
         $this->assertEquals($content['data'][1]['name'], 'Dashboard1');
-   //     $this->assertEquals($content['data']['total'],2);
+        $this->assertEquals($content['total'],2);
     }
 
      public function testGetListSortWithPageSize()
@@ -187,7 +187,7 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals($content['data'][0]['uuid'], 'fc67ceb2-4b6f-4a33-8527-5fc6b0822988');
         $this->assertEquals($content['data'][0]['name'], 'Dashboard2');
         $this->assertEquals($content['data'][0]['is_owner'], 'true');
-   //     $this->assertEquals($content['data']['total'],2);
+       $this->assertEquals($content['total'],2);
     }
 
     public function testGetListwithQueryParameters()
@@ -201,6 +201,6 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']), 1);
         $this->assertEquals($content['data'][0]['uuid'], 'fc67ceb2-4b6f-4a33-8527-5fc6b0822988');
         $this->assertEquals($content['data'][0]['name'], 'Dashboard2');
-     //   $this->assertEquals($content['total'],1);
+       $this->assertEquals($content['total'],1);
     }
 }

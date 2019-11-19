@@ -14,10 +14,10 @@ class FileIndexerService extends AbstractService
 {
     protected $restClient;
 
-    public function __construct($config,AdapterInterface $dbAdapter, Logger $log)
+    public function __construct($config,AdapterInterface $dbAdapter,MessageProducer $messageProducer)
     {
-        parent::__construct($config,$dbAdapter, $log);
-        $this->messageProducer = MessageProducer::getInstance();
+        parent::__construct($config,$dbAdapter);
+        $this->messageProducer = $messageProducer;
     }
     public function setRestClient($restClient)
     {
@@ -45,8 +45,8 @@ class FileIndexerService extends AbstractService
             LEFT JOIN ox_activity as act on act.id = act_inst.activity_id
             INNER JOIN ox_form as form on file.form_id = form.id
             INNER JOIN ox_app as app on app.id = form.app_id
-            INNER JOIN ox_file_attribute as file_attr on file_attr.fileid = file.id
-            INNER  JOIN ox_field as field on file_attr.fieldid = field.id
+            INNER JOIN ox_file_attribute as file_attr on file_attr.file_id = file.id
+            INNER  JOIN ox_field as field on file_attr.field_id = field.id
             where file.id =".$fileId."
             GROUP BY file.workflow_instance_id, file.activity_id, file.form_id, form.name,
             file.org_id, form.app_id, app.name, wf.name, wf_inst.status, wf_inst.date_created,

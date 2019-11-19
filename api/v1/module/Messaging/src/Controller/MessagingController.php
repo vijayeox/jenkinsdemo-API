@@ -10,19 +10,18 @@ class MessagingController extends AbstractApiControllerHelper
     /**
      * @ignore __construct
      */
-    private $logger;
     private $messagingService;
     public function __construct(MessagingService $service)
     {
-        $this->logger = $log;
+        $this->log = $this->getLogger();
         $this->messagingService = $service;
     }
 
     public function create($data)
     {
-        $this->logger->info(__CLASS__."->create data - ".print_r($data, true));
+        $this->log->info(__CLASS__."->create data - ".print_r($data, true));
         $response = $this->messagingService->send($data);
-        $this->logger->info(__CLASS__."->create response - ".print_r($response, true));
+        $this->log->info(__CLASS__."->create response - ".print_r($response, true));
         if($response){
             return $this->getSuccessResponseWithData(array("result" => $response), 201);
         } else {

@@ -17,9 +17,9 @@ class VisualizationService extends AbstractService
 
     private $table;
 
-    public function __construct($config, $dbAdapter, VisualizationTable $table, $logger)
+    public function __construct($config, $dbAdapter, VisualizationTable $table)
     {
-        parent::__construct($config, $dbAdapter, $logger);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
     }
 
@@ -77,29 +77,31 @@ class VisualizationService extends AbstractService
         return $count;
     }
 
-    public function deleteVisualization($uuid)
+    public function deleteVisualization($uuid,$version)
     {
-        $obj = $this->table->getByUuid($uuid, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        $form = new Visualization();
-        $data['isdeleted'] = 1;
-        $data = array_merge($obj->toArray(), $data);
-        $form->exchangeWithSpecificKey($data,'value',true);
-        $form->validate();
-        $count = 0;
+        $query = 'update ox_visualization set isdeleted=true where uuid=:uuid and version=:version';
+        $queryParams = [
+            'uuid'      => $uuid,
+            'version'   =>$version
+        ];
         try {
-            $count = $this->table->save2($form);
-            if ($count == 0) {
+            $this->beginTransaction();
+            $result = $this->executeQueryWithBindParameters($query, $queryParams);
+            $this->commit();
+            return 1;
+        }
+        catch (ZendDbException $e) {
+            $this->logger->err('Database exception occurred.');
+            $this->logger->err($e);
+            try {
                 $this->rollback();
-                return 0;
             }
-        } catch (Exception $e) {
-            $this->rollback();
+            catch (ZendDbException $ee) {
+                $this->logger->err('Database exception occurred when rolling back transaction.');
+                $this->logger->err($ee);
+            }
             return 0;
         }
-        return $count;
     }
 
     public function getVisualization($uuid)

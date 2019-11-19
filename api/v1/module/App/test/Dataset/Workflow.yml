@@ -20,10 +20,6 @@ ox_app:
     category: "OTHERS"
     type: 2
     status: 4
-ox_app_registry:
--
-    org_id: 1
-    app_id: 99
 ox_app_entity:
   -
     id: 1
@@ -46,6 +42,27 @@ ox_app_entity:
     date_created: '2019-06-26 00:00:00'
     uuid: "f13d0c68-98c9-11e9-adc5-308d99c9145b"
     created_by: 1
+ox_workflow:
+  -
+    id: 1
+    app_id: 99
+    name: "Test Workflow 1"
+    process_id: "[main]"
+    form_id: 1
+    uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4"
+    entity_id: 1
+  -
+    id: 2
+    app_id: 99
+    name: "Test Workflow 2"
+    process_id: "[main]"
+    form_id: 1
+    uuid: "1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo"
+    entity_id: 1
+ox_app_registry:
+-
+    org_id: 1
+    app_id: 99
 ox_field:
 -
     id: 1
@@ -125,23 +142,6 @@ ox_form_field:
     id: 2
     form_id: 1
     field_id: 2
-ox_workflow:
-  -
-    id: 1
-    app_id: 99
-    name: "Test Workflow 1"
-    process_id: "[main]"
-    form_id: 1
-    uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4'
-    entity_id: 1
-  -
-    id: 2
-    app_id: 99
-    name: "Test Workflow 2"
-    process_id: "[main]"
-    form_id: 1
-    uuid: '1141cd2e-cb14-11e9-a32f-2a2ae2dbccpo'
-    entity_id: 1
 ox_workflow_instance:
   -
     id: 1
@@ -243,7 +243,6 @@ ox_activity_instance:
   -
     id: 1
     activity_id: 1
-    form_id: 1
     activity_instance_id: "bed5eb80-c7a6-4d56-aa5c-c35947f42413"
     workflow_instance_id: 1
     status: "In Progress"
@@ -251,7 +250,6 @@ ox_activity_instance:
   -
     id: 2
     activity_id: 1
-    form_id: 1
     activity_instance_id: "96cc9311-57e7-4860-9de4-a4e588162504"
     workflow_instance_id: 2
     status: "Completed"

@@ -23,7 +23,9 @@ final class Version20191014093521 extends AbstractMigration
         $this->addSql("ALTER TABLE `ox_wf_user_identifier` DROP FOREIGN KEY `ox_wf_user_identifier_ibfk_2`");
         $this->addSql("ALTER TABLE `ox_wf_user_identifier` DROP COLUMN `workflow_id`");
         $this->addSql("ALTER TABLE `ox_wf_user_identifier` ADD COLUMN `workflow_instance_id` int(32) NOT NULL AFTER `id`,ADD CONSTRAINT FOREIGN KEY (`workflow_instance_id`) REFERENCES ox_workflow_instance(`id`);");
+        $this->addSql("ALTER TABLE `ox_workflow_instance` DROP FOREIGN KEY workflow_instance_references_org");
         $this->addSql("ALTER TABLE `ox_workflow_instance` CHANGE COLUMN `org_id` `org_id` INT(64) NOT NULL , ADD CONSTRAINT FOREIGN KEY (`org_id`) REFERENCES ox_organization(`id`);");
+        $this->addSql("ALTER TABLE `ox_workflow_instance` ADD CONSTRAINT workflow_instance_references_org FOREIGN KEY (org_id) REFERENCES ox_organization(id)");
         $this->addSql("ALTER TABLE `ox_file_attribute` CHANGE COLUMN `fileid` `file_id` INT(64) NOT NULL");
         $this->addSql("ALTER TABLE `ox_file_attribute` CHANGE COLUMN `fieldid` `field_id` INT(32) NOT NULL");
         $this->addSql("ALTER TABLE `ox_file_attribute` CHANGE COLUMN `fieldvalue` `field_value` TEXT  NULL");

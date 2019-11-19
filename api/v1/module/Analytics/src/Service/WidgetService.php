@@ -19,9 +19,9 @@ class WidgetService extends AbstractService
     private $table;
     private $queryService;
 
-    public function __construct($config, $dbAdapter, WidgetTable $table, $logger, $queryService)
+    public function __construct($config, $dbAdapter, WidgetTable $table, $queryService)
     {
-        parent::__construct($config, $dbAdapter, $logger);
+        parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->queryService  = $queryService;
     }
@@ -29,7 +29,14 @@ class WidgetService extends AbstractService
     public function createWidget($data)
     {
         $newWidgetUuid = Uuid::uuid4()->toString();
-        $oldWidgetUuid = $data['uuid'];
+        if(isset($data['uuid'])){
+            $oldWidgetUuid = $data['uuid'];
+        }
+        if(!isset($data['name'])&&!isset($data['configuration'])){
+            $errors = new ValidationException();
+            $errors->setErrors(array('name' => 'required','configuration'=>'required' ));
+            throw $errors;
+        }
         $queryParams = [
             'created_by'    => AuthContext::get(AuthConstants::USER_ID),
             'date_created'  => date('Y-m-d H:i:s'),
@@ -41,7 +48,6 @@ class WidgetService extends AbstractService
             'name'          => $data['name'],
             'configuration' => $data['configuration']
         ];
-
         $queryIdInsert = '';
         if (isset($data['query_uuid'])) {
             $queryIdInsert = '(SELECT id FROM ox_query oq WHERE oq.uuid=:query_uuid AND oq.org_id=:org_id)';
@@ -64,7 +70,7 @@ class WidgetService extends AbstractService
         try {
             $this->beginTransaction();
             $result = $this->executeQueryWithBindParameters($query, $queryParams);
-            if (1 == $result) {
+            if (1 == $result->count()) {
                 $this->commit();
                 return $newWidgetUuid;
             }

@@ -3,9 +3,8 @@ namespace Oxzion;
 
 class ServiceLogWrapper {
     private $instance;
-    private $logger;
 
-    function __construct($instance, $logger) {
+    function __construct($instance) {
         $this->instance = $instance;
         $this->logger = $logger;
     }

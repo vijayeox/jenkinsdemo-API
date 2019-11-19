@@ -27,7 +27,7 @@ class ContactController extends AbstractApiController
      */
     public function __construct(ContactTable $table, ContactService $contactService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, Contact::class);
+        parent::__construct($table, __class__, Contact::class);
         $this->setIdentifierName('contactId');
         $this->contactService = $contactService;
     }
@@ -60,8 +60,11 @@ class ContactController extends AbstractApiController
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
-        catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),404);
+        if ($count == 0) {
+            return $this->getErrorResponse("Failed to create a new entity", 404, $data);
+        }
+        if ($count == 2) {
+            return $this->getErrorResponse("Entity not found for UUID", 404, $id);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -179,7 +182,7 @@ class ContactController extends AbstractApiController
 
     public function contactImportAction()
     {
-        $columns = ['Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type','Phone 1 - Value','Organization 1 - Name','Organization 2 - Title','Address 1 - Street','Address 1 - Extended Address','Address 1 - City','Address 1 - Region','Address 1 - Country','Address 1 - Postal Code'];
+        $columns = ['Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type','Phone 1 - Value','Organization 1 - Name','Organization 2 - Title','Location'];
         if (!isset($_FILES['file'])) {
             return $this->getErrorResponse("Add file to import", 404);
         }

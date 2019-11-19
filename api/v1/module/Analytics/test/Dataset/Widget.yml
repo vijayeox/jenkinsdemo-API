@@ -11,6 +11,7 @@ ox_widget:
     isdeleted: 0
     name: 'widget1'
     configuration: 'sample config'
+    version: 1
   -
     id: 2
     uuid: '0e57b45f-5938-4e26-acd8-d65fb89e8503'
@@ -23,3 +24,4 @@ ox_widget:
     isdeleted: 0
     name: 'widget2'
     configuration: 'sample config2'
+    version: 1

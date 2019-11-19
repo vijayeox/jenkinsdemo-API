@@ -166,10 +166,9 @@ class FormControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $selectResult = $this->getFieldUuid();
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/'.$selectResult[0]['uuid'], 'DELETE');
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(405);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
     }
 
     public function testDeleteNotFound()
@@ -177,9 +176,8 @@ class FormControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/form/ef99352c-df86-11e9-8a34-2a2ae2dbcce4', 'DELETE');
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(405);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
     }
 }

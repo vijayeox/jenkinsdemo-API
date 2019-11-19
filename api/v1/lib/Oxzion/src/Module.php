@@ -72,7 +72,7 @@ class Module
                 },
                 \Oxzion\Service\FileService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class), $container->get(\Oxzion\Service\FormService::class));
+                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class), $container->get(\Oxzion\Service\FormService::class), $container->get(Messaging\MessageProducer::class));
                 },
                 Service\RoleService::class => function ($container) {
                     return new Service\RoleService(
@@ -257,15 +257,15 @@ class Module
                 FormEngine\FormFactory::class => function ($container) {
                     return FormEngine\FormFactory::getInstance();
                 },
-                Model\WorkflowTable::class => function ($container) {
-                    $tableGateway = $container->get(Model\WorkflowTableGateway::class);
-                    return new Model\WorkflowTable($tableGateway);
-                },
                 Model\WorkflowTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Organization());
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Workflow());
                     return new TableGateway('ox_workflow', $dbAdapter, null, $resultSetPrototype);
+                },
+                Model\WorkflowTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\WorkflowTableGateway::class);
+                    return new Model\WorkflowTable($tableGateway);
                 },
                 Service\WorkflowService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);

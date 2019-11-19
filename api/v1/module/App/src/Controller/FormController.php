@@ -97,11 +97,7 @@ class FormController extends AbstractApiController
     */
     public function delete($id)
     {
-        $response = $this->formService->deleteForm($id);
-        if ($response == 0) {
-            return $this->getErrorResponse("Form not found", 404, ['id' => $id]);
-        }
-        return $this->getSuccessResponse();
+        return $this->getInvalidMethod();
     }
     /**
     * GET Form API

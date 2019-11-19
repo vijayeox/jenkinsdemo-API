@@ -16,10 +16,10 @@ namespace FileIndexer\Controller;
         /**
         * @ignore __construct
         */
-        public function __construct(FileIndexerService $fileIndexerService, Logger $log)
+        public function __construct(FileIndexerService $fileIndexerService)
         {
             $this->fileIndexerService = $fileIndexerService;
-            $this->log = $log;
+            $this->log = $this->getLogger();
         }
 
         public function IndexAction() {

@@ -321,14 +321,24 @@ class WorkflowService extends AbstractService
 
     public function deleteWorkflow($appUuid, $workflowUuid)
     {
+        $data['id'] = $this->getIdFromUuid('ox_workflow',$workflowUuid);
+        if(!isset($data['id']) || $data['id'] == 0){
+            $data['id'] = $workflowUuid;
+        }
+        $obj = $this->table->getByUuid($workflowUuid,array());
+        if (is_null($obj)) {
+            return 0;
+        }
+        $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['date_modified'] = date('Y-m-d H:i:s');
+        $data['isdeleted'] = 1;
+        $workflow = new Workflow();
+        $changedArray = array_merge($obj->toArray(), $data);
+        $workflow->exchangeArray($changedArray);
+        $workflow->validate();
         $this->beginTransaction();
-        $count = 0;
         try {
-            $count = $this->table->delete($this->getIdFromUuid('ox_workflow',$workflowUuid), ['app_id'=>$this->getIdFromUuid('ox_app',$appUuid)]);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
+            $this->table->save($workflow);
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
@@ -336,7 +346,7 @@ class WorkflowService extends AbstractService
             throw $e;
         }
 
-        return $count;
+        return $workflow->toArray();
     }
 
     public function getWorkflows($appUuid=null, $filterArray = array())

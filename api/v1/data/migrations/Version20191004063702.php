@@ -20,6 +20,7 @@ final class Version20191004063702 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql("ALTER TABLE `ox_workflow` DROP FOREIGN KEY workflow_references_org");
         $this->addSql("ALTER TABLE `ox_workflow` DROP COLUMN `org_id`");
 
     }
@@ -27,6 +28,7 @@ final class Version20191004063702 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-
+        $this->addSql("ALTER TABLE ox_workflow ADD COLUMN `org_id` INT(32) NOT NULL");
+        $this->addSql("ALTER TABLE `ox_workflow` ADD CONSTRAINT workflow_references_org FOREIGN KEY (org_id) REFERENCES ox_organization(id)");
     }
 }

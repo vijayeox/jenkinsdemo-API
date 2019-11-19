@@ -7,6 +7,7 @@ use Analytics\Model\Dashboard;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
+use Exception;
 
 class DashboardController extends AbstractApiController
 {
@@ -16,9 +17,9 @@ class DashboardController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct($dashboardService, Logger $log)
+    public function __construct($dashboardService)
     {
-        parent::__construct(null, $log, __class__, Dashboard::class);
+        parent::__construct(null, __class__, Dashboard::class);
         $this->setIdentifierName('dashboardUuid');
         $this->dashboardService = $dashboardService;
     }
@@ -83,29 +84,21 @@ class DashboardController extends AbstractApiController
     }
 
     public function delete($uuid) {
-        throw new Exception('Deleting without version number is not allowed. Use */deleteWithVersion?version=<version> URL.');
-    }
-
-    /**
-     * Delete Dashboard API
-     * @api
-     * @link /analytics/dashboard/:dashboardUuid
-     * @method DELETE
-     * @param $uuid ID of Dashboard to Delete
-     * @return array success|failure response
-     */
-    public function deleteWithVersion($uuid, $data)
-    {
-        try {
-            $response = $this->dashboardService->deleteDashboard($uuid, $data['version']);
+        $params = $this->params()->fromQuery();
+        if(isset($params['version'])){
+            try {
+                $response = $this->dashboardService->deleteDashboard($uuid, $params['version']);
+            }
+            catch (VersionMismatchException $e) {
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+            }
+            if ($response == 0) {
+                return $this->getErrorResponse("Dashboard not found for uuid - $uuid", 404, ['uuid' => $uuid]);
+            }
+            return $this->getSuccessResponse();
+        } else {
+            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['uuid' => $uuid]);
         }
-        catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
-        }
-        if ($response == 0) {
-            return $this->getErrorResponse("Dashboard not found for uuid - $uuid", 404, ['uuid' => $uuid]);
-        }
-        return $this->getSuccessResponse();
     }
 
     /**
@@ -165,7 +158,7 @@ class DashboardController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->dashboardService->getDashboardList($params);
-        return $this->getSuccessResponseWithData($result);
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
 }
 

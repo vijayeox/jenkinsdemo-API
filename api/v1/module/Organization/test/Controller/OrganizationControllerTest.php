@@ -190,9 +190,9 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $contact['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $contact['lastname']);
         $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 23);
-        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 6);
-        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 1);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 28);
+        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 11);
+        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 6);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals(isset($usrResult[0]['address_id']),true);

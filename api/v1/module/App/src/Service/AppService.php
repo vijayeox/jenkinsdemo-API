@@ -433,9 +433,6 @@ class AppService extends AbstractService
 
         $appId = $this->getIdFromUuid('ox_app',$appUuid);
         // delete from ox_app_menu
-        $queryString = "UPDATE ox_app_menu AS mn INNER JOIN ox_privilege AS pr ON mn.privilege_id = pr.id INNER JOIN ox_app AS ap ON pr.app_id = ap.id SET mn.privilege_id = NULL WHERE mn.app_id = :appid AND pr.name NOT IN (".$list.")";
-        $params = array("appid" => $appId);
-        $result = $this->executeQueryWithBindParameters($queryString, $params);
         $this->privilegeService->saveAppPrivileges($appId, $privilegedata);
     }
 
@@ -446,8 +443,12 @@ class AppService extends AbstractService
         $where = "";
         $sort = "name";
         $cntQuery ="SELECT count(id) FROM `ox_app`";
-            if(count($filterParams) > 0 || sizeof($filterParams) > 0){
-                $filterArray = json_decode($filterParams['filter'],true);
+        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
+            $filterArray = json_decode($filterParams['filter'], true);
+            if (isset($filterArray[0]['filter'])) {
+                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                $filterList = $filterArray[0]['filter']['filters'];
+                $where = " WHERE ".FilterUtils::filterArray($filterList, $filterlogic);
             }
             if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
                 $sort = $filterArray[0]['sort'];

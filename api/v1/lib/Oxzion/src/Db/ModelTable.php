@@ -56,7 +56,6 @@ abstract class ModelTable
         }
 
         $filter['uuid'] = $uuid;
-
         $rowset = $this->tableGateway->select($filter);
 
         $row = $rowset->current();

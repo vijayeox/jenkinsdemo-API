@@ -7,6 +7,7 @@ use Analytics\Model\Query;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
+use Exception;
 
 class QueryController extends AbstractApiController
 {
@@ -16,9 +17,9 @@ class QueryController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct($queryService, Logger $log)
+    public function __construct($queryService)
     {
-        parent::__construct(null, $log, __class__, Query::class);
+        parent::__construct(null, __class__, Query::class);
         $this->setIdentifierName('queryUuid');
         $this->queryService = $queryService;
     }
@@ -81,29 +82,21 @@ class QueryController extends AbstractApiController
     }
 
     public function delete($uuid) {
-        throw new Exception('Deleting without version number is not allowed. Use */deleteWithVersion?version=<version> URL.');
-    }
-
-    /**
-     * Delete Query API
-     * @api
-     * @link /analytics/query/:queryUuid
-     * @method DELETE
-     * @param $uuid ID of Query to Delete
-     * @return array success|failure response
-     */
-    public function deleteWithVersion($uuid)
-    {
-        try {
-            $response = $this->queryService->deleteQuery($uuid, $data['version']);
+        $params = $this->params()->fromQuery();
+        if(isset($params['version'])){
+            try {
+                $response = $this->queryService->deleteQuery($uuid, $params['version']);
+            }
+            catch (VersionMismatchException $e) {
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+            }
+            if ($response == 0) {
+                return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);
+            }
+            return $this->getSuccessResponse();
+        } else {
+            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['uuid' => $uuid]);
         }
-        catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
-        }
-        if ($response == 0) {
-            return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);
-        }
-        return $this->getSuccessResponse();
     }
 
     /**

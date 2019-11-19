@@ -14,6 +14,7 @@ class Workflow extends Entity
         'entity_id'=>0,
         'file'=> null,
         'uuid'=> 0,
+        'isdeleted' => 0
     );
     public function validate()
     {

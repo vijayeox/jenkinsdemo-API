@@ -33,9 +33,8 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $config = $container->get('config');
                     $table = $container->get(Model\DataSourceTable::class);
-                    $logger = $container->get('AnalyticsLogger');
-                    $service = new Service\DataSourceService($config, $dbAdapter, $table, $logger);
-                    return new \Oxzion\ServiceLogWrapper($service, $logger);
+                    return new Service\DataSourceService($config, $dbAdapter, $table);
+                    // return new \Oxzion\ServiceLogWrapper($service);
                 },
                 Model\DataSourceTable::class => function($container) {
                     $tableGateway = $container->get(Model\DataSourceTableGateway::class);
@@ -52,9 +51,8 @@ class Module implements ConfigProviderInterface {
                     $config = $container->get('config');
                     $table = $container->get(Model\QueryTable::class);
                     $datasourceService = $container->get(Service\DataSourceService::class);
-                    $logger = $container->get('AnalyticsLogger');
-                    $service = new Service\QueryService($config, $dbAdapter, $table, $logger,$datasourceService);
-                    return new \Oxzion\ServiceLogWrapper($service, $logger);
+                    return new Service\QueryService($config, $dbAdapter, $table,$datasourceService);
+                    // return new \Oxzion\ServiceLogWrapper($service);
                 },
                 Model\QueryTable::class => function($container) {
                     $tableGateway = $container->get(Model\QueryTableGateway::class);
@@ -70,9 +68,8 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $config = $container->get('config');
                     $table = $container->get(Model\VisualizationTable::class);
-                    $logger = $container->get('AnalyticsLogger');
-                    $service = new Service\VisualizationService($config, $dbAdapter, $table, $logger);
-                    return new \Oxzion\ServiceLogWrapper($service, $logger);
+                    return new Service\VisualizationService($config, $dbAdapter, $table);
+                    // return new \Oxzion\ServiceLogWrapper($service);
                 },
                 Model\VisualizationTable::class => function($container) {
                     $tableGateway = $container->get(Model\VisualizationTableGateway::class);
@@ -88,10 +85,9 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $config = $container->get('config');
                     $table = $container->get(Model\WidgetTable::class);
-                    $logger = $container->get('AnalyticsLogger');
                     $queryService = $container->get(Service\QueryService::class);
-                    $service = new Service\WidgetService($config, $dbAdapter, $table, $logger, $queryService);
-                    return new \Oxzion\ServiceLogWrapper($service, $logger);
+                    return new Service\WidgetService($config, $dbAdapter, $table, $queryService);
+                    // return new \Oxzion\ServiceLogWrapper($service);
                 },
                 Model\WidgetTable::class => function($container) {
                     $tableGateway = $container->get(Model\WidgetTableGateway::class);
@@ -107,9 +103,8 @@ class Module implements ConfigProviderInterface {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $config = $container->get('config');
                     $table = $container->get(Model\DashboardTable::class);
-                    $logger = $container->get('AnalyticsLogger');
-                    $service = new Service\DashboardService($config, $dbAdapter, $table, $logger);
-                    return new \Oxzion\ServiceLogWrapper($service, $logger);
+                    return new Service\DashboardService($config, $dbAdapter, $table);
+                    // return new \Oxzion\ServiceLogWrapper($service);
                 },
                 Model\DashboardTable::class => function($container) {
                     $tableGateway = $container->get(Model\DashboardTableGateway::class);
@@ -130,23 +125,23 @@ class Module implements ConfigProviderInterface {
             'factories' => [
                 Controller\DataSourceController::class => function($container) {
                     return new Controller\DataSourceController(
-                        $container->get(Service\DataSourceService::class), $container->get('AnalyticsLogger'));
+                        $container->get(Service\DataSourceService::class));
                 },
                 Controller\QueryController::class => function($container) {
                     return new Controller\QueryController(
-                        $container->get(Service\QueryService::class), $container->get('AnalyticsLogger'));
+                        $container->get(Service\QueryService::class));
                 },
                 Controller\VisualizationController::class => function($container) {
                     return new Controller\VisualizationController(
-                        $container->get(Service\VisualizationService::class), $container->get('AnalyticsLogger'));
+                        $container->get(Service\VisualizationService::class));
                 },
                 Controller\WidgetController::class => function($container) {
                     return new Controller\WidgetController(
-                        $container->get(Service\WidgetService::class), $container->get('AnalyticsLogger'));
+                        $container->get(Service\WidgetService::class));
                 },
                 Controller\DashboardController::class => function($container) {
                     return new Controller\DashboardController(
-                        $container->get(Service\DashboardService::class), $container->get('AnalyticsLogger'));
+                        $container->get(Service\DashboardService::class));
                 },
             ],
         ];

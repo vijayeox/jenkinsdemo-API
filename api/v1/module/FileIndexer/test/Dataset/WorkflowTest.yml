@@ -169,9 +169,6 @@ ox_activity_instance:
     id: 1
     workflow_instance_id: 1
     activity_instance_id: "[activityInstanceId]"
-    assignee: 'Bharat'
-    group_id: 1
-    form_id: 1
     status: 'In Progress'
     org_id: 1
     activity_id: 1
@@ -179,9 +176,6 @@ ox_activity_instance:
     id: 2
     workflow_instance_id: 2
     activity_instance_id: "[activityInstanceId]"
-    assignee: 'Brian'
-    group_id: 1
-    form_id: 2
     status: 'In Progress'
     org_id: 1
     activity_id: 3
@@ -189,9 +183,6 @@ ox_activity_instance:
     id: 3
     workflow_instance_id: 3
     activity_instance_id: "[activityInstanceId]"
-    assignee: 'Purvi'
-    group_id: 2
-    form_id: 3
     status: 'Completed'
     org_id: 1
     activity_id: 5
@@ -215,7 +206,6 @@ ox_field:
     app_id: 99
     text: "field1text"
     data_type: "integer"
-    workflow_id: 1
     required: 1
     sequence: 2
 -
@@ -223,7 +213,6 @@ ox_field:
     name: "field2"
     app_id: 99
     text: "field2text"
-    workflow_id: 1
     data_type: "integer"
     required: 1
     sequence: 1
@@ -233,7 +222,6 @@ ox_field:
     app_id: 99
     text: "field3text"
     data_type: "string"
-    workflow_id: 2
     required: 1
     sequence: 1
 -
@@ -241,7 +229,6 @@ ox_field:
     name: "field4"
     app_id: 99
     text: "field4text"
-    workflow_id: 2
     data_type: "integer"
     required: 1
     sequence: 2
@@ -279,37 +266,37 @@ ox_file:
 ox_file_attribute:
 -
     id: 1
-    fileid: 1
+    file_id: 1
     org_id: 1
-    fieldvalue: 1
-    fieldid: 1
+    field_value: 1
+    field_id: 1
 -
     id: 2
-    fileid: 1
+    file_id: 1
     org_id: 1
-    fieldvalue: 1
-    fieldid: 2
+    field_value: 1
+    field_id: 2
 -
     id: 3
-    fileid: 2
+    file_id: 2
     org_id: 1
-    fieldvalue: 2
-    fieldid: 3
+    field_value: 2
+    field_id: 3
 -
     id: 4
-    fileid: 2
+    file_id: 2
     org_id: 1
-    fieldvalue: 2
-    fieldid: 4
+    field_value: 2
+    field_id: 4
 -
     id: 5
-    fileid: 3
+    file_id: 3
     org_id: 1
-    fieldvalue: 1
-    fieldid: 2
+    field_value: 1
+    field_id: 2
 -
     id: 6
-    fileid: 3
+    file_id: 3
     org_id: 1
-    fieldvalue: 1
-    fieldid: 4
+    field_value: 1
+    field_id: 4

@@ -7,6 +7,7 @@ use Analytics\Model\DataSource;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
+use Exception;
 
 class DataSourceController extends AbstractApiController
 {
@@ -16,9 +17,9 @@ class DataSourceController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct($dataSourceService, Logger $log)
+    public function __construct($dataSourceService)
     {
-        parent::__construct(null, $log, __class__, DataSource::class);
+        parent::__construct(null, __class__, DataSource::class);
         $this->setIdentifierName('dataSourceUuid');
         $this->dataSourceService = $dataSourceService;
     }
@@ -80,29 +81,21 @@ class DataSourceController extends AbstractApiController
     }
 
     public function delete($uuid) {
-        throw new Exception('Deleting without version number is not allowed. Use */deleteWithVersion?version=<version> URL.');
-    }
-
-    /**
-     * Delete DataSource API
-     * @api
-     * @link /analytics/dataSource/:dataSourceUuid
-     * @method DELETE
-     * @param $uuid ID of DataSource to Delete
-     * @return array success|failure response
-     */
-    public function deleteWithVersion($uuid, $data)
-    {
-        try {
-            $response = $this->dataSourceService->deleteDataSource($uuid,$data['version']);
+        $params = $this->params()->fromQuery();
+        if(isset($params['version'])){
+            try {
+                $response = $this->dataSourceService->deleteDataSource($uuid,$params['version']);
+            }
+            catch (VersionMismatchException $e) {
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+            }
+            if ($response == 0) {
+                return $this->getErrorResponse("DataSource not found for uuid - $uuid", 404, ['uuid' => $uuid]);
+            }
+            return $this->getSuccessResponse();
+        } else {
+            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['uuid' => $uuid]);
         }
-        catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
-        }
-        if ($response == 0) {
-            return $this->getErrorResponse("DataSource not found for uuid - $uuid", 404, ['uuid' => $uuid]);
-        }
-        return $this->getSuccessResponse();
     }
 
     /**

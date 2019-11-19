@@ -7,6 +7,7 @@ use Analytics\Model\Widget;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\VersionMismatchException;
+use Exception;
 
 class WidgetController extends AbstractApiController
 {
@@ -15,9 +16,9 @@ class WidgetController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct($widgetService, Logger $log)
+    public function __construct($widgetService)
     {
-        parent::__construct(null, $log, __class__, Widget::class);
+        parent::__construct(null, __class__, Widget::class);
         $this->setIdentifierName('widgetUuid');
         $this->widgetService = $widgetService;
     }
@@ -80,30 +81,21 @@ class WidgetController extends AbstractApiController
     }
 
     public function delete($uuid) {
-        throw new Exception('Deleting without version number is not allowed. Use */deleteWithVersion?version=<version> URL.');
-    }
-
-    /**
-     * Delete Widget API
-     * @api
-     * @link /analytics/widget/:widgetUuid
-     * @method DELETE
-     * @param $uuid ID of Widget to Delete
-     * @return array success|failure response
-     */
-    public function deleteWithVersion($uuid)
-    {
         $params = $this->params()->fromQuery();
-        try {
-            $response = $this->widgetService->deleteWidget($uuid, $params['version']);
+        if(isset($params['version'])){
+            try {
+                $response = $this->widgetService->deleteWidget($uuid, $params['version']);
+            }
+            catch (VersionMismatchException $e) {
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+            }
+            if ($response == 0) {
+                return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);
+            }
+            return $this->getSuccessResponse();
+        } else {
+            return $this->getErrorResponse("Deleting without version number is not allowed. Use */delete?version=<version> URL.", 404, ['uuid' => $uuid]);
         }
-        catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
-        }
-        if ($response == 0) {
-            return $this->getErrorResponse("Widget not found for uuid - $uuid", 404, ['uuid' => $uuid]);
-        }
-        return $this->getSuccessResponse();
     }
 
     /**

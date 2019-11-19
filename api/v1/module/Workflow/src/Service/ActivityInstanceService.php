@@ -70,14 +70,14 @@ class ActivityInstanceService extends AbstractService
     }
     public function createActivityInstance(&$data)
     {
-        $page = new ActivityInstance();
+        $activityInstance = new ActivityInstance();
         $data['start_date'] = date('Y-m-d H:i:s');
-        $page->exchangeArray($data);
-        $page->validate();
+        $activityInstance->exchangeArray($data);
+        $activityInstance->validate();
         $this->beginTransaction();
         $count = 0;
         try {
-            $count = $this->table->save($page);
+            $count = $this->table->save($activityInstance);
             if ($count == 0) {
                 $this->rollback();
                 return 0;
@@ -88,6 +88,7 @@ class ActivityInstanceService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
+        print_r($e->getMessage());exit;
             $this->rollback();
             throw $e;
         }
