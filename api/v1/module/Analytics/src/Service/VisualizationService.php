@@ -30,6 +30,7 @@ class VisualizationService extends AbstractService
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['version'] = 1;
         $form->exchangeWithSpecificKey($data,'value');
         $form->validate();
         $form->validateType($data['name']);

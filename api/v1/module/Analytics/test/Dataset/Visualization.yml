@@ -7,6 +7,9 @@ ox_visualization:
     date_created: '2019-06-27 07:25:06'
     org_id: 1
     isdeleted: 0
+    configuration: '{"data":"value"}'
+    renderer: "value1"
+    type: "Type1"
     version: 1
   -
     id: 2
@@ -16,4 +19,7 @@ ox_visualization:
     date_created: '2019-06-27 07:25:06'
     org_id: 1
     isdeleted: 0
+    configuration: '{"data":"value"}'
+    renderer: "value2"
+    type: "Type2"
     version: 1
