@@ -182,12 +182,12 @@ class ContactController extends AbstractApiController
 
     public function contactImportAction()
     {
-        $columns = ['Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type','Phone 1 - Value','Organization 1 - Name','Organization 2 - Title','Location'];
+        $columns = ['Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type','Phone 1 - Value','Organization 1 - Name','Organization 2 - Title','Address 1 - Street','Address 1 - Extended Address','Address 1 - City','Address 1 - Region','Address 1 - Country','Address 1 - Postal Code'];
         if (!isset($_FILES['file'])) {
             return $this->getErrorResponse("Add file to import", 404);
         }
         $result = $this->contactService->importContactCSV($_FILES['file']);
-
+        
         if ($result ==  3) {
             return $this->getErrorResponse("Column Headers donot match...", 404, $columns);
         }
