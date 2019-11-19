@@ -179,7 +179,6 @@ class AppService extends AbstractService
         try{
             $appUuid = $this->checkAppExists($appData);
             $this->updateymlforapp($ymlData, $appData, $path);
-
             $queryString = "UPDATE ox_app SET status = ".App::IN_DRAFT." WHERE ox_app.uuid = :appUuid";
             $params = array("appUuid" => $appUuid);
             $result = $this->executeQueryWithBindParameters($queryString, $params);
@@ -196,6 +195,7 @@ class AppService extends AbstractService
             $returnData = $this->createRole($ymlData);
             $this->performMigration($path, $ymlData['app'][0]);
             $appName = $ymlData['app'][0]['name'];
+            $this->setupAppView($path, $ymlData);
             $this->setupLinks($path, $appName, $appUuid, $orgUuid);
             $this->processWorkflow($ymlData, $path, $orgUuid);
             //check if menu exists and add to app menu table
@@ -207,6 +207,28 @@ class AppService extends AbstractService
             $this->rollback();
             throw $e;
         }
+    }
+
+    private function setupAppView($path, $yamlData){
+        if(!is_dir($path.'view')){
+            FileUtils::createDirectory($path.'view');
+        }
+        if(!is_dir($path.'view/apps/')){
+            FileUtils::createDirectory($path.'view/apps/');
+        }
+        $appName = $path.'view/apps/'.$yamlData['app'][0]['name'];
+        $appName = str_replace(' ', '', $appName);
+        $eoxapp = $this->config['DATA_FOLDER'].'eoxapps';
+        FileUtils::copyDir($eoxapp, $appName);
+        $metadataPath = $appName.'/metadata.json';
+        $jsonData = json_decode(file_get_contents($metadataPath), true);
+        $jsonData['name']=$yamlData['app'][0]['name'];
+        $jsonData['appId'] = $yamlData['app'][0]['uuid'];
+        $jsonData['title']['en_EN']= $yamlData['app'][0]['name'];
+        if(isset($yamlData['app'][0]['description'])){
+            $jsonData['description']['en_EN'] = $yamlData['app'][0]['description'];
+        }
+        file_put_contents($appName.'/metadata.json', json_encode($jsonData));
     }
 
     private function processWorkflow(&$yamlData, $path,  $orgUuid = NULL){
@@ -432,7 +454,6 @@ class AppService extends AbstractService
         $list = "'" . implode( "', '", $privilegearray) . "'";
 
         $appId = $this->getIdFromUuid('ox_app',$appUuid);
-        // delete from ox_app_menu
         $this->privilegeService->saveAppPrivileges($appId, $privilegedata);
     }
 

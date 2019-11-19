@@ -13,7 +13,7 @@ role:
   - {name: 'Policy Holder', default: true, privileges: [name: 'MANAGE_MY_POLICY', permission: 3]}
 menu:
   - name: Home
-    privilee: "MANAGE_MY_POLICY_WRITE"
+    privilege: "MANAGE_MY_POLICY_WRITE"
     icon: 'fa-home'
     page:
       name: "My Policies"
@@ -90,18 +90,29 @@ workflow:
   - name: "Individual Liability"
     id: f0efea9e-7863-4368-a9b2-baa1a1603067
     bpmn_file: "Individual Professional Liability/NewUserApplicationSubmission.bpmn"
+    entity: "Individual Professional Liability"
   - name: "Group Liability"
     id: 76dc0348-910c-4ae8-a05a-78ba47803208
     bpmn_file: group_liability.bpmn
+    entity: "Group Professional Liability"
   - name: "Dive Store"
     id: cb99e634-de00-468d-9230-d6f77d241c5b
     bpmn_file: Dive Store/dive_store.bpmn
+    entity: "Dive Store"
   - name: "Dive Boat"
     id: bb15e393-11b9-48ea-bc5a-5b7616047cb1
     bpmn_file: Dive Shop/dive_boat.bpmn
+    entity: "Dive Boat"
   - name: "Individual Liability Auto Renewal"
     id: 91cb9e10-5845-4379-97c9-f9486b702bd6
     bpmn_file: IPLAutoRenewal.bpmn
+    entity: "Individual Professional Liability"
+form:
+  - name: PADI Verification
+  - description: description
+  - uuid: 
+  - template: JSON STRING
+  - entity: Padi
 job:
   - import_padi:
       - {

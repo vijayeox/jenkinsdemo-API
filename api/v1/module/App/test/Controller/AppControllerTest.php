@@ -213,12 +213,6 @@ class AppControllerTest extends ControllerTest
     public function testDeployApp()
     {
         copy(__DIR__.'/../sampleapp/application1.yml', __DIR__.'/../sampleapp/application.yml');
-        $target = __DIR__.'/../Dataset/SampleApp';
-        $link = __DIR__.'/../sampleapp/view/apps/SampleApp';
-        if(is_link($link)){
-            unlink($link);
-        }
-        symlink($target, $link);
         $this->initAuthToken($this->adminUser);
         if (enableCamundaForDeployApp == 0) {
             $mockProcessManager = $this->getMockProcessManager();
@@ -306,7 +300,9 @@ class AppControllerTest extends ControllerTest
             }
         }
         unlink(__DIR__.'/../sampleapp/application.yml');
-        unlink($link);
+        $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
+        $appname = str_replace(' ', '', $appname);
+        FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
@@ -346,8 +342,11 @@ class AppControllerTest extends ControllerTest
             }
         }
         unlink(__DIR__.'/../sampleapp/application.yml');
+        $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
+        $appname = str_replace(' ', '', $appname);
+        FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
-        $this->unlinkFolders($YmlappUuid, $appName);
+        $this->unlinkFolders($YmlappUuid, $appname);
     }
 
     private function unlinkFolders($appUuid, $appName, $orgUuid = null){
@@ -362,7 +361,8 @@ class AppControllerTest extends ControllerTest
                 unlink($file);
             }
         }
-        $app = $config['APPS_FOLDER'].'SampleApp';
+        $appName = str_replace(' ', '', $appName);
+        $app = $config['APPS_FOLDER'].$appName;
         if(is_link($app)){
             unlink($app);
         }
@@ -412,6 +412,9 @@ class AppControllerTest extends ControllerTest
             $yaml['org'][0]['uuid'] = null;
         }
         unlink(__DIR__.'/../sampleapp/application.yml');
+        $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
+        $appname = str_replace(' ', '', $appname);
+        FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
@@ -445,6 +448,9 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
+        $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
+        $appname = str_replace(' ', '', $appname);
+        FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
@@ -524,6 +530,9 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
+        $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
+        $appname = str_replace(' ', '', $appname);
+        FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
@@ -559,6 +568,9 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
+        $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
+        $appname = str_replace(' ', '', $appname);
+        FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
@@ -594,6 +606,9 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($template), true);
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
+        $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
+        $appname = str_replace(' ', '', $appname);
+        FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }
@@ -618,6 +633,9 @@ class AppControllerTest extends ControllerTest
         $YmlappUuid = $yaml['app'][0]['uuid'];
         $this->assertEquals($content['status'], 'success');
         unlink(__DIR__.'/../sampleapp/application.yml');
+        $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
+        $appname = str_replace(' ', '', $appname);
+        FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
     }

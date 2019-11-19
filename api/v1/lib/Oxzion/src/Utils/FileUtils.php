@@ -79,22 +79,35 @@ class FileUtils
         self::createDirectory($destDirectory);
         copy($src, $destDirectory.$destFile);
     }
-    
+
+    public static function copyDir($src, $dest) {
+        if (!file_exists($dest)) self::createDirectory($dest);
+        foreach (scandir($src) as $file) {
+            if ($file == '.' || $file == '..') continue;
+            if (is_dir($src.'/'.$file))
+                self::copyDir($src.'/'.$file, $dest.'/'.$file);
+            elseif (!file_exists($dest.'/'.$file))
+                copy($src.'/'.$file, $dest.'/'.$file);
+        }
+    }
+
     public static function renameFile($source, $destination)
     {
         self::createDirectory(str_replace(basename($destination), "", $destination));
         return rename($source, $destination);
     }
+
     public static function deleteDirectoryContents($dir)
     {
-        if (is_file($dir)) {
-            return unlink($dir);
-        } elseif (is_dir($dir)) {
-            $scan = glob(rtrim($dir, '/').'/*');
-            foreach ($scan as $index=>$path) {
-                self::deleteDirectoryContents($path);
+        if(is_dir($dir)){
+            $files = scandir( $dir );
+            foreach( $files as $file ) {
+                if ($file !== '.' && $file !== '..')
+                self::deleteDirectoryContents( $dir.'/'.$file );
             }
-            return @rmdir($dir);
+            rmdir( $dir );
+        } else {
+            unlink( $dir );
         }
     }
     public static function getFiles($directory)
