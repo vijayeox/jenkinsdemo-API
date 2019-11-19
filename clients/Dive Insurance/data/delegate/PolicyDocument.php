@@ -7,7 +7,7 @@ use Oxzion\Utils\ArtifactUtils;
 
 class PolicyDocument extends AbstractDocumentAppDelegate
 {
-    private $documentBuilder;
+    protected $documentBuilder;
     protected $type;
     protected $template;
     const TEMPLATE = array(
@@ -124,6 +124,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                      'nTemplate' => 'Group_PL_NI',
                      'nheader' => 'Group_NI_header.html',
                      'nfooter' => 'Group_NI_footer.html'));
+
+        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured');
        
     }
 
@@ -136,54 +138,28 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     {
         $this->destination = $destination;
     }
-    public function execute(array $data,Persistence $persistenceService)
+    public function execute(array $data,Persistence $persistenceService) 
     {     
+        print("POLICY DOCUMENT");
         $documents = array();
         $this->logger->info("Template Data Source - ".print_r($data, true));
         $date = ''; 
         $this->logger->info("Executing Policy Document");
-        if($this->type != "quote" || $this->type != "lapse"){
-            $coi_number = $this->generateCOINumber($data,$persistenceService);
-            $data['certificate_no'] = $coi_number;
-        }
-        
-        $date=date_create($data['start_date']);
-        $data['start_date'] = date_format($date,"m/d/Y");
-        $date=date_create($data['end_date']);
-        $data['end_date'] = date_format($date,"m/d/Y");
+       
+        $this->setPolicyInfo($data,$persistenceService);
+        $dest = $data['dest'];
+        unset($data['dest']);
 
-        if(isset($data['fileId'])){
-            $data['uuid'] = $data['fileId'];
-        }
-        if(!isset($data['uuid'])){
-            $data['uuid'] = UuidUtil::uuid();
-        }
-        
-        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));        
-        $dest = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid'],array('orgUuid' => $orgUuid));
-        $data['orgUuid'] = $orgUuid;
 
         if($this->type == 'lapse'){
             $lapseTemplate = self::TEMPLATE[$data['product']]['ltemplate'];
-            $lapseDest = $dest['absolutePath'].$coi_number.'_Lapse_Letter'.'.pdf';
+            $lapseDest = $dest['absolutePath'].'_Lapse_Letter'.'.pdf';
             $options['header'] = self::TEMPLATE[$data['product']]['lheader'];
             $options['footer'] = self::TEMPLATE[$data['product']]['lfooter'];
             $this->documentBuilder->generateDocument($lapseTemplate,$data,$lapseDest,$options);
-            $documents['lapse_document'] = $dest['relativePath'].$coi_number.'_LapseLetter'.'.pdf'; 
+            $documents['lapse_document'] = $dest['relativePath'].'_LapseLetter'.'.pdf'; 
             return $data;
         }
-
-
-        $license_number = $this->getLicenseNumber($data,$persistenceService);
-        $policyDetails = $this->getPolicyDetails($data,$persistenceService);
-        $data['license_number'] = $license_number;
-
-        if($policyDetails){
-            $data['policy_id'] = $policyDetails['policy_number'];
-            $data['carrier'] = $policyDetails['carrier'];
-        } 
-        
-    
         
         $options = array();
         if(isset($this->template[$data['product']]['header'])){
@@ -268,18 +244,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
 
    	  	$temp =$data;
-        if(isset($data['endorsement_options'])){
-            $temp['endorsement_options'] = json_encode($data['endorsement_options']);
+        foreach ($this->jsonOptions as $val){
+            if(array_key_exists($val, $temp)){
+                 $temp[$val] = json_encode($data[$val]);
+            }
         }
-
+        
         if(isset($data['lossPayees'])){
             $temp['lossPayees'] = json_encode(array('name' => $data['lossPayees']));
         }
 
-        if(isset($data['additionalInsured'])){
-            $temp['additionalInsured'] = json_encode($data['additionalInsured']);
-              unset($data['additionalInsured']);
-        }
+       
  
         if(isset($data['additionalNamedInsured'])){
             $temp['additionalNamedInsured'] = json_encode(array('name' => $data['additionalNamedInsured']));
@@ -288,10 +263,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
         if(isset($data['groupAdditionalInsured'])){
             $temp['groupAdditionalInsured'] = json_encode(array('name' => $data['groupAdditionalInsured']));
-        }
-
-        if(isset($data['namedInsured'])){
-            $temp['namedInsured'] = json_encode($data['namedInsured']);
         }
 
         $destAbsolute = $dest['absolutePath'].$template.'.pdf';
@@ -314,27 +285,27 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
         if(isset($this->template[$data['product']]['card'])){
             $cardTemplate = $this->template[$data['product']]['card'];
-            $cardDest = $dest['absolutePath'].$coi_number.'_Pocket_Card'.'.pdf';
+            $cardDest = $dest['absolutePath'].$data['certificate_no'].'_Pocket_Card'.'.pdf';
             $this->documentBuilder->generateDocument($cardTemplate,$temp,$cardDest);
-            $documents['card'] = $dest['relativePath'].$coi_number.'_Pocket_Card'.'.pdf';
+            $documents['card'] = $dest['relativePath'].$data['certificate_no'].'_Pocket_Card'.'.pdf';
         }
 
         if(isset($data['cover_letter']) && $data['cover_letter']){
             $coverTemplate = $this->template[$data['product']]['cover_letter'];
-            $coverDest = $dest['absolutePath'].$coi_number.'_Cover_Letter'.'.pdf';
+            $coverDest = $dest['absolutePath'].$data['certificate_no'].'_Cover_Letter'.'.pdf';
             $options['header'] = $this->template[$data['product']]['lheader'];
             $options['footer'] = $this->template[$data['product']]['lfooter'];
             $this->documentBuilder->generateDocument($coverTemplate,$temp,$coverDest,$options);
-            $documents['cover_letter'] = $dest['relativePath'].$coi_number.'_Cover_Letter'.'.pdf';
+            $documents['cover_letter'] = $dest['relativePath'].$data['certificate_no'].'_Cover_Letter'.'.pdf';
         }
 
         if(isset($data['lossPayees'])){
             $lpTemplate = self::TEMPLATE[$data['product']]['lpTemplate'];
-            $coverDest = $dest['absolutePath'].$coi_number.'_Loss_Payees'.'.pdf';
+            $coverDest = $dest['absolutePath'].$data['certificate_no'].'_Loss_Payees'.'.pdf';
             $options['header'] = self::TEMPLATE[$data['product']]['lpheader'];
             $options['footer'] = self::TEMPLATE[$data['product']]['lpfooter'];
             $this->documentBuilder->generateDocument($lpTemplate,$temp,$coverDest,$options);
-            $documents['loss_payee_document'] = $dest['relativePath'].$coi_number.'_Loss_Payees'.'.pdf';
+            $documents['loss_payee_document'] = $dest['relativePath'].$data['certificate_no'].'_Loss_Payees'.'.pdf';
         }
 
         if(isset($data['additionalInsured'])){
@@ -371,7 +342,45 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['ani_document'] = $dest['relativePath'].$data['product'].'_NI'.'.pdf';
         }
         $this->logger->info("DATA".print_r($data,true));
-        $data['documents'] = $documents;
+        $data['documents'] = $documents;                              
+        return $data;
+    }
+
+    protected function setPolicyInfo(&$data,$persistenceService)
+    {
+        if($this->type != "quote" || $this->type != "lapse"){
+            $coi_number = $this->generateCOINumber($data,$persistenceService);
+            $data['certificate_no'] = $coi_number;
+        }
+        
+        $date=date_create($data['start_date']);
+        $data['start_date'] = date_format($date,"m/d/Y");
+        $date=date_create($data['end_date']);
+        $data['end_date'] = date_format($date,"m/d/Y");
+
+        if(isset($data['fileId'])){
+            $data['uuid'] = $data['fileId'];
+        }
+        if(!isset($data['uuid'])){
+            $data['uuid'] = UuidUtil::uuid();
+        }
+        
+        $orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] :AuthContext::get(AuthConstants::ORG_UUID));        
+        $data['orgUuid'] = $orgUuid;
+
+        if($this->type != "lapse"){
+            $license_number = $this->getLicenseNumber($data,$persistenceService);
+            $policyDetails = $this->getPolicyDetails($data,$persistenceService);
+            $data['license_number'] = $license_number;
+
+            if($policyDetails){
+                $data['policy_id'] = $policyDetails['policy_number'];
+                $data['carrier'] = $policyDetails['carrier'];
+            } 
+        }
+
+        $data['dest'] = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid'],array('orgUuid' => $orgUuid));
+
         return $data;
     }
 
