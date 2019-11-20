@@ -289,8 +289,11 @@ abstract class AbstractService extends AbstractBaseService
             $select  = "SELECT ou.id,ou.uuid from ox_user as ou join ox_organization as org on org.contactid = ou.id where org.id = :orgId";
             $params = array("orgId" => $orgId);
             $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
-            AuthContext::put(AuthConstants::USER_ID, $result[0]['id']);
-            AuthContext::put(AuthConstants::USER_UUID, $result[0]['uuid']);
+            if(isset($result[0]))
+            {
+                AuthContext::put(AuthConstants::USER_ID, $result[0]['id']);
+                AuthContext::put(AuthConstants::USER_UUID, $result[0]['uuid']);
+            }
         }
     }
 }
