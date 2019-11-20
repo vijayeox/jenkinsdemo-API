@@ -58,7 +58,7 @@ class ActivityInstanceController extends AbstractApiControllerHelper
         try{
             $response = $this->activityInstanceService->createActivityInstanceEntry($data);
             $this->log->info(ActivityInstanceController::class.":Add Activity Instance Successful");
-            
+
         }catch(EntityNotFoundException $e){
             $this->log->info("Entity Not FOund Instance");
             if(isset($data['processVariables'])){

@@ -80,7 +80,7 @@ class ActivityImpl implements Activity
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(),$e);
             throw $e;
-        }
+       }
     }
     public function completeActivity($activityId, $parameterArray=array())
     {
@@ -104,6 +104,7 @@ class ActivityImpl implements Activity
             $params[$key]['value'] = $value;
         }
         try {
+            $this->logger->info("submitTaskForm parameter array -".print_r($params,true));
             $response =  $this->restClient->post($query, array('variables'=>$params));
             $result = json_decode($response, true);
             $this->logger->info("submitTaskForm method result - $result \n");
@@ -113,7 +114,7 @@ class ActivityImpl implements Activity
             throw $e;
         }
     }
-    
+
     public function resolveActivity($id, $parameterArray=array())
     {
         $query = 'task/'.$id.'/resolve';

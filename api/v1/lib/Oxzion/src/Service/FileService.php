@@ -60,6 +60,7 @@ class FileService extends AbstractService
         }
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
         $fields = $data = $this->cleanData($data);
+        $this->logger->info("Data From Fileservice before encoding - " . print_r($data, true));
         $jsonData = json_encode($data);
         $data['workflow_instance_id'] = isset($workflowInstanceId) ? $workflowInstanceId : null;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -87,6 +88,7 @@ class FileService extends AbstractService
                     throw new Exception("Could not update latest for parent file " . $data['parent_id']);
                 }
             }
+            $this->logger->info("FILE DATA BEFORE SAVE----" . print_r($file,true));
             $count = $this->table->save($file);
             $this->logger->info("COUNT  FILE DATA----" . $count);
             if ($count == 0) {
@@ -207,7 +209,7 @@ class FileService extends AbstractService
 
         $this->beginTransaction();
         try {
-            $this->logger->info("Entering to Update File -" . json_encode($file) . "\n");
+            $this->logger->info("Entering to Update File -" . json_encode($fileObject) . "\n");
 
             $file->exchangeArray($fileObject);
             $file->validate();
@@ -356,7 +358,7 @@ class FileService extends AbstractService
                     }
                     continue;
                 }
-                if ($field['data_type'] == 'selectboxes' && isset($fieldData[$field['name']])) {
+                if (isset($fieldData[$field['name']]) && is_array($fieldData[$field['name']])) {
 
                     $fieldData[$field['name']] = json_encode($fieldData[$field['name']]);
                 }

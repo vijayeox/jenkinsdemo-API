@@ -12,7 +12,7 @@ class PadiVerification extends AbstractAppDelegate
 
     // Padi Verification is performed here
     public function execute(array $data,Persistence $persistenceService)
-    {  
+    {
         $this->logger->info("Padi Verification");
         if(isset($data['padi'])){
             $data['member_number'] = $data['padi'];

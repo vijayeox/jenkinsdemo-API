@@ -61,7 +61,10 @@ class CacheController extends AbstractApiController
         $data = array_merge($this->extractPostData(),$this->params()->fromRoute());
         $appUuid = $this->params()->fromRoute()['appId'];
         try {
-            $data = $this->cacheService->storeUserCache($appUuid, $data);
+            $count = $this->cacheService->storeUserCache($appUuid, $data);
+            if($count == 0 ){
+                return $this->getErrorResponse("Failed to store cache", 404, $data);
+            }
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
