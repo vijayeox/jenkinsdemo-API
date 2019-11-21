@@ -336,7 +336,7 @@ class PolicyDocumentTest extends DelegateTest
         $doc = substr($doc, 0, strripos($doc, '/'));
         $files = glob($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'].'/'.$content['uuid'].'/'."*");
         $filecount = count($files);
-        $this->assertEquals($filecount,5);
+        $this->assertEquals($filecount,6);
         FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
     }
 
@@ -436,7 +436,6 @@ class PolicyDocumentTest extends DelegateTest
                  'personal_effect_deduct' => '500.00',
                  'liability_ins_deduct' => '1,000.00',
                  'medical_deduct' => '100.00',
-                 'additionalInsured' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}',
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
              ];
@@ -497,7 +496,7 @@ class PolicyDocumentTest extends DelegateTest
                  'personal_effect_deduct' => '500.00',
                  'liability_ins_deduct' => '1,000.00',
                  'medical_deduct' => '100.00',
-                 'additionalInsured' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}',
+                 'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
              ];
@@ -527,6 +526,7 @@ class PolicyDocumentTest extends DelegateTest
                  'firstname' => 'Mohan',
                  'lastname' => 'Raj' ,
                  'orgname' => "ABOVE AND BELOW THE SEA LLC L'S DIVE INC. & ST. THOMAS DIVING CLUB",
+                 'quote_due_date' => '2019-06-01',
                  'address1' => 'ABC 200',
                  'address2' => 'XYZ 300',
                  'city' => 'APO',
@@ -558,7 +558,10 @@ class PolicyDocumentTest extends DelegateTest
                  'personal_effect_deduct' => '500.00',
                  'liability_ins_deduct' => '1,000.00',
                  'medical_deduct' => '100.00',
-                 'additionalNamedInsured' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}'            ];
+                 'additionalNamedInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
+                 'manager_name' => 'Julie Joseph',
+                 'manager_email' => 'abcd@gmail.com',
+                 ''];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -686,10 +689,10 @@ class PolicyDocumentTest extends DelegateTest
                  'personal_effect_deduct' => '500.00',
                  'liability_ins_deduct' => '1,000.00',
                  'medical_deduct' => '100.00',
-                 'additionalInsured' => array("LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"),
+                 'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
-                 'lossPayees' => array("LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)")];
+                 'lossPayees' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}')];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -751,8 +754,8 @@ class PolicyDocumentTest extends DelegateTest
         $this->assertEquals(isset($content['carrier']), true);
         $this->assertEquals(isset($content['license_number']), true);
         $this->assertEquals(isset($content['certificate_no']), true);
-        $this->assertEquals(isset($content['documents']['policy_document']), true);
-        $doc = $config['APP_DOCUMENT_FOLDER'].$content['documents']['coi_document'];
+        $this->assertEquals(isset($content['documents']['liability_policy_document']), true);
+        $doc = $config['APP_DOCUMENT_FOLDER'].$content['documents']['liability_coi_document'];
         $this->assertTrue(is_file($doc));
         $this->assertTrue(filesize($doc)>0);
         $doc = substr($doc, 0, strripos($doc, '/'));
@@ -781,10 +784,10 @@ class PolicyDocumentTest extends DelegateTest
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Dive Store',
                  'property' => array('content_limit' => '80,000', 'business_income' => '40,000','building_coverage' => 1,'equipment_breakdown' => 1,'dependant_prop' => '5,000','robbery_inside' => '2,500','robbery_outside' => '2,500','transit_coverage' => '10,000','emp_theft' => '5,000','prop_others' => '25,000','off_premises' => '10,000','glass' => '5,000','property' => 1,'cover_letter' => 1,'storename' => 'HUB INTERNATIONAL'),
+                 'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
-                 'additionalInsured' => array("LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"),
-                 'lossPayees' => array("COMMUNITY BANK OF ELMHURST-300 W.BUTTERFIELD RD. ELMHURST, IL 60126- (LOAN #1000477-1 AND LOAN#133183-1)","COMMUNITY BANK OF ELMHURST-300 W.BUTTERFIELD RD. ELMHURST, IL 60126- (LOAN #1000477-1 AND LOAN#133183-1)")];
+                 'lossPayees' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}')];
 
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -795,8 +798,8 @@ class PolicyDocumentTest extends DelegateTest
         $this->assertEquals(isset($content['carrier']), true);
         $this->assertEquals(isset($content['license_number']), true);
         $this->assertEquals(isset($content['certificate_no']), true);
-        $this->assertEquals(isset($content['documents']['policy_document']), true);
-        $doc = $config['APP_DOCUMENT_FOLDER'].$content['documents']['coi_document'];
+        $this->assertEquals(isset($content['documents']['property_policy_document']), true);
+        $doc = $config['APP_DOCUMENT_FOLDER'].$content['documents']['property_coi_document'];
         $this->assertTrue(is_file($doc));
         $this->assertTrue(filesize($doc)>0);
         $doc = substr($doc, 0, strripos($doc, '/'));
@@ -845,7 +848,7 @@ class PolicyDocumentTest extends DelegateTest
         $doc = substr($doc, 0, strripos($doc, '/'));
         $files = glob($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'].'/'.$content['uuid'].'/'."*");
         $filecount = count($files);
-        $this->assertEquals($filecount,2);
+        $this->assertEquals($filecount,3);
         FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
     }
 
@@ -877,7 +880,7 @@ class PolicyDocumentTest extends DelegateTest
                  'cylinder_coverage' => 0,
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Emergency First Response',
-                 'additionalInsured' => '{"name" : ["LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"]}'];
+                 'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}')];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -893,7 +896,7 @@ class PolicyDocumentTest extends DelegateTest
         $doc = substr($doc, 0, strripos($doc, '/'));
         $files = glob($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'].'/'.$content['uuid'].'/'."*");
         $filecount = count($files);
-        $this->assertEquals($filecount,3);
+        $this->assertEquals($filecount,4);
         FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
     }
 
@@ -925,7 +928,7 @@ class PolicyDocumentTest extends DelegateTest
                  'cylinder_coverage' => 0,
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Group Professional Liability',
-                 'groupAdditionalInsured' => array("LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)")];
+                 'groupAdditionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}')];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -941,7 +944,7 @@ class PolicyDocumentTest extends DelegateTest
         $doc = substr($doc, 0, strripos($doc, '/'));
         $files = glob($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'].'/'.$content['uuid'].'/'."*");
         $filecount = count($files);
-        $this->assertEquals($filecount,1);
+        $this->assertEquals($filecount,2);
         FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
     }
 
@@ -972,7 +975,7 @@ class PolicyDocumentTest extends DelegateTest
                  'cylinder_coverage' => 0,
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Group Professional Liability',
-                 'groupAdditionalInsured' => array("LITITZ COMM CENTER","BAINBRIDGE SPORTSMENS CLUB INC.","BURLINGTON COUNTY COLLEGE","GOLDEN MEADOWS SWIM CENTER","WILLOW SPRINGS PARK","HOLIDAY INN EXPRESS (LITITZ, PA)"),
+                 'groupAdditionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
                  'namedInsured' => array(0 =>array('memberid' => '000048','name' => 'MU LI','status' => 'Swim Instructor','effective_date' => '2020-06-30','upgrade' => 0),1 => array('memberid' => '000048','name' => 'MU LI','status' => 'Swim Instructor','effective_date' => '2020-06-30','upgrade' => 0))];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -989,7 +992,7 @@ class PolicyDocumentTest extends DelegateTest
         $doc = substr($doc, 0, strripos($doc, '/'));
         $files = glob($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid'].'/'.$content['uuid'].'/'."*");
         $filecount = count($files);
-        $this->assertEquals($filecount,2);
+        $this->assertEquals($filecount,3);
         FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
     }
 

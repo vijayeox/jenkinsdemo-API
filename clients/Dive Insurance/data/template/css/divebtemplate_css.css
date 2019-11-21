@@ -346,9 +346,10 @@ body{
 
 /*AI*/
 .ai_list{
-  margin-top: 1px;
-  margin-bottom: 1px;
+  margin-top: 1%;
+  margin-bottom: 1%;
   font-size:13px;
+  text-transform: uppercase;
 }
 .claims_title{
   width:70%;

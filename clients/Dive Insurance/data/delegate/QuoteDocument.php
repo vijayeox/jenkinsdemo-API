@@ -11,7 +11,7 @@ class QuoteDocument extends PolicyDocument
         $this->template = array(
         'Dive Boat' 
             => array(
-                     'cover_letter' => 'Dive_Boat_Cover_Letter',
+                     'cover_letter' => 'Dive_Boat_Quote_Cover_Letter',
                      'lheader' => 'letter_header.html',
                      'lfooter' => 'letter_footer.html',
                      'template' => 'DiveBoat_Quote',
@@ -22,7 +22,8 @@ class QuoteDocument extends PolicyDocument
                      'aifooter' => null,
                      'aniTemplate' => 'DiveBoat_ANI',
                      'aniheader' => 'DB_Quote_ANI_header.html',
-                     'anifooter' => null),
+                     'anifooter' => null,
+                     'policy' => 'Dive_Boat_Policy.pdf',),
         'Dive Store' 
             => array(
                      'cover_letter' => 'Dive_Store_Cover_Letter',
@@ -36,7 +37,8 @@ class QuoteDocument extends PolicyDocument
                      'anifooter' => null,
                      'lpTemplate' => 'DS_Quote_LP',
                      'lpheader' => 'DS_LP_header.html',
-                     'lpfooter' => null));
+                     'lpfooter' => null,
+                     'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf')));
         
     }
 }

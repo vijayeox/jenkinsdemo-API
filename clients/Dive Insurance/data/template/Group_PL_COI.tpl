@@ -231,11 +231,12 @@
 	{if groupAdditionalInsured}
 		<b><p class ="grp_add">Additional Insured (See Additional Insured Endorsement on Reverse):</p></b>
 		{assign var=list value=$groupAdditionalInsured|json_decode:true}
-		{foreach from=$list.name item=$value}
-	  			<p class = "ai_list">
-	    			&nbsp&nbsp&nbsp{$value}
-	  			</p>
-			{/foreach}
+		{foreach from=$list item=$additional}
+	    		{assign var=datalist value=$additional|json_decode:true}
+	    		<p class = "ai_list">
+	    			&nbsp&nbsp&nbsp{$datalist.name}
+	    		</p>
+    		{/foreach}
 	{/if}
 	</div>
 </body>

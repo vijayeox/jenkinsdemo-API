@@ -7,11 +7,12 @@
 </head>
 <body>
 	<div class ="body_div_ai">
-	    	{foreach from=$list.name item=$value}
-	  			<p class = "ai_list">
-	    			*&nbsp{$value}
-	  			</p>
-			{/foreach}
+	    	{foreach from=$list item=$additional}
+	    		{assign var=datalist value=$additional|json_decode:true}
+	    		<p class = "ai_list">
+	    			&nbsp&nbsp&nbsp{$datalist.name},{$datalist.address},{$datalist.city},{$datalist.state},{$datalist.zip}
+	    		</p>
+    		{/foreach}
 	</div>
 </body>
 </html>

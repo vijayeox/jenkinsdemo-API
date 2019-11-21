@@ -553,7 +553,7 @@ class ContactService extends AbstractService
                 $this->persistContacts($contact, $error_list);
             }
         } catch (Exception $e) {
-            print_r($e->getMessage());
+            
         } finally {
             fclose($file_handle);
         }
