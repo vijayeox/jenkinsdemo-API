@@ -11,9 +11,9 @@ class DiveStorePremiumSummary extends PolicyDocument
         $this->type = 'premiumSummary';
         $this->template = array(
         'Dive Store'
-            => array('template' => 'PocketCard',
-                     'header' => 'letter_header.html',
-                     'footer' => 'letter_footer.html'));
+            => array('template' => 'DiveStore_DCPS_template',
+                     'header' => 'DiveStore_DCPS_header.html',
+                     'footer' => 'DiveStore_DCPS_footer.html'));
         }
 
     public function execute(array $data,Persistence $persistenceService) 

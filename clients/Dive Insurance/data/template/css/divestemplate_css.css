@@ -118,6 +118,11 @@ body{
 	padding: 0px;
 	letter-spacing: 1px;
 }
+
+.info.normal {
+	font-weight: 100;
+}
+
 .caption1{
 	margin-top:10px;
 	margin-bottom: 10px;
@@ -146,6 +151,9 @@ body{
 .p_margin{
 	margin-top: 0px;
 	margin-bottom: 5px;
+}
+.p_margin.normal{
+	font-weight: 100;
 }
 .policy{
 	font-family: sans-serif;
@@ -179,6 +187,10 @@ body{
 }
 .margin_div{
 	margin-top: 10% !important;
+}
+
+.uppercase {
+	text-transform: uppercase;
 }
 
 /*body*/
@@ -310,4 +322,61 @@ body{
 }
 .title2{
 	font-size: 20px;
+}
+
+/* dive center premium summary */
+
+.main {
+	margin-right: 1%;
+	margin-top: 2%;
+    width: 80%;
+    float: right;
+}
+
+.total_main {
+	margin-right: 1%;
+	width: 80%;
+	margin-top: 1%;
+    float: right;
+}
+
+.sub_main,
+.value_main {
+	float: right;
+}
+
+.sub_main {
+	width: 70%;
+}
+.value_main {
+	width: 20%;
+}
+
+.value-main {
+	float: right;
+}
+
+.sub_main p {
+	text-align: right;
+	margin-bottom: 2px;
+	margin-top: 0px;
+	/* font-size: 10px; */
+}
+
+.value_main p {
+	text-align: right;
+	margin-bottom: 2px;
+	text-align: right;
+	margin-top: 0px;
+	font-weight: 700
+	/* font-size: 10px; */
+}
+
+.sub_line {
+	float: right;
+	width: 85%;
+}
+
+.clearfix {
+	clear: both;
 }
