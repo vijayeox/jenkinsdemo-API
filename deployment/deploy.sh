@@ -165,6 +165,7 @@ orocrm()
             ln -nfs /var/log/oxzion/crm /var/lib/oxzion/crm/logs    
         fi
         rm -Rf integrations/crm/var
+        echo -e "${YELLOW}Copying existing link"
         cp -P /var/www/crm/var integrations/crm/var 
         rsync -rl --delete integrations/crm/ /var/www/crm/
         chown www-data:www-data -R /var/lib/oxzion/crm
