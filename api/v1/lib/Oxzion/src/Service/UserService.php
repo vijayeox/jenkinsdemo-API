@@ -159,9 +159,10 @@ class UserService extends AbstractService
         $select = "SELECT ou.id,ou.uuid,count(ou.id),ou.status,ou.username,ou.email,GROUP_CONCAT(ouo.org_id) from ox_user as ou inner join ox_user_org as ouo on ouo.user_id = ou.id where ou.username = '".$data['username']."' OR ou.email = '".$data['email']."' GROUP BY ou.id,ou.uuid,ou.status,ou.email";
         $result = $this->executeQuerywithParams($select)->toArray();
 
-        if(count($result) > 1){
-           throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");       
-        }
+        //Is this required?????
+        // if(count($result) > 1){
+        //    throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");       
+        // }
 
         if(count($result) == 1){
             $result[0]['GROUP_CONCAT(ouo.org_id)'] = isset($result[0]['GROUP_CONCAT(ouo.org_id)']) ? $result[0]['GROUP_CONCAT(ouo.org_id)'] : NULL;
@@ -206,6 +207,7 @@ class UserService extends AbstractService
                 }
             }
         
+        $data['name'] = $data['firstname']." ".$data['lastname'];
         $data['uuid'] = UuidUtil::uuid();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -985,8 +987,8 @@ class UserService extends AbstractService
     }
 
     private function addUserToOrg($userId, $organizationId) {
-        if ($this->getDataByParams('ox_user', array('id'), array('id' => $userId))->toArray()) {
-            if ($this->getDataByParams('ox_organization', array('id'), array('id' => $organizationId, 'status' => 'Active'))->toArray()) {
+        if ($user = $this->getDataByParams('ox_user', array('id', 'username'), array('id' => $userId))->toArray()) {
+            if ($org = $this->getDataByParams('ox_organization', array('id', 'name'), array('id' => $organizationId, 'status' => 'Active'))->toArray()) {
                 if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))->toArray()) {
                     $data = array(array(
                         'user_id' => $userId,
@@ -997,6 +999,9 @@ class UserService extends AbstractService
                     if ($result_update->getAffectedRows() == 0) {
                         return $result_update;
                     }
+                    $message = json_encode(array('orgname' => $org[0]['name'] , 'status' => 'Active', 'username'=>$user[0]["username"]));
+
+                    $this->messageProducer->sendTopic($message, 'USERTOORGANIZATION_ADDED');
                     return 1;
                 } else {
                     return 3;
