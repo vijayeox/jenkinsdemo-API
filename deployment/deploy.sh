@@ -159,13 +159,20 @@ orocrm()
         runuser -l ubuntu -c "php ${TEMP}/integrations/crm/bin/console oro:migration:load --force"
         mkdir -p integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome
         rsync -rl --delete integrations/crm/public/bundles/bowerassets/font-awesome/ integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome/
+        if [ -d "/var/www/crm/var" ] ;
+        then
+            rsync /var/www/crm/var/ /var/lib/oxzion/crm/
+            rm -rf /var/www/crm/var
+            chown www-data:www-data -R /var/lib/oxzion/crm
+        fi
+        #check for link exists
         if [ ! -L "/var/www/crm/var" ] ;
         then
             ln -nfs /var/lib/oxzion/crm /var/www/crm/var
             ln -nfs /var/log/oxzion/crm /var/lib/oxzion/crm/logs    
         fi
         rm -Rf integrations/crm/var
-        echo -e "${YELLOW}Copying existing link"
+        echo -e "${YELLOW}Copying existing link${RESET}"
         cp -P /var/www/crm/var integrations/crm/var 
         rsync -rl --delete integrations/crm/ /var/www/crm/
         chown www-data:www-data -R /var/lib/oxzion/crm
