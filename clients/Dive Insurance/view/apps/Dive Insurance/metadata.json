@@ -5,6 +5,7 @@
   "formId":"1",
   "category": null,
   "autostart": true,
+  "singleton": true,
   "defaultAppforOrgs" : false,
   "server": "server.js",
   "title": {
