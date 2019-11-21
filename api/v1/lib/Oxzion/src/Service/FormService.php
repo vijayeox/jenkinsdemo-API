@@ -45,7 +45,7 @@ class FormService extends AbstractService
             $appId = $appUuid;
         }
         $template['form']['app_id'] = $appId;
-        $data['name'] = $template['form']['name'];
+        // $data['name'] = $template['form']['name'];
         $template['form']['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $template['form']['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $template['form']['date_created'] = date('Y-m-d H:i:s');
@@ -171,20 +171,20 @@ class FormService extends AbstractService
 
     public function getWorkflow($formId)
     {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_form')
-        ->columns(array("*"))
-        ->join('ox_activity_form', 'ox_activity_form.form_id = ox_form.id', array(), 'left')
-        ->join('ox_activity', 'ox_activity.id = ox_activity_form.form_id', array('activity_id'=>'id'), 'left')
-        ->join('ox_workflow', 'ox_workflow.form_id = ox_form.id', array('workflow_id'=>'uuid'), 'inner')
-        ->where(array('ox_form.uuid' => $formId));
-        $response = $this->executeQuery($select)->toArray();
+        $select = "SELECT f.*, a.id as activity_id, w.uuid as workflow_id from ox_form f
+                 left join ox_activity_form af on af.form_id = f.id
+                 left join ox_activity a on a.id = af.form_id
+                 inner join ox_workflow_deployment wd on wd.form_id = f.id
+                 inner join ox_workflow w on wd.workflow_id = w.id
+                 where f.uuid=:formId and wd.latest=1";
+        $params = array("formId" => $formId);
+        $response = $this->executeQueryWithBindParameters($select,$params)->toArray();
         if (count($response)==0) {
             return 0;
         }
         return $response[0];
     }
+    
      private function generateFields($fieldsList, $appId, $formId,$entityId)
     {
         try {

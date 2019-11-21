@@ -257,15 +257,25 @@ class Module
                 FormEngine\FormFactory::class => function ($container) {
                     return FormEngine\FormFactory::getInstance();
                 },
+                Model\WorkflowTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\WorkflowTableGateway::class);
+                    return new Model\WorkflowTable($tableGateway);
+                },
                 Model\WorkflowTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Workflow());
                     return new TableGateway('ox_workflow', $dbAdapter, null, $resultSetPrototype);
                 },
-                Model\WorkflowTable::class => function ($container) {
-                    $tableGateway = $container->get(Model\WorkflowTableGateway::class);
-                    return new Model\WorkflowTable($tableGateway);
+                Model\WorkflowDeploymentTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\WorkflowDeploymentTableGateway::class);
+                    return new Model\WorkflowDeploymentTable($tableGateway);
+                },
+                Model\WorkflowDeploymentTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\WorkflowDeployment());
+                    return new TableGateway('ox_workflow_deployment', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\WorkflowService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -277,7 +287,8 @@ class Module
                         $container->get(Service\FieldService::class),
                         $container->get(\Oxzion\Service\FileService::class),
                         $container->get(Workflow\WorkflowFactory::class),
-                        $container->get(Service\ActivityService::class)
+                        $container->get(Service\ActivityService::class),
+                        $container->get(Model\WorkflowDeploymentTable::class)
                     );
                 },
                 Service\UserTokenService::class => function ($container) {

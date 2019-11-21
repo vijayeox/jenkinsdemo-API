@@ -10,26 +10,26 @@ use Oxzion\Model\Workflow;
 use Oxzion\Model\WorkflowTable;
 use Oxzion\Model\Form;
 use Oxzion\Model\Activity;
-use Oxzion\Model\ActivityTable;
 use Oxzion\Service\FormService;
 use Oxzion\Service\ActivityService;
-use Oxzion\Model\FormTable;
 use Oxzion\Model\Field;
 use Oxzion\Service\FieldService;
-use Oxzion\Model\FieldTable;
 use Oxzion\Workflow\WorkFlowFactory;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Service\FileService;
 use Workflow\Model\WorkflowInstance;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
+use Oxzion\ServiceException;
+use Oxzion\Model\WorkflowDeployment;
 use Exception;
+use Oxzion\Model\WorkflowDeploymentTable;
 
 class WorkflowService extends AbstractService
 {
     private $id;
     private $baseFolder;
-
+    
     /**
     * @ignore table
     */
@@ -43,12 +43,13 @@ class WorkflowService extends AbstractService
     protected $activityEngine;
     protected $activityService;
     static $field= array('workflow_name' => 'ox_workflow.name');
-
-    public function __construct($config, $dbAdapter, WorkflowTable $table, FormService $formService, FieldService $fieldService, FileService $fileService, WorkflowFactory $workflowFactory, ActivityService $activityService)
+    
+    public function __construct($config, $dbAdapter, WorkflowTable $table, FormService $formService, FieldService $fieldService, FileService $fileService, WorkflowFactory $workflowFactory, ActivityService $activityService,WorkflowDeploymentTable $workflowDeploymentTable)
     {
         parent::__construct($config, $dbAdapter);
         $this->baseFolder = $this->config['UPLOAD_FOLDER'];
         $this->table = $table;
+        $this->workflowDeploymentTable = $workflowDeploymentTable;
         $this->config = $config;
         $this->workFlowFactory = $workflowFactory;
         $this->processManager = $this->workFlowFactory->getProcessManager();
@@ -83,105 +84,107 @@ class WorkflowService extends AbstractService
             return 0;
         }
         $data['entity_id'] = $entityId;
-        if (!isset($data['workflowId'])) {
-            try {
-                $this->saveWorkflow($appId, $data);
-                $workflow = $data;
-            } catch (Exception $e) {
-                throw $e;
-            }
-            $workFlowId = $data['id'];
-        } else {
-            $workFlowId = $data['workflowId'];
-        }
+        
         try {
             $processIds = $this->getProcessManager()->deploy($workflowName, array($file));
+            $processId = null;
             if ($processIds) {
                 if (count($processIds)==1) {
-                    $processId = $processIds[0];
-                } else {
-                    $this->deleteWorkflow($appId, $workFlowId);
-                    return 2;
+                    $processDefinitionId = $processIds[0];
+                    $processId = explode(":",$processDefinitionId)[0];
+                    $data['process_id'] = $processId;
+                    $data['process_definition_id'] = $processDefinitionId;
                 }
-            } else {
-                $this->deleteWorkflow($appId, $workFlowId);
-                return 1;
+            }
+            if(!$processId){
+                throw new ServiceException("Process Could not be created","process.creation.failed");
             }
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
-            $this->deleteWorkflow($appId, $workFlowId);
             throw $e;
         }
-        $processes = $this->getProcessManager()->parseBPMN($file, $appId);
-        $startFormId = null;
-        $workFlowList = array();
-        $workFlowFormIds = array();
-        if (isset($processes)) {
-            foreach ($processes as $process) {
-                $activityData = array();
-                if (isset($process['form']['properties'])) {
-                    $formProperties = json_decode($process['form']['properties'], true);
-                }
-                $oxForm = new Form();
-                $oxForm->exchangeArray($process['form']);
-                $oxFormProperties = $oxForm->getKeyArray();
-                if (isset($formProperties)) {
-                    foreach ($formProperties as $formKey => $formValue) {
-                        if (in_array($formKey, $oxFormProperties)) {
-                            $oxForm->__set($formKey, $formValue);
-                        }
+        $this->beginTransaction();
+        try{
+            $this->saveWorkflow($appId, $data);
+            $workflow = $data;
+            $workFlowId = $data['id'];
+            $workflowDeploymentId = $data['workflow_deployment_id'];
+            $processes = $this->getProcessManager()->parseBPMN($file, $appId);
+            $startFormId = null;
+            $workFlowList = array();
+            $workFlowFormIds = array();
+            if (isset($processes)) {
+                foreach ($processes as $process) {
+                    $activityData = array();
+                    if (isset($process['form']['properties'])) {
+                        $formProperties = json_decode($process['form']['properties'], true);
                     }
-                }
-                $formData = $oxForm->toArray();
-                $formData['entity_id'] = $entityId;
-                $formData['workflow_id'] = $workFlowId;
-                $formResult = $this->formService->createForm($appUuid, $formData);
-                $startFormId = $formData['id'];
-                foreach ($process['activity'] as $activity) {
-                    $oxActivity = new Activity();
-                    $oxActivity->exchangeArray($activity);
-                    $oxFormProperties = $oxActivity->getKeyArray();
-                    if (isset($activityProperties)) {
-                        foreach ($activityProperties as $activityKey => $activityValue) {
-                            if (in_array($activityKey, $activityProperties)) {
-                                $oxActivity->__set($key, $activityValue);
+                    $oxForm = new Form();
+                    $oxForm->exchangeArray($process['form']);
+                    $oxFormProperties = $oxForm->getKeyArray();
+                    if (isset($formProperties)) {
+                        foreach ($formProperties as $formKey => $formValue) {
+                            if (in_array($formKey, $oxFormProperties)) {
+                                $oxForm->__set($formKey, $formValue);
                             }
                         }
                     }
-                    $activityData = $oxActivity->toArray();
-                    try {
-                        if(isset($activity['form'])){
-                            $formTemplate = json_decode($activity['form'],true);
-                            $activityData['template'] = $formTemplate['template'];
+                    $formData = $oxForm->toArray();
+                    $formData['entity_id'] = $entityId;
+                    $formResult = $this->formService->createForm($appUuid, $formData);
+                    $startFormId = $formData['id'];
+                    foreach ($process['activity'] as $activity) {
+                        $oxActivity = new Activity();
+                        $oxActivity->exchangeArray($activity);
+                        $oxFormProperties = $oxActivity->getKeyArray();
+                        if (isset($activityProperties)) {
+                            foreach ($activityProperties as $activityKey => $activityValue) {
+                                if (in_array($activityKey, $activityProperties)) {
+                                    $oxActivity->__set($key, $activityValue);
+                                }
+                            }
                         }
-                        $activityData['entity_id'] = $entityId;
-                        $activityData['workflow_id'] = $workFlowId;
-                        $activityResult = $this->activityService->createActivity($appId, $activityData,$appUuid);
-                        $activityIdArray[] = $activityData['id'];
-                    } catch (Exception $e) {
-                        foreach ($activityIdArray as $activityCreatedId) {
-                            $id = $this->activityService->deleteActivity($activityCreatedId);
+                        $activityData = $oxActivity->toArray();
+                        try {
+                            if(isset($activity['form'])){
+                                $formTemplate = json_decode($activity['form'],true);
+                                $activityData['template'] = $formTemplate['template'];
+                            }
+                            $activityData['entity_id'] = $entityId;
+                            $activityData['workflow_deployment_id'] = $workflowDeploymentId;
+                            $activityResult = $this->activityService->createActivity($appId, $activityData,$appUuid);
+                            $activityIdArray[] = $activityData['id'];
+                        } catch (Exception $e) {
+                            if(isset($activityIdArray)){
+                                foreach ($activityIdArray as $activityCreatedId) {
+                                    $id = $this->activityService->deleteActivity($activityCreatedId);
+                                }
+                            }
+                            throw $e;
                         }
-                        $this->logger->error($e->getMessage(), $e);
-                        throw $e;
                     }
                 }
             }
-        }
-        if (isset($workflowName)) {
-            $deployedData = array('id'=>$workFlowId,'app_id'=>$appId,'name'=>$workflowName,'process_id'=>$processId,'form_id'=>$startFormId,'file'=>$file,'entity_id'=>$entityId,'uuid'=>$workflow['uuid']);
-            try {
-                $workFlow = $this->saveWorkflow($appId, $deployedData);
-            } catch (Exception $e){
-                $this->deleteWorkflow($appId,$workflowId);
-                $this->logger->error($e->getMessage(), $e);
-                throw $e;
+            if (isset($workflowName)) {
+                $deployedData = array('id'=>$workFlowId,'workflow_deployment_id' => $workflowDeploymentId,'app_id'=>$appId,'name'=>$workflowName,'process_id'=>$processId,'process_definition_id' => $processDefinitionId,'form_id'=>$startFormId,'file'=>$file,'entity_id'=>$entityId,'uuid'=>$workflow['uuid']);
+                $this->logger->info("Deployed Data-".json_encode($deployedData));
+                try {
+                    $workFlow = $this->saveWorkflow($appId, $deployedData);
+                } catch (Exception $e){
+                    $this->deleteWorkflow($appId,$workFlowId);
+                    throw $e;
+                }
             }
+            $this->commit();
+        }catch(Exception $e){
+            $this->logger->error($e->getMessage(),$e);
+            $this->rollback();
+            throw $e;
         }
         return $deployedData?$deployedData:0;
     }
     public function saveWorkflow($appId, &$data)
-    {
+    { 
         if(isset($appId)){
             if ($app = $this->getIdFromUuid('ox_app', $appId)) {
                 $appId = $app;
@@ -204,9 +207,18 @@ class WorkflowService extends AbstractService
         }else{
             $data['uuid'] = UuidUtil::uuid();
         }
-
+        if(!isset($data['id']) && isset($data['process_id'])){
+            $query = "select id from ox_workflow where process_id=:processId";
+            $params = array("processId" => $data['process_id']);
+            $result = $this->executeQueryWithBindParameters($query,$params)->toArray();
+            if(count($result) > 0){
+                $data['id'] = $result[0]['id'];
+            }
+        }
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
+        $data['date_created'] = date('Y-m-d H:i:s');
         $form = new Workflow();
         $form->exchangeArray($data);
         $form->validate();
@@ -222,6 +234,10 @@ class WorkflowService extends AbstractService
                 $id = $this->table->getLastInsertValue();
                 $data['id'] = $id;
             }
+            $temp = $this->saveWorkflowDeployment($data);
+            if($temp){
+                $data['workflow_deployment_id'] = $temp['id'];
+            }
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
@@ -230,49 +246,7 @@ class WorkflowService extends AbstractService
         }
         return $count;
     }
-    private function generateFields($fieldsList, $appId, $activityId, $workFlowId,$type)
-    {
-        $i=0;
-        $fieldIdArray = array();
-        $existingFields = $this->fieldService->getFields($appId, array('workflow_id'=>$workFlowId));
-        foreach ($fieldsList as $field) {
-            $oxField = new Field();
-            $field['app_id'] = $appId;
-            $field['workflow_id'] = $workFlowId;
-            $oxField->exchangeArray($field);
-            $oxFieldProps = array();
-            if (isset($field['properties'])) {
-                $fieldProperties = json_decode($field['properties'], true);
-                $oxFieldProperties = $oxField->getKeyArray();
-                foreach ($fieldProperties as $fieldKey => $fieldValue) {
-                    if (in_array($fieldKey, $fieldProperties)) {
-                        $oxField->__set($fieldKey, $fieldValue);
-                    } else {
-                        $oxFieldProps[] = array('name'=>$fieldKey,'value'=>$fieldValue);
-                    }
-                }
-            }
-            $oxField->__set('properties', json_encode($oxFieldProps));
-            $fieldData = $oxField->toArray();
-            try {
-                $fieldResult = $this->fieldService->saveField($appId, $fieldData);
-                $fieldIdArray[] = $fieldData['id'];
-                $createFormFieldEntry = $this->createFormFieldEntry($activityId, $fieldData['id']);
-            } catch (Exception $e) {
-                foreach ($fieldIdArray as $fieldId) {
-                    $id = $this->fieldService->deleteField($fieldId);
-                    return 0;
-                }
-            }
-            $i++;
-        }
-        if (count($fieldsList)==$i) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-
+    
     private function createFormFieldEntry($formId, $fieldId)
     {
         $this->beginTransaction();
@@ -287,7 +261,7 @@ class WorkflowService extends AbstractService
             throw $e;
         }
     }
-
+    
     public function updateWorkflow($appUuid,$id, &$data)
     {
         $obj = $this->table->getByUuid($id,array());
@@ -318,7 +292,7 @@ class WorkflowService extends AbstractService
         }
         return $count;
     }
-
+    
     public function deleteWorkflow($appUuid, $workflowUuid)
     {
         $data['id'] = $this->getIdFromUuid('ox_workflow',$workflowUuid);
@@ -348,7 +322,7 @@ class WorkflowService extends AbstractService
 
         return $workflow->toArray();
     }
-
+    
     public function getWorkflows($appUuid=null, $filterArray = array())
     {
         if (isset($appUuid)) {
@@ -359,19 +333,20 @@ class WorkflowService extends AbstractService
         $response['data'] = $resultSet->toArray();
         return $response;
     }
-
+    
     public function getWorkflow($id, $appId = null)
     {
         $params = array();
-        $where = "where wf.uuid = :id";
+        $where = "where wf.uuid = :id and wd.latest=1";
         $params['id'] = $id;
         if(isset($params['app_id'])){
             $where .= " and app.uuid = :appId";
             $params['appId'] = $appId;
         }
-        $query = "select app.uuid as app_id, wf.uuid as id, wf.name, wf.form_id, wf.process_id, wf.entity_id
-                    from ox_workflow wf inner join ox_app as app on app.id = wf.app_id
-                    $where";
+        $query = "select app.uuid as app_id, wf.uuid as id, wf.name, wd.form_id, wd.process_definition_id, wf.entity_id
+        from ox_workflow wf inner join ox_workflow_deployment wd on wd.workflow_id = wf.id
+        inner join ox_app as app on app.id = wf.app_id
+        $where";
         $response = $this->executeQueryWithBindParameters($query, $params)->toArray();
         if (count($response)==0) {
             return 0;
@@ -379,33 +354,7 @@ class WorkflowService extends AbstractService
 
         return $response[0];
     }
-
-    public function getFields($appId, $workflowId)
-    {
-        try{
-            $queryString = "Select * from ox_field where workflow_id=:workflowId and app_id=:appId";
-            $queryParams = array("workflowId" => $workflowId,"appId" => $appId);
-            $response = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
-            return $response;
-        }catch(Exception $e){
-            $this->logger->error($e->getMessage(), $e);
-            throw $e;
-        }
-    }
-
-    public function getForms($appId, $workflowId)
-    {
-        try{
-            $queryString = "Select * from ox_form where workflow_id=:workflowId and app_id=:appId";
-            $queryParams = array("workflowId" => $workflowId,"appId" => $appId);
-            $response = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
-            return $response;
-        }catch(Exception $e){
-            $this->logger->error($e->getMessage(), $e);
-            throw $e;
-        }
-    }
-
+    
     public function getStartForm($appId, $workflowId)
     {
         $sql = $this->getSqlObject();
@@ -420,15 +369,16 @@ class WorkflowService extends AbstractService
             $workflowId = $workflowId;
         }
         $select = "select ox_form.template as content,ox_form.uuid as id
-         from ox_form
-          left join ox_workflow on ox_workflow.form_id=ox_form.id
-          left join ox_app on ox_app.id=ox_workflow.app_id
-          where ox_workflow.id=:workflowId and ox_app.id=:appId;";
+        from ox_form
+        left join ox_workflow_deployment on ox_workflow_deployment.form_id = ox_form.id and ox_workflow_deployment.latest=1
+        left join ox_workflow on ox_workflow.id=ox_workflow_deployment.workflow_id
+        left join ox_app on ox_app.id=ox_workflow.app_id
+        where ox_workflow.id=:workflowId and ox_app.id=:appId;";
         $queryParams = array("workflowId" => $workflowId, "appId" => $appId);
         $response = $this->executeQueryWithBindParameters($select,$queryParams)->toArray();
         return $response;
     }
-
+    
     public function getAssignments($appId,$filterParams)
     {
         $userId = AuthContext::get(AuthConstants::USER_ID);
@@ -444,44 +394,80 @@ class WorkflowService extends AbstractService
                     $filterList = $filterArray[0]['filter']['filters'];
                     $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$field);
                 }
-
+                
                 if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
                     $sort = $filterArray[0]['sort'];
                     $sort = FilterUtils::sortArray($sort,self::$field);
                 }
             }
         }
-
+        
         $appFilter = "ox_app.uuid ='".$appId."'";
         $fromQuery = "FROM ox_workflow
-                      INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
-                      INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_id = ox_workflow.id
-                      INNER JOIN ox_activity on ox_activity.workflow_id = ox_workflow.id
-                      INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
-                      LEFT JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
-                      LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id";
+        INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
+        INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id and ox_workflow_deployment.latest =1
+        INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id
+        INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
+        INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
+        LEFT JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
+        LEFT JOIN ox_user_group ON ox_activity_instance_assignee.group_id = ox_user_group.group_id";
         $whereQuery = " WHERE (ox_user_group.avatar_id = $userId
-                                OR ox_activity_instance_assignee.user_id = $userId
-                                OR ox_activity_instance_assignee.group_id is null
-                                OR ox_activity_instance_assignee.id is null)
-                            AND $appFilter AND ox_activity_instance.status = 'In Progress'
-                            AND ox_workflow_instance.org_id = ".AuthContext::get(AuthConstants::ORG_ID);
+        OR ox_activity_instance_assignee.user_id = $userId
+        OR ox_activity_instance_assignee.group_id is null
+        OR ox_activity_instance_assignee.id is null)
+        AND $appFilter AND ox_activity_instance.status = 'In Progress'
+        AND ox_workflow_instance.org_id = ".AuthContext::get(AuthConstants::ORG_ID);
         if(!empty($sort)){
             $sort = " ORDER BY ".$sort;
         }
         $pageSize = "LIMIT ".(isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET ".(isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
-
+        
         $countQuery = "SELECT count(distinct ox_activity_instance.id) as `count` $fromQuery $whereQuery";
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
-
+        
         $querySet = "SELECT distinct ox_workflow.name as workflow_name,
         ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId,
-         ox_activity.name as activityName,
+        ox_activity.name as activityName,
         CASE WHEN ox_activity_instance_assignee.user_id is not null then false
         else true end as to_be_claimed  $fromQuery $whereQuery $sort $pageSize $offset";
         $this->logger->info("Executing query - $querySet");
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
         return array('data' => $resultSet,'total' => $countResultSet[0]['count']);
+    }
+    
+    private function saveWorkflowDeployment($data)
+    {
+        $this->logger->info("Workflow Deployment - ".json_encode($data));
+        if(!isset($data['process_definition_id'])){
+            return;
+        }
+        $data['workflow_id'] = $data['id'];
+        $query = "UPDATE ox_workflow_deployment SET latest=0 where workflow_id=:workflowId and latest=1";
+        $params = array("workflowId" => $data['workflow_id']);
+        $result = $this->executeUpdateWithBindParameters($query,$params);
+        if(!isset($data['workflow_deployment_id'])){
+            unset($data['id']);
+        }else{
+            $data['id'] = $data['workflow_deployment_id'];
+        }
+        $data['latest'] = 1;
+        $workflowDeploy = new WorkflowDeployment();
+        $workflowDeploy->exchangeArray($data);
+        $workflowDeploy->validate();
+        try{
+            $count = $this->workflowDeploymentTable->save($workflowDeploy);
+            if ($count == 0) {
+                throw new ServiceException("SAVE WORKFLOW DEPLOYMENT FAILED","save.workflow.deployement.failed");
+            }
+            if(!isset($data['id'])){
+                $id = $this->workflowDeploymentTable->getLastInsertValue();
+                $data['id']= $id;
+            }
+        }catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+        return $data;
     }
 }

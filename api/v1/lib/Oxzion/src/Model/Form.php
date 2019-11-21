@@ -7,11 +7,11 @@ use Oxzion\Model\Entity;
 class Form extends Entity
 {
     protected $data = array(
-        'id'=>0,
-        'app_id'=>0,
+        'id'=>null,
+        'app_id'=>null,
         'name'=>null,
         'description'=>null,
-        'entity_id'=>0,
+        'entity_id'=>null,
         'template'=>null,
         'created_by'=>null,
         'modified_by'=>null,
