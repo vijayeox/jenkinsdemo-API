@@ -450,7 +450,6 @@ class WorkflowInstanceService extends AbstractService
         $queryParams = array();
         $appFilter = "h.app_id = :appId";
         $queryParams['appId'] = $appId;
-
         if (isset($workflowId)) {
             $appFilter .= " AND h.uuid = :workflowId";
             $queryParams['workflowId'] = $workflowId;

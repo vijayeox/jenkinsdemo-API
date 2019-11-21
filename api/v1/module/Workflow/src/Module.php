@@ -2,19 +2,18 @@
 
 namespace Workflow;
 
+use Oxzion\Error\ErrorHandler;
+use Oxzion\Messaging\MessageProducer;
+use Oxzion\Service\FileService;
+use Oxzion\Service\TemplateService;
+use Oxzion\Service\UserService;
+use Oxzion\Service\WorkflowService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Zend\View\Model\JsonModel;
-use Oxzion\Error\ErrorHandler;
-use Oxzion\Service\WorkflowService;
-use Oxzion\Service\TemplateService;
-use Oxzion\Messaging\MessageProducer;
-use Oxzion\Service\FileService;
-use Oxzion\Service\UserService;
 
 class Module implements ConfigProviderInterface
 {
@@ -61,8 +60,13 @@ class Module implements ConfigProviderInterface
                 },
                 Service\ServiceTaskService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\ServiceTaskService($container->get('config'), $dbAdapter, $container->get(TemplateService::class),
-                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class),$container->get(\Oxzion\Service\FileService::class),$container->get(MessageProducer::class));
+                    return new Service\ServiceTaskService($container->get('config'),
+                        $dbAdapter,
+                        $container->get(TemplateService::class),
+                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class),
+                        $container->get(\Oxzion\Service\FileService::class),
+                        $container->get(MessageProducer::class),
+                        $container->get(Service\WorkflowInstanceService::class));
                 },
                 Model\WorkflowInstanceTable::class => function ($container) {
                     $tableGateway = $container->get(Model\WorkflowInstanceTableGateway::class);

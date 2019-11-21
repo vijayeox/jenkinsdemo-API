@@ -14,6 +14,7 @@ use Oxzion\Service\FileService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Utils\RestClient;
 use Oxzion\ValidationException;
+use Workflow\Service\WorkflowInstanceService;
 
 class ServiceTaskService extends AbstractService
 {
@@ -22,6 +23,7 @@ class ServiceTaskService extends AbstractService
      */
     private $templateService;
     protected $fileService;
+    private $workflowInstanceService;
     /**
      * @ignore __construct
      */
@@ -32,12 +34,13 @@ class ServiceTaskService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, MessageProducer $messageProducer)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
         $this->fileService = $fileService;
         $this->appDelegateService = $appDelegateService;
+        $this->workflowInstanceService = $workflowInstanceService;
         parent::__construct($config, $dbAdapter);
         $this->fileService = $fileService;
         $this->restClient = new RestClient($this->config['job']['jobUrl'], array());
@@ -67,12 +70,13 @@ class ServiceTaskService extends AbstractService
                 $commandJson = json_decode($value, true);
                 $command = $commandJson['command'];
                 unset($commandJson['command']);
-                $variables = array_merge($inputData, $commandJson);
+                $variables = array_merge($inputData, $data['variables']);
                 $this->logger->info(ServiceTaskService::class . print_r($variables, true));
                 $this->logger->info("COMMAND LIST ------" . $command);
                 $result = $this->processCommand($variables, $command);
                 if (is_array($result)) {
                     $inputData = $result;
+                    $inputData['appId'] = $data['variables']['appId'];
                 }
                 $this->logger->info(ServiceTaskService::class . print_r($inputData, true));
             }
@@ -108,9 +112,15 @@ class ServiceTaskService extends AbstractService
             case 'fileSave':
                 $this->logger->info("FILE SAVE");
                 return $this->fileSave($data);
+                break;
             case 'file':
                 $this->logger->info("FILE DATA");
                 return $this->extractFileData($data);
+                break;
+            case 'filelist':
+                $this->logger->info("FILE LIST");
+                return $this->getFileWithParams($data);
+                break;
             default:
                 break;
         };
@@ -206,8 +216,8 @@ class ServiceTaskService extends AbstractService
     protected function executeDelegate($data)
     {
         $this->logger->info("EXECUTE DELEGATE ---- " . print_r($data, true));
-        if (isset($data['app_id']) && isset($data['delegate'])) {
-            $appId = $data['app_id'];
+        if (isset($data['appId']) && isset($data['delegate'])) {
+            $appId = $data['appId'];
             $delegate = $data['delegate'];
             unset($data['delegate']);
         } else {
@@ -249,7 +259,7 @@ class ServiceTaskService extends AbstractService
             if (isset($params['attachments'])) {
                 $attachments = $params['attachments'];
             }
-            if (count($errors) > 0) {
+            if (count($errors) > (int) 0) {
                 $validationException = new ValidationException();
                 $validationException->setErrors($errors);
                 throw $validationException;
@@ -267,7 +277,7 @@ class ServiceTaskService extends AbstractService
             return;
         }
     }
-    
+
     protected function generatePDF(&$params)
     {
         if (isset($params)) {
@@ -321,6 +331,13 @@ class ServiceTaskService extends AbstractService
             throw new EntityNotFoundException("File " . $fileId . " not found");
         }
         return $result['data'];
+    }
 
+    protected function getFileWithParams(&$data)
+    {
+        $params = array("appId" => $data['appId'], "workFlowId" => $data['workFlowId'], "userId" => $data['userId']);
+        $filterParams['filter'] = $data['filter'];
+        $fileList = $this->workflowInstanceService->getFileList($params, $filterParams);
+        return $fileList['data'][0];
     }
 }
