@@ -52,7 +52,7 @@ class UserControllerTest extends ControllerTest
     }
 
 
-
+    //TODO The create tests needs to be modified to mock messageProducer as we now send message when user is added to org
     public function testCreateByAdmin()
     {
         $this->initAuthToken($this->adminUser);
