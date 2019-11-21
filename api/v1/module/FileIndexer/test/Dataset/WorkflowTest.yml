@@ -95,23 +95,42 @@ ox_workflow:
     app_id: 99
     name: "Test Workflow 1"
     process_id: "[main]"
-    form_id: 1
 -
     id: 2
     app_id: 99
     name: "Test Workflow 2"
-    process_id: "[main]"
-    form_id: 1
+    process_id: "[main]1"
 -
     id: 3
     app_id: 97
     name: "Test Workflow 2"
-    process_id: "[main]"
-    form_id: 1
-ox_workflow_instance:
+    process_id: "[main]2"
+ox_workflow_deployment:
 -
     id: 1
     workflow_id: 1
+    process_definition_id: "[main]:232-dfd-tr4"
+    form_id: 1
+    latest: 1
+    created_by: 1
+-
+    id: 2
+    workflow_id: 2
+    process_definition_id: "[main]1:232-dfd-tr4"
+    form_id: 1
+    latest: 1
+    created_by: 1
+-
+    id: 3
+    workflow_id: 3
+    process_definition_id: "[main]2:2r432-dfd-tr4"
+    form_id: 1
+    latest: 1
+    created_by: 1
+ox_workflow_instance:
+-
+    id: 1
+    workflow_deployment_id: 1
     app_id: 99
     org_id: 1
     status: "In Progress"
@@ -119,7 +138,7 @@ ox_workflow_instance:
     created_by: 1
 -
     id: 2
-    workflow_id: 2
+    workflow_deployment_id: 2
     app_id: 99
     org_id: 1
     status: "In Progress"
@@ -127,7 +146,7 @@ ox_workflow_instance:
     created_by: 1
 -
     id: 3
-    workflow_id: 3
+    workflow_deployment_id: 3
     app_id: 97
     org_id: 1
     status: "In Progress"
@@ -137,32 +156,32 @@ ox_activity:
 -
     id: 1
     app_id: 99
-    workflow_id: 1
+    workflow_deployment_id: 1
     name: "Task"
 -
     id: 2
     app_id: 99
-    workflow_id: 1
+    workflow_deployment_id: 1
     name: "Test Form 2"
 -
     id: 3
     app_id: 99
-    workflow_id: 2
+    workflow_deployment_id: 2
     name: "Test Form 3"
 -
     id: 4
     app_id: 99
-    workflow_id: 2
+    workflow_deployment_id: 2
     name: "Test Form 4"
 -
     id: 5
     app_id: 97
-    workflow_id: 3
+    workflow_deployment_id: 3
     name: "Test Form 5"
 -
     id: 6
     app_id: 97
-    workflow_id: 3
+    workflow_deployment_id: 3
     name: "Test Form 6"
 ox_activity_instance:
 -

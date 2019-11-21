@@ -47,6 +47,13 @@ class AppControllerTest extends ControllerTest
         return $mockProcessManager;
     }
 
+    protected function setDefaultAsserts()
+    {
+        $this->assertModuleName('App');
+        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('AppController');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+    }
 
     public function cleanDb($appName, $appId) : void
     {
@@ -98,14 +105,6 @@ class AppControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEquals($content['data'], array());
-    }
-
-    protected function setDefaultAsserts()
-    {
-        $this->assertModuleName('App');
-        $this->assertControllerName(AppController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('AppController');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
     public function testGet()
@@ -216,7 +215,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         if (enableCamundaForDeployApp == 0) {
             $mockProcessManager = $this->getMockProcessManager();
-            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:159:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
+            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
         }
         if (enableExecUtils == 0) {
@@ -279,15 +278,12 @@ class AppControllerTest extends ControllerTest
         $apps = $config['APPS_FOLDER'];
         if(enableExecUtils != 0){
             if(file_exists($apps) && is_dir($apps)){
-                $files = new FileSystemIterator($apps);
-                foreach ($files as $file) {
-                    if(is_link($file)){
+                    if(is_link($apps."/$appName")){
                         $dist = "/dist/";
                         $nodemodules = "/node_modules/";
-                        $this->assertEquals(file_exists($file.$dist), TRUE);
-                        $this->assertEquals(file_exists($file.$nodemodules), TRUE);
+                        $this->assertEquals(file_exists($apps."/$appName".$dist), TRUE);
+                        $this->assertEquals(file_exists($apps."/$appName".$nodemodules), TRUE);
                     }
-                }
             }
         }
         $query = "SELECT * from ox_workflow where app_id = ".$appId;
@@ -331,15 +327,12 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), TRUE);
         $apps = $config['APPS_FOLDER'];
         if(file_exists($apps) && is_dir($apps)){
-            $files = new FileSystemIterator($apps);
-            foreach ($files as $file) {
-                if(is_link($file)){
+                if(is_link($apps."/$appName")){
                     $dist = "/dist/";
                     $nodemodules = "/node_modules/";
-                    $this->assertEquals(file_exists($file.$dist), false);
-                    $this->assertEquals(file_exists($file.$nodemodules), false);
+                    $this->assertEquals(file_exists($apps."/$appName".$dist), false);
+                    $this->assertEquals(file_exists($apps."/$appName".$nodemodules), false);
                 }
-            }
         }
         unlink(__DIR__.'/../sampleapp/application.yml');
         $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
@@ -618,7 +611,7 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         if (enableCamundaForDeployApp == 0) {
             $mockProcessManager = $this->getMockProcessManager();
-            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:159:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
+            $mockProcessManager->expects('deploy')->withAnyArgs()->once()->andReturn(array('Process_1dx3jli:1eca438b-007f-11ea-a6a0-bef32963d9ff'));
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn(null);
         }
         $data = ['path' => __DIR__.'/../sampleapp/'];

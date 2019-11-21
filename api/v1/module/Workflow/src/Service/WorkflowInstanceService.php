@@ -159,7 +159,11 @@ class WorkflowInstanceService extends AbstractService
     public function getWorkflowInstance($id)
     {
         try {
-            $query = "select oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.org_id,ow.uuid as workflow_id from ox_workflow_instance as oxi join ox_workflow as ow on oxi.workflow_id = ow.id where oxi.org_id=? and oxi.process_instance_id=?";
+            $query = "select oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.org_id,ow.uuid as workflow_id 
+            from ox_workflow_instance as oxi
+            join ox_workflow_deployment as wd on wd.id = oxi.workflow_deployment_id
+             join ox_workflow as ow on wd.workflow_id = ow.id  and wd.latest=1
+             where oxi.org_id=? and oxi.process_instance_id=?";
 
             // $query = "SELECT * from ox_workflow_instance where org_id=? and process_instance_id=?";
             $queryParams = array(AuthContext::get(AuthConstants::ORG_ID), $id);
@@ -218,9 +222,9 @@ class WorkflowInstanceService extends AbstractService
             $this->logger->info("File created -" . $file);
             $params['fileId'] = $fileData['uuid'];
             $params['workflow_instance_id'] = $workflowInstance['id'];
-            $this->logger->info("Checking something" . print_r($workflow['process_id'], true));
+            $this->logger->info("Checking something" . print_r($workflow['process_definition_id'], true));
             $this->logger->info("Checking Params" . print_r($params, true));
-            $workflowInstanceId = $this->processEngine->startProcess($workflow['process_id'], $params);
+            $workflowInstanceId = $this->processEngine->startProcess($workflow['process_definition_id'], $params);
             $this->logger->info("WorkflowInstanceId created" . print_r($workflowInstanceId, true));
             $updateQuery = "UPDATE ox_workflow_instance SET process_instance_id=:process_instance_id where id = :workflowInstanceId";
             $updateParams = array('process_instance_id' => $workflowInstanceId['id'], 'workflowInstanceId' => $workflowInstance['id']);
@@ -390,12 +394,14 @@ class WorkflowInstanceService extends AbstractService
         $this->logger->info("SET UP Workflow Instance (CREATE NEW WORKFLOW INSTANCE)");
         $form = new WorkflowInstance();
         $dateCreated = date('Y-m-d H:i:s');
-        $query = "select app_id, id from ox_workflow where uuid=:uuid";
-        $queryParams = array("uuid" => $workflowId);
+        $query = "select w.app_id, wd.id from ox_workflow as w
+        inner join ox_workflow_deployment as wd on w.id = wd.workflow_id 
+        where w.uuid=:uuid and wd.latest=:latest";
+        $queryParams = array("uuid" => $workflowId,"latest" => 1);
         $workflowResultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
 
         if (count($workflowResultSet)) {
-            $data = array('workflow_id' => $workflowResultSet[0]['id'], 'app_id' => $workflowResultSet[0]['app_id'], 'org_id' => $orgId, 'process_instance_id' => $processInstanceId, 'status' => "In Progress", 'date_created' => $dateCreated, 'created_by' => $createdBy);
+            $data = array('workflow_deployment_id' => $workflowResultSet[0]['id'], 'app_id' => $workflowResultSet[0]['app_id'], 'org_id' => $orgId, 'process_instance_id' => $processInstanceId, 'status' => "In Progress", 'date_created' => $dateCreated, 'created_by' => $createdBy);
             if (isset($params['parentWorkflowInstanceId'])) {
                 $resultParentWorkflow = $this->getIdFromProcessInstanceId($params['parentWorkflowInstanceId']);
                 if (count($resultParentWorkflow) > 0) {
@@ -481,7 +487,8 @@ class WorkflowInstanceService extends AbstractService
             $fromQuery .= " join ox_wf_user_identifier on ox_wf_user_identifier.identifier_name = d.name";
         }
         $fromQuery .= " inner join ox_workflow_instance as g on a.workflow_instance_id = g.id
-            inner join ox_workflow as h on h.id = g.workflow_id
+        inner join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
+            inner join ox_workflow as h on h.id = wd.workflow_id and wd.latest=1
             left join (SELECT workflow_instance_id, max(latest) as latest from ox_file
             group by workflow_instance_id) as f2 on a.workflow_instance_id = f2.workflow_instance_id
             and a.latest = f2.latest";

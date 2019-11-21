@@ -40,7 +40,8 @@ class FileIndexerService extends AbstractService
             file.data
             from ox_file as file
             LEFT JOIN ox_workflow_instance as wf_inst on wf_inst.id = file.workflow_instance_id
-            LEFT JOIN ox_workflow as wf on wf_inst.workflow_id = wf.id
+            LEFT JOIN ox_workflow_deployment as wd on wd.id = wf_inst.workflow_deployment_id and wd.latest=1
+            LEFT JOIN ox_workflow as wf on wd.workflow_id = wf.id
             LEFT JOIN ox_activity_instance as act_inst on act_inst.id = file.activity_id
             LEFT JOIN ox_activity as act on act.id = act_inst.activity_id
             INNER JOIN ox_form as form on file.form_id = form.id

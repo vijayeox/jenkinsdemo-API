@@ -9,7 +9,7 @@ class WorkflowInstance extends Entity
 {
     protected $data = array(
         'id' => null,
-        'workflow_id' => null,
+        'workflow_deployment_id' => null,
         'app_id' => 0,
         'org_id' => 0,
         'process_instance_id' => null,
@@ -24,7 +24,7 @@ class WorkflowInstance extends Entity
     
     public function validate()
     {
-        $dataArray = array("workflow_id", "app_id", "org_id", "date_created","created_by","status");
+        $dataArray = array("workflow_deployment_id", "app_id", "org_id", "date_created","created_by","status");
         $this->validateWithParams($dataArray);
     }
 }

@@ -230,7 +230,7 @@ class EntityControllerTest extends ControllerTest
         if (enableCamunda==0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowService::class);
-            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/app/api/v1/config/autoload/../../data/uploads/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity/SampleBPMN.bpmn'))->once()->andReturn(array(1));
+            $mockProcessManager->expects('deploy')->with('NewWorkflow', array('/app/api/v1/config/autoload/../../data/uploads/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity/SampleBPMN.bpmn'))->once()->andReturn(array("process:2232-abc"));
             $mockProcessManager->expects('parseBPMN')->withAnyArgs()->once()->andReturn($parsingResult);
             $workflowService->setProcessManager($mockProcessManager);
         }
@@ -242,7 +242,7 @@ class EntityControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
     public function testDeployWithOutName()
-    {
+    {  
         $this->initAuthToken($this->adminUser);
         $_FILES = array(
             'files'    =>  array(
@@ -282,7 +282,7 @@ class EntityControllerTest extends ControllerTest
         $data = array('name'=>'NewWorkflow1');
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/entity/d23d0c68-98c9-11e9-adc5-308d99c9145b/deployworkflow', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
+        $this->assertResponseStatusCode(417);
         $this->setDefaultAsserts();
         $this->assertEquals($content['status'], 'error');
     }

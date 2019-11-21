@@ -129,50 +129,7 @@ class WorkflowController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($result);
     }
-    /**
-     * Upload the app from the UI and extracting the zip file in a folder that will start the installation of app.
-     * @api
-     * @link /app/:appId/deployworkflow
-     * @method POST
-     * @param null </br>
-     * <code>
-     * </code>
-     * @return array Returns a JSON Response with Status Code.</br>
-     * <code> status : "success|error"
-     * </code>
-     */
-    public function workflowFieldsAction()
-    {
-        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        try {
-            $response = $this->workflowService->getFields($params['appId'], $params['workflowId']);
-            return $this->getSuccessResponseWithData($response);
-        } catch (Exception $e) {
-            return $this->getErrorResponse("Files cannot be uploaded!");
-        }
-    }
-    /**
-     * Upload the app from the UI and extracting the zip file in a folder that will start the installation of app.
-     * @api
-     * @link /app/:appId/deployworkflow
-     * @method POST
-     * @param null </br>
-     * <code>
-     * </code>
-     * @return array Returns a JSON Response with Status Code.</br>
-     * <code> status : "success|error"
-     * </code>
-     */
-    public function workflowFormsAction()
-    {
-        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        try {
-            $response = $this->workflowService->getForms($params['appId'], $params['workflowId']);
-            return $this->getSuccessResponseWithData($response);
-        } catch (Exception $e) {
-            return $this->getErrorResponse("Files cannot be uploaded!");
-        }
-    }
+
     /**
      * GET START FORM
      * @api

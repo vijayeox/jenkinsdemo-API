@@ -13,6 +13,7 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Oxzion\ServiceException;
 use Oxzion\EntityNotFoundException;
+use Exception;
 
 class EntityController extends AbstractApiController
 {
@@ -167,8 +168,8 @@ class EntityController extends AbstractApiController
             } else {
                 return $this->getErrorResponse("Files cannot be uploaded");
             }
-        } catch (Exception $e) {
-            return $this->getErrorResponse("Files cannot be uploaded!");
+        }catch (Exception $e) {
+            return $this->getErrorResponse($e->getMessage(),417);
         }
     }
 }

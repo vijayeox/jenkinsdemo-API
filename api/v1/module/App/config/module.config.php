@@ -86,7 +86,7 @@ return [
                 'options' => [
                     'route' => '/app/:appId/entity/:entityId/deployworkflow[/:workflowId]',
                     'constraints' => [
-                        'workflowId' => UuidUtil::UUID_PATTERN,                    
+                        'workflowId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
                         'controller' => Controller\EntityController::class,
@@ -287,40 +287,6 @@ return [
                     ]
                 ]
              ],
-            'workflowfields' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/workflow/:workflowId/fields',
-                    'constraints' => [
-                        'appId' => UuidUtil::UUID_PATTERN,
-                        'workflowId' => UuidUtil::UUID_PATTERN,                    
-                    ],
-                    'defaults' => [
-                        'controller' => Controller\WorkflowController::class,
-                        'action' => 'workflowFields',
-                        'method' => 'GET',
-                        'access'=>[
-                        ],
-                    ],
-                ],
-            ],
-            'workflowform' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/workflow/:workflowId/forms',
-                    'constraints' => [
-                        'appId' => UuidUtil::UUID_PATTERN,
-                        'workflowId' => UuidUtil::UUID_PATTERN,                    
-                    ],
-                    'defaults' => [
-                        'controller' => Controller\WorkflowController::class,
-                        'action' => 'workflowForms',
-                        'method' => 'GET',
-                        'access'=>[
-                        ],
-                    ],
-                ],
-            ],
             'assignments' => [
                 'type' => Segment::class,
                 'options' => [
@@ -426,7 +392,7 @@ return [
                     'route'    => '/app/:appId/file/:fileId/document/:documentName',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
-                        'fileId' => UuidUtil::UUID_PATTERN,                    
+                        'fileId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
                         'controller' => Controller\FileController::class,

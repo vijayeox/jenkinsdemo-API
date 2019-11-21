@@ -204,6 +204,8 @@ class AppService extends AbstractService
             // $this->updateyml($ymldata, $data['form'], $path);
             //Move the app folder from given path to clients folder
         }catch(Exception $e){
+            // print "Deploy APp";
+            // print_r($e->getMessage());exit;
             $this->rollback();
             throw $e;
         }
@@ -436,6 +438,7 @@ class AppService extends AbstractService
                         throw new ServiceException("App Already Exists", 'duplicate.app');
                     }
                 }else{
+                    // print_r($result);exit;
                     if($appdata['name'] == $result[0]['name']){
                         $appdata['uuid'] = $result[0]['uuid'];
                     }
@@ -443,6 +446,8 @@ class AppService extends AbstractService
             }
             return $appdata['uuid'];
         }catch(Exception $e){
+            // print "checkAppExists";
+            // print_r($e->getMessage());exit;
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
@@ -631,32 +636,6 @@ class AppService extends AbstractService
         }
         return 0;
     }
-
-    public function getFields($appId, $workflowId = null)
-    {
-        $filterArray = array();
-        if (isset($workflowId)) {
-            $filterArray['workflow_id'] = $workflowId;
-        }
-        return $this->fieldService->getFields($appId, $filterArray);
-    }
-
-    public function getForms($appId, $workflowId = null)
-    {
-        $filterArray = array();
-        if (isset($workflowId)) {
-            $filterArray['workflow_id'] = $workflowId;
-        }
-        return $this->formService->getForms($appId, $filterArray);
-    }
-
-    // public function getQuery($appId,$queryId) {
-    //     $queryParameters = $this->queryService->getQueryJson($queryId);
-    //     if($queryParameters == 0){
-    //         return 0;
-    //     }
-    //     $result = $this->analytics->runQuery('kibana_sample_data_ecommerce',null,json_decode($queryParameters['query'],true));
-    // }
 
     public function registerApps($data)
     {
