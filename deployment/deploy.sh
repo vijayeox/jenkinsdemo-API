@@ -56,14 +56,14 @@ api()
         rm -Rf api/v1/data/cache
         rm -Rf api/v1/logs
         rsync -rl --delete api/v1/ /var/www/api/
-        ln -s /var/lib/oxzion/api/cache /var/www/api/data/cache
-        ln -s /var/lib/oxzion/api/uploads /var/www/api/data/uploads
+        ln -nfs /var/lib/oxzion/api/cache /var/www/api/data/cache
+        ln -nfs /var/lib/oxzion/api/uploads /var/www/api/data/uploads
         chown www-data:www-data -R /var/www/api
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
         echo -e "${YELLOW}Starting migrations script for API${RESET}"
         cd /var/www/api
         ./migrations migrate
-        sudo ln -s /var/log/oxzion/api /var/www/api/logs
+        sudo ln -nfs /var/log/oxzion/api /var/www/api/logs
         echo -e "${GREEN}Migrations Complete!${RESET}"
     fi    
 }
@@ -102,7 +102,7 @@ calendar()
         cd ${TEMP}
         rm -Rf integrations/eventcalendar/uploads
         rsync -rl --delete integrations/eventcalendar/ /var/www/calendar/
-        ln -s /var/lib/oxzion/calendar /var/www/calendar/uploads
+        ln -nfs /var/lib/oxzion/calendar /var/www/calendar/uploads
         chown www-data:www-data -R /var/www/calendar
         echo -e "${GREEN}Copying EventCalendar Complete!${RESET}"
     fi
@@ -127,8 +127,8 @@ mattermost()
         rm -Rf integrations/mattermost/logs
         rm -Rf integrations/mattermost/data
         rsync -rl integrations/mattermost/ /opt/oxzion/mattermost/
-        ln -s /var/lib/oxzion/chat /opt/oxzion/mattermost/data
-        ln -s /var/log/oxzion/chat /opt/oxzion/mattermost/logs
+        ln -nfs /var/lib/oxzion/chat /opt/oxzion/mattermost/data
+        ln -nfs /var/log/oxzion/chat /opt/oxzion/mattermost/logs
         chown oxzion:oxzion -R /opt/oxzion/mattermost
         echo -e "${GREEN}Copying Mattermost Complete!${RESET}"
         echo -e "${GREEN}Starting Mattermost service${RESET}"
@@ -161,8 +161,8 @@ orocrm()
         rsync -rl --delete integrations/crm/public/bundles/bowerassets/font-awesome/ integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome/
         if [ ! -L "/var/www/crm/var" ] ;
         then
-            ln -s /var/lib/oxzion/crm /var/www/crm/var
-            ln -s /var/log/oxzion/crm /var/lib/oxzion/crm/logs    
+            ln -nfs /var/lib/oxzion/crm /var/www/crm/var
+            ln -nfs /var/log/oxzion/crm /var/lib/oxzion/crm/logs    
         fi
         rm -Rf integrations/crm/var
         cp -P /var/www/crm/var integrations/crm/var 
@@ -189,7 +189,7 @@ rainloop()
         rsync -rl integrations/rainloop/data/ /var/www/rainloop/data/
         rm -Rf integrations/rainloop/data
         rsync -rl --delete integrations/rainloop/ /var/www/rainloop/
-        ln -s /var/lib/oxzion/rainloop /var/www/rainloop/data
+        ln -nfs /var/lib/oxzion/rainloop /var/www/rainloop/data
         chown www-data:www-data -R /var/www/rainloop
         chown www-data:www-data -R /var/lib/oxzion/rainloop
         echo -e "${GREEN}Copying Rainloop Complete!${RESET}"
@@ -251,8 +251,8 @@ openproject()
         echo -e "${RED}Openproject was not packaged so skipping it\n${RESET}"
     else
         cd ${TEMP}/integrations/openproject
-        ln -s /var/log/oxzion/task ./log
-        ln -s /var/lib/oxzion/task ./files
+        ln -nfs /var/log/oxzion/task ./log
+        ln -nfs /var/lib/oxzion/task ./files
         echo -e "${YELLOW}Running db migrate now...${RESET}"
         bundle exec rake db:migrate RAILS_ENV=production
         echo -e "${YELLOW}Copying codebase now...${RESET}"
@@ -293,7 +293,7 @@ edms()
     else
         cd ${TEMP}/integrations/edms/mayan
         echo -e "${YELLOW}Creating edms data folder...${RESET}"
-        ln -s /var/lib/oxzion/edms ./media
+        ln -nfs /var/lib/oxzion/edms ./media
         rsync -rl --delete ${TEMP}/integrations/edms/ /var/www/edms/
         echo -e "${YELLOW}Taking ownership as www-data...${RESET}"
         chown www-data:www-data -R /var/www/edms
