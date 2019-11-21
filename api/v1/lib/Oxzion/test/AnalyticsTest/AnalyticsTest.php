@@ -112,9 +112,9 @@ class AnalyticsTest extends MainControllerTest
         $parameters = ['field'=>'amount','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created','list'=>'name,created_by,category'];
         $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
-        $this->assertEquals($results[0]['name'], "testing document");
+        $this->assertEquals($results[0]['name'], "test document");
         $this->assertEquals($results[0]['category'], "A");
-        $this->assertEquals($results[0]['created_by'], "Mike Price");
+        $this->assertEquals($results[0]['created_by'], "John Doe");
     }
 
     public function testAggregatesNoGroups() {
@@ -126,6 +126,7 @@ class AnalyticsTest extends MainControllerTest
         $parameters = ['operation'=>'sum','field'=>'amount','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
+
         $this->assertEquals($results,950.5);
     }
 
@@ -177,16 +178,14 @@ class AnalyticsTest extends MainControllerTest
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
-        $parameters = ['filter'=>['AND'=>
+        $parameters = ['filter'=>
                  [
-                     ['numberOfEmployees'=>[5,'<=']],
-                     ['OR'=>
+                      ['numberOfEmployees','<=',5],
+                        'AND',
                         [
-                            ['owner_username'=>'bharatg'],
-                            ['owner_username'=>'mehul']
+                            ['owner_username','bharatg'],'OR',['owner_username','mehul']
                         ]
-                     ]
-                ]],'operation'=>'count'];
+                ],'operation'=>'count'];
         $results = $ae->runQuery('crm', 'Lead', $parameters);
         $results = $results['data'];
         $this->assertEquals($results, 2);
@@ -199,10 +198,9 @@ class AnalyticsTest extends MainControllerTest
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
-        $parameters = ['filter'=>['NOT'=>
-                 [
-                     ['numberOfEmployees'=>[5,'>=']]
-                ]],'operation'=>'count'];
+        $parameters = ['filter'=>[
+                     ['numberOfEmployees','<',5]
+                ],'operation'=>'count'];
         $results = $ae->runQuery('crm', 'Lead', $parameters);
         $results = $results['data'];
         $this->assertEquals($results, 1);
@@ -214,11 +212,11 @@ class AnalyticsTest extends MainControllerTest
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
-        $parameters = ['filter'=>['AND'=>
-                 [
-                     ['numberOfEmployees'=>[4,'>']],
-                     ['numberOfEmployees'=>[10,'<']],
-                ]],'operation'=>'sum','field'=>'numberOfEmployees'];
+        $parameters = ['filter'=>[
+                 
+                     ['numberOfEmployees','>',4],'AND',
+                     ['numberOfEmployees','<',10]
+                ],'operation'=>'sum','field'=>'numberOfEmployees'];
         $results = $ae->runQuery('crm', 'Lead', $parameters);
         $results = $results['data'];
         $this->assertEquals($results, 13.0);
@@ -230,10 +228,9 @@ class AnalyticsTest extends MainControllerTest
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
-        $parameters = ['filter'=>['NOT'=>
-                 [
-                     'owner_username'=>'bharatg'
-                ]],'operation'=>'count'];
+        $parameters = ['filter'=>[
+                     'owner_username','<>','bharatg'
+                ],'operation'=>'count'];
         $results = $ae->runQuery('crm', 'Lead', $parameters);
         $results = $results['data'];
         $this->assertEquals($results, 1);

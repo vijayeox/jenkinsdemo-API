@@ -22,7 +22,7 @@ class ElasticService
         $clientsettings['host'] = $config['elasticsearch']['serveraddress'];
         $clientsettings['user'] = $config['elasticsearch']['user'];
         $clientsettings['pass'] = $config['elasticsearch']['password'];
-        $clientsettings['type'] = $config['elasticsearch']['type'];
+    //    $clientsettings['type'] = $config['elasticsearch']['type'];
         $clientsettings['port'] = $config['elasticsearch']['port'];
         $clientsettings['scheme'] = $config['elasticsearch']['scheme'];
         $this->core = $config['elasticsearch']['core'];
@@ -101,7 +101,7 @@ class ElasticService
     public function getSearchResults($index, $body, $source, $start, $pagesize)
     {
         // print_r($body);exit;
-        $params = ['index' => $index, 'type' => $this->type, 'body' => $body, "_source" => $source, 'from' => $start ? $start : 0, "size" => $pagesize];
+        $params = ['index' => $index, 'body' => $body, "_source" => $source, 'from' => $start ? $start : 0, "size" => $pagesize];
         $result = $this->search($params);
         return $result;
     }
@@ -138,7 +138,7 @@ class ElasticService
 			}
 		}
 		$boolfilterquery['explain'] = true;
-		$params = array('index'=>$app_name.'_index','type'=>$this->type,'body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
+		$params = array('index'=>$app_name.'_index','body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
 		$result_obj = $this->search($params);
 		if ($searchconfig['group'] && !isset($searchconfig['select'])) {
 			$results = array('data'=>$result_obj['aggregations']['groupdata']['buckets']);
@@ -166,44 +166,39 @@ class ElasticService
  //   {"<=", ["sale_date", "2019-10-31"]},
 
 
-    protected function createFilter($filter,$key) {
-        $elasticOutput = null;
-        if ($filter!==null) {
+    protected function createFilter($filter) {
         $symMapping = ['>'=>'gt','>='=>'gte','<'=>'lt','<='=>'lte'];
-        $boolMapping = ['OR'=>'should','NOT'=>'must_not','AND'=>'must'];
-            if (strtoupper($key)=='OR' OR strtoupper($key)=='NOT' OR strtoupper($key)=='AND') {
-                $condition = $boolMapping[strtoupper($key)];
-                foreach($filter as $subFilter) {
-                    if (strtoupper($key)=='NOT' && !is_array($subFilter)) {
-                        $tempQuery = $this->createFilter($subFilter,key($filter));  //if NOt, then you do not need array since it is only 1
-                    } else {
-                        $tempQuery = $this->createFilter($subFilter[key($subFilter)],key($subFilter));
-                    }
-                    $subQuery['bool'][$condition][] = $tempQuery;
-                }
-        } else {
-            if (is_array($filter)) {
-                $symb = $filter[1];
-                $value = $filter[0];
-                if ($symb=="=="){                
-                       if (!is_array($value)) {
-                        $subQuery['match'] = array($key => array('query' => $value, 'operator' => 'and'));
-                        } else {
-                            $subQuery['terms'] = array($key => array_values($value));
-                        }    
-                    } else {
-                        $subQuery['range'] = array($key => array($symMapping[$symb] => $value));
-                    }
-            } else {
-                $value = $filter;
-                if (!is_array($value)) {
-                        $subQuery['match'] = array($key => array('query' => $value, 'operator' => 'and'));
-                      } else {
-                        $subQuery['terms'] = array($key => array_values($value));
-                      }
-                  }
-            }
+        $boolMapping = ['OR'=>'should','AND'=>'must'];
+        if (!isset($filter[1]) && is_array($filter)) {
+            $filter = $filter[0];
         }
+        $column = $filter[0];
+        if (isset($filter[2])) {
+            $value = $filter[2];
+            $condition = $filter[1];
+        } else {
+            $condition = "==";
+            $value = $filter[1];
+        }
+        if (strtoupper($condition)=='OR' OR strtoupper($condition)=='AND') {
+                 $tempQuery1 = $this->createFilter($column);
+                 $tempQuery2 = $this->createFilter($value);
+                 $subQuery['bool'][$boolMapping[$condition]] = [$tempQuery1,$tempQuery2];
+        } else {
+        //    echo $column.' '.$condition.' '.$value;
+            if ($condition=="=="){                
+                    if (!is_array($value)) {
+                    $subQuery['match'] = array($column => array('query' => $value, 'operator' => 'and'));
+                    } else {
+                        $subQuery['terms'] = array($column => array_values($value));
+                    }    
+                } elseif ($condition=="<>" || $condition=="!=") {
+                    $subQuery['bool']['must_not'][] =  ["term"=>[ $column=>$value ]];
+                }
+                else {
+                    $subQuery['range'] = array($column => array($symMapping[$condition] => $value));
+                }
+         }
         return $subQuery;
     }
 
@@ -289,8 +284,9 @@ class ElasticService
             $mustquery['must'][] = array('exists' => array('field' => $aggregates[key($aggregates)]));
         }
         if (!empty($searchconfig['filter'])) {
-            foreach ($searchconfig['filter'] as $key=>$filter) {
-                $filterArry = $this->createFilter($filter,$key);
+            foreach ($searchconfig['filter'] as $filter) {
+           //     echo 'filter:';print_r($filter); echo '--';
+                $filterArry = $this->createFilter($filter);
                 $mustquery['must'][] = $filterArry;
             }
         }
@@ -344,6 +340,7 @@ class ElasticService
     {
       //   print_r($q);
         $data = $this->client->search($q);
+       // print_r($data);
         return $data;
 
     }
@@ -352,7 +349,7 @@ class ElasticService
     {
         $params['index'] = $index;
         $params['id'] = $id;
-        $params['type'] = $this->type;
+    //    $params['type'] = $this->type;
         $params['body'] = $body;
         return $this->client->index($params);
     }

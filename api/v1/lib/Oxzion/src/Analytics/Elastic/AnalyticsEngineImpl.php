@@ -20,10 +20,10 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
     {
         try {
 			$orgId = AuthContext::get(AuthConstants::ORG_ID);
-			if ($entity_name) {
-				$parameters['filter']['entity_name']=$entity_name;
-			}
 			$query = $this->formatQuery($parameters);
+			if ($entity_name) {
+				$query['filter'][]=['entity_name','==',$entity_name];
+			}
             $elasticService = new ElasticService($this->config);
 			$result = $elasticService->getQueryResults($orgId,$app_name,$query);
 			$finalResult['meta'] = $query;
@@ -31,7 +31,11 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			if ($result['type']=='group') {
 				$finalResult['data'] = $this->flattenResult($result['data'],$query);
 			} else {
-				$finalResult['data']  = $result['data'];
+				if (isset($result['data']['value'])) {
+					$finalResult['data']  = $result['data']['value'];
+				} else {
+					$finalResult['data']  = $result['data'];
+				}
 				if (isset($query['select'])) {
 					   $finalResult['meta']['list'] = $query['select'];
 				}
@@ -53,8 +57,8 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 
     private function formatQuery($parameters) {
 		$range=null;
-		$filter=null;
 		$field = null;
+		$filter =array();
 		$datetype = (!empty($parameters['date_type']))?$parameters['date_type']:null;
 		if (!empty($parameters['date-period'])) {
 			$period = explode('/', $parameters['date-period']);
@@ -123,7 +127,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 		if (!isset($parameters['skipdate']) && $datetype)
 			$range[$datetype] = $startdate . "/" . $enddate;
 		if (isset($parameters['filter'])) {
-			$filter = $parameters['filter'];
+			$filter[] = $parameters['filter'];
 		}
 		$this->hasGroup = (empty($group)) ? 0 : 1;
 		if (!empty($group)) $group = array_map('strtolower', $group);
