@@ -146,6 +146,7 @@ orocrm()
         echo -e "${RED}CRM was not packaged so skipping it\n${RESET}"
     else    
         cd ${TEMP}
+        service apache2 stop
         systemctl stop supervisor
         mkdir -p /var/www/crm
         chown ubuntu:ubuntu -R integrations/crm
@@ -181,6 +182,7 @@ orocrm()
         chown www-data:www-data -R /var/www/crm
         rm -Rf /var/www/crm/var/cache/*
         systemctl start supervisor
+        service apache2 start
     fi
 }
 #Function to copy rainloop
