@@ -44,7 +44,7 @@ class AppDelegateService extends AbstractService
 
     public function execute($appId, $delegate, $dataArray = array())
     {
-        $this->logger->info(AppDelegateService::class."EXECUTE DELEGATE ---");
+        $this->logger->info(AppDelegateService::class . "EXECUTE DELEGATE ---");
         try {
             $result = $this->delegateFile($appId, $delegate);
             if ($result) {
@@ -59,13 +59,14 @@ class AppDelegateService extends AbstractService
                     $this->logger->info("Document template location - $destination");
                     $obj->setTemplatePath($destination);
                 } else if (is_a($obj, MailDelegate::class)) {
-                    $this->logger->info(AppDelegateService::class."MAIL DELEGATE ---");
+                    $this->logger->info(AppDelegateService::class . "MAIL DELEGATE ---");
                     $destination = $this->config['APP_DOCUMENT_FOLDER'];
                     $obj->setTemplateService($this->templateService);
                     $obj->setMessageProducer($this->messageProducer);
                     $obj->setDocumentPath($destination);
                 }
                 $persistenceService = $this->getPersistence($appId);
+
                 $output = $obj->execute($dataArray, $persistenceService);
                 if (!$output) {
                     $output = array();
