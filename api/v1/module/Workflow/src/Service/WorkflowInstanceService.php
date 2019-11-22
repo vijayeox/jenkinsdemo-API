@@ -501,7 +501,7 @@ class WorkflowInstanceService extends AbstractService
         if (!empty($filterData)) {
             foreach ($filterData as $val) {
                 $tablePrefix = "tblf" . $prefix;
-                $fieldId = $this->fileService->getFieldDetaild($val['field']);
+                $fieldId = $this->fileService->getFieldDetails($val['field']);
                 if (!empty($val) && !empty($fieldId)) {
                     $joinQuery .= " left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) ";
                     $valueTransform = $this->getFieldType($fieldId, $tablePrefix);

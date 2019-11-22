@@ -403,7 +403,7 @@ class FileService extends AbstractService
         return $dataList;
     }
 
-    public function generateFieldWhereStatement($data)
+    private function generateFieldWhereStatement($data)
     {
         $prefix = 1;
         $whereQuery = "";
@@ -414,7 +414,7 @@ class FileService extends AbstractService
             if (!empty($fieldList)) {
                 foreach ($fieldList as $key => $val) {
                     $tablePrefix = "tblf" . $prefix;
-                    $fieldId = $this->getFieldDetaild($key, $data['entity_id']);
+                    $fieldId = $this->getFieldDetails($key, $data['entity_id']);
                     if (!empty($val) && !empty($fieldId)) {
                         $joinQuery .= "left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) ";
                         $whereQuery .= $tablePrefix . ".field_id =" . $fieldId['id'] . " and " . $tablePrefix . ".field_value ='" . $val . "' and ";
@@ -430,7 +430,7 @@ class FileService extends AbstractService
         return $returnQuery = array("joinQuery" => $joinQuery, "whereQuery" => $whereQuery);
     }
 
-    public function getFieldDetaild($fieldName, $entityId = null)
+    public function getFieldDetails($fieldName, $entityId = null)
     {
         try {
             if($entityId){
