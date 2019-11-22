@@ -130,9 +130,9 @@ class ActivityInstanceService extends AbstractService
         if(isset($activityInstanceAssignee) && is_array($activityInstanceAssignee) && !empty($activityInstanceAssignee)){
             $this->beginTransaction();
             try {
-                $updateQuery = "UPDATE ox_activity_instance_assignee SET assignee = :assignee
+                $updateQuery = "UPDATE ox_activity_instance_assignee SET assignee = :assignee, user_id=:userId
                 where id = :id;";
-                $updateParams = array("assignee" => 1,"id" => $activityInstanceAssignee[0]['id']);
+                $updateParams = array("assignee" => 1,"userId" => AuthContext::get(AuthConstants::USER_ID),"id" => $activityInstanceAssignee[0]['id']);
                 $update = $this->executeQuerywithBindParameters($updateQuery,$updateParams);
                 $this->commit();
             } catch (Exception $e) {
