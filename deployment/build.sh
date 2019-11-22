@@ -88,7 +88,8 @@ package()
     echo -e "${YELLOW}Now Copying ${RED}build.zip${YELLOW} to $SERVER..${RESET}"
     ssh -i ${PEM} $SERVER ' mkdir -p oxzion3.0/deployment ;'
     scp -i ${PEM} build.zip $SERVER:oxzion3.0
-    echo -e "${YELLOW}Copying ${RED}build.zip${YELLOW} to $SERVER completed successfully!${RESET}"        
+    echo -e "${YELLOW}Copying ${RED}build.zip${YELLOW} to $SERVER completed successfully!${RESET}"
+    echo -e "${GREEN}Build Completed on ${YELLOW}`date +%d-%m-%y` at `date +%H:%M:%S` Hours${RESET}"        
 }
 api()
 {   
