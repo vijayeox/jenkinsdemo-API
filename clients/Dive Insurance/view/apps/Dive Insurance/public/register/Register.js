@@ -12,49 +12,80 @@ export default class Register extends React.Component {
     this.appId = this.proc.metadata.appId;
     this.formContent = this.props.form;
   }
-    render() {
-        return (
-            <div>
-			<style type="text/css" dangerouslySetInnerHTML={{__html: "\n   .logo{\n    text-align: center;\n    margin:50px;\n  }\n  .logo img{\n    width:auto;\n    height: 150px;\n  }\n  .mockup-content {\n    text-align: center;\n  }\n" }} />
-			<div className="container">
-				<div className="logo"><img src="../img/logo.png" /></div>
-				<section>
-					<div className="form">
-						<ul className="tab-group">
-							<li className="tab active"><a href="#signup">Register</a></li>
-							<li className="tab"><a href="#login">Log In</a></li>
-						</ul>
-						<div className="tab-content">
-							<div id="signup">   
-								<h1>Register</h1>
-									<div id='formio'></div>
-							</div>
-							<div id="login">   
-								<h1>Welcome Back!</h1>
-								<form action="/" method="post">
-									<div className="field-wrap inputDiv">
-										<label className="labelField">
-											Username<span className="req">*</span>
-										</label>
-										<input className="inputField" required autoComplete="off" />
-									</div>
-									<div className="field-wrap inputDiv">
-										<label className="labelField">
-											Password<span className="req">*</span>
-										</label>
-										<input className="inputField" type="password" required autoComplete="off" />
-									</div>
-									<p className="forgot"><a href="#">Forgot Password?</a></p>      
-									<button className="button button-block">Log In</button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</section>
-			</div>
-		</div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <style
+          type="text/css"
+          dangerouslySetInnerHTML={{
+            __html:
+              "\n   .logo{\n    text-align: center;\n    margin:50px;\n  }\n  .logo img{\n    width:auto;\n    height: 150px;\n  }\n  .mockup-content {\n    text-align: center;\n  }\n"
+          }}
+        />
+        <div className="container">
+          <div className="logo">
+            <img src="../img/logo.png" />
+          </div>
+          <section>
+            <div className="form">
+              <ul className="tab-group">
+                <li className="tab active">
+                  <a href="#signup">Register</a>
+                </li>
+                <li className="tab">
+                  <a href="#login">Log In</a>
+                </li>
+              </ul>
+              <div className="tab-content">
+                <div id="signup">
+                  <h1>Register</h1>
+                  <div id="formio"></div>
+                </div>
+                <div id="login">
+                  <h1>Welcome Back!</h1>
+                  {/* <form> */}
+                  <div className="field-wrap inputDiv">
+                    <label className="labelField">
+                      Username<span className="req">*</span>
+                    </label>
+                    <input
+                      className="inputField userNameField"
+                      required
+                      autoComplete="off"
+                    />
+                  </div>
+                  <div className="field-wrap inputDiv">
+                    <label className="labelField">
+                      Password<span className="req">*</span>
+                    </label>
+                    <input
+                      className="inputField passwordField"
+                      type="password"
+                      required
+                      autoComplete="off"
+                    />
+                  </div>
+                  <div id="wrongPassword" style={{paddingBottom:"30px", display:"none"}}>
+                    <span>
+                      The username and/or password is incorrect! Please try
+                      again.
+                    </span>
+                  </div>
+                  <p className="forgot">
+                    <a href="#">Forgot Password?</a>
+                  </p>
+                  <button className="button button-block loginButton">
+                    Log In
+                  </button>
+                  {/* </form> */}
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    );
+  }
 }
 
 module.exports = Register;
