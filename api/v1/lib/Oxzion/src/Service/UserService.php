@@ -168,6 +168,7 @@ class UserService extends AbstractService
         $select = "SELECT ou.id,ou.uuid,count(ou.id) as org_count,ou.status,ou.username,ou.email,GROUP_CONCAT(ouo.org_id) as organisation_id from ox_user as ou inner join ox_user_org as ouo on ouo.user_id = ou.id where ou.username = '".$data['username']."' OR ou.email = '".$data['email']."' GROUP BY ou.id,ou.uuid,ou.status,ou.email";
         $result = $this->executeQuerywithParams($select)->toArray();
 
+        //Is this required?????
         if(count($result) > 1){
            throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");       
         }
@@ -216,6 +217,7 @@ class UserService extends AbstractService
             $data['address_id'] = $addressid;
             }
 
+        $data['name'] = $data['firstname']." ".$data['lastname'];
         $data['uuid'] = UuidUtil::uuid();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID)?AuthContext::get(AuthConstants::USER_ID):1;
@@ -252,10 +254,14 @@ class UserService extends AbstractService
                 throw new ServiceException("Failed to create a new entity","failed.create.user");
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
-            $add = $this->addUserToOrg($form->id, $form->orgid);
-            
-            $query = "select * from ox_user_org where user_id = ".$form->id;
-            $result = $this->executeQuerywithParams($query)->toArray();
+            $orgid = $this->getUuidFromId('ox_organization',$data['orgid']); //Template Service
+            $this->messageProducer->sendTopic(json_encode(array(
+                'username' => $data['username'],
+                'firstname' => $data['firstname'],
+                'email' => $data['email'],
+                'orgid' => $orgid
+            )), 'USER_ADDED');
+            $this->addUserToOrg($form->id, $form->orgid);
             if(isset($data['role'])){
                 $this->addRoleToUser($data['uuid'],$data['role'],$form->orgid);
             }
@@ -263,15 +269,7 @@ class UserService extends AbstractService
             // // Code to add the user information to the Elastic Search Index
             // $result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
             // $es = $this->generateUserIndexForElastic($data);
-            $orgid = $this->getUuidFromId('ox_organization',$data['orgid']); //Template Service
             $this->commit();
-            $this->messageProducer->sendTopic(json_encode(array(
-                'username' => $data['username'],
-                'firstname' => $data['firstname'],
-                'email' => $data['email'],
-                'password' => $password,
-                'orgid' => $orgid
-            )), 'USER_ADDED');
             return $count;
         } catch (Exception $e) {
             $this->rollback();
@@ -1006,8 +1004,8 @@ class UserService extends AbstractService
     }
 
     private function addUserToOrg($userId, $organizationId) {
-        if ($this->getDataByParams('ox_user', array('id'), array('id' => $userId))->toArray()) {
-            if ($this->getDataByParams('ox_organization', array('id'), array('id' => $organizationId, 'status' => 'Active'))->toArray()) {
+        if ($user = $this->getDataByParams('ox_user', array('id', 'username'), array('id' => $userId))->toArray()) {
+            if ($org = $this->getDataByParams('ox_organization', array('id', 'name'), array('id' => $organizationId, 'status' => 'Active'))->toArray()) {
                 if (!$this->getDataByParams('ox_user_org', array(), array('user_id' => $userId, 'org_id' => $organizationId))->toArray()) {
                     $data = array(array(
                         'user_id' => $userId,
@@ -1018,6 +1016,9 @@ class UserService extends AbstractService
                     if ($result_update->getAffectedRows() == 0) {
                         return $result_update;
                     }
+                    $message = json_encode(array('orgname' => $org[0]['name'] , 'status' => 'Active', 'username'=>$user[0]["username"]));
+
+                    $this->messageProducer->sendTopic($message, 'USERTOORGANIZATION_ADDED');
                     return 1;
                 } else {
                     return 3;

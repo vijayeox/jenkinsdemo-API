@@ -88,7 +88,8 @@ package()
     echo -e "${YELLOW}Now Copying ${RED}build.zip${YELLOW} to $SERVER..${RESET}"
     ssh -i ${PEM} $SERVER ' mkdir -p oxzion3.0/deployment ;'
     scp -i ${PEM} build.zip $SERVER:oxzion3.0
-    echo -e "${YELLOW}Copying ${RED}build.zip${YELLOW} to $SERVER completed successfully!${RESET}"        
+    echo -e "${YELLOW}Copying ${RED}build.zip${YELLOW} to $SERVER completed successfully!${RESET}"
+    echo -e "${GREEN}Build Completed on ${YELLOW}`date +%d-%m-%y` at `date +%H:%M:%S` Hours${RESET}"        
 }
 api()
 {   
@@ -162,7 +163,6 @@ crm()
     echo -e "${YELLOW}Building orocrm${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
     scp -i ${PEM} -r ${SERVER}:env/integrations/orocrm/* ./orocrm/
-    docker run -t --network="host" -v ${PWD}:/integrations -v /var/lib/oxzion/rainloop/data:/var/www/public/rainloop/data --entrypoint ./orocrm/docker-build.sh integrations
     echo -e "${GREEN}Building orocrm Completed!${RESET}"
     #copying orocrm to build
     echo -e "${YELLOW}Copying Orocrm to build folder....${RESET}"
