@@ -1,5 +1,5 @@
 import osjs from "osjs";
-import { name as applicationName } from "./metadata.json";
+import { name as applicationName, icon_white } from "./metadata.json";
 import React from "react";
 import ReactDOM from "react-dom";
 import Home from "./home";
@@ -12,6 +12,7 @@ const register = (core, args, options, metadata) => {
     .createWindow({
       id: "HubWindow",
       title: metadata.title.en_EN,
+      icon: proc.resource(icon_white),
       dimension: {
         width: document.body.clientWidth,
         height: document.body.clientHeight
