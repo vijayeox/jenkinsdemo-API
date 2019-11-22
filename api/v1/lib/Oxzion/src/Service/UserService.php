@@ -160,9 +160,9 @@ class UserService extends AbstractService
         $result = $this->executeQuerywithParams($select)->toArray();
 
         //Is this required?????
-        // if(count($result) > 1){
-        //    throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");       
-        // }
+        if(count($result) > 1){
+           throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");       
+        }
 
         if(count($result) == 1){
             $result[0]['GROUP_CONCAT(ouo.org_id)'] = isset($result[0]['GROUP_CONCAT(ouo.org_id)']) ? $result[0]['GROUP_CONCAT(ouo.org_id)'] : NULL;
@@ -234,7 +234,12 @@ class UserService extends AbstractService
                 throw new ServiceException("Failed to create a new entity","failed.create.user");
             }
             $form->id = $data['id'] = $this->table->getLastInsertValue();
-
+            $this->messageProducer->sendTopic(json_encode(array(
+                'username' => $data['username'],
+                'firstname' => $data['firstname'],
+                'email' => $data['email'],
+                'password' => $password
+            )), 'USER_ADDED');
             $this->addUserToOrg($form->id, $form->orgid);
             if(isset($data['role'])){
                 $this->addRoleToUser($data['uuid'],$data['role'],$form->orgid);
@@ -244,12 +249,6 @@ class UserService extends AbstractService
             // $result = $this->messageProducer->sendTopic(json_encode(array('userInfo' => $data)), 'USER_CREATED');
             // $es = $this->generateUserIndexForElastic($data);
             $this->commit();
-            $this->messageProducer->sendTopic(json_encode(array(
-                'username' => $data['username'],
-                'firstname' => $data['firstname'],
-                'email' => $data['email'],
-                'password' => $password
-            )), 'USER_ADDED');
             return $count;
         } catch (Exception $e) {
             $this->rollback();

@@ -61,6 +61,7 @@ class UserControllerTest extends ControllerTest
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'USER_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
         $this->dispatch('/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -98,6 +99,7 @@ class UserControllerTest extends ControllerTest
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'USER_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
         $this->dispatch('/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -221,6 +223,7 @@ class UserControllerTest extends ControllerTest
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'USER_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'USERTOORGANIZATION_ADDED')->once()->andReturn();
         }
 
         $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/user', 'POST', $data);
