@@ -85,6 +85,7 @@ class AppDelegateService extends AbstractService
     {
         $file = $className . $this->fileExt;
         $path = $this->delegateDir . $appId . "/" . $file;
+        $this->logger->info(AppDelegateService::class."Delegate File Path ---\n".$path);
         if ((file_exists($path))) {
             // include $path;
             require_once $path;
