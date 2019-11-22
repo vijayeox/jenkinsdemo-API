@@ -23,7 +23,7 @@ const register = (core, args, options, metadata) => {
       position: { left: 700, top: 200 }
     })
     .on("destroy", () => proc.destroy())
-    .render($content => ReactDOM.render(<Home args={core} />, $content));
+    .render($content => ReactDOM.render(<Home args={core} params={args} />, $content));
 
   return proc;
 };

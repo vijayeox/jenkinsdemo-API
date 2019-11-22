@@ -9,6 +9,7 @@ class Home extends React.Component {
     super(props);
     this.core = this.props.args;
     this.helper = this.core.make("oxzion/restClient");
+    this.params = this.props.params;
     this.state = {
       cacheID: undefined,
       formContent: undefined,
@@ -119,7 +120,7 @@ class Home extends React.Component {
             />
           </div>
         ) : this.state.showMenuPage ? (
-          <LeftMenuTemplate core={this.core} appId={application_id} />
+          <LeftMenuTemplate core={this.core} params={this.params} appId={application_id} />
         ) : null}
       </div>
     );
