@@ -10,7 +10,7 @@ privilege:
   - { name: 'MANAGE_POLICY_APPROVAL', permission : 3 }
   - { name: 'MANAGE_MY_POLICY', permission : 3 }
 role:
-  - {name: 'Policy Holder', default: true, privileges: [name: 'MANAGE_MY_POLICY', permission: 3]}
+  - {name: 'Policy Holder', default: true, privileges: [privilege_name: 'MANAGE_MY_POLICY', permission: 3]}
 menu:
   - name: Home
     privilege: "MANAGE_MY_POLICY_WRITE"
@@ -109,10 +109,10 @@ workflow:
     entity: "Individual Professional Liability"
 form:
   - name: PADI Verification
-  - description: description
-  - uuid: 
-  - template: JSON STRING
-  - entity: Padi
+    description: description
+    uuid: 
+    template: JSON STRING
+    entity: Padi
 job:
   - import_padi:
       - {
