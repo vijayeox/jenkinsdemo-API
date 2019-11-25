@@ -31,8 +31,11 @@ class PageService extends AbstractService
         $result = $this->executeQuerywithBindParameters($select,$selectQuery)->toArray();
         if(count($result) > 0){
             $content = isset($data['content'])?$data['content']:false;
-            $data['uuid'] = UuidUtil::uuid();
+            if(!isset($data['uuid'])){
+                $data['uuid'] = UuidUtil::uuid();
+            }
             if(isset($id)){
+                $data['id'] = $id;
                 $querySelect = "SELECT * from ox_app_page where app_id = :appId AND uuid = :uuid";
                 $whereQuery = array("appId" => $data['app_id'],"uuid" => $id);  
                 $queryResult = $this->executeQuerywithBindParameters($querySelect,$whereQuery)->toArray();
@@ -60,7 +63,7 @@ class PageService extends AbstractService
                 $count = $this->table->save($page);
                 if ($count == 0) {
                     $this->rollback();
-                    return 0;
+                    throw new ServiceException("Page save failed", "page.save.failed");
                 }
                 if (!isset($data['id'])) {
                     $id = $this->table->getLastInsertValue();
@@ -68,7 +71,7 @@ class PageService extends AbstractService
                 }
                 if($content){
                     $pageContent = $this->pageContentService->savePageContent($data['id'],$content);
-                }   
+                }
                 $this->commit();
             } catch (Exception $e) {
                 $this->rollback();

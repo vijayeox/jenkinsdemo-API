@@ -63,7 +63,7 @@ class PageContentService extends AbstractService
             $select = "DELETE from ox_page_content where page_id =?";
             $deleteQuery = array($pageId);
             $result = $this->executeQuerywithBindParameters($select,$deleteQuery);
-            foreach($data as $key => $value){ 
+            foreach($data as $key => $value){
                 if($value['type'] == 'List' || $value['type'] == 'DocumentViewer'){
                     $value['content'] = json_encode($value['content']);
                 }
@@ -196,10 +196,14 @@ class PageContentService extends AbstractService
     private function savePageContentInternal($data)
     {   
         try{
+            if(isset($data['content']) && !is_string($data['content'])){
+                $data['content'] = json_encode($data['content']);
+            }
             $page = new PageContent();
             $page->exchangeArray($data);
             $page->validate();
             $count = 0;
+
             $count = $this->table->save($page);
             if ($count == 0) {
                 return 0;

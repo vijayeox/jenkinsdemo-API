@@ -34,10 +34,12 @@ class AppService extends AbstractService
     protected $organizationService;
     protected $entityService;
     private $privilegeService;
+    private $menuItemService;
+    private $pageService;
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, $organizationService, $entityService, $privilegeService, $roleService)
+    public function __construct($config, $dbAdapter, AppTable $table, WorkflowService $workflowService, FormService $formService, FieldService $fieldService, $organizationService, $entityService, $privilegeService, $roleService, $menuItemService, $pageService)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -48,6 +50,8 @@ class AppService extends AbstractService
         $this->entityService = $entityService;
         $this->privilegeService = $privilegeService;
         $this->roleService = $roleService;
+        $this->menuItemService = $menuItemService;
+        $this->pageService = $pageService;
     }
 
     /**
@@ -198,16 +202,58 @@ class AppService extends AbstractService
             $this->setupAppView($path, $ymlData);
             $this->setupLinks($path, $appName, $appUuid, $orgUuid);
             $this->processWorkflow($ymlData, $path, $orgUuid);
+            $this->processForm($ymlData);
+            $this->processMenu($ymlData, $path);
             //check if menu exists and add to app menu table
             //check form fields if not found add to fields table fpr the app.
             //if job given setup quartz job
             // $this->updateyml($ymldata, $data['form'], $path);
             //Move the app folder from given path to clients folder
         }catch(Exception $e){
-            // print "Deploy APp";
             // print_r($e->getMessage());exit;
             $this->rollback();
             throw $e;
+        }
+    }
+
+    private function processMenu($yamlData, $path){
+        if(isset($yamlData['menu'])){
+            foreach ($yamlData['menu'] as $menu) {
+                $menu['uuid'] = isset($menu['uuid'])?$menu['uuid']:UuidUtil::uuid();
+                $count = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
+                if($count == 0){
+                    $count = $this->menuItemService->saveMenuItem($yamlData['app'][0]['uuid'], $menu);
+                    $routedata = array("appId" => $yamlData['app'][0]['uuid'], "orgId" => $yamlData['org'][0]['uuid']);
+                    $page = $menu['page'];
+                    if(isset($page['uuid'])){
+                        $pageId = $this->getIdFromUuid('ox_app_page', $page['uuid']);
+                    }else{
+                        $pageId = null;
+                        $page['uuid'] = UuidUtil::uuid();
+                    }
+                    $result = $this->pageService->savePage($routedata, $page, $pageId);
+                }
+            }
+        }
+    }
+
+    private function processForm(&$yamlData){
+        if(isset($yamlData['form'])){
+            $appUuid = $yamlData['app'][0]['uuid'];
+            foreach ($yamlData['form'] as &$form) {
+                $form['uuid'] = isset($form['uuid'])?$form['uuid']:UuidUtil::uuid();
+                $data = $form;
+                $entity = $this->entityService->getEntityByName($appUuid, $data['entity']);
+                if(!$entity) {
+                    $entity = array('name' => $data['entity']);
+                    $result = $this->entityService->saveEntity($appUuid, $entity);
+                }
+                $data['entity_id'] = $entity['id'];
+                $count = $this->formService->updateForm($appUuid, $data['uuid'], $data);
+                if ($count == 0) {
+                    $this->formService->createForm($appUuid, $data);
+                }
+            }
         }
     }
 
@@ -408,7 +454,7 @@ class AppService extends AbstractService
         }
         $result = $this->organizationService->saveOrganization($orgData);
         if($result == 0){
-            throw new ServiceException("Organization could not be saved");
+            throw new ServiceException("Organization could not be saved", 'org.not.saved');
         }
         return $orgData;
     }
@@ -438,7 +484,6 @@ class AppService extends AbstractService
                         throw new ServiceException("App Already Exists", 'duplicate.app');
                     }
                 }else{
-                    // print_r($result);exit;
                     if($appdata['name'] == $result[0]['name']){
                         $appdata['uuid'] = $result[0]['uuid'];
                     }
@@ -446,8 +491,6 @@ class AppService extends AbstractService
             }
             return $appdata['uuid'];
         }catch(Exception $e){
-            // print "checkAppExists";
-            // print_r($e->getMessage());exit;
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }

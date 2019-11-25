@@ -14,6 +14,7 @@ use Oxzion\Model\Field;
 use Oxzion\Model\FieldTable;
 use Oxzion\FormEngine\FormFactory;
 use Oxzion\Utils\ArrayUtils;
+use Oxzion\Utils\UuidUtil;
 
 class FormService extends AbstractService
 {
@@ -29,6 +30,7 @@ class FormService extends AbstractService
     public function createForm($appUuid, &$data)
     {
         $form = new Form();
+        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();
         if(is_array($data['template'])){
             $data['template'] = json_encode($data['template']);
         }
@@ -42,10 +44,11 @@ class FormService extends AbstractService
         if ($app = $this->getIdFromUuid('ox_app', $appUuid)) {
             $appId = $app;
         } else {
-            $appId = $appUuid;
+            throw new Exception("Invalid AppId $appUuid passed");
         }
         $template['form']['app_id'] = $appId;
         // $data['name'] = $template['form']['name'];
+        $template['form']['uuid'] = $data['uuid'];
         $template['form']['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $template['form']['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $template['form']['date_created'] = date('Y-m-d H:i:s');
@@ -120,7 +123,6 @@ class FormService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
-            print_r($e->getMessage());exit;
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
