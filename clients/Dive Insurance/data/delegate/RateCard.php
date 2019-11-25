@@ -26,6 +26,15 @@ class Ratecard extends AbstractAppDelegate
             }
             unset($rate);
         }
+        foreach ($data as $key => $value) {
+            if(is_string($value))
+            {
+                $result = json_decode($value);
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $data[$key] = $result;
+                }
+            }
+        }
         if(isset($premiumRateCardDetails)){
             $returnArray = array_merge($data,$premiumRateCardDetails);
             return $returnArray;

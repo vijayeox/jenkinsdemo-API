@@ -195,9 +195,9 @@ class ActivityInstanceService extends AbstractService
                         }
                         $groupQuery = $this->executeQuerywithParams("SELECT * FROM `ox_group` WHERE `name` = '".$candidate['groupid']."';")->toArray();
                         if($groupQuery){
-                            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`group_id`,`assignee`)
-                            VALUES (:activityInstanceId,:groupId,:assignee)";
-                            $insertParams = array("activityInstanceId" => $activityInstance['id'],"groupId" => $groupQuery[0]['id'],"assignee" => $assignee);
+                            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`group_id``)
+                            VALUES (:activityInstanceId,:groupId)";
+                            $insertParams = array("activityInstanceId" => $activityInstance['id'],"groupId" => $groupQuery[0]['id']);
                             $resultSet = $this->executeQuerywithBindParameters($insert,$insertParams);
                             unset($resultSet);
                             unset($insert);
