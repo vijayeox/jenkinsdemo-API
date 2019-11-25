@@ -707,7 +707,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select()
             ->from('ox_organization')
-            ->columns(array('id', 'name'))
+            ->columns(array('id', 'name','uuid'))
             ->where(array('ox_organization.id' => $id));
         $result = $this->executeQuery($select)->toArray();
         return $result[0];
@@ -1133,7 +1133,7 @@ class UserService extends AbstractService
         {
             $id = AuthContext::get(AuthConstants::USER_ID);
         }
-        $queryO = "Select org.id,org.name,org.address,org.city,org.state,org.zip,org.logo,org.labelfile,org.languagefile,org.status from ox_organization as org LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
+        $queryO = "Select org.id,org.name,org.uuid,org.address,org.city,org.state,org.zip,org.logo,org.labelfile,org.languagefile,org.status from ox_organization as org LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
         $where = "where uo.user_id =".$id." AND org.status='Active'";
         $resultSet = $this->executeQuerywithParams($queryO, $where);
         return $resultSet->toArray();
