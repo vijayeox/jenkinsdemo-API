@@ -48,15 +48,6 @@ class WidgetService extends AbstractService
             'name'          => $data['name'],
             'configuration' => $data['configuration']
         ];
-        $queryIdInsert = '';
-        if (isset($data['query_uuid'])) {
-            $queryIdInsert = '(SELECT id FROM ox_query oq WHERE oq.uuid=:query_uuid AND oq.org_id=:org_id)';
-            $queryParams['query_uuid'] = $data['query_uuid'];
-        }
-        else {
-            $queryIdInsert = '(SELECT query_id FROM ox_widget oqw WHERE oqw.uuid=:oldWidgetUuid AND oqw.org_id=:org_id)';
-            $queryParams['oldWidgetUuid'] = $oldWidgetUuid;
-        }
         if (isset($data['visualization_uuid'])) {
             $visualizationIdInsert = '(SELECT id FROM ox_visualization ov WHERE ov.uuid=:visualization_uuid AND ov.org_id=:org_id)';
             $queryParams['visualization_uuid'] = $data['visualization_uuid'];
@@ -66,7 +57,7 @@ class WidgetService extends AbstractService
             $queryParams['oldWidgetUuid'] = $oldWidgetUuid;
         }
 
-        $query = "INSERT INTO ox_widget (uuid, query_id, visualization_id, ispublic, created_by, date_created, org_id, isdeleted, name, configuration, version) VALUES (:uuid, ${queryIdInsert}, ${visualizationIdInsert}, :ispublic, :created_by, :date_created, :org_id, :isdeleted, :name, :configuration, :version)";
+        $query = "INSERT INTO ox_widget (uuid, visualization_id, ispublic, created_by, date_created, org_id, isdeleted, name, configuration, version) VALUES (:uuid, ${visualizationIdInsert}, :ispublic, :created_by, :date_created, :org_id, :isdeleted, :name, :configuration, :version)";
         try {
             $this->beginTransaction();
             $result = $this->executeQueryWithBindParameters($query, $queryParams);
@@ -75,20 +66,20 @@ class WidgetService extends AbstractService
                 return $newWidgetUuid;
             }
             else {
-                $this->logger->err('Unexpected result. Transaction rolled back.', $result);
+                $this->logger->error('Unexpected result. Transaction rolled back.', $result);
                 $this->rollback();
                 return 0;
             }
         }
         catch (ZendDbException $e) {
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
+            $this->logger->error('Database exception occurred.');
+            $this->logger->error($e);
             try {
                 $this->rollback();
             }
             catch (ZendDbException $ee) {
-                $this->logger->err('Database exception occurred when rolling back transaction.');
-                $this->logger->err($ee);
+                $this->logger->error('Database exception occurred when rolling back transaction.');
+                $this->logger->error($ee);
             }
             return 0;
         }
@@ -162,8 +153,8 @@ class WidgetService extends AbstractService
             $response['widget']['configuration'] = json_decode($resultSet[0]["configuration"]);
         }
         catch (ZendDbException $e) {
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
+            $this->logger->error('Database exception occurred.');
+            $this->logger->error($e);
             return 0;
         }
         return $response;
@@ -171,7 +162,7 @@ class WidgetService extends AbstractService
 
     public function getWidget($uuid,$params)
     {
-        $query = "select w.uuid, w.ispublic, w.created_by, w.date_created, w.name, w.configuration, if(w.created_by=:created_by, true, false) as is_owner, q.uuid as query_uuid, v.renderer, v.type from ox_widget w join ox_visualization v on w.visualization_id=v.id join ox_query q on w.query_id=q.id where w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid and (w.ispublic=true or w.created_by=:created_by)";
+        $query = 'select w.uuid, w.ispublic, w.created_by, w.date_created, w.name, w.configuration, if(w.created_by=:created_by, true, false) as is_owner, v.renderer, v.type from ox_widget w join ox_visualization v on w.visualization_id=v.id where w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid and (w.ispublic=true or w.created_by=:created_by)';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -186,31 +177,26 @@ class WidgetService extends AbstractService
                 'widget' => $resultSet[0]
             ];
             //Widget configuration value from database is a JSON string. Convert it to object and overwrite JSON string value.
-            $response['widget']['configuration'] = json_decode($resultSet[0]["configuration"]);
+            $response['widget']['configuration'] = json_decode($resultSet[0]['configuration']);
         }
         catch (ZendDbException $e) {
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
+            $this->logger->error('Database exception occurred.');
+            $this->logger->error($e);
             return 0;
         }
 
         if(isset($params['data'])) {
-            $query_uuid = $resultSet[0]['query_uuid'];
-            $queryData = $this->queryService->executeAnalyticsQuery($query_uuid);
-            if (isset($queryData['data'])) {
-                $data = $queryData['data'];
-            } else {
-                $data = 0;
-            }
             
             //--------------------------------------------------------------------------------------------------------------------------------
 //TODO:Fetch data from elastic search and remove hard coded values below.
-            $testUuid = $resultSet[0]['query_uuid'];
-            if ($testUuid == 'bf0a8a59-3a30-4021-aa79-726929469b07') {
+            $testUuid = $resultSet[0]['uuid'];
+            if ($testUuid == '2aab5e6a-5fd4-44a8-bb50-57d32ca226b0') {
                 //Sales YTD
                 $data = '235436';
             }
-            if ($testUuid == '3c0c8e99-9ec8-4eac-8df5-9d6ac09628e7') {
+            if (($testUuid == 'bacb4ec3-5f29-49d7-ac41-978a99d014d3') || 
+                ($testUuid == 'ae8e3919-88a8-4eaf-9e35-d7a4408a1f8c') || 
+                ($testUuid == 'e1933370-22bd-4cd8-abc9-fcdc29b6481d')) {
                 //Sales by sales person
                 $data = [
                     ['person'=> 'Bharat', 'sales'=> 4.2],
@@ -221,31 +207,34 @@ class WidgetService extends AbstractService
                     ['person'=> 'Yuvraj', 'sales'=> 14.2]
                 ];
             }
-            if ($testUuid == '45933c62-6933-43da-bbb2-59e6f331e8db') {
-                //Quarterly revenue target
-                $data = [
-                    ['quarter'=> 'Q1 2018', 'revenue'=> 4.2],
-                    ['quarter'=> 'Q2 2018', 'revenue'=> 5.4],
-                    ['quarter'=> 'Q3 2018', 'revenue'=> 3.1],
-                    ['quarter'=> 'Q4 2018', 'revenue'=> 3.8],
-                    ['quarter'=> 'Q1 2019', 'revenue'=> 4.1],
-                    ['quarter'=> 'Q2 2019', 'revenue'=> 4.7]
-                ];
+            if ($testUuid == 'd5927bc2-d87b-4dd5-b45b-66d7c5fcb3f1') {
+                $data = '83.89';
             }
-            if ($testUuid == '69f7732a-998a-41bb-ab89-aa7c434cb327') {
-                //Revenue YTD
-                $data = '786421';
-            }
-            if ($testUuid == 'de5c309d-6bd6-494f-8c34-b85ac109a301') {
-                //Product sales
-                $data = [
-                    ['product'=>'Audio player', 'sales'=>1.3],
-                    ['product'=>'Video player', 'sales'=>3.2],
-                    ['product'=>'Sports shoe', 'sales'=>2.8],
-                    ['product'=>'Gym cap', 'sales'=>0.87],
-                    ['product'=>'Baseball cap', 'sales'=>0.4]
-                ];
-            }
+//            if ($testUuid == '45933c62-6933-43da-bbb2-59e6f331e8db') {
+//                //Quarterly revenue target
+//                $data = [
+//                    ['quarter'=> 'Q1 2018', 'revenue'=> 4.2],
+//                    ['quarter'=> 'Q2 2018', 'revenue'=> 5.4],
+//                    ['quarter'=> 'Q3 2018', 'revenue'=> 3.1],
+//                    ['quarter'=> 'Q4 2018', 'revenue'=> 3.8],
+//                    ['quarter'=> 'Q1 2019', 'revenue'=> 4.1],
+//                    ['quarter'=> 'Q2 2019', 'revenue'=> 4.7]
+//                ];
+//            }
+//            if ($testUuid == '69f7732a-998a-41bb-ab89-aa7c434cb327') {
+//                //Revenue YTD
+//                $data = '786421';
+//            }
+//            if ($testUuid == 'de5c309d-6bd6-494f-8c34-b85ac109a301') {
+//                //Product sales
+//                $data = [
+//                    ['product'=>'Audio player', 'sales'=>1.3],
+//                    ['product'=>'Video player', 'sales'=>3.2],
+//                    ['product'=>'Sports shoe', 'sales'=>2.8],
+//                    ['product'=>'Gym cap', 'sales'=>0.87],
+//                    ['product'=>'Baseball cap', 'sales'=>0.4]
+//                ];
+//            }
             $response['widget']['data'] = $data;
 //--------------------------------------------------------------------------------------------------------------------------------
         }

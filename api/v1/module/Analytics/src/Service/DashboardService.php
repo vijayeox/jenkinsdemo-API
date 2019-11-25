@@ -48,16 +48,16 @@ class DashboardService extends AbstractService
             return $newDashboardUuid;
         }
         catch (ZendDbException $e) {
-            $this->logger->err('Database exception occurred. Query and parameters:');
-            $this->logger->err($query);
-            $this->logger->err($queryParams);
-            $this->logger->err($e);
+            $this->logger->error('Database exception occurred. Query and parameters:');
+            $this->logger->error($query);
+            $this->logger->error($queryParams);
+            $this->logger->error($e);
             try {
                 $this->rollback();
             }
             catch (ZendDbException $ee) {
-                $this->logger->err('Database exception occurred when rolling back transaction.');
-                $this->logger->err($ee);
+                $this->logger->error('Database exception occurred when rolling back transaction.');
+                $this->logger->error($ee);
             }
             return 0;
         }
@@ -93,10 +93,13 @@ class DashboardService extends AbstractService
         try {
             $this->beginTransaction();
             $result = $this->executeQueryWithBindParameters($updateQuery, $updateQueryParams);
-            if ($result->count()==1) { //If 1 row is updated.
+            if (1 == $result) { //If 1 row is updated.
                 $this->commit();
-                $response = array_merge($data,array('version'=>$newVersion));
-                return $response;
+                return [
+                    'dashboard' => [
+                        'version' => $newVersion
+                    ]
+                ];
             }
             else {
                 $this->rollback();
@@ -111,7 +114,7 @@ class DashboardService extends AbstractService
                 if (isset($versionResult[0])) {
                     $versionFromDatabase = $versionResult[0]['version'];
                     if ($versionFromDatabase != $version) {
-                        $this->logger->err('Version number mismatch. Exception thrown.');
+                        $this->logger->error('Version number mismatch. Exception thrown.');
                         throw new \Oxzion\VersionMismatchException();
                     }
                 }
@@ -120,14 +123,14 @@ class DashboardService extends AbstractService
         }
         catch(ZendDbException $e) {
 
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
+            $this->logger->error('Database exception occurred.');
+            $this->logger->error($e);
             try {
                 $this->rollback();
             }
             catch (ZendDbException $ee) {
-                $this->logger->err('Database exception occurred when rolling back transaction.');
-                $this->logger->err($ee);
+                $this->logger->error('Database exception occurred when rolling back transaction.');
+                $this->logger->error($ee);
             }
             return 0;
         }
@@ -146,17 +149,17 @@ class DashboardService extends AbstractService
             $this->beginTransaction();
             $result = $this->executeQueryWithBindParameters($query, $queryParams);
             $this->commit();
-            return 1;
+            return $result;
         }
         catch (ZendDbException $e) {
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
+            $this->logger->error('Database exception occurred.');
+            $this->logger->error($e);
             try {
                 $this->rollback();
             }
             catch (ZendDbException $ee) {
-                $this->logger->err('Database exception occurred when rolling back transaction.');
-                $this->logger->err($ee);
+                $this->logger->error('Database exception occurred when rolling back transaction.');
+                $this->logger->error($ee);
             }
             return 0;
         }
@@ -180,44 +183,61 @@ class DashboardService extends AbstractService
             ];
         }
         catch (ZendDbException $e) {
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
+            $this->logger->error('Database exception occurred.');
+            $this->logger->error($e);
             return 0;
         }
     }
 
     public function getDashboardList($params = null)
     {
-        // $query = 'SELECT uuid,name,description FROM ox_dashboard';
-        // $queryParams = [];
-        // try {
-        //     $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-        //     return $result;
-        // }
-        // catch (ZendDbException $e) {
-        //     $this->logger->err('Database exception occurred. Query and parameters:');
-        //     $this->logger->err($query);
-        //     $this->logger->err($queryParams);
-        //     $this->logger->err($e);
-        //     return 0;
-        // }
-       $paginateOptions = FilterUtils::paginate($params);
-       $where = $paginateOptions['where'];
-       $where .= empty($where) ? "WHERE ox_dashboard.isdeleted <> 1 AND (ox_dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_dashboard.ispublic = 1)" : " AND ox_dashboard.isdeleted <> 1 AND (ox_dashboard.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_dashboard.ispublic = 1)";
-       $sort = " ORDER BY ".$paginateOptions['sort'];
-       $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
-       $cntQuery ="SELECT count(id) as 'count' FROM `ox_dashboard` ";
-       $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-       $count=$resultSet->toArray()[0]['count'];
+//        $query = 'SELECT uuid,name,description FROM ox_dashboard';
+//        $queryParams = [];
+//        try {
+//            $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+//            return $result;
+//        }
+//        catch (ZendDbException $e) {
+//            $this->logger->error('Database exception occurred. Query and parameters:');
+//            $this->logger->error($query);
+//            $this->logger->error($queryParams);
+//            $this->logger->error($e);
+//            return 0;
+//        }
 
-       $query ="Select ox_dashboard.id,ox_dashboard.uuid,ox_dashboard.name,ox_dashboard.ispublic,ox_dashboard.description, ox_dashboard.dashboard_type,IF(ox_dashboard.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,ox_dashboard.org_id,ox_dashboard.isdeleted, ox_widget_dashboard_mapper.widget_id from ox_dashboard INNER JOIN ox_widget_dashboard_mapper on ox_dashboard.id = ox_widget_dashboard_mapper.dashboard_id ".$where." ".$sort." ".$limit;
-       $resultSet = $this->executeQuerywithParams($query);
-       $result = $resultSet->toArray();
-       foreach ($result as $key => $value) {
-           unset($result[$key]['id']);
-       }
-       return array('data' => $result,
-                    'total' => $count);
+        $paginateOptions = FilterUtils::paginate($params);
+        $where = $paginateOptions['where'];
+        $dashboardConditions = 'ox_dashboard.isdeleted <> 1 AND (ox_dashboard.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND (ox_dashboard.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ' OR ox_dashboard.ispublic = 1)';
+        $where .= empty($where) ? "WHERE ${dashboardConditions}" : " AND ${dashboardConditions}";
+        $sort = " ORDER BY ".$paginateOptions['sort'];
+        $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
+
+        $countQuery = "SELECT count(id) as 'count' FROM ox_dashboard ${where}";
+        try {
+            $resultSet = $this->executeQuerywithParams($countQuery);
+        }
+        catch (ZendDbException $e) {
+            $this->logger->error('Database exception occurred. Query:');
+            $this->logger->error($countQuery);
+            $this->logger->error($e);
+            return 0;
+        }
+        $count = $resultSet->toArray()[0]['count'];
+
+        $query ='SELECT uuid, name, ispublic, description, dashboard_type, IF(ox_dashboard.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, org_id, isdeleted from ox_dashboard '.$where.' '.$sort.' '.$limit;
+        try {
+            $resultSet = $this->executeQuerywithParams($query);
+        }
+        catch (ZendDbException $e) {
+            $this->logger->error('Database exception occurred. Query:');
+            $this->logger->error($countQuery);
+            $this->logger->error($e);
+            return 0;
+        }
+        $result = $resultSet->toArray();
+
+        return array('data' => $result,
+                     'total' => $count);
     }
 }
 
