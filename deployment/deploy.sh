@@ -146,6 +146,7 @@ orocrm()
         echo -e "${RED}CRM was not packaged so skipping it\n${RESET}"
     else    
         cd ${TEMP}
+        echo -e "${YELLOW}Stopping apache and supervisor service${RESET}"
         service apache2 stop
         systemctl stop supervisor
         mkdir -p /var/www/crm
@@ -162,6 +163,7 @@ orocrm()
         rsync -rl --delete integrations/crm/public/bundles/bowerassets/font-awesome/ integrations/crm/public/css/themes/oro/bundles/bowerassets/font-awesome/
         if [ -d "/var/www/crm/var" ] || [ ! -L "/var/www/crm/var" ] ;
         then
+            echo -e "${YELLOW}Stopping cron service${RESET}"
             service cron stop
             if [ -d "/var/www/crm/var" ] ;
             then
@@ -172,9 +174,11 @@ orocrm()
             #check for link exists
             if [ ! -L "/var/www/crm/var" ] ;
             then
+                echo -e "${YELLOW}Links doesn't exist. Creating links now"
                 ln -nfs /var/lib/oxzion/crm /var/www/crm/var
                 ln -nfs /var/log/oxzion/crm /var/lib/oxzion/crm/logs    
             fi
+            echo -e "${YELLOW}Starting cron service${RESET}"
             service cron start
         fi            
         rm -Rf integrations/crm/var
@@ -186,6 +190,9 @@ orocrm()
         echo -e "${GREEN}Copying CRM Complete!${RESET}"
         chown www-data:www-data -R /var/www/crm
         rm -Rf /var/www/crm/var/cache/*
+        echo -e "${YELLOW}Updating current logs with timestamp${RESET}"
+        mv /var/log/oxzion/crm/prod.log /var/log/oxzion/crm/prod_`date +%d-%m-%y_%H%M`.log
+        echo -e "${YELLOW}Starting apache and supervisor service${RESET}"
         systemctl start supervisor
         service apache2 start
     fi
