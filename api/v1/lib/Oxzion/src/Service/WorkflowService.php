@@ -152,7 +152,7 @@ class WorkflowService extends AbstractService
                             }
                             $activityData['entity_id'] = $entityId;
                             $activityData['workflow_deployment_id'] = $workflowDeploymentId;
-                            $activityResult = $this->activityService->createActivity($appId, $activityData,$appUuid);
+                            $activityResult = $this->activityService->createActivity($appUuid, $activityData);
                             $activityIdArray[] = $activityData['id'];
                         } catch (Exception $e) {
                             if(isset($activityIdArray)){
