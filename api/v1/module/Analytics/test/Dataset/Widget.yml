@@ -1,8 +1,7 @@
 ox_widget:
   -
-    id: 1
+    id: 11
     uuid: '51e881c3-040d-44d8-9295-f2c3130bafbc'
-    query_id: 1
     visualization_id: 2
     ispublic: 1
     created_by: 1
@@ -13,9 +12,8 @@ ox_widget:
     configuration: 'sample config'
     version: 1
   -
-    id: 2
+    id: 12
     uuid: '0e57b45f-5938-4e26-acd8-d65fb89e8503'
-    query_id: 2
     visualization_id: 1
     ispublic: 1
     created_by: 1
@@ -25,3 +23,12 @@ ox_widget:
     name: 'widget2'
     configuration: 'sample config2'
     version: 1
+ox_widget_query:
+-
+    ox_widget_id: 11
+    ox_query_id: 11
+    configuration: ''
+-
+    ox_widget_id: 12
+    ox_query_id: 12
+    configuration: ''

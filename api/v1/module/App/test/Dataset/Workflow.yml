@@ -289,14 +289,14 @@ ox_activity_instance_assignee:
     assignee: 1
 ox_file:
   -
-    id: 1
+    id: 11
     workflow_instance_id: 1
     org_id: 1
     data: "{\"field1\" : \"1\"}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     entity_id: 1
   -
-    id: 2
+    id: 12
     workflow_instance_id: 1
     org_id: 1
     data: "{\"field1\" : \"1\"}"
@@ -306,25 +306,25 @@ ox_file:
 ox_file_attribute:
   -
     id: 1
-    file_id: 1
+    file_id: 11
     org_id: 1
     field_value: 1
     field_id: 1
   -
     id: 2
-    file_id: 1
+    file_id: 11
     org_id: 1
     field_value: 1
     field_id: 2
   -
     id: 3
-    file_id: 1
+    file_id: 11
     org_id: 1
     field_value: 2
     field_id: 2
   -
     id: 4
-    file_id: 2
+    file_id: 12
     org_id: 1
     field_value: 2
     field_id: 2

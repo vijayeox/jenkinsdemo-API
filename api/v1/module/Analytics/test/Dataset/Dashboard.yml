@@ -1,6 +1,6 @@
 ox_dashboard:
   -
-    id: 1
+    id: 11
     uuid: 'a59f865e-efba-472e-91f2-2ae2d8a16d36'
     name: 'Dashboard1'
     ispublic: 1
@@ -14,7 +14,7 @@ ox_dashboard:
     version: 1
 
   -
-    id: 2
+    id: 12
     uuid: 'fc67ceb2-4b6f-4a33-8527-5fc6b0822988'
     name: 'Dashboard2'
     ispublic: 1 
@@ -30,9 +30,9 @@ ox_dashboard:
 ox_widget_dashboard_mapper:
   -
     id: 1
-    dashboard_id: 1
-    widget_id: 1
+    dashboard_id: 11
+    widget_id: 11
   -
     id: 2
-    dashboard_id: 2
-    widget_id: 2
+    dashboard_id: 12
+    widget_id: 12

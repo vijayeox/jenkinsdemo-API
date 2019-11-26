@@ -1,6 +1,6 @@
 ox_visualization:
   -
-    id: 1
+    id: 11
     uuid: '44f22a46-26d2-48df-96b9-c58520005817'
     name: 'Bar'
     created_by: 1
@@ -12,7 +12,7 @@ ox_visualization:
     type: "Type1"
     version: 1
   -
-    id: 2
+    id: 12
     uuid: '101b3d1e-175b-43d8-ac38-485e80e6b2f3'
     name: 'Aggregate'
     created_by: 1

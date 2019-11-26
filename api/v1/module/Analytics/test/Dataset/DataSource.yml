@@ -1,6 +1,6 @@
 ox_datasource:
 -
-    id: 1
+    id: 2
     uuid: '7700c623-1361-4c85-8203-e255ac995c4a'
     name: 'mattermost'
     type: 'MySql'
@@ -11,7 +11,7 @@ ox_datasource:
     isdeleted: 0
     version: 1
 -
-    id: 2
+    id: 3
     uuid: 'cb1bebce-df33-4266-bbd6-d8da5571b10a'
     name: 'reporting engine'
     type: 'Elastic'
