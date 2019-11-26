@@ -13,7 +13,8 @@ use Exception;
 class FileIndexerService extends AbstractService
 {
     protected $restClient;
-
+    protected $messageProducer;
+    
     public function __construct($config,AdapterInterface $dbAdapter,MessageProducer $messageProducer)
     {
         parent::__construct($config,$dbAdapter);
@@ -22,6 +23,11 @@ class FileIndexerService extends AbstractService
     public function setRestClient($restClient)
     {
         $this->restClient = $restClient;
+    }
+
+    public function setMessageProducer($messageProducer)
+    {
+        $this->messageProducer = $messageProducer;
     }
 
     public function getRelevantDetails($fileId)
