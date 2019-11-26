@@ -247,7 +247,7 @@ class WidgetService extends AbstractService
         $paginateOptions = FilterUtils::paginate($params);
         $where = $paginateOptions['where'];
         $where .= empty($where) ? "WHERE ox_widget.isdeleted <>1 AND (ox_widget.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_widget.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_widget.ispublic = 1)" : " AND ox_widget.isdeleted <>1 AND (ox_widget.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (ox_widget.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ox_widget.ispublic = 1)";
-        $sort = " ORDER BY ox_widget.".$paginateOptions['sort'];
+        $sort = $paginateOptions['sort'] ? " ORDER BY ox_widget.".$paginateOptions['sort'] : '';
         $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
         $cntQuery ="SELECT count(id) as 'count' FROM `ox_widget` ";

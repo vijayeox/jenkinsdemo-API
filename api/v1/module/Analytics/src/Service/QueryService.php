@@ -183,7 +183,7 @@ class QueryService extends AbstractService
         $paginateOptions = FilterUtils::paginate($params);
         $where = $paginateOptions['where'];
         $where .= empty($where) ? "WHERE ox_query.isdeleted <> 1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND ox_query.isdeleted <> 1 AND(org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
-        $sort = " ORDER BY ".$paginateOptions['sort'];
+        $sort = $paginateOptions['sort'] ? " ORDER BY ".$paginateOptions['sort'] : '';
         $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
         $cntQuery ="SELECT count(id) as 'count' FROM `ox_query` ";
