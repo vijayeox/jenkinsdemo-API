@@ -45,20 +45,6 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $_REQUEST = [];
     }
 
-    public function testGetList()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/activity/2', 'GET');
-        $this->assertResponseStatusCode(500);
-        $this->assertModuleName('Workflow');
-        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('WorkflowInstanceController');
-        $this->assertMatchedRouteName('workflowInstance');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
