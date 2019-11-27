@@ -173,6 +173,20 @@ return [
                     ],
                 ],
             ],
+            'filelistfilter' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/file/filelist/file',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileListFilter',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

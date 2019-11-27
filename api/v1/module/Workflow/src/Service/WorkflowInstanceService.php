@@ -159,7 +159,7 @@ class WorkflowInstanceService extends AbstractService
     public function getWorkflowInstance($id)
     {
         try {
-            $query = "select oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.org_id,ow.uuid as workflow_id 
+            $query = "select oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.org_id,ow.uuid as workflow_id
             from ox_workflow_instance as oxi
             join ox_workflow_deployment as wd on wd.id = oxi.workflow_deployment_id
              join ox_workflow as ow on wd.workflow_id = ow.id  and wd.latest=1
@@ -178,7 +178,7 @@ class WorkflowInstanceService extends AbstractService
 
     public function startWorkflow($params)
     {
-        $this->logger->info("Starting StartWorkflow method params - ".json_encode($params));
+        $this->logger->info("Starting StartWorkflow method params - " . json_encode($params));
 
         if (!isset($params['workflowId'])) {
             throw new EntityNotFoundException("No workflow or workflow instance id provided");
@@ -395,9 +395,9 @@ class WorkflowInstanceService extends AbstractService
         $form = new WorkflowInstance();
         $dateCreated = date('Y-m-d H:i:s');
         $query = "select w.app_id, wd.id from ox_workflow as w
-        inner join ox_workflow_deployment as wd on w.id = wd.workflow_id 
+        inner join ox_workflow_deployment as wd on w.id = wd.workflow_id
         where w.uuid=:uuid and wd.latest=:latest";
-        $queryParams = array("uuid" => $workflowId,"latest" => 1);
+        $queryParams = array("uuid" => $workflowId, "latest" => 1);
         $workflowResultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
 
         if (count($workflowResultSet)) {
@@ -445,7 +445,9 @@ class WorkflowInstanceService extends AbstractService
             }
         }
         $fieldNameList = "";
-        $appId = $this->getIdFromUuid('ox_app', $params['appId']);
+        if (isset($params['appId'])) {
+            $appId = $this->getIdFromUuid('ox_app', $params['appId']);
+        }
         if (isset($params['userId'])) {
             $userId = $this->getIdFromUuid('ox_user', $params['userId']);
         }
@@ -455,7 +457,9 @@ class WorkflowInstanceService extends AbstractService
 
         $queryParams = array();
         $appFilter = "h.app_id = :appId";
-        $queryParams['appId'] = $appId;
+        if (isset($params['appId'])) {
+            $queryParams['appId'] = $appId;
+        }
         if (isset($workflowId)) {
             $appFilter .= " AND h.uuid = :workflowId";
             $queryParams['workflowId'] = $workflowId;
@@ -476,8 +480,12 @@ class WorkflowInstanceService extends AbstractService
 
         $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
-        $where = " WHERE $appFilter AND g.status = 'Completed' and";
 
+        $where = "WHERE 1 and";
+        $fieldList = "";
+        if (isset($params['appId'])) {
+            $where .= " $appFilter and";
+        }
         $fromQuery = " from ox_file as a
             join ox_form as b on (a.entity_id = b.entity_id)
             join ox_form_field as c on (c.form_id = b.id)
@@ -486,12 +494,18 @@ class WorkflowInstanceService extends AbstractService
         if (isset($userId)) {
             $fromQuery .= " join ox_wf_user_identifier on ox_wf_user_identifier.identifier_name = d.name";
         }
-        $fromQuery .= " inner join ox_workflow_instance as g on a.workflow_instance_id = g.id
+
+        if (isset($workflowId)) {
+
+            $fieldList .= "g.process_instance_id as workflowInstanceId, h.name ";
+            $where .= " g.status = 'Completed' and";
+            $fromQuery .= " inner join ox_workflow_instance as g on a.workflow_instance_id = g.id
         inner join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
             inner join ox_workflow as h on h.id = wd.workflow_id and wd.latest=1
             left join (SELECT workflow_instance_id, max(latest) as latest from ox_file
             group by workflow_instance_id) as f2 on a.workflow_instance_id = f2.workflow_instance_id
             and a.latest = f2.latest";
+        }
 
         $prefix = 1;
         $whereQuery = "";
@@ -525,10 +539,10 @@ class WorkflowInstanceService extends AbstractService
         }
 
         $where .= " 1";
+
         $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery $where";
         $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
-
-        $select = "SELECT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name $fromQuery $where group by a.id $sort $pageSize $offset";
+        $select = "SELECT a.data, a.uuid $fieldList $fromQuery $where group by a.id $sort $pageSize $offset";
         $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
         return array('data' => $resultSet, 'total' => $countResultSet[0]['count']);
     }
