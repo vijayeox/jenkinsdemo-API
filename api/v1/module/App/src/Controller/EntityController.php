@@ -169,6 +169,7 @@ class EntityController extends AbstractApiController
                 return $this->getErrorResponse("Files cannot be uploaded");
             }
         }catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(),417);
         }
     }
