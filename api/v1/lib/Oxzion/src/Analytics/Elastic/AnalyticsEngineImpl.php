@@ -46,7 +46,6 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			if (isset($parameters['expression']) ||  isset($parameters['round']) ) {
 				$finalResult['data'] = AnalyticsPostProcessing::postProcess($finalResult['data'],$parameters);
 			}
-
 			return $finalResult;
 			
         } catch (Exception $e) {
@@ -160,23 +159,37 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 	}
 	
 
-	public function flattenmultigroups(&$finalresult,$result,$config,$count,$index,$key='',$grouplist=array()){
+	public function flattenmultigroups(&$finalresult,$result,$config,$count,$index,$keys=array()){
 		$operation = key($config['aggregates']);
+		$field = $config['aggregates'][$operation];
 		if ($index==$count) {
 			foreach($result as $data) {
+				$tempresult = array();
+				for($i=0;$i<$count;$i++) {						
+					$tempresult[$config['group'][$i]] = $keys[$i];
+				}
+				$tempresult[$config['group'][$count]] = $data['key'];
 				if ($operation=='count') {
 					$value = $data['doc_count'];
+					$tempresult['count']= $value;
+					$finalresult[] = $tempresult;
+//					$finalresult[] = array(implode(" - ",$config['group'])=>$key.' - '.$data['key'],'count'=>$value);
+
 				} else {
-					$value = $data['value']['value'];
-				}
-				$finalresult[] = array('name'=>$key.' - '.$data['key'],'value'=>$value);
+					$value = $data['value']['value'];					
+					$tempresult[$field]= $value;
+					$finalresult[] = $tempresult;
+//					$finalresult[] = array(implode(" - ",$config['group'])=>$key.' - '.$data['key'],$field=>$value);
+	
+				}			
 			}
 		} else {
 			foreach($result as $data) {
 				$groupname = 'groupdata'.$index;
-				$keytemp = ($key) ? $key.' - '.$data['key']:$data['key'];
-				$grouplisttemp = array_merge($grouplist,array($data['key']));
-				$this->flattenmultigroups($finalresult,$data['groupdata'.(string)$index]['buckets'],$config,$count,$index+1,$keytemp,$grouplisttemp);
+			//	$keytemp = ($key) ? $key.' - '.$data['key']:$data['key'];
+				$tempkeys = $keys;
+				$tempkeys[] = $data['key'];
+				$this->flattenmultigroups($finalresult,$data['groupdata'.(string)$index]['buckets'],$config,$count,$index+1,$tempkeys);
 			}
 			
 		}
@@ -185,6 +198,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 	public function flattenResult($resultData,$config){
 		$finalresult = array();
 		$operation = key($config['aggregates']);
+		$field = $config['aggregates'][$operation];
 		$qtrtranslate = array('Jan'=>'Q1','Apr'=>'Q2','Jul'=>'Q3','Oct'=>'Q4');
 		if (isset($config['group'])) {
 			if (count($config['group'])==1) {
@@ -201,10 +215,12 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 					}
 					if ($operation=='count') {
 						$value = $data['doc_count'];
+						$finalresult[]=array($config['group'][0]=>$name,'count'=>$value);
 					} else {
 						$value = $data['value']['value'];
+						$finalresult[]=array($config['group'][0]=>$name,$field=>$value);
 					}
-					$finalresult[]=array('name'=>$name,'value'=>$value);
+					
 				}
 			} else {
 				$this->flattenmultigroups($finalresult,$resultData,$config,count($config['group'])-1,0);

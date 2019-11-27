@@ -1,0 +1,26 @@
+ox_widget_query:
+  -
+    ox_query_id: 11
+    ox_widget_id: 11
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 14
+    ox_widget_id: 11
+    sequence: 2
+    configuration: "Sample"
+  -
+    ox_query_id: 12
+    ox_widget_id: 12
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 11
+    ox_widget_id: 13
+    sequence: 1
+    configuration: "Sample"
+  -
+    ox_query_id: 14
+    ox_widget_id: 13
+    sequence: 2
+    configuration: "Sample"

@@ -13,6 +13,7 @@ use Ramsey\Uuid\Uuid;
 use Exception;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 use Zend\Mvc\Application;
+use Webit\Util\EvalMath\EvalMath;
 
 class WidgetService extends AbstractService
 {
@@ -162,7 +163,7 @@ class WidgetService extends AbstractService
 
     public function getWidget($uuid,$params)
     {
-        $query = 'select w.uuid, w.ispublic, w.created_by, w.date_created, w.name, w.configuration, if(w.created_by=:created_by, true, false) as is_owner, v.renderer, v.type from ox_widget w join ox_visualization v on w.visualization_id=v.id where w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid and (w.ispublic=true or w.created_by=:created_by)';
+        $query = 'select w.uuid,wq.ox_query_id,w.ispublic, w.created_by, w.date_created, w.name, w.configuration, if(w.created_by=:created_by, true, false) as is_owner, v.renderer, v.type from ox_widget w join ox_visualization v on w.visualization_id=v.id join ox_widget_query wq on w.id = wq.ox_widget_id where w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid and (w.ispublic=true or w.created_by=:created_by)';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -177,16 +178,26 @@ class WidgetService extends AbstractService
                 'widget' => $resultSet[0]
             ];
             //Widget configuration value from database is a JSON string. Convert it to object and overwrite JSON string value.
-            $response['widget']['configuration'] = json_decode($resultSet[0]['configuration']);
+            $response['widget']['configuration'] = json_decode($resultSet[0]['configuration'],1);
         }
         catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
             $this->logger->error($e);
             return 0;
         }
-
+        $data = array();
         if(isset($params['data'])) {
-            
+            foreach ($resultSet as $row) {
+                $query_id = $row['ox_query_id'];
+                $queryData = $this->queryService->executeAnalyticsQuery($query_id);
+                if (!empty($data) && isset($queryData['data'])) {
+                    $data = array_replace_recursive($data, $queryData['data']);
+                } else {
+                    if (isset($queryData['data'])) {
+                        $data = $queryData['data'];
+                    }
+                }
+            }
             //--------------------------------------------------------------------------------------------------------------------------------
 //TODO:Fetch data from elastic search and remove hard coded values below.
             $testUuid = $resultSet[0]['uuid'];
@@ -235,12 +246,30 @@ class WidgetService extends AbstractService
 //                    ['product'=>'Baseball cap', 'sales'=>0.4]
 //                ];
 //            }
+            if (isset($response['widget']['configuration']['expression'])) {
+                $data = $this->evaluteExpression($data,$response['widget']['configuration']['expression']);
+            }
             $response['widget']['data'] = $data;
 //--------------------------------------------------------------------------------------------------------------------------------
         }
         return $response;
     }
 
+
+    public function evaluteExpression($data,$expression) {
+        $newDataSet = Array();
+        foreach($data as $key1=>$dataset) {
+            $m = new EvalMath;
+            foreach($dataset as $key2=>$value) {
+                if (is_numeric($value)) {
+                    $m->evaluate("$key2 = $value");
+                }
+            }
+            $calculated = $m->evaluate($expression);
+            $data[$key1]['calculated'] = $calculated;
+        }
+        return $data;
+    }
 
     public function getWidgetList($params = null)
     {
@@ -264,4 +293,6 @@ class WidgetService extends AbstractService
         return array('data' => $result,
                  'total' => $count);
     }
+
+
 }

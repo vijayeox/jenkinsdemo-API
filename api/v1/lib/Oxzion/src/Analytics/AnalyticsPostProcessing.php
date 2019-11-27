@@ -21,13 +21,14 @@ class AnalyticsPostProcessing
         }
         $finalResults = $resultData;
         if (is_array($resultData)) {
+            $field = isset($parameters['field']) ?$parameters['field']:'count';
             foreach ($resultData as $key => $data) {
-                $value = $data['value'];
+                $value = $data[$field];
                 eval("\$value=\$value" . $expression . ";");
                 if ($round !== null && is_numeric($value)) {
                     $value = round($value, $round);
                 }
-                $finalResults[$key]['value'] = $value;
+                $finalResults[$key][$field] = $value;
             }
         } else {
             $value = $resultData;

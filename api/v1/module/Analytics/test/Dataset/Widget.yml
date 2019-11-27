@@ -2,7 +2,7 @@ ox_widget:
   -
     id: 11
     uuid: '51e881c3-040d-44d8-9295-f2c3130bafbc'
-    visualization_id: 2
+    visualization_id: 12
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
@@ -14,7 +14,7 @@ ox_widget:
   -
     id: 12
     uuid: '0e57b45f-5938-4e26-acd8-d65fb89e8503'
-    visualization_id: 1
+    visualization_id: 11
     ispublic: 1
     created_by: 1
     date_created: '2019-06-27 07:25:06'
@@ -23,12 +23,15 @@ ox_widget:
     name: 'widget2'
     configuration: 'sample config2'
     version: 1
-ox_widget_query:
--
-    ox_widget_id: 11
-    ox_query_id: 11
-    configuration: ''
--
-    ox_widget_id: 12
-    ox_query_id: 12
-    configuration: ''
+  -
+    id: 13
+    uuid: '41e881c3-040d-44d8-9295-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'widget3'
+    configuration: '{"expression":"(field6-field5)*field6/100"}'
+    version: 1
