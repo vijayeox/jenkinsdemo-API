@@ -26,13 +26,3 @@ ox_dashboard:
     isdeleted: 0
     content: 'Content 2'
     version: 1
-
-ox_widget_dashboard_mapper:
-  -
-    id: 1
-    dashboard_id: 11
-    widget_id: 11
-  -
-    id: 2
-    dashboard_id: 12
-    widget_id: 12
