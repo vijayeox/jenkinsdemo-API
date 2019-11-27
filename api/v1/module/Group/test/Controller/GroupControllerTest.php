@@ -206,7 +206,7 @@ class GroupControllerTest extends ControllerTest {
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group 4', 'orgname'=>'Cleveland Black')),'GROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group 4', 'orgname'=>'Cleveland Black', "new_groupname" => "Test Group 4")),'GROUP_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/group', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -224,7 +224,7 @@ class GroupControllerTest extends ControllerTest {
         $this->assertEquals(5, $this->getConnection()->getRowCount('ox_group'));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Groups 22', 'orgname'=>'Cleveland Black')),'GROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Groups 22', 'orgname'=>'Golden State Warriors')),'GROUP_ADDED')->once()->andReturn();
         }
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/group', 'POST', $data);
@@ -589,6 +589,7 @@ class GroupControllerTest extends ControllerTest {
         $data = ['userid' => array(['id' => '4fd9ce37-758f-11e9-b2d5-68ecc57cde45'],['id' => '4fd9f04d-758f-11e9-b2d5-68ecc57cde45'])]; 
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => 'bharatgtest')),'USERTOGROUP_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->employeeUser)),'USERTOGROUP_ADDED')->once()->andReturn();
         }
         $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',$data);
