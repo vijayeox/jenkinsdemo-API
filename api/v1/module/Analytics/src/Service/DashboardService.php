@@ -93,7 +93,7 @@ class DashboardService extends AbstractService
         try {
             $this->beginTransaction();
             $result = $this->executeQueryWithBindParameters($updateQuery, $updateQueryParams);
-            if (1 == $result) { //If 1 row is updated.
+            if (1 == $result->count()) { //If 1 row is updated.
                 $this->commit();
                 return [
                     'dashboard' => [
@@ -191,28 +191,19 @@ class DashboardService extends AbstractService
 
     public function getDashboardList($params = null)
     {
-//        $query = 'SELECT uuid,name,description FROM ox_dashboard';
-//        $queryParams = [];
-//        try {
-//            $result = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
-//            return $result;
-//        }
-//        catch (ZendDbException $e) {
-//            $this->logger->error('Database exception occurred. Query and parameters:');
-//            $this->logger->error($query);
-//            $this->logger->error($queryParams);
-//            $this->logger->error($e);
-//            return 0;
-//        }
-
         $paginateOptions = FilterUtils::paginate($params);
         $where = $paginateOptions['where'];
-        $dashboardConditions = 'ox_dashboard.isdeleted <> 1 AND (ox_dashboard.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND (ox_dashboard.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ' OR ox_dashboard.ispublic = 1)';
+        $dashboardConditions = 'd.isdeleted <> 1 AND (d.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((d.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (d.ispublic = 1))';
         $where .= empty($where) ? "WHERE ${dashboardConditions}" : " AND ${dashboardConditions}";
-        $sort = " ORDER BY ".$paginateOptions['sort'];
-        $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
+        if(isset($params['sort'])){
+            $sort = ' ORDER BY ' . $paginateOptions['sort'];
+        }
+        else {
+            $sort = '';
+        }
+        $limit = ' LIMIT ' . $paginateOptions['pageSize'] . ' offset ' . $paginateOptions['offset'];
 
-        $countQuery = "SELECT count(id) as 'count' FROM ox_dashboard ${where}";
+        $countQuery = "SELECT COUNT(id) as 'count' FROM ox_dashboard d ${where}";
         try {
             $resultSet = $this->executeQuerywithParams($countQuery);
         }
@@ -224,13 +215,13 @@ class DashboardService extends AbstractService
         }
         $count = $resultSet->toArray()[0]['count'];
 
-        $query ='SELECT uuid, name, ispublic, description, dashboard_type, IF(ox_dashboard.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, org_id, isdeleted from ox_dashboard '.$where.' '.$sort.' '.$limit;
+        $query ='SELECT d.uuid, d.name, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id, d.isdeleted from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
         try {
             $resultSet = $this->executeQuerywithParams($query);
         }
         catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred. Query:');
-            $this->logger->error($countQuery);
+            $this->logger->error($query);
             $this->logger->error($e);
             return 0;
         }
