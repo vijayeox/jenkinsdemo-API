@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
     form.on("submit", function(submission) {
       submission.data.app_id = appId;
       var response = fetch(baseUrl + "register", {
-        body: JSON.stringify(submission),
+        body: JSON.stringify(submission.data),
         headers: {
           "content-type": "application/json"
         },
