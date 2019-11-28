@@ -497,7 +497,7 @@ class WorkflowInstanceService extends AbstractService
 
         if (isset($workflowId)) {
 
-            $fieldList .= "g.process_instance_id as workflowInstanceId, h.name ";
+            $fieldList .= ", g.status, g.process_instance_id as workflowInstanceId, h.name ";
             $where .= " g.status = 'Completed' and";
             $fromQuery .= " inner join ox_workflow_instance as g on a.workflow_instance_id = g.id
         inner join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
