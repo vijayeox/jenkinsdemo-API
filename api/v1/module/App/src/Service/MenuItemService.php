@@ -52,18 +52,8 @@ class MenuItemService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
-            switch (get_class($e)) {
-             case "Oxzion\ValidationException":
-                $this->rollback();
-                $this->logger->error($e->getMessage(), $e);
-                throw $e;
-                break;
-             default:
-                $this->rollback();
-                $this->logger->error($e->getMessage(), $e);
-                throw $e;
-                break;
-            }
+            $this->rollback();
+            throw $e;
         }
         return $count;
     }

@@ -57,11 +57,17 @@ class EntityService extends AbstractService
                 $id = $this->table->getLastInsertValue();
                 $data['id'] = $id;
             }
+            if($count == 0){
+                $this->rollback();
+                throw new ServiceException("Entity save failed", 'entity.save.failed');
+                
+            }
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
+        $entity->validate();
         return $count;
     }
      

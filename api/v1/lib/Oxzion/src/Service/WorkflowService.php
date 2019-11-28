@@ -155,11 +155,6 @@ class WorkflowService extends AbstractService
                             $activityResult = $this->activityService->createActivity($appUuid, $activityData);
                             $activityIdArray[] = $activityData['id'];
                         } catch (Exception $e) {
-                            if(isset($activityIdArray)){
-                                foreach ($activityIdArray as $activityCreatedId) {
-                                    $id = $this->activityService->deleteActivity($activityCreatedId);
-                                }
-                            }
                             throw $e;
                         }
                     }
@@ -171,7 +166,6 @@ class WorkflowService extends AbstractService
                 try {
                     $workFlow = $this->saveWorkflow($appId, $deployedData);
                 } catch (Exception $e){
-                    $this->deleteWorkflow($appId,$workFlowId);
                     throw $e;
                 }
             }
@@ -222,13 +216,14 @@ class WorkflowService extends AbstractService
         $form = new Workflow();
         $form->exchangeArray($data);
         $form->validate();
+        $transactionManager = \Oxzion\Transaction\TransactionManager::getInstance($this->dbAdapter);
         $this->beginTransaction();
         $count = 0;
         try {
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Workflow not saved", 'workflow.save.failed');
             }
             if (!isset($data['id'])) {
                 $id = $this->table->getLastInsertValue();

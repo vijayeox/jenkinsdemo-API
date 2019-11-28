@@ -509,8 +509,7 @@ class RoleControllerTest extends ControllerTest
 
         $this->dispatch('/role','POST',$data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Role already exists');
+        $this->assertEquals($content['status'], 'success');
     }
 
     public function testCreate()

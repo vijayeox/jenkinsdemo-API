@@ -62,6 +62,13 @@ class RoleService extends AbstractService
                 $params = array("orgId" => $org_id);
                 $result = $this->executeQueryWithBindParameters($queryString, $params);
             }
+            if(!isset($roleId) && isset($rolename)){
+                $select ="SELECT id from ox_role where name = '".$rolename."' AND org_id =".$org_id;
+                $result = $this->executeQuerywithParams($select)->toArray();
+                if(count($result) > 0){
+                    $roleId = $result[0]['id'];
+                }
+            }
             if (isset($roleId)) {
                 $update = "UPDATE `ox_role` SET `name`= '".$data['name']."' WHERE `id` = '".$roleId."' AND name not in ('ADMIN', 'MANAGER', 'EMPLOYEE') AND org_id = ".$org_id ;
                 $result1 = $this->runGenericQuery($update);
@@ -72,13 +79,7 @@ class RoleService extends AbstractService
                 if(!isset($rolename)){
                    throw new ServiceException("Role name cannot be empty","role.name.empty");
                 }
-                $select ="SELECT name,uuid from ox_role where name = '".$rolename."' AND org_id =".$org_id;
-                $result = $this->executeQuerywithParams($select)->toArray();
-
-                if(count($result) > 0){
-                    throw new ServiceException("Role already exists","role.already.exists");
-                }
-
+                
                 $data['uuid'] = isset($params['uuid']) ? $params['uuid'] : UuidUtil::uuid();
                 $data['is_system_role'] = isset($data['is_system_role']) ? $data['is_system_role'] :0;
                 $insert = "INSERT into `ox_role` (`name`,`description`,`uuid`,`org_id`,`is_system_role`, `default_role`) VALUES ('".$rolename."','".$data['description']."','".$data['uuid']."','".$org_id."','".$data['is_system_role']."','".$data['default']."')";

@@ -67,6 +67,9 @@ class PageContentService extends AbstractService
                 if($value['type'] == 'List' || $value['type'] == 'DocumentViewer'){
                     $value['content'] = json_encode($value['content']);
                 }
+                if($value['type'] == 'Form' && isset($value['formUuid'])){
+                    $value['form_id'] = $this->getIdFromUuid('ox_form', $value['formUuid']);
+                }
                 unset($value['id']);
                 if (!isset($value['id'])) {
                     $value['created_by'] = AuthContext::get(AuthConstants::USER_ID);

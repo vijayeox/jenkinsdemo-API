@@ -95,7 +95,7 @@ class AppService extends AbstractService
         $data['uuid'] = isset($data['uuid'])?$data['uuid']:UuidUtil::uuid();
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['status'] = App::PUBLISHED;
+        $data['status'] =  isset($data['status']) ? $data['status'] : App::IN_DRAFT;
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
@@ -105,6 +105,10 @@ class AppService extends AbstractService
             if ($count == 0) {
                 $this->rollback();
                 return 0;
+            }
+            if (!isset($data['id'])) {
+                $id = $this->table->getLastInsertValue();
+                $data['id'] = $id;
             }
             $this->commit();
         } catch (Exception $e) {
@@ -118,12 +122,9 @@ class AppService extends AbstractService
             return $count;
     }
 
-    private function updateymlfororg($yamldata, $modifieddata, $path){
+    private function updateyml($yamldata, $path){
         $filename = "application.yml";
-        if(!(array_key_exists('uuid',$yamldata['org']))){
-            $yamldata['org'][0]['uuid'] = $modifieddata['uuid'];
-        }
-        $new_yaml = Yaml::dump($yamldata, 2);
+        $new_yaml = Yaml::dump($yamldata, 10);
         file_put_contents($path.$filename, $new_yaml);
     }
 
@@ -139,12 +140,12 @@ class AppService extends AbstractService
         file_put_contents($path.$filename, $new_yaml);
     }
 
-    private function collectappfieldsdata($data){
+    private function collectappfieldsdata(&$data){
         if(!(array_key_exists('type',$data[0]))){
             $data[0]['type'] = 2;
         }
         if(!(array_key_exists('category',$data[0]))){
-            $data[0]['category'] = "EXAMPLE_CATEGORY";
+            $data[0]['category'] = "OFFICE";
         }
         return $data;
     }
@@ -179,18 +180,14 @@ class AppService extends AbstractService
     public function deployApp($path){
         $ymlData = $this->loadAppDescriptor($path);
         $appData = $this->collectappfieldsdata($ymlData['app'])[0];
-        $this->beginTransaction();
         try{
-            $appUuid = $this->checkAppExists($appData);
+            $appUuid = $this->checkAppExists($ymlData['app'][0]);
+            $appData['uuid'] = $ymlData['app'][0]['uuid'];
             $this->updateymlforapp($ymlData, $appData, $path);
-            $queryString = "UPDATE ox_app SET status = ".App::IN_DRAFT." WHERE ox_app.uuid = :appUuid";
-            $params = array("appUuid" => $appUuid);
-            $result = $this->executeQueryWithBindParameters($queryString, $params);
             $orgUuid = null;
             if(isset($ymlData['org'])){
                 $data = $this->processOrg($ymlData['org'][0]);
                 $orgUuid = $data['uuid'];
-                $this->updateymlfororg($ymlData, $data, $path);
                 $result = $this->createAppRegistry($appUuid, $ymlData['org'][0]['uuid']);
             }
             if(isset($ymlData['privilege'])){
@@ -204,21 +201,20 @@ class AppService extends AbstractService
             $this->processWorkflow($ymlData, $path, $orgUuid);
             $this->processForm($ymlData);
             $this->processMenu($ymlData, $path);
-            //check if menu exists and add to app menu table
-            //check form fields if not found add to fields table fpr the app.
             //if job given setup quartz job
-            // $this->updateyml($ymldata, $data['form'], $path);
+            $this->updateyml($ymlData, $path);
             //Move the app folder from given path to clients folder
+            $appData['status'] = App::PUBLISHED;
+            $this->updateApp($appData['uuid'], $appData);        
         }catch(Exception $e){
-            // print_r($e->getMessage());exit;
-            $this->rollback();
             throw $e;
         }
     }
 
-    private function processMenu($yamlData, $path){
+    private function processMenu(&$yamlData, $path){
         if(isset($yamlData['menu'])){
-            foreach ($yamlData['menu'] as $menu) {
+            foreach ($yamlData['menu'] as &$menuData) {
+                $menu = $menuData;
                 $menu['uuid'] = isset($menu['uuid'])?$menu['uuid']:UuidUtil::uuid();
                 $count = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
                 if($count == 0){
@@ -233,6 +229,7 @@ class AppService extends AbstractService
                     }
                     $result = $this->pageService->savePage($routedata, $page, $pageId);
                 }
+                $menuData['uuid'] = $menu['uuid'];
             }
         }
     }
@@ -265,10 +262,12 @@ class AppService extends AbstractService
             FileUtils::createDirectory($path.'view/apps/');
         }
         $appName = $path.'view/apps/'.$yamlData['app'][0]['name'];
-        $appName = str_replace(' ', '', $appName);
+        $metadataPath = $appName.'/metadata.json';
+        if(FileUtils::fileExists($appName) && FileUtils::fileExists($metadataPath)){
+            return;
+        }
         $eoxapp = $this->config['DATA_FOLDER'].'eoxapps';
         FileUtils::copyDir($eoxapp, $appName);
-        $metadataPath = $appName.'/metadata.json';
         $jsonData = json_decode(file_get_contents($metadataPath), true);
         $jsonData['name']=$yamlData['app'][0]['name'];
         $jsonData['appId'] = $yamlData['app'][0]['uuid'];
@@ -294,7 +293,7 @@ class AppService extends AbstractService
                         $result = $this->entityService->saveEntity($yamlData['app'][0]['uuid'], $entity);
                     }
                     if(isset($value['uuid']) && isset($entity['id'])) {
-                        $bpmnFilePath = $path."contents/workflows/".$value['bpmn_file'];
+                        $bpmnFilePath = $path."content/workflows/".$value['bpmn_file'];
                         $result = $this->workflowService->deploy($bpmnFilePath, $appUuid, $value, $entity['id']);
                     }
                 }
@@ -417,7 +416,7 @@ class AppService extends AbstractService
         }
     }
 
-    private function createRole($yamlData){
+    private function createRole(&$yamlData){
         if (isset($yamlData['role'])){
             if (!(isset($yamlData['org'][0]['uuid']))){
                 $this->logger->warn("Organization not provided not processing roles!");
@@ -426,14 +425,15 @@ class AppService extends AbstractService
             $appUuid = $yamlData['app'][0]['uuid'];
             $appId = $this->getIdFromUuid('ox_app', $appUuid);
             $params['orgId'] = $yamlData['org'][0]['uuid'];
-            $roles = $yamlData['role'];
-            foreach($roles as $role){
+            foreach($yamlData['role'] as &$roleData){
+                $role = $roleData;
                 if(!isset($role['name'])){
                     $this->logger->warn("Role name not provided continuing!");
                     continue;
                 }
                 $role['uuid'] = isset($role['uuid'])?$role['uuid']:UuidUtil::uuid();
                 $result = $this->roleService->saveRole($params, $role, $role['uuid']);
+                $roleData['uuid'] = $role['uuid'];
             }
         }
     }
@@ -452,10 +452,12 @@ class AppService extends AbstractService
         if(!isset($orgData['preferences'])){
             $orgData['preferences']= '{}';
         }
-        $result = $this->organizationService->saveOrganization($orgData);
+        $orgdata = $orgData;
+        $result = $this->organizationService->saveOrganization($orgdata);
         if($result == 0){
             throw new ServiceException("Organization could not be saved", 'org.not.saved');
         }
+        $orgData['uuid'] = $orgdata['uuid'];
         return $orgData;
     }
     private function checkAppExists(&$appdata){
@@ -552,7 +554,7 @@ class AppService extends AbstractService
         $data['id'] = $this->getIdFromUuid('ox_app', $id);
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
-        $data['status'] = App::PUBLISHED;
+        $data['status'] = isset($data['status']) ? $data['status'] : App::IN_DRAFT;
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
@@ -671,11 +673,18 @@ class AppService extends AbstractService
         $params = array("appId" => $appId, "orgId" => $orgId);
         $resultSet = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
         if ($resultSet[0]['count'] == 0) {
-            $insert =  "INSERT into ox_app_registry (app_id, org_id, start_options)
-            select ap.id, org.id, ap.start_options from ox_app as ap, ox_organization as org where ap.uuid = :appId and org.uuid = :orgId";
-            $params = array("appId" => $appId, "orgId" => $orgId);
-            $result = $this->executeUpdateWithBindParameters($insert, $params);
-            return $result->getAffectedRows();
+            try{
+                $this->beginTransaction();
+                $insert =  "INSERT into ox_app_registry (app_id, org_id, start_options)
+                select ap.id, org.id, ap.start_options from ox_app as ap, ox_organization as org where ap.uuid = :appId and org.uuid = :orgId";
+                $params = array("appId" => $appId, "orgId" => $orgId);
+                $result = $this->executeUpdateWithBindParameters($insert, $params);
+                $this->commit();
+                return $result->getAffectedRows();
+            }catch(Exception $e){
+                $this->rollback();
+                throw $e;
+            }
         }
         return 0;
     }
