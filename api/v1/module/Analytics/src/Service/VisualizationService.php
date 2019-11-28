@@ -124,7 +124,7 @@ class VisualizationService extends AbstractService
         $paginateOptions = FilterUtils::paginate($params);
         $where = $paginateOptions['where'];
         $where .= empty($where) ? "WHERE isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
-        $sort = " ORDER BY ".$paginateOptions['sort'];
+        $sort = $paginateOptions['sort'] ? " ORDER BY ".$paginateOptions['sort'] : '';
         $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
         $cntQuery ="SELECT count(id) as 'count' FROM `ox_visualization` ";

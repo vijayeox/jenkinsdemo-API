@@ -1,11 +1,10 @@
 ox_query:
   -
-    id: 1
+    id: 11
     uuid: '8f1d2819-c5ff-4426-bc40-f7a20704a738'
     name: 'query1'
-    datasource_id: 2
+    datasource_id: 3
     configuration: '{"app_name":"sampleapp","group":"field3","field":"field5","operation":"avg"}'
-    
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'
@@ -13,11 +12,11 @@ ox_query:
     isdeleted: 0
     version: 1
   -
-    id: 2
+    id: 12
     uuid: '86c0cc5b-2567-4e5f-a741-f34e9f6f1af1'
     name: 'query2'
-    datasource_id: 2
-    configuration: '{"app_name":"crm","date_type":"date_created","date-period":"2019-01-01/now","operation":"count"}'
+    datasource_id: 3
+    configuration: '{"app_name":"crm","date_type":"createdAt","date-period":"2018-01-01/2019-12-12","operation":"count"}'
     ispublic: 1
     created_by: 2
     date_created: '2019-06-27 07:25:06'
@@ -25,11 +24,23 @@ ox_query:
     isdeleted: 0
     version: 1
   -
-    id: 3
+    id: 13
     uuid: '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1'
     name: 'query3'
-    datasource_id: 2
+    datasource_id: 3
     configuration: '{"app_name":"crm","date_type":"date_created","date-period":"2018-01-01/now","list":"name,amount"}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+  -
+    id: 14
+    uuid: '7f1d2819-c5ff-4426-bc40-f7a20704a748'
+    name: 'query4'
+    datasource_id: 3
+    configuration: '{"app_name":"sampleapp","group":"field3","field":"field6","operation":"avg"}'
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'

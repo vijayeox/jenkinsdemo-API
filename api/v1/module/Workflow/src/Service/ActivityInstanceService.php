@@ -164,7 +164,6 @@ class ActivityInstanceService extends AbstractService
         $activityId = null;
         $resultSet = $this->executeQuerywithBindParameters($query,$queryParams)->toArray();
         if(count($resultSet)==0){
-            print("THROW Exception on EntityNotFoundException");
             throw new EntityNotFoundException("WorkflowInstance Not Found");
         }
 
@@ -195,7 +194,7 @@ class ActivityInstanceService extends AbstractService
                         }
                         $groupQuery = $this->executeQuerywithParams("SELECT * FROM `ox_group` WHERE `name` = '".$candidate['groupid']."';")->toArray();
                         if($groupQuery){
-                            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`group_id``)
+                            $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`group_id`)
                             VALUES (:activityInstanceId,:groupId)";
                             $insertParams = array("activityInstanceId" => $activityInstance['id'],"groupId" => $groupQuery[0]['id']);
                             $resultSet = $this->executeQuerywithBindParameters($insert,$insertParams);

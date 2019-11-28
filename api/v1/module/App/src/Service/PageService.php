@@ -30,12 +30,17 @@ class PageService extends AbstractService
         $selectQuery = array("orgId" => $orgId,"appId" => $data['app_id']);           
         $result = $this->executeQuerywithBindParameters($select,$selectQuery)->toArray();
         if(count($result) > 0){
+            $page = null;
             $content = isset($data['content'])?$data['content']:false;
-            if(!isset($data['uuid'])){
-                $data['uuid'] = UuidUtil::uuid();
-            }
+            
             if(isset($id)){
-                $data['id'] = $id;
+                $page = $this->table->getByUuid($id);
+                $data['uuid'] = $id;
+                    
+                if($page){
+                    $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+                    $data['date_modified'] = date('Y-m-d H:i:s');
+                }
                 $querySelect = "SELECT * from ox_app_page where app_id = :appId AND uuid = :uuid";
                 $whereQuery = array("appId" => $data['app_id'],"uuid" => $id);  
                 $queryResult = $this->executeQuerywithBindParameters($querySelect,$whereQuery)->toArray();
@@ -48,13 +53,12 @@ class PageService extends AbstractService
                     return 0;
                 }
             }
-            $page = new Page();
-            if (!isset($data['id'])) {
+            if(!$page){
+                $page = new Page();
+                $data['uuid'] = UuidUtil::uuid();
                 $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
                 $data['date_created'] = date('Y-m-d H:i:s');
             }
-            $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-            $data['date_modified'] = date('Y-m-d H:i:s');
             $page->exchangeArray($data);
             $page->validate();
             $this->beginTransaction();

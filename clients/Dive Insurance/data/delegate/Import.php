@@ -92,7 +92,11 @@ class Import extends AbstractAppDelegate
         $f_pointer = fopen($filePath, "r");
         // echo $filePath . $fileName;exit;
         $ftp_server = $host;
-        $ftp_conn = ftp_ssl_connect($ftp_server) or die("Could not connect to $ftp_server");
+        try{
+            $ftp_conn = ftp_ssl_connect($ftp_server);  
+        } catch (Exception $e){
+            throw new Exception("Could not connect to $ftp_server", 1);
+        }
         $login = ftp_login($ftp_conn, $userId, $password);
         // ftp_set_option($ftp_conn, 1, true);
         // echo "USEPASVADDRESS Value: " . ftp_get_option($ftp_conn, USEPASVADDRESS) ? '1' : '0';exit;

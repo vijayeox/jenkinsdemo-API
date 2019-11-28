@@ -40,6 +40,13 @@ class FileIndexerControllerTest extends ControllerTest
         return $mockRestClient;
     }
 
+    public function getMockMessageProducer(){
+        $fileIndexerService = $this->getApplicationServiceLocator()->get(Service\FileIndexerService::class);
+        $mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
+        $fileIndexerService->setMessageProducer($mockMessageProducer);
+        return $mockMessageProducer;
+    }
+
     protected function setDefaultAsserts()
     {
         $this->assertModuleName('FileIndexer');
@@ -92,6 +99,10 @@ class FileIndexerControllerTest extends ControllerTest
                 'type' => 'file',
             ),
           ))));
+        }
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'/topic/elastic')->once()->andReturn();
         }
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -148,6 +159,10 @@ class FileIndexerControllerTest extends ControllerTest
             ),
           ))));
         }
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'/topic/elastic')->once()->andReturn();
+        }
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('index');
@@ -203,6 +218,10 @@ class FileIndexerControllerTest extends ControllerTest
             ),
           ))));
         }
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'/topic/elastic')->once()->andReturn();
+        }
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('index');
@@ -228,6 +247,10 @@ class FileIndexerControllerTest extends ControllerTest
               'found' => false
           ))));
         }
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'/topic/elastic')->once()->andReturn();
+        }
         $this->assertResponseStatusCode(400);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('index');
@@ -251,6 +274,10 @@ class FileIndexerControllerTest extends ControllerTest
               'found' => false,
               ))));
         }
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'/topic/elastic')->once()->andReturn();
+        }
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('deleteIndex');
@@ -273,6 +300,10 @@ class FileIndexerControllerTest extends ControllerTest
               '_id' => '1',
               'found' => false,
               ))));
+        }
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'/topic/elastic')->once()->andReturn();
         }
         $this->assertResponseStatusCode(400);
         $this->setDefaultAsserts();

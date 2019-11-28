@@ -21,11 +21,11 @@ class ActivityService extends AbstractService
         $this->formService = $formService;
     }
 
-    public function createActivity($appId, &$data)
+    public function createActivity($appUuid, &$data)
     {
         $activity = new Activity();
         if(isset($data['template'])){
-            $formId = $this->formService->createForm($appId,$data);
+            $formId = $this->formService->createForm($appUuid,$data);
             $formId = $data['id'];
             unset($data['id']);
         } else {

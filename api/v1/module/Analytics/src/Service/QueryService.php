@@ -183,7 +183,7 @@ class QueryService extends AbstractService
         $paginateOptions = FilterUtils::paginate($params);
         $where = $paginateOptions['where'];
         $where .= empty($where) ? "WHERE ox_query.isdeleted <> 1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND ox_query.isdeleted <> 1 AND(org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
-        $sort = " ORDER BY ".$paginateOptions['sort'];
+        $sort = $paginateOptions['sort'] ? " ORDER BY ".$paginateOptions['sort'] : '';
         $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
         $cntQuery ="SELECT count(id) as 'count' FROM `ox_query` ";
@@ -212,11 +212,11 @@ class QueryService extends AbstractService
             return 0;
     }
 
-    public function executeAnalyticsQuery($uuid) {
-        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, q.isdeleted, d.uuid as datasource_uuid from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.uuid=:uuid';
+    public function executeAnalyticsQuery($id) {
+        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, q.isdeleted, d.uuid as datasource_uuid from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.id=:id';
         $queryParams = [
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
-            'uuid' => $uuid
+            'id' => $id
         ];
         try {
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();

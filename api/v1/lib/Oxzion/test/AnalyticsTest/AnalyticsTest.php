@@ -67,10 +67,10 @@ class AnalyticsTest extends MainControllerTest
         $parameters = ['group'=>'created_by','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
-        $this->assertEquals($results[0]['name'], "John Doe");
-        $this->assertEquals($results[0]['value'], "800");
-        $this->assertEquals($results[1]['name'], "Mike Price");
-        $this->assertEquals($results[1]['value'], "50.5");
+        $this->assertEquals($results[0]['created_by'], "John Doe");
+        $this->assertEquals($results[0]['amount'], "800");
+        $this->assertEquals($results[1]['created_by'], "Mike Price");
+        $this->assertEquals($results[1]['amount'], "50.5");
     }
 
     public function testDoubleGrouping() {
@@ -82,25 +82,41 @@ class AnalyticsTest extends MainControllerTest
         $parameters = ['group'=>'created_by,category','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
-        $this->assertEquals($results[0]['name'], "John Doe - A");
-        $this->assertEquals($results[0]['value'], "200");
-        $this->assertEquals($results[2]['name'], "Mike Price - A");
-        $this->assertEquals($results[2]['value'], "50.5");
+        $this->assertEquals($results[0]['created_by'], "John Doe");
+        $this->assertEquals($results[0]['category'], "A");
+        $this->assertEquals($results[0]['amount'], "200");
+        $this->assertEquals($results[1]['created_by'], "John Doe");
+        $this->assertEquals($results[1]['category'], "B");
+        $this->assertEquals($results[1]['amount'], "600");
+        $this->assertEquals($results[2]['created_by'], "Mike Price");
+        $this->assertEquals($results[2]['category'], "A");
+        $this->assertEquals($results[2]['amount'], "50.5");
     }
 
-    public function testDoubleGroupingCount() {
+    public function testTripleGroupingCount() {
         if(enableElastic==0){
             $this->markTestSkipped('Only Integration Test');
         }
         AuthContext::put(AuthConstants::ORG_ID, 1);
         $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
-        $parameters = ['group'=>'created_by,category','field'=>'amount','operation'=>'count','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created'];
+        $parameters = ['group'=>'created_by,category,modified_by','field'=>'amount','operation'=>'count','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
-        $this->assertEquals($results[0]['name'], "John Doe - A");
-        $this->assertEquals($results[0]['value'], "1");
-        $this->assertEquals($results[2]['name'], "Mike Price - A");
-        $this->assertEquals($results[2]['value'], "1");
+        $this->assertEquals($results[0]['created_by'], "John Doe");
+        $this->assertEquals($results[0]['category'], "A");
+        $this->assertEquals($results[0]['modified_by'], "Jane Doe");
+        $this->assertEquals($results[0]['count'], "1");
+
+        $this->assertEquals($results[1]['created_by'], "John Doe");
+        $this->assertEquals($results[1]['category'], "B");
+        $this->assertEquals($results[1]['modified_by'], "Jane Doe");
+        $this->assertEquals($results[1]['count'], "1");
+
+
+        $this->assertEquals($results[2]['created_by'], "Mike Price");
+        $this->assertEquals($results[2]['category'], "A");
+        $this->assertEquals($results[2]['modified_by'], "Mark Doe");
+        $this->assertEquals($results[2]['count'], "1");
     }
 
     public function testLists() {
@@ -151,10 +167,10 @@ class AnalyticsTest extends MainControllerTest
         $parameters = ['group'=>'created_by','operation'=>'count','date-period'=>'2018-01-01/2019-12-12','date_type'=>'date_created'];
         $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
-        $this->assertEquals($results[0]['name'], "John Doe");
-        $this->assertEquals($results[0]['value'], "3");
-        $this->assertEquals($results[1]['name'], "Mike Price");
-        $this->assertEquals($results[1]['value'], "1");
+        $this->assertEquals($results[0]['created_by'], "John Doe");
+        $this->assertEquals($results[0]['count'], "3");
+        $this->assertEquals($results[1]['created_by'], "Mike Price");
+        $this->assertEquals($results[1]['count'], "1");
     }
 
     public function testWorkflowData() {
@@ -166,10 +182,10 @@ class AnalyticsTest extends MainControllerTest
         $parameters = ['group'=>'field3','field'=>'field5','operation'=>'avg'];
         $results = $ae->runQuery('sampleapp', 'TaskSystem', $parameters);
         $results = $results['data'];
-        $this->assertEquals($results[0]['name'], "field3text");
-        $this->assertEquals($results[0]['value'], "15");
-        $this->assertEquals($results[1]['name'], "cfield3text");
-        $this->assertEquals($results[1]['value'], "30");
+        $this->assertEquals($results[0]['field3'], "field3text");
+        $this->assertEquals($results[0]['field5'], "15");
+        $this->assertEquals($results[1]['field3'], "cfield3text");
+        $this->assertEquals($results[1]['field5'], "30");
     }
 
     public function testCrmDataWithFilter() {
@@ -256,10 +272,10 @@ class AnalyticsTest extends MainControllerTest
         $parameters = ['group'=>'created_by','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created','expression'=>'/10'];
         $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
-        $this->assertEquals($results[0]['name'], "John Doe");
-        $this->assertEquals($results[0]['value'], "80");
-        $this->assertEquals($results[1]['name'], "Mike Price");
-        $this->assertEquals($results[1]['value'], "5.05");
+        $this->assertEquals($results[0]['created_by'], "John Doe");
+        $this->assertEquals($results[0]['amount'], "80");
+        $this->assertEquals($results[1]['created_by'], "Mike Price");
+        $this->assertEquals($results[1]['amount'], "5.05");
     }
 
     public function testRoundingWithGrouping() {
@@ -271,10 +287,10 @@ class AnalyticsTest extends MainControllerTest
         $parameters = ['group'=>'created_by','field'=>'amount','operation'=>'sum','date-period'=>'2018-01-01/2018-12-12','date_type'=>'date_created','expression'=>'*23/53','round'=>'2'];
         $results = $ae->runQuery('11_test', null, $parameters);
         $results = $results['data'];
-        $this->assertEquals($results[0]['name'], "John Doe");
-        $this->assertEquals($results[0]['value'], "347.17");
-        $this->assertEquals($results[1]['name'], "Mike Price");
-        $this->assertEquals($results[1]['value'], "21.92");
+        $this->assertEquals($results[0]['created_by'], "John Doe");
+        $this->assertEquals($results[0]['amount'], "347.17");
+        $this->assertEquals($results[1]['created_by'], "Mike Price");
+        $this->assertEquals($results[1]['amount'], "21.92");
     }
 
     public function testExpressionsNoGroups() {

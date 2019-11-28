@@ -20,14 +20,18 @@ final class Version20191122080048 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql("ALTER TABLE `ox_form` DROP  FOREIGN KEY `FK_FormEntityId`;");
         $this->addSql("ALTER TABLE ox_form CHANGE entity_id entity_id int(32) NOT NULL");
+        $this->addSql("ALTER TABLE ox_form ADD CONSTRAINT FK_FormEntityId FOREIGN KEY (entity_id) REFERENCES ox_app_entity(id);");
 
     }
 
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql("ALTER TABLE `ox_form` DROP  FOREIGN KEY `FK_FormEntityId`;");
         $this->addSql("ALTER TABLE ox_form CHANGE entity_id entity_id int(32) NULL");
+        $this->addSql("ALTER TABLE ox_form ADD CONSTRAINT FK_FormEntityId FOREIGN KEY (entity_id) REFERENCES ox_app_entity(id);");
 
     }
 }

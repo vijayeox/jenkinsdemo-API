@@ -195,12 +195,7 @@ class DashboardService extends AbstractService
         $where = $paginateOptions['where'];
         $dashboardConditions = 'd.isdeleted <> 1 AND (d.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((d.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (d.ispublic = 1))';
         $where .= empty($where) ? "WHERE ${dashboardConditions}" : " AND ${dashboardConditions}";
-        if(isset($params['sort'])){
-            $sort = ' ORDER BY ' . $paginateOptions['sort'];
-        }
-        else {
-            $sort = '';
-        }
+        $sort = $paginateOptions['sort'] ? (' ORDER BY d.' . $paginateOptions['sort']) : '';
         $limit = ' LIMIT ' . $paginateOptions['pageSize'] . ' offset ' . $paginateOptions['offset'];
 
         $countQuery = "SELECT COUNT(id) as 'count' FROM ox_dashboard d ${where}";

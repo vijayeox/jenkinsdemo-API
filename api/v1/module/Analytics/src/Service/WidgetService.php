@@ -13,6 +13,7 @@ use Ramsey\Uuid\Uuid;
 use Exception;
 use Zend\Db\Exception\ExceptionInterface as ZendDbException;
 use Zend\Mvc\Application;
+use Webit\Util\EvalMath\EvalMath;
 
 class WidgetService extends AbstractService
 {
@@ -233,15 +234,27 @@ class WidgetService extends AbstractService
             $response = [
                 'widget' => $widget
             ];
+            //Widget configuration value from database is a JSON string. Convert it to object and overwrite JSON string value.
+            $response['widget']['configuration'] = json_decode($resultSet[0]['configuration'],1);
         }
         catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
             $this->logger->error($e);
             return 0;
         }
-
+        $data = array();
         if(isset($params['data'])) {
-            
+            foreach ($resultSet as $row) {
+                $query_id = $row['ox_query_id'];
+                $queryData = $this->queryService->executeAnalyticsQuery($query_id);
+                if (!empty($data) && isset($queryData['data'])) {
+                    $data = array_replace_recursive($data, $queryData['data']);
+                } else {
+                    if (isset($queryData['data'])) {
+                        $data = $queryData['data'];
+                    }
+                }
+            }
             //--------------------------------------------------------------------------------------------------------------------------------
 //TODO:Fetch data from elastic search and remove hard coded values below.
                 $data = [
@@ -299,6 +312,9 @@ class WidgetService extends AbstractService
 //                    ['product'=>'Baseball cap', 'sales'=>0.4]
 //                ];
 //            }
+            if (isset($response['widget']['configuration']['expression'])) {
+                $data = $this->evaluteExpression($data,$response['widget']['configuration']['expression']);
+            }
             $response['widget']['data'] = $data;
 //--------------------------------------------------------------------------------------------------------------------------------
         }
@@ -306,18 +322,28 @@ class WidgetService extends AbstractService
     }
 
 
+    public function evaluteExpression($data,$expression) {
+        $newDataSet = Array();
+        foreach($data as $key1=>$dataset) {
+            $m = new EvalMath;
+            foreach($dataset as $key2=>$value) {
+                if (is_numeric($value)) {
+                    $m->evaluate("$key2 = $value");
+                }
+            }
+            $calculated = $m->evaluate($expression);
+            $data[$key1]['calculated'] = $calculated;
+        }
+        return $data;
+    }
+
     public function getWidgetList($params = null)
     {
         $paginateOptions = FilterUtils::paginate($params);
         $where = $paginateOptions['where'];
         $widgetConditions = '(w.isdeleted <> 1) AND (w.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';
         $where .= empty($where) ? "WHERE ${widgetConditions}" : " AND ${widgetConditions}";
-        if(isset($params['sort'])){
-            $sort = ' ORDER BY ' . $paginateOptions['sort'];
-        }
-        else {
-            $sort = '';
-        }
+        $sort = $paginateOptions['sort'] ? (' ORDER BY w.' . $paginateOptions['sort']) : '';
         $limit = ' LIMIT ' . $paginateOptions['pageSize'] . ' OFFSET ' . $paginateOptions['offset'];
 
         $countQuery = "SELECT COUNT(id) as 'count' FROM ox_widget w ${where}";

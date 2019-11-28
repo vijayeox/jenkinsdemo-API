@@ -20,6 +20,7 @@ final class Version20191122075602 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql ("ALTER TABLE ox_form CHANGE name name VARCHAR(255) NOT NULL");
         $this->addSql ("ALTER TABLE ox_form ADD CONSTRAINT entityid_name_unique UNIQUE (entity_id, name)");
 
     }

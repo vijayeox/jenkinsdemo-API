@@ -8,7 +8,7 @@ class FilterUtils
     {
         $pageSize = 20;
         $offset = 0;
-        $sort = "id";
+        $sort = NULL;
         $where = "";
 
         if(!empty($params))

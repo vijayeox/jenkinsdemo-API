@@ -20,6 +20,7 @@ ox_elastic:
     field3: 'cfield3text'
     field4: 'dfield4text'
     field5: 30
+    field6: 20
     data: 'new data'
 
   -
@@ -43,8 +44,31 @@ ox_elastic:
     field3: 'cfield3text'
     field4: 'dfield4text'
     field5: 40
+    field6: 70
     data: 'new data'
-
+  -
+    app_name: 'sampleapp'
+    id: 10
+    found: true
+    workflow_instance_id: 3
+    activity_instance_id: 3
+    form_id: 3
+    form_name: 'Test Form 4'
+    entity_name: 'TicketSystem'
+    org_id: 1
+    app_id: 99
+    workflow_name: 'Test Workflow 1'
+    worflow_instance_status: 'In Progress'
+    workflow_instance_date_created: 2019/06/26
+    activity_name: 'Task'
+    activity_instance_status: 'In Progress'
+    activity_instance_start_date: 2019/09/16
+    activity_instance_act_by_date: null
+    field3: 'cfield5text'
+    field4: 'dfield4text'
+    field5: 40
+    field6: 70
+    data: 'new data'
   -
     app_name: 'crm'
     entity_name: 'Lead'
@@ -84,6 +108,7 @@ ox_elastic:
     source_name: 'Demand Generation'
     status: 'new'
     status_name: 'New'
+    amount: 1000
 
   -
     app_name: 'crm'
@@ -124,6 +149,7 @@ ox_elastic:
     source_name: 'Demand Generation'
     status: 'new'
     status_name: 'New'
+    amount: 2000
 
   -
     app_name: 'crm'
@@ -164,3 +190,4 @@ ox_elastic:
     source_name: 'Demand Generation'
     status: 'new'
     status_name: 'New'
+    amount: 3000

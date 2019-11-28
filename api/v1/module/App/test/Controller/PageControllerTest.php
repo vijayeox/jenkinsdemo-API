@@ -120,13 +120,13 @@ class PageControllerTest extends ControllerTest
         $data = json_decode('{"name":"Page23","description":"Page Description","content":[{"content":"<div>Page Content goes here!!!....</div>","type": "Document"},{"form_id":1,"type": "Form"}]}');
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/page/050283ae-df8d-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(PageController::class); // as specified in router's controller name alias
         $this->assertControllerClass('PageController');
         $this->assertMatchedRouteName('apppage');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data->name);
     }
