@@ -1,123 +1,186 @@
 app:
-  - name: "Dive Insurance"
-    uuid: d77ea120-b028-479b-8c6e-60476b6a4456
-    description: "App for Dive Insurance"
+    -
+        name: 'Dive Insurance'
+        uuid: d77ea120-b028-479b-8c6e-60476b6a4456
+        description: 'App for Dive Insurance'
+        category: EXAMPLE_CATEGORY
+        type: 2
 org:
-  - name: "Vincencia & Buckley"
-    uuid: c1ed4200-9131-4671-b0e0-de3e27c3f609
-    email: testhub07@gmail.com
+    -
+        name: 'Vincencia & Buckley'
+        uuid: c1ed4200-9131-4671-b0e0-de3e27c3f609
+        email: testhub07@gmail.com
+        address1: '6 bCenterpoint'
+        address2: Dr.
+        city: 'La Palma'
+        state: CA
+        zip: 90623
+        country: 'United States'
+        contact:
+            username: testhub07.gmail.com
+            firstname: Admin
+            lastname: User
+            email: testhub07@gmail.com
+        preferences: '{}'
 privilege:
-  - { name: 'MANAGE_POLICY_APPROVAL', permission : 3 }
-  - { name: 'MANAGE_MY_POLICY', permission : 3 }
+    -
+        name: MANAGE_POLICY_APPROVAL
+        permission: 3
+    -
+        name: MANAGE_MY_POLICY
+        permission: 3
 role:
-  - {name: 'Policy Holder', default: true, privileges: [privilege_name: 'MANAGE_MY_POLICY', permission: 3]}
+    -
+        name: 'Policy Holder'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_MY_POLICY
+                permission: 3
+        uuid: 7888bb68-3a96-404f-ac9f-6abebfe76de8
 menu:
-  - name: Home
-    privilege: "MANAGE_MY_POLICY_WRITE"
-    icon: 'fa-home'
-    page:
-      name: "My Policies"
-      description: "Shows a list of users policies"
-      content:
-        [
-          {
-            type: Document,
-            content: "<p><h2>Personal Policies</h2></p><p></p>",
-          },
-          {
-            type: List,
+    -
+        name: Home
+        privilege: MANAGE_MY_POLICY_WRITE
+        icon: fa-home
+        page:
+            name: 'My Policies'
+            description: 'Shows a list of users policies'
             content:
-              {
-                route: "app/{{app_id}}/file",
-                filterable: true,
-                reorderable: true,
-                resizable: true,
-                pageable:
-                  { buttonCount: 3, pageSizes: [10, 20, 50], info: true },
-                actions:
-                  [
-                    {
-                      name: View,
-                      page_id: "1",
-                      icon: "fas fa-envelope-open-text",
-                    },
-                    { name: Claim, page_id: "2", icon: "fas fa-plus-circle" },
-                    { name: Cancel, page_id: "3", icon: "far fa-window-close" },
-                  ],
-                columnConfig:
-                  [
-                    { title: Name, field: name },
-                    { title: Status, field: status },
-                    { title: Data, field: data },
-                  ],
-              },
-          },
-        ]
-  - name: "My History"
-    privilege: "MANAGE_MY_POLICY_READ"
-    page:
-      name: "All Policies"
-      description: "Shows all the policies"
-      content: [{ type: List, content: { route: "app/{{app_id}}/file" } }]
-  - name: "Verify PADI details"
-    page:
-      name: "Verify PADI details"
-      description: "Lets CSR to input and check PADI Data"
-      content:
-        [
-          { content: "<h3>Verify PADI Details</h3>", type: "Document" },
-          { form_id: "{{form_id}}", type: "Form" },
-        ]
-  - name: Home
-    privilege: MANAGE_POLICY_APPROVAL_READ
-    page:
-      name: Dashboard
-      description: "Shows dashboard"
-      content: [{ type: Dashboard, dashboard: Dashboard }]
-  - name: Requests
-    privilege: MANAGE_POLICY_APPROVAL_WRITE
-    page:
-      name: Requests
-      description: "Shows requests"
-      content: [{ type: List, content: { route: "" } }]
-  - name: "Manage Policies"
-    privilege: MANAGE_POLICY_APPROVAL_WRITE
-    page:
-      name: "Manage Policies"
-      description: "Page to manage policies"
-      content: [{ type: List, content: { route: "" } }]
+                -
+                    type: Document
+                    content: '<p><h2>Personal Policies</h2></p><p></p>'
+                -
+                    type: List
+                    content:
+                        route: 'app/{{app_id}}/file'
+                        filterable: true
+                        reorderable: true
+                        resizable: true
+                        pageable:
+                            buttonCount: 3
+                            pageSizes:
+                                - 10
+                                - 20
+                                - 50
+                            info: true
+                            actions:
+                                -
+                                    name: View
+                                    page_id: '1'
+                                    icon: 'fas fa-envelope-open-text'
+                                -
+                                    name: Claim
+                                    page_id: '2'
+                                    icon: 'fas fa-plus-circle'
+                                -
+                                    name: Cancel
+                                    page_id: '3'
+                                    icon: 'far fa-window-close'
+                            columnConfig:
+                                -
+                                    title: Name
+                                    field: name
+                                -
+                                    title: Status
+                                    field: status
+                                -
+                                    title: Data
+                                    field: data
+        uuid: 32a63754-41ce-4f90-be21-921fcb403e80
+    -
+        name: 'My History'
+        privilege: MANAGE_MY_POLICY_READ
+        page:
+            name: 'All Policies'
+            description: 'Shows all the policies'
+            content:
+                -
+                    type: List
+                    content:
+                        route: 'app/{{app_id}}/file'
+        uuid: f7dc937f-7faf-45d3-9fae-b5aac2e738f0
+    -
+        name: 'Verify PADI details'
+        page:
+            name: 'Verify PADI details'
+            description: 'Lets CSR to input and check PADI Data'
+            content:
+                -
+                    content: '<h3>Verify PADI Details</h3>'
+                    type: Document
+                -
+                    formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
+                    type: Form
+        uuid: 1b241039-48be-461e-b04d-5ef235308946
+    -
+        name: Home
+        privilege: MANAGE_POLICY_APPROVAL_READ
+        page:
+            name: Dashboard
+            description: 'Shows dashboard'
+            content:
+                -
+                    type: Dashboard
+                    dashboard: Dashboard
+        uuid: f7c2da6c-5eeb-472e-9332-0b2cb0dd64d9
+    -
+        name: Requests
+        privilege: MANAGE_POLICY_APPROVAL_WRITE
+        page:
+            name: Requests
+            description: 'Shows requests'
+            content:
+                -
+                    type: List
+                    content:
+                        route: ''
+        uuid: 2ea639fe-83d3-477a-a638-824fa93da762
+    -
+        name: 'Manage Policies'
+        privilege: MANAGE_POLICY_APPROVAL_WRITE
+        page:
+            name: 'Manage Policies'
+            description: 'Page to manage policies'
+            content:
+                -
+                    type: List
+                    content:
+                        route: ''
+        uuid: 907471b6-e875-482c-b699-2646bb52ed6e
 workflow:
-  - name: "Individual Liability"
-    id: f0efea9e-7863-4368-a9b2-baa1a1603067
-    bpmn_file: "Individual Professional Liability/NewUserApplicationSubmission.bpmn"
-    entity: "Individual Professional Liability"
-  - name: "Group Liability"
-    id: 76dc0348-910c-4ae8-a05a-78ba47803208
-    bpmn_file: group_liability.bpmn
-    entity: "Group Professional Liability"
-  - name: "Dive Store"
-    id: cb99e634-de00-468d-9230-d6f77d241c5b
-    bpmn_file: Dive Store/dive_store.bpmn
-    entity: "Dive Store"
-  - name: "Dive Boat"
-    id: bb15e393-11b9-48ea-bc5a-5b7616047cb1
-    bpmn_file: Dive Shop/dive_boat.bpmn
-    entity: "Dive Boat"
-  - name: "Individual Liability Auto Renewal"
-    id: 91cb9e10-5845-4379-97c9-f9486b702bd6
-    bpmn_file: IPLAutoRenewal.bpmn
-    entity: "Individual Professional Liability"
+    -
+        name: 'Individual Liability'
+        uuid: f0efea9e-7863-4368-a9b2-baa1a1603067
+        bpmn_file: 'Individual Professional Liability/NewUserApplicationSubmission.bpmn'
+        entity: 'Individual Professional Liability'
+    -
+        name: 'Dive Store'
+        uuid: cb99e634-de00-468d-9230-d6f77d241c5b
+        bpmn_file: 'Dive Store/NewApplication.bpmn'
+        entity: 'Dive Store'
+    -
+        name: 'Dive Boat'
+        uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
+        bpmn_file: 'Dive Boat/NewApplicationSubmission.bpmn'
+        entity: 'Dive Boat'
+    -
+        name: 'Individual Liability Auto Renewal'
+        uuid: 91cb9e10-5845-4379-97c9-f9486b702bd6
+        bpmn_file: 'Individual Professional Liability/IPLAutoRenewal.bpmn'
+        entity: 'Individual Professional Liability'
 form:
-  - name: PADI Verification
-    description: description
-    uuid: 
-    template: JSON STRING
-    entity: Padi
+    -
+        name: 'PADI Verification'
+        uuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
+        description: description
+        template: 'JSON STRING'
+        entity: Padi
 job:
-  - import_padi:
-      - {
-          stored_procedure_name: ox_padi_verification,
-          upload_host_name: 206.107.76.164,
-          upload_host_user: vbinsurance,
-          upload_user_password: "<<InsureName>>",
-        }
+    -
+        import_padi:
+            -
+                stored_procedure_name: ox_padi_verification
+                upload_host_name: 206.107.76.164
+                upload_host_user: vbinsurance
+                upload_user_password: '<<InsureName>>'
