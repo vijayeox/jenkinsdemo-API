@@ -402,8 +402,7 @@ class WorkflowService extends AbstractService
         INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
         INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id and ox_workflow_deployment.latest =1
         INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id
-        INNER JOIN ox_wf_user_identifier on ox_wf_user_identifier.workflow_instance_id = ox_workflow_instance.id
-        INNER JOIN ox_user on ox_user.id = ox_wf_user_identifier.user_id
+        INNER JOIN ox_file on ox_file.workflow_instance_id = ox_workflow_instance.id
         INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
         INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
         LEFT JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
@@ -423,14 +422,20 @@ class WorkflowService extends AbstractService
         $countQuery = "SELECT count(distinct ox_activity_instance.id) as `count` $fromQuery $whereQuery";
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
         
-        $querySet = "SELECT distinct ox_workflow.name as workflow_name, CONCAT(ox_user.firstname,' ',ox_user.lastname) as applicant,ox_wf_user_identifier.identifier,
-        ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId,
+        $querySet = "SELECT distinct ox_workflow.name as workflow_name, ox_file.data,
+        ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date,
         ox_activity.name as activityName,
         CASE WHEN ox_activity_instance_assignee.user_id is not null then false
         else true end as to_be_claimed  $fromQuery $whereQuery $sort $pageSize $offset";
         $this->logger->info("Executing query - $querySet");
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
-        return array('data' => $resultSet,'total' => $countResultSet[0]['count']);
+        $result = array();
+        foreach ($resultSet as $key => $value) {
+            $data[] = json_decode($value['data']);
+            unset($value['data']);
+            $result[] = array_merge($value, $data);
+        }
+        return array('data' => $result,'total' => $countResultSet[0]['count']);
     }
     
     private function saveWorkflowDeployment($data)

@@ -1201,7 +1201,8 @@ class UserService extends AbstractService
             $query = "SELECT ox_role.uuid from ox_role left join ox_organization on ox_organization.id = ox_role.org_id where ox_role.default_role=:defaultRole and ox_organization.uuid=:orgId";
             $params = array("defaultRole" => 1, "orgId" => $data['orgId']);
             $resultSet = $this->executeQueryWithBindParameters($query,$params)->toArray();
-            $data['role'] = array(['id' => $resultSet[0]['uuid']]);
+            if(isset($resultSet[0]))
+                $data['role'] = array(['id' => $resultSet[0]['uuid']]);
         }
         $query = "SELECT id,uuid,username,email FROM ox_user WHERE username=:username OR email=:email";
         $queryParams = array("username" => $data['username'],
