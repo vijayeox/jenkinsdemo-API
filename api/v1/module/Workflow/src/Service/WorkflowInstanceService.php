@@ -445,6 +445,7 @@ class WorkflowInstanceService extends AbstractService
             }
         }
         $fieldNameList = "";
+        $appFilter = "";
         if (isset($params['appId'])) {
             $appId = $this->getIdFromUuid('ox_app', $params['appId']);
         }
@@ -456,13 +457,15 @@ class WorkflowInstanceService extends AbstractService
         }
 
         $queryParams = array();
-        $appFilter = "h.app_id = :appId";
         if (isset($params['appId'])) {
             $queryParams['appId'] = $appId;
         }
         if (isset($workflowId)) {
+            $appFilter .= "h.app_id = :appId";
             $appFilter .= " AND h.uuid = :workflowId";
             $queryParams['workflowId'] = $workflowId;
+        } else {
+            $appFilter .= "1";
         }
 
         if (isset($filterParamsArray[0]['filter'])) {
@@ -496,7 +499,6 @@ class WorkflowInstanceService extends AbstractService
         }
 
         if (isset($workflowId)) {
-
             $fieldList .= ", g.status, g.process_instance_id as workflowInstanceId, h.name ";
             $where .= " g.status = 'Completed' and";
             $fromQuery .= " inner join ox_workflow_instance as g on a.workflow_instance_id = g.id
@@ -511,7 +513,6 @@ class WorkflowInstanceService extends AbstractService
         $whereQuery = "";
         $joinQuery = "";
         $sort = "";
-        // print_r($filterParams);exit;
         if (!empty($filterData)) {
             foreach ($filterData as $val) {
                 $tablePrefix = "tblf" . $prefix;
@@ -541,8 +542,8 @@ class WorkflowInstanceService extends AbstractService
         $where .= " 1";
 
         $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery $where";
-        $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
         $select = "SELECT a.data, a.uuid $fieldList $fromQuery $where group by a.id $sort $pageSize $offset";
+        $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
         $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
         return array('data' => $resultSet, 'total' => $countResultSet[0]['count']);
     }
