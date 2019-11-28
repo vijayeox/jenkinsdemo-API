@@ -199,7 +199,7 @@ class OrganizationService extends AbstractService
         return $returnArray['user'];
     }
 
-    public function saveOrganization($orgData){
+    public function saveOrganization(&$orgData){
         $create = TRUE;
         $result;
         if(isset($orgData['uuid'])){
