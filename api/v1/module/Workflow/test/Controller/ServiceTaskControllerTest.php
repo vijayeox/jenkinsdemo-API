@@ -272,7 +272,7 @@ class ServiceTaskControllerTest extends ControllerTest
         $tempFile = $config['TEMPLATE_FOLDER'] . "/";
         FileUtils::createDirectory($tempFile);
         copy(__DIR__ . "/../Dataset/GenericTemplate.tpl", $tempFile . "GenericTemplate.tpl");
-        $params['variables'] = ["appId" => "9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4",'commands' => array('{"command":"pdf"}', '{"command":"file"}'), 'template' => 'GenericTemplate', 'orgid' => 1, 'options' => array('initial_title' => 'Vantage agora Pdf Template', 'second_title' => 'Title 2', 'pdf_header_logo' => '/logo_example.jpg', 'pdf_header_logo_width' => 20, 'header_text_color' => array(139, 58, 58), 'header_line_color' => array(255, 48, 48), 'footer_text_color' => array(123, 121, 34), 'footer_line_color' => array(56, 142, 142)), 'destination' => $config['TEMPLATE_FOLDER'] . "GenericTemplate.pdf", "orgId" => "53012471-2863-4949-afb1-e69b0891c98a", "fileId" => "d13d0c68-98c9-11e9-adc5-308d99c9145b"];
+        $params['variables'] = ["app_id" => "9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4",'commands' => array('{"command":"pdf", "template":"GenericTemplate"}', '{"command":"file"}'), 'orgid' => 1, 'options' => array('initial_title' => 'Vantage agora Pdf Template', 'second_title' => 'Title 2', 'pdf_header_logo' => '/logo_example.jpg', 'pdf_header_logo_width' => 20, 'header_text_color' => array(139, 58, 58), 'header_line_color' => array(255, 48, 48), 'footer_text_color' => array(123, 121, 34), 'footer_line_color' => array(56, 142, 142)), 'destination' => $config['TEMPLATE_FOLDER'] . "GenericTemplate.pdf", "orgId" => "53012471-2863-4949-afb1-e69b0891c98a", "fileId" => "d13d0c68-98c9-11e9-adc5-308d99c9145b"];
         $this->setJsonContent(json_encode($params));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $params);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -287,11 +287,11 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
-        $params['variables'] = ["commands" => array('{"command":"filelist"}', '{"command":"delegate"}'), 'orgid' => 1, "filter" => '[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', "appId" => "9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4", "workFlowId" => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", "userId" => null, "delegate" => "followup"];
+        $params['variables'] = ["commands" => array('{"command":"filelist", "filter" : "'.'[{\"filter\":{\"filters\":[{\"field\":\"expiry_date\",\"operator\":\"lt\",\"value\":\"' . $currentDate . '\"}]},\"sort\":[{\"field\":\"expiry_date\",\"dir\":\"asc\"}],\"skip\":0,\"take\":1}]'.'"'.'}', '{"command":"delegate", "delegate": "followup"}'), 'orgid' => 1, "app_id" => "9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4", "workFlowId" => "1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4", "userId" => null, ];
         $this->setJsonContent(json_encode($params));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $params);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['appId'], "9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4");
+        $this->assertEquals($content['data']['app_id'], "9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4");
     }
 }
