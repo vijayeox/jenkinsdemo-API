@@ -5,12 +5,26 @@ use Oxzion\Workflow\WorkflowFactory;
 use Oxzion\Utils\RestClient;
 use Mockery;
 use PHPUnit\Framework\TestCase;
+use Zend\Stdlib\ArrayUtils;
 
 class WorkflowTest extends TestCase
 {
+    private $config;
+
+    public function setUp() : void
+    {
+        $this->loadConfig();
+    }
+    protected function loadConfig()
+    {
+        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/autoload/global.php', include __DIR__ . '/../../../../config/autoload/local.php');
+        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php', $configOverrides);
+        $config = $configOverrides;
+    }
+
     public function testDeploymentProcess()
     {
-        $workflowFactory = WorkflowFactory::getInstance();
+        $workflowFactory = WorkflowFactory::getInstance($this->config);
         $processManager = $workflowFactory->getProcessManager();
         $processEngine = $workflowFactory->getProcessEngine();
         if (enableCamunda==0) {
@@ -56,7 +70,7 @@ class WorkflowTest extends TestCase
     // Check this
     public function testAssigneeProcess()
     {
-        $workflowFactory = WorkflowFactory::getInstance();
+        $workflowFactory = WorkflowFactory::getInstance($this->config);
         $processManager = $workflowFactory->getProcessManager();
         $processEngine = $workflowFactory->getProcessEngine();
         $activityManager = $workflowFactory->getActivity();
@@ -90,7 +104,7 @@ class WorkflowTest extends TestCase
     }
     public function testAssignGroupProcess()
     {
-        $workflowFactory = WorkflowFactory::getInstance();
+        $workflowFactory = WorkflowFactory::getInstance($this->config);
         $processManager = $workflowFactory->getProcessManager();
         $processEngine = $workflowFactory->getProcessEngine();
         $activityManager = $workflowFactory->getActivity();
@@ -173,7 +187,7 @@ class WorkflowTest extends TestCase
 
     public function testBPMNParsing()
     {
-        $workflowFactory = WorkflowFactory::getInstance();
+        $workflowFactory = WorkflowFactory::getInstance($this->config);
         $processManager = $workflowFactory->getProcessManager();
         $processEngine = $workflowFactory->getProcessEngine();
         $data = $processManager->parseBPMN(__DIR__."/Dataset/ScriptTaskTest.bpmn", 1, 1);
@@ -195,7 +209,7 @@ class WorkflowTest extends TestCase
 
     public function testBPMNParsingWithFormTemplate()
     {
-        $workflowFactory = WorkflowFactory::getInstance();
+        $workflowFactory = WorkflowFactory::getInstance($this->config);
         $processManager = $workflowFactory->getProcessManager();
         $processEngine = $workflowFactory->getProcessEngine();
         $data = $processManager->parseBPMN(__DIR__."/Dataset/SampleBPMN.bpmn", 1, 1);

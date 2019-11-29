@@ -45,6 +45,9 @@ return [
     'amqp' => [
         'host' => 'tcp://localhost:61613'
     ],
+    'workflow' => [
+        'engineUrl' => 'http://localhost:8090/engine-rest/engine/default/'
+    ],
     'chat' => [
         'chatServerUrl' => 'http://localhost:8065/',
         'authToken' => ''

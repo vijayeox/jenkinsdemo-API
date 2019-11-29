@@ -10,10 +10,10 @@ class ProcessEngineImpl implements ProcessEngine
 {
     private $restClient;
     protected $logger;
-    public function __construct()
+    public function __construct($config)
     {
         $this->logger = Logger::getLogger(__CLASS__);
-        $this->restClient = new RestClient(Config::ENGINE_URL);
+        $this->restClient = new RestClient($config['workflow']['engineUrl']);
     }
     public function setRestClient($restClient)
     {

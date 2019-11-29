@@ -10,13 +10,13 @@ class ActivityImpl implements Activity
 {
     private $restClient;
     protected $logger;
-
-    public function __construct()
+    
+    public function __construct($config)
     {
         $class= get_class($this);
         $class = substr($class, strrpos($class, "\\")+1);
         $this->initLogger();
-        $this->restClient = new RestClient(Config::ENGINE_URL);
+        $this->restClient = new RestClient($config['workflow']['engineUrl']);
     }
 
     protected function initLogger()
