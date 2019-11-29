@@ -21,9 +21,6 @@ final class Version20191127083631 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `ox_workflow_instance` DROP FOREIGN KEY workflow_instance_references_workflow");
-        $this->addSql("ALTER TABLE `ox_form` DROP  FOREIGN KEY `FK_FormEntityId`;");
-        $this->addSql("ALTER TABLE `ox_form` DROP INDEX entityid_name_unique");
-        $this->addSql("ALTER TABLE ox_form ADD CONSTRAINT FK_FormEntityId FOREIGN KEY (entity_id) REFERENCES ox_app_entity(id);");
         
     }
 
