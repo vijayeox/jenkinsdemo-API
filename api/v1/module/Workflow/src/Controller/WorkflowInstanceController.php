@@ -84,22 +84,6 @@ class WorkflowInstanceController extends AbstractApiController
         return $this->getSuccessResponseWithData($params, 200);
     }
 
-    public function getFileListAction()
-    {
-        $params = $this->params()->fromRoute();
-        $filterParams = $this->params()->fromQuery();
-        try {
-            $fieldList = $this->workflowInstanceService->getFileList($params, $filterParams);
-        } catch (ValidationException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
-        }
-        return $this->getSuccessResponseDataWithPagination($fieldList['data'], $fieldList['total']);
-    }
-
     public function claimActivityInstanceAction()
     {
         $data = array_merge($this->extractPostData(), $this->params()->fromRoute());
@@ -158,21 +142,5 @@ class WorkflowInstanceController extends AbstractApiController
             return $this->getErrorResponse($e->getMessage(), 403, $response);
         }
         return $this->getSuccessResponseWithData($result, 200);
-    }
-
-    public function getFileListFilterAction()
-    {
-        $params = $this->params()->fromRoute();
-        $filterParams = $this->params()->fromQuery();
-        try {
-            $fieldList = $this->workflowInstanceService->getFileList($params, $filterParams);
-        } catch (ValidationException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (AccessDeniedException $e) {
-            $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(), 403, $response);
-        }
-        return $this->getSuccessResponseDataWithPagination($fieldList['data'], $fieldList['total']);
     }
 }

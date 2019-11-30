@@ -47,13 +47,13 @@ class FieldControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 3);
+        $this->assertEquals(count($content['data']), 6);
         $this->assertEquals($content['data'][0]['id']>0, true);
         $this->assertEquals($content['data'][0]['name'], 'field1');
         $this->assertEquals($content['data'][1]['id']>1, true);
         $this->assertEquals($content['data'][1]['name'], 'field2');
         $this->assertEquals($content['data'][2]['id']>2, true);
-        $this->assertEquals($content['data'][2]['name'], 'field3');
+        $this->assertEquals($content['data'][2]['name'], 'expiry_date');
     }
 
     public function testGet()
@@ -142,11 +142,11 @@ class FieldControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $selectResult = $this->getFieldUuid();
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/1ee410e8-f0e1-11e9-81b4-2a2ae2dbcce4', 'DELETE');
-        $this->assertResponseStatusCode(200);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/'.$selectResult[0]['uuid'], 'DELETE');
+        $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['status'], 'error');
     }
 
      public function testDeleteNotPossible()

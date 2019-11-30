@@ -319,3 +319,7 @@ ox_wf_user_identifier:
     user_id: 1
     identifier_name: "expiry_data"
     identifier: "2019-01-01"
+ox_app_registry:
+-
+    org_id: 1
+    app_id: 99

@@ -445,6 +445,39 @@ return [
                     ],
                 ],
             ],
+            'filelisting' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/[workflow/:workflowId/][:userId/]file',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'workflowId' => UuidUtil::UUID_PATTERN,
+                        'userId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'filelistfilter' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/search',
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

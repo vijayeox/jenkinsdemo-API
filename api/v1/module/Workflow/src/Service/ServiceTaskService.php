@@ -337,7 +337,7 @@ class ServiceTaskService extends AbstractService
     {
         $params = array("app_id" => $data['app_id'], "workFlowId" => $data['workFlowId'], "userId" => $data['userId']);
         $filterParams['filter'] = $data['filter'];
-        $fileList = $this->workflowInstanceService->getFileList($params, $filterParams);
+        $fileList = $this->fileService->getFileList($data['app_id'],$params, $filterParams);
         return $fileList['data'][0];
     }
 }

@@ -175,4 +175,202 @@ class FileControllerTest extends ControllerTest
         }
         FileUtils::rmDir($path1);
     }
+    public function testGetListOfFilesWithUserId()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['total'], 1);
+    }
+    public function testGetListOfFilesWithInvalidUserId()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/3fd99e8e-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+    public function testGetListOfFilesWithInvalidWorkflow()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/9941cd2e-cb14-11e9-a32f-2a2ae2dbcce4/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testGetListOfFilesWithUserIdNoData()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/4fd9ce37-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 0);
+        $this->assertEquals($content['total'], 0);
+    }
+
+    public function testGetListOfFilesWithQueryParameter()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'], 1);
+    }
+
+    public function testGetListOfFilesWithAppParameter()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['total'], 1);
+    }
+    public function testGetListOfFilesWithInvalidAppParameter()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/file?filter=[{"filter":{"filters":[{"field":"expiry_dates","operator":"lt","value":"' . $currentDate . '"}]},"sort":[{"field":"expiry_dates","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
+
+    public function testGetListOfFilesWithoutFilters()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file?filter=[{"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'], 4);
+    }
+
+    public function testGetListOfFilesWithUserIdUsingMultipleFilters()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}, {"field":"field1","operator":"eq","value":1}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['total'], 1);
+    }
+
+    public function testGetListOfFiles()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'], 4);
+    }
+    public function testGetListOfFilesWithoutWorkFlow()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/search?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}, {"field":"field1","operator":"eq","value":1}, {"field":"user_id","operator":"eq","value":1}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelistfilter');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['total'], 1);
+    }
+    public function testGetListOfFilesWithInvalid()
+    {
+        $this->initAuthToken($this->adminUser);
+        $date = date('Y-m-d');
+        $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce5/file/search?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}, {"field":"field1","operator":"eq","value":1}, {"field":"user_id","operator":"eq","value":1}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->assertResponseStatusCode(404);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelistfilter');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 }

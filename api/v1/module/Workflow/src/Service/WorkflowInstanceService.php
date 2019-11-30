@@ -159,7 +159,7 @@ class WorkflowInstanceService extends AbstractService
     public function getWorkflowInstance($id)
     {
         try {
-            $query = "select oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.org_id,ow.uuid as workflow_id
+            $query = "select oxi.id,oxi.process_instance_id ,oxi.app_id,oxi.org_id,ow.uuid as workflow_id 
             from ox_workflow_instance as oxi
             join ox_workflow_deployment as wd on wd.id = oxi.workflow_deployment_id
              join ox_workflow as ow on wd.workflow_id = ow.id  and wd.latest=1
@@ -178,7 +178,7 @@ class WorkflowInstanceService extends AbstractService
 
     public function startWorkflow($params)
     {
-        $this->logger->info("Starting StartWorkflow method params - " . json_encode($params));
+        $this->logger->info("Starting StartWorkflow method params - ".json_encode($params));
 
         if (!isset($params['workflowId'])) {
             throw new EntityNotFoundException("No workflow or workflow instance id provided");
@@ -395,9 +395,9 @@ class WorkflowInstanceService extends AbstractService
         $form = new WorkflowInstance();
         $dateCreated = date('Y-m-d H:i:s');
         $query = "select w.app_id, wd.id from ox_workflow as w
-        inner join ox_workflow_deployment as wd on w.id = wd.workflow_id
+        inner join ox_workflow_deployment as wd on w.id = wd.workflow_id 
         where w.uuid=:uuid and wd.latest=:latest";
-        $queryParams = array("uuid" => $workflowId, "latest" => 1);
+        $queryParams = array("uuid" => $workflowId,"latest" => 1);
         $workflowResultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
 
         if (count($workflowResultSet)) {
@@ -436,118 +436,6 @@ class WorkflowInstanceService extends AbstractService
         }
     }
 
-    public function getFileList($params, $filterParams = null)
-    {
-        if (!empty($filterParams)) {
-            $filterParamsArray = json_decode($filterParams['filter'], true);
-            if (array_key_exists("sort", $filterParamsArray[0])) {
-                $sortParam = $filterParamsArray[0]['sort'];
-            }
-        }
-        $fieldNameList = "";
-        $appFilter = "";
-        if (isset($params['appId'])) {
-            $appId = $this->getIdFromUuid('ox_app', $params['appId']);
-        }
-        if (isset($params['userId'])) {
-            $userId = $this->getIdFromUuid('ox_user', $params['userId']);
-        }
-        if (isset($params['workflowId'])) {
-            $workflowId = $params['workflowId'];
-        }
-
-        $queryParams = array();
-        if (isset($params['appId'])) {
-            $queryParams['appId'] = $appId;
-        }
-        if (isset($workflowId)) {
-            $appFilter .= "h.app_id = :appId";
-            $appFilter .= " AND h.uuid = :workflowId";
-            $queryParams['workflowId'] = $workflowId;
-        } else {
-            $appFilter .= "1";
-        }
-
-        if (isset($filterParamsArray[0]['filter'])) {
-            $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
-            $cnt = 1;
-            $fieldParams = array();
-            foreach ($filterParamsArray[0]['filter']['filters'] as $key => $value) {
-                $fieldNameList .= $fieldNameList !== "" ? "," : $fieldNameList;
-                $fieldNameList .= ':val' . $cnt;
-                $fieldParams['val' . $cnt] = $value['field'];
-                $cnt++;
-            }
-            $filterData = $filterParamsArray[0]['filter']['filters'];
-        }
-
-        $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
-        $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
-
-        $where = "WHERE 1 and";
-        $fieldList = "";
-        if (isset($params['appId'])) {
-            $where .= " $appFilter and";
-        }
-        $fromQuery = " from ox_file as a
-            join ox_form as b on (a.entity_id = b.entity_id)
-            join ox_form_field as c on (c.form_id = b.id)
-            join ox_field as d on (c.field_id = d.id)
-            join ox_app as f on (f.id = b.app_id)";
-        if (isset($userId)) {
-            $fromQuery .= " join ox_wf_user_identifier on ox_wf_user_identifier.identifier_name = d.name";
-        }
-
-        if (isset($workflowId)) {
-            $fieldList .= ", g.status, g.process_instance_id as workflowInstanceId, h.name ";
-            $where .= " g.status = 'Completed' and";
-            $fromQuery .= " inner join ox_workflow_instance as g on a.workflow_instance_id = g.id
-        inner join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
-            inner join ox_workflow as h on h.id = wd.workflow_id and wd.latest=1
-            left join (SELECT workflow_instance_id, max(latest) as latest from ox_file
-            group by workflow_instance_id) as f2 on a.workflow_instance_id = f2.workflow_instance_id
-            and a.latest = f2.latest";
-        }
-
-        $prefix = 1;
-        $whereQuery = "";
-        $joinQuery = "";
-        $sort = "";
-        if (!empty($filterData)) {
-            foreach ($filterData as $val) {
-                $tablePrefix = "tblf" . $prefix;
-                $fieldId = $this->fileService->getFieldDetails($val['field']);
-                if (!empty($val) && !empty($fieldId)) {
-                    $joinQuery .= " left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) ";
-                    $valueTransform = $this->getFieldType($fieldId, $tablePrefix);
-                    $filterOperator = $this->processFilters($val);
-                    $whereQuery .= " (" . $tablePrefix . ".field_id = " . $fieldId['id'] . " and " . $valueTransform . "" . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "') and ";
-                }
-                if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
-                    if ($sortParam[0]['field'] === $val['field']) {
-                        $sort = "ORDER BY " . $tablePrefix . ".field_value";
-                    }
-                }
-                $prefix += 1;
-            }
-        }
-        $where .= " " . $whereQuery . "";
-        $fromQuery .= " " . $joinQuery . "";
-
-        if (isset($userId)) {
-            $where = $where . " ox_wf_user_identifier.user_id = :userId and";
-            $queryParams['userId'] = $userId;
-        }
-
-        $where .= " 1";
-
-        $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery $where";
-        $select = "SELECT a.data, a.uuid $fieldList $fromQuery $where group by a.id $sort $pageSize $offset";
-        $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
-        $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
-        return array('data' => $resultSet, 'total' => $countResultSet[0]['count']);
-    }
-
     public function getFileDocumentList($params)
     {
         $selectQuery = 'select ox_field.name, ox_file_attribute.field_value from ox_file
@@ -574,72 +462,6 @@ class WorkflowInstanceService extends AbstractService
         $query = "Select id from ox_workflow_instance where process_instance_id=:processInstanceId;";
         $params = array("processInstanceId" => $processInstanceId);
         return $result = $this->executeQueryWithBindParameters($query, $params)->toArray();
-    }
-
-    public function getFieldType($value, $prefix)
-    {
-        switch ($value['data_type']) {
-            case 'date':
-                $castString = "CAST($prefix.field_value AS DATETIME)";
-                break;
-            case 'int':
-                $castString = "CAST($prefix.field_value AS INT)";
-                break;
-            default:
-                $castString = "($prefix.field_value)";
-        }
-        return $castString;
-    }
-
-    public function processFilters($filterList)
-    {
-        $operator = $filterList['operator'];
-        $field = $filterList['field'];
-        $operatorp1 = '';
-        $operatorp2 = '';
-        if ($operator == 'startswith') {
-            $operatorp2 = '%';
-            $operation = ' like ';
-        } elseif ($operator == 'endswith') {
-            $operatorp1 = '%';
-            $operation = ' like ';
-        } elseif ($operator == 'eq') {
-            $operation = ' = ';
-        } elseif ($operator == 'neq') {
-            $operation = ' <> ';
-        } elseif ($operator == 'contains') {
-            $operatorp1 = '%';
-            $operatorp2 = '%';
-            $operation = ' like ';
-        } elseif ($operator == 'doesnotcontain') {
-            $operatorp1 = '%';
-            $operatorp2 = '%';
-            $operation = ' NOT LIKE ';
-        } elseif ($operator == 'isnull' || $operator == 'isempty') {
-            $value = '';
-            $operation = ' = ';
-        } elseif ($operator == 'isnotnull' || $operator == 'isnotempty') {
-            $value = '';
-            $operation = ' <> ';
-        } elseif ($operator == 'lte') {
-            $operation = ' <= ';
-        } elseif ($operator == 'lt') {
-            $operation = ' < ';
-        } elseif ($operator == 'gt') {
-            $operation = ' > ';
-        } elseif ($operator == 'gte') {
-            $operation = ' >= ';
-        } else {
-            $operatorp1 = '%';
-            $operatorp2 = '%';
-            $operation = ' like ';
-        }
-
-        return $returnData = array(
-            "operation" => $operation,
-            "operator1" => $operatorp1,
-            "operator2" => $operatorp2,
-        );
     }
 
     private function cleanData($params)

@@ -418,7 +418,6 @@ class WorkflowService extends AbstractService
         }
         $pageSize = "LIMIT ".(isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
         $offset = "OFFSET ".(isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
-        
         $countQuery = "SELECT count(distinct ox_activity_instance.id) as `count` $fromQuery $whereQuery";
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
         
