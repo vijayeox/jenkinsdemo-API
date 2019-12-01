@@ -466,12 +466,6 @@ class FileService extends AbstractService
             $queryParams = array();
             $appFilter = "h.app_id = :appId";
             $queryParams['appId'] = $appId;
-            if (!empty($filterParams)) {
-                $filterParamsArray = json_decode($filterParams['filter'], true);
-                if (array_key_exists("sort", $filterParamsArray[0])) {
-                    $sortParam = $filterParamsArray[0]['sort'];
-                }
-            }
             $fieldNameList = "";
             if (isset($params['userId'])) {
                 $userId = $this->getIdFromUuid('ox_user', $params['userId']);
@@ -488,26 +482,19 @@ class FileService extends AbstractService
                     $queryParams['workflowId'] = $workflowId;
                 }
             }
-            if (isset($filterParamsArray[0]['filter'])) {
-                $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
-                $cnt = 1;
-                $fieldParams = array();
-                foreach ($filterParamsArray[0]['filter']['filters'] as $key => $value) {
-                    $fieldNameList .= $fieldNameList !== "" ? "," : $fieldNameList;
-                    $fieldNameList .= ':val' . $cnt;
-                    $fieldParams['val' . $cnt] = $value['field'];
-                    $cnt++;
-                }
-                $filterData = $filterParamsArray[0]['filter']['filters'];
+            if(isset($params['status'])){
+                $statusFilter = " AND g.status = '".$params['status']."'";
+            } else {
+                $statusFilter = " AND g.status = 'Completed'";
             }
             $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
             $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
-            $where = " WHERE $appFilter AND g.status = 'Completed' and";
+            $where = " WHERE $appFilter $statusFilter";
             $fromQuery = " from ox_file as a
-            join ox_form as b on (a.entity_id = b.entity_id)
-            join ox_form_field as c on (c.form_id = b.id)
-            join ox_field as d on (c.field_id = d.id)
-            join ox_app as f on (f.id = b.app_id)";
+            inner join ox_form as b on (a.entity_id = b.entity_id)
+            inner join ox_form_field as c on (c.form_id = b.id)
+            inner join ox_field as d on (c.field_id = d.id)
+            inner join ox_app as f on (f.id = b.app_id)";
             if (isset($userId)) {
                 $fromQuery .= " join ox_wf_user_identifier on ox_wf_user_identifier.identifier_name = d.name";
             }
@@ -521,38 +508,64 @@ class FileService extends AbstractService
             $whereQuery = "";
             $joinQuery = "";
             $sort = "";
-            if (!empty($filterData)) {
-                foreach ($filterData as $val) {
-                    $tablePrefix = "tblf" . $prefix;
-                    $fieldId = $this->getFieldDetails($val['field']);
-                    if (!empty($val) && !empty($fieldId)) {
-                        $joinQuery .= " left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) ";
-                        $valueTransform = $this->getFieldType($fieldId, $tablePrefix);
-                        $filterOperator = $this->processFilters($val);
-                        $whereQuery .= " (" . $tablePrefix . ".field_id = " . $fieldId['id'] . " and " . $valueTransform . "" . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "') and ";
+            if (!empty($filterParams)) {
+                $filterParamsArray = json_decode($filterParams['filter'], true);
+                if (array_key_exists("sort", $filterParamsArray[0])) {
+                    $sortParam = $filterParamsArray[0]['sort'];
+                }
+                $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
+                $cnt = 1;
+                $fieldParams = array();
+                if(isset($filterParamsArray[0]['filter'])){
+                    foreach ($filterParamsArray[0]['filter']['filters'] as $key => $value) {
+                        $fieldNameList .= $fieldNameList !== "" ? "," : $fieldNameList;
+                        $fieldNameList .= ':val' . $cnt;
+                        $fieldParams['val' . $cnt] = $value['field'];
+                        $cnt++;
                     }
-                    if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
-                        if ($sortParam[0]['field'] === $val['field']) {
-                            $sort = "ORDER BY " . $tablePrefix . ".field_value";
+                    $filterData = $filterParamsArray[0]['filter']['filters'];
+                    foreach ($filterData as $val) {
+                        $tablePrefix = "tblf" . $prefix;
+                        $fieldId = $this->getFieldDetails($val['field']);
+                        if (!empty($val) && !empty($fieldId)) {
+                            $joinQuery .= " left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) ";
+                            $valueTransform = $this->getFieldType($fieldId, $tablePrefix);
+                            $filterOperator = $this->processFilters($val);
+                            $whereQuery .= " ".$filterlogic." (" . $tablePrefix . ".field_id = " . $fieldId['id'] . " and " . $valueTransform . "" . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "') ";
                         }
+                        if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
+                            if ($sortParam[0]['field'] === $val['field']) {
+                                $sort = "ORDER BY " . $tablePrefix . ".field_value";
+                            }
+                        }
+                        $prefix += 1;
                     }
-                    $prefix += 1;
                 }
             }
             $where .= " " . $whereQuery . "";
             $fromQuery .= " " . $joinQuery . "";
-
             if (isset($userId)) {
-                $where = $where . " ox_wf_user_identifier.user_id = :userId and";
+                $where = $where . " and ox_wf_user_identifier.user_id = :userId";
                 $queryParams['userId'] = $userId;
             }
-            $where .= " 1";
             try {
                 $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery $where";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
 
-                $select = "SELECT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name $fromQuery $where group by a.id $sort $pageSize $offset";
+                $select = "SELECT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name as entity_name $fromQuery $where group by a.id $sort $pageSize $offset";
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+                if($resultSet){
+                    $i=0;
+                    foreach ($resultSet as $file) {
+                        if($file['data']){
+                            $content = json_decode($file['data'],true);
+                            if($content){
+                                $resultSet[$i] = array_merge($file,$content);
+                            }
+                        }
+                        $i++;
+                    }
+                }
                 return array('data' => $resultSet, 'total' => $countResultSet[0]['count']);
             } catch (Exception $e){
                 throw new ServiceException($e->getMessage(),"app.mysql.error");
