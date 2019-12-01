@@ -467,12 +467,6 @@ class FileService extends AbstractService
             $appFilter = "h.app_id = :appId";
             $queryParams['appId'] = $appId;
             $fieldNameList = "";
-            if (isset($params['userId'])) {
-                $userId = $this->getIdFromUuid('ox_user', $params['userId']);
-                if(!$userId){
-                    throw new ServiceException("User Does not Exist","app.forusernot.found");
-                }
-            }
             if (isset($params['workflowId'])) {
                 $workflowId = $this->getIdFromUuid('ox_workflow', $params['workflowId']);
                 if(!$workflowId){
@@ -495,8 +489,20 @@ class FileService extends AbstractService
             inner join ox_form_field as c on (c.form_id = b.id)
             inner join ox_field as d on (c.field_id = d.id)
             inner join ox_app as f on (f.id = b.app_id)";
-            if (isset($userId)) {
+            if (isset($params['userId'])) {
+                if($params['userId'] == 'me'){
+                    $userId = AuthContext::get(AuthConstants::USER_ID);
+                } else {
+                    $userId = $this->getIdFromUuid('ox_user', $params['userId']);
+                    if(!$userId){
+                        throw new ServiceException("User Does not Exist","app.forusernot.found");
+                    }  
+                }
                 $fromQuery .= " join ox_wf_user_identifier on ox_wf_user_identifier.identifier_name = d.name";
+                $userWhere = " and ox_wf_user_identifier.user_id = :userId";
+                $queryParams['userId'] = $userId;
+            } else {
+                $userWhere = "";
             }
             $fromQuery .= " inner join ox_workflow_instance as g on a.workflow_instance_id = g.id
             inner join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
@@ -544,15 +550,11 @@ class FileService extends AbstractService
             }
             $where .= " " . $whereQuery . "";
             $fromQuery .= " " . $joinQuery . "";
-            if (isset($userId)) {
-                $where = $where . " and ox_wf_user_identifier.user_id = :userId";
-                $queryParams['userId'] = $userId;
-            }
             try {
-                $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery $where";
+                $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery $where $userWhere";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
 
-                $select = "SELECT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name as entity_name $fromQuery $where group by a.id $sort $pageSize $offset";
+                $select = "SELECT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name as entity_name $fromQuery $where $userWhere group by a.id $sort $pageSize $offset";
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 if($resultSet){
                     $i=0;

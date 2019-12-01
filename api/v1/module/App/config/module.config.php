@@ -448,11 +448,47 @@ return [
             'filelisting' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/[workflow/:workflowId/][:userId/]file',
+                    'route' => '/app/:appId[/workflow/:workflowId][/:userId]/file',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'workflowId' => UuidUtil::UUID_PATTERN,
                         'userId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'filelistingstatus' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/status/:status',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'workflowId' => UuidUtil::UUID_PATTERN,
+                        'userId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'filelistinguser' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/user/:userId',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN
                     ],
                     'defaults' => [
                         'controller' => Controller\FileController::class,
