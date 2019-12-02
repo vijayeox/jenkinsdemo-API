@@ -70,13 +70,13 @@ class ServiceTaskService extends AbstractService
                 $commandJson = json_decode($value, true);
                 $command = $commandJson['command'];
                 unset($commandJson['command']);
-                $variables = array_merge($inputData, $data['variables']);
+                $variables = array_merge($inputData, $commandJson);
                 $this->logger->info(ServiceTaskService::class . print_r($variables, true));
                 $this->logger->info("COMMAND LIST ------" . $command);
                 $result = $this->processCommand($variables, $command);
                 if (is_array($result)) {
                     $inputData = $result;
-                    $inputData['appId'] = $data['variables']['appId'];
+                    $inputData['app_id'] = $data['variables']['app_id'];
                 }
                 $this->logger->info(ServiceTaskService::class . print_r($inputData, true));
             }
@@ -216,8 +216,8 @@ class ServiceTaskService extends AbstractService
     protected function executeDelegate($data)
     {
         $this->logger->info("EXECUTE DELEGATE ---- " . print_r($data, true));
-        if (isset($data['appId']) && isset($data['delegate'])) {
-            $appId = $data['appId'];
+        if (isset($data['app_id']) && isset($data['delegate'])) {
+            $app_id = $data['app_id'];
             $delegate = $data['delegate'];
             unset($data['delegate']);
         } else {
@@ -225,8 +225,8 @@ class ServiceTaskService extends AbstractService
             throw new EntityNotFoundException("App Id or Delegate Not Specified");
         }
         $this->logger->info("DELEGATE ---- " . print_r($delegate, true));
-        $this->logger->info("DELEGATE APP ID---- " . print_r($appId, true));
-        $response = $this->appDelegateService->execute($appId, $delegate, $data);
+        $this->logger->info("DELEGATE APP ID---- " . print_r($app_id, true));
+        $response = $this->appDelegateService->execute($app_id, $delegate, $data);
         return $response;
     }
 
@@ -335,9 +335,9 @@ class ServiceTaskService extends AbstractService
 
     protected function getFileWithParams(&$data)
     {
-        $params = array("appId" => $data['appId'], "workFlowId" => $data['workFlowId'], "userId" => $data['userId']);
+        $params = array("app_id" => $data['app_id'], "workFlowId" => $data['workFlowId'], "userId" => $data['userId']);
         $filterParams['filter'] = $data['filter'];
-        $fileList = $this->workflowInstanceService->getFileList($params, $filterParams);
+        $fileList = $this->fileService->getFileList($data['app_id'],$params, $filterParams);
         return $fileList['data'][0];
     }
 }

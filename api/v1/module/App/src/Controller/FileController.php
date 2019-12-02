@@ -192,5 +192,30 @@ class FileController extends AbstractApiController
     {
 
     }
+    /**
+    * GET List Entitys API
+    * @api
+    * @link /app/appId/search
+    * @method GET
+    * @return array Returns a JSON Response list of Entitys based on Access.
+    */
+    public function getFileListAction()
+    {
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $filterParams = $this->params()->fromQuery();
+        try {
+            $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
+        }
+        return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+    }
 
 }

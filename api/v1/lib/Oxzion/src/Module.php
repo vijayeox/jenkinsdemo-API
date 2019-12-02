@@ -252,7 +252,7 @@ class Module
                     );
                 },
                 Workflow\WorkflowFactory::class => function ($container) {
-                    return Workflow\WorkflowFactory::getInstance();
+                    return Workflow\WorkflowFactory::getInstance($container->get('config'));
                 },
                 FormEngine\FormFactory::class => function ($container) {
                     return FormEngine\FormFactory::getInstance();

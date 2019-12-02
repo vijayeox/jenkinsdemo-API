@@ -19,7 +19,7 @@ class App extends Entity
     const MY_APP = 2;
 
     protected $data = array(
-        'id' => 0,
+        'id' => null,
         'name' => null,
         'uuid' => 0,
         'description' => null,

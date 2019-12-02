@@ -192,9 +192,9 @@ class EntityControllerTest extends ControllerTest
                 'error'     =>  0
             )
         );
-        $workflowFactory = WorkflowFactory::getInstance();
-        $processManager = $workflowFactory->getProcessManager();
         $config = $this->getApplicationConfig();
+        $workflowFactory = WorkflowFactory::getInstance($config);
+        $processManager = $workflowFactory->getProcessManager();
         $baseFolder = $config['UPLOAD_FOLDER'];
         if (enableCamunda==0) {
             $mockProcessManager = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessManagerImpl');
@@ -222,9 +222,9 @@ class EntityControllerTest extends ControllerTest
                 'error'     =>  0
             )
         );
-        $workflowFactory = WorkflowFactory::getInstance();
-        $processManager = $workflowFactory->getProcessManager();
         $config = $this->getApplicationConfig();
+        $workflowFactory = WorkflowFactory::getInstance($config);
+        $processManager = $workflowFactory->getProcessManager();
         $parsingResult = $processManager->parseBPMN(__DIR__."/../Dataset/SampleBPMN.bpmn", 99);
         $baseFolder = $config['UPLOAD_FOLDER'];
         if (enableCamunda==0) {

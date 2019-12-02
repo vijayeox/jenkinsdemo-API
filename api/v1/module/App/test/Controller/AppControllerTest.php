@@ -216,7 +216,7 @@ class AppControllerTest extends ControllerTest
             print_r("here");
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__.'/../sampleapp/view/apps/DiveInsurance';
+        $directoryName = __DIR__.'/../sampleapp/view/apps/Dive Insurance';
         if(is_dir($directoryName)){
             print_r("here");
             FileUtils::deleteDirectoryContents($directoryName);
@@ -312,7 +312,6 @@ class AppControllerTest extends ControllerTest
         }
         unlink(__DIR__.'/../sampleapp/application.yml');
         $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
-        $appname = str_replace(' ', '', $appname);
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
@@ -324,7 +323,7 @@ class AppControllerTest extends ControllerTest
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__.'/../sampleapp/view/apps/DiveInsurance';
+        $directoryName = __DIR__.'/../sampleapp/view/apps/Dive Insurance';
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
@@ -359,7 +358,6 @@ class AppControllerTest extends ControllerTest
         }
         unlink(__DIR__.'/../sampleapp/application.yml');
         $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
-        $appname = str_replace(' ', '', $appname);
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appname);
@@ -403,7 +401,7 @@ class AppControllerTest extends ControllerTest
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__.'/../sampleapp/view/apps/DiveInsurance';
+        $directoryName = __DIR__.'/../sampleapp/view/apps/Dive Insurance';
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
@@ -437,7 +435,6 @@ class AppControllerTest extends ControllerTest
         }
         unlink(__DIR__.'/../sampleapp/application.yml');
         $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
-        $appname = str_replace(' ', '', $appname);
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
@@ -449,7 +446,7 @@ class AppControllerTest extends ControllerTest
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__.'/../sampleapp/view/apps/DiveInsurance';
+        $directoryName = __DIR__.'/../sampleapp/view/apps/Dive Insurance';
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
@@ -481,7 +478,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
         $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
-        $appname = str_replace(' ', '', $appname);
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
@@ -541,7 +537,7 @@ class AppControllerTest extends ControllerTest
         if(is_link($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__.'/../sampleapp/view/apps/DiveInsurance';
+        $directoryName = __DIR__.'/../sampleapp/view/apps/Dive Insurance';
         if(is_link($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
@@ -571,7 +567,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
         $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
-        $appname = str_replace(' ', '', $appname);
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
@@ -583,7 +578,7 @@ class AppControllerTest extends ControllerTest
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__.'/../sampleapp/view/apps/DiveInsurance';
+        $directoryName = __DIR__.'/../sampleapp/view/apps/Dive Insurance';
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
@@ -617,7 +612,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
         $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
-        $appname = str_replace(' ', '', $appname);
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
@@ -629,7 +623,7 @@ class AppControllerTest extends ControllerTest
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__.'/../sampleapp/view/apps/DiveInsurance';
+        $directoryName = __DIR__.'/../sampleapp/view/apps/Dive Insurance';
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
@@ -663,7 +657,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals(file_exists($delegate), true);
         unlink(__DIR__.'/../sampleapp/application.yml');
         $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
-        $appname = str_replace(' ', '', $appname);
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
@@ -674,7 +667,7 @@ class AppControllerTest extends ControllerTest
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__.'/../sampleapp/view/apps/DiveInsurance';
+        $directoryName = __DIR__.'/../sampleapp/view/apps/Dive Insurance';
         if(is_dir($directoryName)){
             FileUtils::deleteDirectoryContents($directoryName);
         }
@@ -698,7 +691,6 @@ class AppControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         unlink(__DIR__.'/../sampleapp/application.yml');
         $appname = $path.'view/apps/'.$yaml['app'][0]['name'];
-        $appname = str_replace(' ', '', $appname);
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);

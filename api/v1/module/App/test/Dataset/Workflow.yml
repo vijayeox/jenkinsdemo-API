@@ -47,36 +47,54 @@ ox_app_registry:
     org_id: 1
     app_id: 99
 ox_field:
--
-    id: 1
-    uuid: "465c8710-df82-11e9-8a34-2a2ae2dbcce4"
+  - id: 1
     name: "field1"
     app_id: 99
     data_type: "integer"
-    template: "{\"persistent\" : \"true\"}"
+    template: '{"persistent" : "true"}'
     required: 1
     sequence: 2
     entity_id: 1
--
-    id: 2
-    uuid: "465c89e0-df82-11e9-8a34-2a2ae2dbcce4"
+  - id: 2
     name: "field2"
     app_id: 99
     data_type: "integer"
-    template: "{\"persistent\" : \"true\"}"
+    template: '{"persistent" : "true"}'
     required: 1
     sequence: 1
     entity_id: 1
--
-    id: 3
-    uuid: "1ee410e8-f0e1-11e9-81b4-2a2ae2dbcce4"
-    name: "field3"
+  - id: 3
+    name: "expiry_date"
     app_id: 99
-    data_type: "integer"
-    template: "{\"persistent\" : \"true\"}"
+    data_type: "date"
+    template: '{"persistent" : "true"}'
     required: 1
     sequence: 1
-    entity_id: 1    
+    entity_id: 1
+  - id: 4
+    name: "padi_number"
+    app_id: 99
+    data_type: "integer"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 4
+    entity_id: 1
+  - id: 5
+    name: "policy_document"
+    app_id: 99
+    data_type: "document"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 5
+    entity_id: 1
+  - id: 6
+    name: "coi_number"
+    app_id: 99
+    data_type: "document"
+    template: '{"persistent" : "true"}'
+    required: 1
+    sequence: 6
+    entity_id: 1 
 ox_form:
   -
     id: 1
@@ -95,12 +113,10 @@ ox_form:
     description: "Form Description"
     entity_id: 1
 ox_form_field:
-  -
-    id: 1
+  - id: 1
     form_id: 1
-    field_id: 2
-  -
-    id: 2
+    field_id: 1
+  - id: 2
     form_id: 1
     field_id: 2
 ox_workflow:
@@ -156,22 +172,54 @@ ox_activity_form:
     activity_id: 2
     form_id: 2
 ox_workflow_instance:
-  -
-    id: 1
+  - id: 1
     workflow_deployment_id: 1
-    app_id: 99
-    org_id: 1
-    status: "In Progress"
-    date_created: "2019-06-26 00:00:00"
-    created_by: 1
-  -
-    id: 2
-    workflow_deployment_id: 1
+    process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
     app_id: 99
     org_id: 1
     status: "Completed"
     date_created: "2019-06-26 00:00:00"
     created_by: 1
+  - id: 2
+    workflow_deployment_id: 1
+    process_instance_id: 2
+    app_id: 99
+    org_id: 1
+    status: "Completed"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+  - id: 3
+    workflow_deployment_id: 1
+    process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0790"
+    app_id: 99
+    org_id: 1
+    status: "In Progress"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+  - id: 4
+    workflow_deployment_id: 1
+    process_instance_id: 1
+    app_id: 99
+    org_id: 1
+    status: "In Progress"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+  - id: 5
+    workflow_deployment_id: 1
+    process_instance_id: 1
+    app_id: 99
+    org_id: 1
+    status: "Completed"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 1
+  - id: 6
+    workflow_deployment_id: 1
+    process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
+    app_id: 99
+    org_id: 1
+    status: "In Progress"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 2
 ox_app_menu:
   -
     id: 1
@@ -231,20 +279,20 @@ ox_page_content:
     sequence: 1
     content: '{"name":"content_1"}'
     page_id: 1
-    type: 1
+    type: 'Form'
     form_id: 1
   -
     id: 2
     sequence: 2
     content: '{"name":"content_2"}'
     page_id: 1
-    type: 2
+    type: 'List'
   -
     id: 3
     sequence: 3
     content: 'content_3'
     page_id: 1
-    type: 3
+    type: 'Document'
 ox_user_cache:
   -
     id: 1
@@ -253,19 +301,23 @@ ox_user_cache:
     user_id: 1
     deleted: 0
 ox_activity_instance:
-  -
-    id: 1
+  - id: 1
     activity_id: 1
-    activity_instance_id: "bed5eb80-c7a6-4d56-aa5c-c35947f42413"
+    activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0778"
     workflow_instance_id: 1
-    status: "In Progress"
+    status: "Completed"
     org_id: 1
-  -
-    id: 2
-    activity_id: 1
-    activity_instance_id: "96cc9311-57e7-4860-9de4-a4e588162504"
+  - id: 2
+    activity_id: 2
+    activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0772"
     workflow_instance_id: 2
     status: "Completed"
+    org_id: 1
+  - id: 3
+    activity_id: 1
+    activity_instance_id: "3f6622fd-0124-11ea-a8a0-22e8105c0722"
+    workflow_instance_id: 1
+    status: "In Progress"
     org_id: 1
 ox_group:
   -
@@ -288,50 +340,115 @@ ox_activity_instance_assignee:
     user_id: 1
     assignee: 1
 ox_file:
-  -
+ -
     id: 11
     workflow_instance_id: 1
     org_id: 1
-    data: "{\"field1\" : \"1\"}"
+    data: '{"firstname" : "Neha","policy_period" : "1year","card_expiry_date" : "10/24","city" : "Bangalore","orgUuid" : "53012471-2863-4949-afb1-e69b0891c98a","isequipmentliability" : "1","card_no" : "1234","state" : "karnataka","app_id" : "ec8942b7-aa93-4bc6-9e8c-e1371988a5d4","zip" : "560030","coverage" : "100000","product" : "Individual Professional Liability","address2" : "dhgdhdh","address1" : "hjfjhfjfjfhfg","expiry_date" : "2020-06-30","form_id" : "0","entity_id" : "1","created_by" : "1","expiry_year" : "2019","lastname" : "Rai","isexcessliability" : "1","workflow_instance_id" : "1","credit_card_type" : "credit","workflowId" : "a01a6776-431a-401e-9288-6acf3b2f3925","email" : "bharat@gmail.com"}'
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
+    date_created: "2019-06-25 00:00:00"
     entity_id: 1
-  -
+ -
     id: 12
-    workflow_instance_id: 1
+    workflow_instance_id: 2
     org_id: 1
-    data: "{\"field1\" : \"1\"}"
+    data: "New File Data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
+    date_created: "2019-06-28 00:00:00"
     entity_id: 1
-
+ -
+    id: 13
+    workflow_instance_id: 2
+    org_id: 1
+    data: "New File Data - Completed"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
+    date_created: "2019-06-26 00:00:00"
+    entity_id: 1
+ -
+    id: 14
+    workflow_instance_id: 2
+    org_id: 1
+    data: "New File Data - Latest Completed"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9146d"
+    date_created: "2019-06-26 10:00:00"
+    entity_id: 1
+ -
+    id: 15
+    workflow_instance_id: 6
+    org_id: 1
+    data: "New File Data - Latest In Progress"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c91478"
+    date_created: "2019-06-26 10:00:00"
+    entity_id: 1
 ox_file_attribute:
-  -
-    id: 1
+  - id: 1
     file_id: 11
     org_id: 1
     field_value: 1
     field_id: 1
-  -
-    id: 2
+  - id: 2
+    file_id: 11
+    org_id: 1
+    field_value: "2019-10-01"
+    field_id: 3
+  - id: 3
+    file_id: 12
+    org_id: 1
+    field_value: 2
+    field_id: 1
+  - id: 4
+    file_id: 13
+    org_id: 1
+    field_value: "2020-01-01"
+    field_id: 3
+  - id: 5
+    file_id: 13
+    org_id: 1
+    field_value: 2
+    field_id: 1
+  - id: 6
+    file_id: 14
+    org_id: 1
+    field_value: "2030-06-20"
+    field_id: 3
+  - id: 7
+    file_id: 14
+    org_id: 1
+    field_value: 4
+    field_id: 1
+  - id: 8
     file_id: 11
     org_id: 1
     field_value: 1
     field_id: 2
-  -
-    id: 3
-    file_id: 11
-    org_id: 1
-    field_value: 2
-    field_id: 2
-  -
-    id: 4
+  - id: 9
     file_id: 12
     org_id: 1
-    field_value: 2
+    field_value: 8
     field_id: 2
+  - id: 10
+    file_id: 11
+    org_id: 1
+    field_value: 47
+    field_id: 5
+  - id: 11
+    file_id: 11
+    org_id: 1
+    field_value: 6
+    field_id: 6
 ox_wf_user_identifier:
-  -
-    id: 1
+  - id: 1
     workflow_instance_id: 1
     user_id: 1
-    identifier_name: "padi"
-    identifier: 2141
+    identifier_name: "field1"
+    identifier: "32552"
+  - id: 2
+    workflow_instance_id: 2
+    user_id: 1
+    identifier_name: "expiry_date"
+    identifier: "2019-01-01"
+  - id: 3
+    workflow_instance_id: 6
+    user_id: 2
+    identifier_name: "field1"
+    identifier: "32252"

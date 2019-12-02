@@ -13,14 +13,14 @@
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
 $host = 'localhost';
-$db = 'appBuilder_oxzionapi';
-$username = 'bharat';
+$db = 'oxzionapi';
+$username = 'user';
 $password = 'password';
 
 if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
     $host = 'localhost';
-    $db = "appBuilder_oxzionapi_test";
-    $username = "bharat";
+    $db = "oxzionapi_test";
+    $username = "user";
     $password = "password";
 }
 
@@ -44,6 +44,9 @@ return [
     ],
     'amqp' => [
         'host' => 'tcp://localhost:61613'
+    ],
+    'workflow' => [
+        'engineUrl' => 'http://localhost:8090/engine-rest/engine/default/'
     ],
     'chat' => [
         'chatServerUrl' => 'http://localhost:8065/',

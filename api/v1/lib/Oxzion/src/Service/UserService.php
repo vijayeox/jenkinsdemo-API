@@ -733,7 +733,7 @@ class UserService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select()
             ->from('ox_organization')
-            ->columns(array('id', 'name'))
+            ->columns(array('id', 'name','uuid'))
             ->where(array('ox_organization.id' => $id));
         $result = $this->executeQuery($select)->toArray();
         return $result[0];
@@ -1155,7 +1155,7 @@ class UserService extends AbstractService
         {
             $id = AuthContext::get(AuthConstants::USER_ID);
         }
-        $queryO = "Select org.id,org.name,oxa.address1,oxa.address2,oxa.city,oxa.state,oxa.country,oxa.zip,org.logo,org.labelfile,org.languagefile,org.status from ox_organization as org join ox_address as oxa on oxa.id = org.address_id LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
+        $queryO = "Select org.id,org.name,org.uuid,oxa.address1,oxa.address2,oxa.city,oxa.state,oxa.country,oxa.zip,org.logo,org.labelfile,org.languagefile,org.status from ox_organization as org join ox_address as oxa on oxa.id = org.address_id LEFT JOIN ox_user_org as uo ON uo.org_id=org.id";
         $where = "where uo.user_id =".$id." AND org.status='Active'";
         $resultSet = $this->executeQuerywithParams($queryO, $where);
         return $resultSet->toArray();
@@ -1201,7 +1201,8 @@ class UserService extends AbstractService
             $query = "SELECT ox_role.uuid from ox_role left join ox_organization on ox_organization.id = ox_role.org_id where ox_role.default_role=:defaultRole and ox_organization.uuid=:orgId";
             $params = array("defaultRole" => 1, "orgId" => $data['orgId']);
             $resultSet = $this->executeQueryWithBindParameters($query,$params)->toArray();
-            $data['role'] = array(['id' => $resultSet[0]['uuid']]);
+            if(isset($resultSet[0]))
+                $data['role'] = array(['id' => $resultSet[0]['uuid']]);
         }
         $query = "SELECT id,uuid,username,email FROM ox_user WHERE username=:username OR email=:email";
         $queryParams = array("username" => $data['username'],

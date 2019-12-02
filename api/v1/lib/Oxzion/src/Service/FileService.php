@@ -391,7 +391,8 @@ class FileService extends AbstractService
         " . $fieldWhereQuery['joinQuery'] . "
         where f.id = " . $data['app_id'] . " and b.id = " . $data['form_id'] . " and (" . $fieldWhereQuery['whereQuery'] . ") group by a.id";
                 $this->logger->info("Executing query - $queryStr");
-                $dataList = $this->getActivePolicies($queryStr);
+                $resultSet = $this->executeQuerywithParams($queryStr);
+                return $dataSet = $resultSet->toArray();
             } else {
                 return 0;
             }
@@ -451,22 +452,195 @@ class FileService extends AbstractService
         return $dataSet[0];
     }
 
-    private function getActivePolicies($queryStr)
+    public function getFileList($appUUid,$params, $filterParams = null)
     {
-        $resultSet = $this->executeQuerywithParams($queryStr);
-        return $dataSet = $resultSet->toArray();
+        $orgId = isset($params['orgId'])? $this->getIdFromUuid('ox_organization', $params['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
+        $appId = $this->getIdFromUuid('ox_app', $appUUid);
+        if(!isset($orgId)){
+            $orgId = $params['orgId'];
+        }
+        $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
+        $selectQuery = array("orgId" => $orgId,"appId" => $appId);           
+        $result = $this->executeQuerywithBindParameters($select,$selectQuery)->toArray();
+        if(count($result) > 0){
+            $queryParams = array();
+            $appFilter = "h.app_id = :appId";
+            $queryParams['appId'] = $appId;
+            $fieldNameList = "";
+            if (isset($params['workflowId'])) {
+                $workflowId = $this->getIdFromUuid('ox_workflow', $params['workflowId']);
+                if(!$workflowId){
+                    throw new ServiceException("Workflow Does not Exist","app.forworkflownot.found");
+                } else {
+                    $appFilter .= " AND h.id = :workflowId";
+                    $queryParams['workflowId'] = $workflowId;
+                }
+            }
+            if(isset($params['status'])){
+                $statusFilter = " AND g.status = '".$params['status']."'";
+            } else {
+                $statusFilter = " AND g.status = 'Completed'";
+            }
+            $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
+            $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
+            $where = " WHERE $appFilter $statusFilter";
+            $fromQuery = " from ox_file as a
+            inner join ox_form as b on (a.entity_id = b.entity_id)
+            inner join ox_form_field as c on (c.form_id = b.id)
+            inner join ox_field as d on (c.field_id = d.id)
+            inner join ox_app as f on (f.id = b.app_id)";
+            if (isset($params['userId'])) {
+                if($params['userId'] == 'me'){
+                    $userId = AuthContext::get(AuthConstants::USER_ID);
+                } else {
+                    $userId = $this->getIdFromUuid('ox_user', $params['userId']);
+                    if(!$userId){
+                        throw new ServiceException("User Does not Exist","app.forusernot.found");
+                    }  
+                }
+                $fromQuery .= " join ox_wf_user_identifier on ox_wf_user_identifier.identifier_name = d.name";
+                $userWhere = " and ox_wf_user_identifier.user_id = :userId";
+                $queryParams['userId'] = $userId;
+            } else {
+                $userWhere = "";
+            }
+            $fromQuery .= " inner join ox_workflow_instance as g on a.workflow_instance_id = g.id
+            inner join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
+            inner join ox_workflow as h on h.id = wd.workflow_id and wd.latest=1
+            left join (SELECT workflow_instance_id, max(latest) as latest from ox_file
+            group by workflow_instance_id) as f2 on a.workflow_instance_id = f2.workflow_instance_id
+            and a.latest = f2.latest";
+            $prefix = 1;
+            $whereQuery = "";
+            $joinQuery = "";
+            $sort = "";
+            $field = "";
+            if (!empty($filterParams)) {
+                $filterParamsArray = json_decode($filterParams['filter'], true);
+                if (array_key_exists("sort", $filterParamsArray[0])) {
+                    $sortParam = $filterParamsArray[0]['sort'];
+                }
+                $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
+                $cnt = 1;
+                $fieldParams = array();
+                if(isset($filterParamsArray[0]['filter'])){
+                    foreach ($filterParamsArray[0]['filter']['filters'] as $key => $value) {
+                        $fieldNameList .= $fieldNameList !== "" ? "," : $fieldNameList;
+                        $fieldNameList .= ':val' . $cnt;
+                        $fieldParams['val' . $cnt] = $value['field'];
+                        $cnt++;
+                    }
+                    $filterData = $filterParamsArray[0]['filter']['filters'];
+                    foreach ($filterData as $val) {
+                        $tablePrefix = "tblf" . $prefix;
+                        $fieldId = $this->getFieldDetails($val['field']);
+                        if (!empty($val) && !empty($fieldId)) {
+                            $joinQuery .= " left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) ";
+                            $valueTransform = $this->getFieldType($fieldId, $tablePrefix);
+                            $filterOperator = $this->processFilters($val);
+                            $whereQuery .= " ".$filterlogic." (" . $tablePrefix . ".field_id = " . $fieldId['id'] . " and " . $valueTransform . "" . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "') ";
+                        }
+                        if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
+                            if ($sortParam[0]['field'] === $val['field']) {
+                                $sort = "ORDER BY " . $tablePrefix . ".field_value";
+                                $field = " , ".$tablePrefix.".field_value";
+                            }
+                        }
+                        $prefix += 1;
+                    }
+                }
+            }
+            $where .= " " . $whereQuery . "";
+            $fromQuery .= " " . $joinQuery . "";
+            try {
+                $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery $where $userWhere";
+                $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
+                $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name as entity_name $field $fromQuery $where $userWhere $sort $pageSize $offset";
+                $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+                if($resultSet){
+                    $i=0;
+                    foreach ($resultSet as $file) {
+                        if($file['data']){
+                            $content = json_decode($file['data'],true);
+                            if($content){
+                                $resultSet[$i] = array_merge($file,$content);
+                            }
+                        }
+                        $i++;
+                    }
+                }
+                return array('data' => $resultSet, 'total' => $countResultSet[0]['count']);
+            } catch (Exception $e){
+                throw new ServiceException($e->getMessage(),"app.mysql.error");
+            }
+        } else {
+            throw new ServiceException("App Does not belong to the org","app.fororgnot.found");
+        }
+    }
+    public function getFieldType($value, $prefix)
+    {
+        switch ($value['data_type']) {
+            case 'date':
+                $castString = "CAST($prefix.field_value AS DATETIME)";
+                break;
+            case 'int':
+                $castString = "CAST($prefix.field_value AS INT)";
+                break;
+            default:
+                $castString = "($prefix.field_value)";
+        }
+        return $castString;
     }
 
-    // Code to run through the list of all the active policies and and send email to the Insureds
-    private function sendEmail($appId, $data)
+    public function processFilters($filterList)
     {
-        $delegateService = new AppDelegateService($this->config, $this->dbAdapter);
-        $content = $delegateService->execute($appId, 'DispatchRenewalPolicy', $data);
-        // print_r($content);exit;
-        return 1;
-        // foreach ($data as $d) {
+        $operator = $filterList['operator'];
+        $field = $filterList['field'];
+        $operatorp1 = '';
+        $operatorp2 = '';
+        if ($operator == 'startswith') {
+            $operatorp2 = '%';
+            $operation = ' like ';
+        } elseif ($operator == 'endswith') {
+            $operatorp1 = '%';
+            $operation = ' like ';
+        } elseif ($operator == 'eq') {
+            $operation = ' = ';
+        } elseif ($operator == 'neq') {
+            $operation = ' <> ';
+        } elseif ($operator == 'contains') {
+            $operatorp1 = '%';
+            $operatorp2 = '%';
+            $operation = ' like ';
+        } elseif ($operator == 'doesnotcontain') {
+            $operatorp1 = '%';
+            $operatorp2 = '%';
+            $operation = ' NOT LIKE ';
+        } elseif ($operator == 'isnull' || $operator == 'isempty') {
+            $value = '';
+            $operation = ' = ';
+        } elseif ($operator == 'isnotnull' || $operator == 'isnotempty') {
+            $value = '';
+            $operation = ' <> ';
+        } elseif ($operator == 'lte') {
+            $operation = ' <= ';
+        } elseif ($operator == 'lt') {
+            $operation = ' < ';
+        } elseif ($operator == 'gt') {
+            $operation = ' > ';
+        } elseif ($operator == 'gte') {
+            $operation = ' >= ';
+        } else {
+            $operatorp1 = '%';
+            $operatorp2 = '%';
+            $operation = ' like ';
+        }
 
-        // }
+        return $returnData = array(
+            "operation" => $operation,
+            "operator1" => $operatorp1,
+            "operator2" => $operatorp2,
+        );
     }
 
     private function cleanData($params)

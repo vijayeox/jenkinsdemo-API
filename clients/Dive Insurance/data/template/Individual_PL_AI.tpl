@@ -54,7 +54,7 @@
 	    		{foreach from=$list item=$additional}
 		    		{assign var=datalist value=$additional|json_decode:true}
 		    		<p class = "ai_list">
-		    			{$datalist.name}
+		    			{$datalist[0]['name']}
 		    		</p>
 	    		{/foreach}
     	</div>

@@ -136,25 +136,6 @@ return [
                     ],
                 ],
             ],
-            'filelisting' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/[workflow/:workflowId/][:userId/]file',
-                    'constraints' => [
-                        'appId' => UuidUtil::UUID_PATTERN,
-                        'workflowId' => UuidUtil::UUID_PATTERN,
-                        'userId' => UuidUtil::UUID_PATTERN,
-                    ],
-                    'defaults' => [
-                        'controller' => Controller\WorkflowInstanceController::class,
-                        'method' => 'GET',
-                        'action' => 'getFileList',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                        ],
-                    ],
-                ],
-            ],
             'filedocumentlisting' => [
                 'type' => Segment::class,
                 'options' => [
@@ -167,20 +148,6 @@ return [
                         'controller' => Controller\WorkflowInstanceController::class,
                         'method' => 'GET',
                         'action' => 'getFileDocumentList',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                        ],
-                    ],
-                ],
-            ],
-            'filelistfilter' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/file/filelist/file',
-                    'defaults' => [
-                        'controller' => Controller\WorkflowInstanceController::class,
-                        'method' => 'GET',
-                        'action' => 'getFileListFilter',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],

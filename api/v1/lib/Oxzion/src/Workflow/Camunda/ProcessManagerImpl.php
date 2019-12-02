@@ -10,9 +10,10 @@ use Exception;
 
 class ProcessManagerImpl implements ProcessManager
 {
-    public function __construct()
+    private $restClient;
+    public function __construct($config)
     {
-        $this->restClient = new RestClient(Config::ENGINE_URL);
+        $this->restClient = new RestClient($config['workflow']['engineUrl']);
     }
     public function setRestClient($restClient)
     {

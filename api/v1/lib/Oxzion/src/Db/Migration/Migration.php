@@ -192,7 +192,9 @@ class Migration extends AbstractService
                         }
                     }
                 }
+                $this->commit();
             } else {
+                $this->rollback();
                 throw new Exception("Database not found");
             }
             return 1;

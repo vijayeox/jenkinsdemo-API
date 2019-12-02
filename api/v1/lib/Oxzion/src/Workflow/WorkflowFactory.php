@@ -4,45 +4,46 @@ namespace Oxzion\Workflow;
 class WorkflowFactory
 {
     private static $instance;
-
-    private function __construct()
+    private $config;
+    private function __construct($config)
     {
+        $this->config = $config;
     }
 
-    public static function getInstance()
+    public static function getInstance($config)
     {
         if (self::$instance === null) {
-            self::$instance = new WorkflowFactory();
+            self::$instance = new WorkflowFactory($config);
         }
         return self::$instance;
     }
 
     public function getActivity()
     {
-        return new Camunda\ActivityImpl();
+        return new Camunda\ActivityImpl($this->config);
     }
 
-    public function getEventManager()
-    {
-        return new Camunda\EventManagerImpl();
-    }
+    // public function getEventManager()
+    // {
+    //     return new Camunda\EventManagerImpl();
+    // }
 
-    public function getGroup()
-    {
-        return new Camunda\GroupImpl();
-    }
+    // public function getGroup()
+    // {
+    //     return new Camunda\GroupImpl();
+    // }
 
     public function getProcessEngine()
     {
-        return new Camunda\ProcessEngineImpl();
+        return new Camunda\ProcessEngineImpl($this->config);
     }
 
     public function getProcessManager()
     {
-        return new Camunda\ProcessManagerImpl();
+        return new Camunda\ProcessManagerImpl($this->config);
     }
-    public function getUser()
-    {
-        return new Camunda\UserImpl();
-    }
+    // public function getUser()
+    // {
+    //     return new Camunda\UserImpl();
+    // }
 }

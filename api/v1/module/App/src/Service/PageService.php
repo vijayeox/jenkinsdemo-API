@@ -32,27 +32,25 @@ class PageService extends AbstractService
         if(count($result) > 0){
             $page = null;
             $content = isset($data['content'])?$data['content']:false;
-            
+            $this->beginTransaction();
             if(isset($id)){
                 $page = $this->table->getByUuid($id);
                 $data['uuid'] = $id;
-                    
                 if($page){
                     $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
                     $data['date_modified'] = date('Y-m-d H:i:s');
-                }
-                $querySelect = "SELECT * from ox_app_page where app_id = :appId AND uuid = :uuid";
-                $whereQuery = array("appId" => $data['app_id'],"uuid" => $id);  
-                $queryResult = $this->executeQuerywithBindParameters($querySelect,$whereQuery)->toArray();
-                if(count($queryResult)>0){
-                    $deleteQuery = "DELETE from ox_page_content where page_id = ?";
-                    $whereParams = array($queryResult[0]['id']);
-                    $deleteResult = $this->executeQuerywithBindParameters($deleteQuery,$whereParams);
-                    $deleteRecord = $this->table->delete($this->getIdFromUuid('ox_app_page', $id), ['app_id'=>$data['app_id']]);
-                }else{
+                } else {
                     return 0;
                 }
+                $existingPage = $page->toArray();
+                $deleteQuery = "DELETE from ox_page_content where page_id = ?";
+                $whereParams = array($existingPage['id']);
+                $deleteResult = $this->executeQuerywithBindParameters($deleteQuery,$whereParams);
+                $deleteRecord = $this->table->delete($existingPage['id'], ['app_id'=>$data['app_id']]);
+                unset($data['id']);
+                unset($page->id);
             }
+           
             if(!$page){
                 $page = new Page();
                 $data['uuid'] = UuidUtil::uuid();
@@ -61,7 +59,6 @@ class PageService extends AbstractService
             }
             $page->exchangeArray($data);
             $page->validate();
-            $this->beginTransaction();
             try { 
                 unset($data['content']);
                 $count = $this->table->save($page);

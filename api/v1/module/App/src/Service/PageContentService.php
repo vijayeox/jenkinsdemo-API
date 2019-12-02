@@ -64,8 +64,11 @@ class PageContentService extends AbstractService
             $deleteQuery = array($pageId);
             $result = $this->executeQuerywithBindParameters($select,$deleteQuery);
             foreach($data as $key => $value){
-                if($value['type'] == 'List' || $value['type'] == 'DocumentViewer'){
+                if($value['type'] == 'List' || $value['type'] == 'DocumentViewer' || $value['type'] == 'Search'){
                     $value['content'] = json_encode($value['content']);
+                }
+                if($value['type'] == 'Form' && isset($value['formUuid'])){
+                    $value['form_id'] = $this->getIdFromUuid('ox_form', $value['formUuid']);
                 }
                 unset($value['id']);
                 if (!isset($value['id'])) {
@@ -142,6 +145,7 @@ class PageContentService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
+            print_r($e->getMessage());exit;
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
             throw $e;
