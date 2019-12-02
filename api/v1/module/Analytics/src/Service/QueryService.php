@@ -212,11 +212,11 @@ class QueryService extends AbstractService
             return 0;
     }
 
-    public function executeAnalyticsQuery($id) {
-        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, q.isdeleted, d.uuid as datasource_uuid from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.id=:id';
+    public function executeAnalyticsQuery($uuid) {
+        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, q.isdeleted, d.uuid as datasource_uuid from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.uuid=:uuid';
         $queryParams = [
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
-            'id' => $id
+            'uuid' => $uuid
         ];
         try {
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
