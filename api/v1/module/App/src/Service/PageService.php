@@ -47,7 +47,10 @@ class PageService extends AbstractService
                 $whereParams = array($existingPage['id']);
                 $deleteResult = $this->executeQuerywithBindParameters($deleteQuery,$whereParams);
                 $deleteRecord = $this->table->delete($existingPage['id'], ['app_id'=>$data['app_id']]);
+                unset($data['id']);
+                unset($page->id);
             }
+           
             if(!$page){
                 $page = new Page();
                 $data['uuid'] = UuidUtil::uuid();
