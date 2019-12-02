@@ -52,7 +52,8 @@ class WidgetService extends AbstractService
             'isdeleted'     => false,
             'uuid'          => $newWidgetUuid,
             'name'          => $data['name'],
-            'configuration' => json_encode($data['configuration'])
+            'configuration' => json_encode($data['configuration']),
+            'expression'    => json_encode($data['expression'])
         ];
         if (isset($data['visualization_uuid'])) {
             $visualizationIdInsert = '(SELECT id FROM ox_visualization ov WHERE ov.uuid=:visualization_uuid AND ov.org_id=:org_id)';
@@ -63,7 +64,7 @@ class WidgetService extends AbstractService
             $queryParams['oldWidgetUuid'] = $oldWidgetUuid;
         }
 
-        $query = "INSERT INTO ox_widget (uuid, visualization_id, ispublic, created_by, date_created, org_id, isdeleted, name, configuration, version) VALUES (:uuid, ${visualizationIdInsert}, :ispublic, :created_by, :date_created, :org_id, :isdeleted, :name, :configuration, :version)";
+        $query = "INSERT INTO ox_widget (uuid, visualization_id, ispublic, created_by, date_created, org_id, isdeleted, name, configuration, expression, version) VALUES (:uuid, ${visualizationIdInsert}, :ispublic, :created_by, :date_created, :org_id, :isdeleted, :name, :configuration, :expression, :version)";
         try {
             $this->beginTransaction();
 
@@ -112,6 +113,9 @@ class WidgetService extends AbstractService
         catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
             $this->logger->error($e);
+            $this->logger->error("Query and params:");
+            $this->logger->error($query);
+            $this->logger->error($queryParams);
             try {
                 $this->rollback();
             }
@@ -193,6 +197,9 @@ class WidgetService extends AbstractService
         catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
             $this->logger->error($e);
+            $this->logger->error('Query and params:');
+            $this->logger->error($query);
+            $this->logger->error($queryParams);
             return 0;
         }
         return $response;
@@ -200,7 +207,7 @@ class WidgetService extends AbstractService
 
     public function getWidget($uuid,$params)
     {
-        $query = 'SELECT w.uuid, w.ispublic, w.date_created, w.name, w.configuration, IF(w.created_by=:created_by, true, false) AS is_owner, v.renderer, v.type, q.uuid AS query_uuid, wq.sequence AS query_sequence, wq.configuration AS query_configuration FROM ox_widget w JOIN ox_visualization v on w.visualization_id=v.id JOIN ox_widget_query wq ON w.id=wq.ox_widget_id JOIN ox_query q ON wq.ox_query_id=q.id WHERE w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid AND (w.ispublic=true OR w.created_by=:created_by) ORDER BY wq.sequence ASC';
+        $query = 'SELECT w.uuid, w.ispublic, w.date_created, w.name, w.configuration, w.expression, IF(w.created_by=:created_by, true, false) AS is_owner, v.renderer, v.type, q.uuid AS query_uuid, wq.sequence AS query_sequence, wq.configuration AS query_configuration FROM ox_widget w JOIN ox_visualization v on w.visualization_id=v.id JOIN ox_widget_query wq ON w.id=wq.ox_widget_id JOIN ox_query q ON wq.ox_query_id=q.id WHERE w.isdeleted=false and w.org_id=:org_id and w.uuid=:uuid AND (w.ispublic=true OR w.created_by=:created_by) ORDER BY wq.sequence ASC';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -226,6 +233,7 @@ class WidgetService extends AbstractService
                 'date_created' => $firstRow['date_created'],
                 'name' => $firstRow['name'],
                 'configuration' => json_decode($firstRow['configuration']),
+                'expression' => json_decode($firstRow['expression']),
                 'is_owner' => $firstRow['is_owner'],
                 'renderer' => $firstRow['renderer'],
                 'type' => $firstRow['type'],
@@ -240,21 +248,24 @@ class WidgetService extends AbstractService
         catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
             $this->logger->error($e);
+            $this->logger->error('Query and params:');
+            $this->logger->error($query);
+            $this->logger->error($queryParams);
             return 0;
         }
         $data = array();
         if(isset($params['data'])) {
-            foreach ($resultSet as $row) {
-                $query_id = $row['ox_query_id'];
-                $queryData = $this->queryService->executeAnalyticsQuery($query_id);
-                if (!empty($data) && isset($queryData['data'])) {
-                    $data = array_replace_recursive($data, $queryData['data']);
-                } else {
-                    if (isset($queryData['data'])) {
-                        $data = $queryData['data'];
-                    }
-                }
-            }
+//            foreach ($resultSet as $row) {
+//                $query_id = $row['ox_query_id'];
+//                $queryData = $this->queryService->executeAnalyticsQuery($query_id);
+//                if (!empty($data) && isset($queryData['data'])) {
+//                    $data = array_replace_recursive($data, $queryData['data']);
+//                } else {
+//                    if (isset($queryData['data'])) {
+//                        $data = $queryData['data'];
+//                    }
+//                }
+//            }
             //--------------------------------------------------------------------------------------------------------------------------------
 //TODO:Fetch data from elastic search and remove hard coded values below.
                 $data = [
@@ -312,9 +323,9 @@ class WidgetService extends AbstractService
 //                    ['product'=>'Baseball cap', 'sales'=>0.4]
 //                ];
 //            }
-            if (isset($response['widget']['configuration']['expression'])) {
-                $data = $this->evaluteExpression($data,$response['widget']['configuration']['expression']);
-            }
+//            if (isset($response['widget']['configuration']['expression'])) {
+//                $data = $this->evaluteExpression($data,$response['widget']['configuration']['expression']);
+//            }
             $response['widget']['data'] = $data;
 //--------------------------------------------------------------------------------------------------------------------------------
         }
