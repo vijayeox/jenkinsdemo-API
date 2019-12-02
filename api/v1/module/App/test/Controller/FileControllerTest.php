@@ -181,13 +181,13 @@ class FileControllerTest extends ControllerTest
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(FileController::class);
         $this->assertControllerClass('FileController');
         $this->assertMatchedRouteName('filelisting');
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['status'], 'Completed');
         $this->assertEquals($content['total'], 1);
@@ -237,8 +237,8 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']), 1);
-        $this->assertEquals($content['total'], 1);
+        $this->assertEquals(count($content['data']), 0);
+        $this->assertEquals($content['total'], 0);
     }
 
     public function testGetListOfFilesWithQueryParameter()
@@ -306,7 +306,7 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['total'], 4);
+        $this->assertEquals($content['total'], 6);
     }
 
     public function testGetListOfFilesWithUserIdUsingMultipleFilters()
@@ -339,7 +339,7 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['status'], 'Completed');
-        $this->assertEquals($content['total'], 4);
+        $this->assertEquals($content['total'], 3);
     }
     public function testGetListOfFilesWithStatus2()
     {
@@ -354,7 +354,7 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['status'], 'In Progress');
-        $this->assertEquals($content['total'], 1);
+        $this->assertEquals($content['total'], 3);
     }
     public function testGetListOfFilesWithUser()
     {
@@ -369,8 +369,59 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['status'], 'Completed');
-        $this->assertEquals($content['total'], 4);
+        $this->assertEquals($content['data'][0]['uuid'],'d13d0c68-98c9-11e9-adc5-308d99c9145b');
+        $this->assertEquals($content['total'], 1);
     }
+    public function testGetListOfFilesWithUser2()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/user/4fd9ce37-758f-11e9-b2d5-68ecc57cde45', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelistinguser');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['status'], 'In Progress');
+        $this->assertEquals($content['data'][0]['uuid'],'f13d0c68-98c9-11e9-adc5-308d99c91478');
+        $this->assertEquals($content['data'][1]['uuid'],'d13d0c68-98c9-11e9-adc5-308d99c91478');
+        $this->assertEquals($content['total'], 2);
+    }
+        public function testGetListOfFilesWithUserAndStatus()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/user/me/status/Completed', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelistinguser');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['data'][0]['uuid'],'d13d0c68-98c9-11e9-adc5-308d99c9145b');
+        $this->assertEquals($content['total'], 1);
+    }
+    public function testGetListOfFilesWithUserAndStatus2()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/user/4fd9ce37-758f-11e9-b2d5-68ecc57cde45/status/Completed', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class);
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filelistinguser');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['data'][0]['uuid'],'d13d0c68-98c9-11e9-adc5-308d99c91478');
+        $this->assertEquals($content['total'], 1);
+    }
+
 
     public function testGetListOfFilesWithStatusUsingMultipleFilters()
     {
@@ -404,7 +455,7 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['total'], 4);
+        $this->assertEquals($content['total'], 6);
     }
     public function testGetListOfFilesWithoutWorkFlow()
     {
