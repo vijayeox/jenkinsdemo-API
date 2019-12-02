@@ -532,7 +532,9 @@ class GroupService extends AbstractService
             "where ox_user_group.id = ".$group_id;
             $groupUsers = $this->executeQuerywithParams($queryString)->toArray();
             // echo "<pre>";print_r($groupUsers);exit();
-            $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name, 'usernames' => array_column($groupUsers, 'username'))), 'USERTOGROUP_UPDATED');
+            if(count($groupUsers) > 0){
+                $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name, 'usernames' => array_column($groupUsers, 'username'))), 'USERTOGROUP_UPDATED');
+            }
             return 1;
         }
         throw new ServiceException("Entity not found","group.not.found");

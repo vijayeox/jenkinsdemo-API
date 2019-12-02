@@ -73,19 +73,6 @@ class TaskService extends AbstractService
         return 0;
     }
 
-        public function addUserToTask($projectUuid, $username, $firstname, $lastname, $email, $timezone)
-        {
-            try {
-                $response = $this->restClient->postWithHeader('oxusers', array('username' => $username, 'firstname' => $firstname, 'lastname' => $lastname,'email' => $email,'timezone' => $timezone,'projectUuid' => $projectUuid));
-                if ($response != 0) {
-                    $projectData = json_decode($response['body'], true);
-                    return $projectData;
-                }
-            } catch (Exception $e) {
-                $this->logger->error("Failed to create new entity", $e);
-            }
-            return 0;
-
     public function addGroupToTask($groupname) {
         try {
             $response = $this->restClient->post('groups', array('name' => $groupname));
@@ -110,6 +97,17 @@ class TaskService extends AbstractService
             return json_decode($response, true);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->info(TaskService::class."Failed to create new entity".$e);
+        }
+    }
+
+    public function deleteUserFromTask($projectUuid, $username)
+    {
+        try {
+            $response = $this->restClient->deleteWithHeader('oxusers', array('username' => $username, 'projectUuid' => $projectUuid));
+            $projectData = json_decode($response['body'], true);
+            return $projectData;
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->logger->error("Failed to create new entity", $e);
         }
     }
 

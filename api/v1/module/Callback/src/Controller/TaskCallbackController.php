@@ -11,12 +11,14 @@ use Callback\Service\TaskService;
 class TaskCallbackController extends AbstractApiControllerHelper
 {
     private $taskService;
+    private $log;
         // /**
         // * @ignore __construct
         // */
     public function __construct(TaskService $taskService)
     {
         $this->taskService = $taskService;
+        $this->log = $this->getLogger();
     }
 
 
