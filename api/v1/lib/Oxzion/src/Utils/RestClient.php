@@ -65,7 +65,7 @@ class RestClient
     { 
         try {
             if ($formParams) {
-                $response = $this->client->request('POST', $url, ['json'=>$formParams]);
+                $response = $this->client->request('POST', $url, ['json'=> $formParams]);
             } else {
                 $response = $this->client->request('POST', $url, ['headers' => ['Content-Type' => 'application/json']]);
             }
