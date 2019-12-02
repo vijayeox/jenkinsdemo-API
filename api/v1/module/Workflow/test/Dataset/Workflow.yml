@@ -124,6 +124,7 @@ ox_file:
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     date_created: "2019-06-25 00:00:00"
     entity_id: 1
+    is_active: 1
     form_id: 1
   - id: 12
     workflow_instance_id: 2
@@ -132,6 +133,7 @@ ox_file:
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
     date_created: "2019-06-28 00:00:00"
     entity_id: 1
+    is_active: 1
     form_id: 1
   - id: 13
     workflow_instance_id: 2
@@ -140,6 +142,7 @@ ox_file:
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
     date_created: "2019-06-26 00:00:00"
     entity_id: 1
+    is_active: 1
     form_id: 1
   - id: 14
     workflow_instance_id: 2
@@ -148,6 +151,7 @@ ox_file:
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9146d"
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
+    is_active: 1
     form_id: 1
 ox_workflow_instance:
   - id: 1
