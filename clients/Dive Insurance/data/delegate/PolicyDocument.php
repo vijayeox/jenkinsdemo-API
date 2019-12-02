@@ -220,7 +220,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
             if($this->type != 'quote')
             {
-                $documents['property_exists(class, property)_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
+                $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
             }
         }
 

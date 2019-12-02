@@ -438,6 +438,7 @@ class PolicyDocumentTest extends DelegateTest
                  'medical_deduct' => '100.00',
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
+                 'quote_due_date' => '2019-06-01'
              ];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -499,6 +500,7 @@ class PolicyDocumentTest extends DelegateTest
                  'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
+                 'quote_due_date' => '2019-06-01'
              ];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -787,7 +789,8 @@ class PolicyDocumentTest extends DelegateTest
                  'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
-                 'lossPayees' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}')];
+                 'lossPayees' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
+                'storename' => 'HUB INTERNATIONAL'];
 
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -797,7 +800,6 @@ class PolicyDocumentTest extends DelegateTest
         $this->assertEquals(isset($content['policy_id']), true);
         $this->assertEquals(isset($content['carrier']), true);
         $this->assertEquals(isset($content['license_number']), true);
-        $this->assertEquals(isset($content['certificate_no']), true);
         $this->assertEquals(isset($content['documents']['property_policy_document']), true);
         $doc = $config['APP_DOCUMENT_FOLDER'].$content['documents']['property_coi_document'];
         $this->assertTrue(is_file($doc));
