@@ -251,6 +251,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
 
         if(isset($temp['additionalInsured'])){
+            $this->logger->info("additionalInsured_document_filedata".print_r($temp['additionalInsured'],true));
             $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
         }
 
