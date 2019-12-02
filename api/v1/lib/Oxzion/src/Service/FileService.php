@@ -514,6 +514,7 @@ class FileService extends AbstractService
             $whereQuery = "";
             $joinQuery = "";
             $sort = "";
+            $field = "";
             if (!empty($filterParams)) {
                 $filterParamsArray = json_decode($filterParams['filter'], true);
                 if (array_key_exists("sort", $filterParamsArray[0])) {
@@ -542,6 +543,7 @@ class FileService extends AbstractService
                         if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
                             if ($sortParam[0]['field'] === $val['field']) {
                                 $sort = "ORDER BY " . $tablePrefix . ".field_value";
+                                $field = " , ".$tablePrefix.".field_value";
                             }
                         }
                         $prefix += 1;
@@ -553,8 +555,7 @@ class FileService extends AbstractService
             try {
                 $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery $where $userWhere";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
-
-                $select = "SELECT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name as entity_name $fromQuery $where $userWhere group by a.id $sort $pageSize $offset";
+                $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name as entity_name $field $fromQuery $where $userWhere $sort $pageSize $offset";
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 if($resultSet){
                     $i=0;
