@@ -404,7 +404,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
         $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
         if($this->type == 'lapse'){
-            $data['documents']['lapse_document'] = $data['dest']['relativePath'].$template.'.pdf'; 
+            $data['documents']['lapse_document'] = $dest['relativePath'].$template.'.pdf'; 
             return $data;
         }
         return $dest['relativePath'].$template.'.pdf';
