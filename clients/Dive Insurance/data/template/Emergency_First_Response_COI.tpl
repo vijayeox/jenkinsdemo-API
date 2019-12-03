@@ -4,7 +4,7 @@
 <link href= "{$smarty.current_dir}/css/template_css.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script>
 </head>
-<body>
+<body onload = "agentInfo()">
 	<div class ="body_div">
 		<div>&nbsp</div>
 		<div class = "content">

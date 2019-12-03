@@ -52,7 +52,7 @@
 	    	<b><p class = "ai_title">Additional Insured (See Additional Insured - Blanket Form):</p></b>
 	    		{foreach from=$list item=$additional}
 		    		<p class = "ai_list">
-		    			{$additional['name']}
+		    			{$additional.name}
 		    		</p>
 	    		{/foreach}
     	</div>

@@ -318,7 +318,7 @@ class PolicyDocumentTest extends DelegateTest
                  'endorsement_options'=>'{"modify_personalInformation"=>true,
                                           "modify_coverage"=> false,
                                           "modify_additionalInsured"=> false}',
-                 'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
+                 'additionalInsured' => array(array("additionalInformation" => "SHe ditched TVS for Royal Enfield","address" => "Hell","businessRelation"=> "Enemy","city"=> "Bangalore","name"=> "Neha","state"=> "Karnataka","zip"=> "420420"),array("additionalInformation"=> "Wonderful person","address"=> "No.33, 8th cross, 24th main","businessRelation"=> "Friend","city"=> "Bangalore","name"=> "Prajwal K","state"=> "Karnataka","zip"=> "560102")),
                  'lapseletter' => 1];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
@@ -497,7 +497,7 @@ class PolicyDocumentTest extends DelegateTest
                  'personal_effect_deduct' => '500.00',
                  'liability_ins_deduct' => '1,000.00',
                  'medical_deduct' => '100.00',
-                 'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
+                 'additionalInsured' => array(array("additionalInformation" => "SHe ditched TVS for Royal Enfield","address" => "Hell","businessRelation"=> "Enemy","city"=> "Bangalore","name"=> "Neha","state"=> "Karnataka","zip"=> "420420"),array("additionalInformation"=> "Wonderful person","address"=> "No.33, 8th cross, 24th main","businessRelation"=> "Friend","city"=> "Bangalore","name"=> "Prajwal K","state"=> "Karnataka","zip"=> "560102")),
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
                  'quote_due_date' => '2019-06-01'
@@ -560,7 +560,7 @@ class PolicyDocumentTest extends DelegateTest
                  'personal_effect_deduct' => '500.00',
                  'liability_ins_deduct' => '1,000.00',
                  'medical_deduct' => '100.00',
-                 'additionalNamedInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
+                 'additionalNamedInsured' => array(array("additionalInformation" => "SHe ditched TVS for Royal Enfield","address" => "Hell","businessRelation"=> "Enemy","city"=> "Bangalore","name"=> "Neha","state"=> "Karnataka","zip"=> "420420"),array("additionalInformation"=> "Wonderful person","address"=> "No.33, 8th cross, 24th main","businessRelation"=> "Friend","city"=> "Bangalore","name"=> "Prajwal K","state"=> "Karnataka","zip"=> "560102")),
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
                  ''];
@@ -691,10 +691,10 @@ class PolicyDocumentTest extends DelegateTest
                  'personal_effect_deduct' => '500.00',
                  'liability_ins_deduct' => '1,000.00',
                  'medical_deduct' => '100.00',
-                 'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
+                 'additionalInsured' => array(array("additionalInformation" => "SHe ditched TVS for Royal Enfield","address" => "Hell","businessRelation"=> "Enemy","city"=> "Bangalore","name"=> "Neha","state"=> "Karnataka","zip"=> "420420"),array("additionalInformation"=> "Wonderful person","address"=> "No.33, 8th cross, 24th main","businessRelation"=> "Friend","city"=> "Bangalore","name"=> "Prajwal K","state"=> "Karnataka","zip"=> "560102")),
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
-                 'lossPayees' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}')];
+                 'lossPayees' => array(array("additionalInformation" => "SHe ditched TVS for Royal Enfield","address" => "Hell","businessRelation"=> "Enemy","city"=> "Bangalore","name"=> "Neha","state"=> "Karnataka","zip"=> "420420"),array("additionalInformation"=> "Wonderful person","address"=> "No.33, 8th cross, 24th main","businessRelation"=> "Friend","city"=> "Bangalore","name"=> "Prajwal K","state"=> "Karnataka","zip"=> "560102"))];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -786,10 +786,10 @@ class PolicyDocumentTest extends DelegateTest
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Dive Store',
                  'property' => array('content_limit' => '80,000', 'business_income' => '40,000','building_coverage' => 1,'equipment_breakdown' => 1,'dependant_prop' => '5,000','robbery_inside' => '2,500','robbery_outside' => '2,500','transit_coverage' => '10,000','emp_theft' => '5,000','prop_others' => '25,000','off_premises' => '10,000','glass' => '5,000','property' => 1,'cover_letter' => 1,'storename' => 'HUB INTERNATIONAL'),
-                 'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
+                 'additionalInsured' => array(array("additionalInformation" => "SHe ditched TVS for Royal Enfield","address" => "Hell","businessRelation"=> "Enemy","city"=> "Bangalore","name"=> "Neha","state"=> "Karnataka","zip"=> "420420"),array("additionalInformation"=> "Wonderful person","address"=> "No.33, 8th cross, 24th main","businessRelation"=> "Friend","city"=> "Bangalore","name"=> "Prajwal K","state"=> "Karnataka","zip"=> "560102")),
                  'manager_name' => 'Julie Joseph',
                  'manager_email' => 'abcd@gmail.com',
-                 'lossPayees' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
+                 'lossPayees' => array(array("additionalInformation" => "SHe ditched TVS for Royal Enfield","address" => "Hell","businessRelation"=> "Enemy","city"=> "Bangalore","name"=> "Neha","state"=> "Karnataka","zip"=> "420420"),array("additionalInformation"=> "Wonderful person","address"=> "No.33, 8th cross, 24th main","businessRelation"=> "Friend","city"=> "Bangalore","name"=> "Prajwal K","state"=> "Karnataka","zip"=> "560102")),
                 'storename' => 'HUB INTERNATIONAL'];
 
         $config = $this->getApplicationConfig();
@@ -808,7 +808,7 @@ class PolicyDocumentTest extends DelegateTest
         FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
     }
 
-    public function testEFRPolicyWithAIDocument()
+    public function testEFRPolicyDocument()
     {
         $config = $this->getApplicationConfig();
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
@@ -855,7 +855,7 @@ class PolicyDocumentTest extends DelegateTest
     }
 
 
-    public function testEFRPolicyDocument()
+    public function testEFRPolicyWithAIDocument()
     {
         $config = $this->getApplicationConfig();
         $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
@@ -882,7 +882,7 @@ class PolicyDocumentTest extends DelegateTest
                  'cylinder_coverage' => 0,
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Emergency First Response',
-                 'additionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}')];
+                 'additionalInsured' => array(array("additionalInformation" => "SHe ditched TVS for Royal Enfield","address" => "Hell","businessRelation"=> "Enemy","city"=> "Bangalore","name"=> "Neha","state"=> "Karnataka","zip"=> "420420"),array("additionalInformation"=> "Wonderful person","address"=> "No.33, 8th cross, 24th main","businessRelation"=> "Friend","city"=> "Bangalore","name"=> "Prajwal K","state"=> "Karnataka","zip"=> "560102"))];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -930,7 +930,7 @@ class PolicyDocumentTest extends DelegateTest
                  'cylinder_coverage' => 0,
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Group Professional Liability',
-                 'groupAdditionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}')];
+                 'groupAdditionalInsured' => array(array("additionalInformation" => "SHe ditched TVS for Royal Enfield","address" => "Hell","businessRelation"=> "Enemy","city"=> "Bangalore","name"=> "Neha","state"=> "Karnataka","zip"=> "420420"),array("additionalInformation"=> "Wonderful person","address"=> "No.33, 8th cross, 24th main","businessRelation"=> "Friend","city"=> "Bangalore","name"=> "Prajwal K","state"=> "Karnataka","zip"=> "560102"))];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
@@ -977,7 +977,7 @@ class PolicyDocumentTest extends DelegateTest
                  'cylinder_coverage' => 0,
                  'orgUuid' => $this->data['orgUuid'],
                  'product' => 'Group Professional Liability',
-                 'groupAdditionalInsured' => array('{"additionalInformation" : "SHe ditched TVS for Royal Enfield","address" : "Hell","businessRelation": "Enemy","city": "Bangalore","name": "Neha","state": "Karnataka","zip": "420420"}','{"additionalInformation": "Wonderful person","address": "No.33, 8th cross, 24th main","businessRelation": "Friend","city": "Bangalore","name": "Prajwal K","state": "Karnataka","zip": "560102"}'),
+                 'groupAdditionalInsured' => array(array("additionalInformation" => "SHe ditched TVS for Royal Enfield","address" => "Hell","businessRelation"=> "Enemy","city"=> "Bangalore","name"=> "Neha","state"=> "Karnataka","zip"=> "420420"),array("additionalInformation"=> "Wonderful person","address"=> "No.33, 8th cross, 24th main","businessRelation"=> "Friend","city"=> "Bangalore","name"=> "Prajwal K","state"=> "Karnataka","zip"=> "560102")),
                  'namedInsured' => array(0 =>array('memberid' => '000048','name' => 'MU LI','status' => 'Swim Instructor','effective_date' => '2020-06-30','upgrade' => 0),1 => array('memberid' => '000048','name' => 'MU LI','status' => 'Swim Instructor','effective_date' => '2020-06-30','upgrade' => 0))];
         $config = $this->getApplicationConfig();
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
