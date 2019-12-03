@@ -10,9 +10,8 @@
 
 			<div class = "ai_spacing"></div>
 			{foreach from=$list item=$additional}
-	    		{assign var=datalist value=$additional|json_decode:true}
 	    		<p class = "ai_list">
-	    			{$datalist.name},{$datalist.address},{$datalist.city},{$datalist.state},{$datalist.zip}
+	    			{$additional.name},{$additional.address},{$additional.city},{$additional.state},{$additional.zip}
 	    		</p>
     		{/foreach}
 	</div>

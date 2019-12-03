@@ -232,7 +232,7 @@ class WidgetService extends AbstractService
                 'ispublic' => $firstRow['ispublic'],
                 'date_created' => $firstRow['date_created'],
                 'name' => $firstRow['name'],
-                'configuration' => json_decode($firstRow['configuration']),
+                'configuration' => json_decode($firstRow['configuration'],1),
                 'expression' => json_decode($firstRow['expression']),
                 'is_owner' => $firstRow['is_owner'],
                 'renderer' => $firstRow['renderer'],
@@ -243,7 +243,7 @@ class WidgetService extends AbstractService
                 'widget' => $widget
             ];
             //Widget configuration value from database is a JSON string. Convert it to object and overwrite JSON string value.
-            $response['widget']['configuration'] = json_decode($resultSet[0]['configuration'],1);
+         //   $response['widget']['configuration'] = json_decode($resultSet[0]['configuration'],1);
         }
         catch (ZendDbException $e) {
             $this->logger->error('Database exception occurred.');
@@ -255,27 +255,27 @@ class WidgetService extends AbstractService
         }
         $data = array();
         if(isset($params['data'])) {
-//            foreach ($resultSet as $row) {
-//                $query_id = $row['ox_query_id'];
-//                $queryData = $this->queryService->executeAnalyticsQuery($query_id);
-//                if (!empty($data) && isset($queryData['data'])) {
-//                    $data = array_replace_recursive($data, $queryData['data']);
-//                } else {
-//                    if (isset($queryData['data'])) {
-//                        $data = $queryData['data'];
-//                    }
-//                }
-//            }
+            foreach ($resultSet as $row) {
+                $query_uuid = $row['query_uuid'];
+                $queryData = $this->queryService->executeAnalyticsQuery($query_uuid);
+                if (!empty($data) && isset($queryData['data'])) {
+                    $data = array_replace_recursive($data, $queryData['data']);
+                } else {
+                    if (isset($queryData['data'])) {
+                        $data = $queryData['data'];
+                    }
+                }
+            }
             //--------------------------------------------------------------------------------------------------------------------------------
 //TODO:Fetch data from elastic search and remove hard coded values below.
-                $data = [
-                    ['person'=> 'Bharat', 'sales'=> 4.2],
-                    ['person'=> 'Harsha', 'sales'=> 5.2],
-                    ['person'=> 'Mehul', 'sales'=> 15.2],
-                    ['person'=> 'Rajesh', 'sales'=> 2.9],
-                    ['person'=> 'Ravi', 'sales'=> 2.9],
-                    ['person'=> 'Yuvraj', 'sales'=> 14.2]
-                ];
+                // $data = [
+                //     ['person'=> 'Bharat', 'sales'=> 4.2],
+                //     ['person'=> 'Harsha', 'sales'=> 5.2],
+                //     ['person'=> 'Mehul', 'sales'=> 15.2],
+                //     ['person'=> 'Rajesh', 'sales'=> 2.9],
+                //     ['person'=> 'Ravi', 'sales'=> 2.9],
+                //     ['person'=> 'Yuvraj', 'sales'=> 14.2]
+                // ];
 
             $testUuid = $resultSet[0]['uuid'];
             if ($testUuid == '2aab5e6a-5fd4-44a8-bb50-57d32ca226b0') {
@@ -323,9 +323,15 @@ class WidgetService extends AbstractService
 //                    ['product'=>'Baseball cap', 'sales'=>0.4]
 //                ];
 //            }
-//            if (isset($response['widget']['configuration']['expression'])) {
-//                $data = $this->evaluteExpression($data,$response['widget']['configuration']['expression']);
-//            }
+            if (isset($response['widget']['configuration']['expression'])) {
+                $expressions = $response['widget']['configuration']['expression'];
+                if (!is_array($expressions)) {
+                    $expressions = array($expressions);
+                }
+                foreach($expressions as $expression) {
+                    $data = $this->evaluteExpression($data,$expression);
+                }
+            }
             $response['widget']['data'] = $data;
 //--------------------------------------------------------------------------------------------------------------------------------
         }
@@ -334,7 +340,13 @@ class WidgetService extends AbstractService
 
 
     public function evaluteExpression($data,$expression) {
-        $newDataSet = Array();
+        $expArray = explode("=",$expression,2);
+        if (count($expArray)==2) {
+            $colName =  $expArray[0];
+            $expression = $expArray[1];
+        } else {
+            $colName = 'calculated';
+        }
         foreach($data as $key1=>$dataset) {
             $m = new EvalMath;
             foreach($dataset as $key2=>$value) {
@@ -343,7 +355,7 @@ class WidgetService extends AbstractService
                 }
             }
             $calculated = $m->evaluate($expression);
-            $data[$key1]['calculated'] = $calculated;
+            $data[$key1][$colName] = $calculated;
         }
         return $data;
     }

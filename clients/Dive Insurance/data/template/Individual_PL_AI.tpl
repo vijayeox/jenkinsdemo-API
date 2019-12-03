@@ -50,11 +50,9 @@
 		<hr class="hrtag"></hr>
 		<div class = "ai_margin">
 	    	<b><p class = "ai_title">Additional Insured (See Additional Insured - Blanket Form):</p></b>
-	    	
 	    		{foreach from=$list item=$additional}
-		    		{assign var=datalist value=$additional|json_decode:true}
 		    		<p class = "ai_list">
-		    			{$datalist[0]['name']}
+		    			{$additional.name}
 		    		</p>
 	    		{/foreach}
     	</div>

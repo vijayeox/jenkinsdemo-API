@@ -479,11 +479,11 @@ class FileService extends AbstractService
             if(isset($params['status'])){
                 $statusFilter = " AND g.status = '".$params['status']."'";
             } else {
-                $statusFilter = " AND g.status = 'Completed'";
+                $statusFilter = "";
             }
             $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
             $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
-            $where = " WHERE $appFilter $statusFilter";
+            $where = " $appFilter $statusFilter";
             $fromQuery = " from ox_file as a
             inner join ox_form as b on (a.entity_id = b.entity_id)
             inner join ox_form_field as c on (c.form_id = b.id)
@@ -498,8 +498,8 @@ class FileService extends AbstractService
                         throw new ServiceException("User Does not Exist","app.forusernot.found");
                     }  
                 }
-                $fromQuery .= " join ox_wf_user_identifier on ox_wf_user_identifier.identifier_name = d.name";
-                $userWhere = " and ox_wf_user_identifier.user_id = :userId";
+                $fromQuery .= "left join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.workflow_instance_id=a.workflow_instance_id";
+                $userWhere = " and owufi.user_id = :userId";
                 $queryParams['userId'] = $userId;
             } else {
                 $userWhere = "";
@@ -553,9 +553,9 @@ class FileService extends AbstractService
             $where .= " " . $whereQuery . "";
             $fromQuery .= " " . $joinQuery . "";
             try {
-                $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery $where $userWhere";
+                $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
-                $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name as entity_name $field $fromQuery $where $userWhere $sort $pageSize $offset";
+                $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 if($resultSet){
                     $i=0;

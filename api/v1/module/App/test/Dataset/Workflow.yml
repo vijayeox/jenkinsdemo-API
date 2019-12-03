@@ -220,6 +220,14 @@ ox_workflow_instance:
     status: "In Progress"
     date_created: "2019-06-26 00:00:00"
     created_by: 2
+  - id: 7
+    workflow_deployment_id: 1
+    process_instance_id: "3f20b5c5-0124-11ea-a8a0-22e8105c0778"
+    app_id: 99
+    org_id: 1
+    status: "Completed"
+    date_created: "2019-06-26 00:00:00"
+    created_by: 2
 ox_app_menu:
   -
     id: 1
@@ -358,17 +366,17 @@ ox_file:
     entity_id: 1
  -
     id: 13
-    workflow_instance_id: 2
+    workflow_instance_id: 3
     org_id: 1
-    data: "New File Data - Completed"
+    data: "New File Data - In Progress"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
     date_created: "2019-06-26 00:00:00"
     entity_id: 1
  -
     id: 14
-    workflow_instance_id: 2
+    workflow_instance_id: 4
     org_id: 1
-    data: "New File Data - Latest Completed"
+    data: "New File Data - Latest In Progress"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9146d"
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
@@ -377,6 +385,14 @@ ox_file:
     workflow_instance_id: 6
     org_id: 1
     data: "New File Data - Latest In Progress"
+    uuid: "f13d0c68-98c9-11e9-adc5-308d99c91478"
+    date_created: "2019-06-26 10:00:00"
+    entity_id: 1
+ -
+    id: 16
+    workflow_instance_id: 7
+    org_id: 1
+    data: "New File Data - Latest Completed"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c91478"
     date_created: "2019-06-26 10:00:00"
     entity_id: 1
@@ -449,6 +465,11 @@ ox_wf_user_identifier:
     identifier: "2019-01-01"
   - id: 3
     workflow_instance_id: 6
+    user_id: 2
+    identifier_name: "field1"
+    identifier: "32252"
+  - id: 4
+    workflow_instance_id: 7
     user_id: 2
     identifier_name: "field1"
     identifier: "32252"

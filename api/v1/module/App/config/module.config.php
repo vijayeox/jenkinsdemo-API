@@ -486,7 +486,7 @@ return [
             'filelistinguser' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/user/:userId',
+                    'route' => '/app/:appId/file/user/:userId[/status/:status]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN
                     ],

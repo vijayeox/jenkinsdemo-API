@@ -9,9 +9,8 @@
 	<div class ="body_div_lp">
 	<p><b>Name & Address</b></p>
 	    	{foreach from=$list item=$additional}
-	    		{assign var=datalist value=$additional|json_decode:true}
 	    		<p class = "ai_list">
-	    			&nbsp&nbsp&nbsp{$datalist.name}
+	    			&nbsp&nbsp&nbsp{$additional.name}
 	    		</p>
     		{/foreach}
 	</div>

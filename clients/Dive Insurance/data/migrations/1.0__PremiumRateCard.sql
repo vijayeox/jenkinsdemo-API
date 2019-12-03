@@ -1873,309 +1873,379 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2019-06-30', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2019-06-30', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2019-06-30', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2019-06-30', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2019-06-30', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2019-06-30', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2019-06-30', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2019-06-30', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2019-06-30', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2019-06-30', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2019-06-30', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2019-06-30', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2019-06-30', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2019-06-30', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2019-06-30', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2019-06-30', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2019-06-30', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2019-06-30', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2019-06-30', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2019-06-30', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2019-06-30', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2019-06-30', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2019-06-30', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2019-06-30', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2019-06-30', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2019-06-30', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2019-06-30', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2019-06-30', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2019-06-30', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2019-06-30', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2019-06-30', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2019-06-30', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2019-07-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2019-07-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2019-07-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2019-07-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2019-07-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2019-07-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2019-07-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2019-07-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2019-07-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2019-07-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2019-07-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2019-07-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2019-07-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2019-07-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2019-07-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2019-07-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2019-07-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2019-07-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2019-07-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2019-07-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2019-07-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2019-07-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2019-07-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2019-07-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2019-07-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2019-07-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2019-07-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2019-07-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2019-07-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2019-07-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2019-07-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2019-07-01', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2019-08-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2019-08-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2019-08-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2019-08-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2019-08-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2019-08-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2019-08-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2019-08-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2019-08-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2019-08-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2019-08-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2019-08-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2019-08-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2019-08-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2019-08-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2019-08-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2019-08-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2019-08-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2019-08-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2019-08-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2019-08-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2019-08-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2019-08-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2019-08-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2019-08-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2019-08-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2019-08-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2019-08-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2019-08-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2019-08-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2019-08-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2019-08-01', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2019-09-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2019-09-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2019-09-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2019-09-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2019-09-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2019-09-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2019-09-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2019-09-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2019-09-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2019-09-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2019-09-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2019-09-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2019-09-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2019-09-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2019-09-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2019-09-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2019-09-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2019-09-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2019-09-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2019-09-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2019-09-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2019-09-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2019-09-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2019-09-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2019-09-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2019-09-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2019-09-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2019-09-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2019-09-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2019-09-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2019-09-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2019-09-01', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2019-10-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2019-10-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2019-10-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2019-10-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2019-10-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2019-10-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2019-10-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2019-10-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2019-10-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2019-10-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2019-10-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2019-10-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2019-10-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2019-10-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2019-10-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2019-10-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2019-10-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2019-10-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2019-10-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2019-10-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2019-10-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2019-10-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2019-10-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2019-10-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2019-10-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2019-10-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2019-10-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2019-10-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2019-10-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2019-10-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2019-10-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2019-10-01', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2019-11-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2019-11-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2019-11-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2019-11-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2019-11-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2019-11-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2019-11-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2019-11-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2019-11-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2019-11-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2019-11-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2019-11-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2019-11-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2019-11-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2019-11-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2019-11-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2019-11-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2019-11-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2019-11-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2019-11-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2019-11-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2019-11-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2019-11-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2019-11-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2019-11-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2019-11-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2019-11-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2019-11-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2019-11-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2019-11-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2019-11-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2019-11-01', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2019-12-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2019-12-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2019-12-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2019-12-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2019-12-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2019-12-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2019-12-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2019-12-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2019-12-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2019-12-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2019-12-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2019-12-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2019-12-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2019-12-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2019-12-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2019-12-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2019-12-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2019-12-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2019-12-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2019-12-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2019-12-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2019-12-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2019-12-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2019-12-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2019-12-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2019-12-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2019-12-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2019-12-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2019-12-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2019-12-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2019-12-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2019-12-01', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2020-01-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2020-01-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2020-01-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2020-01-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2020-01-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2020-01-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2020-01-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2020-01-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2020-01-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2020-01-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2020-01-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2020-01-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2020-01-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2020-01-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2020-01-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2020-01-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2020-01-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2020-01-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2020-01-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2020-01-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2020-01-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2020-01-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2020-01-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2020-01-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2020-01-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2020-01-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2020-01-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2020-01-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2020-01-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2020-01-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2020-01-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2020-01-01', '2020-07-31',0.00997272);
 
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2020-02-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2020-02-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2020-02-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2020-02-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2020-02-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2020-02-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2020-02-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2020-02-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2020-02-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2020-02-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2020-02-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2020-02-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2020-02-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2020-02-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2020-02-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2020-02-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2020-02-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2020-02-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2020-02-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2020-02-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2020-02-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2020-02-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2020-02-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2020-02-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2020-02-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2020-02-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2020-02-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2020-02-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2020-02-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2020-02-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2020-02-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2020-02-01', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2020-03-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2020-03-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2020-03-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2020-03-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2020-03-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2020-03-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2020-03-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2020-03-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2020-03-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2020-03-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2020-03-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2020-03-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2020-03-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2020-03-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2020-03-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2020-03-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2020-03-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2020-03-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2020-03-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2020-03-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2020-03-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2020-03-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2020-03-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2020-03-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2020-03-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2020-03-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2020-03-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2020-03-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2020-03-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2020-03-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2020-03-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2020-03-01', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2020-04-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2020-04-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2020-04-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2020-04-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2020-04-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2020-04-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2020-04-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2020-04-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2020-04-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2020-04-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2020-04-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2020-04-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2020-04-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2020-04-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2020-04-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2020-04-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2020-04-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2020-04-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2020-04-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2020-04-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2020-04-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2020-04-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2020-04-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2020-04-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2020-04-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2020-04-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2020-04-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2020-04-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2020-04-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2020-04-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2020-04-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2020-04-01', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2020-05-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2020-05-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2020-05-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2020-05-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2020-05-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2020-05-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2020-05-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2020-05-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2020-05-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2020-05-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2020-05-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2020-05-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2020-05-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2020-05-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2020-05-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2020-05-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2020-05-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2020-05-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2020-05-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2020-05-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2020-05-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2020-05-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2020-05-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2020-05-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2020-05-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2020-05-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2020-05-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2020-05-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2020-05-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2020-05-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2020-05-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2020-05-01', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2020-06-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2020-06-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2020-06-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2020-06-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2020-06-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2020-06-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2020-06-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2020-06-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2020-06-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2020-06-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2020-06-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2020-06-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2020-06-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2020-06-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2020-06-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2020-06-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2020-06-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2020-06-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2020-06-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2020-06-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2020-06-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2020-06-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2020-06-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2020-06-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2020-06-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2020-06-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2020-06-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2020-06-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2020-06-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2020-06-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2020-06-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2020-06-01', '2020-07-31',0.00997272);
 
 
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingCat','LimitOver500000CoverBuildingCat','2020-07-01', '2020-07-31',0.010773);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingCat','LimitOver250000CoverBuildingCat','2020-07-01', '2020-07-31',0.0118503);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingCat','LimitOver100000CoverBuildingCat','2020-07-01', '2020-07-31',0.015561);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingCat','LimitOver0CoverBuildingCat','2020-07-01', '2020-07-31',0.0172368);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingCat','limitOver500000CoverBuildingCat','2020-07-01', '2020-07-31',0.010773);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingCat','limitOver250000CoverBuildingCat','2020-07-01', '2020-07-31',0.0118503);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingCat','limitOver100000CoverBuildingCat','2020-07-01', '2020-07-31',0.015561);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingCat','limitOver0CoverBuildingCat','2020-07-01', '2020-07-31',0.0172368);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBuildingNonCat','LimitOver500000CoverBuildingNonCat','2020-07-01', '2020-07-31',0.0090804);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBuildingNonCat','LimitOver250000CoverBuildingNonCat','2020-07-01', '2020-07-31',0.0095412);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBuildingNonCat','LimitOver100000CoverBuildingNonCat','2020-07-01', '2020-07-31',0.0100548);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBuildingNonCat','LimitOver0CoverBuildingNonCat','2020-07-01', '2020-07-31',0.0110808);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBuildingNonCat','limitOver500000CoverBuildingNonCat','2020-07-01', '2020-07-31',0.0090804);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBuildingNonCat','limitOver250000CoverBuildingNonCat','2020-07-01', '2020-07-31',0.0095412);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBuildingNonCat','limitOver100000CoverBuildingNonCat','2020-07-01', '2020-07-31',0.0100548);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBuildingNonCat','limitOver0CoverBuildingNonCat','2020-07-01', '2020-07-31',0.0110808);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeCat','LimitOver500000CoverBusIncomeCat','2020-07-01', '2020-07-31',0.0096957);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeCat','LimitOver250000CoverBusIncomeCat','2020-07-01', '2020-07-31',0.01066527);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeCat','LimitOver100000CoverBusIncomeCat','2020-07-01', '2020-07-31',0.0140049);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeCat','LimitOver0CoverBusIncomeCat','2020-07-01', '2020-07-31',0.01551312);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeCat','limitOver500000CoverBusIncomeCat','2020-07-01', '2020-07-31',0.0096957);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeCat','limitOver250000CoverBusIncomeCat','2020-07-01', '2020-07-31',0.01066527);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeCat','limitOver100000CoverBusIncomeCat','2020-07-01', '2020-07-31',0.0140049);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeCat','limitOver0CoverBusIncomeCat','2020-07-01', '2020-07-31',0.01551312);
 
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver500000CoverBusIncomeNonCat','LimitOver500000CoverBusIncomeNonCat','2020-07-01', '2020-07-31',0.00817236);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver250000CoverBusIncomeNonCat','LimitOver250000CoverBusIncomeNonCat','2020-07-01', '2020-07-31',0.00858708);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver100000CoverBusIncomeNonCat','LimitOver100000CoverBusIncomeNonCat','2020-07-01', '2020-07-31',0.00904932);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'LimitOver0CoverBusIncomeNonCat','LimitOver0CoverBusIncomeNonCat','2020-07-01', '2020-07-31',0.00997272);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver500000CoverBusIncomeNonCat','limitOver500000CoverBusIncomeNonCat','2020-07-01', '2020-07-31',0.00817236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver250000CoverBusIncomeNonCat','limitOver250000CoverBusIncomeNonCat','2020-07-01', '2020-07-31',0.00858708);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver100000CoverBusIncomeNonCat','limitOver100000CoverBusIncomeNonCat','2020-07-01', '2020-07-31',0.00904932);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'limitOver0CoverBusIncomeNonCat','limitOver0CoverBusIncomeNonCat','2020-07-01', '2020-07-31',0.00997272);
+
+
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'standardCoverageUpTo50000','standardCoverageUpTo50000','2019-06-30', '2020-06-30',1631);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'standardCoverage50001To100000','standardCoverage50001To100000','2019-06-30', '2020-06-30',1874);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'standardCoverage100001To200000','standardCoverage100001To200000','2019-06-30', '2020-06-30',2153);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'standardCoverage200001To350000','standardCoverage200001To350000','2019-06-30', '2020-06-30',2470);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'standardCoverage350001To500000','standardCoverage350001To500000','2019-06-30', '2020-06-30',2939);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'standardCoverage500001To1M','standardCoverage500001To1M','2019-06-30', '2020-06-30',3141);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'standardCoverage1MAndOver','standardCoverage1MAndOver','2019-06-30', '2020-06-30',3359);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'liabilityOnlyUpTo50000','liabilityOnlyUpTo50000','2019-06-30', '2020-06-30',1631);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'liabilityOnly50001To100000','liabilityOnly50001To100000','2019-06-30', '2020-06-30',1874);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'liabilityOnly100001To200000','liabilityOnly100001To200000','2019-06-30', '2020-06-30',2153);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'liabilityOnly200001To350000','liabilityOnly200001To350000','2019-06-30', '2020-06-30',2470);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'liabilityOnly350001To500000','liabilityOnly350001To500000','2019-06-30', '2020-06-30',2939);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'liabilityOnly500001To1M','liabilityOnly500001To1M','2019-06-30', '2020-06-30',3141);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'liabilityOnly1MAndOver','liabilityOnly1MAndOver','2019-06-30', '2020-06-30',3359);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'discontinuedOperation','discontinuedOperation','2019-06-30', '2020-06-30',816);
+
+
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'medicalExpense','medicalExpense','2019-06-30', '2020-06-30',55);
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'nonOwnedAutoLiability100K','nonOwnedAutoLiability100K','2019-06-30', '2020-06-30',113);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'nonOwnedAutoLiability1M','nonOwnedAutoLiability1M','2019-06-30', '2020-06-30',849);
+
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'excessLiabilityCoverage1M','excessLiabilityCoverage1M','2019-06-30', '2020-06-30',567);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'excessLiabilityCoverage2M','excessLiabilityCoverage2M','2019-06-30', '2020-06-30',1133);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'excessLiabilityCoverage3M','excessLiabilityCoverage3M','2019-06-30', '2020-06-30',1700);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'excessLiabilityCoverage4M','excessLiabilityCoverage4M','2019-06-30', '2020-06-30',2266);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'excessLiabilityCoverage9M','excessLiabilityCoverage9M','2019-06-30', '2020-06-30',5381);
+
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'TAEOunder100k','TAEOunder100k','2019-06-30', '2020-06-30',283);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'TAEO100kTo500k','TAEO100kTo500k','2019-06-30', '2020-06-30',340);
+
+
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'poolLiabilityOver50k','poolLiabilityOver50k','2019-06-30', '2020-06-30',1189);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'poolLiabilityOver20k','poolLiabilityOver20k','2019-06-30', '2020-06-30',793);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'poolLiabilityOver0','poolLiabilityOver0','2019-06-30', '2020-06-30',396);
+
+
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsJan','proRataFactorsJan','2020-01-01', '2020-12-31',0.493);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsFeb','proRataFactorsFeb','2020-01-01', '2020-12-31',0.408);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsMar','proRataFactorsMar','2020-01-01', '2020-12-31',0.332);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsApr','proRataFactorsApr','2020-01-01', '2020-12-31',0.247);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsMay','proRataFactorsMay','2020-01-01', '2020-12-31',0.164);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsJun','proRataFactorsJun','2020-01-01', '2020-12-31',0.079);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsJul','proRataFactorsJul','2020-01-01', '2020-12-31',1.000);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsAug','proRataFactorsAug','2020-01-01', '2020-12-31',0.912);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsSep','proRataFactorsSep','2020-01-01', '2020-12-31',0.827);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsOct','proRataFactorsOct','2020-01-01', '2020-12-31',0.745);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsNov','proRataFactorsNov','2020-01-01', '2020-12-31',0.660);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'proRataFactorsDec','proRataFactorsDec','2020-01-01', '2020-12-31',0.578);
+
+
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'padiFee','padiFee','2020-01-01', '2020-12-31',50);

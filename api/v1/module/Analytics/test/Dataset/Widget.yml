@@ -33,5 +33,5 @@ ox_widget:
     org_id: 1
     isdeleted: 0
     name: 'widget3'
-    configuration: '{"expression":"(field6-field5)*field6/100"}'
+    configuration: '{"expression":["calcfield1=(field6-field5)*field6/100","calcfield2=(field6-field5)"]}'
     version: 1
