@@ -141,14 +141,11 @@ class ContactService extends AbstractService
         $userId = AuthContext::get(AuthConstants::USER_ID);
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
 
-        $queryString1 = "SELECT * from (";
-
         if ($column == ContactService::ALL_FIELDS) {
-            $queryString2 = "SELECT oxc.uuid as uuid, user_id, oxc.first_name, oxc.last_name, oxc.phone_1, oxc.phone_list, oxc.email, oxc.email_list, oxc.company_name, oxc.icon_type,oxc.designation,oxc.address_1,oxc.country, '1' as contact_type from ox_contact as oxc";
+            $queryString1 = "SELECT * from (SELECT oxc.uuid as uuid, user_id, oxc.first_name, oxc.last_name, oxc.phone_1, oxc.phone_list, oxc.email, oxc.email_list, oxc.company_name, oxc.icon_type,oxc.designation,oxc.address_1,oxc.country, '1' as contact_type from ox_contact as oxc WHERE oxc.owner_id = " . $userId . " ";
         } else {
-            $queryString2 = "SELECT oxc.uuid as uuid,user_id, oxc.first_name, oxc.last_name, oxc.icon_type, '1' as contact_type  from ox_contact as oxc";
+            $queryString1 = "SELECT oxc.uuid as uuid,user_id, oxc.first_name, oxc.last_name, oxc.icon_type, '1' as contact_type  from ox_contact as oxc WHERE oxc.owner_id = " . $userId . " ";
         }
-        $where1 = " WHERE oxc.owner_id = " . $userId . " ";
 
         if ($filter == null) {
             $and1  = '';
@@ -159,12 +156,11 @@ class ContactService extends AbstractService
         $union = " UNION ";
 
         if ($column == "-1") {
-            $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name, ou.phone as phone_1, null as phone_list, ou.email, null as email_list, org.name as company_name, null as icon_type,ou.designation,ou.address,ou.country, '2' as contact_type  from ox_user as ou inner join ox_organization as org on ou.orgid = org.id";
+            $queryString2 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name, ou.phone as phone_1, null as phone_list, ou.email, null as email_list, org.name as company_name, null as icon_type,ou.designation,ou.address,ou.country, '2' as contact_type  from ox_user as ou inner join ox_organization as org on ou.orgid = org.id WHERE ou.orgid = " . $orgId . " AND ou.status = 'Active' and org.status = 'Active' ";
         } else {
-            $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name,null as icon_type, '2' as contact_type from ox_user as ou inner join ox_organization as org on ou.orgid = org.id";
+            $queryString2 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name,null as icon_type, '2' as contact_type from ox_user as ou inner join ox_organization as org on ou.orgid = org.id WHERE ou.orgid = " . $orgId . " AND ou.status = 'Active' and org.status = 'Active' ";
         }
-
-        $where2 = " WHERE ou.orgid = " . $orgId . " AND ou.status = 'Active' and org.status = 'Active' ";
+;
 
         if ($filter == null) {
             $and2 = '';
@@ -172,9 +168,9 @@ class ContactService extends AbstractService
             $and2 = " AND (LOWER(ou.firstname) like '%".$filter."%' OR LOWER(ou.lastname) like '%".$filter."%' OR LOWER(ou.email) like '%".$filter."%')";
         }
 
-        $queryString4 = ") as a ORDER BY a.first_name, a.last_name";
+        $queryString3 = ") as a ORDER BY a.first_name, a.last_name";
 
-        $finalQueryString = $queryString1.$queryString2.$where1.$and1.$union.$queryString3.$where2.$and2.$queryString4;
+        $finalQueryString = $queryString1.$and1.$union.$queryString2.$and2.$queryString3;
         $resultSet = $this->executeQuerywithParams($finalQueryString);
         $resultSet = $resultSet->toArray();
         $myContacts = array();
