@@ -232,8 +232,8 @@ class WidgetService extends AbstractService
                 'ispublic' => $firstRow['ispublic'],
                 'date_created' => $firstRow['date_created'],
                 'name' => $firstRow['name'],
-                'configuration' => json_decode($firstRow['configuration'],1),
-                'expression' => json_decode($firstRow['expression']),
+                'configuration' => json_decode($firstRow['configuration']),
+                'expression' => json_decode($firstRow['expression'],1),
                 'is_owner' => $firstRow['is_owner'],
                 'renderer' => $firstRow['renderer'],
                 'type' => $firstRow['type'],
@@ -323,8 +323,8 @@ class WidgetService extends AbstractService
 //                    ['product'=>'Baseball cap', 'sales'=>0.4]
 //                ];
 //            }
-            if (isset($response['widget']['configuration']['expression'])) {
-                $expressions = $response['widget']['configuration']['expression'];
+            if (isset($response['widget']['expression']['expression'])) {
+                $expressions = $response['widget']['expression']['expression'];
                 if (!is_array($expressions)) {
                     $expressions = array($expressions);
                 }

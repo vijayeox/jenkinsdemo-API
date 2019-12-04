@@ -11,6 +11,7 @@ ox_widget:
     name: 'widget1'
     configuration: 'sample config'
     version: 1
+    expression: ''
   -
     id: 12
     uuid: '0e57b45f-5938-4e26-acd8-d65fb89e8503'
@@ -23,6 +24,7 @@ ox_widget:
     name: 'widget2'
     configuration: 'sample config2'
     version: 1
+    expression: ''
   -
     id: 13
     uuid: '41e881c3-040d-44d8-9295-f2c3130bafbc'
@@ -33,5 +35,6 @@ ox_widget:
     org_id: 1
     isdeleted: 0
     name: 'widget3'
-    configuration: '{"expression":["calcfield1=(field6-field5)*field6/100","calcfield2=(field6-field5)"]}'
+    configuration: 'sample config3'
     version: 1
+    expression: '{"expression":["calcfield1=(field6-field5)*field6/100","calcfield2=(field6-field5)"]}'

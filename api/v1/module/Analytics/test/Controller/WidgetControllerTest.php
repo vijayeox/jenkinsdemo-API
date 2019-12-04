@@ -64,7 +64,7 @@ class WidgetControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['query_uuid' => '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1','visualization_uuid' => "44f22a46-26d2-48df-96b9-c58520005817", 'ispublic' => 1 , 'name' => 'widget3' , 'configuration' => 'sample configuration'];
+        $data = ['query_uuid' => '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1','visualization_uuid' => "44f22a46-26d2-48df-96b9-c58520005817", 'ispublic' => 1 , 'name' => 'widget3' , 'configuration' => 'sample configuration','expression' => ''];
         $this->assertEquals(3, $this->getConnection()->getRowCount('ox_widget'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/widget', 'POST', $data);
@@ -72,7 +72,6 @@ class WidgetControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('analytics_widget');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
-        print_r($content);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['query_uuid'], $data['query_uuid']);
         $this->assertEquals($content['data']['ispublic'], $data['ispublic']);
@@ -211,6 +210,7 @@ class WidgetControllerTest extends ControllerTest
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
+        
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['widget']['data'][0]['field3'],"cfield3text");
         $this->assertEquals($content['data']['widget']['data'][0]['field5'],35);
@@ -222,6 +222,7 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['widget']['data'][1]['field6'],70);
         $this->assertEquals($content['data']['widget']['data'][1]['calcfield1'],21);
         $this->assertEquals($content['data']['widget']['data'][1]['calcfield2'],30);
+        
     }
 
     public function testGetWithConfig() {
