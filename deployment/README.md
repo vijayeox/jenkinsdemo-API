@@ -125,7 +125,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 
 	<h5>ruby -v</h5>
 
-	<h5>bunlde -v or bundler -v</h5>
+	<h5>bundle -v or bundler -v</h5>
 
 -----------
 <h4>7. <u>Passenger:</u></h4>
