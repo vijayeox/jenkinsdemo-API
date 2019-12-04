@@ -12,15 +12,15 @@
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-$host = '172.16.1.101';
-$db = 'appBuilder_oxzionapi';
-$username = 'bharat';
+$host = 'localhost';
+$db = 'oxzionapi';
+$username = 'root';
 $password = 'password';
 
 if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
-    $host = '172.16.1.101';
-    $db = "appBuilder_oxzionapi_test";
-    $username = "bharat";
+    $host = 'localhost';
+    $db = "oxzionapi_test";
+    $username = "root";
     $password = "password";
 }
 
@@ -34,13 +34,13 @@ return [
         'dsn' => 'mysql:dbname=' . $db . ';host=' . $host . ';charset=utf8;',
     ],
     'elasticsearch' => [
-        'serveraddress'=>'dataocean.oxzion.com',
+        'serveraddress'=>'localhost',
         'port'=>'9200',
         'scheme'=>'http',
-        'core'=>'oxstaging',
+        'core'=>'core',
         'type'=>'type',
-        'user'=>'elastic',
-        'password'=>'hvqr9799/'
+        'user'=>'user',
+        'password'=>'password'
     ],
     'chat' => [
         'chatServerUrl' => 'http://localhost:8065/',
