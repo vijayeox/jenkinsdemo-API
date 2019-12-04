@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `premium_rate_card` (
               `padi_fee` DECIMAL(8,2),
               `total` DECIMAL(8,2),
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Instructor','instructor','2019-06-30', '2019-07-31',645);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Dive Master','divemaster','2019-06-30', '2019-07-31',404);
@@ -34,12 +34,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined','2019-06-30', '2019-07-31',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage','2019-06-30', '2019-07-31',299);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage - Declined','equipmentLiabilityCoverageDeclined','2019-06-30', '2019-07-31',0);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst','','2019-06-30', '2019-07-31',241);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','', '2019-06-30', '2019-07-31',129);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','', '2019-06-30', '2019-07-31',370);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','', '2019-06-30', '2019-07-31',134);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','', '2019-06-30', '2019-07-31',233);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl DM/AI','', '2019-06-30', '2019-07-31',99);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 1M','EFR1M', '2019-06-30', '2019-09-30',332);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 2M','EFR2M', '2019-06-30', '2019-09-30',396);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 4M','EFR4M', '2019-06-30', '2019-09-30',434);
@@ -72,12 +66,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined','2019-08-01', '2019-08-31',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage','2019-08-01', '2019-08-31',275);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage - Declined','equipmentLiabilityCoverageDeclined','2019-08-01', '2019-08-31',0);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst','','2019-08-01', '2019-08-31',221);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','', '2019-08-01', '2019-08-31',118);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','', '2019-08-01', '2019-08-31',339);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','', '2019-08-01', '2019-08-31',123);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','', '2019-08-01', '2019-08-31',214);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl DM/AI','', '2019-08-01', '2019-08-31',91);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '0 Excess', 'excessLiabilityCoverageDeclined','2019-08-01', '2019-08-31',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '1M Excess','excessLiabilityCoverage1000000','2019-08-01', '2019-08-31',429);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '2M Excess','excessLiabilityCoverage2000000','2019-08-01', '2019-08-31',858);
@@ -105,12 +93,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined', '2019-09-01', '2019-09-30',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage', '2019-09-01', '2019-09-30',250);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage - Declined','equipmentLiabilityCoverageDeclined', '2019-09-01', '2019-09-30',0);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst','', '2019-09-01', '2019-09-30',201);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','', '2019-09-01', '2019-09-30',107);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','', '2019-09-01', '2019-09-30',308);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','', '2019-09-01', '2019-09-30',112);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','', '2019-09-01', '2019-09-30',195);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl DM/AI','', '2019-09-01', '2019-09-30',83);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2019-09-01', '2019-09-30',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '1M Excess','excessLiabilityCoverage1000000', '2019-09-01', '2019-09-30',390);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '2M Excess','excessLiabilityCoverage2000000', '2019-09-01', '2019-09-30',780);
@@ -138,12 +120,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Insp & Inst','cylinderInspectorAndInstructor', '2019-10-01', '2019-10-31',211);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined', '2019-10-01', '2019-10-31',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage', '2019-10-01', '2019-10-31',225);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst','', '2019-10-01', '2019-10-31',181);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','', '2019-10-01', '2019-10-31',96);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','', '2019-10-01', '2019-10-31',277);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','', '2019-10-01', '2019-10-31',101);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','', '2019-10-01', '2019-10-31',175);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl DM/AI','', '2019-10-01', '2019-10-31',74);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 1M','EFR1M', '2019-10-01', '2019-12-31',252);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 2M','EFR2M', '2019-10-01', '2019-12-31',300);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 4M','EFR4M', '2019-10-01', '2019-12-31',329);
@@ -176,12 +152,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined', '2019-11-01', '2019-11-30',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage', '2019-11-01', '2019-11-30',200);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage - Declined','equipmentLiabilityCoverageDeclined', '2019-11-01', '2019-11-30',0);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst', '' ,'2019-11-01', '2019-11-30',160);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','' , '2019-11-01', '2019-11-30',86);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','' , '2019-11-01', '2019-11-30',246);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','' , '2019-11-01', '2019-11-30',90);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','' , '2019-11-01', '2019-11-30',156);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl DM/AI','' , '2019-11-01', '2019-11-30',66);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2019-11-01', '2019-11-30',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '1M Excess','excessLiabilityCoverage1000000', '2019-11-01', '2019-11-30',312);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '2M Excess','excessLiabilityCoverage2000000', '2019-11-01', '2019-11-30',624);
@@ -210,12 +180,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined', '2019-12-01', '2019-12-31',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage', '2019-12-01', '2019-12-31',175);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage - Declined','equipmentLiabilityCoverageDeclined', '2019-12-01', '2019-12-31',0);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst','' , '2019-12-01', '2019-12-31',141);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','' , '2019-12-01', '2019-12-31',75);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','' , '2019-12-01', '2019-12-31',216);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','' , '2019-12-01', '2019-12-31',78);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','' , '2019-12-01', '2019-12-31',136);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl DM/AI','' , '2019-12-01', '2019-12-31',58);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '1M Excess','excessLiabilityCoverage1000000', '2019-12-01', '2019-12-31',273);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '2M Excess','excessLiabilityCoverage2000000', '2019-12-01', '2019-12-31',546);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '3M Excess','excessLiabilityCoverage3000000', '2019-12-01', '2019-12-31',709);
@@ -243,12 +207,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined', '2020-01-01', '2020-01-31',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage', '2020-01-01', '2020-01-31',150);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage - Declined','equipmentLiabilityCoverageDeclined', '2020-01-01', '2020-01-31',0);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst','' , '2020-01-01', '2020-01-31',121);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','' , '2020-01-01', '2020-01-31',64);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','' , '2020-01-01', '2020-01-31',185);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','' , '2020-01-01', '2020-01-31',67);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','' , '2020-01-01', '2020-01-31',117);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl DM/AI','' , '2020-01-01', '2020-01-31',50);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 1M','EFR1M', '2020-01-01', '2020-03-31',172);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 2M','EFR2M', '2020-01-01', '2020-03-31',204);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 4M','EFR4M', '2020-01-01', '2020-03-31',223);
@@ -281,12 +239,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined', '2020-02-01', '2020-02-29',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage', '2020-02-01', '2020-02-29',125);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage - Declined','equipmentLiabilityCoverageDeclined', '2020-02-01', '2020-02-29',0);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst','' , '2020-02-01', '2020-02-29',100);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','' , '2020-02-01', '2020-02-29',54);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','' , '2020-02-01', '2020-02-29',154);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','' , '2020-02-01', '2020-02-29',56);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','' , '2020-02-01', '2020-02-29',97);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl DM/AI','' , '2020-02-01', '2020-02-29',41);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2020-02-01', '2020-02-29',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '1M Excess','excessLiabilityCoverage1000000', '2020-02-01', '2020-02-29',195);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '2M Excess','excessLiabilityCoverage2000000', '2020-02-01', '2020-02-29',390);
@@ -315,12 +267,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined', '2020-03-01', '2020-03-31',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage', '2020-03-01', '2020-03-31',100);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage - Declined','equipmentLiabilityCoverageDeclined', '2020-03-01', '2020-03-31',0);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst','' , '2020-03-01', '2020-03-31',80);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','' , '2020-03-01', '2020-03-31',43);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','' , '2020-03-01', '2020-03-31',123);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','' , '2020-03-01', '2020-03-31',45);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','' , '2020-03-01', '2020-03-31',78);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl DM/AI','' , '2020-03-01', '2020-03-31',33);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '1M Excess','excessLiabilityCoverage1000000', '2020-03-01', '2020-03-31',156);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '2M Excess','excessLiabilityCoverage2000000', '2020-03-01', '2020-03-31',312);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '3M Excess','excessLiabilityCoverage3000000', '2020-03-01', '2020-03-31',405);
@@ -348,12 +294,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined', '2020-04-01', '2020-04-30',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage', '2020-04-01', '2020-04-30',75);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage - Declined','equipmentLiabilityCoverageDeclined', '2020-04-01', '2020-04-30',0);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst','' , '2020-04-01', '2020-04-30',61);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','' , '2020-04-01', '2020-04-30',32);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','' , '2020-04-01', '2020-04-30',93);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','' , '2020-04-01', '2020-04-30',33);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','' , '2020-04-01', '2020-04-30',58);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl DM/AI','' , '2020-04-01', '2020-04-30',25);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 1M','EFR1M', '2020-04-01', '2020-06-30',91);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 2M','EFR2M', '2020-04-01', '2020-06-30',108);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'EFR 4M','EFR4M', '2020-04-01', '2020-06-30',117);
@@ -386,12 +326,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined', '2020-05-01', '2020-05-31',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage', '2020-05-01', '2020-05-31',50);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage - Declined','equipmentLiabilityCoverageDeclined', '2020-05-01', '2020-05-31',0);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst','' , '2020-05-01', '2020-05-31',40);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','' , '2020-05-01', '2020-05-31',22);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','' , '2020-05-01', '2020-05-31',62);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','' , '2020-05-01', '2020-05-31',22);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','' , '2020-05-01', '2020-05-31',39);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl DM/AI','' , '2020-05-01', '2020-05-31',17);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '1M Excess','excessLiabilityCoverage1000000', '2020-05-01', '2020-05-31',78);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '2M Excess','excessLiabilityCoverage2000000', '2020-05-01', '2020-05-31',156);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '3M Excess','excessLiabilityCoverage3000000', '2020-05-01', '2020-05-31',203);
@@ -419,11 +353,6 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Cylinder Inspector Or Instructor - Declined','cylinderInspectorOrInstructorDeclined', '2020-06-01', '2020-06-30',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage','equipmentLiabilityCoverage', '2020-06-01', '2020-06-30',25);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'Equipment Liability Coverage - Declined','equipmentLiabilityCoverageDeclined', '2020-06-01', '2020-06-30',0);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - DM/AI to Inst','' , '2020-06-01', '2020-06-30',20);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to DM/AI','' , '2020-06-01', '2020-06-30',11);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - AO to Inst','' , '2020-06-01', '2020-06-30',31);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl DM to Intl Inst','' , '2020-06-01', '2020-06-30',11);
-INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', 'UG - Intl AO to Intl Inst','' , '2020-06-01', '2020-06-30',19);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '0 Excess','excessLiabilityCoverageDeclined', '2020-06-01', '2020-06-30',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '1M Excess','excessLiabilityCoverage1000000', '2020-06-01', '2020-06-30',39);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Individual Professional Liability', '1M Excess','excessLiabilityCoverage1000000', '2020-06-01', '2020-06-30',39);
