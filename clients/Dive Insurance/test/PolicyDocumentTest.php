@@ -1058,4 +1058,67 @@ class PolicyDocumentTest extends DelegateTest
         $this->assertEquals($filecount,1);
         FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
     }
+
+
+    public function testDiveBoatPolicyEndorsement()
+    {
+        $config = $this->getApplicationConfig();
+        $orgId = AuthContext::put(AuthConstants::ORG_ID, 1);
+        AuthContext::put(AuthConstants::ORG_UUID, $this->data['orgUuid']);
+        $appId = $this->data['UUID'];
+        $data = [
+                 'firstname' => 'Mohan',
+                 'lastname' => 'Raj' ,
+                 'orgname' => "ABOVE AND BELOW THE SEA LLC L'S DIVE INC. & ST. THOMAS DIVING CLUB",
+                 'address1' => 'ABC 200',
+                 'address2' => 'XYZ 300',
+                 'city' => 'APO',
+                 'state' => 'California',
+                 'country' => 'US',
+                 'zip' => '09522-9998',
+                 'padi' => '34567',
+                 'start_date' => '2019-06-01',
+                 'end_date' => '2020-06-30',
+                 'orgUuid' => $this->data['orgUuid'],
+                 'product' => 'Dive Boat',
+                 'vessel_name' => 'LETTS DIVE',
+                 'vessel_year' => '1778',
+                 'vessel_length' => '30',
+                 'vessel_hp' => '300',
+                 'hull_type' => 'FIBER',
+                 'hull_mfg' => 'HOPPER',
+                 'vessel_sno' => '18000F888',
+                 'limit_ins' => '90,000.00',
+                 'personnal_effects' => '500.00/$5,000.00',
+                 'passengers' => '18',
+                 'crew_on_boat' => '2',
+                 'crew_in_water' => 1,
+                 'protection_liability_amt' => '1,000,000.00',
+                 'medical_pay' => '5,000',
+                 'total_premium' => '7,754.00',
+                 'padi_admin_fee' => '75.00',
+                 'navigation_limit_note' => 'WATERS OF PUERTO RICO AND THE U.S. VIRGIN ISLANDS NOT MORE THAN THREE (3) MILES FROM A HARBOR OF SAFE REFUGE. THE VESSEL MAY NOT CARRY PASSENGERS BETWEEN PUERTO RICO AND THE U.S. VIRGIN ISLANDS.',
+                 'personal_effect_deduct' => '500.00',
+                 'liability_ins_deduct' => '1,000.00',
+                 'medical_deduct' => '100.00',
+                 'manager_name' => 'Julie Joseph',
+                 'manager_email' => 'abcd@gmail.com',
+                 'quote_due_date' => '2019-06-01',
+                 'layup_period' => array('startdate' => '2019-06-01','enddate' => '2019-06-01')
+             ];
+        $config = $this->getApplicationConfig();
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'PolicyEndorsement', $data);
+        $this->assertEquals(isset($content['uuid']), true);
+        $this->assertEquals(isset($content['policy_id']), true);
+        $this->assertEquals(isset($content['carrier']), true);
+        $this->assertEquals(isset($content['license_number']), true);
+        $doc = $config['APP_DOCUMENT_FOLDER'].$content['documents']['endorsement'];
+        $this->assertTrue(is_file($doc));
+        $this->assertTrue(filesize($doc)>0);
+        $doc = substr($doc, 0, strripos($doc, '/'));
+        FileUtils::rmDir($config['APP_DOCUMENT_FOLDER'].$this->data['orgUuid']);
+    }
+
 }

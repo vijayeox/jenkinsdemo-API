@@ -135,7 +135,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                      'nfooter' => 'Group_NI_footer.html',
                      'policy' => 'Individual_Professional_Liability_Policy.pdf'));
 
-        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured');
+        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period');
        
     }
 
@@ -203,7 +203,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                  $temp[$val] = json_encode($data[$val]);
             }
         }
-        
+
+        if($this->type == 'endorsement'){
+            $data['documents']['endorsement'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+            return $data;
+        }
 
         if(isset($temp['liability'])){
             $temp['liability'] = json_encode($temp['liability']);
