@@ -9,4 +9,4 @@
                 Password: {$password} <br/>
             </div>
 Thank you
-Team VA
+Team EOX Vantage
