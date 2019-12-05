@@ -67,7 +67,7 @@ INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `st
 INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'West Virginia', 'liability', '4.550', '2020-01-01', '2020-12-31');
 INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'Wisconsin', 'liability', '3.000', '2020-01-01', '2020-12-31');
 INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'Wyoming', 'liability', '3.175', '2020-01-01', '2020-12-31');
-INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'Armed Forces - America's', 'liability', '3.200', '2020-01-01', '2020-12-31');
+INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', "Armed Forces - America's", 'liability', '3.200', '2020-01-01', '2020-12-31');
 INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'Armed Forces - Other', 'liability', '3.200', '2020-01-01', '2020-12-31');
 INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'Armed Forces - Pacific', 'liability', '3.200', '2020-01-01', '2020-12-31');
 
@@ -132,6 +132,6 @@ INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `st
 INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'West Virginia', 'property', '4.550', '2020-01-01', '2020-12-31');
 INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'Wisconsin', 'property', '3.000', '2020-01-01', '2020-12-31');
 INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'Wyoming', 'property', '3.175', '2020-01-01', '2020-12-31');
-INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'Armed Forces - America's', 'property', '3.200', '2020-01-01', '2020-12-31');
+INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', "Armed Forces - America's", 'property', '3.200', '2020-01-01', '2020-12-31');
 INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'Armed Forces - Other', 'property', '3.200', '2020-01-01', '2020-12-31');
 INSERT INTO `state_tax` (`id`, `product`, `state`, `coverage`, `percentage`, `start_date`, `end_date`) VALUES (NULL, 'Dive Store', 'Armed Forces - Pacific', 'property', '3.200', '2020-01-01', '2020-12-31');
