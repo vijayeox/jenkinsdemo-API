@@ -1,6 +1,6 @@
 app:
     -
-        name: 'Dive Insurance'
+        name: DiveInsurance
         uuid: d77ea120-b028-479b-8c6e-60476b6a4456
         description: 'App for Dive Insurance'
         category: EXAMPLE_CATEGORY
@@ -38,7 +38,7 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 3
-        uuid: 7888bb68-3a96-404f-ac9f-6abebfe76de8
+        uuid: fa31149b-2f01-445a-bc24-7843196bd964
 menu:
     -
         name: Home
@@ -54,7 +54,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'app/{{app_id}}/file'
+                        route: file
                         filterable: true
                         reorderable: true
                         resizable: true
@@ -65,26 +65,26 @@ menu:
                                 - 20
                                 - 50
                             info: true
-                            actions:
-                                -
-                                    name: View
-                                    page_id: '1'
-                                    icon: 'fa fa-envelope-open'
-                                -
-                                    name: Cancel
-                                    page_id: '3'
-                                    icon: 'fa fa-window-close'
-                            columnConfig:
-                                -
-                                    title: Name
-                                    field: name
-                                -
-                                    title: Status
-                                    field: status
-                                -
-                                    title: Data
-                                    field: data
-        uuid: 5b0ceefd-01d1-47f5-aa59-fd0054b0d659
+                        actions:
+                            -
+                                name: View
+                                page_id: '1'
+                                icon: 'fa fa-envelope-open'
+                            -
+                                name: Cancel
+                                page_id: '3'
+                                icon: 'fa fa-window-close'
+                        columnConfig:
+                            -
+                                title: Name
+                                field: name
+                            -
+                                title: Status
+                                field: status
+                            -
+                                title: Data
+                                field: data
+        uuid: 8afee66e-21e5-49c3-b566-b1a248d7cadb
     -
         name: 'My History'
         privilege: MANAGE_MY_POLICY_READ
@@ -96,8 +96,8 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'app/{{app_id}}/file'
-        uuid: adc38522-6128-4290-be88-d211905213fe
+                        route: file
+        uuid: d988d72f-8c54-4d41-93f8-cbccafcdd1e7
     -
         name: 'Verify PADI details'
         icon: 'fa fa-search'
@@ -111,7 +111,7 @@ menu:
                 -
                     formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
                     type: Form
-        uuid: 13202509-7f36-42b5-b457-cd8d5b8fd6fa
+        uuid: 23b203bc-c1e0-482d-8836-8ec02bc6f2e1
     -
         name: Home
         icon: 'fa fa-paper'
@@ -123,7 +123,7 @@ menu:
                 -
                     type: Dashboard
                     dashboard: Dashboard
-        uuid: e9471b46-2557-48dc-83cd-20a56fcb65dc
+        uuid: 3dc74e92-7a90-492e-83fe-ce65bb412aaa
     -
         name: Requests
         privilege: MANAGE_POLICY_APPROVAL_WRITE
@@ -179,7 +179,7 @@ menu:
                             -
                                 title: 'Submission Date'
                                 field: start_date
-        uuid: 314e5357-f82f-4416-b725-7ca6f27ec283
+        uuid: c6be57db-299b-4da5-900f-63dd134f286c
     -
         name: 'Manage Policies'
         icon: 'fa fa-list'
@@ -192,7 +192,7 @@ menu:
                     type: List
                     content:
                         route: ''
-        uuid: 0690f0c1-2785-4cb9-8b70-eb8634bce8c5
+        uuid: 46e296fd-87ef-4aa2-9c35-9b4e77f539b8
 workflow:
     -
         name: 'Individual Liability'
