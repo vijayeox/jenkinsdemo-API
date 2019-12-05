@@ -23,6 +23,7 @@ class PageService extends AbstractService
     }
     public function savePage($routeData, &$data,$id = null)
     {  
+        $this->logger->info("save page - params - ".json_encode($routeData).", ".json_encode($data).", $id");
         $count = 0;
         $orgId = isset($routeData['orgId'])? $this->getIdFromUuid('ox_organization', $routeData['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
         $data['app_id'] = $this->getIdFromUuid('ox_app', $routeData['appId']);
@@ -39,21 +40,20 @@ class PageService extends AbstractService
                 if($page){
                     $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
                     $data['date_modified'] = date('Y-m-d H:i:s');
-                } else {
-                    return 0;
+                    $existingPage = $page->toArray();
+                    $deleteQuery = "DELETE from ox_page_content where page_id = ?";
+                    $whereParams = array($existingPage['id']);
+                    $deleteResult = $this->executeUpdatewithBindParameters($deleteQuery,$whereParams);
+                    $deleteRecord = $this->table->delete($existingPage['id'], ['app_id'=>$data['app_id']]);
+                    unset($data['id']);
+                    unset($page->id);
                 }
-                $existingPage = $page->toArray();
-                $deleteQuery = "DELETE from ox_page_content where page_id = ?";
-                $whereParams = array($existingPage['id']);
-                $deleteResult = $this->executeQuerywithBindParameters($deleteQuery,$whereParams);
-                $deleteRecord = $this->table->delete($existingPage['id'], ['app_id'=>$data['app_id']]);
-                unset($data['id']);
-                unset($page->id);
+                
             }
            
             if(!$page){
                 $page = new Page();
-                $data['uuid'] = UuidUtil::uuid();
+                $data['uuid'] = isset($id) ? $id : UuidUtil::uuid();
                 $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
                 $data['date_created'] = date('Y-m-d H:i:s');
             }
@@ -93,27 +93,27 @@ class PageService extends AbstractService
         $count = 0;
         if(count($result)>0){
             $this->beginTransaction();           
-        try {
-            $selectQuery = "DELETE from ox_page_content where page_id = ?";
-            $selectParams = array($result[0]['id']);
-            $resultSet = $this->executeQueryWithBindParameters($selectQuery,$selectParams);
-            $count = $this->table->delete($this->getIdFromUuid('ox_app_page', $pageUuid), ['app_id'=>$this->getIdFromUuid('ox_app', $appUuid)]);
-            if ($count == 0) {
+            try {
+                $selectQuery = "DELETE from ox_page_content where page_id = ?";
+                $selectParams = array($result[0]['id']);
+                $resultSet = $this->executeQueryWithBindParameters($selectQuery,$selectParams);
+                $count = $this->table->delete($this->getIdFromUuid('ox_app_page', $pageUuid), ['app_id'=>$this->getIdFromUuid('ox_app', $appUuid)]);
+                if ($count == 0) {
+                    $this->rollback();
+                    return 0;
+                }
+                $this->commit();
+            } catch (Exception $e) {
                 $this->rollback();
-                return 0;
+                $this->logger->error($e->getMessage(), $e);
+                throw $e;
             }
-            $this->commit();
-        } catch (Exception $e) {
-            $this->rollback();
-            $this->logger->error($e->getMessage(), $e);
-            throw $e;
+        }else{
+            throw new ServiceException("Page Not Found","page.not.found");
         }
-    }else{
-        throw new ServiceException("Page Not Found","page.not.found");
+            return $count;
     }
-        return $count;
-    }
-    
+
     public function getPages($appUuid=null, $filterArray = array())
     {
         if (isset($appUuid)) {

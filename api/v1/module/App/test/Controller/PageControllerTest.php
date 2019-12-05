@@ -131,22 +131,6 @@ class PageControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data->name);
     }
 
-    public function testUpdateNotFound()
-    {
-        $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Sample2', 'text' => 'Sample 2 Description'];
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/page/4c73d940-df8d-11e9-8a34-2a2ae2dbcce4', 'PUT', null);
-        $this->assertResponseStatusCode(404);
-        $this->assertModuleName('App');
-        $this->assertControllerName(PageController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('PageController');
-        $this->assertMatchedRouteName('apppage');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-    }
-
     public function testDelete()
     {
         $this->initAuthToken($this->adminUser);

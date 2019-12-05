@@ -147,6 +147,9 @@ class AppService extends AbstractService
         if(!(array_key_exists('category',$data[0]))){
             $data[0]['category'] = "OFFICE";
         }
+        if(!(array_key_exists('autostart',$data[0]))){
+            $data[0]['autostart'] = "true";
+        }
         return $data;
     }
 
@@ -213,22 +216,26 @@ class AppService extends AbstractService
 
     private function processMenu(&$yamlData, $path){
         if(isset($yamlData['menu'])){
+            $appId = $yamlData['app'][0]['uuid'];
             foreach ($yamlData['menu'] as &$menuData) {
                 $menu = $menuData;
                 $menu['uuid'] = isset($menu['uuid'])?$menu['uuid']:UuidUtil::uuid();
-                $count = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
-                if($count == 0){
-                    $count = $this->menuItemService->saveMenuItem($yamlData['app'][0]['uuid'], $menu);
-                    $routedata = array("appId" => $yamlData['app'][0]['uuid'], "orgId" => $yamlData['org'][0]['uuid']);
-                    $page = $menu['page'];
-                    if(isset($page['uuid'])){
-                        $pageId = $this->getIdFromUuid('ox_app_page', $page['uuid']);
-                    }else{
-                        $pageId = null;
-                        $page['uuid'] = UuidUtil::uuid();
-                    }
-                    $result = $this->pageService->savePage($routedata, $page, $pageId);
+                $menuUpdated = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
+                if($menuUpdated == 0){
+                    $count = $this->menuItemService->saveMenuItem($appId, $menu);
+                                       
                 }
+                $page = $menu['page'];
+                if(isset($menu['page_id'])){
+                    $pageId = $menu['page_id'];
+                }else{
+                    $pageId = null;
+                    $page['uuid'] = UuidUtil::uuid();
+                }
+                $routedata = array("appId" => $appId, "orgId" => $yamlData['org'][0]['uuid']);
+                $result = $this->pageService->savePage($routedata, $page, $pageId);
+                $menu['page_id'] = $page['id'];
+                $count = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
                 $menuData['uuid'] = $menu['uuid'];
             }
         }
@@ -379,10 +386,12 @@ class AppService extends AbstractService
         if(!file_exists($command."src/client/local.js")){
             copy($command.'src/client/local.js.example', $command.'src/client/local.js');
         }
-        $command_two = "npm install";
-        $command_three = "npm run build";
-        $command_four = "npm run package:discover";
-        ExecUtils::execCommand($command_one." && ".$command_two." && ".$command_three." && ".$command_four);
+        $command_two = "npm run package:discover";
+        $output = ExecUtils::execCommand($command_one." && ".$command_two);
+        $this->logger->info("PAckage Discover .. \n". print_r($output, true));
+        $output = ExecUtils::execCommand($command_one." && chmod 755 -R dist");
+        $this->logger->info("PAckage Discover .. \n". print_r($output, true));
+           
     }
 
     private function executeCommands($link){
@@ -390,7 +399,9 @@ class AppService extends AbstractService
         $command_one = "cd ".$link;
         $command_two = "npm install";
         $command_three = "npm run build";
-        ExecUtils::execCommand($command_one." && ".$command_two." && ".$command_three);
+        $command = $command_one." && ".$command_two." && ".$command_three;
+        $output = ExecUtils::execCommand($command);
+        $this->logger->info("Executing command $command .. \n". print_r($output, true));
     }
 
     private function setupLink($target, $link){

@@ -22,6 +22,7 @@ class MenuItemService extends AbstractService
     }
     public function saveMenuItem($appUuid, &$data)
     {
+        $this->logger->info("In saveMenuItem params - $appUuid, ".json_encode($data));
         $MenuItem = new MenuItem();
         $data['uuid'] = UuidUtil::uuid();
         $data['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
@@ -59,6 +60,7 @@ class MenuItemService extends AbstractService
     }
     public function updateMenuItem($menuUuid, &$data)
     {
+        $this->logger->info("In updateMenuItem params - $menuUuid, ".json_encode($data));
         $obj = $this->table->getByUuid($menuUuid, array());
         if (is_null($obj)) {
             return 0;
@@ -70,6 +72,10 @@ class MenuItemService extends AbstractService
         $changedArray = array_merge($obj->toArray(), $data);
         $MenuItem = new MenuItem();
         $MenuItem->exchangeArray($changedArray);
+        $pageId = $this->getUuidFromId('ox_app_page', $file['page_id']);
+        if($pageId != 0){
+            $data['page_id'] = $pageId;
+        } 
         $MenuItem->validate();
         $this->beginTransaction();
         $count = 0;

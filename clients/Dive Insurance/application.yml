@@ -5,6 +5,7 @@ app:
         description: 'App for Dive Insurance'
         category: EXAMPLE_CATEGORY
         type: 2
+        autostart: 'true'
 org:
     -
         name: 'Vincencia & Buckley'
@@ -42,159 +43,156 @@ menu:
     -
         name: Home
         privilege: MANAGE_MY_POLICY_WRITE
-        icon: fa-home
+        icon: 'fa fa-home'
         page:
             name: 'My Policies'
             description: 'Shows a list of users policies'
             content:
-  - name: Home
-    privilege: "MANAGE_MY_POLICY_WRITE"
-    icon: 'fa-home'
-    page:
-      name: "My Policies"
-      description: "Shows a list of users policies"
-      content:
-        [
-          {
-            type: Document,
-            content: "<p><h2>Personal Policies</h2></p><p></p>",
-          },
-          {
-            type: List,
+                -
+                    type: Document
+                    content: '<p><h2>Personal Policies</h2></p><p></p>'
+                -
+                    type: List
+                    content:
+                        route: 'app/{{app_id}}/file'
+                        filterable: true
+                        reorderable: true
+                        resizable: true
+                        pageable:
+                            buttonCount: 3
+                            pageSizes:
+                                - 10
+                                - 20
+                                - 50
+                            info: true
+                            actions:
+                                -
+                                    name: View
+                                    page_id: '1'
+                                    icon: 'fa fa-envelope-open'
+                                -
+                                    name: Cancel
+                                    page_id: '3'
+                                    icon: 'fa fa-window-close'
+                            columnConfig:
+                                -
+                                    title: Name
+                                    field: name
+                                -
+                                    title: Status
+                                    field: status
+                                -
+                                    title: Data
+                                    field: data
+        uuid: 5b0ceefd-01d1-47f5-aa59-fd0054b0d659
+    -
+        name: 'My History'
+        privilege: MANAGE_MY_POLICY_READ
+        icon: 'fa fa-table'
+        page:
+            name: 'All Policies'
+            description: 'Shows all the policies'
             content:
-              {
-                route: "file",
-                filterable: true,
-                reorderable: true,
-                resizable: true,
-                pageable:
-                  { buttonCount: 3, pageSizes: [10, 20, 50], info: true },
-                actions:
-                  [
-                    {
-                      name: View,
-                      page_id: "1",
-                      icon: "fas fa-envelope-open-text",
-                    },
-                    { name: Cancel, 
-                      page_id: "3", 
-                      icon: "far fa-window-close" 
-                    }
-                  ],
-                columnConfig:
-                  [
-                    { title: Name, field: name },
-                    { title: Status, field: status },
-                    { title: Data, field: data },
-                  ],
-              },
-          },
-        ]
-  - name: "My History"
-    privilege: "MANAGE_MY_POLICY_READ"
-    page:
-      name: "All Policies"
-      description: "Shows all the policies"
-      content: [{ type: List, content: { route: "app/{{app_id}}/file" } }]
-  - name: "Verify PADI details"
-    page:
-      name: "Verify PADI details"
-      description: "Lets CSR to input and check PADI Data"
-      content:
-        [
-          { content: "<h3>Verify PADI Details</h3>", type: "Document" },
-          { form_id: "{{form_id}}", type: "Form" },
-        ]
-  - name: Home
-    privilege: MANAGE_POLICY_APPROVAL_READ
-    page:
-      name: Dashboard
-      description: "Shows dashboard"
-      content: [{ type: Dashboard, dashboard: Dashboard }]
-  - name: Requests
-    privilege: MANAGE_POLICY_APPROVAL_WRITE
-    page:
-      name: Requests
-      description: "Shows requests"
-      content: 
-        [
-          {
-              type: List,
-              content:
-                {
-                  route: "assignments",
-                  filterable: true,
-                  reorderable: true, 
-                  resizable: true,
-                  sortable: true,
-                  pageable: {buttonCount: 3, pageSizes: [10,20,50], info: true},
-                  actions: 
-                    [
-                      {
-                        name: Approve,
-                        rule: {{to_be_claimed}} == 1,
-                        details:
-                          [
-                            { 
-                              type: "Update",
-                              params: 
-                                {url: "workflowinstance\/{{workflowInstanceId}}\/activityinstance\/{{activityInstanceId}}\/claim"}
-                            },
-                            {
-                              type: "Form",
-                              url: "workflowinstance\/{{workflowInstanceId}}\/activityinstance\/{{activityInstanceId}}\/form"
-                            }
-                          ],
-                         icon: "fas fa-plus-circle"
-                      },
-                      {
-                        name: "Approve",
-                        rule: {{to_be_claimed}} == 0,
-                        details:
-                          [
-                            {
-                              type: Form",
-                              url: workflowinstance\/{{workflowInstanceId}}\/activityinstance\/{{activityInstanceId}}\/form"
-                            }
-                          ]
-                      }
-                    ],
-                  columnConfig: 
-                    [
-                      {
-                        title: "PADI",
-                        field: "padi"
-                      },
-                      {
-                        title: "First Name",
-                        field: "first_name"
-                      },
-                      {
-                        title: "Last Name",
-                        field: "last_name"
-                      },
-                      {
-                        title: "Product",
-                        field: "workflow_name"
-                      },
-                      {
-                        title: "Task",
-                        field: "activityName"
-                      },
-                      {
-                        title: "Submission Date",
-                        field: "start_date"
-                      }
-                    ]
-                }
-            }
-          ]
-  - name: "Manage Policies"
-    privilege: MANAGE_POLICY_APPROVAL_WRITE
-    page:
-      name: "Manage Policies"
-      description: "Page to manage policies"
-      content: [{ type: List, content: { route: "" } }]
+                -
+                    type: List
+                    content:
+                        route: 'app/{{app_id}}/file'
+        uuid: adc38522-6128-4290-be88-d211905213fe
+    -
+        name: 'Verify PADI details'
+        icon: 'fa fa-search'
+        page:
+            name: 'Verify PADI details'
+            description: 'Lets CSR to input and check PADI Data'
+            content:
+                -
+                    content: '<h3>Verify PADI Details</h3>'
+                    type: Document
+                -
+                    formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
+                    type: Form
+        uuid: 13202509-7f36-42b5-b457-cd8d5b8fd6fa
+    -
+        name: Home
+        icon: 'fa fa-paper'
+        privilege: MANAGE_POLICY_APPROVAL_READ
+        page:
+            name: Dashboard
+            description: 'Shows dashboard'
+            content:
+                -
+                    type: Dashboard
+                    dashboard: Dashboard
+        uuid: e9471b46-2557-48dc-83cd-20a56fcb65dc
+    -
+        name: Requests
+        privilege: MANAGE_POLICY_APPROVAL_WRITE
+        icon: 'fa fa-help'
+        page:
+            name: Requests
+            description: 'Shows requests'
+            content:
+                -
+                    type: List
+                    content:
+                        route: assignments
+                        filterable: true
+                        reorderable: true
+                        resizable: true
+                        sortable: true
+                        pageable:
+                            buttonCount: 3
+                            pageSizes:
+                                - 10
+                                - 20
+                                - 50
+                            info: true
+                        actions:
+                            -
+                                name: Approve
+                                rule: '{{to_be_claimed}} == 1'
+                                details:
+                                    - { type: Update, url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim' }
+                                    - { type: Form, url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form' }
+                                icon: 'fa fa-plus-circle'
+                            -
+                                name: Approve
+                                rule: '{{to_be_claimed}} == 0'
+                                details:
+                                    - { type: 'Form"', url: 'workflowinstance\/{{workflowInstanceId}}\/activityinstance\/{{activityInstanceId}}\/form"' }
+                        columnConfig:
+                            -
+                                title: PADI
+                                field: padi
+                            -
+                                title: 'First Name'
+                                field: first_name
+                            -
+                                title: 'Last Name'
+                                field: last_name
+                            -
+                                title: Product
+                                field: workflow_name
+                            -
+                                title: Task
+                                field: activityName
+                            -
+                                title: 'Submission Date'
+                                field: start_date
+        uuid: 314e5357-f82f-4416-b725-7ca6f27ec283
+    -
+        name: 'Manage Policies'
+        icon: 'fa fa-list'
+        privilege: MANAGE_POLICY_APPROVAL_WRITE
+        page:
+            name: 'Manage Policies'
+            description: 'Page to manage policies'
+            content:
+                -
+                    type: List
+                    content:
+                        route: ''
+        uuid: 0690f0c1-2785-4cb9-8b70-eb8634bce8c5
 workflow:
     -
         name: 'Individual Liability'
