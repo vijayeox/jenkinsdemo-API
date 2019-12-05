@@ -230,7 +230,7 @@ class UserService extends AbstractService
             unset($preferences['timezone']);
             $data['preferences'] = json_encode($preferences);
         }
-        $password = BosUtils::randomPassword();
+        $password = isset($data['password']) ? $data['password'] : BosUtils::randomPassword();
         if (isset($password)) {
             $data['password'] = md5(sha1($password));
         }
@@ -259,7 +259,8 @@ class UserService extends AbstractService
                 'username' => $data['username'],
                 'firstname' => $data['firstname'],
                 'email' => $data['email'],
-                'orgid' => $orgid
+                'orgid' => $orgid,
+                'password' => $password
             )), 'USER_ADDED');
             $this->addUserToOrg($form->id, $form->orgid);
             if(isset($data['role'])){
@@ -353,7 +354,8 @@ class UserService extends AbstractService
             "password" => BosUtils::randomPassword()
         );
         $params['orgId'] = $org['uuid'];
-        
+        $password = $data['password'];
+            
         $this->beginTransaction();
         try{
             $result = $this->createUser($params,$data);
@@ -367,6 +369,7 @@ class UserService extends AbstractService
             $this->rollback();
             throw $e;
         }
+        $data['password'] = $password;
         $data['orgid'] = $org['uuid']; // overriding uuid for Template Service
         $this->messageProducer->sendQueue(json_encode(array(
             'To' => $data['email'],
