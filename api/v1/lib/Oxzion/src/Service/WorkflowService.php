@@ -363,7 +363,7 @@ class WorkflowService extends AbstractService
         } else {
             $workflowId = $workflowId;
         }
-        $select = "select ox_form.template as content,ox_form.uuid as id
+        $select = "select ox_form.template as template,ox_form.uuid as id
         from ox_form
         left join ox_workflow_deployment on ox_workflow_deployment.form_id = ox_form.id and ox_workflow_deployment.latest=1
         left join ox_workflow on ox_workflow.id=ox_workflow_deployment.workflow_id
@@ -371,7 +371,10 @@ class WorkflowService extends AbstractService
         where ox_workflow.id=:workflowId and ox_app.id=:appId;";
         $queryParams = array("workflowId" => $workflowId, "appId" => $appId);
         $response = $this->executeQueryWithBindParameters($select,$queryParams)->toArray();
-        return $response;
+        if(isset($response[0])){
+            return $response[0];
+        }
+        throw new ServiceException("Start form not found for the workflow","workflow.startform.not.found");
     }
     
     public function getAssignments($appId,$filterParams)

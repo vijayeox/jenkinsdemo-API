@@ -11,6 +11,7 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\View\Model\JsonModel;
+use Exception;
 
 /**
  * Workflow Controller
@@ -149,7 +150,8 @@ class WorkflowController extends AbstractApiController
             $response = $this->workflowService->getStartForm($params['appId'], $params['workflowId']);
             return $this->getSuccessResponseWithData($response);
         } catch (Exception $e) {
-            return $this->getErrorResponse("Files cannot be uploaded!");
+            $this->log->error($e->getMessage(),$e);
+            return $this->getErrorResponse($e->getMessage(), 404, $params);
         }
     }
 }
