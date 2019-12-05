@@ -70,7 +70,7 @@ class DocumentServiceTest extends ServiceTest
         AuthContext::put(AuthConstants::ORG_UUID, $data['orgUuid']);
         $config = $this->getApplicationConfig();
         $tempFile = $config['TEMPLATE_FOLDER'].$data['orgUuid'];
-        $templateLocation = __DIR__."/../../../../../../clients/Dive Insurance/data/template";
+        $templateLocation = __DIR__."/../../../../../../clients/DiveInsurance/data/template";
         if(FileUtils::fileExists($tempFile)){
             FileUtils::rmDir($tempFile);
         }
