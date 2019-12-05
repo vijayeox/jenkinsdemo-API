@@ -99,12 +99,13 @@ class AppService extends AbstractService
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
+
         $this->beginTransaction();
         try {
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("App Save Failed", "app.save.failed");
             }
             if (!isset($data['id'])) {
                 $id = $this->table->getLastInsertValue();
@@ -136,7 +137,7 @@ class AppService extends AbstractService
         if(!(array_key_exists('category',$yamldata['app'][0]))){
             $yamldata['app'][0]['category'] = $modifieddata['category'];
         }
-        $new_yaml = Yaml::dump($yamldata, 2);
+        $new_yaml = Yaml::dump($yamldata, 10);
         file_put_contents($path.$filename, $new_yaml);
     }
 
@@ -150,6 +151,7 @@ class AppService extends AbstractService
         if(!(array_key_exists('autostart',$data[0]))){
             $data[0]['autostart'] = "true";
         }
+        $data[0]['name'] = str_replace(" ", "", $data[0]['name']);
         return $data;
     }
 
@@ -217,8 +219,10 @@ class AppService extends AbstractService
     private function processMenu(&$yamlData, $path){
         if(isset($yamlData['menu'])){
             $appId = $yamlData['app'][0]['uuid'];
+            $sequence = 0;
             foreach ($yamlData['menu'] as &$menuData) {
                 $menu = $menuData;
+                $menu['sequence'] = $sequence++;
                 $menu['uuid'] = isset($menu['uuid'])?$menu['uuid']:UuidUtil::uuid();
                 $menuUpdated = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
                 if($menuUpdated == 0){
@@ -574,7 +578,7 @@ class AppService extends AbstractService
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("App could not be saved", "app.save.failed" );
             }
             $this->commit();
         } catch (Exception $e) {
