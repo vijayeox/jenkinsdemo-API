@@ -124,6 +124,7 @@ class PrivilegeService extends AbstractService
                     if(!in_array($value['name'], $existingprivileges)){
                         $query = "INSERT INTO ox_privilege (name, permission_allowed, app_id) VALUES (:name, :permission,:appid)";
                         $params = array("name" => $value['name'], "permission" => $value['permission'], "appid" =>$appId );
+                        $this->logger->info("Executing query $query with params - ".json_encode($params));
                         $result = $this->executeQueryWithBindParameters($query, $params);
 
                         $query = "INSERT into ox_role_privilege (role_id, privilege_name, permission, org_id, app_id)
