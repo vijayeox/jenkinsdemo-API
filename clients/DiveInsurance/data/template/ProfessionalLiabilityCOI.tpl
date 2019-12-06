@@ -94,7 +94,7 @@
 		</p></center>
 		<hr class = "spacing1"></hr>
 		<b><center><p class = "phy_add">Physical Address {if !$sameasmailingaddress} 
-										 : {$address3},{$address4}
+										 : {$mailaddress1},{$mailaddress2}
 									  {else}
 										is the same as the mailing address
 									{/if}
