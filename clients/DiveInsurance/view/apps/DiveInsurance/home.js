@@ -26,11 +26,11 @@ class Home extends React.Component {
       if (cache) {
         if (cache.workflow_uuid) {
           this.getFormData(cache.workflow_uuid).then(formResponse => {
-            if (formResponse && formResponse.data.length > 0) {
+            if (formResponse.data) {
               this.setState({
-                formContent: JSON.parse(formResponse.data[0].content),
+                formContent: JSON.parse(formResponse.data.template),
                 cachePage: cache.page,
-                formID: formResponse.data[0].id,
+                formID: formResponse.data.id,
                 cacheData: cache
               });
             } else {
