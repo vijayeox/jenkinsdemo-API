@@ -66,4 +66,8 @@ echo -e "${YELLOW}Building docker for build and deployment now..${RESET}"
 cd ${HOME}/integrations/openproject/docker_build
 docker build -t openproject_build .
 echo -e "${GREEN}Building Integrations Openproject Docker images completed!\n${RESET}"
+echo -e "${YELLOW}Building Integrations HelpApp!\n${RESET}"
+cd ${HOME}/integrations/help/docker
+docker build -t help .
+echo -e "${GREEN}Building Integrations HelpApp completed!\n${RESET}"
 echo -e "${GREEN} All images built successfully${RESET}"

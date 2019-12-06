@@ -756,9 +756,10 @@ mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 		
 		- Note - Update the flags as required for the above command like application url and user-email.
 
-	- Note: If it fails for some reason start with an empy database and remove the cache folder
+	- Note: If it fails for some reason start with an empty database and remove the cache folder
 
-		<h5>rm -R var/cache/*</h5>
+		<h5>rm -R var/cache/prod/*</h5>
+		<h5>sudo service apache2 restart</h5>
 
 3. After the migration is completed replace the parameters.yml in the env folder from the **/var/www/crm/config** folder on the instance after deployment
 

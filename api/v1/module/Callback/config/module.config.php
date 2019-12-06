@@ -200,6 +200,46 @@ return [
                     ],
                 ],
             ],
+            'projectcreategroupfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/creategroup',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'creategroup',
+                    ],
+                ],
+            ],
+            'projectupdategroupfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/updategroup',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'updateGroup',
+                    ],
+                ],
+            ],
+            'projectdeletegroupfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/deletegroup',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'deleteGroup',
+                    ],
+                ],
+            ],
+            'projectupdategroupusersfromcallback' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/callback/task/updategroupusers',
+                    'defaults' => [
+                        'controller' => Controller\TaskCallbackController::class,
+                        'action' => 'updateGroupUsers',
+                    ],
+                ],
+            ],
         ],
     ],
     'log' => [
