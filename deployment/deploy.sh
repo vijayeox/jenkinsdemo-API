@@ -154,7 +154,7 @@ orocrm()
         echo -e "${YELLOW}Installing composer libraries in ${CYAN}crm/vendor${RESET}"
         runuser -l ubuntu -c "composer install -d ${TEMP}/integrations/crm"
         echo -e "${YELLOW}Installing node_modules in ${CYAN}crm/build${RESET}"
-        runuser -l ubuntu -c "npm install --prefix ${TEMP}/integrations/crm/build --verbose"
+        runuser -l ubuntu -c "npm install --prefix ${TEMP}/integrations/crm/build"
         echo -e "${YELLOW}Installing Assets for CRM now${RESET}"
         runuser -l ubuntu -c "php ${TEMP}/integrations/crm/bin/console oro:assets:install"
         echo -e "${YELLOW}Loading migrations now${RESET}"

@@ -1,0 +1,30 @@
+Received: from prajwal-HP-250-G7-Notebook-PC (localhost [/127.0.0.1])
+        by prajwal-HP-250-G7-Notebook-PC with SMTP;
+        Fri, 08 Nov 2019 17:18:50 +0530 (IST)
+Date: Fri, 8 Nov 2019 11:48:49 +0000 (UTC)
+From: support@oxzion.com
+To: prajwalv@myvamla.com
+Message-ID: <508755263.0.1573213730299@localhost>
+Subject: Your login details for OX Zion!!
+MIME-Version: 1.0
+Content-Type: text/html
+Content-Transfer-Encoding: 7bit
+breadcrumbId: ID-prajwal-HP-250-G7-Notebook-PC-1573195630337-1-2
+JMSDeliveryMode: 1
+JMSDestination: topic://mail
+JMSExpiration: 0
+JMSMessageID: ID:prajwal-HP-250-G7-Notebook-PC-44067-1573195624596-3:80:-1:1:1
+JMSPriority: 4
+JMSRedelivered: false
+JMSTimestamp: 1573213728304
+
+            <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
+            </div>
+            <div style='line-height: 24px'>Dear prajwal, </br/>
+                OX Zion has created a new ID for you, <br/>Details are below: <br/>
+                URL: <a href='http://localhost:8080' >Click here to Login! </a> <br/>
+                UserName: prajwalvtest <br/>
+                Password: EZFqCPVX <br/>
+            </div>
+Thank you
+Team VA
