@@ -352,6 +352,7 @@ class WorkflowService extends AbstractService
     
     public function getStartForm($appId, $workflowId)
     {
+        $workflowUuid= $workflowId;
         $sql = $this->getSqlObject();
         if ($app = $this->getIdFromUuid('ox_app', $appId)) {
             $appId = $app;
@@ -372,6 +373,7 @@ class WorkflowService extends AbstractService
         $queryParams = array("workflowId" => $workflowId, "appId" => $appId);
         $response = $this->executeQueryWithBindParameters($select,$queryParams)->toArray();
         if(isset($response[0])){
+            $response[0]['workflow_uuid']= $workflowUuid;
             return $response[0];
         }
         throw new ServiceException("Start form not found for the workflow","workflow.startform.not.found");
