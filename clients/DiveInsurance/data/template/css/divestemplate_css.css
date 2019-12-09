@@ -82,6 +82,11 @@ body{
 	height:3px;
 	background-color: black;
 }
+.spacer2{
+	margin:2px 0px;
+	height:3px;
+	background-color: black;
+}
 .title1{
 	font-size: 25px;
 	margin: 0px;
@@ -150,6 +155,11 @@ body{
 }
 .p_margin{
 	margin-top: 0px;
+	margin-bottom: 5px;
+}
+
+.p_margin2{
+	margin-top: 5px;
 	margin-bottom: 5px;
 }
 .p_margin.normal{
@@ -293,7 +303,6 @@ body{
 	margin-top: 1px;
 	margin-bottom: 1px;
 	font-size:13px;
-	text-transform: uppercase;
 }
 .body_div_ai{
 	margin-top: 2%;
@@ -337,7 +346,7 @@ body{
 .total_main {
 	margin-right: 1%;
 	width: 80%;
-	margin-top: 1%;
+	margin-top: 0.5%;
     float: right;
 }
 
@@ -380,4 +389,125 @@ body{
 
 .clearfix {
 	clear: both;
+}
+
+ul {
+	width: 80%;
+}
+
+ul > li {
+	margin:6px 0;
+	line-height: 1.2;
+}
+
+.checkbox_sec {
+	width: 80%;
+	margin-right: 10%;
+	margin-left: 5%;
+}
+
+/* Dive Center Proposal */
+.line_divide {
+	margin-bottom: 2px;
+	font-weight: 700;
+}
+
+#space_left {
+	padding-left: 10px;
+}
+
+.table_sec {
+	margin-bottom: 40%;
+	margin-top: 2%;
+}
+
+table.proposal_table {
+    float: left;
+    width: 49%;
+	margin-right: 1%;
+	margin-top: 1%;
+}
+
+table.proposal_table th {
+    border: 0.5px solid black;
+}
+
+table.proposal_table th:first-child {
+    text-align: left;
+    padding-left: 10px;
+}
+
+table.proposal_table th:last-child {
+    text-align: right;
+    padding-right: 10px;
+}
+
+table.proposal_table td {
+    padding: 3px;
+}
+
+table.proposal_table td:last-child {
+    width: 20%;
+	text-align: right;
+	font-weight: 700;
+}
+
+
+.deductible_table {
+	margin-top: 5px;
+}
+
+.deductible_table td:first-child {
+	width: 10%;
+	vertical-align: baseline;
+}
+
+.check_sec {
+    float: left;
+    width: 100%;
+    margin: 1% 0;
+}
+
+.check_p {
+    display: inline;
+	float: left;
+	/* width: 50%; */
+	margin-right: 10%;
+}
+
+.checkbox {
+    border: 2px solid black;
+    height: 10px;
+    float: left;
+    width: 10px;
+    margin-right: 1%;
+}
+
+.paymentSection {
+	float: left;
+	width: 49%;
+}
+
+.paymentSection:nth-child(2) {
+	float: left;
+	width: 49%;
+	border-left: 1px solid grey;
+}
+
+.textbox_line {
+    border-bottom: 1px solid black;
+    margin-left: 2%;
+    width: auto;
+	padding: 0px 10%;
+}
+.payment_option {
+	margin-bottom: 1%;
+}
+
+.payment_option > div + div {
+	/* background-color: blue; */
+	margin-left: 5%;
+}
+.payment_option > div + div p {
+	margin: 0px;
 }

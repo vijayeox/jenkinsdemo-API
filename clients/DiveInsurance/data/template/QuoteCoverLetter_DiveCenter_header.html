@@ -1,0 +1,54 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <link href="./css/card_css.css" rel="stylesheet" type="text/css" />
+  <!-- <script type="text/javascript" src="{$smarty.current_dir}/AgentInfo.js"></script> -->
+  <script type="text/javascript" src="./AgentInfo.js"></script>
+<script>
+  function subst() {
+      var vars = {};
+      var data = {};
+      var split = {};
+
+      var query_strings_from_url = document.location.search.substring(1).split('&');
+      for (var query_string in query_strings_from_url) {
+          if (query_strings_from_url.hasOwnProperty(query_string)) {
+              var temp_var = query_strings_from_url[query_string].split('=', 2);
+              vars[temp_var[0]] = decodeURI(temp_var[1]);
+          }
+      }
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zipcode','certificate_no','padi','end_date','policy_id','address1','address2'];
+      for (var css_class in css_selector_classes) {
+          if (css_selector_classes.hasOwnProperty(css_class)) {
+              var element = document.getElementsByClassName(css_selector_classes[css_class]);
+              for (var j = 0; j < element.length; ++j) {
+                  element[j].textContent = vars[css_selector_classes[css_class]];
+              }
+          }
+      }
+      agentInfo();
+  }
+  </script>
+</head>
+
+<body onload="subst()">
+  <div class="div_cover">
+    <center>
+      <img class="" height="100" width="250" src="./image/V&B.jpg" />
+    </center>
+    <div>&nbsp</div>
+
+    <div class="order">
+      <p id="nowdate" class="info uppercase">{$date}</p>
+      <p></p>
+      <p class="info uppercase">{$businessname}</p>
+      <p class="info uppercase">{$dba} <span>{$membernumber}</span></p>
+      <p></p>
+      <div>Dear <span class="uppercase">{$contactname}</span></div>
+    </div>
+  </div>
+</body>
+
+</html>

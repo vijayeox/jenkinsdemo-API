@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="./css/divestemplate_css.css" rel="stylesheet" type="text/css" />
+    <script>
+        function subst() {
+            var vars = {};
+            var css_selector_classes = [];
+            var query_strings_from_url = document.location.search.substring(1).split('&');
+            for (var query_string in query_strings_from_url) {
+                if (query_strings_from_url.hasOwnProperty(query_string)) {
+                    var temp_var = query_strings_from_url[query_string].split('=', 2);
+                    vars[temp_var[0]] = decodeURI(temp_var[1]);
+                    css_selector_classes.push(temp_var[0]);
+                }
+            }
+
+            // var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages', 'reference','start_date'];
+            for (var css_class in css_selector_classes) {
+                if (css_selector_classes.hasOwnProperty(css_class)) {
+                    var element = document.getElementsByClassName(css_selector_classes[css_class]);
+                    for (var j = 0; j < element.length; ++j) {
+                        element[j].textContent = vars[css_selector_classes[css_class]];
+                    }
+                }
+            }
+            agentInfo();
+        }
+    </script>
+</head>
+
+<body class="footer_html" onload="subst()">
+    <center>
+        <p style="font-size: 13px;margin-right: 10%;">Page <span class="page"></span> of <span class="topage"></span>
+        </p>
+    </center>
+</body>
+
+</html>
