@@ -19,8 +19,10 @@ final class Version20191209063745 extends AbstractMigration
 
     public function up(Schema $schema) : void
     {
+        $this->addSql("ALTER TABLE ox_role_privilege DROP FOREIGN KEY roleid");
         $this->addSql("ALTER TABLE `ox_role_privilege` DROP INDEX `role_privilege`;");
         $this->addSql("ALTER TABLE `ox_role_privilege` ADD UNIQUE `role_privilege` (`role_id`, `privilege_name`,`org_id`, `app_id`);");
+        $this->addSql("ALTER TABLE `ox_role_privilege` ADD CONSTRAINT roleid FOREIGN KEY (role_id) REFERENCES ox_role(id)");
 
 
     }
