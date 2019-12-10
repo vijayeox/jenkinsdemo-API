@@ -255,17 +255,17 @@ class WidgetService extends AbstractService
         }
         $data = array();
         if(isset($params['data'])) {
-            foreach ($resultSet as $row) {
-                $query_uuid = $row['query_uuid'];
-                $queryData = $this->queryService->executeAnalyticsQuery($query_uuid);
-                if (!empty($data) && isset($queryData['data'])) {
-                    $data = array_replace_recursive($data, $queryData['data']);
-                } else {
-                    if (isset($queryData['data'])) {
-                        $data = $queryData['data'];
-                    }
-                }
-            }
+//            foreach ($resultSet as $row) {
+//                $query_uuid = $row['query_uuid'];
+//                $queryData = $this->queryService->executeAnalyticsQuery($query_uuid);
+//                if (!empty($data) && isset($queryData['data'])) {
+//                    $data = array_replace_recursive($data, $queryData['data']);
+//                } else {
+//                    if (isset($queryData['data'])) {
+//                        $data = $queryData['data'];
+//                    }
+//                }
+//            }
             //--------------------------------------------------------------------------------------------------------------------------------
 //TODO:Fetch data from elastic search and remove hard coded values below.
                 // $data = [
