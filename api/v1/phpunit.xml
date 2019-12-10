@@ -50,7 +50,7 @@
             <directory>./module/Form/test</directory>
         </testsuite>
         <testsuite name="Dive Insurance Fixtures">
-            <directory>../../clients/Dive Insurance/test/</directory>
+            <directory>../../clients/DiveInsurance/test/</directory>
         </testsuite>
     </testsuites> 
     <php>

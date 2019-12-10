@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>OXZION-3.0 BUILD AND DEPLOY</h1>
+  <h1>EOS-3.0 BUILD AND DEPLOY</h1>
   <p>
     To package and deploy oxzion-3.0 to production.
   </p>
@@ -125,7 +125,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 
 	<h5>ruby -v</h5>
 
-	<h5>bunlde -v or bundler -v</h5>
+	<h5>bundle -v or bundler -v</h5>
 
 -----------
 <h4>7. <u>Passenger:</u></h4>

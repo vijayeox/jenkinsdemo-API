@@ -34,13 +34,13 @@ return [
         'dsn' => 'mysql:dbname=' . $db . ';host=' . $host . ';charset=utf8;',
     ],
     'elasticsearch' => [
-        'serveraddress'=>'dataocean.oxzion.com',
+        'serveraddress'=>'localhost',
         'port'=>'9200',
         'scheme'=>'http',
-        'core'=>'oxstaging',
+        'core'=>'core',
         'type'=>'type',
-        'user'=>'elastic',
-        'password'=>'hvqr9799/'
+        'user'=>'user',
+        'password'=>'password'
     ],
     'amqp' => [
         'host' => 'tcp://localhost:61613'
