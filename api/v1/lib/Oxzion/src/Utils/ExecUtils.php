@@ -11,7 +11,7 @@ namespace Oxzion\Utils;
 class ExecUtils
 {
     public static function execCommand($command){
-    	$output = shell_exec($command." 2>&1");
+    	exec($command." 2>&1", $output, $return);
     	return $output;
     }
 }
