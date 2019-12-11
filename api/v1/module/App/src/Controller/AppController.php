@@ -265,7 +265,9 @@ class AppController extends AbstractApiController
         if(isset($params['path']))
         {
             try {
-                $this->appService->deployApp($params['path']);
+                $path = $params['path'];
+                $path .= substr($path, -1) == '/' ? '' : '/';
+                $this->appService->deployApp($path);
                 return $this->getSuccessResponse(200);
             }
             catch (ValidationException $e) {
