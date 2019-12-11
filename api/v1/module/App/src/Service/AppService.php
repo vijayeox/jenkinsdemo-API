@@ -204,7 +204,7 @@ class AppService extends AbstractService
             $this->setupAppView($path, $ymlData);
             $this->setupLinks($path, $appName, $appUuid, $orgUuid);
             $this->processWorkflow($ymlData, $path, $orgUuid);
-            $this->processForm($ymlData);
+            $this->processForm($path, $ymlData);
             $this->processMenu($ymlData, $path);
             //if job given setup quartz job
             $this->updateyml($ymlData, $path);
@@ -245,7 +245,7 @@ class AppService extends AbstractService
         }
     }
 
-    private function processForm(&$yamlData){
+    private function processForm($path, &$yamlData){
         if(isset($yamlData['form'])){
             $appUuid = $yamlData['app'][0]['uuid'];
             foreach ($yamlData['form'] as &$form) {
@@ -257,6 +257,9 @@ class AppService extends AbstractService
                     $result = $this->entityService->saveEntity($appUuid, $entity);
                 }
                 $data['entity_id'] = $entity['id'];
+                if(isset($data['template_file'])){
+                    $data['template'] = file_get_contents($path.'content/forms/'.$data['template_file']);
+                }
                 $count = $this->formService->updateForm($appUuid, $data['uuid'], $data);
                 if ($count == 0) {
                     $this->formService->createForm($appUuid, $data);
@@ -331,7 +334,7 @@ class AppService extends AbstractService
 
     private function setupLinks($path, $appName, $appId, $orgId = null){
         $link = $this->config['DELEGATE_FOLDER'].$appId;
-        $target = $path."/data/delegate";
+        $target = $path."data/delegate";
         if(is_link($link)){
             FileUtils::unlink($link);
         }
@@ -340,7 +343,7 @@ class AppService extends AbstractService
         }
         if($orgId){
             $link =$this->config['TEMPLATE_FOLDER'].$orgId;
-            $target = $path."/data/template";
+            $target = $path."data/template";
             if(is_link($link)){
                 FileUtils::unlink($link);
             }
@@ -368,7 +371,7 @@ class AppService extends AbstractService
                         }
                         if(file_exists($target)){
                             $this->setupLink($target, $link);
-                            $this->executeCommands($link);
+                            $this->executeCommands($target);
                             $flag = 1;
                         }
                     }
@@ -393,8 +396,6 @@ class AppService extends AbstractService
         $command_two = "npm run package:discover";
         $output = ExecUtils::execCommand($command_one." && ".$command_two);
         $this->logger->info("PAckage Discover .. \n". print_r($output, true));
-        $output = ExecUtils::execCommand($command_one." && chmod 755 -R dist");
-        $this->logger->info("PAckage Discover .. \n". print_r($output, true));
            
     }
 
@@ -403,7 +404,10 @@ class AppService extends AbstractService
         $command_one = "cd ".$link;
         $command_two = "npm install";
         $command_three = "npm run build";
-        $command = $command_one." && ".$command_two." && ".$command_three;
+        $command = $command_one." && ".$command_two;
+        $output = ExecUtils::execCommand($command);
+        $this->logger->info("Executing command $command .. \n". print_r($output, true));
+        $command = $command_one." && ".$command_three;
         $output = ExecUtils::execCommand($command);
         $this->logger->info("Executing command $command .. \n". print_r($output, true));
     }
