@@ -210,11 +210,13 @@ workflow()
 {
     cd ${OXHOME}
     echo -e "${YELLOW}Creating directory build/integrations/workflow...${RESET}"
-    mkdir -p build/integrations/workflow/IdentityService/dist
+    mkdir -p build/integrations/workflow
+    cd ${OXHOME}/integrations/workflow
+    echo -e "${YELLOW}Building workflow....${RESET}"
+    docker run -it -v ${PWD}:/camunda --entrypoint ./dockerbuild.sh workflow_build
+    echo -e "${YELLOW}Building workflow completed....${RESET}"
     echo -e "${YELLOW}Copying workflow to build folder....${RESET}"
-    echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/integrations/workflow/.env ./build/integrations/workflow/
-    cp integrations/workflow/bpm-platform.xml integrations/workflow/Dockerfile integrations/workflow/camunda-tomcat.sh ./build/integrations/workflow/ && cp integrations/workflow/IdentityService/dist/identity_plugin.jar ./build/integrations/workflow/IdentityService/dist/
+    cp ${OXHOME}/integrations/workflow/IdentityService/build/libs/identity_plugin-1.0.jar ${OXHOME}/integrations/workflow/ProcessEngine/build/libs/processengine_plugin-1.0.jar ${OXHOME}/integrations/workflow/bpm-platform.xml ${OXHOME}/build/integrations/workflow 
     echo -e "${GREEN}Copying workflow Completed!${RESET}"
 }
 openproject()

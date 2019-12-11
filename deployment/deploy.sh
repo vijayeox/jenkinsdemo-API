@@ -249,17 +249,12 @@ workflow()
     then
         echo -e "${RED}Workflow was not packaged so skipping it\n${RESET}"
     else
-        docker stop wf_1
+        service camunda stop
         cd ${TEMP}
-        rsync -rl --delete integrations/workflow/ /opt/oxzion/workflow/
+        cp ${TEMP}/integrations/workflow/identity_plugin-1.0.jar integrations/workflow/processengine_plugin-1.0.jar /opt/oxzion/camunda/lib/
+        cp ${TEMP}/integrations/workflow/bpm-platform.xml /opt/oxzion/camunda/conf/
         echo -e "${GREEN}Copying workflow Complete!${RESET}"
-        cd /opt/oxzion/workflow
-        echo -e "${YELLOW}Building Workflow Docker Image!${RESET}"
-        docker build -t workflow .
-        echo -e "${GREEN}Built!${RESET}"
-        echo -e "${YELLOW}Starting workflow in docker!${RESET}"
-        docker run --network="host" -d --env-file ~/env/integrations/workflow/.env --rm --name wf_1 workflow 
-        echo -e "${GREEN}Started Workflow!${RESET}"
+        service camunda start
     fi
 }
 openproject()
@@ -335,7 +330,7 @@ mattermost
 orocrm
 rainloop
 openproject
-workflow
+#workflow
 helpapp
 #edms
 echo -e "${GREEN}${BLINK}DEPLOYED SUCCESSFULLY${RESET}"
