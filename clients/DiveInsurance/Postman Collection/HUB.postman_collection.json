@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "82c1165c-e342-43e0-bf77-26ec5cfcfd9d",
+		"_postman_id": "e5986174-8826-450d-b95b-8b1178427b0e",
 		"name": "HUB",
 		"description": "Hub specific data setup for developers",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -343,6 +343,34 @@
 								"app",
 								"{{app_id}}",
 								"menu"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Deploy App",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "path",
+									"value": "/app/api/v1/module/App/test/Controller/../../../../../../clients/DiveInsurance/",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/app/deployapp",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"deployapp"
 							]
 						}
 					},
