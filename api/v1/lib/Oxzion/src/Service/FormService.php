@@ -34,7 +34,7 @@ class FormService extends AbstractService
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();
         if(isset($data['template']) && is_array($data['template'])){
             $data['template'] = json_encode($data['template']);
-        }else{
+        }else if(!isset($data['template'])){
             throw new ServiceException("Template not provided", 'template.required');
         }
         $template = $this->formEngine->parseForm($data['template']);
