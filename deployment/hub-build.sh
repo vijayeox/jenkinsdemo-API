@@ -150,7 +150,7 @@ view()
     echo -e "${YELLOW}Copying View to build folder. Please wait this may take sometime....${RESET}"
     rsync -rl --exclude=node_modules ./view ./build/
     mkdir -p ./build/view/bos/node_modules
-    rsync -rl --delete ./view/bos/node_modules/ ./build/view/bos/node_modecho -e "${YELLOW}Copying clients DiveInsurance to build folder.${RESET}"echo -e "${YELLOW}Copying clients DiveInsurance to build folder.${RESET}"ules/
+    rsync -rl --delete ./view/bos/node_modules/ ./build/view/bos/node_modules/
     echo -e "${GREEN}Copying View Completed!${RESET}"
     #building UI/view folder
     
