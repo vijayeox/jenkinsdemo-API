@@ -18,12 +18,17 @@ class Visualization extends Entity
         'configuration' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
         'renderer' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
         'type' => array('type' => parent::STRINGVAL, 'value' => null, 'readonly' => FALSE , 'required' => TRUE),
-        'version' => array('type' => parent::INTVAL, 'value' => null, 'readonly' => FALSE , 'required' => FALSE),
+        'version' => array('type' => parent::INTVAL, 'value' => 1, 'readonly' => FALSE, 'required' => FALSE)
     );
 
     public function validate()
     {
         $this->completeValidation();
+    }
+
+    public function updateValidate()
+    {
+        $this->typeChecker();
     }
 
     public function validateType($type)

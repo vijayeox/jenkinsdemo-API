@@ -73,7 +73,7 @@ class QueryController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED', 'new record' => $e->getReturnObject()]);
         }
         if ($count == 0) {
             return $this->getErrorResponse("Query not found for uuid - $uuid", 404);
@@ -88,7 +88,7 @@ class QueryController extends AbstractApiController
                 $response = $this->queryService->deleteQuery($uuid, $params['version']);
             }
             catch (VersionMismatchException $e) {
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED',  'new record' => $e->getReturnObject()]);
             }
             if ($response == 0) {
                 return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);

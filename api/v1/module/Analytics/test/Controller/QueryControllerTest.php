@@ -39,8 +39,8 @@ class QueryControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => "query4", 'datasource_id' => 1, 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}', 'ispublic' => 1];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_query'));
+        $data = ['name' => "query5", 'datasource_id' => 1, 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}', 'ispublic' => 1];
+        $this->assertEquals(10, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -51,14 +51,14 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['datasource_id'], $data['datasource_id']);
         $this->assertEquals($content['data']['configuration'], $data['configuration']);
-        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_query'));
+        $this->assertEquals(11, $this->getConnection()->getRowCount('ox_query'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => "query4", 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}'];
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_query'));
+        $data = ['name' => "query5", 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}'];
+        $this->assertEquals(10, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -72,10 +72,10 @@ class QueryControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => "querytest", 'datasource_id' => 2];
+        $data = ['name' => "querytest", 'datasource_id' => 2, 'version' => 1];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/analytics/query/8f1d2819-c5ff-4426-bc40-f7a20704a738?version=1', 'PUT', null);
+        $this->dispatch('/analytics/query/8f1d2819-c5ff-4426-bc40-f7a20704a738', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('query');
@@ -85,9 +85,23 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['data']['datasource_id'], $data['datasource_id']);
     }
 
+    public function testUpdateWithWrongVersion()
+    {
+        $data = ['name' => "Analytics", 'type' => 'Elastic' , 'version' => 3];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/query/8f1d2819-c5ff-4426-bc40-f7a20704a738', 'PUT', null);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('query');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Version changed');
+    }
+
     public function testUpdateNotFound()
     {
-        $data = ['name' => "querytest", 'datasource_id' => 2];
+        $data = ['name' => "querytest", 'datasource_id' => 2, 'version' => 1];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query/1000', 'PUT', null);
@@ -109,6 +123,18 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
+    public function testDeleteWithWrongVersion()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/query/8f1d2819-c5ff-4426-bc40-f7a20704a738?version=3', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('query');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Version changed');
+    }
+
     public function testDeleteNotFound()
     {
         $this->initAuthToken($this->adminUser);
@@ -116,8 +142,8 @@ class QueryControllerTest extends ControllerTest
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('query');
-        // $content = json_decode($this->getResponse()->getContent(), true);
-        // $this->assertEquals($content['status'], 'error');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
     }
 
     public function testGet() {
@@ -147,12 +173,12 @@ class QueryControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 3);
-        $this->assertEquals($content['data']['data'][0]['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
-        $this->assertEquals($content['data']['data'][0]['name'], 'query1');
-        $this->assertEquals($content['data']['data'][1]['datasource_id'], 2);
-        $this->assertEquals($content['data']['data'][1]['name'], 'query2');
-        $this->assertEquals($content['data']['total'],3);
+        $this->assertEquals(count($content['data']['data']), 10);
+        $this->assertEquals($content['data']['data'][6]['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
+        $this->assertEquals($content['data']['data'][6]['name'], 'query1');
+        $this->assertEquals($content['data']['data'][7]['datasource_id'], 3);
+        $this->assertEquals($content['data']['data'][7]['name'], 'query2');
+        $this->assertEquals($content['data']['total'],10);
     }
 
     public function testGetListWithSort()
@@ -163,12 +189,12 @@ class QueryControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 3);
-        $this->assertEquals($content['data']['data'][0]['uuid'], '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1');
-        $this->assertEquals($content['data']['data'][0]['name'], 'query3');
-        $this->assertEquals($content['data']['data'][1]['ispublic'], 1);
-        $this->assertEquals($content['data']['data'][1]['name'], 'query2');
-        $this->assertEquals($content['data']['total'],3);
+        $this->assertEquals(count($content['data']['data']), 10);
+        $this->assertEquals($content['data']['data'][5]['uuid'], '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1');
+        $this->assertEquals($content['data']['data'][5]['name'], 'query3');
+        $this->assertEquals($content['data']['data'][6]['ispublic'], 1);
+        $this->assertEquals($content['data']['data'][6]['name'], 'query2');
+        $this->assertEquals($content['data']['total'],10);
     }
 
      public function testGetListSortWithPageSize()
@@ -179,11 +205,11 @@ class QueryControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['uuid'], '86c0cc5b-2567-4e5f-a741-f34e9f6f1af1');
-        $this->assertEquals($content['data']['data'][0]['name'], 'query2');
-        $this->assertEquals($content['data']['data'][0]['is_owner'], 'false');
-        $this->assertEquals($content['data']['total'],3);
+        $this->assertEquals(count($content['data']['data']), 9);
+        $this->assertEquals($content['data']['data'][2]['uuid'], '86c0cc5b-2567-4e5f-a741-f34e9f6f1af1');
+        $this->assertEquals($content['data']['data'][2]['name'], 'query2');
+        $this->assertEquals($content['data']['data'][2]['is_owner'], 'false');
+        $this->assertEquals($content['data']['total'],10);
     }
 
     public function testGetListwithQueryParameters()
@@ -200,5 +226,4 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['data']['total'],1);
     }
 
-    
 }
