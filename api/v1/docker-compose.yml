@@ -6,7 +6,6 @@ services:
             dockerfile: Dockerfile
         ports:
             - "8080:80"
-            - "8081:8081"
         volumes:
             - ../..:/app
             - /tmp:/tmp
