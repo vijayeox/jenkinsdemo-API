@@ -1,0 +1,35 @@
+Prerequisites installation on server for camunda
+
+sudo apt install bash - mostly already there so it will upgrade
+sudo apt install ca-certificates - might be there and may upgrade
+sudo apt install tar
+sudo apt install wget
+sudo apt install tzdata  (for timezone data)
+sudo apt install tini (no package found for now in ubuntu 18.04)(digged in to found its used for containers to managing processes. Mostly as a init for containers)
+sudo apt install xmlstarlet
+
+#Step for downloading a installing camunda on server
+#make a temp dir for camunda setup download
+
+mkdir ~/camunda-setup
+
+#make camunda installation folder
+
+sudo mkdir /opt/oxzion/camunda
+
+#download camunda to ~/camunda-setup folder as camunda.tar.gz file from the camunda repo
+
+wget --progress=bar:force:noscroll -O /home/ubuntu/camunda-setup/camunda.tar.gz "https://camunda.org/release/camunda-bpm/tomcat/7.9/camunda-bpm-tomcat-7.9.0.tar.gz"
+
+#extract the contents of camunda.tar.gz to the installation dir i.e /opt/oxzion/camunda
+
+sudo tar xzf /home/ubuntu/camunda-setup/camunda.tar.gz -C /opt/oxzion/camunda server --strip-components=2
+
+#then download the mysql connector library for camunda from maven repo
+
+wget -O /home/ubuntu/camunda-setup/mysql-connector-java-5.1.21.jar "http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.21/mysql-connector-java-5.1.21.jar"
+
+#copy the downloaded mysql library to camunda library
+sudo cp /home/ubuntu/camunda-setup/mysql-connector-java-5.1.21.jar /opt/oxzion/camunda/lib
+
+#Configuration settings to be updated in server xml

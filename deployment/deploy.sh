@@ -253,6 +253,7 @@ workflow()
         cd ${TEMP}
         cp ${TEMP}/integrations/workflow/identity_plugin-1.0.jar integrations/workflow/processengine_plugin-1.0.jar /opt/oxzion/camunda/lib/
         cp ${TEMP}/integrations/workflow/bpm-platform.xml /opt/oxzion/camunda/conf/
+        chown oxzion:oxzion -R /opt/oxzion/camunda
         echo -e "${GREEN}Copying workflow Complete!${RESET}"
         service camunda start
     fi
@@ -318,6 +319,21 @@ edms()
         echo -e "${GREEN}Copying edms Complete!${RESET}"
     fi
 }
+clients()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rync -rl . /opt/oxzion/eoxapps/
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+    fi
+}
 #calling functions accordingly
 unpack
 echo -e "${YELLOW}Now copying files to respective locations..${RESET}"
@@ -330,6 +346,7 @@ mattermost
 orocrm
 rainloop
 openproject
+clients
 #workflow
 helpapp
 #edms

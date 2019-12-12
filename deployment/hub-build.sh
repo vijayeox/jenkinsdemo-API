@@ -1,8 +1,5 @@
-# script to package oxzion3.0 to production build
 #!/bin/bash
-# exit when any command fails
-#set -e
-#trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
+#Script to deploy hub to server
 #going back to oxzion3.0 root directory
 start_time="$(date +%s)"
 cd ../
@@ -30,21 +27,15 @@ buildhelp()
     echo -e "2.  api             -${YELLOW}For packaging API.${RESET}"
     echo -e "3.  view            -${YELLOW}For packaging UI/View.${RESET}"
     echo -e "4.  workflow        -${YELLOW}For packaging workflow.${RESET}"
-    echo -e "5.  integrations    -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
-    echo -e "6.  calendar        -${YELLOW}For packaging Event Calendar.${RESET}"
-    echo -e "7.  camel           -${YELLOW}For packaging Apache Camel.${RESET}"
-    echo -e "8.  chat            -${YELLOW}For packaging Mattermost Chat.${RESET}"
-    echo -e "9.  crm             -${YELLOW}For packaging OroCRM.${RESET}"
-    echo -e "10. mail            -${YELLOW}For packaging Rainloop Mail.${RESET}"
-    echo -e "11. openproject     -${YELLOW}For packaging Openproject.${RESET}"
-    echo -e "12. helpapp         -${YELLOW}For packaging HelpApp.${RESET}"
-    echo -e "13. edms            -${YELLOW}For packaging EDMS.${RESET}"
-    echo -e "14. --help or -h    -${YELLOW}For help.${RESET}"
-    echo -e "15. list            -${YELLOW}For list of options.${RESET}"
-    echo -e "16. deploy          -${YELLOW}For deploying to production${RESET}"
-    echo -e "17. clean           -${YELLOW}For cleaning the production server${RESET}"
-    echo -e "18. setup           -${YELLOW}For fresh setup of the production server${RESET}"
-    echo -e "19. package         -${YELLOW}For packaging existing build${RESET}"
+    echo -e "5.  camel           -${YELLOW}For packaging Apache Camel.${RESET}"
+    echo -e "6.  clients         -${YELLOW}For packaging Clients directory.${RESET}"
+    echo -e "6.  integrations    -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
+    echo -e "7. --help or -h     -${YELLOW}For help.${RESET}"
+    echo -e "8. list             -${YELLOW}For list of options.${RESET}"
+    echo -e "9. deploy           -${YELLOW}For deploying to production${RESET}"
+    echo -e "10. clean           -${YELLOW}For cleaning the production server${RESET}"
+    echo -e "11. setup           -${YELLOW}For fresh setup of the production server${RESET}"
+    echo -e "12. package         -${YELLOW}For packaging existing build${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -117,6 +108,8 @@ camel()
     #building camel
     cd ${OXHOME}/integrations/camel
     echo -e "${YELLOW}Building Camel${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
+    scp -i ${PEM} -r ${SERVER}:env/integrations/camel/src/main/resources/application.yml src/main/resources/
     #building camel
     docker run --network="host" -t -v ${PWD}:/workspace/app --entrypoint ./docker-build.sh camel
     echo -e "${GREEN}Building Camel Completed!${RESET}"
@@ -124,87 +117,6 @@ camel()
     cp ./build/libs/app-0.0.1-SNAPSHOT.jar ../../build/integrations/camel/camel.jar
     cp -R ./init.d ../../build/integrations/camel
     echo -e "${GREEN}Copying Camel completed!${RESET}"
-}
-calendar()
-{   
-    cd ${OXHOME}
-    echo -e "${YELLOW}Creating directory build/integrations/eventcalendar...${RESET}" 
-    mkdir -p build/integrations/eventcalendar
-    echo -e "${YELLOW}No build for calendar! Copying Calendar to build folder....${RESET}"
-    cp -R ./integrations/eventcalendar ./build/integrations/
-    echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/integrations/eventcalendar/* ./build/integrations/eventcalendar/
-    echo -e "${GREEN}Copying and Building Calendar Completed!${RESET}"
-}
-chat()
-{   
-    cd ${OXHOME}
-    echo -e "${YELLOW}Creating directory build/integrations/mattermost...${RESET}"
-    mkdir -p build/integrations/mattermost
-    #building mattermost
-    cd ${OXHOME}/integrations/mattermost
-    echo -e "${YELLOW}Building Integration Mattermost...${RESET}"
-    echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/integrations/mattermost/* ./
-    docker run -t --network="host" -e NODE_ENV='<production>' -v ${PWD}:/mattermost --entrypoint ./docker-build.sh mchat
-    echo -e "${GREEN}Building Mattermost Completed!${RESET}"
-    # unzip of the tar.gz file to build/integrations/mattermost
-    echo -e "${YELLOW}Copying Mattermost to build folder${RESET}"
-    tar xvzf ./mattermost-server/dist/mattermost-team-linux-amd64.tar.gz -C ../../build/integrations
-    echo -e "${GREEN}Copying Mattermost Completed!${RESET}"
-}
-crm()
-{   
-    cd ${OXHOME}
-    echo -e "${YELLOW}Creating directory build/integrations/orocrm...${RESET}"
-    mkdir -p build/integrations/crm
-    #building orocrm
-    cd ${OXHOME}/integrations
-    echo -e "${YELLOW}Building orocrm${RESET}"
-    echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/integrations/orocrm/* ./orocrm/
-    echo -e "${GREEN}Building orocrm Completed!${RESET}"
-    #copying orocrm to build
-    echo -e "${YELLOW}Copying Orocrm to build folder....${RESET}"
-    cp -R ./orocrm/* ../build/integrations/crm/
-    echo -e "${GREEN}Copying Completed!${RESET}"
-}
-mail()
-{   
-    cd ${OXHOME}
-    mkdir -p build/integrations/rainloop
-    #building rainloop
-    cd ${OXHOME}/integrations/rainloop
-    echo -e "${YELLOW}Building Rainloop...${RESET}"
-    echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/integrations/rainloop/.env.js ./
-    docker run -t -v ${PWD}:/app view ./dockerbuild.sh
-    echo -e "${GREEN}Building Rainloop Completed!${RESET}"
-    #copying contents of src folder to build/integrations/rainloop
-    echo -e "${YELLOW}Copying Rainloop to build folder...${RESET}"
-    cp -R ./build/dist/releases/webmail/1.12.1/src/* ../../build/integrations/rainloop/
-    echo -e "${GREEN}Copying Rainloop Completed!${RESET}"
-}
-view()
-{   
-    cd ${OXHOME}
-    echo -e "${YELLOW}Creating directory /build/view...${RESET}"
-    cd view
-    echo -e "${YELLOW}Build UI/view${RESET}"
-    echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/view/* ./
-    docker run -t -v ${PWD}:/app view ./dockerbuild.sh
-    echo -e "${GREEN}Building UI/view Completed!${RESET}"
-    cd ..
-    #copy contents of view to build
-    mkdir -p build/view
-    echo -e "${YELLOW}Copying View to build folder. Please wait this may take sometime....${RESET}"
-    rsync -rl --exclude=node_modules ./view ./build/
-    mkdir -p ./build/view/bos/node_modules
-    rsync -rl --delete ./view/bos/node_modules/ ./build/view/bos/node_modules/
-    echo -e "${GREEN}Copying View Completed!${RESET}"
-    #building UI/view folder
-    
 }
 workflow()
 {
@@ -221,67 +133,49 @@ workflow()
     cp ${OXHOME}/integrations/workflow/bpm-platform.xml ${OXHOME}/build/integrations/workflow 
     echo -e "${GREEN}Copying workflow Completed!${RESET}"
 }
-openproject()
-{
+#Update this specific for hub.
+view()
+{   
     cd ${OXHOME}
-    echo -e "${YELLOW}Creating directory build/integrations/openproject...${RESET}"
-    mkdir -p build/integrations/openproject
-    cd ${OXHOME}/integrations/openproject
+    echo -e "${YELLOW}Creating directory /build/view...${RESET}"
+    cd view
+    echo -e "${YELLOW}Build UI/view${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/integrations/openproject/config/* ./config/
-    echo -e "${YELLOW}Building Openproject...${RESET}"
-    docker run -t -v ${PWD}:/app --entrypoint ./dockerbuild.sh openproject_build
-    echo -e "${GREEN}Building Openproject Completed!${RESET}"
-    echo -e "${YELLOW}Now Copying Openproject to build folder...${RESET}"
-    rsync -rl --exclude=node_modules ${OXHOME}/integrations/openproject/ ${OXHOME}/build/integrations/openproject/
-    rm -rf ${OXHOME}/build/integrations/openproject/files ${OXHOME}/build/integrations/openproject/log
-    echo -e "${GREEN}Copying Openproject Completed!${RESET}"
-
+    scp -i ${PEM} -r ${SERVER}:env/view/* ./
+    docker run -t -v ${PWD}:/app view ./hubentrypoint.sh
+    echo -e "${GREEN}Building UI/view Completed!${RESET}"
+    cd ..
+    #copy contents of view to build
+    mkdir -p build/view
+    echo -e "${YELLOW}Copying View to build folder. Please wait this may take sometime....${RESET}"
+    rsync -rl --exclude=node_modules ./view ./build/
+    mkdir -p ./build/view/bos/node_modules
+    rsync -rl --delete ./view/bos/node_modules/ ./build/view/bos/node_modecho -e "${YELLOW}Copying clients DiveInsurance to build folder.${RESET}"echo -e "${YELLOW}Copying clients DiveInsurance to build folder.${RESET}"ules/
+    echo -e "${GREEN}Copying View Completed!${RESET}"
+    #building UI/view folder
+    
 }
-helpapp()
+clients()
 {
     cd ${OXHOME}
-    echo -e "${YELLOW}Creating directory build/integrations/help...${RESET}"
-    mkdir -p build/integrations/help/chat build/integrations/help/crm build/integrations/help/task
-    cd ${OXHOME}/integrations/help
-    echo -e "${YELLOW}Building HelpApp...${RESET}"
-    docker run -t -v ${PWD}:/app help
-    echo -e "${GREEN}Building HelpApp Completed!${RESET}"
-    echo -e "${YELLOW}Now Copying HelpApp to build folder...${RESET}"
-    rsync -rl ${OXHOME}/integrations/help/chat/build/html/* ${OXHOME}/build/integrations/help/chat
-    rsync -rl ${OXHOME}/integrations/help/crm/_build/html/* ${OXHOME}/build/integrations/help/crm
-    rsync -rl ${OXHOME}/integrations/help/task/* ${OXHOME}/build/integrations/help/task
-    echo -e "${GREEN}Copying HelpApp Completed!${RESET}"
-
-}
-#on-hold
-edms()
-{
-    cd ${OXHOME}
-    echo -e "${YELLOW}Creating directory build/integrations/edms...${RESET}"
-    mkdir -p build/integrations/edms
-    echo -e "${YELLOW}Copying edms to build folder...${RESET}"
-    rsync -rl --delete ${OXHOME}/integrations/edms/mayan-edms/ ${OXHOME}/build/integrations/edms/
-    echo -e "${GREEN}Copying edms Completed!${RESET}"
+    echo -e "${YELLOW}Creating directory /build/view...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients DiveInsurance to build folder.${RESET}"
+    rsync -rl clients/DiveInsurance/ ./build/clients/DiveInsurance/
+    echo -e "${YELLOW}Copying clients DiveInsurance Completed.${RESET}"
 
 }
 integrations()
 {
     camel
-    calendar
-    chat
-    crm
-    mail
-    openproject
-    helpapp
-    #edms
-    #workflow    
+    workflow    
 }
 all()
 {   
    integrations
    api
    view 
+   clients
 }
 
 #looping through case from arguments passed
@@ -300,52 +194,16 @@ do
                 view
                 package
                 break ;;
+        clients)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                clients
+                package
+                break;;
         camel)
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"
                 check_dir
                 camel
-                package
-                break ;;
-        calendar)
-                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"
-                check_dir
-                calendar
-                package
-                break ;;
-        chat)
-                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"
-                check_dir
-                chat
-                package
-                break ;;
-        crm)
-                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
-                check_dir
-                crm
-                package
-                break ;;
-        mail)
-                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
-                check_dir
-                mail
-                package
-                break ;;
-        openproject)
-                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
-                check_dir
-                openproject
-                package
-                break ;;
-        helpapp)
-                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
-                check_dir
-                helpapp
-                package
-                break ;;
-        edms)
-                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
-                check_dir
-                edms
                 package
                 break ;;
         workflow)
