@@ -14,7 +14,10 @@ class Ratecard extends AbstractAppDelegate
     {  
         $this->logger->info("Executing Rate Card");
         $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
+        $selectTax = "Select state, coverage, percentage FROM state_tax WHERE product = '".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
         $result = $persistenceService->selectQuery($select);
+        $stateTaxResult = $persistenceService->selectQuery($selectTax);
+        
         while ($result->next()) {
             $rate = $result->current();
             if(isset($rate['key'])){
@@ -26,6 +29,13 @@ class Ratecard extends AbstractAppDelegate
             }
             unset($rate);
         }
+
+        $stateTaxData = [];
+        while ($stateTaxResult->next()) {
+            $rate = $stateTaxResult->current();
+            array_push($stateTaxData, $rate);
+        }
+
         foreach ($data as $key => $value) {
             if(is_string($value))
             {
@@ -34,6 +44,9 @@ class Ratecard extends AbstractAppDelegate
                     $data[$key] = $result;
                 }
             }
+        }
+        if(isset($stateTaxData)){
+            $premiumRateCardDetails['stateTaxData'] = $stateTaxData;
         }
         if(isset($premiumRateCardDetails)){
             $returnArray = array_merge($data,$premiumRateCardDetails);
