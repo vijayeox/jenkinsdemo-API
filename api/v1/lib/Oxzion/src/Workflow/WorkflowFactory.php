@@ -23,16 +23,6 @@ class WorkflowFactory
         return new Camunda\ActivityImpl($this->config);
     }
 
-    // public function getEventManager()
-    // {
-    //     return new Camunda\EventManagerImpl();
-    // }
-
-    // public function getGroup()
-    // {
-    //     return new Camunda\GroupImpl();
-    // }
-
     public function getProcessEngine()
     {
         return new Camunda\ProcessEngineImpl($this->config);
@@ -42,8 +32,9 @@ class WorkflowFactory
     {
         return new Camunda\ProcessManagerImpl($this->config);
     }
-    // public function getUser()
-    // {
-    //     return new Camunda\UserImpl();
-    // }
+
+    public function getIncidentManager()
+    {
+        return new Camunda\IncidentManagerImpl($this->config);
+    }
 }

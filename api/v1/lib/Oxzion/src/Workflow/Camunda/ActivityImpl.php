@@ -86,8 +86,12 @@ class ActivityImpl implements Activity
     {
         $this->logger->info("Entering the completeActivity method in ActivityImpl File\n");
         $query = 'task/'.$activityId.'/complete';
+        $params = array();
+        foreach ($parameterArray as $key => $value) {
+            $params[$key]['value'] = $value;
+        }
         try {
-            $response =  $this->restClient->post($query, $parameterArray);
+            $response =  $this->restClient->post($query, array('variables'=>$params));
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {

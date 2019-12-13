@@ -405,17 +405,18 @@ class Module
                     $resultSetPrototype->setArrayObjectPrototype(new Model\ErrorLog());
                     return new TableGateway('ox_error_log', $dbAdapter, null, $resultSetPrototype);
                 },
+                Messaging\MessageProducer::class => function ($container) {
+                    $config = $container->get('config');
+                    return new Messaging\MessageProducer($config,$container->get(Service\ErrorLogService::class));
+                },
                 Service\ErrorLogService::class => function ($container) {
                     return new Service\ErrorLogService(
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
                         $container->get(Model\ErrorLogTable::class),
-                        $container->get(Service\UserCacheService::class)
+                        $container->get(Service\UserCacheService::class),
+                        $container->get(Workflow\WorkflowFactory::class)
                     );
-                },
-                Messaging\MessageProducer::class => function ($container) {
-                    $config = $container->get('config');
-                    return new Messaging\MessageProducer($config,$container->get(Service\ErrorLogService::class));
                 },
             ],
         ];
