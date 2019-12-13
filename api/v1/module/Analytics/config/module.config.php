@@ -62,7 +62,10 @@ return [
                         'controller' => Controller\WidgetController::class,
                         'access'=>[
                             // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
+                            //DO NOT ADD THIS AT IS NOT NEEDED. LEAVING THIS HERE IN CASE THE REQUIREMENT CHANGES
+                            //--------------------------------------------------------------------
+                            // - BRIAN
+                            // 'put'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
                             'post'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
                             'delete'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
                             'get'=> 'MANAGE_ANALYTICS_WIDGET_READ',
