@@ -330,7 +330,7 @@ clients()
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
-        rync -rl . /opt/oxzion/eoxapps/
+        rsync -rl . /opt/oxzion/eoxapps/
         chown oxzion:oxzion -R /opt/oxzion/eoxapps
     fi
 }
