@@ -257,8 +257,8 @@ class AppService extends AbstractService
                     $result = $this->entityService->saveEntity($appUuid, $entity);
                 }
                 $data['entity_id'] = $entity['id'];
-                if(isset($data['template_file'])){
-                    $data['template'] = file_get_contents($path.'content/forms/'.$data['template_file']);
+                if(isset($data['template'])){
+                    $data['template'] = file_get_contents($path.'content/forms/'.$data['template']);
                 }
                 $count = $this->formService->updateForm($appUuid, $data['uuid'], $data);
                 if ($count == 0) {

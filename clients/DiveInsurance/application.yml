@@ -9,7 +9,7 @@ app:
 org:
     -
         name: 'Vincencia & Buckley'
-        uuid: c1ed4200-9131-4671-b0e0-de3e27c3f609
+        uuid: f0033dc0-126b-40ba-89e0-d3061bdeda4c
         email: testhub07@gmail.com
         address1: '6 bCenterpoint'
         address2: Dr.
@@ -22,13 +22,16 @@ org:
             firstname: Admin
             lastname: User
             email: testhub07@gmail.com
-        preferences: "{}"
+        preferences: '{}'
 privilege:
     -
         name: MANAGE_POLICY_APPROVAL
         permission: 3
     -
         name: MANAGE_MY_POLICY
+        permission: 3
+    -
+        name: MANAGE_DIVEINSURANCE_ERRORS
         permission: 3
 role:
     -
@@ -38,11 +41,11 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 3
-        uuid: fa31149b-2f01-445a-bc24-7843196bd964
+        uuid: 0c055839-cafc-4f06-ab66-c56b5f54042f
 menu:
     -
         name: Home
-        uuid: 8afee66e-21e5-49c3-b566-b1a248d7cadb
+        uuid: 0d0ea0f3-2ea1-43e0-ac89-917434eabf4f
         privilege: MANAGE_MY_POLICY_WRITE
         icon: 'fa fa-home'
         page:
@@ -81,24 +84,15 @@ menu:
                                 -
                                     name: IPL
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform
+                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
                                 -
                                     name: 'Dive Boat'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform
+                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
                                 -
                                     name: 'Dive Store'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform
+                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
                         columnConfig:
                             -
                                 title: Name
@@ -111,7 +105,7 @@ menu:
                                 field: data
     -
         name: 'My History'
-        uuid: d988d72f-8c54-4d41-93f8-cbccafcdd1e7
+        uuid: 1a82cf8a-07f8-49a5-9818-5bec4d54318e
         privilege: MANAGE_MY_POLICY_READ
         icon: 'fa fa-table'
         page:
@@ -122,6 +116,36 @@ menu:
                     type: List
                     content:
                         route: file
+                        filterable: true
+                        reorderable: true
+                        resizable: true
+                        sortable: true
+                        pageable:
+                            buttonCount: 3
+                            pageSizes:
+                                - 10
+                                - 20
+                                - 50
+                            info: true
+                        columnConfig:
+                            -
+                                title: PADI
+                                field: padi
+                            -
+                                title: 'First Name'
+                                field: first_name
+                            -
+                                title: 'Last Name'
+                                field: last_name
+                            -
+                                title: Product
+                                field: workflow_name
+                            -
+                                title: Task
+                                field: activityName
+                            -
+                                title: 'Submission Date'
+                                field: start_date
     -
         name: 'Verify PADI details'
         icon: 'fa fa-search'
@@ -135,7 +159,7 @@ menu:
                 -
                     formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
                     type: Form
-        uuid: 23b203bc-c1e0-482d-8836-8ec02bc6f2e1
+        uuid: 9e7c9797-7fb9-4a63-8432-f5de2bbf5968
     -
         name: Home
         icon: 'fa fa-paper'
@@ -147,7 +171,7 @@ menu:
                 -
                     type: Dashboard
                     dashboard: Dashboard
-        uuid: 3dc74e92-7a90-492e-83fe-ce65bb412aaa
+        uuid: e3cd93af-3b15-49ab-9196-2bad928c87e3
     -
         name: Requests
         privilege: MANAGE_POLICY_APPROVAL_WRITE
@@ -177,50 +201,32 @@ menu:
                                 -
                                     name: IPL
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
+                                    details: [{ type: Form, url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform }]
                                 -
                                     name: 'Dive Store'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                    details: [{ type: Form, url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform }]
                                 -
                                     name: 'Dive Boat'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
+                                    details: [{ type: Form, url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform }]
                                 -
                                     name: 'Emergency First Response'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform
+                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
                         actions:
                             -
                                 name: Approve
                                 rule: '{{to_be_claimed}} == 1'
                                 details:
-                                    -
-                                        type: Update
-                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim'
-                                    -
-                                        type: Form
-                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                                    - { type: Update, params: { url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim' }}
+                                    - { type: Form, url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form' }
                                 icon: 'fa fa-plus-circle'
                             -
                                 name: Approve
                                 rule: '{{to_be_claimed}} == 0'
                                 details:
-                                    -
-                                        type: Form
-                                        url: 'workflowinstance\/{{workflowInstanceId}}\/activityinstance\/{{activityInstanceId}}\/form'
+                                    - { type: Form, url: 'workflowinstance\/{{workflowInstanceId}}\/activityinstance\/{{activityInstanceId}}\/form' }
                         columnConfig:
                             -
                                 title: PADI
@@ -240,7 +246,53 @@ menu:
                             -
                                 title: 'Submission Date'
                                 field: start_date
-        uuid: c6be57db-299b-4da5-900f-63dd134f286c
+        uuid: cc831923-40a2-4d9b-b11e-17b0462a45be
+    -
+        name: Errors
+        privilege: MANAGE_DIVEINSURANCE_ERRORS_WRITE
+        icon: 'fa fa-warning'
+        page:
+            name: Errors
+            description: 'Shows errors which occured in workflow'
+            content:
+                -
+                    type: List
+                    content:
+                        route: errorlog
+                        filterable: true
+                        reorderable: true
+                        resizable: true
+                        sortable: true
+                        pageable:
+                            buttonCount: 3
+                            pageSizes:
+                                - 10
+                                - 20
+                                - 50
+                            info: true
+                        actions:
+                            -
+                                name: retry
+                                rule: 'true'
+                                details:
+                                    - { type: Update, params: { url: 'errorlog/{{id}}/retry' }}
+                        columnConfig:
+                            -
+                                title: Id
+                                field: id
+                            -
+                                title: 'Type of Error'
+                                field: error_type
+                            -
+                                title: Data
+                                field: payload
+                            -
+                                title: 'Date Created'
+                                field: date_created
+                            -
+                                title: Parameters
+                                field: params
+        uuid: 1dff8bf5-d1ab-4c3a-867c-89983d6441ca
     -
         name: 'Manage Policies'
         icon: 'fa fa-list'
@@ -250,10 +302,49 @@ menu:
             description: 'Page to manage policies'
             content:
                 -
-                    type: List
+                    type: SearchPage
                     content:
-                        route: assignments
-        uuid: 46e296fd-87ef-4aa2-9c35-9b4e77f539b8
+                        actions:
+                            -
+                                name: View
+                                page_id: 1
+                                icon: 'fa fa-envelope-open'
+                            -
+                                name: Cancel
+                                page_id: 3
+                                icon: 'fa fa-window-close'
+                        filterColumns:
+                                -
+                                    name
+                                -
+                                    padi
+                                -
+                                    firstname
+                                -
+                                    lastname
+                        operations:
+                            title: 'Create Policies'
+                            actions:
+                                -
+                                    name: IPL
+                                    rule: 'true'
+                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
+                                -
+                                    name: 'Dive Boat'
+                                    rule: 'true'
+                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
+                                -
+                                    name: 'Dive Store'
+                                    rule: 'true'
+                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
+                        columnConfig:
+                            -
+                                title: Name
+                                field: name
+                            -
+                                title: Status
+                                field: status
+        uuid: 7d584f90-675a-4c37-9c79-0b41e4908b36
 workflow:
     -
         name: 'Individual Liability'
@@ -279,8 +370,8 @@ form:
     -
         name: 'PADI Verification'
         uuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
-        description: Page for CSR to verify PADI details
-        template_file: padi_validation.json
+        description: 'Page for CSR to verify PADI details'
+        template: padi_validation.json
         entity: Padi
 job:
     -
