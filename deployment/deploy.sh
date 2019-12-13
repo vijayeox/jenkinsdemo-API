@@ -347,7 +347,7 @@ orocrm
 rainloop
 openproject
 clients
-#workflow
+workflow
 helpapp
 #edms
 echo -e "${GREEN}${BLINK}DEPLOYED SUCCESSFULLY${RESET}"
