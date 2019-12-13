@@ -1,8 +1,8 @@
 CREATE TABLE `state_tax` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `product` varchar(30) NOT NULL,
-  `state` varchar(10) NOT NULL,
-  `coverage` varchar(30) NOT NULL,
+  `product` varchar(100) NOT NULL,
+  `state` varchar(255) NOT NULL,
+  `coverage` varchar(255) NOT NULL,
   `percentage` decimal(10,0) NOT NULL,
   `start_date` datetime NOT NULL,
   `end_date` datetime NOT NULL,
