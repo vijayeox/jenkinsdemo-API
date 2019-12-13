@@ -328,10 +328,11 @@ clients()
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
         cd ${TEMP}/clients
-        echo -e "${YELLOW}Copying EOX Apps directory${RESET}"
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
         rsync -rl . /opt/oxzion/eoxapps/
         chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
     fi
 }
 #calling functions accordingly
