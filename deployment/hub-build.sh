@@ -152,6 +152,7 @@ view()
     mkdir -p ./build/view/bos/node_modules
     rsync -rl --delete ./view/bos/node_modules/ ./build/view/bos/node_modules/
     rsync -rl --delete ./view/gui/node_modules/ ./build/view/gui/node_modules/
+    rsync -rl --delete ./view/node_modules/ ./build/view/node_modules/
     echo -e "${GREEN}Copying View Completed!${RESET}"
     #building UI/view folder
     
