@@ -41,11 +41,11 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 3
-        uuid: 0c055839-cafc-4f06-ab66-c56b5f54042f
+        uuid: bf349be5-3d33-45bf-84a9-816b712002f4
 menu:
     -
         name: Home
-        uuid: 0d0ea0f3-2ea1-43e0-ac89-917434eabf4f
+        uuid: e1ee3006-77a7-4d62-ad25-b7be66387fb1
         privilege: MANAGE_MY_POLICY_WRITE
         icon: 'fa fa-home'
         page:
@@ -105,7 +105,7 @@ menu:
                                 field: data
     -
         name: 'My History'
-        uuid: 1a82cf8a-07f8-49a5-9818-5bec4d54318e
+        uuid: c420e935-372a-44e2-b4d7-4979439f9427
         privilege: MANAGE_MY_POLICY_READ
         icon: 'fa fa-table'
         page:
@@ -159,7 +159,7 @@ menu:
                 -
                     formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
                     type: Form
-        uuid: 9e7c9797-7fb9-4a63-8432-f5de2bbf5968
+        uuid: 40209052-2550-4d60-a2ea-7a38bb614c7a
     -
         name: Home
         icon: 'fa fa-paper'
@@ -171,7 +171,7 @@ menu:
                 -
                     type: Dashboard
                     dashboard: Dashboard
-        uuid: e3cd93af-3b15-49ab-9196-2bad928c87e3
+        uuid: dc280f97-f4f7-4fb1-ac56-e820831445c3
     -
         name: Requests
         privilege: MANAGE_POLICY_APPROVAL_WRITE
@@ -219,7 +219,7 @@ menu:
                                 name: Approve
                                 rule: '{{to_be_claimed}} == 1'
                                 details:
-                                    - { type: Update, params: { url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim' }}
+                                    - { type: Update, params: { url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim' } }
                                     - { type: Form, url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form' }
                                 icon: 'fa fa-plus-circle'
                             -
@@ -246,7 +246,7 @@ menu:
                             -
                                 title: 'Submission Date'
                                 field: start_date
-        uuid: cc831923-40a2-4d9b-b11e-17b0462a45be
+        uuid: 452287d9-86ea-4dd1-b18a-53bf9a924d1a
     -
         name: Errors
         privilege: MANAGE_DIVEINSURANCE_ERRORS_WRITE
@@ -275,7 +275,7 @@ menu:
                                 name: retry
                                 rule: 'true'
                                 details:
-                                    - { type: Update, params: { url: 'errorlog/{{id}}/retry' }}
+                                    - { type: Update, params: { url: 'errorlog/{{id}}/retry' } }
                         columnConfig:
                             -
                                 title: Id
@@ -292,7 +292,7 @@ menu:
                             -
                                 title: Parameters
                                 field: params
-        uuid: 1dff8bf5-d1ab-4c3a-867c-89983d6441ca
+        uuid: b2cb5a1e-93b1-4263-b097-9a98c5d35d33
     -
         name: 'Manage Policies'
         icon: 'fa fa-list'
@@ -302,7 +302,7 @@ menu:
             description: 'Page to manage policies'
             content:
                 -
-                    type: SearchPage
+                    type: Search
                     content:
                         actions:
                             -
@@ -314,14 +314,10 @@ menu:
                                 page_id: 3
                                 icon: 'fa fa-window-close'
                         filterColumns:
-                                -
-                                    name
-                                -
-                                    padi
-                                -
-                                    firstname
-                                -
-                                    lastname
+                            - name
+                            - padi
+                            - firstname
+                            - lastname
                         operations:
                             title: 'Create Policies'
                             actions:
@@ -344,7 +340,7 @@ menu:
                             -
                                 title: Status
                                 field: status
-        uuid: 7d584f90-675a-4c37-9c79-0b41e4908b36
+        uuid: cb7a2022-307f-40ff-88dc-64d6d5834f5c
 workflow:
     -
         name: 'Individual Liability'

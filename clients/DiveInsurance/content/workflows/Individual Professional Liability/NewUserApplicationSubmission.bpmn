@@ -48,7 +48,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_03hjjoz" name="Yes" sourceRef="ExclusiveGateway_12lkytx" targetRef="Task_0rtdhn2">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==true || automatic_renewal=="true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="Task_0rtdhn2" name="Schedule a reminder mail for Auto Renewal" camunda:expression="0">
+    <bpmn:serviceTask id="Task_0rtdhn2" name="Schedule a reminder mail for Auto Renewal" camunda:asyncBefore="true" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property />
@@ -84,7 +84,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_17xyewr" sourceRef="Task_0rtdhn2" targetRef="Task_1mka1rj" />
     <bpmn:sequenceFlow id="SequenceFlow_0d6flow" name="Approved" sourceRef="Task_1s7qzh3" targetRef="ExclusiveGateway_12lkytx" />
-    <bpmn:userTask id="Task_1s7qzh3" name="CSR Review" default="SequenceFlow_0d6flow" camunda:asyncAfter="true" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateGroups="CSR group">
+    <bpmn:userTask id="Task_1s7qzh3" name="CSR Review" default="SequenceFlow_0d6flow" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateGroups="CSR group">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="approved" type="boolean" defaultValue="false" />

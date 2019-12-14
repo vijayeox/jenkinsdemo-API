@@ -308,7 +308,7 @@ class WorkflowInstanceService extends AbstractService
         if (isset($existingFile[0])) {
             $this->logger->info(WorkflowInstanceService::class . "FILE UPDATE-----" . print_r($existingFile, true));
             $file = $this->fileService->updateFile($params, $existingFile[0]['uuid']);
-            $workflowInstanceId = $this->activityEngine->submitTaskForm($activityId, $params);
+            $workflowInstanceId = $this->activityEngine->completeActivity($activityId, $params);
 
         } else {
             throw new EntityNotFoundException("No file EntityNotFoundExceptiond for workflow instance " . $workflowInstanceId);

@@ -2,13 +2,15 @@ package org.oxzion.processengine
 
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
+import org.camunda.bpm.engine.delegate.BpmnError
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.delegate.ExecutionListener
+import org.camunda.bpm.engine.runtime.Incident
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class CustomServiceTaskListener implements ExecutionListener {
-  private static final Logger logger = LoggerFactory.getLogger(CustomServiceTaskListener.class);
+  private static final Logger logger = LoggerFactory.getLogger(CustomServiceTaskListener.class)
 
   private static CustomServiceTaskListener instance = null
 
@@ -47,8 +49,8 @@ class CustomServiceTaskListener implements ExecutionListener {
     taskDetails.parentInstanceId = execution.getParentActivityInstanceId()
     taskDetails.parentActivity = execution.getParentId()
     String json = new JsonBuilder(taskDetails ).toPrettyString()
-    try{
       logger.info("Custom Service Task Listener -- ${taskDetails.variables.command}")
+      try{
       def connection = getConnection()
       logger.info("Posting data - ${json}")
       String response
@@ -65,19 +67,18 @@ class CustomServiceTaskListener implements ExecutionListener {
         logger.info("Response received - ${response}")
         def responseValue = jsonSlurper.parseText(response)
         if(responseValue.status == "success"){
-            if(taskDetails.variables.return == "true"){
-              def responseData = responseValue.data
-              responseData = responseData.putAll(responseData)
-              execution.setVariables(responseData)
-              logger.info("Response received - ${execution.getVariables()}")
-            }
-        }else{
-           //TODO ERROR HANDLER
-           logger.error("ERROR");
-        }
+          if(taskDetails.variables.return == "true"){
+            def responseData = responseValue.data
+            responseData = responseData.putAll(responseData)
+            execution.setVariables(responseData)
+            logger.info("Response received - ${execution.getVariables()}")
+          }
+          }else{
+            ErrorHandler.handleError(execution)
+         }
+       }
+       }catch(Exception e){
+            ErrorHandler.handleError(execution,e)
+       }
       }
-      }catch(Exception e){
-          logger.error("Custom Service Task Listener Exception-- Message : ${e.getMessage()},   Trace : ${e.getStackTrace()}")
-      } 
-  }
-}
+    }
