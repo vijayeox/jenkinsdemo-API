@@ -39,7 +39,7 @@ class DataSourceControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => "Orocrm", 'type' => 'MySql', 'configuration' => '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_datasource'));
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_datasource'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/datasource', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -50,14 +50,14 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['type'], $data['type']);
         $this->assertEquals($content['data']['configuration'], $data['configuration']);
-        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_datasource'));
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_datasource'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['type' => 'MySql', 'configuration' => '{"data": { "server": "myServerAddress", "Database": "myDataBase", "Uid": "myUsername","Pwd": "myPassword"}}'];
-        $this->assertEquals(2, $this->getConnection()->getRowCount('ox_datasource'));
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_datasource'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/datasource', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -71,10 +71,10 @@ class DataSourceControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => "Analytics", 'type' => 'Elastic'];
+        $data = ['name' => "Analytics", 'type' => 'Elastic' , 'version' => 1];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
-        $this->dispatch('/analytics/datasource/7700c623-1361-4c85-8203-e255ac995c4a?version=1', 'PUT', null);
+        $this->dispatch('/analytics/datasource/7700c623-1361-4c85-8203-e255ac995c4a', 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dataSource');
@@ -82,6 +82,20 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['type'], $data['type']);
+    }
+
+    public function testUpdateWithWrongVersion()
+    {
+        $data = ['name' => "Analytics", 'type' => 'Elastic' , 'version' => 3];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/datasource/7700c623-1361-4c85-8203-e255ac995c4a', 'PUT', null);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('dataSource');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Version changed');
     }
 
     public function testUpdateNotFound()
@@ -108,15 +122,28 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
     }
 
-    public function testDeleteNotFound()
+    public function testDeleteWithWrongVersion()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/datasource/10000', 'DELETE');
+        $this->dispatch('/analytics/datasource/7700c623-1361-4c85-8203-e255ac995c4a?version=3', 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('dataSource');
         $content = json_decode($this->getResponse()->getContent(), true);
-        // $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Version changed');
+    }
+
+    public function testDeleteNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/datasource/10000?version=1', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('dataSource');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'DataSource not found for uuid - 10000');
     }
 
     public function testGet() {
@@ -146,12 +173,12 @@ class DataSourceControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][0]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
-        $this->assertEquals($content['data']['data'][0]['name'], 'mattermost');
-        $this->assertEquals($content['data']['data'][1]['type'], 'Elastic');
-        $this->assertEquals($content['data']['data'][1]['name'], 'reporting engine');
-        $this->assertEquals($content['data']['total'],2);
+        $this->assertEquals(count($content['data']['data']), 3);
+        $this->assertEquals($content['data']['data'][1]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
+        $this->assertEquals($content['data']['data'][1]['name'], 'mattermost');
+        $this->assertEquals($content['data']['data'][2]['type'], 'Elastic');
+        $this->assertEquals($content['data']['data'][2]['name'], 'reporting engine');
+        $this->assertEquals($content['data']['total'],3);
     }
 
     public function testGetListWithSort()
@@ -162,12 +189,12 @@ class DataSourceControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 2);
+        $this->assertEquals(count($content['data']['data']), 3);
         $this->assertEquals($content['data']['data'][0]['uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
         $this->assertEquals($content['data']['data'][0]['name'], 'reporting engine');
         $this->assertEquals($content['data']['data'][1]['type'], 'MySql');
         $this->assertEquals($content['data']['data'][1]['name'], 'mattermost');
-        $this->assertEquals($content['data']['total'],2);
+        $this->assertEquals($content['data']['total'],3);
     }
 
      public function testGetListSortWithPageSize()
@@ -178,11 +205,11 @@ class DataSourceControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 1);
-        $this->assertEquals($content['data']['data'][0]['uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
-        $this->assertEquals($content['data']['data'][0]['name'], 'reporting engine');
-        $this->assertEquals($content['data']['data'][0]['type'], 'Elastic');
-        $this->assertEquals($content['data']['total'],2);
+        $this->assertEquals(count($content['data']['data']), 2);
+        $this->assertEquals($content['data']['data'][1]['uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
+        $this->assertEquals($content['data']['data'][1]['name'], 'reporting engine');
+        $this->assertEquals($content['data']['data'][1]['type'], 'Elastic');
+        $this->assertEquals($content['data']['total'],3);
     }
 
     public function testGetListwithQueryParameters()

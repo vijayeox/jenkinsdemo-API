@@ -75,7 +75,7 @@ class DashboardController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED','new record' => $e->getReturnObject()]);
         }
         if ($result == 0) {
             return $this->getErrorResponse("Dashboard update failed for uuid - $uuid", 404);
@@ -90,7 +90,7 @@ class DashboardController extends AbstractApiController
                 $response = $this->dashboardService->deleteDashboard($uuid, $params['version']);
             }
             catch (VersionMismatchException $e) {
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED','new record' => $e->getReturnObject()]);
             }
             if ($response == 0) {
                 return $this->getErrorResponse("Dashboard not found for uuid - $uuid", 404, ['uuid' => $uuid]);

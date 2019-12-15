@@ -23,6 +23,7 @@ use Oxzion\Service\UserCacheService;
 use Oxzion\Service\RoleService;
 use App\Service\MenuItemService;
 use App\Service\PageService;
+use Oxzion\Service\ErrorLogService;
 
 class Module implements ConfigProviderInterface
 {
@@ -218,6 +219,12 @@ class Module implements ConfigProviderInterface
                     return new Controller\EntityController(
                         $container->get(Model\EntityTable::class),
                         $container->get(Service\EntityService::class),
+                        $container->get(AdapterInterface::class)
+                    );
+                },
+                Controller\ErrorLogController::class => function ($container) {
+                    return new Controller\ErrorLogController(
+                        $container->get(ErrorLogService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },

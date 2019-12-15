@@ -1,6 +1,6 @@
 Build all the child projects first
 
-$ sudo docker run --network="host" -it --env-file .env -v ${PWD}:/camunda --entrypoint=bash workflow
+$ sudo docker run --network="host" -it -v ${PWD}:/camunda --entrypoint=bash workflow
 
 $ cd IdentityService/
 $ ./gradlew build
@@ -19,10 +19,10 @@ $ docker build -t workflow .
 copy the .env.sample to .env and update the db host, user and password values
 
 To run the docker container in foreground
-$ docker run --network="host" -it --env-file .env workflow
+$ docker run --network="host" -it workflow
 
 To run the docker container in background
-$ docker run --network="host" -d --env-file .env --rm --name wf_1 workflow
+$ docker run --network="host" -d --rm --name wf_1 workflow
 
 To stop the docker when running in background mode
 $ docker stop wf_1

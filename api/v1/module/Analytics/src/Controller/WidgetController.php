@@ -72,7 +72,7 @@ class WidgetController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         catch (VersionMismatchException $e) {
-            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+            return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED','new record' => $e->getReturnObject()]);
         }
         if ($count == 0) {
             return $this->getErrorResponse("Widget not found for uuid - $uuid", 404);
@@ -87,7 +87,7 @@ class WidgetController extends AbstractApiController
                 $response = $this->widgetService->deleteWidget($uuid, $params['version']);
             }
             catch (VersionMismatchException $e) {
-                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED']);
+                return $this->getErrorResponse('Version changed', 404, ['reason' => 'Version changed', 'reasonCode' => 'VERSION_CHANGED','new record' => $e->getReturnObject()]);
             }
             if ($response == 0) {
                 return $this->getErrorResponse("Query not found for uuid - $uuid", 404, ['uuid' => $uuid]);

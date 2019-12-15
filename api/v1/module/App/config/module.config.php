@@ -514,6 +514,33 @@ return [
                     ],
                 ],
             ],
+            'app_error_log' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/errorlog',
+                    'defaults' => [
+                        'controller' => Controller\ErrorLogController::class,
+                        'method' => 'GET',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'app_error_retry' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/errorlog/:errorId/retry',
+                    'defaults' => [
+                        'controller' => Controller\ErrorLogController::class,
+                        'method' => 'GET',
+                        'action' => 'retry',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [

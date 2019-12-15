@@ -50,7 +50,7 @@ class QueryService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -61,10 +61,14 @@ class QueryService extends AbstractService
         if (is_null($obj)) {
             return 0;
         }
+        if(!isset($data['version']))
+        {
+            throw new Exception("Version is not specified, please specify the version");
+        }
         $form = new Query();
-        $data = array_merge($obj->toArray(), $data);
+        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
         $form->exchangeWithSpecificKey($data,'value',true);
-        $form->validate();
+        $form->updateValidate();
         $count = 0;
         try {
             $count = $this->table->save2($form);
@@ -74,22 +78,26 @@ class QueryService extends AbstractService
             }
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
 
-    public function deleteQuery($uuid)
+    public function deleteQuery($uuid, $version)
     {
         $obj = $this->table->getByUuid($uuid, array());
         if (is_null($obj)) {
             return 0;
         }
+        if(!isset($version))
+        {
+            throw new Exception("Version is not specified, please specify the version");
+        }
+        $data = array('version' => $version, 'isdeleted' => 1);
         $form = new Query();
-        $data['isdeleted'] = 1;
-        $data = array_merge($obj->toArray(), $data);
+        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
         $form->exchangeWithSpecificKey($data,'value',true);
-        $form->validate();
+        $form->updateValidate();
         $count = 0;
         try {
             $count = $this->table->save2($form);
@@ -99,7 +107,7 @@ class QueryService extends AbstractService
             }
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }

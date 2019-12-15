@@ -30,7 +30,6 @@ class VisualizationService extends AbstractService
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
-        $data['version'] = 1;
         $form->exchangeWithSpecificKey($data,'value');
         $form->validate();
         $form->validateType($data['name']);
@@ -47,7 +46,7 @@ class VisualizationService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -58,10 +57,14 @@ class VisualizationService extends AbstractService
         if (is_null($obj)) {
             return 0;
         }
+        if(!isset($data['version']))
+        {
+            throw new Exception("Version is not specified, please specify the version");
+        }
         $form = new Visualization();
-        $data = array_merge($obj->toArray(), $data);
+        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
         $form->exchangeWithSpecificKey($data,'value',true);
-        $form->validate();
+        $form->updateValidate();
         if(isset($data['name']))
             $form->validateType($data['name']);
         $count = 0;
@@ -73,36 +76,38 @@ class VisualizationService extends AbstractService
             }
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
 
     public function deleteVisualization($uuid,$version)
     {
-        $query = 'update ox_visualization set isdeleted=true where uuid=:uuid and version=:version';
-        $queryParams = [
-            'uuid'      => $uuid,
-            'version'   =>$version
-        ];
-        try {
-            $this->beginTransaction();
-            $result = $this->executeQueryWithBindParameters($query, $queryParams);
-            $this->commit();
-            return 1;
-        }
-        catch (ZendDbException $e) {
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
-            try {
-                $this->rollback();
-            }
-            catch (ZendDbException $ee) {
-                $this->logger->err('Database exception occurred when rolling back transaction.');
-                $this->logger->err($ee);
-            }
+        $obj = $this->table->getByUuid($uuid, array());
+        if (is_null($obj)) {
             return 0;
         }
+        if(!isset($version))
+        {
+            throw new Exception("Version is not specified, please specify the version");
+        }
+        $data = array('version' => $version,'isdeleted' => 1);
+        $form = new Visualization();
+        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+        $form->exchangeWithSpecificKey($data,'value',true);
+        $form->updateValidate($data);
+        $count = 0;
+        try {
+            $count = $this->table->save2($form);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+        return $count;
     }
 
     public function getVisualization($uuid)

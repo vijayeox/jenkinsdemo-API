@@ -249,17 +249,13 @@ workflow()
     then
         echo -e "${RED}Workflow was not packaged so skipping it\n${RESET}"
     else
-        docker stop wf_1
+        service camunda stop
         cd ${TEMP}
-        rsync -rl --delete integrations/workflow/ /opt/oxzion/workflow/
+        cp ${TEMP}/integrations/workflow/identity_plugin-1.0.jar integrations/workflow/processengine_plugin-1.0.jar /opt/oxzion/camunda/lib/
+        cp ${TEMP}/integrations/workflow/bpm-platform.xml /opt/oxzion/camunda/conf/
+        chown oxzion:oxzion -R /opt/oxzion/camunda
         echo -e "${GREEN}Copying workflow Complete!${RESET}"
-        cd /opt/oxzion/workflow
-        echo -e "${YELLOW}Building Workflow Docker Image!${RESET}"
-        docker build -t workflow .
-        echo -e "${GREEN}Built!${RESET}"
-        echo -e "${YELLOW}Starting workflow in docker!${RESET}"
-        docker run --network="host" -d --env-file ~/env/integrations/workflow/.env --rm --name wf_1 workflow 
-        echo -e "${GREEN}Started Workflow!${RESET}"
+        service camunda start
     fi
 }
 openproject()
@@ -323,6 +319,22 @@ edms()
         echo -e "${GREEN}Copying edms Complete!${RESET}"
     fi
 }
+clients()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl . /opt/oxzion/eoxapps/
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+    fi
+}
 #calling functions accordingly
 unpack
 echo -e "${YELLOW}Now copying files to respective locations..${RESET}"
@@ -335,6 +347,7 @@ mattermost
 orocrm
 rainloop
 openproject
+clients
 workflow
 helpapp
 #edms

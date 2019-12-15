@@ -22,13 +22,14 @@ abstract class AbstractService extends AbstractBaseService
         return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
     }
     
-    protected function getIdFromUuid($table, $uuid)
+    protected function getIdFromUuid($table, $uuid, $filter = array())
     {
+        $filter['uuid'] = $uuid;
         $sql = $this->getSqlObject();
         $getID= $sql->select();
         $getID->from($table)
         ->columns(array("id"))
-        ->where(array('uuid' => $uuid));
+        ->where($filter);
         $responseID = $this->executeQuery($getID)->toArray();
         if($responseID){
             return $responseID[0]['id'];

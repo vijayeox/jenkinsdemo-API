@@ -47,7 +47,7 @@ class DataSourceService extends AbstractService
             $this->commit();
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
@@ -58,10 +58,14 @@ class DataSourceService extends AbstractService
         if (is_null($obj)) {
             return 0;
         }
+        if(!isset($data['version']))
+        {
+            throw new Exception("Version is not specified, please specify the version");
+        }
         $form = new DataSource();
-        $data = array_merge($obj->toArray(), $data);
+        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
         $form->exchangeWithSpecificKey($data,'value',true);
-        $form->validate();
+        $form->updateValidate($data);
         $count = 0;
         try {
             $count = $this->table->save2($form);
@@ -71,36 +75,38 @@ class DataSourceService extends AbstractService
             }
         } catch (Exception $e) {
             $this->rollback();
-            return 0;
+            throw $e;
         }
         return $count;
     }
 
     public function deleteDataSource($uuid,$version)
     {
-        $query = 'update ox_datasource set isdeleted=true where uuid=:uuid and version=:version';
-        $queryParams = [
-            'uuid'      => $uuid,
-            'version'   =>$version
-        ];
-        try {
-            $this->beginTransaction();
-            $result = $this->executeQueryWithBindParameters($query, $queryParams);
-            $this->commit();
-            return 1;
-        }
-        catch (ZendDbException $e) {
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
-            try {
-                $this->rollback();
-            }
-            catch (ZendDbException $ee) {
-                $this->logger->err('Database exception occurred when rolling back transaction.');
-                $this->logger->err($ee);
-            }
+        $obj = $this->table->getByUuid($uuid, array());
+        if (is_null($obj)) {
             return 0;
         }
+        if(!isset($version))
+        {
+            throw new Exception("Version is not specified, please specify the version");
+        }
+        $data = array('version' => $version,'isdeleted' => 1);
+        $form = new DataSource();
+        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+        $form->exchangeWithSpecificKey($data,'value',true);
+        $form->updateValidate($data);
+        $count = 0;
+        try {
+            $count = $this->table->save2($form);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+        return $count;
     }
 
     public function getDataSource($uuid)
@@ -133,8 +139,10 @@ class DataSourceService extends AbstractService
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
         foreach ($result as $key => $value) {
-            $result[$key]['configuration'] = json_decode($result[$key]['configuration']);
-            unset($result[$key]['id']);
+            if(isset($result[$key]['configuration']) && (!empty($result[$key]['configuration']))){
+                $result[$key]['configuration'] = json_decode($result[$key]['configuration']);
+                unset($result[$key]['id']);
+            }
         }
         return array('data' => $result,
                  'total' => $count);
@@ -151,9 +159,9 @@ class DataSourceService extends AbstractService
             return 0;
         }
         $type = $response[0]['type'];
-        
+
         $config = json_decode($response[0]['configuration'],1);
-        
+
         switch($type) {
             case 'Elastic':
                 $elasticConfig['elasticsearch'] = $config['data'];

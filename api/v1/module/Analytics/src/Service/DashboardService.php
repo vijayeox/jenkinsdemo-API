@@ -25,144 +25,92 @@ class DashboardService extends AbstractService
 
     public function createDashboard($data)
     {
-        $newDashboardUuid = Uuid::uuid4()->toString();
-        $queryParams = [
-            'uuid'           => $newDashboardUuid,
-            'date_created'   => date('Y-m-d H:i:s'),
-            'org_id'         => AuthContext::get(AuthConstants::ORG_ID),
-            'created_by'     => AuthContext::get(AuthConstants::USER_ID),
-            'version'        => 0,
-            'isdeleted'      => false,
-            'dashboard_type' => 'html',
-            'name'           => $data['name'],
-            'ispublic'       => isset($data['ispublic']) ? $data['ispublic'] : false,
-            'description'    => $data['description'],
-            'content'        => $data['content']
-        ];
-        $query = 'insert into ox_dashboard (uuid, name, ispublic, description, dashboard_type, created_by, date_created, org_id, isdeleted, content, version) values (:uuid, :name, :ispublic, :description, :dashboard_type, :created_by, :date_created, :org_id, :isdeleted, :content, :version)';
-
+        $form = new Dashboard();
+        $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+        $data['date_created'] = date('Y-m-d H:i:s');
+        $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        $data['uuid'] = Uuid::uuid4()->toString();
+        $form->exchangeWithSpecificKey($data,'value');
+        $form->validate();
+        $this->beginTransaction();
+        $count = 0;
         try {
-            $this->beginTransaction();
-            $result = $this->executeQueryWithBindParameters($query, $queryParams);
-            $this->commit();
-            return $newDashboardUuid;
-        }
-        catch (ZendDbException $e) {
-            $this->logger->error('Database exception occurred. Query and parameters:');
-            $this->logger->error($query);
-            $this->logger->error($queryParams);
-            $this->logger->error($e);
-            try {
+            $count = $this->table->save2($form);
+            if ($count == 0) {
                 $this->rollback();
+                return 0;
             }
-            catch (ZendDbException $ee) {
-                $this->logger->error('Database exception occurred when rolling back transaction.');
-                $this->logger->error($ee);
-            }
-            return 0;
+            $id = $this->table->getLastInsertValue();
+            $data['id'] = $id;
+            $this->commit();
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
         }
+        return $data['uuid'];
     }
 
     public function updateDashboard($uuid, $data)
     {
-        $updatableColumns = [
-            'name', 
-            'ispublic', 
-            'description', 
-            'dashboard_type', 
-            'isdeleted', 
-            'content'
-        ];
-        $updateQueryFragment = 'version=:newVersion';
-        $version = $data['version'];
-        $newVersion = $version + 1;
-        $updateQueryParams = [
-            'newVersion' => $newVersion,
-            'version'    => $version,
-            'uuid'       => $uuid,
-            'org_id'     => AuthContext::get(AuthConstants::ORG_ID),
-            'user_id'    => AuthContext::get(AuthConstants::USER_ID)
-        ];
-        foreach ($updatableColumns as $index => $column) {
-            if (array_key_exists($column, $data)) {
-                $updateQueryFragment = "${updateQueryFragment}, ${column}=:${column}";
-                $updateQueryParams[$column] = $data[$column];
-            }
-        }
-        $updateQuery = "update ox_dashboard set ${updateQueryFragment} where uuid=:uuid and created_by=:user_id and org_id=:org_id and isdeleted=false and version=:version";
-        try {
-            $this->beginTransaction();
-            $result = $this->executeQueryWithBindParameters($updateQuery, $updateQueryParams);
-            if (1 == $result->count()) { //If 1 row is updated.
-                $this->commit();
-                return [
-                    'dashboard' => [
-                        'version' => $newVersion
-                    ]
-                ];
-            }
-            else {
-                $this->rollback();
-                //Check whether version number has changed.
-                $versionQuery = "select version from ox_dashboard where uuid=:uuid and created_by=:user_id and org_id=:org_id";
-                $versionQueryParams = [
-                    'uuid' => $uuid,
-                    'org_id' => AuthContext::get(AuthConstants::ORG_ID),
-                    'user_id' => AuthContext::get(AuthConstants::USER_ID)
-                ];
-                $versionResult = $this->executeQueryWithBindParameters($versionQuery, $versionQueryParams)->toArray();
-                if (isset($versionResult[0])) {
-                    $versionFromDatabase = $versionResult[0]['version'];
-                    if ($versionFromDatabase != $version) {
-                        $this->logger->error('Version number mismatch. Exception thrown.');
-                        throw new \Oxzion\VersionMismatchException();
-                    }
-                }
-                return 0;
-            }
-        }
-        catch(ZendDbException $e) {
-
-            $this->logger->error('Database exception occurred.');
-            $this->logger->error($e);
-            try {
-                $this->rollback();
-            }
-            catch (ZendDbException $ee) {
-                $this->logger->error('Database exception occurred when rolling back transaction.');
-                $this->logger->error($ee);
-            }
+        $obj = $this->table->getByUuid($uuid, array());
+        if (is_null($obj)) {
             return 0;
         }
+        if(!isset($data['version']))
+        {
+            throw new Exception("Version is not specified, please specify the version");
+        }
+        $form = new Dashboard();
+        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+        $form->exchangeWithSpecificKey($data,'value',true);
+        $form->updateValidate($data);
+        $count = 0;
+        try {
+            $count = $this->table->save2($form);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+        $formArray = $form->toArray();
+        return [
+            'dashboard' => [
+                'version' => $formArray['version']['value'] + 1,
+                'data' => $data
+            ]
+        ];
     }
 
     public function deleteDashboard($uuid, $version)
     {
-        $query = 'update ox_dashboard set isdeleted=true where uuid=:uuid and version=:version and org_id=:org_id and created_by=:user_id';
-        $queryParams = [
-            'uuid'      => $uuid,
-            'version'   =>$version,
-            'org_id'    =>AuthContext::get(AuthConstants::ORG_ID),
-            'user_id'   =>AuthContext::get(AuthConstants::USER_ID)
-        ];
-        try {
-            $this->beginTransaction();
-            $result = $this->executeQueryWithBindParameters($query, $queryParams);
-            $this->commit();
-            return $result;
-        }
-        catch (ZendDbException $e) {
-            $this->logger->error('Database exception occurred.');
-            $this->logger->error($e);
-            try {
-                $this->rollback();
-            }
-            catch (ZendDbException $ee) {
-                $this->logger->error('Database exception occurred when rolling back transaction.');
-                $this->logger->error($ee);
-            }
+        $obj = $this->table->getByUuid($uuid, array());
+        if (is_null($obj)) {
             return 0;
         }
+        if(!isset($version))
+        {
+            throw new Exception("Version is not specified, please specify the version");
+        }
+        $data = array('version' => $version,'isdeleted' => 1);
+        $form = new Dashboard();
+        $form->exchangeWithSpecificKey($obj->toArray(), 'value');
+        $form->exchangeWithSpecificKey($data,'value',true);
+        $form->updateValidate($data);
+        $count = 0;
+        try {
+            $count = $this->table->save2($form);
+            if ($count == 0) {
+                $this->rollback();
+                return 0;
+            }
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+        return $count;
     }
 
     public function getDashboard($uuid)
@@ -170,7 +118,7 @@ class DashboardService extends AbstractService
         $query = 'select uuid, name, ispublic, description, dashboard_type, date_created, content, version, if(created_by=:created_by, true, false) as is_owner from ox_dashboard where org_id=:org_id and uuid=:uuid and (ispublic=true or created_by=:created_by) and isdeleted=false';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
-            'org_id' => AuthContext::get(AuthConstants::ORG_ID), 
+            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
             'uuid' => $uuid
         ];
         try{

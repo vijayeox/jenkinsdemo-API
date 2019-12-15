@@ -7,6 +7,7 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
+use Oxzion\ServiceException;
 use Zend\Db\Sql\Expression;
 use Exception;
 use Oxzion\Service\FieldService;
@@ -31,8 +32,14 @@ class FormService extends AbstractService
     {
         $form = new Form();
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();
-        if(is_array($data['template'])){
+        if(isset($data['template']) && is_array($data['template'])){
             $data['template'] = json_encode($data['template']);
+        }else{
+            if(isset($data['template'])&&is_string($data['template'])){
+                $data['template'] = $data['template'];
+            } else {
+                throw new ServiceException("Template not provided", 'template.required');
+            }
         }
         $template = $this->formEngine->parseForm($data['template']);
         if (!is_array($template)) {

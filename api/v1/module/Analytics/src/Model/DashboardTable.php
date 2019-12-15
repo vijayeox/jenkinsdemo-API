@@ -15,4 +15,8 @@ class DashboardTable extends ModelTable {
     public function save(Entity $data) {
         return $this->internalSave($data->toArray());
     }
+
+    public function save2(Entity $data) {
+        return $this->internalSave2($data->toArray());
+    }
 }

@@ -11,6 +11,7 @@ use Oxzion\Service\UserCacheService;
 use Oxzion\Service\UserService;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
+use Oxzion\Workflow\WorkFlowFactory;
 use Oxzion\ServiceException;
 use Oxzion\Utils\RestClient;
 use Exception;
@@ -19,13 +20,16 @@ class ErrorLogService extends AbstractService
 {
     private $messageProducer;
     private $cacheService;
-    public function __construct($config, $dbAdapter, ErrorLogTable $table,UserCacheService $userCacheService)
+    private $workFlowFactory;
+    public function __construct($config, $dbAdapter, ErrorLogTable $table,UserCacheService $userCacheService,WorkFlowFactory $workFlowFactory)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
         $this->messageProducer = MessageProducer::getInstance($config,$this);
         $this->cacheService = $userCacheService;
         $this->restClient = new RestClient(null);
+        $this->workFlowFactory = $workFlowFactory;
+        $this->incidentManager = $this->workFlowFactory->getIncidentManager();
     }
     private function getAuthHeader($userId)
     {
@@ -64,7 +68,7 @@ class ErrorLogService extends AbstractService
         }
         return $count;
     }
-    public function getErrorList($filterParams=array()){
+    public function getErrorList($filterParams=array(),$appUUid = null){
         $where = "";
         $pageSize = 20;
         $offset = 0;
@@ -74,8 +78,8 @@ class ErrorLogService extends AbstractService
         $cntQuery ="SELECT count(id) as error_count ".$from;
         if(count($filterParams) > 0 || sizeof($filterParams) > 0){
             if(isset($filterParams['filter'])){
-               $filterArray = json_decode($filterParams['filter'],true);
-               if(isset($filterArray[0]['filter'])){
+                $filterArray = json_decode($filterParams['filter'],true);
+                if(isset($filterArray[0]['filter'])){
                     $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
                     $filterList = $filterArray[0]['filter']['filters'];
                     $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,self::$userField);
@@ -84,20 +88,60 @@ class ErrorLogService extends AbstractService
                     $sort = $filterArray[0]['sort'];
                     $sort = FilterUtils::sortArray($sort,self::$userField);
                 }
-                $pageSize = $filterArray[0]['take'];
-                $offset = $filterArray[0]['skip'];
+                if(isset($filterArray[0]['take'])){
+                    $pageSize = $filterArray[0]['take'];  
+                }
+                if(isset($filterArray[0]['take'])){
+                    $offset = $filterArray[0]['skip'];
+                }
             }
-           }
-            $sort = " ORDER BY ".$sort;
-            $limit = " LIMIT ".$pageSize." offset ".$offset;
-            $resultSet = $this->executeQuerywithParams($cntQuery.$where);
-            $count = $resultSet->toArray()[0]['error_count'];
-            $query = $select." ".$from." ".$where." ".$sort." ".$limit;
-            $resultSet = $this->executeQuerywithParams($query);
-            $result = $resultSet->toArray();
+        }
+        $sort = " ORDER BY ".$sort;
+        $limit = " LIMIT ".$pageSize." offset ".$offset;
+        if(isset($appUUid)){
+            $appId = $this->getIdFromUuid('ox_app', $appUUid);
+            if(!isset($where)){
+                $where = " AND ";
+            } else {
+                $where = " WHERE  ";
+            }
+            $where .= "app_id = $appId";
+        } else {
+            if(!isset($where)){
+                $where = " AND ";
+            } else {
+                $where = " WHERE  ";
+            }
+            $where .= "app_id is NULL";
+        }
+        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
+        $count = $resultSet->toArray()[0]['error_count'];
+        $query = $select." ".$from." ".$where." ".$sort." ".$limit;
+        $resultSet = $this->executeQuerywithParams($query);
+        $result = $resultSet->toArray();
         return array('data' => $result,'total' => $count);
     }
-    public function retryError($id,$errorRequest){
+    public function resolveWorkflowIncident($params)
+    {
+        $this->logger->info("Resolve Workflow Instance");
+        try {
+            $data = json_decode($params,true);
+            $result = $this->incidentManager->resolveIncident($data['incidentId']);
+            return $result;
+        } catch (Exception $e){
+            print_r($e->getMessage());exit;
+            throw new ServiceException("Incident resolution failed","incident.resolution.failed");
+        }
+    }
+
+    public function retryError($id,$errorRequest,$appUUid = null){
+        if(isset($appUUid)){
+            if ($app = $this->getIdFromUuid('ox_app', $appUUid)) {
+                $appId = $app;
+            } else {
+                throw new Exception("Invalid AppId $appUUid passed");
+            }
+        }
         $obj = $this->table->get($id, array());
         $error = $obj->toArray();
         if(is_array($error)){
@@ -126,6 +170,11 @@ class ErrorLogService extends AbstractService
                     case 'schedule_job':
                         if(isset($error['params'])){
                             $response = $this->restClient->postWithHeader($this->config['job']['jobUrl']."setupjob", $error['params']);
+                        }
+                        break;
+                    case 'serviceTaskFailure':
+                        if(isset($error['params'])){
+                            $response = $this->resolveWorkflowIncident($error['params']);
                         }
                         break;
                     default:
