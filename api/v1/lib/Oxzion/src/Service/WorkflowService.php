@@ -406,7 +406,7 @@ class WorkflowService extends AbstractService
         $appFilter = "ox_app.uuid ='".$appId."'";
         $fromQuery = "FROM ox_workflow
         INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
-        INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id and ox_workflow_deployment.latest =1
+        INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id 
         INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id
         INNER JOIN ox_file on ox_file.workflow_instance_id = ox_workflow_instance.id
         INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
@@ -436,7 +436,7 @@ class WorkflowService extends AbstractService
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
         $result = array();
         foreach ($resultSet as $key => $value) {
-            $data[] = json_decode($value['data']);
+            $data = json_decode($value['data'], true);
             unset($value['data']);
             $result[] = array_merge($value, $data);
         }
