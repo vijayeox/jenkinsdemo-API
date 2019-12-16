@@ -130,11 +130,10 @@ class WorkflowService extends AbstractService
                         }
                     }
                     $formData = $oxForm->toArray();
-                    if(isset($formData['template'])){
-                        $formData['entity_id'] = $entityId;
+                    $formData['entity_id'] = $entityId;
+                    if(isset($formData['template']))
                         $formResult = $this->formService->createForm($appUuid, $formData);
-                        $startFormId = $formData['id'];
-                    }
+                    $startFormId = $formData['id'];
                     foreach ($process['activity'] as $activity) {
                         $oxActivity = new Activity();
                         $oxActivity->exchangeArray($activity);
