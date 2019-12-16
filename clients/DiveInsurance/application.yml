@@ -133,10 +133,10 @@ menu:
                                 field: padi
                             -
                                 title: 'First Name'
-                                field: first_name
+                                field: firstname
                             -
                                 title: 'Last Name'
-                                field: last_name
+                                field: lastname
                             -
                                 title: Product
                                 field: workflow_name
@@ -147,22 +147,8 @@ menu:
                                 title: 'Submission Date'
                                 field: start_date
     -
-        name: 'Verify PADI details'
-        icon: 'fa fa-search'
-        page:
-            name: 'Verify PADI details'
-            description: 'Lets CSR to input and check PADI Data'
-            content:
-                -
-                    content: '<h3>Verify PADI Details</h3>'
-                    type: Document
-                -
-                    formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
-                    type: Form
-        uuid: 40209052-2550-4d60-a2ea-7a38bb614c7a
-    -
         name: Home
-        icon: 'fa fa-paper'
+        icon: 'fa fa-home'
         privilege: MANAGE_POLICY_APPROVAL_READ
         page:
             name: Dashboard
@@ -175,7 +161,7 @@ menu:
     -
         name: Requests
         privilege: MANAGE_POLICY_APPROVAL_WRITE
-        icon: 'fa fa-help'
+        icon: 'fa fa-list'
         page:
             name: Requests
             description: 'Shows requests'
@@ -233,10 +219,10 @@ menu:
                                 field: padi
                             -
                                 title: 'First Name'
-                                field: first_name
+                                field: firstname
                             -
                                 title: 'Last Name'
-                                field: last_name
+                                field: lastname
                             -
                                 title: Product
                                 field: workflow_name
@@ -295,7 +281,7 @@ menu:
         uuid: b2cb5a1e-93b1-4263-b097-9a98c5d35d33
     -
         name: 'Manage Policies'
-        icon: 'fa fa-list'
+        icon: 'fa fa-list-alt'
         privilege: MANAGE_POLICY_APPROVAL_WRITE
         page:
             name: 'Manage Policies'
@@ -341,6 +327,20 @@ menu:
                                 title: Status
                                 field: status
         uuid: cb7a2022-307f-40ff-88dc-64d6d5834f5c
+    -
+        name: 'Verify PADI details'
+        icon: 'fa fa-search'
+        page:
+            name: 'Verify PADI details'
+            description: 'Lets CSR to input and check PADI Data'
+            content:
+                -
+                    content: '<h3>Verify PADI Details</h3>'
+                    type: Document
+                -
+                    formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
+                    type: Form
+        uuid: 40209052-2550-4d60-a2ea-7a38bb614c7a    
 workflow:
     -
         name: 'Individual Liability'
