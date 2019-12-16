@@ -1,6 +1,6 @@
 $(".form")
   .find("input, textarea")
-  .on("keyup blur focus", function(e) {
+  .on("keyup blur focus", function (e) {
     var $this = $(this),
       label = $this.prev("label");
 
@@ -25,7 +25,7 @@ $(".form")
     }
   });
 
-$(".tab a").on("click", function(e) {
+$(".tab a").on("click", function (e) {
   e.preventDefault();
 
   $(this)
@@ -45,8 +45,8 @@ $(".tab a").on("click", function(e) {
   $(target).fadeIn(600);
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-  $(".loginButton").on("click", function(e) {
+document.addEventListener("DOMContentLoaded", function () {
+  $(".loginButton").on("click", function (e) {
     var username = document.getElementsByClassName("userNameField")[0].value;
     var password = document.getElementsByClassName("passwordField")[0].value;
     const formData = new FormData();
@@ -63,8 +63,8 @@ document.addEventListener("DOMContentLoaded", function() {
       if (res.status == "success") {
         autoLogin(res.data);
       } else {
-        document.getElementById("wrongPassword").style.display="block";
-        document.getElementById("wrongPassword").style.color="red";
+        document.getElementById("wrongPassword").style.display = "block";
+        document.getElementById("wrongPassword").style.color = "red";
       }
     });
   });
@@ -89,11 +89,11 @@ document.addEventListener("DOMContentLoaded", function() {
   Formio.createForm(
     document.getElementById("formio"),
     JSON.parse(formContent)
-  ).then(function(form) {
+  ).then(function (form) {
     // Prevent the submission from going to the form.io server.
     form.nosubmit = true;
     // Triggered when they click the submit button.
-    form.on("submit", function(submission) {
+    form.on("submit", function (submission) {
       submission.data.app_id = appId;
       var response = fetch(baseUrl + "register", {
         body: JSON.stringify(submission.data),
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 "/delegate/" +
                 properties["delegate"],
               data: changed,
-              success: function(response) {
+              success: function (response) {
                 if (response.data) {
                   form.submission = { data: response.data };
                   form.triggerChange();
@@ -137,5 +137,32 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       }
     });
+    form.on("change", changed => {
+      if (changed && changed.changed) {
+        var component = changed.changed.component;
+        var properties = component.properties;
+        if (properties) {
+          if (properties["delegate"]) {
+            $.ajax({
+              type: "POST",
+              async: true,
+              url:
+                baseUrl +
+                "app/" +
+                appId +
+                "/delegate/" +
+                properties["delegate"],
+              data: changed.data,
+              success: function (response) {
+                if (response.data) {
+                  form.submission = { data: response.data };
+                  form.triggerChange();
+                }
+              }
+            });
+          }
+        }
+      }
+    })
   });
 });
