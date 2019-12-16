@@ -374,4 +374,48 @@ class DispatchPolicyTest extends DelegateTest
         $this->assertEquals($content, array());
     }
 
+
+    public function testDispatchQuoteDocument()
+    {
+        $data = array();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['documents'] = array('cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['product'] = 'Dive Boat';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['vessel_name'] = 'HUB';
+        if (enableCamel == 0) {
+                    $mockMessageProducer = $this->getMockMessageProducer();
+                    $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
+                }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'DispatchProposalDocument', $data);
+        $this->assertEquals($content, array());
+    }
+
+    public function testDispatchDiveStoreQuoteDocument()
+    {
+        $data = array();
+        $config = $this->getApplicationConfig();
+        $appId = $this->data['UUID'];
+        $data['email'] = 'neha@myvamla.com';
+        $data['firstname'] = 'Neha';
+        $data['lastname'] = 'Rai';
+        $data['documents'] = array('cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['product'] = 'Dive Store';
+        $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        if (enableCamel == 0) {
+                    $mockMessageProducer = $this->getMockMessageProducer();
+                    $mockMessageProducer->expects('sendQueue')->with(Mockery::any(), 'mail')->once()->andReturn();
+                }
+        $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
+        $delegateService->setPersistence($appId, $this->persistence);
+        $content = $delegateService->execute($appId, 'DispatchProposalDocument', $data);
+        $this->assertEquals($content, array());
+    }
+
 }
