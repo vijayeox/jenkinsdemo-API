@@ -105,7 +105,7 @@ menu:
         name: 'My History'
         uuid: c420e935-372a-44e2-b4d7-4979439f9427
         privilege: MANAGE_MY_POLICY_READ
-        icon: 'fa fa-table'
+        icon: 'My History'
         page:
             name: 'All Policies'
             description: 'Shows all the policies'
@@ -309,13 +309,17 @@ menu:
                                 -
                                     name: IPL
                                     rule: 'true'
-                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
+                                    details: [{ type: Form, url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform }]
+                                -
+                                    name: 'Dive Store'
+                                    rule: 'true'
+                                    details: [{ type: Form, url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform }]
                                 -
                                     name: 'Dive Boat'
                                     rule: 'true'
-                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
+                                    details: [{ type: Form, url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform }]
                                 -
-                                    name: 'Dive Store'
+                                    name: 'Emergency First Response'
                                     rule: 'true'
                                     details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
                         columnConfig:
