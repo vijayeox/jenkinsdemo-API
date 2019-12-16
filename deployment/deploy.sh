@@ -233,7 +233,7 @@ view()
         rsync -rl view/vfs/ /opt/oxzion/view/vfs/
         chown oxzion:oxzion -R /opt/oxzion/view/vfs/
         rm -Rf view/vfs
-        rsync -rl --delete view/ /opt/oxzion/view/
+        rsync -rl view/ /opt/oxzion/view/
         chown oxzion:oxzion -R /opt/oxzion/view
         echo -e "${GREEN}Copying view Complete!${RESET}"
         echo -e "${GREEN}Starting view service${RESET}"
@@ -332,6 +332,7 @@ clients()
         mkdir -p /opt/oxzion/eoxapps
         rsync -rl . /opt/oxzion/eoxapps/
         chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
     fi
 }
