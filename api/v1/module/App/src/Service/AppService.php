@@ -223,6 +223,7 @@ class AppService extends AbstractService
             foreach ($yamlData['menu'] as &$menuData) {
                 $menu = $menuData;
                 $menu['sequence'] = $sequence++;
+                $menu['privilege_name'] = isset($menu['privilege']) ? $menu['privilege'] : null;
                 $menu['uuid'] = isset($menu['uuid'])?$menu['uuid']:UuidUtil::uuid();
                 $menuUpdated = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
                 if($menuUpdated == 0){
