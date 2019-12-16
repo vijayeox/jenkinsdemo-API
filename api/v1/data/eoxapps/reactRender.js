@@ -38,7 +38,7 @@ module.exports = function(core, proc) {
               <script type="text/javascript">
                 var formContent = JSON.stringify(${buf});
                 var appId='${appId}';
-                var baseUrl="${core.config("wrapper.url")}";
+                var baseUrl="${core.config("api.url")}";
               </script>
             </head>
             <body>
