@@ -624,7 +624,7 @@ class UserService extends AbstractService
                 ou.designation,ou.phone,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,ou.gender,ou.website,ou.about,
                 ou.managerid, ou.timezone, ou.date_of_join, ou.interest, ou.preferences";
 
-            $from = " FROM `ox_user` as ou join ox_address as oa on ou.address_id = oa.id ";
+            $from = " FROM `ox_user` as ou left join ox_address as oa on ou.address_id = oa.id ";
             $cntQuery ="SELECT count(ou.id) as org_count ".$from;
 
             if(count($filterParams) > 0 || sizeof($filterParams) > 0){
@@ -680,7 +680,7 @@ class UserService extends AbstractService
     public function getUser($id, $getAllFields = false)
     {
         $sql = $this->getSqlObject();
-        $select = "SELECT ou.uuid,ou.username,ou.firstname,ou.lastname,ou.name,ou.email,ou.orgid,ou.icon,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,ou.date_of_birth,ou.designation,ou.phone,ou.gender,ou.website,ou.about,ou.managerid,ou.timezone,ou.date_of_join,ou.interest,ou.preferences,ou.password,ou.password_reset_expiry_date,ou.password_reset_code from ox_user as ou join ox_address as oa on ou.address_id = oa.id where ou.id =".$id." and ou.status = 'Active'";
+        $select = "SELECT ou.uuid,ou.username,ou.firstname,ou.lastname,ou.name,ou.email,ou.orgid,ou.icon,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,ou.date_of_birth,ou.designation,ou.phone,ou.gender,ou.website,ou.about,ou.managerid,ou.timezone,ou.date_of_join,ou.interest,ou.preferences,ou.password,ou.password_reset_expiry_date,ou.password_reset_code from ox_user as ou left join ox_address as oa on ou.address_id = oa.id where ou.id =".$id." and ou.status = 'Active'";
         $response = $this->executeQuerywithParams($select)->toArray();
     
         if (!$response) {
