@@ -10,6 +10,7 @@ use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
 use Oxzion\ServiceException;
 use Oxzion\Service\FileService;
+use Oxzion\Service\WorkflowService;
 use Oxzion\ValidationException;
 use Oxzion\Utils\ArtifactUtils;
 use Oxzion\EntityNotFoundException;
@@ -19,14 +20,16 @@ use Zend\Db\Adapter\AdapterInterface;
 class FileController extends AbstractApiController
 {
     private $fileService;
+    private $workflowService;
     /**
      * @ignore __construct
      */
-    public function __construct(FileTable $table, fileService $fileService, AdapterInterface $dbAdapter)
+    public function __construct(FileTable $table, fileService $fileService, AdapterInterface $dbAdapter,WorkflowService $workflowService)
     {
         parent::__construct($table, File::class);
         $this->setIdentifierName('id');
         $this->fileService = $fileService;
+        $this->workflowService = $workflowService;
     }
     /**
      * Create File API
@@ -195,7 +198,7 @@ class FileController extends AbstractApiController
     /**
     * GET List Entitys API
     * @api
-    * @link /app/appId/search
+    * @link /app/:appId/file/search
     * @method GET
     * @return array Returns a JSON Response list of Entitys based on Access.
     */
@@ -216,6 +219,47 @@ class FileController extends AbstractApiController
             return $this->getErrorResponse($e->getMessage(), 404);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
+    }
+
+
+    /**
+    * GET List Entitys API
+    * @api
+    * @link /app/appId/search
+    * @method GET
+    * @return array Returns a JSON Response list of Entitys based on Access.
+    */
+    public function getFileListCommandAction()
+    {
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $commandList = $this->params()->fromRoute()['commands'];
+        $commandsArray = explode("+",$commandList);
+        $filterParams = $this->params()->fromQuery();
+        try {
+        foreach ($commandsArray as $command) {
+            switch ($command) {
+                case 'myfiles':
+                        $params['status'] = 'Completed';
+                        $result['myfiles'] = $this->fileService->getFileList($appUuid,$params,$filterParams);
+                    break;
+                case 'assignments':
+                        $result['assignments'] = $this->workflowService->getAssignments($appUuid,$filterParams);
+                    break;
+                default:
+                    break;
+            }
+        }
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
+        }
+        return $this->getSuccessResponseWithData($result);
     }
 
 }

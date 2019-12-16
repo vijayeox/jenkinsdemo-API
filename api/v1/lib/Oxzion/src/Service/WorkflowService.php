@@ -409,6 +409,7 @@ class WorkflowService extends AbstractService
         INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id 
         INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id
         INNER JOIN ox_file on ox_file.workflow_instance_id = ox_workflow_instance.id
+        INNER JOIN ox_app_entity on ox_app_entity.id = ox_file.entity_id
         INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
         INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
         LEFT JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
@@ -428,7 +429,7 @@ class WorkflowService extends AbstractService
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
         
         $querySet = "SELECT distinct ox_workflow.name as workflow_name, ox_file.data,
-        ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date,
+        ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date,ox_app_entity.name as entityName
         ox_activity.name as activityName,
         CASE WHEN ox_activity_instance_assignee.user_id is not null then false
         else true end as to_be_claimed  $fromQuery $whereQuery $sort $pageSize $offset";

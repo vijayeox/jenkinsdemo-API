@@ -179,7 +179,8 @@ class Module implements ConfigProviderInterface
                     return new Controller\FileController(
                         $container->get(FileTable::class),
                         $container->get(FileService::class),
-                        $container->get(AdapterInterface::class)
+                        $container->get(AdapterInterface::class),
+                        $container->get(WorkflowService::class)
                     );
                 },
                 Controller\FieldController::class => function ($container) {

@@ -470,8 +470,6 @@ return [
                     'route' => '/app/:appId/file/status/:status',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
-                        'workflowId' => UuidUtil::UUID_PATTERN,
-                        'userId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
                         'controller' => Controller\FileController::class,
@@ -483,12 +481,30 @@ return [
                     ],
                 ],
             ],
+            'filelistingcommand' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/command/:commands',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileListCommand',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'filelistinguser' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/file/user/:userId[/status/:status]',
                     'constraints' => [
-                        'appId' => UuidUtil::UUID_PATTERN
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'userId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
                         'controller' => Controller\FileController::class,
