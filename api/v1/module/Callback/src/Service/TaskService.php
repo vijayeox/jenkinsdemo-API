@@ -111,9 +111,9 @@ class TaskService extends AbstractService
         }
     }
 
-    public function addUsersToGroup($groupname, $usernames) {
+    public function addUsersToGroup($groupname, $users) {
         try {
-            $response = $this->restClient->put('group_members', array('name' => $groupname, 'usernames' => $usernames));
+            $response = $this->restClient->put('group_members', array('name' => $groupname, 'users' => $users));
             return json_decode($response, true);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->info(TaskService::class."Failed to create new entity".$e);
