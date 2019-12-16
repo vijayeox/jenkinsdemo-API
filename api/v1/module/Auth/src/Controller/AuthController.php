@@ -13,6 +13,7 @@ use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
 use Exception;
 use Oxzion\ServiceException;
+use Oxzion\ValidationException;
 
 class AuthController extends AbstractApiControllerHelper
 {
@@ -136,6 +137,9 @@ class AuthController extends AbstractApiControllerHelper
         }catch(ServiceException $e){
             $this->log->error("Error".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(),404);
+        }catch (ValidationException $e){
+            $this->log->error("Error".$e->getMessage().json_encode($e->getErrors()), $e);
+            return $this->getErrorResponse($e->getMessage(), 417, $e->getErrors());
         }catch (Exception $e){
             $this->log->error("Error".$e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
