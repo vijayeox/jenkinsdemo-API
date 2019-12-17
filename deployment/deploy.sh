@@ -234,6 +234,9 @@ view()
         chown oxzion:oxzion -R /opt/oxzion/view/vfs/
         rm -Rf view/vfs
         rsync -rl view/ /opt/oxzion/view/
+        echo -e "${GREEN}Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run package:discover
         chown oxzion:oxzion -R /opt/oxzion/view
         echo -e "${GREEN}Copying view Complete!${RESET}"
         echo -e "${GREEN}Starting view service${RESET}"
