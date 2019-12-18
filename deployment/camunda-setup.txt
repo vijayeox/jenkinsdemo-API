@@ -61,8 +61,23 @@ Below is the difference of the default server.xml and working copy of server.xml
 >     <Connector port="8090" protocol="HTTP/1.1"
 
 
-create camunda service
-enable camunda service
+#add the below Environment variable in /opt/oxzion/camunda/bin/catalina.sh right above "# OS specific support.  $var _must_ be set to either true or false" comment
+
+JAVA_OPTS="-Xmx768m -XX:MaxMetaspaceSize=256m"
+export BASE_DB_URL=jdbc:mysql://localhost:3306/oxzionapi 
+export DB_USERNAME=apiuser 
+export DB_PASSWORD=Apipasswd321! 
+export DB_DRIVER=com.mysql.jdbc.Driver
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+#create camunda service
+
+copy the camunda.service file in deployment/etc/systemd/system/camunda.service in codebase to /etc/systemd/system/camunda.service
+
+#enable camunda service
+
+sudo systemctl enable camunda.service
+
 
 #database setup
 
