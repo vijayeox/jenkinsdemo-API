@@ -2314,7 +2314,138 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 
 
 
-
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'propertyDeductibles1000','propertyDeductibles1000','2020-01-01', '2020-12-31',0);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'propertyDeductibles2500','propertyDeductibles2500','2020-01-01', '2020-12-31',4.37);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Store', 'propertyDeductibles5000','propertyDeductibles5000','2020-01-01', '2020-12-31',8.93);
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-01-01', '2020-01-31',693);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-01-01', '2020-01-31',1143);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-01-01', '2020-01-31',1455);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-01-01', '2020-01-31',1767);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-01-01', '2020-01-31',2286);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-01-01', '2020-01-31',2427);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-01-01', '2020-01-31',2910);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-01-01', '2020-01-31',3120);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-01-01', '2020-01-31',3465);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-02-01', '2020-02-29',578);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-02-01', '2020-02-29',953);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-02-01', '2020-02-29',1213);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-02-01', '2020-02-29',1473);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-02-01', '2020-02-29',1905);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-02-01', '2020-02-29',2023);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-02-01', '2020-02-29',2425);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-02-01', '2020-02-29',2600);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-02-01', '2020-02-29',2888);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-03-01', '2020-03-31',462);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-03-01', '2020-03-31',762);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-03-01', '2020-03-31',970);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-03-01', '2020-03-31',1178);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-03-01', '2020-03-31',1524);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-03-01', '2020-03-31',1618);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-03-01', '2020-03-31',1940);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-03-01', '2020-03-31',2080);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-03-01', '2020-03-31',2310);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-04-01', '2020-04-30',347);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-04-01', '2020-04-30',572);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-04-01', '2020-04-30',728);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-04-01', '2020-04-30',884);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-04-01', '2020-04-30',1143);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-04-01', '2020-04-30',1214);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-04-01', '2020-04-30',1455);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-04-01', '2020-04-30',1560);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-04-01', '2020-04-30',1733);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-05-01', '2020-05-31',231);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-05-01', '2020-05-31',381);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-05-01', '2020-05-31',485);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-05-01', '2020-05-31',589);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-05-01', '2020-05-31',762);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-05-01', '2020-05-31',809);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-05-01', '2020-05-31',970);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-05-01', '2020-05-31',1040);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-05-01', '2020-05-31',1155);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-06-01', '2020-06-30',116);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-06-01', '2020-06-30',191);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-06-01', '2020-06-30',243);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-06-01', '2020-06-30',295);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-06-01', '2020-06-30',381);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-06-01', '2020-06-30',405);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-06-01', '2020-06-30',485);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-06-01', '2020-06-30',520);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-06-01', '2020-06-30',578);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-07-01', '2020-07-31',1271);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-07-01', '2020-07-31',2286);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-07-01', '2020-07-31',2910);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-07-01', '2020-07-31',3534);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-07-01', '2020-07-31',4572);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-07-01', '2020-07-31',4854);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-07-01', '2020-07-31',5820);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-07-01', '2020-07-31',6240);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-07-01', '2020-07-31',6930);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-08-01', '2020-08-31',1155);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-08-01', '2020-08-31',2096);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-08-01', '2020-08-31',2668);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-08-01', '2020-08-31',3240);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-08-01', '2020-08-31',4191);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-08-01', '2020-08-31',4450);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-08-01', '2020-08-31',5335);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-08-01', '2020-08-31',5720);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-08-01', '2020-08-31',6353);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-09-01', '2020-09-30',1040);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-09-01', '2020-09-30',1905);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-09-01', '2020-09-30',2425);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-09-01', '2020-09-30',2945);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-09-01', '2020-09-30',3810);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-09-01', '2020-09-30',4045);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-09-01', '2020-09-30',4850);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-09-01', '2020-09-30',5200);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-09-01', '2020-09-30',5775);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-10-01', '2020-10-31',924);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-10-01', '2020-10-31',1715);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-10-01', '2020-10-31',2183);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-10-01', '2020-10-31',2651);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-10-01', '2020-10-31',3429);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-10-01', '2020-10-31',3641);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-10-01', '2020-10-31',4365);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-10-01', '2020-10-31',4680);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-10-01', '2020-10-31',5198);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-11-01', '2020-11-30',809);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-11-01', '2020-11-30',1524);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-11-01', '2020-11-30',1940);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-11-01', '2020-11-30',2356);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-11-01', '2020-11-30',3048);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-11-01', '2020-11-30',3236);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-11-01', '2020-11-30',3880);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-11-01', '2020-11-30',4160);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-11-01', '2020-11-30',4620);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan0','groupCoverageMoreThan0','2020-12-01', '2020-12-31',674);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan25000','groupCoverageMoreThan25000','2020-12-01', '2020-12-31',1334);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan50000','groupCoverageMoreThan50000','2020-12-01', '2020-12-31',1698);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan100000','groupCoverageMoreThan100000','2020-12-01', '2020-12-31',2062);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan150000','groupCoverageMoreThan150000','2020-12-01', '2020-12-31',2667);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan200000','groupCoverageMoreThan200000','2020-12-01', '2020-12-31',2832);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan250000','groupCoverageMoreThan250000','2020-12-01', '2020-12-31',3395);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan350000','groupCoverageMoreThan350000','2020-12-01', '2020-12-31',3640);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupCoverageMoreThan500000','groupCoverageMoreThan500000','2020-12-01', '2020-12-31',4043);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupExcessLiability1M','groupExcessLiability1M','2020-01-01', '2020-12-31',65);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupExcessLiability2M','groupExcessLiability2M','2020-01-01', '2020-12-31',125);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupExcessLiability3M','groupExcessLiability3M','2020-01-01', '2020-12-31',160);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupExcessLiability4M','groupExcessLiability4M','2020-01-01', '2020-12-31',200);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupExcessLiability9M','groupExcessLiability9M','2020-01-01', '2020-12-31',350);
+
+
+
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Dive Boat', 'groupPadiFee','groupPadiFee','2020-01-01', '2020-12-31',175);
