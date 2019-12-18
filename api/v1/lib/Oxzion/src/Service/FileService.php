@@ -505,7 +505,7 @@ class FileService extends AbstractService
             }
             $fromQuery .= " inner join ox_workflow_instance as g on a.workflow_instance_id = g.id
             inner join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
-            inner join ox_workflow as h on h.id = wd.workflow_id and wd.latest=1
+            inner join ox_workflow as h on h.id = wd.workflow_id 
             left join (SELECT workflow_instance_id, max(latest) as latest from ox_file
             group by workflow_instance_id) as f2 on a.workflow_instance_id = f2.workflow_instance_id
             and a.latest = f2.latest";
@@ -555,6 +555,7 @@ class FileService extends AbstractService
                 $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
+                $this->logger->info("Executing query - $select with params - ".json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 if($resultSet){
                     $i=0;
