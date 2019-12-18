@@ -18,11 +18,11 @@ class DispatchNewPolicy extends DispatchDocument {
             'Dive Boat' => 'diveBoatPolicyMailTemplate',
             'Dive Store' => 'diveStorePolicyMailTemplate');
         $this->document = array(
-            'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','card','slWording','blanket_document']),
+            'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','pocket_card','slWording','blanket_document']),
             'Dive Boat' => array('docs' => ['policy_document','coi_document','cover_letter']),
             'Dive Store' => array('docs' => ['policy_document','coi_document','cover_letter']));
         $this->required = array(
-            'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','card','blanket_document']),
+            'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','pocket_card','blanket_document']),
             'Dive Boat' => array('docs' => ['policy_document','coi_document','cover_letter']),
             'Dive Store' => array('docs' => ['policy_document','coi_document','cover_letter']));
         parent::__construct();
