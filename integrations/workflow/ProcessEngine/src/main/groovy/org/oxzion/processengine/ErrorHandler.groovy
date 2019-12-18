@@ -20,54 +20,66 @@ class ErrorHandler {
 
     static handleError(DelegateExecution execution, Exception e) throws Exception{
         logger.error("Custom Service Task Listener Exception-- Message : ${e.getMessage()},   Trace : ${e.getStackTrace()}")
-        Map message = [:]
-        Map data = execution.getVariables()
-        if(data .containsKey("command")){
-            message.command = data.command
-        } else if(data.containsKey("commands")){
-            message.commands = data.commands
+        try{        
+            Map message = [:]
+            Map data = execution.getVariables()
+            if(data .containsKey("command")){
+                message.command = data.command
+            } else if(data.containsKey("commands")){
+                message.commands = data.commands
+            }
+            if(data.containsKey("app_id")){
+                message.app_id = data.app_id
+            }
+            message.error = e.getMessage()
+            String msg = new JsonBuilder(message).toPrettyString()
+            String stacktrace = new JsonBuilder(e.getStackTrace()).toPrettyString()
+            logger.info("Incident Message : ${msg}")
+            Incident incident = execution.createIncident("failedJob",execution.getCurrentActivityId(),msg)
+            data.incidentId = incident.getId()
+            String content = new JsonBuilder(data).toPrettyString()
+            logger.info("Incident Id : ${incident.getId()}")
+            message.incidentId = incident.getId()
+            log('failedJob',stacktrace,content,new JsonBuilder(message).toPrettyString(),message.app_id.toString())
+        }catch(Exception e){
+            logger.error("Error while processing exception", e)
         }
-        if(data.containsKey("app_id")){
-            message.app_id = data.app_id
+        finally{
+            throw new BpmnError("400","Service Task Failure")
         }
-        message.error = e.getMessage()
-        String msg = new JsonBuilder(message).toPrettyString()
-        String stacktrace = new JsonBuilder(e.getStackTrace()).toPrettyString()
-        logger.info("Incident Message : ${msg}")
-        Incident incident = execution.createIncident("failedJob",execution.getCurrentActivityId(),msg)
-        data.incidentId = incident.getId()
-        String content = new JsonBuilder(data).toPrettyString()
-        logger.info("Incident Id : ${incident.getId()}")
-        message.incidentId = incident.getId()
-        log('failedJob',stacktrace,content,new JsonBuilder(message).toPrettyString(),message.app_id.toString())
-        throw new BpmnError("400","Service Task Failure")
     }
     static handleError(DelegateExecution execution) throws Exception{
-        Map config = [:]
-        config.activityId = execution.getCurrentActivityId()
-        config.processDefinitionId = execution.getProcessDefinitionId()
-        String configuration = new JsonBuilder(config).toPrettyString()
-        logger.info("Incident Configuration : ${configuration}")
-        Map message = [:]
-        Map data = execution.getVariables()
-        if(data .containsKey("command")){
-            message.command = data.command
-        } else if(data.containsKey("commands")){
-            message.commands = data.commands
+        try{
+            Map config = [:]
+            config.activityId = execution.getCurrentActivityId()
+            config.processDefinitionId = execution.getProcessDefinitionId()
+            String configuration = new JsonBuilder(config).toPrettyString()
+            logger.info("Incident Configuration : ${configuration}")
+            Map message = [:]
+            Map data = execution.getVariables()
+            if(data .containsKey("command")){
+                message.command = data.command
+            } else if(data.containsKey("commands")){
+                message.commands = data.commands
+            }
+            if(data.containsKey("app_id")){
+                message.app_id = data.app_id
+            }
+            message.error = "failed to execute "
+            String msg = new JsonBuilder(message).toPrettyString()
+            logger.info("Incident Message : ${msg}")
+            Incident incident = execution.createIncident("failedJob",execution.getCurrentActivityId(),msg)
+            data.incidentId = incident.getId()
+            String content = new JsonBuilder(data).toPrettyString()
+            logger.info("Incident Id : ${incident.getId()}")
+            message.incidentId = incident.getId()
+            log('failedJob',msg,content,new JsonBuilder(message).toPrettyString(),message.app_id.toString())
+        }catch(Exception e){
+            logger.error("Error while processing exception", e)
         }
-        if(data.containsKey("app_id")){
-            message.app_id = data.app_id
+        finally{
+            throw new BpmnError("400","Service Task Failure")
         }
-        message.error = "failed to execute "
-        String msg = new JsonBuilder(message).toPrettyString()
-        logger.info("Incident Message : ${msg}")
-        Incident incident = execution.createIncident("failedJob",execution.getCurrentActivityId(),msg)
-        data.incidentId = incident.getId()
-        String content = new JsonBuilder(data).toPrettyString()
-        logger.info("Incident Id : ${incident.getId()}")
-        message.incidentId = incident.getId()
-        log('failedJob',msg,content,new JsonBuilder(message).toPrettyString(),message.app_id.toString())
-        throw new BpmnError("400","Service Task Failure")
     }
     static log(String error_type, String  error_trace, String payload, String params,String app_id){
         try {
@@ -86,7 +98,7 @@ class ErrorHandler {
             sql.close()
             System.out.println("handling ex")
         }  catch (IOException ex) {
-            ex.printStackTrace()
+            logger.error("Could not log the message", ex)
         }
     }
 }
