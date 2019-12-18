@@ -94,7 +94,7 @@ ox_field:
     template: '{"persistent" : "true"}'
     required: 1
     sequence: 6
-    entity_id: 1 
+    entity_id: 1
 ox_form:
   -
     id: 1

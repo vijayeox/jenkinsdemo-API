@@ -259,35 +259,6 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-    public function testgetFileDocumentList()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145b/document', 'GET');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Workflow');
-        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('WorkflowInstanceController');
-        $this->assertMatchedRouteName('filedocumentlisting');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']) > 0, true);
-    }
-
-    public function testgetFileDocumentListNotFound()
-    {
-        $this->initAuthToken($this->adminUser);
-        $this->dispatch('/app/9fc99df0-d91b-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c91422/document', 'GET');
-        $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(200);
-        $this->assertModuleName('Workflow');
-        $this->assertControllerName(WorkflowInstanceController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('WorkflowInstanceController');
-        $this->assertMatchedRouteName('filedocumentlisting');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-        $this->assertEquals($content['status'], 'success');
-    }
-
     public function testSubmitTask()
     {
         $this->initAuthToken($this->adminUser);
@@ -296,7 +267,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
             $workflowService = $this->getApplicationServiceLocator()->get(\Workflow\Service\WorkflowInstanceService::class);
-            $mockProcessEngine->expects('submitTaskForm')->withAnyArgs()->once()->andReturnUsing(function () {
+            $mockProcessEngine->expects('completeActivity')->withAnyArgs()->once()->andReturnUsing(function () {
                 $activityService = $this->getApplicationServiceLocator()->get(\Workflow\Service\ActivityInstanceService::class);
                 $data['processInstanceId'] = "3f20b5c5-0124-11ea-a8a0-22e8105c0778";
                 $data['activityInstanceId'] = "3f6622fd-0124-11ea-a8a0-22e8105c0778";

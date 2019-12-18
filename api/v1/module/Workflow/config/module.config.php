@@ -136,24 +136,6 @@ return [
                     ],
                 ],
             ],
-            'filedocumentlisting' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/file/:fileId/document',
-                    'constraints' => [
-                        'appId' => UuidUtil::UUID_PATTERN,
-                        'fileId' => UuidUtil::UUID_PATTERN,
-                    ],
-                    'defaults' => [
-                        'controller' => Controller\WorkflowInstanceController::class,
-                        'method' => 'GET',
-                        'action' => 'getFileDocumentList',
-                        'access' => [
-                            // SET ACCESS CONTROL
-                        ],
-                    ],
-                ],
-            ],
         ],
     ],
     'view_manager' => [

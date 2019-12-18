@@ -1215,13 +1215,44 @@ class UserService extends AbstractService
         if(count($result) == 0){
            return $this->createUser($params,$data,$register);
         }
-        if($data['email'] == $result[0]['email'] && AuthContext::get(AuthConstants::USER_ID)){
+        if(($data['email'] == $result[0]['email'] && AuthContext::get(AuthConstants::USER_ID)) || $data['username'] == $result[0]['username'] ){
             $data['username'] = $result[0]['username'];
             $data['id'] = $result[0]['id'];
             $data['uuid'] = $result[0]['uuid'];
             return 1;
         }else{
             throw new ServiceException("Username Used","username.exists");
+        }
+    }
+    public function getUsersList($appUUid,$params)
+    {
+        $orgId = isset($params['orgId'])? $this->getIdFromUuid('ox_organization', $params['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
+        $appId = $this->getIdFromUuid('ox_app', $appUUid);
+        if(!isset($orgId)){
+            $orgId = $params['orgId'];
+        }
+        $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
+        $selectQuery = array("orgId" => $orgId,"appId" => $appId);           
+        $result = $this->executeQuerywithBindParameters($select,$selectQuery)->toArray();
+        if(count($result) > 0){
+            $where = "";
+            $pageSize = 20;
+            $offset = 0;
+            $sort = "name";
+            $select = "SELECT ou.uuid, ou.username, ou.firstname, ou.lastname, ou.name,ou.orgid";
+            $from = " FROM `ox_user` as ou  ";
+            $where .= strlen($where) > 0 ? " AND ou.status = 'Active' AND ou.orgid = ".$orgId : " WHERE ou.status = 'Active' AND ou.orgid = ".$orgId;
+            $sort = " ORDER BY ".$sort;
+            $limit = " LIMIT ".$pageSize." offset ".$offset;
+            $query =$select." ".$from." ".$where." ".$sort." ".$limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            $result = $resultSet->toArray();
+            for($x=0;$x<sizeof($result);$x++) {
+                $result[$x]['icon'] = $this->getBaseUrl() . "/user/profile/" . $result[$x]['uuid'];
+            }
+            return $result;
+        } else {
+            throw new ServiceException("App Does not belong to the org","app.fororgnot.found");
         }
     }
 }

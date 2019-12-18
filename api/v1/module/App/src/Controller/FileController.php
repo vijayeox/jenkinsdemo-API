@@ -262,4 +262,18 @@ class FileController extends AbstractApiController
         return $this->getSuccessResponseWithData($result);
     }
 
+    public function getFileDocumentListAction()
+    {
+        $params = $this->params()->fromRoute();
+        try {
+            $result = $this->fileService->getFileDocumentList($params);
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
+        }
+        return $this->getSuccessResponseWithData($result, 200);
+    }
 }
