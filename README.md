@@ -95,6 +95,13 @@ mysql -u 'user_name' -p 'password'
 
 <h4> 3. <u>Database Creation</u>: </h4>
 
+- Update bind-address in mysql configuration to allow external connections using ipv4 address
+
+	- $ vi /etc/mysql/mysql.conf.d/mysqld.cnf
+	
+	`look for "bind-address            = 127.0.0.1"`
+        `update it to 0.0.0.0`
+
 <h5>login to your mysql client</h5>
 
 - Database for API
@@ -119,25 +126,25 @@ mysql -u 'user_name' -p 'password'
 
 <h4> 4. <u>Updating Configurations</u>: </h4>
 
-		Note : Using relative path below
+		Note : Using relative path below from repository root path
 		
 		Note : Use IPv4 address of your machine for updating host configurations, to check IPv4 address use `ifconfig` on terminal.
 - For API
-	- cp api/v1/config/autoload/local.php.dist api/v1/config/autoload/local.php
-	- update api/v1/config/autoload/local.php
-	- update the database settings as per the database you created in your local machine
+	- $ cp api/v1/config/autoload/local.php.dist api/v1/config/autoload/local.php
+	`update api/v1/config/autoload/local.php`
+	`update the database settings as per the database you created in your local machine`
 
 - For Workflow
-	- cp integrations/workflow/.env.sample integrations/workflow/.env
-	- update the database connection in the .env file you just copied
-	- Follow the readme to build the docker image and run the container
+	- $ cp integrations/workflow/.env.sample integrations/workflow/.env
+	`update the database connection in the .env file you just copied`
+	`Follow the readme to build the docker image and run the container`
 - For Camel	
-	- Updare integrations/camel/src/main/resources/application.yml, integrations/camel/src/main/resources/oxzion.properties and integrations/camel/src/main/resources/Routes.groovy according to your host ip and database.
+	- Update integrations/camel/src/main/resources/application.yml, integrations/camel/src/main/resources/oxzion.properties and integrations/camel/src/main/resources/Routes.groovy according to your host ip and database.
 
 - For View
-	- cp .env.example to .env in all the iframe apps under `view/apps` to your host.
-	- cp view/bos/src/server/local.js.example view/bos/src/server/local.js
+	`cp .env.example to .env in all the iframe apps under `view/apps` to your host.`
+	- $ cp view/bos/src/server/local.js.example view/bos/src/server/local.js
 	- update view/bos/src/server/local.js to your host environment
-	- cp view/bos/src/osjs-server.env.example view/bos/src/osjs-server.env and update the SERVER parameter to your host ip. 
-	- cp view/bos/src/client/local.js.example view/bos/src/client/local.js
+	- $ cp view/bos/src/osjs-server.env.example view/bos/src/osjs-server.env and update the SERVER parameter to your host ip. 
+	- $ cp view/bos/src/client/local.js.example view/bos/src/client/local.js
 	- update the wrapper url parameter to host ip in view/bos/src/client/local.js
