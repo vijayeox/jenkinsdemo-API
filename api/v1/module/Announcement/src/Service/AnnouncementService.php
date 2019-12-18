@@ -345,7 +345,7 @@ class AnnouncementService extends AbstractService
             $orgId = AuthContext::get(AuthConstants::ORG_ID); 
         }
 
-        $select = "SELECT a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id left join ox_user_group as oug on ogm.group_id = oug.group_id where oug.avatar_id = ".AuthContext::get(AuthConstants::USER_ID)." and a.org_id =".$orgId." and a.end_date >= curdate() union SELECT a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id where ogm.group_id is NULL and a.org_id =".$orgId." and a.end_date >= curdate()";
+        $select = "SELECT * from (SELECT a.id,a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id left join ox_user_group as oug on ogm.group_id = oug.group_id where oug.avatar_id = ".AuthContext::get(AuthConstants::USER_ID)." and a.org_id =".$orgId." and a.end_date >= curdate() union SELECT a.id,a.uuid,a.name,a.org_id,a.status,a.description,a.start_date,a.end_date,a.media_type,a.media from ox_announcement as a left join ox_announcement_group_mapper as ogm on a.id = ogm.announcement_id where ogm.group_id is NULL and a.org_id =".$orgId." and a.end_date >= curdate())as a ORDER BY a.id DESC";
 
         return $this->executeQuerywithParams($select)->toArray();
     }

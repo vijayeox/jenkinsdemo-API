@@ -43,46 +43,126 @@
 <h4>Step 1: <u>Install Software Prerequisites:-</u></h4>
 
 -------------------------
-<h4><u>Node.js 8.x:</u> </h4>
+<h4>1. <u>Node.js 8.x:</u> </h4>
 
-To learn how to install Node.js [click here.](https://nodesource.com/blog/installing-node-js-8-tutorial-linux-via-package-manager/)
+To learn how to install Node.js [click here.](https://nodesource.com/blog/installing-node-js-8-tutorial-linux-via-package-manager/) 
 
+<h5><center> OR RUN THE FOLLOWING COMMANDS in terminal</center></h5>
+
+- sudo apt update
+- curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+- sudo apt-get install -y nodejs
+
+<h5><center>After Installation validate by</center></h5>
+
+- node -v
+- npm -v
 ------
-<h4><u>PhP 7.2</u>: </h4>
+<h4>2. <u>PhP 7.2</u>: </h4>
 
 To learn how to install PhP [click here.](https://tecadmin.net/install-php-7-on-ubuntu/
 )
+
+<h5><center> OR RUN THE FOLLOWING COMMANDS in terminal</center></h5>
+
+- sudo apt-get install software-properties-common
+- sudo add-apt-repository ppa:ondrej/php
+- sudo apt-get update
+- sudo apt-get install -y php7.2
+
+<h5><center>After Installation validate by</center></h5>
+
+- php -v
 
 Set the memory limit in php.ini located inside /etc/php/"version"/apache2 to atleast 512MB and restart apache
 
 - **Note: Install the following extensions according to php version**
 
-<h5>sudo apt-get install php7.2-mysql php7.2-curl php7.2-json php7.2-cgi php7.2-xsl php7.2-intl php7.2gd php7.2-zip</h5>
+<h5>sudo apt-get install php7.2-mysql php7.2-curl php7.2-json php7.2-cgi php7.2-xsl php7.2-intl php7.2-gd php7.2-zip</h5>
 
 ---------
-<h4> 1. <u>Apache 2.4+</u>: </h4>
+<h4> 3. <u>Apache 2.4+</u>: </h4>
 
 To learn how to install Apache [click here.](https://www.digitalocean.com/community/tutorials/how-to-install-the-apache-web-server-on-ubuntu-18-04-quickstart)
 
-- Note: No firewall enabled so skip firewall steps.
+<h5><center> OR RUN THE FOLLOWING COMMANDS in terminal</center></h5>
+
+- sudo apt update
+- sudo apt install apache2
+
+		 Note: No firewall enabled so skip firewall steps if you are following the above linked blog.
 
 ---------------
-<h4>2. <u>MySql 5.7</u>: </h4>
+<h4>4. <u>MySql 5.7</u>: </h4>
 
 To learn how to install MySql [click here.](https://linuxize.com/post/how-to-install-mysql-on-ubuntu-18-04/)
 
+<h5><center> OR RUN THE FOLLOWING COMMANDS in terminal</center></h5>
+
+- sudo apt update
+- sudo apt install mysql-server
+
+<h5>Once the installation is completed, the MySQL service will start automatically. To check whether the MySQL server is running, type:</h5>
+- sudo systemctl status mysql
+
+#####Login to mysql client with superuser privilege for the first time
+
+- sudo mysql
+
+<h5>After installing mysql update your root password </h5><h5> 
+If you want to login to your MySQL server as root from an external program such as phpMyAdmin.
+
+Change the authentication method from auth_socket to mysql_native_password. You can do that by running the following command:</h5>
+- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'very_strong_ password';
+- FLUSH PRIVILEGES;
+
+####To exit the client
+
+- \q or exit
+
+After updating the root password you can login with the new password that you have set by the following
+
+mysql -u 'user_name' -p 'password'
+
 -----------
-<h4>3. <u>Java JDK 8.x</u>: </h4>
+<h4>5. <u>Java JDK 8.x</u>: </h4>
 
 To learn how to install Java 8 [click here.](https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-on-ubuntu-18-04)
 
+<h5><center> OR RUN THE FOLLOWING COMMANDS in terminal</center></h5>
+
+- sudo apt update
+- sudo apt install openjdk-8-jdk
+
+<h5>Verify that this is installed with</h5>
+
+- java -version
+
 ------------
-<h4> 4. <u>Docker</u>: </h4>
+<h4> 6. <u>Docker</u>: </h4>
 
 To learn how to install Docker [click here.](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04)
 
+<h5><center> OR RUN THE FOLLOWING COMMANDS in terminal</center></h5>
+
+- sudo apt update
+- sudo apt install apt-transport-https ca-certificates curl software-properties-common
+
+- curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+
+- sudo apt update
+- sudo apt install docker-ce
+
+<h5>Docker should now be installed, the daemon started, and the process enabled to start on boot. Check that it’s running:</h5>
+
+- sudo systemctl status docker
+
+			Note: Use `sudo` to run docker command
+		
 -----------
-<h4> 5. <u>Postgres</u>: </h4>
+<h4> 7. <u>Postgres</u>: </h4>
 
 - Following are the steps to install postgres and postgres-cli.
 
@@ -91,7 +171,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 	<h5>sudo apt-get install postgresql postgresql-client</h5>
 
 -----------
-<h4> 6. <u>Ruby with rbenv</u>: </h4>
+<h4> 8. <u>Ruby with rbenv</u>: </h4>
 
 - Following are the steps to install rbenv:-
 
@@ -128,7 +208,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 	<h5>bundle -v or bundler -v</h5>
 
 -----------
-<h4>7. <u>Passenger:</u></h4>
+<h4>9. <u>Passenger:</u></h4>
 
 - Follow the step to install passenger
 
@@ -175,7 +255,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
   	Note-If you do not see any Apache processes or Passenger processes, then you probably have some kind of installation problem or configuration problem. Please refer to the troubleshooting guide on the following [link.](https://www.phusionpassenger.com/library/admin/apache/troubleshooting/)
 
 ---
-<h4>Postfix installation</h4>
+<h4>10. <u>Postfix installation</u></h4>
 Follow instructions from this site to use postfix https://rtcamp.com/tutorials/linux/ubuntu-postfix-gmail-smtp/
 
 To retain the Reply-To header
@@ -191,7 +271,7 @@ Tested with:
 
 mail -s test -a 'Reply-To: a@domain.tld' me@me.com <<< test
 
-<h4>8. <u>Supervisor and Redis Server:</u></h4>
+<h4>11. <u>Supervisor and Redis Server:</u></h4>
 
 ---
 

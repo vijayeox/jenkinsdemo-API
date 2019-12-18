@@ -94,7 +94,7 @@ class ProjectController extends AbstractApiController
     public function update($id, $data) {
     	try {
             $params = $this->params()->fromRoute();
-            $params['orgId'] = isset($params['orgId']) ? $params['orgId'] : NULL; 
+            $params['orgId'] = isset($params['orgId']) ? $params['orgId'] : NULL;
     		$count = $this->projectService->updateProject($id, $data,$params['orgId']);
     	} catch (ValidationException $e) {
     		$response = ['data' => $data, 'errors' => $e->getErrors()];
@@ -127,7 +127,7 @@ class ProjectController extends AbstractApiController
      */
     public function get($id)
     {
-        $params = $this->params()->fromRoute();    
+        $params = $this->params()->fromRoute();
         try {
             $result = $this->projectService->getProjectByUuid($id, $params);
         } catch (AccessDeniedException $e) {
@@ -251,7 +251,7 @@ class ProjectController extends AbstractApiController
         catch(ServiceException $e){
             return $this->getErrorResponse($e->getMessage(),404);
         }
-        
+
         return $this->getSuccessResponseWithData($data,200);
     }
     /**
