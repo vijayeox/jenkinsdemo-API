@@ -75,19 +75,23 @@ mysql -u 'user_name' -p 'password'
 - Download the debian bundle of smartgit for easy installation
 
 ![smartgit-installation](deployment/static/gif/installsmartgit.gif)
+<h5><center>GIF: HOW TO INSTALL SMARTGIT</center></h5>
 
 - Once Installed you can generate ssh keys and update them in your gitlab account for you to connect the git repository and enable you to do version control without password or you can enter your git account credential to pull code.
 
 ![key generation](deployment/static/gif/ssh-keygen.gif)
-
-- After you have generated the keys update the keys to gitlab account 
+<h5><center>GIF: HOW TO GENERATE KEYS</center></h5>
+- After you have generated the keys update the public part of key to gitlab account 
 
 ![](deployment/static/gif/addingpubkeygitlab.gif)
+<h5><center>GIF: HOW TO ADD KEYS TO GITLAB</center></h5>
 
 - Open Smartgit and goto repository tab and select clone to start cloning the codebase to your local machine.
 - You need to know the gitlab repository address to clone it which you can find in the gitlab server i.e `code.oxzion.com`.
+- We have different branches for different projects going on. The QA branch is for Development Team. Please clone or checkout if already cloned to the required branch to work on.
 
 ![clone](deployment/static/gif/smartgitclone.gif)
+<h5><center>GIF: HOW TO CLONE A REPOSITORY IN SMARTGIT</center></h5>
 
 <h4> 3. <u>Database Creation</u>: </h4>
 
