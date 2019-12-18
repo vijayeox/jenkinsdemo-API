@@ -41,11 +41,11 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 3
-        uuid: bf349be5-3d33-45bf-84a9-816b712002f4
+        uuid: 887e0696-d456-4001-85c4-37985cbfb144
 menu:
     -
         name: Home
-        uuid: e1ee3006-77a7-4d62-ad25-b7be66387fb1
+        uuid: 7794c91e-b708-41be-83e1-cc0bb6cd667a
         privilege: MANAGE_MY_POLICY_WRITE
         icon: 'fa fa-home'
         page:
@@ -58,7 +58,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: file
+                        route: file/status/Completed
                         filterable: true
                         reorderable: true
                         resizable: true
@@ -72,19 +72,22 @@ menu:
                         actions:
                             -
                                 name: View
-                                page_id: 1
+                                rule: 'true'
+                                details:
+                                    - { type: DocumentViewer, params: { uuid: '{{uuid}}' } }
                                 icon: 'fa fa-envelope-open'
                             -
                                 name: Cancel
+                                rule: 'true'
                                 page_id: 3
                                 icon: 'fa fa-window-close'
                         operations:
-                            title: 'Create Policies'
+                            title: 'Get Policy'
                             actions:
                                 -
                                     name: IPL
                                     rule: 'true'
-                                    details: [{ type: Form, url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform}]
+                                    details: [{ type: Form, url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform }]
                                 -
                                     name: 'Dive Boat'
                                     rule: 'true'
@@ -99,13 +102,13 @@ menu:
                                     details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
                         columnConfig:
                             -
-                                title: Policy Name
+                                title: 'Policy Name'
                                 field: entity_name
     -
         name: 'My History'
-        uuid: c420e935-372a-44e2-b4d7-4979439f9427
+        uuid: 623132d9-8ccb-4c8a-b7b7-a3b0921defdc
         privilege: MANAGE_MY_POLICY_READ
-        icon: 'My History'
+        icon: 'fa fa-book'
         page:
             name: 'My History'
             description: 'Shows all the policies'
@@ -137,13 +140,13 @@ menu:
                                 field: lastname
                             -
                                 title: Product
-                                field: workflow_name
+                                field: entity_name
                             -
-                                title: Task
-                                field: activityName
-                            -
-                                title: 'Submission Date'
+                                title: 'Policy Start Date'
                                 field: start_date
+                            -
+                                title: 'Policy End Date'
+                                field: end_date
     -
         name: Home
         icon: 'fa fa-home'
@@ -155,7 +158,7 @@ menu:
                 -
                     type: Dashboard
                     dashboard: Dashboard
-        uuid: dc280f97-f4f7-4fb1-ac56-e820831445c3
+        uuid: 24176975-8f4d-499d-8b2d-86902de26c14
     -
         name: Requests
         privilege: MANAGE_POLICY_APPROVAL_WRITE
@@ -211,7 +214,7 @@ menu:
                                 rule: '{{to_be_claimed}} == 0'
                                 details:
                                     - { type: Form, url: 'workflowinstance\/{{workflowInstanceId}}\/activityinstance\/{{activityInstanceId}}\/form' }
-                                icon: 'fa fa-check-circle'    
+                                icon: 'fa fa-check-circle'
                         columnConfig:
                             -
                                 title: PADI
@@ -224,14 +227,14 @@ menu:
                                 field: lastname
                             -
                                 title: Product
-                                field: workflow_name
+                                field: entity_name
                             -
-                                title: Task
-                                field: activityName
-                            -
-                                title: 'Submission Date'
+                                title: 'Policy Start Date'
                                 field: start_date
-        uuid: 452287d9-86ea-4dd1-b18a-53bf9a924d1a
+                            -
+                                title: 'Policy End Date'
+                                field: end_date
+        uuid: 50fd8782-3e08-4a4c-9ff2-10d404904e5e
     -
         name: Errors
         privilege: MANAGE_DIVEINSURANCE_ERRORS_WRITE
@@ -277,7 +280,7 @@ menu:
                             -
                                 title: Parameters
                                 field: params
-        uuid: b2cb5a1e-93b1-4263-b097-9a98c5d35d33
+        uuid: 41551bff-e30e-4ba5-abc1-1a864f12e061
     -
         name: 'Manage Policies'
         icon: 'fa fa-list-alt'
@@ -292,11 +295,14 @@ menu:
                         actions:
                             -
                                 name: View
-                                page_id: 1
                                 icon: 'fa fa-envelope-open'
+                                rule: 'true'
+                                details:
+                                    - { type: DocumentViewer, params: { uuid: '{{uuid}}' } }
                             -
                                 name: Cancel
                                 page_id: 3
+                                rule: 'true'
                                 icon: 'fa fa-window-close'
                         filterColumns:
                             - name
@@ -304,7 +310,7 @@ menu:
                             - firstname
                             - lastname
                         operations:
-                            title: 'Create Policies'
+                            title: 'Get Policy'
                             actions:
                                 -
                                     name: IPL
@@ -325,11 +331,11 @@ menu:
                         columnConfig:
                             -
                                 title: Name
-                                field: name
+                                field: entity_name
                             -
                                 title: Status
                                 field: status
-        uuid: cb7a2022-307f-40ff-88dc-64d6d5834f5c
+        uuid: 3a4cc987-5627-4882-89ae-3bdc4f6e1e77
     -
         name: 'Verify PADI details'
         icon: 'fa fa-search'
@@ -343,7 +349,7 @@ menu:
                 -
                     formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
                     type: Form
-        uuid: 40209052-2550-4d60-a2ea-7a38bb614c7a    
+        uuid: 9bf92403-2111-4d05-9d89-01a609ed4b83
 workflow:
     -
         name: 'Individual Liability'

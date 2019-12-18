@@ -195,7 +195,7 @@ class FileService extends AbstractService
             }
         }
 
-        $fields = array_diff($data,$fileObject);
+        $fields = array_merge($fileObject,$data);
         $file = new File();
         $id = $this->getIdFromUuid('ox_file', $id);
         $validFields = $this->checkFields(isset($obj['entity_id']) ? $obj['entity_id'] : null, $fields, $id);
@@ -359,7 +359,6 @@ class FileService extends AbstractService
                     continue;
                 }
                 if (isset($fieldData[$field['name']]) && is_array($fieldData[$field['name']])) {
-
                     $fieldData[$field['name']] = json_encode($fieldData[$field['name']]);
                 }
                 $keyValueFields[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
@@ -575,6 +574,27 @@ class FileService extends AbstractService
             }
         } else {
             throw new ServiceException("App Does not belong to the org","app.fororgnot.found");
+        }
+    }
+
+    public function getFileDocumentList($params)
+    {
+        $selectQuery = 'select ox_field.name, ox_file_attribute.field_value from ox_file
+        inner join ox_file_attribute on ox_file_attribute.file_id = ox_file.id
+        inner join ox_field on ox_field.id = ox_file_attribute.field_id
+        inner join ox_app on ox_field.app_id = ox_app.id
+        where ox_file.org_id=:organization and ox_app.uuid=:appUuid and ox_field.data_type=:dataType
+        and ox_file.uuid=:fileUuid';
+        $selectQueryParams = array('organization' => AuthContext::get(AuthConstants::ORG_ID),
+            'appUuid' => $params['appId'],
+            'fileUuid' => $params['fileId'],
+            'dataType' => 'document');
+        try {
+            $selectResultSet = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
+            return $selectResultSet;
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
+            return 0;
         }
     }
     public function getFieldType($value, $prefix)
