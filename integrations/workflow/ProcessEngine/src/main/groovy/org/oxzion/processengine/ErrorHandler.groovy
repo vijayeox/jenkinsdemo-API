@@ -41,8 +41,8 @@ class ErrorHandler {
             logger.info("Incident Id : ${incident.getId()}")
             message.incidentId = incident.getId()
             log('failedJob',stacktrace,content,new JsonBuilder(message).toPrettyString(),message.app_id.toString())
-        }catch(Exception e){
-            logger.error("Error while processing exception", e)
+        }catch(Exception ex){
+            logger.error("Error while processing exception", ex)
         }
         finally{
             throw new BpmnError("400","Service Task Failure")
