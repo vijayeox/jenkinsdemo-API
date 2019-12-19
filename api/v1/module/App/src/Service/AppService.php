@@ -239,9 +239,9 @@ class AppService extends AbstractService
                 }
                 $routedata = array("appId" => $appId, "orgId" => $yamlData['org'][0]['uuid']);
                 $result = $this->pageService->savePage($routedata, $page, $pageId);
-                $menu['page_id'] = $page['id'];
+                $menu['page_id'] = isset($menu['page_id']) ? $menu['page_id'] : $page['id'];
                 $count = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
-                $menuData['uuid'] = $menu['uuid'];
+                $menuData['uuid'] = isset($menuData['uuid']) ? $menuData['uuid'] : $menu['uuid'];
             }
         }
     }
