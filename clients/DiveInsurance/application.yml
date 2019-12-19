@@ -99,7 +99,7 @@ menu:
                                 -
                                     name: 'Emergency First Response'
                                     rule: 'true'
-                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
+                                    details: [{ type: Form, url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform }]
                         columnConfig:
                             -
                                 title: 'Policy Name'
@@ -200,7 +200,7 @@ menu:
                                 -
                                     name: 'Emergency First Response'
                                     rule: 'true'
-                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
+                                    details: [{ type: Form, url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform }]
                         actions:
                             -
                                 name: Approve
@@ -327,7 +327,7 @@ menu:
                                 -
                                     name: 'Emergency First Response'
                                     rule: 'true'
-                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
+                                    details: [{ type: Form, url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform }]
                         columnConfig:
                             -
                                 title: Name
@@ -371,6 +371,11 @@ workflow:
         uuid: 91cb9e10-5845-4379-97c9-f9486b702bd6
         bpmn_file: 'Individual Professional Liability/IPLAutoRenewal.bpmn'
         entity: 'Individual Professional Liability'
+    -
+        name: 'Emergency First Response'
+        uuid: cb74d176-225a-11ea-978f-2e728ce88125
+        bpmn_file: 'Emergency First Response/NewApplication.bpmn'
+        entity: 'Emergency First Response'
 form:
     -
         name: 'PADI Verification'
