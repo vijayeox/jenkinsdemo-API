@@ -74,10 +74,7 @@ menu:
                                 name: View
                                 rule: 'true'
                                 details:
-                                    -
-                                        type: DocumentViewer
-                                        params:
-                                            uuid: '{{uuid}}'
+                                    - { type: DocumentViewer, params: { uuid: '{{uuid}}' } }
                                 icon: 'fa fa-envelope-open'
                             -
                                 name: Cancel
@@ -90,31 +87,19 @@ menu:
                                 -
                                     name: IPL
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
+                                    details: [{ type: Form, url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform }]
                                 -
                                     name: 'Dive Boat'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                    details: [{ type: Form, url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform }]
                                 -
                                     name: 'Dive Store'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
+                                    details: [{ type: Form, url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform }]
                                 -
                                     name: 'Emergency First Response'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform
+                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
                         columnConfig:
                             -
                                 title: 'Policy Name'
@@ -203,51 +188,32 @@ menu:
                                 -
                                     name: IPL
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
+                                    details: [{ type: Form, url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform }]
                                 -
                                     name: 'Dive Store'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                    details: [{ type: Form, url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform }]
                                 -
                                     name: 'Dive Boat'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
+                                    details: [{ type: Form, url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform }]
                                 -
                                     name: 'Emergency First Response'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform
+                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
                         actions:
                             -
                                 name: Approve
                                 rule: '{{to_be_claimed}} == 1'
                                 details:
-                                    -
-                                        type: Update
-                                        params:
-                                            url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim'
-                                    -
-                                        type: Form
-                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                                    - { type: Update, params: { url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim' } }
+                                    - { type: Form, url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form' }
                                 icon: 'fa fa-check-circle'
                             -
                                 name: Approve
                                 rule: '{{to_be_claimed}} == 0'
                                 details:
-                                    -
-                                        type: Form
-                                        url: 'workflowinstance\/{{workflowInstanceId}}\/activityinstance\/{{activityInstanceId}}\/form'
+                                    - { type: Form, url: 'workflowinstance\/{{workflowInstanceId}}\/activityinstance\/{{activityInstanceId}}\/form' }
                                 icon: 'fa fa-check-circle'
                         columnConfig:
                             -
@@ -297,10 +263,7 @@ menu:
                                 name: retry
                                 rule: 'true'
                                 details:
-                                    -
-                                        type: Update
-                                        params:
-                                            url: 'errorlog/{{id}}/retry'
+                                    - { type: Update, params: { url: 'errorlog/{{id}}/retry' } }
                         columnConfig:
                             -
                                 title: Id
@@ -335,10 +298,7 @@ menu:
                                 icon: 'fa fa-envelope-open'
                                 rule: 'true'
                                 details:
-                                    -
-                                        type: DocumentViewer
-                                        params:
-                                            uuid: '{{uuid}}'
+                                    - { type: DocumentViewer, params: { uuid: '{{uuid}}' } }
                             -
                                 name: Cancel
                                 page_id: 3
@@ -355,31 +315,19 @@ menu:
                                 -
                                     name: IPL
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
+                                    details: [{ type: Form, url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform }]
                                 -
                                     name: 'Dive Store'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
+                                    details: [{ type: Form, url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform }]
                                 -
                                     name: 'Dive Boat'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
+                                    details: [{ type: Form, url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform }]
                                 -
                                     name: 'Emergency First Response'
                                     rule: 'true'
-                                    details:
-                                        -
-                                            type: Form
-                                            url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform
+                                    details: [{ type: Form, url: workflow/9619673a-8e6b-4b98-866f-a90e40eeb5e8/startform }]
                         columnConfig:
                             -
                                 title: Name
@@ -423,11 +371,6 @@ workflow:
         uuid: 91cb9e10-5845-4379-97c9-f9486b702bd6
         bpmn_file: 'Individual Professional Liability/IPLAutoRenewal.bpmn'
         entity: 'Individual Professional Liability'
-    -
-        name: 'Dive Boat Cancel'
-        uuid: fb83df6d-6a87-4592-9bfd-914b799389f8
-        bpmn_file: 'Cancel Policy/CancelForm.bpmn'
-        entity: 'Dive Boat'
 form:
     -
         name: 'PADI Verification'

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true" printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinter">
     <testsuites>
-         <!-- <testsuite name="Messaging Fixtures Fixtures">
+         <testsuite name="Messaging Fixtures Fixtures">
             <directory>./module/Messaging/test</directory>
         </testsuite>
         <testsuite name="Attachment Fixtures">
@@ -21,12 +21,12 @@
         </testsuite>
         <testsuite name="Roles Fixtures">
             <directory>./module/Role/test</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="App Fixtures">
             <directory>./module/App/test</directory>
-            <!-- <directory>./module/Workflow/test</directory> -->
+            <directory>./module/Workflow/test</directory>
         </testsuite>
-         <!-- <testsuite name="Core Fixtures">
+         <testsuite name="Core Fixtures">
             <directory>./lib/Oxzion/test</directory>
             <directory>./module/Mlet/test</directory>
         </testsuite>
@@ -51,7 +51,7 @@
         </testsuite>
         <testsuite name="Dive Insurance Fixtures">
             <directory>../../clients/DiveInsurance/test/</directory>
-        </testsuite> -->
+        </testsuite>
     </testsuites> 
     <php>
         <ini name="memory_limit" value="500M" />
