@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_15ktrj6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.5.0">
+  <bpmn:process id="Process_005xob2" isExecutable="true">
+    <bpmn:endEvent id="EndEvent_1nhr9rj" name="Approved">
+      <bpmn:incoming>SequenceFlow_06rhdcm</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="UserTask_0kf4sqm" name="Cancellation Approval">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="csrApproved" type="boolean" defaultValue="false" />
+        </camunda:formData>
+        <camunda:properties>
+          <camunda:property name="template" value="{&#34;_id&#34;:&#34;5def2f93b73e9a322efec489&#34;,&#34;type&#34;:&#34;form&#34;,&#34;tags&#34;:[],&#34;owner&#34;:&#34;5ddfaa682859774314661851&#34;,&#34;components&#34;:[{&#34;type&#34;:&#34;panel&#34;,&#34;title&#34;:&#34;Cancel Confirmation&#34;,&#34;components&#34;:[{&#34;key&#34;:&#34;page7Content2&#34;,&#34;label&#34;:&#34;Content&#34;,&#34;input&#34;:false,&#34;tag&#34;:&#34;p&#34;,&#34;attrs&#34;:[{&#34;value&#34;:&#34;&#34;,&#34;attr&#34;:&#34;&#34;}],&#34;className&#34;:&#34;&#34;,&#34;content&#34;:&#34;This is not a binder of insurance coverage, and does not bind the insurer or Vicencia Buckley, a division of HUB International, until approved by the insurer and a premium is paid by the applicant and all required documents are received. We (I) acknowledge that this policy does not cover in water accidents and that we (I) have or require Professional Liability in place for in water accidents. No coverage is provided under this policy for Liquor Liability. It is your duty to correct any wrong information and to complete any omitted information on this application. Concealment, misrepresenting, or stating falsely on this application may result in your policy being voided or rescinded at any time, even after a loss&#34;,&#34;type&#34;:&#34;htmlelement&#34;,&#34;hideLabel&#34;:true,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;inputType&#34;:&#34;checkbox&#34;,&#34;tableView&#34;:true,&#34;label&#34;:&#34;I have read and agree to Terms of Service, Cancellation Policy and Privacy Policy.&#34;,&#34;dataGridLabel&#34;:false,&#34;key&#34;:&#34;page7IhavereadandagreetoTermsofServiceCancellationPolicyandPrivacyPolicy&#34;,&#34;defaultValue&#34;:false,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;name&#34;:&#34;&#34;,&#34;value&#34;:&#34;&#34;,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:true},&#34;type&#34;:&#34;checkbox&#34;,&#34;labelPosition&#34;:&#34;right&#34;,&#34;hideLabel&#34;:false,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}}],&#34;input&#34;:false,&#34;key&#34;:&#34;page7&#34;,&#34;clearOnHide&#34;:false,&#34;theme&#34;:&#34;primary&#34;,&#34;tableView&#34;:false,&#34;hideLabel&#34;:false,&#34;breadcrumb&#34;:&#34;default&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}},{&#34;type&#34;:&#34;panel&#34;,&#34;title&#34;:&#34;Cancellation Approval&#34;,&#34;components&#34;:[{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;inputType&#34;:&#34;radio&#34;,&#34;label&#34;:&#34;Cancallention is:&#34;,&#34;key&#34;:&#34;CancellationApproval&#34;,&#34;values&#34;:[{&#34;value&#34;:&#34;approved&#34;,&#34;label&#34;:&#34;Approved&#34;,&#34;shortcut&#34;:&#34;Y&#34;},{&#34;value&#34;:&#34;notApproved&#34;,&#34;label&#34;:&#34;Not Approved&#34;,&#34;shortcut&#34;:&#34;N&#34;}],&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;fieldSet&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;custom&#34;:&#34;&#34;,&#34;customPrivate&#34;:false},&#34;type&#34;:&#34;radio&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;optionsLabelPosition&#34;:&#34;right&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;inline&#34;:true,&#34;hideLabel&#34;:false,&#34;labelWidth&#34;:30,&#34;labelMargin&#34;:3,&#34;lockKey&#34;:true},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;inputType&#34;:&#34;radio&#34;,&#34;label&#34;:&#34;Reason for Cancellation&#34;,&#34;key&#34;:&#34;page8ReasonforCancellation&#34;,&#34;values&#34;:[{&#34;value&#34;:&#34;nonPaymentOfPremium&#34;,&#34;label&#34;:&#34;Non-payment of premium&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;padiMembershipNotCurrent&#34;,&#34;label&#34;:&#34;PADI Membership not current&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;nonSufficientFunds&#34;,&#34;label&#34;:&#34;Non-Sufficient Funds&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;storeSold&#34;,&#34;label&#34;:&#34;Store Sold&#34;,&#34;shortcut&#34;:&#34;&#34;}],&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;fieldSet&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;custom&#34;:&#34;&#34;,&#34;customPrivate&#34;:false},&#34;type&#34;:&#34;radio&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;optionsLabelPosition&#34;:&#34;right&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;CancellationApproval&#34;,&#34;eq&#34;:&#34;notApproved&#34;},&#34;properties&#34;:{}},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Reason&#34;,&#34;key&#34;:&#34;page8Reason&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;prefix&#34;:&#34;&#34;,&#34;suffix&#34;:&#34;&#34;,&#34;rows&#34;:3,&#34;multiple&#34;:false,&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;wysiwyg&#34;:false,&#34;clearOnHide&#34;:true,&#34;spellcheck&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;minLength&#34;:&#34;&#34;,&#34;maxLength&#34;:&#34;&#34;,&#34;pattern&#34;:&#34;&#34;,&#34;custom&#34;:&#34;&#34;},&#34;type&#34;:&#34;textarea&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;inputFormat&#34;:&#34;plain&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;CancellationApproval&#34;,&#34;eq&#34;:&#34;notApproved&#34;},&#34;properties&#34;:{},&#34;disabled&#34;:false}],&#34;input&#34;:false,&#34;key&#34;:&#34;page8&#34;,&#34;clearOnHide&#34;:false,&#34;theme&#34;:&#34;primary&#34;,&#34;tableView&#34;:false,&#34;hideLabel&#34;:false,&#34;breadcrumb&#34;:&#34;default&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}}],&#34;revisions&#34;:&#34;&#34;,&#34;_vid&#34;:0,&#34;title&#34;:&#34;Dive Boat Cancel CSR Approval&#34;,&#34;display&#34;:&#34;form&#34;,&#34;access&#34;:[{&#34;roles&#34;:[&#34;5ce43aa430776b950569301d&#34;,&#34;5ce43aa430776b4a5969301e&#34;,&#34;5ce43aa430776bdfb569301f&#34;],&#34;type&#34;:&#34;read_all&#34;}],&#34;submissionAccess&#34;:[],&#34;settings&#34;:{},&#34;properties&#34;:{},&#34;name&#34;:&#34;diveBoatCancelCsrApproval&#34;,&#34;path&#34;:&#34;diveboatcancelcsrapproval&#34;,&#34;project&#34;:&#34;5ce43aa430776b2aff69301c&#34;,&#34;created&#34;:&#34;2019-12-10T05:39:31.540Z&#34;,&#34;modified&#34;:&#34;2019-12-10T05:40:44.162Z&#34;,&#34;machineName&#34;:&#34;testdivehub:diveBoatCsrApproval&#34;}" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_003k1z8</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0fepnrm</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="ServiceTask_0meemdw" name="Send cancellation approval mail" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="commands">
+            <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate":"QuoteDocument"}</camunda:value>
+              <camunda:value>{"command" : "fileSave"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate" : "DispatchNewPolicy"}</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1bbqiwe</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_19glx88</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_06rhdcm</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:startEvent id="StartEvent_1" name="Cancel form">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="template" value="{&#34;_id&#34;:&#34;5dea0c3d77d02524ac90c95a&#34;,&#34;type&#34;:&#34;form&#34;,&#34;tags&#34;:[],&#34;owner&#34;:&#34;5ddfaa682859774314661851&#34;,&#34;components&#34;:[{&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;key&#34;:&#34;privileges&#34;,&#34;label&#34;:&#34;privileges&#34;,&#34;protected&#34;:true,&#34;unique&#34;:false,&#34;persistent&#34;:false,&#34;type&#34;:&#34;hidden&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;isNew&#34;:false},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;inputType&#34;:&#34;radio&#34;,&#34;label&#34;:&#34;Cancellation Status:&#34;,&#34;key&#34;:&#34;cancellationStatus&#34;,&#34;values&#34;:[{&#34;value&#34;:&#34;approved&#34;,&#34;label&#34;:&#34;Approved&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;notApproved&#34;,&#34;label&#34;:&#34;Not Approved&#34;,&#34;shortcut&#34;:&#34;&#34;}],&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;fieldSet&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;custom&#34;:&#34;&#34;,&#34;customPrivate&#34;:false},&#34;type&#34;:&#34;radio&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;optionsLabelPosition&#34;:&#34;right&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;inline&#34;:false,&#34;customConditional&#34;:&#34;show = data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] != null &#38;&#38; data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] ? true: false;&#34;,&#34;labelWidth&#34;:30,&#34;labelMargin&#34;:3,&#34;lockKey&#34;:true},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;inputType&#34;:&#34;radio&#34;,&#34;label&#34;:&#34;Reason for Cancellation:&#34;,&#34;key&#34;:&#34;reasonforCsrCancellation&#34;,&#34;values&#34;:[{&#34;value&#34;:&#34;nonPaymentOfPremium&#34;,&#34;label&#34;:&#34;Non-payment of Premium&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;padiMembershipNotCurrent&#34;,&#34;label&#34;:&#34;PADI Membership not current&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;nonSufficientFunds&#34;,&#34;label&#34;:&#34;Non-Sufficient Funds&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;boatSold&#34;,&#34;label&#34;:&#34;Boat Sold&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;others&#34;,&#34;label&#34;:&#34;Others&#34;,&#34;shortcut&#34;:&#34;&#34;}],&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;fieldSet&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;custom&#34;:&#34;&#34;,&#34;customPrivate&#34;:false},&#34;type&#34;:&#34;radio&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;optionsLabelPosition&#34;:&#34;right&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;cancellationStatus&#34;,&#34;eq&#34;:&#34;notApproved&#34;},&#34;properties&#34;:{},&#34;customConditional&#34;:&#34;&#34;,&#34;lockKey&#34;:true,&#34;isNew&#34;:false},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;inputType&#34;:&#34;radio&#34;,&#34;label&#34;:&#34;Reason for Cancellation&#34;,&#34;key&#34;:&#34;reasonforUserCancellation&#34;,&#34;values&#34;:[{&#34;value&#34;:&#34;padiMembershipNotCurrent&#34;,&#34;label&#34;:&#34;PADI Membership not current&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;boatSold&#34;,&#34;label&#34;:&#34;Boat Sold&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;others&#34;,&#34;label&#34;:&#34;Others&#34;,&#34;shortcut&#34;:&#34;&#34;}],&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;fieldSet&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;custom&#34;:&#34;&#34;,&#34;customPrivate&#34;:false},&#34;type&#34;:&#34;radio&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;optionsLabelPosition&#34;:&#34;right&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;customConditional&#34;:&#34;show = data.privileges[&#39;MANAGE_MY_POLICY_READ&#39;]? true : false;&#34;,&#34;lockKey&#34;:true},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Others&#34;,&#34;key&#34;:&#34;othersCsr&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;prefix&#34;:&#34;&#34;,&#34;suffix&#34;:&#34;&#34;,&#34;rows&#34;:3,&#34;multiple&#34;:false,&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;wysiwyg&#34;:false,&#34;clearOnHide&#34;:true,&#34;spellcheck&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;minLength&#34;:&#34;&#34;,&#34;maxLength&#34;:&#34;&#34;,&#34;pattern&#34;:&#34;&#34;,&#34;custom&#34;:&#34;&#34;},&#34;type&#34;:&#34;textarea&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;inputFormat&#34;:&#34;plain&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;reasonforCsrCancellation&#34;,&#34;eq&#34;:&#34;others&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Others&#34;,&#34;key&#34;:&#34;othersUser&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;prefix&#34;:&#34;&#34;,&#34;suffix&#34;:&#34;&#34;,&#34;rows&#34;:3,&#34;multiple&#34;:false,&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;wysiwyg&#34;:false,&#34;clearOnHide&#34;:true,&#34;spellcheck&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;minLength&#34;:&#34;&#34;,&#34;maxLength&#34;:&#34;&#34;,&#34;pattern&#34;:&#34;&#34;,&#34;custom&#34;:&#34;&#34;},&#34;type&#34;:&#34;textarea&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;inputFormat&#34;:&#34;plain&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;reasonforUserCancellation&#34;,&#34;eq&#34;:&#34;others&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true},{&#34;type&#34;:&#34;panel&#34;,&#34;title&#34;:&#34;Cancel Confirmation&#34;,&#34;components&#34;:[{&#34;key&#34;:&#34;page7Content2&#34;,&#34;label&#34;:&#34;Content&#34;,&#34;input&#34;:false,&#34;tag&#34;:&#34;p&#34;,&#34;attrs&#34;:[{&#34;value&#34;:&#34;&#34;,&#34;attr&#34;:&#34;&#34;}],&#34;className&#34;:&#34;&#34;,&#34;content&#34;:&#34;This is not a binder of insurance coverage, and does not bind the insurer or Vicencia Buckley, a division of HUB International, until approved by the insurer and a premium is paid by the applicant and all required documents are received. We (I) acknowledge that this policy does not cover in water accidents and that we (I) have or require Professional Liability in place for in water accidents. No coverage is provided under this policy for Liquor Liability. It is your duty to correct any wrong information and to complete any omitted information on this application. Concealment, misrepresenting, or stating falsely on this application may result in your policy being voided or rescinded at any time, even after a loss&#34;,&#34;type&#34;:&#34;htmlelement&#34;,&#34;hideLabel&#34;:true,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;inputType&#34;:&#34;checkbox&#34;,&#34;tableView&#34;:true,&#34;label&#34;:&#34;I have read and agree to Terms of Service, Cancellation Policy and Privacy Policy.&#34;,&#34;dataGridLabel&#34;:false,&#34;key&#34;:&#34;page7IhavereadandagreetoTermsofServiceCancellationPolicyandPrivacyPolicy&#34;,&#34;defaultValue&#34;:false,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;name&#34;:&#34;&#34;,&#34;value&#34;:&#34;&#34;,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:true},&#34;type&#34;:&#34;checkbox&#34;,&#34;labelPosition&#34;:&#34;right&#34;,&#34;hideLabel&#34;:false,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}}],&#34;input&#34;:false,&#34;key&#34;:&#34;page7&#34;,&#34;clearOnHide&#34;:false,&#34;theme&#34;:&#34;primary&#34;,&#34;tableView&#34;:false,&#34;hideLabel&#34;:false,&#34;breadcrumb&#34;:&#34;default&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;customConditional&#34;:&#34;show = data.privileges[&#39;MANAGE_MY_POLICY_READ&#39;]? true : false;&#34;},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;label&#34;:&#34;Submit&#34;,&#34;tableView&#34;:false,&#34;key&#34;:&#34;submit&#34;,&#34;size&#34;:&#34;md&#34;,&#34;leftIcon&#34;:&#34;&#34;,&#34;rightIcon&#34;:&#34;&#34;,&#34;block&#34;:false,&#34;action&#34;:&#34;submit&#34;,&#34;disableOnInvalid&#34;:false,&#34;theme&#34;:&#34;primary&#34;,&#34;type&#34;:&#34;button&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}}],&#34;revisions&#34;:&#34;&#34;,&#34;_vid&#34;:0,&#34;title&#34;:&#34;Dive Boat Cancel&#34;,&#34;display&#34;:&#34;form&#34;,&#34;access&#34;:[{&#34;roles&#34;:[&#34;5ce43aa430776b950569301d&#34;,&#34;5ce43aa430776b4a5969301e&#34;,&#34;5ce43aa430776bdfb569301f&#34;],&#34;type&#34;:&#34;read_all&#34;}],&#34;submissionAccess&#34;:[],&#34;settings&#34;:{},&#34;properties&#34;:{},&#34;name&#34;:&#34;diveBoatCancel&#34;,&#34;path&#34;:&#34;diveboatcancel&#34;,&#34;project&#34;:&#34;5ce43aa430776b2aff69301c&#34;,&#34;created&#34;:&#34;2019-12-06T08:07:25.229Z&#34;,&#34;modified&#34;:&#34;2019-12-19T10:58:34.427Z&#34;,&#34;machineName&#34;:&#34;testdivehub:diveBoatCancelForm&#34;}" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_0lxu54y</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0lxu54y" sourceRef="StartEvent_1" targetRef="ExclusiveGateway_0wzuikz" />
+    <bpmn:sequenceFlow id="SequenceFlow_06rhdcm" sourceRef="ServiceTask_0meemdw" targetRef="EndEvent_1nhr9rj" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0i2rjqf">
+      <bpmn:incoming>SequenceFlow_0fepnrm</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1bbqiwe</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_05l3k6h</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_1bbqiwe" name="csr approved" sourceRef="ExclusiveGateway_0i2rjqf" targetRef="ServiceTask_0meemdw">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CancellationApproval==true || CancellationApproval == "true"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_05l3k6h" name="csr not approved" sourceRef="ExclusiveGateway_0i2rjqf" targetRef="Task_1wb5k09">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CancellationApproval==false || CancellationApproval == "false"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="Task_1wb5k09" name="Send cancellation rejection mail" camunda:expression="0">
+      <bpmn:incoming>SequenceFlow_05l3k6h</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0h5r9zj</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0xf3o3r</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent_1ddmoxm" name="Rejected&#10;&#10;">
+      <bpmn:incoming>SequenceFlow_0xf3o3r</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_0xf3o3r" sourceRef="Task_1wb5k09" targetRef="EndEvent_1ddmoxm" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0wzuikz" default="SequenceFlow_003k1z8">
+      <bpmn:incoming>SequenceFlow_0lxu54y</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_19glx88</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_003k1z8</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0h5r9zj</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_19glx88" name="csr approved" sourceRef="ExclusiveGateway_0wzuikz" targetRef="ServiceTask_0meemdw">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${cancellationStatus=="approved"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0fepnrm" sourceRef="UserTask_0kf4sqm" targetRef="ExclusiveGateway_0i2rjqf" />
+    <bpmn:sequenceFlow id="SequenceFlow_003k1z8" name="user request" sourceRef="ExclusiveGateway_0wzuikz" targetRef="UserTask_0kf4sqm" />
+    <bpmn:sequenceFlow id="SequenceFlow_0h5r9zj" name="csr not approved" sourceRef="ExclusiveGateway_0wzuikz" targetRef="Task_1wb5k09">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${cancellationStatus=="notApproved"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_005xob2">
+      <bpmndi:BPMNShape id="EndEvent_1nhr9rj_di" bpmnElement="EndEvent_1nhr9rj">
+        <dc:Bounds x="852" y="159" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="847" y="202" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_0u9m17b_di" bpmnElement="UserTask_0kf4sqm">
+        <dc:Bounds x="340" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0ngtxh0_di" bpmnElement="ServiceTask_0meemdw">
+        <dc:Bounds x="630" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_11kt5gj_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="132" y="159" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="120" y="202" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0lxu54y_di" bpmnElement="SequenceFlow_0lxu54y">
+        <di:waypoint x="168" y="177" />
+        <di:waypoint x="225" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_06rhdcm_di" bpmnElement="SequenceFlow_06rhdcm">
+        <di:waypoint x="730" y="177" />
+        <di:waypoint x="852" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0i2rjqf_di" bpmnElement="ExclusiveGateway_0i2rjqf" isMarkerVisible="true">
+        <dc:Bounds x="485" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1bbqiwe_di" bpmnElement="SequenceFlow_1bbqiwe">
+        <di:waypoint x="535" y="177" />
+        <di:waypoint x="630" y="177" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="551" y="159" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_05l3k6h_di" bpmnElement="SequenceFlow_05l3k6h">
+        <di:waypoint x="510" y="202" />
+        <di:waypoint x="510" y="320" />
+        <di:waypoint x="630" y="320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="485" y="258" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1r8tfui_di" bpmnElement="Task_1wb5k09">
+        <dc:Bounds x="630" y="280" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1ddmoxm_di" bpmnElement="EndEvent_1ddmoxm">
+        <dc:Bounds x="852" y="302" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="849" y="345" width="44" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0xf3o3r_di" bpmnElement="SequenceFlow_0xf3o3r">
+        <di:waypoint x="730" y="320" />
+        <di:waypoint x="852" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0wzuikz_di" bpmnElement="ExclusiveGateway_0wzuikz" isMarkerVisible="true">
+        <dc:Bounds x="225" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_19glx88_di" bpmnElement="SequenceFlow_19glx88">
+        <di:waypoint x="250" y="152" />
+        <di:waypoint x="250" y="80" />
+        <di:waypoint x="660" y="80" />
+        <di:waypoint x="660" y="137" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="424" y="62" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0fepnrm_di" bpmnElement="SequenceFlow_0fepnrm">
+        <di:waypoint x="440" y="177" />
+        <di:waypoint x="485" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_003k1z8_di" bpmnElement="SequenceFlow_003k1z8">
+        <di:waypoint x="275" y="177" />
+        <di:waypoint x="340" y="177" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="269" y="159" width="62" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0h5r9zj_di" bpmnElement="SequenceFlow_0h5r9zj">
+        <di:waypoint x="250" y="202" />
+        <di:waypoint x="250" y="320" />
+        <di:waypoint x="630" y="320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="224" y="258" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

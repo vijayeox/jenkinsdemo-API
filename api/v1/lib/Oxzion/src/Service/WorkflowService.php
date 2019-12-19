@@ -88,6 +88,7 @@ class WorkflowService extends AbstractService
         try {
             $processIds = $this->getProcessManager()->deploy($workflowName, array($file));
             $processId = null;
+            print_r($processIds);
             if ($processIds) {
                 if (count($processIds)==1) {
                     $processDefinitionId = $processIds[0];

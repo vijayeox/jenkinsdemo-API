@@ -4,7 +4,7 @@ flyway:
   baseline-on-migrate: true
 spring:
   activemq:
-    broker-url: tcp://localhost:61616
+    broker-url: tcp://172.16.1.141:61616
     user: admin
     password: admin
   quartz:
@@ -30,9 +30,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     platform: org.hibernate.dialect.MySQL5Dialect
-    url: jdbc:mysql://localhost:3306/quartz_db?useSSL=false
+    url: jdbc:mysql://172.16.1.141:3306/quartz_db?useSSL=false
     username: root
-    password: password
+    password: purvi08
   jpa:
     properties:
       hibernate:
@@ -44,14 +44,14 @@ spring:
 smtp:
   host: localhost
   port: 25
-  username: root
-  password: password
+  username: ""
+  password: ""
   from:
     email: support@eoxvantage.com
 db:
-  host: jdbc:mysql://localhost/appBuilder_oxzionapi
+  host: jdbc:mysql://172.16.1.141/appBuilder_oxzionapi
   user: root
-  password: password
+  password: purvi08
 contentType: text/html
 camel:
   component:
@@ -61,7 +61,7 @@ camel:
       host: localhost
       port: 8081
 apikey: 0cb6fd4c-40a5-11e9-a30d-1c1b0d785c98
-authorization-url: http://localhost:8080/auth
+authorization-url: http://172.16.1.141:8080/auth
 elastic:
   host: localhost
   port: 9200
