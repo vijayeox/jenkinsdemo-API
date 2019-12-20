@@ -223,6 +223,7 @@ class AppService extends AbstractService
             foreach ($yamlData['menu'] as &$menuData) {
                 $menu = $menuData;
                 $menu['sequence'] = $sequence++;
+                $menu['privilege_name'] = isset($menu['privilege']) ? $menu['privilege'] : null;
                 $menu['uuid'] = isset($menu['uuid'])?$menu['uuid']:UuidUtil::uuid();
                 $menuUpdated = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
                 if($menuUpdated == 0){
@@ -238,9 +239,9 @@ class AppService extends AbstractService
                 }
                 $routedata = array("appId" => $appId, "orgId" => $yamlData['org'][0]['uuid']);
                 $result = $this->pageService->savePage($routedata, $page, $pageId);
-                $menu['page_id'] = $page['id'];
+                $menu['page_id'] = isset($menu['page_id']) ? $menu['page_id'] : $page['id'];
                 $count = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
-                $menuData['uuid'] = $menu['uuid'];
+                $menuData['uuid'] = isset($menuData['uuid']) ? $menuData['uuid'] : $menu['uuid'];
             }
         }
     }

@@ -32,4 +32,81 @@ wget -O /home/ubuntu/camunda-setup/mysql-connector-java-5.1.21.jar "http://centr
 #copy the downloaded mysql library to camunda library
 sudo cp /home/ubuntu/camunda-setup/mysql-connector-java-5.1.21.jar /opt/oxzion/camunda/lib
 
-#Configuration settings to be updated in server xml
+#Configuration settings to be updated in server.xml in /opt/oxzion/camunda/conf/server.xml
+
+update the following parameters
+1) driverClassName
+2)url
+3)username for camunda db
+4)password for camunda db
+5)port from 8080 to 8090
+
+Below is the difference of the default server.xml and working copy of server.xml. Look for the pattern and update the required parameters
+
+61,62c61,62
+<               driverClassName="org.h2.Driver" 
+<               url="jdbc:h2:./camunda-h2-dbs/process-engine;MVCC=TRUE;TRACE_LEVEL_FILE=0;DB_CLOSE_ON_EXIT=FALSE"
+---
+>               driverClassName="com.mysql.jdbc.Driver" 
+>               url="jdbc:mysql://localhost:3306/process-engine"
+64,65c64,65
+<               username="sa"  
+<               password="sa"
+---
+>               username="camunda"  
+>               password="Camundapasswd321!"
+103c103
+<     <Connector port="8080" protocol="HTTP/1.1"
+---
+>     <Connector port="8090" protocol="HTTP/1.1"
+
+
+#add the below Environment variable in /opt/oxzion/camunda/bin/catalina.sh right above "# OS specific support.  $var _must_ be set to either true or false" comment
+
+JAVA_OPTS="-Xmx768m -XX:MaxMetaspaceSize=256m"
+export BASE_DB_URL=jdbc:mysql://localhost:3306/oxzionapi 
+export DB_USERNAME=apiuser 
+export DB_PASSWORD=Apipasswd321! 
+export DB_DRIVER=com.mysql.jdbc.Driver
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+#create camunda service
+
+copy the camunda.service file in deployment/etc/systemd/system/camunda.service in codebase to /etc/systemd/system/camunda.service
+
+#enable camunda service
+
+sudo systemctl enable camunda.service
+
+
+#database setup
+
+create database for camel quartz and camunda as process-engine with camunda user and quartzuser
+
+#login as root to mysql
+
+create database quartz_db;
+create database `process-engine`;
+
+grant all privileges on `quartzdb` to 'quartzuser'@'%' identified by 'password';
+grant all privileges on `process-engine` to 'camunda'@'	%' identified by 'password';
+
+
+#run these two privileges as root for deploy api to work
+
+grant select on `mysql`.* to 'apiuser'@'%';
+grant all privileges on `%\_\_\_%` . * to 'apiuser'@'%';
+
+#give these filesystem permissions(one-time only)
+
+chmod 755 -R /opt/oxzion/view/gui
+chmod 777 -R /opt/oxzion/view/bos
+chmod 777 /opt/oxzion/view/apps
+
+#make a .npm and .config folder in /var/www and give ownership to www-data
+mkdir /var/www/.npm
+mkdir /var/www/.config
+chown www-data:www-data /var/www/.npm
+chown www-data:www-data /var/www/.config
+
+

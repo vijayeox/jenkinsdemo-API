@@ -130,11 +130,10 @@ class WorkflowService extends AbstractService
                         }
                     }
                     $formData = $oxForm->toArray();
-                    if(isset($formData['template'])){
-                        $formData['entity_id'] = $entityId;
+                    $formData['entity_id'] = $entityId;
+                    if(isset($formData['template']))
                         $formResult = $this->formService->createForm($appUuid, $formData);
-                        $startFormId = $formData['id'];
-                    }
+                    $startFormId = $formData['id'];
                     foreach ($process['activity'] as $activity) {
                         $oxActivity = new Activity();
                         $oxActivity->exchangeArray($activity);
@@ -407,9 +406,10 @@ class WorkflowService extends AbstractService
         $appFilter = "ox_app.uuid ='".$appId."'";
         $fromQuery = "FROM ox_workflow
         INNER JOIN ox_app on ox_app.id = ox_workflow.app_id
-        INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id and ox_workflow_deployment.latest =1
+        INNER JOIN ox_workflow_deployment on ox_workflow_deployment.workflow_id = ox_workflow.id 
         INNER JOIN ox_workflow_instance on ox_workflow_instance.workflow_deployment_id = ox_workflow_deployment.id
         INNER JOIN ox_file on ox_file.workflow_instance_id = ox_workflow_instance.id
+        INNER JOIN ox_app_entity on ox_app_entity.id = ox_file.entity_id
         INNER JOIN ox_activity on ox_activity.workflow_deployment_id = ox_workflow_deployment.id
         INNER JOIN ox_activity_instance ON ox_activity_instance.workflow_instance_id = ox_workflow_instance.id and ox_activity.id = ox_activity_instance.activity_id
         LEFT JOIN ox_activity_instance_assignee ON ox_activity_instance_assignee.activity_instance_id = ox_activity_instance.id
@@ -429,7 +429,7 @@ class WorkflowService extends AbstractService
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
         
         $querySet = "SELECT distinct ox_workflow.name as workflow_name, ox_file.data,
-        ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date,
+        ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date,ox_app_entity.name as entityName,
         ox_activity.name as activityName,
         CASE WHEN ox_activity_instance_assignee.user_id is not null then false
         else true end as to_be_claimed  $fromQuery $whereQuery $sort $pageSize $offset";
@@ -437,7 +437,7 @@ class WorkflowService extends AbstractService
         $resultSet = $this->executeQuerywithParams($querySet)->toArray();
         $result = array();
         foreach ($resultSet as $key => $value) {
-            $data[] = json_decode($value['data']);
+            $data = json_decode($value['data'], true);
             unset($value['data']);
             $result[] = array_merge($value, $data);
         }

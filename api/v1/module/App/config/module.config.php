@@ -470,13 +470,28 @@ return [
                     'route' => '/app/:appId/file/status/:status',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
-                        'workflowId' => UuidUtil::UUID_PATTERN,
-                        'userId' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
                         'controller' => Controller\FileController::class,
                         'method' => 'GET',
                         'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'filelistingcommand' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/command/:commands',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileListCommand',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],
@@ -535,6 +550,38 @@ return [
                         'controller' => Controller\ErrorLogController::class,
                         'method' => 'GET',
                         'action' => 'retry',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'app_userlist' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/org/:orgId/userlist',
+                    'defaults' => [
+                        'controller' => Controller\AppDelegateController::class,
+                        'method' => 'GET',
+                        'action' => 'userlist',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'filedocumentlisting' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/document',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileDocumentList',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],

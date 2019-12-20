@@ -1,5 +1,5 @@
 app:
-    - { name: 'Dive Insurance', category: EXAMPLE_CATEGORY }
+    - { name: 'DiveInsuranceSample', category: EXAMPLE_CATEGORY }
 org:
     - { name: 'Vincencia & Buckley',
         email: testhub07@gmail.com,

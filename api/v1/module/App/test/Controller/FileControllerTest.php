@@ -473,6 +473,35 @@ class FileControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['total'], 1);
     }
+
+    public function testgetFileDocumentList()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c9145b/document', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filedocumentlisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']) > 0, true);
+    }
+
+    public function testgetFileDocumentListNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/d13d0c68-98c9-11e9-adc5-308d99c91422/document', 'GET');
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->assertModuleName('App');
+        $this->assertControllerName(FileController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('FileController');
+        $this->assertMatchedRouteName('filedocumentlisting');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+        $this->assertEquals($content['status'], 'success');
+    }
     public function testGetListOfFilesWithInvalid()
     {
         $this->initAuthToken($this->adminUser);

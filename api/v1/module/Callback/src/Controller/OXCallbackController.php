@@ -30,7 +30,7 @@ class OXCallbackController extends AbstractApiControllerHelper
         $params['baseurl'] = $this->config['baseUrl'];
         $this->messageProducer->sendQueue(json_encode(array(
             'to' => $params['email'],
-            'subject' => 'Your login details for OX Zion!!',
+            'subject' => 'Your login details for EOX Vantage!!',
             'body' => $this->templateService->getContent('newUser', $params)
         )), 'mail');
         return $this->getSuccessResponse();

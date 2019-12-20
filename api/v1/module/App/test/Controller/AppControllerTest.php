@@ -213,12 +213,10 @@ class AppControllerTest extends ControllerTest
     {
         $directoryName = __DIR__.'/../sampleapp/view/apps/DummyDive';
         if(is_dir($directoryName)){
-            print_r("here");
             FileUtils::deleteDirectoryContents($directoryName);
         }
-        $directoryName = __DIR__.'/../sampleapp/view/apps/Dive Insurance';
+        $directoryName = __DIR__.'/../sampleapp/view/apps/DiveInsuranceSample';
         if(is_dir($directoryName)){
-            print_r("here");
             FileUtils::deleteDirectoryContents($directoryName);
         }
         copy(__DIR__.'/../sampleapp/application1.yml', __DIR__.'/../sampleapp/application.yml');
@@ -315,6 +313,34 @@ class AppControllerTest extends ControllerTest
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appName, $yaml['org'][0]['uuid']);
+        $deletdirectoryPath = __DIR__.'/../../../';
+        $deletenpm = $deletdirectoryPath.'.npm';
+        if(file_exists($deletenpm)){
+            FileUtils::deleteDirectoryContents($deletenpm);
+        }
+        $deleteconfig = $deletdirectoryPath.'.config';
+        if(file_exists($deleteconfig)){
+            FileUtils::deleteDirectoryContents($deleteconfig);
+        }
+    }
+
+    private function unlinkFolders($appUuid, $appName, $orgUuid = null){
+        $config = $this->getApplicationConfig();
+        $file = $config['DELEGATE_FOLDER'].$appUuid;
+        if(is_link($file)){
+            unlink($file);
+        }
+        if($orgUuid){
+            $file = $config['TEMPLATE_FOLDER'].$orgUuid;
+            if(is_link($file)){
+                unlink($file);
+            }
+        }
+        $appName = str_replace(' ', '', $appName);
+        $app = $config['APPS_FOLDER'].$appName;
+        if(is_link($app)){
+            unlink($app);
+        }
     }
 
     public function testDeployAppWithoutOptionalFieldsInYml()
@@ -361,25 +387,6 @@ class AppControllerTest extends ControllerTest
         FileUtils::deleteDirectoryContents($appname);
         $this->cleanDb($appName, $YmlappUuid);
         $this->unlinkFolders($YmlappUuid, $appname);
-    }
-
-    private function unlinkFolders($appUuid, $appName, $orgUuid = null){
-        $config = $this->getApplicationConfig();
-        $file = $config['DELEGATE_FOLDER'].$appUuid;
-        if(is_link($file)){
-            unlink($file);
-        }
-        if($orgUuid){
-            $file = $config['TEMPLATE_FOLDER'].$orgUuid;
-            if(is_link($file)){
-                unlink($file);
-            }
-        }
-        $appName = str_replace(' ', '', $appName);
-        $app = $config['APPS_FOLDER'].$appName;
-        if(is_link($app)){
-            unlink($app);
-        }
     }
 
     public function testDeployAppWithWrongUuidInDatabase()

@@ -195,7 +195,7 @@ class FileService extends AbstractService
             }
         }
 
-        $fields = array_diff($data,$fileObject);
+        $fields = array_merge($fileObject,$data);
         $file = new File();
         $id = $this->getIdFromUuid('ox_file', $id);
         $validFields = $this->checkFields(isset($obj['entity_id']) ? $obj['entity_id'] : null, $fields, $id);
@@ -359,7 +359,6 @@ class FileService extends AbstractService
                     continue;
                 }
                 if (isset($fieldData[$field['name']]) && is_array($fieldData[$field['name']])) {
-
                     $fieldData[$field['name']] = json_encode($fieldData[$field['name']]);
                 }
                 $keyValueFields[$i]['org_id'] = (empty($fileArray[$key]['org_id']) ? AuthContext::get(AuthConstants::ORG_ID) : $fileArray[$key]['org_id']);
@@ -506,7 +505,7 @@ class FileService extends AbstractService
             }
             $fromQuery .= " inner join ox_workflow_instance as g on a.workflow_instance_id = g.id
             inner join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
-            inner join ox_workflow as h on h.id = wd.workflow_id and wd.latest=1
+            inner join ox_workflow as h on h.id = wd.workflow_id 
             left join (SELECT workflow_instance_id, max(latest) as latest from ox_file
             group by workflow_instance_id) as f2 on a.workflow_instance_id = f2.workflow_instance_id
             and a.latest = f2.latest";
@@ -556,6 +555,7 @@ class FileService extends AbstractService
                 $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
+                $this->logger->info("Executing query - $select with params - ".json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 if($resultSet){
                     $i=0;
@@ -575,6 +575,27 @@ class FileService extends AbstractService
             }
         } else {
             throw new ServiceException("App Does not belong to the org","app.fororgnot.found");
+        }
+    }
+
+    public function getFileDocumentList($params)
+    {
+        $selectQuery = 'select ox_field.name, ox_file_attribute.field_value from ox_file
+        inner join ox_file_attribute on ox_file_attribute.file_id = ox_file.id
+        inner join ox_field on ox_field.id = ox_file_attribute.field_id
+        inner join ox_app on ox_field.app_id = ox_app.id
+        where ox_file.org_id=:organization and ox_app.uuid=:appUuid and ox_field.data_type=:dataType
+        and ox_file.uuid=:fileUuid';
+        $selectQueryParams = array('organization' => AuthContext::get(AuthConstants::ORG_ID),
+            'appUuid' => $params['appId'],
+            'fileUuid' => $params['fileId'],
+            'dataType' => 'document');
+        try {
+            $selectResultSet = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
+            return $selectResultSet;
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
+            return 0;
         }
     }
     public function getFieldType($value, $prefix)

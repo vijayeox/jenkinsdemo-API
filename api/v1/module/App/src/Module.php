@@ -24,6 +24,7 @@ use Oxzion\Service\RoleService;
 use App\Service\MenuItemService;
 use App\Service\PageService;
 use Oxzion\Service\ErrorLogService;
+use Oxzion\Service\UserService;
 
 class Module implements ConfigProviderInterface
 {
@@ -143,7 +144,8 @@ class Module implements ConfigProviderInterface
                 },
                 Controller\AppDelegateController::class => function ($container) {
                     return new Controller\AppDelegateController(
-                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class)
+                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class),
+                        $container->get(UserService::class)
                     );
                 },
                 Controller\MenuItemController::class => function ($container) {
@@ -179,7 +181,8 @@ class Module implements ConfigProviderInterface
                     return new Controller\FileController(
                         $container->get(FileTable::class),
                         $container->get(FileService::class),
-                        $container->get(AdapterInterface::class)
+                        $container->get(AdapterInterface::class),
+                        $container->get(WorkflowService::class)
                     );
                 },
                 Controller\FieldController::class => function ($container) {

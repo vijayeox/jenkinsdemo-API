@@ -9,6 +9,7 @@ class Home extends React.Component {
     super(props);
     this.core = this.props.args;
     this.helper = this.core.make("oxzion/restClient");
+    this.params = this.props.params;
     this.state = {
       cacheID: undefined,
       formContent: undefined,
@@ -22,15 +23,15 @@ class Home extends React.Component {
   componentDidMount() {
     this.getCacheData().then(cacheResponse => {
       var cache = cacheResponse.data;
-      if (cache && cache.data) {
-        if (cache.data.workflow_uuid) {
-          this.getFormData(cache.data.workflow_uuid).then(formResponse => {
-            if (formResponse && formResponse.data.length > 0) {
+      if (cache) {
+        if (cache.workflow_uuid) {
+          this.getFormData(cache.workflow_uuid).then(formResponse => {
+            if (formResponse.data) {
               this.setState({
-                formContent: JSON.parse(formResponse.data[0].content),
-                cachePage: cache.data.page,
-                formID: formResponse.data[0].id,
-                cacheData: cacheResponse.data
+                formContent: JSON.parse(formResponse.data.template),
+                cachePage: cache.page,
+                formID: formResponse.data.id,
+                cacheData: cache
               });
             } else {
               this.setState({
@@ -115,11 +116,15 @@ class Home extends React.Component {
               appId={application_id}
               formId={this.state.formID}
               content={this.state.formContent}
-              data={this.state.cacheData.data}
+              data={this.state.cacheData}
             />
           </div>
         ) : this.state.showMenuPage ? (
-          <LeftMenuTemplate core={this.core} appId={application_id} />
+          <LeftMenuTemplate
+            core={this.core}
+            params={this.params}
+            appId={application_id}
+          />
         ) : null}
       </div>
     );

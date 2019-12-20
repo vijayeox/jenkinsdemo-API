@@ -7,24 +7,21 @@ use Oxzion\DelegateException;
 require_once __DIR__."/DispatchDocument.php";
 
 
-class DispatchNewPolicy extends DispatchDocument {
+class DispatchProposalDocument extends DispatchDocument {
 
     public $template = array();
     public $document = array();
  
     public function __construct(){
         $this->template = array(
-            'Individual Professional Liability' => 'COIPolicyMailTemplate',
-            'Dive Boat' => 'diveBoatPolicyMailTemplate',
-            'Dive Store' => 'diveStorePolicyMailTemplate');
+            'Dive Boat' => 'diveBoatProposalMailTemplate',
+            'Dive Store' => 'diveStoreProposalMailTemplate');
         $this->document = array(
-            'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','pocket_card','slWording','blanket_document']),
-            'Dive Boat' => array('docs' => ['policy_document','coi_document','cover_letter']),
-            'Dive Store' => array('docs' => ['policy_document','coi_document','cover_letter']));
+            'Dive Boat' => array('docs' => ['coi_document','cover_letter']),
+            'Dive Store' => array('docs' => ['coi_document','cover_letter']));
         $this->required = array(
-            'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','pocket_card','blanket_document']),
-            'Dive Boat' => array('docs' => ['policy_document','coi_document','cover_letter']),
-            'Dive Store' => array('docs' => ['policy_document','coi_document','cover_letter']));
+            'Dive Boat' => array('docs' => ['coi_document','cover_letter']),
+            'Dive Store' => array('docs' => ['coi_document','cover_letter']));
         parent::__construct();
     }
 
@@ -64,12 +61,9 @@ class DispatchNewPolicy extends DispatchDocument {
            throw new DelegateException('Required Documents are not Found','file.not.found');
         }
         $data['document'] =$fileData;
-        $data['subject'] = 'Certificate Of Insurance';
+        $data['subject'] = 'Proposal Document';
         $response = $this->dispatch($data);
         return $response;
     }
-
-
-
 }
 ?>

@@ -52,12 +52,25 @@ api()
         #moving to temp directory and copying required
         cd ${TEMP}
         rsync -rl api/v1/data/uploads/ /var/www/api/data/uploads/
+        rsync -rl --delete api/v1/data/eoxapps/ /var/lib/oxzion/api/eoxapps/
+        rsync -rl --delete api/v1/data/migrations/ /var/lib/oxzion/api/migrations/
+        rsync -rl api/v1/data/template/ /var/lib/oxzion/api/template/
         rm -Rf api/v1/data/uploads
         rm -Rf api/v1/data/cache
-        rm -Rf api/v1/logs
+        rm -Rf api/v1/data/delegate
+        rm -Rf api/v1/data/eoxapps
+        rm -Rf api/v1/data/import
+        rm -Rf api/v1/data/migrations
+        rm -Rf api/v1/data/template
         rsync -rl --delete api/v1/ /var/www/api/
         ln -nfs /var/lib/oxzion/api/cache /var/www/api/data/cache
         ln -nfs /var/lib/oxzion/api/uploads /var/www/api/data/uploads
+        ln -nfs /var/lib/oxzion/api/delegate /var/www/api/data/delegate
+        ln -nfs /var/lib/oxzion/api/eoxapps /var/www/api/data/eoxapps
+        ln -nfs /var/lib/oxzion/api/file_docs /var/www/api/data/file_docs
+        ln -nfs /var/lib/oxzion/api/import /var/www/api/data/import
+        ln -nfs /var/lib/oxzion/api/migrations /var/www/api/data/migrations
+        ln -nfs /var/lib/oxzion/api/template /var/www/api/data/template
         chown www-data:www-data -R /var/www/api
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
         echo -e "${YELLOW}Starting migrations script for API${RESET}"
@@ -233,7 +246,10 @@ view()
         rsync -rl view/vfs/ /opt/oxzion/view/vfs/
         chown oxzion:oxzion -R /opt/oxzion/view/vfs/
         rm -Rf view/vfs
-        rsync -rl --delete view/ /opt/oxzion/view/
+        rsync -rl view/ /opt/oxzion/view/
+        echo -e "${GREEN}Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run package:discover
         chown oxzion:oxzion -R /opt/oxzion/view
         echo -e "${GREEN}Copying view Complete!${RESET}"
         echo -e "${GREEN}Starting view service${RESET}"
@@ -332,6 +348,7 @@ clients()
         mkdir -p /opt/oxzion/eoxapps
         rsync -rl . /opt/oxzion/eoxapps/
         chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
     fi
 }

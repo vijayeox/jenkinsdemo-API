@@ -1,101 +1,275 @@
 app:
-    - { name: 'Dive Insurance', uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641, category: EXAMPLE_CATEGORY }
+    -
+        name: DiveInsuranceSample
+        uuid: 6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641
+        category: EXAMPLE_CATEGORY
+        type: 2
+        autostart: 'true'
 org:
-    - { name: 'Vincencia & Buckley',
-        uuid: faffaf17-00b1-4a92-9ae6-7d04545457fe,
-        email: testhub07@gmail.com,
-        address1: '6 bCenterpoint',
-        address2: Dr.,
-        city: 'La Palma',
-        state: CA,
-        zip: 90623,
-        contact: { username: csradmin, firstname: CSR, lastname: admin, email: testhub07@gmail.com, phone: '' },
-        preferences: { currency: INR, timezone: Kolkata, dateformat: dd/mm/yy },
-        country: 'United States' }
+    -
+        name: 'Vincencia & Buckley'
+        uuid: faffaf17-00b1-4a92-9ae6-7d04545457fe
+        email: testhub07@gmail.com
+        address1: '6 bCenterpoint'
+        address2: Dr.
+        city: 'La Palma'
+        state: CA
+        zip: 90623
+        contact:
+            username: csradmin
+            firstname: CSR
+            lastname: admin
+            email: testhub07@gmail.com
+            phone: ''
+        preferences:
+            currency: INR
+            timezone: Kolkata
+            dateformat: dd/mm/yy
+        country: 'United States'
 privilege:
-    - { name: 'MANAGE_POLICY_APPROVAL', permission: 7 }
-    - { name: 'MANAGE_MY_POLICY', permission: 7 }
-    - { name: 'MANAGE_MY_POLICY2', permission: 5}
+    -
+        name: MANAGE_POLICY_APPROVAL
+        permission: 7
+    -
+        name: MANAGE_MY_POLICY
+        permission: 7
+    -
+        name: MANAGE_MY_POLICY2
+        permission: 5
 role:
-    - {name: 'Policy Holder', default: true, privileges: [{privilege_name: 'MANAGE_MY_POLICY', permission: 3},{privilege_name: 'MANAGE_MY_POLICY2', permission: 5}]}
-    - {name: 'CSR', privileges: [{privilege_name: 'MANAGE_POLICY_APPROVAL', permission: 5}]}
+    -
+        name: 'Policy Holder'
+        default: true
+        privileges:
+            -
+                privilege_name: MANAGE_MY_POLICY
+                permission: 3
+            -
+                privilege_name: MANAGE_MY_POLICY2
+                permission: 5
+        uuid: e10aa5de-8122-4b97-87a6-444306b62cb4
+    -
+        name: CSR
+        privileges:
+            -
+                privilege_name: MANAGE_POLICY_APPROVAL
+                permission: 5
+        uuid: 45b7c4b0-d08f-4a96-a9c0-8c4df425e7d1
 dashboard:
-    - { name: Dashboard, content: content/Dashboard.txt }
+    -
+        name: Dashboard
+        content: content/Dashboard.txt
 menu:
-  - name: Home
-    privilege: "MANAGE_MY_POLICY_WRITE"
-    icon: 'fa-home'
-    page:
-      name: "My Policies"
-      description: "Shows a list of users policies"
-      content:
-        - type: Document
-          content: "<p><h2>Personal Policies</h2></p><p></p>"
-        - type: List
-          content:
-            route: "app/{{app_id}}/file"
-            filterable: true
-            reorderable: true
-            resizable: true
-            pageable:
-              buttonCount: 3 
-              pageSizes: [10, 20, 50]
-              info: true
-              actions:
-                - name: View
-                  page_id: "1"
-                  icon: "fas fa-envelope-open-text"
-                - name: Claim 
-                  page_id: "2"
-                  icon: "fas fa-plus-circle"
-                - name: Cancel
-                  page_id: "3"
-                  icon: "far fa-window-close"
-              columnConfig:
-                - title: Name
-                  field: name
-                - title: Status
-                  field: status
-                - title: Data 
-                  field: data
-  - name: "My History"
-    privilege: "MANAGE_MY_POLICY_READ"
-    page:
-      name: "All Policies"
-      description: "Shows all the policies"
-      content: [{ type: List, content: { route: "app/{{app_id}}/file" } }]
-  - name: "Verify PADI details"
-    page:
-      name: "Verify PADI details"
-      description: "Lets CSR to input and check PADI Data"
-      content:
-        [
-          { content: "<h3>Verify PADI Details</h3>", type: "Document" },
-          { form_id: "750", type: "Form" },
-        ]
-  - name: Home
-    privilege: MANAGE_POLICY_APPROVAL_READ
-    page:
-      name: Dashboard
-      description: "Shows dashboard"
-      content: [{ type: Dashboard, dashboard: Dashboard }]
-  - name: Requests
-    privilege: MANAGE_POLICY_APPROVAL_WRITE
-    page:
-      name: Requests
-      description: "Shows requests"
-      content: [{ type: List, content: { route: "" } }]
-  - name: "Manage Policies"
-    privilege: MANAGE_POLICY_APPROVAL_WRITE
-    page:
-      name: "Manage Policies"
-      description: "Page to manage policies"
-      content: [{ type: List, content: { route: "" } }]
+    -
+        name: Home
+        privilege: MANAGE_MY_POLICY_WRITE
+        icon: fa-home
+        page:
+            name: 'My Policies'
+            description: 'Shows a list of users policies'
+            content:
+                -
+                    type: Document
+                    content: '<p><h2>Personal Policies</h2></p><p></p>'
+                -
+                    type: List
+                    content:
+                        route: 'app/{{app_id}}/file'
+                        filterable: true
+                        reorderable: true
+                        resizable: true
+                        pageable:
+                            buttonCount: 3
+                            pageSizes:
+                                - 10
+                                - 20
+                                - 50
+                            info: true
+                            actions:
+                                -
+                                    name: View
+                                    page_id: '1'
+                                    icon: 'fas fa-envelope-open-text'
+                                -
+                                    name: Claim
+                                    page_id: '2'
+                                    icon: 'fas fa-plus-circle'
+                                -
+                                    name: Cancel
+                                    page_id: '3'
+                                    icon: 'far fa-window-close'
+                            columnConfig:
+                                -
+                                    title: Name
+                                    field: name
+                                -
+                                    title: Status
+                                    field: status
+                                -
+                                    title: Data
+                                    field: data
+        uuid: 1a9d7295-30bb-4e01-bab2-c24cdce902da
+    -
+        name: 'My History'
+        privilege: MANAGE_MY_POLICY_READ
+        page:
+            name: 'All Policies'
+            description: 'Shows all the policies'
+            content:
+                -
+                    type: List
+                    content:
+                        route: 'app/{{app_id}}/file'
+        uuid: dca2f307-42cd-4aac-b7c1-1d60c77c1d38
+    -
+        name: 'Verify PADI details'
+        page:
+            name: 'Verify PADI details'
+            description: 'Lets CSR to input and check PADI Data'
+            content:
+                -
+                    content: '<h3>Verify PADI Details</h3>'
+                    type: Document
+                -
+                    form_id: '750'
+                    type: Form
+        uuid: 280d7505-5cdf-42a5-9a56-a3b24fc9590f
+    -
+        name: Home
+        privilege: MANAGE_POLICY_APPROVAL_READ
+        page:
+            name: Dashboard
+            description: 'Shows dashboard'
+            content:
+                -
+                    type: Dashboard
+                    dashboard: Dashboard
+        uuid: 68c2c44b-5102-4988-bc15-eb1d0aea52b2
+    -
+        name: Requests
+        privilege: MANAGE_POLICY_APPROVAL_WRITE
+        page:
+            name: Requests
+            description: 'Shows requests'
+            content:
+                -
+                    type: List
+                    content:
+                        route: ''
+        uuid: 729a3ac5-19b3-4bcc-b860-2f81d52e29e8
+    -
+        name: 'Manage Policies'
+        privilege: MANAGE_POLICY_APPROVAL_WRITE
+        page:
+            name: 'Manage Policies'
+            description: 'Page to manage policies'
+            content:
+                -
+                    type: List
+                    content:
+                        route: ''
+        uuid: 13960f14-0a88-43a6-a959-33457234407e
 workflow:
-    - { name: 'Individual Liability', uuid: f0efea9e-7863-4368-a9b2-baa1a1603067, bpmn_file: Individual Professional Liability/SampleBPMN.bpmn, entity: dummyEntity1 }
-    - { name: 'Dive Store', uuid: cb99e634-de00-468d-9230-d6f77d241c5b, bpmn_file: Dive Store/SampleBPMN.bpmn, entity: dummyEntity3 }
-    - { name: 'Dive Boat', uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1, bpmn_file: Dive Boat/SampleBPMN.bpmn, entity: dummyEntity4 }
+    -
+        name: 'Individual Liability'
+        uuid: f0efea9e-7863-4368-a9b2-baa1a1603067
+        bpmn_file: 'Individual Professional Liability/SampleBPMN.bpmn'
+        entity: dummyEntity1
+    -
+        name: 'Dive Store'
+        uuid: cb99e634-de00-468d-9230-d6f77d241c5b
+        bpmn_file: 'Dive Store/SampleBPMN.bpmn'
+        entity: dummyEntity3
+    -
+        name: 'Dive Boat'
+        uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
+        bpmn_file: 'Dive Boat/SampleBPMN.bpmn'
+        entity: dummyEntity4
 form:
-  - { description: description, template: {"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":[]},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":[],"properties":[],"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleFormForTests"}, entity: Padi}
+    -
+        description: description
+        template:
+            _id: 5d3afa5ccc5f75b982967721
+            type: form
+            tags: {  }
+            owner: 5cd2e0d62363f67ddc9489c6
+            components:
+                -
+                    autofocus: false
+                    input: true
+                    tableView: true
+                    inputType: text
+                    inputMask: ''
+                    label: Name
+                    key: name
+                    placeholder: ''
+                    prefix: ''
+                    suffix: ''
+                    multiple: false
+                    defaultValue: ''
+                    protected: false
+                    unique: false
+                    persistent: true
+                    hidden: false
+                    clearOnHide: true
+                    spellcheck: true
+                    validate:
+                        required: false
+                        minLength: ''
+                        maxLength: ''
+                        pattern: ''
+                        custom: ''
+                        customPrivate: false
+                    conditional:
+                        show: ''
+                        when: null
+                        eq: ''
+                    type: textfield
+                    labelPosition: top
+                    inputFormat: plain
+                    tags: {  }
+                    properties: {  }
+                -
+                    autofocus: false
+                    input: true
+                    label: Submit
+                    tableView: false
+                    key: submit
+                    size: md
+                    leftIcon: ''
+                    rightIcon: ''
+                    block: false
+                    action: submit
+                    disableOnInvalid: false
+                    theme: primary
+                    type: button
+            revisions: ''
+            _vid: 0
+            title: SampleFormForTests
+            display: form
+            access:
+                -
+                    roles:
+                        - 5ce43aa430776b950569301d
+                        - 5ce43aa430776b4a5969301e
+                        - 5ce43aa430776bdfb569301f
+                    type: read_all
+            submissionAccess: {  }
+            settings: {  }
+            properties: {  }
+            name: sampleFormForTests
+            path: sampleformfortests
+            project: 5ce43aa430776b2aff69301c
+            created: '2019-07-26T13:04:28.211Z'
+            modified: '2019-07-26T13:04:28.214Z'
+            machineName: 'testdivehub:sampleFormForTests'
+        entity: Padi
+        uuid: 93afddc8-bc0f-4421-b05d-93f3d9dbbe05
 job:
-    - { import_padi: [{ stored_procedure_name: ox_padi_verification, upload_host_name: 206.107.76.164, upload_host_user: vbinsurance, upload_user_password: '<<InsureName>>' }] }
+    -
+        import_padi:
+            -
+                stored_procedure_name: ox_padi_verification
+                upload_host_name: 206.107.76.164
+                upload_host_user: vbinsurance
+                upload_user_password: '<<InsureName>>'
