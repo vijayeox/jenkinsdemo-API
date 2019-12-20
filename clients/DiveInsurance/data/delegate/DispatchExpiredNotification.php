@@ -19,7 +19,7 @@ class DispatchExpiredNotification extends DispatchNotification {
     public function execute(array $data,Persistence $persistenceService)
     {
         $data['template'] = $this->template[$data['product']];
-        $data['subject'] = 'Policy Expired!!!!!';
+        $data['subject'] = 'Policy Expired!';
         $response = $this->dispatch($data);
         return $response;
     }
