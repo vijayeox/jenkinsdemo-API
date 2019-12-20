@@ -20,7 +20,14 @@ const register = (core, args, options, metadata) => {
       state: {
         maximized: true
       },
-      position: { left: 700, top: 200 }
+      attributes: {
+        visibility: "restricted",
+        closeable: false,
+        minimizable: false,
+        resizable: false,
+        maximizable: false,
+        controls: false
+      }
     })
     .on("destroy", () => proc.destroy())
     .render($content => ReactDOM.render(<Home args={core} params={args} />, $content));
