@@ -93,12 +93,16 @@ class DocumentGeneratorImpl implements DocumentGenerator
         $dest = $destination;
         $myProjectDirectory = __DIR__."/../../../..";
         $snappy = new Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
+        $snappy->setOption("load-error-handling",'ignore');
+        $snappy->setOption("load-media-error-handling",'ignore');
         if(isset($generateOptions['disable_smart_shrinking'])){
             $snappy->setOption("disable-smart-shrinking",true);
+
         }
         $snappy->setOption("header-html",$header);
         $snappy->setOption("footer-html",$footer);
         $snappy->setOption('replace',$data);
+
         if(isset($append) && !empty($append) || isset($prepend) && !empty($prepend)){
             $dest = sys_get_temp_dir().'/COI.pdf';
             if(file_exists($dest)){
