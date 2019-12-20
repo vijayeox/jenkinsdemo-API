@@ -58,7 +58,7 @@
 	        	</div>
 	        	<div class = "in-type1"> 
 		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability - Claims Made Form</p>
-			            <p class = "ins_font">Insured's Status: {$careerCoverage} {if isset($scubaFitVal)} <span> and {$scubaFitVal} </span>{/if}</p>
+			            <p class = "ins_font">Insured's Status: {$careerCoverage} {if isset($scubaFitPrice)} <span> and {$scubaFitPrice} </span>{/if}</p>
 			            <p class = "ins_font">${$single_limit}&nbsp&nbsp&nbsp(per occurrence)</p>
 			            <p class = "ins_font">${$annual_aggregate}</p>
 		        </div>
@@ -73,13 +73,13 @@
 		       <div class="i-type" style="margin-top: 9px;">
 		          <p class = "ins_font">&nbsp</p>
 		          <p class = "ins_font">&nbsp</p>
-		          <p class = "ins_font">{if isset($equipmentVal)}
-		          			{$equipmentVal}
+		          <p class = "ins_font">{if isset($equipmentPrice)}
+		          			{$equipmentPrice}
 		          		{else}
 		          			Not Included
 		          		{/if}</p>
-		          <p class = "ins_font">{if isset($cylinderVal)}
-		          			{$cylinderVal}
+		          <p class = "ins_font">{if isset($cylinderPrice)}
+		          			{$cylinderPrice}
 		          		{else}
 		          			Not Covered
 		          		{/if}
@@ -104,7 +104,7 @@
 			{if isset($update)}
 			{assign var=endrosement value=$endorsement_options|json_decode:true}
 				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
-				<p class = "policy_status">Status of Insured : {$endrosement_status} as of {$update_date}</p>
+				<p class = "policy_status">Status of Insured : {$endorsement_status} as of {$update_date}</p>
 			{/if}
 
 			<hr></hr>

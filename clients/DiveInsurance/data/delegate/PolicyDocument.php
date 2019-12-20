@@ -135,8 +135,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                      'nfooter' => 'Group_NI_footer.html',
                      'policy' => 'Individual_Professional_Liability_Policy.pdf'));
 
-        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period');
-       
+        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData');
     }
 
     public function setDocumentBuilder($builder){
@@ -175,7 +174,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
             if(isset($data['equipment']) && $data['equipment'] == "equipmentLiabilityCoverage"){
                 $documents['equipment_liability_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplEquipment');
-                $data['equipmentVal'] = 'Included';
+                $data['equipmentPrice'] = 'Included';
            }
            $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
            $result = json_decode($result,true);
@@ -184,7 +183,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['scubaFitVal'] = $result[$data['scubaFit']];
            }
            if(isset($result[$data['cylinder']])){
-                $data['cylinderVal'] = $result[$data['cylinder']];
+                $data['cylinderPrice'] = $result[$data['cylinder']];
            }
            $data['careerCoverageVal'] = $result[$data['careerCoverage']];
         }    
@@ -218,7 +217,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
         }
 
-
         if(isset($temp['property'])){
             $temp['property'] = json_encode($temp['property']);
             $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
@@ -245,6 +243,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         if(isset($this->template[$temp['product']]['card'])){
             $documents['pocket_card'] = $this->generateDocuments($temp,$dest,$options,'card');
         }
+
 
         if(isset($this->template[$temp['product']]['cover_letter'])){
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
@@ -394,7 +393,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }else{
             $template =  $this->template[$data['product']][$templateKey];
         }
-        
         $docDest = $dest['absolutePath'].$template.'.pdf';
 
         if($template == 'Group_PL_COI'){
