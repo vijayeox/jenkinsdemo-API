@@ -206,6 +206,7 @@ class AppService extends AbstractService
             $this->processWorkflow($ymlData, $path, $orgUuid);
             $this->processForm($path, $ymlData);
             $this->processMenu($ymlData, $path);
+            $this->processPage($ymlData, $path);
             //if job given setup quartz job
             $this->updateyml($ymlData, $path);
             //Move the app folder from given path to clients folder
@@ -242,6 +243,25 @@ class AppService extends AbstractService
                 $menu['page_id'] = isset($menu['page_id']) ? $menu['page_id'] : $page['id'];
                 $count = $this->menuItemService->updateMenuItem($menu['uuid'], $menu);
                 $menuData['uuid'] = isset($menuData['uuid']) ? $menuData['uuid'] : $menu['uuid'];
+            }
+        }
+    }
+    private function processPage(&$yamlData, $path){
+        if(isset($yamlData['pages'])){
+            $appId = $yamlData['app'][0]['uuid'];
+            $sequence = 0;
+            foreach ($yamlData['pages'] as &$pageData) {
+                $page = $page['page'];
+                if(isset($page['page_id'])){
+                    $pageId = $page['page_id'];
+                }else{
+                    $pageId = null;
+                    $page['uuid'] = UuidUtil::uuid();
+                }
+                $routedata = array("appId" => $appId, "orgId" => $yamlData['org'][0]['uuid']);
+                $result = $this->pageService->savePage($routedata, $page, $pageId);
+                $page['page_id'] = isset($page['page_id']) ? $page['page_id'] : $page['id'];
+                $pageData['uuid'] = isset($pageData['uuid']) ? $pageData['uuid'] : $page['uuid'];
             }
         }
     }
