@@ -41,7 +41,7 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 3
-        uuid: 887e0696-d456-4001-85c4-37985cbfb144
+        uuid: 38880e3a-6bee-43c1-bd4d-9431d78a084b
 menu:
     -
         name: Home
@@ -74,13 +74,8 @@ menu:
                                 name: View
                                 rule: 'true'
                                 details:
-                                    - { type: DocumentViewer, params: { uuid: '{{uuid}}' } }
+                                    - { type: View, params: { uuid: '{{uuid}}', page_id: b9714cfd-2ae5-4f13-83eb-7d925c3b660c } }
                                 icon: 'fa fa-envelope-open'
-                            -
-                                name: Cancel
-                                rule: 'true'
-                                page_id: 3
-                                icon: 'fa fa-window-close'
                         operations:
                             title: 'Get Policy'
                             actions:
@@ -298,7 +293,7 @@ menu:
                                 icon: 'fa fa-envelope-open'
                                 rule: 'true'
                                 details:
-                                    - { type: DocumentViewer, params: { uuid: '{{uuid}}' } }
+                                    - { type: View, params: { uuid: '{{uuid}}', page_id: b9714cfd-2ae5-4f13-83eb-7d925c3b660c } }
                             -
                                 name: Cancel
                                 page_id: 3
@@ -350,6 +345,19 @@ menu:
                     formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
                     type: Form
         uuid: 9bf92403-2111-4d05-9d89-01a609ed4b83
+pages:
+    -
+        page:
+            name: 'View Policy'
+            description: 'View Policy'
+            page_id: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
+            content:
+                -
+                    content: '<h4>{{padi}} - {{firstname}} {{lastname}}</h4><p> The Policy will expire on {{end_date}} </p>'
+                    type: Document
+                -
+                    type: DocumentViewer
+        uuid: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
 workflow:
     -
         name: 'Individual Liability'
