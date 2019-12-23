@@ -14,7 +14,7 @@ class FileIndexerService extends AbstractService
 {
     protected $restClient;
     protected $messageProducer;
-    
+
     public function __construct($config,AdapterInterface $dbAdapter,MessageProducer $messageProducer)
     {
         parent::__construct($config,$dbAdapter);
@@ -34,36 +34,56 @@ class FileIndexerService extends AbstractService
     {
         if(isset($fileId))
         {
-            $select = "SELECT file.workflow_instance_id, file.activity_id as activity_instance_id,
-            file.form_id, form.name as form_name,
-            file.org_id, form.app_id, app.name as app_name,
-            wf.name as workflow_name, wf_inst.status as worflow_instance_status,
-            wf_inst.date_created as workflow_instance_date_created,
-            act.name as activity_name, act_inst.status as activity_instance_status,
-            act_inst.start_date as activity_instance_start_date,
-            act_inst.act_by_date as activity_instance_act_by_date,
+            $select = "SELECT app.name as app_name, entity.id as entity_id, entity.name,
+            file.data as file_data, file.uuid as file_uuid, file.is_active, file.parent_id,file.latest,file.org_id,
             CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields,
-            file.data
+            w.user_id, file.workflow_instance_id,
+            w.id as workflow_instance_id, w.status,
+            w.activity_instance_id,
+            w.name as workflow_name, w.activities
             from ox_file as file
-            LEFT JOIN ox_workflow_instance as wf_inst on wf_inst.id = file.workflow_instance_id
-            LEFT JOIN ox_workflow_deployment as wd on wd.id = wf_inst.workflow_deployment_id and wd.latest=1
-            LEFT JOIN ox_workflow as wf on wd.workflow_id = wf.id
-            LEFT JOIN ox_activity_instance as act_inst on act_inst.id = file.activity_id
-            LEFT JOIN ox_activity as act on act.id = act_inst.activity_id
-            INNER JOIN ox_form as form on file.form_id = form.id
-            INNER JOIN ox_app as app on app.id = form.app_id
-            INNER JOIN ox_file_attribute as file_attr on file_attr.file_id = file.id
-            INNER  JOIN ox_field as field on file_attr.field_id = field.id
-            where file.id =".$fileId."
-            GROUP BY file.workflow_instance_id, file.activity_id, file.form_id, form.name,
-            file.org_id, form.app_id, app.name, wf.name, wf_inst.status, wf_inst.date_created,
-            act.name, act_inst.status, act_inst.start_date, act_inst.act_by_date, file.data";
+            INNER JOIN ox_app_entity as entity ON file.entity_id = entity.id
+            INNER JOIN ox_field as field ON field.entity_id = entity.id
+            INNER JOIN ox_app as app on entity.app_id = app.id
+            LEFT JOIN (SELECT wf_user.user_id,
+            wf_inst.id, wf_inst.status,
+            act_inst.activity_instance_id,
+            wf.name, CONCAT('{', GROUP_CONCAT(CONCAT('\"', activity.name, '\" : \"', act_inst.status, '\"') SEPARATOR ','), '}') as activities
+            FROM ox_workflow_instance as wf_inst
+            INNER JOIN ox_workflow_deployment as wd on wf_inst.workflow_deployment_id = wd.id 
+            INNER JOIN ox_workflow as wf on wd.workflow_id = wf.id
+            LEFT JOIN ox_activity_instance as act_inst on wf_inst.id = act_inst.workflow_instance_id
+            LEFT JOIN ox_activity as activity on wd.id = activity.workflow_deployment_id
+            LEFT JOIN ox_wf_user_identifier as wf_user on wf_user.workflow_instance_id = wf_inst.id
+            GROUP BY wf_user.user_id, wf_inst.id, wf_inst.status, act_inst.activity_instance_id, wf.name) w
+            ON w.id = file.workflow_instance_id
+            where file.id = ".$fileId."
+            GROUP BY app_name,entity.id, entity.name,file_data,file_uuid,file.is_active, file.parent_id, file.org_id,w.user_id,w.id, w.status,w.activity_instance_id,w.name, w.activities";
+            $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
             $body=$this->executeQuerywithParams($select)->toArray();
-            if(!empty($body))
-                $app_name =array_unique(array_column($body, 'app_name'))[0];
-            if (isset($app_name)&&isset($body)) {
-                $this->messageProducer->sendTopic(json_encode(array('index'=>  $app_name.'_index','body' => $body,'id' => $fileId, 'operation' => 'Index', 'type' => 'file')), 'elastic');
-                return $body;
+            if(!empty($body)){
+                if(isset($body[0]['file_data'])){
+                    $file_data = json_decode((array_column($body, 'file_data')[0]),true);
+                    $databody = array_merge($body[0],$file_data);
+                }
+                unset($databody['file_data']);
+                $app_name = $databody['app_name'];
+            }
+            foreach ($databody as $key => $value) {
+                if(is_string($value))
+                {
+                    $result = json_decode($value);
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        if(is_array($result))
+                        {
+                            $databody[$key] = $result;
+                        }
+                    }
+                }
+            }
+            if (isset($app_name)&&isset($databody)) {
+                $this->messageProducer->sendTopic(json_encode(array('index'=>  $app_name.'_index','body' => $databody,'id' => $fileId, 'operation' => 'Index', 'type' => '_doc')), 'elastic');
+                return $databody;
             }
         }
         return null;

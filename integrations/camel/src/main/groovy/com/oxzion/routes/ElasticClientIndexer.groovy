@@ -1,5 +1,6 @@
 package com.oxzion.routes
 
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
@@ -45,12 +46,13 @@ class ElasticClientIndexer extends RouteBuilder {
                         String type = object.type.toString()
                         String id = object.id.toString()
                         String operation = object.operation.toString()
+                        def output = JsonOutput.toJson(object.body)
                         def client = new RestHighLevelClient(
-                                RestClient.builder(new HttpHost(HOST, PORT, "http")))
+                        RestClient.builder(new HttpHost(HOST, PORT, "http")))
                         if(operation == 'Index')
                         {
                             def request = new IndexRequest(indexName,type,id)
-                            request.source(exchange.getMessage().getBody(), XContentType.JSON)
+                            request.source(output, XContentType.JSON)
                             client.index(request, RequestOptions.DEFAULT)
                         }
                         else if(operation == 'Delete')

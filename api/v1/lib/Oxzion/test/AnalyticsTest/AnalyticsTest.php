@@ -305,4 +305,47 @@ class AnalyticsTest extends MainControllerTest
         $this->assertEquals($results,9505);
     }
 
+    // THE FOLLOWING NEED TO BE MOVED OUT
+
+    public function testHubSubmissions() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 3);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['filter'=>[
+                    ['workflow_name','==','New Policy'],'AND',
+                    ['end_date','>',date("Y/m/d h:i:s")]
+                ],'operation'=>'count','field'=>'workflow_name'];
+        $results = $ae->runQuery('diveinsurance', null, $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results,1);
+    }
+
+    public function testHubPolicies() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 3);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['filter'=>[
+                    ['end_date','>',date("Y/m/d h:i:s")]
+                ],'operation'=>'count','field'=>'entity_id'];
+        $results = $ae->runQuery('diveinsurance', null, $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results,1);
+    }
+
+    public function testHubWrittenPremium() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
+        AuthContext::put(AuthConstants::ORG_ID, 3);
+        $ae = $this->getApplicationServiceLocator()->get(AnalyticsEngine::class);
+        $parameters = ['operation'=>'sum','field'=>'total','round'=>'2'];
+        $results = $ae->runQuery('diveinsurance', null, $parameters);
+        $results = $results['data'];
+        $this->assertEquals($results,1887.56);
+    }
+
 }

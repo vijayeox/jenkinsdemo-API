@@ -138,50 +138,7 @@ class QueryService extends AbstractService
         }
 
         if(isset($params['data'])) {
-//--------------------------------------------------------------------------------------------------------------------------------
-//TODO:Fetch data from elastic search and remove hard coded values below.
-            if ($uuid == 'bf0a8a59-3a30-4021-aa79-726929469b07') {
-                //Sales YTD
-                $data = '235436';
-            }
-            if ($uuid == '3c0c8e99-9ec8-4eac-8df5-9d6ac09628e7') {
-                //Sales by sales person
-                $data = [
-                    ['person'=> 'Bharat', 'sales'=> 4.2],
-                    ['person'=> 'Harsha', 'sales'=> 5.2],
-                    ['person'=> 'Mehul', 'sales'=> 15.2],
-                    ['person'=> 'Rajesh', 'sales'=> 2.9],
-                    ['person'=> 'Ravi', 'sales'=> 2.9],
-                    ['person'=> 'Yuvraj', 'sales'=> 14.2]
-                ];
-            }
-            if ($uuid == '45933c62-6933-43da-bbb2-59e6f331e8db') {
-                //Quarterly revenue target
-                $data = [
-                    ['quarter'=> 'Q1 2018', 'revenue'=> 4.2],
-                    ['quarter'=> 'Q2 2018', 'revenue'=> 5.4],
-                    ['quarter'=> 'Q3 2018', 'revenue'=> 3.1],
-                    ['quarter'=> 'Q4 2018', 'revenue'=> 3.8],
-                    ['quarter'=> 'Q1 2019', 'revenue'=> 4.1],
-                    ['quarter'=> 'Q2 2019', 'revenue'=> 4.7]
-                ];
-            }
-            if ($uuid == '69f7732a-998a-41bb-ab89-aa7c434cb327') {
-                //Revenue YTD
-                $data = '786421';
-            }
-            if ($uuid == 'de5c309d-6bd6-494f-8c34-b85ac109a301') {
-                //Product sales
-                $data = [
-                    ['product'=>'Audio player', 'sales'=>1.3],
-                    ['product'=>'Video player', 'sales'=>3.2],
-                    ['product'=>'Sports shoe', 'sales'=>2.8],
-                    ['product'=>'Gym cap', 'sales'=>0.87],
-                    ['product'=>'Baseball cap', 'sales'=>0.4]
-                ];
-            }
-            $response['query']['data'] = $data;
-//--------------------------------------------------------------------------------------------------------------------------------
+            $this->runQuery($resultSet[0]['configuration'],$resultSet[0]['datasource_uuid']);
         }
         return $response;
     }
@@ -231,11 +188,19 @@ class QueryService extends AbstractService
             if (count($resultSet) == 0) {
                 return 0;
             }
-            $config = $resultSet[0]["configuration"];
-            $ds_uuid = $resultSet[0]['datasource_uuid'];
-            
-            $analyticsEngine = $this->datasourceService->getAnalyticsEngine($ds_uuid);
-            $parameters = json_decode($config,1);
+            $this->runQuery($resultSet[0]['configuration'],$resultSet[0]['datasource_uuid']);
+
+        } catch(Exception $e) {
+            return 0;
+        }
+
+        return $result;
+    }
+
+    private function runQuery($configuration,$datasource_uuid)
+    {
+            $analyticsEngine = $this->datasourceService->getAnalyticsEngine($datasource_uuid);
+            $parameters = json_decode($configuration,1);
             $app_name = $parameters['app_name'];
             if (isset($parameters['entity_name'])) {
                 $entity_name = $parameters['entity_name'];
@@ -243,12 +208,6 @@ class QueryService extends AbstractService
                 $entity_name = null;
             }
             $result = $analyticsEngine->runQuery($app_name,$entity_name,$parameters);
-
-        } catch(Exception $e) {
-            return 0;
-        }
-
-        return $result;
     }
 
 }
