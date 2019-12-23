@@ -33,7 +33,7 @@ class PadiVerification extends AbstractAppDelegate
             while ($resultSet->next()) {
                 $stateDetails[] = $resultSet->current();
             }
-            if(isset($stateDetails)){
+            if(isset($stateDetails) && count($stateDetails)>0){
                 $response[0]['state'] = $stateDetails[0]['state'];
             }
             if(isset($response[0]['country_code'])){
