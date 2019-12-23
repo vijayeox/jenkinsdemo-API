@@ -64,7 +64,7 @@ class PageContentService extends AbstractService
             $deleteQuery = array($pageId);
             $result = $this->executeQuerywithBindParameters($select,$deleteQuery);
             foreach($data as $key => $value){
-                if($value['type'] == 'List' || $value['type'] == 'DocumentViewer' || $value['type'] == 'Search'){
+                if($value['type'] == 'List' || $value['type'] == 'Search'){
                     $value['content'] = json_encode($value['content']);
                 }
                 if($value['type'] == 'Form' && isset($value['formUuid'])){
