@@ -292,3 +292,399 @@ ox_analysis:
     source_name: 'Demand Generation'
     status: 'new'
     status_name: 'New'
+
+  -
+    app_name: diveinsurance
+    id: 1
+    entity_id: '3'
+    name: Dive Boat
+    file_uuid: 4b639cc8-5043-488e-be4c-513669d47700
+    is_active: '1'
+    parent_id: 
+    latest: '1'
+    org_id: '3'
+    fields: '{"padi" : "PADI","initial" : "Initial","firstname" : "First Name","lastname"
+      : "Last Name","address1" : "Address 1","address2" : "Address 2","city" : "City","zip"
+      : "Zip Code","state" : "State","country" : "Country","sameasmailingaddress" : "Same
+      as mailing address","address3" : "Address 1","address4" : "Address 2","home_phone"
+      : "Home Phone","mobilephone" : "Mobile Phone","work_phone" : "Work Phone","fax"
+      : "Fax","email" : "Email","excess_liability_coverage" : "Excess Liability Coverage","any_boat_claims"
+      : "Any Boat Claims?","data_grid_claims" : "Claims","data_grid_date" : "Date","data_grid_amounts"
+      : "Amounts","start_date" : "Select a policy period","end_date" : "End Date","application_type_select"
+      : "Select","padi_number" : "PADI Number","legal_business_name" : "Legal Business
+      Name","dba" : "DBA","who_are_the_partners" : "Text","who_are_the_shareholders" :
+      "Who are the shareholders?","others_please_explain" : "Other, Please Explain","state_value"
+      : "State","street_address" : "Street Address","city_calculated" : "City","country_calculated"
+      : "Country","zip_calculated" : "ZIP Code","mobilephone_calculated" : "Phone Number","fax_calculated"
+      : "Fax","email_address1" : "Email Address","email_address2" : "Email","website"
+      : "Text","current_insurance_company" : "Current Insurance Company","captain_name"
+      : "Text","boat_usage_survey" : "Survey","registry_number" : "Registry Number","waters_to_be_navigated"
+      : "Waters to be navigated","specifics" : "Text","certified_for_max_number_of_passengers"
+      : "Certified for Maximum Number of Passengers:","percentage_of_trips_for_diving_charters"
+      : "Percentage of trips for diving charters","if_lessthan_100_please_explain" : "If
+      less than 100%, Please explain","layup_period_from_date_time" : "Date Time","layup_period_to_date_time"
+      : "Date Time","duty" : "Duty","name" : "Name","ft_pt" : "ft/pt","do_they_have_professional_liability_insurance"
+      : "Do they have Professional Liability Insurance?","padi" : "PADI Number","vessel_name"
+      : "Name of Vessel","hull_mfg" : "Manufacturer","pageNaNFieldsetTableYear" : "Year","vessel_sno"
+      : "Serial Number","model" : "Model","vessel_length" : "Length Overall","hull_type"
+      : "Material of Hull","maximum_range" : "Maximum range","engine_make" : "Engine Make","vessel_hp"
+      : "Total Horsepower","type_of_propulsion" : "Type of propulsion","if_others_please_specify"
+      : "If other, please specify","protective_devices" : "Protective devices (automatic
+      firefighting systems, etc)","hull_market_value" : "Hull Market Value","purchase_price_currency"
+      : "Currency","date_of_purchase" : "Date of Purchase","vessel_name" : "Name of Vessel","hull_mfg"
+      : "Manufacturer","pageNaNFieldsetTableYear" : "Year","vessel_sno" : "Serial Number","model"
+      : "Model","vessel_length" : "Length Overall","hull_type" : "Material of Hull","maximum_range"
+      : "Maximum range","engine_make" : "Engine Make","vessel_hp" : "Total Horsepower","type_of_propulsion"
+      : "Type of propulsion","if_others_please_specify" : "If other, please specify","protective_devices"
+      : "Protective devices (automatic firefighting systems, etc)","hull_market_value"
+      : "Hull Market Value","purchase_price_currency" : "Currency","date_of_purchase"
+      : "Date of Purchase","description_of_boat" : "DESCRIPTION OF BOAT","dingy_or_tender"
+      : "Dingy/Tender","dingy_manufacturer" : "Manufacturer","dingy_length" : "Dinghy
+      Length (Feet)","dingy_age" : "Age","dingy_value" : "Value","trailer" : "Trailer","trailer_manufacturer"
+      : "Manufacturer","trailer_year_built" : "Year Built","trailer_value" : "Value","trailer_serial_number"
+      : "Serial Number","loss_payees" : "Loss Payees","loss_payees_payable_to" : "Text","loss_payees_address"
+      : "Address","additional_insured_select" : "Select","additional_insured_name" : "Name","additional_insured_address"
+      : "Address","additional_insured_city" : "City","additiona_insured_state" : "State","addtional_insured_zip"
+      : "Zip","additional_insured_business_relation" : "Business Relation","additional_insured_additional_info"
+      : "Additional Information","additional_required_information_select" : "Select:","page5ColumnsPanelAcknowledged"
+      : "Acknowledged","applicant_name" : "Name","applicant_title" : "Text","comments"
+      : "Text Area","gdpr_agreement" : "I Agree","boat_year" : "Select","boat_year" :
+      "Select","hullRate" : "Property Rate","HullPremium" : "Hull Premium","DingyTenderPremium"
+      : "Dingy / Tender Premium","TrailerPremium" : "Trailer Premium","PropertyBasePremium"
+      : "Property Base Premium","Age25Surcharge" : "Age > 25 Surcharge","NavWaterSurchargeYN"
+      : "Nav Water Surcharge","NavWaterSurchargePremium" : "Nav Water Surcharge Premium","PortRiskYN"
+      : "Port Risk Credit","PortRiskCredit" : "Port Risk Credit","NavigationCreditYN"
+      : "Navigation Credit","NavigationCredit" : "Navigation Credit","SuperiorRiskCreditYN"
+      : "Superior Risk Credit","SuperiorRiskCredit" : "Superior Risk Credit","PropertySubTotal"
+      : "Property Sub Total","PropertySubTotalProRated" : "Property SubTotal ProRated","ProRataFactor"
+      : "Pro Rata Factor","LiabilityPremium1M" : "LiabilityPremium1M","LiabilityPremiumCost"
+      : "Liability","ExcessLiabilityPremium" : "Excess Liability Premium","DingyLiability"
+      : "Dingy Liability Coverage","PassengerPremiumCost" : "Passenger Premium","CrewOnBoatPremium"
+      : "Crew On Boat Premium","CrewMembersinWaterPremium" : "Crew Members in Water Premium","FL-HISurchargeYN"
+      : "FL - HI Surcharge","FlHiSurchargePremium" : "FL-HI Surcharge","LiabilitySubTotal"
+      : "Liability Sub Total","total" : "Total","csrApproved" : "Approved","product" :
+      "product","amount" : "amount","userApproved" : "Do you accept the final Quote Amount?","automatic_renewal"
+      : "YES!  Sign me up for AUTOMATIC RENEWAL.","transaction_id" : "transaction_id","transaction_status"
+      : "transaction_status"}'
+    user_id: 
+    workflow_instance_id: '12'
+    status: In Progress
+    activity_instance_id: 2c75dffc-2311-11ea-8323-ae4afb7e2503
+    workflow_name: New Policy
+    activities: '{"CSR Rating and Quoating" : "Completed","Customer Approval and payment"
+      : "Completed"}'
+    initial: G
+    firstname: Rakshith
+    lastname: wsdaef
+    address1: addr1
+    address2: addr2
+    city: something
+    zip: '235342'
+    state: Florida
+    country: Afghanistan
+    address3: ''
+    address4: ''
+    home_phone: "(234) 342-1234"
+    mobilephone: "(345) 343-4324"
+    work_phone: "(123) 423-1254"
+    fax: "(324) 543-2134"
+    email: somethingzz@something.com
+    padi: 2141
+    padiVerified: 'true'
+    sameasmailingaddress: 'true'
+    member_number: 2141
+    country_code: AF
+    excess_liability_coverage: 1M
+    any_boat_claims: 'no'
+    marine_insurance_policy_ever_cancelled_or_nonrenewed: 'no'
+    start_date: '2019-08-01'
+    end_date: '07/22/2020'
+    application_type_select: ''
+    padi_number: '2141'
+    legal_business_name: sdfsdfdsfdsf
+    dba: soleProprietor
+    who_are_the_partners: ''
+    who_are_the_shareholders: ''
+    others_please_explain: ''
+    state_value: Florida
+    street_address: addr1 addr2
+    city_calculated: something
+    country_calculated: Afghanistan
+    mobilephone_calculated: "(345) 343-4324"
+    fax_calculated: ''
+    email_address1: somethingzz@something.com
+    email_address2: ''
+    website: ''
+    current_insurance_company: ''
+    zip_calculated: 235342
+    captain_name: wsdaef
+    boat_usage_survey: []
+    registry_number: ''
+    waters_to_be_navigated:
+    - uSEastCoast
+    certified_for_max_number_of_passengers: '5'
+    percentage_of_trips_for_diving_charters: '50'
+    layup_period_from_date_time: '2019-10-01T12:00:00+05:30'
+    layup_period_to_date_time: '2019-11-01T12:00:00+05:30'
+    pageNaNColumnsDataGrid:
+    - duty: ''
+      name: ''
+      ft_pt: ''
+      do_they_have_professional_liability_insurance: ''
+      padi: ''
+    captain_and_crew_schedule_survey: []
+    vessel_name: wsdaef
+    hull_mfg: bcuhbjw
+    pageNaNFieldsetTableYear: 2014
+    vessel_sno: '2134'
+    model: sbtz
+    vessel_length: '234'
+    hull_type: afsfda
+    maximum_range: awfvrs
+    engine_make: 12dv
+    vessel_hp: '234'
+    type_of_propulsion: outboard
+    pageNaNPanel3DataGrid:
+    - protective_devices: rrfdw
+    - protective_devices: efrwaC
+    - protective_devices: wsdqegrt
+    date_of_last_survey: '2019-12-25T12:00:00+05:30'
+    date_of_purchase: '2017-12-01T12:00:00+05:30'
+    description_of_boat: '{"areMaintenanceLogsKept":"yes","areCopiesStoredOnLand":"yes","haveRecommendationsBeenCompleted":"yes"}'
+    dingy_or_tender: ''
+    trailer: ''
+    loss_payees: ''
+    hull_market_value: 1123
+    purchase_price_currency: 2345
+    additional_insured_select: noAdditionalInsureds
+    additional_required_information_select: ''
+    page5ColumnsPanelAcknowledged: 'true'
+    applicant_name: ''
+    applicant_title: ''
+    comments: ''
+    gdpr_agreement: 'true'
+    panelColumnsValidatePadiMembership: false
+    specifics: ''
+    if_lessthan_100_please_explain: ''
+    if_others_please_specify: ''
+    CrewInBoatYN: 'false'
+    CrewInWaterYN: 'false'
+    product: Dive Boat
+    total: 1486.78
+    csrApproved: 'true'
+    layup_period: 31
+    layupDeductible: 75
+    totalLiability: 1185
+    boat_age: 2019
+    DateEffective: '2019-12-20T10:14:47.598Z'
+    ProRataDays: 214
+    DataGrid:
+    - data_grid_claims: ''
+      data_grid_date: ''
+      data_grid_amounts: ''
+    information_for_each_additional_insured:
+    - additional_insured_name: ''
+      additional_insured_address: ''
+      additional_insured_city: ''
+      additiona_insured_state: ''
+      additional_insured_business_relation: ''
+      additional_insured_additional_info: ''
+
+  -
+    app_name: diveinsurance
+    id: 2
+    entity_id: '3'
+    name: Dive Boat
+    file_uuid: 4b639cc8-5043-488e-be4c-513669d47700
+    is_active: '1'
+    parent_id: 
+    latest: '1'
+    org_id: '3'
+    fields: '{"padi" : "PADI","initial" : "Initial","firstname" : "First Name","lastname"
+      : "Last Name","address1" : "Address 1","address2" : "Address 2","city" : "City","zip"
+      : "Zip Code","state" : "State","country" : "Country","sameasmailingaddress" : "Same
+      as mailing address","address3" : "Address 1","address4" : "Address 2","home_phone"
+      : "Home Phone","mobilephone" : "Mobile Phone","work_phone" : "Work Phone","fax"
+      : "Fax","email" : "Email","excess_liability_coverage" : "Excess Liability Coverage","any_boat_claims"
+      : "Any Boat Claims?","data_grid_claims" : "Claims","data_grid_date" : "Date","data_grid_amounts"
+      : "Amounts","start_date" : "Select a policy period","end_date" : "End Date","application_type_select"
+      : "Select","padi_number" : "PADI Number","legal_business_name" : "Legal Business
+      Name","dba" : "DBA","who_are_the_partners" : "Text","who_are_the_shareholders" :
+      "Who are the shareholders?","others_please_explain" : "Other, Please Explain","state_value"
+      : "State","street_address" : "Street Address","city_calculated" : "City","country_calculated"
+      : "Country","zip_calculated" : "ZIP Code","mobilephone_calculated" : "Phone Number","fax_calculated"
+      : "Fax","email_address1" : "Email Address","email_address2" : "Email","website"
+      : "Text","current_insurance_company" : "Current Insurance Company","captain_name"
+      : "Text","boat_usage_survey" : "Survey","registry_number" : "Registry Number","waters_to_be_navigated"
+      : "Waters to be navigated","specifics" : "Text","certified_for_max_number_of_passengers"
+      : "Certified for Maximum Number of Passengers:","percentage_of_trips_for_diving_charters"
+      : "Percentage of trips for diving charters","if_lessthan_100_please_explain" : "If
+      less than 100%, Please explain","layup_period_from_date_time" : "Date Time","layup_period_to_date_time"
+      : "Date Time","duty" : "Duty","name" : "Name","ft_pt" : "ft/pt","do_they_have_professional_liability_insurance"
+      : "Do they have Professional Liability Insurance?","padi" : "PADI Number","vessel_name"
+      : "Name of Vessel","hull_mfg" : "Manufacturer","pageNaNFieldsetTableYear" : "Year","vessel_sno"
+      : "Serial Number","model" : "Model","vessel_length" : "Length Overall","hull_type"
+      : "Material of Hull","maximum_range" : "Maximum range","engine_make" : "Engine Make","vessel_hp"
+      : "Total Horsepower","type_of_propulsion" : "Type of propulsion","if_others_please_specify"
+      : "If other, please specify","protective_devices" : "Protective devices (automatic
+      firefighting systems, etc)","hull_market_value" : "Hull Market Value","purchase_price_currency"
+      : "Currency","date_of_purchase" : "Date of Purchase","vessel_name" : "Name of Vessel","hull_mfg"
+      : "Manufacturer","pageNaNFieldsetTableYear" : "Year","vessel_sno" : "Serial Number","model"
+      : "Model","vessel_length" : "Length Overall","hull_type" : "Material of Hull","maximum_range"
+      : "Maximum range","engine_make" : "Engine Make","vessel_hp" : "Total Horsepower","type_of_propulsion"
+      : "Type of propulsion","if_others_please_specify" : "If other, please specify","protective_devices"
+      : "Protective devices (automatic firefighting systems, etc)","hull_market_value"
+      : "Hull Market Value","purchase_price_currency" : "Currency","date_of_purchase"
+      : "Date of Purchase","description_of_boat" : "DESCRIPTION OF BOAT","dingy_or_tender"
+      : "Dingy/Tender","dingy_manufacturer" : "Manufacturer","dingy_length" : "Dinghy
+      Length (Feet)","dingy_age" : "Age","dingy_value" : "Value","trailer" : "Trailer","trailer_manufacturer"
+      : "Manufacturer","trailer_year_built" : "Year Built","trailer_value" : "Value","trailer_serial_number"
+      : "Serial Number","loss_payees" : "Loss Payees","loss_payees_payable_to" : "Text","loss_payees_address"
+      : "Address","additional_insured_select" : "Select","additional_insured_name" : "Name","additional_insured_address"
+      : "Address","additional_insured_city" : "City","additiona_insured_state" : "State","addtional_insured_zip"
+      : "Zip","additional_insured_business_relation" : "Business Relation","additional_insured_additional_info"
+      : "Additional Information","additional_required_information_select" : "Select:","page5ColumnsPanelAcknowledged"
+      : "Acknowledged","applicant_name" : "Name","applicant_title" : "Text","comments"
+      : "Text Area","gdpr_agreement" : "I Agree","boat_year" : "Select","boat_year" :
+      "Select","hullRate" : "Property Rate","HullPremium" : "Hull Premium","DingyTenderPremium"
+      : "Dingy / Tender Premium","TrailerPremium" : "Trailer Premium","PropertyBasePremium"
+      : "Property Base Premium","Age25Surcharge" : "Age > 25 Surcharge","NavWaterSurchargeYN"
+      : "Nav Water Surcharge","NavWaterSurchargePremium" : "Nav Water Surcharge Premium","PortRiskYN"
+      : "Port Risk Credit","PortRiskCredit" : "Port Risk Credit","NavigationCreditYN"
+      : "Navigation Credit","NavigationCredit" : "Navigation Credit","SuperiorRiskCreditYN"
+      : "Superior Risk Credit","SuperiorRiskCredit" : "Superior Risk Credit","PropertySubTotal"
+      : "Property Sub Total","PropertySubTotalProRated" : "Property SubTotal ProRated","ProRataFactor"
+      : "Pro Rata Factor","LiabilityPremium1M" : "LiabilityPremium1M","LiabilityPremiumCost"
+      : "Liability","ExcessLiabilityPremium" : "Excess Liability Premium","DingyLiability"
+      : "Dingy Liability Coverage","PassengerPremiumCost" : "Passenger Premium","CrewOnBoatPremium"
+      : "Crew On Boat Premium","CrewMembersinWaterPremium" : "Crew Members in Water Premium","FL-HISurchargeYN"
+      : "FL - HI Surcharge","FlHiSurchargePremium" : "FL-HI Surcharge","LiabilitySubTotal"
+      : "Liability Sub Total","total" : "Total","csrApproved" : "Approved","product" :
+      "product","amount" : "amount","userApproved" : "Do you accept the final Quote Amount?","automatic_renewal"
+      : "YES!  Sign me up for AUTOMATIC RENEWAL.","transaction_id" : "transaction_id","transaction_status"
+      : "transaction_status"}'
+    user_id: 
+    workflow_instance_id: '12'
+    status: In Progress
+    activity_instance_id: 2c75dffc-2311-11ea-8323-ae4afb7e2503
+    workflow_name: New Policy
+    activities: '{"CSR Rating and Quoating" : "Completed","Customer Approval and payment"
+      : "Completed"}'
+    initial: G
+    firstname: Rakshith
+    lastname: wsdaef
+    address1: addr1
+    address2: addr2
+    city: something
+    zip: '235342'
+    state: Florida
+    country: Afghanistan
+    address3: ''
+    address4: ''
+    home_phone: "(234) 342-1234"
+    mobilephone: "(345) 343-4324"
+    work_phone: "(123) 423-1254"
+    fax: "(324) 543-2134"
+    email: somethingzz@something.com
+    padi: 2141
+    padiVerified: 'true'
+    sameasmailingaddress: 'true'
+    member_number: 2141
+    country_code: AF
+    excess_liability_coverage: 1M
+    any_boat_claims: 'no'
+    marine_insurance_policy_ever_cancelled_or_nonrenewed: 'no'
+    start_date: '2019-08-01'
+    end_date: '07/22/2018'
+    application_type_select: ''
+    padi_number: '2141'
+    legal_business_name: sdfsdfdsfdsf
+    dba: soleProprietor
+    who_are_the_partners: ''
+    who_are_the_shareholders: ''
+    others_please_explain: ''
+    state_value: Florida
+    street_address: addr1 addr2
+    city_calculated: something
+    country_calculated: Afghanistan
+    mobilephone_calculated: "(345) 343-4324"
+    fax_calculated: ''
+    email_address1: somethingzz@something.com
+    email_address2: ''
+    website: ''
+    current_insurance_company: ''
+    zip_calculated: 235342
+    captain_name: wsdaef
+    boat_usage_survey: []
+    registry_number: ''
+    waters_to_be_navigated:
+    - uSEastCoast
+    certified_for_max_number_of_passengers: '5'
+    percentage_of_trips_for_diving_charters: '50'
+    layup_period_from_date_time: '2019-10-01T12:00:00+05:30'
+    layup_period_to_date_time: '2019-11-01T12:00:00+05:30'
+    pageNaNColumnsDataGrid:
+    - duty: ''
+      name: ''
+      ft_pt: ''
+      do_they_have_professional_liability_insurance: ''
+      padi: ''
+    captain_and_crew_schedule_survey: []
+    vessel_name: wsdaef
+    hull_mfg: bcuhbjw
+    pageNaNFieldsetTableYear: 2014
+    vessel_sno: '2134'
+    model: sbtz
+    vessel_length: '234'
+    hull_type: afsfda
+    maximum_range: awfvrs
+    engine_make: 12dv
+    vessel_hp: '234'
+    type_of_propulsion: outboard
+    pageNaNPanel3DataGrid:
+    - protective_devices: rrfdw
+    - protective_devices: efrwaC
+    - protective_devices: wsdqegrt
+    date_of_last_survey: '2019-12-25T12:00:00+05:30'
+    date_of_purchase: '2017-12-01T12:00:00+05:30'
+    description_of_boat: '{"areMaintenanceLogsKept":"yes","areCopiesStoredOnLand":"yes","haveRecommendationsBeenCompleted":"yes"}'
+    dingy_or_tender: ''
+    trailer: ''
+    loss_payees: ''
+    hull_market_value: 1123
+    purchase_price_currency: 2345
+    additional_insured_select: noAdditionalInsureds
+    additional_required_information_select: ''
+    page5ColumnsPanelAcknowledged: 'true'
+    applicant_name: ''
+    applicant_title: ''
+    comments: ''
+    gdpr_agreement: 'true'
+    panelColumnsValidatePadiMembership: false
+    specifics: ''
+    if_lessthan_100_please_explain: ''
+    if_others_please_specify: ''
+    CrewInBoatYN: 'false'
+    CrewInWaterYN: 'false'
+    product: Dive Boat
+    total: 400.78
+    csrApproved: 'true'
+    layup_period: 31
+    layupDeductible: 75
+    totalLiability: 1185
+    boat_age: 2019
+    DateEffective: '2019-12-20T10:14:47.598Z'
+    ProRataDays: 214
+    DataGrid:
+    - data_grid_claims: ''
+      data_grid_date: ''
+      data_grid_amounts: ''
+    information_for_each_additional_insured:
+    - additional_insured_name: ''
+      additional_insured_address: ''
+      additional_insured_city: ''
+      additiona_insured_state: ''
+      additional_insured_business_relation: ''
+      additional_insured_additional_info: ''
+
+
