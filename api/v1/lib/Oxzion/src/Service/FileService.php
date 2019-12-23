@@ -269,11 +269,9 @@ class FileService extends AbstractService
         try {
             $this->logger->info("FILE ID  ------" . json_encode($id));
             $params = array('id' => $id,
-                'active' => 1,
                 'orgId' => AuthContext::get(AuthConstants::ORG_ID));
-            $select = "SELECT uuid, data  from ox_file where uuid = :id AND is_active = :active AND org_id = :orgId";
+            $select = "SELECT uuid, data  from ox_file where uuid = :id AND org_id = :orgId";
             $this->logger->info("Executing query $select with params " . json_encode($params));
-
             $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
             $this->logger->info("FILE DATA ------" . json_encode($result));
             if (count($result) > 0) {
@@ -580,7 +578,7 @@ class FileService extends AbstractService
 
     public function getFileDocumentList($params)
     {
-        $selectQuery = 'select ox_field.name, ox_file_attribute.field_value from ox_file
+        $selectQuery = 'select ox_field.name, ox_file_attribute.* from ox_file
         inner join ox_file_attribute on ox_file_attribute.file_id = ox_file.id
         inner join ox_field on ox_field.id = ox_file_attribute.field_id
         inner join ox_app on ox_field.app_id = ox_app.id
@@ -592,7 +590,12 @@ class FileService extends AbstractService
             'dataType' => 'document');
         try {
             $selectResultSet = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
-            return $selectResultSet;
+            if(count($selectResultSet)>0 && isset($selectResultSet[0])){
+                $selectResultSet[0]['field_value'] = json_decode($selectResultSet[0]['field_value'],true);
+                return $selectResultSet[0];
+            } else {
+                return array();
+            }
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             return 0;
