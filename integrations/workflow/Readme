@@ -5,18 +5,14 @@ $ sudo docker run --network="host" -it -v ${PWD}:/camunda --entrypoint=bash work
 $ cd IdentityService/
 $ ./gradlew build
 
-$ cd ../TaskListener/
-$ ./gradlew build
-
 $ cd ../ProcessEngine/
 $ ./gradlew build
+
 $ mkdir -p dist
 $ cp build/libs/processengine_plugin-1.0.jar dist/processengine_plugin.jar 
 
 To build the docker container
 $ docker build -t workflow .
-
-copy the .env.sample to .env and update the db host, user and password values
 
 To run the docker container in foreground
 $ docker run --network="host" -it workflow
