@@ -570,6 +570,23 @@ return [
                     ],
                 ],
             ],
+            'fileCRUD' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:id/data',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
             'filedocumentlisting' => [
                 'type' => Segment::class,
                 'options' => [
@@ -582,6 +599,24 @@ return [
                         'controller' => Controller\FileController::class,
                         'method' => 'GET',
                         'action' => 'getFileDocumentList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'file_document_get' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/:appId/:orgId/:fileId/:document',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'orgId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\DocumentController::class,
+                        'method' => 'GET',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],

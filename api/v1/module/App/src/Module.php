@@ -231,6 +231,11 @@ class Module implements ConfigProviderInterface
                         $container->get(AdapterInterface::class)
                     );
                 },
+                Controller\DocumentController::class => function ($container) {
+                    return new Controller\DocumentController(
+                        $container->get('config')
+                    );
+                },
             ],
         ];
     }
