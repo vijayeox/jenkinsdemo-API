@@ -251,12 +251,12 @@ class AppService extends AbstractService
             $appId = $yamlData['app'][0]['uuid'];
             $sequence = 0;
             foreach ($yamlData['pages'] as &$pageData) {
-                $page = $page['page'];
+                $page = $pageData['page'];
                 if(isset($page['page_id'])){
                     $pageId = $page['page_id'];
                 }else{
                     $pageId = null;
-                    $page['uuid'] = UuidUtil::uuid();
+                    $page['uuid'] = isset($page['uuid'])?$page['uuid']:UuidUtil::uuid();
                 }
                 $routedata = array("appId" => $appId, "orgId" => $yamlData['org'][0]['uuid']);
                 $result = $this->pageService->savePage($routedata, $page, $pageId);
