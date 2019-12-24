@@ -1,6 +1,8 @@
 Build all the child projects first
 
-$ sudo docker run --network="host" -it -v ${PWD}:/camunda --entrypoint=bash workflow
+$ docker build -t workflow_build docker_build
+
+$ sudo docker run --network="host" -it -v ${PWD}:/camunda --entrypoint=bash workflow_build
 
 $ cd IdentityService/
 $ ./gradlew build
