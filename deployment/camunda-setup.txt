@@ -7,6 +7,8 @@ sudo apt install wget
 sudo apt install tzdata  (for timezone data)
 sudo apt install tini (no package found for now in ubuntu 18.04)(digged in to found its used for containers to managing processes. Mostly as a init for containers)
 sudo apt install xmlstarlet
+#required for ssl
+sudo apt-get install libssl1.0-dev
 
 #Step for downloading a installing camunda on server
 #make a temp dir for camunda setup download
