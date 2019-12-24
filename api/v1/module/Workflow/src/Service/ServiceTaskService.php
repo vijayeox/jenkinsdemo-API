@@ -67,7 +67,12 @@ class ServiceTaskService extends AbstractService
             unset($data['variables']['commands']);
             $inputData = $data['variables'];
             foreach ($commands as $index => $value) {
-                $commandJson = json_decode($value, true);
+                $isArray = is_array($value);
+                if (!$isArray) {
+                    $commandJson = json_decode($value, true);
+                } else {
+                    $commandJson = $value;
+                }
                 $command = $commandJson['command'];
                 unset($commandJson['command']);
                 $variables = array_merge($inputData, $commandJson);
@@ -77,6 +82,8 @@ class ServiceTaskService extends AbstractService
                 if (is_array($result)) {
                     $inputData = $result;
                     $inputData['app_id'] = $data['variables']['app_id'];
+                    $inputData['orgId'] = $data['variables']['orgId'];
+                    $inputData['workFlowId'] = $data['variables']['workFlowId'];
                 }
                 $this->logger->info(ServiceTaskService::class . print_r($inputData, true));
             }
@@ -337,7 +344,7 @@ class ServiceTaskService extends AbstractService
     {
         $params = array("app_id" => $data['app_id'], "workFlowId" => $data['workFlowId'], "userId" => $data['userId']);
         $filterParams['filter'] = $data['filter'];
-        $fileList = $this->fileService->getFileList($data['app_id'],$params, $filterParams);
+        $fileList = $this->fileService->getFileList($data['app_id'], $params, $filterParams);
         return $fileList['data'][0];
     }
 }

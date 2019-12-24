@@ -3,22 +3,17 @@ namespace Oxzion\Service;
 
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
-use Oxzion\Service\AbstractService;
-use Oxzion\ValidationException;
+use Oxzion\Encryption\TwoWayEncryption;
 use Oxzion\Model\Email;
 use Oxzion\Model\EmailTable;
-use Oxzion\Encryption\TwoWayEncryption;
-use Oxzion\Encryption\Crypto;
+use Oxzion\Service\AbstractService;
 use TheSeer\Tokenizer\Exception;
-use Zend\Mail;
-use Zend\Mail\Message;
-use Zend\Db\ResultSet\ResultSet;
 
 class EmailService extends AbstractService
 {
     private $table;
 
-    public function __construct($config, $dbAdapter, EmailTable $table)
+    public function __construct($config, $dbAdapter, EmailTable $table = null)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
@@ -28,7 +23,7 @@ class EmailService extends AbstractService
     {
         $form = new Email();
         $userId = $data['userid'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['email'] = isset($data['email']) ? $data['email'] : NULL;
+        $data['email'] = isset($data['email']) ? $data['email'] : null;
         if ($data['email']) {
             $queryString = "select id,email from email_setting_user";
             $where = "where userid = " . $userId;
@@ -91,7 +86,7 @@ class EmailService extends AbstractService
         return $count;
     }
 
-    public function getEmailAccountsByUserId($id=null)
+    public function getEmailAccountsByUserId($id = null)
     {
         $accounts = array();
         if (empty($id)) {
@@ -110,7 +105,7 @@ class EmailService extends AbstractService
         return $accounts;
     }
 
-    public function getEmailAccountsByEmailId($id=null, $pw =false)
+    public function getEmailAccountsByEmailId($id = null, $pw = false)
     {
         $accounts = array();
         if (empty($id)) {
@@ -120,7 +115,7 @@ class EmailService extends AbstractService
         }
 
         $queryString = "select email_setting_user.id,userid,password,email,host,isdefault,ox_email_domain.* from email_setting_user LEFT JOIN ox_email_domain on ox_email_domain.name=email_setting_user.host";
-        $where = "where email_setting_user.email = '" . $emailId."'";
+        $where = "where email_setting_user.email = '" . $emailId . "'";
         $order = "order by email_setting_user.id";
         $resultSet = $this->executeQuerywithParams($queryString, $where, null, $order);
         if ($pw) {

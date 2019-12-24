@@ -54,9 +54,7 @@ class WorkflowInstanceController extends AbstractApiController
             $response = ['data' => $params, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Errors", 500, $response);
         }
-
         return $this->getSuccessResponseWithData($params, 200);
-
     }
 
     public function submitAction()
@@ -104,7 +102,6 @@ class WorkflowInstanceController extends AbstractApiController
             if ($e->getReason() == 'TaskAlreadyClaimedException') {
                 return $this->getErrorResponse("Task is already claimed", 409);
             }
-
             return $this->getErrorResponse($e->getMessage(), 409);
         }
     }
