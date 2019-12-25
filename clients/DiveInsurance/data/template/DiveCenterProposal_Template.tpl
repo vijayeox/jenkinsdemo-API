@@ -1,3 +1,4 @@
+{assign var=dspropcentralfire value=$dsPropCentralFirePL|json_decode:true}
 <!DOCTYPE html>
 <html>
 
@@ -19,55 +20,55 @@
                     </tr>
                     <tr>
                         <td>Contents Limit:</td>
-                        <td>${$contentslimit}</td>
+                        <td>${$dspropTotal}</td>
                     </tr>
                     <tr>
-                        <td id="space_left">(Sign limited to : ${$signlimit})</td>
+                        <td id="space_left">(Sign limited to : $25000)</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td>Business Income:</td>
-                        <td>${$businessincome}</td>
+                        <td>${$lossOfBusIncome}</td>
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
-                        <td>{$buildingcoverage}</td>
+                        <td>${$dspropreplacementvalue}</td>
                     </tr>
                     <tr>
                         <td>Equipment Breakdown:</td>
-                        <td>{$equipbrkdown}</td>
+                        <td>${$dspropreplacementvalue}</td>
                     </tr>
                     <tr>
                         <td>Business Income from dependant properties:</td>
-                        <td>{$busiIncproperty}</td>
+                        <td>$5000</td>
                     </tr>
                     <tr>
                         <td>Robbery (per Occurrence - Inside):</td>
-                        <td>{$robberyinside}</td>
+                        <td>$2500</td>
                     </tr>
                     <tr>
                         <td>Robbery (per Occurrence - Outside):</td>
-                        <td>{$robberoutside}</td>
+                        <td>$2500</td>
                     </tr>
                     <tr>
                         <td>Transit Coverage (Locked Vehicle):</td>
-                        <td>{$transitcoverage}</td>
+                        <td>$10000</td>
                     </tr>
                     <tr>
                         <td>EmployeeTheft Limit:</td>
-                        <td>{$emptheftlimit}</td>
+                        <td>$5000</td>
                     </tr>
                     <tr>
                         <td>Property of Others:</td>
-                        <td>{$propertyodothers}</td>
+                        <td>$25000</td>
                     </tr>
                     <tr>
                         <td>Off premises:</td>
-                        <td>{$offpremises}</td>
+                        <td>$10000</td>
                     </tr>
                     <tr>
                         <td>Glass:</td>
-                        <td>{$glass}</td>
+                        <td>$5000</td>
                     </tr>
                 </tbody>
             </table>
@@ -80,49 +81,49 @@
                     </tr>
                     <tr>
                         <td>Commercial General Liability (Each Occurrence Limit):</td>
-                        <td>${$commercialGLliability}</td>
+                        <td>$1000000</td>
                     </tr>
                     <tr>
                         <td>Personal Injury (per Occurence):</td>
-                        <td>{$personalinjury}</td>
+                        <td>$1000000</td>
                     </tr>
                     <tr>
                         <td>General Liability Aggregate:</td>
-                        <td>${$GLaggr}</td>
+                        <td>$2000000</td>
                     </tr>
                     <tr>
                         <td>Products and Completed Operations Aggregate:</td>
-                        <td>${$prodNcompoperationaggr}</td>
+                        <td>$2000000</td>
                     </tr>
                     <tr>
                         <td>Damage to premises rented to you:</td>
-                        <td>${$damagetopremisesrented}</td>
+                        <td>$1000000</td>
                     </tr>
                     <tr>
                         <td>Medical Expense:</td>
-                        <td>${$medicalexps}</td>
+                        <td>${$MedicalExpenseFP}</td>
                     </tr>
                     <tr>
                         <td>NON-Owned Auto:</td>
-                        <td>${$nonownedauto}</td>
+                        <td>${$nonOwnedAutoLiabilityPL}</td>
                     </tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
-                        <td>{$nondivingpool}</td>
+                        <td>${$poolLiability}</td>
                     </tr>
                     <tr>
                         <td>Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        <td>{$travelagenteo}</td>
+                        <td>$1000000</td>
                     </tr>
                     <tr>
                         <td>Group Professional Liability:</td>
-                        <td>{$grpprofliability}</td>
+                        <td>$1000000</td>
                     </tr>
                     <tr>
                         <td>Group Professional Liability Aggregate:</td>
-                        <td>{$grpprofliabilityaggr}</td>
+                        <td>$2000000</td>
                     </tr>
                 </tbody>
             </table>
@@ -135,7 +136,7 @@
                             Hawaii, Puerto Rico, USVI, Guam and all Tier 1 locations
                             (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North
                             Carolina and all Harris County Texas locations.
-                            Mechanical breakdown is $2500. All other perils is ${$deductibleProperty}}.</td>
+                            Mechanical breakdown is $2500. All other perils is ${$PropDeductibleCredit}}.</td>
                     </tr>
                 </tbody>
             </table>
@@ -148,7 +149,7 @@
 
             <!-- Alarm Calc -->
             <div style="margin: 2% 0;">
-                {if not $alert}
+                {if $dspropcentralfire.centralStationAlarmPL != "yes"}
                 <center>
                     <b>
                         <p>Burglary Coverage is Excluded as there is no Central Station Alarm</p>
@@ -487,15 +488,15 @@
 
         <div class="main" style="margin-top: 1%;">
             <div class="value_main">
-                <p>${$divecenterGLpremium}</p>
+                <p>${$liabilityCoveragesTotalPL}</p>
                 <p>&nbsp;</p>
-                <p>${$divecenterPLpremium}</p>
-                <p>${$surpluslinetax}</p>
-                <p>${$padiadminfee}</p>
+                <p>${$propertyCoveragesTotalPL}</p>
+                <p>${$PropTax+$LiaTax}</p>
+                <p>${$padiFee}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center General Liability Premium:</p>
-                <p>(Based on estimated annual receipts of ${$annualreceipt})</p>
+                <p>(Based on estimated annual receipts of ${$dsglestmonthretailreceipt})</p>
                 <p>Dive Center Property Premium</p>
                 <p>Dive Center Surplus Lines Tax:</p>
                 <p>Dive Center PADI Administration Fee:</p>
@@ -506,7 +507,7 @@
         <div class="clearfix"></div>
         <div class="total_main">
             <div class="value_main">
-                <p>${$storepremium}</p>
+                <p>${$ProRataPremium+$PropTax+$LiaTax+$AddILocPremium+$AddILocTax+$padiFee-$PropDeductibleCredit+$PAORFee}</p>
             </div>
             <div class="sub_main">
                 <p>Total Store Premium:</p>
@@ -519,14 +520,14 @@
         <!-- second section -->
         <div class="main">
             <div class="value_main">
-                <p>${$divecentergrouppremium}</p>
+                <p>${$groupCoverage+$groupExcessLiability}</p>
                 <p>&nbsp;</p>
-                <p>${$groupsurpluslinetax}</p>
-                <p>${$grouppadiadminfee}</p>
+                <p>${$groupTaxAmount}</p>
+                <p>${$groupPadiFeeAmount}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center Group Instructional Program Premium:</p>
-                <p>(Based on estimated annual group receipts of {$groupannualreceipts})</p>
+                <p>(Based on estimated annual group receipts of ${$groupReceipts})</p>
                 <p>Dive Center Group Instructional Program Surplus Lines Tax:</p>
                 <p>Dive Center Group Instructional Program PADI Administration Fee:</p>
             </div>
@@ -536,7 +537,7 @@
         </div>
         <div class="total_main">
             <div class="value_main">
-                <p>${$totalgrouppremium}</p>
+                <p>${$groupTotalAmount}</p>
             </div>
             <div class="sub_main">
                 <p>Total Group Premium:</p>
@@ -546,7 +547,7 @@
         <p class="hrtag" style="margin-top: 2px;"></p>
         <div class="total_main">
             <div class="value_main">
-                <p>${$amtDueinFull}</p>
+                <p>${$totalAmount}</p>
             </div>
             <div class="sub_main">
                 <p>Amount due in full:</p>
