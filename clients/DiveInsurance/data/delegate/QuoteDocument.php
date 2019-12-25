@@ -26,7 +26,9 @@ class QuoteDocument extends PolicyDocument
                      'policy' => 'Dive_Boat_Policy.pdf',),
         'Dive Store' 
             => array(
-                     'template' => 'DiveCenterProposal_Template',  
+                     'template' => 'DiveCenterProposal_Template', 
+                     'header' => 'DiveCenterProposal_header.html',
+                     'footer' => 'DiveCenterProposal_footer.html', 
                      'cover_letter' => 'Dive_Store_Cover_Letter',
                      'lheader' => 'letter_header.html',
                      'lfooter' => 'letter_footer.html',

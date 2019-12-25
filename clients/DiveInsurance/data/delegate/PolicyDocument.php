@@ -267,6 +267,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
         }
 
+        if(isset($temp['additionalLocations'])){
+            $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+        }
+
         if(isset($temp['namedInsured'])){
             $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
         }
