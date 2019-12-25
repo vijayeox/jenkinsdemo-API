@@ -254,18 +254,19 @@ class WidgetService extends AbstractService
         }
         $data = array();
         if(isset($params['data'])) {
-//            foreach ($resultSet as $row) {
-//                $query_uuid = $row['query_uuid'];
-//                $queryData = $this->queryService->executeAnalyticsQuery($query_uuid);
-//                if (!empty($data) && isset($queryData['data'])) {
-//                    $data = array_replace_recursive($data, $queryData['data']);
-//                } else {
-//                    if (isset($queryData['data'])) {
-//                        $data = $queryData['data'];
-//                    }
-//                }
-//            }
-            //--------------------------------------------------------------------------------------------------------------------------------
+            foreach ($resultSet as $row) {
+                $query_uuid = $row['query_uuid'];
+                $queryData = $this->queryService->executeAnalyticsQuery($query_uuid);
+                if (!empty($data) && isset($queryData['data'])) {
+                    $data = array_replace_recursive($data, $queryData['data']);
+                } else {
+                    if (isset($queryData['data'])) {
+                        $data = $queryData['data'];
+                    }
+                }
+                
+        }
+//--------------------------------------------------------------------------------------------------------------------------------
 //TODO:Fetch data from elastic search and remove hard coded values below.
                 // $data = [
                 //     ['person'=> 'Bharat', 'sales'=> 4.2],
@@ -276,27 +277,27 @@ class WidgetService extends AbstractService
                 //     ['person'=> 'Yuvraj', 'sales'=> 14.2]
                 // ];
 
-            $testUuid = $resultSet[0]['uuid'];
-            if ($testUuid == '2aab5e6a-5fd4-44a8-bb50-57d32ca226b0') {
-                //Sales YTD
-                $data = '235436';
-            }
-            if (($testUuid == 'bacb4ec3-5f29-49d7-ac41-978a99d014d3') || 
-                ($testUuid == 'ae8e3919-88a8-4eaf-9e35-d7a4408a1f8c') || 
-                ($testUuid == 'e1933370-22bd-4cd8-abc9-fcdc29b6481d')) {
-                //Sales by sales person
-                $data = [
-                    ['person'=> 'Bharat', 'sales'=> 4.2],
-                    ['person'=> 'Harsha', 'sales'=> 5.2],
-                    ['person'=> 'Mehul', 'sales'=> 15.2],
-                    ['person'=> 'Rajesh', 'sales'=> 2.9],
-                    ['person'=> 'Ravi', 'sales'=> 2.9],
-                    ['person'=> 'Yuvraj', 'sales'=> 14.2]
-                ];
-            }
-            if ($testUuid == 'd5927bc2-d87b-4dd5-b45b-66d7c5fcb3f1') {
-                $data = '83.89';
-            }
+            // $testUuid = $resultSet[0]['uuid'];
+            // if ($testUuid == '2aab5e6a-5fd4-44a8-bb50-57d32ca226b0') {
+            //     //Sales YTD
+            //     $data = '235436';
+            // }
+            // if (($testUuid == 'bacb4ec3-5f29-49d7-ac41-978a99d014d3') || 
+            //     ($testUuid == 'ae8e3919-88a8-4eaf-9e35-d7a4408a1f8c') || 
+            //     ($testUuid == 'e1933370-22bd-4cd8-abc9-fcdc29b6481d')) {
+            //     //Sales by sales person
+            //     $data = [
+            //         ['person'=> 'Bharat', 'sales'=> 4.2],
+            //         ['person'=> 'Harsha', 'sales'=> 5.2],
+            //         ['person'=> 'Mehul', 'sales'=> 15.2],
+            //         ['person'=> 'Rajesh', 'sales'=> 2.9],
+            //         ['person'=> 'Ravi', 'sales'=> 2.9],
+            //         ['person'=> 'Yuvraj', 'sales'=> 14.2]
+            //     ];
+            // }
+            // if ($testUuid == 'd5927bc2-d87b-4dd5-b45b-66d7c5fcb3f1') {
+            //     $data = '83.89';
+            // }
 //            if ($testUuid == '45933c62-6933-43da-bbb2-59e6f331e8db') {
 //                //Quarterly revenue target
 //                $data = [

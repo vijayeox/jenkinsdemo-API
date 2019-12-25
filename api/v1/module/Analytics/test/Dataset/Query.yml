@@ -37,10 +37,59 @@ ox_query:
     version: 1
   -
     id: 14
-    uuid: '7f1d2819-c5ff-4426-bc40-f7a20704a748'
+    uuid: '5f1d2819-c5ff-4426-bc40-f7a20704a748'
     name: 'query4'
     datasource_id: 3
     configuration: '{"app_name":"sampleapp","group":"field3","field":"field6","operation":"avg"}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+  -
+    id: 15
+    uuid: '7f1d2819-c5ff-4426-aa40-f7a20704a748'
+    name: 'hub 1'
+    datasource_id: 3
+    configuration: '{"app_name":"diveinsurance","group":"state","field":"total","operation":"sum"}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+  -
+    id: 16
+    uuid: '7f1d2819-c5ff-2326-bc40-f7a20704a748'
+    name: 'hub 2'
+    datasource_id: 3
+    configuration: '{"app_name":"diveinsurance","group":"state","field":"totalLiability","operation":"sum"}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+  -
+    id: 17
+    uuid: '6f1d2819-c5ff-2326-bc40-f7a20704a748'
+    name: 'hub 3'
+    datasource_id: 3
+    configuration: '{"app_name":"diveinsurance","frequency":"2","field":"total","operation":"sum","date_type":"start_date","date-period":"2018-01-01/now"}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+
+  -
+    id: 18
+    uuid: '5f1d2819-c5ff-2326-bc40-f7a20704a748'
+    name: 'hub 4'
+    datasource_id: 3
+    configuration: '{"app_name":"diveinsurance","frequency":"2","field":"totalLiablity","operation":"sum","date_type":"start_date","date-period":"2018-01-01/now"}'
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'

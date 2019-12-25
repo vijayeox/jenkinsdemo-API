@@ -138,7 +138,8 @@ class QueryService extends AbstractService
         }
 
         if(isset($params['data'])) {
-            $this->runQuery($resultSet[0]['configuration'],$resultSet[0]['datasource_uuid']);
+            $queryResult=$this->runQuery($resultSet[0]['configuration'],$resultSet[0]['datasource_uuid']);
+            $response['query']['data']=$queryResult['data'];
         }
         return $response;
     }
@@ -188,7 +189,7 @@ class QueryService extends AbstractService
             if (count($resultSet) == 0) {
                 return 0;
             }
-            $this->runQuery($resultSet[0]['configuration'],$resultSet[0]['datasource_uuid']);
+            $result = $this->runQuery($resultSet[0]['configuration'],$resultSet[0]['datasource_uuid']);
 
         } catch(Exception $e) {
             return 0;
@@ -208,6 +209,7 @@ class QueryService extends AbstractService
                 $entity_name = null;
             }
             $result = $analyticsEngine->runQuery($app_name,$entity_name,$parameters);
+            return $result;
     }
 
 }
