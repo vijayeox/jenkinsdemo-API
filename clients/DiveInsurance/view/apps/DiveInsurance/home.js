@@ -106,7 +106,7 @@ class Home extends React.Component {
 
   render() {
     return (
-      <div style={{ height: "inherit" }}>
+      <div style={{ height: "inherit", overflow: "auto" }}>
         {this.state.formContent ? (
           <div className="formContent">
             <FormRender
