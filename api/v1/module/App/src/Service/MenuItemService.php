@@ -24,7 +24,7 @@ class MenuItemService extends AbstractService
     {
         $this->logger->info("In saveMenuItem params - $appUuid, ".json_encode($data));
         $MenuItem = new MenuItem();
-        $data['uuid'] = UuidUtil::uuid();
+        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
         $data['app_id'] = $this->getIdFromUuid('ox_app',$appUuid);
         if(isset($data['page_id'])){
             $data['page_id'] = $this->getIdFromUuid('ox_app_page',$data['page_id']);
