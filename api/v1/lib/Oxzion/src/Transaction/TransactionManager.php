@@ -50,11 +50,11 @@ class TransactionManager
 
     public function commit()
     {
+        if (!$this->rollbackOnly && $this->transactionCount == 1) {
+            $this->dbAdapter->getDriver()->getConnection()->commit();
+        }
         if ($this->transactionCount > 0) {
             $this->transactionCount--;
-        }
-        if (!$this->rollbackOnly && $this->transactionCount == 0) {
-            $this->dbAdapter->getDriver()->getConnection()->commit();
         }
     }
 
