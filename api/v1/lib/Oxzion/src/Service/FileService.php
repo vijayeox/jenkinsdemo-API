@@ -10,6 +10,7 @@ use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
 use Oxzion\ServiceException;
 use Oxzion\Utils\UuidUtil;
+use Oxzion\Utils\FileUtils;
 
 class FileService extends AbstractService
 {
@@ -38,8 +39,9 @@ class FileService extends AbstractService
      *   } </code>
      * @return array Returns a JSON Response with Status Code and Created File.
      */
-    public function createFile(&$data, $workflowInstanceId = null)
+    public function createFile(&$data, $workflowInstanceId = null,$ensureDir=false)
     {
+        $baseFolder = $this->config['APP_DOCUMENT_FOLDER'];
         $this->logger->info("Data CreateFile- " . json_encode($data));
         $parentId = isset($data['parent_id']) ? $data['parent_id'] : null;
         if (isset($data['uuid'])) {
@@ -58,10 +60,17 @@ class FileService extends AbstractService
         } else {
             $activityId = null;
         }
+        $data['uuid'] = $uuid = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+        if(isset($data['groupPL'])){
+            $this->saveGroupPLDocuments($data,$baseFolder);
+        }
+        
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
+        unset($data['uuid']);
         $fields = $data = $this->cleanData($data);
         $this->logger->info("Data From Fileservice before encoding - " . print_r($data, true));
         $jsonData = json_encode($data);
+        $data['uuid'] = $uuid;
         $data['workflow_instance_id'] = isset($workflowInstanceId) ? $workflowInstanceId : null;
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
@@ -71,7 +80,7 @@ class FileService extends AbstractService
         $data['parent_id'] = $parentId;
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['entity_id'] = $entityId;
-        $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+       
         $data['data'] = $jsonData;
         $file = new File();
         $file->exchangeArray($data);
@@ -90,6 +99,7 @@ class FileService extends AbstractService
             }
             $this->logger->info("FILE DATA BEFORE SAVE----" . print_r($file, true));
             $count = $this->table->save($file);
+
             $this->logger->info("COUNT  FILE DATA----" . $count);
             if ($count == 0) {
                 throw new ServiceException("File Creation Failed", "file.create.failed");
@@ -115,6 +125,24 @@ class FileService extends AbstractService
             throw $e;
         }
         return $count;
+    }
+
+    private function saveGroupPLDocuments(&$data,$baseFolder){
+        $filepath = $baseFolder.$data['orgId'].'/'.$data['uuid'].'/';
+        if (!file_exists($filepath)) {
+            FileUtils::createDirectory($filepath);
+        }
+        chmod($filepath, 0777);
+        for($j = 0;$j < sizeof($data['groupPL']);$j++){
+        $group = $data['groupPL'][$j]['document'];
+            for($i = 0 ;$i < sizeof($group);$i++){
+                $docFile = fopen($filepath.$group[$i]['originalName'].'.txt','wb');
+                fwrite($docFile,$group[$i]['url']);
+                fclose($docFile);
+                unset($data['groupPL'][$j]['document'][$i]['url']);
+                $data['groupPL'][$j]['document'][$i]['file'] = $filepath.$group[$i]['originalName'].'.txt';
+            }
+        }
     }
 
     private function updateFileData($id, $data)
@@ -148,6 +176,7 @@ class FileService extends AbstractService
      */
     public function updateFile(&$data, $id)
     {
+        $baseFolder = $this->config['APP_DOCUMENT_FOLDER'];
         if (isset($data['workflow_instance_id'])) {
             $select = "SELECT ox_file.* from ox_file
             where ox_file.workflow_instance_id=? ";
@@ -196,8 +225,10 @@ class FileService extends AbstractService
                 $data[$key] = json_encode($dataelement);
             }
         }
-
-        $fields = array_diff($data, $fileObject);
+        if(isset($data['groupPL'])){
+            $this->saveGroupPLDocuments($data,$baseFolder);
+        }
+        $fields = array_merge($fileObject,$data);
         $file = new File();
         $id = $this->getIdFromUuid('ox_file', $id);
         $validFields = $this->checkFields(isset($obj['entity_id']) ? $obj['entity_id'] : null, $fields, $id);
@@ -280,14 +311,27 @@ class FileService extends AbstractService
                 $this->logger->info("FILE ID  ------" . json_encode($result));
                 if ($result[0]['data']) {
                     $result[0]['data'] = json_decode($result[0]['data'], true);
+                    $this->getGroupDocuments($result[0]['data']);
                 }
-                return $result[0];
+                 return $result[0];
             }
             return 0;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
+    }
+
+    private function getGroupDocuments(&$data){
+        if(isset($data['groupPL']))
+            {
+                $group = $data['groupPL'];
+                for($i = 0;$i < sizeof($group);$i++){
+                    $file = $group[$i]['document'][0]['file'];
+                    $data['groupPL'][$i]['document'][0]['url'] = file_get_contents($file);
+                    unset($data['groupPL'][$i]['document'][0]['file']);
+                }
+            }
     }
 
     public function getFileByWorkflowInstanceId($workflowInstanceId, $isProcessInstanceId = true)
@@ -306,6 +350,7 @@ class FileService extends AbstractService
                 "isActive" => 1);
             $result = $this->executeQueryWithBindParameters($select, $whereQuery)->toArray();
             if (count($result) > 0) {
+                $this->getGroupDocuments($result[0]['data']);
                 return $result[0];
             }
             return 0;
