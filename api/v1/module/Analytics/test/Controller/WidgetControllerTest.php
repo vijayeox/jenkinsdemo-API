@@ -200,6 +200,8 @@ class WidgetControllerTest extends ControllerTest
     public function testGetWithData() {
         if (enableElastic!=0) {
             $this->setElasticData();
+        } else {
+            $this->markTestSkipped('Only Integration Test');
         }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/widget/0e57b45f-5938-4e26-acd8-d65fb89e8503?data=true', 'GET');
@@ -211,6 +213,9 @@ class WidgetControllerTest extends ControllerTest
     }
 
     public function testGetWithCombinedData() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
         $this->assertResponseStatusCode(200);
@@ -226,6 +231,9 @@ class WidgetControllerTest extends ControllerTest
     }
 
     public function testGetWithExpressionData() {
+        if(enableElastic==0){
+            $this->markTestSkipped('Only Integration Test');
+        }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/widget/41e881c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
         $this->assertResponseStatusCode(200);

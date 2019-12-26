@@ -181,6 +181,8 @@ class QueryControllerTest extends ControllerTest
     public function testGetWithResults() {
         if (enableElastic!=0) {
             $this->setElasticData();
+        } else {
+            $this->markTestSkipped('Only Integration Test');
         }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/query/6f1d2819-c5ff-2326-bc40-f7a20704a748?data=true', 'GET');
