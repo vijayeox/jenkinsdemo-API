@@ -217,13 +217,11 @@ class WorkflowService extends AbstractService
         $form = new Workflow();
         $form->exchangeArray($data);
         $form->validate();
-        $transactionManager = \Oxzion\Transaction\TransactionManager::getInstance($this->dbAdapter);
         $this->beginTransaction();
         $count = 0;
         try {
             $count = $this->table->save($form);
             if ($count == 0) {
-                $this->rollback();
                 throw new ServiceException("Workflow not saved", 'workflow.save.failed');
             }
             if (!isset($data['id'])) {
