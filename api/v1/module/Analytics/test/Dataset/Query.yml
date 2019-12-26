@@ -89,7 +89,20 @@ ox_query:
     uuid: '5f1d2819-c5ff-2326-bc40-f7a20704a748'
     name: 'hub 4'
     datasource_id: 3
-    configuration: '{"app_name":"diveinsurance","frequency":"2","field":"totalLiablity","operation":"sum","date_type":"start_date","date-period":"2018-01-01/now"}'
+    configuration: '{"app_name":"diveinsurance","frequency":"2","field":"totalLiability","operation":"sum","date_type":"start_date","date-period":"2018-01-01/now"}'
+    ispublic: 0
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    version: 1
+  
+  -
+    id: 19
+    uuid: '771d2819-c5ff-2326-bc40-f7a20704a748'
+    name: 'crmDoubleGrouping'
+    datasource_id: 3
+    configuration: '{"app_name":"crm","group":"owner_username,industry","field":"amount","operation":"sum"}'
     ispublic: 0
     created_by: 1
     date_created: '2019-06-27 07:25:06'

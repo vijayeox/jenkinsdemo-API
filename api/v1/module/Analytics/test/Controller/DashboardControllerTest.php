@@ -28,6 +28,7 @@ class DashboardControllerTest extends ControllerTest
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Visualization.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Widget.yml");
         $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/Dashboard.yml");
+        $dataset->addYamlFile(dirname(__FILE__) . "/../Dataset/WidgetQuery.yml");      
         return $dataset;
     }
 

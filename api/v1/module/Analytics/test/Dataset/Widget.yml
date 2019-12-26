@@ -34,7 +34,33 @@ ox_widget:
     date_created: '2019-06-27 07:25:06'
     org_id: 1
     isdeleted: 0
-    name: 'widget3'
+    name: 'combinedWithExpression'
     configuration: 'sample config3'
     version: 1
     expression: '{"expression":["calcfield1=(field6-field5)*field6/100","calcfield2=(field6-field5)"]}'
+  -
+    id: 14
+    uuid: '31e881c3-040d-44d8-9295-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'combinedWithDate'
+    configuration: 'test'
+    version: 1
+    expression: ''
+  -
+    id: 15
+    uuid: '55e881c3-040d-44d8-9295-f2c3130bafbc'
+    visualization_id: 12
+    ispublic: 1
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    name: 'crmDoubleGrouping'
+    configuration: 'test'
+    version: 1
+    expression: ''

@@ -134,7 +134,7 @@ ox_elastic:
     companyName: 'ABC Solutions'
     website: 'eoxvantage.com'
     numberOfEmployees: 8
-    industry: 'Insurance'
+    industry: 'Software'
     createdAt: 2019/08/30
     updatedAt: 2019/08/30
     notes: null

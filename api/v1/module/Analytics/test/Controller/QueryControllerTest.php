@@ -14,6 +14,7 @@ use Oxzion\Search\Indexer;
 class QueryControllerTest extends ControllerTest
 {
 
+    private $elastic = 0;
     public function setUp() : void
     {
         $this->loadConfig();
@@ -45,6 +46,7 @@ class QueryControllerTest extends ControllerTest
         foreach ($dataset as $body) {
             $this->createIndex($indexer, $body);
         }
+        sleep(2);
     }
 
     protected function setDefaultAsserts()
@@ -59,7 +61,7 @@ class QueryControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => "query5", 'datasource_id' => 1, 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}', 'ispublic' => 1];
-        $this->assertEquals(14, $this->getConnection()->getRowCount('ox_query'));
+        $this->assertEquals(15, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -70,14 +72,14 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals($content['data']['datasource_id'], $data['datasource_id']);
         $this->assertEquals($content['data']['configuration'], $data['configuration']);
-        $this->assertEquals(15, $this->getConnection()->getRowCount('ox_query'));
+        $this->assertEquals(16, $this->getConnection()->getRowCount('ox_query'));
     }
 
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
         $data = ['name' => "query5", 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}'];
-        $this->assertEquals(14, $this->getConnection()->getRowCount('ox_query'));
+        $this->assertEquals(15, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);
         $this->assertResponseStatusCode(404);
@@ -179,7 +181,6 @@ class QueryControllerTest extends ControllerTest
     public function testGetWithResults() {
         if (enableElastic!=0) {
             $this->setElasticData();
-            sleep(1) ;
         }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/query/6f1d2819-c5ff-2326-bc40-f7a20704a748?data=true', 'GET');
@@ -208,12 +209,12 @@ class QueryControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 14);
+        $this->assertEquals(count($content['data']['data']), 15);
         $this->assertEquals($content['data']['data'][6]['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
         $this->assertEquals($content['data']['data'][6]['name'], 'query1');
         $this->assertEquals($content['data']['data'][7]['datasource_id'], 3);
         $this->assertEquals($content['data']['data'][7]['name'], 'query2');
-        $this->assertEquals($content['data']['total'],14);
+        $this->assertEquals($content['data']['total'],15);
     }
 
     public function testGetListWithSort()
@@ -224,12 +225,12 @@ class QueryControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 14);
+        $this->assertEquals(count($content['data']['data']), 15);
         $this->assertEquals($content['data']['data'][5]['uuid'], '1a7d9e0d-f6cd-40e2-9154-87de247b9ce1');
         $this->assertEquals($content['data']['data'][5]['name'], 'query3');
         $this->assertEquals($content['data']['data'][6]['ispublic'], 1);
         $this->assertEquals($content['data']['data'][6]['name'], 'query2');
-        $this->assertEquals($content['data']['total'],14);
+        $this->assertEquals($content['data']['total'],15);
     }
 
      public function testGetListSortWithPageSize()
@@ -241,10 +242,10 @@ class QueryControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 10);
-        $this->assertEquals($content['data']['data'][2]['uuid'], '5f1d2819-c5ff-2326-bc40-f7a20704a748');
-        $this->assertEquals($content['data']['data'][2]['name'], 'hub 4');
+        $this->assertEquals($content['data']['data'][2]['uuid'], '6f1d2819-c5ff-2326-bc40-f7a20704a748');
+        $this->assertEquals($content['data']['data'][2]['name'], 'hub 3');
         $this->assertEquals($content['data']['data'][2]['is_owner'], 'true');
-        $this->assertEquals($content['data']['total'],14);
+        $this->assertEquals($content['data']['total'],15);
     }
 
     public function testGetListwithQueryParameters()
