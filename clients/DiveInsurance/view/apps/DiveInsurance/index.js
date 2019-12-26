@@ -18,7 +18,11 @@ const register = (core, args, options, metadata) => {
         height: document.body.clientHeight
       },
       state: {
-        maximized: true
+        maximized: true 
+      },
+      attributes: {
+        visibility: "restricted",
+        controls: false
       }
     })
     .on("destroy", () => proc.destroy())
