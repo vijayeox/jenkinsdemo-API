@@ -19,14 +19,6 @@ const register = (core, args, options, metadata) => {
       },
       state: {
         maximized: true
-      },
-      attributes: {
-        visibility: "restricted",
-        closeable: false,
-        minimizable: false,
-        resizable: false,
-        maximizable: false,
-        controls: false
       }
     })
     .on("destroy", () => proc.destroy())
