@@ -8,7 +8,7 @@ use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Search\Indexer;
-
+use Mockery;
 
 
 class QueryControllerTest extends ControllerTest
@@ -35,6 +35,14 @@ class QueryControllerTest extends ControllerTest
         $id = $body['id'];
         AuthContext::put(AuthConstants::ORG_ID, $body['org_id']);
         $return=$indexer->index($app_name, $id, $entity_name, $body);
+    }
+
+    private function getMockRestClientForElasticService()
+    {
+        $elasticService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ElasticService::class);
+        $mockElasticClient = Mockery::mock('Elasticsearch\ClientBuilder');
+        $elasticService->setElasticClient($mockElasticClient);
+        return $mockElasticClient;
     }
 
     public function setElasticData()
@@ -182,7 +190,9 @@ class QueryControllerTest extends ControllerTest
         if (enableElastic!=0) {
             $this->setElasticData();
         } else {
-            $this->markTestSkipped('Only Integration Test');
+            $mockElasticClient = $this->getMockRestClientForElasticService();
+            $mockElasticClient->expects('search')->with(json_decode('{"index":"diveinsurance_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"total"}},{"range":{"start_date":{"gte":"2018-01-01","lte":"2019-12-27","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"aggs":{"groupdata":{"date_histogram":{"field":"start_date","interval":"month","format":"MMM-yyyy"},"aggs":{"value":{"sum":{"field":"total"}}}}},"explain":true},"_source":["*"],"from":0,"size":0}'))->once()->andReturn(json_decode('{"took":2,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":4,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"buckets":[{"key_as_string":"Apr-2019","key":1554076800000,"doc_count":1,"value":{"value":890}},{"key_as_string":"May-2019","key":1556668800000,"doc_count":1,"value":{"value":400.7799987792969}},{"key_as_string":"Jun-2019","key":1559347200000,"doc_count":0,"value":{"value":0}},{"key_as_string":"Jul-2019","key":1561939200000,"doc_count":0,"value":{"value":0}},{"key_as_string":"Aug-2019","key":1564617600000,"doc_count":1,"value":{"value":1486.780029296875}},{"key_as_string":"Sep-2019","key":1567296000000,"doc_count":1,"value":{"value":600.780029296875}}]}}}',true));
+
         }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/query/6f1d2819-c5ff-2326-bc40-f7a20704a748?data=true', 'GET');

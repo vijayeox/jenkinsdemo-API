@@ -9,6 +9,7 @@ use PHPUnit\DbUnit\DataSet\YamlDataSet;
 use PHPUnit\DbUnit\DataSet\SymfonyYamlParser;
 use Oxzion\Search\Indexer;
 use Oxzion\Auth\AuthContext;
+use Mockery;
 use Oxzion\Auth\AuthConstants;
 
 class WidgetControllerTest extends ControllerTest
@@ -28,6 +29,13 @@ class WidgetControllerTest extends ControllerTest
         $app_name = $body['app_name'];
         $id = $body['id'];
         $return=$indexer->index($app_name, $id, $entity_name, $body);
+    }
+    private function getMockRestClientForElasticService()
+    {
+        $elasticService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ElasticService::class);
+        $mockElasticClient = Mockery::mock('Elasticsearch\ClientBuilder');
+        $elasticService->setElasticClient($mockElasticClient);
+        return $mockElasticClient;
     }
 
     public function setElasticData()
@@ -201,7 +209,8 @@ class WidgetControllerTest extends ControllerTest
         if (enableElastic!=0) {
             $this->setElasticData();
         } else {
-            $this->markTestSkipped('Only Integration Test');
+            $mockElasticClient = $this->getMockRestClientForElasticService();
+            $mockElasticClient->expects('search')->with(json_decode('{"index":"crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"createdAt":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}'))->once()->andReturn(json_decode('{"took":0,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]}}',true));
         }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/widget/0e57b45f-5938-4e26-acd8-d65fb89e8503?data=true', 'GET');
@@ -214,7 +223,9 @@ class WidgetControllerTest extends ControllerTest
 
     public function testGetWithCombinedData() {
         if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test');
+            $mockElasticClient = $this->getMockRestClientForElasticService();
+            $mockElasticClient->expects('search')->with(json_decode('{"index":"sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"field5"}}]}},"_source":["*","field3"],"aggs":{"groupdata":{"terms":{"field":"field3.keyword","size":10000},"aggs":{"value":{"avg":{"field":"field5"}}}}},"explain":true},"_source":["*","field3"],"from":0,"size":0}'))
+            ->once()->andReturn(json_decode('{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}{"took":4,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":45}},{"key":"cfield5text","doc_count":1,"value":{"value":70}}]}}}',true));
         }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
@@ -232,7 +243,9 @@ class WidgetControllerTest extends ControllerTest
 
     public function testGetWithExpressionData() {
         if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test');
+            $mockElasticClient = $this->getMockRestClientForElasticService();
+            $mockElasticClient->expects('search')->with(json_decode('{"index":"sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"field5"}}]}},"_source":["*","field3"],"aggs":{"groupdata":{"terms":{"field":"field3.keyword","size":10000},"aggs":{"value":{"avg":{"field":"field5"}}}}},"explain":true},"_source":["*","field3"],"from":0,"size":0}'))
+            ->once()->andReturn(json_decode('{"took":5,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}{"took":0,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":45}},{"key":"cfield5text","doc_count":1,"value":{"value":70}}]}}}',true));
         }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/widget/41e881c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');

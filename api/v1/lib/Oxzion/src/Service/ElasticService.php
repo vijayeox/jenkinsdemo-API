@@ -4,6 +4,8 @@ namespace Oxzion\Service;
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 
+use function GuzzleHttp\json_encode;
+
 ini_set("memory_limit", -1);
 class ElasticService
 {
@@ -29,6 +31,9 @@ class ElasticService
         $this->type = $config['elasticsearch']['type'];
 
         $this->client = ClientBuilder::create()->setHosts(array($clientsettings))->build();
+    }
+    public function setElasticClient($client){
+        $this->client = $client;
     }
 
     public function create($indexName,$fieldList,$settings) {
@@ -338,8 +343,9 @@ class ElasticService
 
     public function search($q)
     {
-      //   print_r($q);
+       // print_r(json_encode($q));
         $data = $this->client->search($q);
+       //  print_r(json_encode($data));
        // print_r($data);
         return $data;
 
