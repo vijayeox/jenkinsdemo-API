@@ -395,9 +395,9 @@ class AppControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $data = ['path' => __DIR__.'/../sampleapp/'];
         $this->dispatch('/app/deployapp', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(406);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         unlink(__DIR__.'/../sampleapp/application.yml');
     }
