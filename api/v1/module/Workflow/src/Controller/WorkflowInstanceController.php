@@ -11,10 +11,10 @@ use Oxzion\Service\WorkflowService;
 use Oxzion\ValidationException;
 use Oxzion\Workflow\Camunda\WorkflowException;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
-use Workflow\Model\WorkflowInstance;
-use Workflow\Model\WorkflowInstanceTable;
-use Workflow\Service\ActivityInstanceService;
-use Workflow\Service\WorkflowInstanceService;
+use Oxzion\Model\WorkflowInstance;
+use Oxzion\Model\WorkflowInstanceTable;
+use Oxzion\Service\ActivityInstanceService;
+use Oxzion\Service\WorkflowInstanceService;
 use Zend\Db\Adapter\AdapterInterface;
 
 class WorkflowInstanceController extends AbstractApiController

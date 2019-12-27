@@ -418,6 +418,59 @@ class Module
                         $container->get(Workflow\WorkflowFactory::class)
                     );
                 },
+                Model\WorkflowInstanceTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\WorkflowInstanceTableGateway::class);
+                    return new Model\WorkflowInstanceTable($tableGateway);
+                },
+                Model\ActivityInstanceTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\ActivityInstanceTableGateway::class);
+                    return new Model\ActivityInstanceTable($tableGateway);
+                },
+                Model\WorkflowInstanceTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\WorkflowInstance());
+                    return new TableGateway('ox_workflow_instance', $dbAdapter, null, $resultSetPrototype);
+                },
+                Model\ActivityInstanceTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\ActivityInstance());
+                    return new TableGateway('ox_activity_instance', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\WorkflowInstanceService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\WorkflowInstanceService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Model\WorkflowInstanceTable::class),
+                        $container->get(Service\FileService::class),
+                        $container->get(Service\UserService::class),
+                        $container->get(Service\WorkflowService::class),
+                        $container->get(Workflow\WorkflowFactory::class),
+                        $container->get(Service\ActivityInstanceService::class)
+                    );
+                },
+                Service\ActivityInstanceService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ActivityInstanceService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Model\ActivityInstanceTable::class),
+                        $container->get(Workflow\WorkflowFactory::class)
+                    );
+                },
+                Service\CommandService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\CommandService($container->get('config'),
+                        $dbAdapter,
+                        $container->get(Service\TemplateService::class),
+                        $container->get(AppDelegate\AppDelegateService::class),
+                        $container->get(Service\FileService::class),
+                        $container->get(Messaging\MessageProducer::class),
+                        $container->get(Service\WorkflowInstanceService::class),
+                        $container->get(Service\WorkflowService::class));
+                },
             ],
         ];
     }

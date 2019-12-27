@@ -25,6 +25,7 @@ use App\Service\MenuItemService;
 use App\Service\PageService;
 use Oxzion\Service\ErrorLogService;
 use Oxzion\Service\UserService;
+use Oxzion\Service\CommandService;
 
 class Module implements ConfigProviderInterface
 {
@@ -117,8 +118,7 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\PageContent());
                     return new TableGateway('ox_page_content', $dbAdapter, null, $resultSetPrototype);
-                },
-                
+                },                
             ],
         ];
     }
@@ -234,6 +234,11 @@ class Module implements ConfigProviderInterface
                 Controller\DocumentController::class => function ($container) {
                     return new Controller\DocumentController(
                         $container->get('config')
+                    );
+                },
+                Controller\PipelineController::class => function ($container) {
+                    return new Controller\PipelineController(
+                        $container->get(CommandService::class)
                     );
                 },
             ],

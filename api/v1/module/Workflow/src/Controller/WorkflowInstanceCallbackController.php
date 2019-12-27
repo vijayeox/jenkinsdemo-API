@@ -4,14 +4,14 @@ namespace Workflow\Controller;
 /**
 * Workflow Api
 */
-use Workflow\Model\WorkflowInstanceTable;
-use Workflow\Model\WorkflowInstance;
-use Workflow\Service\WorkflowInstanceService;
+use Oxzion\Model\WorkflowInstanceTable;
+use Oxzion\Model\WorkflowInstance;
+use Oxzion\Service\WorkflowInstanceService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\ValidationException;
 use Oxzion\Service\WorkflowService;
-use Workflow\Service\ActivityInstanceService;
+use Oxzion\Service\ActivityInstanceService;
 
 class WorkflowInstanceCallbackController extends AbstractApiControllerHelper
 {

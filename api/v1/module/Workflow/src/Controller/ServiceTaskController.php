@@ -8,20 +8,20 @@ use Exception;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\EntityNotFoundException;
 use Oxzion\ValidationException;
-use Workflow\Service\ServiceTaskService;
-use Workflow\Service\WorkflowInstanceService;
+use Oxzion\Service\CommandService;
+use Oxzion\Service\WorkflowInstanceService;
 
 class ServiceTaskController extends AbstractApiControllerHelper
 {
-    private $serviceTaskService;
+    private $commandService;
     private $workflowInstanceService;
     private $log;
     /**
      * @ignore __construct
      */
-    public function __construct(ServiceTaskService $serviceTaskService, WorkflowInstanceService $workflowInstanceService)
+    public function __construct(CommandService $commandService, WorkflowInstanceService $workflowInstanceService)
     {
-        $this->serviceTaskService = $serviceTaskService;
+        $this->commandService = $commandService;
         $this->workflowInstanceService = $workflowInstanceService;
         $this->log = $this->getLogger();
     }
@@ -61,10 +61,11 @@ class ServiceTaskController extends AbstractApiControllerHelper
     public function executeAction()
     {
         $data = $this->extractPostData();
-        $this->serviceTaskService->updateOrganizationContext($data['variables']);
+        $this->commandService->updateOrganizationContext($data['variables']);
         $this->log->info(":Post Data- " . print_r(json_encode($data), true));
+        $variables = isset($data['variables'])?$data['variables']:null;
         try {
-            $response = $this->serviceTaskService->runCommand($data);
+            $response = $this->commandService->runCommand($variables,$this->getRequest());
             if ($response && is_array($response)) {
                 $this->log->info(":Workflow Step Successfully Executed - " . print_r($response, true));
                 return $this->getSuccessResponseWithData($response, 200);

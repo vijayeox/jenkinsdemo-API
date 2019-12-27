@@ -4,9 +4,9 @@ namespace Workflow\Controller;
 /**
 * Activity Instance Api
 */
-use Workflow\Model\ActivityInstance;
-use Workflow\Service\ActivityInstanceService;
-use Workflow\Service\WorkflowInstanceService;
+use Oxzion\Model\ActivityInstance;
+use Oxzion\Service\ActivityInstanceService;
+use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\ValidationException;
 use Oxzion\EntityNotFoundException;

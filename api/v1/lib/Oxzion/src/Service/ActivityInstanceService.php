@@ -2,12 +2,12 @@
 /**
 * File Api
 */
-namespace Workflow\Service;
+namespace Oxzion\Service;
 
 use Oxzion\Service\AbstractService;
 use Oxzion\Workflow\WorkFlowFactory;
-use Workflow\Model\ActivityInstanceTable;
-use Workflow\Model\ActivityInstance;
+use Oxzion\Model\ActivityInstanceTable;
+use Oxzion\Model\ActivityInstance;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\ValidationException;

@@ -178,7 +178,7 @@ return [
                     'route' => '/app/:appId/field[/:id]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
-                        'id' => UuidUtil::UUID_PATTERN,                    
+                        'id' => UuidUtil::UUID_PATTERN,
                     ],
                     'defaults' => [
                         'controller' => Controller\FieldController::class,
@@ -617,6 +617,23 @@ return [
                     'defaults' => [
                         'controller' => Controller\DocumentController::class,
                         'method' => 'GET',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'pipeline_execute' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/pipeline',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\PipelineController::class,
+                        'method' => 'GET',
+                        'action' => 'executePipeline',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],

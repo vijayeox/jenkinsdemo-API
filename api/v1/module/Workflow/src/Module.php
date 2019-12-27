@@ -7,7 +7,11 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\FileService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Service\UserService;
+use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Service\WorkflowService;
+use Oxzion\Service\CommandService;
+use Oxzion\Service\ActivityInstanceService;
+use Oxzion\Model\WorkflowInstanceTable;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
@@ -36,58 +40,6 @@ class Module implements ConfigProviderInterface
     {
         return [
             'factories' => [
-                Service\WorkflowInstanceService::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\WorkflowInstanceService(
-                        $container->get('config'),
-                        $dbAdapter,
-                        $container->get(Model\WorkflowInstanceTable::class),
-                        $container->get(\Oxzion\Service\FileService::class),
-                        $container->get(\Oxzion\Service\UserService::class),
-                        $container->get(\Oxzion\Service\WorkflowService::class),
-                        $container->get(\Oxzion\Workflow\WorkflowFactory::class),
-                        $container->get(Service\ActivityInstanceService::class)
-                    );
-                },
-                Service\ActivityInstanceService::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\ActivityInstanceService(
-                        $container->get('config'),
-                        $dbAdapter,
-                        $container->get(Model\ActivityInstanceTable::class),
-                        $container->get(\Oxzion\Workflow\WorkflowFactory::class)
-                    );
-                },
-                Service\ServiceTaskService::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\ServiceTaskService($container->get('config'),
-                        $dbAdapter,
-                        $container->get(TemplateService::class),
-                        $container->get(\Oxzion\AppDelegate\AppDelegateService::class),
-                        $container->get(\Oxzion\Service\FileService::class),
-                        $container->get(MessageProducer::class),
-                        $container->get(Service\WorkflowInstanceService::class));
-                },
-                Model\WorkflowInstanceTable::class => function ($container) {
-                    $tableGateway = $container->get(Model\WorkflowInstanceTableGateway::class);
-                    return new Model\WorkflowInstanceTable($tableGateway);
-                },
-                Model\ActivityInstanceTable::class => function ($container) {
-                    $tableGateway = $container->get(Model\ActivityInstanceTableGateway::class);
-                    return new Model\ActivityInstanceTable($tableGateway);
-                },
-                Model\WorkflowInstanceTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\WorkflowInstance());
-                    return new TableGateway('ox_workflow_instance', $dbAdapter, null, $resultSetPrototype);
-                },
-                Model\ActivityInstanceTableGateway::class => function ($container) {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\ActivityInstance());
-                    return new TableGateway('ox_activity_instance', $dbAdapter, null, $resultSetPrototype);
-                },
             ],
         ];
     }
@@ -98,30 +50,30 @@ class Module implements ConfigProviderInterface
             'factories' => [
                 Controller\WorkflowInstanceController::class => function ($container) {
                     return new Controller\WorkflowInstanceController(
-                        $container->get(Model\WorkflowInstanceTable::class),
-                        $container->get(Service\WorkflowInstanceService::class),
+                        $container->get(WorkflowInstanceTable::class),
+                        $container->get(WorkflowInstanceService::class),
                         $container->get(WorkflowService::class),
-                        $container->get(Service\ActivityInstanceService::class),
+                        $container->get(ActivityInstanceService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },
                 Controller\WorkflowInstanceCallbackController::class => function ($container) {
                     return new Controller\WorkflowInstanceCallbackController(
-                        $container->get(Model\WorkflowInstanceTable::class),
-                        $container->get(Service\WorkflowInstanceService::class),
+                        $container->get(WorkflowInstanceTable::class),
+                        $container->get(WorkflowInstanceService::class),
                         $container->get(AdapterInterface::class)
                     );
                 },
                 Controller\ActivityInstanceController::class => function ($container) {
                     return new Controller\ActivityInstanceController(
-                        $container->get(Service\ActivityInstanceService::class),
-                        $container->get(Service\WorkflowInstanceService::class)
+                        $container->get(ActivityInstanceService::class),
+                        $container->get(WorkflowInstanceService::class)
                     );
                 },
                 Controller\ServiceTaskController::class => function ($container) {
                     return new Controller\ServiceTaskController(
-                        $container->get(Service\ServiceTaskService::class),
-                        $container->get(Service\WorkflowInstanceService::class)
+                        $container->get(CommandService::class),
+                        $container->get(WorkflowInstanceService::class)
                     );
                 },
             ],

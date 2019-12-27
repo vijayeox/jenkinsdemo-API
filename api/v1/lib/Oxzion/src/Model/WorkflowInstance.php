@@ -1,6 +1,6 @@
 <?php
 
-namespace Workflow\Model;
+namespace Oxzion\Model;
 
 use Oxzion\Model\Entity;
 use Oxzion\ValidationException;

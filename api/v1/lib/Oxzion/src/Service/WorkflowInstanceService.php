@@ -1,5 +1,5 @@
 <?php
-namespace Workflow\Service;
+namespace Oxzion\Service;
 
 use Exception;
 use Oxzion\Auth\AuthConstants;
@@ -12,9 +12,9 @@ use Oxzion\Service\FileService;
 use Oxzion\Service\UserService;
 use Oxzion\Service\WorkflowService;
 use Oxzion\Workflow\WorkFlowFactory;
-use Workflow\Model\WorkflowInstance;
-use Workflow\Model\WorkflowInstanceTable;
-use Workflow\Service\ActivityInstanceService;
+use Oxzion\Model\WorkflowInstance;
+use Oxzion\Model\WorkflowInstanceTable;
+use Oxzion\Service\ActivityInstanceService;
 
 class WorkflowInstanceService extends AbstractService
 {

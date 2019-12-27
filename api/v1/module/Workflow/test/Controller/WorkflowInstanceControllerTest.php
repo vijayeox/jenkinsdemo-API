@@ -68,7 +68,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ProcessEngineImpl');
-            $workflowService = $this->getApplicationServiceLocator()->get(\Workflow\Service\WorkflowInstanceService::class);
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
             $mockProcessEngine->expects('startProcess')->withAnyArgs()->once()->andReturn(array('id' => 1));
             $workflowService->setProcessEngine($mockProcessEngine);
             $this->processId = 1;
@@ -141,7 +141,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         if (enableCamunda == 0) {
             $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
-            $activityInstanceService = $this->getApplicationServiceLocator()->get(\Workflow\Service\ActivityInstanceService::class);
+            $activityInstanceService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ActivityInstanceService::class);
             $mockActivityEngine->expects('claimActivity')->with('3f6622fd-0124-11ea-a8a0-22e8105c0778', $this->adminUser)->once()->andReturn(1);
             $activityInstanceService->setActivityEngine($mockActivityEngine);
         }
@@ -162,7 +162,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->initAuthToken($this->employeeUser);
         if (enableCamunda == 0) {
             $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
-            $activityInstanceService = $this->getApplicationServiceLocator()->get(\Workflow\Service\ActivityInstanceService::class);
+            $activityInstanceService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ActivityInstanceService::class);
             $mockActivityEngine->expects('claimActivity')->with('[activityInstanceId]', $this->employeeUser)->once()->andReturn(1);
             $activityInstanceService->setActivityEngine($mockActivityEngine);
         }
@@ -182,7 +182,7 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->initAuthToken($this->employeeUser);
         if (enableCamunda == 0) {
             $mockActivityEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
-            $activityInstanceService = $this->getApplicationServiceLocator()->get(\Workflow\Service\ActivityInstanceService::class);
+            $activityInstanceService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ActivityInstanceService::class);
             $mockActivityEngine->expects('claimActivity')->with('3f6622fd-0124-11ea-a8a0-22e8105c0778', $this->employeeUser)->once()->andReturn(1);
             $activityInstanceService->setActivityEngine($mockActivityEngine);
         }
@@ -266,9 +266,9 @@ class WorkflowInstanceControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         if (enableCamunda == 0) {
             $mockProcessEngine = Mockery::mock('\Oxzion\Workflow\Camunda\ActivityImpl');
-            $workflowService = $this->getApplicationServiceLocator()->get(\Workflow\Service\WorkflowInstanceService::class);
+            $workflowService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\WorkflowInstanceService::class);
             $mockProcessEngine->expects('completeActivity')->withAnyArgs()->once()->andReturnUsing(function () {
-                $activityService = $this->getApplicationServiceLocator()->get(\Workflow\Service\ActivityInstanceService::class);
+                $activityService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ActivityInstanceService::class);
                 $data['processInstanceId'] = "3f20b5c5-0124-11ea-a8a0-22e8105c0778";
                 $data['activityInstanceId'] = "3f6622fd-0124-11ea-a8a0-22e8105c0778";
                 $activityService->completeActivityInstance($data);

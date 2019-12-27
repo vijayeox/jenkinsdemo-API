@@ -133,44 +133,44 @@ class WorkflowService extends AbstractService
                     $formData['entity_id'] = $entityId;
                     if(isset($formData['template']))
                         $formResult = $this->formService->createForm($appUuid, $formData);
-                    $startFormId = $formData['id'];
-                    foreach ($process['activity'] as $activity) {
-                        $oxActivity = new Activity();
-                        $oxActivity->exchangeArray($activity);
-                        $oxFormProperties = $oxActivity->getKeyArray();
-                        if (isset($activityProperties)) {
-                            foreach ($activityProperties as $activityKey => $activityValue) {
-                                if (in_array($activityKey, $activityProperties)) {
-                                    $oxActivity->__set($key, $activityValue);
+                        $startFormId = $formData['id'];
+                        foreach ($process['activity'] as $activity) {
+                            $oxActivity = new Activity();
+                            $oxActivity->exchangeArray($activity);
+                            $oxFormProperties = $oxActivity->getKeyArray();
+                            if (isset($activityProperties)) {
+                                foreach ($activityProperties as $activityKey => $activityValue) {
+                                    if (in_array($activityKey, $activityProperties)) {
+                                        $oxActivity->__set($key, $activityValue);
+                                    }
                                 }
                             }
-                        }
-                        $activityData = $oxActivity->toArray();
-                        try {
-                            if(isset($activity['form'])){
-                                $formTemplate = json_decode($activity['form'],true);
-                                $activityData['template'] = $formTemplate['template'];
+                            $activityData = $oxActivity->toArray();
+                            try {
+                                if(isset($activity['form'])){
+                                    $formTemplate = json_decode($activity['form'],true);
+                                    $activityData['template'] = $formTemplate['template'];
+                                }
+                                $activityData['entity_id'] = $entityId;
+                                $activityData['workflow_deployment_id'] = $workflowDeploymentId;
+                                $activityResult = $this->activityService->createActivity($appUuid, $activityData);
+                                $activityIdArray[] = $activityData['id'];
+                            } catch (Exception $e) {
+                                throw $e;
                             }
-                            $activityData['entity_id'] = $entityId;
-                            $activityData['workflow_deployment_id'] = $workflowDeploymentId;
-                            $activityResult = $this->activityService->createActivity($appUuid, $activityData);
-                            $activityIdArray[] = $activityData['id'];
-                        } catch (Exception $e) {
-                            throw $e;
                         }
                     }
                 }
-            }
-            if (isset($workflowName)) {
-                $deployedData = array('id'=>$workFlowId,'workflow_deployment_id' => $workflowDeploymentId,'app_id'=>$appId,'name'=>$workflowName,'process_id'=>$processId,'process_definition_id' => $processDefinitionId,'form_id'=>$startFormId,'file'=>$file,'entity_id'=>$entityId,'uuid'=>$workflow['uuid']);
-                $this->logger->info("Deployed Data-".json_encode($deployedData));
-                try {
-                    $workFlow = $this->saveWorkflow($appId, $deployedData);
-                } catch (Exception $e){
-                    throw $e;
+                if (isset($workflowName)) {
+                    $deployedData = array('id'=>$workFlowId,'workflow_deployment_id' => $workflowDeploymentId,'app_id'=>$appId,'name'=>$workflowName,'process_id'=>$processId,'process_definition_id' => $processDefinitionId,'form_id'=>$startFormId,'file'=>$file,'entity_id'=>$entityId,'uuid'=>$workflow['uuid']);
+                    $this->logger->info("Deployed Data-".json_encode($deployedData));
+                    try {
+                        $workFlow = $this->saveWorkflow($appId, $deployedData);
+                    } catch (Exception $e){
+                        throw $e;
+                    }
                 }
-            }
-            $this->commit();
+                $this->commit();
         }catch(Exception $e){
             $this->logger->error($e->getMessage(),$e);
             $this->rollback();

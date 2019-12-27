@@ -2,7 +2,7 @@
 /**
  * ServiceTask Callback Api
  */
-namespace Workflow\Service;
+namespace Oxzion\Service;
 
 use Exception;
 use Oxzion\AppDelegate\AppDelegateService;
@@ -12,11 +12,14 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
 use Oxzion\Service\TemplateService;
+use Oxzion\ServiceException;
 use Oxzion\Utils\RestClient;
 use Oxzion\ValidationException;
-use Workflow\Service\WorkflowInstanceService;
+use Oxzion\Service\WorkflowInstanceService;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
 
-class ServiceTaskService extends AbstractService
+class CommandService extends AbstractService
 {
     /**
      * @var ServiceTaskService Instance of Task Service
@@ -34,7 +37,7 @@ class ServiceTaskService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService,WorkflowService $workflowService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
@@ -43,6 +46,7 @@ class ServiceTaskService extends AbstractService
         $this->workflowInstanceService = $workflowInstanceService;
         parent::__construct($config, $dbAdapter);
         $this->fileService = $fileService;
+        $this->workflowService = $workflowService;
         $this->restClient = new RestClient($this->config['job']['jobUrl'], array());
     }
 
@@ -51,21 +55,31 @@ class ServiceTaskService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
-    public function runCommand(&$data)
+    public function runCommand(&$data,$request)
     {
         $this->logger->info("RUN COMMAND  ------" . json_encode($data));
-        //TODO Execute Service Task Methods
-        if (isset($data['variables']) && isset($data['variables']['command'])) {
-            $this->logger->info("COMMAND  ------" . print_r($data['variables']['command'], true));
-            $command = $data['variables']['command'];
-            unset($data['variables']['command']);
-            return $this->processCommand($data['variables'], $command);
-        } else if (isset($data['variables']) && isset($data['variables']['commands'])) {
-            $this->logger->info("Service Task Service - Comamnds");
-            $commands = $data['variables']['commands'];
+        //TODO Execute Command Service Methods
+        if(isset($data['appId'])){
+            $orgId = isset($data['orgId']) ? $this->getIdFromUuid('ox_organization', $data['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
+            $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
+            $appId = $this->getIdFromUuid('ox_app', $data['appId']);
+            $selectQuery = array("orgId" => $orgId, "appId" => $appId);
+            $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+            if (count($result) == 0) {
+                throw new ServiceException("App Does not belong to the org", "app.fororgnot.found");
+            }
+        }
+        if (isset($data['command'])) {
+            $this->logger->info("COMMAND  ------" . print_r($data['command'], true));
+            $command = $data['command'];
+            unset($data['command']);
+            return $this->processCommand($data, $command, $request);
+        } else if (isset($data['commands'])) {
+            $this->logger->info("Command Service - Comamnds");
+            $commands = $data['commands'];
             $this->logger->info("COMMAND LIST ------" . print_r($commands, true));
-            unset($data['variables']['commands']);
-            $inputData = $data['variables'];
+            unset($data['commands']);
+            $inputData = $data;
             foreach ($commands as $index => $value) {
                 $isArray = is_array($value);
                 if (!$isArray) {
@@ -73,32 +87,38 @@ class ServiceTaskService extends AbstractService
                 } else {
                     $commandJson = $value;
                 }
-                $command = $commandJson['command'];
-                unset($commandJson['command']);
-                $variables = array_merge($inputData, $commandJson);
-                $this->logger->info(ServiceTaskService::class . print_r($variables, true));
-                $this->logger->info("COMMAND LIST ------" . $command);
-                $result = $this->processCommand($variables, $command);
-                if (is_array($result)) {
-                    $inputData = $result;
-                    $inputData['app_id'] = $data['variables']['app_id'];
-                    $inputData['orgId'] = $data['variables']['orgId'];
-                    $inputData['workFlowId'] = $data['variables']['workFlowId'];
+                if(isset($commandJson['command'])){
+                    $command = $commandJson['command'];
+                    unset($commandJson['command']);
+                    $outputData = array_merge($inputData, $commandJson);
+                    $this->logger->info(ServiceTaskService::class . print_r($outputData, true));
+                    $this->logger->info("COMMAND LIST ------" . $command);
+                    $result = $this->processCommand($outputData, $command, $request);
+                    if (is_array($result)) {
+                        $inputData = $result;
+                        $inputData['app_id'] = isset($data['app_id'])?$data['app_id']:null;
+                        $inputData['orgId'] = isset($data['orgId'])?$data['orgId']:null;
+                        $inputData['workFlowId'] = isset($data['workFlowId'])?$data['workFlowId']:null;
+                    }
                 }
                 $this->logger->info(ServiceTaskService::class . print_r($inputData, true));
             }
-            return $variables;
+            return $outputData;
         }
         return 1;
     }
 
-    protected function processCommand(&$data, $command)
+    protected function processCommand(&$data, $command, $request)
     {
         $this->logger->info("PROCESS COMMAND : command --- " . $command);
         switch ($command) {
             case 'mail':
                 $this->logger->info("SEND MAIL");
                 return $this->sendMail($data);
+                break;
+            case 'route':
+                $this->logger->info("Get Route Data");
+                $this->getRouteData($data, $request);
                 break;
             case 'schedule':
                 $this->logger->info("SCHEDULE JOB");
@@ -128,9 +148,37 @@ class ServiceTaskService extends AbstractService
                 $this->logger->info("FILE LIST");
                 return $this->getFileWithParams($data);
                 break;
+            case 'startform':
+                $this->logger->info("START FORM");
+                return $this->getStartForm($data);
+                break;
             default:
                 break;
         };
+    }
+
+    protected function getRouteData(&$data,$request)
+    {
+        $this->logger->info("EXECUTE DELEGATE ---- " . print_r($data, true));
+        if (isset($data['app_id']) && isset($data['route'])) {
+            $app_id = $data['app_id'];
+        } else {
+            $this->logger->info("App Id or Delegate Not Specified");
+            throw new EntityNotFoundException("App Id or Delegate Not Specified");
+        }
+        $this->logger->info("DELEGATE ---- " . print_r($route, true));
+        $this->logger->info("DELEGATE APP ID---- " . print_r($app_id, true));
+        $headers = $request->getHeaders()->toArray();
+        $restClient = new RestClient($headers['Host'],array('exceptions' => false,'timeout' => 0));
+        $route = "/app/".$data['app_uuid']."/".$route;
+        // print_r($route);exit;
+        $response = json_decode($restClient->get($route,array(),$headers),true);
+        if($response['status']=='success'){
+            $data['result'] = $response['data'];
+            if(isset($response['total'])){
+                $data['total'] = $response['total'];
+            }
+        }
     }
 
     protected function scheduleJob(&$data)
@@ -202,7 +250,7 @@ class ServiceTaskService extends AbstractService
         return $response;
     }
 
-    protected function fileSave($data)
+    protected function fileSave(&$data)
     {
         try {
             $this->logger->info("File Save Service Start" . print_r($data, true));
@@ -213,8 +261,10 @@ class ServiceTaskService extends AbstractService
                 $this->logger->info("File Save ---- Workflow Instance Id Not Found");
                 throw new EntityNotFoundException("Workflow Instance Id Not Found");
             }
-            return $this->fileService->updateFile($data, $result[0]['uuid']);
+            $file = $this->fileService->updateFile($data, $result[0]['uuid']);
+            return $data;
         } catch (Exception $e) {
+
             $this->logger->info("File Save ---- Exception" . print_r($e->getMessage(), true));
             throw $e;
         }
@@ -244,7 +294,6 @@ class ServiceTaskService extends AbstractService
             $template = isset($params['template']) ? $params['template'] : 0;
             if ($template) {
                 $body = $this->templateService->getContent($template, $params);
-
             } else {
                 if (isset($params['body'])) {
                     $body = $params['body'];
@@ -334,10 +383,11 @@ class ServiceTaskService extends AbstractService
 
         $result = $this->fileService->getFile($fileId);
         $this->logger->info("EXTRACT FILE DATA result" . print_r($result, true));
-        if (count($result) == 0) {
+        if ($result == 0) {
             throw new EntityNotFoundException("File " . $fileId . " not found");
         }
-        return $result['data'];
+        $data['data'] = $result['data'];
+        return $data;
     }
 
     protected function getFileWithParams(&$data)
@@ -345,6 +395,19 @@ class ServiceTaskService extends AbstractService
         $params = array("app_id" => $data['app_id'], "workFlowId" => $data['workFlowId'], "userId" => $data['userId']);
         $filterParams['filter'] = $data['filter'];
         $fileList = $this->fileService->getFileList($data['app_id'], $params, $filterParams);
-        return $fileList['data'][0];
+        $data['data'] = $fileList['data'];
+        return $data;
+    }
+
+    protected function getStartForm(&$data)
+    {
+        if(isset($data['workflow_id']) && isset($data['appId'])){
+            $workFlowId = $data['workflow_id'];
+            $result = $this->workflowService->getStartForm($data['appId'], $workFlowId);
+            $data['data'] = $result;
+            return $data;
+        } else {
+            throw new ServiceException("App and Workflow not Found", "app.for.workflow.not.found");
+        }
     }
 }
