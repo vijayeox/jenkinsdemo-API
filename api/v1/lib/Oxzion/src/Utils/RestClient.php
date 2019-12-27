@@ -13,7 +13,7 @@ class RestClient
     {
         $this->client = new Client(array_merge(['base_uri' => $baseUrl,'timeout'  => 10.0], $params));
     }
-    public function get($url, $params=array(), $headers=null)
+    public function get($url, $params=array(), $headers=array())
     {
         $payload = array();
         if (isset($params) && !empty($params)) {
@@ -22,7 +22,11 @@ class RestClient
         if (isset($headers) && !empty($headers)) {
             $payload['headers'] = $headers;
         }
-        $response = $this->client->request('GET', $url, $payload);
+        try {
+            $response = $this->client->request('GET', $url, $payload);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     
         return $response->getBody()->getContents();
     }
