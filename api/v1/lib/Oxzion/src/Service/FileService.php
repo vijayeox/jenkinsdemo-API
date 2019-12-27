@@ -313,7 +313,8 @@ class FileService extends AbstractService
                     $result[0]['data'] = json_decode($result[0]['data'], true);
                     $this->getGroupDocuments($result[0]['data']);
                 }
-                 return $result[0];
+                $this->logger->info("FILE DATA SUCCESS ------" . json_encode($result));
+                return $result[0];
             }
             return 0;
         } catch (Exception $e) {
