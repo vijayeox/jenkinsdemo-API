@@ -314,12 +314,14 @@ ox_activity_instance_assignee:
     assignee: 1
 ox_wf_user_identifier:
   - id: 1
-    workflow_instance_id: 1
+    app_id: 99
+    org_id: 1
     user_id: 1
     identifier_name: "field1"
     identifier: "32552"
   - id: 2
-    workflow_instance_id: 2
+    app_id: 99
+    org_id: 1
     user_id: 1
     identifier_name: "expiry_data"
     identifier: "2019-01-01"
