@@ -10,6 +10,7 @@ class Home extends React.Component {
     this.core = this.props.args;
     this.helper = this.core.make("oxzion/restClient");
     this.params = this.props.params;
+    this.proc = this.props.proc;
     this.state = {
       cacheID: undefined,
       formContent: undefined,
@@ -123,6 +124,7 @@ class Home extends React.Component {
           <LeftMenuTemplate
             core={this.core}
             params={this.params}
+            proc={this.proc}
             appId={application_id}
           />
         ) : null}
