@@ -315,8 +315,8 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']['data']), 10);
         $this->assertEquals($content['data']['data'][5]['uuid'], '0e57b45f-5938-4e26-acd8-d65fb89e8503');
         $this->assertEquals($content['data']['data'][5]['name'], 'widget2');
-        $this->assertEquals($content['data']['data'][6]['name'], 'widget1');
-        $this->assertEquals($content['data']['data'][6]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
+        $this->assertEquals($content['data']['data'][8]['name'], 'widget1');
+        $this->assertEquals($content['data']['data'][8]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
         $this->assertEquals($content['data']['total'],10);
     }
 
@@ -329,9 +329,9 @@ class WidgetControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 9);
-        $this->assertEquals($content['data']['data'][5]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
-        $this->assertEquals($content['data']['data'][5]['name'], 'widget1');
-        $this->assertEquals($content['data']['data'][5]['is_owner'], true);
+        $this->assertEquals($content['data']['data'][7]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
+        $this->assertEquals($content['data']['data'][7]['name'], 'widget1');
+        $this->assertEquals($content['data']['data'][7]['is_owner'], true);
         $this->assertEquals($content['data']['total'],10);
     }
 
