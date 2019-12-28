@@ -211,11 +211,14 @@ class FileController extends AbstractApiController
             $result = $this->fileService->getFileList($appUuid,$params,$filterParams);
         } catch (ValidationException $e) {
             $response = ['errors' => $e->getErrors()];
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (AccessDeniedException $e) {
             $response = ['errors' => $e->getErrors()];
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 403, $response);
         } catch (ServiceException $e) {
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);

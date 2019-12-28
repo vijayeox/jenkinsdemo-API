@@ -509,9 +509,10 @@ class FileService extends AbstractService
         $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
         if (count($result) > 0) {
             $queryParams = array();
-            $appFilter = "h.app_id = :appId";
+            $appFilter = "f.id = :appId";
             $queryParams['appId'] = $appId;
             $fieldNameList = "";
+            $statusFilter = "";
             if (isset($params['workflowId'])) {
                 $workflowId = $this->getIdFromUuid('ox_workflow', $params['workflowId']);
                 if (!$workflowId) {
@@ -521,14 +522,13 @@ class FileService extends AbstractService
                     $queryParams['workflowId'] = $workflowId;
                 }
             }
-            if (isset($params['status'])) {
-                $statusFilter = " AND g.status = '" . $params['status'] . "'";
-            } else {
-                $statusFilter = "";
+            if (isset($params['workflowStatus'])) {
+                $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
             }
             $where = " $appFilter $statusFilter";
             $fromQuery = " from ox_file as a
-            inner join ox_form as b on (a.entity_id = b.entity_id)
+            inner join ox_app_entity en on en.id = a.entity_id
+            inner join ox_form as b on (en.id = b.entity_id)
             inner join ox_form_field as c on (c.form_id = b.id)
             inner join ox_field as d on (c.field_id = d.id)
             inner join ox_app as f on (f.id = b.app_id)";
@@ -541,15 +541,18 @@ class FileService extends AbstractService
                         throw new ServiceException("User Does not Exist", "app.forusernot.found");
                     }
                 }
-                $fromQuery .= "left join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.workflow_instance_id=a.workflow_instance_id";
-                $userWhere = " and owufi.user_id = :userId";
+                $fromQuery .= " left join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=f.id
+                    INNER JOIN ox_file_attribute ofa on ofa.file_id = a.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
+                $userWhere = " and owufi.user_id = :userId and owufi.org_id = :orgId";
                 $queryParams['userId'] = $userId;
+                $queryParams['orgId'] = $orgId;
             } else {
                 $userWhere = "";
             }
-            $fromQuery .= " inner join ox_workflow_instance as g on a.workflow_instance_id = g.id
-            inner join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
-            inner join ox_workflow as h on h.id = wd.workflow_id
+            
+            $fromQuery .= " left join ox_workflow_instance as g on a.workflow_instance_id = g.id
+            left join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
+            left join ox_workflow as h on h.id = wd.workflow_id
             left join (SELECT workflow_instance_id, max(latest) as latest from ox_file
             group by workflow_instance_id) as f2 on a.workflow_instance_id = f2.workflow_instance_id
             and a.latest = f2.latest";
@@ -604,7 +607,7 @@ class FileService extends AbstractService
             try {
                 $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
-                $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, h.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
+                $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 if ($resultSet) {

@@ -467,7 +467,7 @@ return [
             'filelistingstatus' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/status/:status',
+                    'route' => '/app/:appId/file/status/:workflowStatus',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                     ],
@@ -501,7 +501,7 @@ return [
             'filelistinguser' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/user/:userId[/status/:status]',
+                    'route' => '/app/:appId/file/user/:userId[/status/:workflowStatus]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN
                     ],

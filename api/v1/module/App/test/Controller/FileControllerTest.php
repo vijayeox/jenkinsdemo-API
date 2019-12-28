@@ -314,7 +314,7 @@ class FileControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}, {"field":"field1","operator":"eq","value":1}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/workflow/1141cd2e-cb14-11e9-a32f-2a2ae2dbcce4/4fd99e8e-758f-11e9-b2d5-68ecc57cde45/file?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"gt","value":"' . $currentDate . '"}, {"field":"field2","operator":"eq","value":8}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(FileController::class);
@@ -323,7 +323,7 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['data'][0]['status'], 'In Progress');
         $this->assertEquals($content['total'], 1);
     }
     public function testGetListOfFilesWithStatus()
@@ -370,7 +370,7 @@ class FileControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['status'], 'Completed');
         $this->assertEquals($content['data'][0]['uuid'],'d13d0c68-98c9-11e9-adc5-308d99c9145b');
-        $this->assertEquals($content['total'], 1);
+        $this->assertEquals($content['total'], 4);
     }
     public function testGetListOfFilesWithUser2()
     {
@@ -403,7 +403,8 @@ class FileControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['status'], 'Completed');
         $this->assertEquals($content['data'][0]['uuid'],'d13d0c68-98c9-11e9-adc5-308d99c9145b');
-        $this->assertEquals($content['total'], 1);
+        $this->assertEquals($content['data'][1]['uuid'],'d13d0c68-98c9-11e9-adc5-308d99c9145c');
+        $this->assertEquals($content['total'], 2);
     }
     public function testGetListOfFilesWithUserAndStatus2()
     {
@@ -428,7 +429,7 @@ class FileControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/status/Completed?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}, {"field":"field1","operator":"eq","value":1}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/status/Completed?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"gt","value":"' . $currentDate . '"}, {"field":"field2","operator":"eq","value":8}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
@@ -438,6 +439,7 @@ class FileControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['status'], 'Completed');
+        $this->assertEquals($content['data'][0]['uuid'],'d13d0c68-98c9-11e9-adc5-308d99c91478');
         $this->assertEquals($content['total'], 1);
     }
 
@@ -462,7 +464,7 @@ class FileControllerTest extends ControllerTest
         $this->initAuthToken($this->adminUser);
         $date = date('Y-m-d');
         $currentDate = date('Y-m-d', strtotime($date . ' + 1 days'));
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/search?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}, {"field":"field1","operator":"eq","value":1}, {"field":"user_id","operator":"eq","value":1}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/file/search?filter=[{"filter":{"filters":[{"field":"expiry_date","operator":"lt","value":"' . $currentDate . '"}, {"field":"field2","operator":"eq","value":1}]},"sort":[{"field":"expiry_date","dir":"asc"}],"skip":0,"take":1}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->assertModuleName('App');
         $this->assertControllerName(FileController::class);
