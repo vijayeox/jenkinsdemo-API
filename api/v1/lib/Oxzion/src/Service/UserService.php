@@ -1199,23 +1199,76 @@ class UserService extends AbstractService
         if(!isset($data['username'])){
             $data['username'] = $data['email'];
         }
-
+        if ($org = $this->getIdFromUuid('ox_organization', $data['orgId'])) {
+            $orgId = $org;
+        } else {
+            $orgId = $data['orgId'];
+        }
         if(!isset($data['role'])){
-            $query = "SELECT ox_role.uuid from ox_role left join ox_organization on ox_organization.id = ox_role.org_id where ox_role.default_role=:defaultRole and ox_organization.uuid=:orgId";
-            $params = array("defaultRole" => 1, "orgId" => $data['orgId']);
+            $query = "SELECT ox_role.uuid from ox_role 
+                        where ox_role.default_role=:defaultRole 
+                        and ox_role.org_id=:orgId";
+            $params = array("defaultRole" => 1, "orgId" => $orgId);
             $resultSet = $this->executeQueryWithBindParameters($query,$params)->toArray();
             if(isset($resultSet[0]))
                 $data['role'] = array(['id' => $resultSet[0]['uuid']]);
         }
-        $query = "SELECT id,uuid,username,email FROM ox_user WHERE username=:username OR email=:email";
+        $from = "FROM ox_user as u";
+        $where = "WHERE (username=:username OR email=:email)";
         $queryParams = array("username" => $data['username'],
                              "email" => $data['email']);
+        $handleUserIdentifier = false;
+        if(isset($data['app_id']) && isset($data['identifier_field'])){
+            if ($app = $this->getIdFromUuid('ox_app', $data['app_id'])) {
+                $appId = $app;
+            } else {
+                $appId = $data['app_id'];
+            }
+            
+            $from .= " INNER JOIN ox_wf_user_identifier ui ON ui.user_id = u.id";
+            $where .= " AND ui.app_id = :appId AND ui.org_id = :orgId 
+                        AND ui.identifier = :identifier AND ui.identifier_name = :identifierName";
+            $queryParams = array_merge($queryParams, array("appId" => $appId, 
+                                 "orgId" => $orgId,
+                                 "identifier" => $data[$data['identifier_field']],
+                                 "identifierName" => $data['identifier_field']));
+            $handleUserIdentifier = true;
+        }
+        $query = "SELECT u.id,u.uuid,u.username,u.email $from $where";
         $this->logger->info("Check user query $query with Params".json_encode($queryParams));
         $result = $this->executeQuerywithBindParameters($query,$queryParams)->toArray();
         if(count($result) == 0){
-           return $this->createUser($params,$data,$register);
+            try {
+                $this->beginTransaction();
+                $result = $this->createUser($params,$data,$register);
+                if($handleUserIdentifier){
+                    $query = "select count(id) as count from ox_wf_user_identifier 
+                                where app_id = :appId AND org_id = :orgId AND user_id = :userId";
+                    $queryParams = array("appId" => $appId,
+                            "orgId" => $orgId,
+                            "userId" => $data['id']);
+                    $this->logger->info("Executing Query - $query with Parametrs - " . print_r($queryParams, true));
+                    $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+                    if($resultSet[0]['count'] == 0){
+                        $query = "INSERT INTO ox_wf_user_identifier(`app_id`,`org_id`,`user_id`,`identifier_name`,`identifier`) VALUES (:appId, :orgId, :userId, :identifierName, :identifier)";
+                        $queryParams = array_merge($queryParams, 
+                            array("identifierName" => $data['identifier_field'],
+                            "identifier" => $data[$data['identifier_field']]));
+                        $this->logger->info("Executing Query - $query with Parametrs - " . print_r($queryParams, true));
+                        $resultSet = $this->executeQueryWithBindParameters($query, $queryParams);
+                    }
+                }
+                $this->commit();
+                return $result;
+            } catch (Exception $e) {
+                $this->logger->error($e->getMessage(), $e);
+                $this->rollback();
+                throw $e;
+            }
+            
         }
-        if(($data['email'] == $result[0]['email'] && AuthContext::get(AuthConstants::USER_ID)) || $data['username'] == $result[0]['username'] ){
+        
+        if(($data['email'] == $result[0]['email']) && $data['username'] == $result[0]['username'] ){
             $data['username'] = $result[0]['username'];
             $data['id'] = $result[0]['id'];
             $data['uuid'] = $result[0]['uuid'];
