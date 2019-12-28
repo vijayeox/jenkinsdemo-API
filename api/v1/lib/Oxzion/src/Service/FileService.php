@@ -561,6 +561,8 @@ class FileService extends AbstractService
             $joinQuery = "";
             $sort = "";
             $field = "";
+            $pageSize = " LIMIT 10";
+            $offset =  " OFFSET 0";
             if (!empty($filterParams)) {
                 if (!is_array($filterParams['filter'])) {
                     $filterParamsArray = json_decode($filterParams['filter'], true);
