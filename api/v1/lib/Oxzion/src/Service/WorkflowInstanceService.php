@@ -247,21 +247,6 @@ class WorkflowInstanceService extends AbstractService
         if (isset($params['identity_field'])) {
             $data = $params;
             $test = $this->userService->checkAndCreateUser(array(), $data, true);
-            try {
-                $this->beginTransaction();
-                $query = "INSERT INTO ox_wf_user_identifier(`workflow_instance_id`,`user_id`,`identifier_name`,`identifier`) VALUES (:workflowInstanceId,:userId,:identifierName,:identifier)";
-                $queryParams = array("workflowInstanceId" => $params['workflow_instance_id'],
-                    "userId" => $data['id'],
-                    "identifierName" => $params['identity_field'],
-                    "identifier" => $params[$params['identity_field']]);
-                $this->logger->info("Query2 - $query with Parametrs - " . print_r($queryParams, true));
-                $resultSet = $this->executeQueryWithBindParameters($query, $queryParams);
-                $this->commit();
-            } catch (Exception $e) {
-                $this->logger->error($e->getMessage(), $e);
-                $this->rollback();
-                throw $e;
-            }
         }
     }
 
