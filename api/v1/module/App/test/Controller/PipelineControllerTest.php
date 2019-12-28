@@ -231,7 +231,7 @@ class PipelineControllerTest extends ControllerTest
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/pipeline', 'POST', $params);
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['app_id'], "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4");
+        $this->assertEquals($content['data']['appId'], "1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4");
     }
     public function testGetStartFormCommands()
     {

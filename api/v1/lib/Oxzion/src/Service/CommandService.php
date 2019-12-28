@@ -22,7 +22,7 @@ use Oxzion\Auth\AuthConstants;
 class CommandService extends AbstractService
 {
     /**
-     * @var ServiceTaskService Instance of Task Service
+     * @var CommandService Instance of Task Service
      */
     private $templateService;
     protected $fileService;
@@ -68,6 +68,7 @@ class CommandService extends AbstractService
             if (count($result) == 0) {
                 throw new ServiceException("App Does not belong to the org", "app.fororgnot.found");
             }
+            $data['app_id'] = $appId;
         }
         if (isset($data['command'])) {
             $this->logger->info("COMMAND  ------" . print_r($data['command'], true));
@@ -91,7 +92,7 @@ class CommandService extends AbstractService
                     $command = $commandJson['command'];
                     unset($commandJson['command']);
                     $outputData = array_merge($inputData, $commandJson);
-                    $this->logger->info(ServiceTaskService::class . print_r($outputData, true));
+                    $this->logger->info(CommandService::class . print_r($outputData, true));
                     $this->logger->info("COMMAND LIST ------" . $command);
                     $result = $this->processCommand($outputData, $command, $request);
                     if (is_array($result)) {
@@ -99,9 +100,10 @@ class CommandService extends AbstractService
                         $inputData['app_id'] = isset($data['app_id'])?$data['app_id']:null;
                         $inputData['orgId'] = isset($data['orgId'])?$data['orgId']:null;
                         $inputData['workFlowId'] = isset($data['workFlowId'])?$data['workFlowId']:null;
+                        $outputData = array_merge($outputData,$result);
                     }
                 }
-                $this->logger->info(ServiceTaskService::class . print_r($inputData, true));
+                $this->logger->info(CommandService::class . print_r($inputData, true));
             }
             return $outputData;
         }
@@ -270,11 +272,14 @@ class CommandService extends AbstractService
         }
     }
 
-    protected function executeDelegate($data)
+    protected function executeDelegate(&$data)
     {
         $this->logger->info("EXECUTE DELEGATE ---- " . print_r($data, true));
         if (isset($data['app_id']) && isset($data['delegate'])) {
             $app_id = $data['app_id'];
+            if(isset($data['appId'])){
+                $app_id = $data['appId'];
+            }
             $delegate = $data['delegate'];
             unset($data['delegate']);
         } else {
@@ -392,9 +397,25 @@ class CommandService extends AbstractService
 
     protected function getFileWithParams(&$data)
     {
-        $params = array("app_id" => $data['app_id'], "workFlowId" => $data['workFlowId'], "userId" => $data['userId']);
-        $filterParams['filter'] = $data['filter'];
-        $fileList = $this->fileService->getFileList($data['app_id'], $params, $filterParams);
+        $params = array();
+        $filterParams = array();
+        if(isset($data['workFlowId'])){
+            $params['workFlowId'] = $data['workFlowId'];
+        }
+        if(isset($data['userId'])){
+            $params['userId'] = $data['userId'];
+        }
+        if(isset($data['appId'])){
+            $params['app_id'] = $data['appId'];
+        } else {
+            if(isset($data['app_id'])){
+                $params['app_id'] = $data['app_id'];
+            }
+        }
+        if(isset($data['filter'])){
+            $filterParams['filter'] = $data['filter'];
+        }
+        $fileList = $this->fileService->getFileList($params['app_id'], $params, $filterParams);
         $data['data'] = $fileList['data'];
         return $data;
     }

@@ -25,6 +25,7 @@ class PipelineController extends AbstractApiController
     }
     public function executePipelineAction(){
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $params = array_merge($params,$this->params()->fromQuery());
         $appUuid = $this->params()->fromRoute()['appId'];
         unset($params['method']);
         unset($params['controller']);
