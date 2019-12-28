@@ -355,8 +355,6 @@ class GroupService extends AbstractService
                 throw new ServiceException("Failed to Update","failed.update.group");
             }
         } catch (Exception $e) {
-            print("Exception");
-            print_r($e->getMessage());exit;
             $this->rollback();
             throw $e;
         }
