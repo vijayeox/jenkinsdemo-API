@@ -526,8 +526,6 @@ class FileService extends AbstractService
             } else {
                 $statusFilter = "";
             }
-            $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
-            $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
             $where = " $appFilter $statusFilter";
             $fromQuery = " from ox_file as a
             inner join ox_form as b on (a.entity_id = b.entity_id)
@@ -598,6 +596,8 @@ class FileService extends AbstractService
                         $prefix += 1;
                     }
                 }
+                $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
+                $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
             }
             $where .= " " . $whereQuery . "";
             $fromQuery .= " " . $joinQuery . "";
