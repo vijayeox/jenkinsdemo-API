@@ -596,7 +596,7 @@ class FileService extends AbstractService
                         $prefix += 1;
                     }
                 }
-                $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 20);
+                $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
             }
             $where .= " " . $whereQuery . "";
