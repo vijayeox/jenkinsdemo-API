@@ -278,14 +278,14 @@ ox_form_field:
     field_id: 2
 ox_file:
 -
-    id: 1
+    id: 101
     workflow_instance_id: 1
     org_id: 1
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     form_id: 1
 -
-    id: 2
+    id: 102
     workflow_instance_id: 1
     activity_id: 1
     org_id: 1
@@ -293,7 +293,7 @@ ox_file:
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
     form_id: 2
 -
-    id: 3
+    id: 103
     org_id: 1
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
@@ -301,37 +301,37 @@ ox_file:
 ox_file_attribute:
 -
     id: 1
-    file_id: 1
+    file_id: 101
     org_id: 1
     field_value: 1
     field_id: 1
 -
     id: 2
-    file_id: 1
+    file_id: 101
     org_id: 1
     field_value: 1
     field_id: 2
 -
     id: 3
-    file_id: 2
+    file_id: 102
     org_id: 1
     field_value: 2
     field_id: 3
 -
     id: 4
-    file_id: 2
+    file_id: 102
     org_id: 1
     field_value: 2
     field_id: 4
 -
     id: 5
-    file_id: 3
+    file_id: 103
     org_id: 1
     field_value: 1
     field_id: 2
 -
     id: 6
-    file_id: 3
+    file_id: 103
     org_id: 1
     field_value: 1
     field_id: 4

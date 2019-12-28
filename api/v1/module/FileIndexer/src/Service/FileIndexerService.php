@@ -54,13 +54,15 @@ class FileIndexerService extends AbstractService
             INNER JOIN ox_workflow as wf on wd.workflow_id = wf.id
             LEFT JOIN ox_activity_instance as act_inst on wf_inst.id = act_inst.workflow_instance_id
             LEFT JOIN ox_activity as activity on wd.id = activity.workflow_deployment_id
-            LEFT JOIN ox_wf_user_identifier as wf_user on wf_user.workflow_instance_id = wf_inst.id
+            LEFT JOIN ox_wf_user_identifier as wf_user on wf_user.app_id = wf_inst.app_id and wf_user.org_id = wf_inst.org_id
             GROUP BY wf_user.user_id, wf_inst.id, wf_inst.status, act_inst.activity_instance_id, wf.name) w
             ON w.id = file.workflow_instance_id
-            where file.id = ".$fileId."
+            where file.id = ".$fileId." 
             GROUP BY app_name,entity.id, entity.name,file_data,file_uuid,file.is_active, file.parent_id, file.org_id,w.user_id,w.id, w.status,w.activity_instance_id,w.name, w.activities";
+            
             $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
             $body=$this->executeQuerywithParams($select)->toArray();
+            $databody = array();
             if(!empty($body)){
                 if(isset($body[0]['file_data'])){
                     $file_data = json_decode((array_column($body, 'file_data')[0]),true);
@@ -81,7 +83,7 @@ class FileIndexerService extends AbstractService
                     }
                 }
             }
-            if (isset($app_name)&&isset($databody)) {
+            if (isset($app_name)&&isset($databody) && count($databody) > 0) {
                 $this->messageProducer->sendTopic(json_encode(array('index'=>  $app_name.'_index','body' => $databody,'id' => $fileId, 'operation' => 'Index', 'type' => '_doc')), 'elastic');
                 return $databody;
             }
