@@ -139,12 +139,13 @@ class GroupService extends AbstractService
             $data['uuid'] = UuidUtil::uuid();
             $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
-            $user_manager_uuid = $data['manager_id'];
             $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
+            $user_manager_uuid = $data['manager_id'];
             $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
             $result = $this->executeQueryWithParams($select)->toArray();
-            if ($result)
+            if ($result){
                 $data['manager_id']=$result[0]["id"];
+            }
             if(isset($data['parent_id'])){
                 $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
             }
@@ -346,6 +347,7 @@ class GroupService extends AbstractService
             if(isset($files)){
                 $this->uploadGroupLogo($org['uuid'],$id,$files);
             }
+            $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])), 'GROUP_UPDATED');
             if($count === 1) {
                 $select = "SELECT count(id) as users from ox_user_group where avatar_id =".$data['manager_id']." AND group_id = (SELECT id from ox_group where uuid = '".$id."')";
                 $query=$this->executeQuerywithParams($select)->toArray();
@@ -358,7 +360,6 @@ class GroupService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])), 'GROUP_UPDATED');
         return $count;
     }
 
@@ -492,8 +493,10 @@ class GroupService extends AbstractService
             "inner join ox_user on ox_user.id = ox_user_group.avatar_id ".
             "where ox_user_group.id = ".$obj->id;
             $groupUsers = $this->executeQuerywithParams($query)->toArray();
-            foreach (array_diff(array_column($data['userid'], 'uuid'), array_column($groupUsers, 'uuid')) as $userUuid)
+            foreach (array_diff(array_column($data['userid'], 'uuid'), array_column($groupUsers, 'uuid')) as $userUuid){
                 $groupUsers[] = array('uuid' => $userUuid);
+            }
+            
             $data['userid'] = $groupUsers;
         }
 
@@ -535,7 +538,6 @@ class GroupService extends AbstractService
             "inner join ox_user on ox_user.id = ox_user_group.avatar_id ".
             "where ox_user_group.group_id = ".$group_id;
             $groupUsers = $this->executeQuerywithParams($queryString)->toArray();
-            // echo "<pre>";print_r($groupUsers);exit();
             if(count($groupUsers) > 0){
                 $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name, 'usernames' => array_column($groupUsers, 'username'))), 'USERTOGROUP_UPDATED');
             }

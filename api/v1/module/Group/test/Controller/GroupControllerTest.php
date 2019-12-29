@@ -207,6 +207,9 @@ class GroupControllerTest extends ControllerTest {
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('old_groupname' => 'Test Group 4', 'orgname'=>'Cleveland Black', "new_groupname" => "Test Group 4")),'GROUP_UPDATED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group 4', 'orgname'=>'Cleveland Black', "username" => "bharatgtest")),'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group 4', "usernames" => array("bharatgtest"))),'USERTOGROUP_UPDATED')->once()->andReturn();
+            
         }
         $this->dispatch('/group', 'POST', $data);
         $this->assertResponseStatusCode(201);
@@ -517,6 +520,7 @@ class GroupControllerTest extends ControllerTest {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->adminUser)),'USERTOGROUP_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->employeeUser)),'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'usernames' => array($this->managerUser, $this->employeeUser))),'USERTOGROUP_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST', $data); 
         $this->assertResponseStatusCode(200);
@@ -532,6 +536,7 @@ class GroupControllerTest extends ControllerTest {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->adminUser)),'USERTOGROUP_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->employeeUser)),'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'usernames' => array($this->managerUser, $this->employeeUser))),'USERTOGROUP_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST', $data); 
         $this->assertResponseStatusCode(200);
@@ -591,6 +596,7 @@ class GroupControllerTest extends ControllerTest {
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => 'bharatgtest')),'USERTOGROUP_DELETED')->once()->andReturn();
             $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'orgname'=>'Cleveland Black','username' => $this->employeeUser)),'USERTOGROUP_ADDED')->once()->andReturn();
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('groupname' => 'Test Group', 'usernames' => array($this->managerUser, $this->employeeUser))),'USERTOGROUP_UPDATED')->once()->andReturn();
         }
         $this->dispatch('/group/2db1c5a3-8a82-4d5b-b60a-c648cf1e27de/save','POST',$data);
         $this->setDefaultAsserts();
