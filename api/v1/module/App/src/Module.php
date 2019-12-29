@@ -241,6 +241,11 @@ class Module implements ConfigProviderInterface
                         $container->get(CommandService::class)
                     );
                 },
+                Controller\CommandController::class => function ($container) {
+                    return new Controller\CommandController(
+                        $container->get(CommandService::class)
+                    );
+                },
             ],
         ];
     }

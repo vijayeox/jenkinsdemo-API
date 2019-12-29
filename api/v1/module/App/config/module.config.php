@@ -640,6 +640,23 @@ return [
                     ],
                 ],
             ],
+            'commands_execute' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/commands',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\CommandController::class,
+                        'method' => 'POST',
+                        'action' => 'executeCommands',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'view_manager' => [
