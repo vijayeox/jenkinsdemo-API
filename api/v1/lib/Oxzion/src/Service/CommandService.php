@@ -154,6 +154,10 @@ class CommandService extends AbstractService
                 $this->logger->info("START FORM");
                 return $this->getStartForm($data);
                 break;
+            case 'verify_user':
+                $this->logger->info("Verify User");
+                return $this->verifyUser($data);
+                break;
             default:
                 break;
         };
@@ -429,6 +433,20 @@ class CommandService extends AbstractService
             return $data;
         } else {
             throw new ServiceException("App and Workflow not Found", "app.for.workflow.not.found");
+        }
+    }
+    protected function verifyUser(&$data){
+        if(isset($data['identity_field']) && isset($data['appId']) && isset($data[$data['identity_field']])){
+            $select = "SELECT * from ox_wf_user_identifier where identifier_name = :identityField AND app_id = :appId AND identifier = :identifier";
+            $selectQuery = array("identityField" => $data['identity_field'], "appId" => $data['app_id'],"identifier"=>$data[$data['identity_field']]);
+            $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+            if(count($result) > 0){
+                $data['user_exists'] = '1';
+                return $data;
+            } else {
+                $data['user_exists'] = '0';
+                return $data;
+            }
         }
     }
 }
