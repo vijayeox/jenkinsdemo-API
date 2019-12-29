@@ -134,13 +134,15 @@ class FileService extends AbstractService
         }
         chmod($filepath, 0777);
         for($j = 0;$j < sizeof($data['groupPL']);$j++){
-        $group = $data['groupPL'][$j]['document'];
-            for($i = 0 ;$i < sizeof($group);$i++){
-                $docFile = fopen($filepath.$group[$i]['originalName'].'.txt','wb');
-                fwrite($docFile,$group[$i]['url']);
-                fclose($docFile);
-                unset($data['groupPL'][$j]['document'][$i]['url']);
-                $data['groupPL'][$j]['document'][$i]['file'] = $filepath.$group[$i]['originalName'].'.txt';
+            if(isset($data['groupPL'][$j]['document'])){
+                $group = $data['groupPL'][$j]['document'];
+                for($i = 0 ;$i < sizeof($group);$i++){
+                    $docFile = fopen($filepath.$group[$i]['originalName'].'.txt','wb');
+                    fwrite($docFile,$group[$i]['url']);
+                    fclose($docFile);
+                    unset($data['groupPL'][$j]['document'][$i]['url']);
+                    $data['groupPL'][$j]['document'][$i]['file'] = $filepath.$group[$i]['originalName'].'.txt';
+                }
             }
         }
     }
