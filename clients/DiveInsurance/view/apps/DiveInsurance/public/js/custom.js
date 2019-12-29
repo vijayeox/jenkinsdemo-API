@@ -137,6 +137,34 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       }
     });
+    form.on("callCommands", changed => {
+      var component = form.getComponent(event.target.id);
+      if (component) {
+
+        var properties = component.component.properties;
+        if (properties) {
+          if (properties["commands"]) {
+            $.ajax({
+              type: "POST",
+              async: false,
+              url:
+                baseUrl +
+                "app/" +
+                appId +
+                "/commands?" +
+                $.param(JSON.parse(properties['commands'])),
+              data: changed,
+              success: function (response) {
+                if (response.data) {
+                  form.submission = { data: response.data };
+                  form.triggerChange();
+                }
+              }
+            });
+          }
+        }
+      }
+    });
     form.on("change", changed => {
       if (changed && changed.changed) {
         var component = changed.changed.component;

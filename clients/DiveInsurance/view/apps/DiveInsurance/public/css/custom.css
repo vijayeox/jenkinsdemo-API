@@ -15,11 +15,11 @@ body {
 
 a {
   text-decoration: none;
-  color: #053b6d;
+  color: #275362;
   transition: 0.5s ease;
 }
 a:hover {
-  color: #053b6d;
+  color: #275362;
 }
 
 .form {
@@ -53,11 +53,11 @@ a:hover {
   transition: 0.5s ease;
 }
 .tab-group li a:hover {
-  background: #053b6d;
+  background: #275362;
   color: #ffffff;
 }
 .tab-group .active a {
-  background: #053b6d;
+  background: #275362;
   color: #ffffff;
 }
 
@@ -87,7 +87,7 @@ h1 {
 
 label .req {
   margin: 2px;
-  color: #053b6d;
+  color: #275362;
 }
 
 label.active {
@@ -126,7 +126,7 @@ label.highlight {
 input:focus,
 textarea:focus {
   outline: 0;
-  border-color: #053b6d;
+  border-color: #275362;
 }
 
 textarea {
@@ -162,14 +162,14 @@ textarea {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  background: #053b6d;
+  background: #275362;
   color: #ffffff;
   transition: all 0.5s ease;
   -webkit-appearance: none;
 }
 .button:hover,
 .button:focus {
-  background: #053b6d;
+  background: #275362;
 }
 
 .hideBorders > td {
@@ -189,4 +189,22 @@ textarea {
 .inputDiv {
   text-align: -webkit-center;
   text-align: -moz-center;
+}
+
+.btn-success:hover {
+    color: #fff;
+    background-color: #275362 !important;
+    border-color: #275362 !important;
+}
+.panel-primary>.panel-heading {
+    color: #fff;
+    background-color: #275362 !important;
+    border-color: #275362 !important;
+}
+.panel-primary {
+    border-color: #275262 !important;
+}
+.btn-primary{
+    background-color: #275362 !important;
+    border-color: #275362 !important;
 }
