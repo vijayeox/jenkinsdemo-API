@@ -125,7 +125,7 @@ class AppService extends AbstractService
 
     private function updateyml($yamldata, $path){
         $filename = "application.yml";
-        $new_yaml = Yaml::dump($yamldata, 10);
+        $new_yaml = Yaml::dump($yamldata, 20);
         file_put_contents($path.$filename, $new_yaml);
     }
 
@@ -137,7 +137,7 @@ class AppService extends AbstractService
         if(!(array_key_exists('category',$yamldata['app'][0]))){
             $yamldata['app'][0]['category'] = $modifieddata['category'];
         }
-        $new_yaml = Yaml::dump($yamldata, 10);
+        $new_yaml = Yaml::dump($yamldata, 20);
         file_put_contents($path.$filename, $new_yaml);
     }
 
@@ -211,7 +211,7 @@ class AppService extends AbstractService
             $this->updateyml($ymlData, $path);
             //Move the app folder from given path to clients folder
             $appData['status'] = App::PUBLISHED;
-            $this->updateApp($appData['uuid'], $appData);        
+            $this->updateApp($appData['uuid'], $appData);
         }catch(Exception $e){
             throw $e;
         }
@@ -278,13 +278,11 @@ class AppService extends AbstractService
                     $result = $this->entityService->saveEntity($appUuid, $entity);
                 }
                 $data['entity_id'] = $entity['id'];
-                if(isset($data['template']) && is_string($data['template'])){
-                    $data['template'] = file_get_contents($path.'content/forms/'.$data['template']);
-                }
                 $count = $this->formService->updateForm($appUuid, $data['uuid'], $data);
                 if ($count == 0) {
                     $this->formService->createForm($appUuid, $data);
                 }
+                $form['uuid'] = isset($form['uuid']) ? $form['uuid'] : $data['uuid'];
             }
         }
     }
@@ -310,7 +308,14 @@ class AppService extends AbstractService
         if(isset($yamlData['app'][0]['description'])){
             $jsonData['description']['en_EN'] = $yamlData['app'][0]['description'];
         }
+        if(isset($yamlData['app'][0]['autostart'])){
+            $jsonData['autostart'] = $yamlData['app'][0]['autostart'];
+        }
         file_put_contents($appName.'/metadata.json', json_encode($jsonData));
+        $packagePath = $appName.'/package.json';
+        $jsonData = json_decode(file_get_contents($packagePath), true);
+        $jsonData['name'] = $yamlData['app'][0]['name'];
+        file_put_contents($appName.'/package.json', json_encode($jsonData));
     }
 
     private function processWorkflow(&$yamlData, $path,  $orgUuid = NULL){
