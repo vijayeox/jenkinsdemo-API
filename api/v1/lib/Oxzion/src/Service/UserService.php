@@ -658,7 +658,7 @@ class UserService extends AbstractService
             $resultSet = $this->executeQuerywithParams($cntQuery.$where);
             $count=$resultSet->toArray()[0]['org_count'];
             $query =$select." ".$from." ".$where." ".$sort." ".$limit;
-          
+            $this->logger->info("Executing Query - $query");
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
             for($x=0;$x<sizeof($result);$x++) {
@@ -1298,6 +1298,7 @@ class UserService extends AbstractService
             $sort = " ORDER BY ".$sort;
             $limit = " LIMIT ".$pageSize." offset ".$offset;
             $query =$select." ".$from." ".$where." ".$sort." ".$limit;
+            $this->logger->info("Executing Query - $query");
             $resultSet = $this->executeQuerywithParams($query);
             $result = $resultSet->toArray();
             for($x=0;$x<sizeof($result);$x++) {
