@@ -136,8 +136,8 @@
                 {
                     "input":true,
                     "tableView":true,
-                    "key":"identity_field",
-                    "label":"identity_field",
+                    "key":"identifier_field",
+                    "label":"identifier_field",
                     "protected":false,
                     "unique":false,
                     "persistent":true,
@@ -150,7 +150,8 @@
                     "properties": {}
                     ,
                     "lockKey":true,
-                    "defaultValue":"padi"
+                    "defaultValue":"padi",
+                    "isNew":false
                 }
                 ,
                 {
@@ -2888,7 +2889,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":94,
+    "_vid":96,
     "title":"Padi Verification Form - IPL",
     "display":"form",
     "access":[ {
@@ -2904,6 +2905,6 @@
     "path":"padiverificationformipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-10T15:46:39.851Z",
-    "modified":"2019-12-29T11:47:36.892Z",
+    "modified":"2019-12-30T08:11:00.455Z",
     "machineName":"testdivehub:padiVerificationForm"
 }

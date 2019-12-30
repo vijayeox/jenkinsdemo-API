@@ -158,6 +158,10 @@ class CommandService extends AbstractService
                 $this->logger->info("Verify User");
                 return $this->verifyUser($data);
                 break;
+            case 'getuserlist':
+                $this->logger->info("GET User LIST");
+                return $this->getUserList($data);
+                break;
             default:
                 break;
         };
@@ -436,9 +440,9 @@ class CommandService extends AbstractService
         }
     }
     protected function verifyUser(&$data){
-        if(isset($data['identity_field']) && isset($data['appId']) && isset($data[$data['identity_field']])){
+        if(isset($data['identifier_field']) && isset($data['appId']) && isset($data[$data['identifier_field']])){
             $select = "SELECT * from ox_wf_user_identifier where identifier_name = :identityField AND app_id = :appId AND identifier = :identifier";
-            $selectQuery = array("identityField" => $data['identity_field'], "appId" => $data['app_id'],"identifier"=>$data[$data['identity_field']]);
+            $selectQuery = array("identityField" => $data['identifier_field'], "appId" => $data['app_id'],"identifier"=>$data[$data['identifier_field']]);
             $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
             if(count($result) > 0){
                 $data['user_exists'] = '1';
@@ -448,5 +452,8 @@ class CommandService extends AbstractService
                 return $data;
             }
         }
+    }
+    protected function getUserList(&$data){
+        
     }
 }

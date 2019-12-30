@@ -42,29 +42,30 @@ export default class Register extends React.Component {
                   <div id="formio"></div>
                 </div>
                 <div id="login">
+                <div className="loginBlock">
+                <div className="LoginDiv">
                   <h1>Welcome Back!</h1>
-                  {/* <form> */}
-                  <div className="field-wrap inputDiv">
-                    <label className="labelField">
-                      Username<span className="req">*</span>
-                    </label>
+                  <div className="floating-label">
                     <input
-                      className="inputField userNameField"
                       required
+                      id="username"
+                      name="username"
                       autoComplete="off"
+                      placeholder="Username"
                     />
-                  </div>
-                  <div className="field-wrap inputDiv">
-                    <label className="labelField">
-                      Password<span className="req">*</span>
-                    </label>
+                      <label htmlFor="username">Username:</label>
+                     </div>
+                  <div className="floating-label">
                     <input
-                      className="inputField passwordField"
                       type="password"
+                      id="password"
+                      name="password"
+                      placeholder="Password"
                       required
                       autoComplete="off"
-                    />
-                  </div>
+                      />
+                      <label htmlFor="password">Password:</label>
+                      </div>
                   <div id="wrongPassword" style={{paddingBottom:"30px", display:"none"}}>
                     <span>
                       The username and/or password is incorrect! Please try
@@ -77,8 +78,9 @@ export default class Register extends React.Component {
                   <button className="button button-block loginButton">
                     Log In
                   </button>
-                  {/* </form> */}
+                  </div>
                 </div>
+              </div>
               </div>
             </div>
           </section>
