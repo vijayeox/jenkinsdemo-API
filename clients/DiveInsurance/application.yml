@@ -76,6 +76,12 @@ menu:
                                 details:
                                     - { type: View, params: { uuid: '{{uuid}}', page_id: b9714cfd-2ae5-4f13-83eb-7d925c3b660c } }
                                 icon: 'fa fa-envelope-open'
+                            -
+                                name: Endorsement
+                                rule: 'true'
+                                details:
+                                    - { type: Form, url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform, workflowInstanceId: '{{workflowInstanceId}}' }
+                                icon: 'fa fa-pencil'
                         operations:
                             title: 'Get Policy'
                             actions:
@@ -363,6 +369,11 @@ workflow:
         name: 'Individual Liability'
         uuid: f0efea9e-7863-4368-a9b2-baa1a1603067
         bpmn_file: 'Individual Professional Liability/NewUserApplicationSubmission.bpmn'
+        entity: 'Individual Professional Liability'
+    -
+        name: 'Individual Liability Endorsement'
+        uuid: 7d302209-667d-46e4-80f0-3dd1a4079509
+        bpmn_file: 'Individual Professional Liability/IPLEndorsement.bpmn'
         entity: 'Individual Professional Liability'
     -
         name: 'Dive Store'

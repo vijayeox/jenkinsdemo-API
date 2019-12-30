@@ -34,6 +34,9 @@ class DispatchNewPolicy extends DispatchDocument {
         $fileData = array();
         $errorFile = array();
         $data['template'] = $this->template[$data['product']];
+        if(isset($data['documents']) && is_string($data['documents'])){
+            $data['documents'] = json_decode($data['documents'],true);
+        }
         $document = array_keys($data['documents']);
         $this->logger->info("ARRAY DOCUMENT --- ".print_r($document,true));
         $this->logger->info("REQUIRED DOCUMENT --- ".print_r($this->required[$data['product']]['docs'],true));
