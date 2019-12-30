@@ -533,7 +533,7 @@ class OrganizationService extends AbstractService
         case when (ox_organization.contactid = ox_user.id)
         then 1
         end as is_admin";
-        $from = " FROM ox_user inner join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id join ox_address on ox_user.address_id = ox_address.id";
+        $from = " FROM ox_user inner join ox_user_org on ox_user.id = ox_user_org.user_id left join ox_organization on ox_organization.id = ox_user_org.org_id LEFT join ox_address on ox_user.address_id = ox_address.id";
 
 
         $cntQuery ="SELECT count(ox_user.id)".$from;
@@ -555,6 +555,7 @@ class OrganizationService extends AbstractService
        $resultSet = $this->executeQuerywithParams($cntQuery.$where);
        $count=$resultSet->toArray();
        $query =$query." ".$from." ".$where." ".$sort." ".$limit;
+       $this->logger->info("Executing query - $query");
        $resultSet = $this->executeQuerywithParams($query)->toArray();
        for($x=0;$x<sizeof($resultSet);$x++) {
         $resultSet[$x]['icon'] = $baseUrl . "/user/profile/" . $resultSet[$x]['uuid'];
