@@ -545,7 +545,7 @@ class FileService extends AbstractService
                 }
                 $fromQuery .= " left join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=f.id
                     INNER JOIN ox_file_attribute ofa on ofa.file_id = a.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
-                $userWhere = " and owufi.user_id = :userId and owufi.org_id = :orgId";
+                $userWhere = " and a.latest=1 and owufi.user_id = :userId and owufi.org_id = :orgId";
                 $queryParams['userId'] = $userId;
                 $queryParams['orgId'] = $orgId;
             } else {
@@ -554,10 +554,7 @@ class FileService extends AbstractService
             
             $fromQuery .= " left join ox_workflow_instance as g on a.workflow_instance_id = g.id
             left join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
-            left join ox_workflow as h on h.id = wd.workflow_id
-            left join (SELECT workflow_instance_id, max(latest) as latest from ox_file
-            group by workflow_instance_id) as f2 on a.workflow_instance_id = f2.workflow_instance_id
-            and a.latest = f2.latest";
+            left join ox_workflow as h on h.id = wd.workflow_id";
             $prefix = 1;
             $whereQuery = "";
             $joinQuery = "";
