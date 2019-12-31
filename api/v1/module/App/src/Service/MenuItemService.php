@@ -72,7 +72,7 @@ class MenuItemService extends AbstractService
         $changedArray = array_merge($obj->toArray(), $data);
         $MenuItem = new MenuItem();
         $MenuItem->exchangeArray($changedArray);
-        $pageId = $this->getUuidFromId('ox_app_page', $file['page_id']);
+        $pageId = $this->getIdFromUuid('ox_app_page', $file['page_id']);
         if($pageId != 0){
             $data['page_id'] = $pageId;
         } 
