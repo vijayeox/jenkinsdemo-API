@@ -11,7 +11,36 @@
 </div>
 -------------------------
 
-<h4> 1. <u>Docker</u>: </h4>
+<h4> 1. <u>Install Smartgit</u>: </h4>
+
+<h4>Install git command line</h4>
+
+- sudo apt install git
+
+<h4>Download Smartgit from the Official Website</h4>
+
+- Download the debian bundle of smartgit for easy installation
+
+![smartgit-installation](deployment/static/gif/installsmartgit.gif)
+<h5 align="center">GIF: HOW TO INSTALL SMARTGIT</center></h5>
+    
+- Once Installed you can generate ssh keys and update them in your gitlab account for you to connect the git repository and enable you to do version control without password or you can enter your git account credential to pull code.
+
+![key generation](deployment/static/gif/ssh-keygen.gif)
+<h5 align="center">GIF: HOW TO GENERATE KEYS</h5>
+- After you have generated the keys update the public part of key to gitlab account 
+
+![](deployment/static/gif/addingpubkeygitlab.gif)
+<h5 align="center">GIF: HOW TO ADD KEYS TO GITLAB</center></h5>
+
+- Open Smartgit and goto repository tab and select clone to start cloning the codebase to your local machine.
+- You need to know the gitlab repository address to clone it which you can find in the gitlab server i.e `code.oxzion.com`.
+- We have different branches for different projects going on. The QA branch is for Development Team. Please clone or checkout if already cloned to the required branch to work on.
+
+![clone](deployment/static/gif/smartgitclone.gif)
+<h5 align="center">GIF: HOW TO CLONE A REPOSITORY IN SMARTGIT</center></h5>
+
+<h4> 2. <u>Docker</u>: </h4>
 
 To learn how to install Docker [click here.](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04)
 
@@ -22,10 +51,18 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 
 - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-- sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+- sudo nano /etc/apt/sources.list.d/additional-repositories.list
+
+add the following line in the file
+
+           Note:  deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+
 
 - sudo apt update
 - sudo apt install docker-ce
+- sudo apt install docker-compose
+- sudo apt install docker
+- sudo apt install docker.io
 
 <h5>Docker should now be installed, the daemon started, and the process enabled to start on boot. Check that it’s running:</h5>
 
@@ -35,7 +72,7 @@ To learn how to install Docker [click here.](https://www.digitalocean.com/commun
 		
 -----------
 
-<h4>2. <u>MySql 5.7</u>: </h4>
+<h4>3. <u>MySql 5.7</u>: </h4>
 
 To learn how to install MySql [click here.](https://linuxize.com/post/how-to-install-mysql-on-ubuntu-18-04/)
 
@@ -68,32 +105,9 @@ mysql -u 'user_name' -p 'password'
 
 -----------
 
-<h4> 3. <u>Install Smartgit</u>: </h4>
 
-<h4>Download Smartgit from the Official Website</h4>
 
-- Download the debian bundle of smartgit for easy installation
-
-![smartgit-installation](deployment/static/gif/installsmartgit.gif)
-<h5 align="center">GIF: HOW TO INSTALL SMARTGIT</center></h5>
-
-- Once Installed you can generate ssh keys and update them in your gitlab account for you to connect the git repository and enable you to do version control without password or you can enter your git account credential to pull code.
-
-![key generation](deployment/static/gif/ssh-keygen.gif)
-<h5 align="center">GIF: HOW TO GENERATE KEYS</h5>
-- After you have generated the keys update the public part of key to gitlab account 
-
-![](deployment/static/gif/addingpubkeygitlab.gif)
-<h5 align="center">GIF: HOW TO ADD KEYS TO GITLAB</center></h5>
-
-- Open Smartgit and goto repository tab and select clone to start cloning the codebase to your local machine.
-- You need to know the gitlab repository address to clone it which you can find in the gitlab server i.e `code.oxzion.com`.
-- We have different branches for different projects going on. The QA branch is for Development Team. Please clone or checkout if already cloned to the required branch to work on.
-
-![clone](deployment/static/gif/smartgitclone.gif)
-<h5 align="center">GIF: HOW TO CLONE A REPOSITORY IN SMARTGIT</center></h5>
-
-<h4> 3. <u>Database Creation</u>: </h4>
+<h4> 4. <u>Database Creation</u>: </h4>
 
 - Update bind-address in mysql configuration to allow external connections using ipv4 address
 
@@ -118,17 +132,18 @@ mysql -u 'user_name' -p 'password'
 
 <h5>Above are the database required for basic app development and if you want to work for each integrations follow the readme inside each integrations to setup dev environment accordingly</h5>
 
-<h4> 3. <u>Build Docker Images for Development Environement</u>: </h4>
+<h4> 5. <u>Build Docker Images for Development Environement</u>: </h4>
 
 <h5> The development environment uses docker containers for hassle free setup.</h5>
 
 - Follow the readme in each integrations to build the docker images and run the containers
 
-<h4> 4. <u>Updating Configurations</u>: </h4>
+<h4> 6. <u>Updating Configurations</u>: </h4>
 
 		Note : Using relative path below from repository root path
 		
 		Note : Use IPv4 address of your machine for updating host configurations, to check IPv4 address use `ifconfig` on terminal.
+		
 - For API
 	- $ cp api/v1/config/autoload/local.php.dist api/v1/config/autoload/local.php
 	`update api/v1/config/autoload/local.php`
