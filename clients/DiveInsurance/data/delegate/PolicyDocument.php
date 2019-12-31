@@ -198,7 +198,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     
         $temp = $data;
         foreach ($this->jsonOptions as $val){
-            if(array_key_exists($val, $temp)){
+            if(array_key_exists($val, $temp) && is_array($temp[$val])){
                  $temp[$val] = json_encode($data[$val]);
             }
         }
