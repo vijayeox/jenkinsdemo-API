@@ -12,6 +12,7 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
 use Oxzion\Service\TemplateService;
+use Oxzion\Service\UserService;
 use Oxzion\ServiceException;
 use Oxzion\Utils\RestClient;
 use Oxzion\ValidationException;
@@ -27,6 +28,7 @@ class CommandService extends AbstractService
     private $templateService;
     protected $fileService;
     private $workflowInstanceService;
+    private $userService;
     /**
      * @ignore __construct
      */
@@ -37,7 +39,7 @@ class CommandService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService,WorkflowService $workflowService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService,WorkflowService $workflowService,UserService $userService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
@@ -48,6 +50,7 @@ class CommandService extends AbstractService
         $this->fileService = $fileService;
         $this->workflowService = $workflowService;
         $this->restClient = new RestClient($this->config['job']['jobUrl'], array());
+        $this->userService = $userService;
     }
 
     public function setMessageProducer($messageProducer)
@@ -440,6 +443,15 @@ class CommandService extends AbstractService
         }
     }
     protected function verifyUser(&$data){
+        if(isset($data['email'])){
+            $select = "SELECT * from ox_user where email = :email";
+            $selectQuery = array("email" => $data['email']);
+            $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+            if(count($result) > 0){
+                $data['user_exists'] = '1';
+                return $data;
+            }
+        }
         if(isset($data['identifier_field']) && isset($data['appId']) && isset($data[$data['identifier_field']])){
             $select = "SELECT * from ox_wf_user_identifier where identifier_name = :identityField AND app_id = :appId AND identifier = :identifier";
             $selectQuery = array("identityField" => $data['identifier_field'], "appId" => $data['app_id'],"identifier"=>$data[$data['identifier_field']]);
@@ -454,6 +466,9 @@ class CommandService extends AbstractService
         }
     }
     protected function getUserList(&$data){
-        
+        if(isset($data['appId'])){
+            $userList = $this->userService->getUsersList($data['appId'],$data);
+            return $userList;
+        }
     }
 }
