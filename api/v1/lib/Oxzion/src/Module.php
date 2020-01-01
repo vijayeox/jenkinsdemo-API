@@ -469,7 +469,8 @@ class Module
                         $container->get(Service\FileService::class),
                         $container->get(Messaging\MessageProducer::class),
                         $container->get(Service\WorkflowInstanceService::class),
-                        $container->get(Service\WorkflowService::class));
+                        $container->get(Service\WorkflowService::class),
+                        $container->get(Service\UserService::class));
                 },
             ],
         ];
