@@ -1,6 +1,5 @@
-{assign var=property value=$property|json_decode:true}
-{assign var=building_coverage value=$property.building_coverage}
-{assign var=equipment_breakdown value=$property.equipment_breakdown}
+{assign var=building_coverage value=$BuildingLimitFP}
+{assign var=equipment_breakdown value=$equipment_breakdown}
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -27,7 +26,7 @@
 			<div class = "sec_content">
 				<div class = "sec3">
 					<p class = "sec_title">Commercial General Liability (Each Occurrence Limit):</p>
-					<p class = "sec_title">&nbsp&nbsp&nbsp&nbsp(Sign limited to : ${$property.content_limit})</p>
+					<p class = "sec_title">&nbsp&nbsp&nbsp&nbsp(Sign limited to : $25,000)</p>
 					<p class = "sec_title">Business Income:</p>
 					<p class = "sec_title">Building Coverage:</p>
 					<p class = "sec_title">Equipment Breakdown: (Included in Contents Limit)</p>
@@ -41,9 +40,9 @@
 					<p class = "sec_title">Glass:</p>
 				</div>
 				<b><div class = "sec4">
-					<p class = "sec_title2">${$property.content_limit}</p>
+					<p class = "sec_title2">$500,000</p>
 					<p></p>
-					<p class = "sec_title2">${$property.business_income}</p>
+					<p class = "sec_title2">${$lossOfBusIncome}</p>
 					<p class = "sec_title2">{if building_coverage}
 							Included
 					   {else}
@@ -56,14 +55,14 @@
 					   		Not Included
 					   {/if}
 					</p>
-					<p class = "sec_title2">${$property.dependant_prop}</p>
-					<p class = "sec_title2">${$property.robbery_inside}</p>
-					<p class = "sec_title2">${$property.robbery_outside}</p>
-					<p class = "sec_title2">${$property.transit_coverage}</p>
-					<p class = "sec_title2">${$property.emp_theft}</p>
-					<p class = "sec_title2">${$property.prop_others}</p>
-					<p class = "sec_title2">${$property.off_premises}</p>
-					<p class = "sec_title2">${$property.glass}</p>
+					<p class = "sec_title2">$5,000</p>
+					<p class = "sec_title2">$2,500</p>
+					<p class = "sec_title2">$2,500</p>
+					<p class = "sec_title2">$10,000</p>
+					<p class = "sec_title2">$5,000</p>
+					<p class = "sec_title2">$25,000</p>
+					<p class = "sec_title2">$10,000</p>
+					<p class = "sec_title2">$5,000</p>
 				</div></b>
 			</div>
 			<div class="spacing1">&nbsp</div>
@@ -72,7 +71,7 @@
 locations (coastal Counties) in Texas, Louisiana, Mississippi, Alabama, Georgia, South Carolina, North Carolina and all Harris
 County Texas locations. Mechanical breakdown is $2500. All other perils is $1000.</p></div>
 		<hr></hr>
-		<b><center><p class="addIn">{if !empty(lossPayees)}
+		<b><center><p class="addIn">{if !empty($lossPayees)}
 			Certificate has Loss Payees (See Attached)
 			{else}
 			Certificate Does Not Have Loss Payees.
