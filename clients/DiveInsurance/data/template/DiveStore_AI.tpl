@@ -1,4 +1,4 @@
-{assign var=list value=$additionalInsured|json_decode:false}
+{assign var=list value=$additionalInsured|json_decode:true}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -7,7 +7,7 @@
 </head>
 <body>
 	<div class ="body_div_ai">
-	    	{foreach from=$list item=$additional}
+	    	{foreach $list as $additional}
 	    		<p class = "ai_list">
 	    			&nbsp&nbsp&nbsp{$additional.name},{$additional.address},{$additional.city},{$additional.state},{$additional.zip}
 	    		</p>

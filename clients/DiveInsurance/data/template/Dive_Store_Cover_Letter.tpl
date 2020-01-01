@@ -8,7 +8,7 @@
 	<div class ="div_cover">
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
-			<p class="name">{$storename}</p>
+			<p class="name">{$storeName}</p>
 			<p class="name">{$address1}</p>
 			<p class="name">{$address2}</p>
 			<p class="name">{$city},{$state}</p>
