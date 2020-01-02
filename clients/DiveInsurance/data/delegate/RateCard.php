@@ -16,8 +16,8 @@ class Ratecard extends AbstractAppDelegate
         $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
         $selectTax = "Select state, coverage, percentage FROM state_tax WHERE product = '".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
         $result = $persistenceService->selectQuery($select);
+        $this->logger->info("Rate Card query -> $select");
         $stateTaxResult = $persistenceService->selectQuery($selectTax);
-        
         while ($result->next()) {
             $rate = $result->current();
             if(isset($rate['key'])){
