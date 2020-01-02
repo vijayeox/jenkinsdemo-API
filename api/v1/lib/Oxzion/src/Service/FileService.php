@@ -11,19 +11,22 @@ use Oxzion\Model\FileTable;
 use Oxzion\ServiceException;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Service\FieldService;
 
 class FileService extends AbstractService
 {
+    protected $fieldService;
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer)
+    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer,FieldService $fieldService)
     {
         parent::__construct($config, $dbAdapter);
         $this->messageProducer = $messageProducer;
         $this->table = $table;
         $this->config = $config;
         $this->dbAdapter = $dbAdapter;
+        $this->fieldService = $fieldService;
         // $emailService = new EmailService($config, $dbAdapter, Oxzion\Model\Email);
     }
 
@@ -400,7 +403,7 @@ class FileService extends AbstractService
                 }
                 $fieldProperties = json_decode($field['template'], true);
                 $this->logger->info("FIELD PROPERTIES - " . json_encode($fieldProperties));
-                if (!$fieldProperties['persistent']) {
+                if (isset($fieldProperties['persistent']) && !$fieldProperties['persistent']) {
                     if (isset($fieldData[$field['name']])) {
                         unset($fieldData[$field['name']]);
                     }

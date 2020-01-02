@@ -151,4 +151,23 @@ class FieldService extends AbstractService
             throw $e;
         }
     }
+
+    public function getFieldByName($entityId,$fieldName)
+    {
+        $this->logger->info("EntityId = $entityId, FieldName = $fieldName");
+        try {
+            $queryString = "Select oxf.* from ox_field as oxf
+                            inner join ox_app_entity as en on oxf.entity_id = en.id
+            where en.uuid=? and oxf.name=?";
+            $queryParams = array($entityId,$fieldName);
+            $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
+            if (count($resultSet) == 0) {
+                return 0;
+            }
+            return $resultSet[0];
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
+        }
+    }
 }

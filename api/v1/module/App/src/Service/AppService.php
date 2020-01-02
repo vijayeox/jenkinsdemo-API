@@ -203,6 +203,7 @@ class AppService extends AbstractService
             $appName = $ymlData['app'][0]['name'];
             $this->setupAppView($path, $ymlData);
             $this->setupLinks($path, $appName, $appUuid, $orgUuid);
+            $this->processEntity($ymlData);
             $this->processWorkflow($ymlData, $path, $orgUuid);
             $this->processForm($path, $ymlData);
             $this->processMenu($ymlData, $path);
@@ -813,5 +814,32 @@ class AppService extends AbstractService
             throw $e;
         }
 
+    }
+
+    private function processEntity(&$yamlData){
+        if(isset($yamlData['entity'])){
+            $appId = $yamlData['app'][0]['uuid'];
+            $sequence = 0;
+            foreach ($yamlData['entity'] as &$entityData) {
+                $entity = $entityData;
+                $entity['uuid'] = isset($entity['uuid'])?$entity['uuid']:UuidUtil::uuid();
+                $entityRec = $this->entityService->getEntityByName($appId, $entity['name']);
+                if(!$entityRec) {
+                    $result = $this->entityService->saveEntity($appId, $entity);
+                }else{
+                    $entity['id'] = $entityRec['id'];
+                }
+                $fields = $entity['field'];
+                foreach($fields as $field){
+                    $result = $this->fieldService->getFieldByName($entityRec['uuid'],$field['name']);
+                    if($result == 0){
+                        $field['entity_id'] = $entity['id'];
+                        $this->fieldService->saveField($appId,$field);
+                    }else{
+                        $this->fieldService->updateField($result['id'],$field);
+                    }
+                }
+            }
+        }
     }
 }
