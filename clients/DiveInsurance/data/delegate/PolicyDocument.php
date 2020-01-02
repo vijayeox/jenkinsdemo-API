@@ -275,7 +275,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
         }
         $this->logger->info("temp".print_r($data,true));
-        $data['documents'] = $documents;                              
+        $data['documents'] = $documents;
+        $data['policyStatus'] = "In Force";
         return $data;
     }
 

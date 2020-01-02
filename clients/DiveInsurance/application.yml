@@ -49,6 +49,35 @@ role:
                 privilege_name: MANAGE_POLICY_APPROVAL
                 permission: 3
         uuid: ef71307c-7bdc-4dd3-bc75-afdc0ab2790a
+entity:
+    -
+        name: 'Individual Professional Liability'
+        field:
+            -
+                name: policyStatus
+                text: 'Policy Status'
+                data_type: text
+    -
+        name: 'Dive Store'
+        field:
+            -
+                name: policyStatus
+                text: 'Policy Status'
+                data_type: text
+    -
+        name: 'Dive Boat'
+        field:
+            -
+                name: policyStatus
+                text: 'Policy Status'
+                data_type: text
+    -
+        name: 'Emergency First Response'
+        field:
+            -
+                name: policyStatus
+                text: 'Policy Status'
+                data_type: text
 menu:
     -
         name: Home
