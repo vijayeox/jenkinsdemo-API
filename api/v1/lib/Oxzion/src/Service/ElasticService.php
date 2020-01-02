@@ -29,8 +29,12 @@ class ElasticService
         $clientsettings['scheme'] = $config['elasticsearch']['scheme'];
         $this->core = $config['elasticsearch']['core'];
         $this->type = $config['elasticsearch']['type'];
-
-        $this->client = ClientBuilder::create()->setHosts(array($clientsettings))->build();
+        $clientbuilder = ClientBuilder::create(); 
+        if ($clientbuilder) { 
+            $this->client = $clientbuilder->setHosts(array($clientsettings))->build();
+        } else {
+            $this->client = new ClientBuilder(); //This is for Mocking in the test case
+        }
     }
     public function setElasticClient($client){
         $this->client = $client;
@@ -343,10 +347,9 @@ class ElasticService
 
     public function search($q)
     {
-       // print_r(json_encode($q));
+     //   print_r(json_encode($q));
         $data = $this->client->search($q);
-       //  print_r(json_encode($data));
-       // print_r($data);
+     //    print_r(json_encode($data));
         return $data;
 
     }

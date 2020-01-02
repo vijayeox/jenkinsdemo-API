@@ -184,16 +184,16 @@ class QueryService extends AbstractService
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
             'uuid' => $uuid
         ];
-        try {
+  //      try {
             $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
             if (count($resultSet) == 0) {
                 return 0;
             }
             $result = $this->runQuery($resultSet[0]['configuration'],$resultSet[0]['datasource_uuid']);
 
-        } catch(Exception $e) {
-            return 0;
-        }
+  //      } catch(Exception $e) {
+   //         return 0;
+   //     }
 
         return $result;
     }

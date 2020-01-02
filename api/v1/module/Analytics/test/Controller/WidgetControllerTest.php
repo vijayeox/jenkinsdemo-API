@@ -14,7 +14,7 @@ use Oxzion\Auth\AuthConstants;
 
 class WidgetControllerTest extends ControllerTest
 {
-
+    private $mock;
     public function setUp() : void
     {
         $this->loadConfig();
@@ -22,6 +22,10 @@ class WidgetControllerTest extends ControllerTest
 
     }
 
+    public function tearDown()  : void {
+        parent::tearDown();
+        Mockery::close();
+    }
 
     public function createIndex($indexer, $body)
     {
@@ -30,12 +34,19 @@ class WidgetControllerTest extends ControllerTest
         $id = $body['id'];
         $return=$indexer->index($app_name, $id, $entity_name, $body);
     }
-    private function getMockRestClientForElasticService()
+
+
+
+    private function setMockData($input,$output)
     {
-        $elasticService = $this->getApplicationServiceLocator()->get(\Oxzion\Service\ElasticService::class);
-        $mockElasticClient = Mockery::mock('Elasticsearch\ClientBuilder');
-        $elasticService->setElasticClient($mockElasticClient);
-        return $mockElasticClient;
+            $mock =  Mockery::mock('overload:Elasticsearch\ClientBuilder');
+            $mock->shouldReceive('create')
+            ->once()
+            ->andReturn(0);
+            $mock->shouldReceive('search')
+            ->once()
+            ->with($input)
+            ->andReturn($output);
     }
 
     public function setElasticData()
@@ -209,12 +220,13 @@ class WidgetControllerTest extends ControllerTest
         if (enableElastic!=0) {
             $this->setElasticData();
         } else {
-            $this->markTestSkipped('Only Integration Test');
-            $mockElasticClient = $this->getMockRestClientForElasticService();
-            $mockElasticClient->expects('search')->with(json_decode('{"index":"crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"createdAt":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}',true))->once()->andReturn(json_decode('{"took":0,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]}}',true));
+           $input =  json_decode('{"index":"crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"createdAt":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}',true);
+           $output = json_decode('{"took":0,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]}}',true);
+           $this->setMockData($input,$output);
         }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/widget/0e57b45f-5938-4e26-acd8-d65fb89e8503?data=true', 'GET');
+
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -224,9 +236,7 @@ class WidgetControllerTest extends ControllerTest
 
     public function testGetWithCombinedData() {
         if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test');
-            $mockElasticClient = $this->getMockRestClientForElasticService();
-            $mockElasticClient->expects('search')->with(json_decode('{"index":"sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"field5"}}]}},"_source":["*","field3"],"aggs":{"groupdata":{"terms":{"field":"field3.keyword","size":10000},"aggs":{"value":{"avg":{"field":"field5"}}}}},"explain":true},"_source":["*","field3"],"from":0,"size":0}',true))->once()->andReturn(json_decode('{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}{"took":4,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":45}},{"key":"cfield5text","doc_count":1,"value":{"value":70}}]}}}',true));
+            $this->markTestSkipped('Only Integration Test'); //Mock will not work in this case. 
         }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
@@ -244,9 +254,7 @@ class WidgetControllerTest extends ControllerTest
 
     public function testGetWithExpressionData() {
         if(enableElastic==0){
-            $this->markTestSkipped('Only Integration Test');
-            $mockElasticClient = $this->getMockRestClientForElasticService();
-            $mockElasticClient->expects('search')->with(json_decode('{"index":"sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"field5"}}]}},"_source":["*","field3"],"aggs":{"groupdata":{"terms":{"field":"field3.keyword","size":10000},"aggs":{"value":{"avg":{"field":"field5"}}}}},"explain":true},"_source":["*","field3"],"from":0,"size":0}'))->once()->andReturn(json_decode('{"took":5,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":35}},{"key":"cfield5text","doc_count":1,"value":{"value":40}}]}}}{"took":0,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"cfield3text","doc_count":2,"value":{"value":45}},{"key":"cfield5text","doc_count":1,"value":{"value":70}}]}}}',true));
+            $this->markTestSkipped('Only Integration Test'); //Mock will not work in this case. 
         }
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/analytics/widget/41e881c3-040d-44d8-9295-f2c3130bafbc?data=true', 'GET');
@@ -315,8 +323,8 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']['data']), 10);
         $this->assertEquals($content['data']['data'][5]['uuid'], '0e57b45f-5938-4e26-acd8-d65fb89e8503');
         $this->assertEquals($content['data']['data'][5]['name'], 'widget2');
-        $this->assertEquals($content['data']['data'][8]['name'], 'widget1');
-        $this->assertEquals($content['data']['data'][8]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
+        $this->assertEquals($content['data']['data'][8]['name'], 'combinedWithDate');
+        $this->assertEquals($content['data']['data'][8]['uuid'], '31e881c3-040d-44d8-9295-f2c3130bafbc');
         $this->assertEquals($content['data']['total'],10);
     }
 
@@ -329,8 +337,8 @@ class WidgetControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']['data']), 9);
-        $this->assertEquals($content['data']['data'][7]['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
-        $this->assertEquals($content['data']['data'][7]['name'], 'widget1');
+        $this->assertEquals($content['data']['data'][7]['uuid'], '31e881c3-040d-44d8-9295-f2c3130bafbc');
+        $this->assertEquals($content['data']['data'][7]['name'], 'combinedWithDate');
         $this->assertEquals($content['data']['data'][7]['is_owner'], true);
         $this->assertEquals($content['data']['total'],10);
     }
