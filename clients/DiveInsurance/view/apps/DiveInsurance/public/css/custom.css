@@ -216,7 +216,7 @@ label {
   opacity: .8;
   font-weight: 400;
 }
-input {
+/* input {
   font-size: 16px;
   padding: 20px 0px;
   height: 56px;
@@ -229,7 +229,7 @@ input {
   color: #000;
   font-weight: 400;
   -webkit-appearance: none;
-}
+} */
 input:focus {
   border-bottom: solid 1px #275362;
   outline: 0;
