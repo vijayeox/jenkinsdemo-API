@@ -116,6 +116,9 @@ document.addEventListener("DOMContentLoaded", function () {
         var properties = component.component.properties;
         if (properties) {
           if (properties["delegate"]) {
+            if(properties["padiType"]){
+              changed['padiType'] = properties["padiType"] ? properties["padiType"] : null;
+            }
             $.ajax({
               type: "POST",
               async: false,
