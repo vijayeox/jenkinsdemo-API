@@ -15,8 +15,8 @@
                 {
                     "input": true,
                     "tableView": true,
-                    "key": "orgId",
-                    "label": "orgId",
+                    "key": "app_id",
+                    "label": "app_id",
                     "protected": false,
                     "unique": false,
                     "persistent": true,
@@ -29,13 +29,13 @@
                     },
                     "properties": {},
                     "lockKey": true,
-                    "defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
+                    "defaultValue": "d77ea120-b028-479b-8c6e-60476b6a4456"
                 },
                 {
                     "input": true,
                     "tableView": true,
-                    "key": "app_id",
-                    "label": "app_id",
+                    "key": "orgId",
+                    "label": "orgId",
                     "protected": false,
                     "unique": false,
                     "persistent": true,
@@ -92,7 +92,7 @@
                     "input": true,
                     "tableView": true,
                     "key": "workflow_uuid",
-                    "label": "workflow UUID",
+                    "label": "workflow_uuid",
                     "protected": false,
                     "unique": false,
                     "persistent": true,
@@ -304,7 +304,8 @@
                                                 "eq": ""
                                             },
                                             "properties": {
-                                                "delegate": "PadiVerification"
+                                                "delegate": "PadiVerification",
+                                                "padiType": "userPadi"
                                             },
                                             "customClass": "alignCenter",
                                             "overlay": {
@@ -331,6 +332,90 @@
                                             "properties": {},
                                             "lockKey": true,
                                             "defaultValue": "false"
+                                        },
+                                        {
+                                            "input": true,
+                                            "tableView": true,
+                                            "key": "identifier_field",
+                                            "label": "identifier_field",
+                                            "protected": false,
+                                            "unique": false,
+                                            "persistent": true,
+                                            "type": "hidden",
+                                            "tags": [],
+                                            "conditional": {
+                                                "show": "",
+                                                "when": null,
+                                                "eq": ""
+                                            },
+                                            "properties": {},
+                                            "lockKey": true
+                                        },
+                                        {
+                                            "input": true,
+                                            "tableView": true,
+                                            "key": "user_exists",
+                                            "label": "user_exists",
+                                            "protected": false,
+                                            "unique": false,
+                                            "persistent": true,
+                                            "type": "hidden",
+                                            "tags": [],
+                                            "conditional": {
+                                                "show": "",
+                                                "when": null,
+                                                "eq": ""
+                                            },
+                                            "properties": {},
+                                            "lockKey": true
+                                        },
+                                        {
+                                            "key": "panelColumnsContent2",
+                                            "label": "Content",
+                                            "input": false,
+                                            "tag": "p",
+                                            "attrs": [
+                                                {
+                                                    "value": "",
+                                                    "attr": ""
+                                                }
+                                            ],
+                                            "className": "",
+                                            "content": "PADI number already Registered!",
+                                            "type": "htmlelement",
+                                            "hideLabel": true,
+                                            "tags": [],
+                                            "conditional": {
+                                                "show": "",
+                                                "when": null,
+                                                "eq": ""
+                                            },
+                                            "properties": {},
+                                            "customConditional": "show = ((data['user_exists']==1||data['user_exists']=='1'))"
+                                        },
+                                        {
+                                            "key": "panelColumnsContent3",
+                                            "label": "Content",
+                                            "input": false,
+                                            "tag": "p",
+                                            "attrs": [
+                                                {
+                                                    "value": "",
+                                                    "attr": ""
+                                                }
+                                            ],
+                                            "className": "",
+                                            "content": "PADI number is Invalid!",
+                                            "type": "htmlelement",
+                                            "hideLabel": true,
+                                            "tags": [],
+                                            "conditional": {
+                                                "show": "",
+                                                "when": null,
+                                                "eq": ""
+                                            },
+                                            "properties": {},
+                                            "customConditional": "show = ((data['padiVerified']==false||data['padiVerified']=='false'))"
                                         }
                                     ],
                                     "width": 4,
@@ -5608,6 +5693,24 @@
                                 "eq": ""
                             },
                             "properties": {}
+                        },
+                        {
+                            "input": true,
+                            "tableView": true,
+                            "key": "work_phone",
+                            "label": "Work_Phone",
+                            "protected": false,
+                            "unique": false,
+                            "persistent": true,
+                            "type": "hidden",
+                            "tags": [],
+                            "conditional": {
+                                "show": "",
+                                "when": null,
+                                "eq": ""
+                            },
+                            "properties": {},
+                            "lockKey": true
                         }
                     ],
                     "type": "panel",
@@ -5678,6 +5781,6 @@
     "path": "padiverificationformdiveboat",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-10-05T12:23:24.281Z",
-    "modified": "2019-12-16T04:53:35.472Z",
+    "modified": "2020-01-03T06:29:10.382Z",
     "machineName": "testdivehub:padiVerificationFormDiveBoat"
 }
