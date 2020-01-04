@@ -111,26 +111,26 @@
                 }
                 ,
                 {
-                    "key":"panelColumnsContent2",
+                    "key":"panelColumnsContent3",
                     "label":"Content",
                     "input":false,
                     "tag":"p",
                     "attrs":[ {
-                        "value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;", "attr": "style"
+                        "value": "", "attr": ""
                     }
                     ],
                     "className":"",
-                    "content":"PADI number already Registered!",
+                    "content":"PADI number is Invalid!",
                     "type":"htmlelement",
                     "hideLabel":true,
                     "tags":[],
                     "conditional": {
-                        "show": "", "when": null, "eq": ""
+                        "show": "true", "when": "padiVerified", "eq": "false"
                     }
                     ,
                     "properties": {}
                     ,
-                    "customConditional":"show = ((data['user_exists']==1||data['user_exists']=='1'))"
+                    "customConditional":"show = ((data['padiVerified']==false||data['padiVerified']=='false'))"
                 }
                 ,
                 {
@@ -150,8 +150,7 @@
                     "properties": {}
                     ,
                     "lockKey":true,
-                    "defaultValue":"padi",
-                    "isNew":false
+                    "defaultValue":"padi"
                 }
                 ,
                 {
@@ -191,8 +190,7 @@
                     "properties": {}
                     ,
                     "lockKey":true,
-                    "defaultValue":"0",
-                    "isNew":false
+                    "defaultValue":"0"
                 }
                 ],
                 "width":4,
@@ -468,6 +466,26 @@
         }
         ,
         {
+            "input":true,
+            "tableView":true,
+            "key":"statelist",
+            "label":"statelist",
+            "protected":true,
+            "unique":false,
+            "persistent":false,
+            "type":"hidden",
+            "tags":[],
+            "conditional": {
+                "show": "", "when": null, "eq": ""
+            }
+            ,
+            "properties": {}
+            ,
+            "defaultValue":"[{\"name\":\"Alaska\",\"abbreviation\":\"AK\"},{\"name\":\"American Samoa\",\"abbreviation\":\"AS\"},{\"name\":\"Arizona\",\"abbreviation\":\"AZ\"},{\"name\":\"Arkansas\",\"abbreviation\":\"AR\"},{\"name\":\"California\",\"abbreviation\":\"CA\"},{\"name\":\"Colorado\",\"abbreviation\":\"CO\"},{\"name\":\"Connecticut\",\"abbreviation\":\"CT\"},{\"name\":\"Delaware\",\"abbreviation\":\"DE\"},{\"name\":\"District Of Columbia\",\"abbreviation\":\"DC\"},{\"name\":\"Federated States Of Micronesia\",\"abbreviation\":\"FM\"},{\"name\":\"Florida\",\"abbreviation\":\"FL\"},{\"name\":\"Georgia\",\"abbreviation\":\"GA\"},{\"name\":\"Guam Gu\",\"abbreviation\":\"GU\"},{\"name\":\"Hawaii\",\"abbreviation\":\"HI\"},{\"name\":\"Idaho\",\"abbreviation\":\"ID\"},{\"name\":\"Illinois\",\"abbreviation\":\"IL\"},{\"name\":\"Indiana\",\"abbreviation\":\"IN\"},{\"name\":\"Iowa\",\"abbreviation\":\"IA\"},{\"name\":\"Kansas\",\"abbreviation\":\"KS\"},{\"name\":\"Kentucky\",\"abbreviation\":\"KY\"},{\"name\":\"Louisiana\",\"abbreviation\":\"LA\"},{\"name\":\"Maine\",\"abbreviation\":\"ME\"},{\"name\":\"Marshall Islands\",\"abbreviation\":\"MH\"},{\"name\":\"Maryland\",\"abbreviation\":\"MD\"},{\"name\":\"Massachusetts\",\"abbreviation\":\"MA\"},{\"name\":\"Michigan\",\"abbreviation\":\"MI\"},{\"name\":\"Minnesota\",\"abbreviation\":\"MN\"},{\"name\":\"Mississippi\",\"abbreviation\":\"MS\"},{\"name\":\"Missouri\",\"abbreviation\":\"MO\"},{\"name\":\"Montana\",\"abbreviation\":\"MT\"},{\"name\":\"Nebraska\",\"abbreviation\":\"NE\"},{\"name\":\"Nevada\",\"abbreviation\":\"NV\"},{\"name\":\"New Hampshire\",\"abbreviation\":\"NH\"},{\"name\":\"New Jersey\",\"abbreviation\":\"NJ\"},{\"name\":\"New Mexico\",\"abbreviation\":\"NM\"},{\"name\":\"New York\",\"abbreviation\":\"NY\"},{\"name\":\"North Carolina\",\"abbreviation\":\"NC\"},{\"name\":\"North Dakota\",\"abbreviation\":\"ND\"},{\"name\":\"Northern Mariana Islands\",\"abbreviation\":\"MP\"},{\"name\":\"Ohio\",\"abbreviation\":\"OH\"},{\"name\":\"Oklahoma\",\"abbreviation\":\"OK\"},{\"name\":\"Oregon\",\"abbreviation\":\"OR\"},{\"name\":\"Palau\",\"abbreviation\":\"PW\"},{\"name\":\"Pennsylvania\",\"abbreviation\":\"PA\"},{\"name\":\"Puerto Rico\",\"abbreviation\":\"PR\"},{\"name\":\"Rhode Island\",\"abbreviation\":\"RI\"},{\"name\":\"South Carolina\",\"abbreviation\":\"SC\"},{\"name\":\"South Dakota\",\"abbreviation\":\"SD\"},{\"name\":\"Tennessee\",\"abbreviation\":\"TN\"},{\"name\":\"Texas\",\"abbreviation\":\"TX\"},{\"name\":\"Utah\",\"abbreviation\":\"UT\"},{\"name\":\"Vermont\",\"abbreviation\":\"VT\"},{\"name\":\"Virgin Islands\",\"abbreviation\":\"VI\"},{\"name\":\"Virginia\",\"abbreviation\":\"VA\"},{\"name\":\"Washington\",\"abbreviation\":\"WA\"},{\"name\":\"West Virginia\",\"abbreviation\":\"WV\"},{\"name\":\"Wisconsin\",\"abbreviation\":\"WI\"}]",
+            "lockKey":true
+        }
+        ,
+        {
             "clearOnHide":false,
             "key":"panelPanel",
             "input":false,
@@ -658,14 +676,14 @@
                             "json":"",
                             "url":"https://api.myjson.com/bins/1bz191",
                             "resource":"",
-                            "custom":"",
+                            "custom":"component.dataValueProperty = \"abbreviation\"\nvalues = data['statelist']",
                             "headers":[ {
                                 "value": "", "key": ""
                             }
                             ]
                         }
                         ,
-                        "dataSrc":"url",
+                        "dataSrc":"custom",
                         "valueProperty":"abbreviation",
                         "defaultValue":"",
                         "refreshOn":"",
@@ -1518,7 +1536,7 @@
                 "hideLabel":true,
                 "tags":[],
                 "conditional": {
-                    "show": "", "when": null, "eq": ""
+                    "show": "", "when": "", "eq": ""
                 }
                 ,
                 "properties": {}
@@ -1615,11 +1633,11 @@
                                 "clearOnHide":false,
                                 "spellcheck":true,
                                 "validate": {
-                                    "required": false, "minLength": "", "maxLength": "", "pattern": "", "custom": "", "customPrivate": false
+                                    "required": true, "minLength": "", "maxLength": "", "pattern": "", "custom": "", "customPrivate": false
                                 }
                                 ,
                                 "conditional": {
-                                    "show": "", "when": "", "eq": ""
+                                    "show": "", "when": null, "eq": ""
                                 }
                                 ,
                                 "type":"textfield",
@@ -1699,7 +1717,7 @@
                                 "clearOnHide":false,
                                 "spellcheck":true,
                                 "validate": {
-                                    "required": false, "minLength": "", "maxLength": "", "pattern": "", "custom": "", "customPrivate": false
+                                    "required": true, "minLength": "", "maxLength": "", "pattern": "", "custom": "", "customPrivate": false
                                 }
                                 ,
                                 "conditional": {
@@ -1737,7 +1755,7 @@
                                 "clearOnHide":false,
                                 "spellcheck":true,
                                 "validate": {
-                                    "required": false, "minLength": "", "maxLength": "", "pattern": "", "custom": "", "customPrivate": false
+                                    "required": true, "minLength": "", "maxLength": "", "pattern": "", "custom": "", "customPrivate": false
                                 }
                                 ,
                                 "conditional": {
@@ -1750,9 +1768,9 @@
                                 "tags":[],
                                 "properties": {}
                                 ,
-                                "hideLabel":true,
                                 "lockKey":true,
-                                "calculateValue":"if(data['sameasmailingaddress'] == true){\n   value = data['zip'];\n}else{\n  value = data['physical_zip'];\n}"
+                                "calculateValue":"if(data['sameasmailingaddress'] == true){\n   value = data['zip'];\n}else{\n  value = data['physical_zip'];\n}",
+                                "hideLabel":true
                             }
                             ],
                             "width":4,
@@ -1777,17 +1795,17 @@
                                     "json":"",
                                     "url":"https://api.myjson.com/bins/1bz191",
                                     "resource":"",
-                                    "custom":"",
+                                    "custom":"component.dataValueProperty = \"abbreviation\"\nvalues = data['statelist']",
                                     "headers":[ {
                                         "value": "", "key": ""
                                     }
                                     ]
                                 }
                                 ,
-                                "dataSrc":"url",
+                                "dataSrc":"custom",
                                 "valueProperty":"abbreviation",
                                 "defaultValue":"",
-                                "refreshOn":"",
+                                "refreshOn":"state",
                                 "filter":"",
                                 "authenticate":false,
                                 "template":"<span>{{ item.name }}</span>",
@@ -1811,7 +1829,8 @@
                                 "properties": {}
                                 ,
                                 "hideLabel":true,
-                                "lockKey":true
+                                "lockKey":true,
+                                "clearOnRefresh":false
                             }
                             ,
                             {
@@ -2651,7 +2670,7 @@
                 "hideLabel":true,
                 "tags":[],
                 "conditional": {
-                    "show": "", "when": "", "eq": ""
+                    "show": "true", "when": "sameasmailingaddress", "eq": "false"
                 }
                 ,
                 "properties": {}
@@ -2720,7 +2739,7 @@
                     "inputType":"tel",
                     "inputMask":"(999) 999-9999",
                     "label":"Mobile Phone",
-                    "key":"mobilephone",
+                    "key":"phone",
                     "placeholder":"Mobile Phone",
                     "prefix":"",
                     "suffix":"",
@@ -2846,8 +2865,7 @@
             "properties": {}
             ,
             "hideLabel":true,
-            "customConditional":"show = (data['padiVerified'] == true && (data['user_exists']==0||data['user_exists']=='0'))",
-            "isNew":false
+            "customConditional":"show = (data['padiVerified'] == true && (data['user_exists']==0||data['user_exists']=='0'))"
         }
         ],
         "type":"panel",
@@ -2860,8 +2878,7 @@
         ,
         "properties": {}
         ,
-        "customConditional":"show = (data['padiVerified'] == true && (data['user_exists']==0||data['user_exists']=='0'))",
-        "isNew":false
+        "customConditional":"show = (data['padiVerified'] == true && (data['user_exists']==0||data['user_exists']=='0'))"
     }
     ,
     {
@@ -2889,7 +2906,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":96,
+    "_vid":122,
     "title":"Padi Verification Form - IPL",
     "display":"form",
     "access":[ {
@@ -2905,6 +2922,6 @@
     "path":"padiverificationformipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-10T15:46:39.851Z",
-    "modified":"2019-12-30T08:11:00.455Z",
+    "modified":"2020-01-04T11:47:23.672Z",
     "machineName":"testdivehub:padiVerificationForm"
 }
