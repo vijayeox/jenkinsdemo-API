@@ -243,6 +243,7 @@ ox_field:
     data_type: "integer"
     required: 1
     sequence: 2
+    entity_id: 1
 -
     id: 2
     name: "field2"
@@ -251,6 +252,7 @@ ox_field:
     data_type: "integer"
     required: 1
     sequence: 1
+    entity_id: 1
 -
     id: 3
     name: "field3"
@@ -259,6 +261,7 @@ ox_field:
     data_type: "string"
     required: 1
     sequence: 1
+    entity_id: 1
 -
     id: 4
     name: "field4"
@@ -267,6 +270,7 @@ ox_field:
     data_type: "integer"
     required: 1
     sequence: 2
+    entity_id: 1
 ox_form_field:
 -
     id: 1
@@ -281,23 +285,26 @@ ox_file:
     id: 101
     workflow_instance_id: 1
     org_id: 1
-    data: "new data"
+    data: "{\"field1\":3,\"field2\":4}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     form_id: 1
+    entity_id: 1
 -
     id: 102
     workflow_instance_id: 1
     activity_id: 1
     org_id: 1
-    data: "new data"
+    data: "{\"field3\":3,\"field4\":4}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
     form_id: 2
+    entity_id: 1
 -
     id: 103
     org_id: 1
     data: "new data"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
     form_id: 3
+    entity_id: 1
 ox_file_attribute:
 -
     id: 1

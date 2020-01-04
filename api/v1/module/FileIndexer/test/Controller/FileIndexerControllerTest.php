@@ -59,8 +59,11 @@ class FileIndexerControllerTest extends ControllerTest
     {
         //Scenario where both workflow_instance_id and activity_instance_id exists
         $this->initAuthToken($this->adminUser);
-        $data = ['id' => 2];
-        $this->dispatch('/fileindexer', 'POST', $data);
+        $data = ['id' => 102];
+        if(enableActiveMQ == 0){
+            $mockMessageProducer = $this->getMockMessageProducer();
+            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'/elastic')->once()->andReturn();
+        }
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
             $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/file/2")->once()->andReturn(array("body" => json_encode(array (
@@ -91,7 +94,7 @@ class FileIndexerControllerTest extends ControllerTest
                     'activity_instance_start_date' => '2019-09-16 13:23:21',
                     'activity_instance_act_by_date' => NULL,
                     'fields' => '{"field3" : "field3text","field4" : "field4text"}',
-                    'data' => 'new data',
+                    'data' => '{"field3":3,"field4":4}',
                 ),
               ),
                 'id' => 2,
@@ -100,14 +103,12 @@ class FileIndexerControllerTest extends ControllerTest
             ),
           ))));
         }
-        if(enableActiveMQ == 0){
-            $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'/topic/elastic')->once()->andReturn();
-        }
+        
+        $this->dispatch('/fileindexer', 'POST', $data);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('index');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['form_id'], $data['id']);
         $this->assertEquals($content['data'][0]['form_name'], 'Test Form 2');
@@ -150,7 +151,7 @@ class FileIndexerControllerTest extends ControllerTest
                     'activity_instance_start_date' => NULL,
                     'activity_instance_act_by_date' => NULL,
                     'fields' => '{"field1" : "field1text","field2" : "field2text"}',
-                    'data' => 'new data',
+                    'data' => '{\"field1\":3,\"field2\":4}',
                 ),
               ),
                 'id' => 1,

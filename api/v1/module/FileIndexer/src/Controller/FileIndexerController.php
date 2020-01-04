@@ -26,7 +26,7 @@ namespace FileIndexer\Controller;
             $params = $this->extractPostData();
             $params['id']  = isset($params['id']) ? $params['id'] : null;
             $params['filedata'] = ($params['id']) ? ($params['id']) : "No File to index";
-            $this->log->info(FileIndexerController::class.":File Id- ".$params['filedata']);
+            $this->log->info("Params- ".json_encode($params));
             $response = $this->fileIndexerService->getRelevantDetails($params['id']);
             if ($response) {
                 $this->log->info(FileIndexerController::class.":File has been Indexed");

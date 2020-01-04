@@ -61,6 +61,7 @@ class FileIndexerService extends AbstractService
             GROUP BY app_name,entity.id, entity.name,file_data,file_uuid,file.is_active, file.parent_id, file.org_id,w.user_id,w.id, w.status,w.activity_instance_id,w.name, w.activities";
             
             $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
+            $this->logger->info("Executing Query - $select");
             $body=$this->executeQuerywithParams($select)->toArray();
             $databody = array();
             if(!empty($body)){
