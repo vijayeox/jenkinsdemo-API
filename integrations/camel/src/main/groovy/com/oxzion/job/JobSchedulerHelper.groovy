@@ -2,10 +2,12 @@ package com.oxzion.job
 
 import groovy.json.JsonOutput
 import org.quartz.*
+import java.util.Date
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import org.quartz.impl.matchers.GroupMatcher
 
 import java.text.SimpleDateFormat
 
@@ -29,6 +31,30 @@ class JobSchedulerHelper {
         }
     }
 
+    def listJob() {
+        try{
+            List<String> list = new ArrayList<>()
+            for (String groupName : scheduler.getJobGroupNames()) {
+
+                for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
+
+                    String jobName = jobKey.getName();
+                    String jobGroup = jobKey.getGroup();
+
+                    //get job's trigger
+                    List<Trigger> triggers = (List<Trigger>) scheduler.getTriggersOfJob(jobKey);
+                    Date nextFireTime = triggers.get(0).getNextFireTime();
+                    list.add("[jobName] : " + jobName + " [groupName] : "
+                            + jobGroup + " - next fire time -" + nextFireTime)
+                }
+
+            }
+            return list
+        } catch(Exception ex){
+            logger.error("JOB HANDLER LIST (EXCEPTION) --- ${ex}")
+        }
+    }
+
     def cancelJob(String jobId, String jobGroup) {
             try {
                 JobKey jobKey = JobKey.jobKey(jobId, jobGroup)
@@ -44,12 +70,23 @@ class JobSchedulerHelper {
             JobDataMap jobDataMap = new JobDataMap()
             def jobDataJson = JsonOutput.toJson(jobDataObj)
             jobDataMap.put("JobData",jobDataJson)
-            return JobBuilder.newJob(JobHandler.class)
-                    .withIdentity(UUID.randomUUID().toString(), "Job")
-                    .withDescription("Job")
-                    .usingJobData(jobDataMap)
-                    .storeDurably()
-                    .build()
+            if(jobDataObj.job.containsKey('group')) {
+                String _group = jobDataObj.job.group.toString()
+                return JobBuilder.newJob(JobHandler.class)
+                        .withIdentity(UUID.randomUUID().toString(), _group)
+                        .withDescription("Job")
+                        .usingJobData(jobDataMap)
+                        .storeDurably()
+                        .build()
+            }
+            else {
+                return JobBuilder.newJob(JobHandler.class)
+                        .withIdentity(UUID.randomUUID().toString(), "Job")
+                        .withDescription("Job")
+                        .usingJobData(jobDataMap)
+                        .storeDurably()
+                        .build()
+            }
         }
         else
             return null

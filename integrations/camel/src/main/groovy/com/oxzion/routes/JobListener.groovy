@@ -93,5 +93,13 @@ class JobListener {
 
         return jobSchedulerResponse.getAll()
     }
+
+    @RequestMapping(value ="/listjob",method = RequestMethod.GET)
+    def ListJob() {
+        logger.info("List jobs - $payload")
+        def check = jobHelper.listJob()
+        return check
+    }
+
 }
 
