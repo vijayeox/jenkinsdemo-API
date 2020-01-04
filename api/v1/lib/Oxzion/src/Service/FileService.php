@@ -64,9 +64,6 @@ class FileService extends AbstractService
             $activityId = null;
         }
         $data['uuid'] = $uuid = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
-        if(isset($data['groupPL'])){
-            $this->saveGroupPLDocuments($data,$baseFolder);
-        }
         
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
         unset($data['uuid']);
@@ -128,26 +125,6 @@ class FileService extends AbstractService
             throw $e;
         }
         return $count;
-    }
-
-    private function saveGroupPLDocuments(&$data,$baseFolder){
-        $filepath = $baseFolder.$data['orgId'].'/'.$data['uuid'].'/';
-        if (!file_exists($filepath)) {
-            FileUtils::createDirectory($filepath);
-        }
-        chmod($filepath, 0777);
-        for($j = 0;$j < sizeof($data['groupPL']);$j++){
-            if(isset($data['groupPL'][$j]['document'])){
-                $group = $data['groupPL'][$j]['document'];
-                for($i = 0 ;$i < sizeof($group);$i++){
-                    $docFile = fopen($filepath.$group[$i]['originalName'].'.txt','wb');
-                    fwrite($docFile,$group[$i]['url']);
-                    fclose($docFile);
-                    unset($data['groupPL'][$j]['document'][$i]['url']);
-                    $data['groupPL'][$j]['document'][$i]['file'] = $filepath.$group[$i]['originalName'].'.txt';
-                }
-            }
-        }
     }
 
     private function updateFileData($id, $data)
@@ -230,9 +207,7 @@ class FileService extends AbstractService
                 $data[$key] = json_encode($dataelement);
             }
         }
-        if(isset($data['groupPL'])){
-            $this->saveGroupPLDocuments($data,$baseFolder);
-        }
+        
         $fields = array_merge($fileObject,$data);
         $file = new File();
         $id = $this->getIdFromUuid('ox_file', $id);
