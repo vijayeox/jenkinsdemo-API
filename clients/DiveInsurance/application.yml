@@ -433,6 +433,7 @@ menu:
     -
         name: 'Verify PADI details'
         icon: 'fa fa-search'
+        privilege: MANAGE_POLICY_APPROVAL_READ
         page:
             name: 'Verify PADI details'
             description: 'Lets CSR to input and check PADI Data'
