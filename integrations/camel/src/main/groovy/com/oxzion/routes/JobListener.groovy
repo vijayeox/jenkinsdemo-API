@@ -28,6 +28,7 @@ class JobListener {
      *          {
      *              job : {
      *                      url : string,
+     *                      group : string,
      *                      topic : string,
      *                      data : {json}
      *              }
