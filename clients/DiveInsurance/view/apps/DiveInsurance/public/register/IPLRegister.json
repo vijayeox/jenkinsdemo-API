@@ -116,11 +116,11 @@
                     "input":false,
                     "tag":"p",
                     "attrs":[ {
-                        "value": "", "attr": ""
+                        "value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;", "attr": "style"
                     }
                     ],
                     "className":"",
-                    "content":"PADI number is Invalid!",
+                    "content":"PADI number already Registered!",
                     "type":"htmlelement",
                     "hideLabel":true,
                     "tags":[],
@@ -130,7 +130,7 @@
                     ,
                     "properties": {}
                     ,
-                    "customConditional":"show = ((data['padiVerified']==false||data['padiVerified']=='false'))"
+                    "customConditional":"show = ((data['user_exists']==1||data['user_exists']=='1'))"
                 }
                 ,
                 {
@@ -2906,7 +2906,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":122,
+    "_vid":123,
     "title":"Padi Verification Form - IPL",
     "display":"form",
     "access":[ {
@@ -2922,6 +2922,6 @@
     "path":"padiverificationformipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-10T15:46:39.851Z",
-    "modified":"2020-01-04T11:47:23.672Z",
+    "modified":"2020-01-04T18:17:00.107Z",
     "machineName":"testdivehub:padiVerificationForm"
 }
