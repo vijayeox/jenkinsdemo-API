@@ -17,7 +17,7 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zip','certificate_no','padi','end_date','policy_id','address1','address2'];
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -77,14 +77,14 @@
     <div class="agent">
       <div class = "agent_info">
       <b >Insured's Name and Mailing Address:</b>
-          <p class = "c_details"><span class ="firstname"></span>,<span class ="lastname"></span></p>
-          <p class = "c_details"><span class="address1"></span></p>
-          <p class = "c_details"><span class="address2"></span></p>
-          <p class = "c_details"><span class ="city"></span>,<span class ="state"></span></p>
-          <p class = "c_details"><span class = "country"></span>,<span class ="zip"></span></p>
+          <p class = "c_details"><span class ="business_name"></span></p>
+          <p class = "c_details"><span class="business_address1"></span></p>
+          <p class = "c_details"><span class="business_address2"></span></p>
+          <p class = "c_details"><span class ="business_city"></span>,<span class ="business_state"></span></p>
+          <p class = "c_details"><span class = "business_country"></span>,<span class ="zip"></span></p>
       </div>
       <div class = "agent_info1">
-        <p class ="padi_margin"><b>Member#:</b> <span class ="padi"></span>
+        <p class ="padi_margin"><b>Member#:</b> <span class ="business_padi"></span>
       </div>
     </div>
 <div class = "spacing_div">&nbsp</div>

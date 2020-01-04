@@ -8,11 +8,11 @@
 	<div class ="div_cover">
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
-			<p class="name1">{$orgname}</p>
-			<p class="name1">{$address1}</p>
-			<p class="name1">{$address2}</p>
-			<p class="name1">{$city},{$state}</p>
-			<p class="name1">{$country},{$zip}</p>
+			<p class="name1">{$business_name}</p>
+			<p class="name1">{$business_address1}</p>
+			<p class="name1">{$business_address2}</p>
+			<p class="name1">{$business_city},{$business_state}</p>
+			<p class="name1">{$business_country},{$business_zip}</p>
 		</div>
 
 		<p class = "rgard">RE: PADI ENDORSED DIVE BOAT INSURANCE</p>
@@ -34,10 +34,10 @@ application.</li>
 </div>
 		<p>Sincerely,</p>
 		<p>Vicencia & Buckley A Division of HUB International</p>
-		<p class="acc_name">{$manager_name},CISR, Account Manager</p>
+		<p class="acc_name">{$user_name},CISR, Account Manager</p>
 		<p class ="footer_line">Vicencia & Buckley A Division of HUB International</p>
 		<p class ="footer_line">(800) 223-9998 or (714) 739-3176</p>
-		<p class ="footer_line">{$manager_email}</p>
+		<p class ="footer_line">{$user_email}</p>
 
 	</div>
 </body>

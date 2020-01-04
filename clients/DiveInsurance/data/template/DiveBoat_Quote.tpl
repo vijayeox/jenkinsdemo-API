@@ -33,14 +33,14 @@
  <div class="agent">
   <div class = "agent_info">
     <b >Insured's Name and Mailing Address:</b>
-    <p class = "c_details">{$firstname},{$lastname}</p>
-    <p class = "c_details">{$address1}</p>
-    <p class = "c_details">{$address2}</p>
-    <p class = "c_details">{$city},{$state}</p>
-    <p class = "c_details">{$country},{$zip}</p>
+    <p class = "c_details">{$business_name}</p>
+    <p class = "c_details">{$business_address1}</p>
+    <p class = "c_details">{$business_address2}</p>
+    <p class = "c_details">{$business_city},{$business_state}</p>
+    <p class = "c_details">{$business_country},{$business_zip}</p>
   </div>
   <div class = "agent_info1">
-    <p class ="padi_margin"><b>Member#:</b> {$padi}
+    <p class ="padi_margin"><b>Member#:</b> {$businessPadi}
     </div>
   </div>
   <div class = "spacing_div">&nbsp</div>

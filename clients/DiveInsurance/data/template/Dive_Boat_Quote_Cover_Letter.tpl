@@ -9,7 +9,7 @@
 	<div class ="div_cover">
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
-			<p class="name1"><span>#{$padi}</span><span>{$orgname}</span></p>
+			<p class="name1"><span>#{$business_padi}</span><span>{$business_name}</span></p>
 		</div>
 		<div class = "line_space">
 		<p>We are pleased to enclose your PADI Endorsed Dive Boat insurance proposal. The coverage includes:</p>
@@ -35,10 +35,10 @@ a policy will be sent to you.)</p>
 </div>
 		<p>Sincerely,</p>
 		<p>Vicencia & Buckley A Division of HUB International</p>
-		<p class="acc_name"><span id="managerName"></span>,CISR, Account Manager</p>
+		<p class="acc_name">{$user_name},CISR, Account Manager</p>
 		<p class ="footer_line">Vicencia & Buckley A Division of HUB International</p>
 		<p class ="footer_line"><span id="phone1Val"></span> or <span id="phone2Val"></span></p>
-		<p class ="footer_line"><span id="managerEmail"></span></p>
+		<p class ="footer_line">{$user_email}</p>
 
 	</div>
 </body>

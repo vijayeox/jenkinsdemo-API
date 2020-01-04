@@ -17,7 +17,7 @@
           }
       }
       // document.getElementById("test").textContent = query_strings_from_url;
-      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zipcode','certificate_no','padi','end_date','policy_id','address1','address2'];
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','businessPadi','end_date','policy_id','business_address1','business_address2'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -54,11 +54,11 @@
           </div>
           <hr class ="hr_caption"></hr>
           <b class = "caption2">Insured's Name and Mailing Address:</b>
-          <p class = "details"><span class ="orgname"></span></p>
-          <p class = "details"><span class ="address1"></span></p>
-          <p class = "details"><span class ="address2"></span></p>
-          <p class = "details"><span class ="city"></span>,<span class ="state"></span></p>
-          <p class = "details"><span class ="country"></span>,<span class ="zipcode"></span></p>
+          <p class = "details"><span class ="business_name"></span></p>
+          <p class = "details"><span class ="business_address1"></span></p>
+          <p class = "details"><span class ="business_address2"></span></p>
+          <p class = "details"><span class ="business_city"></span>,<span class ="business_state"></span></p>
+          <p class = "details"><span class ="business_country"></span>,<span class ="business_zip"></span></p>
       </div>
       <div class ="content2">
         <div class = "certificate_data">
@@ -71,7 +71,7 @@
         </div>
         <div class = "certificate_data1">
           <p class = "p_margin"><span class ="certificate_no"></span></p>
-          <p class = "p_margin"><span class ="padi"></p>
+          <p class = "p_margin"><span class ="businessPadi"></p>
           <p class = "p_margin"><span class ="start_date"></p>
           <p class = "p_margin"><span class ="end_date"></p>
           <p class = "p_margin">U.S. SPECIALTY INSURANCE COMPANY</p>
