@@ -28,6 +28,9 @@ privilege:
         name: MANAGE_POLICY_APPROVAL
         permission: 3
     -
+        name: MANAGE_MYPOLICY_APPROVAL
+        permission: 3
+    -
         name: MANAGE_MY_POLICY
         permission: 3
     -
@@ -40,6 +43,9 @@ role:
         privileges:
             -
                 privilege_name: MANAGE_MY_POLICY
+                permission: 3
+            -
+                name: MANAGE_MYPOLICY_APPROVAL
                 permission: 3
         uuid: 38880e3a-6bee-43c1-bd4d-9431d78a084b
     -
@@ -460,35 +466,10 @@ pages:
         uuid: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
 workflow:
     -
-        name: 'Individual Liability'
-        uuid: f0efea9e-7863-4368-a9b2-baa1a1603067
-        bpmn_file: 'Individual Professional Liability/NewUserApplicationSubmission.bpmn'
-        entity: 'Individual Professional Liability'
-    -
-        name: 'Individual Liability Endorsement'
-        uuid: 7d302209-667d-46e4-80f0-3dd1a4079509
-        bpmn_file: 'Individual Professional Liability/IPLEndorsement.bpmn'
-        entity: 'Individual Professional Liability'
-    -
-        name: 'Dive Store'
-        uuid: cb99e634-de00-468d-9230-d6f77d241c5b
-        bpmn_file: 'Dive Store/NewApplication.bpmn'
-        entity: 'Dive Store'
-    -
         name: 'Dive Boat'
         uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
         bpmn_file: 'Dive Boat/NewApplicationSubmission.bpmn'
         entity: 'Dive Boat'
-    -
-        name: 'Individual Liability Auto Renewal'
-        uuid: 91cb9e10-5845-4379-97c9-f9486b702bd6
-        bpmn_file: 'Individual Professional Liability/IPLAutoRenewal.bpmn'
-        entity: 'Individual Professional Liability'
-    -
-        name: 'Emergency First Response'
-        uuid: cb74d176-225a-11ea-978f-2e728ce88125
-        bpmn_file: 'Emergency First Response/NewApplication.bpmn'
-        entity: 'Emergency First Response'
 form:
     -
         name: 'PADI Verification'

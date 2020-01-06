@@ -24,6 +24,7 @@ class PipelineController extends AbstractApiController
         $this->log = $this->getLogger();
     }
     public function executePipelineAction(){
+        $this->log->info("PIPELINE CONTROLLER");
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $params = array_merge($params,$this->params()->fromQuery());
         $appUuid = $this->params()->fromRoute()['appId'];

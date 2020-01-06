@@ -1241,6 +1241,7 @@ class UserService extends AbstractService
             try {
                 $this->beginTransaction();
                 $result = $this->createUser($params,$data,$register);
+                $this->logger->info("HandleUserIdentifier");
                 if($handleUserIdentifier){
                     $query = "select count(id) as count from ox_wf_user_identifier 
                                 where app_id = :appId AND org_id = :orgId AND user_id = :userId";
@@ -1250,6 +1251,7 @@ class UserService extends AbstractService
                     $this->logger->info("Executing Query - $query with Parametrs - " . print_r($queryParams, true));
                     $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
                     if($resultSet[0]['count'] == 0){
+                        $this->logger->info("Middle - checkand Create INSERT");
                         $query = "INSERT INTO ox_wf_user_identifier(`app_id`,`org_id`,`user_id`,`identifier_name`,`identifier`) VALUES (:appId, :orgId, :userId, :identifierName, :identifier)";
                         $queryParams = array_merge($queryParams, 
                             array("identifierName" => $data['identifier_field'],

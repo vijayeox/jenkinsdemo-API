@@ -72,14 +72,17 @@ class ActivityInstanceService extends AbstractService
     {
         $activityInstance = new ActivityInstance();
         $data['start_date'] = date('Y-m-d H:i:s');
+        $this->logger->info("ActivityInstance BEFCHANGE".print_r($data,true));
         $activityInstance->exchangeArray($data);
         $activityInstance->validate();
+        $this->logger->info("ActivityInstance AFTERFCHANGE".print_r($activityInstance,true));
         $this->beginTransaction();
         $count = 0;
         try {
             $count = $this->table->save($activityInstance);
+            $this->logger->info("ActivityInstance CREATED");
             if ($count == 0) {
-                $this->rollback();
+                $this->logger->info("ActivityInstance ROLLBACK");
                 return 0;
             }
             if (!isset($data['id'])) {

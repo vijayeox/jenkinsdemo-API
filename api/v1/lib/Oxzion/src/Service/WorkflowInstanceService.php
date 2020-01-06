@@ -221,6 +221,7 @@ class WorkflowInstanceService extends AbstractService
             $file = $this->fileService->createFile($fileData, $workflowInstance['id']);
             $this->logger->info("File created -" . $file);
             $params['fileId'] = $fileData['uuid'];
+            unset($params['groupPL']);
             $params['workflow_instance_id'] = $workflowInstance['id'];
             $this->logger->info("Checking something" . print_r($workflow['process_definition_id'], true));
             $this->logger->info("Checking Params" . print_r($params, true));
@@ -244,7 +245,7 @@ class WorkflowInstanceService extends AbstractService
     private function setupIdentityField($params)
     {
         $this->logger->info("setupIdentityField");
-        if (isset($params['identity_field'])) {
+        if (isset($params['identifier_field'])) {
             $data = $params;
             $test = $this->userService->checkAndCreateUser(array(), $data, true);
         }

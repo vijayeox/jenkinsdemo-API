@@ -317,7 +317,7 @@ class FileService extends AbstractService
                 $this->logger->info("FILE ID  ------" . json_encode($result));
                 if ($result[0]['data']) {
                     $result[0]['data'] = json_decode($result[0]['data'], true);
-                    $this->getGroupDocuments($result[0]['data']);
+                    // $this->getGroupDocuments($result[0]['data']);
                 }
                 $this->logger->info("FILE DATA SUCCESS ------" . json_encode($result));
                 return $result[0];
@@ -357,7 +357,7 @@ class FileService extends AbstractService
                 "isActive" => 1);
             $result = $this->executeQueryWithBindParameters($select, $whereQuery)->toArray();
             if (count($result) > 0) {
-                $this->getGroupDocuments($result[0]['data']);
+                // $this->getGroupDocuments($result[0]['data']);
                 return $result[0];
             }
             return 0;

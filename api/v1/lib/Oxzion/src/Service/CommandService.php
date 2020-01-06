@@ -91,13 +91,16 @@ class CommandService extends AbstractService
                 } else {
                     $commandJson = $value;
                 }
-                if (isset($commandJson['command'])) {
+                $this->logger->info("Command JSON------",print_r($commandJson,true)); 
+                if(isset($commandJson['command'])){
+                    $this->logger->info("COMMAND------",print_r($commandJson,true)); 
                     $command = $commandJson['command'];
                     unset($commandJson['command']);
                     $outputData = array_merge($inputData, $commandJson);
                     $this->logger->info(CommandService::class . print_r($outputData, true));
                     $this->logger->info("COMMAND LIST ------" . $command);
                     $result = $this->processCommand($outputData, $command, $request);
+                    $this->logger->info("Process Command Result".print_r($result,true));
                     if (is_array($result)) {
                         $inputData = $result;
                         $inputData['app_id'] = isset($data['app_id']) ? $data['app_id'] : null;
@@ -164,6 +167,10 @@ class CommandService extends AbstractService
             case 'getuserlist':
                 $this->logger->info("GET User LIST");
                 return $this->getUserList($data);
+                break;
+            case 'startWorkflow':
+                $this->logger->info("GET User LIST");
+                return $this->startWorkflow($data);
                 break;
             default:
                 break;
@@ -471,5 +478,10 @@ class CommandService extends AbstractService
             $userList = $this->userService->getUsersList($data['appId'], $data);
             return $userList;
         }
+    }
+
+    protected function startWorkflow(&$data){
+        $startWorkflow = $this->workflowInstanceService->startWorkflow($data);
+        return $startWorkflow;
     }
 }

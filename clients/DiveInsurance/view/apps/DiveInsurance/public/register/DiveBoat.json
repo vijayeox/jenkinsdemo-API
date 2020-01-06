@@ -304,8 +304,7 @@
                                                 "eq": ""
                                             },
                                             "properties": {
-                                                "delegate": "PadiVerification",
-                                                "padiType": "userPadi"
+                                                "delegate": "PadiVerification"
                                             },
                                             "customClass": "alignCenter",
                                             "overlay": {
@@ -349,7 +348,8 @@
                                                 "eq": ""
                                             },
                                             "properties": {},
-                                            "lockKey": true
+                                            "lockKey": true,
+                                            "defaultValue": "padi"
                                         },
                                         {
                                             "input": true,
@@ -5393,137 +5393,6 @@
                         },
                         {
                             "clearOnHide": false,
-                            "key": "panelPanel3",
-                            "input": false,
-                            "title": "Physical Address",
-                            "theme": "primary",
-                            "tableView": false,
-                            "components": [
-                                {
-                                    "autofocus": false,
-                                    "input": true,
-                                    "inputType": "checkbox",
-                                    "tableView": true,
-                                    "label": "Same as mailing address",
-                                    "dataGridLabel": false,
-                                    "key": "sameasmailingaddress",
-                                    "defaultValue": "true",
-                                    "protected": false,
-                                    "persistent": true,
-                                    "hidden": false,
-                                    "name": "",
-                                    "value": "",
-                                    "clearOnHide": true,
-                                    "validate": {
-                                        "required": false
-                                    },
-                                    "type": "checkbox",
-                                    "labelPosition": "right",
-                                    "tags": [],
-                                    "conditional": {
-                                        "show": "",
-                                        "when": null,
-                                        "eq": ""
-                                    },
-                                    "properties": {},
-                                    "lockKey": true,
-                                    "hideLabel": false
-                                },
-                                {
-                                    "autofocus": false,
-                                    "input": true,
-                                    "tableView": true,
-                                    "inputType": "text",
-                                    "inputMask": "",
-                                    "label": "Address 1",
-                                    "key": "address3",
-                                    "placeholder": "Address 1",
-                                    "prefix": "",
-                                    "suffix": "",
-                                    "multiple": false,
-                                    "defaultValue": "",
-                                    "protected": false,
-                                    "unique": false,
-                                    "persistent": true,
-                                    "hidden": false,
-                                    "clearOnHide": false,
-                                    "spellcheck": true,
-                                    "validate": {
-                                        "required": false,
-                                        "minLength": "",
-                                        "maxLength": "",
-                                        "pattern": "",
-                                        "custom": "",
-                                        "customPrivate": false
-                                    },
-                                    "conditional": {
-                                        "show": "false",
-                                        "when": "sameasmailingaddress",
-                                        "eq": "true"
-                                    },
-                                    "type": "textfield",
-                                    "labelPosition": "top",
-                                    "inputFormat": "plain",
-                                    "tags": [],
-                                    "properties": {},
-                                    "lockKey": true,
-                                    "hideLabel": true
-                                },
-                                {
-                                    "autofocus": false,
-                                    "input": true,
-                                    "tableView": true,
-                                    "inputType": "text",
-                                    "inputMask": "",
-                                    "label": "Address 2",
-                                    "key": "address4",
-                                    "placeholder": "Address 2",
-                                    "prefix": "",
-                                    "suffix": "",
-                                    "multiple": false,
-                                    "defaultValue": "",
-                                    "protected": false,
-                                    "unique": false,
-                                    "persistent": true,
-                                    "hidden": false,
-                                    "clearOnHide": false,
-                                    "spellcheck": true,
-                                    "validate": {
-                                        "required": false,
-                                        "minLength": "",
-                                        "maxLength": "",
-                                        "pattern": "",
-                                        "custom": "",
-                                        "customPrivate": false
-                                    },
-                                    "conditional": {
-                                        "show": "false",
-                                        "when": "sameasmailingaddress",
-                                        "eq": "true"
-                                    },
-                                    "type": "textfield",
-                                    "labelPosition": "top",
-                                    "inputFormat": "plain",
-                                    "tags": [],
-                                    "properties": {},
-                                    "lockKey": true,
-                                    "hideLabel": true
-                                }
-                            ],
-                            "type": "panel",
-                            "breadcrumb": "default",
-                            "tags": [],
-                            "conditional": {
-                                "show": "true",
-                                "when": "padiVerified",
-                                "eq": "true"
-                            },
-                            "properties": {},
-                            "customConditional": "",
-                            "hideLabel": false
-                        },
-                        {
-                            "clearOnHide": false,
                             "label": "Columns",
                             "input": false,
                             "tableView": false,
@@ -5693,24 +5562,6 @@
                                 "eq": ""
                             },
                             "properties": {}
-                        },
-                        {
-                            "input": true,
-                            "tableView": true,
-                            "key": "work_phone",
-                            "label": "Work_Phone",
-                            "protected": false,
-                            "unique": false,
-                            "persistent": true,
-                            "type": "hidden",
-                            "tags": [],
-                            "conditional": {
-                                "show": "",
-                                "when": null,
-                                "eq": ""
-                            },
-                            "properties": {},
-                            "lockKey": true
                         }
                     ],
                     "type": "panel",
@@ -5781,6 +5632,6 @@
     "path": "padiverificationformdiveboat",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-10-05T12:23:24.281Z",
-    "modified": "2020-01-03T06:29:10.382Z",
+    "modified": "2020-01-04T18:17:31.971Z",
     "machineName": "testdivehub:padiVerificationFormDiveBoat"
 }

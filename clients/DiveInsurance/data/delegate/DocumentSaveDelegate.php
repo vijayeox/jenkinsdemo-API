@@ -24,9 +24,9 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate
     public function execute(array $data,Persistence $persistenceService) 
     {
         $data['uuid'] = UuidUtil::uuid();
-        $filepath = $this->destination.$data['orgId'].'/'.$data['uuid'].'/';
-        if (!is_dir($filepath)) {
-            mkdir($filepath, 0777, true);
+        $filepath = $data['orgId'].'/'.$data['uuid'].'/';
+        if (!is_dir($this->destination.$filepath)) {
+            mkdir($this->destination.$filepath, 0777, true);
         }
         for($j = 0;$j < sizeof($data['groupPL']);$j++){
             $this->logger->info("INSIDE FOR Loop");
@@ -34,11 +34,11 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate
                 $group = $data['groupPL'][$j]['document'];
                 for($i = 0 ;$i < sizeof($group);$i++){
                     $this->logger->info("INSIDE FOR2 Loop");
-                    $docFile = fopen($filepath.$group[$i]['originalName'].'.txt','wb');
+                    $docFile = fopen($this->destination.$filepath.$group[$i]['originalName'].'.txt','wb');
                     fwrite($docFile,$group[$i]['url']);
                     fclose($docFile);
                     unset($data['groupPL'][$j]['document'][$i]['url']);
-                    $data['groupPL'][$j]['document'][$i]['file'] = $filepath.$group[$i]['originalName'].'.txt';
+                    $data['groupPL'][$j]['document'][$i]['file'] = $this->destination.$filepath.$group[$i]['originalName'].'.txt';
                 }
             }
         }

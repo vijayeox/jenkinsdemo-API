@@ -101,7 +101,14 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                      'efooter' => 'DB_Endorsement_footer.html',
                      'lpTemplate' => 'DiveBoat_LP',
                      'lpheader' => 'DiveBoat_LP_header.html',
-                     'lpfooter' => 'DiveBoat_LP_footer.html') ,
+                     'lpfooter' => 'DiveBoat_LP_footer.html',
+                     'gtemplate' => 'Group_PL_COI',
+                     'gheader' => 'Group_header.html',
+                     'gfooter' => 'Group_footer.html',
+                     'nTemplate' => 'Group_PL_NI',
+                     'nheader' => 'Group_NI_header.html',
+                     'nfooter' => 'Group_NI_footer.html'
+                     ) ,
         'Dive Store'
             => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                      'header' => 'DiveStoreHeader.html',
@@ -227,6 +234,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
 
         if(!isset($documents['property_coi_document']) && !isset($documents['liability_coi_document'])){
+            $this->logger->info("Policy Documnet Generation");
             $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
             if($this->type != 'quote')
             {
@@ -244,17 +252,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['pocket_card'] = $this->generateDocuments($temp,$dest,$options,'card');
         }
 
+        if(isset($temp['groupPL'])){
+            $document['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
+        }
+
 
         if(isset($this->template[$temp['product']]['cover_letter'])){
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
         }
 
-        if(isset($temp['lossPayees'])){
+        if(isset($temp['loss_payees']) && $temp['loss_payees'] == 'yes'){
             $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
         }
 
         if(isset($temp['additionalInsured'])){
-            $this->logger->info("additionalInsured_document_filedata".print_r($temp['additionalInsured'],true));
             $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
         }
 
@@ -277,6 +288,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $this->logger->info("temp".print_r($data,true));
         $data['documents'] = $documents;
         $data['policyStatus'] = "In Force";
+        $this->logger->info("Policy Documnet Generation");
         return $data;
     }
 
@@ -410,7 +422,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         if(isset($headerKey) && $footerKey !=null){ 
             $options['footer'] =  $this->template[$data['product']][$footerKey];
         }
-        $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
+        if(!file_exists($docDest)){
+            $this->documentBuilder->generateDocument($template,$data,$docDest,$options);
+        }
         if($this->type == 'lapse'){
             $data['documents']['lapse_document'] = $dest['relativePath'].$template.'.pdf'; 
             return $data;
@@ -424,7 +438,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }else{
             $file =  $this->template[$data['product']][$fileKey];
         }
-        $this->documentBuilder->copyTemplateToDestination($file,$dest);
+        if(!file_exists($dest)){
+            $this->documentBuilder->copyTemplateToDestination($file,$dest);
+        }
         return $dest.$file;
     }
 }
