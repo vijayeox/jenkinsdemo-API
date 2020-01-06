@@ -7,9 +7,9 @@ namespace Workflow\Controller;
 use Exception;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\EntityNotFoundException;
-use Oxzion\ValidationException;
 use Oxzion\Service\CommandService;
 use Oxzion\Service\WorkflowInstanceService;
+use Oxzion\ValidationException;
 
 class ServiceTaskController extends AbstractApiControllerHelper
 {
@@ -63,9 +63,9 @@ class ServiceTaskController extends AbstractApiControllerHelper
         $data = $this->extractPostData();
         $this->commandService->updateOrganizationContext($data['variables']);
         $this->log->info(":Post Data- " . print_r(json_encode($data), true));
-        $variables = isset($data['variables'])?$data['variables']:null;
+        $variables = isset($data['variables']) ? $data['variables'] : null;
         try {
-            $response = $this->commandService->runCommand($variables,$this->getRequest());
+            $response = $this->commandService->runCommand($variables, $this->getRequest());
             if ($response && is_array($response)) {
                 $this->log->info(":Workflow Step Successfully Executed - " . print_r($response, true));
                 return $this->getSuccessResponseWithData($response, 200);

@@ -6,19 +6,19 @@ namespace Oxzion\Service;
 
 use Exception;
 use Oxzion\AppDelegate\AppDelegateService;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
 use Oxzion\Document\DocumentGeneratorImpl;
 use Oxzion\EntityNotFoundException;
 use Oxzion\Messaging\MessageProducer;
+use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Service\UserService;
-use Oxzion\ServiceException;
+use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Utils\RestClient;
 use Oxzion\ValidationException;
-use Oxzion\Service\WorkflowInstanceService;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
 
 class CommandService extends AbstractService
 {
@@ -39,7 +39,7 @@ class CommandService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService,WorkflowService $workflowService,UserService $userService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
@@ -58,11 +58,11 @@ class CommandService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
-    public function runCommand(&$data,$request)
+    public function runCommand(&$data, $request)
     {
         $this->logger->info("RUN COMMAND  ------" . json_encode($data));
         //TODO Execute Command Service Methods
-        if(isset($data['appId'])){
+        if (isset($data['appId'])) {
             $orgId = isset($data['orgId']) ? $this->getIdFromUuid('ox_organization', $data['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
             $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
             $appId = $this->getIdFromUuid('ox_app', $data['appId']);
@@ -91,7 +91,7 @@ class CommandService extends AbstractService
                 } else {
                     $commandJson = $value;
                 }
-                if(isset($commandJson['command'])){
+                if (isset($commandJson['command'])) {
                     $command = $commandJson['command'];
                     unset($commandJson['command']);
                     $outputData = array_merge($inputData, $commandJson);
@@ -100,10 +100,10 @@ class CommandService extends AbstractService
                     $result = $this->processCommand($outputData, $command, $request);
                     if (is_array($result)) {
                         $inputData = $result;
-                        $inputData['app_id'] = isset($data['app_id'])?$data['app_id']:null;
-                        $inputData['orgId'] = isset($data['orgId'])?$data['orgId']:null;
-                        $inputData['workFlowId'] = isset($data['workFlowId'])?$data['workFlowId']:null;
-                        $outputData = array_merge($outputData,$result);
+                        $inputData['app_id'] = isset($data['app_id']) ? $data['app_id'] : null;
+                        $inputData['orgId'] = isset($data['orgId']) ? $data['orgId'] : null;
+                        $inputData['workFlowId'] = isset($data['workFlowId']) ? $data['workFlowId'] : null;
+                        $outputData = array_merge($outputData, $result);
                     }
                 }
                 $this->logger->info(CommandService::class . print_r($inputData, true));
@@ -170,7 +170,7 @@ class CommandService extends AbstractService
         };
     }
 
-    protected function getRouteData(&$data,$request)
+    protected function getRouteData(&$data, $request)
     {
         $this->logger->info("EXECUTE DELEGATE ---- " . print_r($data, true));
         if (isset($data['app_id']) && isset($data['route'])) {
@@ -182,13 +182,12 @@ class CommandService extends AbstractService
         $this->logger->info("DELEGATE ---- " . print_r($route, true));
         $this->logger->info("DELEGATE APP ID---- " . print_r($app_id, true));
         $headers = $request->getHeaders()->toArray();
-        $restClient = new RestClient($headers['Host'],array('exceptions' => false,'timeout' => 0));
-        $route = "/app/".$data['app_uuid']."/".$route;
-        // print_r($route);exit;
-        $response = json_decode($restClient->get($route,array(),$headers),true);
-        if($response['status']=='success'){
+        $restClient = new RestClient($headers['Host'], array('exceptions' => false, 'timeout' => 0));
+        $route = "/app/" . $data['app_uuid'] . "/" . $route;
+        $response = json_decode($restClient->get($route, array(), $headers), true);
+        if ($response['status'] == 'success') {
             $data['result'] = $response['data'];
-            if(isset($response['total'])){
+            if (isset($response['total'])) {
                 $data['total'] = $response['total'];
             }
         }
@@ -288,7 +287,7 @@ class CommandService extends AbstractService
         $this->logger->info("EXECUTE DELEGATE ---- " . print_r($data, true));
         if (isset($data['app_id']) && isset($data['delegate'])) {
             $app_id = $data['app_id'];
-            if(isset($data['appId'])){
+            if (isset($data['appId'])) {
                 $app_id = $data['appId'];
             }
             $delegate = $data['delegate'];
@@ -410,20 +409,20 @@ class CommandService extends AbstractService
     {
         $params = array();
         $filterParams = array();
-        if(isset($data['workFlowId'])){
+        if (isset($data['workFlowId'])) {
             $params['workFlowId'] = $data['workFlowId'];
         }
-        if(isset($data['userId'])){
+        if (isset($data['userId'])) {
             $params['userId'] = $data['userId'];
         }
-        if(isset($data['appId'])){
+        if (isset($data['appId'])) {
             $params['app_id'] = $data['appId'];
         } else {
-            if(isset($data['app_id'])){
+            if (isset($data['app_id'])) {
                 $params['app_id'] = $data['app_id'];
             }
         }
-        if(isset($data['filter'])){
+        if (isset($data['filter'])) {
             $filterParams['filter'] = $data['filter'];
         }
         $fileList = $this->fileService->getFileList($params['app_id'], $params, $filterParams);
@@ -433,7 +432,7 @@ class CommandService extends AbstractService
 
     protected function getStartForm(&$data)
     {
-        if(isset($data['workflow_id']) && isset($data['appId'])){
+        if (isset($data['workflow_id']) && isset($data['appId'])) {
             $workFlowId = $data['workflow_id'];
             $result = $this->workflowService->getStartForm($data['appId'], $workFlowId);
             $data['data'] = $result;
@@ -442,21 +441,22 @@ class CommandService extends AbstractService
             throw new ServiceException("App and Workflow not Found", "app.for.workflow.not.found");
         }
     }
-    protected function verifyUser(&$data){
-        if(isset($data['email'])){
+    protected function verifyUser(&$data)
+    {
+        if (isset($data['email'])) {
             $select = "SELECT * from ox_user where email = :email";
             $selectQuery = array("email" => $data['email']);
             $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
-            if(count($result) > 0){
+            if (count($result) > 0) {
                 $data['user_exists'] = '1';
                 return $data;
             }
         }
-        if(isset($data['identifier_field']) && isset($data['appId']) && isset($data[$data['identifier_field']])){
+        if (isset($data['identifier_field']) && isset($data['appId']) && isset($data[$data['identifier_field']])) {
             $select = "SELECT * from ox_wf_user_identifier where identifier_name = :identityField AND app_id = :appId AND identifier = :identifier";
-            $selectQuery = array("identityField" => $data['identifier_field'], "appId" => $data['app_id'],"identifier"=>$data[$data['identifier_field']]);
+            $selectQuery = array("identityField" => $data['identifier_field'], "appId" => $data['app_id'], "identifier" => $data[$data['identifier_field']]);
             $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
-            if(count($result) > 0){
+            if (count($result) > 0) {
                 $data['user_exists'] = '1';
                 return $data;
             } else {
@@ -465,9 +465,10 @@ class CommandService extends AbstractService
             }
         }
     }
-    protected function getUserList(&$data){
-        if(isset($data['appId'])){
-            $userList = $this->userService->getUsersList($data['appId'],$data);
+    protected function getUserList(&$data)
+    {
+        if (isset($data['appId'])) {
+            $userList = $this->userService->getUsersList($data['appId'], $data);
             return $userList;
         }
     }

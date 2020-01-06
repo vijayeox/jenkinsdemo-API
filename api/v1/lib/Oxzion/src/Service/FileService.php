@@ -9,9 +9,9 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
 use Oxzion\ServiceException;
-use Oxzion\Utils\UuidUtil;
-use Oxzion\Utils\FileUtils;
 use Oxzion\Service\FieldService;
+use Oxzion\Utils\FileUtils;
+use Oxzion\Utils\UuidUtil;
 
 class FileService extends AbstractService
 {
@@ -19,7 +19,7 @@ class FileService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer,FieldService $fieldService)
+    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer, FieldService $fieldService)
     {
         parent::__construct($config, $dbAdapter);
         $this->messageProducer = $messageProducer;
@@ -42,7 +42,7 @@ class FileService extends AbstractService
      *   } </code>
      * @return array Returns a JSON Response with Status Code and Created File.
      */
-    public function createFile(&$data, $workflowInstanceId = null,$ensureDir=false)
+    public function createFile(&$data, $workflowInstanceId = null, $ensureDir = false)
     {
         $baseFolder = $this->config['APP_DOCUMENT_FOLDER'];
         $this->logger->info("Data CreateFile- " . json_encode($data));
@@ -64,7 +64,10 @@ class FileService extends AbstractService
             $activityId = null;
         }
         $data['uuid'] = $uuid = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
-        
+        if (isset($data['groupPL'])) {
+            $this->saveGroupPLDocuments($data, $baseFolder);
+        }
+
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
         unset($data['uuid']);
         $fields = $data = $this->cleanData($data);
@@ -80,7 +83,7 @@ class FileService extends AbstractService
         $data['parent_id'] = $parentId;
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['entity_id'] = $entityId;
-       
+
         $data['data'] = $jsonData;
         $file = new File();
         $file->exchangeArray($data);
@@ -125,6 +128,27 @@ class FileService extends AbstractService
             throw $e;
         }
         return $count;
+    }
+
+    private function saveGroupPLDocuments(&$data, $baseFolder)
+    {
+        $filepath = $baseFolder . $data['orgId'] . '/' . $data['uuid'] . '/';
+        if (!file_exists($filepath)) {
+            FileUtils::createDirectory($filepath);
+        }
+        chmod($filepath, 0777);
+        for ($j = 0; $j < sizeof($data['groupPL']); $j++) {
+            if (isset($data['groupPL'][$j]['document'])) {
+                $group = $data['groupPL'][$j]['document'];
+                for ($i = 0; $i < sizeof($group); $i++) {
+                    $docFile = fopen($filepath . $group[$i]['originalName'] . '.txt', 'wb');
+                    fwrite($docFile, $group[$i]['url']);
+                    fclose($docFile);
+                    unset($data['groupPL'][$j]['document'][$i]['url']);
+                    $data['groupPL'][$j]['document'][$i]['file'] = $filepath . $group[$i]['originalName'] . '.txt';
+                }
+            }
+        }
     }
 
     private function updateFileData($id, $data)
@@ -207,8 +231,10 @@ class FileService extends AbstractService
                 $data[$key] = json_encode($dataelement);
             }
         }
-        
-        $fields = array_merge($fileObject,$data);
+        if (isset($data['groupPL'])) {
+            $this->saveGroupPLDocuments($data, $baseFolder);
+        }
+        $fields = array_merge($fileObject, $data);
         $file = new File();
         $id = $this->getIdFromUuid('ox_file', $id);
         $validFields = $this->checkFields(isset($obj['entity_id']) ? $obj['entity_id'] : null, $fields, $id);
@@ -303,16 +329,16 @@ class FileService extends AbstractService
         }
     }
 
-    private function getGroupDocuments(&$data){
-        if(isset($data['groupPL']))
-            {
-                $group = $data['groupPL'];
-                for($i = 0;$i < sizeof($group);$i++){
-                    $file = $group[$i]['document'][0]['file'];
-                    $data['groupPL'][$i]['document'][0]['url'] = file_get_contents($file);
-                    unset($data['groupPL'][$i]['document'][0]['file']);
-                }
+    private function getGroupDocuments(&$data)
+    {
+        if (isset($data['groupPL'])) {
+            $group = $data['groupPL'];
+            for ($i = 0; $i < sizeof($group); $i++) {
+                $file = $group[$i]['document'][0]['file'];
+                $data['groupPL'][$i]['document'][0]['url'] = file_get_contents($file);
+                unset($data['groupPL'][$i]['document'][0]['file']);
             }
+        }
     }
 
     public function getFileByWorkflowInstanceId($workflowInstanceId, $isProcessInstanceId = true)
@@ -487,6 +513,12 @@ class FileService extends AbstractService
         $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
         $selectQuery = array("orgId" => $orgId, "appId" => $appId);
         $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+
+        // Code to get the entityID from appId, we need this to get the correct fieldId for the filters
+        $select1 = "SELECT * from ox_workflow where uuid = :uuid";
+        $selectQuery1 = array("uuid" => $params['workFlowId']);
+        $worflowArray = $this->executeQuerywithBindParameters($select1, $selectQuery1)->toArray();
+
         if (count($result) > 0) {
             $queryParams = array();
             $appFilter = "f.id = :appId";
@@ -505,7 +537,7 @@ class FileService extends AbstractService
             if (isset($params['workflowStatus'])) {
                 $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
             }
-            $where = " $appFilter $statusFilter";
+            $where = " $appFilter" . "$statusFilter";
             $fromQuery = " from ox_file as a
             inner join ox_app_entity en on en.id = a.entity_id
             inner join ox_form as b on (en.id = b.entity_id)
@@ -529,8 +561,8 @@ class FileService extends AbstractService
             } else {
                 $userWhere = "";
             }
-            
-            $fromQuery .= " left join ox_workflow_instance as g on a.workflow_instance_id = g.id
+
+            $fromQuery .= "\n left join ox_workflow_instance as g on a.workflow_instance_id = g.id
             left join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
             left join ox_workflow as h on h.id = wd.workflow_id";
             $prefix = 1;
@@ -539,14 +571,16 @@ class FileService extends AbstractService
             $sort = "";
             $field = "";
             $pageSize = " LIMIT 10";
-            $offset =  " OFFSET 0";
+            $offset = " OFFSET 0";
             if (!empty($filterParams)) {
                 if (!is_array($filterParams['filter'])) {
                     $filterParamsArray = json_decode($filterParams['filter'], true);
-                    if (is_array($filterParamsArray[0])) {
-                        if (array_key_exists("sort", $filterParamsArray[0])) {
-                            $sortParam = $filterParamsArray[0]['sort'];
-                        }
+                } else {
+                    $filterParamsArray = $filterParams['filter'];
+                }
+                if (is_array($filterParamsArray[0])) {
+                    if (array_key_exists("sort", $filterParamsArray[0])) {
+                        $sortParam = $filterParamsArray[0]['sort'];
                     }
                 }
                 $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
@@ -561,8 +595,15 @@ class FileService extends AbstractService
                     }
                     $filterData = $filterParamsArray[0]['filter']['filters'];
                     foreach ($filterData as $val) {
+                        if ($val['field'] === 'status') {
+                            $whereQuery .= "AND " . $this->checkStatusFilter($val) . "";
+                        }
                         $tablePrefix = "tblf" . $prefix;
-                        $fieldId = $this->getFieldDetails($val['field']);
+                        if (!empty($worflowArray['entity_id'])) {
+                            $fieldId = $this->getFieldDetails($val['field'], $worflowArray['entity_id']);
+                        } else {
+                            $fieldId = $this->getFieldDetails($val['field']);
+                        }
                         if (!empty($val) && !empty($fieldId)) {
                             $joinQuery .= " left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) ";
                             $valueTransform = $this->getFieldType($fieldId, $tablePrefix);
@@ -572,7 +613,7 @@ class FileService extends AbstractService
                         if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
                             if ($sortParam[0]['field'] === $val['field']) {
                                 $sort = "ORDER BY " . $tablePrefix . ".field_value";
-                                $field = " , " . $tablePrefix . ".field_value";
+                                $field = ", " . $tablePrefix . ".field_value";
                             }
                         }
                         $prefix += 1;
@@ -581,12 +622,12 @@ class FileService extends AbstractService
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
             }
-            $where .= " " . $whereQuery . "";
-            $fromQuery .= " " . $joinQuery . "";
+            $where .= "" . $whereQuery . "";
+            $fromQuery .= "" . $joinQuery . "";
             try {
                 $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
-                $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
+                $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, en.name as entity_name" . "$field" . "$fromQuery" . "WHERE" . "$where" . "$userWhere" . "$sort" . "$pageSize" . "$offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 if ($resultSet) {
@@ -637,8 +678,10 @@ class FileService extends AbstractService
     }
     public function getFieldType($value, $prefix)
     {
+        // print_r($value);exit;
         switch ($value['data_type']) {
             case 'date':
+            case 'Date':
                 $castString = "CAST($prefix.field_value AS DATETIME)";
                 break;
             case 'int':
@@ -731,5 +774,11 @@ class FileService extends AbstractService
 
         return $params;
 
+    }
+
+    private function checkStatusFilter($filter)
+    {
+        $whereQuery = "g.status = '" . $filter['value'] . "' ";
+        return $whereQuery;
     }
 }

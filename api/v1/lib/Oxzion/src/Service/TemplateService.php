@@ -63,7 +63,6 @@ class TemplateService extends AbstractService
      */
     public function getContent($templateName, $data = array())
     {
-
         $this->logger->info("Template Name:".$templateName);
         $this->logger->info("Data context".print_r($data,true));
 
