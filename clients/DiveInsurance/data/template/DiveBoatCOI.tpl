@@ -259,215 +259,215 @@ premium, then 10 days notice will be provided, and any premium not earned will b
 <hr></hr>
 
 
-            {if $state == 'Alaska'}
+            {if $business_state == 'Alaska'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/AK.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Alabama'}
+			{elseif $business_state == 'Alabama'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/AL.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Arkansas'}
+			{elseif $business_state == 'Arkansas'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/AR.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Arizona'}
+			{elseif $business_state == 'Arizona'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/AZ.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Colorado'}
+			{elseif $business_state == 'Colorado'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/CO.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Connecticut'}
+			{elseif $business_state == 'Connecticut'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/CT.tpl"}</b>
 				</p></center>
-			{elseif $state == 'District of Columbia'}
+			{elseif $business_state == 'District of Columbia'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/DC.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Delaware'}
+			{elseif $business_state == 'Delaware'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/DE.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Florida'}
+			{elseif $business_state == 'Florida'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/FL.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Micronesia'}
+			{elseif $business_state == 'Micronesia'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/FM.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Georgia'}
+			{elseif $business_state == 'Georgia'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/GA.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Hawaii'}
+			{elseif $business_state == 'Hawaii'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/HI.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Iowa'}
+			{elseif $business_state == 'Iowa'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/IA.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Idaho'}
+			{elseif $business_state == 'Idaho'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/ID.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Illinois'}
+			{elseif $business_state == 'Illinois'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/IL.tpl"}</b>
 				</p></center>
-			{elseif $state == 'International'}
+			{elseif $business_state == 'International'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/International.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Kansas'}
+			{elseif $business_state == 'Kansas'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/KS.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Kentucky'}
+			{elseif $business_state == 'Kentucky'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/KY.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Louisiana'}
+			{elseif $business_state == 'Louisiana'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/LA.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Massachusetts'}
+			{elseif $business_state == 'Massachusetts'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MA.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Maryland'}
+			{elseif $business_state == 'Maryland'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MD.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Maine'}
+			{elseif $business_state == 'Maine'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/ME.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Marshall Islands'}
+			{elseif $business_state == 'Marshall Islands'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MH.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Michigan'}
+			{elseif $business_state == 'Michigan'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MI.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Minnesota'}
+			{elseif $business_state == 'Minnesota'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MN.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Missouri'}
+			{elseif $business_state == 'Missouri'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MO.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Mississippi'}
+			{elseif $business_state == 'Mississippi'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MS.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Montana'}
+			{elseif $business_state == 'Montana'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/MT.tpl"}</b>
 				</p></center>
-			{elseif $state == 'North Carolina'}
+			{elseif $business_state == 'North Carolina'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NC.tpl"}</b>
 				</p></center>
-			{elseif $state == 'North Dakota'}
+			{elseif $business_state == 'North Dakota'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/ND.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Nebraska'}
+			{elseif $business_state == 'Nebraska'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NE.tpl"}</b>
 				</p></center>
-			{elseif $state == 'New Hampshire'}
+			{elseif $business_state == 'New Hampshire'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NH.tpl"}</b>
 				</p></center>
-			{elseif $state == 'New Jersey'}
+			{elseif $business_state == 'New Jersey'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NJ.tpl"}</b>
 				</p></center>
-			{elseif $state == 'New Mexico'}
+			{elseif $business_state == 'New Mexico'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NM.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Nevada'}
+			{elseif $business_state == 'Nevada'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NV.tpl"}</b>
 				</p></center>
-			{elseif $state == 'New York'}
+			{elseif $business_state == 'New York'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/NY.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Ohio'}
+			{elseif $business_state == 'Ohio'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/OH.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Oklahoma'}
+			{elseif $business_state == 'Oklahoma'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/OK.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Oregon'}
+			{elseif $business_state == 'Oregon'}
 				<center><center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/OR.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Pennsylvania'}
+			{elseif $business_state == 'Pennsylvania'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/PA.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Palau'}
+			{elseif $business_state == 'Palau'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/PW.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Rhode Island'}
+			{elseif $business_state == 'Rhode Island'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/RI.tpl"}</b>
 				</p></center>
-			{elseif $state == 'South Carolina'}
+			{elseif $business_state == 'South Carolina'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/SC.tpl"}</b>
 				</p></center>
-			{elseif $state == 'South Dakota'}
+			{elseif $business_state == 'South Dakota'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/SD.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Tennessee'}
+			{elseif $business_state == 'Tennessee'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/TN.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Texas'}
+			{elseif $business_state == 'Texas'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/TX.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Utah'}
+			{elseif $business_state == 'Utah'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/UT.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Virginia'}
+			{elseif $business_state == 'Virginia'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/VA.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Virgin Islands'}
+			{elseif $business_state == 'Virgin Islands'}
 				<center><p class = "notice" style = "color:red;">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/VT.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Washington'}
+			{elseif $business_state == 'Washington'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/WA.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Wisconsin'}
+			{elseif $business_state == 'Wisconsin'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/WI.tpl"}</b>
 				</p></center>
-			{elseif $state == 'West Virginias'}
+			{elseif $business_state == 'West Virginias'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/WV.tpl"}</b>
 				</p></center>
-			{elseif $state == 'Wyoming'}
+			{elseif $business_state == 'Wyoming'}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/DiveBoatSurplus/WY.tpl"}</b>
 				</p></center>
