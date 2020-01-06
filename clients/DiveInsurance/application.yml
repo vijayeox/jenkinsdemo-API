@@ -28,9 +28,6 @@ privilege:
         name: MANAGE_POLICY_APPROVAL
         permission: 3
     -
-        name: MANAGE_MYPOLICY_APPROVAL
-        permission: 3
-    -
         name: MANAGE_MY_POLICY
         permission: 3
     -
@@ -43,9 +40,6 @@ role:
         privileges:
             -
                 privilege_name: MANAGE_MY_POLICY
-                permission: 3
-            -
-                name: MANAGE_MYPOLICY_APPROVAL
                 permission: 3
         uuid: 38880e3a-6bee-43c1-bd4d-9431d78a084b
     -
@@ -294,7 +288,7 @@ menu:
                                 details:
                                     -
                                         type: Form
-                                        url: 'workflowinstance\/{{workflowInstanceId}}\/activityinstance\/{{activityInstanceId}}\/form'
+                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
                                 icon: 'fa fa-check-circle'
                         columnConfig:
                             -
@@ -451,6 +445,73 @@ menu:
                     formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
                     type: Form
         uuid: 9bf92403-2111-4d05-9d89-01a609ed4b83
+    -
+        name: MyAssignments
+        privilege: MANAGE_MY_POLICY_WRITE
+        icon: 'fa fa-list'
+        page:
+            name: 'My Assignments'
+            description: 'My Assignments'
+            content:
+                -
+                    type: Document
+                    content: '<p><h2>My Assignments</h2></p><p></p>'
+                -
+                    type: List
+                    content:
+                        route: assignments
+                        filterable: true
+                        reorderable: true
+                        resizable: true
+                        sortable: true
+                        pageable:
+                            buttonCount: 3
+                            pageSizes:
+                                - 10
+                                - 20
+                                - 50
+                            info: true
+                        actions:
+                            -
+                                name: Approve
+                                rule: '{{to_be_claimed}} == 1'
+                                details:
+                                    -
+                                        type: Update
+                                        params:
+                                            url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim'
+                                    -
+                                        type: Form
+                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                                icon: 'fa fa-check-circle'
+                            -
+                                name: Approve
+                                rule: '{{to_be_claimed}} == 0'
+                                details:
+                                    -
+                                        type: Form
+                                        url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
+                                icon: 'fa fa-check-circle'
+                        columnConfig:
+                            -
+                                title: PADI
+                                field: padi
+                            -
+                                title: 'First Name'
+                                field: firstname
+                            -
+                                title: 'Last Name'
+                                field: lastname
+                            -
+                                title: Product
+                                field: entity_name
+                            -
+                                title: 'Policy Start Date'
+                                field: start_date
+                            -
+                                title: 'Policy End Date'
+                                field: end_date
+        uuid: 3b396d26-c0cb-4436-8804-f22431d6ac8c
 pages:
     -
         page:
