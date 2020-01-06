@@ -525,13 +525,13 @@ class FileService extends AbstractService
             $queryParams['appId'] = $appId;
             $fieldNameList = "";
             $statusFilter = "";
-            if (isset($params['workflowId'])) {
-                $workflowId = $this->getIdFromUuid('ox_workflow', $params['workflowId']);
-                if (!$workflowId) {
+            if (isset($params['workFlowId'])) {
+                $workFlowId = $this->getIdFromUuid('ox_workflow', $params['workFlowId']);
+                if (!$workFlowId) {
                     throw new ServiceException("Workflow Does not Exist", "app.forworkflownot.found");
                 } else {
-                    $appFilter .= " AND h.id = :workflowId";
-                    $queryParams['workflowId'] = $workflowId;
+                    $appFilter .= " AND h.id = :workFlowId";
+                    $queryParams['workFlowId'] = $workFlowId;
                 }
             }
             if (isset($params['workflowStatus'])) {
@@ -678,7 +678,6 @@ class FileService extends AbstractService
     }
     public function getFieldType($value, $prefix)
     {
-        // print_r($value);exit;
         switch ($value['data_type']) {
             case 'date':
             case 'Date':
@@ -754,7 +753,7 @@ class FileService extends AbstractService
         unset($params['page']);
         unset($params['parentWorkflowInstanceId']);
         unset($params['activityId']);
-        unset($params['workflowId']);
+        unset($params['workFlowId']);
         unset($params['form_id']);
         unset($params['fileId']);
         unset($params['app_id']);
@@ -771,9 +770,7 @@ class FileService extends AbstractService
         unset($params['access']);
         unset($params['uuid']);
         unset($params['commands']);
-
         return $params;
-
     }
 
     private function checkStatusFilter($filter)
