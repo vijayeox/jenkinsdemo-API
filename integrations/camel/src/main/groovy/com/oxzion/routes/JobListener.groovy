@@ -28,6 +28,7 @@ class JobListener {
      *          {
      *              job : {
      *                      url : string,
+     *                      name: string,
      *                      group : string,
      *                      topic : string,
      *                      data : {json}
@@ -97,9 +98,8 @@ class JobListener {
 
     @RequestMapping(value ="/listjob",method = RequestMethod.GET)
     def ListJob() {
-        logger.info("List jobs - $payload")
-        def check = jobHelper.listJob()
-        return check
+        def list = jobHelper.listJob()
+        return list
     }
 
 }

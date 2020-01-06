@@ -44,8 +44,8 @@ class JobSchedulerHelper {
                     //get job's trigger
                     List<Trigger> triggers = (List<Trigger>) scheduler.getTriggersOfJob(jobKey);
                     Date nextFireTime = triggers.get(0).getNextFireTime();
-                    list.add("[jobName] : " + jobName + " [groupName] : "
-                            + jobGroup + " - next fire time -" + nextFireTime)
+                    list.add("[jobName] : " + jobName + ", [groupName] : "
+                            + jobGroup + ",  next fire time -" + nextFireTime)
                 }
 
             }
@@ -70,10 +70,29 @@ class JobSchedulerHelper {
             JobDataMap jobDataMap = new JobDataMap()
             def jobDataJson = JsonOutput.toJson(jobDataObj)
             jobDataMap.put("JobData",jobDataJson)
-            if(jobDataObj.job.containsKey('group')) {
+            if(jobDataObj.job.containsKey('group') && !jobDataObj.job.containsKey('name')) {
                 String _group = jobDataObj.job.group.toString()
                 return JobBuilder.newJob(JobHandler.class)
                         .withIdentity(UUID.randomUUID().toString(), _group)
+                        .withDescription("Job")
+                        .usingJobData(jobDataMap)
+                        .storeDurably()
+                        .build()
+            }
+            else if(!jobDataObj.job.containsKey('group') && jobDataObj.job.containsKey('name')){
+                String _name = jobDataObj.job.name.toString()
+                return JobBuilder.newJob(JobHandler.class)
+                        .withIdentity(_name, "Job")
+                        .withDescription("Job")
+                        .usingJobData(jobDataMap)
+                        .storeDurably()
+                        .build()
+            }
+            else if(jobDataObj.job.containsKey('group') && jobDataObj.job.containsKey('name')){
+                String _name = jobDataObj.job.name.toString()
+                String _group = jobDataObj.job.group.toString()
+                return JobBuilder.newJob(JobHandler.class)
+                        .withIdentity(_name, _group)
                         .withDescription("Job")
                         .usingJobData(jobDataMap)
                         .storeDurably()
@@ -97,12 +116,42 @@ class JobSchedulerHelper {
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"))
         if(payload.schedule.cron) {
             CronExpression cronExpression = new CronExpression(payload.schedule.cron)
-            return TriggerBuilder.newTrigger()
+            if(payload.job.containsKey('group') && !payload.job.containsKey('name')) {
+                String _group = payload.job.group.toString()
+                return TriggerBuilder.newTrigger()
+                        .forJob(jobDetail)
+                        .withIdentity(jobDetail.getKey().getName(), _group)
+                        .withDescription("Job")
+                        .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression).withMisfireHandlingInstructionFireAndProceed())
+                        .build()
+            }
+            else if(payload.job.containsKey('group') && !payload.job.containsKey('name')){
+                String _name = payload.job.name.toString()
+                return TriggerBuilder.newTrigger()
+                        .forJob(jobDetail)
+                        .withIdentity(_name, "Job")
+                        .withDescription("Job")
+                        .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression).withMisfireHandlingInstructionFireAndProceed())
+                        .build()
+            }
+            else if(payload.job.containsKey('group') && payload.job.containsKey('name')){
+                String _name = payload.job.name.toString()
+                String _group = payload.job.group.toString()
+                return TriggerBuilder.newTrigger()
+                        .forJob(jobDetail)
+                        .withIdentity(_name, _group)
+                        .withDescription("Job")
+                        .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression).withMisfireHandlingInstructionFireAndProceed())
+                        .build()
+            }
+            else{
+                return TriggerBuilder.newTrigger()
                     .forJob(jobDetail)
                     .withIdentity(jobDetail.getKey().getName(), "Job")
                     .withDescription("Job")
                     .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression).withMisfireHandlingInstructionFireAndProceed())
                     .build()
+            }
         }
     }
 
