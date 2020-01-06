@@ -29,7 +29,6 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate
             mkdir($this->destination.$filepath, 0777, true);
         }
         for($j = 0;$j < sizeof($data['groupPL']);$j++){
-            $this->logger->info("INSIDE FOR Loop");
             if(isset($data['groupPL'][$j]['document'])){
                 $group = $data['groupPL'][$j]['document'];
                 for($i = 0 ;$i < sizeof($group);$i++){

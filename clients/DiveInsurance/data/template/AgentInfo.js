@@ -6,9 +6,9 @@ function agentInfo(){
 	"phone2" : "(800) 223-9998",
 	"fax" : "(714) 739-3188"
 	};
-document.getElementById('nameVal').innerHTML= data.name; 
-document.getElementById('addressVal').innerHTML= data.address;
-document.getElementById('phone1Val').innerHTML= data.phone1;
-document.getElementById('phone2Val').innerHTML= data.phone2;
-document.getElementById('faxVal').innerHTML= data.fax; 
+	document.getElementById('nameVal').innerHTML= data.name; 
+	document.getElementById('addressVal').innerHTML= data.address;
+	document.getElementById('phone1Val').innerHTML= data.phone1;
+	document.getElementById('phone2Val').innerHTML= data.phone2;
+    document.getElementById('faxVal').innerHTML= data.fax; 
 }
