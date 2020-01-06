@@ -397,7 +397,7 @@ ox_analysis:
     excess_liability_coverage: 1M
     any_boat_claims: 'no'
     marine_insurance_policy_ever_cancelled_or_nonrenewed: 'no'
-    start_date: '2019-08-01'
+    start_date: 2019/08/01
     end_date: 2020/07/22
     application_type_select: ''
     padi_number: '2141'
@@ -594,7 +594,7 @@ ox_analysis:
     excess_liability_coverage: 1M
     any_boat_claims: 'no'
     marine_insurance_policy_ever_cancelled_or_nonrenewed: 'no'
-    start_date: '2019-08-01'
+    start_date: 2019/08/01
     end_date: 2018/07/22
     application_type_select: ''
     padi_number: '2141'

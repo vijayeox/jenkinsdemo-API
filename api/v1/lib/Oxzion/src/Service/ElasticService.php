@@ -347,9 +347,9 @@ class ElasticService
 
     public function search($q)
     {
-     //   print_r(json_encode($q));
+      //  print_r(json_encode($q));echo "\n";
         $data = $this->client->search($q);
-     //    print_r(json_encode($data));
+     //    print_r(json_encode($data));echo "\n";
         return $data;
 
     }
