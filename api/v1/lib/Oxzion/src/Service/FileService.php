@@ -9,9 +9,8 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Model\File;
 use Oxzion\Model\FileTable;
 use Oxzion\ServiceException;
-use Oxzion\Utils\UuidUtil;
-use Oxzion\Utils\FileUtils;
 use Oxzion\Service\FieldService;
+use Oxzion\Utils\UuidUtil;
 
 class FileService extends AbstractService
 {
@@ -19,7 +18,7 @@ class FileService extends AbstractService
     /**
      * @ignore __construct
      */
-    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer,FieldService $fieldService)
+    public function __construct($config, $dbAdapter, FileTable $table, FormService $formService, MessageProducer $messageProducer, FieldService $fieldService)
     {
         parent::__construct($config, $dbAdapter);
         $this->messageProducer = $messageProducer;
@@ -42,7 +41,7 @@ class FileService extends AbstractService
      *   } </code>
      * @return array Returns a JSON Response with Status Code and Created File.
      */
-    public function createFile(&$data, $workflowInstanceId = null,$ensureDir=false)
+    public function createFile(&$data, $workflowInstanceId = null, $ensureDir = false)
     {
         $baseFolder = $this->config['APP_DOCUMENT_FOLDER'];
         $this->logger->info("Data CreateFile- " . json_encode($data));
@@ -143,11 +142,11 @@ class FileService extends AbstractService
         // $resultSet = $this->executeQueryWithBindParameters($selectQuery,$queryParams)->toArray();
         $query = "update ox_file set latest = :latest where id = :fileId";
         $params = array('latest' => $isLatest, 'fileId' => $fileId);
-        $this->logger->info("Executing query - $query with params - ".json_encode($params));
+        $this->logger->info("Executing query - $query with params - " . json_encode($params));
         $result = $this->executeUpdateWithBindParameters($query, $params);
         // print_r("UpdateFileLatest - \n");
         // print_r($result->getAffectedRows());
-        $this->logger->info("Affected Rows - ".print_r($result, true));
+        $this->logger->info("Affected Rows - " . print_r($result, true));
         return $result->getAffectedRows() > 0;
     }
 
@@ -209,7 +208,7 @@ class FileService extends AbstractService
                 $data[$key] = json_encode($dataelement);
             }
         }
-        
+
         $fields = array_merge($fileObject, $data);
         $file = new File();
         $id = $this->getIdFromUuid('ox_file', $id);
@@ -482,6 +481,12 @@ class FileService extends AbstractService
             $fieldNameList = "";
             $statusFilter = "";
             if (isset($params['workflowId'])) {
+
+                // Code to get the entityID from appId, we need this to get the correct fieldId for the filters
+                $select1 = "SELECT * from ox_workflow where uuid = :uuid";
+                $selectQuery1 = array("uuid" => $params['workflowId']);
+                $worflowArray = $this->executeQuerywithBindParameters($select1, $selectQuery1)->toArray();
+
                 $workflowId = $this->getIdFromUuid('ox_workflow', $params['workflowId']);
                 if (!$workflowId) {
                     throw new ServiceException("Workflow Does not Exist", "app.forworkflownot.found");
@@ -489,9 +494,9 @@ class FileService extends AbstractService
                     $appFilter .= " AND h.id = :workflowId";
                     $queryParams['workflowId'] = $workflowId;
                 }
-            }
-            if (isset($params['workflowStatus'])) {
-                $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
+                if (isset($params['workflowStatus'])) {
+                    $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
+                }
             }
             $where = " $appFilter $statusFilter and a.latest=1";
             $fromQuery = " from ox_file as a
@@ -517,7 +522,7 @@ class FileService extends AbstractService
             } else {
                 $userWhere = "";
             }
-            
+
             $fromQuery .= " left join ox_workflow_instance as g on a.workflow_instance_id = g.id
             left join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
             left join ox_workflow as h on h.id = wd.workflow_id";
@@ -531,7 +536,9 @@ class FileService extends AbstractService
             if (!empty($filterParams)) {
                 if (!is_array($filterParams['filter'])) {
                     $filterParamsArray = json_decode($filterParams['filter'], true);
-                } 
+                } else {
+                    $filterParamsArray = $filterParams['filter'];
+                }
                 if (is_array($filterParamsArray[0])) {
                     if (array_key_exists("sort", $filterParamsArray[0])) {
                         $sortParam = $filterParamsArray[0]['sort'];
@@ -549,11 +556,12 @@ class FileService extends AbstractService
                     }
                     $filterData = $filterParamsArray[0]['filter']['filters'];
                     foreach ($filterData as $val) {
-                        if ($val['field'] === 'status') {
-                            $whereQuery .= " AND " . $this->checkStatusFilter($val) . "";
-                        }
                         $tablePrefix = "tblf" . $prefix;
-                        $fieldId = $this->getFieldDetails($val['field']);
+                        if (isset($params['workflowId']) && !empty($worflowArray['entity_id'])) {
+                            $fieldId = $this->getFieldDetails($val['field'], $worflowArray['entity_id']);
+                        } else {
+                            $fieldId = $this->getFieldDetails($val['field']);
+                        }
                         if (!empty($val) && !empty($fieldId)) {
                             $joinQuery .= " left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) ";
                             $valueTransform = $this->getFieldType($fieldId, $tablePrefix);
@@ -572,8 +580,8 @@ class FileService extends AbstractService
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
             }
-            $where .= " $whereQuery";
-            $fromQuery .= " $joinQuery";
+            $where .= " " . $whereQuery . "";
+            $fromQuery .= " " . $joinQuery . "";
             try {
                 $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
@@ -626,10 +634,12 @@ class FileService extends AbstractService
             return 0;
         }
     }
+
     public function getFieldType($value, $prefix)
     {
         switch ($value['data_type']) {
             case 'Date':
+            case 'date':
                 $castString = "CAST($prefix.field_value AS DATETIME)";
                 break;
             case 'int':

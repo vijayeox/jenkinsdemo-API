@@ -91,16 +91,16 @@ class CommandService extends AbstractService
                 } else {
                     $commandJson = $value;
                 }
-                $this->logger->info("Command JSON------",print_r($commandJson,true)); 
-                if(isset($commandJson['command'])){
-                    $this->logger->info("COMMAND------",print_r($commandJson,true)); 
+                $this->logger->info("Command JSON------", print_r($commandJson, true));
+                if (isset($commandJson['command'])) {
+                    $this->logger->info("COMMAND------", print_r($commandJson, true));
                     $command = $commandJson['command'];
                     unset($commandJson['command']);
                     $outputData = array_merge($inputData, $commandJson);
                     $this->logger->info(CommandService::class . print_r($outputData, true));
                     $this->logger->info("COMMAND LIST ------" . $command);
                     $result = $this->processCommand($outputData, $command, $request);
-                    $this->logger->info("Process Command Result".print_r($result,true));
+                    $this->logger->info("Process Command Result" . print_r($result, true));
                     if (is_array($result)) {
                         $inputData = $result;
                         $inputData['app_id'] = isset($data['app_id']) ? $data['app_id'] : null;
@@ -416,18 +416,22 @@ class CommandService extends AbstractService
     {
         $params = array();
         $filterParams = array();
-        if (isset($data['workFlowId'])) {
-            $params['workFlowId'] = $data['workFlowId'];
+        if (isset($data['workflowId'])) {
+            $params['workflowId'] = $data['workflowId'];
+        }
+        if (isset($data['orgId'])) {
+            $params['orgId'] = $data['orgId'];
         }
         if (isset($data['userId'])) {
             $params['userId'] = $data['userId'];
         }
         if (isset($data['appId'])) {
             $params['app_id'] = $data['appId'];
-        } else {
-            if (isset($data['app_id'])) {
-                $params['app_id'] = $data['app_id'];
-            }
+        } else if (isset($data['app_id'])) {
+            $params['app_id'] = $data['app_id'];
+        }
+        if (isset($data['workflowStatus'])) {
+            $params['workflowStatus'] = $data['workflowStatus'];
         }
         if (isset($data['filter'])) {
             $filterParams['filter'] = $data['filter'];
@@ -480,7 +484,8 @@ class CommandService extends AbstractService
         }
     }
 
-    protected function startWorkflow(&$data){
+    protected function startWorkflow(&$data)
+    {
         $startWorkflow = $this->workflowInstanceService->startWorkflow($data);
         return $startWorkflow;
     }
