@@ -117,7 +117,7 @@ class Persistence extends AbstractService
                         $parsedArray['VALUES'][$key]['data'],
                         array(
                             "expr_type" => "const",
-                            "base_expr" => 1,
+                            "base_expr" => AuthContext::get(AuthConstants::ORG_ID),
                             "sub_tree" => ""
                         )
                     );
