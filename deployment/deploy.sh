@@ -50,6 +50,8 @@ api()
     else    
         #making the directory where api will be copied.
         #moving to temp directory and copying required
+        echo -e "${YELLOW}Stopping Apache${RESET}"
+        service apache2 stop
         cd ${TEMP}
         rsync -rl api/v1/data/uploads/ /var/www/api/data/uploads/
         rsync -rl --delete api/v1/data/eoxapps/ /var/lib/oxzion/api/eoxapps/
@@ -62,6 +64,7 @@ api()
         rm -Rf api/v1/data/import
         rm -Rf api/v1/data/migrations
         rm -Rf api/v1/data/template
+        rm -Rf api/v1/data/file_docs
         rsync -rl --delete api/v1/ /var/www/api/
         ln -nfs /var/lib/oxzion/api/cache /var/www/api/data/cache
         ln -nfs /var/lib/oxzion/api/uploads /var/www/api/data/uploads
@@ -78,6 +81,8 @@ api()
         ./migrations migrate
         sudo ln -nfs /var/log/oxzion/api /var/www/api/logs
         echo -e "${GREEN}Migrations Complete!${RESET}"
+        echo -e "${GREEN}Starting Apache${RESET}"
+        service apache2 stop
     fi    
 }
 camel()
