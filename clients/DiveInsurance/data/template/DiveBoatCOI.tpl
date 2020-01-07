@@ -107,11 +107,7 @@
                       <p class="hull_title">Limit per Item/per Occurence:</p>
                   </div>
                    <div class="sec2"><p class="hull_title">US</p></div>
-                 <div class="sec3"><p class="value_align">{if isset($personnal_effects)}
-                  						${$personnal_effects}
-                  					{else}
-                  						N/A
-                  					{/if}</p></div>
+                 <div class="sec3"><p class="value_align">$500.00/$5,000.00</p></div>
         </div>
         <div class="div_section1"></div>
     </div>
@@ -132,21 +128,9 @@
                       <p class="hull_title">Limit of Insurance - Crew in the Water:</p>
                   </div>
                   <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p><p class="hull_title">US</p></div>
-                  <div class="sec3"><p class="value_align">{if isset($protection_liability_amt)}
-                  						${$protection_liability_amt}
-                  					{else}
-                  						Not Covered
-                  					{/if}</p>
-                  	<p class="value_align">{if isset($crew_liability_amt)}
-                  						${$crew_liability_amt}
-                  					{else}
-                  						Not Covered
-                  					{/if}</p>
-                  	<p class="value_align">{if isset($crew_water_liability_amt)}
-                  						${$crew_water_liability_amt}
-                  					{else}
-                  						Not Covered
-                  					{/if}</p></div>
+                  <div class="sec3"><p class="value_align">$1,000,000.00</p>
+                  	<p class="value_align">$1,000,000.00</p>
+                  	<p class="value_align">$1,000,000.00</p></div>
           </div>
           <div class = "div_section1">
                   <div class="sec4">
@@ -154,15 +138,7 @@
                       <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                       <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                   </div>
-                  <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if crew_liability_premium}
-                  						Included
-                  					{else}
-                  						N/A
-                  					{/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if water_crew_premium}
-                  						Included
-                  					{else}
-                  						N/A
-                  					{/if}</p></div>
+                  <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p></div>
     </div>
 </div>
 <p class = "sec_title"><b>SECTION C - MEDICAL PAYMENTS </b></p>

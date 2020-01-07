@@ -138,11 +138,7 @@
         <p class="hull_title">Limit per Item/per Occurence:</p>
       </div>
       <div class="sec2"><p class="hull_title">US</p></div>
-      <div class="sec3"><p class="value_align">{if isset($personnal_effects)}
-        ${$personnal_effects}
-        {else}
-        N/A
-      {/if}</p></div>
+      <div class="sec3"><p class="value_align">$500.00/$5,000.00</p></div>
     </div>
     <div class="div_section1">
       
@@ -163,21 +159,9 @@
         <p class="hull_title">Limit of Insurance - Crew in the Water:</p>
       </div>
       <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p><p class="hull_title">US</p></div>
-      <div class="sec3"><p class="value_align">{if isset($protection_liability_amt)}
-        ${$protection_liability_amt}
-        {else}
-        Not Covered
-      {/if}</p>
-      <p class="value_align">{if isset($crew_liability_amt)}
-        ${$crew_liability_amt}
-        {else}
-        Not Covered
-      {/if}</p>
-      <p class="value_align">{if isset($crew_water_liability_amt)}
-        ${$crew_water_liability_amt}
-        {else}
-        Not Covered
-      {/if}</p></div>
+      <div class="sec3"><p class="value_align">$1,000,000.00</p>
+      <p class="value_align">$1,000,000.00</p>
+      <p class="value_align">$1,000,000.00</p></div>
     </div>
     <div class = "div_section1">
       <div class="sec4">

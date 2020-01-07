@@ -169,8 +169,12 @@ class CommandService extends AbstractService
                 return $this->getUserList($data);
                 break;
             case 'startWorkflow':
-                $this->logger->info("GET User LIST");
+                $this->logger->info("START WORKFLOW");
                 return $this->startWorkflow($data);
+                break;
+            case 'submitActivity':
+                $this->logger->info("SUBMIT ACTIVITY");
+                return $this->submitActivity($data);
                 break;
             default:
                 break;
@@ -487,6 +491,11 @@ class CommandService extends AbstractService
     protected function startWorkflow(&$data)
     {
         $startWorkflow = $this->workflowInstanceService->startWorkflow($data);
+        return $startWorkflow;
+    }
+
+    protected function submitActivity(&$data){
+        $startWorkflow = $this->workflowInstanceService->submitActivity($data);
         return $startWorkflow;
     }
 }

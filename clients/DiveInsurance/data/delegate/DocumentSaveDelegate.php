@@ -32,12 +32,11 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate
             if(isset($data['groupPL'][$j]['document'])){
                 $group = $data['groupPL'][$j]['document'];
                 for($i = 0 ;$i < sizeof($group);$i++){
-                    $this->logger->info("INSIDE FOR2 Loop");
                     $docFile = fopen($this->destination.$filepath.$group[$i]['originalName'].'.txt','wb');
                     fwrite($docFile,$group[$i]['url']);
                     fclose($docFile);
                     unset($data['groupPL'][$j]['document'][$i]['url']);
-                    $data['groupPL'][$j]['document'][$i]['file'] = $this->destination.$filepath.$group[$i]['originalName'].'.txt';
+                    $data['groupPL'][$j]['document'][$i]['file'] = $filepath.$group[$i]['originalName'].'.txt';
                 }
             }
         }
