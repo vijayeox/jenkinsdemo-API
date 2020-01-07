@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `padi_data` (
             `firstname` varchar(16) NULL,
             `MI` varchar(1) NOT NULL,
             `lastname` varchar(21) NULL,
+            `business_name` varchar(250) NULL,
             `address1` varchar(100) NULL,
             `address2` varchar(100) NULL,
             `address_international` varchar(200) NULL,
