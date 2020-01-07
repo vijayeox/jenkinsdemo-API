@@ -7,6 +7,7 @@ use Oxzion\Model\Entity;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Oxzion\VersionMismatchException;
+use Oxzion\ServiceException;
 use Exception;
 
 abstract class ModelTable
@@ -134,7 +135,7 @@ abstract class ModelTable
             }
             return $this->tableGateway->update($data, ['id' => $id]);
         } catch (Exception $e) {
-            return $e->getMessage();
+            throw new ServiceException($e->getMessage(),'save.error');
         }
     }
 
