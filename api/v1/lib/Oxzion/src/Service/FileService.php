@@ -64,7 +64,7 @@ class FileService extends AbstractService
             $activityId = null;
         }
         $data['uuid'] = $uuid = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
-        
+
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
         unset($data['uuid']);
         $fields = $data = $this->cleanData($data);
@@ -80,7 +80,7 @@ class FileService extends AbstractService
         $data['parent_id'] = $parentId;
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['entity_id'] = $entityId;
-       
+
         $data['data'] = $jsonData;
         $file = new File();
         $file->exchangeArray($data);
@@ -143,9 +143,11 @@ class FileService extends AbstractService
         // $resultSet = $this->executeQueryWithBindParameters($selectQuery,$queryParams)->toArray();
         $query = "update ox_file set latest = :latest where id = :fileId";
         $params = array('latest' => $isLatest, 'fileId' => $fileId);
+        $this->logger->info("Executing query - $query with params - ".json_encode($params));
         $result = $this->executeUpdateWithBindParameters($query, $params);
         // print_r("UpdateFileLatest - \n");
         // print_r($result->getAffectedRows());
+        $this->logger->info("Affected Rows - ".print_r($result, true));
         return $result->getAffectedRows() > 0;
     }
 
@@ -208,7 +210,7 @@ class FileService extends AbstractService
             }
         }
         
-        $fields = array_merge($fileObject,$data);
+        $fields = array_merge($fileObject, $data);
         $file = new File();
         $id = $this->getIdFromUuid('ox_file', $id);
         $validFields = $this->checkFields(isset($obj['entity_id']) ? $obj['entity_id'] : null, $fields, $id);
@@ -291,7 +293,6 @@ class FileService extends AbstractService
                 $this->logger->info("FILE ID  ------" . json_encode($result));
                 if ($result[0]['data']) {
                     $result[0]['data'] = json_decode($result[0]['data'], true);
-                    // $this->getGroupDocuments($result[0]['data']);
                 }
                 $this->logger->info("FILE DATA SUCCESS ------" . json_encode($result));
                 return $result[0];
@@ -301,18 +302,6 @@ class FileService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-    }
-
-    private function getGroupDocuments(&$data){
-        if(isset($data['groupPL']))
-            {
-                $group = $data['groupPL'];
-                for($i = 0;$i < sizeof($group);$i++){
-                    $file = $group[$i]['document'][0]['file'];
-                    $data['groupPL'][$i]['document'][0]['url'] = file_get_contents($file);
-                    unset($data['groupPL'][$i]['document'][0]['file']);
-                }
-            }
     }
 
     public function getFileByWorkflowInstanceId($workflowInstanceId, $isProcessInstanceId = true)
@@ -331,7 +320,6 @@ class FileService extends AbstractService
                 "isActive" => 1);
             $result = $this->executeQueryWithBindParameters($select, $whereQuery)->toArray();
             if (count($result) > 0) {
-                // $this->getGroupDocuments($result[0]['data']);
                 return $result[0];
             }
             return 0;
@@ -493,19 +481,19 @@ class FileService extends AbstractService
             $queryParams['appId'] = $appId;
             $fieldNameList = "";
             $statusFilter = "";
-            if (isset($params['workFlowId'])) {
-                $workFlowId = $this->getIdFromUuid('ox_workflow', $params['workFlowId']);
-                if (!$workFlowId) {
+            if (isset($params['workflowId'])) {
+                $workflowId = $this->getIdFromUuid('ox_workflow', $params['workflowId']);
+                if (!$workflowId) {
                     throw new ServiceException("Workflow Does not Exist", "app.forworkflownot.found");
                 } else {
-                    $appFilter .= " AND h.id = :workFlowId";
-                    $queryParams['workFlowId'] = $workFlowId;
+                    $appFilter .= " AND h.id = :workflowId";
+                    $queryParams['workflowId'] = $workflowId;
                 }
             }
             if (isset($params['workflowStatus'])) {
                 $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
             }
-            $where = " $appFilter $statusFilter";
+            $where = " $appFilter $statusFilter and a.latest=1";
             $fromQuery = " from ox_file as a
             inner join ox_app_entity en on en.id = a.entity_id
             inner join ox_form as b on (en.id = b.entity_id)
@@ -523,7 +511,7 @@ class FileService extends AbstractService
                 }
                 $fromQuery .= " left join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=f.id
                     INNER JOIN ox_file_attribute ofa on ofa.file_id = a.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
-                $userWhere = " and a.latest=1 and owufi.user_id = :userId and owufi.org_id = :orgId";
+                $userWhere = " and owufi.user_id = :userId and owufi.org_id = :orgId";
                 $queryParams['userId'] = $userId;
                 $queryParams['orgId'] = $orgId;
             } else {
@@ -539,14 +527,14 @@ class FileService extends AbstractService
             $sort = "";
             $field = "";
             $pageSize = " LIMIT 10";
-            $offset =  " OFFSET 0";
+            $offset = " OFFSET 0";
             if (!empty($filterParams)) {
                 if (!is_array($filterParams['filter'])) {
                     $filterParamsArray = json_decode($filterParams['filter'], true);
-                    if (is_array($filterParamsArray[0])) {
-                        if (array_key_exists("sort", $filterParamsArray[0])) {
-                            $sortParam = $filterParamsArray[0]['sort'];
-                        }
+                } 
+                if (is_array($filterParamsArray[0])) {
+                    if (array_key_exists("sort", $filterParamsArray[0])) {
+                        $sortParam = $filterParamsArray[0]['sort'];
                     }
                 }
                 $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
@@ -561,6 +549,9 @@ class FileService extends AbstractService
                     }
                     $filterData = $filterParamsArray[0]['filter']['filters'];
                     foreach ($filterData as $val) {
+                        if ($val['field'] === 'status') {
+                            $whereQuery .= " AND " . $this->checkStatusFilter($val) . "";
+                        }
                         $tablePrefix = "tblf" . $prefix;
                         $fieldId = $this->getFieldDetails($val['field']);
                         if (!empty($val) && !empty($fieldId)) {
@@ -581,8 +572,8 @@ class FileService extends AbstractService
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
             }
-            $where .= " " . $whereQuery . "";
-            $fromQuery .= " " . $joinQuery . "";
+            $where .= " $whereQuery";
+            $fromQuery .= " $joinQuery";
             try {
                 $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
@@ -638,7 +629,7 @@ class FileService extends AbstractService
     public function getFieldType($value, $prefix)
     {
         switch ($value['data_type']) {
-            case 'date':
+            case 'Date':
                 $castString = "CAST($prefix.field_value AS DATETIME)";
                 break;
             case 'int':
@@ -711,7 +702,7 @@ class FileService extends AbstractService
         unset($params['page']);
         unset($params['parentWorkflowInstanceId']);
         unset($params['activityId']);
-        unset($params['workFlowId']);
+        unset($params['workflowId']);
         unset($params['form_id']);
         unset($params['fileId']);
         unset($params['app_id']);
