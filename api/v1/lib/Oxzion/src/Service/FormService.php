@@ -68,7 +68,7 @@ class FormService extends AbstractService
             $count = $this->table->save($form);
             if ($count == 0) {
                 $this->rollback();
-                return 0;
+                throw new ServiceException("Form Save failed", "form.save.failed");
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
@@ -223,7 +223,7 @@ class FormService extends AbstractService
                     $createFormFieldEntry = $this->createFormFieldEntry($formId, $fieldData['id']);
                 } catch (Exception $e) {
                     foreach ($fieldIdArray as $fieldId) {
-                        $id = $this->fieldService->deleteField($fieldId);
+                        $id = $this->fieldService->deleteField($appId,$fieldId);
                         return 0;
                     }
                 }
