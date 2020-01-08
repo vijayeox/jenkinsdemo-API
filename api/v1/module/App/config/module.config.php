@@ -70,6 +70,17 @@ return [
                     ],
                 ],
             ],
+            'ftpClient' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/ftps',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'uploadFileToFTP',
+                        'method' => 'GET'
+                    ],
+                ],
+            ],
             'appupload' => [
                 'type' => Segment::class,
                 'options' => [
