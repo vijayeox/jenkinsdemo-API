@@ -13,7 +13,7 @@ class Ratecard extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {  
         $this->logger->info("Executing Rate Card");
-        $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
+        $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND is_upgrade = 0 AND end_date >= '".$data['start_date']."'";
         $selectTax = "Select state, coverage, percentage FROM state_tax WHERE product = '".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
         $result = $persistenceService->selectQuery($select);
         $this->logger->info("Rate Card query -> $select");
@@ -24,7 +24,15 @@ class Ratecard extends AbstractAppDelegate
                 if(isset($rate['total'])){
                     $premiumRateCardDetails[$rate['key']] = $rate['total'];
                 } else {
-                    $premiumRateCardDetails[$rate['key']] = $rate['premium'];
+                    if(isset($rate['tax'])){
+                        $total = $rate['tax'] + $rate['premium'];
+                        if(isset($rate['padi_fee'])){
+                            $total = $rate['padi_fee'] + $total;
+                        }
+                        $premiumRateCardDetails[$rate['key']] = $total;
+                    } else {
+                        $premiumRateCardDetails[$rate['key']] = $rate['premium'];
+                    }
                 }
             }
             unset($rate);
