@@ -11,32 +11,33 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate
         parent::__construct();
     }
 
-    public function setDocumentBuilder($builder){
-        
-        $this->documentBuilder = $builder;
-    }
-
-    public function setTemplatePath($destination)
-    {
-        $this->destination = $destination;
-    }
-
     public function execute(array $data,Persistence $persistenceService) 
     {
-        $data['uuid'] = UuidUtil::uuid();
-        $filepath = $data['orgId'].'/'.$data['uuid'].'/';
-        if (!is_dir($this->destination.$filepath)) {
-            mkdir($this->destination.$filepath, 0777, true);
-        }
-        for($j = 0;$j < sizeof($data['groupPL']);$j++){
-            if(isset($data['groupPL'][$j]['document'])){
-                $group = $data['groupPL'][$j]['document'];
-                for($i = 0 ;$i < sizeof($group);$i++){
-                    $docFile = fopen($this->destination.$filepath.$group[$i]['originalName'].'.txt','wb');
-                    fwrite($docFile,$group[$i]['url']);
-                    fclose($docFile);
-                    unset($data['groupPL'][$j]['document'][$i]['url']);
-                    $data['groupPL'][$j]['document'][$i]['file'] = $filepath.$group[$i]['originalName'].'.txt';
+        if(isset($data['groupPL'])){
+            if(!isset($data['fileId'])){
+                $data['uuid'] = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
+            }else{
+                $data['uuid'] = $data['fileId'];
+            }
+
+            if(!isset($data['orgId'])){
+                $data['orgId'] = $this->getOrgId();
+            }
+
+            $filepath = $data['orgId'].'/'.$data['uuid'].'/';
+            if (!is_dir($this->destination.$filepath)) {
+                mkdir($this->destination.$filepath, 0777, true);
+            }
+            for($j = 0;$j < sizeof($data['groupPL']);$j++){
+                if(isset($data['groupPL'][$j]['document'])){
+                    $group = $data['groupPL'][$j]['document'];
+                    for($i = 0 ;$i < sizeof($group);$i++){
+                        $docFile = fopen($this->destination.$filepath.$group[$i]['originalName'].'.txt','wb');
+                        fwrite($docFile,$group[$i]['url']);
+                        fclose($docFile);
+                        unset($data['groupPL'][$j]['document'][$i]['url']);
+                        $data['groupPL'][$j]['document'][$i]['file'] = $filepath.$group[$i]['originalName'].'.txt';
+                    }
                 }
             }
         }

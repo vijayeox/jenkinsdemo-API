@@ -63,7 +63,7 @@ class ActivityInstanceService extends AbstractService
 
         $activityform = $activityInstance[0];
         $data = json_decode($activityform['data'],true);
-        $data['uuid'] = $activityform['uuid'];
+        $data['fileId'] = $activityform['uuid'];
         unset($activityform['uuid']);
         $activityform['data'] = json_encode($data);
         return $activityform;

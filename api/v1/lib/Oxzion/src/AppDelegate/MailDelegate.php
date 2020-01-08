@@ -8,7 +8,7 @@ use Oxion\Auth\AuthContext;
 
 abstract class MailDelegate extends AbstractAppDelegate
 {
-
+	use UserContextTrait;
 	private $messageProducer;
 	private $templateService;
 

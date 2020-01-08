@@ -10,16 +10,6 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
         parent::__construct();
     }
 
-    public function setDocumentBuilder($builder){
-        
-        $this->documentBuilder = $builder;
-    }
-
-    public function setTemplatePath($destination)
-    {
-        $this->destination = $destination;
-    }
-
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("DocumentFetchDelegate".print_r($data,true));
@@ -27,9 +17,11 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
             {
                 $group = $data['groupPL'];
                 for($i = 0;$i < sizeof($group);$i++){
-                    $file = $this->destination.$group[$i]['document'][0]['file'];
-                    $data['groupPL'][$i]['document'][0]['url'] = file_get_contents($file);
-                    unset($data['groupPL'][$i]['document'][0]['file']);
+                    if(isset($group[$i]['document'][0]['file'])){
+                        $file = $this->destination.$group[$i]['document'][0]['file'];
+                        $data['groupPL'][$i]['document'][0]['url'] = file_get_contents($file);
+                        unset($data['groupPL'][$i]['document'][0]['file']); 
+                    }
                 }
             }
         $this->logger->info("DocumentFetchDelegate1".print_r($data,true));

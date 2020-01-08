@@ -7,7 +7,7 @@ use Oxzion\Utils\ArtifactUtils;
 
 class PolicyDocument extends AbstractDocumentAppDelegate
 {
-    protected $documentBuilder;
+    // protected $documentBuilder;
     protected $type;
     protected $template;
 
@@ -107,8 +107,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                      'gfooter' => 'Group_footer.html',
                      'nTemplate' => 'Group_PL_NI',
                      'nheader' => 'Group_NI_header.html',
-                     'nfooter' => 'Group_NI_footer.html'
-                     ) ,
+                     'nfooter' => 'Group_NI_footer.html',
+                     'aniTemplate' => 'DiveBoat_ANI',
+                     'aniheader' => 'DB_Quote_ANI_header.html',
+                     'anifooter' => null),
         'Dive Store'
             => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                      'header' => 'DiveStoreHeader.html',
@@ -142,18 +144,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                      'nfooter' => 'Group_NI_footer.html',
                      'policy' => 'Individual_Professional_Liability_Policy.pdf'));
 
-        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range');
+        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement');
     }
 
-    public function setDocumentBuilder($builder){
-        
-        $this->documentBuilder = $builder;
-    }
-
-    public function setTemplatePath($destination)
-    {
-        $this->destination = $destination;
-    }
     public function execute(array $data,Persistence $persistenceService) 
     {     
         $documents = array();
@@ -165,6 +158,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $this->setPolicyInfo($data,$persistenceService);
 
         $dest = $data['dest'];
+        if($this->type == 'quote'){
+            $dest['relativePath'] = $dest['relativePath'].'Quote/';
+            $dest['absolutePath'] = $dest['absolutePath'].'Quote/';
+        }
+
         unset($data['dest']);
 
         if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])){
@@ -279,7 +277,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
 
         if(isset($temp['additionalLocations'])){
-            $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+            $documents['additionalLocations_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
         }
 
         if(isset($temp['namedInsured'])){
