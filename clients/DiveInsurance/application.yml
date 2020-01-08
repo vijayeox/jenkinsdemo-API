@@ -125,6 +125,15 @@ menu:
                                         url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
+                            -
+                                name: 'Cancel Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'''
+                                icon: 'fa fa-window-close'
                         operations:
                             title: 'Get Policy'
                             actions:
@@ -302,7 +311,7 @@ menu:
                                 field: lastname
                             -
                                 title: Product
-                                field: entity_name
+                                field: entityName
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
@@ -382,8 +391,12 @@ menu:
                                             uuid: '{{uuid}}'
                                             page_id: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
                             -
-                                name: Cancel
-                                page_id: 3
+                                name: 'Cancel Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
                                 rule: 'true'
                                 icon: 'fa fa-window-close'
                         filterColumns:
@@ -556,6 +569,11 @@ workflow:
         uuid: cb74d176-225a-11ea-978f-2e728ce88125
         bpmn_file: 'Emergency First Response/NewApplication.bpmn'
         entity: 'Emergency First Response'
+    -
+        name: 'Cancel Policy'
+        uuid: 71cb9e10-5845-4379-97c9-f9486b702bda
+        bpmn_file: 'Cancel Policy/CancelPolicy.bpmn'
+        entity: 'Individual Professional Liability'
 form:
     -
         name: 'PADI Verification'
