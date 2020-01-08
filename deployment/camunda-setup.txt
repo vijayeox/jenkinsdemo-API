@@ -99,7 +99,7 @@ grant all privileges on `process-engine` to 'camunda'@'	%' identified by 'passwo
 grant select on `mysql`.* to 'apiuser'@'%';
 grant all privileges on `%\_\_\_%` . * to 'apiuser'@'%';
 
-#Alter data types in the process-engine database using the following sql queries. This is a one time update. Run the queries one by one to avoid conflict in syntax. Please not these queries can only execute successfully when process-engine database is populated(migrations) after the first time camunda runs.
+#Alter data types in the process-engine database using the following sql queries. This is a one time update. Run the queries one by one to avoid conflict in syntax. Please note these queries can only execute successfully when process-engine database is populated(migrations) after the first time camunda runs.
 
 ALTER TABLE ACT_HI_DETAIL MODIFY COLUMN TEXT_ teXT;
 ALTER TABLE ACT_HI_VARINST MODIFY COLUMN TEXT_ teXT;
