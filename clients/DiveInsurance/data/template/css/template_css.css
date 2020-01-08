@@ -29,6 +29,13 @@ body{
 .title2{
 	width:100%;
 }
+.title3{
+	font-size: 16px;
+	margin: 0px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	font-family: sans-serif;
+}
 .claims_title{
 	margin-top: -4px;
 	margin-bottom: -2px;
