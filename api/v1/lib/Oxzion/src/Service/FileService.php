@@ -479,6 +479,7 @@ class FileService extends AbstractService
             $appFilter = "f.id = :appId";
             $queryParams['appId'] = $appId;
             $fieldNameList = "";
+            $statusFilter = "";
             if (isset($params['workflowStatus'])) {
                 $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
             }
