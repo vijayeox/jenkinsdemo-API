@@ -265,7 +265,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
         }
 
-        if(isset($temp['additionalInsured'])){
+        if(isset($temp['additional_insured_select']) && $temp['additional_insured_select'] == 'newListOfAdditionalInsureds'){
             $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
         }
 
@@ -274,7 +274,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
         }
 
-        if(isset($temp['additionalNamedInsured'])){
+        if(isset($temp['additional_named_insureds_option']) && $temp['additional_named_insureds_option'] == 'yes'){
             $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
         }
 

@@ -10,7 +10,7 @@
 	    	{foreach from=$list item=$value}
 	    	{assign var=upgrade value={$value['upgrade']}}
 	  		<div class = "named_div">
-			      <div class = "named_div1"><p class ="t_title">{$value['memberid']}</p></div>
+			      <div class = "named_div1"><p class ="t_title">{$value['padi']}</p></div>
 
 			      <div class = "named_div2"><p class ="t_title" style="text-tranform:uppercase;">{$value['name']}</p></div>
 
