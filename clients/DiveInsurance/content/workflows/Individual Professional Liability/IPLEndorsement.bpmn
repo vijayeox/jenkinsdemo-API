@@ -16,11 +16,20 @@
 def country = execution.getVariable('country')
 def tecRecEndorsment = execution.getVariable('tecRecEndorsment')
 def section2Agreement = execution.getVariable('section2Agreement')
+def coverage = execution.getVariable('modify_coverage')
+def personalInfo = execution.getVariable('modify_personalInformation')
+def additionalIn = execution.getVariable('modify_additionalInsured')
 
 boolean result1 = false
-boolean result2 = false
 boolean result3 = false
 
+if(personalInfo){
+    if(country != "United States of America"){
+       result3=true 
+    }
+    execution.setVariable('CSRReviewRequired', result3)
+}
+if(coverage || additionalIn){
 if (additionalInsured) {
  additionalInsured.each {
   if (it.businessRelation == 'other') {
@@ -28,19 +37,13 @@ if (additionalInsured) {
   }
  }
 }
-if (section2Agreement) {
-    if(section2Agreement== true){
-     result2 = true
-    }
-}
 
-if (country != "United States of America" ||
- tecRecEndorsment == "accepted" ||
- result1 || result2) {
+if (tecRecEndorsment == "accepted" || result1) {
   result3=true
 }
 
-execution.setVariable('CSRReviewRequired', result3)</camunda:script>
+execution.setVariable('CSRReviewRequired', result3)
+}</camunda:script>
         </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1m44nyk</bpmn:incoming>
@@ -119,10 +122,10 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_1m44nyk" sourceRef="StartEvent_0qetve8" targetRef="ExclusiveGateway_0spajg7" />
     <bpmn:sequenceFlow id="SequenceFlow_11738jy" name="No" sourceRef="ExclusiveGateway_0spajg7" targetRef="UserTask_14i3m9l">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">(${endorsement_options['modify_coverage']==true} || ${endorsement_options['modify_additionalInsured']==true}) &amp;&amp; (${CSRReviewRequired==true})</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1gaibuf" name="Yes" sourceRef="ExclusiveGateway_0spajg7" targetRef="ExclusiveGateway_1uh392h">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${endorsement_options['modify_personalInformation']==true} &amp;&amp; ${CSRReviewRequired==false}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${CSRReviewRequired==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0isa8vl" name="Approved" sourceRef="UserTask_14i3m9l" targetRef="ExclusiveGateway_0goh29c">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==true}</bpmn:conditionExpression>
