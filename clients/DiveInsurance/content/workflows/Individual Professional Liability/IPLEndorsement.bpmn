@@ -16,9 +16,10 @@
 def country = execution.getVariable('country')
 def tecRecEndorsment = execution.getVariable('tecRecEndorsment')
 def section2Agreement = execution.getVariable('section2Agreement')
-def coverage = execution.getVariable('modify_coverage')
-def personalInfo = execution.getVariable('modify_personalInformation')
-def additionalIn = execution.getVariable('modify_additionalInsured')
+def endorsementOptions = execution.getVariable('endorsement_options')
+def coverage = endorsementOptions.modify_coverage
+def personalInfo = endorsementOptions.modify_personalInformation
+def additionalIn = endorsementOptions.modify_additionalInsured
 
 boolean result1 = false
 boolean result3 = false
