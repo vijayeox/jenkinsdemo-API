@@ -75,11 +75,11 @@ api()
         ln -nfs /var/lib/oxzion/api/migrations /var/www/api/data/migrations
         ln -nfs /var/lib/oxzion/api/template /var/www/api/data/template
         chown www-data:www-data -R /var/www/api
+        sudo ln -nfs /var/log/oxzion/api /var/www/api/logs
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
         echo -e "${YELLOW}Starting migrations script for API${RESET}"
         cd /var/www/api
         ./migrations migrate
-        sudo ln -nfs /var/log/oxzion/api /var/www/api/logs
         echo -e "${GREEN}Migrations Complete!${RESET}"
         echo -e "${GREEN}Starting Apache${RESET}"
         service apache2 stop
@@ -258,6 +258,8 @@ view()
         chown oxzion:oxzion -R /opt/oxzion/view
         echo -e "${GREEN}Copying view Complete!${RESET}"
         echo -e "${GREEN}Starting view service${RESET}"
+        chmod 777 -R /opt/oxzion/view/bos
+        chmod 777 /opt/oxzion/view/apps
         systemctl start view
         echo -e "${YELLOW}Started!${RESET}"
     fi
