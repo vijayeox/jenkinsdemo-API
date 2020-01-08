@@ -479,7 +479,9 @@ class FileService extends AbstractService
             $appFilter = "f.id = :appId";
             $queryParams['appId'] = $appId;
             $fieldNameList = "";
-            $statusFilter = "";
+            if (isset($params['workflowStatus'])) {
+                $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
+            }
             if (isset($params['workflowId'])) {
 
                 // Code to get the entityID from appId, we need this to get the correct fieldId for the filters
@@ -493,9 +495,6 @@ class FileService extends AbstractService
                 } else {
                     $appFilter .= " AND h.id = :workflowId";
                     $queryParams['workflowId'] = $workflowId;
-                }
-                if (isset($params['workflowStatus'])) {
-                    $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
                 }
             }
             $where = " $appFilter $statusFilter and a.latest=1";
