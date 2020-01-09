@@ -94,7 +94,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: file/user/me/status/Completed
+                        route: 'file/user/me/status/Completed?filter=[{\"filter\":{\"logic\":\"and\",\"filters\":[{\"field\":\"policyStatus\",\"operator\":\"neq\",\"value\":\"Cancelled\"}]}}]'
                         filterable: true
                         reorderable: true
                         resizable: true
@@ -207,6 +207,9 @@ menu:
                                 title: Product
                                 field: entity_name
                             -
+                                title: 'Policy Status'
+                                field: policyStatus
+                            -
                                 title: 'Policy Start Date'
                                 field: start_date
                             -
@@ -311,7 +314,7 @@ menu:
                                 field: lastname
                             -
                                 title: Product
-                                field: entityName
+                                field: entity_name
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
@@ -397,7 +400,7 @@ menu:
                                         type: Form
                                         url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: 'true'
+                                rule: '''{{policyStatus}}'' != ''Cancelled'''
                                 icon: 'fa fa-window-close'
                         filterColumns:
                             - name
@@ -437,11 +440,26 @@ menu:
                                             url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
                         columnConfig:
                             -
-                                title: Name
+                                title: PADI
+                                field: padi
+                            -
+                                title: 'First Name'
+                                field: firstname
+                            -
+                                title: 'Last Name'
+                                field: lastname
+                            -
+                                title: Product
                                 field: entity_name
                             -
-                                title: Status
-                                field: status
+                                title: 'Policy Status'
+                                field: policyStatus
+                            -
+                                title: 'Policy Start Date'
+                                field: start_date
+                            -
+                                title: 'Policy End Date'
+                                field: end_date
         uuid: 3a4cc987-5627-4882-89ae-3bdc4f6e1e77
     -
         name: 'Verify PADI details'
@@ -579,7 +597,7 @@ form:
         name: 'PADI Verification'
         uuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
         description: 'Page for CSR to verify PADI details'
-        template: padi_validation.json
+        template_file: padi_validation.json
         entity: Padi
 job:
     -
