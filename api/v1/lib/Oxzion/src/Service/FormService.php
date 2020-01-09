@@ -30,6 +30,7 @@ class FormService extends AbstractService
 
     public function createForm($appUuid, &$data)
     {
+        $this->logger->info("EXECUTING CREATE FORM ");
         $form = new Form();
         $data['uuid'] = isset($data['uuid']) ? $data['uuid'] :  UuidUtil::uuid();
         if(isset($data['template']) && is_array($data['template'])){
@@ -85,6 +86,7 @@ class FormService extends AbstractService
     }
     public function updateForm($appUuid, $formUuid, &$data)
     {
+        $this->logger->info("EXECUTING UPDATE FORM");
         $obj = $this->table->getByUuid($formUuid);
         if (is_null($obj)) {
             return 0;
@@ -120,6 +122,7 @@ class FormService extends AbstractService
 
     public function deleteForm($formUuid)
     {
+        $this->logger->info("EXECUTING DELETE FORM");
         $this->beginTransaction();
         $count = 0;
         try {
@@ -140,7 +143,7 @@ class FormService extends AbstractService
 
     public function getForms($appUuid=null, $filterArray=array())
     {
-        
+        $this->logger->info("EXECUTING GET FORMS");
         try{
             $where = "";
             $params = array();
@@ -164,6 +167,7 @@ class FormService extends AbstractService
     }
     public function getForm($uuid)
     {
+        $this->logger->info("EXECUTING GET FORM");
         try{
             $queryString = "Select * from ox_form where uuid=?";
             $queryParams = array($uuid);
@@ -180,6 +184,7 @@ class FormService extends AbstractService
 
     public function getWorkflow($formId)
     {
+        $this->logger->info("EXECUTING GET WORKFLOW");
         $select = "SELECT f.*, a.id as activity_id, w.uuid as workflow_id from ox_form f
                  left join ox_activity_form af on af.form_id = f.id
                  left join ox_activity a on a.id = af.form_id
@@ -187,6 +192,7 @@ class FormService extends AbstractService
                  inner join ox_workflow w on wd.workflow_id = w.id
                  where f.uuid=:formId and wd.latest=1";
         $params = array("formId" => $formId);
+        $this->logger->info("Executing query - $select with params - ".json_encode($params));
         $response = $this->executeQueryWithBindParameters($select,$params)->toArray();
         if (count($response)==0) {
             return 0;
