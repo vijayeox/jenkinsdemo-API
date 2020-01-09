@@ -325,7 +325,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             } 
         }
 
-        $data['dest'] = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid'],array('orgUuid' => $orgUuid));
+        $data['dest'] = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
 
         return $data;
     }
@@ -402,7 +402,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     }
 
 
-    private function generateDocuments(&$data,$dest,$options,$templateKey,$headerKey = null,$footerKey = null,$indexKey = null){
+    protected function generateDocuments(&$data,$dest,$options,$templateKey,$headerKey = null,$footerKey = null,$indexKey = null){
+        $this->logger->info("Generate documents parameters templatekey is : ".print_r($templateKey, true));
+        $this->logger->info("policy document destination is : ".print_r($dest, true));
+        $this->logger->info("policy document options is : ".print_r($options, true));
+        $this->logger->info("policy document data is : ".print_r($data, true));
         if(isset($indexKey)){
             $template =  $this->template[$data['product']][$templateKey][$indexKey];
         }else{
