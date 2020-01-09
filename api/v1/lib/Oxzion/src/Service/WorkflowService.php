@@ -74,6 +74,7 @@ class WorkflowService extends AbstractService
     }
     public function deploy($file, $appUuid, $data, $entityId)
     {
+        $this->logger->info("Executing deploy for entity id -> $entityId");
         $query = "SELECT * FROM `ox_app` WHERE uuid = :appUuid;";
         $queryParams = array("appUuid" => $appUuid);
         $resultSet = $this->executeQuerywithBindParameters($query,$queryParams)->toArray();
@@ -86,6 +87,7 @@ class WorkflowService extends AbstractService
         $data['entity_id'] = $entityId;
         
         try {
+            $this->logger->info("Executing deploy of workflow : $workflowName");
             $processIds = $this->getProcessManager()->deploy($workflowName, array($file));
             $processId = null;
             if ($processIds) {
