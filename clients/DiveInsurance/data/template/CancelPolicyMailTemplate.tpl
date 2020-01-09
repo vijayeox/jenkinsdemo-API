@@ -1,4 +1,4 @@
-  {* COI Auto Renewal Notification Template *}
+  {* Cancel Policy Mail Template *}
 
             <div style='width:100%;background:#452767;color:#fff;height:35px;margin-bottom:2px'>
             </div>
@@ -8,7 +8,7 @@
 				{$address2}<br/>
 				{$city},{$state},{$zip}<br/></p>
 				<br/>
-				<p>Cancellation of Policy having policy number {$policy_id} is {$cancellationStatus}.</p><br/>
+				<p>This mail is regarding the cancellation of your policy.</p><br/>
 				
 				<p>We thank you for your long-standing relationship with PADI and Vicencia & Buckley, a Division of HUB International Insurance Services Inc. If you have any questions feel free to give us a call or send us an email.</p>
 			 <br/>

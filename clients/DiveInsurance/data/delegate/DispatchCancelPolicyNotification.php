@@ -15,7 +15,6 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
             'Individual Professional Liability' => 'CancelPolicyMailTemplate',
             'Dive Boat' => 'CancelPolicyMailTemplate',
             'Dive Store' => 'CancelPolicyMailTemplate');
-        $this->document = array('docs' => ['Cancellation_Approval']);
         parent::__construct();
     }
 
@@ -26,9 +25,21 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
         if(isset($data['documents']) && is_string($data['documents'])){
             $data['documents'] = json_decode($data['documents'],true);
         }
-        $this->logger->info("ARRAY DOCUMENT --- ".print_r($document,true));
-        $this->logger->info("REQUIRED DOCUMENT --- ".print_r($this->document,true));
-        $file = $this->destination.$data['documents']['Cancellation_Approval'];
+        $this->logger->info("ARRAY DOCUMENT --- ".json_encode($data['documents']));
+        $this->logger->info("REQUIRED DOCUMENT --- cancel_doc");
+        $fileData = array();
+        if(isset($data['documents']['cancel_doc'])){
+            $file = $this->destination.$data['documents']['cancel_doc'];
+            if(file_exists($file)){
+                 array_push($fileData, $file);         
+            }else{
+                $this->logger->error("Cancellation Document Not Found - ".$file);
+                throw new DelegateException('Cancellation Document Not Found','file.not.found',0,array($file));
+            }
+        }else{
+            $this->logger->error("Cancellation Document Not Found".$error);
+            throw new DelegateException('Cancellation Document Not Found','file.not.found');
+        }
         $data['subject'] = 'Cancel Policy';
         $data['document'] =$fileData;
         $response = $this->dispatch($data);

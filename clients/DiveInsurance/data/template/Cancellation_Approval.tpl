@@ -11,14 +11,14 @@
 		<p>THE ABOVE POLICY IS HEREBY CANCELLED EFFECTIVE: {$CancelDate|date_format:"%m/%d/%Y"} </p>
 			{if $reasonforCsrCancellation == 'nonPaymentOfPremium'}
 				<p>DUE TO NON-PAYMENT OF PREMIUM.</p>
-				<p>TO REINSTATE COVERAGE, PAYMENT OF {$reinstateAmount} IS REQUIRED WITHIN
+				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
 				10 DAYS OF THIS NOTICE TO THE FINANCE COMPANY.</p>
 			{elseif $reasonforCsrCancellation == 'padiMembershipNotCurrent'}
 				<p>DUE TO PADI MEMBERSHIP NOT CURRENT.</p>
 				<p>TO REINSTATE COVERAGE, MEMBERSHIP MUST BE RENEWED WITHIN 45 DAYS OF THIS NOTICE</p>
 			{elseif $reasonforCsrCancellation == 'nonSufficientFunds'}
 				<p>NON-PAYMENT OF PREMIUM DUE TO NON-SUFFICIENT FUNDS.</p>
-				<p>TO REINSTATE COVERAGE, PAYMENT OF {$reinstateAmount} IS REQUIRED WITHIN
+				<p>TO REINSTATE COVERAGE, PAYMENT OF ${$reinstateAmount} IS REQUIRED WITHIN
 				10 DAYS OF THIS NOTICE TO THE FINANCE COMPANY.</p>
 			{elseif $reasonforCsrCancellation == 'boatSold'}
 				<p>DUE TO BOAT SOLD.</p>
