@@ -73,6 +73,7 @@ class ErrorController extends AbstractApiControllerHelper
     public function create($data)
     {
         try {
+            print_r($data);exit;
             $data = $this->errorService->saveError($data);
             if ($data == 0) {
                 return $this->getFailureResponse("Failed to create a new entity", $data);
