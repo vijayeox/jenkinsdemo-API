@@ -164,6 +164,7 @@ class DataSourceService extends AbstractService
 
         switch($type) {
             case 'Elastic':
+            case 'ElasticSearch':
                 $elasticConfig['elasticsearch'] = $config['data'];
                 $analyticsObject = new  \Oxzion\Analytics\Elastic\AnalyticsEngineImpl($elasticConfig);
                 break;
