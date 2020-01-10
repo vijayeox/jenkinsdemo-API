@@ -132,8 +132,8 @@ class QueryService extends AbstractService
             $response['query']['configuration'] = json_decode($resultSet[0]["configuration"]);
         }
         catch (ZendDbException $e) {
-            $this->logger->err('Database exception occurred.');
-            $this->logger->err($e);
+            $this->logger->error('Database exception occurred.');
+            $this->logger->error($e);
             return 0;
         }
 
