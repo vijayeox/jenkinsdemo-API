@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_15ktrj6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.5.0">
+  <bpmn:process id="Process_005xob2" isExecutable="true">
+    <bpmn:endEvent id="EndEvent_0wm5ke0" name="Approved">
+      <bpmn:incoming>SequenceFlow_0trljpl</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="UserTask_1bmka00" name="Cancellation Approval">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="template" value="{&#34;_id&#34;:&#34;5e1568f91411ab41cbd81450&#34;,&#34;type&#34;:&#34;form&#34;,&#34;tags&#34;:[],&#34;owner&#34;:&#34;5ddfaa682859774314661851&#34;,&#34;components&#34;:[{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Reason for Cancellation:&#34;,&#34;key&#34;:&#34;csrCancellationReason&#34;,&#34;placeholder&#34;:&#34;--Select one--&#34;,&#34;data&#34;:{&#34;values&#34;:[{&#34;value&#34;:&#34;&#34;,&#34;label&#34;:&#34;&#34;}],&#34;json&#34;:&#34;&#34;,&#34;url&#34;:&#34;&#34;,&#34;resource&#34;:&#34;&#34;,&#34;custom&#34;:&#34;var list = [{\&#34;label\&#34;: \&#34;Non-payment of Premium\&#34;,\&#34;value\&#34; : \&#34;nonPaymentOfPremium\&#34;},{\&#34;label\&#34;: \&#34;PADI Membership not current\&#34;,\&#34;value\&#34; : \&#34;padiMembershipNotCurrent\&#34;},{\&#34;label\&#34;: \&#34;Non-Sufficient Funds\&#34;,\&#34;value\&#34; : \&#34;nonSufficientFunds\&#34;},{\&#34;label\&#34;: \&#34;Others\&#34;,\&#34;value\&#34; : \&#34;others\&#34;}]\nif(data[&#39;product&#39;] == &#39;Dive Boat&#39;){\nlist.push({\&#34;label\&#34;: \&#34;Boat Sold\&#34;,\&#34;value\&#34; : \&#34;boatSold\&#34;})\n}\nif(data[&#39;product&#39;] == &#39;Dive Store&#39;){\nlist.push({\&#34;label\&#34;: \&#34;Store Sold\&#34;,\&#34;value\&#34; : \&#34;storeSold\&#34;})\n}\nconsole.log(list)\nvalues = list&#34;},&#34;dataSrc&#34;:&#34;custom&#34;,&#34;valueProperty&#34;:&#34;&#34;,&#34;defaultValue&#34;:&#34;&#34;,&#34;refreshOn&#34;:&#34;&#34;,&#34;filter&#34;:&#34;&#34;,&#34;authenticate&#34;:false,&#34;template&#34;:&#34;&#60;span&#62;{{ item.label }}&#60;/span&#62;&#34;,&#34;multiple&#34;:false,&#34;protected&#34;:false,&#34;unique&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false},&#34;type&#34;:&#34;select&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;dataGridLabel&#34;:false,&#34;customConditional&#34;:&#34;show = data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] != null &#38;&#38; data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] ? true: false;&#34;,&#34;isNew&#34;:false},{&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;key&#34;:&#34;reasonforCsrCancellation&#34;,&#34;label&#34;:&#34;Reason for Cancellation&#34;,&#34;protected&#34;:false,&#34;unique&#34;:false,&#34;persistent&#34;:true,&#34;type&#34;:&#34;hidden&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:&#34;&#34;,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;calculateValue&#34;:&#34;value = data[&#39;csrCancellationReason&#39;].value;&#34;,&#34;customDefaultValue&#34;:&#34;value = data[&#39;csrCancellationReason&#39;].value&#34;},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;inputType&#34;:&#34;number&#34;,&#34;label&#34;:&#34;Amount to be paid to Reinstate Policy:&#34;,&#34;key&#34;:&#34;reinstateAmount&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;prefix&#34;:&#34;$&#34;,&#34;suffix&#34;:&#34;&#34;,&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:true,&#34;min&#34;:&#34;&#34;,&#34;max&#34;:&#34;&#34;,&#34;step&#34;:&#34;any&#34;,&#34;integer&#34;:&#34;&#34;,&#34;multiple&#34;:&#34;&#34;,&#34;custom&#34;:&#34;&#34;},&#34;type&#34;:&#34;number&#34;,&#34;labelPosition&#34;:&#34;left-left&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;reasonforCsrCancellation&#34;,&#34;eq&#34;:&#34;padiMembershipNotCurrent&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;labelWidth&#34;:30,&#34;labelMargin&#34;:3,&#34;customConditional&#34;:&#34;show = (data[&#39;reasonforCsrCancellation&#39;]==&#39;nonSufficientFunds&#39; || data[&#39;reasonforCsrCancellation&#39;]==&#39;nonPaymentOfPremium&#39;)&#34;,&#34;isNew&#34;:false},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Others&#34;,&#34;key&#34;:&#34;othersCsr&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;prefix&#34;:&#34;&#34;,&#34;suffix&#34;:&#34;&#34;,&#34;rows&#34;:3,&#34;multiple&#34;:false,&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;wysiwyg&#34;:false,&#34;clearOnHide&#34;:true,&#34;spellcheck&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;minLength&#34;:&#34;&#34;,&#34;maxLength&#34;:&#34;&#34;,&#34;pattern&#34;:&#34;&#34;,&#34;custom&#34;:&#34;&#34;},&#34;type&#34;:&#34;textarea&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;inputFormat&#34;:&#34;plain&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;reasonforCsrCancellation&#34;,&#34;eq&#34;:&#34;others&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;customConditional&#34;:&#34;show = (data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] != null &#38;&#38; data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] &#38;&#38; (data[&#39;reasonforCsrCancellation&#39;]==&#39;others&#39;)) ? true: false;&#34;,&#34;isNew&#34;:false},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;inputType&#34;:&#34;radio&#34;,&#34;label&#34;:&#34;Cancellation Status:&#34;,&#34;key&#34;:&#34;cancellationStatus&#34;,&#34;values&#34;:[{&#34;value&#34;:&#34;approved&#34;,&#34;label&#34;:&#34;Approved&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;notApproved&#34;,&#34;label&#34;:&#34;Not Approved&#34;,&#34;shortcut&#34;:&#34;&#34;}],&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;fieldSet&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:true,&#34;custom&#34;:&#34;&#34;,&#34;customPrivate&#34;:false},&#34;type&#34;:&#34;radio&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;optionsLabelPosition&#34;:&#34;right&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;inline&#34;:false,&#34;customConditional&#34;:&#34;show = data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] != null &#38;&#38; data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] ? true: false;&#34;,&#34;labelWidth&#34;:30,&#34;labelMargin&#34;:3,&#34;lockKey&#34;:true},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Reason for Cancel Policy Not Approved:&#34;,&#34;key&#34;:&#34;reasonforRejection&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;prefix&#34;:&#34;&#34;,&#34;suffix&#34;:&#34;&#34;,&#34;rows&#34;:3,&#34;multiple&#34;:false,&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;wysiwyg&#34;:false,&#34;clearOnHide&#34;:true,&#34;spellcheck&#34;:true,&#34;validate&#34;:{&#34;required&#34;:true,&#34;minLength&#34;:&#34;&#34;,&#34;maxLength&#34;:&#34;&#34;,&#34;pattern&#34;:&#34;&#34;,&#34;custom&#34;:&#34;&#34;},&#34;type&#34;:&#34;textarea&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;inputFormat&#34;:&#34;plain&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;cancellationStatus&#34;,&#34;eq&#34;:&#34;notApproved&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Reason for Cancellation&#34;,&#34;key&#34;:&#34;userCancellationReason&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;data&#34;:{&#34;values&#34;:[{&#34;value&#34;:&#34;&#34;,&#34;label&#34;:&#34;&#34;}],&#34;json&#34;:&#34;&#34;,&#34;url&#34;:&#34;&#34;,&#34;resource&#34;:&#34;&#34;,&#34;custom&#34;:&#34;var list = [{\&#34;label\&#34;: \&#34;PADI Membership not current\&#34;,\&#34;value\&#34; : \&#34;padiMembershipNotCurrent\&#34;},{\&#34;label\&#34;: \&#34;Others\&#34;,\&#34;value\&#34; : \&#34;others\&#34;}\n]\nif(data[&#39;product&#39;] == &#39;Dive Boat&#39;){\nlist.push({\&#34;label\&#34;: \&#34;Boat Sold\&#34;,\&#34;value\&#34; : \&#34;boatSold\&#34;})\n}\nelse if(data[&#39;product&#39;] == &#39;Dive Store&#39;){\nlist.push({\&#34;label\&#34;: \&#34;Store Sold\&#34;,\&#34;value\&#34; : \&#34;storeSold\&#34;})\n}\nvalues = list&#34;},&#34;dataSrc&#34;:&#34;custom&#34;,&#34;valueProperty&#34;:&#34;&#34;,&#34;defaultValue&#34;:&#34;&#34;,&#34;refreshOn&#34;:&#34;&#34;,&#34;filter&#34;:&#34;&#34;,&#34;authenticate&#34;:false,&#34;template&#34;:&#34;&#60;span&#62;{{ item.label }}&#60;/span&#62;&#34;,&#34;multiple&#34;:false,&#34;protected&#34;:false,&#34;unique&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false},&#34;type&#34;:&#34;select&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;customConditional&#34;:&#34;show = data.privileges[&#39;MANAGE_MY_POLICY_READ&#39;]? true : false;&#34;},{&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;key&#34;:&#34;reasonforUserCancellation&#34;,&#34;label&#34;:&#34;Reason for Cancellation:&#34;,&#34;protected&#34;:false,&#34;unique&#34;:false,&#34;persistent&#34;:true,&#34;type&#34;:&#34;hidden&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;calculateValue&#34;:&#34;value = data[&#39;userCancellationReason&#39;].value;&#34;},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Others&#34;,&#34;key&#34;:&#34;othersUser&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;prefix&#34;:&#34;&#34;,&#34;suffix&#34;:&#34;&#34;,&#34;rows&#34;:3,&#34;multiple&#34;:false,&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;wysiwyg&#34;:false,&#34;clearOnHide&#34;:true,&#34;spellcheck&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;minLength&#34;:&#34;&#34;,&#34;maxLength&#34;:&#34;&#34;,&#34;pattern&#34;:&#34;&#34;,&#34;custom&#34;:&#34;&#34;},&#34;type&#34;:&#34;textarea&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;inputFormat&#34;:&#34;plain&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;reasonforUserCancellation&#34;,&#34;eq&#34;:&#34;others&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true},{&#34;type&#34;:&#34;panel&#34;,&#34;title&#34;:&#34;Cancel Confirmation&#34;,&#34;components&#34;:[{&#34;key&#34;:&#34;page7Content2&#34;,&#34;label&#34;:&#34;Content&#34;,&#34;input&#34;:false,&#34;tag&#34;:&#34;p&#34;,&#34;attrs&#34;:[{&#34;value&#34;:&#34;&#34;,&#34;attr&#34;:&#34;&#34;}],&#34;className&#34;:&#34;&#34;,&#34;content&#34;:&#34;This is not a binder of insurance coverage, and does not bind the insurer or Vicencia Buckley, a division of HUB International, until approved by the insurer and a premium is paid by the applicant and all required documents are received. We (I) acknowledge that this policy does not cover in water accidents and that we (I) have or require Professional Liability in place for in water accidents. No coverage is provided under this policy for Liquor Liability. It is your duty to correct any wrong information and to complete any omitted information on this application. Concealment, misrepresenting, or stating falsely on this application may result in your policy being voided or rescinded at any time, even after a loss&#34;,&#34;type&#34;:&#34;htmlelement&#34;,&#34;hideLabel&#34;:true,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;inputType&#34;:&#34;checkbox&#34;,&#34;tableView&#34;:true,&#34;label&#34;:&#34;I have read and agree to Terms of Service, Cancellation Policy and Privacy Policy.&#34;,&#34;dataGridLabel&#34;:false,&#34;key&#34;:&#34;page7IhavereadandagreetoTermsofServiceCancellationPolicyandPrivacyPolicy&#34;,&#34;defaultValue&#34;:false,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;name&#34;:&#34;&#34;,&#34;value&#34;:&#34;&#34;,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:true},&#34;type&#34;:&#34;checkbox&#34;,&#34;labelPosition&#34;:&#34;right&#34;,&#34;hideLabel&#34;:false,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}}],&#34;input&#34;:false,&#34;key&#34;:&#34;cancelConfirmation&#34;,&#34;clearOnHide&#34;:false,&#34;theme&#34;:&#34;primary&#34;,&#34;tableView&#34;:false,&#34;hideLabel&#34;:false,&#34;breadcrumb&#34;:&#34;default&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;customConditional&#34;:&#34;show = data.privileges[&#39;MANAGE_MY_POLICY_READ&#39;]? true : false;&#34;,&#34;lockKey&#34;:true},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;label&#34;:&#34;Submit&#34;,&#34;tableView&#34;:false,&#34;key&#34;:&#34;submit&#34;,&#34;size&#34;:&#34;md&#34;,&#34;leftIcon&#34;:&#34;&#34;,&#34;rightIcon&#34;:&#34;&#34;,&#34;block&#34;:false,&#34;action&#34;:&#34;submit&#34;,&#34;disableOnInvalid&#34;:false,&#34;theme&#34;:&#34;primary&#34;,&#34;type&#34;:&#34;button&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}}],&#34;revisions&#34;:&#34;&#34;,&#34;_vid&#34;:0,&#34;title&#34;:&#34;Cancel Policy Generic&#34;,&#34;display&#34;:&#34;form&#34;,&#34;access&#34;:[{&#34;roles&#34;:[&#34;5ce43aa430776b950569301d&#34;,&#34;5ce43aa430776b4a5969301e&#34;,&#34;5ce43aa430776bdfb569301f&#34;],&#34;type&#34;:&#34;read_all&#34;}],&#34;submissionAccess&#34;:[],&#34;settings&#34;:{},&#34;properties&#34;:{},&#34;name&#34;:&#34;cancelPolicyGeneric&#34;,&#34;path&#34;:&#34;cancelpolicygeneric&#34;,&#34;project&#34;:&#34;5ce43aa430776b2aff69301c&#34;,&#34;created&#34;:&#34;2020-01-08T05:30:33.387Z&#34;,&#34;modified&#34;:&#34;2020-01-08T10:42:01.371Z&#34;,&#34;machineName&#34;:&#34;testdivehub:cancelPolicyGeneric&#34;}" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0us9fau</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0p1x3ey</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="ServiceTask_1583ijt" name="Send cancellation approval mail" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="commands">
+            <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate":"CancelPolicy"}</camunda:value>
+              <camunda:value>{"command" : "fileSave"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate" : "DispatchCancelPolicyNotification"}</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1s4yql3</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1lvd7y4</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0trljpl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:startEvent id="StartEvent_122fw9n" name="Cancel form" camunda:asyncAfter="true">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="template" value="{&#34;_id&#34;:&#34;5e1568f91411ab41cbd81450&#34;,&#34;type&#34;:&#34;form&#34;,&#34;tags&#34;:[],&#34;owner&#34;:&#34;5ddfaa682859774314661851&#34;,&#34;components&#34;:[{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Reason for Cancellation:&#34;,&#34;key&#34;:&#34;csrCancellationReason&#34;,&#34;placeholder&#34;:&#34;--Select one--&#34;,&#34;data&#34;:{&#34;values&#34;:[{&#34;value&#34;:&#34;&#34;,&#34;label&#34;:&#34;&#34;}],&#34;json&#34;:&#34;&#34;,&#34;url&#34;:&#34;&#34;,&#34;resource&#34;:&#34;&#34;,&#34;custom&#34;:&#34;var list = [{\&#34;label\&#34;: \&#34;Non-payment of Premium\&#34;,\&#34;value\&#34; : \&#34;nonPaymentOfPremium\&#34;},{\&#34;label\&#34;: \&#34;PADI Membership not current\&#34;,\&#34;value\&#34; : \&#34;padiMembershipNotCurrent\&#34;},{\&#34;label\&#34;: \&#34;Non-Sufficient Funds\&#34;,\&#34;value\&#34; : \&#34;nonSufficientFunds\&#34;},{\&#34;label\&#34;: \&#34;Others\&#34;,\&#34;value\&#34; : \&#34;others\&#34;}]\nif(data[&#39;product&#39;] == &#39;Dive Boat&#39;){\nlist.push({\&#34;label\&#34;: \&#34;Boat Sold\&#34;,\&#34;value\&#34; : \&#34;boatSold\&#34;})\n}\nif(data[&#39;product&#39;] == &#39;Dive Store&#39;){\nlist.push({\&#34;label\&#34;: \&#34;Store Sold\&#34;,\&#34;value\&#34; : \&#34;storeSold\&#34;})\n}\nconsole.log(list)\nvalues = list&#34;},&#34;dataSrc&#34;:&#34;custom&#34;,&#34;valueProperty&#34;:&#34;&#34;,&#34;defaultValue&#34;:&#34;&#34;,&#34;refreshOn&#34;:&#34;&#34;,&#34;filter&#34;:&#34;&#34;,&#34;authenticate&#34;:false,&#34;template&#34;:&#34;&#60;span&#62;{{ item.label }}&#60;/span&#62;&#34;,&#34;multiple&#34;:false,&#34;protected&#34;:false,&#34;unique&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false},&#34;type&#34;:&#34;select&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;dataGridLabel&#34;:false,&#34;customConditional&#34;:&#34;show = data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] != null &#38;&#38; data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] ? true: false;&#34;,&#34;isNew&#34;:false},{&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;key&#34;:&#34;reasonforCsrCancellation&#34;,&#34;label&#34;:&#34;Reason for Cancellation&#34;,&#34;protected&#34;:false,&#34;unique&#34;:false,&#34;persistent&#34;:true,&#34;type&#34;:&#34;hidden&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:&#34;&#34;,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;calculateValue&#34;:&#34;value = data[&#39;csrCancellationReason&#39;].value;&#34;,&#34;customDefaultValue&#34;:&#34;value = data[&#39;csrCancellationReason&#39;].value&#34;},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;inputType&#34;:&#34;number&#34;,&#34;label&#34;:&#34;Amount to be paid to Reinstate Policy:&#34;,&#34;key&#34;:&#34;reinstateAmount&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;prefix&#34;:&#34;$&#34;,&#34;suffix&#34;:&#34;&#34;,&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:true,&#34;min&#34;:&#34;&#34;,&#34;max&#34;:&#34;&#34;,&#34;step&#34;:&#34;any&#34;,&#34;integer&#34;:&#34;&#34;,&#34;multiple&#34;:&#34;&#34;,&#34;custom&#34;:&#34;&#34;},&#34;type&#34;:&#34;number&#34;,&#34;labelPosition&#34;:&#34;left-left&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;reasonforCsrCancellation&#34;,&#34;eq&#34;:&#34;padiMembershipNotCurrent&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;labelWidth&#34;:30,&#34;labelMargin&#34;:3,&#34;customConditional&#34;:&#34;show = (data[&#39;reasonforCsrCancellation&#39;]==&#39;nonSufficientFunds&#39; || data[&#39;reasonforCsrCancellation&#39;]==&#39;nonPaymentOfPremium&#39;)&#34;,&#34;isNew&#34;:false},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Others&#34;,&#34;key&#34;:&#34;othersCsr&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;prefix&#34;:&#34;&#34;,&#34;suffix&#34;:&#34;&#34;,&#34;rows&#34;:3,&#34;multiple&#34;:false,&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;wysiwyg&#34;:false,&#34;clearOnHide&#34;:true,&#34;spellcheck&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;minLength&#34;:&#34;&#34;,&#34;maxLength&#34;:&#34;&#34;,&#34;pattern&#34;:&#34;&#34;,&#34;custom&#34;:&#34;&#34;},&#34;type&#34;:&#34;textarea&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;inputFormat&#34;:&#34;plain&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;reasonforCsrCancellation&#34;,&#34;eq&#34;:&#34;others&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;customConditional&#34;:&#34;show = (data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] != null &#38;&#38; data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] &#38;&#38; (data[&#39;reasonforCsrCancellation&#39;]==&#39;others&#39;)) ? true: false;&#34;,&#34;isNew&#34;:false},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;inputType&#34;:&#34;radio&#34;,&#34;label&#34;:&#34;Cancellation Status:&#34;,&#34;key&#34;:&#34;cancellationStatus&#34;,&#34;values&#34;:[{&#34;value&#34;:&#34;approved&#34;,&#34;label&#34;:&#34;Approved&#34;,&#34;shortcut&#34;:&#34;&#34;},{&#34;value&#34;:&#34;notApproved&#34;,&#34;label&#34;:&#34;Not Approved&#34;,&#34;shortcut&#34;:&#34;&#34;}],&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;fieldSet&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:true,&#34;custom&#34;:&#34;&#34;,&#34;customPrivate&#34;:false},&#34;type&#34;:&#34;radio&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;optionsLabelPosition&#34;:&#34;right&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;inline&#34;:false,&#34;customConditional&#34;:&#34;show = data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] != null &#38;&#38; data.privileges[&#39;MANAGE_POLICY_APPROVAL_WRITE&#39;] ? true: false;&#34;,&#34;labelWidth&#34;:30,&#34;labelMargin&#34;:3,&#34;lockKey&#34;:true},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Reason for Cancel Policy Not Approved:&#34;,&#34;key&#34;:&#34;reasonforRejection&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;prefix&#34;:&#34;&#34;,&#34;suffix&#34;:&#34;&#34;,&#34;rows&#34;:3,&#34;multiple&#34;:false,&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;wysiwyg&#34;:false,&#34;clearOnHide&#34;:true,&#34;spellcheck&#34;:true,&#34;validate&#34;:{&#34;required&#34;:true,&#34;minLength&#34;:&#34;&#34;,&#34;maxLength&#34;:&#34;&#34;,&#34;pattern&#34;:&#34;&#34;,&#34;custom&#34;:&#34;&#34;},&#34;type&#34;:&#34;textarea&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;inputFormat&#34;:&#34;plain&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;cancellationStatus&#34;,&#34;eq&#34;:&#34;notApproved&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Reason for Cancellation&#34;,&#34;key&#34;:&#34;userCancellationReason&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;data&#34;:{&#34;values&#34;:[{&#34;value&#34;:&#34;&#34;,&#34;label&#34;:&#34;&#34;}],&#34;json&#34;:&#34;&#34;,&#34;url&#34;:&#34;&#34;,&#34;resource&#34;:&#34;&#34;,&#34;custom&#34;:&#34;var list = [{\&#34;label\&#34;: \&#34;PADI Membership not current\&#34;,\&#34;value\&#34; : \&#34;padiMembershipNotCurrent\&#34;},{\&#34;label\&#34;: \&#34;Others\&#34;,\&#34;value\&#34; : \&#34;others\&#34;}\n]\nif(data[&#39;product&#39;] == &#39;Dive Boat&#39;){\nlist.push({\&#34;label\&#34;: \&#34;Boat Sold\&#34;,\&#34;value\&#34; : \&#34;boatSold\&#34;})\n}\nelse if(data[&#39;product&#39;] == &#39;Dive Store&#39;){\nlist.push({\&#34;label\&#34;: \&#34;Store Sold\&#34;,\&#34;value\&#34; : \&#34;storeSold\&#34;})\n}\nvalues = list&#34;},&#34;dataSrc&#34;:&#34;custom&#34;,&#34;valueProperty&#34;:&#34;&#34;,&#34;defaultValue&#34;:&#34;&#34;,&#34;refreshOn&#34;:&#34;&#34;,&#34;filter&#34;:&#34;&#34;,&#34;authenticate&#34;:false,&#34;template&#34;:&#34;&#60;span&#62;{{ item.label }}&#60;/span&#62;&#34;,&#34;multiple&#34;:false,&#34;protected&#34;:false,&#34;unique&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false},&#34;type&#34;:&#34;select&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;customConditional&#34;:&#34;show = data.privileges[&#39;MANAGE_MY_POLICY_READ&#39;]? true : false;&#34;},{&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;key&#34;:&#34;reasonforUserCancellation&#34;,&#34;label&#34;:&#34;Reason for Cancellation:&#34;,&#34;protected&#34;:false,&#34;unique&#34;:false,&#34;persistent&#34;:true,&#34;type&#34;:&#34;hidden&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true,&#34;calculateValue&#34;:&#34;value = data[&#39;userCancellationReason&#39;].value;&#34;},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;tableView&#34;:true,&#34;label&#34;:&#34;Others&#34;,&#34;key&#34;:&#34;othersUser&#34;,&#34;placeholder&#34;:&#34;&#34;,&#34;prefix&#34;:&#34;&#34;,&#34;suffix&#34;:&#34;&#34;,&#34;rows&#34;:3,&#34;multiple&#34;:false,&#34;defaultValue&#34;:&#34;&#34;,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;wysiwyg&#34;:false,&#34;clearOnHide&#34;:true,&#34;spellcheck&#34;:true,&#34;validate&#34;:{&#34;required&#34;:false,&#34;minLength&#34;:&#34;&#34;,&#34;maxLength&#34;:&#34;&#34;,&#34;pattern&#34;:&#34;&#34;,&#34;custom&#34;:&#34;&#34;},&#34;type&#34;:&#34;textarea&#34;,&#34;labelPosition&#34;:&#34;top&#34;,&#34;inputFormat&#34;:&#34;plain&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;true&#34;,&#34;when&#34;:&#34;reasonforUserCancellation&#34;,&#34;eq&#34;:&#34;others&#34;},&#34;properties&#34;:{},&#34;lockKey&#34;:true},{&#34;type&#34;:&#34;panel&#34;,&#34;title&#34;:&#34;Cancel Confirmation&#34;,&#34;components&#34;:[{&#34;key&#34;:&#34;page7Content2&#34;,&#34;label&#34;:&#34;Content&#34;,&#34;input&#34;:false,&#34;tag&#34;:&#34;p&#34;,&#34;attrs&#34;:[{&#34;value&#34;:&#34;&#34;,&#34;attr&#34;:&#34;&#34;}],&#34;className&#34;:&#34;&#34;,&#34;content&#34;:&#34;This is not a binder of insurance coverage, and does not bind the insurer or Vicencia Buckley, a division of HUB International, until approved by the insurer and a premium is paid by the applicant and all required documents are received. We (I) acknowledge that this policy does not cover in water accidents and that we (I) have or require Professional Liability in place for in water accidents. No coverage is provided under this policy for Liquor Liability. It is your duty to correct any wrong information and to complete any omitted information on this application. Concealment, misrepresenting, or stating falsely on this application may result in your policy being voided or rescinded at any time, even after a loss&#34;,&#34;type&#34;:&#34;htmlelement&#34;,&#34;hideLabel&#34;:true,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;inputType&#34;:&#34;checkbox&#34;,&#34;tableView&#34;:true,&#34;label&#34;:&#34;I have read and agree to Terms of Service, Cancellation Policy and Privacy Policy.&#34;,&#34;dataGridLabel&#34;:false,&#34;key&#34;:&#34;page7IhavereadandagreetoTermsofServiceCancellationPolicyandPrivacyPolicy&#34;,&#34;defaultValue&#34;:false,&#34;protected&#34;:false,&#34;persistent&#34;:true,&#34;hidden&#34;:false,&#34;name&#34;:&#34;&#34;,&#34;value&#34;:&#34;&#34;,&#34;clearOnHide&#34;:true,&#34;validate&#34;:{&#34;required&#34;:true},&#34;type&#34;:&#34;checkbox&#34;,&#34;labelPosition&#34;:&#34;right&#34;,&#34;hideLabel&#34;:false,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}}],&#34;input&#34;:false,&#34;key&#34;:&#34;cancelConfirmation&#34;,&#34;clearOnHide&#34;:false,&#34;theme&#34;:&#34;primary&#34;,&#34;tableView&#34;:false,&#34;hideLabel&#34;:false,&#34;breadcrumb&#34;:&#34;default&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{},&#34;customConditional&#34;:&#34;show = data.privileges[&#39;MANAGE_MY_POLICY_READ&#39;]? true : false;&#34;,&#34;lockKey&#34;:true},{&#34;autofocus&#34;:false,&#34;input&#34;:true,&#34;label&#34;:&#34;Submit&#34;,&#34;tableView&#34;:false,&#34;key&#34;:&#34;submit&#34;,&#34;size&#34;:&#34;md&#34;,&#34;leftIcon&#34;:&#34;&#34;,&#34;rightIcon&#34;:&#34;&#34;,&#34;block&#34;:false,&#34;action&#34;:&#34;submit&#34;,&#34;disableOnInvalid&#34;:false,&#34;theme&#34;:&#34;primary&#34;,&#34;type&#34;:&#34;button&#34;,&#34;tags&#34;:[],&#34;conditional&#34;:{&#34;show&#34;:&#34;&#34;,&#34;when&#34;:null,&#34;eq&#34;:&#34;&#34;},&#34;properties&#34;:{}}],&#34;revisions&#34;:&#34;&#34;,&#34;_vid&#34;:0,&#34;title&#34;:&#34;Cancel Policy Generic&#34;,&#34;display&#34;:&#34;form&#34;,&#34;access&#34;:[{&#34;roles&#34;:[&#34;5ce43aa430776b950569301d&#34;,&#34;5ce43aa430776b4a5969301e&#34;,&#34;5ce43aa430776bdfb569301f&#34;],&#34;type&#34;:&#34;read_all&#34;}],&#34;submissionAccess&#34;:[],&#34;settings&#34;:{},&#34;properties&#34;:{},&#34;name&#34;:&#34;cancelPolicyGeneric&#34;,&#34;path&#34;:&#34;cancelpolicygeneric&#34;,&#34;project&#34;:&#34;5ce43aa430776b2aff69301c&#34;,&#34;created&#34;:&#34;2020-01-08T05:30:33.387Z&#34;,&#34;modified&#34;:&#34;2020-01-08T10:42:01.371Z&#34;,&#34;machineName&#34;:&#34;testdivehub:cancelPolicyGeneric&#34;}" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_0opiye2</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0dsusq7">
+      <bpmn:incoming>SequenceFlow_0p1x3ey</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1s4yql3</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1afr2kj</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="ServiceTask_10l09j2" name="Send cancellation rejection mail" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="commands">
+            <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate":"CancelPolicy"}</camunda:value>
+              <camunda:value>{"command" : "fileSave"}</camunda:value>
+              <camunda:value>{"command" : "delegate", "delegate" : "DispatchCancelPolicyNotification"}</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1afr2kj</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0ydanwf</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_07jfkd3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent_1w28ejz" name="Rejected&#10;&#10;">
+      <bpmn:incoming>SequenceFlow_07jfkd3</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0qojjhv" default="SequenceFlow_16e706u">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="Groovy">def reasonforUC = execution.getVariable('reasonforUserCancellation')
+if(reasonforUC){
+	execution.setVariable("reasonforCsrCancellation",reasonforUC)
+	if(reasonforUC=='others'){
+		def othersReason = execution.getVariable('othersUser')
+	  	execution.setVariable("othersCsr",othersReason)
+	}
+}</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0opiye2</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_16e706u</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1lvd7y4</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0ydanwf</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0trljpl" sourceRef="ServiceTask_1583ijt" targetRef="EndEvent_0wm5ke0" />
+    <bpmn:sequenceFlow id="SequenceFlow_16e706u" name="user request" sourceRef="ExclusiveGateway_0qojjhv" targetRef="Task_1qiwpa8" />
+    <bpmn:sequenceFlow id="SequenceFlow_0p1x3ey" sourceRef="UserTask_1bmka00" targetRef="ExclusiveGateway_0dsusq7" />
+    <bpmn:sequenceFlow id="SequenceFlow_1s4yql3" name="csr approved" sourceRef="ExclusiveGateway_0dsusq7" targetRef="ServiceTask_1583ijt">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${cancellationStatus=="approved"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1lvd7y4" name="csr approved" sourceRef="ExclusiveGateway_0qojjhv" targetRef="ServiceTask_1583ijt">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${cancellationStatus=="approved"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0opiye2" sourceRef="StartEvent_122fw9n" targetRef="ExclusiveGateway_0qojjhv" />
+    <bpmn:sequenceFlow id="SequenceFlow_1afr2kj" name="csr not approved" sourceRef="ExclusiveGateway_0dsusq7" targetRef="ServiceTask_10l09j2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${cancellationStatus=="notApproved"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0ydanwf" name="csr not approved" sourceRef="ExclusiveGateway_0qojjhv" targetRef="ServiceTask_10l09j2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${cancellationStatus=="notApproved"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_07jfkd3" sourceRef="ServiceTask_10l09j2" targetRef="EndEvent_1w28ejz" />
+    <bpmn:sequenceFlow id="SequenceFlow_0us9fau" sourceRef="Task_1qiwpa8" targetRef="UserTask_1bmka00" />
+    <bpmn:serviceTask id="Task_1qiwpa8" name="Save user input into DB" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="command">fileSave</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_16e706u</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0us9fau</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_005xob2">
+      <bpmndi:BPMNShape id="EndEvent_0wm5ke0_di" bpmnElement="EndEvent_0wm5ke0">
+        <dc:Bounds x="1152" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1147" y="235" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1bmka00_di" bpmnElement="UserTask_1bmka00">
+        <dc:Bounds x="640" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1583ijt_di" bpmnElement="ServiceTask_1583ijt">
+        <dc:Bounds x="930" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_122fw9n_di" bpmnElement="StartEvent_122fw9n">
+        <dc:Bounds x="172" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="160" y="235" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0dsusq7_di" bpmnElement="ExclusiveGateway_0dsusq7" isMarkerVisible="true">
+        <dc:Bounds x="785" y="185" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_10l09j2_di" bpmnElement="ServiceTask_10l09j2">
+        <dc:Bounds x="930" y="313" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_1w28ejz_di" bpmnElement="EndEvent_1w28ejz">
+        <dc:Bounds x="1152" y="335" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1149" y="378" width="44" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_0qojjhv_di" bpmnElement="ExclusiveGateway_0qojjhv" isMarkerVisible="true">
+        <dc:Bounds x="255" y="185" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0trljpl_di" bpmnElement="SequenceFlow_0trljpl">
+        <di:waypoint x="1030" y="210" />
+        <di:waypoint x="1152" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_16e706u_di" bpmnElement="SequenceFlow_16e706u">
+        <di:waypoint x="305" y="210" />
+        <di:waypoint x="430" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="313" y="192" width="62" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0p1x3ey_di" bpmnElement="SequenceFlow_0p1x3ey">
+        <di:waypoint x="740" y="210" />
+        <di:waypoint x="785" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1s4yql3_di" bpmnElement="SequenceFlow_1s4yql3">
+        <di:waypoint x="835" y="210" />
+        <di:waypoint x="930" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="851" y="192" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1lvd7y4_di" bpmnElement="SequenceFlow_1lvd7y4">
+        <di:waypoint x="280" y="185" />
+        <di:waypoint x="280" y="110" />
+        <di:waypoint x="960" y="110" />
+        <di:waypoint x="960" y="170" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="589" y="95" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0opiye2_di" bpmnElement="SequenceFlow_0opiye2">
+        <di:waypoint x="208" y="210" />
+        <di:waypoint x="255" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1afr2kj_di" bpmnElement="SequenceFlow_1afr2kj">
+        <di:waypoint x="810" y="235" />
+        <di:waypoint x="810" y="353" />
+        <di:waypoint x="930" y="353" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="819" y="276" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0ydanwf_di" bpmnElement="SequenceFlow_0ydanwf">
+        <di:waypoint x="280" y="235" />
+        <di:waypoint x="280" y="353" />
+        <di:waypoint x="930" y="353" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="342" y="336" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_07jfkd3_di" bpmnElement="SequenceFlow_07jfkd3">
+        <di:waypoint x="1030" y="353" />
+        <di:waypoint x="1152" y="353" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0us9fau_di" bpmnElement="SequenceFlow_0us9fau">
+        <di:waypoint x="530" y="210" />
+        <di:waypoint x="640" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0gd31cj_di" bpmnElement="Task_1qiwpa8">
+        <dc:Bounds x="430" y="170" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

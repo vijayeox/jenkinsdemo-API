@@ -156,19 +156,24 @@ class DataSourceService extends AbstractService
             ->where(array('uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
-            return 0;
+            throw new Exception("Error Processing Request", 1);
         }
         $type = $response[0]['type'];
 
         $config = json_decode($response[0]['configuration'],1);
 
-        switch($type) {
-            case 'Elastic':
-            case 'ElasticSearch':
-                $elasticConfig['elasticsearch'] = $config['data'];
-                $analyticsObject = new  \Oxzion\Analytics\Elastic\AnalyticsEngineImpl($elasticConfig);
+        try{
+            switch($type) {
+                case 'Elastic':
+                case 'ElasticSearch':
+                    $elasticConfig['elasticsearch'] = $config['data'];
+                    $analyticsObject = new  \Oxzion\Analytics\Elastic\AnalyticsEngineImpl($elasticConfig);
+                    return $analyticsObject;
                 break;
+            }
         }
-        return $analyticsObject;
+        catch(Exception $e){
+            throw $e;
+        }
     }
 }

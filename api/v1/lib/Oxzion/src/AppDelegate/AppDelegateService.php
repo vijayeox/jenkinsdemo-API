@@ -10,6 +10,9 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Utils\FileUtils;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Auth\AuthConstants;
+
 
 class AppDelegateService extends AbstractService
 {
@@ -64,6 +67,11 @@ class AppDelegateService extends AbstractService
                     $obj->setTemplateService($this->templateService);
                     $obj->setMessageProducer($this->messageProducer);
                     $obj->setDocumentPath($destination);
+                }
+                if(method_exists($obj, "setUserContext")){
+                    $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
+                                         AuthContext::get(AuthConstants::NAME),
+                                         AuthContext::get(AuthConstants::ORG_UUID));
                 }
                 $persistenceService = $this->getPersistence($appId);
 

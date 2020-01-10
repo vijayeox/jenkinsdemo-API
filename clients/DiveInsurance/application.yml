@@ -94,7 +94,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: file/user/me/status/Completed
+                        route: 'file/user/me/status/Completed?filter=[{\"filter\":{\"logic\":\"and\",\"filters\":[{\"field\":\"policyStatus\",\"operator\":\"neq\",\"value\":\"Cancelled\"}]}}]'
                         filterable: true
                         reorderable: true
                         resizable: true
@@ -125,6 +125,15 @@ menu:
                                         url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
+                            -
+                                name: 'Cancel Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'''
+                                icon: 'fa fa-window-close'
                         operations:
                             title: 'Get Policy'
                             actions:
@@ -197,6 +206,9 @@ menu:
                             -
                                 title: Product
                                 field: entity_name
+                            -
+                                title: 'Policy Status'
+                                field: policyStatus
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
@@ -382,9 +394,13 @@ menu:
                                             uuid: '{{uuid}}'
                                             page_id: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
                             -
-                                name: Cancel
-                                page_id: 3
-                                rule: 'true'
+                                name: 'Cancel Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '''{{policyStatus}}'' != ''Cancelled'''
                                 icon: 'fa fa-window-close'
                         filterColumns:
                             - name
@@ -424,11 +440,26 @@ menu:
                                             url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
                         columnConfig:
                             -
-                                title: Name
+                                title: PADI
+                                field: padi
+                            -
+                                title: 'First Name'
+                                field: firstname
+                            -
+                                title: 'Last Name'
+                                field: lastname
+                            -
+                                title: Product
                                 field: entity_name
                             -
-                                title: Status
-                                field: status
+                                title: 'Policy Status'
+                                field: policyStatus
+                            -
+                                title: 'Policy Start Date'
+                                field: start_date
+                            -
+                                title: 'Policy End Date'
+                                field: end_date
         uuid: 3a4cc987-5627-4882-89ae-3bdc4f6e1e77
     -
         name: 'Verify PADI details'
@@ -556,12 +587,17 @@ workflow:
         uuid: cb74d176-225a-11ea-978f-2e728ce88125
         bpmn_file: 'Emergency First Response/NewApplication.bpmn'
         entity: 'Emergency First Response'
+    -
+        name: 'Cancel Policy'
+        uuid: 71cb9e10-5845-4379-97c9-f9486b702bda
+        bpmn_file: 'Cancel Policy/CancelPolicy.bpmn'
+        entity: 'Individual Professional Liability'
 form:
     -
         name: 'PADI Verification'
         uuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
         description: 'Page for CSR to verify PADI details'
-        template: padi_validation.json
+        template_file: padi_validation.json
         entity: Padi
 job:
     -

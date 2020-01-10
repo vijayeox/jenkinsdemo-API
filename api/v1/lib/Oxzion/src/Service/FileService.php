@@ -117,6 +117,9 @@ class FileService extends AbstractService
             $this->multiInsertOrUpdate('ox_file_attribute', $validFields, ['id']);
             $this->logger->info("Created successfully  - file record");
             $this->commit();
+            // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
+            if(isset($data['id']))
+                $this->messageProducer->sendTopic(json_encode(array('id' => $data['id'])),'FILE_ADDED');
         } catch (Exception $e) {
             $this->logger->info("erorororor  - file record");
             $this->rollback();
@@ -238,6 +241,9 @@ class FileService extends AbstractService
             }
             $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
+            // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
+            if(isset($id))
+                $this->messageProducer->sendTopic(json_encode(array('id' => $id)),'FILE_UPDATED');
         } catch (Exception $e) {
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
@@ -264,6 +270,10 @@ class FileService extends AbstractService
                 ->set(array('is_active' => 0))
                 ->where($params);
             $response = $this->executeUpdate($update);
+            $id = $this->getIdFromUuid('ox_file', $id);
+            // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
+            if(isset($id))
+                $this->messageProducer->sendTopic(json_encode(array('id' => $id)),'FILE_DELETED');
             return 1;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
@@ -480,6 +490,9 @@ class FileService extends AbstractService
             $queryParams['appId'] = $appId;
             $fieldNameList = "";
             $statusFilter = "";
+            if (isset($params['workflowStatus'])) {
+                $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
+            }
             if (isset($params['workflowId'])) {
 
                 // Code to get the entityID from appId, we need this to get the correct fieldId for the filters
@@ -493,9 +506,6 @@ class FileService extends AbstractService
                 } else {
                     $appFilter .= " AND h.id = :workflowId";
                     $queryParams['workflowId'] = $workflowId;
-                }
-                if (isset($params['workflowStatus'])) {
-                    $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
                 }
             }
             $where = " $appFilter $statusFilter and a.latest=1";

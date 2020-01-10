@@ -7,7 +7,7 @@ use Oxzion\Utils\ArtifactUtils;
 
 class PolicyDocument extends AbstractDocumentAppDelegate
 {
-    protected $documentBuilder;
+    // protected $documentBuilder;
     protected $type;
     protected $template;
 
@@ -107,8 +107,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                      'gfooter' => 'Group_footer.html',
                      'nTemplate' => 'Group_PL_NI',
                      'nheader' => 'Group_NI_header.html',
-                     'nfooter' => 'Group_NI_footer.html'
-                     ) ,
+                     'nfooter' => 'Group_NI_footer.html',
+                     'aniTemplate' => 'DiveBoat_ANI',
+                     'aniheader' => 'DB_Quote_ANI_header.html',
+                     'anifooter' => null),
         'Dive Store'
             => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
                      'header' => 'DiveStoreHeader.html',
@@ -142,18 +144,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                      'nfooter' => 'Group_NI_footer.html',
                      'policy' => 'Individual_Professional_Liability_Policy.pdf'));
 
-        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range');
+        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement');
     }
 
-    public function setDocumentBuilder($builder){
-        
-        $this->documentBuilder = $builder;
-    }
-
-    public function setTemplatePath($destination)
-    {
-        $this->destination = $destination;
-    }
     public function execute(array $data,Persistence $persistenceService) 
     {     
         $documents = array();
@@ -165,6 +158,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $this->setPolicyInfo($data,$persistenceService);
 
         $dest = $data['dest'];
+        if($this->type == 'quote'){
+            $dest['relativePath'] = $dest['relativePath'].'Quote/';
+            $dest['absolutePath'] = $dest['absolutePath'].'Quote/';
+        }
+
         unset($data['dest']);
 
         if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])){
@@ -265,7 +263,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
         }
 
-        if(isset($temp['additionalInsured'])){
+        if(isset($temp['additional_insured_select']) && $temp['additional_insured_select'] == 'newListOfAdditionalInsureds'){
             $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
         }
 
@@ -274,12 +272,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
         }
 
-        if(isset($temp['additionalNamedInsured'])){
+        if(isset($temp['additional_named_insureds_option']) && $temp['additional_named_insureds_option'] == 'yes'){
             $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
         }
 
         if(isset($temp['additionalLocations'])){
-            $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+            $documents['additionalLocations_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
         }
 
         if(isset($temp['namedInsured'])){
@@ -327,7 +325,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             } 
         }
 
-        $data['dest'] = ArtifactUtils::getDocumentFilePath($this->destination,$data['uuid'],array('orgUuid' => $orgUuid));
+        $data['dest'] = ArtifactUtils::getDocumentFilePath($this->destination,$data['fileId'],array('orgUuid' => $orgUuid));
 
         return $data;
     }
@@ -404,7 +402,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
     }
 
 
-    private function generateDocuments(&$data,$dest,$options,$templateKey,$headerKey = null,$footerKey = null,$indexKey = null){
+    protected function generateDocuments(&$data,$dest,$options,$templateKey,$headerKey = null,$footerKey = null,$indexKey = null){
+        $this->logger->info("Generate documents parameters templatekey is : ".print_r($templateKey, true));
+        $this->logger->info("policy document destination is : ".print_r($dest, true));
+        $this->logger->info("policy document options is : ".print_r($options, true));
+        $this->logger->info("policy document data is : ".print_r($data, true));
         if(isset($indexKey)){
             $template =  $this->template[$data['product']][$templateKey][$indexKey];
         }else{

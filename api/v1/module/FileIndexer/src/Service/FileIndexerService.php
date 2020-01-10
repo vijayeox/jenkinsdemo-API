@@ -57,9 +57,9 @@ class FileIndexerService extends AbstractService
             LEFT JOIN ox_wf_user_identifier as wf_user on wf_user.app_id = wf_inst.app_id and wf_user.org_id = wf_inst.org_id
             GROUP BY wf_user.user_id, wf_inst.id, wf_inst.status, act_inst.activity_instance_id, wf.name) w
             ON w.id = file.workflow_instance_id
-            where file.id = ".$fileId." 
+            where file.id = ".$fileId."
             GROUP BY app_name,entity.id, entity.name,file_data,file_uuid,file.is_active, file.parent_id, file.org_id,w.user_id,w.id, w.status,w.activity_instance_id,w.name, w.activities";
-            
+
             $this->runGenericQuery("SET SESSION group_concat_max_len = 1000000;");
             $this->logger->info("Executing Query - $select");
             $body=$this->executeQuerywithParams($select)->toArray();
@@ -105,7 +105,7 @@ class FileIndexerService extends AbstractService
         }
         $app_name = $response[0]['name'];
         if (isset($app_name)) {
-            $this->messageProducer->sendTopic(json_encode(array('index'=>  $app_name.'_index','id' => $fileId, 'operation' => 'Delete', 'type' => 'file')), 'elastic');
+            $this->messageProducer->sendTopic(json_encode(array('index'=>  $app_name.'_index','id' => $fileId, 'operation' => 'Delete', 'type' => '_doc')), 'elastic');
             return array('fileId' => $fileId);
         }
         return null;

@@ -49,7 +49,7 @@ smtp:
   from:
     email: support@eoxvantage.com
 db:
-  host: jdbc:mysql://localhost/appBuilder
+  host: jdbc:mysql://localhost/appBuilder_oxzionapi
   user: root
   password: password
 contentType: text/html

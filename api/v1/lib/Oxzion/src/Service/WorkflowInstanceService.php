@@ -179,7 +179,6 @@ class WorkflowInstanceService extends AbstractService
     public function startWorkflow($params)
     {
         $this->logger->info("Starting StartWorkflow method params - ".json_encode($params));
-
         if (!isset($params['workflowId'])) {
             throw new EntityNotFoundException("No workflow or workflow instance id provided");
         }
@@ -221,7 +220,6 @@ class WorkflowInstanceService extends AbstractService
             $file = $this->fileService->createFile($fileData, $workflowInstance['id']);
             $this->logger->info("File created -" . $file);
             $params['fileId'] = $fileData['uuid'];
-            unset($params['groupPL']);
             $params['workflow_instance_id'] = $workflowInstance['id'];
             $this->logger->info("Checking something" . print_r($workflow['process_definition_id'], true));
             $this->logger->info("Checking Params" . print_r($params, true));

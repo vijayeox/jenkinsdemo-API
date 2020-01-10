@@ -17,7 +17,7 @@ class DispatchProposalDocument extends DispatchDocument {
             'Dive Boat' => 'diveBoatProposalMailTemplate',
             'Dive Store' => 'diveStoreProposalMailTemplate');
         $this->document = array(
-            'Dive Boat' => array('docs' => ['coi_document','cover_letter','group_coi_document']),
+            'Dive Boat' => array('docs' => ['coi_document','cover_letter','group_coi_document','slWording','loss_payee_document','additionalInsured_document','additionalNamedInsured_document','additionalLocations_document','named_insured_document']),
             'Dive Store' => array('docs' => ['coi_document','cover_letter']));
         $this->required = array(
             'Dive Boat' => array('docs' => ['coi_document','cover_letter']),
