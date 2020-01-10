@@ -93,7 +93,7 @@ class ErrorHandler {
             String mysqlDateString = formatter.format(now)
             def sql = Sql.newInstance(BASE_DB_URL, DB_USERNAME, DB_PASSWORD, DB_DRIVER)
             def appId = sql.firstRow("SELECT id FROM ox_app where uuid='${app_id}'")
-            print(appId.getProperty("id"))
+            print(appId?.getProperty("id"))
             sql.execute("INSERT INTO ox_error_log (error_type, error_trace,payload,date_created,params,app_id) values (${error_type}, ${error_trace},${payload},${mysqlDateString}, ${params}, ${appId.getProperty("id")})")
             sql.close()
             System.out.println("handling ex")
