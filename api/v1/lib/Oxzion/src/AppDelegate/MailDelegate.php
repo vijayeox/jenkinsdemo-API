@@ -11,12 +11,14 @@ abstract class MailDelegate extends AbstractAppDelegate
 	use UserContextTrait;
 	private $messageProducer;
 	private $templateService;
+	public $mailConfig = Array();
 
-	public function __construct(){
+	public function __construct() {
 		parent::__construct();
+		$this->mailConfig = ["host" => "http://localhost:8081/"];
 	}
 
-	public function setMessageProducer(MessageProducer $messageProducer){
+	public function setMessageProducer(MessageProducer $messageProducer) {
 		$this->messageProducer = $messageProducer;
 	}
 

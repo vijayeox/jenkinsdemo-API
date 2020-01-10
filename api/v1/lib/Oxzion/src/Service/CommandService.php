@@ -31,7 +31,7 @@ class CommandService extends AbstractService
     private $userService;
     /**
      * @ignore __construct
-     */
+    */
 
     public function setRestClient($restClient)
     {
@@ -456,6 +456,7 @@ class CommandService extends AbstractService
             throw new ServiceException("App and Workflow not Found", "app.for.workflow.not.found");
         }
     }
+
     protected function verifyUser(&$data)
     {
         if (isset($data['email'])) {
@@ -480,6 +481,7 @@ class CommandService extends AbstractService
             }
         }
     }
+    
     protected function getUserList(&$data)
     {
         if (isset($data['appId'])) {
@@ -494,7 +496,8 @@ class CommandService extends AbstractService
         return $startWorkflow;
     }
 
-    protected function submitActivity(&$data){
+    protected function submitActivity(&$data)
+    {
         $startWorkflow = $this->workflowInstanceService->submitActivity($data);
         return $startWorkflow;
     }
