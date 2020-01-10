@@ -263,7 +263,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
         }
 
-        if(isset($temp['additional_insured_select']) && $temp['additional_insured_select'] == 'newListOfAdditionalInsureds'){
+        if(isset($temp['AdditionalInsuredOption']) && $temp['AdditionalInsuredOption'] == 'newListOfAdditionalInsureds'){
             $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
         }
 
