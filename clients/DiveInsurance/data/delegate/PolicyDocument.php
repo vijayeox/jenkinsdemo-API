@@ -154,6 +154,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $this->logger->info("Template Data Source - ".print_r($data, true));
         $date = ''; 
         $this->logger->info("Executing Policy Document");
+
+        $startDate = $data['start_date'];
+        $endDate = $data['end_date'];
         
         $this->setPolicyInfo($data,$persistenceService);
 
@@ -286,6 +289,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $this->logger->info("temp".print_r($data,true));
         $data['documents'] = $documents;
         $data['policyStatus'] = "In Force";
+        $data['start_date'] = $startDate;
+        $data['end_date'] = $endDate;
         $this->logger->info("Policy Documnet Generation");
         return $data;
     }
