@@ -12,6 +12,9 @@ class EndorsementRatecard extends AbstractAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("Executing Endorsement Rate Card".json_encode($data));
+        $endorsementCoverages = array();
+        $endorsementExcessLiability = array();
+        $endorsementCylinder = array();
         if(!isset($data['previous_scuba'])){
             $data['previous_scuba'] = isset($data['scubaFit'])? $data['scubaFit']: '';
         }
