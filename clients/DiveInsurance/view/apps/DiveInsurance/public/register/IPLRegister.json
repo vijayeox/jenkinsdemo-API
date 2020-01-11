@@ -1857,7 +1857,7 @@
                                 "refreshOn":"",
                                 "filter":"",
                                 "authenticate":false,
-                                "template":"<span>{{ item.value }}</span>",
+                                "template":"<span>{{ item }}</span>",
                                 "multiple":false,
                                 "protected":false,
                                 "unique":false,
@@ -2143,7 +2143,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":132,
+    "_vid":133,
     "title":"Padi Verification Form - IPL",
     "display":"form",
     "access":[ {
@@ -2159,6 +2159,6 @@
     "path":"padiverificationformipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-10T15:46:39.851Z",
-    "modified":"2020-01-09T07:54:25.525Z",
+    "modified":"2020-01-10T05:24:34.553Z",
     "machineName":"testdivehub:padiVerificationForm"
 }

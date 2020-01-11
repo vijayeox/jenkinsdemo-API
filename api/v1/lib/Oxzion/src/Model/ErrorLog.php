@@ -12,7 +12,8 @@ class ErrorLog extends Entity
         'error_trace'=>null,
         'payload'=>null,
         'params'=>null,
-        'date_created'=>null
+        'date_created'=>null,
+        'app_id'=>null
     );
     public function validate()
     {

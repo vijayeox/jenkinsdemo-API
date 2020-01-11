@@ -25,7 +25,21 @@ class ErrorLogController extends AbstractApiController
     }
     public function create($data)
     {
-        return $this->getInvalidMethod();
+        $appUuid = $this->params()->fromRoute()['appId'];
+        if(isset($data['error_type']) || isset($data['type'])){
+            try {
+                $count = $this->errorLogService->saveError(isset($data['error_type'])?$data['error_type']:$data['type'],isset($data['error_trace'])?$data['error_trace']:null,isset($data['payload'])?$data['payload']:null,isset($data['params'])?$data['params']:null,$appUuid);
+            } catch (ValidationException $e) {
+                $response = ['data' => $data, 'errors' => $e->getErrors()];
+                return $this->getErrorResponse("Validation Errors", 404, $response);
+            }
+            if ($count == 0) {
+                return $this->getFailureResponse("Failed to create a new entity", $data);
+            }
+        } else {
+            return $this->getFailureResponse("Failed to log error", $data);
+        }
+        return $this->getSuccessResponseWithData($data, 201);
     }
     public function getList()
     {

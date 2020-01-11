@@ -173,12 +173,12 @@ class DataSourceControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 3);
-        $this->assertEquals($content['data']['data'][1]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
-        $this->assertEquals($content['data']['data'][1]['name'], 'mattermost');
-        $this->assertEquals($content['data']['data'][2]['type'], 'Elastic');
-        $this->assertEquals($content['data']['data'][2]['name'], 'reporting engine');
-        $this->assertEquals($content['data']['total'],3);
+        $this->assertEquals(count($content['data']), 3);
+        $this->assertEquals($content['data'][1]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
+        $this->assertEquals($content['data'][1]['name'], 'mattermost');
+        $this->assertEquals($content['data'][2]['type'], 'Elastic');
+        $this->assertEquals($content['data'][2]['name'], 'reporting engine');
+        $this->assertEquals($content['total'],3);
     }
 
     public function testGetListWithSort()
@@ -189,12 +189,12 @@ class DataSourceControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 3);
-        $this->assertEquals($content['data']['data'][0]['uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
-        $this->assertEquals($content['data']['data'][0]['name'], 'reporting engine');
-        $this->assertEquals($content['data']['data'][1]['type'], 'MySql');
-        $this->assertEquals($content['data']['data'][1]['name'], 'mattermost');
-        $this->assertEquals($content['data']['total'],3);
+        $this->assertEquals(count($content['data']), 3);
+        $this->assertEquals($content['data'][0]['uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
+        $this->assertEquals($content['data'][0]['name'], 'reporting engine');
+        $this->assertEquals($content['data'][1]['type'], 'MySql');
+        $this->assertEquals($content['data'][1]['name'], 'mattermost');
+        $this->assertEquals($content['total'],3);
     }
 
      public function testGetListSortWithPageSize()
@@ -205,11 +205,11 @@ class DataSourceControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 2);
-        $this->assertEquals($content['data']['data'][1]['uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
-        $this->assertEquals($content['data']['data'][1]['name'], 'reporting engine');
-        $this->assertEquals($content['data']['data'][1]['type'], 'Elastic');
-        $this->assertEquals($content['data']['total'],3);
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][1]['uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
+        $this->assertEquals($content['data'][1]['name'], 'reporting engine');
+        $this->assertEquals($content['data'][1]['type'], 'Elastic');
+        $this->assertEquals($content['total'],3);
     }
 
     public function testGetListwithQueryParameters()
@@ -220,9 +220,9 @@ class DataSourceControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(count($content['data']['data']), 1);
-        $this->assertEquals($content['data']['data'][0]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
-        $this->assertEquals($content['data']['data'][0]['name'], 'mattermost');
-        $this->assertEquals($content['data']['total'],1);
+        $this->assertEquals(count($content['data']), 1);
+        $this->assertEquals($content['data'][0]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
+        $this->assertEquals($content['data'][0]['name'], 'mattermost');
+        $this->assertEquals($content['total'],1);
     }
 }

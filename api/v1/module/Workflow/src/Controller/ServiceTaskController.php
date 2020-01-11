@@ -18,7 +18,7 @@ class ServiceTaskController extends AbstractApiControllerHelper
     private $log;
     /**
      * @ignore __construct
-     */
+    */
     public function __construct(CommandService $commandService, WorkflowInstanceService $workflowInstanceService)
     {
         $this->commandService = $commandService;

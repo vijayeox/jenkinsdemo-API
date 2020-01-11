@@ -169,7 +169,8 @@ $ mysql -u 'user_name' -p 'password'
 - Give the following permission on the api/v1/data folder to make sure api like login works in frontend.
 
 - $ sudo chmod 777 api/v1/data -R
-- $ sudo chmod 777 api/v1/logs -R (logs folder might not exist)
+- $ mkdir api/v1/logs
+- $ sudo chmod 777 api/v1/logs -R
 
 - For Workflow
 	- $ cp integrations/workflow/.env.sample integrations/workflow/.env

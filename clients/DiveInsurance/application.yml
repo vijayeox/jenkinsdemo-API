@@ -592,6 +592,11 @@ workflow:
         uuid: 71cb9e10-5845-4379-97c9-f9486b702bda
         bpmn_file: 'Cancel Policy/CancelPolicy.bpmn'
         entity: 'Individual Professional Liability'
+    -
+        name: 'Emergency First Response Endorsement'
+        uuid: 35139ac6-3229-11ea-aec2-2e728ce88125
+        bpmn_file: 'Emergency First Response/EFREndorsement.bpmn'
+        entity: 'Emergency First Response'
 form:
     -
         name: 'PADI Verification'

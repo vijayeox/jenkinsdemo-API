@@ -153,7 +153,7 @@ class DataSourceController extends AbstractApiController
     {
         $params = $this->params()->fromQuery();
         $result = $this->dataSourceService->getDataSourceList($params);
-        return $this->getSuccessResponseWithData($result);
+        return $this->getSuccessResponseDataWithPagination($result['data'],$result['total']);
     }
 }
 

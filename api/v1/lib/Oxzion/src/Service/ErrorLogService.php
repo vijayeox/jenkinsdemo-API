@@ -37,7 +37,7 @@ class ErrorLogService extends AbstractService
         $headers = array("Authorization" => "Bearer $this->authToken");
         return $headers;
     }
-    public function saveError($type,$errorTrace=null,$payload = null,$params = null)
+    public function saveError($type='untraced',$errorTrace=null,$payload = null,$params = null,$appUUid = null)
     {
         $this->logger->info("Entering to saving Error method in ErrorLogService");
         $errorLog = new ErrorLog();
@@ -48,7 +48,16 @@ class ErrorLogService extends AbstractService
                 $params = json_encode($params);
             }
         }
-        $errorLog->exchangeArray(array('error_type'=>$type,'error_trace'=>$errorTrace,'payload'=>$payload,'params'=>$params,'date_created'=>date('Y-m-d H:i:s')));
+        if(isset($appUUid)){
+            if ($app = $this->getIdFromUuid('ox_app', $appUUid)) {
+                $appId = $app;
+            } else {
+                $appId = null;
+            }
+        } else {
+            $appId = null;
+        }
+        $errorLog->exchangeArray(array('error_type'=>$type,'error_trace'=>$errorTrace,'payload'=>$payload,'params'=>$params,'date_created'=>date('Y-m-d H:i:s'),'app_id'=>$appId));
         $this->beginTransaction();
         $count = 0;
         try {

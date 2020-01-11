@@ -135,7 +135,7 @@ class DataSourceService extends AbstractService
         $resultSet = $this->executeQuerywithParams($cntQuery.$where);
         $count=$resultSet->toArray()[0]['count'];
 
-        $query ="SELECT name,type,configuration,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted,uuid FROM `ox_datasource`".$where." ".$sort." ".$limit;
+        $query ="SELECT name,type,configuration,version,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted,uuid FROM `ox_datasource`".$where." ".$sort." ".$limit;
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
         foreach ($result as $key => $value) {

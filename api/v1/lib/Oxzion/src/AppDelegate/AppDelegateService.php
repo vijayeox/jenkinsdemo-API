@@ -67,6 +67,7 @@ class AppDelegateService extends AbstractService
                     $obj->setTemplateService($this->templateService);
                     $obj->setMessageProducer($this->messageProducer);
                     $obj->setDocumentPath($destination);
+                    $obj->setBaseUrl($this->config['applicationUrl']);
                 }
                 if(method_exists($obj, "setUserContext")){
                     $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
