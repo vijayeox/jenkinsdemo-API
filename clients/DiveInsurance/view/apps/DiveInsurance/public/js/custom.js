@@ -85,15 +85,9 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     window.location.href = window.location.origin;
   }
-
-  Formio.createForm(
-    document.getElementById("formio"),
-    JSON.parse(formContent)
-  ).then(function (form) {
-    // Prevent the submission from going to the form.io server.
-    form.nosubmit = true;
-    // Triggered when they click the submit button.
-    form.on("submit", function (submission) {
+  var options = {};
+  var hooks = {
+    beforeSubmit: (submission,next) =>{
       submission.data.app_id = appId;
       var response = fetch(baseUrl + "register", {
         body: JSON.stringify(submission.data),
@@ -103,13 +97,33 @@ document.addEventListener("DOMContentLoaded", function () {
         method: "POST",
         mode: "cors"
       }).then(response => {
-        form.emit("submitDone", submission);
         return response.json();
       });
       response.then(res => {
-        autoLogin(res.data);
+        console.log(res);
+        if(res.status=='success'){
+          autoLogin(res.data);
+          next(null);
+        } else {
+          var submitErrors = [];
+          submitErrors.push(res.message);
+          next(submitErrors);
+        }
       });
-    });
+      console.log('submitted');
+    }
+  };
+  options.hooks = hooks;
+  Formio.createForm(
+    document.getElementById("formio"),
+    JSON.parse(formContent),options
+  ).then(function (form) {
+    // Prevent the submission from going to the form.io server.
+    form.nosubmit = true;
+    // Triggered when they click the submit button.
+    // form.on("submit", function (submission) {
+    //   alert('Successfully registered!');
+    // });
     form.on("callDelegate", changed => {
       var component = form.getComponent(event.target.id);
       if (component) {
@@ -172,6 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (changed && changed.changed) {
         var component = changed.changed.component;
         var properties = component.properties;
+        console.log(changed)
         if (properties) {
           if (properties["delegate"]) {
             $.ajax({

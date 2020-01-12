@@ -67,6 +67,19 @@ class PadiVerification extends AbstractAppDelegate
             }else if(isset($data['business_padi'])){
                $returnArray['businessPadiVerified'] = true;
             }
+            if(isset($data['product'])){
+                if(($data['product'] == 'Individual Professional Liability' || $data['product'] == 'Emergency First Response' ) && (!isset($response[0]['firstname']) || $response[0]['firstname'] == '')){
+                    $returnArray['padiVerified'] = false;
+                }
+                if($data['product'] == 'Dive Store' && (!isset($response[0]['business_name']) || $response[0]['business_name'] != '')){
+                    $returnArray['padiVerified'] = false;
+                }
+                if($data['product'] == 'Dive Boat' && (!isset($response[0]['business_name']) || $response[0]['business_name'] != '')){
+                    $returnArray['padiVerified'] = false;
+                }
+            }
+            $returnArray['padiNotFound'] = false;
+            $returnArray['verified'] = true;
             return $returnArray;
         } else {
             if(isset($data['padi']) && !isset($data['business_padi'])){
@@ -74,6 +87,8 @@ class PadiVerification extends AbstractAppDelegate
             }else if(isset($data['business_padi'])){
                 $returnArray['businessPadiVerified'] = false;
             }
+            $returnArray['verified'] = true;
+            $returnArray['padiNotFound'] = true;
             $data = array_merge($data,$returnArray);
             return $data;
         }

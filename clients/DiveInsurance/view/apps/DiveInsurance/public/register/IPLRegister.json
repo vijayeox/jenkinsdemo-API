@@ -54,7 +54,8 @@
                     "customDefaultValue":"",
                     "customError":"Cannot set property 'maxLength' of null",
                     "lockKey":true,
-                    "decimalLimit":0
+                    "decimalLimit":0,
+                    "isNew":false
                 }
                 ,
                 {
@@ -130,7 +131,96 @@
                     ,
                     "properties": {}
                     ,
-                    "customConditional":"show = ((data['user_exists']==1||data['user_exists']=='1'))"
+                    "customConditional":"show = ((data['user_exists']==1||data['user_exists']=='1'))",
+                    "isNew":false
+                }
+                ,
+                {
+                    "key":"panelColumnsContent2",
+                    "label":"Content",
+                    "input":false,
+                    "tag":"p",
+                    "attrs":[ {
+                        "value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;", "attr": "style"
+                    }
+                    ],
+                    "className":"",
+                    "content":"PADI Membership not Applicable for this Program",
+                    "type":"htmlelement",
+                    "hideLabel":true,
+                    "tags":[],
+                    "conditional": {
+                        "show": "", "when": null, "eq": ""
+                    }
+                    ,
+                    "properties": {}
+                    ,
+                    "customConditional":"show = ((data['padiVerified']==false||data['padiVerified']=='false') && (data['verified'] == true || data['verified']=='true') && (data['padiNotFound']==false||data['padiNotFound']=='false') )"
+                }
+                ,
+                {
+                    "key":"panelColumnsContent4",
+                    "label":"Content",
+                    "input":false,
+                    "tag":"p",
+                    "attrs":[ {
+                        "value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;", "attr": "style"
+                    }
+                    ],
+                    "className":"",
+                    "content":"PADI Number not found!",
+                    "type":"htmlelement",
+                    "hideLabel":true,
+                    "tags":[],
+                    "conditional": {
+                        "show": "", "when": null, "eq": ""
+                    }
+                    ,
+                    "properties": {}
+                    ,
+                    "customConditional":"show = ((data['padiNotFound']==true||data['padiNotFound']=='true') && (data['verified'] == true || data['verified']=='true'))",
+                    "isNew":false
+                }
+                ,
+                {
+                    "input":true,
+                    "tableView":true,
+                    "key":"padiNotFound",
+                    "label":"padiNotFound",
+                    "protected":false,
+                    "unique":false,
+                    "persistent":true,
+                    "type":"hidden",
+                    "tags":[],
+                    "conditional": {
+                        "show": "", "when": null, "eq": ""
+                    }
+                    ,
+                    "properties": {}
+                    ,
+                    "lockKey":true,
+                    "defaultValue":"false"
+                }
+                ,
+                {
+                    "input":true,
+                    "tableView":true,
+                    "key":"verified",
+                    "label":"verified",
+                    "protected":true,
+                    "unique":false,
+                    "persistent":false,
+                    "type":"hidden",
+                    "tags":[],
+                    "conditional": {
+                        "show": "", "when": null, "eq": ""
+                    }
+                    ,
+                    "properties": {}
+                    ,
+                    "lockKey":true,
+                    "defaultValue":"false",
+                    "isNew":false
                 }
                 ,
                 {
@@ -156,6 +246,26 @@
                 {
                     "input":true,
                     "tableView":true,
+                    "key":"product",
+                    "label":"product",
+                    "protected":false,
+                    "unique":false,
+                    "persistent":true,
+                    "type":"hidden",
+                    "tags":[],
+                    "conditional": {
+                        "show": "", "when": null, "eq": ""
+                    }
+                    ,
+                    "properties": {}
+                    ,
+                    "lockKey":true,
+                    "defaultValue":"Individual Professional Liability"
+                }
+                ,
+                {
+                    "input":true,
+                    "tableView":true,
                     "key":"padiVerified",
                     "label":"padiVerified",
                     "protected":false,
@@ -170,7 +280,8 @@
                     "properties": {}
                     ,
                     "lockKey":true,
-                    "defaultValue":"false"
+                    "defaultValue":"false",
+                    "isNew":false
                 }
                 ,
                 {
@@ -2143,7 +2254,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":133,
+    "_vid":139,
     "title":"Padi Verification Form - IPL",
     "display":"form",
     "access":[ {
@@ -2159,6 +2270,6 @@
     "path":"padiverificationformipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-10T15:46:39.851Z",
-    "modified":"2020-01-10T05:24:34.553Z",
+    "modified":"2020-01-12T11:19:44.743Z",
     "machineName":"testdivehub:padiVerificationForm"
 }
