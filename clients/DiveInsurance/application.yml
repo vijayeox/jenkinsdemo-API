@@ -95,8 +95,8 @@ menu:
                     type: List
                     content:
                         route: 'file/user/me/status/Completed?filter=[{\"filter\":{\"logic\":\"and\",\"filters\":[{\"field\":\"policyStatus\",\"operator\":\"neq\",\"value\":\"Cancelled\"}]}}]'
-                        filterable: true
-                        reorderable: true
+                        filterable: false
+                        reorderable: false
                         resizable: true
                         pageable:
                             buttonCount: 3
@@ -134,33 +134,34 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 rule: '''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'''
                                 icon: 'fa fa-window-close'
+                        toolbarTemplate: '<h4>List of all policies</h4>'                                
                         operations:
                             title: 'Get Policy'
                             actions:
                                 -
                                     name: IPL
-                                    rule: 'true'
+                                    rule: 'listData.every((i)=>{\n    if (i.entity_name == \"Individual Professional Liability\") {\n        return false;\n      } else {\n        return true;\n      }\n});'
                                     details:
                                         -
                                             type: Form
                                             url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
                                 -
                                     name: 'Dive Boat'
-                                    rule: 'true'
+                                    rule: 'listData.every((i)=>{\n    if (i.entity_name == \"Dive Boat\") {\n        return false;\n      } else {\n        return true;\n      }\n});'
                                     details:
                                         -
                                             type: Form
                                             url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
                                 -
                                     name: 'Dive Store'
-                                    rule: 'true'
+                                    rule: 'listData.every((i)=>{\n    if (i.entity_name == \"Dive Store\") {\n        return false;\n      } else {\n        return true;\n      }\n});'
                                     details:
                                         -
                                             type: Form
                                             url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
                                 -
                                     name: 'Emergency First Response'
-                                    rule: 'true'
+                                    rule: 'listData.every((i)=>{\n    if (i.entity_name == \"Emergency First Response\") {\n        return false;\n      } else {\n        return true;\n      }\n});'
                                     details:
                                         -
                                             type: Form
