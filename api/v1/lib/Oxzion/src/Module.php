@@ -345,7 +345,8 @@ class Module
                         $container->get(AdapterInterface::class),
                         $container->get(Document\DocumentBuilder::class),
                         $container->get(Service\TemplateService::class),
-                        $container->get(Messaging\MessageProducer::class)
+                        $container->get(Messaging\MessageProducer::class),
+                        $container->get(Service\FileService::class)
                     );
                 },
                 Document\DocumentBuilder::class => function ($container) {

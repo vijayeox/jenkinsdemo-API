@@ -9,6 +9,7 @@ use Oxzion\Document\DocumentBuilder;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\TemplateService;
+use Oxzion\Service\FileService;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
@@ -23,9 +24,10 @@ class AppDelegateService extends AbstractService
     private $templateService;
     private $organizationService;
 
-    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null, MessageProducer $messageProducer)
+    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null, MessageProducer $messageProducer,FileService $fileService)
     {
         $this->templateService = $templateService;
+        $this->fileService = $fileService;
         $this->messageProducer = $messageProducer;
         parent::__construct($config, $dbAdapter);
         $this->documentBuilder = $documentBuilder;
@@ -68,6 +70,10 @@ class AppDelegateService extends AbstractService
                     $obj->setMessageProducer($this->messageProducer);
                     $obj->setDocumentPath($destination);
                     $obj->setBaseUrl($this->config['applicationUrl']);
+                } else if (is_a($obj, FileListDelegate::class)) {
+                    $this->logger->info(AppDelegateService::class . "FileList DELEGATE ---");
+                    $obj->setFileService($this->fileService);
+                    $obj->setAppId($appId);
                 }
                 if(method_exists($obj, "setUserContext")){
                     $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
