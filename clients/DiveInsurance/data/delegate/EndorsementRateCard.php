@@ -22,7 +22,6 @@ class EndorsementRatecard extends AbstractAppDelegate
             $data['previous_equipmentLiability'] = isset($data['equipment'])?$data['equipment'] :'' ;
         }
         if(!isset($data['previous_careerCoverage'])){
-            $data['previous_careerCoverage'] = $data['careerCoverage'];
             $endorsementCoverages[$data['previous_careerCoverage']] = $data['careerCoverageVal'];
             $premiumRateCardDetails[$data['previous_careerCoverage']] = 0.00;
         }
@@ -46,6 +45,9 @@ class EndorsementRatecard extends AbstractAppDelegate
         while ($resultCylinder->next()) {
             $rate = $resultCylinder->current();
             if(isset($rate['key'])){
+                if($rate['key'] == $data['previous_cylinder']){
+                    $data['upgradecylinder'] = array('value'=>$data['previous_cylinder'],'label'=>$rate['coverage']);
+                }
                 $endorsementCylinder[$rate['key']] = $rate['coverage'];
                 if(isset($rate['total'])){
                     $premiumRateCardDetails[$rate['key']] = $rate['total'];
@@ -62,6 +64,9 @@ class EndorsementRatecard extends AbstractAppDelegate
         while ($resultExcessLiability->next()) {
             $rate = $resultExcessLiability->current();
             if(isset($rate['key'])){
+                if($rate['key'] == $data['previous_excessLiability']){
+                    $data['upgradeExcessLiability'] = array('value'=>$data['previous_excessLiability'],'label'=>$rate['coverage']);
+                }
                 $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
                 if(isset($rate['total'])){
                     $premiumRateCardDetails[$rate['key']] = $rate['total'];
@@ -78,6 +83,9 @@ class EndorsementRatecard extends AbstractAppDelegate
         while ($result->next()) {
             $rate = $result->current();
             if(isset($rate['key'])){
+                if($rate['key'] == $data['previous_careerCoverage']){
+                    $data['upgradeCareerCoverage'] = array('value'=>$data['previous_careerCoverage'],'label'=>$rate['coverage']);
+                }
                 $endorsementCoverages[$rate['key']] = $rate['coverage'];
                 if(isset($rate['total'])){
                     $premiumRateCardDetails[$rate['key']] = $rate['total'];
