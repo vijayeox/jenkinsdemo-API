@@ -199,11 +199,8 @@ menu:
                                 title: PADI
                                 field: padi
                             -
-                                title: 'First Name'
-                                field: firstname
-                            -
-                                title: 'Last Name'
-                                field: lastname
+                                title: 'Name'
+                                cell: "<td>{item.firstname}&nbsp;{item.lastname}</td>"
                             -
                                 title: Product
                                 field: entity_name
@@ -308,11 +305,8 @@ menu:
                                 title: PADI
                                 field: padi
                             -
-                                title: 'First Name'
-                                field: firstname
-                            -
-                                title: 'Last Name'
-                                field: lastname
+                                title: 'Name'
+                                cell: "<td>{item.firstname}&nbsp;{item.lastname}</td>"
                             -
                                 title: Product
                                 field: entity_name
@@ -444,11 +438,8 @@ menu:
                                 title: PADI
                                 field: padi
                             -
-                                title: 'First Name'
-                                field: firstname
-                            -
-                                title: 'Last Name'
-                                field: lastname
+                                title: 'Name'
+                                cell: "<td>{item.firstname}&nbsp;{item.lastname}</td>"
                             -
                                 title: Product
                                 field: entity_name
@@ -529,11 +520,8 @@ menu:
                                 title: PADI
                                 field: padi
                             -
-                                title: 'First Name'
-                                field: firstname
-                            -
-                                title: 'Last Name'
-                                field: lastname
+                                title: 'Name'
+                                cell: "<td>{item.firstname}&nbsp;{item.lastname}</td>"
                             -
                                 title: Product
                                 field: entity_name
