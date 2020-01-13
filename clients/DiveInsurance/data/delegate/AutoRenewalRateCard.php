@@ -18,7 +18,7 @@ class AutoRenewalRateCard extends RateCard{
         $this->logger->info("AutoRenewal Rate Card");
         $startYear = date("Y");
         $endYear = date("Y") + 1;
-        $policy_period = "July 01,".$startYear."-June 30,".$endYear;
+        $policy_period = "July 01,".$startYear." - June 30,".$endYear;
         $data['start_date'] = $startYear."-07-01";
         $data['end_date'] = $endYear."-06-30";
         $date_range = array("label" => $policy_period,"value" => $data['start_date']);
