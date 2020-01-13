@@ -67,11 +67,12 @@ class CustomServiceTaskListener implements ExecutionListener {
         logger.info("Response received - ${response}")
         def responseValue = jsonSlurper.parseText(response)
         if(responseValue.status == "success"){
-          if(taskDetails.variables.return == "true"){
+          if(taskDetails.variables.return == "true" || taskDetails.variables.return == true){
+            logger.info("Inside Return");
             def responseData = responseValue.data
-            responseData = responseData.putAll(responseData)
+            responseData.putAll(responseData)
             execution.setVariables(responseData)
-            logger.info("Response received - ${execution.getVariables()}")
+            logger.info("Final Response received - ${execution.getVariables()}")
           }
           }else{
             ErrorHandler.handleError(execution)

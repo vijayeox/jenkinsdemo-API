@@ -12,7 +12,7 @@ class Ratecard extends AbstractAppDelegate
     // Premium Calculation values are fetched here
     public function execute(array $data,Persistence $persistenceService)
     {  
-        $this->logger->info("Executing Rate Card");
+        $this->logger->info("Executing Rate Card -STart");
         $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND start_date <= '".$data['start_date']."' AND is_upgrade = 0 AND end_date >= '".$data['start_date']."'";
         $selectTax = "Select state, coverage, percentage FROM state_tax WHERE product = '".$data['product']."' AND start_date <= '".$data['start_date']."' AND end_date >= '".$data['start_date']."'";
         $result = $persistenceService->selectQuery($select);
@@ -57,6 +57,7 @@ class Ratecard extends AbstractAppDelegate
             $premiumRateCardDetails['stateTaxData'] = $stateTaxData;
         }
         if(isset($premiumRateCardDetails)){
+            $this->logger->info("Rate Card ENd");
             $returnArray = array_merge($data,$premiumRateCardDetails);
             return $returnArray;
         } else {

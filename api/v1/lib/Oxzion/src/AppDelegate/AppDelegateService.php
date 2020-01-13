@@ -103,6 +103,7 @@ class AppDelegateService extends AbstractService
         $this->logger->info(AppDelegateService::class."Delegate File Path ---\n".$path);
         if ((file_exists($path))) {
             // include $path;
+            $this->logger->info("Loading Delegate");
             require_once $path;
 
         } else {
