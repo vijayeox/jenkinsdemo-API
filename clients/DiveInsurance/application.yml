@@ -129,7 +129,7 @@ menu:
                                         type: Form
                                         url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'''
+                                rule: '''{{policyStatus}}'' != ''Cancelled'''
                                 icon: 'fa fa-window-close'
                         toolbarTemplate: '<h4>List of all policies</h4>'
                         operations:
