@@ -260,7 +260,7 @@ view()
         chmod 777 -R /opt/oxzion/view/bos
         chmod 777 /opt/oxzion/view/apps
         systemctl start view
-        echo -e "${YELLOW}Started!${RESET}"
+        echo -e "${YELLOW}Started view service!${RESET}"
     fi
 }
 workflow()
@@ -349,16 +349,21 @@ clients()
     then
         echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
     else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
         cd ${TEMP}/clients
         echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
         mkdir -p /opt/oxzion/eoxapps
         rsync -rl . /opt/oxzion/eoxapps/
-        chown oxzion:oxzion -R /opt/oxzion/eoxapps
-        chmod 777 -R /opt/oxzion/eoxapps
         echo -e "${YELLOW}Building Diveinsurance using deployapp API${RESET}"
-        jwt=$(curl --location --request POST 'localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
-        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/'
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/DiveInsurance'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown oxzion:oxzion -R /opt/oxzion/view
+        chmod 777 -R /opt/oxzion/eoxapps
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
     fi
 }
 #calling functions accordingly
