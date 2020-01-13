@@ -47,8 +47,8 @@ $(".tab a").on("click", function (e) {
 
 document.addEventListener("DOMContentLoaded", function () {
   $(".loginButton").on("click", function (e) {
-    var username = document.getElementsByClassName("userNameField")[0].value;
-    var password = document.getElementsByClassName("passwordField")[0].value;
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
     const formData = new FormData();
     formData.append("username", username);
     formData.append("password", password);
