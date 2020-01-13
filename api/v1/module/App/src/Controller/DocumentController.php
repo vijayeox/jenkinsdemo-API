@@ -24,6 +24,10 @@ class DocumentController extends AbstractApiControllerHelper
         $this->setIdentifierName('document');
         $this->config = $config;
     }
+    public function head($id = null)
+    {
+        return true;
+    }
     /**
     * Create Document API
     * @api
