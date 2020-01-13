@@ -35,6 +35,7 @@ class SetupEndorsement extends AbstractAppDelegate
             $data['excessLiabilityPrice'] = 0;
             $data['previous_excessLiability'] = $data['excessLiability'];
         }
+        $data['update_date'] = date("Y-m-d");
         if(isset($data['start_date_range'])){
             if(is_string($data['start_date_range'])){
                 $startDateRange = json_decode($data['start_date_range'],true);
