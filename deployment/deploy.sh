@@ -19,7 +19,6 @@ BLINK="\e[5m"
 INVERT="\e[7m"
 RESET="\e[0m"
 
-
 #Checking if temp folder exist, delete and create new.
 if [ -d "./temp" ] ;
 then
@@ -356,6 +355,9 @@ clients()
         rsync -rl . /opt/oxzion/eoxapps/
         chown oxzion:oxzion -R /opt/oxzion/eoxapps
         chmod 777 -R /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building Diveinsurance using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
     fi
 }
