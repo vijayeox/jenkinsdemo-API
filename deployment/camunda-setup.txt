@@ -117,4 +117,7 @@ mkdir /var/www/.config
 chown www-data:www-data /var/www/.npm
 chown www-data:www-data /var/www/.config
 
+for deploy app api to work make sure you give following permission
+
+chmod 777 -R /opt/oxzion/eoxapps
 
