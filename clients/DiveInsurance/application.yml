@@ -197,6 +197,7 @@ menu:
                                 field: padi
                             -
                                 title: Name
+                                field: firstname
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
@@ -303,6 +304,7 @@ menu:
                                 field: padi
                             -
                                 title: Name
+                                field: firstname
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
@@ -436,6 +438,7 @@ menu:
                                 field: padi
                             -
                                 title: Name
+                                field: firstname
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
@@ -518,6 +521,7 @@ menu:
                                 field: padi
                             -
                                 title: Name
+                                field: firstname
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
