@@ -89,9 +89,6 @@ menu:
             description: 'Shows a list of users policies'
             content:
                 -
-                    type: Document
-                    content: '<p><h2>My Policies</h2></p><p></p>'
-                -
                     type: List
                     content:
                         route: 'file/user/me/status/Completed?filter=[{\"filter\":{\"logic\":\"and\",\"filters\":[{\"field\":\"policyStatus\",\"operator\":\"neq\",\"value\":\"Cancelled\"}]}}]'
@@ -134,34 +131,34 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 rule: '''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'''
                                 icon: 'fa fa-window-close'
-                        toolbarTemplate: '<h4>List of all policies</h4>'                                
+                        toolbarTemplate: '<h4>List of all policies</h4>'
                         operations:
                             title: 'Get Policy'
                             actions:
                                 -
                                     name: IPL
-                                    rule: 'listData.every((i)=>{\n    if (i.entity_name == \"Individual Professional Liability\") {\n        return false;\n      } else {\n        return true;\n      }\n});'
+                                    rule: "listData.every((i)=>{\n    if (i.entity_name == \"Individual Professional Liability\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
                                     details:
                                         -
                                             type: Form
                                             url: workflow/f0efea9e-7863-4368-a9b2-baa1a1603067/startform
                                 -
                                     name: 'Dive Boat'
-                                    rule: 'listData.every((i)=>{\n    if (i.entity_name == \"Dive Boat\") {\n        return false;\n      } else {\n        return true;\n      }\n});'
+                                    rule: "listData.every((i)=>{\n    if (i.entity_name == \"Dive Boat\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
                                     details:
                                         -
                                             type: Form
                                             url: workflow/cb99e634-de00-468d-9230-d6f77d241c5b/startform
                                 -
                                     name: 'Dive Store'
-                                    rule: 'listData.every((i)=>{\n    if (i.entity_name == \"Dive Store\") {\n        return false;\n      } else {\n        return true;\n      }\n});'
+                                    rule: "listData.every((i)=>{\n    if (i.entity_name == \"Dive Store\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
                                     details:
                                         -
                                             type: Form
                                             url: workflow/bb15e393-11b9-48ea-bc5a-5b7616047cb1/startform
                                 -
                                     name: 'Emergency First Response'
-                                    rule: 'listData.every((i)=>{\n    if (i.entity_name == \"Emergency First Response\") {\n        return false;\n      } else {\n        return true;\n      }\n});'
+                                    rule: "listData.every((i)=>{\n    if (i.entity_name == \"Emergency First Response\") {\n        return false;\n      } else {\n        return true;\n      }\n});"
                                     details:
                                         -
                                             type: Form
@@ -199,8 +196,8 @@ menu:
                                 title: PADI
                                 field: padi
                             -
-                                title: 'Name'
-                                cell: "<td>{item.firstname}&nbsp;{item.lastname}</td>"
+                                title: Name
+                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
                                 field: entity_name
@@ -305,8 +302,8 @@ menu:
                                 title: PADI
                                 field: padi
                             -
-                                title: 'Name'
-                                cell: "<td>{item.firstname}&nbsp;{item.lastname}</td>"
+                                title: Name
+                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
                                 field: entity_name
@@ -342,7 +339,7 @@ menu:
                             info: true
                         actions:
                             -
-                                name: retry
+                                name: Retry
                                 rule: 'true'
                                 details:
                                     -
@@ -438,8 +435,8 @@ menu:
                                 title: PADI
                                 field: padi
                             -
-                                title: 'Name'
-                                cell: "<td>{item.firstname}&nbsp;{item.lastname}</td>"
+                                title: Name
+                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
                                 field: entity_name
@@ -520,8 +517,8 @@ menu:
                                 title: PADI
                                 field: padi
                             -
-                                title: 'Name'
-                                cell: "<td>{item.firstname}&nbsp;{item.lastname}</td>"
+                                title: Name
+                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
                                 field: entity_name
