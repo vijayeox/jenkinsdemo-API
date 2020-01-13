@@ -251,8 +251,9 @@ view()
         chown oxzion:oxzion -R /opt/oxzion/view/vfs/
         rm -Rf view/vfs
         rsync -rl view/ /opt/oxzion/view/
-        echo -e "${GREEN}Running package discover in bos${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
         cd /opt/oxzion/view/bos/
+        npm run build
         npm run package:discover
         chown oxzion:oxzion -R /opt/oxzion/view
         echo -e "${GREEN}Copying view Complete!${RESET}"
@@ -359,6 +360,10 @@ clients()
         jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
         curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/DiveInsurance'
         echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
         chown oxzion:oxzion -R /opt/oxzion/eoxapps
         chown oxzion:oxzion -R /opt/oxzion/view
         chmod 777 -R /opt/oxzion/eoxapps
