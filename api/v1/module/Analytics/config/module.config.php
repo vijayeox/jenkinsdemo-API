@@ -73,6 +73,20 @@ return [
                     ],
                 ],
             ],
+            'copyWidget' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/analytics/widget/:widgetUuid/copy',
+                    'defaults' => [
+                        'controller' => Controller\WidgetController::class,
+                        'method' => 'POST',
+                        'action' => 'copyWidget',
+                        'access' => [
+                            'copyWidget'=>'MANAGE_ANALYTICS_WIDGET_WRITE'
+                        ],
+                    ],
+                ],
+            ],
             'dashboard' => [
                 'type'    => Segment::class,
                 'options' => [

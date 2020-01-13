@@ -155,5 +155,35 @@ class WidgetController extends AbstractApiController
         $result = $this->widgetService->getWidgetList($params);
         return $this->getSuccessResponseWithData($result);
     }
+
+    /**
+     * Copy Widget API
+     * @api
+     * @link /analytics/widget/widgetUuid/copy
+     * @method POST
+     * @param
+     * <code> {
+     *
+     *   } </code>
+     * @return array Returns a JSON Response with Status Code and Created Widget.
+     */
+    public function copyWidgetAction()
+    {
+        try {
+            $data=$this->extractPostData();
+            $params = array_merge($data, $this->params()->fromRoute());
+            $result = $this->widgetService->copyWidget($params['widgetUuid']);
+            $strResult = "${result}";
+            if ($strResult != '0') {
+                $data['newWidgetUuid'] = $result;
+                return $this->getSuccessResponseWithData($data, 201);
+            }
+        }
+        catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse('Validation Errors', 404, $response);
+        }
+        return $this->getErrorResponse('Failed to copy the entity', 404, array('uuid' => $params['widgetUuid']));
+    }
 }
 

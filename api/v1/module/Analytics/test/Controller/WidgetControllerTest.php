@@ -115,6 +115,36 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['errors']['name'], 'required');
     }
 
+    public function testCopy()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->assertEquals(10, $this->getConnection()->getRowCount('ox_widget'));
+        $data = null;
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafbc/copy', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('copyWidget');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(11, $this->getConnection()->getRowCount('ox_widget'));
+    }
+
+    public function testCopyNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = [];
+        $this->assertEquals(10, $this->getConnection()->getRowCount('ox_widget'));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/widget/51e881c3-040d-44d8-9295-f2c3130bafab/copy', 'POST', $data);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('copyWidget');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+        $this->assertEquals($content['message'], 'Failed to copy the entity');
+        $this->assertEquals($content['data']['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafab');
+    }
+
     //DO NOT ADD THIS AT IS NOT NEEDED. LEAVING THIS HERE IN CASE THE REQUIREMENT CHANGES
     //-----------------------------------------------------------------------------------
     // - BRIAN
@@ -203,6 +233,17 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['widget']['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
   //      $this->assertEquals($content['data']['widget']['query_uuid'],"8f1d2819-c5ff-4426-bc40-f7a20704a738");
     }
+
+  //   public function testGetHub() {
+  //       $this->initAuthToken($this->adminUser);
+  //       $this->dispatch('/analytics/widget/41a73da0-bf9b-4069-841b-6f9a93caa691?data=true', 'GET');
+  //       $this->assertResponseStatusCode(200);
+  //       $this->setDefaultAsserts();
+  //       $content = json_decode($this->getResponse()->getContent(), true);
+  //       $this->assertEquals($content['status'], 'success');
+  //       $this->assertEquals($content['data']['widget']['uuid'], '51e881c3-040d-44d8-9295-f2c3130bafbc');
+  // //      $this->assertEquals($content['data']['widget']['query_uuid'],"8f1d2819-c5ff-4426-bc40-f7a20704a738");
+  //   }
 
     public function testGetWithParams() {
         $this->initAuthToken($this->adminUser);
@@ -356,4 +397,5 @@ class WidgetControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'][1]['name'], 'combinedWithDate');
         $this->assertEquals($content['data']['total'],8);
     }
+
 }

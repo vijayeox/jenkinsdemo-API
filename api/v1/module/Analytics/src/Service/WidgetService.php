@@ -66,7 +66,10 @@ class WidgetService extends AbstractService
                 $sequence = 0;
                 foreach($data['queries'] as $query) {
                     $queryUuid = $query['uuid'];
-                    $queryConfiguration = json_encode($query['configuration']);
+                    if(isset($query['configuration']))
+                        $queryConfiguration = json_encode($query['configuration']);
+                    else
+                        $queryConfiguration = $query['configuration'];
                     $query = 'INSERT INTO ox_widget_query (ox_widget_id, ox_query_id, sequence, configuration) VALUES ((SELECT id FROM ox_widget WHERE uuid=:widgetUuid), (SELECT id FROM ox_query WHERE uuid=:queryUuid), :sequence, :configuration)';
                     $queryParams = [
                         'widgetUuid' => $data['uuid'],
@@ -395,6 +398,59 @@ class WidgetService extends AbstractService
 
         return array('data' => $result,
                      'total' => $count);
+    }
+
+    public function copyWidget($uuid)
+    {
+        $query = 'SELECT w.uuid, w.ispublic, w.date_created, w.name, w.configuration, w.expression, w.created_by, w.visualization_id, q.uuid as query_uuid, wq.configuration as query_configuration from ox_widget as w INNER JOIN ox_widget_query as wq on w.id=wq.ox_widget_id INNER JOIN ox_query as q ON wq.ox_query_id = q.id where w.uuid=:uuid and w.created_by=:created_by and w.org_id=:org_id';
+        $queryParams = [
+            'created_by' => AuthContext::get(AuthConstants::USER_ID),
+            'org_id' => AuthContext::get(AuthConstants::ORG_ID),
+            'uuid' => $uuid
+        ];
+        try {
+            $resultGet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
+            if (count($resultGet) == 0) {
+                return 0;
+            }
+            try {
+                $queries = [];
+                foreach($resultGet as $row) {
+                    array_push($queries, [
+                        'uuid' => $row['query_uuid'],
+                        'configuration' => $row['query_configuration']
+                    ]);
+                }
+                $firstRow = $resultGet[0];
+                $widget = [
+                    'uuid' => $firstRow['uuid'],
+                    'ispublic' => $firstRow['ispublic'],
+                    'date_created' => $firstRow['date_created'],
+                    'visualization_id' => $firstRow['visualization_id'],
+                    'name' => $firstRow['name'],
+                    'configuration' => $firstRow['configuration'],
+                    'expression' => $firstRow['expression'],
+                    'queries' => $queries
+                ];
+                unset($widget['id']);
+                $widget['name'] = $widget['name']."_copy_".date("YmdHis");
+                $resultCreate = $this->createWidget($widget);
+                return $resultCreate;
+            }
+            catch(Exception $e){
+                $this->logger->error('Error has occured-');
+                $this->logger->error($e->getMessage());
+                return 0;
+            }
+        }
+        catch (ZendDbException $e) {
+            $this->logger->error('Database exception occurred.');
+            $this->logger->error($e);
+            $this->logger->error('Query and params:');
+            $this->logger->error($query);
+            $this->logger->error($queryParams);
+            return 0;
+        }
     }
 }
 
