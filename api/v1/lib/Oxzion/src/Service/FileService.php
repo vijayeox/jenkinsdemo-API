@@ -544,12 +544,16 @@ class FileService extends AbstractService
             $pageSize = " LIMIT 10";
             $offset = " OFFSET 0";
             if (!empty($filterParams)) {
-                if (!is_array($filterParams['filter'])) {
+                if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
                     $filterParamsArray = json_decode($filterParams['filter'], true);
                 } else {
-                    $filterParamsArray = $filterParams['filter'];
+                    if(isset($filterParams['filter'])){
+                        $filterParamsArray = $filterParams['filter'];
+                    } else {
+                        $filterParamsArray = $filterParams;
+                    }
                 }
-                if (is_array($filterParamsArray[0])) {
+                if (isset($filterParamsArray[0]) && is_array($filterParamsArray[0])) {
                     if (array_key_exists("sort", $filterParamsArray[0])) {
                         $sortParam = $filterParamsArray[0]['sort'];
                     }
