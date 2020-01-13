@@ -129,7 +129,7 @@ menu:
                                         type: Form
                                         url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'''
+                                rule: 'true'
                                 icon: 'fa fa-window-close'
                         toolbarTemplate: '<h4>List of all policies</h4>'
                         operations:
@@ -165,8 +165,18 @@ menu:
                                             url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
                         columnConfig:
                             -
-                                title: 'Policy Name'
+                                title: Name
                                 field: entity_name
+                                cell: '<td>{item.firstname}&nbsp;{item.lastname} - &nbsp; {item.entity_name}</td>'
+                            -
+                                title: 'Policy Status'
+                                field: policyStatus
+                            -
+                                title: 'Policy Start Date'
+                                field: start_date
+                            -
+                                title: 'Policy End Date'
+                                field: end_date
     -
         name: 'My History'
         uuid: 623132d9-8ccb-4c8a-b7b7-a3b0921defdc
@@ -179,7 +189,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: file
+                        route: file/user/me
                         filterable: true
                         reorderable: true
                         resizable: true
