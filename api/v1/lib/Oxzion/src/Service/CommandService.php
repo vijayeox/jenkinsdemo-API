@@ -279,6 +279,7 @@ class CommandService extends AbstractService
             $this->logger->info("File Save Service Start" . print_r($data, true));
             $select = "Select uuid from ox_file where workflow_instance_id=:workflowInstanceId;";
             $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
+            $this->logger->info(" EXECUTING QUERY FOR FILE SAVE WITH query -> $select with params -> ".print_r($selectParams, true));
             $result = $this->executeQueryWithBindParameters($select, $selectParams)->toArray();
             if (count($result) == 0) {
                 $this->logger->info("File Save ---- Workflow Instance Id Not Found");

@@ -22,11 +22,14 @@ class ProcessManagerImpl implements ProcessManager
 
     public function deploy($name, $filesArray)
     {
+        print_r("EXECUTING DEPLOY IN PROCESS MANAGER");
         $fields = array("deployment-name"=>$name);
         $url = "deployment/create";
         try {
+            print_r("EXECUTING postMultiPart IN rest client");
             $response = $this->restClient->postMultiPart($url, $fields, $filesArray);
             $result = json_decode($response, true);
+            print_r($result);
             if ($result) {
                 return array_keys($result['deployedProcessDefinitions']);
             } else {
