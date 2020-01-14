@@ -752,13 +752,7 @@ class FileService extends AbstractService
         unset($params['commands']);
         return $params;
     }
-
-    private function checkStatusFilter($filter)
-    {
-        $whereQuery = "g.status = '" . $filter['value'] . "' ";
-        return $whereQuery;
-    }
-
+    
     private function transformValue($value, $fieldDetail)
     {
         $fieldType = $fieldDetail['data_type'];
