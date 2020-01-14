@@ -218,7 +218,7 @@ class CommandService extends AbstractService
         $this->logger->info("jobUrl - $jobUrl, url -$url");
         unset($data['jobUrl'], $data['cron'], $data['command'], $data['url']);
         $this->logger->info("JOB DATA ------" . json_encode($data));
-        $jobPayload = array("job" => array("url" => $this->config['baseUrl'] . $jobUrl, "data" => $data), "schedule" => array("cron" => $cron));
+        $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $jobUrl, "data" => $data), "schedule" => array("cron" => $cron));
         $this->logger->info("JOB PAYLOAD ------" . print_r($jobPayload, true));
         $response = $this->restClient->postWithHeader($url, $jobPayload);
         $this->logger->info("Response - " . print_r($response, true));
