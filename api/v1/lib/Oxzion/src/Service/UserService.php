@@ -1248,7 +1248,7 @@ class UserService extends AbstractService
                     $queryParams = array("appId" => $appId,
                             "orgId" => $orgId,
                             "userId" => $data['id']);
-                    $this->logger->info("Executing userservice check and create user method Query - $query with Parametrs - " . print_r($queryParams, true));
+                    $this->logger->info("Executing Query - $query with Parametrs - " . print_r($queryParams, true));
                     $resultSet = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
                     if($resultSet[0]['count'] == 0){
                         $this->logger->info("Middle - checkand Create INSERT");

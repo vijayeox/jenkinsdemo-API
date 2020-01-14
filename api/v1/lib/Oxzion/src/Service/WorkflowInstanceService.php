@@ -290,7 +290,7 @@ class WorkflowInstanceService extends AbstractService
         $queryParams = array($workflowInstance[0]['id']);
         $existingFile = $this->executeQueryWithBindParameters($query, $queryParams)->toArray();
         if (isset($existingFile[0])) {
-            $this->logger->info(WorkflowInstanceService::class . "FILE UPDATE-----" . print_r($params, true));
+            $this->logger->info(WorkflowInstanceService::class . "FILE UPDATE-----" . print_r($existingFile, true));
             $file = $this->fileService->updateFile($params, $existingFile[0]['uuid']);
             $workflowInstanceId = $this->activityEngine->completeActivity($activityId, $params);
 

@@ -49,7 +49,6 @@ class AppDelegateService extends AbstractService
 
     public function execute($appId, $delegate, $dataArray = array())
     {
-        $this->logger->info("execute with $appId, and $delegate");
         $this->logger->info(AppDelegateService::class . "EXECUTE DELEGATE ---");
         try {
             $result = $this->delegateFile($appId, $delegate);

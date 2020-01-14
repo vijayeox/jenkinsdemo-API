@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit colors="true" printerClass="Sempro\PHPUnitPrettyPrinter\PrettyPrinter">
     <testsuites>
-         <!-- <testsuite name="Messaging Fixtures Fixtures">
+         <testsuite name="Messaging Fixtures Fixtures">
             <directory>./module/Messaging/test</directory>
         </testsuite>
         <testsuite name="Attachment Fixtures">
@@ -44,11 +44,11 @@
             <directory>./module/Search/test</directory>
             <directory>./module/ProspectResearch/test</directory>
             <directory>./module/PaymentGateway/test</directory>
-        </testsuite> --> 
-       <!-- <testsuite name="Form File Fixtures">
+        </testsuite> 
+       <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
-        </testsuite> -->
+        </testsuite>
         <testsuite name="Dive Insurance Fixtures">
             <directory>../../clients/DiveInsurance/test/</directory>
         </testsuite>

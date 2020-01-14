@@ -44,29 +44,21 @@ class RestClient
     }
     public function postMultiPart($url, $formParams=array(), $fileParams=array())
     {
-        print_r("executing post multi part");
         $boundary = uniqid();
         $multipart_form = array();
-        
         if ($formParams) {
-            print_r("h1");
             foreach ($formParams as $key => $value) {
                 $multipart_form[] = array('name'=>$key,'contents'=>$value);
             }
         }
-
         if ($fileParams) {
-            print_r("h2");
             foreach ($fileParams as $key => $value) {
                 $multipart_form[] = array('name'=>$key,'contents'=>fopen($value, 'r'),'headers'  => [ 'Content-Type' => 'application/octet-stream']);
             }
         }
-        print_r("h3");
         $params = ['headers' => ['Connection' => 'close','Content-Type' => 'multipart/form-data; boundary='.$boundary,],'body' => new MultipartStream($multipart_form, $boundary),];
         try {
-            print_r("post in client file");
             $response = $this->client->post($url, $params);
-            print_r("h5");
             $var = $response->getBody()->getContents();
             return $var;
         } catch (ServerException $e) {
