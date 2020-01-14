@@ -31,7 +31,7 @@ class CommandService extends AbstractService
     private $userService;
     /**
      * @ignore __construct
-    */
+     */
 
     public function setRestClient($restClient)
     {
@@ -481,7 +481,7 @@ class CommandService extends AbstractService
             }
         }
     }
-    
+
     protected function getUserList(&$data)
     {
         if (isset($data['appId'])) {

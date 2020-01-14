@@ -118,8 +118,10 @@ class FileService extends AbstractService
             $this->logger->info("Created successfully  - file record");
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
-            if(isset($data['id']))
-                $this->messageProducer->sendTopic(json_encode(array('id' => $data['id'])),'FILE_ADDED');
+            if (isset($data['id'])) {
+                $this->messageProducer->sendTopic(json_encode(array('id' => $data['id'])), 'FILE_ADDED');
+            }
+
         } catch (Exception $e) {
             $this->logger->info("erorororor  - file record");
             $this->rollback();
@@ -242,8 +244,10 @@ class FileService extends AbstractService
             $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
-            if(isset($id))
-                $this->messageProducer->sendTopic(json_encode(array('id' => $id)),'FILE_UPDATED');
+            if (isset($id)) {
+                $this->messageProducer->sendTopic(json_encode(array('id' => $id)), 'FILE_UPDATED');
+            }
+
         } catch (Exception $e) {
             $this->rollback();
             $this->logger->error($e->getMessage(), $e);
@@ -272,8 +276,10 @@ class FileService extends AbstractService
             $response = $this->executeUpdate($update);
             $id = $this->getIdFromUuid('ox_file', $id);
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
-            if(isset($id))
-                $this->messageProducer->sendTopic(json_encode(array('id' => $id)),'FILE_DELETED');
+            if (isset($id)) {
+                $this->messageProducer->sendTopic(json_encode(array('id' => $id)), 'FILE_DELETED');
+            }
+
             return 1;
         } catch (Exception $e) {
             $this->logger->error($e->getMessage(), $e);
@@ -322,8 +328,8 @@ class FileService extends AbstractService
         }
         try {
             $select = "SELECT ox_file.id,ox_file.data from ox_file
-                       inner join ox_workflow_instance on ox_workflow_instance.id = ox_file.workflow_instance_id
-                       where ox_file.org_id=:orgId and $where and ox_file.is_active =:isActive";
+            inner join ox_workflow_instance on ox_workflow_instance.id = ox_file.workflow_instance_id
+            where ox_file.org_id=:orgId and $where and ox_file.is_active =:isActive";
             $whereQuery = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),
                 "workflowInstanceId" => $workflowInstanceId,
                 "isActive" => 1);
@@ -406,12 +412,12 @@ class FileService extends AbstractService
             // print_r($fieldWhereQuery);exit;
             if (!empty($fieldWhereQuery['joinQuery'] && !empty($fieldWhereQuery['whereQuery']))) {
                 $queryStr = "Select * from ox_file as a
-        join ox_form as b on (a.entity_id = b.entity_id)
-        join ox_form_field as c on (c.form_id = b.id)
-        join ox_field as d on (c.field_id = d.id)
-        join ox_app as f on (f.id = b.app_id)
-        " . $fieldWhereQuery['joinQuery'] . "
-        where f.id = " . $data['app_id'] . " and b.id = " . $data['form_id'] . " and (" . $fieldWhereQuery['whereQuery'] . ") group by a.id";
+                join ox_form as b on (a.entity_id = b.entity_id)
+                join ox_form_field as c on (c.form_id = b.id)
+                join ox_field as d on (c.field_id = d.id)
+                join ox_app as f on (f.id = b.app_id)
+                " . $fieldWhereQuery['joinQuery'] . "
+                where f.id = " . $data['app_id'] . " and b.id = " . $data['form_id'] . " and (" . $fieldWhereQuery['whereQuery'] . ") group by a.id";
                 $this->logger->info("Executing query - $queryStr");
                 $resultSet = $this->executeQuerywithParams($queryStr);
                 return $dataSet = $resultSet->toArray();
@@ -525,7 +531,7 @@ class FileService extends AbstractService
                     }
                 }
                 $fromQuery .= " left join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=f.id
-                    INNER JOIN ox_file_attribute ofa on ofa.file_id = a.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
+                INNER JOIN ox_file_attribute ofa on ofa.file_id = a.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
                 $userWhere = " and owufi.user_id = :userId and owufi.org_id = :orgId";
                 $queryParams['userId'] = $userId;
                 $queryParams['orgId'] = $orgId;
@@ -547,7 +553,7 @@ class FileService extends AbstractService
                 if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
                     $filterParamsArray = json_decode($filterParams['filter'], true);
                 } else {
-                    if(isset($filterParams['filter'])){
+                    if (isset($filterParams['filter'])) {
                         $filterParamsArray = $filterParams['filter'];
                     } else {
                         $filterParamsArray = $filterParams;
@@ -578,9 +584,10 @@ class FileService extends AbstractService
                         }
                         if (!empty($val) && !empty($fieldId)) {
                             $joinQuery .= " left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) ";
-                            $valueTransform = $this->getFieldType($fieldId, $tablePrefix);
+                            $fieldTransform = $this->getFieldType($fieldId, $tablePrefix);
                             $filterOperator = $this->processFilters($val);
-                            $whereQuery .= " " . $filterlogic . " (" . $tablePrefix . ".field_id = " . $fieldId['id'] . " and " . $valueTransform . "" . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $val['value'] . "" . $filterOperator["operator2"] . "') ";
+                            $valueTrasform = $this->transformValue($val['value'], $fieldId);
+                            $whereQuery .= " " . $filterlogic . " (" . $tablePrefix . ".field_id = " . $fieldId['id'] . " and " . $fieldTransform . "" . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $valueTrasform . "" . $filterOperator["operator2"] . "') ";
                         }
                         if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
                             if ($sortParam[0]['field'] === $val['field']) {
@@ -750,5 +757,20 @@ class FileService extends AbstractService
     {
         $whereQuery = "g.status = '" . $filter['value'] . "' ";
         return $whereQuery;
+    }
+
+    private function transformValue($value, $fieldDetail)
+    {
+        $fieldType = $fieldDetail['data_type'];
+        if (strtolower($fieldType) === 'date') {
+            switch ($value) { //Based on the type of value, we can fetch the date
+                case 'today': 
+                    return Date("Y-m-d");
+                    break;
+                default:
+                    return $value;
+            }
+        }
+        return $value;
     }
 }
