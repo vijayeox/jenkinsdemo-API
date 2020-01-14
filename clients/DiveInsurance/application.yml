@@ -318,7 +318,7 @@ menu:
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
-                                field: entity_name
+                                field: entityName
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
