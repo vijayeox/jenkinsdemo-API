@@ -406,6 +406,15 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 rule: '''{{policyStatus}}'' != ''Cancelled'''
                                 icon: 'fa fa-window-close'
+                            -
+                                name: 'Reinstate Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '''{{policyStatus}}'' == ''Cancelled'''
+                                icon: 'fa fa-repeat'
                         filterColumns:
                             - name
                             - padi
@@ -597,6 +606,11 @@ workflow:
         uuid: 35139ac6-3229-11ea-aec2-2e728ce88125
         bpmn_file: 'Emergency First Response/EFREndorsement.bpmn'
         entity: 'Emergency First Response'
+    -
+        name: 'Reinstate Policy'
+        uuid: 81cb9e10-5845-4379-97c9-f9486b702bdb
+        bpmn_file: 'Cancel Policy/ReinstatePolicy.bpmn'
+        entity: 'Individual Professional Liability'
 form:
     -
         name: 'PADI Verification'
