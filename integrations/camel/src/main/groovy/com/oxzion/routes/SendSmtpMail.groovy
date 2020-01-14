@@ -75,7 +75,7 @@ public class SendSmtpMail extends RouteBuilder {
                                 def attachmentList = object.attachments as ArrayList
                                 for (int i=0;i<attachmentList.size();i++){
                                     def fileLocation = new File(attachmentList.get(i) as String)
-                                    def fileName = fileLocation.getAbsolutePath().substring(fileLocation.getAbsolutePath().lastIndexOf("\\")+1)
+                                    def fileName = fileLocation.getAbsolutePath().substring(fileLocation.getAbsolutePath().lastIndexOf("/")+1)
                                     messageIn.addAttachment(fileName, new DataHandler(new FileDataSource(fileLocation)))
                                 }
                             }
