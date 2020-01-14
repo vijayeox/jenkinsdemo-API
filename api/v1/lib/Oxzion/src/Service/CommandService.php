@@ -111,7 +111,9 @@ class CommandService extends AbstractService
                 }
                 $this->logger->info(CommandService::class . print_r($inputData, true));
             }
-            return $outputData;
+            if(isset($outputData)){
+                return $outputData;
+            }
         }
         return 1;
     }
@@ -403,6 +405,14 @@ class CommandService extends AbstractService
             $fileId = $data[$data['fileId_fieldName']];
         } else if (isset($data['fileId'])) {
             $fileId = $data['fileId'];
+        } else if(isset($data['workflowInstanceId'])){
+            $file = $this->fileService->getFileByWorkflowInstanceId($data['workflowInstanceId']);
+            if(isset($file)){
+                $data['data'] = $file;
+                return $data;
+            } else {
+                throw new EntityNotFoundException("File not Found");
+            }
         } else {
             throw new EntityNotFoundException("File Id not provided");
         }
