@@ -27,7 +27,7 @@ class OXCallbackController extends AbstractApiControllerHelper
     public function userCreatedAction()
     {
         $params = $this->extractPostData();
-        $params['baseurl'] = $this->config['baseUrl'];
+        $params['baseurl'] = $this->config['applicationUrl'];
         $this->messageProducer->sendQueue(json_encode(array(
             'to' => $params['email'],
             'subject' => 'Your login details for EOX Vantage!!',
