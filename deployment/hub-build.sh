@@ -109,7 +109,7 @@ camel()
     cd ${OXHOME}/integrations/camel
     echo -e "${YELLOW}Building Camel${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/integrations/camel/src/main/resources/application.yml src/main/resources/
+    scp -i ${PEM} -r ${SERVER}:env/integrations/camel/src/main/resources/* src/main/resources/
     #building camel
     docker run --network="host" -t -v ${PWD}:/workspace/app --entrypoint ./docker-build.sh camel
     echo -e "${GREEN}Building Camel Completed!${RESET}"
