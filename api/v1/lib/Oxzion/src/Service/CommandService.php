@@ -178,6 +178,10 @@ class CommandService extends AbstractService
                 $this->logger->info("SUBMIT ACTIVITY");
                 return $this->submitActivity($data);
                 break;
+            case 'processFileData':
+                $this->logger->info("Process File Data");
+                return $this->processFileData($data);
+                break;
             default:
                 break;
         };
@@ -508,7 +512,16 @@ class CommandService extends AbstractService
 
     protected function submitActivity(&$data)
     {
-        $startWorkflow = $this->workflowInstanceService->submitActivity($data);
-        return $startWorkflow;
+        $submitActivity = $this->workflowInstanceService->submitActivity($data);
+        return $submitActivity;
+    }
+
+    protected function processFileData($data){
+        if(isset($data['data'])){
+            $fileData = $data['data'];
+            unset($data['data']);
+            $processedData = array_merge($data,$fileData);
+            return $processedData;
+        }
     }
 }
