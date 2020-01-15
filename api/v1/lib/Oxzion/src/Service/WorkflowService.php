@@ -137,29 +137,31 @@ class WorkflowService extends AbstractService
                         $formResult = $this->formService->createForm($appUuid, $formData);
                     }
                     $startFormId = $formData['id'];
-                    foreach ($process['activity'] as $activity) {
-                        $oxActivity = new Activity();
-                        $oxActivity->exchangeArray($activity);
-                        $oxFormProperties = $oxActivity->getKeyArray();
-                        if (isset($activityProperties)) {
-                            foreach ($activityProperties as $activityKey => $activityValue) {
-                                if (in_array($activityKey, $activityProperties)) {
-                                    $oxActivity->__set($key, $activityValue);
+                    if(isset($process['activity'])){
+                        foreach ($process['activity'] as $activity) {
+                            $oxActivity = new Activity();
+                            $oxActivity->exchangeArray($activity);
+                            $oxFormProperties = $oxActivity->getKeyArray();
+                            if (isset($activityProperties)) {
+                                foreach ($activityProperties as $activityKey => $activityValue) {
+                                    if (in_array($activityKey, $activityProperties)) {
+                                        $oxActivity->__set($key, $activityValue);
+                                    }
                                 }
                             }
-                        }
-                        $activityData = $oxActivity->toArray();
-                        try {
-                            if(isset($activity['form'])){
-                                $formTemplate = json_decode($activity['form'],true);
-                                $activityData['template'] = $formTemplate['template'];
+                            $activityData = $oxActivity->toArray();
+                            try {
+                                if(isset($activity['form'])){
+                                    $formTemplate = json_decode($activity['form'],true);
+                                    $activityData['template'] = $formTemplate['template'];
+                                }
+                                $activityData['entity_id'] = $entityId;
+                                $activityData['workflow_deployment_id'] = $workflowDeploymentId;
+                                $activityResult = $this->activityService->createActivity($appUuid, $activityData);
+                                $activityIdArray[] = $activityData['id'];
+                            } catch (Exception $e) {
+                                throw $e;
                             }
-                            $activityData['entity_id'] = $entityId;
-                            $activityData['workflow_deployment_id'] = $workflowDeploymentId;
-                            $activityResult = $this->activityService->createActivity($appUuid, $activityData);
-                            $activityIdArray[] = $activityData['id'];
-                        } catch (Exception $e) {
-                            throw $e;
                         }
                     }
                 }
