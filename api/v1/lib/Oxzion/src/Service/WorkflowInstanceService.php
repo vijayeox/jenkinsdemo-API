@@ -347,7 +347,8 @@ class WorkflowInstanceService extends AbstractService
             } else {
                 $orgId = $params['orgId'];
             }
-        } else {
+        } 
+        if(!$orgId){
             $orgId = AuthContext::get(AuthConstants::ORG_ID);
         }
         $this->logger->info("SET UP Workflow Instance (OrgID) --- " . $orgId);
