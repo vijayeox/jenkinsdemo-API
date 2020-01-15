@@ -7,63 +7,8 @@ use Oxzion\Utils\ArtifactUtils;
 
 class PolicyDocument extends AbstractDocumentAppDelegate
 {
-    // protected $documentBuilder;
     protected $type;
     protected $template;
-
- // Dont Delete Templates to checked
-    const TEMPLATE = array(
-        'Individual Professional Liability' 
-            => array('template' => 'ProfessionalLiabilityCOI',
-                     'header' => 'COIheader.html',
-                     'footer' => 'COIfooter.html',
-                     'slWording' => 'SL Wording.pdf',
-                     'policy' => 'Individual_Professional_Liability_Policy.pdf',
-                     'card' => 'PocketCard',
-                     'aiTemplate' => 'Individual_PL_AI',
-                     'blanketForm' => 'Individual_AI_Blanket_Endorsement.pdf',
-                     'aiheader' => 'IPL_AI_header.html',
-                     'lheader' => 'letter_header.html',
-                     'lfooter' => 'letter_footer.html',
-                     'ltemplate' => 'Individual_PL_Lapse_Letter'),
-        'Dive Boat' 
-            => array('template' => 'DiveBoatCOI',
-                     'header' => 'DiveBoatHeader.html',
-                     'footer' => 'DiveBoatFooter.html',
-                     'slWording' => 'SL Wording.pdf',
-                     'policy' => 'Dive_Boat_Policy.pdf',
-                     'cover_letter' => 'Dive_Boat_Cover_Letter',
-                     'lheader' => 'letter_header.html',
-                     'lfooter' => 'letter_footer.html',
-                     'instruct' => 'Instructions_To_Insured.pdf',
-                     'aiTemplate' => 'DiveBoat_AI',
-                     'aiheader' => 'DiveBoat_AI_header.html',
-                     'aifooter' => 'DiveBoat_AI_footer.html',
-                     'aniheader' => 'DiveBoat_ANI_header.html',
-                     'lpTemplate' => 'DiveBoat_LP',
-                     'lpheader' => 'DiveBoat_LP_header.html',
-                     'lpfooter' => 'DiveBoat_LP_footer.html',
-                     'quoteTemplate' => 'DiveBoat_Quote',
-                     'qheader' => 'DB_Quote_header.html',
-                     'qfooter' => 'DB_Quote_footer.html',
-                     'qaiHeader' => 'DB_Quote_AI_header.html',
-                     'qaniHeader' => 'DB_Quote_ANI_header.html'),
-        'Dive Store'
-            => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
-                     'header' => 'DiveStoreHeader.html',
-                     'footer' => 'DiveStoreFooter.html',
-                     'slWording' => 'SL Wording.pdf',
-                     'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
-                     'cover_letter' => 'Dive_Store_Cover_Letter',
-                     'lheader' => 'letter_header.html',
-                     'lfooter' => 'letter_footer.html',
-                     'instruct' => 'Instructions_To_Insured.pdf',
-                     'aiTemplate' => 'DiveStore_AI',
-                     'aiheader' => 'DiveStore_AI_header.html',
-                     'aifooter' => 'DiveStore_AI_footer.html',
-                     'lpTemplate' => 'DiveStore_LP',
-                     'lpheader' => 'DiveStore_LP_header.html',
-                     'lpfooter' => 'DiveStore_LP_footer.html'));
 
     public function __construct(){
         parent::__construct();
@@ -134,15 +79,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                      'policy' => 'Individual_Professional_Liability_Policy.pdf',
                      'aiTemplate' => 'EFR_AI',
                      'aiheader' => 'EFR_AI_header.html',
-                     'aifooter' => 'EFR_AI_footer.html'),
-        'Group Professional Liability'
-            => array('template' => 'Group_PL_COI',
-                     'header' => 'Group_header.html',
-                     'footer' => 'Group_footer.html',
-                     'nTemplate' => 'Group_PL_NI',
-                     'nheader' => 'Group_NI_header.html',
-                     'nfooter' => 'Group_NI_footer.html',
-                     'policy' => 'Individual_Professional_Liability_Policy.pdf'));
+                     'aifooter' => 'EFR_AI_footer.html'));
 
         $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement');
     }
@@ -249,9 +186,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
         }
 
-        if(isset($this->template[$temp['product']]['card'])){
-            $documents['pocket_card'] = $this->generateDocuments($temp,$dest,$options,'card');
-        }
+        // if(isset($this->template[$temp['product']]['card'])){
+        //     $documents['pocket_card'] = $this->generateDocuments($temp,$dest,$options,'card');
+        // }
 
         if(isset($temp['groupPL'])){
             $document['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
