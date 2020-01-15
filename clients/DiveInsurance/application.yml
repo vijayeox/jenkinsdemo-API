@@ -91,7 +91,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'file/user/me/status/Completed?filter=[{\"filter\":{\"logic\":\"and\",\"filters\":[{\"field\":\"policyStatus\",\"operator\":\"neq\",\"value\":\"Cancelled\"}]}}]'
+                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"}]}}'
                         filterable: false
                         reorderable: false
                         resizable: true
@@ -129,7 +129,7 @@ menu:
                                         type: Form
                                         url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store''' 
+                                rule: '''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'''
                                 icon: 'fa fa-window-close'
                         toolbarTemplate: '<h4>List of all policies</h4>'
                         operations:
@@ -172,11 +172,9 @@ menu:
                                 title: 'Policy Status'
                                 field: policyStatus
                             -
-                                title: 'Policy Start Date'
+                                title: 'Policy Effective Period'
+                                cell: '<td>{item.start_date}&nbsp;-&nbsp;{item.end_date}</td>'
                                 field: start_date
-                            -
-                                title: 'Policy End Date'
-                                field: end_date
     -
         name: 'My History'
         uuid: 623132d9-8ccb-4c8a-b7b7-a3b0921defdc
