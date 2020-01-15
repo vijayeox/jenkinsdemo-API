@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   Formio.createForm(
     document.getElementById("formio"),
-    JSON.parse(formContent)
+    JSON.parse(formContent),{noAlerts:true}
   ).then(function(form) {
     // Prevent the submission from going to the form.io server.
     form.nosubmit = true;
