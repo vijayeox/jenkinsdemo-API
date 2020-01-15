@@ -31,7 +31,7 @@ INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES (
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Kentucky', 'KY', '345609');
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Louisiana', 'LA', '249639');
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Massachusetts', 'MA', '1931743');
-INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Manitoba', 'MB', '');
+INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Manitoba', 'MB', '0757776');
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Maryland', 'MD', '10127');
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Maine', 'ME', 'PRN59470');
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Marshall Islands', 'MH', '0757776');
@@ -51,7 +51,7 @@ INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES (
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('New York', 'NY', 'EX999685-R');
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Ohio', 'OH', '671333');
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Oklahoma', 'OK', '185559');
-INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Ontario', 'ON', '');
+INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Ontario', 'ON', '0757776');
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Oregon', 'OR', '230642');
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Pennsylvania', 'PA', '415445');
 INSERT INTO `state_license` (`state`,`state_in_short`,`license_number`) VALUES ('Puerto Rico', 'PR', '0757776');
