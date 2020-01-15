@@ -64,14 +64,12 @@
 		        </div>
 	     	</div>
 	     	<div class="i_type2">
-		       <div class="i-type" style="margin-top: 9px;">
-		           <p class = "ins_font">&nbsp</p>
+		       <div class="right1" style="margin-top: 9px;">
 		           <p class = "ins_font">&nbsp</p>
 		           <p class = "ins_font"><b>Equipment Liability:</b></p>
 		           <p class = "ins_font"><b>Cylinder Coverage:</b></p>
 		       </div>
-		       <div class="i-type" style="margin-top: 9px;">
-		          <p class = "ins_font">&nbsp</p>
+		       <div class="right2" style="margin-top: 9px;">
 		          <p class = "ins_font">&nbsp</p>
 		          <p class = "ins_font">{if isset($equipmentPrice) && (equipmentPrice != "0.00" || equipmentPrice != "0") }
 		          			Included
@@ -87,6 +85,7 @@
 		       </div>
      		</div>
     	</div>
+		<br/>
     	
     	<hr class="hrtag"></hr>
     	<center><p class = "policy_notice1">Retroactive Date: {$start_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$start_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
