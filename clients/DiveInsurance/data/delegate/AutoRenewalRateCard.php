@@ -10,7 +10,10 @@ require_once __DIR__."/RateCard.php";
 class AutoRenewalRateCard extends RateCard{
     public function __construct(){
         parent::__construct();
-    }
+    //     $this->template = array(
+    //     'Individual Professional Liability' 
+    //         => array('documents'));
+    // }
 
     // Premium Calculation values are fetched here
     public function execute(array $data,Persistence $persistenceService)
@@ -30,7 +33,7 @@ class AutoRenewalRateCard extends RateCard{
         if($data['product'] == 'Individual Professional Liability'){
             $this->IPLRates($data);
         }
-        $data['policyStatus'] = 'Renewal Pending';
+        $data['policyStatus'] = 'AutoRenewal Approval Pending';
         return $data;
     }
 
@@ -51,8 +54,10 @@ class AutoRenewalRateCard extends RateCard{
     //     $unsetVar = $this->unsetVariables[$data['product']];
     //     $this->logger->info("UNSET VARIABLES".print_r($unsetVar,true));
     //     for($i=0;$i< sizeof($unsetVar);$i++){
-    //         $this->logger->info("CLEN DATA FOR");
-    //         unset($data[$unsetVar[$i]]);
+    //         $this->logger->info("CLEAN DATA FOR");
+    //         if(isset($data[$unsetVar[$i]])){
+    //             unset($data[$unsetVar[$i]]);
+    //         }
     //     }
     //     $this->logger->info("CLEAN DATA END".print_r($data,true));
     // }
