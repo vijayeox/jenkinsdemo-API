@@ -119,7 +119,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
 
             if(isset($data['equipment']) && $data['equipment'] == "equipmentLiabilityCoverage"){
                 $documents['equipment_liability_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplEquipment');
-                $data['equipmentPrice'] = 'Included';
            }
            $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
            $result = json_decode($result,true);
@@ -128,7 +127,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $data['scubaFitVal'] = $result[$data['scubaFit']];
            }
            if(isset($result[$data['cylinder']])){
-                $data['cylinderPrice'] = $result[$data['cylinder']];
+                $data['cylinderPriceVal'] = $result[$data['cylinder']];
            }
            $data['careerCoverageVal'] = $result[$data['careerCoverage']];
         }    

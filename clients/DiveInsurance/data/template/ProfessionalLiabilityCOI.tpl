@@ -58,7 +58,7 @@
 	        	</div>
 	        	<div class = "in-type1"> 
 		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability - Claims Made Form</p>
-			            <p class = "ins_font">Insured's Status: {$careerCoverage} {if isset($scubaFitPrice) && (scubaFitPrice != "0.00" || scubaFitPrice != "0")} <span> and {$scubaFitPrice} </span>{/if}</p>
+			            <p class = "ins_font">Insured's Status: {$careerCoverageVal} {if isset($scubaFitPrice) && (scubaFitPrice != "0.00" || scubaFitPrice != "0")} <span> and {$scubaFitVal} </span>{/if}</p>
 			            <p class = "ins_font">$1,000,000&nbsp&nbsp&nbsp(per occurrence)</p>
 			            <p class = "ins_font">$2,000,000</p>
 		        </div>
@@ -79,7 +79,7 @@
 		          			Not Included
 		          		{/if}</p>
 		          <p class = "ins_font">{if isset($cylinderPrice) && (cylinderPrice != "0.00" || cylinderPrice != "0")}
-		          			{$cylinderPrice}
+		          			{$cylinderPriceVal}
 		          		{else}
 		          			Not Covered
 		          		{/if}
@@ -175,7 +175,7 @@
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/IPLSurplus/IL.tpl"}</b>
 				</p></center>
-			{elseif $state == 'International'}
+			{elseif $state == '' || !isset($state)}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/IPLSurplus/International.tpl"}</b>
 				</p></center>
