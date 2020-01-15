@@ -421,7 +421,7 @@ menu:
                             - firstname
                             - lastname
                         operations:
-                            title: 'Get Policy'
+                            title: 'Create Policy'
                             actions:
                                 -
                                     name: IPL
@@ -489,7 +489,7 @@ menu:
         uuid: 9bf92403-2111-4d05-9d89-01a609ed4b83
     -
         name: MyAssignments
-        privilege: MANAGE_MY_POLICY_WRITE
+        privilege: HIDE_FOR_NOW
         icon: 'fa fa-list'
         page:
             name: 'My Assignments'
