@@ -1013,7 +1013,7 @@
                     "clearOnHide": true,
                     "spellcheck": true,
                     "validate": {
-                        "required": true,
+                        "required": false,
                         "minLength": "",
                         "maxLength": "",
                         "pattern": "",
@@ -1060,7 +1060,7 @@
                     "clearOnHide": true,
                     "spellcheck": true,
                     "validate": {
-                        "required": true,
+                        "required": false,
                         "minLength": "",
                         "maxLength": "",
                         "pattern": "",
@@ -1107,7 +1107,7 @@
                     "clearOnHide": true,
                     "spellcheck": true,
                     "validate": {
-                        "required": true,
+                        "required": false,
                         "minLength": "",
                         "maxLength": "",
                         "pattern": "",
@@ -1142,7 +1142,8 @@
                 "eq": "true"
             },
             "properties": {},
-            "hideLabel": true
+            "hideLabel": true,
+            "isNew": false
         }, {
             "clearOnHide": false,
             "key": "panelPanel",
@@ -1177,7 +1178,7 @@
                         "clearOnHide": true,
                         "spellcheck": true,
                         "validate": {
-                            "required": true,
+                            "required": false,
                             "minLength": "",
                             "maxLength": "",
                             "pattern": "",
@@ -1235,7 +1236,8 @@
                         "tags": [],
                         "properties": {},
                         "lockKey": true,
-                        "hideLabel": true
+                        "hideLabel": true,
+                        "disabled": true
                     }],
                     "width": 4,
                     "offset": 0,
@@ -1262,7 +1264,7 @@
                         "clearOnHide": false,
                         "spellcheck": true,
                         "validate": {
-                            "required": true,
+                            "required": false,
                             "minLength": "",
                             "maxLength": "",
                             "pattern": "",
@@ -1302,7 +1304,7 @@
                         "clearOnHide": true,
                         "spellcheck": true,
                         "validate": {
-                            "required": true,
+                            "required": false,
                             "minLength": "",
                             "maxLength": "",
                             "pattern": "",
@@ -1363,7 +1365,7 @@
                         "hidden": false,
                         "clearOnHide": false,
                         "validate": {
-                            "required": true
+                            "required": false
                         },
                         "type": "select",
                         "labelPosition": "top",
@@ -1727,7 +1729,8 @@
                                 "properties": {},
                                 "hideLabel": true,
                                 "lockKey": true,
-                                "clearOnRefresh": true
+                                "clearOnRefresh": true,
+                                "isNew": false
                             }, {
                                 "autofocus": false,
                                 "input": true,
@@ -2017,7 +2020,7 @@
         "customConditional": "show = (data['padiVerified'] == true && (data['user_exists']==0||data['user_exists']=='0'))"
     }],
     "revisions": "current",
-    "_vid": 144,
+    "_vid": 145,
     "title": "Padi Verification Form - IPL",
     "display": "form",
     "access": [{
@@ -2031,7 +2034,7 @@
     "path": "padiverificationformipl",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-08-10T15:46:39.851Z",
-    "modified": "2020-01-14T08:11:04.737Z",
+    "modified": "2020-01-15T07:37:13.079Z",
     "machineName": "testdivehub:padiVerificationForm",
     "controller": ""
 }
