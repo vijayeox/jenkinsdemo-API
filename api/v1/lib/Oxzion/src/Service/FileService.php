@@ -554,7 +554,11 @@ class FileService extends AbstractService
                     $filterParamsArray = json_decode($filterParams['filter'], true);
                 } else {
                     if (isset($filterParams['filter'])) {
-                        $filterParamsArray = $filterParams['filter'];
+                        if($jsonFilters = json_decode($filterParams['filter'],true)){
+                            $filterParamsArray = $jsonFilters;
+                        } else { 
+                            $filterParamsArray = $filterParams['filter'];
+                        }
                     } else {
                         $filterParamsArray = $filterParams;
                     }
