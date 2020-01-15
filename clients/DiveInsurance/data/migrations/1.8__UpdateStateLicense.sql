@@ -1,0 +1,1 @@
+UPDATE `state_license` SET `license_number` = '0757776' WHERE `license_number` = '';
