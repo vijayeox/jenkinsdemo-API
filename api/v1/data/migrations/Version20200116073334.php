@@ -33,10 +33,10 @@ final class Version20200116073334 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE ox_file DROP CONSTRAINT FK_orgid");
-        $this->addSql("ALTER TABLE ox_file DROP CONSTRAINT FK_wfInstanceid");
-        $this->addSql("ALTER TABLE ox_file DROP CONSTRAINT FK_fieldId");
-        $this->addSql("ALTER TABLE ox_file DROP CONSTRAINT FK_modifiedBy");
-        $this->addSql("ALTER TABLE ox_file DROP CONSTRAINT FK_createdBy");        
+        $this->addSql("ALTER TABLE `ox_file` DROP FOREIGN KEY FK_orgid");
+        $this->addSql("ALTER TABLE ox_file DROP FOREIGN KEY FK_wfInstanceid");
+        $this->addSql("ALTER TABLE ox_file DROP FOREIGN KEY FK_fieldId");
+        $this->addSql("ALTER TABLE ox_file DROP FOREIGN KEY FK_modifiedBy");
+        $this->addSql("ALTER TABLE ox_file DROP FOREIGN KEY FK_createdBy");
     }
 }
