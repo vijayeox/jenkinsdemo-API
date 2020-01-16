@@ -575,16 +575,6 @@ workflow:
         bpmn_file: 'Individual Professional Liability/IPLEndorsement.bpmn'
         entity: 'Individual Professional Liability'
     -
-        name: 'Dive Store'
-        uuid: cb99e634-de00-468d-9230-d6f77d241c5b
-        bpmn_file: 'Dive Store/NewApplication.bpmn'
-        entity: 'Dive Store'
-    -
-        name: 'Dive Boat'
-        uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
-        bpmn_file: 'Dive Boat/NewApplicationSubmission.bpmn'
-        entity: 'Dive Boat'
-    -
         name: 'Individual Liability Auto Renewal'
         uuid: 91cb9e10-5845-4379-97c9-f9486b702bd6
         bpmn_file: 'Individual Professional Liability/IPLAutoRenewal.bpmn'
