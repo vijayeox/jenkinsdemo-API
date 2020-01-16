@@ -146,7 +146,8 @@ return [
                             'put'=> 'MANAGE_FORM_WRITE',
                             'post'=> 'MANAGE_FORM_WRITE',
                             'delete'=> 'MANAGE_FORM_WRITE',
-                            'get'=> 'MANAGE_FORM_READ',
+                            // 'get'=> 'MANAGE_FORM_READ',
+                            // fix to get form template available for csr
                         ],
                     ],
                 ],
