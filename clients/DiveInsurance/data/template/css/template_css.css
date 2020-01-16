@@ -198,6 +198,12 @@ body {
   margin-top: 2px;
   margin-bottom: 1px;
 }
+.ins_font1 {
+  font-size: 14px;
+  margin-top: 2px;
+  margin-bottom: 1px;
+  margin-left: 10px;
+}
 .hrtag {
   margin-top: 5px;
   margin-bottom: 0px;
@@ -521,4 +527,17 @@ body {
 }
 .ghrtag2 {
   margin-top: 0px;
+}
+td, th {
+  text-align: left;
+}
+.flex-container{
+  display: block;
+  width: 100px;
+}
+.marginTop{
+  margin-top: 40px;
+}
+.policy_notice_div{
+  clear: both;
 }
