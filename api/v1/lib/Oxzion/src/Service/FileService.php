@@ -482,6 +482,7 @@ class FileService extends AbstractService
 
     public function getFileList($appUUid, $params, $filterParams = null)
     {
+        $this->logger->info("Inside File List API - with params - " . json_encode($params));
         $orgId = isset($params['orgId']) ? $this->getIdFromUuid('ox_organization', $params['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
         $appId = $this->getIdFromUuid('ox_app', $appUUid);
         if (!isset($orgId)) {
@@ -494,7 +495,6 @@ class FileService extends AbstractService
             $queryParams = array();
             $appFilter = "f.id = :appId";
             $queryParams['appId'] = $appId;
-            $fieldNameList = "";
             $statusFilter = "";
             if (isset($params['workflowStatus'])) {
                 $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
@@ -517,10 +517,7 @@ class FileService extends AbstractService
             $where = " $appFilter $statusFilter and a.latest=1";
             $fromQuery = " from ox_file as a
             inner join ox_app_entity en on en.id = a.entity_id
-            inner join ox_form as b on (en.id = b.entity_id)
-            inner join ox_form_field as c on (c.form_id = b.id)
-            inner join ox_field as d on (c.field_id = d.id)
-            inner join ox_app as f on (f.id = b.app_id)";
+            inner join ox_app as f on (f.id = en.app_id)";
             if (isset($params['userId'])) {
                 if ($params['userId'] == 'me') {
                     $userId = AuthContext::get(AuthConstants::USER_ID);
@@ -530,7 +527,7 @@ class FileService extends AbstractService
                         throw new ServiceException("User Does not Exist", "app.forusernot.found");
                     }
                 }
-                $fromQuery .= " left join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=f.id
+                $fromQuery .= " inner join ox_field as d on (en.id = d.entity_id) left join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=f.id
                 INNER JOIN ox_file_attribute ofa on ofa.file_id = a.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
                 $userWhere = " and owufi.user_id = :userId and owufi.org_id = :orgId";
                 $queryParams['userId'] = $userId;
@@ -551,12 +548,17 @@ class FileService extends AbstractService
             $offset = " OFFSET 0";
             if (!empty($filterParams)) {
                 if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
-                    $filterParamsArray = json_decode($filterParams['filter'], true);
+                    $jsonParams = json_decode($filterParams['filter'], true);
+                    if(isset($filterParamsArray['filter'])){
+                        $filterParamsArray[0] = $jsonParams;
+                    } else {
+                        $filterParamsArray = $jsonParams;
+                    }
                 } else {
                     if (isset($filterParams['filter'])) {
                         if($jsonFilters = json_decode($filterParams['filter'],true)){
                             $filterParamsArray = $jsonFilters;
-                        } else { 
+                        } else {
                             $filterParamsArray = $filterParams['filter'];
                         }
                     } else {
@@ -572,26 +574,17 @@ class FileService extends AbstractService
                 $cnt = 1;
                 $fieldParams = array();
                 if (isset($filterParamsArray[0]['filter'])) {
-                    foreach ($filterParamsArray[0]['filter']['filters'] as $key => $value) {
-                        $fieldNameList .= $fieldNameList !== "" ? "," : $fieldNameList;
-                        $fieldNameList .= ':val' . $cnt;
-                        $fieldParams['val' . $cnt] = $value['field'];
-                        $cnt++;
-                    }
                     $filterData = $filterParamsArray[0]['filter']['filters'];
                     foreach ($filterData as $val) {
                         $tablePrefix = "tblf" . $prefix;
-                        if (isset($params['workflowId']) && !empty($worflowArray['entity_id'])) {
-                            $fieldId = $this->getFieldDetails($val['field'], $worflowArray['entity_id']);
-                        } else {
-                            $fieldId = $this->getFieldDetails($val['field']);
-                        }
-                        if (!empty($val) && !empty($fieldId)) {
-                            $joinQuery .= " left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) ";
-                            $fieldTransform = $this->getFieldType($fieldId, $tablePrefix);
+                        if (!empty($val)) {
+                            $joinQuery .= " left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) left join ox_field as ".$val['field'].$tablePrefix." on( ".$val['field'].$tablePrefix.".id = " . $tablePrefix . ".field_id )";
                             $filterOperator = $this->processFilters($val);
-                            $valueTrasform = $this->transformValue($val['value'], $fieldId);
-                            $whereQuery .= " " . $filterlogic . " (" . $tablePrefix . ".field_id = " . $fieldId['id'] . " and " . $fieldTransform . "" . $filterOperator["operation"] . "'" . $filterOperator["operator1"] . "" . $valueTrasform . "" . $filterOperator["operator2"] . "') ";
+                            $queryString = $filterOperator["operation"]."'".$filterOperator["operator1"]."".$val['value']."".$filterOperator["operator2"]."'";
+                            if($prefix > 1){
+                                $whereQuery .= " ".$filterlogic." ";
+                            }
+                            $whereQuery .= "(".$val['field'].$tablePrefix.".entity_id = en.id and ".$val['field'].$tablePrefix.".name ='".$val['field']."' and (CASE WHEN (".$val['field'].$tablePrefix.".data_type='date') THEN CAST(".$tablePrefix.".field_value AS DATETIME) $queryString WHEN (".$val['field'].$tablePrefix.".data_type='int') THEN ".$tablePrefix.".field_value ".(($filterOperator['integerOperation']))." '".$val['value']."' ELSE (".$tablePrefix.".field_value $queryString) END )) ";
                         }
                         if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
                             if ($sortParam[0]['field'] === $val['field']) {
@@ -601,6 +594,9 @@ class FileService extends AbstractService
                         }
                         $prefix += 1;
                     }
+                    if($whereQuery != ""){
+                        $whereQuery = " AND (".$whereQuery.")";
+                    }
                 }
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
@@ -608,7 +604,7 @@ class FileService extends AbstractService
             $where .= " " . $whereQuery . "";
             $fromQuery .= " " . $joinQuery . "";
             try {
-                $countQuery = "SELECT count(distinct a.id) as `count` $fromQuery  WHERE ($where) $userWhere";
+                $countQuery = "SELECT count(id) as `count` FROM (SELECT distinct(a.id) $fromQuery  WHERE ($where) $userWhere) as id";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
@@ -685,45 +681,59 @@ class FileService extends AbstractService
         if ($operator == 'startswith') {
             $operatorp2 = '%';
             $operation = ' like ';
+            $integerOperation = "=";
         } elseif ($operator == 'endswith') {
             $operatorp1 = '%';
             $operation = ' like ';
+            $integerOperation = "=";
         } elseif ($operator == 'eq') {
             $operation = ' = ';
+            $integerOperation = "=";
         } elseif ($operator == 'neq') {
             $operation = ' <> ';
+            $integerOperation = "<>";
         } elseif ($operator == 'contains') {
             $operatorp1 = '%';
             $operatorp2 = '%';
             $operation = ' like ';
+            $integerOperation = "=";
         } elseif ($operator == 'doesnotcontain') {
             $operatorp1 = '%';
             $operatorp2 = '%';
             $operation = ' NOT LIKE ';
+            $integerOperation = "<>";
         } elseif ($operator == 'isnull' || $operator == 'isempty') {
             $value = '';
             $operation = ' = ';
+            $integerOperation = "=";
         } elseif ($operator == 'isnotnull' || $operator == 'isnotempty') {
             $value = '';
             $operation = ' <> ';
+            $integerOperation = "=";
         } elseif ($operator == 'lte') {
             $operation = ' <= ';
+            $integerOperation = "<=";
         } elseif ($operator == 'lt') {
             $operation = ' < ';
+            $integerOperation = "<";
         } elseif ($operator == 'gt') {
             $operation = ' > ';
+            $integerOperation = ">";
         } elseif ($operator == 'gte') {
             $operation = ' >= ';
+            $integerOperation = ">=";
         } else {
             $operatorp1 = '%';
             $operatorp2 = '%';
             $operation = ' like ';
+            $integerOperation = "=";
         }
 
         return $returnData = array(
             "operation" => $operation,
             "operator1" => $operatorp1,
             "operator2" => $operatorp2,
+            "integerOperation" => $integerOperation,
         );
     }
 
