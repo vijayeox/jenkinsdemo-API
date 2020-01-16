@@ -52,19 +52,19 @@
 				<div class="i_type1">
 						<table>
 							<tr>
-								<th nowrap><p class = "ins_font">Type of Insurance:</p></th>
+								<th nowrap><p class = "ins_font1">Type of Insurance:</p></th>
 								<td><p class = "ins_font"> Professional Liability - Claims Made Form </p></td>
 							</tr>
 							<tr>
-								<th nowrap><b class = "ins_font1">COVERAGE:</b></th>
+								<th nowrap><b class = "ins_font">COVERAGE:</b></th>
 								<td><p class = "ins_font">Insured's Status: {$careerCoverageVal} {if $scubaFit != "scubaFitInstructorDeclined"} <span> and {$scubaFitVal} </span>{/if}</p></td>
 							</tr>
 							<tr>
-								<th nowrap><b class = "ins_font1">COMBINED SINGLE LIMIT:</COMBINED></th>
+								<th nowrap><b class = "ins_font">COMBINED SINGLE LIMIT:</COMBINED></th>
 								<td><p class = "ins_font">$1,000,000&nbsp&nbsp&nbsp(per occurrence)</p></td>
 							</tr>
 							<tr>
-								<th nowrap><b class = "ins_font1">ANNUAL AGGREGATE:</b></th>
+								<th nowrap><b class = "ins_font">ANNUAL AGGREGATE:</b></th>
 								<td><p class = "ins_font">$2,000,000</p></td>
 							</tr>
 						</table>
