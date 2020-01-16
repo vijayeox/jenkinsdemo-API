@@ -77,7 +77,7 @@ class QueryControllerTest extends ControllerTest
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => "query5", 'datasource_id' => 1, 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}', 'ispublic' => 1];
+        $data = ['name' => "query5", 'datasource_id' => 'd08d06ce-0cae-47e7-9c4f-a6716128a303', 'configuration' => '{"date_type":"date_created","date-period":"2018-01-01/now","operation":"sum","group":"created_by","field":"amount"}', 'ispublic' => 1];
         $this->assertEquals(15, $this->getConnection()->getRowCount('ox_query'));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query', 'POST', $data);
@@ -195,6 +195,17 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['data']['query']['name'], 'query1');
     }
 
+    // public function testGetHub() {
+    //     $this->initAuthToken($this->adminUser);
+    //     $this->dispatch('/analytics/query/e6de79cb-3148-11ea-98ba-283a4d5d1bdb?data=true', 'GET');
+    //     $this->assertResponseStatusCode(200);
+    //     $this->setDefaultAsserts();
+    //     $content = json_decode($this->getResponse()->getContent(), true);
+    //     $this->assertEquals($content['status'], 'success');
+    //     $this->assertEquals($content['data']['query']['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
+    //     $this->assertEquals($content['data']['query']['name'], 'query1');
+    // }
+
     public function testGetWithResults() {
         if (enableElastic!=0) {
             $this->setElasticData();
@@ -233,6 +244,23 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals(count($content['data']['data']), 15);
         $this->assertEquals($content['data']['data'][6]['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
         $this->assertEquals($content['data']['data'][6]['name'], 'query1');
+        $this->assertEquals($content['data']['data'][7]['datasource_id'], 3);
+        $this->assertEquals($content['data']['data'][7]['name'], 'query2');
+        $this->assertEquals($content['data']['total'],15);
+    }
+
+    public function testGetListWithDeleted()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/query?show_deleted=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']['data']), 15);
+        $this->assertEquals($content['data']['data'][6]['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
+        $this->assertEquals($content['data']['data'][6]['name'], 'query1');
+        $this->assertEquals($content['data']['data'][6]['isdeleted'], 0);
         $this->assertEquals($content['data']['data'][7]['datasource_id'], 3);
         $this->assertEquals($content['data']['data'][7]['name'], 'query2');
         $this->assertEquals($content['data']['total'],15);

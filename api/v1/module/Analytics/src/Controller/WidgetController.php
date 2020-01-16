@@ -172,7 +172,7 @@ class WidgetController extends AbstractApiController
         try {
             $data=$this->extractPostData();
             $params = array_merge($data, $this->params()->fromRoute());
-            $result = $this->widgetService->copyWidget($params['widgetUuid']);
+            $result = $this->widgetService->copyWidget($params);
             $strResult = "${result}";
             if ($strResult != '0') {
                 $data['newWidgetUuid'] = $result;

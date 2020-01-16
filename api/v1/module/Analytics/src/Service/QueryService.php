@@ -35,6 +35,8 @@ class QueryService extends AbstractService
         $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_created'] = date('Y-m-d H:i:s');
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
+        if(isset($data['datasource_id']))
+            $data['datasource_id'] = $this->getIdFromUuid('ox_datasource',$data['datasource_id']);
         $form->exchangeWithSpecificKey($data,'value');
         $form->validate();
         $this->beginTransaction();
@@ -66,6 +68,8 @@ class QueryService extends AbstractService
             throw new Exception("Version is not specified, please specify the version");
         }
         $form = new Query();
+        if(isset($data['datasource_id']))
+            $data['datasource_id'] = $this->getIdFromUuid('ox_datasource',$data['datasource_id']);
         $form->exchangeWithSpecificKey($obj->toArray(), 'value');
         $form->exchangeWithSpecificKey($data,'value',true);
         $form->updateValidate();
@@ -156,7 +160,10 @@ class QueryService extends AbstractService
         $resultSet = $this->executeQuerywithParams($cntQuery.$where);
         $count=$resultSet->toArray()[0]['count'];
 
-        $query ="SELECT uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted FROM `ox_query`".$where." ".$sort." ".$limit;
+        if(isset($params['show_deleted']) && $params['show_deleted']==true)
+            $query ="SELECT uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted FROM `ox_query`".$where." ".$sort." ".$limit;
+        else
+            $query ="SELECT uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id FROM `ox_query`".$where." ".$sort." ".$limit;
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
         foreach ($result as $key => $value) {
@@ -196,6 +203,35 @@ class QueryService extends AbstractService
    //     }
 
         return $result;
+    }
+
+    public function previewQuery($params)
+    {
+        $errors = array();
+        if(isset($params['datasource_id']))
+            $datasource_id = $params['datasource_id'];
+        else
+            array_push($errors, array('message' => 'datasource_id is required'));
+
+        if(isset($params['configuration']))
+            $configuration = $params['configuration'];
+        else
+            array_push($errors, array('message' => 'configuration is required'));
+
+        if(count($errors) > 0){
+            $validationException = new ValidationException();
+            $validationException->setErrors($errors);
+            throw $validationException;
+        }
+        try{
+            $result = $this->runQuery($configuration,$datasource_id);
+        }
+        catch(Exception $e) {
+            $this->logger->error('Error in running the query');
+            $this->logger->error($e);
+            throw $e;
+        }
+        return $result['data'];
     }
 
     private function runQuery($configuration,$datasource_uuid)

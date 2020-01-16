@@ -158,7 +158,10 @@ class DashboardService extends AbstractService
         }
         $count = $resultSet->toArray()[0]['count'];
 
-        $query ='SELECT d.uuid, d.name, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id, d.isdeleted from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
+        if(isset($params['show_deleted']) && $params['show_deleted']==true)
+            $query ='SELECT d.uuid, d.name, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id, d.isdeleted from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
+        else
+            $query ='SELECT d.uuid, d.name, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
         try {
             $resultSet = $this->executeQuerywithParams($query);
         }

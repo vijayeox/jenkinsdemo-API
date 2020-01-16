@@ -38,6 +38,20 @@ return [
                     ],
                 ],
             ],
+            'previewQuery' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/analytics/query/:queryUuid/preview',
+                    'defaults' => [
+                        'controller' => Controller\QueryController::class,
+                        'method' => 'POST',
+                        'action' => 'previewQuery',
+                        'access' => [
+                            'previewQuery'=>'MANAGE_QUERY_WRITE'
+                        ],
+                    ],
+                ],
+            ],
             'visualization' => [
                 'type'    => Segment::class,
                 'options' => [
