@@ -20,6 +20,9 @@ final class Version20200116095333 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         $this->addSql("ALTER TABLE ox_form MODIFY COLUMN template LONGBLOB");
+        $this->addSql("ALTER TABLE ox_field MODIFY COLUMN template LONGBLOB");
+        $this->addSql("ALTER TABLE ox_field MODIFY COLUMN options LONGBLOB");
+        $this->addSql("ALTER TABLE ox_field MODIFY COLUMN name VARCHAR(2400)");
         // this up() migration is auto-generated, please modify it to your needs
 
     }
