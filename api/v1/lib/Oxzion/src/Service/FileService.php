@@ -582,12 +582,15 @@ class FileService extends AbstractService
                         if (!empty($val)) {
                             if($subQuery != ''){
                                 $subQuery .= " ".$filterlogic." a.id in ";
+                            } else {
+                                $subQuery = " a.id in ";
                             }
-                            $subQuery .= " (select ox_file.id from ox_file left join ox_file_attribute as " . $tablePrefix . " on (ox_file.id =" . $tablePrefix . ".file_id) left join ox_field as ".$val['field'].$tablePrefix." on( ".$val['field'].$tablePrefix.".id = " . $tablePrefix . ".field_id )";
+                            $subQuery .= " (select distinct ox_file.id from ox_file inner join ox_file_attribute as " . $tablePrefix . " on (ox_file.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$val['field'].$tablePrefix." on( ".$val['field'].$tablePrefix.".id = " . $tablePrefix . ".field_id )";
                             $filterOperator = $this->processFilters($val);
                             $queryString = $filterOperator["operation"]."'".$filterOperator["operator1"]."".$val['value']."".$filterOperator["operator2"]."'";
                             $subQuery .= " WHERE ";
-                            $subQuery .= " (".$val['field'].$tablePrefix.".entity_id = en.id and ".$val['field'].$tablePrefix.".name ='".$val['field']."' and (CASE WHEN (".$val['field'].$tablePrefix.".data_type='date') THEN CAST(".$tablePrefix.".field_value AS DATETIME) $queryString WHEN (".$val['field'].$tablePrefix.".data_type='int') THEN ".$tablePrefix.".field_value ".(($filterOperator['integerOperation']))." '".$val['value']."' ELSE (".$tablePrefix.".field_value $queryString) END )))";
+                            $subQuery .= " (".$val['field'].$tablePrefix.".entity_id = ox_file.entity_id and ".$val['field'].$tablePrefix.".name ='".$val['field']."' and (CASE WHEN (".$val['field'].$tablePrefix.".data_type='date') THEN CAST(".$tablePrefix.".field_value AS DATETIME) $queryString WHEN (".$val['field'].$tablePrefix.".data_type='int') THEN ".$tablePrefix.".field_value ".(($filterOperator['integerOperation']))." '".$val['value']."' ELSE (".$tablePrefix.".field_value $queryString) END )))";
+                            
                         }
                         if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
                             if ($sortParam[0]['field'] === $val['field']) {
@@ -598,7 +601,7 @@ class FileService extends AbstractService
                         $prefix += 1;
                     }
                     if($subQuery != ""){
-                        $whereQuery = " AND  (".$subQuery.")";
+                        $whereQuery = " AND (".$subQuery.")";
                     }
                 }
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
@@ -610,6 +613,7 @@ class FileService extends AbstractService
                 $countQuery = "select DISTINCT count(a.uuid) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
+                $this->logger->info("Executing COUNT query - $select with params - " . json_encode($queryParams));
                 $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
