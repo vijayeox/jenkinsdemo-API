@@ -183,6 +183,10 @@ class CommandService extends AbstractService
                 $this->logger->info("Process File Data");
                 return $this->processFileData($data);
                 break;
+            case 'deactivateFile':
+                $this->logger->info("DEcativate File ID");
+                return $this->deactivateFile($data);
+                break;
             default:
                 break;
         };
@@ -517,7 +521,7 @@ class CommandService extends AbstractService
         return $submitActivity;
     }
 
-    protected function processFileData($data){
+    protected function processFileData(&$data){
         $this->logger->info("Process File Data--");
         if(isset($data['data'])){
             $this->logger->info("Process File Data --");
@@ -528,4 +532,17 @@ class CommandService extends AbstractService
             return $processedData;
         }
     }
+
+    protected function deactivateFile(&$data){
+        $this->logger->info("Decativate File");
+        if (isset($data['fileId_fieldName']) && isset($data[$data['fileId_fieldName']])) {
+            $fileId = $data[$data['fileId_fieldName']];
+            $this->logger->info("FileId".print_r($fileId,true));
+            $update = "UPDATE ox_file SET latest = 0 where uuid = :fileId";
+            $updateArray = array('fileId' => $fileId);
+            $this->logger->info("Executing query - $update with params ".print_r($updateArray,true));
+            $result = $this->executeUpdatewithBindParameters($update, $updateArray);
+        }
+    }
 }
+    
