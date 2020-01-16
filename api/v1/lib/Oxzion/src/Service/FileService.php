@@ -271,8 +271,8 @@ class FileService extends AbstractService
             $params['uuid'] = $id;
             $update = $sql->update();
             $update->table('ox_file')
-                ->set(array('is_active' => 0))
-                ->where($params);
+            ->set(array('is_active' => 0))
+            ->where($params);
             $response = $this->executeUpdate($update);
             $id = $this->getIdFromUuid('ox_file', $id);
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
@@ -527,7 +527,7 @@ class FileService extends AbstractService
                         throw new ServiceException("User Does not Exist", "app.forusernot.found");
                     }
                 }
-                $fromQuery .= " inner join ox_field as d on (en.id = d.entity_id) left join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=f.id
+                $fromQuery .= " inner join ox_field as d on (en.id = d.entity_id) inner join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=f.id
                 INNER JOIN ox_file_attribute ofa on ofa.file_id = a.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
                 $userWhere = " and owufi.user_id = :userId and owufi.org_id = :orgId";
                 $queryParams['userId'] = $userId;
@@ -573,18 +573,21 @@ class FileService extends AbstractService
                 $filterlogic = isset($filterParamsArray[0]['filter']['logic']) ? $filterParamsArray[0]['filter']['logic'] : " AND ";
                 $cnt = 1;
                 $fieldParams = array();
+                $tableFilters = "";
                 if (isset($filterParamsArray[0]['filter'])) {
                     $filterData = $filterParamsArray[0]['filter']['filters'];
+                    $subQuery = "";
                     foreach ($filterData as $val) {
                         $tablePrefix = "tblf" . $prefix;
                         if (!empty($val)) {
-                            $joinQuery .= " left join ox_file_attribute as " . $tablePrefix . " on (a.id =" . $tablePrefix . ".file_id) left join ox_field as ".$val['field'].$tablePrefix." on( ".$val['field'].$tablePrefix.".id = " . $tablePrefix . ".field_id )";
+                            if($subQuery != ''){
+                                $subQuery .= " ".$filterlogic." a.id in ";
+                            }
+                            $subQuery .= " (select ox_file.id from ox_file left join ox_file_attribute as " . $tablePrefix . " on (ox_file.id =" . $tablePrefix . ".file_id) left join ox_field as ".$val['field'].$tablePrefix." on( ".$val['field'].$tablePrefix.".id = " . $tablePrefix . ".field_id )";
                             $filterOperator = $this->processFilters($val);
                             $queryString = $filterOperator["operation"]."'".$filterOperator["operator1"]."".$val['value']."".$filterOperator["operator2"]."'";
-                            if($prefix > 1){
-                                $whereQuery .= " ".$filterlogic." ";
-                            }
-                            $whereQuery .= "(".$val['field'].$tablePrefix.".entity_id = en.id and ".$val['field'].$tablePrefix.".name ='".$val['field']."' and (CASE WHEN (".$val['field'].$tablePrefix.".data_type='date') THEN CAST(".$tablePrefix.".field_value AS DATETIME) $queryString WHEN (".$val['field'].$tablePrefix.".data_type='int') THEN ".$tablePrefix.".field_value ".(($filterOperator['integerOperation']))." '".$val['value']."' ELSE (".$tablePrefix.".field_value $queryString) END )) ";
+                            $subQuery .= " WHERE ";
+                            $subQuery .= " (".$val['field'].$tablePrefix.".entity_id = en.id and ".$val['field'].$tablePrefix.".name ='".$val['field']."' and (CASE WHEN (".$val['field'].$tablePrefix.".data_type='date') THEN CAST(".$tablePrefix.".field_value AS DATETIME) $queryString WHEN (".$val['field'].$tablePrefix.".data_type='int') THEN ".$tablePrefix.".field_value ".(($filterOperator['integerOperation']))." '".$val['value']."' ELSE (".$tablePrefix.".field_value $queryString) END )))";
                         }
                         if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
                             if ($sortParam[0]['field'] === $val['field']) {
@@ -594,8 +597,8 @@ class FileService extends AbstractService
                         }
                         $prefix += 1;
                     }
-                    if($whereQuery != ""){
-                        $whereQuery = " AND (".$whereQuery.")";
+                    if($subQuery != ""){
+                        $whereQuery = " AND  (".$subQuery.")";
                     }
                 }
                 $pageSize = " LIMIT " . (isset($filterParamsArray[0]['take']) ? $filterParamsArray[0]['take'] : 10);
@@ -604,7 +607,7 @@ class FileService extends AbstractService
             $where .= " " . $whereQuery . "";
             $fromQuery .= " " . $joinQuery . "";
             try {
-                $countQuery = "SELECT count(id) as `count` FROM (SELECT distinct(a.id) $fromQuery  WHERE ($where) $userWhere) as id";
+                $countQuery = "select DISTINCT count(a.uuid) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
@@ -661,13 +664,13 @@ class FileService extends AbstractService
         switch ($value['data_type']) {
             case 'Date':
             case 'date':
-                $castString = "CAST($prefix.field_value AS DATETIME)";
-                break;
+            $castString = "CAST($prefix.field_value AS DATETIME)";
+            break;
             case 'int':
-                $castString = "CAST($prefix.field_value AS INT)";
-                break;
+            $castString = "CAST($prefix.field_value AS INT)";
+            break;
             default:
-                $castString = "($prefix.field_value)";
+            $castString = "($prefix.field_value)";
         }
         return $castString;
     }
@@ -773,10 +776,10 @@ class FileService extends AbstractService
         if (strtolower($fieldType) === 'date') {
             switch ($value) { //Based on the type of value, we can fetch the date
                 case 'today': 
-                    return Date("Y-m-d");
-                    break;
+                return Date("Y-m-d");
+                break;
                 default:
-                    return $value;
+                return $value;
             }
         }
         return $value;
