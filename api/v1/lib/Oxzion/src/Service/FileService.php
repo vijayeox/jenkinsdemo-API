@@ -608,6 +608,7 @@ class FileService extends AbstractService
             $fromQuery .= " " . $joinQuery . "";
             try {
                 $countQuery = "select DISTINCT count(a.uuid) as `count` $fromQuery  WHERE ($where) $userWhere";
+                $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
