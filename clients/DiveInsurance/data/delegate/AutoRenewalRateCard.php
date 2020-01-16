@@ -34,6 +34,7 @@ class AutoRenewalRateCard extends RateCard{
             $this->IPLRates($data);
         }
         $data['policyStatus'] = 'AutoRenewal Approval Pending';
+        $this->logger->info("AutoRenewalRateCard Final DATA".print_r($data,true));
         return $data;
     }
 
@@ -45,7 +46,6 @@ class AutoRenewalRateCard extends RateCard{
         $data['cylinderPrice'] = $data[$data['cylinder']];
         $data['excessLiabilityPrice'] = $data[$data['excessLiability']];
         $data['amount'] = (float)$data['careerCoveragePrice']+ (float)$data['scubaFitPrice']+ (float)$data['equipmentPrice'] +  (float)$data['cylinderPrice'] +(float)$data['excessLiabilityPrice'];
-        return $data;
     }
 
 // Data Cleanup is done here

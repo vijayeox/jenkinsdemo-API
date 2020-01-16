@@ -112,6 +112,7 @@ class CommandService extends AbstractService
                 $this->logger->info(CommandService::class . print_r($inputData, true));
             }
             if(isset($outputData)){
+                $this->logger->info("Process Command Data".print_r($outputData,true));
                 return $outputData;
             }
         }
@@ -517,10 +518,13 @@ class CommandService extends AbstractService
     }
 
     protected function processFileData($data){
+        $this->logger->info("Process File Data--");
         if(isset($data['data'])){
+            $this->logger->info("Process File Data --");
             $fileData = $data['data'];
             unset($data['data']);
             $processedData = array_merge($data,$fileData);
+            $this->logger->info("Processed Data".print_r($processedData,true));
             return $processedData;
         }
     }
