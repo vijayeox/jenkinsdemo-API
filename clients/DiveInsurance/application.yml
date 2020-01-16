@@ -479,9 +479,6 @@ menu:
             description: 'Lets CSR to input and check PADI Data'
             content:
                 -
-                    content: '<h3>Verify PADI Details</h3>'
-                    type: Document
-                -
                     formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
                     type: Form
         uuid: 9bf92403-2111-4d05-9d89-01a609ed4b83
