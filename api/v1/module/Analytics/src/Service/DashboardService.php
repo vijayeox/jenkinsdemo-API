@@ -141,7 +141,12 @@ class DashboardService extends AbstractService
     {
         $paginateOptions = FilterUtils::paginate($params);
         $where = $paginateOptions['where'];
-        $dashboardConditions = 'd.isdeleted <> 1 AND (d.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((d.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (d.ispublic = 1))';
+        if(isset($params['show_deleted']) && $params['show_deleted']==true){
+            $dashboardConditions = '(d.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((d.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (d.ispublic = 1))';
+        }
+        else{
+            $dashboardConditions = 'd.isdeleted <> 1 AND (d.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((d.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (d.ispublic = 1))';
+        }
         $where .= empty($where) ? "WHERE ${dashboardConditions}" : " AND ${dashboardConditions}";
         $sort = $paginateOptions['sort'] ? (' ORDER BY d.' . $paginateOptions['sort']) : '';
         $limit = ' LIMIT ' . $paginateOptions['pageSize'] . ' offset ' . $paginateOptions['offset'];
@@ -158,10 +163,12 @@ class DashboardService extends AbstractService
         }
         $count = $resultSet->toArray()[0]['count'];
 
-        if(isset($params['show_deleted']) && $params['show_deleted']==true)
+        if(isset($params['show_deleted']) && $params['show_deleted']==true){
             $query ='SELECT d.uuid, d.name, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id, d.isdeleted from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
-        else
+        }
+        else{
             $query ='SELECT d.uuid, d.name, d.ispublic, d.description, d.dashboard_type, IF(d.created_by = '.AuthContext::get(AuthConstants::USER_ID).', true, false) AS is_owner, d.org_id from ox_dashboard d ' . $where . ' ' . $sort . ' ' . $limit;
+        }
         try {
             $resultSet = $this->executeQuerywithParams($query);
         }

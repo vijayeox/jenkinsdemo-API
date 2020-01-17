@@ -368,7 +368,12 @@ class WidgetService extends AbstractService
     {
         $paginateOptions = FilterUtils::paginate($params);
         $where = $paginateOptions['where'];
-        $widgetConditions = '(w.isdeleted <> 1) AND (w.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';
+        if(isset($params['show_deleted']) && $params['show_deleted']==true) {
+            $widgetConditions = '(w.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';
+        }
+        else{
+            $widgetConditions = '(w.isdeleted <> 1) AND (w.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';
+        }
         $where .= empty($where) ? "WHERE ${widgetConditions}" : " AND ${widgetConditions}";
         $sort = $paginateOptions['sort'] ? (' ORDER BY w.' . $paginateOptions['sort']) : '';
         $limit = ' LIMIT ' . $paginateOptions['pageSize'] . ' OFFSET ' . $paginateOptions['offset'];
@@ -385,10 +390,12 @@ class WidgetService extends AbstractService
         }
         $count = $resultSet->toArray()[0]['count'];
 
-        if(isset($params['show_deleted']) && $params['show_deleted']==true)
+        if(isset($params['show_deleted']) && $params['show_deleted']==true){
             $query ='SELECT w.name, w.uuid, IF(w.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, w.ispublic, w.isdeleted, v.type, v.renderer FROM ox_widget w JOIN ox_visualization v ON w.visualization_id = v.id ' . $where. ' ' . $sort . ' ' . $limit;
-        else
+        }
+        else{
             $query ='SELECT w.name, w.uuid, IF(w.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, w.ispublic, v.type, v.renderer FROM ox_widget w JOIN ox_visualization v ON w.visualization_id = v.id ' . $where. ' ' . $sort . ' ' . $limit;
+        }
         try {
             $resultSet = $this->executeQuerywithParams($query);
         }

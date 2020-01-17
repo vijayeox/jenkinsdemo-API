@@ -128,7 +128,12 @@ class VisualizationService extends AbstractService
     {
         $paginateOptions = FilterUtils::paginate($params);
         $where = $paginateOptions['where'];
-        $where .= empty($where) ? "WHERE isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
+        if(isset($params['show_deleted']) && $params['show_deleted']==true){
+            $where .= empty($where) ? "WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
+        }
+        else{
+            $where .= empty($where) ? "WHERE isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND isdeleted <>1 AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
+        }
         $sort = $paginateOptions['sort'] ? " ORDER BY ".$paginateOptions['sort'] : '';
         $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
@@ -136,10 +141,12 @@ class VisualizationService extends AbstractService
         $resultSet = $this->executeQuerywithParams($cntQuery.$where);
         $count=$resultSet->toArray()[0]['count'];
 
-        if(isset($params['show_deleted']) && $params['show_deleted']==true)
+        if(isset($params['show_deleted']) && $params['show_deleted']==true){
             $query ="SELECT uuid,name,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted FROM `ox_visualization`".$where." ".$sort." ".$limit;
-        else
+        }
+        else{
             $query ="SELECT uuid,name,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id FROM `ox_visualization`".$where." ".$sort." ".$limit;
+        }
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
         foreach ($result as $key => $value) {
