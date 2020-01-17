@@ -57,7 +57,8 @@ class WidgetService extends AbstractService
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $this->commit();
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -406,7 +407,7 @@ class WidgetService extends AbstractService
     public function copyWidget($params)
     {
         $uuid = $params['widgetUuid'];
-        $query = 'SELECT w.uuid, w.ispublic, w.name, w.configuration, w.expression, w.created_by, w.visualization_id, q.uuid as query_uuid, wq.configuration as query_configuration, wq.sequence as query_sequence from ox_widget as w INNER JOIN ox_widget_query as wq on w.id=wq.ox_widget_id INNER JOIN ox_query as q ON wq.ox_query_id = q.id where w.uuid=:uuid and w.created_by=:created_by and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by) ORDER BY wq.sequence ASC';
+        $query = 'SELECT w.uuid, w.ispublic, w.name, w.configuration, w.expression, w.visualization_id, q.uuid as query_uuid, wq.configuration as query_configuration, wq.sequence as query_sequence from ox_widget as w INNER JOIN ox_widget_query as wq on w.id=wq.ox_widget_id INNER JOIN ox_query as q ON wq.ox_query_id = q.id where w.uuid=:uuid and w.created_by=:created_by and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by) ORDER BY wq.sequence ASC';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -427,22 +428,22 @@ class WidgetService extends AbstractService
                     ]);
                 }
                 $firstRow = $resultGet[0];
-                if(isset($params['name']))
+                if(isset($params['name'])) {
+                    //Use incoming name if sent by the client.
                     $name = $params['name'];
-                else
-                    $name = $firstRow['name'];
+                }
+                else {
+                    //Create unique name based on existing widget name if name is not given by the client.
+                    $name = $firstRow['name'] . '_copy_' . date('Y-m-d H:i:s');
+                }
                 $widget = [
-                    'uuid' => $firstRow['uuid'],
                     'ispublic' => $firstRow['ispublic'],
-                    'date_created' => $firstRow['date_created'],
                     'visualization_id' => $firstRow['visualization_id'],
                     'name' => $name,
                     'configuration' => $firstRow['configuration'],
                     'expression' => $firstRow['expression'],
                     'queries' => $queries
                 ];
-                unset($widget['id']);
-                $widget['name'] = $widget['name']."_copy_".date("YmdHis");
                 $resultCreate = $this->createWidget($widget);
                 return $resultCreate;
             }
