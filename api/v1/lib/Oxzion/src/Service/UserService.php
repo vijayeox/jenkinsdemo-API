@@ -170,7 +170,7 @@ class UserService extends AbstractService
 
         //Is this required?????
         if(count($result) > 1){
-           throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");       
+           throw new ServiceException("Username or Email Exists in other Organization","user.email.exists");       
         }
 
         if(count($result) == 1){
@@ -180,9 +180,9 @@ class UserService extends AbstractService
             if(in_array($data['orgid'],$orgList)){
                 $countval = 0;
                 if($result[0]['username'] == $data['username'] && $result[0]['status'] == 'Active'){
-                    throw new ServiceException("Username Exist","duplicate.username");
+                    throw new ServiceException("Username/Email Exists","duplicate.username");
                 }else if($result[0]['email'] == $data['email'] && $result[0]['status'] == 'Active'){
-                    throw new ServiceException("Email ID Exist","duplicate.email");
+                    throw new ServiceException("Email Exists","duplicate.email");
                 }else if($result[0]['status'] == "Inactive"){
                      $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : 0; 
                      if($data['reactivate'] == 1){
@@ -209,7 +209,7 @@ class UserService extends AbstractService
                      }
                 }
                 else{
-                    throw new ServiceException("Username or Email ID Exist in other Organization","user.email.exists");
+                    throw new ServiceException("Username or Email Exists in other Organization","user.email.exists");
                 }
             }
           if(isset($data['address1'])){
@@ -1276,7 +1276,7 @@ class UserService extends AbstractService
             $data['uuid'] = $result[0]['uuid'];
             return 1;
         }else{
-            throw new ServiceException("Username Used","username.exists");
+            throw new ServiceException("Username/Email Used","username.exists");
         }
     }
     public function getUsersList($appUUid,$params)

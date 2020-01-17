@@ -37,8 +37,6 @@
 			 <br/>
 
             </div>
- }
-}
 
 Regards,
 <br/><br/>

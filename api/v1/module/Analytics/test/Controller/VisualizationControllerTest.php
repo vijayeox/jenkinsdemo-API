@@ -178,6 +178,23 @@ class VisualizationControllerTest extends ControllerTest
         $this->assertEquals($content['data']['total'],6);
     }
 
+    public function testGetListWithDeleted()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/visualization?show_deleted=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']['data']), 6);
+        $this->assertEquals($content['data']['data'][4]['uuid'], '44f22a46-26d2-48df-96b9-c58520005817');
+        $this->assertEquals($content['data']['data'][4]['name'], 'Bar');
+        $this->assertEquals($content['data']['data'][4]['isdeleted'], 0);
+        $this->assertEquals($content['data']['data'][5]['name'], 'Aggregate');
+        $this->assertEquals($content['data']['data'][5]['uuid'], '101b3d1e-175b-43d8-ac38-485e80e6b2f3');
+        $this->assertEquals($content['data']['total'],6);
+    }
+
     public function testGetListWithSort()
     {
         $this->initAuthToken($this->adminUser);

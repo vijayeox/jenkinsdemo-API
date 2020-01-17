@@ -23,16 +23,39 @@ export default class OX_Grid extends React.Component {
     super(props);
     this.child = React.createRef();
     this.rawDataPresent = typeof this.props.data == "object" ? true : false;
+    var apiUrl = this.props.data;
+    var defaultFilters = {}
+    if(this.props.gridDefaultFilters){
+      defaultFilters = this.props.gridDefaultFilters;
+    }
+    if (typeof this.props.data == 'string') {
+      var splitUrl = this.props.data.split('?');
+      if(splitUrl[1]){
+        apiUrl = splitUrl[0];
+        var getUrlParams = decodeURI(splitUrl[1]).replace('?', '').split('&').map(param => param.split('=')).reduce((values, [ key, value ]) => {
+          values[ key ] = value
+          return values
+        }, {})
+        if(getUrlParams.filter){
+          try{
+            defaultFilters = JSON.parse(getUrlParams.filter);
+          } catch(e){
+            console.log(getUrlParams.filter)
+            console.log(e)
+            defaultFilters = getUrlParams.filter;
+          }
+        }
+      }
+    }
+    if(this.rawDataPresent){
+      apiUrl = undefined;
+    }
     this.state = {
       gridData: this.rawDataPresent ? this.props.data : [],
-      api: this.rawDataPresent ? undefined : this.props.data,
-      dataState: this.props.gridDefaultFilters
-        ? this.props.gridDefaultFilters
-        : {},
+      api: apiUrl,
+      dataState: defaultFilters,
       apiActivityCompleted: this.rawDataPresent ? true : false,
-      gridDefaultFilters: this.props.gridDefaultFilters
-        ? this.props.gridDefaultFilters
-        : {}
+      gridDefaultFilters: defaultFilters
     };
   }
 
@@ -40,7 +63,8 @@ export default class OX_Grid extends React.Component {
     $(document).ready(function() {
       $(".k-textbox").attr("placeholder", "Search");
     });
-    this.gridHeight = document.getElementsByClassName("PageRender")[0].clientHeight - 50;
+    this.gridHeight =
+      document.getElementsByClassName("PageRender")[0].clientHeight - 50;
   }
 
   dataStateChange = e => {
@@ -93,6 +117,7 @@ export default class OX_Grid extends React.Component {
                   <CustomCell
                     cellTemplate={dataItem.cell}
                     dataItem={item.dataItem}
+                    type={"cellTemplate"}
                   />
                 )
               : undefined
@@ -108,6 +133,7 @@ export default class OX_Grid extends React.Component {
                   <CustomCell
                     cellTemplate={dataItem.filterCell}
                     dataItem={item.dataItem}
+                    type={"filterTemplate"}
                   />
                 )
               : undefined
@@ -245,10 +271,7 @@ export default class OX_Grid extends React.Component {
 
   render() {
     return (
-      <div
-        style={{ height: "94%" }}
-        className="GridCustomStyle"
-      >
+      <div style={{ height: "94%" }} className="GridCustomStyle">
         {this.rawDataPresent ? (
           <DataOperation
             gridData={this.props.data}
@@ -299,7 +322,8 @@ export default class OX_Grid extends React.Component {
           expandField="expanded"
           {...this.state.dataState}
         >
-          {this.props.gridToolbar ? (
+          {(this.props.gridToolbar || this.props.gridOperations) &&
+          this.state.apiActivityCompleted ? (
             <GridToolbar>
               <div
                 style={{
@@ -308,12 +332,16 @@ export default class OX_Grid extends React.Component {
                   alignItems: "center"
                 }}
               >
-                <JsxParser
-                  bindings={{ gridData: this.state.gridData.data }}
-                  jsx={this.props.gridToolbar}
-                />
+                {this.props.gridToolbar ? (
+                  <JsxParser
+                    bindings={{ gridData: this.state.gridData.data }}
+                    jsx={this.props.gridToolbar}
+                  />
+                ) : (
+                  <div />
+                )}
                 <div>
-                  {this.props.gridOperations && this.state.apiActivityCompleted
+                  {this.props.gridOperations
                     ? this.renderListOperations(this.props.gridOperations)
                     : null}
                 </div>
@@ -333,17 +361,31 @@ class CustomCell extends GridCell {
     let checkType = typeof this.props.cellTemplate;
     if (checkType == "function") {
       var cellTemplate = this.props.cellTemplate(this.props.dataItem);
-      return (
-        <td
-          style={{
-            display: "flex",
-            justifyContent: "space-evenly",
-            cursor: "default"
-          }}
-        >
-          {cellTemplate}
-        </td>
-      );
+      if (this.props.type == "filterTemplate") {
+        return (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              cursor: "default"
+            }}
+          >
+            {cellTemplate}
+          </div>
+        );
+      } else {
+        return (
+          <td
+            style={{
+              display: "flex",
+              justifyContent: "space-evenly",
+              cursor: "default"
+            }}
+          >
+            {cellTemplate}
+          </td>
+        );
+      }
     } else if (checkType == "string") {
       return (
         <JsxParser

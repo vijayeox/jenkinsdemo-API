@@ -159,5 +159,26 @@ class QueryController extends AbstractApiController
         $result = $this->queryService->getQueryList($params);
         return $this->getSuccessResponseWithData($result);
     }
+
+    public function previewQueryAction()
+    {
+        $data = $this->params()->fromPost();
+        $params = array_merge($data, $this->params()->fromRoute());
+        try{
+            $result = $this->queryService->previewQuery($params);
+            if (!$result && !isset($params['queryUuid'])) {
+                return $this->getErrorResponse("Query Cannot be executed", 404, ['query uuid' => $params['queryUuid']]);
+            }
+        }
+        catch(ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        catch(Exception $e) {
+            $response = ['data' => $data, 'errors' => 'Query could not be executed'];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        }
+        return $this->getSuccessResponseWithData(array('result' => $result));
+    }
 }
 

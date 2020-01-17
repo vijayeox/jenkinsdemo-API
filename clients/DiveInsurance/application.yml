@@ -91,7 +91,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'file/user/me/status/Completed?filter=[{\"filter\":{\"logic\":\"and\",\"filters\":[{\"field\":\"policyStatus\",\"operator\":\"neq\",\"value\":\"Cancelled\"}]}}]'
+                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"}]}}'
                         filterable: false
                         reorderable: false
                         resizable: true
@@ -129,7 +129,7 @@ menu:
                                         type: Form
                                         url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store''' 
+                                rule: '''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'''
                                 icon: 'fa fa-window-close'
                         toolbarTemplate: '<h4>List of all policies</h4>'
                         operations:
@@ -172,11 +172,9 @@ menu:
                                 title: 'Policy Status'
                                 field: policyStatus
                             -
-                                title: 'Policy Start Date'
+                                title: 'Policy Effective Period'
+                                cell: '<td>{item.start_date}&nbsp;-&nbsp;{item.end_date}</td>'
                                 field: start_date
-                            -
-                                title: 'Policy End Date'
-                                field: end_date
     -
         name: 'My History'
         uuid: 623132d9-8ccb-4c8a-b7b7-a3b0921defdc
@@ -318,7 +316,7 @@ menu:
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
-                                field: entity_name
+                                field: entityName
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
@@ -406,13 +404,22 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 rule: '''{{policyStatus}}'' != ''Cancelled'''
                                 icon: 'fa fa-window-close'
+                            -
+                                name: 'Reinstate Policy'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                rule: '''{{policyStatus}}'' == ''Cancelled'''
+                                icon: 'fa fa-repeat'
                         filterColumns:
                             - name
                             - padi
                             - firstname
                             - lastname
                         operations:
-                            title: 'Get Policy'
+                            title: 'Create Policy'
                             actions:
                                 -
                                     name: IPL
@@ -472,15 +479,12 @@ menu:
             description: 'Lets CSR to input and check PADI Data'
             content:
                 -
-                    content: '<h3>Verify PADI Details</h3>'
-                    type: Document
-                -
                     formUuid: d2ed4200-9131-4671-b0e0-de3e27c3f610
                     type: Form
         uuid: 9bf92403-2111-4d05-9d89-01a609ed4b83
     -
         name: MyAssignments
-        privilege: MANAGE_MY_POLICY_WRITE
+        privilege: HIDE_FOR_NOW
         icon: 'fa fa-list'
         page:
             name: 'My Assignments'
@@ -568,16 +572,6 @@ workflow:
         bpmn_file: 'Individual Professional Liability/IPLEndorsement.bpmn'
         entity: 'Individual Professional Liability'
     -
-        name: 'Dive Store'
-        uuid: cb99e634-de00-468d-9230-d6f77d241c5b
-        bpmn_file: 'Dive Store/NewApplication.bpmn'
-        entity: 'Dive Store'
-    -
-        name: 'Dive Boat'
-        uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
-        bpmn_file: 'Dive Boat/NewApplicationSubmission.bpmn'
-        entity: 'Dive Boat'
-    -
         name: 'Individual Liability Auto Renewal'
         uuid: 91cb9e10-5845-4379-97c9-f9486b702bd6
         bpmn_file: 'Individual Professional Liability/IPLAutoRenewal.bpmn'
@@ -597,6 +591,11 @@ workflow:
         uuid: 35139ac6-3229-11ea-aec2-2e728ce88125
         bpmn_file: 'Emergency First Response/EFREndorsement.bpmn'
         entity: 'Emergency First Response'
+    -
+        name: 'Reinstate Policy'
+        uuid: 81cb9e10-5845-4379-97c9-f9486b702bdb
+        bpmn_file: 'Cancel Policy/ReinstatePolicy.bpmn'
+        entity: 'Individual Professional Liability'
 form:
     -
         name: 'PADI Verification'

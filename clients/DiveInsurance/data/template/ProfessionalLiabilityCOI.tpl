@@ -46,60 +46,70 @@
 		</div>
 		<div class="spacing">&nbsp</div>
 		<hr class="hrtag"></hr>
-    	<div class="i_type">
-      		<div class="i_type1">
-        		<div class = "in-type">
-		           <b class = "ins_type">Type of Insurance</b>
-		           <div class = "ins_data" style="margin-top: 10px;">
-			           <p class = "ins_font"><b>COVERAGE:</b></p>
-			           <p class = "ins_font"><b>COMBINED SINGLE LIMIT:</b></p>
-			           <p class = "ins_font"><b class = "space">ANNUAL AGGREGATE:</b></p>
-		       	   </div>
-	        	</div>
-	        	<div class = "in-type1"> 
-		            <p class = "ins_type"  style="margin-bottom: 10px;margin-left:1px;">Professional Liability - Claims Made Form</p>
-			            <p class = "ins_font">Insured's Status: {$careerCoverage} {if isset($scubaFitPrice)} <span> and {$scubaFitPrice} </span>{/if}</p>
-			            <p class = "ins_font">$1,000,000&nbsp&nbsp&nbsp(per occurrence)</p>
-			            <p class = "ins_font">$2,000,000</p>
-		        </div>
-	     	</div>
-	     	<div class="i_type2">
-		       <div class="i-type" style="margin-top: 9px;">
-		           <p class = "ins_font">&nbsp</p>
-		           <p class = "ins_font">&nbsp</p>
-		           <p class = "ins_font"><b>Equipment Liability:</b></p>
-		           <p class = "ins_font"><b>Cylinder Coverage:</b></p>
-		       </div>
-		       <div class="i-type" style="margin-top: 9px;">
-		          <p class = "ins_font">&nbsp</p>
-		          <p class = "ins_font">&nbsp</p>
-		          <p class = "ins_font">{if isset($equipmentPrice)}
-		          			{$equipmentPrice}
-		          		{else}
-		          			Not Included
-		          		{/if}</p>
-		          <p class = "ins_font">{if isset($cylinderPrice)}
-		          			{$cylinderPrice}
-		          		{else}
-		          			Not Covered
-		          		{/if}
-		          </p>
-		       </div>
-     		</div>
-    	</div>
+
+		<div>
+			<div class="i_type">
+				<div class="i_type1">
+						<table>
+							<tr>
+								<th nowrap><p class = "ins_font1">Type of Insurance:</p></th>
+								<td><p class = "ins_font"> Professional Liability - Claims Made Form </p></td>
+							</tr>
+							<tr>
+								<th nowrap><b class = "ins_font">COVERAGE:</b></th>
+								<td><p class = "ins_font">Insured's Status: {$careerCoverageVal} {if $scubaFit != "scubaFitInstructorDeclined"} <span> and {$scubaFitVal} </span>{/if}</p></td>
+							</tr>
+							<tr>
+								<th nowrap><b class = "ins_font">COMBINED SINGLE LIMIT:</COMBINED></th>
+								<td><p class = "ins_font">$1,000,000&nbsp&nbsp&nbsp(per occurrence)</p></td>
+							</tr>
+							<tr>
+								<th nowrap><b class = "ins_font">ANNUAL AGGREGATE:</b></th>
+								<td><p class = "ins_font">$2,000,000</p></td>
+							</tr>
+						</table>
+				</div>
+				<div class="i_type2 marginTop">
+						<table>
+							<tr>
+								<th nowrap><p class = "ins_font"><b>Equipment Liability:</b></p></th>
+								<td><p class = "ins_font">{if $equipment != "equipmentLiabilityCoverageDeclined"}
+											Included
+										{else}
+											Not Included
+										{/if}
+									</p>
+								</td>
+							</tr>
+							<tr>
+								<th nowrap><p class = "ins_font"><b>Cylinder Coverage:</b></p></th>
+								<td><p class = "ins_font">{if $cylinder != "cylinderInspectorOrInstructorDeclined"}
+											{$cylinderPriceVal}
+										{else}
+											Not Covered
+										{/if}
+									</p>
+								</td>
+							</tr>
+						</table>
+				</div>
+			</div>
     	
-    	<hr class="hrtag"></hr>
-    	<center><p class = "policy_notice1">Retroactive Date: {$start_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$start_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
-			   to the date that the alleged negligent act, error, or omission occurred.
-		</p></center>
-		<hr class = "spacing1"></hr>
-		<b><center><p class = "phy_add">Physical Address {if !$sameasmailingaddress} 
-										 : {$mailaddress1},{$mailaddress2}
-									  {else}
-										is the same as the mailing address
-									{/if}
-			</p></center></b>
-		<hr class="hrtag1"></hr>
+			<div class="policy_notice_div">
+				<hr class="hrtag"></hr>
+					<center><p class = "policy_notice1">Retroactive Date: {$start_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$start_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
+						to the date that the alleged negligent act, error, or omission occurred.
+					</p></center>
+					<hr class = "spacing1"></hr>
+					<b><center><p class = "phy_add">Physical Address {if !$sameasmailingaddress} 
+													: {$mailaddress1},{$mailaddress2}
+												{else}
+													is the same as the mailing address
+												{/if}
+						</p></center></b>
+				<hr class="hrtag1"></hr>
+			</div>
+		</div>
 		<div class = "second_content">
 			{if isset($update)}
 			{assign var=endrosement value=$endorsement_options|json_decode:true}
@@ -175,7 +185,7 @@
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/IPLSurplus/IL.tpl"}</b>
 				</p></center>
-			{elseif $state == 'International'}
+			{elseif $state == '' || !isset($state)}
 				<center><p class = "notice">
 					<b>{include file = "{$smarty.current_dir}/IPLSurplus/International.tpl"}</b>
 				</p></center>

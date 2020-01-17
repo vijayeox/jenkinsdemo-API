@@ -57,7 +57,8 @@ class WidgetService extends AbstractService
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
             $this->commit();
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) {
             $this->rollback();
             throw $e;
         }
@@ -367,7 +368,12 @@ class WidgetService extends AbstractService
     {
         $paginateOptions = FilterUtils::paginate($params);
         $where = $paginateOptions['where'];
-        $widgetConditions = '(w.isdeleted <> 1) AND (w.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';
+        if(isset($params['show_deleted']) && $params['show_deleted']==true) {
+            $widgetConditions = '(w.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';
+        }
+        else{
+            $widgetConditions = '(w.isdeleted <> 1) AND (w.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';
+        }
         $where .= empty($where) ? "WHERE ${widgetConditions}" : " AND ${widgetConditions}";
         $sort = $paginateOptions['sort'] ? (' ORDER BY w.' . $paginateOptions['sort']) : '';
         $limit = ' LIMIT ' . $paginateOptions['pageSize'] . ' OFFSET ' . $paginateOptions['offset'];
@@ -384,7 +390,12 @@ class WidgetService extends AbstractService
         }
         $count = $resultSet->toArray()[0]['count'];
 
-        $query ='SELECT w.name, w.uuid, IF(w.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, w.ispublic, w.isdeleted, v.type, v.renderer FROM ox_widget w JOIN ox_visualization v ON w.visualization_id = v.id ' . $where. ' ' . $sort . ' ' . $limit;
+        if(isset($params['show_deleted']) && $params['show_deleted']==true){
+            $query ='SELECT w.name, w.uuid, IF(w.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, w.ispublic, w.isdeleted, v.type, v.renderer FROM ox_widget w JOIN ox_visualization v ON w.visualization_id = v.id ' . $where. ' ' . $sort . ' ' . $limit;
+        }
+        else{
+            $query ='SELECT w.name, w.uuid, IF(w.created_by = ' . AuthContext::get(AuthConstants::USER_ID) . ', true, false) AS is_owner, w.ispublic, v.type, v.renderer FROM ox_widget w JOIN ox_visualization v ON w.visualization_id = v.id ' . $where. ' ' . $sort . ' ' . $limit;
+        }
         try {
             $resultSet = $this->executeQuerywithParams($query);
         }
@@ -400,9 +411,10 @@ class WidgetService extends AbstractService
                      'total' => $count);
     }
 
-    public function copyWidget($uuid)
+    public function copyWidget($params)
     {
-        $query = 'SELECT w.uuid, w.ispublic, w.date_created, w.name, w.configuration, w.expression, w.created_by, w.visualization_id, q.uuid as query_uuid, wq.configuration as query_configuration from ox_widget as w INNER JOIN ox_widget_query as wq on w.id=wq.ox_widget_id INNER JOIN ox_query as q ON wq.ox_query_id = q.id where w.uuid=:uuid and w.created_by=:created_by and w.org_id=:org_id';
+        $uuid = $params['widgetUuid'];
+        $query = 'SELECT w.uuid, w.ispublic, w.name, w.configuration, w.expression, w.visualization_id, q.uuid as query_uuid, wq.configuration as query_configuration, wq.sequence as query_sequence from ox_widget as w INNER JOIN ox_widget_query as wq on w.id=wq.ox_widget_id INNER JOIN ox_query as q ON wq.ox_query_id = q.id where w.uuid=:uuid and w.created_by=:created_by and w.org_id=:org_id and (w.ispublic=true OR w.created_by=:created_by) ORDER BY wq.sequence ASC';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -418,22 +430,27 @@ class WidgetService extends AbstractService
                 foreach($resultGet as $row) {
                     array_push($queries, [
                         'uuid' => $row['query_uuid'],
+                        'sequence' => $row['query_sequence'],
                         'configuration' => $row['query_configuration']
                     ]);
                 }
                 $firstRow = $resultGet[0];
+                if(isset($params['name'])) {
+                    //Use incoming name if sent by the client.
+                    $name = $params['name'];
+                }
+                else {
+                    //Create unique name based on existing widget name if name is not given by the client.
+                    $name = $firstRow['name'] . '_copy_' . date('Y-m-d H:i:s');
+                }
                 $widget = [
-                    'uuid' => $firstRow['uuid'],
                     'ispublic' => $firstRow['ispublic'],
-                    'date_created' => $firstRow['date_created'],
                     'visualization_id' => $firstRow['visualization_id'],
-                    'name' => $firstRow['name'],
+                    'name' => $name,
                     'configuration' => $firstRow['configuration'],
                     'expression' => $firstRow['expression'],
                     'queries' => $queries
                 ];
-                unset($widget['id']);
-                $widget['name'] = $widget['name']."_copy_".date("YmdHis");
                 $resultCreate = $this->createWidget($widget);
                 return $resultCreate;
             }

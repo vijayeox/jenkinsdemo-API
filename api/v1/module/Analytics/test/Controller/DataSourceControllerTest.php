@@ -181,6 +181,23 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals($content['total'],3);
     }
 
+    public function testGetListWithDeleted()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/analytics/datasource?show_deleted=true', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 3);
+        $this->assertEquals($content['data'][1]['uuid'], '7700c623-1361-4c85-8203-e255ac995c4a');
+        $this->assertEquals($content['data'][1]['name'], 'mattermost');
+        $this->assertEquals($content['data'][1]['isdeleted'], 0);
+        $this->assertEquals($content['data'][2]['type'], 'Elastic');
+        $this->assertEquals($content['data'][2]['name'], 'reporting engine');
+        $this->assertEquals($content['total'],3);
+    }
+
     public function testGetListWithSort()
     {
         $this->initAuthToken($this->adminUser);

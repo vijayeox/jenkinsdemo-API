@@ -92,7 +92,7 @@ api()
     #building API
     cd api/v1
     echo -e "${YELLOW}Building API....${RESET}"
-    docker run -t -v ${PWD}:/var/www v1_zf composer install
+    docker run -t -v ${PWD}:/var/www v1_zf composer install -n
     cd ${OXHOME}
     mkdir -p build/api/v1
     #copy contents of ap1v1 to build
@@ -109,7 +109,7 @@ camel()
     cd ${OXHOME}/integrations/camel
     echo -e "${YELLOW}Building Camel${RESET}"
     echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/integrations/camel/src/main/resources/application.yml src/main/resources/
+    scp -i ${PEM} -r ${SERVER}:env/integrations/camel/src/main/resources/* src/main/resources/
     #building camel
     docker run --network="host" -t -v ${PWD}:/workspace/app --entrypoint ./docker-build.sh camel
     echo -e "${GREEN}Building Camel Completed!${RESET}"

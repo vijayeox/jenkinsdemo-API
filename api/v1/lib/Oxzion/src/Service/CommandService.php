@@ -112,6 +112,7 @@ class CommandService extends AbstractService
                 $this->logger->info(CommandService::class . print_r($inputData, true));
             }
             if(isset($outputData)){
+                $this->logger->info("Process Command Data".print_r($outputData,true));
                 return $outputData;
             }
         }
@@ -177,6 +178,14 @@ class CommandService extends AbstractService
             case 'submitActivity':
                 $this->logger->info("SUBMIT ACTIVITY");
                 return $this->submitActivity($data);
+                break;
+            case 'processFileData':
+                $this->logger->info("Process File Data");
+                return $this->processFileData($data);
+                break;
+            case 'deactivateFile':
+                $this->logger->info("DEcativate File ID");
+                return $this->deactivateFile($data);
                 break;
             default:
                 break;
@@ -508,7 +517,32 @@ class CommandService extends AbstractService
 
     protected function submitActivity(&$data)
     {
-        $startWorkflow = $this->workflowInstanceService->submitActivity($data);
-        return $startWorkflow;
+        $submitActivity = $this->workflowInstanceService->submitActivity($data);
+        return $submitActivity;
+    }
+
+    protected function processFileData(&$data){
+        $this->logger->info("Process File Data--");
+        if(isset($data['data'])){
+            $this->logger->info("Process File Data --");
+            $fileData = $data['data'];
+            unset($data['data']);
+            $processedData = array_merge($data,$fileData);
+            $this->logger->info("Processed Data".print_r($processedData,true));
+            return $processedData;
+        }
+    }
+
+    protected function deactivateFile(&$data){
+        $this->logger->info("Decativate File");
+        if (isset($data['fileId_fieldName']) && isset($data[$data['fileId_fieldName']])) {
+            $fileId = $data[$data['fileId_fieldName']];
+            $this->logger->info("FileId".print_r($fileId,true));
+            $update = "UPDATE ox_file SET latest = 0 where uuid = :fileId";
+            $updateArray = array('fileId' => $fileId);
+            $this->logger->info("Executing query - $update with params ".print_r($updateArray,true));
+            $result = $this->executeUpdatewithBindParameters($update, $updateArray);
+        }
     }
 }
+    

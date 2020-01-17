@@ -42,45 +42,37 @@ export default class Register extends React.Component {
                   <div id="formio"></div>
                 </div>
                 <div id="login">
-                <div className="loginBlock">
-                <div className="LoginDiv">
-                  <h1>Welcome Back!</h1>
-                  <div className="floating-label">
-                    <input
-                      required
-                      id="username"
-                      name="username"
-                      autoComplete="off"
-                      placeholder="Username"
-                    />
-                      <label htmlFor="username">Username:</label>
-                     </div>
-                  <div className="floating-label">
-                    <input
-                      type="password"
-                      id="password"
-                      name="password"
-                      placeholder="Password"
-                      required
-                      autoComplete="off"
-                      />
-                      <label htmlFor="password">Password:</label>
+                  <div className="loginBlock">
+                    <div className="LoginDiv">
+                      <h1>Welcome Back!</h1>
+                      <div className="floating-label">
+                        <input
+                          required
+                          id="username"
+                          name="username"
+                          autoComplete="off"
+                          placeholder="Username"
+                        />
+                        <label htmlFor="username">Username:</label>
                       </div>
-                  <div id="wrongPassword" style={{paddingBottom:"30px", display:"none"}}>
-                    <span>
-                      The username and/or password is incorrect! Please try
-                      again.
-                    </span>
-                  </div>
-                  <p className="forgot">
-                    <a href="#">Forgot Password?</a>
-                  </p>
-                  <button className="button button-block loginButton">
-                    Log In
-                  </button>
+                      <div className="floating-label">
+                        <input
+                          type="password"
+                          id="password"
+                          name="password"
+                          placeholder="Password"
+                          required
+                          autoComplete="off"
+                        />
+                        <label htmlFor="password">Password:</label>
+                      </div>
+                      <button className="button button-block loginButton">
+                        Log In
+                      </button>
+                      <a className="resetPassword">Forgot your password?</a>
+                    </div>
                   </div>
                 </div>
-              </div>
               </div>
             </div>
           </section>

@@ -167,6 +167,17 @@ class FormRender extends React.Component {
     );
     return pageContent;
   }
+  async getForm() {
+    // call to api using wrapper
+    let helper = this.core.make("oxzion/restClient");
+    let form = await helper.request(
+      "v1",
+      "/app/" + this.state.appId + "/form/" + this.state.formId,
+      {},
+      "get"
+    );
+    return form;
+  }
 
   async getFileData() {
     // call to api using wrapper
@@ -360,6 +371,20 @@ class FormRender extends React.Component {
             console.log(response.data);
             that.setState({ content: JSON.parse(response.data.template) });
           }
+        } else {
+          this.getForm().then(response => {
+            if (response.status == "success" ) {
+             if(response.data.workflow_id){
+              that.setState({ workflowId: response.data.workflow_id });
+            }
+            if (response.data.activity_id) {
+              that.setState({ activityId: response.data.activity_id });
+            }
+            if (!that.state.content) {
+              that.setState({ content: JSON.parse(response.data.template) });
+            }
+          }
+        });
         }
         that.setState({ formDivID: "formio_" + that.state.formId });
         that.createForm();
@@ -517,6 +542,20 @@ class FormRender extends React.Component {
 
         form.on("change", function (changed) {
           var formdata = changed;
+          for (var dataItem in form.submission.data) {
+            if(typeof form.submission.data[dataItem] == 'object'){
+              if(form.submission.data[dataItem]){
+                var checkComponent = form.getComponent(dataItem);
+                if(checkComponent && checkComponent.type == 'datagrid'){
+                  for(var rowItem in Object.keys(form.submission.data[dataItem])){
+                    if(Array.isArray(form.submission.data[dataItem][rowItem])){
+                      form.submission.data[dataItem][rowItem] = Object.assign({},form.submission.data[dataItem][rowItem]);
+                    }
+                  }
+                }
+              }
+            }
+          }
           var formdataArray = [];
           for (var formDataItem in formdata.data) {
             if (formdata.data.hasOwnProperty(formDataItem)) {
@@ -525,7 +564,6 @@ class FormRender extends React.Component {
           }
           if (changed && changed.changed) {
             var component = changed.changed.component;
-              console.log(changed);
             var properties = component.properties;
             if (properties) {
               if (properties["delegate"]) {
@@ -580,6 +618,16 @@ class FormRender extends React.Component {
                       }
                     }
                   }
+                }
+              }
+              if(properties['negate']){
+                var targetComponent = form.getComponent(properties["negate"]);
+                if (changed.changed.value && targetComponent) {
+                    if(changed.changed.value.value){
+                      targetComponent.setValue(!changed.changed.value.value);
+                    } else {
+                      targetComponent.setValue(!changed.changed.value);
+                    }
                 }
               }
               if(properties['render']){
@@ -880,7 +928,8 @@ class FormRender extends React.Component {
           this.setState({
             content: JSON.parse(data.template),
             data: this.addAddlData(response.data.form_data),
-            workflowId: response.workflow_id
+            formId: data.id,
+            workflowId: response.data.workflow_id
           });
           this.createForm();
         }

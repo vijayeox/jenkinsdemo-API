@@ -1,7 +1,7 @@
 <?php
 use Oxzion\AppDelegate\MailDelegate;
 
-abstract class DispatchNotification extends MailDelegate
+class DispatchReinstatePolicyMail extends MailDelegate
 {
 
     public function __construct()
