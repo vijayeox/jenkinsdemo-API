@@ -122,6 +122,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
            }
            
            if(isset($data['upgradeCareerCoverage'])){
+               if(!is_array($data['upgradeCareerCoverage'])){
+                $coverageOnCsrReview = json_decode($data['upgradeCareerCoverage'],true);
+                $data['upgradeCareerCoverage'] = $coverageOnCsrReview;
+               }
             $data['upgradeCareerCoverageVal'] = $data['upgradeCareerCoverage']['label'];
             array_push($coverageList,$data['upgradeCareerCoverageVal']);
            }
