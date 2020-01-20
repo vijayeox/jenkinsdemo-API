@@ -356,7 +356,7 @@ class WidgetControllerTest extends ControllerTest
     public function testGetListWithDeleted()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget', 'GET');
+        $this->dispatch('/analytics/widget?show_deleted=true', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
