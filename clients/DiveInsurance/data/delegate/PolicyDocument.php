@@ -70,7 +70,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                      'aifooter' => 'DiveStore_AI_footer.html',
                      'lpTemplate' => 'DiveStore_LP',
                      'lpheader' => 'DiveStore_LP_header.html',
-                     'lpfooter' => 'DiveStore_LP_footer.html'),
+                     'lpfooter' => 'DiveStore_LP_footer.html',
+                     'aniTemplate' => 'DiveStore_ANI',
+                     'aniheader' => 'DS_Quote_ANI_header.html',
+                     'anifooter' => null,),
         'Emergency First Response'
             => array('template' => 'Emergency_First_Response_COI',
                      'header' => 'EFR_header.html',
@@ -106,6 +109,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         unset($data['dest']);
 
         if(isset($data['careerCoverage']) || isset($data['scubaFit']) || isset($data['cylinder']) || isset($data['equipment'])){
+            $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
             $coverageList = array();
             array_push($coverageList,$data['careerCoverage']);
             if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor"){
@@ -145,10 +149,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }    
 
         if(isset($this->template[$data['product']]['instruct'])){
+            $this->logger->info("DOCUMENT instruct");
             $documents['instruct'] = $this->copyDocuments($data,$dest['relativePath'],'instruct');
         }
 
         if($this->type == 'lapse'){
+            $this->logger->info("DOCUMENT lapse");
             return $this->generateDocuments($data,$dest,$options,'ltemplate','lheader','lfooter');
         }
     
@@ -160,29 +166,55 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         }
 
         if($this->type == 'endorsement'){
+            $this->logger->info("DOCUMENT endorsement");
             $data['documents']['endorsement'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
             return $data;
         }
 
-        if(isset($temp['liability'])){
-            $temp['liability'] = json_encode($temp['liability']);
-            $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
-            if($this->type != 'quote')
-            {
-                $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','liability');
-            }
+        if(isset($temp['additionalInsured'])){
+            $this->logger->info("DOCUMENT additionalInsured");
+            $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
         }
 
-        if(isset($temp['property'])){
-            $temp['property'] = json_encode($temp['property']);
-            $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
-            if($this->type != 'quote')
-            {
-                $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
+        if(isset($temp['lossPayees'])){
+            $this->logger->info("DOCUMENT lossPayees");
+            $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
+        }
+
+        if(isset($temp['additionalLocations'])){
+            $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
+            $documents['additionalLocations_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+        }
+
+        if(isset($temp['additionalNamedInsured'])){
+            $this->logger->info("DOCUMENT additionalNamedInsured");
+            $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
+        }
+
+        if($this->type != 'quote'){
+            if(isset($temp['liability'])){
+                $this->logger->info("DOCUMENT liability");
+                $temp['liability'] = json_encode($temp['liability']);
+                $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
+                if($this->type != 'quote')
+                {
+                    $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','liability');
+                }
+            }
+    
+            if(isset($temp['property'])){
+                $this->logger->info("DOCUMENT property");
+                $temp['property'] = json_encode($temp['property']);
+                $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
+                if($this->type != 'quote')
+                {
+                    $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
+                }
             }
         }
 
         if(!isset($documents['property_coi_document']) && !isset($documents['liability_coi_document'])){
+            $this->logger->info("DOCUMENT coi_document");
             $this->logger->info("Policy Documnet Generation");
             $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
             if($this->type != 'quote')
@@ -202,36 +234,39 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         // }
 
         if(isset($temp['groupPL'])){
+            $this->logger->info("DOCUMENT groupPL");
             $document['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
         }
 
 
         if(isset($this->template[$temp['product']]['cover_letter'])){
+            $this->logger->info("DOCUMENT cover_letter");
             $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
         }
 
         if(isset($temp['loss_payees']) && $temp['loss_payees'] == 'yes'){
+            $this->logger->info("DOCUMENT loss_payees");
             $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
         }
 
         if(isset($temp['AdditionalInsuredOption']) && $temp['AdditionalInsuredOption'] == 'newListOfAdditionalInsureds'){
+            $this->logger->info("DOCUMENT AdditionalInsuredOption");
             $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
         }
 
 
         if(isset($this->template[$temp['product']]['blanketForm'])){
+            $this->logger->info("DOCUMENT blanketForm");
             $documents['blanket_document'] = $this->copyDocuments($temp,$dest['relativePath'],'blanketForm');
         }
 
         if(isset($temp['additional_named_insureds_option']) && $temp['additional_named_insureds_option'] == 'yes'){
+            $this->logger->info("DOCUMENT additional_named_insureds_option");
             $documents['additionalNamedInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
         }
 
-        if(isset($temp['additionalLocations'])){
-            $documents['additionalLocations_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
-        }
-
         if(isset($temp['namedInsured'])){
+            $this->logger->info("DOCUMENT namedInsured");
             $documents['named_insured_document'] = $this->generateDocuments($temp,$dest,$options,'nTemplate','nheader','nfooter');
         }
         $this->logger->info("temp".print_r($data,true));
@@ -360,11 +395,18 @@ class PolicyDocument extends AbstractDocumentAppDelegate
         $this->logger->info("policy document destination is : ".print_r($dest, true));
         $this->logger->info("policy document options is : ".print_r($options, true));
         $this->logger->info("policy document data is : ".print_r($data, true));
+        $this->logger->info("Product : ".print_r($this->template[$data['product']], true));
+        $this->logger->info("TEMPLATE KEY ARRAY : ".print_r($this->template[$data['product']][$templateKey],true));
+        $this->logger->info("index key : ".print_r($indexKey,true));
+        
         if(isset($indexKey)){
+            $this->logger->info("template with indexKey");
             $template =  $this->template[$data['product']][$templateKey][$indexKey];
         }else{
+            $this->logger->info("template without indexKey");
             $template =  $this->template[$data['product']][$templateKey];
         }
+        $this->logger->info("template slected: ".print_r($template, true));
         $docDest = $dest['absolutePath'].$template.'.pdf';
 
         if($template == 'Group_PL_COI'){
