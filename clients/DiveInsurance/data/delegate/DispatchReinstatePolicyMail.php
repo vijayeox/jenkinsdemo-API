@@ -6,22 +6,20 @@ use Oxzion\Encryption\Crypto;
 require_once __DIR__."/DispatchNotification.php";
 
 class DispatchReinstatePolicyMail extends DispatchNotification
-{
-
-    public $template;
- 
+{ 
     public function __construct(){
         $this->template = array(
-            'Individual Professional Liability' => 'CancelPolicyMailTemplate',
-            'Dive Boat' => 'CancelPolicyMailTemplate',
-            'Dive Store' => 'CancelPolicyMailTemplate');
+            'Individual Professional Liability' => 'ReinstatePolicyMailTemplate',
+            'Dive Boat' => 'ReinstatePolicyMailTemplate',
+            'Emergency First Response' => 'ReinstatePolicyMailTemplate',
+            'Dive Store' => 'ReinstatePolicyMailTemplate');
         parent::__construct();
         
     }
 
-    protected function execute(array $data)
+    public function execute(array $data, Persistence $persistenceService)
     {
-        $this->logger->info("Dispatch reinstate policy mail notification" .json_encode($data));
+        $this->logger->info("Dispatch reinstate policy mail notification");
         $data['template'] = $this->template[$data['product']];
         $data['subject'] = 'Policy Auto Renewal';
         $response = $this->dispatch($data);
@@ -35,3 +33,4 @@ class DispatchReinstatePolicyMail extends DispatchNotification
         return $response;
     }
 }
+?>
