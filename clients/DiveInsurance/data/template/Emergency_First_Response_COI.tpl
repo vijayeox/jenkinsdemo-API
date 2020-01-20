@@ -70,6 +70,7 @@
 		       &nbsp
      		</div>
     	</div>
+		<br/>
     	
     	<hr class="hrtag_efr"></hr>
     	<center><p class = "policy_notice1">Retro Date: {$start_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$start_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior
