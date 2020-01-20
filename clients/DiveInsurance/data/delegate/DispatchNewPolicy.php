@@ -16,15 +16,18 @@ class DispatchNewPolicy extends DispatchDocument {
         $this->template = array(
             'Individual Professional Liability' => 'COIPolicyMailTemplate',
             'Dive Boat' => 'diveBoatPolicyMailTemplate',
-            'Dive Store' => 'diveStorePolicyMailTemplate');
+            'Dive Boat' => 'diveBoatPolicyMailTemplate',
+            'Emergency First Response' => 'EFRMailTemplate');
         $this->document = array(
             'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','slWording','blanket_document','additionalInsured_document','scuba_fit_document','cylinder_document','equipment_liability_document']),
             'Dive Boat' => array('docs' => ['policy_document','coi_document','cover_letter']),
-            'Dive Store' => array('docs' => ['policy_document','coi_document','cover_letter']));
+            'Dive Store' => array('docs' => ['liability_policy_document','property_policy_document','property_coi_document','liability_coi_document','cover_letter']),
+            'Emergency First Response' => array('docs' => ['policy_document','coi_document']));
         $this->required = array(
             'Individual Professional Liability' => array('docs' => ['policy_document','coi_document','blanket_document']),
             'Dive Boat' => array('docs' => ['policy_document','coi_document','cover_letter']),
-            'Dive Store' => array('docs' => ['policy_document','coi_document','cover_letter']));
+            'Dive Store' => array('docs' => ['liability_policy_document','property_policy_document','property_coi_document','liability_coi_document','cover_letter']),
+            'Emergency First Response' => array('docs' => ['policy_document','coi_document']));
         parent::__construct();
     }
 
