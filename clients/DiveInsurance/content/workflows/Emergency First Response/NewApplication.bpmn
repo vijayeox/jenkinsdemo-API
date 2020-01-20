@@ -27,7 +27,7 @@
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0skn9yz</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_0k7vc52</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_16x67nk</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0yz4jp1</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0bys5d1">
@@ -35,15 +35,6 @@
       <bpmn:outgoing>SequenceFlow_0skn9yz</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_19h4wd9</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="ServiceTask_0mi7rid" name="Schedule a reminder mail for Auto Renewal" camunda:expression="0">
-      <bpmn:extensionElements>
-        <camunda:properties>
-          <camunda:property />
-        </camunda:properties>
-      </bpmn:extensionElements>
-      <bpmn:incoming>SequenceFlow_19h4wd9</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0k7vc52</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:userTask id="UserTask_198io8g" name="CSR Review" camunda:candidateUsers="saditha,bharatg,rajeshs" camunda:candidateGroups="CSR group">
       <bpmn:extensionElements>
         <camunda:properties>
@@ -64,17 +55,55 @@
     <bpmn:sequenceFlow id="SequenceFlow_0skn9yz" name="No" sourceRef="ExclusiveGateway_0bys5d1" targetRef="ServiceTask_0nx5fx7">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0k7vc52" sourceRef="ServiceTask_0mi7rid" targetRef="ServiceTask_0nx5fx7" />
     <bpmn:sequenceFlow id="SequenceFlow_0yz4jp1" sourceRef="ServiceTask_0nx5fx7" targetRef="EndEvent_0rxtnh7" />
     <bpmn:sequenceFlow id="SequenceFlow_1qw7e28" name="Approved" sourceRef="UserTask_198io8g" targetRef="ExclusiveGateway_0bys5d1">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==true || approved == "true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_19h4wd9" name="Yes" sourceRef="ExclusiveGateway_0bys5d1" targetRef="ServiceTask_0mi7rid">
+    <bpmn:sequenceFlow id="SequenceFlow_19h4wd9" name="Yes" sourceRef="ExclusiveGateway_0bys5d1" targetRef="ServiceTask_1yu6h97">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${automatic_renewal==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0y308ra" sourceRef="UserTask_198io8g" targetRef="EndEvent_0jlpwd4">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==false || approved == "false"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="ServiceTask_1yu6h97" name="Schedule a reminder mail for Auto Renewal" camunda:expression="0">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property />
+        </camunda:properties>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="command">schedule</camunda:inputParameter>
+          <camunda:inputParameter name="url">setupjob</camunda:inputParameter>
+          <camunda:inputParameter name="jobUrl">
+            <camunda:script scriptFormat="groovy">def jobUrl = '/workflow/91cb9e10-5845-4379-97c9-f9486b702bd6'</camunda:script>
+          </camunda:inputParameter>
+          <camunda:inputParameter name="cron">
+            <camunda:script scriptFormat="groovy">Calendar calendar = Calendar.getInstance();
+def day = calendar.get(Calendar.DAY_OF_MONTH); 
+def hour = calendar.get(Calendar.HOUR_OF_DAY);
+def minute = calendar.get(Calendar.MINUTE);
+def cron = '0 '+(minute+1)+' '+hour+' '+day+' JAN ? 2020';</camunda:script>
+          </camunda:inputParameter>
+          <camunda:inputParameter name="send_reminder">true</camunda:inputParameter>
+          <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">def variables = execution.getVariables()
+def fileId = variables.fileId
+def workflowId = variables.workflowId
+if(fileId){
+  execution.setVariable("previous_fileId",fileId)
+} 
+if(workflowId){
+  execution.setVariable("parent_workflow_id",workflowId) 
+}
+execution.removeVariable("workflowId")
+execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_19h4wd9</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_16x67nk</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_16x67nk" sourceRef="ServiceTask_1yu6h97" targetRef="ServiceTask_0nx5fx7" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1mgkvtn">
@@ -96,9 +125,6 @@
       <bpmndi:BPMNShape id="ExclusiveGateway_0bys5d1_di" bpmnElement="ExclusiveGateway_0bys5d1" isMarkerVisible="true">
         <dc:Bounds x="713" y="52" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0mi7rid_di" bpmnElement="ServiceTask_0mi7rid">
-        <dc:Bounds x="795" y="233" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UserTask_198io8g_di" bpmnElement="UserTask_198io8g">
         <dc:Bounds x="398" y="37" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -119,11 +145,6 @@
           <dc:Bounds x="881" y="59" width="14" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0k7vc52_di" bpmnElement="SequenceFlow_0k7vc52">
-        <di:waypoint x="895" y="273" />
-        <di:waypoint x="1061" y="273" />
-        <di:waypoint x="1061" y="117" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0yz4jp1_di" bpmnElement="SequenceFlow_0yz4jp1">
         <di:waypoint x="1111" y="77" />
         <di:waypoint x="1292" y="77" />
@@ -137,15 +158,23 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_19h4wd9_di" bpmnElement="SequenceFlow_19h4wd9">
         <di:waypoint x="738" y="102" />
-        <di:waypoint x="738" y="273" />
-        <di:waypoint x="795" y="273" />
+        <di:waypoint x="738" y="260" />
+        <di:waypoint x="840" y="260" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="744" y="186" width="19" height="14" />
+          <dc:Bounds x="878" y="313" width="19" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0y308ra_di" bpmnElement="SequenceFlow_0y308ra">
         <di:waypoint x="448" y="117" />
         <di:waypoint x="448" y="231" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1yu6h97_di" bpmnElement="ServiceTask_1yu6h97">
+        <dc:Bounds x="840" y="220" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_16x67nk_di" bpmnElement="SequenceFlow_16x67nk">
+        <di:waypoint x="940" y="260" />
+        <di:waypoint x="1061" y="260" />
+        <di:waypoint x="1061" y="117" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
