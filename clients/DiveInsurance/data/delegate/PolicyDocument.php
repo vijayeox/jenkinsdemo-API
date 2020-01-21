@@ -58,23 +58,26 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             'anifooter' => null),
             'Dive Store'
             => array('template' => array('liability' => 'DiveStore_Liability_COI','property' => 'DiveStore_Property_COI'),
-            'header' => 'DiveStoreHeader.html',
-            'footer' => 'DiveStoreFooter.html',
-            'slWording' => 'SL Wording.pdf',
-            'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
-            'cover_letter' => 'Dive_Store_Cover_Letter',
-            'lheader' => 'letter_header.html',
-            'lfooter' => 'letter_footer.html',
-            'aiTemplate' => 'DiveStore_AI',
-            'aiheader' => 'DiveStore_AI_header.html',
-            'aifooter' => 'DiveStore_AI_footer.html',
-            'lpTemplate' => 'DiveStore_LP',
-            'lpheader' => 'DiveStore_LP_header.html',
-            'lpfooter' => 'DiveStore_LP_footer.html',
-            'aniTemplate' => 'DiveStore_ANI',
-            'aniheader' => 'DS_Quote_ANI_header.html',
-            'anifooter' => null,),
-            'Emergency First Response'
+                     'header' => 'DiveStoreHeader.html',
+                     'footer' => 'DiveStoreFooter.html',
+                     'slWording' => 'SL Wording.pdf',
+                     'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
+                     'cover_letter' => 'Dive_Store_Cover_Letter',
+                     'lheader' => 'letter_header.html',
+                     'lfooter' => 'letter_footer.html',
+                     'aiTemplate' => 'DiveStore_AI',
+                     'aiheader' => 'DiveStore_AI_header.html',
+                     'aifooter' => 'DiveStore_AI_footer.html',
+                     'lpTemplate' => 'DiveStore_LP',
+                     'lpheader' => 'DiveStore_LP_header.html',
+                     'lpfooter' => 'DiveStore_LP_footer.html',
+                     'aniTemplate' => 'DiveStore_ANI',
+                     'aniheader' => 'DS_Quote_ANI_header.html',
+                     'anifooter' => null,
+                     'gtemplate' => 'Group_PL_COI',
+                     'gheader' => 'Group_header.html',
+                     'gfooter' => 'Group_footer.html',),
+        'Emergency First Response'
             => array('template' => 'Emergency_First_Response_COI',
             'header' => 'EFR_header.html',
             'footer' => 'EFR_footer.html',
@@ -183,17 +186,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 return $data;
             }
             
-            if(isset($temp['additionalInsured'])){
+            if(isset($temp['additionalInsured']) && $temp['additionalInsuredSelect']=="yes"){
                 $this->logger->info("DOCUMENT additionalInsured");
                 $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
             }
             
-            if(isset($temp['lossPayees'])){
+            if(isset($temp['lossPayees']) && $temp['lossPayeesSelect']=="yes"){
                 $this->logger->info("DOCUMENT lossPayees");
                 $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
             }
             
-            if(isset($temp['additionalLocations'])){
+            if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
                 $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
                 $documents['additionalLocations_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
             }
