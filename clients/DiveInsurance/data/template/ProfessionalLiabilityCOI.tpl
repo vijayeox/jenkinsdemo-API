@@ -113,8 +113,17 @@
 		<div class = "second_content">
 			{if isset($update_date)}
 			{assign var=endrosement value=$endorsement_options|json_decode:true}
-				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
-				<p class = "policy_status">Status of Insured : {$upgradeCareerCoverageVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
+			{assign var=previousCoverages value=$previous_careerCoverage|json_decode:true}
+			{assign var=encode value=previousCoverages|json_encode:true}
+				<p {$encode} class ="policy_update"><b>Endorsements & Upgrades:</b></p>
+				{if isset($previous_careerCoverage) && !empty($previous_careerCoverage)}
+					{foreach name=outer from=$previousCoverages item=previousCoverage}
+						{foreach key=key item=item from=$previousCoverage}
+							<p class = "policy_status">Status of Insured : {$key} as of {$item|date_format:"%m/%d/%Y"}</p>
+						{/foreach}
+					{/foreach}
+				{/if}
+				<p class = "policy_status" >Status of Insured : {$upgradeCareerCoverageVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
 			{/if}
 
 			<hr></hr>
