@@ -70,10 +70,12 @@ class AppDelegateService extends AbstractService
                     $obj->setMessageProducer($this->messageProducer);
                     $obj->setDocumentPath($destination);
                     $obj->setBaseUrl($this->config['applicationUrl']);
-                } else if (is_a($obj, FileDelegate::class)) {
-                    $this->logger->info(AppDelegateService::class . "FileDelegate DELEGATE ---");
+                } 
+                if(method_exists($obj, "setFileService")){
                     $obj->setFileService($this->fileService);
-                    $obj->setAppId($appId);
+                }
+                if(method_exists($obj, "setAppId")){
+                    $obj->setAppId($appId);                
                 }
                 if(method_exists($obj, "setUserContext")){
                     $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
