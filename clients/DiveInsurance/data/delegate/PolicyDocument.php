@@ -120,6 +120,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($data['equipment']) && $data['equipment'] == "equipmentLiabilityCoverage"){
                 $documents['equipment_liability_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplEquipment');
            }
+           
+           if(isset($data['upgradeCareerCoverage'])){
+               if(!is_array($data['upgradeCareerCoverage'])){
+                $coverageOnCsrReview = json_decode($data['upgradeCareerCoverage'],true);
+                $data['upgradeCareerCoverage'] = $coverageOnCsrReview;
+               }
+            $data['upgradeCareerCoverageVal'] = $data['upgradeCareerCoverage']['label'];
+            array_push($coverageList,$data['upgradeCareerCoverageVal']);
+           }
            $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
            $result = json_decode($result,true);
          
@@ -129,6 +138,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
            if(isset($result[$data['cylinder']])){
                 $data['cylinderPriceVal'] = $result[$data['cylinder']];
            }
+           if( isset($data['upgradeCareerCoverageVal']) && isset($result[$data['upgradeCareerCoverageVal']])){
+            $data['upgradeCareerCoverageVal'] = $result[$data['upgradeCareerCoverageVal']];
+       }
            $data['careerCoverageVal'] = $result[$data['careerCoverage']];
         }    
 

@@ -546,6 +546,7 @@ class FileService extends AbstractService
             $field = "";
             $pageSize = " LIMIT 10";
             $offset = " OFFSET 0";
+            $sortjoinQuery = "";
             if (!empty($filterParams)) {
                 if (isset($filterParams['filter']) && !is_array($filterParams['filter'])) {
                     $jsonParams = json_decode($filterParams['filter'], true);
@@ -588,13 +589,21 @@ class FileService extends AbstractService
                             $subQuery .= " (".$val['field'].$tablePrefix.".entity_id = ox_file.entity_id and ".$val['field'].$tablePrefix.".name ='".$val['field']."' and (CASE WHEN (".$val['field'].$tablePrefix.".data_type='date') THEN CAST(".$tablePrefix.".field_value AS DATETIME) $queryString WHEN (".$val['field'].$tablePrefix.".data_type='int') THEN ".$tablePrefix.".field_value ".(($filterOperator['integerOperation']))." '".$val['value']."' ELSE (".$tablePrefix.".field_value $queryString) END )))";
                             
                         }
-                        if (isset($filterParamsArray[0]['sort']) && count($filterParamsArray[0]['sort']) > 0) {
-                            if ($sortParam[0]['field'] === $val['field']) {
-                                $sort = "ORDER BY " . $tablePrefix . ".field_value";
-                                $field = " , " . $tablePrefix . ".field_value";
-                            }
-                        }
                         $prefix += 1;
+                    }
+                    if(isset($filterParamsArray[0]['sort']) && !empty($filterParamsArray[0]['sort'])){
+                        $sortCount=0;
+                        $sortTable = "tblf" . $sortCount;
+                        $sort = " ORDER BY ";
+                        foreach ($filterParamsArray[0]['sort'] as $key => $value) {
+                            if($sortCount == 0){
+                                $sort .= $value['field']." ".$value['dir'];
+                            } else {
+                                $sort .= ",".$value['field']." ".$value['dir'];
+                            }
+                            $field .= " , (select ".$sortTable.".field_value from ox_file_attribute as ".$sortTable." inner join ox_field as ".$value['field'].$sortTable." on( ".$value['field'].$sortTable.".id = " . $sortTable . ".field_id)  WHERE ".$value['field'].$sortTable.".name='".$value['field']."' AND ".$sortTable.".file_id=a.id) as ".$value['field'];
+                            $sortCount += 1;
+                        }
                     }
                     if($subQuery != ""){
                         $whereQuery = " AND (".$subQuery.")";
@@ -604,13 +613,13 @@ class FileService extends AbstractService
                 $offset = " OFFSET " . (isset($filterParamsArray[0]['skip']) ? $filterParamsArray[0]['skip'] : 0);
             }
             $where .= " " . $whereQuery . "";
-            $fromQuery .= " " . $joinQuery . "";
+            $fromQuery .= " " . $joinQuery." ".$sortjoinQuery;
             try {
                 $countQuery = "select DISTINCT count(a.uuid) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $this->logger->info("Executing COUNT query - $select with params - " . json_encode($queryParams));
-                $select = "SELECT DISTINCT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
+                $select = "SELECT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 if ($resultSet) {
