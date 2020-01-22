@@ -41,7 +41,7 @@ return [
             'previewQuery' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/analytics/query/:queryUuid/preview',
+                    'route'    => '/analytics/query/preview',
                     'defaults' => [
                         'controller' => Controller\QueryController::class,
                         'method' => 'POST',
