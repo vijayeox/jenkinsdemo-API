@@ -49,7 +49,7 @@ RUN rm -f /tmp/camunda-${DISTRO}.sh \
 
 ENV CAMUNDA_VERSION=${VERSION}
 ENV DB_DRIVER=com.mysql.jdbc.Driver
-ENV DB_HOST=localhost
+ENV DB_HOST=172.16.1.111
 ENV DB_USER=root
 ENV DB_PASS=password
 ENV DB_URL=jdbc:mysql://${DB_HOST}/process-engine
