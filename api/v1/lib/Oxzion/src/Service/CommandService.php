@@ -218,13 +218,13 @@ class CommandService extends AbstractService
     protected function scheduleJob(&$data)
     {
         $this->logger->info("DATA  ------" . json_encode($data));
-        if (!isset($data['jobUrl']) || !isset($data['cron']) || !isset($data['url']) || !isset($data['jobName'])) {
+        if (!isset($data['jobUrl']) || !isset($data['cron']) || !isset($data['jobName'])) {
             $this->logger->info("jobUrl/Cron/Url/JobName Not Specified");
             throw new EntityNotFoundException("JobUrl or Cron Expression or URL or JobName Not Specified");
         }
         $jobUrl = $data['jobUrl'];
         $cron = $data['cron'];
-        $url = $data['url'];
+        $url = 'setupjob';
 
         $this->logger->info("jobUrl - $jobUrl, url -$url");
         unset($data['jobUrl'], $data['cron'], $data['command'], $data['url']);
@@ -244,28 +244,31 @@ class CommandService extends AbstractService
         $fileData = json_encode($data);
         $params = array("filedata" => $fileData, "fileUuid" => $data['fileId']);
         $query = "UPDATE ox_file SET data = :filedata where uuid = :fileUuid";
-        $this->executeQueryWithBindParameters($query, $params);
-        return $response;
+        $this->executeUpdateWithBindParameters($query, $params);
+        // return $response;
     }
 
     protected function canceljob(&$data)
     {
         try {
             $this->logger->info("DATA  ------" . json_encode($data));
-            $url = $data['url'];
+            $url = 'canceljob';
             if (!isset($data['jobName'])) {
-                throw new EntityNotFoundException("Job Name Not Specified");
+                $this->logger->warn("Job Name not specified, so job not cancelled");
+                return $data;
             }
             $jobName = $data['jobName'];
             if (!isset($data[$jobName])) {
-                throw new EntityNotFoundException("Job " . $jobName . " Not Specified");
+                $this->logger->warn("Job Details not found, so job not cancelled");
+                return $data;
             }
             $JobData = json_decode($data[$jobName], true);
             if (!isset($JobData['jobId']) || !isset($JobData['jobGroup'])) {
-                throw new EntityNotFoundException("Job Id or Job Group Not Specified");
+                $this->logger->warn("Job Id or Job Group Not Specified, so job not cancelled");
+                return $data;
             }
             $jobPayload = array('jobid' => $JobData['jobId'], 'jobgroup' => $JobData['jobGroup']);
-            unset($data['url'], $data[$jobName]);
+            unset($data[$jobName]);
             $response = $this->restClient->postWithHeader($url, $jobPayload);
         } catch (Exception $e) {
             $this->logger->info("CLEAR JOB RESPONSE ---- " . print_r($e->getMessage(), true));
@@ -281,7 +284,7 @@ class CommandService extends AbstractService
             throw $e;
         }
         $this->logger->info("Response - " . print_r($response, true));
-        return $response;
+        // return $response;
     }
 
     protected function fileSave(&$data)
