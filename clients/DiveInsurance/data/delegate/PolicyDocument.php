@@ -251,11 +251,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
 
-            if($this->type == 'quote'){
-                $this->logger->info("DOCUMENT coi_document");
-                $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
-            }
-            else{
+            if($this->type != 'quote'){
                 if(isset($temp['liability'])){
                     $this->logger->info("DOCUMENT liability_coi_document");
                     $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
@@ -268,6 +264,16 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
                     $this->logger->info("DOCUMENT property_policy_document");
                     $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
+                }
+            }
+
+            if(!isset($documents['property_coi_document']) && !isset($documents['liability_coi_document'])){
+                $this->logger->info("DOCUMENT coi_document");
+                $this->logger->info("Policy Documnet Generation");
+                $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+                if($this->type != 'quote')
+                {
+                    $documents['policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy');
                 }
             }
             
