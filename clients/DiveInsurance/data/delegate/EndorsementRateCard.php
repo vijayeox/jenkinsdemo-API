@@ -8,44 +8,65 @@ class EndorsementRatecard extends AbstractAppDelegate
     public function __construct(){
         parent::__construct();
     }
-
+    
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("Executing Endorsement Rate Card".json_encode($data));
         $endorsementCoverages = array();
         $endorsementExcessLiability = array();
         $endorsementCylinder = array();
+        
         if(!isset($data['previous_scuba'])){
             $data['previous_scuba'] = isset($data['scubaFit'])? $data['scubaFit']: '';
         }
         if(!isset($data['previous_equipmentLiability'])){
             $data['previous_equipmentLiability'] = isset($data['equipment'])?$data['equipment'] :'' ;
         }
-        if(!isset($data['previous_careerCoverage'])){
-            $endorsementCoverages[$data['previous_careerCoverage']] = $data['careerCoverageVal'];
-            $premiumRateCardDetails[$data['previous_careerCoverage']] = 0.00;
+        
+        if(isset($data['upgradeCareerCoverage']) && (!empty($data['upgradeCareerCoverage']))){
+            if(!isset($data['previous_careerCoverage']) || !is_array($data['previous_careerCoverage'])){
+                $data['previous_careerCoverage'] = array();
+            }
+            if(!is_array($data['upgradeCareerCoverage'])){
+                $coverageOnCsrReview = json_decode($data['upgradeCareerCoverage'],true);
+                $data['upgradeCareerCoverage'] = $coverageOnCsrReview;
+            }
+            if(!isset($data['approved'])){
+                $data['previous_careerCoverage'][] = array($data['upgradeCareerCoverage']['label'] => $data['update_date']);
+                foreach($data['previous_careerCoverage'] as $key => $value){
+                        if($key != $data['upgradeCareerCoverage']['label'] ){
+                            $data['previous_careerCoverage'] = $data['previous_careerCoverage'];
+                        }
+                }
+            }
+            $endorsementCoverages[$data['upgradeCareerCoverage']['value']] = $data['upgradeCareerCoverage']['label'];
+            $premiumRateCardDetails[$data['upgradeCareerCoverage']['value']] = 0.00;
+            $previousKey = $data['upgradeCareerCoverage']['value'];
+        }else {
+            $previousKey = $data['careerCoverage'];
+            // $endorsementCoverages[$data['careerCoverage']] = $data['careerCoverageVal'];
+            $premiumRateCardDetails[$data['careerCoverage']] = 0.00;
         }
-        if(!isset($data['previous_excessLiability'])){
-            $data['previous_excessLiability'] = $data['excessLiability'];
-            $endorsementExcessLiability[$data['previous_excessLiability']] = $data['excessLiability'];
-            $premiumRateCardDetails[$data['previous_excessLiability']] = 0.00;
-        }
-        if(!isset($data['previous_cylinder'])){
-            $data['previous_cylinder'] = $data['cylinder'];
-            $endorsementCylinder[$data['previous_cylinder']] = $data['cylinder'];
-            $premiumRateCardDetails[$data['previous_cylinder']] = 0.00;
-        }
+        
+        $data['previous_excessLiability'] = (!isset($data['upgradeExcessLiability']) || empty($data['upgradeExcessLiability'])) ?
+        $data['excessLiability'] : $data['upgradeExcessLiability']['value'];
+        $premiumRateCardDetails[$data['previous_excessLiability']] = 0.00;        
+                
+        $data['previous_cylinder'] = (!isset($data['upgradecylinder']) || empty($data['upgradecylinder'])) ? 
+        $data['cylinder'] : $data['upgradecylinder']['value'];
+        $premiumRateCardDetails[$data['previous_cylinder']] = 0.00;
+        
         if(!isset($data['update_date'])){
             $data['update_date'] =  date("Y-m-d H:i:s");
         }
-
+        
         $selectCylinder = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['previous_cylinder']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
         $this->logger->info("Executing Endorsement Rate Card Cylinder Query ".$selectCylinder);
         $resultCylinder = $persistenceService->selectQuery($selectCylinder);
         while ($resultCylinder->next()) {
             $rate = $resultCylinder->current();
             if(isset($rate['key'])){
-                if($rate['key'] == $data['previous_cylinder']){
+                if((!isset($data['upgradecylinder']) || empty($data['upgradecylinder']))&& $rate['key'] == $data['previous_cylinder']){
                     $data['upgradecylinder'] = array('value'=>$data['previous_cylinder'],'label'=>$rate['coverage']);
                 }
                 $endorsementCylinder[$rate['key']] = $rate['coverage'];
@@ -64,7 +85,8 @@ class EndorsementRatecard extends AbstractAppDelegate
         while ($resultExcessLiability->next()) {
             $rate = $resultExcessLiability->current();
             if(isset($rate['key'])){
-                if($rate['key'] == $data['previous_excessLiability']){
+                if((!isset($data['upgradeExcessLiability']) || empty($data['upgradeExcessLiability'])) 
+                && $rate['key'] == $data['previous_excessLiability']){
                     $data['upgradeExcessLiability'] = array('value'=>$data['previous_excessLiability'],'label'=>$rate['coverage']);
                 }
                 $endorsementExcessLiability[$rate['key']] = $rate['coverage'];
@@ -76,15 +98,16 @@ class EndorsementRatecard extends AbstractAppDelegate
             }
             unset($rate);
         }
-
-        $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['previous_careerCoverage']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
+        
+        $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$previousKey."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
         $this->logger->info("Executing Endorsement Rate Card Query".$select);
         $result = $persistenceService->selectQuery($select);
         while ($result->next()) {
             $rate = $result->current();
             if(isset($rate['key'])){
-                if($rate['key'] == $data['previous_careerCoverage']){
-                    $data['upgradeCareerCoverage'] = array('value'=>$data['previous_careerCoverage'],'label'=>$rate['coverage']);
+                if((!isset($data['upgradeCareerCoverage']) || empty($data['upgradeCareerCoverage'])) 
+                && $rate['key'] == $previousKey){
+                    $data['upgradeCareerCoverage'] = array('value'=>$previousKey,'label'=>$rate['coverage']);
                 }
                 $endorsementCoverages[$rate['key']] = $rate['coverage'];
                 if(isset($rate['total'])){
@@ -95,7 +118,7 @@ class EndorsementRatecard extends AbstractAppDelegate
             }
             unset($rate);
         }
-
+        
         $selectEquipment = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$data['previous_equipmentLiability']."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
         $this->logger->info("Executing Endorsement Rate Card Equipment Query".$selectEquipment);
         $resultEquipment= $persistenceService->selectQuery($selectEquipment);

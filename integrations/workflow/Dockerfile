@@ -34,7 +34,7 @@ RUN mkdir -p /camunda \
 
 
 RUN MYSQL_VERSION=5.1.21 \
-    && wget -O /tmp/mysql-connector-java-${MYSQL_VERSION}.jar "http://central.maven.org/maven2/mysql/mysql-connector-java/${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}.jar" \ 
+    && wget -O /tmp/mysql-connector-java-${MYSQL_VERSION}.jar "https://repo1.maven.org/maven2/mysql/mysql-connector-java/${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}.jar" \ 
     && cp /tmp/mysql-connector-java-${MYSQL_VERSION}.jar /camunda/lib 
 
 # remove default CATALINA_OPTS from environment settings

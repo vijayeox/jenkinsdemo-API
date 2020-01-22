@@ -37,7 +37,7 @@
     font-weight: 600;
     color: #1a1a1a;
     height: 60px;
-    padding: 0 1rem 0 2.5rem;
+    padding: 20px 1rem 0 2.5rem;
     font-size: 1.75rem;
     font-weight: 300;
     width: 100%;
@@ -108,5 +108,8 @@ border: 0;
     width: 100%;
     top: 5%;
     position: absolute;
+}
+.searchInput:focus {
+  outline-color:transparent;
 }
 

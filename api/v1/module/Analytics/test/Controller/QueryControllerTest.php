@@ -110,7 +110,7 @@ class QueryControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => "querytest", 'datasource_id' => 2, 'version' => 1];
+        $data = ['name' => "querytest", 'datasource_id' => '7700c623-1361-4c85-8203-e255ac995c4a', 'version' => 1];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query/8f1d2819-c5ff-4426-bc40-f7a20704a738', 'PUT', null);

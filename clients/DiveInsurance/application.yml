@@ -41,14 +41,14 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 3
-        uuid: 38880e3a-6bee-43c1-bd4d-9431d78a084b
+        uuid: afce2402-d113-463e-8527-2a9966bcc9b8
     -
         name: CSR
         privileges:
             -
                 privilege_name: MANAGE_POLICY_APPROVAL
                 permission: 3
-        uuid: ef71307c-7bdc-4dd3-bc75-afdc0ab2790a
+        uuid: c24baf77-2ad7-4956-9f79-280086df27d0
 entity:
     -
         name: 'Individual Professional Liability'
@@ -91,7 +91,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"}]}}'
+                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"Rejected"}]}}'
                         filterable: false
                         reorderable: false
                         resizable: true
@@ -316,7 +316,7 @@ menu:
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
-                                field: entityName
+                                field: entity_name
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
@@ -386,9 +386,18 @@ menu:
                     content:
                         actions:
                             -
+                                name: Endorsement
+                                rule: '''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'''
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
                                 name: View
                                 icon: 'fa fa-envelope-open'
-                                rule: 'true'
+                                rule: '''{{policyStatus}}'' != ''Rejected'''
                                 details:
                                     -
                                         type: View
@@ -402,17 +411,8 @@ menu:
                                         type: Form
                                         url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{policyStatus}}'' != ''Cancelled'''
+                                rule: '''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'''
                                 icon: 'fa fa-window-close'
-                            -
-                                name: 'Reinstate Policy'
-                                details:
-                                    -
-                                        type: Form
-                                        url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
-                                        workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{policyStatus}}'' == ''Cancelled'''
-                                icon: 'fa fa-repeat'
                         filterColumns:
                             - name
                             - padi
@@ -591,11 +591,6 @@ workflow:
         uuid: 35139ac6-3229-11ea-aec2-2e728ce88125
         bpmn_file: 'Emergency First Response/EFREndorsement.bpmn'
         entity: 'Emergency First Response'
-    -
-        name: 'Reinstate Policy'
-        uuid: 81cb9e10-5845-4379-97c9-f9486b702bdb
-        bpmn_file: 'Cancel Policy/ReinstatePolicy.bpmn'
-        entity: 'Individual Professional Liability'
 form:
     -
         name: 'PADI Verification'

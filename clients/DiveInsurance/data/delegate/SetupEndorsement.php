@@ -14,8 +14,17 @@ class SetupEndorsement extends AbstractAppDelegate
         $this->logger->info("Executing Endorsement Setup".json_encode($data));
         $rates = $this->getRates($data,$persistenceService);
         $data = array_merge($data,$rates);
+
+        if(isset($data['endorsement_options'])){
+           foreach($data['endorsement_options'] as $key=>$value){
+               $data['endorsement_options'][$key] = false;
+           }
+           $data['endorsementCoverage'] = array();
+           $data['endorsementCylinder'] = array();
+           $data['endorsementExcessLiability'] = array();
+        }
+        
         if(isset($data['careerCoverage'])){
-            $data['previous_careerCoverage'] = $data['careerCoverage'];
             $data['careerCoveragePrice'] = 0;
         }
         if(isset($data['scubaFit']) && isset($data[$data['scubaFit']])){
@@ -24,7 +33,6 @@ class SetupEndorsement extends AbstractAppDelegate
         }
         if(isset($data['cylinder']) && isset($data[$data['cylinder']])){
             $data['cylinderPrice'] = 0;
-            $data['previous_cylinder'] = $data['cylinder'];
         }
         if(isset($data['equipment']) && isset($data[$data['equipment']])){
             $data['equipmentPrice'] = 0;
@@ -33,7 +41,6 @@ class SetupEndorsement extends AbstractAppDelegate
 
         if(isset($data['excessLiability']) && isset($data[$data['excessLiability']])){
             $data['excessLiabilityPrice'] = 0;
-            $data['previous_excessLiability'] = $data['excessLiability'];
         }
         $data['update_date'] = date("Y-m-d");
         if(isset($data['start_date_range'])){

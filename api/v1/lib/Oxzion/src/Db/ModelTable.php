@@ -142,10 +142,12 @@ abstract class ModelTable
     protected function internalSave2(array $data)
     {
         foreach ($data as $key => $value) {
-            if(!empty($value['value']))
+            if(isset($value['value'])){
                 $data[$key] = $value['value'];
-            else
+            }
+            else{
                 unset($data[$key]);
+            }
         }
         $this->init();
         $id = null;

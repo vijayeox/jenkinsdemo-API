@@ -25,3 +25,4 @@ abstract class DispatchNotification extends MailDelegate
         return $response;
     }
 }
+?>
