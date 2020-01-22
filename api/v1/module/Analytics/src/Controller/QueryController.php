@@ -166,7 +166,7 @@ class QueryController extends AbstractApiController
         $params = array_merge($data, $this->params()->fromRoute());
         try{
             $result = $this->queryService->previewQuery($params);
-            if (!$result)) {
+            if (!$result) {
                 return $this->getErrorResponse("Query Cannot be executed", 404);
             }
         }
