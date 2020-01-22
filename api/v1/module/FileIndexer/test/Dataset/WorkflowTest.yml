@@ -288,6 +288,7 @@ ox_file:
     data: "{\"field1\":3,\"field2\":4}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     form_id: 1
+    date_created: '2019-12-19 11:03:08'
     entity_id: 1
 -
     id: 102
@@ -297,13 +298,15 @@ ox_file:
     data: "{\"field3\":3,\"field4\":4}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
     form_id: 2
+    date_created: '2020-01-19 11:03:08'
     entity_id: 1
 -
     id: 103
     org_id: 1
-    data: "new data"
+    data: "{\"some key\" : \"some value \"}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
     form_id: 3
+    date_created: '2020-02-19 11:03:08'
     entity_id: 1
 ox_file_attribute:
 -
