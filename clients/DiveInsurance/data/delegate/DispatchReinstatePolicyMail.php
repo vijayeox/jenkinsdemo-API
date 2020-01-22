@@ -22,7 +22,7 @@ class DispatchReinstatePolicyMail extends DispatchNotification
     {
         $this->logger->info("Dispatch reinstate policy mail notification");
         $data['template'] = $this->template[$data['product']];
-        $data['subject'] = 'Policy Auto Renewal';
+        $data['subject'] = 'Your Policy has been Reinstated!';
         $response = $this->dispatch($data);
         $data['userCancellationReason'] = '';
         $data['othersCsr'] = '';
