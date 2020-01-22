@@ -159,12 +159,13 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     }
                     $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
                     $result = json_decode($result,true);
-                    
-                    if(isset($result[$data['scubaFit']])){
-                        $data['scubaFitVal'] = $result[$data['scubaFit']];
-                    }
-                    if(isset($result[$data['cylinder']])){
-                        $data['cylinderPriceVal'] = $result[$data['cylinder']];
+                    if($data['product'] == "Individual Professional Liability"){
+                        if(isset($result[$data['scubaFit']])){
+                            $data['scubaFitVal'] = $result[$data['scubaFit']];
+                        }
+                        if(isset($result[$data['cylinder']])){
+                            $data['cylinderPriceVal'] = $result[$data['cylinder']];
+                        }
                     }
                     if( isset($data['upgradeCareerCoverageVal']) && isset($result[$data['upgradeCareerCoverageVal']])){
                         $data['upgradeCareerCoverageVal'] = $result[$data['upgradeCareerCoverageVal']];
@@ -248,25 +249,25 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT cover_letter");
                     $documents['cover_letter'] = $this->generateDocuments($temp,$dest,$options,'cover_letter','lheader','lfooter');
                 }
+            }
 
-                if($this->type == 'quote'){
-                    $this->logger->info("DOCUMENT coi_document");
-                    $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+            if($this->type == 'quote'){
+                $this->logger->info("DOCUMENT coi_document");
+                $documents['coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer');
+            }
+            else{
+                if(isset($temp['liability'])){
+                    $this->logger->info("DOCUMENT liability_coi_document");
+                    $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
+                    $this->logger->info("DOCUMENT liability_policy_document");
+                    $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','liability');
                 }
-                else{
-                    if(isset($temp['liability'])){
-                        $this->logger->info("DOCUMENT liability_coi_document");
-                        $documents['liability_coi_document'] = $this->generateDocuments($temp,$dest,$options,'template','header','footer','liability');
-                        $this->logger->info("DOCUMENT liability_policy_document");
-                        $documents['liability_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','liability');
-                    }
-                    
-                    if(isset($temp['property'])){
-                        $this->logger->info("DOCUMENT property_coi_document");
-                        $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
-                        $this->logger->info("DOCUMENT property_policy_document");
-                        $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
-                    }
+                
+                if(isset($temp['property'])){
+                    $this->logger->info("DOCUMENT property_coi_document");
+                    $documents['property_coi_document']  = $this->generateDocuments($temp,$dest,$options,'template','header','footer','property');
+                    $this->logger->info("DOCUMENT property_policy_document");
+                    $documents['property_policy_document'] = $this->copyDocuments($temp,$dest['relativePath'],'policy','property');
                 }
             }
             
