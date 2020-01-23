@@ -17,6 +17,7 @@ class Home extends React.Component {
       cachePage: undefined,
       formID: undefined,
       cacheData: undefined,
+      workflowId: undefined,
       showMenuPage: undefined
     };
   }
@@ -26,6 +27,7 @@ class Home extends React.Component {
       var cache = cacheResponse.data;
       if (cache) {
         if (cache.workflow_uuid) {
+          this.setState({workflowId:cache.workflow_uuid});
           this.getFormData(cache.workflow_uuid).then(formResponse => {
             if (formResponse.data) {
               this.setState({
@@ -115,6 +117,7 @@ class Home extends React.Component {
               core={this.core}
               page={this.state.cachePage}
               appId={application_id}
+              workflowId={this.state.workflowId}
               formId={this.state.formID}
               content={this.state.formContent}
               data={this.state.cacheData}
@@ -125,6 +128,7 @@ class Home extends React.Component {
             core={this.core}
             params={this.params}
             proc={this.proc}
+            expanded={{true}}
             appId={application_id}
           />
         ) : null}
