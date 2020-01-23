@@ -128,7 +128,6 @@ class Home extends React.Component {
             core={this.core}
             params={this.params}
             proc={this.proc}
-            expanded={{true}}
             appId={application_id}
           />
         ) : null}
