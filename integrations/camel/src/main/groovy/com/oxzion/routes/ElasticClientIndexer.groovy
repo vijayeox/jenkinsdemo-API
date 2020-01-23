@@ -71,9 +71,10 @@ class ElasticClientIndexer extends RouteBuilder {
                             for(obj in object.body) {
                                 String id = idList[i].toString()
                                 ++i
-                                bulk.add(new IndexRequest(indexName,type,id).source(obj.value, XContentType.JSON))
+                                String content = JsonOutput.toJson(obj)
+                                bulk.add(new IndexRequest(indexName,type,id).source(content, XContentType.JSON))
                             }
-                            client.bulk(bulk,RequestOptions.DEFAULT)
+                           client.bulk(bulk,RequestOptions.DEFAULT)
                         }
                         else
                         {

@@ -34,7 +34,7 @@ class FileIndexerService extends AbstractService
     {
         if(isset($fileId))
         {
-            $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name,
+            $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name as entity_name,
             file.data as file_data, file.uuid as file_uuid, file.is_active, file.parent_id,file.latest,file.org_id,
             CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields,
             w.user_id, file.workflow_instance_id,
@@ -137,7 +137,7 @@ class FileIndexerService extends AbstractService
                 foreach ($batches as $batch) {
                         $fileIdsArray = $batch;
                         $fileIds = implode(',', $batch);
-                        $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name,
+                        $select = "SELECT file.id as id,app.name as app_name, entity.id as entity_id, entity.name as entity_name,
                         file.data as file_data, file.uuid as file_uuid, file.is_active, file.parent_id,file.latest,file.org_id,
                         CONCAT('{', GROUP_CONCAT(CONCAT('\"', field.name, '\" : \"',COALESCE(field.text, field.name),'\"') SEPARATOR ','), '}') as fields,
                         w.user_id, file.workflow_instance_id,
