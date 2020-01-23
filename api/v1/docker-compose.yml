@@ -5,10 +5,9 @@ services:
             context: ./docker
             dockerfile: Dockerfile
         environment:
-            XDEBUG_CONFIG: remote_host=172.16.1.111 remote_port=9000 remote_enable=1
+            XDEBUG_CONFIG: remote_host=localhost remote_port=9000 remote_enable=1
         ports:
             - "8080:80"
         volumes:
             - ../..:/app
-            - '/app:/var/www/html'
             - /tmp:/tmp

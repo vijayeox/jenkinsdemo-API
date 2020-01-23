@@ -19,7 +19,7 @@ use Oxzion\Service\UserService;
 use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Utils\RestClient;
 use Oxzion\ValidationException;
-
+use Oxzion\Utils\UuidUtil;
 class CommandService extends AbstractService
 {
     /**
@@ -491,8 +491,9 @@ class CommandService extends AbstractService
             }
         }
         if (isset($data['identifier_field']) && isset($data['appId']) && isset($data[$data['identifier_field']])) {
+            $appId = UuidUtil::isValidUuid($data['appId'])?$this->getIdFromUuid('ox_app',$data['appId']):$data['appId'];
             $select = "SELECT * from ox_wf_user_identifier where identifier_name = :identityField AND app_id = :appId AND identifier = :identifier";
-            $selectQuery = array("identityField" => $data['identifier_field'], "appId" => $data['app_id'], "identifier" => $data[$data['identifier_field']]);
+            $selectQuery = array("identityField" => $data['identifier_field'], "appId" => $appId, "identifier" => $data[$data['identifier_field']]);
             $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
             if (count($result) > 0) {
                 $data['user_exists'] = '1';

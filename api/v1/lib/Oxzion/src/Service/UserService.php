@@ -1234,6 +1234,9 @@ class UserService extends AbstractService
                                  "identifierName" => $data['identifier_field']));
             $handleUserIdentifier = true;
         }
+        if(isset($data['date_of_birth'])) {
+            $data['date_of_birth'] = date('Y-m-d', strtotime(str_replace('-', '/', $data['date_of_birth'])));
+        }
         $query = "SELECT u.id,u.uuid,u.username,u.email $from $where";
         $this->logger->info("Check user query $query with Params".json_encode($queryParams));
         $result = $this->executeQuerywithBindParameters($query,$queryParams)->toArray();
