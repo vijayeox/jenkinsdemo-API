@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component
 import org.springframework.core.env.Environment
 import org.springframework.beans.factory.annotation.Autowired
 
-@PropertySource("classpath:oxzion.properties")
 @Component
 class ElasticClientIndexer extends RouteBuilder {
 
@@ -34,8 +33,6 @@ class ElasticClientIndexer extends RouteBuilder {
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
-                PropertiesComponent propc = getContext().getComponent("properties", PropertiesComponent.class)
-                propc.setLocation("classpath:oxzion.properties")
                 from("activemq:topic:elastic").process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
                         def jsonSlurper = new JsonSlurper()
@@ -74,9 +71,10 @@ class ElasticClientIndexer extends RouteBuilder {
                             for(obj in object.body) {
                                 String id = idList[i].toString()
                                 ++i
-                                bulk.add(new IndexRequest(indexName,type,id).source(obj.value, XContentType.JSON))
+                                String content = JsonOutput.toJson(obj)
+                                bulk.add(new IndexRequest(indexName,type,id).source(content, XContentType.JSON))
                             }
-                            client.bulk(bulk,RequestOptions.DEFAULT)
+                           client.bulk(bulk,RequestOptions.DEFAULT)
                         }
                         else
                         {

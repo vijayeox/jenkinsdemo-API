@@ -60,6 +60,7 @@ class FileIndexerControllerTest extends ControllerTest
         //Scenario where both workflow_instance_id and activity_instance_id exists
         $this->initAuthToken($this->adminUser);
         $data = ['id' => 102];
+        $this->dispatch('/fileindexer', 'POST', $data);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'elastic')->once()->andReturn();
@@ -79,7 +80,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'id' => '102',
                 'app_name' => 'SampleApp',
                 'entity_id' => '1',
-                'name' => 'sampleEntity1',
+                'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
                 'parent_id' => NULL,
@@ -97,15 +98,13 @@ class FileIndexerControllerTest extends ControllerTest
             ),
           ))));
         }
-
-        $this->dispatch('/fileindexer', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('index');
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], $data['id']);
-        $this->assertEquals($content['data']['name'], 'sampleEntity1');
+        $this->assertEquals($content['data']['entity_name'], 'sampleEntity1');
         $this->assertEquals($content['data']['fields'], '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}');
     }
 
@@ -130,7 +129,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'id' => '101',
                 'app_name' => 'SampleApp',
                 'entity_id' => '1',
-                'name' => 'sampleEntity1',
+                'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b',
                 'is_active' => '1',
                 'parent_id' => NULL,
@@ -183,7 +182,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'id' => '103',
                 'app_name' => 'SampleApp',
                 'entity_id' => '1',
-                'name' => 'sampleEntity1',
+                'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145d',
                 'is_active' => '1',
                 'parent_id' => NULL,
@@ -210,7 +209,7 @@ class FileIndexerControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], $data['id']);
-        $this->assertEquals($content['data']['name'], 'sampleEntity1');
+        $this->assertEquals($content['data']['entity_name'], 'sampleEntity1');
         $this->assertEquals($content['data']['activities'], null);
     }
 
@@ -300,6 +299,7 @@ class FileIndexerControllerTest extends ControllerTest
         //Only start date is provided
         $this->initAuthToken($this->adminUser);
         $data = ["app_id" => "5965c47d-7bc8-4ae6-ab6c-916c8d78e10f","start_date" => "2019-12-19 11:03:08"];
+        $this->dispatch('/fileindexer/batch', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
             $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/_doc/102")->once()->andReturn(array("body" => json_encode(array (
@@ -315,7 +315,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'id' => '102',
                 'app_name' => 'SampleApp',
                 'entity_id' => '1',
-                'name' => 'sampleEntity1',
+                'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
                 'parent_id' => NULL,
@@ -366,7 +366,6 @@ class FileIndexerControllerTest extends ControllerTest
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'elastic')->once()->andReturn();
         }
-        $this->dispatch('/fileindexer/batch', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -383,6 +382,7 @@ class FileIndexerControllerTest extends ControllerTest
         //Only end_date is provided
         $this->initAuthToken($this->adminUser);
         $data = ["app_id" => "5965c47d-7bc8-4ae6-ab6c-916c8d78e10f","end_date" => "2020-02-19 11:03:08"];
+        $this->dispatch('/fileindexer/batch', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
             $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/_doc/101")->once()->andReturn(array("body" => json_encode(array (
@@ -398,7 +398,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'id' => '101',
                 'app_name' => 'SampleApp',
                 'entity_id' => '1',
-                'name' => 'sampleEntity1',
+                'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145b',
                 'is_active' => '1',
                 'parent_id' => NULL,
@@ -428,7 +428,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'id' => '102',
                 'app_name' => 'SampleApp',
                 'entity_id' => '1',
-                'name' => 'sampleEntity1',
+                'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
                 'parent_id' => NULL,
@@ -450,7 +450,6 @@ class FileIndexerControllerTest extends ControllerTest
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'elastic')->once()->andReturn();
         }
-        $this->dispatch('/fileindexer/batch', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -467,6 +466,7 @@ class FileIndexerControllerTest extends ControllerTest
         //Both start_date and end_date is provided
         $this->initAuthToken($this->adminUser);
         $data = ["app_id" => "5965c47d-7bc8-4ae6-ab6c-916c8d78e10f","start_date" => "2019-12-19 11:03:08","end_date" => "2020-02-19 11:03:08"];
+        $this->dispatch('/fileindexer/batch', 'POST', $data);
         if (enableElastic==0) {
             $mockRestClient = $this->getMockRestClientForFileIndexerService();
             $mockRestClient->expects('get')->with("localhost:".$this->config['elasticsearch']['port']."/sampleapp_index/_doc/102")->once()->andReturn(array("body" => json_encode(array (
@@ -482,7 +482,7 @@ class FileIndexerControllerTest extends ControllerTest
                 'id' => '102',
                 'app_name' => 'SampleApp',
                 'entity_id' => '1',
-                'name' => 'sampleEntity1',
+                'entity_name' => 'sampleEntity1',
                 'file_uuid' => 'd13d0c68-98c9-11e9-adc5-308d99c9145c',
                 'is_active' => '1',
                 'parent_id' => NULL,
@@ -504,7 +504,6 @@ class FileIndexerControllerTest extends ControllerTest
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'elastic')->once()->andReturn();
         }
-        $this->dispatch('/fileindexer/batch', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
@@ -512,7 +511,7 @@ class FileIndexerControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data'][0]['id'], 102);
         $this->assertEquals($content['data'][0]['field3'], 3);
-        $this->assertEquals($content['data'][0]['name'], 'sampleEntity1');
+        $this->assertEquals($content['data'][0]['entity_name'], 'sampleEntity1');
         $this->assertEquals($content['data'][0]['fields'], '{"field1" : "field1text","field2" : "field2text","field3" : "field3text","field4" : "field4text"}');
     }
 
@@ -521,11 +520,11 @@ class FileIndexerControllerTest extends ControllerTest
         //Both start_date and end_date is provided
         $this->initAuthToken($this->adminUser);
         $data = ["app_id" => "5965c47d-7bc8-4ae6-ab6c-916c8d78e10f","start_date" => "2020-02-19 11:03:08"];
+        $this->dispatch('/fileindexer/batch', 'POST', $data);
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
             $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'elastic')->once()->andReturn();
         }
-        $this->dispatch('/fileindexer/batch', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(400);
         $this->setDefaultAsserts();
