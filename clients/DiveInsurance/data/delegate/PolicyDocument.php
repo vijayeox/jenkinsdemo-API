@@ -154,10 +154,10 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     if(isset($data['upgradeCareerCoverage'])){	
                         if(!is_array($data['upgradeCareerCoverage'])){	
                             $coverageOnCsrReview = json_decode($data['upgradeCareerCoverage'],true);	
-                            $data['upgradeCareerCoverage'] = $coverageOnCsrReview;	
+                            $temp['upgradeCareerCoverage'] = $coverageOnCsrReview;	
                         }	
                         
-                        $data['upgradeCareerCoverageVal'] = $data['upgradeCareerCoverage']['label'];	
+                        $temp['upgradeCareerCoverageVal'] = $data['upgradeCareerCoverage']['label'];	
                         
                         array_push($coverageList,$data['upgradeCareerCoverageVal']);
                     }
@@ -165,17 +165,17 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $result = json_decode($result,true);
                     if($data['product'] == "Individual Professional Liability"){
                         if(isset($result[$data['scubaFit']])){
-                            $data['scubaFitVal'] = $result[$data['scubaFit']];
+                            $temp['scubaFitVal'] = $result[$data['scubaFit']];
                         }
                         if(isset($result[$data['cylinder']])){
-                            $data['cylinderPriceVal'] = $result[$data['cylinder']];
+                            $temp['cylinderPriceVal'] = $result[$data['cylinder']];
                         }
                     }
                     
                     if( isset($data['upgradeCareerCoverageVal']) && isset($result[$data['upgradeCareerCoverageVal']])){
-                        $data['upgradeCareerCoverageVal'] = $result[$data['upgradeCareerCoverageVal']];
+                        $temp['upgradeCareerCoverageVal'] = $result[$data['upgradeCareerCoverageVal']];
                     }
-                    $data['careerCoverageVal'] = $result[$data['careerCoverage']];
+                    $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
                 }
 
                 if(isset($temp['AdditionalInsuredOption']) && $temp['AdditionalInsuredOption'] == 'newListOfAdditionalInsureds'){
