@@ -138,17 +138,19 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $documents['equipment_liability_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplEquipment');
                         }
 
-                        if(!is_array($data['upgradecylinder'])){    
-                            $cylinderOnCsrReview = json_decode($data['upgradecylinder'],true);  
-                            $data['upgradecylinder'] = $cylinderOnCsrReview;    
-                        }   
-                        if(!is_array($data['upgradeExcessLiability'])){ 
-                            $excessLiabilityOnCsrReview = json_decode($data['upgradeExcessLiability'],true);    
-                            $data['upgradeExcessLiability'] = $excessLiabilityOnCsrReview;  
-                        }       
-                        
-                        $data['cylinder'] = $data['upgradecylinder']['value'];  
-                        $data['excessLiability'] = $data['upgradeExcessLiability']['value'];
+                        if(isset($data['upgradeCareerCoverage'])){
+                            if(!is_array($data['upgradecylinder'])){    
+                                $cylinderOnCsrReview = json_decode($data['upgradecylinder'],true);  
+                                $data['upgradecylinder'] = $cylinderOnCsrReview;    
+                            }   
+                            if(!is_array($data['upgradeExcessLiability'])){ 
+                                $excessLiabilityOnCsrReview = json_decode($data['upgradeExcessLiability'],true);    
+                                $data['upgradeExcessLiability'] = $excessLiabilityOnCsrReview;  
+                            }       
+                            
+                            $data['cylinder'] = $data['upgradecylinder']['value'];  
+                            $data['excessLiability'] = $data['upgradeExcessLiability']['value'];
+                        }
                     }
                     
                     if(isset($data['upgradeCareerCoverage'])){	
