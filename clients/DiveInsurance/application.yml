@@ -41,14 +41,14 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 3
-        uuid: afce2402-d113-463e-8527-2a9966bcc9b8
+        uuid: 38880e3a-6bee-43c1-bd4d-9431d78a084b
     -
         name: CSR
         privileges:
             -
                 privilege_name: MANAGE_POLICY_APPROVAL
                 permission: 3
-        uuid: c24baf77-2ad7-4956-9f79-280086df27d0
+        uuid: ef71307c-7bdc-4dd3-bc75-afdc0ab2790a
 entity:
     -
         name: 'Individual Professional Liability'
@@ -115,11 +115,20 @@ menu:
                                 icon: 'fa fa-envelope-open'
                             -
                                 name: Endorsement
-                                rule: 'true'
+                                rule: '''{{entity_name}}'' == ''Individual Professional Liability'''
                                 details:
                                     -
                                         type: Form
                                         url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
+                                name: Endorsement
+                                rule: '''{{entity_name}}'' == ''Emergency First Response'''
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
                             -
@@ -229,7 +238,8 @@ menu:
             content:
                 -
                     type: Dashboard
-                    dashboard: Dashboard
+                    content:
+                        uuid: 4796e7fe-50b5-469c-9737-35f3921891ba
         uuid: 24176975-8f4d-499d-8b2d-86902de26c14
     -
         name: Requests
@@ -387,11 +397,20 @@ menu:
                         actions:
                             -
                                 name: Endorsement
-                                rule: '''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'''
+                                rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
                                 details:
                                     -
                                         type: Form
                                         url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
+                                name: Endorsement
+                                rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
                             -

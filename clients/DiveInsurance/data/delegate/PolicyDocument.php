@@ -124,17 +124,31 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $this->logger->info("DOCUMENT careerCoverage || scubaFit || cylinder || equipment");
                     $coverageList = array();
                     array_push($coverageList,$data['careerCoverage']);
-                    if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor"){
-                        $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
-                        array_push($coverageList,$data['scubaFit']);
-                    }
-                    if(isset($data['cylinder']) && ($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor")){
-                        $documents['cylinder_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplCylinder');
-                        array_push($coverageList,$data['cylinder']);
-                    }
-                    
-                    if(isset($data['equipment']) && $data['equipment'] == "equipmentLiabilityCoverage"){
-                        $documents['equipment_liability_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplEquipment');
+                  if($data['product'] == "Individual Professional Liability"){   
+                        if(isset($data['scubaFit']) && $data['scubaFit'] == "scubaFitInstructor"){
+                            $documents['scuba_fit_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplScuba');
+                            array_push($coverageList,$data['scubaFit']);
+                        }
+                        if(isset($data['cylinder']) && ($data['cylinder'] == "cylinderInspector" || $data['cylinder'] == "cylinderInstructor" || $data['cylinder'] == "cylinderInspectorAndInstructor")){
+                            $documents['cylinder_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplCylinder');
+                            array_push($coverageList,$data['cylinder']);
+                        }
+                        
+                        if(isset($data['equipment']) && $data['equipment'] == "equipmentLiabilityCoverage"){
+                            $documents['equipment_liability_document'] = $this->copyDocuments($data,$dest['relativePath'],'iplEquipment');
+                        }
+
+                        if(!is_array($data['upgradecylinder'])){    
+                            $cylinderOnCsrReview = json_decode($data['upgradecylinder'],true);  
+                            $data['upgradecylinder'] = $cylinderOnCsrReview;    
+                        }   
+                        if(!is_array($data['upgradeExcessLiability'])){ 
+                            $excessLiabilityOnCsrReview = json_decode($data['upgradeExcessLiability'],true);    
+                            $data['upgradeExcessLiability'] = $excessLiabilityOnCsrReview;  
+                        }       
+                        
+                        $data['cylinder'] = $data['upgradecylinder']['value'];  
+                        $data['excessLiability'] = $data['upgradeExcessLiability']['value'];
                     }
                     
                     if(isset($data['upgradeCareerCoverage'])){	
@@ -142,18 +156,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $coverageOnCsrReview = json_decode($data['upgradeCareerCoverage'],true);	
                             $data['upgradeCareerCoverage'] = $coverageOnCsrReview;	
                         }	
-                        if(!is_array($data['upgradecylinder'])){	
-                            $cylinderOnCsrReview = json_decode($data['upgradecylinder'],true);	
-                            $data['upgradecylinder'] = $cylinderOnCsrReview;	
-                        }	
-                        if(!is_array($data['upgradeExcessLiability'])){	
-                            $excessLiabilityOnCsrReview = json_decode($data['upgradeExcessLiability'],true);	
-                            $data['upgradeExcessLiability'] = $excessLiabilityOnCsrReview;	
-                        }	
-                        $data['upgradeCareerCoverageVal'] = $data['upgradeCareerCoverage']['label'];	
                         
-                        $data['cylinder'] = $data['upgradecylinder']['value'];	
-                        $data['excessLiability'] = $data['upgradeExcessLiability']['value'];	
+                        $data['upgradeCareerCoverageVal'] = $data['upgradeCareerCoverage']['label'];	
                         
                         array_push($coverageList,$data['upgradeCareerCoverageVal']);
                     }
@@ -167,6 +171,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                             $data['cylinderPriceVal'] = $result[$data['cylinder']];
                         }
                     }
+                    
                     if( isset($data['upgradeCareerCoverageVal']) && isset($result[$data['upgradeCareerCoverageVal']])){
                         $data['upgradeCareerCoverageVal'] = $result[$data['upgradeCareerCoverageVal']];
                     }
