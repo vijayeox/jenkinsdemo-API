@@ -238,7 +238,8 @@ menu:
             content:
                 -
                     type: Dashboard
-                    dashboard: Dashboard
+                    content:
+                        uuid: 4796e7fe-50b5-469c-9737-35f3921891ba
         uuid: 24176975-8f4d-499d-8b2d-86902de26c14
     -
         name: Requests
