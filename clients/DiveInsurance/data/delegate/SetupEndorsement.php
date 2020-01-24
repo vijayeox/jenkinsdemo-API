@@ -14,6 +14,7 @@ class SetupEndorsement extends AbstractAppDelegate
         $this->logger->info("Executing Endorsement Setup".json_encode($data));
         $rates = $this->getRates($data,$persistenceService);
         $data = array_merge($data,$rates);
+        $data['careerCoverage']= isset($data['careerCoverage']) ? $data['careerCoverage']: $data['liabilityCoverageName'];
 
         if(isset($data['endorsement_options'])){
            foreach($data['endorsement_options'] as $key=>$value){
