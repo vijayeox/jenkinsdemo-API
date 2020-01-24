@@ -432,7 +432,7 @@ class WorkflowService extends AbstractService
         $countResultSet = $this->executeQuerywithParams($countQuery)->toArray();
         
         $querySet = "SELECT distinct ox_workflow.name as workflow_name, ox_file.data,
-        ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date,ox_app_entity.name as entityName,
+        ox_activity_instance.activity_instance_id as activityInstanceId,ox_workflow_instance.process_instance_id as workflowInstanceId, ox_activity_instance.start_date,ox_app_entity.name as entity_name,
         ox_activity.name as activityName,
         CASE WHEN ox_activity_instance_assignee.user_id is not null then false
         else true end as to_be_claimed  $fromQuery $whereQuery $sort $pageSize $offset";
