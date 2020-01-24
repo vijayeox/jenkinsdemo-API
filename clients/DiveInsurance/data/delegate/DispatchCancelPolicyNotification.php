@@ -13,6 +13,7 @@ class DispatchCancelPolicyNotification extends DispatchDocument {
     public function __construct(){
         $this->template = array(
             'Individual Professional Liability' => 'CancelPolicyMailTemplate',
+            'Emergency First Response' => 'CancelPolicyMailTemplate',
             'Dive Boat' => 'CancelPolicyMailTemplate',
             'Dive Store' => 'CancelPolicyMailTemplate');
         parent::__construct();
