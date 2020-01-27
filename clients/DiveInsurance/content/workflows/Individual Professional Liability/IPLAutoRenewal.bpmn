@@ -100,7 +100,7 @@ def value = execution.getVariables();       if(value.containsKey("automatic_rene
 def day = calendar.get(Calendar.DAY_OF_MONTH); 
 def hour = calendar.get(Calendar.HOUR_OF_DAY);
 def minute = calendar.get(Calendar.MINUTE);
-def cron = '0 '+(minute+1)+' '+hour+' '+day+' JAN ? 2020';</camunda:script>
+def cron = '0 '+(minute+1)+' '+hour+' '+day+' * ? 2020';</camunda:script>
           </camunda:inputParameter>
           <camunda:inputParameter name="process_reminder">true</camunda:inputParameter>
           <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>
@@ -197,7 +197,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
 def day = calendar.get(Calendar.DAY_OF_MONTH); 
 def hour = calendar.get(Calendar.HOUR_OF_DAY);
 def minute = calendar.get(Calendar.MINUTE);
-def cron = '0 '+(minute+5)+' '+hour+' '+day+' JAN ? 2020';</camunda:script>
+def cron = '0 '+(minute+5)+' '+hour+' '+day+' * ? 2020';</camunda:script>
           </camunda:inputParameter>
           <camunda:inputParameter name="send_reminder">true</camunda:inputParameter>
           <camunda:inputParameter name="jobName">autoRenewalJob</camunda:inputParameter>

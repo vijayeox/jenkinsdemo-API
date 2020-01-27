@@ -28,6 +28,12 @@ class PipelineController extends AbstractApiController
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $params = array_merge($params,$this->params()->fromQuery());
         $appUuid = $this->params()->fromRoute()['appId'];
+        $params['appId'] = $appUuid;
+        if(is_string($params['commands'])){
+            if($commands = json_decode($params['commands'],true)){
+                $params['commands'] = $commands;
+            }
+        }
         unset($params['method']);
         unset($params['controller']);
         unset($params['action']);

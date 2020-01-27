@@ -91,7 +91,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"Rejected"}]}}'
+                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"Rejected"},{"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
                         filterable: false
                         reorderable: false
                         resizable: true
@@ -187,7 +187,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: file/user/me
+                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"end_date","operator":"lt","value":"{{current_date}}"}]}}'
                         filterable: true
                         reorderable: true
                         resizable: true

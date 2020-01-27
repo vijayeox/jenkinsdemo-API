@@ -627,7 +627,7 @@ return [
             'pipeline_execute' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/pipeline',
+                    'route' => '/app/:appId/pipeline[/commands/:commands]',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                     ],
