@@ -2,17 +2,15 @@
 namespace Messaging;
 
 use Messaging\Controller\MessagingController;
-use PHPUnit\DbUnit\TestCaseTrait;
-use Oxzion\Test\ControllerTest;
-use Oxzion\Messaging\MessageProducer;
-use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 use Mockery;
+use Oxzion\Test\ControllerTest;
+use PHPUnit\DbUnit\DataSet\DefaultDataSet;
 
 class MessagingControllerTest extends ControllerTest
 {
     private $mockMessageProducer = null;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->loadConfig();
         parent::setUp();
@@ -20,6 +18,7 @@ class MessagingControllerTest extends ControllerTest
         $this->mockMessageProducer = Mockery::mock('Oxzion\Messaging\MessageProducer');
         $this->mockMessageProducer->expects('getInstance')->once()->andReturn($this->mockMessageProducer);
     }
+    
     public function getDataSet()
     {
         return new DefaultDataSet();
@@ -41,50 +40,51 @@ class MessagingControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-
     public function testTopicCreate()
     {
         $data = ['topic' => 'test_topic', 'param1' => 'value1', 'param2' => 'value2'];
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('topic' => 'test_topic', 'param1' => 'value1','param2'=>'value2')), 'test_topic')->once()->andReturn(true);
+            $mockMessageProducer->expects('sendTopic')->with(json_encode(array('topic' => 'test_topic', 'param1' => 'value1', 'param2' => 'value2')), 'test_topic')->once()->andReturn(true);
         }
         $this->dispatch('/messaging', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('messaging');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
+
     public function testQueueCreate()
     {
         $data = ['queue' => 'test_queue', 'param1' => 'value1', 'param2' => 'value2'];
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendQueue')->with(json_encode(array('queue' => 'test_queue', 'param1' => 'value1','param2'=>'value2')), 'test_queue')->once()->andReturn(true);
+            $mockMessageProducer->expects('sendQueue')->with(json_encode(array('queue' => 'test_queue', 'param1' => 'value1', 'param2' => 'value2')), 'test_queue')->once()->andReturn(true);
         }
         $this->dispatch('/messaging', 'POST', $data);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('messaging');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
     }
+
     public function testFail()
     {
         $data = ['param1' => 'value1', 'param2' => 'value2'];
         $this->setJsonContent(json_encode($data));
         if (enableActiveMQ == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendQueue')->with(json_encode(array('param1' => 'value1','param2'=>'value2')), 'test_queue')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(json_encode(array('param1' => 'value1', 'param2' => 'value2')), 'test_queue')->once()->andReturn();
         }
         $this->dispatch('/messaging', 'POST', $data);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('messaging');
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
 }
