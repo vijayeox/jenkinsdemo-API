@@ -47,7 +47,7 @@ class Ratecard extends AbstractAppDelegate
         foreach ($data as $key => $value) {
             if(is_string($value))
             {
-                $result = json_decode($value);
+                $result = json_decode($value, true);
                 if (json_last_error() === JSON_ERROR_NONE) {
                     $data[$key] = $result;
                 }
