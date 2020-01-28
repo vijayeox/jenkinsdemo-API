@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.4.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0hgo0bw" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.1.0">
   <bpmn:process id="Process_1x7ok44" isExecutable="true">
     <bpmn:startEvent id="StartEvent_0qetve8" name="Endorsement Start form - new" camunda:asyncAfter="true">
       <bpmn:extensionElements>
@@ -9,7 +9,7 @@
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_1m44nyk</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_0spajg7" name="Payment Successful">
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0spajg7" name="Payment Successful" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="groovy">def additionalInsured = execution.getVariable('additionalInsured')
@@ -56,7 +56,7 @@ execution.setVariable('CSRReviewRequired', result3)
       <bpmn:outgoing>SequenceFlow_0lpmjor</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0j0oprr</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="ServiceTask_1nlbeez" name="Policy and COI generation" camunda:expression="0">
+    <bpmn:serviceTask id="ServiceTask_1nlbeez" name="Policy and COI generation" camunda:asyncAfter="true" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
@@ -73,7 +73,7 @@ execution.setVariable('CSRReviewRequired', result3)
       <bpmn:incoming>SequenceFlow_01ocuoy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1qz971h</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="ServiceTask_1j9vqhf" name="Schedule a reminder mail for Auto Renewal" camunda:expression="0">
+    <bpmn:serviceTask id="ServiceTask_1j9vqhf" name="Schedule a reminder mail for Auto Renewal" camunda:asyncAfter="true" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="command">schedule</camunda:inputParameter>
@@ -146,7 +146,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     <bpmn:sequenceFlow id="SequenceFlow_12e5vo3" sourceRef="UserTask_14i3m9l" targetRef="Task_037h9gn">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approved==false}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_1uh392h">
+    <bpmn:exclusiveGateway id="ExclusiveGateway_1uh392h" camunda:asyncAfter="true">
       <bpmn:incoming>SequenceFlow_1gaibuf</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_01ocuoy</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_09bil4y</bpmn:outgoing>

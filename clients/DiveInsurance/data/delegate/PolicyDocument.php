@@ -139,29 +139,23 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
 
                         if(isset($data['upgradeCareerCoverage'])){
-                            if(!is_array($data['upgradecylinder'])){    
-                                $cylinderOnCsrReview = json_decode($data['upgradecylinder'],true);  
-                                $data['upgradecylinder'] = $cylinderOnCsrReview;    
-                            }   
-                            if(!is_array($data['upgradeExcessLiability'])){ 
-                                $excessLiabilityOnCsrReview = json_decode($data['upgradeExcessLiability'],true);    
-                                $data['upgradeExcessLiability'] = $excessLiabilityOnCsrReview;  
-                            }       
-                            
+                            if(!is_array($data['upgradeCareerCoverage'])){  
+                                $coverageOnCsrReview = json_decode($data['upgradeCareerCoverage'],true);    
+                                $data['upgradeCareerCoverage'] = $coverageOnCsrReview;  
+                            }
+                            $temp['upgradeCareerCoverageVal'] = $data['upgradeCareerCoverage']['label'];    
+                            array_push($coverageList,$temp['upgradeCareerCoverageVal']);
+                        }
+                        if(isset($data['upgradecylinder']) && !is_array($data['upgradecylinder'])){    
+                            $cylinderOnCsrReview = json_decode($data['upgradecylinder'],true);  
+                            $data['upgradecylinder'] = $cylinderOnCsrReview;
                             $data['cylinder'] = $data['upgradecylinder']['value'];  
+                        }   
+                        if(isset($data['upgradeExcessLiability']) && !is_array($data['upgradeExcessLiability'])){ 
+                            $excessLiabilityOnCsrReview = json_decode($data['upgradeExcessLiability'],true);    
+                            $data['upgradeExcessLiability'] = $excessLiabilityOnCsrReview;
                             $data['excessLiability'] = $data['upgradeExcessLiability']['value'];
                         }
-                    }
-                    
-                    if(isset($data['upgradeCareerCoverage'])){	
-                        if(!is_array($data['upgradeCareerCoverage'])){	
-                            $coverageOnCsrReview = json_decode($data['upgradeCareerCoverage'],true);	
-                            $temp['upgradeCareerCoverage'] = $coverageOnCsrReview;	
-                        }	
-                        
-                        $temp['upgradeCareerCoverageVal'] = $data['upgradeCareerCoverage']['label'];	
-                        
-                        array_push($coverageList,$data['upgradeCareerCoverageVal']);
                     }
                     $result = $this->getCoverageName($coverageList,$data['product'],$persistenceService);
                     $result = json_decode($result,true);
@@ -174,8 +168,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                         }
                     }
                     
-                    if( isset($data['upgradeCareerCoverageVal']) && isset($result[$data['upgradeCareerCoverageVal']])){
-                        $temp['upgradeCareerCoverageVal'] = $result[$data['upgradeCareerCoverageVal']];
+                    if( isset($temp['upgradeCareerCoverageVal']) && isset($result[$temp['upgradeCareerCoverageVal']])){
+                        $data['upgradeCareerCoverageVal'] = $result[$temp['upgradeCareerCoverageVal']];
                     }
                     $temp['careerCoverageVal'] = $result[$data['careerCoverage']];
                 }
