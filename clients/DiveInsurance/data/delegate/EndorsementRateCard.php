@@ -16,6 +16,9 @@ class EndorsementRatecard extends AbstractAppDelegate
         $endorsementExcessLiability = array();
         $endorsementCylinder = array();
         
+        if(!isset($data['update_date'])){
+            $data['update_date'] =  date("Y-m-d H:i:s");
+        }
         $data['careerCoverage']= isset($data['careerCoverage']) ? $data['careerCoverage']: $data['liabilityCoverageName'];
         if(!isset($data['previous_scuba'])){
             $data['previous_scuba'] = isset($data['scubaFit'])? $data['scubaFit']: '';
@@ -100,11 +103,7 @@ class EndorsementRatecard extends AbstractAppDelegate
             }
             unset($rate);
         }
-    }
-    
-    if(!isset($data['update_date'])){
-        $data['update_date'] =  date("Y-m-d H:i:s");
-    }          
+    }     
     
     $select = "Select * FROM premium_rate_card WHERE product ='".$data['product']."' AND is_upgrade = 1 AND previous_key = '".$previousKey."' AND start_date <= '".$data['update_date']."' AND end_date >= '".$data['update_date']."'";
     $this->logger->info("Executing Endorsement Rate Card Query".$select);
