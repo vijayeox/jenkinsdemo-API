@@ -31,7 +31,7 @@ class AutoRenewalRateCard extends RateCard{
         $this->logger->info("PRESENT RATE card".print_r($data,true));
         if($data['product'] == 'Individual Professional Liability'){
             $this->IPLRates($data);
-        }else if($data['product'] == 'Emergency First Response'){
+        } else if($data['product'] == 'Emergency First Response'){
             $this->EFRRates($data);
         }
         $data['policyStatus'] = 'AutoRenewal Approval Pending';
