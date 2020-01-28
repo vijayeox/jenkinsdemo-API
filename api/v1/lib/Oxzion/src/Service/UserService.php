@@ -1235,7 +1235,7 @@ class UserService extends AbstractService
             $handleUserIdentifier = true;
         }
         if(isset($data['date_of_birth'])) {
-            $data['date_of_birth'] = explode('T',$data['date_of_birth'])[0];
+            $data['date_of_birth'] = date_format(date_create($data['date_of_birth']), "Y-m-d");
         }
         $query = "SELECT u.id,u.uuid,u.username,u.email $from $where";
         $this->logger->info("Check user query $query with Params".json_encode($queryParams));
