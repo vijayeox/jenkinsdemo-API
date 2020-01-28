@@ -181,6 +181,11 @@ class FileService extends AbstractService
             $obj = $obj->toArray();
 
         }
+        $latestcheck = 0;
+        if(isset($data['islatest']) && $data['islatest']==0)
+        {
+            $latestcheck = 1;
+        }
         if (isset($data['form_uuid'])) {
             $data['form_id'] = $this->getIdFromUuid('ox_form', $data['form_uuid']);
             unset($data['form_uuid']);
@@ -244,8 +249,14 @@ class FileService extends AbstractService
             $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
-            if (isset($id)) {
-                $this->messageProducer->sendTopic(json_encode(array('id' => $id)), 'FILE_UPDATED');
+            if(($latestcheck == 1) && isset($id))
+            {
+                $this->messageProducer->sendTopic(json_encode(array('id' => $id)), 'FILE_DELETED');
+            }
+            else {
+                if (isset($id)) {
+                    $this->messageProducer->sendTopic(json_encode(array('id' => $id)), 'FILE_UPDATED');
+                }
             }
 
         } catch (Exception $e) {

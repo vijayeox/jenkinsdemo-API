@@ -39,7 +39,7 @@ class ElasticClientIndexer extends RouteBuilder {
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody())
                         def HOST = env.getProperty("elastic.host")
                         int PORT = env.getProperty("elastic.port").toInteger()
-                        def idList
+                        def idList,deleteList
                         String ID;
                         String indexName = object.index.toString().toLowerCase()
                         String type = object.type.toString()
@@ -48,6 +48,9 @@ class ElasticClientIndexer extends RouteBuilder {
                         }
                         if(object.containsKey('idlist')){
                             idList = object.idlist
+                        }
+                        if(object.containsKey('deleteList')){
+                            deleteList = object.deleteList
                         }
                         String operation = object.operation.toString()
                         def output = JsonOutput.toJson(object.body)
@@ -73,6 +76,12 @@ class ElasticClientIndexer extends RouteBuilder {
                                 ++i
                                 String content = JsonOutput.toJson(obj)
                                 bulk.add(new IndexRequest(indexName,type,id).source(content, XContentType.JSON))
+                            }
+                            if(deleteList){
+                                for(del in deleteList) {
+                                    String id = del.toString()
+                                    bulk.add(new DeleteRequest(indexName,type,id))
+                                }
                             }
                            client.bulk(bulk,RequestOptions.DEFAULT)
                         }

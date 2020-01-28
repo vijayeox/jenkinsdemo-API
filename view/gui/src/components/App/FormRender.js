@@ -392,6 +392,7 @@ class FormRender extends React.Component {
   cleanData(formData) {
     formData.privileges = undefined;
     formData.userprofile = undefined;
+    formData.countryList = undefined;
     return formData;
   }
 
@@ -1074,6 +1075,11 @@ class FormRender extends React.Component {
           },
           true
         );
+        window.addEventListener("paymentCancelled",function(e) {
+            e.stopPropagation();
+            that.notif.current.notify("Warning", e.detail.message, "danger");
+            that.core.make("oxzion/splash").destroy();
+          },true);
         window.addEventListener(
           "paymentError",
           function(e) {

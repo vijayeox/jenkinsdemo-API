@@ -54,8 +54,8 @@ class RoleService extends AbstractService
         $data['privileges'] = isset($data['privileges'])?$data['privileges']:array();
         $data['default'] = isset($data['default'])? $data['default']: 0;
         $count = 0;
+        $this->beginTransaction();
         try {
-            $this->beginTransaction();
             //First, all the other roles are changed to default role 0, and the new record added will be default role 1
             if ($data['default'] == 1){
                 $queryString = "UPDATE ox_role set default_role = 0 where org_id= :orgId and id != 0";

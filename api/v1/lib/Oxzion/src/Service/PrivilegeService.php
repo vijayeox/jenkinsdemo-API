@@ -90,8 +90,8 @@ class PrivilegeService extends AbstractService
 
     public function saveAppPrivileges($appId, $privileges){
         $this->logger->info("appid - $appId, privileges - ".json_encode($privileges));
+        $this->beginTransaction();
         try{
-            $this->beginTransaction();
             $privilegearray = array_unique(array_column($privileges, 'name'));
             $list = "'" . implode( "', '", $privilegearray) . "'";
 

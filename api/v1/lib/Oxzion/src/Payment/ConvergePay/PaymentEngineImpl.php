@@ -15,11 +15,17 @@ class PaymentEngineImpl implements PaymentEngine
         curl_setopt($ch, CURLOPT_URL, $this->paymentConfig['api_url']);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_HTTPHEADER , array(
+            "Accept: */*",
+            "Content-Type: application/x-www-form-urlencoded",
+            "cache-control: no-cache"
+        ));
         curl_setopt($ch, CURLOPT_POSTFIELDS,
             "ssl_merchant_id=$paymentConfigInfo->merchant_id".
             "&ssl_user_id=$paymentConfigInfo->user_id".
             "&ssl_pin=$paymentConfigInfo->pincode".
-            "&ssl_transaction_type=CCSALE".
+            "&ssl_transaction_type=ccsale".
             "&ssl_first_name=".$data['firstname'].
             "&ssl_last_name=".$data['lastname'].
             "&ssl_get_token=Y".
