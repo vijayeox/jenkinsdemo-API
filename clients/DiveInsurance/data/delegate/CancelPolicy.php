@@ -35,13 +35,14 @@ class CancelPolicy extends PolicyDocument
 
     public function execute(array $data,Persistence $persistenceService) 
     {
-        $this->logger->info("Executing Policy with data- ".json_encode($data));
+        $this->logger->info("Executing Cancel Policy with data- ".json_encode($data));
         $options = array();
         foreach($data as $key => $row){
             if(is_array($row)){
                 $data[$key] = json_encode($row);
             }
         }
+        $data['reinstateDocuments'] = $data['documents'];
         $Canceldate = isset($Canceldate) ? $Canceldate : date_create();
         $data['CancelDate'] = isset($data['CancelDate']) ? $data['CancelDate']: $Canceldate->format("Y-m-d");
         $data['policyStatus'] = "Cancelled";
