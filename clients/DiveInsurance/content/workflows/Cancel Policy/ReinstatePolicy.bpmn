@@ -37,8 +37,8 @@ if(confirmRP == 'yes'){
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
-              <camunda:value>{"command" : "fileSave"}</camunda:value>
               <camunda:value>{"command" : "delegate", "delegate" : "DispatchReinstatePolicyMail"}</camunda:value>
+              <camunda:value>{"command" : "fileSave"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
         </camunda:inputOutput>

@@ -7,11 +7,11 @@ return [
     'router' => [
         'routes' => [
             'messaging' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/messaging',
+                    'route' => '/messaging',
                     'defaults' => [
-                        'controller' => Controller\MessagingController::class
+                        'controller' => Controller\MessagingController::class,
                     ],
                 ],
             ],
@@ -24,5 +24,5 @@ return [
             'ViewJsonStrategy',
         ],
     ],
-    
+
 ];
