@@ -290,6 +290,7 @@ ox_file:
     form_id: 1
     date_created: '2019-12-19 11:03:08'
     entity_id: 1
+    latest: 1
 -
     id: 102
     workflow_instance_id: 1
@@ -300,6 +301,7 @@ ox_file:
     form_id: 2
     date_created: '2020-01-19 11:03:08'
     entity_id: 1
+    latest: 1
 -
     id: 103
     org_id: 1
@@ -308,10 +310,11 @@ ox_file:
     form_id: 3
     date_created: '2020-02-19 11:03:08'
     entity_id: 1
+    latest: 1
 ox_file_attribute:
 -
     id: 1
-    file_id: 101
+    file_id: 102
     org_id: 1
     field_value: 1
     field_id: 1
@@ -323,13 +326,13 @@ ox_file_attribute:
     field_id: 2
 -
     id: 3
-    file_id: 102
+    file_id: 101
     org_id: 1
     field_value: 2
     field_id: 3
 -
     id: 4
-    file_id: 102
+    file_id: 101
     org_id: 1
     field_value: 2
     field_id: 4
@@ -345,3 +348,18 @@ ox_file_attribute:
     org_id: 1
     field_value: 1
     field_id: 4
+ox_wf_user_identifier:
+-
+    id: 1
+    user_id: 1
+    identifier_name: 'field1'
+    identifier: 1
+    app_id: 99
+    org_id: 1
+-
+    id: 2
+    user_id: 1
+    identifier_name: 'field2'
+    identifier: 1
+    app_id: 99
+    org_id: 1
