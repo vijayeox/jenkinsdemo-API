@@ -14,7 +14,6 @@ class DocumentSaveDelegate extends AbstractDocumentAppDelegate {
                 $data['uuid'] = $data['fileId'];
             }
             $attachmentsFieldnames = $data['attachmentsFieldnames'];
-            print_r($attachmentsFieldnames);
             for ($i = 0;$i < sizeof($attachmentsFieldnames);$i++) {
                 $fieldNamesArray =is_string($attachmentsFieldnames[$i]) ? array($attachmentsFieldnames[$i]) : $attachmentsFieldnames[$i];
                 if (sizeof($fieldNamesArray) == 1) {
