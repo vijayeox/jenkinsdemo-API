@@ -23,7 +23,8 @@
 					<p class = "details">{$lastname},{$firstname} {if isset($initial)},{$initial}{/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
-					<p class = "details">{$city},{$state} - {$zip}</p>
+					<p class = "details">{$city},{$state_in_short} - {$zip}</p>
+					<p class = "details">{$country}</p>
 			</div>
 			<div class ="content2">
 				<div class = "certificate_data">
@@ -36,7 +37,7 @@
 					<p class = "p_margin">{$certificate_no}</p>
 					<p class = "p_margin">{$padi}</p>
 					<p class = "p_margin">{$start_date|date_format:"%m/%d/%Y"}</p>
-					<p class = "p_margin">{$end_date|date_format:"%m/%d/%Y"}&nbsp12:01:00 AM</p>
+					<p class = "p_margin">{$end_date|date_format:"%d %B %Y"}&nbsp12:01:00 AM</p>
 					<p class = "p_margin">90 DAY DISCOVERY PERIOD</p>
 				</div>
 				<hr></hr>

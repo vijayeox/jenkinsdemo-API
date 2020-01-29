@@ -13,7 +13,8 @@
 			<p class="name">{$lastname},{$firstname}{if isset($initial)},{$initial}{/if}</p>
 			<p class="name">{$address1}</p>
 			<p class="name">{$address2}</p>
-			<p class="name">{$city},{$state} - {$zip}</p>
+			<p class = "details">{$city},{$state_in_short} - {$zip}</p>
+			<p class = "details">{$country}</p>
 		</div>
 		<div class = "certi_details">
 			<div class = "certi_title">
@@ -28,7 +29,8 @@
 				<p class="certi">{$certificate_no}</p>
 				<p class="certi">{$padi}</p>
 				<p class="certi">{$start_date}</p>
-				<p class="certi">{$end_date}</p>
+				<p class = "certi">{$end_date|date_format:"%d %B %Y"}&nbsp12:01:00 AM</p>
+
 			</div>
 		</div>
 	</div>
