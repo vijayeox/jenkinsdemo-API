@@ -21,8 +21,7 @@
 					<p class = "details">{$lastname},{$firstname}{if isset($initial)},{$initial}{/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
-					<p class = "details">{$city},{$state}</p>
-					<p class = "details">{$country},{$zip}</p>
+					<p class = "details">{$city},{$state} - {$zip}</p>
 			</div>
 			<div class ="content2">
 				<div class = "certificate_data">

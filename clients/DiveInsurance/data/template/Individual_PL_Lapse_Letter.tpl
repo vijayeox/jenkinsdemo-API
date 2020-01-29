@@ -13,8 +13,7 @@
 			<p class="name">{$lastname},{$firstname}{if isset($initial)},{$initial}{/if}</p>
 			<p class="name">{$address1}</p>
 			<p class="name">{$address2}</p>
-			<p class="name">{$city},{$state}</p>
-			<p class="name">{$country},{$zip}</p>
+			<p class="name">{$city},{$state} - {$zip}</p>
 		</div>
 		<div class = "certi_details">
 			<div class = "certi_title">
