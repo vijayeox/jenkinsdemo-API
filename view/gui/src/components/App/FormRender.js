@@ -12,6 +12,7 @@ import scrollIntoView from "scroll-into-view-if-needed";
 import ConvergePayCheckoutComponent from "./Form/Payment/ConvergePayCheckoutComponent";
 import DocumentComponent from "./Form/DocumentComponent";
 import { countryList } from "./Form/Country.js";
+import SliderComponent from "./Form/SliderComponent";
 
 class FormRender extends React.Component {
   constructor(props) {
@@ -489,8 +490,11 @@ class FormRender extends React.Component {
   }
   createForm() {
     let that = this;
+    console.log("Slidercomponent")
+    Formio.registerComponent("slider", SliderComponent);
     Formio.registerComponent("convergepay", ConvergePayCheckoutComponent);
     Formio.registerComponent("document", DocumentComponent);
+    
     if (this.state.content && !this.state.form) {
       var options = {};
       if (this.state.content["properties"]) {
@@ -601,6 +605,7 @@ class FormRender extends React.Component {
         });
 
         form.on("change", function(changed) {
+          console.log(changed.data);
           var formdata = changed;
           for (var dataItem in form.submission.data) {
             if (typeof form.submission.data[dataItem] == "object") {
@@ -883,7 +888,7 @@ class FormRender extends React.Component {
                       });
                   } else {
                     that
-                      .callDelegate(properties["delegate"], changed)
+                      .callDelegate(properties["delegate"], that.cleanData(changed))
                       .then(response => {
                         that.core.make("oxzion/splash").destroy();
                         if (response.data) {
@@ -908,7 +913,7 @@ class FormRender extends React.Component {
               console.log(properties);
               if (properties["commands"]) {
                 that
-                  .callPipeline(properties["commands"], changed)
+                  .callPipeline(properties["commands"], that.cleanData(changed))
                   .then(response => {
                     that.core.make("oxzion/splash").destroy();
                     if (response.data) {
