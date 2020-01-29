@@ -22,12 +22,12 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
     {
         return Logger::getLogger('Controller');
     }
+
     /**
      * Check Request object have Authorization token or not
      * @param type $request
      * @return type String
      */
-
     protected function extractPostData()
     {
         $params = json_decode(file_get_contents("php://input"), true);
@@ -36,6 +36,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
         }
         return $params;
     }
+
     /**
      * Process post data and call create
      *
@@ -78,6 +79,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
 
         return $parsedParams;
     }
+
     public function findJwtToken($request)
     {
         $jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';
@@ -147,6 +149,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
         }
         return new JsonModel($payload);
     }
+
     protected function getSuccessResponse($message = null, $code = 200, array $data = null, $total = null, $role = null)
     {
         $this->response->setStatusCode($code);
@@ -185,11 +188,13 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController
     {
         return $this->getErrorResponse($message, 200, $data);
     }
+
     protected function getErrorResponse($message, $code = 200, array $data = null)
     {
         $this->response->setStatusCode($code);
         return ErrorHandler::buildErrorJson($message, $data, $code);
     }
+
     protected function getInvalidMethod()
     {
         return $this->getErrorResponse("Method Not Found", 405);

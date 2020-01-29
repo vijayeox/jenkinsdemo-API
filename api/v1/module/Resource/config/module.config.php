@@ -12,7 +12,7 @@ return [
                 'options' => [
                     'route' => '/resource[/:resourceId]',
                     'defaults' => [
-                        'controller' => Controller\ResourceController::class
+                        'controller' => Controller\ResourceController::class,
                     ],
                 ],
             ],
@@ -21,6 +21,6 @@ return [
     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];
