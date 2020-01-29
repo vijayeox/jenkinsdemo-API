@@ -50,8 +50,10 @@ class PadiVerification extends AbstractAppDelegate
             }       
             if(isset($stateDetails) && count($stateDetails)>0){
                 if(isset($response[0]['business_state'])){
+                    $response[0]['business_state_in_short'] = $response[0]['business_state'];
                     $response[0]['business_state'] = $stateDetails[0]['state'];
                 }else{
+                    $response[0]['state_in_short'] = $response[0]['state'];
                     $response[0]['state'] = $stateDetails[0]['state'];
                 }
             }
@@ -76,12 +78,11 @@ class PadiVerification extends AbstractAppDelegate
                     $returnArray['padiVerified'] = false;
                 }
             }
-
             if(isset($data['business_padi'])){
-                if($data['product'] == 'Dive Store' && (!isset($response[0]['business_name']) || $response[0]['business_name'] != '')){
+                if($data['product'] == 'Dive Store' && (!isset($response[0]['business_name']) || empty($response[0]['business_name']))){
                     $returnArray['businessPadiVerified'] = false;
                 }
-                if($data['product'] == 'Dive Boat' && (!isset($response[0]['business_name']) && $response[0]['business_name'] != '')){
+                if($data['product'] == 'Dive Boat' && (!isset($response[0]['business_name']) || empty($response[0]['business_name']))){
                     $returnArray['businessPadiVerified'] = false;
                 }
             }
