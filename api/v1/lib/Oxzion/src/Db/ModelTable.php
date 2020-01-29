@@ -151,7 +151,7 @@ abstract class ModelTable
         }
         $this->init();
         $id = null;
-        if ((!empty($data['id']))&&(!empty($data['version']))) {
+        if ((!empty($data['id']))&&(isset($data['version']))) {
             $id = $data['id'];
             $version = $data['version'];
         }
@@ -170,8 +170,9 @@ abstract class ModelTable
                         $data['version'] = $data['version'] + 1;
                         return $this->tableGateway->update($data, ['id' => $id, 'version' => $version]);
                     }
-                    else
+                    else{
                         throw new \Oxzion\VersionMismatchException($record);
+                    }
                 }
                 else
                     throw new \Oxzion\VersionMismatchException($record);
