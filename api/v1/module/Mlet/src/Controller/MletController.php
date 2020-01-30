@@ -1,7 +1,6 @@
 <?php
 namespace Mlet\Controller;
 
-use Zend\Log\Logger;
 use Mlet\Model\Mlet;
 use Mlet\Model\MletTable;
 use Mlet\Service\MletService;
@@ -20,9 +19,9 @@ class MletController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(MletTable $table, MletService $mletService, Logger $log)
+    public function __construct(MletTable $table, MletService $mletService)
     {
-        parent::__construct($table, $log, __CLASS__, Mlet::class);
+        parent::__construct($table, Mlet::class);
         $this->mletService=$mletService;
         $this->setIdentifierName('mletId');
     }

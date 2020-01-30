@@ -4,7 +4,6 @@ namespace Oxzion\Controller;
 
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\Event;
-use Zend\Log\Logger;
 use User\Model\UserTable;
 use Zend\Db\Sql\Sql;
 use Oxzion\Auth\AuthConstants;
@@ -18,18 +17,19 @@ use Oxzion\Auth\AuthContext;
 
 abstract class AbstractApiController extends AbstractApiControllerHelper
 {
+//TODO: Remove $table variable - it is not used anywhere! Also, controllers should not directly talk to database. (RaviH).
     protected $table;
     protected $log;
     protected $logClass;
     protected $modelClass;
     protected $parentId;
     protected $username;
-
-    public function __construct($table, Logger $log, $logClass, $modelClass, $parentId = null)
+    
+    public function __construct($table, $modelClass, $parentId = null)
     {
         $this->table = $table;
-        $this->log = $log;
-        $this->logClass = $logClass;
+        $this->log = $this->getLogger();
+        $this->logClass = get_class($this);
         $this->modelClass = $modelClass;
         $this->parentId = $parentId;
     }

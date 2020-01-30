@@ -11,6 +11,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\JsonModel;
 use Oxzion\Error\ErrorHandler;
 use Oxzion\Service\OrganizationService;
+use Oxzion\Messaging\MessageProducer;
 
 class Module implements ConfigProviderInterface
 {
@@ -36,7 +37,7 @@ class Module implements ConfigProviderInterface
                 Service\ProjectService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $orgService = $container->get(OrganizationService::class);
-                    return new Service\ProjectService($container->get('config'), $dbAdapter, $container->get(Model\ProjectTable::class), $orgService);
+                    return new Service\ProjectService($container->get('config'), $dbAdapter, $container->get(Model\ProjectTable::class), $orgService,$container->get(MessageProducer::class));
                 },
                 Model\ProjectTable::class => function ($container) {
                     $tableGateway = $container->get(Model\ProjectTableGateway::class);
@@ -60,7 +61,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\ProjectController(
                         $container->get(Model\ProjectTable::class),
                         $container->get(Service\ProjectService::class),
-                        $container->get('ProjectLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

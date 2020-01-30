@@ -1,5 +1,34 @@
+ox_app:
+-
+  id: 100
+  name: "SampleApp"
+  uuid: "debf3d35-a0ee-49d3-a8ac-8e480be9dac7"
+  category: "OTHERS"
+  type: 2
+  status: 4
+ox_wf_user_identifier:
+-
+  id: 100
+  app_id: 100
+  org_id: 1
+  identifier: 12345
+  identifier_name: padi
+  user_id: 1
+ox_role:
+-
+  id: 10
+  org_id: 1
+  uuid: "50457c26-037e-11ea-8d71-362b9e155667"
+  name: "new Role"
+  default_role: 1
+-
+  id: 11
+  org_id: 2
+  uuid: "b0971de7-0387-48ea-8f29-5d3704d967u7"
+  name: "Test Role"
+  default_role: 1
 ox_user_refresh_token:
--	
+-
   user_id: 1
   salt: "5940264875c7e2a6f120969.43960974"
   expiry_date: "2019-03-05 09:57:08"

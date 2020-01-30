@@ -31,13 +31,16 @@ class DocumentServiceTest extends ServiceTest
         $_REQUEST = [];
     }
 
+
     public function testGenerateDocument()
     {
-        $data = ['username' => 'John','uuid' => '53012471-2863-4949-afb1-e69b0891c98a'];
-        AuthContext::put(AuthConstants::ORG_UUID, $data['uuid']);
+        $data = ['username' => 'John','orgid' => '53012471-2863-4949-afb1-e69b0891c98a'];
+        AuthContext::put(AuthConstants::ORG_UUID, $data['orgid']);
         $config = $this->getApplicationConfig();
-        $tempFolder = $config['TEMPLATE_FOLDER'].$data['uuid']."/";
-        FileUtils::createDirectory($tempFolder);
+        $tempFolder = $config['TEMPLATE_FOLDER'].$data['orgid'];
+        if(!is_link($tempFolder)){
+             FileUtils::createDirectory($tempFolder."/");
+        }
         $tempFile = $config['TEMPLATE_FOLDER']."/";
         FileUtils::createDirectory($tempFile);
         copy(__DIR__."/../Service/template/GenericTemplate.tpl", $tempFile."GenericTemplate.tpl");
@@ -53,6 +56,38 @@ class DocumentServiceTest extends ServiceTest
         $templateName="GenericTemplate.tpl";
         FileUtils::deleteFile($templateName, $tempFile);
         FileUtils::deleteFile("GenericTemplate.pdf", $config['TEMPLATE_FOLDER']);
+        // print_r($tempFolder);exit;
+        FileUtils::rmDir($tempFolder);
         // TO DO DIGITAL SIGNATURE
     }
+
+    public function testGenerateDocumentDiveInsurance()
+    {
+        $data = ['firstname' => 'Mohan', 'initial' => 'Raj' ,'lastname' => 'D','address1' => 'ABC 200','address2' => 'XYZ 300','city' => 'APO','state' => 'District of Columbia','country' => 'US','zip' => '09522-9998','certificate_no' => '200200178','member_no' => '34567','careerCoverage'=> 'Divester','physical_address' => 'APO,AE','policy_id' => 'PPK1992899','single_limit' => '1,000,000','annual_aggregate' => '2,000,000','equipment_liability' => 'Not Included','update' => 1,'update_date' => '08/06/2019','pageno' => 1,'total_page' => 1,'orgUuid' => '53012471-2863-4949-afb1-e69b0891c98a','license_number' => '56342','carrier' => 'Tokio Marine Specialty Insurance Company','sameasmailingaddress' => 1,'address3' => 'Bangalore','address4' => 'Karanataka','padi' => '12345','start_date' => '06/30/2019','end_date' => '6/30/2020','endrosement_status' => 'Instructor','endorsement_options'=>'{"modify_personalInformation"=>true,"modify_coverage"=> false,"modify_additionalInsured"=> false}','careerCoverage' => 'instructor',
+            'scubaFit' => 'scubaFitInstructorDeclined',
+            'cylinder'=> 'cylinderInspectorOrInstructorDeclined',
+            'equipment'=> 'equipmentLiabilityCoverageDeclined',
+            'endorsement_status' => 'In Force'];
+        AuthContext::put(AuthConstants::ORG_UUID, $data['orgUuid']);
+        $config = $this->getApplicationConfig();
+        $tempFile = $config['TEMPLATE_FOLDER'].$data['orgUuid'];
+        $templateLocation = __DIR__."/../../../../../../clients/DiveInsurance/data/template";
+        if(FileUtils::fileExists($tempFile)){
+            FileUtils::rmDir($tempFile);
+        }
+        FileUtils::symlink($templateLocation, $tempFile);
+        $TemplateService = new TemplateService($config, $this->adapter);
+        $content = $TemplateService->getContent('ProfessionalLiabilityCOI', $data);
+        $destination = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/ProfessionalLiabilityCOI.pdf";
+        $header = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/COIheader.html";
+        $footer = $config['TEMPLATE_FOLDER'].$data['orgUuid']."/COIfooter.html";
+        $generatePdf = new DocumentGeneratorImpl();
+        $output = $generatePdf->generatePdfDocumentFromHtml($content, $destination, $header, $footer);
+        $this->assertTrue(is_file($output));
+        $this->assertTrue(filesize($output)>0);
+        FileUtils::deleteFile("ProfessionalLiabilityCOI.pdf", $config['TEMPLATE_FOLDER'].$data['orgUuid']."/");
+        FileUtils::unlink($tempFile);
+    }
+
+
 }

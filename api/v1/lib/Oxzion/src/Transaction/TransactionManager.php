@@ -10,11 +10,17 @@ class TransactionManager
 
     public static function getInstance($dbAdapter)
     {
-        if (!isset($_REQUEST[self::CONTEXT_KEY])) {
-            $_REQUEST[self::CONTEXT_KEY] = new TransactionManager($dbAdapter);
+        $params = "";
+        if(isset($dbAdapter->getDriver()->getConnection()->getConnectionParameters()['database'])){
+            $params = $dbAdapter->getDriver()->getConnection()->getConnectionParameters()['database'];
         }
 
-        return $_REQUEST[self::CONTEXT_KEY];
+        $key = self::CONTEXT_KEY."-$params";
+        if (!isset($_REQUEST[$key])) {
+            $_REQUEST[$key] = new TransactionManager($dbAdapter);
+        }
+
+        return $_REQUEST[$key];
     }
     private function __construct($dbAdapter)
     {
@@ -44,11 +50,11 @@ class TransactionManager
 
     public function commit()
     {
+        if (!$this->rollbackOnly && $this->transactionCount == 1) {
+            $this->dbAdapter->getDriver()->getConnection()->commit();
+        }
         if ($this->transactionCount > 0) {
             $this->transactionCount--;
-        }
-        if (!$this->rollbackOnly && $this->transactionCount == 0) {
-            $this->dbAdapter->getDriver()->getConnection()->commit();
         }
     }
 

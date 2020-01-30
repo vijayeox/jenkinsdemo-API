@@ -1,7 +1,7 @@
 ox_elastic:
   -
     org_id: 1
-    app_id: 11_test
+    app_name: 11_test
     id: 1
     display_id: app1_1
     name: test document
@@ -14,7 +14,7 @@ ox_elastic:
     amount: 100.00
   -
     org_id: 1
-    app_id: 11_test
+    app_name: 11_test
     id: 2
     display_id: app1_2
     name: testing document
@@ -27,7 +27,7 @@ ox_elastic:
     amount: 50.50
   -
     org_id: 1
-    app_id: 11_test
+    app_name: 11_test
     id: 3
     display_id: app1_3
     name: different document
@@ -41,7 +41,7 @@ ox_elastic:
 
   -
     org_id: 1
-    app_id: 12_test
+    app_name: 12_test
     id: 4
     display_id: app2_1
     name: west document
@@ -55,7 +55,7 @@ ox_elastic:
 
   -
     org_id: 2
-    app_id: 11_test
+    app_name: 11_test
     id: 5
     display_id: app1_1
     name: test document
@@ -69,7 +69,7 @@ ox_elastic:
 
   -
     org_id: 1
-    app_id: 11_test
+    app_name: 11_test
     id: 6
     display_id: app1_1
     name: New document

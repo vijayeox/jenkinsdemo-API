@@ -4,7 +4,6 @@ namespace App\Controller;
 /**
 * PageContent Api
 */
-use Zend\Log\Logger;
 use App\Model\PageContent;
 use App\Model\PageContentTable;
 use App\Service\PageContentService;
@@ -18,9 +17,9 @@ class PageContentController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(PageContentTable $table, PageContentService $pageContentService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(PageContentTable $table, PageContentService $pageContentService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, PageContent::class);
+        parent::__construct($table, PageContent::class);
         $this->setIdentifierName('pageContentId');
         $this->pageContentService = $pageContentService;
     }
@@ -39,9 +38,8 @@ class PageContentController extends AbstractApiController
     */
     public function create($data)
     {
-        $appId = $this->params()->fromRoute()['appId'];
         try {
-            $count = $this->pageContentService->savePageContent($appId, $data);
+            $count = $this->pageContentService->createPageContent($data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -96,8 +94,7 @@ class PageContentController extends AbstractApiController
     */
     public function delete($id)
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $response = $this->pageContentService->deletePageContent($appId, $id);
+        $response = $this->pageContentService->deletePageContent($id);
         if ($response == 0) {
             return $this->getErrorResponse("PageContent not found", 404, ['id' => $id]);
         }
@@ -112,13 +109,12 @@ class PageContentController extends AbstractApiController
     * @return array $data
     * @return array Returns a JSON Response with Status Code and Created PageContent.
     */
-    public function get($pageContentId)
+   /* public function get($pageContentId)
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->pageContentService->getContent($appId, $pageContentId);
+        $result = $this->pageContentService->getContent($pageContentId);
         if (empty($result)) {
             return $this->getErrorResponse("Page Content not found", 404, ['id' => $pageContentId]);
         }
         return $this->getSuccessResponseWithData($result);
-    }
+    } */
 }

@@ -1,43 +1,49 @@
 <?php
 namespace Oxzion\Messaging;
 
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
+use Logger;
 use Exception;
+use Oxzion\Service\ErrorLogService;
 
 class MessageProducer
 {
     private static $instance = null;
     private $client;
     private $logger;
-    private function __construct()
-    {
-        $this->client = new Client();
-        $this->logger = new Logger;
-        $writer = new Stream(__DIR__ . '/../../../../logs/Messaging.log');
-        $this->logger->addWriter($writer);
-    }
+    private $errorLogService;
 
-    public static function getInstance()
+    public function __construct($config,ErrorLogService $errorLogService )
     {
-        if (!isset(static::$instance)) {
-            self::$instance = new MessageProducer();
-        }
-        return static::$instance;
+        $this->client = new Client($config);
+        $this->logger = Logger::getLogger(__CLASS__);
+        $this->errorLogService = $errorLogService;
+    }
+    public static function getInstance($config,$errorLogService){
+        return (new self($config,$errorLogService));
     }
 
     public function sendTopic($message, $topic)
     {
-        $this->logger->info("Sending message to topic - $topic");
+        $this->logger->info("Topic is ---".$topic." with payload ".$message);
         try {
-            $this->client->sendMessage('/topic/' . $topic, $message);
+            $result = $this->client->sendMessage('/topic/' . $topic, $message);
         } catch (Exception $e) {
-            $this->logger->log(Logger::ERR, $e->getMessage());
+            $this->errorLogService->saveError('amqp',$e->getTraceAsString(),$message,json_encode(array('topic'=>$topic)));
+            $this->logger->error($e->getMessage(), $e);
+            return false;
         }
+        return true;
     }
     public function sendQueue($message, $queue)
     {
-        $this->logger->info("Sending message to queue - $queue");
-        $this->client->sendMessage('/queue/' . $queue, $message);
+        $this->logger->info("Queue is ---".$queue." with payload ".$message);
+        try {
+            $result = $this->client->sendMessage('/queue/' . $queue, $message);
+        } catch (Exception $e){
+            $this->errorLogService->saveError('amqp',$e->getTraceAsString(),$message,json_encode(array('queue'=>$queue)));
+            $this->logger->error($e->getMessage(), $e);
+            return false;
+        }
+        return true;
     }
 }

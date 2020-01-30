@@ -14,9 +14,4 @@ class GenericPayload
         $this->topic = $topic;
         $this->payload = new Payload($this->data);
     }
-    public function send()
-    {
-        $producer = MessageProducer::getInstance();
-        $producer->sendTopic($this->payload->get(), $this->topic);
-    }
 }

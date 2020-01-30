@@ -1,5 +1,6 @@
 package com.oxzion.routes
 
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
@@ -7,10 +8,13 @@ import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.component.properties.PropertiesComponent
 import org.apache.camel.impl.DefaultCamelContext
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
 
 import javax.activation.DataHandler
 import javax.activation.FileDataSource
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Client for sending mails over smtp.
@@ -18,19 +22,25 @@ import javax.activation.FileDataSource
  *
  */
 @Component
+@EnableConfigurationProperties
+
 public class SendSmtpMail extends RouteBuilder {
+    private static final Logger logger = LoggerFactory.getLogger(SendSmtpMail.class);
     @Override
     void configure() throws Exception {
         CamelContext context = new DefaultCamelContext()
+        PropertiesComponent pc = getContext().getComponent("properties", PropertiesComponent.class)
+        pc.setLocation("classpath:mail.properties")
+        context.addComponent("properties", pc)
         context.addRoutes(new RouteBuilder() {
             @Override
             public void configure() {
-                PropertiesComponent pc = getContext().getComponent("properties", PropertiesComponent.class)
-                pc.setLocation("classpath:mail.properties")
-                from("activemq:topic:mail").process(new Processor() {
+                from("activemq:queue:mail").doTry().process(new Processor() {
                     public void process(Exchange exchange) throws Exception {
                         def jsonSlurper = new JsonSlurper()
+                        def messageIn  = exchange.getIn()
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody() as String)
+                        logger.info("Processing Email with payload ${object}")
                         def toList = ""
                         if(object.to){
                             def recepientList = object.to instanceof String ? [object.to] : object.to as ArrayList
@@ -42,35 +52,45 @@ public class SendSmtpMail extends RouteBuilder {
                                     toList += recepient
                                 }
                             }
-                            exchange.getIn().setHeader("To", toList)
+                            messageIn.setHeader("To", toList)
                         }
                         if(object.from){
-                            exchange.getIn().setHeader("From", object.from as String)
+                            messageIn.setHeader("From", object.from as String)
                         } else {
-                            exchange.getIn().setHeader("From", getContext().resolvePropertyPlaceholders("{{smtp.from.email}}"))
+                            messageIn.setHeader("From", getContext().resolvePropertyPlaceholders("{{smtp.from.email}}"))
                         }
                         if(object.subject){
-                            exchange.getIn().setHeader("Subject", object.subject as String)
+                            messageIn.setHeader("Subject", object.subject as String)
                         } else {
-                            exchange.getIn().setHeader("Subject", getContext().resolvePropertyPlaceholders("{{default.subject}}"))
+                            messageIn.setHeader("Subject", getContext().resolvePropertyPlaceholders("{{default.subject}}"))
                         }
-                        exchange.getIn().setBody(object.body as String)
-                         
-                        exchange.getIn().setHeader("Content-Type", "text/html")
+                        if(object.body){
+                            messageIn.setBody(object.body as String)
+                        } else {
+                            messageIn.setBody('')
+                        }
+                        messageIn.setHeader("Content-Type", "text/html")
                         if(object.attachments){
                             if(object.attachments.size()>0){
                                 def attachmentList = object.attachments as ArrayList
                                 for (int i=0;i<attachmentList.size();i++){
                                     def fileLocation = new File(attachmentList.get(i) as String)
-                                    def fileName = fileLocation.getAbsolutePath().substring(fileLocation.getAbsolutePath().lastIndexOf("\\")+1)
-                                    exchange.getIn().addAttachment(fileName, new DataHandler(new FileDataSource(fileLocation)))
+                                    def fileName = fileLocation.getAbsolutePath().substring(fileLocation.getAbsolutePath().lastIndexOf("/")+1)
+                                    messageIn.addAttachment(fileName, new DataHandler(new FileDataSource(fileLocation)))
                                 }
-                                
                             }
                         }
-                        
                     }
-                }).to("smtp://{{smtp.host}}?username={{smtp.username}}&password={{smtp.password}}")
+                }).log("Received body ").to("smtp://{{smtp.host}}?mail.smtp.auth=false").doCatch(Exception.class).process(new Processor() {
+                    void process(Exchange exchange) throws Exception {
+                        Exception exception = (Exception) exchange.getProperty(Exchange.EXCEPTION_CAUGHT)
+                        def params = [to: 'mail']
+                        def jsonparams = new JsonBuilder(params).toPrettyString()
+                        def stackTrace = new JsonBuilder(exception).toPrettyString()
+                        ErrorLog.log('activemq_queue',stackTrace,exchange.getMessage().getBody().toString(),jsonparams)
+                        System.out.println("handling ex")
+                    }
+                })
             }
         })
         context.start()

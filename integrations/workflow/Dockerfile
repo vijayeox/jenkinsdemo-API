@@ -24,7 +24,7 @@ COPY ./ProcessEngine/dist/processengine_plugin.jar /camunda/lib/
 
 ARG CAMUNDA_REPO="https://camunda.org/release/camunda-bpm/tomcat/7.9/"
 
-RUN wget --progress=bar:force:noscroll -O /tmp/camunda.tar.gz "${CAMUNDA_REPO}/camunda-bpm-${DISTRO}-${VERSION}.tar.gz"
+RUN wget --progress=bar:force:noscroll -O /tmp/camunda.tar.gz "${CAMUNDA_REPO}camunda-bpm-${DISTRO}-${VERSION}.tar.gz"
 
 # Unpack distro to /camunda directory
 RUN mkdir -p /camunda \
@@ -34,7 +34,7 @@ RUN mkdir -p /camunda \
 
 
 RUN MYSQL_VERSION=5.1.21 \
-    && wget -O /tmp/mysql-connector-java-${MYSQL_VERSION}.jar "http://central.maven.org/maven2/mysql/mysql-connector-java/${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}.jar" \ 
+    && wget -O /tmp/mysql-connector-java-${MYSQL_VERSION}.jar "https://repo1.maven.org/maven2/mysql/mysql-connector-java/${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}.jar" \ 
     && cp /tmp/mysql-connector-java-${MYSQL_VERSION}.jar /camunda/lib 
 
 # remove default CATALINA_OPTS from environment settings
@@ -53,7 +53,7 @@ ENV DB_HOST=localhost
 ENV DB_USER=root
 ENV DB_PASS=password
 ENV DB_URL=jdbc:mysql://${DB_HOST}/process-engine
-ENV BASE_DB_URL=jdbc:mysql://${DB_HOST}/oxapi
+ENV BASE_DB_URL=jdbc:mysql://${DB_HOST}/appBuilder_oxzionapi
 ENV BASE_DB_USERNAME=${DB_USER}
 ENV BASE_DB_PASSWORD=${DB_PASS}
 ENV DB_USERNAME=${DB_USER}

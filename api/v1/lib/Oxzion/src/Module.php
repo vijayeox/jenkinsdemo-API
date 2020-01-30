@@ -5,11 +5,33 @@ namespace Oxzion;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\ModuleManager\ModuleEvent;
+use Zend\ModuleManager\ModuleManager;
+use Logger;
 
 class Module
 {
+    private static $logInitialized = false;
+    public function init(ModuleManager $moduleManager)
+    {
+        $events = $moduleManager->getEventManager();
+        // Registering a listener at default priority, 1, which will trigger
+        // after the ConfigListener merges config.
+        $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'));
+    }
+
+    public function onMergeConfig(ModuleEvent $e)
+    {
+        $configListener = $e->getConfigListener();
+        $config         = $configListener->getMergedConfig(false);
+        if(!self::$logInitialized){
+            self::$logInitialized = true;
+            Logger::configure($config['logger']);
+        }
+    }
     public function getServiceConfig()
     {
+        
         return [
             'factories' => [
                 Auth\AuthContext::class => function ($container) {
@@ -23,8 +45,10 @@ class Module
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
                         $container->get(Model\UserTable::class),
+                        $container->get(Service\AddressService::class),
                         $container->get(Service\EmailService::class),
-                        $container->get(Service\TemplateService::class)
+                        $container->get(Service\TemplateService::class),
+                        $container->get(Messaging\MessageProducer::class)
                     );
                 },
                 Model\UserTable::class => function ($container) {
@@ -48,7 +72,7 @@ class Module
                 },
                 \Oxzion\Service\FileService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class), $container->get(\Oxzion\Service\FormService::class));
+                    return new \Oxzion\Service\FileService($container->get('config'), $dbAdapter, $container->get(\Oxzion\Model\FileTable::class), $container->get(\Oxzion\Service\FormService::class), $container->get(Messaging\MessageProducer::class),$container->get(\Oxzion\Service\FieldService::class));
                 },
                 Service\RoleService::class => function ($container) {
                     return new Service\RoleService(
@@ -77,8 +101,7 @@ class Module
                     return new Service\PrivilegeService(
                         $container->get('config'),
                         $container->get(AdapterInterface::class),
-                        $container->get(Model\PrivilegeTable::class),
-                        $container->get(Service\RoleService::class)
+                        $container->get(Model\PrivilegeTable::class)
                     );
                 },
                 Model\PrivilegeTable::class => function ($container) {
@@ -136,11 +159,14 @@ class Module
                 },
                 Service\FormService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\FormService($container->get('config'), $dbAdapter, $container->get(Model\FormTable::class), $container->get(FormEngine\FormFactory::class), $container->get(Service\FieldService::class));
+                    return new Service\FormService($container->get('config'), $dbAdapter, 
+                                                    $container->get(Model\FormTable::class), 
+                                                    $container->get(FormEngine\FormFactory::class), 
+                                                    $container->get(Service\FieldService::class));
                 },
                 Service\ActivityService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\ActivityService($container->get('config'), $dbAdapter, $container->get(Model\ActivityTable::class));
+                    return new Service\ActivityService($container->get('config'), $dbAdapter, $container->get(Model\ActivityTable::class),$container->get(Service\FormService::class));
                 },
                 Service\FieldService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -182,8 +208,10 @@ class Module
                         $container->get(AdapterInterface::class),
                         $container->get(Model\OrganizationTable::class),
                         $container->get(Service\UserService::class),
+                        $container->get(Service\AddressService::class),
                         $container->get(Service\RoleService::class),
-                        $container->get(Service\PrivilegeService::class)
+                        $container->get(Service\PrivilegeService::class),
+                        $container->get(Messaging\MessageProducer::class)
                     );
                 },
                 Model\OrganizationTable::class => function ($container) {
@@ -201,8 +229,30 @@ class Module
                         $resultSetPrototype
                     );
                 },
+                Service\AddressService::class => function ($container) {
+                    return new Service\AddressService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Model\AddressTable::class)
+                    );
+                },
+                Model\AddressTable::class => function ($container) {
+                    return new Model\AddressTable(
+                        $container->get(Model\AddressTableGateway::class)
+                    );
+                },
+                Model\AddressTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Address());
+                    return new TableGateway(
+                        'ox_address',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
                 Workflow\WorkflowFactory::class => function ($container) {
-                    return Workflow\WorkflowFactory::getInstance();
+                    return Workflow\WorkflowFactory::getInstance($container->get('config'));
                 },
                 FormEngine\FormFactory::class => function ($container) {
                     return FormEngine\FormFactory::getInstance();
@@ -214,8 +264,18 @@ class Module
                 Model\WorkflowTableGateway::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\Organization());
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Workflow());
                     return new TableGateway('ox_workflow', $dbAdapter, null, $resultSetPrototype);
+                },
+                Model\WorkflowDeploymentTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\WorkflowDeploymentTableGateway::class);
+                    return new Model\WorkflowDeploymentTable($tableGateway);
+                },
+                Model\WorkflowDeploymentTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\WorkflowDeployment());
+                    return new TableGateway('ox_workflow_deployment', $dbAdapter, null, $resultSetPrototype);
                 },
                 Service\WorkflowService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
@@ -227,7 +287,8 @@ class Module
                         $container->get(Service\FieldService::class),
                         $container->get(\Oxzion\Service\FileService::class),
                         $container->get(Workflow\WorkflowFactory::class),
-                        $container->get(Service\ActivityService::class)
+                        $container->get(Service\ActivityService::class),
+                        $container->get(Model\WorkflowDeploymentTable::class)
                     );
                 },
                 Service\UserTokenService::class => function ($container) {
@@ -277,10 +338,23 @@ class Module
                         $container->get(AdapterInterface::class)
                     );
                 },
-                Rule\RuleService::class => function ($container) {
-                    return new Rule\RuleService(
+                AppDelegate\AppDelegateService::class => function ($container) {
+
+                    return new AppDelegate\AppDelegateService(
                         $container->get('config'),
-                        $container->get(AdapterInterface::class)
+                        $container->get(AdapterInterface::class),
+                        $container->get(Document\DocumentBuilder::class),
+                        $container->get(Service\TemplateService::class),
+                        $container->get(Messaging\MessageProducer::class),
+                        $container->get(Service\FileService::class)
+                    );
+                },
+                Document\DocumentBuilder::class => function ($container) {
+
+                    return new Document\DocumentBuilder(
+                        $container->get('config'),
+                        $container->get(Service\TemplateService::class),
+                        new Document\DocumentGeneratorImpl()
                     );
                 },
                 Service\EmailService::class => function ($container) {
@@ -299,6 +373,105 @@ class Module
                 },
                 NLP\NLPEngine::class => function ($container) {
                     return new NLP\Dialogflow\NLPDialogflowV1();
+                },
+                Service\UserCacheService::class => function ($container) {
+                    return new Service\UserCacheService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Model\UserCacheTable::class)
+                    );
+                },
+                Model\UserCacheTable::class => function ($container) {
+                    return new Model\UserCacheTable(
+                        $container->get(Model\UserCacheTableGateway::class)
+                    );
+                },
+                Model\UserCacheTableGateway::class => function ($container) {
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\UserCache());
+                    return new TableGateway(
+                        'ox_user_cache',
+                        $container->get(AdapterInterface::class),
+                        null,
+                        $resultSetPrototype
+                    );
+                },
+                Model\ErrorLogTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\ErrorLogTableGateway::class);
+                    return new Model\ErrorLogTable($tableGateway);
+                },
+                Model\ErrorLogTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\ErrorLog());
+                    return new TableGateway('ox_error_log', $dbAdapter, null, $resultSetPrototype);
+                },
+                Messaging\MessageProducer::class => function ($container) {
+                    $config = $container->get('config');
+                    return new Messaging\MessageProducer($config,$container->get(Service\ErrorLogService::class));
+                },
+                Service\ErrorLogService::class => function ($container) {
+                    return new Service\ErrorLogService(
+                        $container->get('config'),
+                        $container->get(AdapterInterface::class),
+                        $container->get(Model\ErrorLogTable::class),
+                        $container->get(Service\UserCacheService::class),
+                        $container->get(Workflow\WorkflowFactory::class)
+                    );
+                },
+                Model\WorkflowInstanceTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\WorkflowInstanceTableGateway::class);
+                    return new Model\WorkflowInstanceTable($tableGateway);
+                },
+                Model\ActivityInstanceTable::class => function ($container) {
+                    $tableGateway = $container->get(Model\ActivityInstanceTableGateway::class);
+                    return new Model\ActivityInstanceTable($tableGateway);
+                },
+                Model\WorkflowInstanceTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\WorkflowInstance());
+                    return new TableGateway('ox_workflow_instance', $dbAdapter, null, $resultSetPrototype);
+                },
+                Model\ActivityInstanceTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\ActivityInstance());
+                    return new TableGateway('ox_activity_instance', $dbAdapter, null, $resultSetPrototype);
+                },
+                Service\WorkflowInstanceService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\WorkflowInstanceService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Model\WorkflowInstanceTable::class),
+                        $container->get(Service\FileService::class),
+                        $container->get(Service\UserService::class),
+                        $container->get(Service\WorkflowService::class),
+                        $container->get(Workflow\WorkflowFactory::class),
+                        $container->get(Service\ActivityInstanceService::class)
+                    );
+                },
+                Service\ActivityInstanceService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\ActivityInstanceService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Model\ActivityInstanceTable::class),
+                        $container->get(Workflow\WorkflowFactory::class)
+                    );
+                },
+                Service\CommandService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\CommandService($container->get('config'),
+                        $dbAdapter,
+                        $container->get(Service\TemplateService::class),
+                        $container->get(AppDelegate\AppDelegateService::class),
+                        $container->get(Service\FileService::class),
+                        $container->get(Messaging\MessageProducer::class),
+                        $container->get(Service\WorkflowInstanceService::class),
+                        $container->get(Service\WorkflowService::class),
+                        $container->get(Service\UserService::class));
                 },
             ],
         ];

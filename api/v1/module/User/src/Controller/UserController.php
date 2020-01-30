@@ -4,7 +4,6 @@ namespace User\Controller;
 use DeepCopy\f007\FooDateTimeZone;
 use Oro\Component\MessageQueue\Transport\Exception\Exception;
 use Zend\Db\Sql\Ddl\Column\Datetime;
-use Zend\Log\Logger;
 use Oxzion\Model\User;
 use Oxzion\Model\UserTable;
 use Oxzion\Service\UserService;
@@ -34,9 +33,9 @@ class UserController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(UserTable $table, Logger $log, UserService $userService, AdapterInterface $adapterInterface, EmailService $emailService, ProjectService $projectService)
+    public function __construct(UserTable $table, UserService $userService, AdapterInterface $adapterInterface, EmailService $emailService, ProjectService $projectService)
     {
-        parent::__construct($table, $log, __class__, User::class, EmailService::class);
+        parent::__construct($table, User::class, EmailService::class);
         $this->setIdentifierName('userId');
         $this->userService = $userService;
         $this->emailService = $emailService;
@@ -78,7 +77,6 @@ class UserController extends AbstractApiController
      */
     public function create($data)
     {
-
         try {
             $params = $this->params()->fromRoute();
             $count = $this->userService->createUser($params,$data);
@@ -161,7 +159,17 @@ class UserController extends AbstractApiController
     {
         $data = $this->extractPostData();
         $id =AuthContext::get(AuthConstants::USER_UUID);
-        return $this->update($id,$data);
+        try{
+             $result = $this->update($id,$data);
+        }
+        catch (ValidationException $e) {
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        }
+        catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
+        return $result;
     }
 
     /**

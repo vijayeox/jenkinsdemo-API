@@ -3,8 +3,7 @@
 namespace Oxzion\Error;
 
 use Zend\View\Model\JsonModel;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
+use Logger;
 
 class ErrorHandler
 {
@@ -12,9 +11,7 @@ class ErrorHandler
     
     public static function init()
     {
-        self::$logger = new Logger();
-        $writer = new Stream(__DIR__ . '/../../../../logs/Error.log');
-        self::$logger->addWriter($writer);
+        self::$logger = Logger::getLogger('root');
     }
 
     public static function onDispatchError($e)
@@ -26,9 +23,12 @@ class ErrorHandler
     {
         return self::getJsonModelError($e);
     }
-    public static function buildErrorJson($message, array $data = null)
+    public static function buildErrorJson($message, array $data = null, $errorCode = 0)
     {
         $payload = ['status' => 'error'];
+        if ($errorCode != 0) {
+            $payload['errorCode'] = $errorCode;
+        }
         if (! is_null($message)) {
             $payload['message'] = $message;
         }
@@ -56,7 +56,7 @@ class ErrorHandler
                 'stacktrace' => $exception->getTraceAsString()
             );
         }
-        self::$logger->log(Logger::ERR, print_r($exceptionJson, true));
+        self::$logger->error(print_r($exceptionJson, true));
         
         $errorJson = array(
             'message'   => 'An error occurred during execution; please try again later.',

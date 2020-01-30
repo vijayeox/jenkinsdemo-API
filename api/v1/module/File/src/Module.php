@@ -48,7 +48,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\CommentController(
                         $container->get(CommentTable::class),
                         $container->get(\Oxzion\Service\CommentService::class),
-                        $container->get('FileLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -56,7 +55,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\SubscriberController(
                         $container->get(SubscriberTable::class),
                         $container->get(\Oxzion\Service\SubscriberService::class),
-                        $container->get('FileLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

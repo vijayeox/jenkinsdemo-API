@@ -2,7 +2,6 @@
 
 namespace Email\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
 use Email\Model\DomainTable;
 use Email\Model\Domain;
@@ -22,9 +21,9 @@ class DomainController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(DomainTable $table, DomainService $domainService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(DomainTable $table, DomainService $domainService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Domain::class);
+        parent::__construct($table, Domain::class);
         $this->setIdentifierName('domainId');
         $this->domainService = $domainService;
     }

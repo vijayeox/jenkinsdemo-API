@@ -54,6 +54,8 @@ class ServiceTest extends TestCase
      */
     protected $traceError = true;
 
+    protected $dbAdapter;
+
     /**
      * Reset the application for isolation
      */
@@ -66,6 +68,7 @@ class ServiceTest extends TestCase
     
         $this->usedConsoleBackup = Console::isConsole();
         $this->reset();
+        $this->setupConnection();
         $tm = $this->getTransactionManager();
         $tm->setRollbackOnly(true);
         $tm->beginTransaction();
@@ -76,6 +79,11 @@ class ServiceTest extends TestCase
         $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/autoload/global.php', include __DIR__ . '/../../../../config/autoload/local.php');
         $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php', $configOverrides);
         $this->setApplicationConfig($configOverrides);
+    }
+
+    //this is required to ensure that same connection is used by dbunit and zend db
+    protected function setupConnection()
+    {
     }
 
     /**
@@ -91,6 +99,18 @@ class ServiceTest extends TestCase
         //cleanup required to remove the transactionManager
         $_REQUEST = [];
     }
+
+    protected function getDbAdapter(){
+        if(!$this->dbAdapter){
+            $this->dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);    
+        }
+        
+        return $this->dbAdapter;
+    }
+
+    protected function setDbAdapter($dbAdapter){
+        $this->dbAdapter = $dbAdapter;
+    }
     /**
      * Reset the request
      *
@@ -99,7 +119,7 @@ class ServiceTest extends TestCase
     
     protected function getTransactionManager()
     {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $dbAdapter = $this->getDbAdapter();
         return TransactionManager::getInstance($dbAdapter);
     }
 

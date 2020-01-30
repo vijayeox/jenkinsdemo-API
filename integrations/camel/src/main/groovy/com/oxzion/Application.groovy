@@ -1,15 +1,17 @@
 package com.oxzion
 
+import java.util.Collections
+
 import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 
 //CHECKSTYLE:OFF
 @SpringBootApplication
 @EnableAutoConfiguration
 
 class Application{
-    public static void main(String[] args){
+    static void main(String[] args){
         SpringApplication.run Application, args
     }
 }

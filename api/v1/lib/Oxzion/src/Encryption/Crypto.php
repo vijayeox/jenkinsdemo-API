@@ -39,12 +39,30 @@ class Crypto
         if ($secret==null) {
             $secret=self::$secret;
         }
-        $encrypted_key = hash("sha256", $secret, $raw_output = true);
         $dat = $this->base_64_decode($data);
-        $decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $encrypted_key, $dat, MCRYPT_MODE_ECB);
+        $decrypted = $this->encrypt_decrypt("decrypt",$dat,$secret);
         $dec = Decoder::decode($decrypted);
         return($dec);
     }
+
+    private function encrypt_decrypt($action, $string,$secret) {
+        $output = false;
+        $encrypt_method = "AES-256-CBC";
+        $secret_iv = $secret."-iv";
+        // hash
+        $key = hash('sha256', $secret);
+        
+        // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
+        $iv = substr(hash('sha256', $secret_iv), 0, 16);
+        if ( $action == 'encrypt' ) {
+            $output = openssl_encrypt($string, $encrypt_method, $key, 0, $iv);
+            $output = base64_encode($output);
+        } else if( $action == 'decrypt' ) {
+            $output = openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+        }
+        return $output;
+    }
+    
 
     public function encryption($data, $secret=null)
     {
@@ -52,8 +70,7 @@ class Crypto
             $secret=self::$secret;
         };
         $dataencoded = Encoder::encode($data);
-        $encrypted_key = hash("sha256", $secret, $raw_output = true);
-        $encrypeddata = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $encrypted_key, $dataencoded, MCRYPT_MODE_ECB);
+        $encrypeddata = $this->encrypt_decrypt("encrypt",$dataencoded,$secret);
         $dat = $this->base_64_encode($encrypeddata);
         return $dat;
     }

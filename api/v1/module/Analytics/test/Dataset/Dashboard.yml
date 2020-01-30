@@ -1,0 +1,28 @@
+ox_dashboard:
+  -
+    id: 11
+    uuid: 'a59f865e-efba-472e-91f2-2ae2d8a16d36'
+    name: 'Dashboard1'
+    ispublic: 1
+    description: 'Description'
+    dashboard_type: 'Widget'
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    content: 'Content 1'
+    version: 1
+
+  -
+    id: 12
+    uuid: 'fc67ceb2-4b6f-4a33-8527-5fc6b0822988'
+    name: 'Dashboard2'
+    ispublic: 1 
+    description: 'Description'
+    dashboard_type: 'Document'
+    created_by: 1
+    date_created: '2019-06-27 07:25:06'
+    org_id: 1
+    isdeleted: 0
+    content: 'Content 2'
+    version: 1

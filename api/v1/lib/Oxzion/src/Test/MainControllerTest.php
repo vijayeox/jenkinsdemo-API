@@ -24,6 +24,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     protected $noUser = 'admin';
     protected $noUserId = 0;
     protected $testOrgId = 1;
+    protected $testOrgUuid = "53012471-2863-4949-afb1-e69b0891c98a";
 
 
     protected $jwtToken = array();
@@ -47,7 +48,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         $_SERVER['REQUEST_SCHEME'] = "http";
         $_SERVER['SERVER_NAME'] = "localhost";
         $_SERVER['SERVER_PORT'] = "8080";
-    
+
         $this->setupConnection();
         $tm = $this->getTransactionManager();
         $tm->setRollbackOnly(true);
@@ -69,7 +70,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         parent::tearDown();
         $_REQUEST = [];
     }
-    
+
     protected function getTransactionManager()
     {
         $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
@@ -95,7 +96,7 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
     private function getJwtToken($username)
     {
         if (!isset($this->jwtToken[$username])) {
-            $data = JwtHelper::getTokenPayload(['username'=>$username,'orgid' => $this->testOrgId]);
+            $data = JwtHelper::getTokenPayload(['username'=>$username,'orgid' => $this->testOrgId,'orgUuid' => $this->testOrgUuid]);
             $config = $this->getApplicationConfig();
             $jwtKey = $config['jwtKey'];
             $jwtAlgo = $config['jwtAlgo'];
@@ -192,13 +193,6 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         return $this->getApplication()->getServiceManager();
     }
 
-    protected function executeUpdate($query)
-    {
-        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
-        $statement = $dbAdapter->query($query);
-        $result = $statement->execute();
-        return $result;
-    }
 
     protected function executeQueryTest($query)
     {
@@ -210,4 +204,11 @@ abstract class MainControllerTest extends AbstractHttpControllerTestCase
         return $resultSet->toArray();
     }
 
+    protected function executeUpdate($query)
+    {
+        $dbAdapter = $this->getApplicationServiceLocator()->get(AdapterInterface::class);
+        $statement = $dbAdapter->query($query);
+        $result = $statement->execute();
+        return $result;
+    }
 }

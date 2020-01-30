@@ -30,11 +30,11 @@ class ProjectService extends AbstractService
         $this->messageProducer = $messageProducer;
     }
 
-    public function __construct($config, $dbAdapter, ProjectTable $table, $organizationService)
+    public function __construct($config, $dbAdapter, ProjectTable $table, $organizationService,MessageProducer $messageProducer)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
         $this->organizationService = $organizationService;
     }
 
@@ -453,7 +453,7 @@ class ProjectService extends AbstractService
                 $delete = $this->getSqlObject()
                 ->delete('ox_user_project')
                 ->where(['project_id' => $projectId]);
-                $result = $this->executeQueryString($delete);
+                $result = $this->executeQuery($delete);
                 $query ="Insert into ox_user_project(user_id,project_id) (Select ox_user.id, ".$projectId." AS project_id from ox_user where ox_user.id in (".implode(',', $userSingleArray)."))";
                 $resultInsert = $this->runGenericQuery($query);
                 if (count($resultInsert) != count($userArray)) {

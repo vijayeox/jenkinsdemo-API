@@ -2,7 +2,6 @@
 namespace Callback\Service;
 
     use Oxzion\Service\AbstractService;
-    use Zend\Log\Logger;
     use Oxzion\Email\EmailClient;
     use Exception;
     use Horde_Exception;
@@ -11,21 +10,24 @@ namespace Callback\Service;
     {
         protected $dbAdapter;
         protected $emailService;
-        private $logClass;
-
-        public function __construct($config, Logger $log)
+        protected $emailClient;
+        
+        public function __construct($config)
         {
-            parent::__construct($config, null, $log);
-            $this->logClass = __CLASS__;
+            parent::__construct($config, null);
+            $this->emailClient = new EmailClient();
         }
         public function setEmailService($emailService)
         {
             $this->emailService = $emailService;
         }
+        public function setEmailClient($emailClient)
+        {
+            $this->emailClient = $emailClient;
+        }
 
         public function sendMail($data, $attachment)
         {
-            $emailClient = new EmailClient();
             $attachment = isset($attachment['attachment']) ? $attachment['attachment'] : false;
             $userEmail = $data['from'];
             $smtpDetails = $this->emailService->getEmailAccountsByEmailId($userEmail, true)[0];
@@ -55,12 +57,12 @@ namespace Callback\Service;
             );
             try {
                 if ($body != strip_tags($body)) {
-                    $response = $emailClient->buildAndSendMessage($body, $attachment, $headers, $smtpConfig, $opt=['html'=>true]);
+                    $response = $this->emailClient->buildAndSendMessage($body, $attachment, $headers, $smtpConfig, $opt=['html'=>true]);
                 } else {
-                    $response = $emailClient->buildAndSendMessage($body, $attachment, $headers, $smtpConfig, $opt=['html'=>false]);
+                    $response = $this->emailClient->buildAndSendMessage($body, $attachment, $headers, $smtpConfig, $opt=['html'=>false]);
                 }
             } catch (Exception $e) {
-                $this->logger->err($this->logClass . " Error : ".$e->getMessage());
+                $this->logger->error(" Error : ".$e->getMessage(), $e);
                 return true;
             }
         }

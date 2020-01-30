@@ -14,15 +14,17 @@ class IndexerImpl implements Indexer
         $this->config = $config;
     }
 
-    public function index($appId, $id, $type, $body, $fieldTypeAarray = null)
+    public function index($app_name, $id, $entity_name, $body, $fieldTypeAarray = null)
     {
         try {
             if (empty($body['org_id'])) {
                 $org_id = AuthContext::get(AuthConstants::ORG_ID);
                 $body['org_id'] = $org_id;
             }
-            $body['type'] = $type;
-            $index = $appId;
+            if (empty($body['entity_name'])) {
+                $body['entity_name'] = $entity_name;
+            }
+            $index = $app_name.'_index';
             if ($fieldTypeAarray) {
                 foreach ($body as $key => $value) {
                     if (isset($fieldTypeAarray[$key])) {

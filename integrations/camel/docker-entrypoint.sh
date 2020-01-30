@@ -20,7 +20,8 @@ fi
 #fi
 
 ./gradlew bootJar 
-cp ./build/libs/app-0.0.1-SNAPSHOT.jar /app/camel.jar
+mkdir -p /workspace/camel
+cp ./build/libs/app-0.0.1-SNAPSHOT.jar /workspace/camel/camel.jar
 su - activemq /opt/activemq/bin/activemq console &
-cd /app
+cd /workspace/camel
 java -jar ./camel.jar

@@ -12,7 +12,7 @@ class FileUtils
         // create the directory.
         if (!is_dir($directory)) {
             if (!mkdir($directory, 0777, true)) {
-                throw new \Exception('Could not create directory for uploads: ' . error_get_last());
+                throw new \Exception("Could not create directory $directory: " . error_get_last());
             }
         }
     }
@@ -79,22 +79,35 @@ class FileUtils
         self::createDirectory($destDirectory);
         copy($src, $destDirectory.$destFile);
     }
-    
+
+    public static function copyDir($src, $dest) {
+        if (!file_exists($dest)) self::createDirectory($dest);
+        foreach (scandir($src) as $file) {
+            if ($file == '.' || $file == '..') continue;
+            if (is_dir($src.'/'.$file))
+                self::copyDir($src.'/'.$file, $dest.'/'.$file);
+            elseif (!file_exists($dest.'/'.$file))
+                copy($src.'/'.$file, $dest.'/'.$file);
+        }
+    }
+
     public static function renameFile($source, $destination)
     {
         self::createDirectory(str_replace(basename($destination), "", $destination));
         return rename($source, $destination);
     }
+
     public static function deleteDirectoryContents($dir)
     {
-        if (is_file($dir)) {
-            return unlink($dir);
-        } elseif (is_dir($dir)) {
-            $scan = glob(rtrim($dir, '/').'/*');
-            foreach ($scan as $index=>$path) {
-                self::deleteDirectoryContents($path);
+        if(is_dir($dir)){
+            $files = scandir( $dir );
+            foreach( $files as $file ) {
+                if ($file !== '.' && $file !== '..')
+                self::deleteDirectoryContents( $dir.'/'.$file );
             }
-            return @rmdir($dir);
+            rmdir( $dir );
+        } else {
+            unlink( $dir );
         }
     }
     public static function getFiles($directory)
@@ -115,6 +128,25 @@ class FileUtils
     {
         return filesize($directory.$fileName);
     }
+    public static function rmDir($dirPath)
+    {
+        if(is_link($dirPath)){
+            unlink($dirPath);
+        }else if(is_dir($dirPath)){
+            if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+                $dirPath .= '/';
+            }
+            $files = glob($dirPath . '*', GLOB_MARK);
+            foreach ($files as $file) {
+                if (is_dir($file)) {
+                    self::rmDir($file);
+                } else {
+                    unlink($file);
+                }
+            }
+            rmDir($dirPath);
+        }
+    }
     public static function deleteFile($fileName, $directory)
     {
         if (unlink($directory.$fileName)) {
@@ -129,26 +161,37 @@ class FileUtils
         return file_exists($fileName);
     }
 
+    public static function symlink($target, $link)
+    {
+        return symlink($target, $link);
+    }
 
+    public static function unlink($link)
+    {
+        if(is_link($link))
+        {
+            unlink($link);
+        }
+    }
     public static function convetImageTypetoPNG($file)
     {
         $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         switch ($extension) {
-                case 'jpg':
-                case 'jpeg':
-                case 'JPG':
-                case 'JPEG':
-                    $image = imagecreatefromjpeg($file['tmp_name']);
-                break;
-                case 'gif':
-                case 'GIF':
-                    $image = imageCreateFromGIF($file['tmp_name']);
-                    break;
-                case 'png':
-                case 'PNG':
-                    $image = imageCreateFromPNG($file['tmp_name']);
-                    break;
-                }
+            case 'jpg':
+            case 'jpeg':
+            case 'JPG':
+            case 'JPEG':
+            $image = imagecreatefromjpeg($file['tmp_name']);
+            break;
+            case 'gif':
+            case 'GIF':
+            $image = imageCreateFromGIF($file['tmp_name']);
+            break;
+            case 'png':
+            case 'PNG':
+            $image = imageCreateFromPNG($file['tmp_name']);
+            break;
+        }
         return $image;
     }
 }

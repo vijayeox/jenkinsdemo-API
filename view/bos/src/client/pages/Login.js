@@ -1,4 +1,4 @@
-﻿import { Login as defaultLogin } from "../../osjs-client/index.js";
+import { Login as defaultLogin } from "../../osjs-client/index.js";
 import { h, app } from "hyperapp"; 
 import "../assets/scss/login.scss";
 
@@ -242,6 +242,11 @@ export default class Login extends defaultLogin {
                           className: "btn waves-effect waves-light"
                         },
                         "Login"
+                      ),
+                      h(
+                        "a",
+                        { href: "#", onclick: () => showForgotPassScreen() },
+                        "Forgot your password?"
                       )
                     ])
                   ]
@@ -532,4 +537,11 @@ export default class Login extends defaultLogin {
       }
     };
   }
+
+    destroy() {
+      this.core.$root.classList.remove('login');
+      if (this.$container) {
+        this.$container.remove();
+      }
+    }
 }

@@ -3,13 +3,17 @@ namespace Oxzion\Workflow\Camunda;
 
 use Oxzion\Workflow\ProcessEngine;
 use Oxzion\Utils\RestClient;
+use Exception;
+use Logger;
 
 class ProcessEngineImpl implements ProcessEngine
 {
     private $restClient;
-    public function __construct()
+    protected $logger;
+    public function __construct($config)
     {
-        $this->restClient = new RestClient(Config::ENGINE_URL);
+        $this->logger = Logger::getLogger(__CLASS__);
+        $this->restClient = new RestClient($config['workflow']['engineUrl']);
     }
     public function setRestClient($restClient)
     {
@@ -24,7 +28,7 @@ class ProcessEngineImpl implements ProcessEngine
             $result = json_decode($response, true);
             return $result;
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
 
@@ -32,11 +36,11 @@ class ProcessEngineImpl implements ProcessEngine
     {
         $query = 'process-definition/'.$id.'/start';
         $params =array();
-        foreach ($processVariables as $key => $value) {
-            $params[$key]['value'] = $value;
-        }
         try {
             if ($processVariables) {
+                foreach ($processVariables as $key => $value) {
+                    $params[$key]['value'] = $value;
+                }
                 $response = $this->restClient->post($query, array("variables"=>$params));
             } else {
                 $response = $this->restClient->post($query);
@@ -47,8 +51,10 @@ class ProcessEngineImpl implements ProcessEngine
             } else {
                 return 0;
             }
-        } catch (Exception $e) {
-            return 0;
+        } catch (Exception $e) { 
+            $this->logger->info("Process impl");
+            $this->logger->error($e->getMessage(),$e);
+            throw $e;
         }
     }
 

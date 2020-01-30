@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RequestMapping
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @RestController
 class JobListener {
-
+    private static final Logger logger = LoggerFactory.getLogger(JobListener.class);
     @Autowired
     JobSchedulerHelper jobHelper
     
@@ -26,6 +28,8 @@ class JobListener {
      *          {
      *              job : {
      *                      url : string,
+     *                      name: string,
+     *                      group : string,
      *                      topic : string,
      *                      data : {json}
      *              }
@@ -40,6 +44,7 @@ class JobListener {
     Map setupJob(@RequestBody  Map<String, Object> payload/*,@RequestHeader("Authorization") Object auth*/ ) {
         /*payload.put("Authorization",auth)*/
 
+        logger.info("RequestMapping - $payload")
         JobSchedulerResponse jobSchedulerResponse = new JobSchedulerResponse()
 
         if (payload.containsKey('job')) {
@@ -63,5 +68,39 @@ class JobListener {
         jobSchedulerResponse.setParams(true, "Job Scheduled Successfully!", jobDetail.getKey().getName(), jobDetail.getKey().getGroup())
         return jobSchedulerResponse.getAll()
     }
+    /**
+     *
+     * @param payload
+     * {
+     *     jobId : string
+     *     jobGroup : string
+     * }
+     * @return
+     */
+    @RequestMapping(value ="/canceljob",method = RequestMethod.POST, consumes = "application/json")
+        Map cancelJob(@RequestBody  Map<String, Object> payload ) {
+        logger.info("RequestMapping - $payload")
+        JobSchedulerResponse jobSchedulerResponse = new JobSchedulerResponse()
+        if (payload.containsKey('jobid')) {
+            if(payload.containsKey('jobgroup')) {
+                def check = jobHelper.cancelJob(payload.jobid, payload.jobgroup)
+                if (check)
+                    jobSchedulerResponse.setParams(true, "Job Canceled Successfully!", payload.jobid, payload.jobgroup)
+                else
+                    throw new NotFoundException()
+            }
+        }
+        else
+            jobSchedulerResponse.setParams(false,"Data incorrectly specified")
+
+        return jobSchedulerResponse.getAll()
+    }
+
+    @RequestMapping(value ="/listjob",method = RequestMethod.GET)
+    def ListJob() {
+        def list = jobHelper.listJob()
+        return list
+    }
 
 }
+

@@ -1,4 +1,6 @@
 import React from "react";
+import Notification from "./../../Notification";
+
 import { toODataString } from "@progress/kendo-data-query";
 import LoadingPanel from "./LoadingPanel";
 
@@ -10,18 +12,25 @@ export class DataLoader extends React.Component {
     this.state = {
       url: this.props.url
     };
+    this.init = { method: "GET", accept: "application/json", headers: {} };
     this.timeout = null;
   }
 
   async getData(url) {
-    let helper = this.core.make("oxzion/restClient");
-    let data = await helper.request(
-      "v1",
-      "/" + url + "?" + "filter=[" + JSON.stringify(this.props.dataState) + "]",
-      {},
-      "get"
-    );
-    return data;
+    if (typeof this.core == "undefined") {
+      let response = await fetch(url, this.init);
+      let json = await response.json();
+      let data = { data: json.value, total: json["@odata.count"] };
+      return data;
+    } else {
+      let helper = this.core.make("oxzion/restClient");
+      let route =
+        Object.keys(this.props.dataState).length === 0
+          ? url
+          : url + "?" + "filter=[" + JSON.stringify(this.props.dataState) + "]";
+      let data = await helper.request("v1", "/" + route, {}, "get");
+      return data;
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -30,10 +39,16 @@ export class DataLoader extends React.Component {
         url: this.props.url
       });
       this.getData(this.props.url).then(response => {
-        this.props.onDataRecieved({
-          data: response.data,
-          total: response.total
-        });
+        if (typeof response == "object" && response.status == "success") {
+          this.props.onDataRecieved({
+            data: response.data,
+            total: response.total
+          });
+        } else {
+          //put notification
+
+          this.pending = undefined;
+        }
       });
     }
   }
@@ -74,7 +89,12 @@ export class DataLoader extends React.Component {
 
   render() {
     this.requestDataIfNeeded();
-    return this.pending && <LoadingPanel />;
+    return (
+      <>
+        <Notification ref={this.notif} />
+        {this.pending && <LoadingPanel />}
+      </>
+    );
   }
 }
 export default DataLoader;

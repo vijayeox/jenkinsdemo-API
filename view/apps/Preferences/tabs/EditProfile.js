@@ -2,12 +2,15 @@ import React, { Component } from "react";
 import CountryCodes from "OxzionGUI/public/js/CountryCodes";
 import Moment from "moment";
 import { DatePicker } from "@progress/kendo-react-dateinputs";
-import Notification from "../components/Notification";
+import Notification from "OxzionGUI/Notification"
+import { Form, Row, Button } from 'react-bootstrap'
 import AvatarImageCropper from "react-avatar-image-cropper";
 import image2base64 from "image-to-base64";
 import Webcam from "react-webcam";
 import PhoneInput from "react-phone-number-input";
 import { Editor, EditorTools } from "@progress/kendo-react-editor";
+import Countries from '../public/js/countries'
+import states from '../public/js/states'
 const {
   Bold,
   Italic,
@@ -31,13 +34,14 @@ class EditProfile extends Component {
 
     this.core = this.props.args;
     this.userprofile = this.core.make("oxzion/profile").get();
+    console.log(this.userprofile)
     if (
       this.userprofile.key.preferences != undefined ||
       this.userprofile.key.preferences != null
     ) {
       this.userprofile.key.preferences["dateformat"] =
         this.userprofile.key.preferences["dateformat"] &&
-        this.userprofile.key.preferences["dateformat"] != ""
+          this.userprofile.key.preferences["dateformat"] != ""
           ? this.userprofile.key.preferences["dateformat"]
           : "dd-MM-yyyy";
     } else {
@@ -50,7 +54,8 @@ class EditProfile extends Component {
       fields: this.userprofile.key,
       showImageDiv: 1,
       imageData: null,
-      icon: this.userprofile.key.icon + "?" + new Date()
+      icon: this.userprofile.key.icon + "?" + new Date(),
+      selectedCountryID: ""
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -72,6 +77,7 @@ class EditProfile extends Component {
       const Datekendo = new Date(Dateiso);
       let fields = this.state.fields;
       fields["date_of_birth"] = Datekendo;
+
       this.setState({
         fields
       });
@@ -82,12 +88,25 @@ class EditProfile extends Component {
       this.state.fields.country == null
     ) {
       let fields = this.state.fields;
-      fields["country"] = "United States of America";
+      // fields["country"] = "United States of America";
       this.setState({
         fields
       });
     }
+    else {
+      //setting state dropdown
+      Countries.map((country, key) => {
+        let countryname = country.name
+        let countryid = ""
+        if (this.state.fields.country === countryname) {
+          countryid = "" + country.id
+          this.setState({ selectedCountryID: countryid })
+        }
+      })
+    }
+
   }
+
 
   handleDOBChange = event => {
     let fields = this.state.fields;
@@ -101,6 +120,11 @@ class EditProfile extends Component {
     this.setState({
       fields
     });
+    if (e.target.name === "country") {
+      const selectedIndex = e.target.options.selectedIndex;
+      const countryid = e.target.options[selectedIndex].getAttribute('data-countryid')
+      this.setState({ selectedCountryID: countryid })
+    }
   };
 
   handlePhoneChange = phone => {
@@ -121,7 +145,6 @@ class EditProfile extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-
     if (this.validateForm()) {
       const formData = {};
 
@@ -143,7 +166,6 @@ class EditProfile extends Component {
         }
       });
 
-      console.log(formData);
       let helper = this.core.make("oxzion/restClient");
 
       let editresponse = await helper.request(
@@ -153,19 +175,25 @@ class EditProfile extends Component {
         "post"
       );
       if (editresponse.status == "error") {
-        this.notif.current.failNotification(
-          "Update failed: " + editresponse.message
-        );
+        this.notif.current.notify(
+          "Error",
+          "Update failed: " + editresponse.message,
+          "danger"
+        )
       } else {
-        this.notif.current.successNotification(
-          "Profile has been successfully updated."
-        );
+        this.notif.current.notify(
+          "Success",
+          "Profile has been successfully updated.",
+          "success"
+        )
         this.core.make("oxzion/profile").update();
       }
     } else {
-      this.notif.current.failNotification(
-        "Please fill all the mandatory fields."
-      );
+      this.notif.current.notify(
+        "Error",
+        "Please fill all the mandatory fields. ",
+        "danger"
+      )
     }
   }
 
@@ -198,14 +226,32 @@ class EditProfile extends Component {
       errors["phone"] = "*Please enter Phone Number";
     }
 
-    if (!fields["address"]) {
+    if (!fields["address1"]) {
       formIsValid = false;
-      errors["address"] = "*Please enter your address";
+      errors["address1"] = "*Please enter your address";
+    }
+  
+    if (!fields["state"]) {
+      formIsValid = false;
+      errors["state"] = "*Please select your state";
     }
 
     if (!fields["interest"]) {
       formIsValid = false;
       errors["interest"] = "*Please enter your interest";
+    }
+    if (!fields["country"]) {
+      formIsValid = false;
+      errors["country"] = "*Please select your country";
+    }
+  
+    if (!fields["city"]) {
+      formIsValid = false;
+      errors["city"] = "*Please enter your city";
+    }
+    if (!fields["zip"]) {
+      formIsValid = false;
+      errors["zip"] = "*Please enter your zip";
     }
 
     this.setState({
@@ -225,17 +271,21 @@ class EditProfile extends Component {
       "post"
     );
     if (uploadresponse.status == "error") {
-      this.notif.current.failNotification(
-        "Update failed: " + uploadresponse.message
-      );
+      this.notif.current.notify(
+        "Error",
+        "Update failed: " + uploadresponse.message,
+        "danger"
+      )
     } else {
       this.setState({
         icon: imageData
       });
       this.core.make("oxzion/profile").update();
-      this.notif.current.successNotification(
-        "Profile picture updated successfully."
-      );
+      this.notif.current.notify(
+        "Success",
+        "Profile picture updated successfully.",
+        "success"
+      )
     }
   }
 
@@ -392,258 +442,303 @@ class EditProfile extends Component {
 
   render() {
     return (
-      <div className="componentDiv">
-        <Notification ref={this.notif} />
-        <div className="formmargin">
-          <div className="row">
-            <div className="col-6 firstLastNameDiv">
-              <div className="col-12">
-                <label className="firstNameLabel mandatory">First Name</label>
-                <input
-                  type="text"
-                  name="firstname"
-                  value={
-                    this.state.fields.firstname
-                      ? this.state.fields.firstname
-                      : ""
-                  }
-                  onChange={this.handleChange}
-                  required
-                />
-                <div className="errorMsg">{this.state.errors["firstname"]}</div>
+      <Form className="edit-profile-form preferenceForm">
+        <div className="componentDiv">
+          <Notification ref={this.notif} />
+          <div className="formmargin">
+            <Row>
+              <div className='col-md-6'>
+                {this.profileImageData()}
+                {this.chooseImageData()}
+                {this.chooseWebCamData()}
               </div>
-              <div className="col-12">
-                <label className="firstNameLabel mandatory">Last Name</label>
-                <input
-                  type="text"
-                  name="lastname"
-                  value={
-                    this.state.fields.lastname ? this.state.fields.lastname : ""
-                  }
-                  onChange={this.handleChange}
-                  required
-                />
-                <div className="errorMsg">{this.state.errors["lastname"]}</div>
+              <div className='col-md-6'>
+                <Form.Group>
+                  <Form.Label className="mandatory">First Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="First Name"
+                    name="firstname"
+                    value={this.state.fields.firstname ? this.state.fields.firstname : ""}
+                    onChange={this.handleChange}
+                    required />
+                  <Form.Text className="text-muted errorMsg">
+                    {this.state.errors["firstname"]}
+                  </Form.Text>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label className="mandatory">Last Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Last Name"
+                    name="lastname"
+                    value={this.state.fields.lastname ? this.state.fields.lastname : ""}
+                    onChange={this.handleChange}
+                    required />
+                  <Form.Text className="text-muted errorMsg">
+                    {this.state.errors["lastname"]}
+                  </Form.Text>
+                </Form.Group>
               </div>
-            </div>
-            <div className="col-6 profileImage">
-              {this.profileImageData()}
-              {this.chooseImageData()}
-              {this.chooseWebCamData()}
-            </div>
-          </div>
 
-          <div className="row">
-            <div className="col-12 input-field">
-              <label className="mandatory" htmlFor="email">
-                Email
-              </label>
-              <input
-                name="email"
-                type="text"
+            </Row>
+            <Form.Group>
+              <Form.Label className="mandatory">Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Last Name"
+                name="Email"
+                disabled
                 value={this.state.fields.email ? this.state.fields.email : ""}
-                readOnly={true}
-              />
-            </div>
-          </div>
-
-          <div className="row marginstyle">
-            <div className="col input-field marginbottom">
-              <label className="mandatory" id="rowdob">
-                Date of Birth
-              </label>
-              <div>
-                <DatePicker
-                  format={this.state.dateformat}
-                  name="date_of_birth"
-                  value={
-                    this.state.fields.date_of_birth
-                      ? this.state.fields.date_of_birth
-                      : ""
-                  }
-                  onChange={this.handleDOBChange}
-                  readOnly
-                />
-              </div>
-
-              <div className="errorMsg">
-                {this.state.errors["date_of_birth"]}
-              </div>
-            </div>
-
-            <div className="col input-field">
-              <label id="name" className="active" style={{ fontSize: "16px" }}>
-                Gender
-              </label>
-              <div className="row gender">
-                <div className="col-3 input-field">
-                  <label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="Male"
-                      onChange={this.handleChange}
-                      checked={this.state.fields.gender == "Male"}
-                      className="validate preferencesRadio"
-                      required
-                    />
-                    <span id="gender">Male</span>
-                  </label>
-                </div>
-                <div className="col-5 input-field">
-                  <label>
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="Female"
-                      onChange={this.handleChange}
-                      checked={this.state.fields.gender == "Female"}
-                      className="validate preferencesRadio"
-                      required
-                    />
-                    <span id="gender">Female</span>
-                  </label>
-                  <div className="errorMsg">{this.state.errors["gender"]}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-12 mandatory" style={{ fontSize: "17px" }}>
-              Contact Number
-            </div>
-            <div className="col-12">
-              <PhoneInput
-                international={false}
-                country="US"
-                name="phone"
-                placeholder="Enter phone number"
-                maxLength="15"
-                countryOptions={["US", "IN", "CA", "|", "..."]}
-                value={this.state.fields.phone ? this.state.fields.phone : ""}
-                onChange={phone => this.handlePhoneChange(phone)}
-              />
-              <div className="errorMsg">{this.state.errors["phone"]}</div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-12 input-field">
-              <label className="mandatory" style={{ fontSize: "17px" }}>
-                Address
-              </label>
-              <div>
-                <textarea
-                  rows="3"
-                  className="textareaField"
-                  type="text"
-                  name="address"
-                  value={
-                    this.state.fields.address ? this.state.fields.address : ""
-                  }
-                  onChange={this.handleChange}
-                  required
-                />
-              </div>
-              <div className="errorMsg">{this.state.errors["address"]}</div>
-            </div>
-          </div>
-
-          <div className="row">
-            <label className="country mandatory" style={{ marginTop: "" }}>
-              Country
-            </label>
-
-            <div className="col-12">
-              <select
-                value={
-                  this.state.fields.country ? this.state.fields.country : ""
-                }
-                onChange={this.handleChange}
-                name="country"
-              >
-                {CountryCodes.map((country, key) => (
-                  <option key={key} value={country.name}>
-                    {country.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="row marginsize2">
-            <div className="col-12 input-field">
-              <label htmlFor="website">Website</label>
-              <input
-                type="text"
-                name="website"
-                value={
-                  this.state.fields.website ? this.state.fields.website : ""
-                }
                 onChange={this.handleChange}
               />
-            </div>
-          </div>
-          <div className="row about">
-            <div className="col-12 input-field">
-              <label>About Me</label>
-              <div>
-                <Editor
-                  style={{ height: "20vh", overflow: "auto" }}
-                  name="about"
-                  tools={[
-                    [Bold, Italic, Underline],
-                    [Undo, Redo],
-                    [Link, Unlink],
-                    [AlignLeft, AlignCenter, AlignRight],
-                    [OrderedList, UnorderedList, Indent, Outdent]
-                  ]}
-                  contentStyle={{ height: 320 }}
-                  defaultContent={
-                    this.state.fields.about ? this.state.fields.about : ""
-                  }
-                  onExecute={event =>
-                    this.handleChangeAboutField(
-                      event.target._contentElement.innerHTML
-                    )
-                  }
-                />
+            </Form.Group>
+            <Row>
+              <div className='col-md-6'>
+                <Form.Group>
+                  <Form.Label className="mandatory">Gender</Form.Label>
+                  <Row><br /></Row>
+                  <Row>
+                    <div className='col-md-6'>
+                      <Form.Check
+                        type="radio"
+                        name="gender"
+                        label="Male"
+                        value="Male"
+                        onChange={this.handleChange}
+                        checked={this.state.fields.gender == "Male"}
+                        className="validate"
+                      />
+                    </div>
+                    <div className='col-md-6'>
+                      <Form.Check
+                        type="radio"
+                        name="gender"
+                        label="Female"
+                        value="Female"
+                        onChange={this.handleChange}
+                        checked={this.state.fields.gender == "Female"}
+                        className="validate"
+                      />
+                    </div>
+
+                  </Row>
+                  <Form.Text className="text-muted errorMsg">
+                    {this.state.errors["gender"]}
+                  </Form.Text>
+                </Form.Group>
               </div>
-            </div>
-          </div>
+              <div className='col-md-6'>
+                <Form.Group>
+                  <Form.Label className="mandatory" id="rowdob">Date of Birth</Form.Label>
+                  <DatePicker
+                    format={this.state.dateformat}
+                    name="date_of_birth"
+                    value={
+                      this.state.fields.date_of_birth
+                        ? this.state.fields.date_of_birth
+                        : ""
+                    }
+                    onChange={this.handleDOBChange}
+                    readOnly
+                  />
+                  <Form.Text className="text-muted errorMsg">
+                    {this.state.errors["date_of_birth"]}
+                  </Form.Text>
+                </Form.Group>
+              </div>
+            </Row>
+            <Row>
+              <div className='col-md-6'>
+                <Form.Group>
+                  <Form.Label className="mandatory">Address 1</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="address1"
+                    value={this.state.fields.address1 ? this.state.fields.address1 : ""}
+                    onChange={this.handleChange}
+                    required
+                  />
+                  <Form.Text className="text-muted errorMsg">
+                    {this.state.errors["address1"]}
+                  </Form.Text>
+                </Form.Group>
+              </div>
+              <div className='col-md-6'>
+                <Form.Group>
+                  <Form.Label>Address 2</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="address2"
+                    value={this.state.fields.address2 ? this.state.fields.address2 : ""}
+                    onChange={this.handleChange}
+                    required
+                  />
+                
+                </Form.Group>
+              </div>
+            </Row>
+            <Row>
+              <div className='col-md-6'>
+                <Form.Group>
+                  <Form.Label className="mandatory">
+                    Country
+              </Form.Label>
+                  <select
+                    value={
+                      this.state.fields.country ? this.state.fields.country : ""
+                    }
+                    onChange={this.handleChange}
+                    name="country"
+                  >
+                    {Countries.map((country, key) => (
+                      <option key={key} data-countryid={country.id} value={country.name}>
+                        {country.name}
+                      </option>
+                    ))}
+                  </select>
+                  <Form.Text className="text-muted errorMsg">
+                    {this.state.errors["country"]}
+                  </Form.Text>
+                </Form.Group>
+              </div>
+              <div className='col-md-6'>
+                <Form.Group>
+                  <Form.Label className="mandatory">
+                    State
+              </Form.Label>
 
-          <div className="row">
-            <div className="col-12 input-field interest">
-              <label className="mandatory" htmlFor="interest">
-                Interest
-              </label>
+                  <select
+                    value={
+                      this.state.fields.state ? this.state.fields.state : ""
+                    }
+                    onChange={this.handleChange}
+                    name="state"
+                  >
+                    {states.map((state, key) => {
+                      if (state.country_id === this.state.selectedCountryID)
+                        return <option key={key} data-stateid={state.id} value={state.name}>
+                          {state.name}
+                        </option>
+                    })}
+                  </select>
+                  <Form.Text className="text-muted errorMsg">
+                    {this.state.errors["state"]}
+                  </Form.Text>
+                </Form.Group>
+              </div>
+            </Row>
+            <Row>
+            <div className='col-md-6'>
+            <Form.Group>
+                  <Form.Label className="mandatory">City</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="city"
+                    value={this.state.fields.city ? this.state.fields.city : ""}
+                    onChange={this.handleChange}
+                  />
+                  <Form.Text className="text-muted errorMsg">
+                    {this.state.errors["city"]}
+                  </Form.Text>
+                </Form.Group>
+              </div>
+              <div className='col-md-6'>
+            <Form.Group>
+                  <Form.Label className="mandatory">Postal Code</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="zip"
+                    value={this.state.fields.zip ? this.state.fields.zip : null}
+                    onChange={this.handleChange}
+                  />
+                  <Form.Text className="text-muted errorMsg">
+                    {this.state.errors["zip"]}
+                  </Form.Text>
+                </Form.Group>
+              </div>
+            </Row>
+           
+            <Row>
+              <div className='col-md-6'>
+                <Form.Group>
+                  <Form.Label className="mandatory">Contact Number</Form.Label>
+                  <PhoneInput
+                    international={false}
+                    country="US"
+                    name="phone"
+                    placeholder="Enter phone number"
+                    maxLength="15"
+                    countryOptions={["US", "IN", "CA", "|", "..."]}
+                    value={this.state.fields.phone ? this.state.fields.phone : ""}
+                    onChange={phone => this.handlePhoneChange(phone)}
+                  />
+                  <Form.Text className="text-muted errorMsg">
+                    {this.state.errors["phone"]}
+                  </Form.Text>
+                </Form.Group>
+              </div>
+              <div className='col-md-6'>
+                <Form.Group>
+                  <Form.Label className="mandatory">Website</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="website"
+                    value={this.state.fields.website ? this.state.fields.website : ""}
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
 
-              <input
-                type="text"
-                required
-                name="interest"
-                value={
-                  this.state.fields.interest ? this.state.fields.interest : ""
+
+
+
+              </div>
+            </Row>
+
+          
+            <Row>
+              <div className='col-md-12'>
+                <Form.Group>
+                  <Form.Label className="mandatory">Interest</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="interest"
+                    value={this.state.fields.interest ? this.state.fields.interest : ""}
+                    onChange={this.handleChange}
+                  />
+                  <Form.Text className="text-muted errorMsg">
+                    {this.state.errors["interest"]}
+                  </Form.Text>
+                </Form.Group>
+              </div>
+            </Row>
+            <Form.Group>
+              <Form.Label className="mandatory">About Me</Form.Label>
+              <Editor
+                style={{ height: "20vh", overflow: "auto" }}
+                name="about"
+                tools={[
+                  [Bold, Italic, Underline],
+                  [Undo, Redo],
+                  [Link, Unlink],
+                  [AlignLeft, AlignCenter, AlignRight],
+                  [OrderedList, UnorderedList, Indent, Outdent]
+                ]}
+                contentStyle={{ height: 320 }}
+                defaultContent={
+                  this.state.fields.about ? this.state.fields.about : ""
                 }
-                onChange={this.handleChange}
+                onExecute={event =>
+                  this.handleChangeAboutField(
+                    event.target._contentElement.innerHTML
+                  )
+                }
               />
-              <div className="errorMsg">{this.state.errors["interest"]}</div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col s12 input-field">
-              <button
-                className="k-button k-primary"
-                type="button"
-                onClick={this.handleSubmit}
-              >
-                Submit
-              </button>
-            </div>
+            </Form.Group>
+            <Button type="button" className="pull-right preferenceForm-btn" onClick={this.handleSubmit}>Save</Button>
           </div>
         </div>
-      </div>
+      </Form>
     );
   }
 }

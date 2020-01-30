@@ -1,12 +1,5 @@
 <?php
-/**
- * Code to get the Username and the List of all the apps that are not in the Userlist
- * @api
- * @link /user/:userId/usertoken
- * @method userLoginToken
- * @param $id ID of User
- * @return Json Array of Username and List of Apps
- */
+
 namespace Oxzion\Utils;
 
 class ArrayUtils
@@ -28,8 +21,25 @@ class ArrayUtils
         if ($len1 < $len2) {
             $result = array_diff($array2, $array1); //If the length of second array is bigger than the first
         } else {
-            $result = array_diff($array1, $array2);//If the length of first array is bigger than the second
+            $result = array_diff($array1, $array2); //If the length of first array is bigger than the second
         }
         return $result;
+    }
+
+    public static function multiDimensionalSearch($array, $field, $value)
+    {
+        foreach ($array as $key => $item) {
+            if ($item[$field] === $value) {
+                return $item;
+            }
+
+        }
+        return false;
+    }
+
+    public static function isJson($string)
+    {
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
     }
 }

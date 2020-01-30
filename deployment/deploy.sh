@@ -19,7 +19,6 @@ BLINK="\e[5m"
 INVERT="\e[7m"
 RESET="\e[0m"
 
-
 #Checking if temp folder exist, delete and create new.
 if [ -d "./temp" ] ;
 then
@@ -50,21 +49,39 @@ api()
     else    
         #making the directory where api will be copied.
         #moving to temp directory and copying required
+        echo -e "${YELLOW}Stopping Apache${RESET}"
+        service apache2 stop
         cd ${TEMP}
         rsync -rl api/v1/data/uploads/ /var/www/api/data/uploads/
+        rsync -rl --delete api/v1/data/eoxapps/ /var/lib/oxzion/api/eoxapps/
+        rsync -rl --delete api/v1/data/migrations/ /var/lib/oxzion/api/migrations/
+        rsync -rl api/v1/data/template/ /var/lib/oxzion/api/template/
         rm -Rf api/v1/data/uploads
         rm -Rf api/v1/data/cache
-        rm -Rf api/v1/logs
+        rm -Rf api/v1/data/delegate
+        rm -Rf api/v1/data/eoxapps
+        rm -Rf api/v1/data/import
+        rm -Rf api/v1/data/migrations
+        rm -Rf api/v1/data/template
+        rm -Rf api/v1/data/file_docs
         rsync -rl --delete api/v1/ /var/www/api/
         ln -nfs /var/lib/oxzion/api/cache /var/www/api/data/cache
         ln -nfs /var/lib/oxzion/api/uploads /var/www/api/data/uploads
+        ln -nfs /var/lib/oxzion/api/delegate /var/www/api/data/delegate
+        ln -nfs /var/lib/oxzion/api/eoxapps /var/www/api/data/eoxapps
+        ln -nfs /var/lib/oxzion/api/file_docs /var/www/api/data/file_docs
+        ln -nfs /var/lib/oxzion/api/import /var/www/api/data/import
+        ln -nfs /var/lib/oxzion/api/migrations /var/www/api/data/migrations
+        ln -nfs /var/lib/oxzion/api/template /var/www/api/data/template
+        ln -nfs /var/log/oxzion/api /var/www/api/logs
         chown www-data:www-data -R /var/www/api
         echo -e "${GREEN}Copying API Complete!\n${RESET}"
         echo -e "${YELLOW}Starting migrations script for API${RESET}"
         cd /var/www/api
         ./migrations migrate
-        sudo ln -nfs /var/log/oxzion/api /var/www/api/logs
         echo -e "${GREEN}Migrations Complete!${RESET}"
+        echo -e "${GREEN}Starting Apache${RESET}"
+        service apache2 start
     fi    
 }
 camel()
@@ -233,12 +250,18 @@ view()
         rsync -rl view/vfs/ /opt/oxzion/view/vfs/
         chown oxzion:oxzion -R /opt/oxzion/view/vfs/
         rm -Rf view/vfs
-        rsync -rl --delete view/ /opt/oxzion/view/
+        rsync -rl view/ /opt/oxzion/view/
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
         chown oxzion:oxzion -R /opt/oxzion/view
         echo -e "${GREEN}Copying view Complete!${RESET}"
         echo -e "${GREEN}Starting view service${RESET}"
+        chmod 777 -R /opt/oxzion/view/bos
+        chmod 777 /opt/oxzion/view/apps
         systemctl start view
-        echo -e "${YELLOW}Started!${RESET}"
+        echo -e "${YELLOW}Started view service!${RESET}"
     fi
 }
 workflow()
@@ -249,17 +272,13 @@ workflow()
     then
         echo -e "${RED}Workflow was not packaged so skipping it\n${RESET}"
     else
-        docker stop wf_1
+        service camunda stop
         cd ${TEMP}
-        rsync -rl --delete integrations/workflow/ /opt/oxzion/workflow/
+        cp ${TEMP}/integrations/workflow/identity_plugin-1.0.jar integrations/workflow/processengine_plugin-1.0.jar /opt/oxzion/camunda/lib/
+        cp ${TEMP}/integrations/workflow/bpm-platform.xml /opt/oxzion/camunda/conf/
+        chown oxzion:oxzion -R /opt/oxzion/camunda
         echo -e "${GREEN}Copying workflow Complete!${RESET}"
-        cd /opt/oxzion/workflow
-        echo -e "${YELLOW}Building Workflow Docker Image!${RESET}"
-        docker build -t workflow .
-        echo -e "${GREEN}Built!${RESET}"
-        echo -e "${YELLOW}Starting workflow in docker!${RESET}"
-        docker run --network="host" -d --env-file ~/env/integrations/workflow/.env --rm --name wf_1 workflow 
-        echo -e "${GREEN}Started Workflow!${RESET}"
+        service camunda start
     fi
 }
 openproject()
@@ -323,6 +342,93 @@ edms()
         echo -e "${GREEN}Copying edms Complete!${RESET}"
     fi
 }
+diveinsurance()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients/DiveInsurance" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl ./DiveInsurance /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building DiveInsurance apps using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/DiveInsurance'
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown oxzion:oxzion -R /opt/oxzion/view
+        chmod 777 -R /opt/oxzion/eoxapps
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
+task()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients/Task" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl ./Task /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building Task apps using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/Task'
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown oxzion:oxzion -R /opt/oxzion/view
+        chmod 777 -R /opt/oxzion/eoxapps
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
+bridgemed()
+{
+    cd ${TEMP}
+    echo -e "${YELLOW}Copying EOX apps...${RESET}"
+    if [ ! -d "./clients/BridgeMed" ] ;
+    then
+        echo -e "${RED}EOX Apps was not packaged so skipping it\n${RESET}"
+    else
+        echo -e "${GREEN}Stopping view service${RESET}"
+        systemctl stop view
+        cd ${TEMP}/clients
+        echo -e "${YELLOW}Copying EOX Apps to /opt/oxzion/eoxapps directory${RESET}"
+        mkdir -p /opt/oxzion/eoxapps
+        rsync -rl ./BridgeMed /opt/oxzion/eoxapps
+        echo -e "${YELLOW}Building BridgeMed apps using deployapp API${RESET}"
+        jwt=$(curl --location --request POST 'http://localhost:8080/auth' --form 'username=bharatgtest' --form 'password=password' 2>/dev/null | jq -r '.data.jwt')
+        curl --location --request POST 'http://localhost:8080/app/deployapp' -H 'Authorization: Bearer '${jwt}'' -F 'path=/opt/oxzion/eoxapps/BridgeMed'
+        echo -e "${YELLOW}Copying EOX Apps directory Complete!${RESET}"
+        echo -e "${GREEN}Building and Running package discover in bos${RESET}"
+        cd /opt/oxzion/view/bos/
+        npm run build
+        npm run package:discover
+        chown oxzion:oxzion -R /opt/oxzion/eoxapps
+        chown oxzion:oxzion -R /opt/oxzion/view
+        chmod 777 -R /opt/oxzion/eoxapps
+        systemctl start view
+        echo -e "${YELLOW}Started view service!${RESET}"
+    fi
+}
 #calling functions accordingly
 unpack
 echo -e "${YELLOW}Now copying files to respective locations..${RESET}"
@@ -335,6 +441,9 @@ mattermost
 orocrm
 rainloop
 openproject
+diveinsurance
+task
+bridgemed
 workflow
 helpapp
 #edms

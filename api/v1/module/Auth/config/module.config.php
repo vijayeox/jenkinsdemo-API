@@ -1,12 +1,8 @@
 <?php
 namespace Auth;
 
-use Zend\Log\Logger;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
-use Zend\Log\Formatter\Simple;
-use Zend\Log\Filter\Priority;
-use Zend\Log\Processor\RequestId;
 
 return [
     'router' => [
@@ -33,6 +29,17 @@ return [
                     ],
                 ],
             ],
+            'register' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/register',
+                    'defaults' => [
+                        'controller' => Controller\AuthController::class,
+                        'action' => 'register',
+                        'method' => 'post'
+                    ],
+                ],
+            ],
             'validatetoken' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -53,34 +60,6 @@ return [
                         'action' => 'userprof',
                         'method' => 'post'
                     ],
-                ],
-            ],
-        ],
-    ],
-    'log' => [
-        'AuthLogger' => [
-            'writers' => [
-                'stream' => [
-                    'name' => 'stream',
-                    'priority' => \Zend\Log\Logger::ALERT,
-                    'options' => [
-                        'stream' => __DIR__ . '/../../../logs/auth.log',
-                        'formatter' => [
-                            'name' => \Zend\Log\Formatter\Simple::class,
-                            'options' => [
-                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%',
-                                'dateTimeFormat' => 'c',
-                            ],
-                        ],
-                        'filters' => [
-                            'priority' => \Zend\Log\Logger::INFO,
-                        ],
-                    ],
-                ],
-            ],
-            'processors' => [
-                'requestid' => [
-                    'name' => \Zend\Log\Processor\RequestId::class,
                 ],
             ],
         ],

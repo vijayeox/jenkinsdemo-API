@@ -11,7 +11,6 @@ use Zend\Db\Sql\Expression;
 use Exception;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\OrganizationService;
-use Zend\Log\Logger;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
@@ -24,18 +23,15 @@ class GroupService extends AbstractService
 {
     private $table;
     private $organizationService;
-    protected $logger;
     public static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
 
 
-    public function __construct($config, $dbAdapter, GroupTable $table, $organizationService, Logger $log)
+    public function __construct($config, $dbAdapter, GroupTable $table, $organizationService,$messageProducer)
     {
         parent::__construct($config, $dbAdapter);
-        parent::initLogger(__DIR__ . '/../../../../logs/group.log');
         $this->table = $table;
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
         $this->organizationService = $organizationService;
-        $this->logger = $log;
     }
 
     public function setMessageProducer($messageProducer)
@@ -143,12 +139,13 @@ class GroupService extends AbstractService
             $data['uuid'] = UuidUtil::uuid();
             $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
-            $user_manager_uuid = $data['manager_id'];
             $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
+            $user_manager_uuid = $data['manager_id'];
             $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
             $result = $this->executeQueryWithParams($select)->toArray();
-            if ($result)
+            if ($result){
                 $data['manager_id']=$result[0]["id"];
+            }
             if(isset($data['parent_id'])){
                 $data['parent_id']=$this->getIdFromUuid('ox_group', $data['parent_id']);
             }
@@ -168,13 +165,17 @@ class GroupService extends AbstractService
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
-
-            $this->saveUser(["orgId"=>$orgId, "groupId"=>$data['uuid']], ["userid"=>[["uuid"=>$user_manager_uuid]]]);
+        
+            $insert = $sql->insert('ox_user_group');
+            $insert_data = array('avatar_id' => $data['manager_id'], 'group_id' => $data['id']);
+            $insert->values($insert_data);
+            $result = $this->executeUpdate($insert);
 
             $this->commit();
+        
         }
         catch(Exception $e) {
-            $this->logger->err(__CLASS__.$e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             $this->rollback();
             throw $e;
         }
@@ -346,6 +347,7 @@ class GroupService extends AbstractService
             if(isset($files)){
                 $this->uploadGroupLogo($org['uuid'],$id,$files);
             }
+            $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])), 'GROUP_UPDATED');
             if($count === 1) {
                 $select = "SELECT count(id) as users from ox_user_group where avatar_id =".$data['manager_id']." AND group_id = (SELECT id from ox_group where uuid = '".$id."')";
                 $query=$this->executeQuerywithParams($select)->toArray();
@@ -355,12 +357,9 @@ class GroupService extends AbstractService
                 throw new ServiceException("Failed to Update","failed.update.group");
             }
         } catch (Exception $e) {
-            print("Exception");
-            print_r($e->getMessage());exit;
             $this->rollback();
             throw $e;
         }
-        $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])), 'GROUP_UPDATED');
         return $count;
     }
 
@@ -474,8 +473,8 @@ class GroupService extends AbstractService
         $obj = $this->table->getByUuid($params['groupId'],array());
 
         if (is_null($obj)) {
-            $this->logger->log(Logger::INFO, "Invalid group id - ".$params['groupId']);
-            throw new ServiceException("Entity not found","group.not.found");
+            $this->logger->info("Invalid group id - ".$params['groupId']);
+            throw new ServiceException("Entity not found","group.not.found");   
         }
 
         if(isset($params['orgId'])){
@@ -494,8 +493,10 @@ class GroupService extends AbstractService
             "inner join ox_user on ox_user.id = ox_user_group.avatar_id ".
             "where ox_user_group.id = ".$obj->id;
             $groupUsers = $this->executeQuerywithParams($query)->toArray();
-            foreach (array_diff(array_column($data['userid'], 'uuid'), array_column($groupUsers, 'uuid')) as $userUuid)
+            foreach (array_diff(array_column($data['userid'], 'uuid'), array_column($groupUsers, 'uuid')) as $userUuid){
                 $groupUsers[] = array('uuid' => $userUuid);
+            }
+            
             $data['userid'] = $groupUsers;
         }
 
@@ -537,8 +538,9 @@ class GroupService extends AbstractService
             "inner join ox_user on ox_user.id = ox_user_group.avatar_id ".
             "where ox_user_group.group_id = ".$group_id;
             $groupUsers = $this->executeQuerywithParams($queryString)->toArray();
-            // echo "<pre>";print_r($groupUsers);exit();
-            $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name, 'users' => $groupUsers)), 'USERTOGROUP_UPDATED');
+            if(count($groupUsers) > 0){
+                $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name, 'usernames' => array_column($groupUsers, 'username'))), 'USERTOGROUP_UPDATED');
+            }
             return 1;
         }
         throw new ServiceException("Entity not found","group.not.found");

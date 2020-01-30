@@ -1,7 +1,6 @@
 <?php
 namespace Callback\Controller;
 
-    use Zend\Log\Logger;
     use Oxzion\Controller\AbstractApiControllerHelper;
     use Oxzion\ValidationException;
     use Zend\Db\Adapter\AdapterInterface;
@@ -24,11 +23,11 @@ namespace Callback\Controller;
         // /**
         // * @ignore __construct
         // */
-        public function __construct(CalendarService $calendarService, EmailService $emailService, Logger $log, $config)
+        public function __construct(CalendarService $calendarService, EmailService $emailService, $config)
         {
             $this->calendarService = $calendarService;
             $this->emailService = $emailService;
-            $this->log = $log;
+            $this->log = $this->getLogger();
             $this->restClient = new RestClient($config['calendar']['calendarServerUrl']);
         }
 
@@ -48,9 +47,9 @@ namespace Callback\Controller;
         public function addEventAction()
         {
             $params = $this->extractPostData();
-            $this->log->info(__CLASS__.": ".print_r($params, true));
+            $this->log->info(print_r($params, true));
             $response = $this->restClient->post('/calendar/server/phpmailer/extras/extract_ics_data/geticsdata.php', $params);
-            $this->log->info(__CLASS__.": ".$response);
+            $this->log->info($response);
             return $this->getSuccessResponseWithData(array('Event Added'), 201);
         }
     }

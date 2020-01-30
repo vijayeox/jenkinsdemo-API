@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<link href= "./css/template_css.css" rel="stylesheet" type="text/css" />
+<script>
+  function subst() {
+      var vars = {};
+      var data = {};
+      var split = {};
+
+      var query_strings_from_url = document.location.search.substring(1).split('&');
+      for (var query_string in query_strings_from_url) {
+          if (query_strings_from_url.hasOwnProperty(query_string)) {
+              var temp_var = query_strings_from_url[query_string].split('=', 2);
+              vars[temp_var[0]] = decodeURI(temp_var[1]);
+          }
+      }
+      
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages'];
+      for (var css_class in css_selector_classes) {
+          if (css_selector_classes.hasOwnProperty(css_class)) {
+              var element = document.getElementsByClassName(css_selector_classes[css_class]);
+              for (var j = 0; j < element.length; ++j) {
+                  element[j].textContent = vars[css_selector_classes[css_class]];
+              }
+          }
+      }
+
+      if(vars.page == 1){
+          var e1 = document.getElementById("main_div");
+          e1.style.visibility = 'visible';  
+      }
+  }
+  </script>
+</head>
+<body onload="subst()" id = "doc_body">         
+	<div class ="main_div" id="main_div" style="visibility: hidden;">
+       	<hr class="line1"></hr>
+      		<div class="spacer"></div>
+      		<hr class="line2"></hr>
+      		<div class="title1"><center><b>CERTIFICATE OF INSURANCE</b></center></div>
+		
+          <div class="title2">
+            <div class = "claims_title">
+      			   <p class ="claims"><b>CLAIMS MADE FORM</b></p>
+            </div>
+            <div class = "page_value">
+      			   <p class ="page_no">Page <span class="page"></span> of <span class="topage"></span></p>
+            </div>
+		      </div>
+
+      		<hr class="line1"></hr>
+      		<div class="spacer"></div>
+      		<hr class="line2"></hr>
+
+  <div>
+</body>
+</html>
+

@@ -1,0 +1,19 @@
+{
+  "type": "application",
+  "name": "<<applicationName>>",
+  "appId":"<<appid>>",
+  "category": null,
+  "autostart": true,
+  "defaultAppforOrgs" : false,
+  "server": "server.js",
+  "title": {
+    "en_EN": "<<applicationtitle>>"
+  },
+  "description": {
+    "en_EN": "<<applicationdescription>>"
+  },
+  "files": [
+    "main.js",
+    "main.css"
+  ]
+}

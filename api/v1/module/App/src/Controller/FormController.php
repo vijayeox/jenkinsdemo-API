@@ -4,7 +4,6 @@ namespace App\Controller;
 /**
 * Form Api
 */
-use Zend\Log\Logger;
 use Oxzion\Model\Form;
 use Oxzion\Model\FormTable;
 use Oxzion\Service\FormService;
@@ -18,9 +17,9 @@ class FormController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(FormTable $table, FormService $formService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(FormTable $table, FormService $formService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Form::class);
+        parent::__construct($table, Form::class);
         $this->setIdentifierName('id');
         $this->formService = $formService;
     }
@@ -39,9 +38,9 @@ class FormController extends AbstractApiController
     */
     public function create($data)
     {
-        $appId = $this->params()->fromRoute()['appId'];
+        $appUuid = $this->params()->fromRoute()['appId'];
         try {
-            $count = $this->formService->createForm($appId, $data);
+            $count = $this->formService->createForm($appUuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -61,8 +60,8 @@ class FormController extends AbstractApiController
     */
     public function getList()
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->formService->getForms($appId);
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $result = $this->formService->getForms($appUuid);
         return $this->getSuccessResponseWithData($result['data']);
     }
     /**
@@ -74,17 +73,17 @@ class FormController extends AbstractApiController
     * @param array $data
     * @return array Returns a JSON Response with Status Code and Created Form.
     */
-    public function update($id, $data)
+    public function update($formUuid, $data)
     {
-        $appId = $this->params()->fromRoute()['appId'];
+        $appUuid = $this->params()->fromRoute()['appId'];
         try {
-            $count = $this->formService->updateForm($appId, $id, $data);
+            $count = $this->formService->updateForm($appUuid, $formUuid, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+            return $this->getErrorResponse("Entity not found for id - $formUuid", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -98,11 +97,7 @@ class FormController extends AbstractApiController
     */
     public function delete($id)
     {
-        $response = $this->formService->deleteForm($id);
-        if ($response == 0) {
-            return $this->getErrorResponse("Form not found", 404, ['id' => $id]);
-        }
-        return $this->getSuccessResponse();
+        return $this->getInvalidMethod();
     }
     /**
     * GET Form API
@@ -118,6 +113,16 @@ class FormController extends AbstractApiController
         $result = $this->formService->getForm($id);
         if ($result == 0) {
             return $this->getErrorResponse("Form not found", 404, ['id' => $id]);
+        }
+        return $this->getSuccessResponseWithData($result);
+    }
+    public function getWorkflowAction()
+    {
+        $formId = $this->params()->fromRoute()['formId'];
+        $result = $this->formService->getWorkflow($formId);
+        // print_r($result);exit;
+        if ($result == 0) {
+            return $this->getErrorResponse("Form not found", 404, ['id' => $formId]);
         }
         return $this->getSuccessResponseWithData($result);
     }

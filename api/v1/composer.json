@@ -28,7 +28,6 @@
     "zendframework/zend-db": "^2.9",
     "doctrine/migrations": "2.1",
     "zendframework/zend-json": "^3.1",
-    "zendframework/zend-log": "^2.10",
     "ramsey/uuid":"^3.8.0",
     "zendframework/zend-authentication": "^2.6",
     "firebase/php-jwt": "^5.0",
@@ -36,6 +35,7 @@
     "zendframework/zend-mail": "^2.10",
     "zendframework/zend-servicemanager": "^3.3",
     "zendframework/zend-cache": "^2.8",
+    "zendframework/zend-validator": "^2.12",
     "zendframework/zend-serializer": "^2.9",
     "zendframework/zend-inputfilter": "^2.8",
     "pear-pear.horde.org/Horde_Injector": "2.*",
@@ -43,7 +43,7 @@
     "pear-pear.horde.org/Horde_Imap_Client":"*",
     "pear-pear.horde.org/Horde_Smtp":"*",
     "pear-pear.horde.org/Horde_Text_Filter": "^2.1",
-    "elasticsearch/elasticsearch": "~5.0",
+    "elasticsearch/elasticsearch": "~7.0",
     "guzzlehttp/guzzle": "~6.0",
     "greenlion/php-sql-parser": "^4.1.2",
     "nelexa/zip": "dev-master",
@@ -54,11 +54,19 @@
     "ext-json": "*",
     "smarty/smarty": "~3.1",
     "tecnickcom/tcpdf": "^6.2.26",
-    "friendsofphp/php-cs-fixer": "^2.16@dev"
+    "knplabs/knp-snappy": "^1.0@dev",
+    "h4cc/wkhtmltopdf-amd64": "0.12.x",
+    "setasign/fpdi-tcpdf": "^2.0",
+    "apache/log4php": "2.3.0",
+    "webit/eval-math":"1.0.1",
+    "nicolab/php-ftp-client": "dev-master",
+    "twilio/sdk": "dev-master",
+    "zendframework/zend-hydrator": "^3.0@dev"
   },
   "require-dev": {
     "phpunit/phpunit": "^7",
     "zendframework/zend-test": "^3.2",
+    "friendsofphp/php-cs-fixer": "^2.16@dev",
     "phpunit/dbunit": "^4",
     "mockery/mockery": "^1.2",
     "sempro/phpunit-pretty-print": "dev-master",
@@ -75,10 +83,9 @@
       "Alert\\": "module/Alert/src/",
       "User\\": "module/User/src/",
       "Group\\": "module/Group/src/",
+      "Analytics\\": "module/Analytics/src/",
       "Organization\\": "module/Organization/src/",
       "Auth\\": "module/Auth/src/",
-      "Widget\\": "module/Widget/src/",
-      "Screen\\": "module/Screen/src/",
       "Attachment\\": "module/Attachment/src/",
       "App\\": "module/App/src/",
       "Project\\": "module/Project/src/",
@@ -89,10 +96,13 @@
       "Resource\\": "module/Resource/src/",
       "Privilege\\": "module/Privilege/src/",
       "Callback\\": "module/Callback/src/",
+      "FileIndexer\\": "module/FileIndexer/src/",
       "Mlet\\": "module/Mlet/src/",
       "Messaging\\":"module/Messaging/src/",
       "ProspectResearch\\":"module/ProspectResearch/src/",
-      "Workflow\\":"module/Workflow/src/"
+      "Workflow\\":"module/Workflow/src/",
+      "PaymentGateway\\":"module/PaymentGateway/src/",
+      "ErrorLog\\":"module/ErrorLog/src/"
     }
   },
   "autoload-dev": {
@@ -105,6 +115,8 @@
       "FileTest\\": "module/File/test/",
       "UserTest\\": "module/User/test/",
       "GroupTest\\": "module/Group/test/",
+      "AnalyticsTest\\": "module/Analytics/test/",
+      "FileIndexerTest\\": "module/FileIndexer/test/",
       "RoleTest\\": "module/Role/test/",
       "OrganizationTest\\": "module/Organization/test/",
       "AuthTest\\": "module/Auth/test",
@@ -119,7 +131,9 @@
       "MessageTest\\": "lib/Oxzion/test/MessageTest",
       "PrivilegeTest\\": "module/Privilege/test/",
       "ChatCallbackTest\\": "module/Callback/test/",
-      "MessagingTest\\":"module/Messaging/test/"
+      "MessagingTest\\":"module/Messaging/test/",
+      "DiveInsuranceTest\\":"../../clients/Dive Insurance/test/",
+      "ErrorLogTest\\":"module/ErrorLog/test/"
     }
   },
   "extra": [],

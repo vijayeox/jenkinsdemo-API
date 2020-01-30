@@ -13,13 +13,13 @@ class MenuItem extends Entity
     const FORM = 3;
     
     protected $data = array(
-        'id' => 0,
-        'uuid' => 0,
+        'id' => NULL,
+        'uuid' => NULL,
         'name' => null,
-        'app_id' => 0,
-        'parent_id' => 0,
-        'page_id' => 0,
-        'group_id' => 0,
+        'app_id' => NULL,
+        'parent_id' => NULL,
+        'page_id' => NULL,
+        'privilege_name' => NULL,
         'icon' => null,
         'sequence' => 0,
         'date_created' => null,

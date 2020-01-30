@@ -2,6 +2,7 @@
 
 namespace Workflow;
 
+use Oxzion\Utils\UuidUtil;
 use Zend\Router\Http\Segment;
 
 return [
@@ -10,11 +11,33 @@ return [
             'workflowInstance' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/workflow/:workflowId[/activity/:activityId][/instance/:instanceId]',
+                    'route' => '/workflow/:workflowId[/activity/:activityId]',
+                    'constraints' => [
+                        'workflowId' => UuidUtil::UUID_PATTERN,
+                        'activityId' => '[0-9]*',
+                    ],
                     'defaults' => [
                         'controller' => Controller\WorkflowInstanceController::class,
-                        'action' => 'activity',
-                        'access'=>[
+                        'method' => 'POST',
+                        'action' => 'startWorkflow',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            'workflowActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/workflowinstance/:workflowInstanceId/activity/:activityInstanceId/submit',
+                    'constraints' => [
+                        'activityInstanceId' => UuidUtil::UUID_PATTERN,
+                        'workflowInstanceId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'submit',
+                        'access' => [
                         ],
                     ],
                 ],
@@ -27,6 +50,20 @@ return [
                         'controller' => Controller\ActivityInstanceController::class,
                         'method' => 'POST',
                         'action' => 'addActivityInstance',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'completeActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/workflow/activitycomplete',
+                    'defaults' => [
+                        'controller' => Controller\ActivityInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'completeActivityInstance',
                         'access' => [
                             // SET ACCESS CONTROL
                         ],
@@ -47,82 +84,63 @@ return [
                     ],
                 ],
             ],
-        ],
-    ],
-    'log' => [
-        'ActivityInstanceLogger' => [
-            'writers' => [
-                'stream' => [
-                    'name' => 'stream',
-                    'priority' => \Zend\Log\Logger::ALERT,
-                    'options' => [
-                        'stream' => __DIR__ . '/../../../logs/activity.log',
-                        'formatter' => [
-                            'name' => \Zend\Log\Formatter\Simple::class,
-                            'options' => [
-                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
-                            ],
+            'initiateWorkflow' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/workflowinstance/start',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceCallbackController::class,
+                        'method' => 'POST',
+                        'action' => 'initiateWorkflow',
+                        'access' => [
                         ],
-                        'filters' => [
-                            'priority' => \Zend\Log\Logger::INFO,],
                     ],
                 ],
             ],
-            'processors' => [
-                'requestid' => [
-                    'name' => \Zend\Log\Processor\RequestId::class,],
-            ],
-        ],
-        'ServiceTaskLogger' => [
-            'writers' => [
-                'stream' => [
-                    'name' => 'stream',
-                    'priority' => \Zend\Log\Logger::ALERT,
-                    'options' => [
-                        'stream' => __DIR__ . '/../../../logs/servicetask.log',
-                        'formatter' => [
-                            'name' => \Zend\Log\Formatter\Simple::class,
-                            'options' => [
-                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
-                            ],
+            'completeWorkflowInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/callback/workflowinstance/complete',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceCallbackController::class,
+                        'method' => 'POST',
+                        'action' => 'completeWorkflow',
+                        'access' => [
                         ],
-                        'filters' => [
-                            'priority' => \Zend\Log\Logger::INFO,],
                     ],
                 ],
             ],
-            'processors' => [
-                'requestid' => [
-                    'name' => \Zend\Log\Processor\RequestId::class,],
-            ],
-        ],
-        'WorkflowInstanceLogger' => [
-            'writers' => [
-                'stream' => [
-                    'name' => 'stream',
-                    'priority' => \Zend\Log\Logger::ALERT,
-                    'options' => [
-                        'stream' => __DIR__ . '/../../../logs/workflowinstance.log',
-                        'formatter' => [
-                            'name' => \Zend\Log\Formatter\Simple::class,
-                            'options' => [
-                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
-                            ],
+            'claimActivityInstance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflowinstance/:workflowInstanceId/activityinstance/:activityInstanceId/claim',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'POST',
+                        'action' => 'claimActivityInstance',
+                        'access' => [
                         ],
-                        'filters' => [
-                            'priority' => \Zend\Log\Logger::INFO,],
                     ],
                 ],
             ],
-            'processors' => [
-                'requestid' => [
-                    'name' => \Zend\Log\Processor\RequestId::class,],
+            'activityInstanceForm' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflowinstance/:workflowInstanceId/activityinstance/:activityInstanceId/form',
+                    'defaults' => [
+                        'controller' => Controller\WorkflowInstanceController::class,
+                        'method' => 'GET',
+                        'action' => 'activityInstanceForm',
+                        'access' => [
+                        ],
+                    ],
+                ],
             ],
         ],
     ],
     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];

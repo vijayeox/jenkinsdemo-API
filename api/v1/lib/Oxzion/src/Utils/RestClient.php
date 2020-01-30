@@ -4,15 +4,16 @@ namespace Oxzion\Utils;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\MultipartStream;
+use Exception;
 
 class RestClient
 {
     private $client;
     public function __construct($baseUrl, $params=array())
     {
-        $this->client = new Client(array_merge(['base_uri' => $baseUrl,'timeout'  => 10.0], $params));
+        $this->client = new Client(array_merge(['base_uri' => $baseUrl,'timeout'  => 40.0], $params));
     }
-    public function get($url, $params=array(), $headers=null)
+    public function get($url, $params=array(), $headers=array())
     {
         $payload = array();
         if (isset($params) && !empty($params)) {
@@ -21,7 +22,11 @@ class RestClient
         if (isset($headers) && !empty($headers)) {
             $payload['headers'] = $headers;
         }
-        $response = $this->client->request('GET', $url, $payload);
+        try {
+            $response = $this->client->request('GET', $url, $payload);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     
         return $response->getBody()->getContents();
     }
@@ -54,13 +59,14 @@ class RestClient
         $params = ['headers' => ['Connection' => 'close','Content-Type' => 'multipart/form-data; boundary='.$boundary,],'body' => new MultipartStream($multipart_form, $boundary),];
         try {
             $response = $this->client->post($url, $params);
-            return $response->getBody()->getContents();
+            $var = $response->getBody()->getContents();
+            return $var;
         } catch (ServerException $e) {
             return $e->getMessage();
         }
     }
     public function post($url, $formParams=array())
-    {
+    { 
         try {
             if ($formParams) {
                 $response = $this->client->request('POST', $url, ['json'=> $formParams]);
@@ -69,7 +75,7 @@ class RestClient
             }
             return $response->getBody()->getContents();
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
     public function postWithHeader($url, $formParams=array(), $headers=array())
@@ -78,7 +84,7 @@ class RestClient
             $response = $this->client->request('POST', $url, ['headers' => $headers,'json' => $formParams]);
             return array('body'=>$response->getBody()->getContents(),'headers'=>$response->getHeaders());
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
 
@@ -88,7 +94,7 @@ class RestClient
             $response = $this->client->request('DELETE', $url, ['headers' => $headers,'json' => $formParams]);
             return array('body'=>$response->getBody()->getContents(),'headers'=>$response->getHeaders());
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
 
@@ -98,7 +104,7 @@ class RestClient
             $response = $this->client->request('PUT', $url, ['headers' => $headers,'json' => $formParams]);
             return array('body'=>$response->getBody()->getContents(),'headers'=>$response->getHeaders());
         } catch (Exception $e) {
-            return 0;
+            throw $e;
         }
     }
 

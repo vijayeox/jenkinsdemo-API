@@ -51,12 +51,12 @@ class UserControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
+   
 
-    //TODO The create tests needs to be modified to mock messageProducer as we now send message when user is added to org
     public function testCreateByAdmin()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073']),'preferences' => '{"soundnotification":"true","emailalerts":"false","timezone":"Africa/Tripoli","dateformat":"dd/MM/yyyy"}'];
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -69,8 +69,11 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
 
-        $query = "SELECT id,timezone from ox_user where username = '" .$data['username']."'";
+        $query = "SELECT id,address_id from ox_user where username = '" .$data['username']."'";
         $userId = $this->executeQueryTest($query);
+
+        $query = "SELECT * from ox_address where id = ".$userId[0]['address_id'];
+        $address = $this->executeQueryTest($query);
 
         $query = "SELECT * from ox_user_org where user_id = ".$userId[0]['id'];
         $userOrg = $this->executeQueryTest($query);
@@ -87,14 +90,16 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($userRole[0]['user_id'], $userId[0]['id']);
         $this->assertEquals($userRole[0]['role_id'], 16);
         $this->assertEquals($userRole[1]['role_id'], 17);
-        $this->assertEquals($userId[0]['timezone'], 'Africa/Tripoli');
+        $this->assertEquals($address[0]['address1'], $data['address1']);
+        $this->assertEquals($address[0]['city'], $data['city']);
+        $this->assertEquals($address[0]['state'], $data['state']);
+        $this->assertEquals($address[0]['country'], $data['country']);
     }
-
 
     public function testCreateWithRoleOfOtherOrg()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '508572ae-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873a47-a6c2-11e9-b648-68ecc57cde45'])];
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '508572ae-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873a47-a6c2-11e9-b648-68ecc57cde45'])];
         $this->setJsonContent(json_encode($data));
         if(enableActiveMQ == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -128,7 +133,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateByEmployee()
     {
         $this->initAuthToken($this->employeeUser);
-        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','role' => array(['id' => '50873baa-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873bf0-a6c2-11e9-b648-68ecc57cde45'])];
+        $data = ['username' => 'John Holt', 'status' => 'Active', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'harshva.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '50873baa-a6c2-11e9-b648-68ecc57cde45'],['id' => '50873bf0-a6c2-11e9-b648-68ecc57cde45'])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user', 'POST', $data);
         $this->assertResponseStatusCode(401);
@@ -145,7 +150,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateforExistingInactiveUserWithoutReactivateFlag()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rajesh', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
+        $data = ['username' => 'rajesh', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
         $this->setJsonContent(json_encode($data));
         
         $this->dispatch('/user', 'POST', $data);
@@ -162,7 +167,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateforExistingInactiveUserWithReactivateFlag()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rajesh', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073']),'reactivate' => 1];
+        $data = ['username' => 'rajesh', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073']),'reactivate' => 1];
         $this->setJsonContent(json_encode($data));
         
         if(enableActiveMQ == 0){
@@ -197,7 +202,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateforExistingUser()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rajesh', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
+        $data = ['username' => 'rajesh', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'],['id' => '5ecccd2d-4dc7-4e19-ae5f-adb3c8f48073'])];
         $this->setJsonContent(json_encode($data));
         
         if(enableActiveMQ == 0){
@@ -217,7 +222,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateforOtherOrg()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'rajesha', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','role' => array(['id' => '53012471-2863'])];
+        $data = ['username' => 'rajesha', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '53012471-2863'])];
         $this->setJsonContent(json_encode($data));
         
         if(enableActiveMQ == 0){
@@ -253,7 +258,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateExistingUsernameInDifferentOrg()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'deepak', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','role' => array(['id' => '53012471-2863'])];
+        $data = ['username' => 'deepak', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '53012471-2863'])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -268,7 +273,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateExistingUsername()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'deepak', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','role' => array(['id' => '53012471-2863'])];
+        $data = ['username' => 'deepak', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'john@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '53012471-2863'])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -282,7 +287,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateExistingEmailId()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'raju', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'deepak@gmail.com', 'gender' => 'Male','role' => array(['id' => '53012471-2863'])];
+        $data = ['username' => 'raju', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'deepak@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '53012471-2863'])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -297,7 +302,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateExistingEmailIdInDifferentOrg()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'raju', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'deepak@gmail.com', 'gender' => 'Male','role' => array(['id' => '53012471-2863'])];
+        $data = ['username' => 'raju', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'deepak@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '53012471-2863'])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/b0971de7-0387-48ea-8f29-5d3704d96a46/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -313,7 +318,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateExistingEmailIdInactiveUser()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'raju', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'prajwal@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'])];
+        $data = ['username' => 'raju', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'prajwal@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -329,7 +334,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateExistingUsernameInactiveUser()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'klmn@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'])];
+        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'klmn@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -345,7 +350,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateExistingUsernameInactiveUserWithReactivateFlag()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'klmn@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7']),'reactivate' => 1];
+        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'klmn@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7']),'reactivate' => 1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -375,7 +380,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateExistingUsernameAndEmailIdInactiveUser()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'prajwal@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'])];
+        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'prajwal@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -392,7 +397,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateExistingUsernameAndEmailIdInactiveUserWithReactivateFlag()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'prajwal@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7']),'reactivate' => 1];
+        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'prajwal@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7']),'reactivate' => 1];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -420,7 +425,7 @@ class UserControllerTest extends ControllerTest
     public function testCreateUsernameAndEmailIdExist()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'deepak@gmail.com', 'gender' => 'Male','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'])];
+        $data = ['username' => 'prajwal', 'date_of_birth' => date('Y-m-d H:i:s', strtotime("-50 year")), 'date_of_join' => date('Y-m-d H:i:s'), 'icon' => 'test-oxzionlogo.png', 'managerid' => '471', 'firstname' => 'John', 'lastname' => 'Holt','designation' => 'CEO','location' => 'USA', 'email' => 'deepak@gmail.com', 'gender' => 'Male','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456','role' => array(['id' => '89a01b30-9cc9-416e-8027-1fd2083786c7'])];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization/53012471-2863-4949-afb1-e69b0891c98a/user', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
@@ -432,6 +437,8 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['message'], 'Username or Email ID Exist in other Organization');
     }
 
+
+//GET
     public function testGetList()
     {
         $this->initAuthToken($this->adminUser);
@@ -464,6 +471,51 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
     }
 
+    public function testGetListWithSortForCountry()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user?filter=[{"sort":[{"field":"country","dir":"dsc"}],"skip":0,"take":2}]
+', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][0]['uuid'], '768d1fb9-de9c-46c3-8d5c-23e0e484ce2e');
+        $this->assertEquals($content['data'][0]['name'], 'rohan kumar');
+        $this->assertEquals($content['data'][1]['uuid'], 'd9890624-8f42-4201-bbf9-675ec5dc8400');
+        $this->assertEquals($content['data'][1]['name'], 'Deepak S');
+    }
+
+    public function testGetListWithFilterForCountry()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user?filter=[{"filter":{"logic":"and","filters":[{"field":"country","operator":"startswith","value":"Ghana"}]},"sort":[{"field":"id","dir":"asc"},{"field":"uuid","dir":"dsc"}],"skip":0,"take":2}]
+', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
+        $this->assertEquals($content['data'][0]['uuid'], '4fd9ce37-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data'][0]['name'], 'Karan Agarwal');
+        $this->assertEquals($content['data'][1]['uuid'], '4fd9f04d-758f-11e9-b2d5-68ecc57cde45');
+        $this->assertEquals($content['data'][1]['name'], 'rakshith amin');
+    }
+
+     public function testGetListWithMultipleFilter()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/user?filter=[{"filter":{"logic":"and","filters":[{"field":"country","operator":"startswith","value":"in"},{"field":"address1","operator":"endswith","value":"r"},{"field":"address2","operator":"contains","value":"mba"},{"field":"state","operator":"startswith","value":"Tamil"}]},"sort":[{"field":"id","dir":"asc"},{"field":"uuid","dir":"dsc"}],"skip":0,"take":2}]
+', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 1);
+        $this->assertEquals($content['data'][0]['uuid'], 'd9890624-8f42-4201-bbf9-675ec5dc8400');
+        $this->assertEquals($content['data'][0]['name'], 'Deepak S');
+    }
      public function testGetListSortWithPageSize()
     {
         $this->initAuthToken($this->adminUser);
@@ -548,6 +600,7 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['username'], $this->adminUser);
         $this->assertEquals($content['data']['name'], 'Bharat Gogineni');
+        $this->assertEquals($content['data']['country'], 'Germany');
     }
 
     public function testGetNotFound()
@@ -562,7 +615,7 @@ class UserControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['firstname' => 'John','lastname' => 'Holt','preferences' => '{"soundnotification":"true","emailalerts":"false","timezone":"Africa/Tripoli","dateformat":"dd/MM/yyyy"}'];
+        $data = ['firstname' => 'John','lastname' => 'Holt'];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
@@ -573,6 +626,29 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['firstname'], $data['firstname']);
         $this->assertEquals($content['data']['lastname'], $data['lastname']);
+    }
+
+    public function testUpdateWithAddress()
+    {
+        $data = ['firstname' => 'John','lastname' => 'Holt','address1' => 'Banshankari','city' => 'Bangalore', 'state' => 'Karnataka','country' => 'India','zip' => '23456',];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/4fd99e8e-758f-11e9-b2d5-68ecc57cde45', 'PUT', null);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $query = "SELECT address_id from ox_user where uuid = '4fd99e8e-758f-11e9-b2d5-68ecc57cde45'";
+        $addId = $this->executeQueryTest($query);
+
+        $query = "SELECT * from ox_address where id = ".$addId[0]['address_id'];
+        $address = $this->executeQueryTest($query);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['id'], 1);
+        $this->assertEquals($content['data']['firstname'], $data['firstname']);
+        $this->assertEquals($content['data']['lastname'], $data['lastname']);
+        $this->assertEquals($address[0]['address1'],$data['address1']);
+        $this->assertEquals($address[0]['city'],$data['city']);
+        $this->assertEquals($address[0]['state'],$data['state']);
     }
 
 
@@ -954,6 +1030,44 @@ class UserControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertNotEmpty($content['data']['privilege']);
         $this->assertNotEmpty($content['data']['whiteListedApps']);
+        $this->assertEquals(true,count($content['data']['whiteListedApps']) > 0);
+    }
+
+    public function testGetUserProjectWithdata()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['data' => array([
+            "id" => "1",
+            "name"=> "Test Project 1",
+            "org_id"=>"1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=>"1"
+        ],[
+            "id"=> "3",
+            "name"=> "Test Project 2",
+            "org_id"=>"1",
+            "description"=> "Description Test Data",
+            "created_by"=> "1",
+            "modified_by"=> "1",
+            "date_created"=> "2018-11-11 07:25:06",
+            "date_modified"=> "2018-12-11 07:25:06",
+            "isdeleted"=> "0",
+            "user_id"=> "1",
+            "project_id"=> "2"
+        ])];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/user/1/project', 'GET');
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts('getuserproject');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals(count($content['data']), 2);
     }
 
     public function testGetUserProjectWithoutdata()

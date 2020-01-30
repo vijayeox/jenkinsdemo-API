@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<link href= "./css/divebtemplate_css.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="./AgentInfo.js"></script>
+
+<script>
+  function subst() {
+      var vars = {};
+      var data = {};
+      var split = {};
+
+      var query_strings_from_url = document.location.search.substring(1).split('&');
+      for (var query_string in query_strings_from_url) {
+          if (query_strings_from_url.hasOwnProperty(query_string)) {
+              var temp_var = query_strings_from_url[query_string].split('=', 2);
+              vars[temp_var[0]] = decodeURI(temp_var[1]);
+          }
+      }
+      // document.getElementById("test").textContent = query_strings_from_url;
+      var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','firstname','lastname','city','state','country','zipcode','certificate_no','padi','end_date','policy_id','address1','address2'];
+      for (var css_class in css_selector_classes) {
+          if (css_selector_classes.hasOwnProperty(css_class)) {
+              var element = document.getElementsByClassName(css_selector_classes[css_class]);
+              for (var j = 0; j < element.length; ++j) {
+                  element[j].textContent = vars[css_selector_classes[css_class]];
+              }
+          }
+      }
+  }
+  </script>
+</head>
+<body onload="subst()" id = "doc_body">  
+ <div>
+            <hr class="line1"></hr>
+          <div class="spacer"></div>
+          <hr class="line2"></hr>
+
+          <center><b><div class="title1">DIVE CENTER PROPOSAL</div></b></center>
+          <div class="title2">
+            <div class = "claims_title">
+               <p class ="claims"><b>LOSS PAYEES(S)</b></p>
+            </div>
+            <div class = "page_data">
+               <p class ="page_no1">Page <span class="page"></span> of <span class="topage"></span></p>
+            </div>
+          </div>
+ 
+          <hr class="line1"></hr>
+          <div class="spacer"></div>
+          <hr class="line2"></hr>
+
+
+           <div class = "agent">
+      <div class = "agent_info">
+        <b class = "agent_info_title">Agent Information</b>
+        <div class = "agent_1">
+      <p class ="info_margin" id ="nameVal"></p>
+      <p class ="add_margin" id = "addressVal"></p>
+            <p></p>
+      <p class = "p_info">License#: <span class="license_number"></span></p>
+        </div>
+      </div>
+      <div class ="agent_info1">
+        <b class = "agent_info2">Agent Contact Information</b>
+        <div class = "agent_1">
+          <p class ="p_info"><span id= "phone1Val"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspFAX <span id= "faxVal"></span></p>
+          <p class ="p_info" id ="phone2Val"></p>
+          <p class ="p_info">www.diveinsurance.com</p>
+          <p class ="p_info">diveboat@diveinsurance.com</p>
+          <p class ="p_info">Policy period from <span class ="start_date"></span> to <span class = "end_date"></span></p>
+          <p class ="agent_info2"><b>Member#:</b> <span class ="padi"></span></p>
+      </div>
+      </div>
+    </div>
+    <div>&nbsp</div>
+    <hr class = "hr_margin"></hr>
+    <div class="agent">
+      <div class = "agent_info">
+      <b >Insured's Name and Mailing Address:</b>
+          <p class = "c_details"><span class ="firstname"></span>,<span class ="lastname"></span></p>
+          <p class = "c_details"><span class="address1"></span></p>
+          <p class = "c_details"><span class="address2"></span></p>
+          <p class = "c_details"><span class ="city"></span>,<span class ="state"></span></p>
+          <p class = "c_details"><span class = "country"></span>,<span class ="zipcode"></span></p>
+      </div>
+      <div class = "agent_info1">
+        <p class ="padi_margin"></p>                                                                
+      </div>
+    </div>
+<div class = "spacing_div">&nbsp</div>
+    <hr class = "qfooter_line1"></hr>
+</div>
+</body>
+</html>

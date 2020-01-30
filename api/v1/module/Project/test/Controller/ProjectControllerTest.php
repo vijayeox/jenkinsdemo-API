@@ -44,7 +44,6 @@ class ProjectControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-
     public function testGetList()
     {
         $this->initAuthToken($this->adminUser);

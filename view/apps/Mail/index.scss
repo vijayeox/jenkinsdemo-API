@@ -1,15 +1,15 @@
 .osjs-window[data-id=MailApplicationWindow] {
 
-.osjs-window-icon{
-  background-color: #4495D1;
-}
+    .osjs-window-icon{
+        background-color: #4495D1;
+    }
     .osjs-window-button[data-action=minimize] > div {
         background-position: 50% 50%;
         background-image: url('./close.svg');
     }
     .osjs-window-button[data-action=minimize] {
         min-width: 3em;
-    } 
+    }
 
     // Changing the Icon cursor from Pointer to Auto
     .osjs-window-icon > div {
@@ -18,8 +18,4 @@
     .osjs-window-title > div {
         cursor: auto!important;
     }
-
-    //  &:hover>div {
-    //         background-color: lighten(#c75050, 10%);
-    //     }
 }

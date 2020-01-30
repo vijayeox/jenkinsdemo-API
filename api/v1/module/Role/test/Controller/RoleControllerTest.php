@@ -36,7 +36,6 @@ class RoleControllerTest extends ControllerTest
         $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
     }
 
-
     public function testGetList(){
         $this->initAuthToken($this->adminUser);
         $this->dispatch('/role', 'GET');
@@ -167,7 +166,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(13, count($content['data']));
+        $this->assertEquals(18, count($content['data']));
         foreach ($content['data'] as $key => $val) {
             if($val['privilege_name'] == "MANAGE_ANNOUNCEMENT"){
                 $this->assertEquals($val['permission'], 3);
@@ -231,7 +230,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertMatchedRouteName('roleprivilege');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals(13, count($content['data']));
+        $this->assertEquals(18, count($content['data']));
         foreach ($content['data'] as $key => $val) {
             if($val['privilege_name'] == "MANAGE_ANNOUNCEMENT"){
                 $this->assertEquals($val['permission'], 3);
@@ -321,7 +320,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 4);
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(26,count($content['data']['privileges']));
+        $this->assertEquals(31,count($content['data']['privileges']));
     }
 
 
@@ -336,7 +335,7 @@ class RoleControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 4);
         $this->assertEquals($content['data']['name'], 'ADMIN');
-        $this->assertEquals(26,count($content['data']['privileges']));
+        $this->assertEquals(31,count($content['data']['privileges']));
     }
 
     public function testGetWithDifferentOrgId(){
@@ -466,7 +465,7 @@ class RoleControllerTest extends ControllerTest
 
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'],'ADMIN');
-        $this->assertEquals(count($result),26);
+        $this->assertEquals(count($result),31);
     }
 
     public function testUpdatePrivilegePermissionWithOrgID(){
@@ -486,7 +485,7 @@ class RoleControllerTest extends ControllerTest
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'],'ADMIN');
-        $this->assertEquals(count($result),26);
+        $this->assertEquals(count($result),31);
     }
 
     public function testAddNewPrivilege()
@@ -510,8 +509,7 @@ class RoleControllerTest extends ControllerTest
 
         $this->dispatch('/role','POST',$data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Role already exists');
+        $this->assertEquals($content['status'], 'success');
     }
 
     public function testCreate()
@@ -570,18 +568,6 @@ class RoleControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'You have no Access to this API');
-    }
-
-    public function testUpdateNotFound()
-    {
-        $data = ['name' => 'ADMINs'];
-        $this->initAuthToken($this->adminUser);
-        $this->setJsonContent(json_encode($data));
-        $this->dispatch('/role/64', 'PUT', null);
-        $this->assertResponseStatusCode(404);
-        $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
     }
 
     public function testDelete()

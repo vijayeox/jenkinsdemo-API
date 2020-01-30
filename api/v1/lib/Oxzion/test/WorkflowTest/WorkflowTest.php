@@ -5,12 +5,26 @@ use Oxzion\Workflow\WorkflowFactory;
 use Oxzion\Utils\RestClient;
 use Mockery;
 use PHPUnit\Framework\TestCase;
+use Zend\Stdlib\ArrayUtils;
 
 class WorkflowTest extends TestCase
 {
+    private $config;
+
+    public function setUp() : void
+    {
+        $this->loadConfig();
+    }
+    protected function loadConfig()
+    {
+        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/autoload/global.php', include __DIR__ . '/../../../../config/autoload/local.php');
+        $configOverrides = ArrayUtils::merge(include __DIR__ . '/../../../../config/application.config.php', $configOverrides);
+        $config = $configOverrides;
+    }
+
     public function testDeploymentProcess()
     {
-        $workflowFactory = WorkflowFactory::getInstance();
+        $workflowFactory = WorkflowFactory::getInstance($this->config);
         $processManager = $workflowFactory->getProcessManager();
         $processEngine = $workflowFactory->getProcessEngine();
         if (enableCamunda==0) {
@@ -56,7 +70,7 @@ class WorkflowTest extends TestCase
     // Check this
     public function testAssigneeProcess()
     {
-        $workflowFactory = WorkflowFactory::getInstance();
+        $workflowFactory = WorkflowFactory::getInstance($this->config);
         $processManager = $workflowFactory->getProcessManager();
         $processEngine = $workflowFactory->getProcessEngine();
         $activityManager = $workflowFactory->getActivity();
@@ -90,7 +104,7 @@ class WorkflowTest extends TestCase
     }
     public function testAssignGroupProcess()
     {
-        $workflowFactory = WorkflowFactory::getInstance();
+        $workflowFactory = WorkflowFactory::getInstance($this->config);
         $processManager = $workflowFactory->getProcessManager();
         $processEngine = $workflowFactory->getProcessEngine();
         $activityManager = $workflowFactory->getActivity();
@@ -173,23 +187,44 @@ class WorkflowTest extends TestCase
 
     public function testBPMNParsing()
     {
-        $workflowFactory = WorkflowFactory::getInstance();
+        $workflowFactory = WorkflowFactory::getInstance($this->config);
         $processManager = $workflowFactory->getProcessManager();
         $processEngine = $workflowFactory->getProcessEngine();
         $data = $processManager->parseBPMN(__DIR__."/Dataset/ScriptTaskTest.bpmn", 1, 1);
         $this->assertEquals($data[0]['form']['name'], 'StartEvent_1');
         $this->assertEquals($data[0]['form']['app_id'], 1);
-        $this->assertEquals(count($data[0]['fields']), 1);
-        $this->assertEquals($data[0]['fields'][0]['name'], 'FormField_3oot72p');
-        $this->assertEquals($data[0]['fields'][0]['text'], 'New Field');
-        $this->assertEquals($data[0]['fields'][0]['data_type'], 'string');
+        $this->assertEquals(count($data[0]['form']['fields']), 1);
+        $this->assertEquals($data[0]['form']['fields'][0]['name'], 'FormField_3oot72p');
+        $this->assertEquals($data[0]['form']['fields'][0]['text'], 'New Field');
+        $this->assertEquals($data[0]['form']['fields'][0]['data_type'], 'string');
         $this->assertEquals($data[0]['start_form'], 'StartEvent_1');
-        $this->assertEquals(count($data[1]['fields']), 3);
-        $this->assertEquals($data[1]['activity']['activity_id'], 'UserTask_1');
-        $this->assertEquals($data[1]['activity']['app_id'], 1);
-        $this->assertEquals($data[1]['fields'][0]['name'], 'a_val');
-        $this->assertEquals($data[1]['fields'][0]['text'], 'A Value');
-        $this->assertEquals($data[1]['fields'][0]['constraints'], '[{"name":"required","config":"true"}]');
+        $this->assertEquals($data[0]['activity'][0]['task_id'], 'UserTask_1');
+        $this->assertEquals($data[0]['activity'][0]['app_id'], 1);
+        $this->assertEquals(count($data[0]['activity'][0]['fields']), 3);
+        $this->assertEquals($data[0]['activity'][0]['fields'][0]['name'], 'a_val');
+        $this->assertEquals($data[0]['activity'][0]['fields'][0]['text'], 'A Value');
+        $this->assertEquals($data[0]['activity'][0]['fields'][0]['constraints'], '[{"name":"required","config":"true"}]');
+        $this->assertNotEquals(0, $data);
+    }
+
+    public function testBPMNParsingWithFormTemplate()
+    {
+        $workflowFactory = WorkflowFactory::getInstance($this->config);
+        $processManager = $workflowFactory->getProcessManager();
+        $processEngine = $workflowFactory->getProcessEngine();
+        $data = $processManager->parseBPMN(__DIR__."/Dataset/SampleBPMN.bpmn", 1, 1);
+        $this->assertEquals($data[0]['form']['name'], 'Insure Fills Online Application');
+        $this->assertEquals($data[0]['form']['app_id'], 1);
+        $this->assertEquals(count($data[0]['form']['fields']), 1);
+        $this->assertEquals($data[0]['form']['fields'][0]['name'], 'automatic_renewal');
+        $this->assertEquals($data[0]['form']['fields'][0]['text'], 'Auto Renewal?');
+        $this->assertEquals($data[0]['form']['fields'][0]['data_type'], 'boolean');
+        $this->assertEquals($data[0]['start_form'], 'StartEvent_198mssd');
+        $this->assertEquals($data[0]['activity'][0]['task_id'], 'Task_1s7qzh3');
+        $this->assertEquals($data[0]['activity'][0]['name'], 'CSR Review');
+        $this->assertEquals($data[0]['activity'][0]['app_id'], 1);
+        $this->assertEquals(count($data[0]['activity'][0]['fields']), 1);
+        $this->assertEquals($data[0]['activity'][0]['fields'][0]['name'], 'FormField_1c1vahk');
         $this->assertNotEquals(0, $data);
     }
 }

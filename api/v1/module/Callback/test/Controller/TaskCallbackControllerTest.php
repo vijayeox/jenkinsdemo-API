@@ -34,14 +34,6 @@ class TaskCallbackControllerTest extends ControllerTest
         return $mockRestClient;
     }
 
-    protected function setDefaultAsserts()
-    {
-        $this->assertModuleName('Callback');
-        $this->assertControllerName(TaskCallbackController::class); // as specified in router's controller name alias
-        $this->assertControllerClass('TaskCallbackController');
-        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
-    }
-
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
@@ -233,4 +225,11 @@ class TaskCallbackControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
+    protected function setDefaultAsserts()
+    {
+        $this->assertModuleName('Callback');
+        $this->assertControllerName(TaskCallbackController::class); // as specified in router's controller name alias
+        $this->assertControllerClass('TaskCallbackController');
+        $this->assertResponseHeaderContains('content-type', 'application/json; charset=utf-8');
+    }
 }

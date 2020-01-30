@@ -112,10 +112,7 @@ export default class DialogContainer extends React.Component {
         this.props.action(response);
         this.props.cancel();
       } else {
-        this.notif.current.failNotification(
-          "Error",
-          response.message ? response.message : null
-        );
+        this.notif.current.notify("Error",response.message ? response.message : null,"danger")
       }
     });
   }
@@ -154,10 +151,12 @@ export default class DialogContainer extends React.Component {
           behavior: "smooth",
           inline: "nearest"
         });
-        this.notif.current.customWarningNotification(
+      
+        this.notif.current.notify(
           "No Media Selected",
-          "Please select a banner for the Announcement."
-        );
+          "Please select a banner for the Announcement.",
+          "warning"
+        )
       } else {
         this.pushFile().then(response => {
           var addResponse = response.data.filename[0];
@@ -167,10 +166,11 @@ export default class DialogContainer extends React.Component {
               this.props.action(response);
               this.props.cancel();
             } else {
-              this.notif.current.failNotification(
+              this.notif.current.notify(
                 "Error",
-                response.message ? response.message : null
-              );
+                response.message ? response.message : null,
+                "danger"
+              )
             }
           });
         });
@@ -187,7 +187,7 @@ export default class DialogContainer extends React.Component {
             {this.props.diableField ? (
               <div className="read-only-mode">
                 <h5>(READ ONLY MODE)</h5>
-                <i className="fas fa-user-lock"></i>
+                <i className="fa fa-lock"></i>
               </div>
             ) : null}
             <div className="form-group">

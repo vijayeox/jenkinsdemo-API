@@ -14,13 +14,13 @@ use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
 $host = 'localhost';
 $db = 'oxzionapi';
-$username = 'root';
+$username = 'user';
 $password = 'password';
 
 if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
     $host = 'localhost';
     $db = "oxzionapi_test";
-    $username = "root";
+    $username = "user";
     $password = "password";
 }
 
@@ -42,6 +42,12 @@ return [
         'user'=>'user',
         'password'=>'password'
     ],
+    'amqp' => [
+        'host' => 'tcp://localhost:61613'
+    ],
+    'workflow' => [
+        'engineUrl' => 'http://localhost:8090/engine-rest/engine/default/'
+    ],
     'chat' => [
         'chatServerUrl' => 'http://localhost:8065/',
         'authToken' => ''
@@ -59,16 +65,26 @@ return [
         'calendarServerUrl' => 'http://localhost:8075/calendar',
         'authToken' => ''
     ],
+    'job' => [
+        'jobUrl' => 'http://localhost:8085/',
+        'authToken' => ''
+    ],
+    'DELEGATE_FOLDER'=>__DIR__.'/../../data/delegate/',
     'applicationUrl' => 'http://localhost:8081',
     'RULE_FOLDER'=>__DIR__.'/../../data/rules/',
     'DATA_FOLDER'=>__DIR__.'/../../data/',
     "UPLOAD_FOLDER" => __DIR__.'/../../data/uploads/',
     'TEMPLATE_FOLDER'=>__DIR__.'/../../data/template/',
     'APP_UPLOAD_FOLDER' => __DIR__.'/../../data/app',
+    'APP_DOCUMENT_FOLDER' => __DIR__.'/../../data/file_docs/',
+    'CLIENT_FOLDER' => __DIR__.'/../../../../clients/',
+    'APPS_FOLDER' => __DIR__."/../../../../view/apps/",
+    'internalBaseUrl' => 'http://localhost:8080',
     'baseUrl' => 'http://localhost:8080',
     'salt' => 'arogAegatnaVOfficeBack123',
     'jwtKey' => 'l7Hnf6TGMYTy6eP7oyyWNG1MGay1T39/If495vwYBhS2j6OOHlMKhSf3qADPlWwkHQ6h3tjP2klI0kvKPltvVA==',
     'jwtAlgo' => 'HS512',
     'authRequiredText' => 'Authentication Required',
     'refreshTokenPeriod' => '7',
+    'paymentGatewayType'=>'DEMO'
 ];

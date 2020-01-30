@@ -10,7 +10,9 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\ValidationException;
 use Oxzion\Controller\AbstractApiController;
 use Zend\Db\Adapter\AdapterInterface;
-use Zend\Log\Logger;
+use Oxzion\ServiceException;
+use Exception;
+use Oxzion\Service\WorkflowService;
 
 class AppController extends AbstractApiController
 {
@@ -22,11 +24,12 @@ class AppController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(AppTable $table, AppService $appService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter,WorkflowService $workflowService)
     {
-        parent::__construct($table, $log, __CLASS__, App::class);
+        parent::__construct($table, App::class);
         $this->setIdentifierName('appId');
         $this->appService = $appService;
+        $this->workflowService = $workflowService;
     }
     public function setParams($params)
     {
@@ -62,7 +65,7 @@ class AppController extends AbstractApiController
     public function create($data)
     {
         try {
-            $count = $this->appService->deployAppForOrg($data);
+            $count = $this->appService->createApp($data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -196,35 +199,6 @@ class AppController extends AbstractApiController
     }
 
     /**
-     * Upload the app from the UI and extracting the zip file in a folder that will start the installation of app.
-     * @api
-     * @link /app/appdeployyml
-     * @method GET
-     * @param null </br>
-     * <code>
-     * </code>
-     * @return array Returns a JSON Response with Status Code.</br>
-     * <code> status : "success|error"
-     * </code>
-     */
-    public function appUploadAction()
-    {
-        $file_name = $_FILES["file"]["name"];
-        $destinationFolder = $this->appService->getAppUploadFolder() . "/uploads/";
-        $target_file = $destinationFolder . $file_name;
-        try {
-            if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
-                $this->appService->getDataFromDeploymentDescriptorUsingYML($this->appService->getAppUploadFolder());
-                return $this->getSuccessResponse();
-            } else {
-                return $this->getErrorResponse("Files cannot be uploaded");
-            }
-        } catch (Exception $e) {
-            return $this->getErrorResponse("Files cannot be uploaded!");
-        }
-    }
-
-    /**
      * GET App API
      * @api
      * @link /app/a
@@ -255,46 +229,23 @@ class AppController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
-    /**
-     * Upload the app from the UI and extracting the zip file in a folder that will start the installation of app.
-     * @api
-     * @link /app/:appId/deployworkflow
-     * @method POST
-     * @param null </br>
-     * <code>
-     * </code>
-     * @return array Returns a JSON Response with Status Code.</br>
-     * <code> status : "success|error"
-     * </code>
-     */
-    public function workflowDeployAction()
-    {
-        $data=$this->extractPostData();
-        $params = array_merge($data, $this->params()->fromRoute());
-        $files = isset($_FILES['files']) ? $_FILES['files'] : null;
-        try {
-            if ($files&&isset($params['name'])) {
-                $response = $this->appService->deployWorkflow($params['appId'], $params, $files);
-                if ($response == 1) {
-                    return $this->getErrorResponse("Error Parsing BPMN");
-                }
-                if ($response == 2) {
-                    return $this->getErrorResponse("More Than 1 Process Found in BPMN Please Define only one Process per BPMN");
-                }
-                return $this->getSuccessResponse($response);
-            } else {
-                return $this->getErrorResponse("Files cannot be uploaded");
-            }
-        } catch (Exception $e) {
-            return $this->getErrorResponse("Files cannot be uploaded!");
-        }
-    }
+    
 
     public function assignmentsAction()
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        $assignments = $this->appService->getAssignments($params['appId']);
-        return $this->getSuccessResponseWithData($assignments);
+        $filterParams = $this->params()->fromQuery();
+        try {
+            $assignments = $this->workflowService->getAssignments($params['appId'],$filterParams);
+        }catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors",404, $response);
+        }
+        catch(AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(),403, $response);
+        }
+        return $this->getSuccessResponseDataWithPagination($assignments['data'], $assignments['total']);
     }
 
     /**
@@ -308,63 +259,40 @@ class AppController extends AbstractApiController
      * @return array Returns a JSON Response with Status Code.</br>
      * <code> status : "success|error"
      * </code>
-     */
-    /*    public function getDataFromDeploymentDescriptorUsingYML($appFolder) {
-            $appUploadFolder = $appFolder;
+    */
+    public function deployAppAction() {
+        $params = $this->extractPostData();
+        if(isset($params['path']))
+        {
             try {
-                $appUploadedZipFile = $appUploadFolder . "/uploads/App.zip";
-                $destinationFolder = $appUploadFolder . "/temp";
-                $this->appService->extractZipFilefromAppUploader($appUploadedZipFile, $destinationFolder);
-                $fileName = file_get_contents($appUploadFolder . "/temp/App/web.yml");
-            } catch (Exception $e) {
-                return $this->getErrorResponse("The files could not be extracted!");
+                $path = $params['path'];
+                $path .= substr($path, -1) == '/' ? '' : '/';
+                $this->appService->deployApp($path);
+                return $this->getSuccessResponse(200);
             }
-            $ymlArray = $this->appService->ymlToArrayParser($fileName);
-            //Code to insert the details of the app to the app table. Returns 1 or 0 for success or failure
-            $app = $this->appService->insertAppDetail($ymlArray['config']);
-            if($app === 0) {
-                return $this->getErrorResponse("App could not be installed, please check your deployment descriptor and try again!");
+            catch (ValidationException $e) {
+                // print_r($e->getMessage());
+                $this->log->error($e->getMessage(), $e);
+                // print_r($e->getTraceAsString());exit;
+                $response = ['data' => $data, 'errors' => $e->getErrors()];
+                return $this->getErrorResponse("Validation Errors", 406, $response);
             }
-            //Code to add the default privilege to the app installed.
-            $appPrivileges = $this->appService->applyAppPrivilege($ymlArray['config'], $app);
-            if($appPrivileges === 0){
-                return $this->getErrorResponse("App Privileges could not be set, please check your application and try again!");
+            catch (ServiceException $e){
+                // print_r($e->getMessage());
+                $this->log->error($e->getMessage(), $e);
+                // print_r($e->getTraceAsString());exit;
+                return $this->getErrorResponse($e->getMessage(),406);
+            }catch(Exception $e){
+                // print_r($e->getMessage());
+                $this->log->error($e->getMessage(), $e);
+                // print_r($e->getTraceAsString());exit;
+                return $this->getErrorResponse($e->getMessage(),500);
             }
-            $count = $this->appService->getFormInsertFormat($ymlArray['config']);
-            if ($count === 1) {
-                return $this->getSuccessResponse();
-            } else {
-                return $this->getErrorResponse("Form could not be created, please check your deployment descriptor and try again!");
-            }
-        }*/
-
-    /**
-     * Deploy App API using XML File
-     * @api
-     * @link /app/appdeployxml
-     * @method GET
-     * @param null </br>
-     * <code>
-     * </code>
-     * @return array Returns a JSON Response with Status Code.</br>
-     * <code> status : "success|error"
-     * </code>
-     */
-    /*    public function getDataFromDeploymentDescriptorUsingXMLAction($appFolder) {
-            try {
-                $appUploadedZipFile = $appFolder . "/uploads/App.zip";
-                $destinationFolder = $appFolder . "/temp";
-                $fileExtract = $this->appService->extractZipFilefromAppUploader($appUploadedZipFile, $destinationFolder);
-                $fileName = file_get_contents($appFolder . "/temp/App/web.xml");
-            } catch (Exception $e) {
-                return $this->getErrorResponse("The files could not be extracted!");
-            }
-            $xmlArray = $this->appService->xmlToArrayParser($fileName);
-            $count = $this->appService->getFormInsertFormat($xmlArray);
-            if ($count === 1) {
-                return $this->getSuccessResponse();
-            } else {
-                return $this->getErrorResponse("Form could not be created, please check your deployment descriptor");
-            }
-        }*/
+        }else{
+            // print_r($e->getMessage());
+            $this->log->error("Path not provided");
+            // print_r($e->getTraceAsString());exit;
+            return $this->getErrorResponse("Invalid parameters",400);
+        }
+    }
 }

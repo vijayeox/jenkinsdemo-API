@@ -9,128 +9,132 @@ use Oxzion\Service\AbstractService;
 use Oxzion\ValidationException;
 use Zend\Db\Sql\Expression;
 use Oxzion\Utils\UuidUtil;
+use App\Service\PageContentService;
+use Oxzion\ServiceException;
 use Exception;
 
 class PageService extends AbstractService
 {
-    public function __construct($config, $dbAdapter, PageTable $table)
+    public function __construct($config, PageContentService $pageContentService ,$dbAdapter, PageTable $table)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->pageContentService = $pageContentService;
     }
-    public function savePage($appId, &$data)
-    {
-        $page = new Page();
-        $data['app_id'] = $appId;
-        $data['uuid'] = UuidUtil::uuid();
-        if (!isset($data['id'])) {
-            $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
-            $data['date_created'] = date('Y-m-d H:i:s');
-        }
-        $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_modified'] = date('Y-m-d H:i:s');
-        $page->exchangeArray($data);
-        $page->validate();
-        $this->beginTransaction();
+    public function savePage($routeData, &$data,$id = null)
+    {  
+        $this->logger->info("save page - params - ".json_encode($routeData).", ".json_encode($data).", $id");
         $count = 0;
-        try {
-            $count = $this->table->save($page);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
+        $orgId = isset($routeData['orgId'])? $this->getIdFromUuid('ox_organization', $routeData['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
+        $data['app_id'] = $this->getIdFromUuid('ox_app', $routeData['appId']);
+        $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
+        $selectQuery = array("orgId" => $orgId,"appId" => $data['app_id']);           
+        $result = $this->executeQuerywithBindParameters($select,$selectQuery)->toArray();
+        if(count($result) > 0){
+            $page = null;
+            $content = isset($data['content'])?$data['content']:false;
+            $this->beginTransaction();
+            if(isset($id)){
+                $page = $this->table->getByUuid($id);
+                $data['uuid'] = $id;
+                if($page){
+                    $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
+                    $data['date_modified'] = date('Y-m-d H:i:s');
+                    $existingPage = $page->toArray();
+                    $deleteQuery = "DELETE from ox_page_content where page_id = ?";
+                    $whereParams = array($existingPage['id']);
+                    $deleteResult = $this->executeUpdatewithBindParameters($deleteQuery,$whereParams);
+                    $deleteRecord = $this->table->delete($existingPage['id'], ['app_id'=>$data['app_id']]);
+                    unset($data['id']);
+                    unset($page->id);
+                }
+                
             }
-            if (!isset($data['id'])) {
-                $id = $this->table->getLastInsertValue();
-                $data['id'] = $id;
+           
+            if(!$page){
+                $page = new Page();
+                $data['uuid'] = isset($id) ? $id : UuidUtil::uuid();
+                $data['created_by'] = AuthContext::get(AuthConstants::USER_ID);
+                $data['date_created'] = date('Y-m-d H:i:s');
             }
-            $this->commit();
-        } catch (Exception $e) {
-            switch (get_class($e)) {
-             case "Oxzion\ValidationException":
+            $page->exchangeArray($data);
+            $page->validate();
+            try { 
+                unset($data['content']);
+                $count = $this->table->save($page);
+                if ($count == 0) {
+                    $this->rollback();
+                    throw new ServiceException("Page save failed", "page.save.failed");
+                }
+                if (!isset($data['id'])) {
+                    $id = $this->table->getLastInsertValue();
+                    $data['id'] = $id;
+                }
+                if($content){
+                    $pageContent = $this->pageContentService->savePageContent($data['id'],$content);
+                }
+                $this->commit();
+            } catch (Exception $e) {
                 $this->rollback();
+                $this->logger->error($e->getMessage(), $e);
                 throw $e;
-                break;
-             default:
-                $this->rollback();
-                return 0;
-                break;
             }
+        }else{
+            throw new ServiceException("App Does not belong to the org","app.fororgnot.found");
         }
         return $count;
     }
-    public function updatePage($id, &$data)
+     
+    public function deletePage($appUuid, $pageUuid)
     {
-        $obj = $this->table->get($id, array());
-        if (is_null($obj)) {
-            return 0;
-        }
-        $data['id'] = $id;
-        $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
-        $data['date_modified'] = date('Y-m-d H:i:s');
-        $file = $obj->toArray();
-        $changedArray = array_merge($obj->toArray(), $data);
-        $Page = new Page();
-        $Page->exchangeArray($changedArray);
-        $Page->validate();
-        $this->beginTransaction();
+        $select = "SELECT ox_app_page.* from ox_app_page left join ox_app on ox_app.id = ox_app_page.app_id where ox_app.uuid =? AND ox_app_page.uuid =?";
+        $whereQuery = array($appUuid,$pageUuid);
+        $result = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
         $count = 0;
-        try {
-            $count = $this->table->save($Page);
-            if ($count == 0) {
+        if(count($result)>0){
+            $this->beginTransaction();           
+            try {
+                $selectQuery = "DELETE from ox_page_content where page_id = ?";
+                $selectParams = array($result[0]['id']);
+                $resultSet = $this->executeQueryWithBindParameters($selectQuery,$selectParams);
+                $count = $this->table->delete($this->getIdFromUuid('ox_app_page', $pageUuid), ['app_id'=>$this->getIdFromUuid('ox_app', $appUuid)]);
+                if ($count == 0) {
+                    $this->rollback();
+                    return 0;
+                }
+                $this->commit();
+            } catch (Exception $e) {
                 $this->rollback();
-                return 0;
+                $this->logger->error($e->getMessage(), $e);
+                throw $e;
             }
-            $this->commit();
-        } catch (Exception $e) {
-            $this->rollback();
-            return 0;
+        }else{
+            throw new ServiceException("Page Not Found","page.not.found");
         }
-        return $count;
+            return $count;
     }
 
-
-    public function deletePage($appId, $id)
+    public function getPages($appUuid=null, $filterArray = array())
     {
-        try {
-            $delete = "DELETE from ox_page_content where page_id=".$id.";";
-            $result = $this->executeQuerywithParams($delete);
-        } catch (Exception $e) {
-            return 0;
-        }
-        $this->beginTransaction();
-        $count = 0;
-        try {
-            $count = $this->table->delete($id, ['app_id'=>$appId]);
-            if ($count == 0) {
-                $this->rollback();
-                return 0;
-            }
-            $this->commit();
-        } catch (Exception $e) {
-            $this->rollback();
-        }
-        return $count;
-    }
-
-    public function getPages($appId=null, $filterArray = array())
-    {
-        if (isset($appId)) {
-            $filterArray['app_id'] = $appId;
+        if (isset($appUuid)) {
+            $filterArray['app_id'] = $this->getIdFromUuid('ox_app', $appUuid);
         }
         $resultSet = $this->getDataByParams('ox_app_page', array("*"), $filterArray, null);
         return $resultSet->toArray();
     }
-    public function getPage($appId, $id)
-    {
-        $sql = $this->getSqlObject();
-        $select = $sql->select();
-        $select->from('ox_app_page')
-        ->columns(array("*"))
-        ->where(array('id' => $id,'app_id'=>$appId));
-        $response = $this->executeQuery($select)->toArray();
-        if (count($response)==0) {
-            return 0;
+    public function getPage($appUuid, $pageUuid)
+    {     
+        try{
+            $select = "SELECT ox_app_page.* FROM ox_app_page left join ox_app on ox_app.id = ox_app_page.app_id where ox_app_page.uuid=? and ox_app.uuid=?";
+            $whereQuery = array($pageUuid,$appUuid);
+            $response = $this->executeQueryWithBindParameters($select,$whereQuery)->toArray();
+            if (count($response)==0) {
+                return 0;
+            }
+            return $response[0];
+        }catch(Exception $e){
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
         }
-        return $response[0];
     }
 }
