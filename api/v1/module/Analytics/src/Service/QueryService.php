@@ -118,7 +118,7 @@ class QueryService extends AbstractService
 
     public function getQuery($uuid, $params)
     {
-        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, if(q.created_by=:created_by, true, false) as is_owner, q.isdeleted, d.uuid as datasource_uuid from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.uuid=:uuid and (q.ispublic=true or q.created_by=:created_by)';
+        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, if(q.created_by=:created_by, true, false) as is_owner, q.isdeleted, q.version, d.uuid as datasource_uuid, d.name as datasource_name from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.uuid=:uuid and (q.ispublic=true or q.created_by=:created_by)';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -166,10 +166,10 @@ class QueryService extends AbstractService
         $count=$resultSet->toArray()[0]['count'];
 
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
-            $query ="SELECT uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted FROM `ox_query`".$where." ".$sort." ".$limit;
+            $query ="SELECT uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,org_id,isdeleted FROM `ox_query`".$where." ".$sort." ".$limit;
         }
         else{
-            $query ="SELECT uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id FROM `ox_query`".$where." ".$sort." ".$limit;
+            $query ="SELECT uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,org_id FROM `ox_query`".$where." ".$sort." ".$limit;
         }
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();

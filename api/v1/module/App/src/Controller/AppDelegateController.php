@@ -40,6 +40,7 @@ class AppDelegateController extends AbstractApiControllerHelper
         $data = $this->extractPostData();
         $appId = $this->params()->fromRoute()['appId'];
         $delegate = $this->params()->fromRoute()['delegate'];
+        $data = array_merge($data,$this->params()->fromQuery());
         $this->appDelegateService->updateOrganizationContext($data);
         $response = $this->appDelegateService->execute($appId, $delegate, $data);
         if ($response == 1) {

@@ -91,7 +91,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"}]}}'
+                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"policyStatus","operator":"neq","value":"Cancelled"},{"field":"policyStatus","operator":"neq","value":"Rejected"},{"field":"end_date","operator":"gt","value":"{{current_date}}"}]}}'
                         filterable: false
                         reorderable: false
                         resizable: true
@@ -115,11 +115,20 @@ menu:
                                 icon: 'fa fa-envelope-open'
                             -
                                 name: Endorsement
-                                rule: 'true'
+                                rule: '''{{entity_name}}'' == ''Individual Professional Liability'''
                                 details:
                                     -
                                         type: Form
                                         url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
+                                name: Endorsement
+                                rule: '''{{entity_name}}'' == ''Emergency First Response'''
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
                             -
@@ -187,7 +196,7 @@ menu:
                 -
                     type: List
                     content:
-                        route: file/user/me
+                        route: 'file/user/me/status/Completed?filter={"filter":{"logic":"and","filters":[{"field":"end_date","operator":"lt","value":"{{current_date}}"}]}}'
                         filterable: true
                         reorderable: true
                         resizable: true
@@ -229,7 +238,8 @@ menu:
             content:
                 -
                     type: Dashboard
-                    dashboard: Dashboard
+                    content:
+                        uuid: 4796e7fe-50b5-469c-9737-35f3921891ba
         uuid: 24176975-8f4d-499d-8b2d-86902de26c14
     -
         name: Requests
@@ -316,7 +326,7 @@ menu:
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
-                                field: entityName
+                                field: entity_name
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
@@ -386,9 +396,27 @@ menu:
                     content:
                         actions:
                             -
+                                name: Endorsement
+                                rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
+                                name: Endorsement
+                                rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
                                 name: View
                                 icon: 'fa fa-envelope-open'
-                                rule: 'true'
+                                rule: '''{{policyStatus}}'' != ''Rejected'''
                                 details:
                                     -
                                         type: View
@@ -402,17 +430,8 @@ menu:
                                         type: Form
                                         url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{policyStatus}}'' != ''Cancelled'''
+                                rule: '''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'''
                                 icon: 'fa fa-window-close'
-                            -
-                                name: 'Reinstate Policy'
-                                details:
-                                    -
-                                        type: Form
-                                        url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
-                                        workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{policyStatus}}'' == ''Cancelled'''
-                                icon: 'fa fa-repeat'
                         filterColumns:
                             - name
                             - padi
@@ -591,11 +610,6 @@ workflow:
         uuid: 35139ac6-3229-11ea-aec2-2e728ce88125
         bpmn_file: 'Emergency First Response/EFREndorsement.bpmn'
         entity: 'Emergency First Response'
-    -
-        name: 'Reinstate Policy'
-        uuid: 81cb9e10-5845-4379-97c9-f9486b702bdb
-        bpmn_file: 'Cancel Policy/ReinstatePolicy.bpmn'
-        entity: 'Individual Professional Liability'
 form:
     -
         name: 'PADI Verification'

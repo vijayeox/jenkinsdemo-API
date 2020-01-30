@@ -79,6 +79,7 @@ class CustomServiceTaskListener implements ExecutionListener {
          }
        }
        }catch(Exception e){
+            logger.error("Exception in ServiceTask execution", e)
             ErrorHandler.handleError(execution,e)
        }
       }

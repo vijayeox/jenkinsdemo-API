@@ -18,11 +18,11 @@
 						<p class = "info">License#: {$license_number}</p>
 					</div>
 					<b class = "caption2">Insured's Name and Mailing Address:</b>
-					<p class = "details">{$initial},{$firstname},{$lastname}</p>
+					<p class = "details">{$lastname},{$firstname}{if isset($initial)},{$initial}{/if}</p>
 					<p class = "details">{$address1}</p>
 					<p class = "details">{$address2}</p>
-					<p class = "details">{$city},{$state}</p>
-					<p class = "details">{$country},{$zip}</p>
+					<p class = "details">{$city},{$state_in_short} - {$zip}</p>
+					<p class = "details">{$country}</p>
 			</div>
 			<div class ="content2">
 				<div class = "certificate_data">
@@ -35,7 +35,7 @@
 					<p class = "p_margin">{$certificate_no}</p>
 					<p class = "p_margin">{$padi}</p>
 					<p class = "p_margin">{$start_date|date_format:"%m/%d/%Y"}</p>
-					<p class = "p_margin">{$end_date|date_format:"%m/%d/%Y"}</p>
+					<p class = "p_margin">{$end_date|date_format:"%d %B %Y"}&nbsp12:01:00 AM</p>
 					<p class = "p_margin">90 DAY DISCOVERY PERIOD</p>
 				</div>
 				<hr></hr>
@@ -113,8 +113,17 @@
 		<div class = "second_content">
 			{if isset($update_date)}
 			{assign var=endrosement value=$endorsement_options|json_decode:true}
-				<p class ="policy_update"><b>Endorsements & Upgrades:</b></p>
-				<p class = "policy_status">Status of Insured : {$upgradeCareerCoverageVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
+			{assign var=previousCoverages value=$previous_careerCoverage|json_decode:true}
+			{assign var=encode value=previousCoverages|json_encode:true}
+				<p {$encode} class ="policy_update"><b>Endorsements & Upgrades:</b></p>
+				{if isset($previous_careerCoverage) && !empty($previous_careerCoverage)}
+					{foreach name=outer from=$previousCoverages item=previousCoverage}
+						{foreach key=key item=item from=$previousCoverage}
+							<p class = "policy_status">Status of Insured : {$key} as of {$item|date_format:"%m/%d/%Y"}</p>
+						{/foreach}
+					{/foreach}
+				{/if}
+				<p class = "policy_status" >Status of Insured : {$upgradeCareerCoverageVal} as of {$update_date|date_format:"%m/%d/%Y"}</p>
 			{/if}
 
 			<hr></hr>

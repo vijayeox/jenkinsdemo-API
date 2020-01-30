@@ -2,37 +2,41 @@
 
 namespace Oxzion\Controller;
 
-use Zend\Mvc\Controller\AbstractRestfulController;
-use Zend\View\Model\JsonModel;
-use Oxzion\Jwt\JwtHelper;
-use Oxzion\Error\ErrorHandler;
-use Zend\Stdlib\RequestInterface as Request;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
 use Logger;
-abstract class AbstractApiControllerHelper extends AbstractRestfulController{
+use Oxzion\Error\ErrorHandler;
+use Oxzion\Jwt\JwtHelper;
+use Zend\Mvc\Controller\AbstractRestfulController;
+use Zend\Stdlib\RequestInterface as Request;
+use Zend\View\Model\JsonModel;
+
+abstract class AbstractApiControllerHelper extends AbstractRestfulController
+{
 
     private $config;
-    protected function getBaseUrl() {
+    protected function getBaseUrl()
+    {
         return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
     }
 
-    protected function getLogger(){
+    protected function getLogger()
+    {
         return Logger::getLogger('Controller');
     }
+
     /**
-     * Check Request object have Authorization token or not 
+     * Check Request object have Authorization token or not
      * @param type $request
      * @return type String
      */
-
-    protected function extractPostData(){
-        $params = json_decode(file_get_contents("php://input"),true);
-        if(!isset($params)){
+    protected function extractPostData()
+    {
+        $params = json_decode(file_get_contents("php://input"), true);
+        if (!isset($params)) {
             $params = $this->params()->fromPost();
         }
         return $params;
-    } 
+    }
+
     /**
      * Process post data and call create
      *
@@ -47,8 +51,8 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
             return $this->create($this->jsonDecode($request->getContent()));
         }
         $data = $request->getPost()->toArray();
-        if(sizeof($data) == 0){
-            $data =json_decode(file_get_contents("php://input"),true);
+        if (sizeof($data) == 0) {
+            $data = json_decode(file_get_contents("php://input"), true);
         }
         return $this->create($data);
     }
@@ -63,7 +67,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
         parse_str($content, $parsedParams);
         // If parse_str fails to decode, or we have a single element with empty value
-        if (! is_array($parsedParams) || empty($parsedParams)
+        if (!is_array($parsedParams) || empty($parsedParams)
             || (1 == count($parsedParams) && '' === reset($parsedParams))
         ) {
             if (!empty($content)) {
@@ -75,6 +79,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
         return $parsedParams;
     }
+
     public function findJwtToken($request)
     {
         $jwtToken = $request->getHeaders("Authorization") ? $request->getHeaders("Authorization")->getFieldValue() : '';
@@ -90,7 +95,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         }
         return $jwtToken;
     }
-    
+
     /**
      * contain encoded token for user.
      */
@@ -107,67 +112,73 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
         return $decodeToken;
     }
 
-    protected function getTokenPayload($responseData){
+    protected function getTokenPayload($responseData)
+    {
         return JwtHelper::getTokenPayload($responseData);
     }
 
-    protected function getRefreshTokenPayload(){
+    protected function getRefreshTokenPayload()
+    {
         return JwtHelper::getRefreshTokenPayload();
     }
 
-    protected function generateJwtToken($payload){
+    protected function generateJwtToken($payload)
+    {
         $config = $this->getConfig();
         $jwtKey = $config['jwtKey'];
-        $jwtAlgo = $config['jwtAlgo'];      
+        $jwtAlgo = $config['jwtAlgo'];
         return JwtHelper::generateJwtToken($payload, $jwtKey, $jwtAlgo);
     }
 
-    protected function getSuccessResponseWithData(array $data, $code = 200){
+    protected function getSuccessResponseWithData(array $data, $code = 200)
+    {
         return $this->getSuccessResponse(null, $code, $data);
     }
 
-    protected function getSuccessResponseWithParams(array $data = null,array $paramData = null,$code = 200,$param = null){
+    protected function getSuccessResponseWithParams(array $data = null, array $paramData = null, $code = 200, $param = null)
+    {
         $this->response->setStatusCode($code);
         $payload = ['status' => 'success'];
-        if(! is_null($data)){
+        if (!is_null($data)) {
             $payload['data'] = (array) $data;
         }
-        if(! is_null($param)){
-            if(! is_null($paramData)){
+        if (!is_null($param)) {
+            if (!is_null($paramData)) {
                 $payload[$param] = $paramData;
             }
         }
         return new JsonModel($payload);
     }
-    protected function getSuccessResponse($message = null, $code = 200, array $data = null,$total = null,$role = null){
+
+    protected function getSuccessResponse($message = null, $code = 200, array $data = null, $total = null, $role = null)
+    {
         $this->response->setStatusCode($code);
         $payload = ['status' => 'success'];
-        if (! is_null($message)) {
+        if (!is_null($message)) {
             $payload['message'] = $message;
         }
-        if (! is_null($data)) {
+        if (!is_null($data)) {
             $payload['data'] = (array) $data;
         }
-        if (! is_null($total)) {
+        if (!is_null($total)) {
             $payload['total'] = $total;
         }
         return new JsonModel($payload);
     }
-
 
     protected function getSuccessResponseDataWithPagination(array $data = null, $total, $code = 200)
     {
         return $this->getSuccessResponse(null, $code, $data, $total);
     }
 
-    
-    protected function getSuccessStringResponse($message = null,$code = 200,$data = null){
+    protected function getSuccessStringResponse($message = null, $code = 200, $data = null)
+    {
         $this->response->setStatusCode($code);
         $payload = ['status' => 'success'];
-        if (! is_null($message)) {
+        if (!is_null($message)) {
             $payload['message'] = $message;
         }
-        if (! is_null($data)) {
+        if (!is_null($data)) {
             $payload['data'] = (array) $data;
         }
         return new JsonModel($payload);
@@ -177,11 +188,13 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
     {
         return $this->getErrorResponse($message, 200, $data);
     }
+
     protected function getErrorResponse($message, $code = 200, array $data = null)
     {
         $this->response->setStatusCode($code);
         return ErrorHandler::buildErrorJson($message, $data, $code);
     }
+
     protected function getInvalidMethod()
     {
         return $this->getErrorResponse("Method Not Found", 405);
@@ -189,7 +202,7 @@ abstract class AbstractApiControllerHelper extends AbstractRestfulController{
 
     protected function getConfig()
     {
-        if (! isset($this->config)) {
+        if (!isset($this->config)) {
             $this->config = $this->getEvent()->getApplication()->getServiceManager()->get('Config');
         }
 

@@ -13,18 +13,36 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
     public function execute(array $data,Persistence $persistenceService)
     {
         $this->logger->info("DocumentFetchDelegate".print_r($data,true));
-        if(isset($data['groupPL']))
-            {
-                $group = $data['groupPL'];
-                for($i = 0;$i < sizeof($group);$i++){
-                    if(isset($group[$i]['document'][0]['file'])){
-                        $file = $this->destination.$group[$i]['document'][0]['file'];
-                        $data['groupPL'][$i]['document'][0]['url'] = file_get_contents($file);
-                        unset($data['groupPL'][$i]['document'][0]['file']); 
+        if (isset($data['attachmentsFieldnames'])) {
+            $attachmentsFieldnames = $data['attachmentsFieldnames'];
+            for ($i = 0;$i < sizeof($attachmentsFieldnames);$i++) {
+                $fieldNamesArray = is_string($attachmentsFieldnames[$i]) ? array($attachmentsFieldnames[$i]) : $attachmentsFieldnames[$i];
+                if (sizeof($fieldNamesArray) == 1) {
+                    $fieldName = $fieldNamesArray[0];
+                    $data[$fieldName] = $this->getFileData($data[$fieldName]);
+                } else if (sizeof($fieldNamesArray) == 2) {
+                    $gridFieldName = $fieldNamesArray[0];
+                    $fieldName = $fieldNamesArray[1];
+                    for ($i = 0;$i < sizeof($data[$gridFieldName]);$i++) {
+                        if (isset($data[$gridFieldName][$i][$fieldName])) {
+                            $data[$gridFieldName][$i][$fieldName] = $this->getFileData($data[$gridFieldName][$i][$fieldName]);
+                        }
                     }
                 }
             }
-        $this->logger->info("DocumentFetchDelegate1".print_r($data,true));
+        }
         return $data;
+    }
+
+    public function getFileData(array $documentsArray) {
+        for ($i = 0;$i < sizeof($documentsArray);$i++) {
+            if(isset($documentsArray[$i]['file'])){
+                $file = $this->destination.$documentsArray[$i]['file'];
+                $fileData = file_get_contents($file);
+                $documentsArray[$i]['url']='data:'.$documentsArray[$i]['type'].';base64,'.base64_encode($fileData);
+                unset($documentsArray[$i]['file']);
+            }
+        }
+        return $documentsArray;
     }
 }
