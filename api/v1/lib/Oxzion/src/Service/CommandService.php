@@ -266,7 +266,7 @@ class CommandService extends AbstractService
                 $this->logger->warn("Job Details not found, so job not cancelled");
                 return $data;
             }
-            $JobData = json_decode($data[$jobName], true);
+            $JobData = (is_array($data[$jobName]) ? $data[$jobName] : json_decode($data[$jobName], true));
             if (!isset($JobData['jobId']) || !isset($JobData['jobGroup'])) {
                 $this->logger->warn("Job Id or Job Group Not Specified, so job not cancelled");
                 return $data;
