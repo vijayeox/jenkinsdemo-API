@@ -178,12 +178,16 @@ class DataSourceService extends AbstractService
                 case 'ElasticSearch':
                     $elasticConfig['elasticsearch'] = $config['data'];
                     $analyticsObject = new  \Oxzion\Analytics\Elastic\AnalyticsEngineImpl($elasticConfig);
-                    return $analyticsObject;
-                break;
+                    break;
+                case 'MySQL':
+                    $config = $config['data'];
+                    $analyticsObject = new  \Oxzion\Analytics\MySQL\AnalyticsEngineMySQLImpl($config);
+                    break;
             }
         }
         catch(Exception $e){
             throw $e;
         }
+        return $analyticsObject;
     }
 }
