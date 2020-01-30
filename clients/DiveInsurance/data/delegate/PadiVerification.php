@@ -24,7 +24,7 @@ class PadiVerification extends AbstractAppDelegate
             return;
         }
         if(isset($data['padi']) && !isset($data['business_padi'])){
-            $select = "Select firstname, MI as initial, lastname, email, address1, address2, city, state, country_code, zip, home_phone, work_phone, num as mobilephone FROM padi_data WHERE member_number ='".$data['member_number']."'";
+            $select = "Select firstname, MI as initial, lastname, state FROM padi_data WHERE member_number ='".$data['member_number']."'";
 
         }else if(isset($data['business_padi'])){
             $select = "Select business_name, email as business_email, address1 as business_address1, address2 as business_address2, city as business_city, state as business_state, country_code as business_country_code, zip as business_zip, home_phone as business_home_phone, work_phone as business_work_phone, num as business_mobilephone FROM padi_data WHERE member_number ='".$data['member_number']."'";
@@ -54,7 +54,7 @@ class PadiVerification extends AbstractAppDelegate
                     $response[0]['business_state'] = $stateDetails[0]['state'];
                 }else{
                     $response[0]['state_in_short'] = $response[0]['state'];
-                    $response[0]['state'] = $stateDetails[0]['state'];
+                    $response[0]['state'] = "";
                 }
             }
             
