@@ -109,7 +109,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $dest['relativePath'] = $dest['relativePath'].'Quote/';
                 $dest['absolutePath'] = $dest['absolutePath'].'Quote/';
             }
-            
+
+            if(isset($data['state'])){
+              $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$data['state']."'";
+
+            } 
+            $resultSet = $persistenceService->selectQuery($selectQuery);
+            $stateDetails = array();
+            while ($resultSet->next()) {
+                $stateDetails[] = $resultSet->current();
+            }       
+            if(isset($stateDetails) && count($stateDetails)>0){                
+                    $data['state_in_short'] = $stateDetails[0]['state_in_short'];                
+            }
+            $this->logger->info("Data------------------ ".print_r($data,true));
             unset($data['dest']);
 
             $temp = $data;

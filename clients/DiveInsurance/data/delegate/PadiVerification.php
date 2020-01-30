@@ -53,7 +53,7 @@ class PadiVerification extends AbstractAppDelegate
                     $response[0]['business_state_in_short'] = $response[0]['business_state'];
                     $response[0]['business_state'] = $stateDetails[0]['state'];
                 }else{
-                    $response[0]['state_in_short'] = $response[0]['state'];
+                    // $response[0]['state_in_short'] = $response[0]['state'];
                     $response[0]['state'] = "";
                 }
             }
