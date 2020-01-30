@@ -309,7 +309,7 @@ class WidgetService extends AbstractService
 
     public function getWidgetList($params = null)
     {
-        $paginateOptions = FilterUtils::paginate($params);
+        $paginateOptions = FilterUtils::paginateLikeKendo($params);
         $where = $paginateOptions['where'];
         if(isset($params['show_deleted']) && $params['show_deleted']==true) {
             $widgetConditions = '(w.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((w.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (w.ispublic = 1))';

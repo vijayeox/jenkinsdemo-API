@@ -375,7 +375,7 @@ class WidgetControllerTest extends ControllerTest
     public function testGetListWithSort()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget?sort=[{"field":"visualization_id","dir":"asc"}]', 'GET');
+        $this->dispatch('/analytics/widget?filter=[{"sort":[{"field":"visualization_id","dir":"asc"}]}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -391,7 +391,7 @@ class WidgetControllerTest extends ControllerTest
     public function testGetListSortWithPageSize()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget?skip=1&limit=10&sort=[{"field":"visualization_id","dir":"asc"}]', 'GET');
+        $this->dispatch('/analytics/widget?filter=[{"sort":[{"field":"visualization_id","dir":"asc"}],"skip":1,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -406,7 +406,7 @@ class WidgetControllerTest extends ControllerTest
     public function testGetListwithQueryParameters()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget?limit=10&sort=[{"field":"id","dir":"desc"}]&filter=[{"logic":"and"},{"filters":[{"field":"visualization_id","operator":"neq","value":"2"}]}]', 'GET');
+        $this->dispatch('/analytics/widget?filter=[{"filter":{"logic":"and","filters":[{"field":"visualization_id","operator":"neq","value":"2"}]},"sort":[{"field":"id","dir":"desc"}],"skip":0,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);

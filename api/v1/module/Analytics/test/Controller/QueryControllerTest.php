@@ -195,17 +195,6 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['data']['query']['name'], 'query1');
     }
 
-    // public function testGetHub() {
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/analytics/query/e6de79cb-3148-11ea-98ba-283a4d5d1bdb?data=true', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals($content['data']['query']['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
-    //     $this->assertEquals($content['data']['query']['name'], 'query1');
-    // }
-
     public function testGetWithResults() {
         if (enableElastic!=0) {
             $this->setElasticData();
@@ -269,7 +258,7 @@ class QueryControllerTest extends ControllerTest
     public function testGetListWithSort()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/query?sort=[{"field":"name","dir":"desc"}]', 'GET');
+        $this->dispatch('/analytics/query?filter=[{"sort":[{"field":"name","dir":"desc"}]}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -285,7 +274,7 @@ class QueryControllerTest extends ControllerTest
      public function testGetListSortWithPageSize()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/query?skip=1&limit=10&sort=[{"field":"name","dir":"asc"}]', 'GET');
+        $this->dispatch('/analytics/query?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -300,7 +289,7 @@ class QueryControllerTest extends ControllerTest
     public function testGetListwithQueryParameters()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/query?limit=10&sort=[{"field":"name","dir":"desc"}]&filter=[{"logic":"and"},{"filters":[{"field":"name","operator":"endswith","value":"3"},{"field":"name","operator":"startswith","value":"q"}]}]', 'GET');
+        $this->dispatch('/analytics/query?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"endswith","value":"3"},{"field":"name","operator":"startswith","value":"q"}]},"sort":[{"field":"name","dir":"desc"}],"skip":0,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
