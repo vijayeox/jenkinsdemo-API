@@ -3,6 +3,7 @@ namespace Oxzion\Service;
 
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
+use Logger;
 
 use function GuzzleHttp\json_encode;
 
@@ -35,7 +36,9 @@ class ElasticService
         } else {
             $this->client = new ClientBuilder(); //This is for Mocking in the test case
         }
+        $this->logger = Logger::getLogger(get_class($this));
     }
+
     public function setElasticClient($client){
         $this->client = $client;
     }
@@ -347,8 +350,12 @@ class ElasticService
 
     public function search($q)
     {
+       $this->logger->debug('Elastic query:');
+       $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
       //  print_r(json_encode($q));echo "\n";
         $data = $this->client->search($q);
+       $this->logger->debug('Data from elastic:');
+       $this->logger->debug(json_encode($data, JSON_PRETTY_PRINT));
      //    print_r(json_encode($data));echo "\n";
         return $data;
 
