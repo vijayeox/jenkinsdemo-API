@@ -25,7 +25,7 @@
 				<p class="certi">Exp. Date</p></b>
 			</div>
 			<div class = "certi_value">
-				<p class="certi">{$smarty.now|date_format:"%m/%d/%Y"}</p>
+				<p class="certi">{$smarty.now|date_format:"%d %B %Y"}</p>
 				<p class="certi">{$certificate_no}</p>
 				<p class="certi">{$padi}</p>
 				<p class="certi">{$start_date}</p>

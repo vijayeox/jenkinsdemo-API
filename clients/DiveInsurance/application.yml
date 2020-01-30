@@ -167,13 +167,13 @@ menu:
                             -
                                 title: Name
                                 field: entity_name
-                                cell: '<td>{item.firstname}&nbsp;{item.lastname} - &nbsp; {item.entity_name}</td>'
+                                cell: '{item.firstname}&nbsp;{item.lastname} - &nbsp; {item.entity_name}'
                             -
                                 title: 'Policy Status'
                                 field: policyStatus
                             -
                                 title: 'Policy Effective Period'
-                                cell: '<td>{item.start_date}&nbsp;-&nbsp;{item.end_date}</td>'
+                                cell: '{item.start_date}&nbsp;-&nbsp;{item.end_date}'
                                 field: start_date
     -
         name: 'My History'
@@ -206,7 +206,7 @@ menu:
                             -
                                 title: Name
                                 field: firstname
-                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                                cell: '{item.firstname}&nbsp;{item.lastname}'
                             -
                                 title: Product
                                 field: entity_name
@@ -313,7 +313,7 @@ menu:
                             -
                                 title: Name
                                 field: firstname
-                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                                cell: '{item.firstname}&nbsp;{item.lastname}'
                             -
                                 title: Product
                                 field: entityName
@@ -465,7 +465,7 @@ menu:
                             -
                                 title: Name
                                 field: firstname
-                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                                cell: '{item.firstname}&nbsp;{item.lastname}'
                             -
                                 title: Product
                                 field: entity_name
@@ -545,7 +545,7 @@ menu:
                             -
                                 title: Name
                                 field: firstname
-                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
+                                cell: '{item.firstname}&nbsp;{item.lastname}'
                             -
                                 title: Product
                                 field: entity_name

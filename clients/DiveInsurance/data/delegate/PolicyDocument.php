@@ -88,7 +88,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'aifooter' => 'EFR_AI_footer.html')
         );
             
-        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement','endorsementCylinder','endorsementCoverage','upgradeExcessLiability','upgradeCareerCoverage','upgradecylinder','endorsementExcessLiability','previous_careerCoverage');
+        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement','endorsementCylinder','endorsementCoverage','upgradeExcessLiability','upgradeCareerCoverage','upgradecylinder','endorsementExcessLiability','previous_careerCoverage','dataGrid');
     }
         
         public function execute(array $data,Persistence $persistenceService) 
@@ -109,7 +109,20 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $dest['relativePath'] = $dest['relativePath'].'Quote/';
                 $dest['absolutePath'] = $dest['absolutePath'].'Quote/';
             }
-            
+
+            if(isset($data['state'])){
+              $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$data['state']."'";
+
+            } 
+            $resultSet = $persistenceService->selectQuery($selectQuery);
+            $stateDetails = array();
+            while ($resultSet->next()) {
+                $stateDetails[] = $resultSet->current();
+            }       
+            if(isset($stateDetails) && count($stateDetails)>0){                
+                    $data['state_in_short'] = $stateDetails[0]['state_in_short'];                
+            }
+            $this->logger->info("Data------------------ ".print_r($data,true));
             unset($data['dest']);
 
             $temp = $data;

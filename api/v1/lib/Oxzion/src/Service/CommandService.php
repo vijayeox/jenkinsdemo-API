@@ -264,7 +264,7 @@ class CommandService extends AbstractService
             if (!isset($data[$jobName])) {
                 throw new EntityNotFoundException("Job " . $jobName . " Not Specified");
             }
-            $JobData = json_decode($data[$jobName], true);
+            $JobData = (is_array($data[$jobName]) ? $data[$jobName] : json_decode($data[$jobName], true));
             if (!isset($JobData['jobId']) || !isset($JobData['jobGroup'])) {
                 throw new EntityNotFoundException("Job Id or Job Group Not Specified");
             }
