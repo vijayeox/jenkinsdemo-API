@@ -40,7 +40,7 @@
     <p class = "c_details">{$business_country},{$business_zip}</p>
   </div>
   <div class = "agent_info1">
-    <p class ="padi_margin"><b>Member#:</b> {$businessPadi}
+    <p class ="padi_margin"><b>Member#:</b> {$business_padi}
     </div>
   </div>
   <div class = "spacing_div">&nbsp</div>
@@ -63,7 +63,7 @@
   <div class = "section1">
     <div class = "sectiona">
       <p class="hull_title">Name of Vessel: {$vessel_name}</p>
-      <p class="hull_title"><span>Year Built: &nbsp&nbsp&nbsp&nbsp {$pageNaNFieldsetTableYear}&nbsp&nbsp&nbsp</span><span>Length:&nbsp&nbsp&nbsp&nbsp{$vessel_length}&nbsp&nbsp&nbsp     </span><span>HP:&nbsp&nbsp&nbsp&nbsp{$vessel_hp}</span></p>
+      <p class="hull_title"><span>Year Built: &nbsp&nbsp&nbsp&nbsp {$built_year}&nbsp&nbsp&nbsp</span><span>Length:&nbsp&nbsp&nbsp&nbsp{$vessel_length}&nbsp&nbsp&nbsp     </span><span>HP:&nbsp&nbsp&nbsp&nbsp{$vessel_hp}</span></p>
       <p class="hull_title">S/N: &nbsp&nbsp{$vessel_sno}</p>
     </div>
     <div class = "sectionb">
@@ -207,7 +207,7 @@
 <div class = "total">
   <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$total}</span></p>
   <hr class="total_hr"></hr>
-  <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padi_admin_fee}</span></p>
+  <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee}</span></p>
 </div>
 <hr class = "sec_title"></hr>
 <p class="nav"><b>Navigation Limits:</b></p>
