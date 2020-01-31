@@ -20,9 +20,11 @@ def endorsementOptions = execution.getVariable('endorsement_options')
 def coverage = endorsementOptions.modify_coverage
 def personalInfo = endorsementOptions.modify_personalInformation
 def additionalIn = endorsementOptions.modify_additionalInsured
+def upgradeInternationalCoverages = execution.getVariable('upgradeCareerCoverage')
 
 boolean result1 = false
 boolean result3 = false
+boolean result4 = false
 
 if(personalInfo){
     if(country != "United States of America"){
@@ -38,8 +40,11 @@ if (additionalInsured) {
   }
  }
 }
+if(upgradeInternationalCoverages == "internationalInstructor" || upgradeInternationalCoverages == "internationalAssistantInstructor" || upgradeInternationalCoverages == "internationalDivemaster" || upgradeInternationalCoverages =="internationalNonteachingSupervisoryInstructor" || upgradeInternationalCoverages == "internationalDivemasterAssistantInstructorAssistingOnly"){
+	result4 = true
+}
 
-if (tecRecEndorsment == "accepted" || result1) {
+if (tecRecEndorsment == "accepted" || result1 || result4) {
   result3=true
 }
 
