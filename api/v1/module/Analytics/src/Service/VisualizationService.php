@@ -126,7 +126,7 @@ class VisualizationService extends AbstractService
 
     public function getVisualizationList($params = null)
     {
-        $paginateOptions = FilterUtils::paginate($params);
+        $paginateOptions = FilterUtils::paginateLikeKendo($params);
         $where = $paginateOptions['where'];
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
             $where .= empty($where) ? "WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND org_id =".AuthContext::get(AuthConstants::ORG_ID);

@@ -150,7 +150,7 @@ class QueryService extends AbstractService
 
     public function getQueryList($params = null)
     {
-        $paginateOptions = FilterUtils::paginate($params);
+        $paginateOptions = FilterUtils::paginateLikeKendo($params);
         $where = $paginateOptions['where'];
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
             $where .= empty($where) ? "WHERE (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND(org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";

@@ -1,7 +1,3 @@
-{assign var=building_coverage value=$BuildingLimitFP}
-{assign var=equipment_breakdown value=$equipment_breakdown}
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -25,7 +21,7 @@
 
 			<div class = "sec_content">
 				<div class = "sec3">
-					<p class = "sec_title">Commercial General Liability (Each Occurrence Limit):</p>
+					<p class = "sec_title">Contents Limit:</p>
 					<p class = "sec_title">&nbsp&nbsp&nbsp&nbsp(Sign limited to : $25,000)</p>
 					<p class = "sec_title">Business Income:</p>
 					<p class = "sec_title">Building Coverage:</p>
@@ -40,20 +36,29 @@
 					<p class = "sec_title">Glass:</p>
 				</div>
 				<b><div class = "sec4">
-					<p class = "sec_title2">$500,000</p>
-					<p></p>
-					<p class = "sec_title2">${$lossOfBusIncome}</p>
-					<p class = "sec_title2">{if building_coverage}
-							Included
-					   {else}
-					   		Not Included
-					   {/if}
+					<p class = "sec_title2">
+						${$dspropTotal|number_format:2:".":","}
 					</p>
-					<p class = "sec_title2">{if equipment_breakdown}
-							Included
-					   {else}
-					   		Not Included
-					   {/if}
+					<p></p>
+					<p class = "sec_title2">                        
+						{if $additionalLossofBusinessIncomePL != "false"}
+                            ${$lossOfBusIncome|number_format:2:".":","}
+                        {else}
+                            $0
+                        {/if}</p>
+					<p class = "sec_title2">
+						{if $dspropownbuilding != "no"}
+                            ${$dspropreplacementvalue|number_format:2:".":","}
+                        {else}
+                            $0
+                        {/if}
+					</p>
+					<p class = "sec_title2">
+						{if (int)$dspropFurniturefixturesandequip != 0}
+                            <td>Included</td>
+                        {else}
+                            <td>Not Included</td>
+                        {/if}
 					</p>
 					<p class = "sec_title2">$5,000</p>
 					<p class = "sec_title2">$2,500</p>

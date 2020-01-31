@@ -25,7 +25,7 @@
 				<br/>
 				<p>It's that time of the year to think about insurance. Fortunately, you are currently signed up for automatic renewal under the PADI Endorsed Professional Liability Program.</p><br/>
 
-				<p>The final amount that will be deducted from your account for the policy period July 01,{$year} to June 30,{$year+1} is ${$amount}.</p>
+				<p>The final amount that will be deducted from your account for the policy period June 30,{$year} to June 30,{$year+1} is ${$amount}.</p>
 
 				<p style = 'font-size:13px;text-transform: uppercase;'><b>Please reply to this email with your request to be taken off auto renewal by May 29, {$year+1}. Not responding is confirmation you want to stay on auto renewal.</b></p><br/>
 

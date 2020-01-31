@@ -125,7 +125,7 @@ class DataSourceService extends AbstractService
 
     public function getDataSourceList($params = null)
     {
-        $paginateOptions = FilterUtils::paginate($params);
+        $paginateOptions = FilterUtils::paginateLikeKendo($params);
         $where = $paginateOptions['where'];
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
             $where .= empty($where) ? "WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
@@ -178,12 +178,16 @@ class DataSourceService extends AbstractService
                 case 'ElasticSearch':
                     $elasticConfig['elasticsearch'] = $config['data'];
                     $analyticsObject = new  \Oxzion\Analytics\Elastic\AnalyticsEngineImpl($elasticConfig);
-                    return $analyticsObject;
-                break;
+                    break;
+                case 'MySQL':
+                    $config = $config['data'];
+                    $analyticsObject = new  \Oxzion\Analytics\MySQL\AnalyticsEngineMySQLImpl($config);
+                    break;
             }
         }
         catch(Exception $e){
             throw $e;
         }
+        return $analyticsObject;
     }
 }

@@ -139,7 +139,7 @@ class DashboardService extends AbstractService
 
     public function getDashboardList($params = null)
     {
-        $paginateOptions = FilterUtils::paginate($params);
+        $paginateOptions = FilterUtils::paginateLikeKendo($params);
         $where = $paginateOptions['where'];
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
             $dashboardConditions = '(d.org_id = ' . AuthContext::get(AuthConstants::ORG_ID) . ') AND ((d.created_by =  ' . AuthContext::get(AuthConstants::USER_ID) . ') OR (d.ispublic = 1))';
