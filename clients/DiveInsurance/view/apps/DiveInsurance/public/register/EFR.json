@@ -729,7 +729,6 @@
                       },
                       "selectThreshold": 0.3,
                       "clearOnHide": false,
-                      "customDefaultValue": "value = \"United States of America\";",
                       "validate": {
                         "required": true,
                         "unique": false,
@@ -737,13 +736,13 @@
                       },
                       "key": "country",
                       "type": "select",
+                      "refreshOn": "physical_country",
                       "input": true,
                       "lockKey": true,
                       "hideOnChildrenHidden": false,
                       "autofocus": false,
                       "valueProperty": "",
                       "defaultValue": "",
-                      "refreshOn": "physical_country",
                       "filter": "",
                       "authenticate": false,
                       "template": "<span>{{ item.label }}</span>",
@@ -751,12 +750,7 @@
                       "protected": false,
                       "unique": false,
                       "persistent": true,
-                      "hidden": false,
-                      "labelPosition": "top",
-                      "tags": [],
-                      "conditional": { "show": "", "when": null, "eq": "" },
-                      "properties": {},
-                      "isNew": false
+                      "hidden": false
                     },
                     {
                       "label": "State",
@@ -797,11 +791,7 @@
                       "unique": false,
                       "persistent": true,
                       "hidden": false,
-                      "clearOnHide": true,
-                      "labelPosition": "top",
-                      "tags": [],
-                      "conditional": { "show": "", "when": null, "eq": "" },
-                      "properties": {}
+                      "clearOnHide": true
                     }
                   ],
                   "width": 4,
@@ -1037,13 +1027,18 @@
                       "protected": false,
                       "unique": false,
                       "persistent": true,
-                      "hidden": false
+                      "hidden": false,
+                      "labelPosition": "top",
+                      "isNew": false,
+                      "tags": [],
+                      "conditional": { "show": "", "when": null, "eq": "" },
+                      "properties": {}
                     },
                     {
                       "input": true,
                       "tableView": true,
                       "label": "State",
-                      "key": "panelPanel3Columns2Select",
+                      "key": "physical_state",
                       "placeholder": "State",
                       "data": {
                         "values": [{ "value": "", "label": "" }],
@@ -1070,7 +1065,12 @@
                       "unique": false,
                       "persistent": true,
                       "hidden": false,
-                      "clearOnHide": true
+                      "clearOnHide": true,
+                      "labelPosition": "top",
+                      "tags": [],
+                      "conditional": { "show": "", "when": null, "eq": "" },
+                      "properties": {},
+                      "lockKey": true
                     }
                   ],
                   "width": 4,
@@ -1261,7 +1261,7 @@
     }
   ],
   "revisions": "current",
-  "_vid": 37,
+  "_vid": 40,
   "title": "Padi Verification Form - Emergency First Response",
   "display": "form",
   "access": [
@@ -1281,7 +1281,7 @@
   "path": "padiverificationformemergencyfirstresponse",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2019-10-05T12:05:39.142Z",
-  "modified": "2020-01-31T12:57:39.592Z",
+  "modified": "2020-02-03T15:31:35.907Z",
   "machineName": "testdivehub:padiVerificationFormEmergencyFirstResponse",
   "controller": ""
 }
