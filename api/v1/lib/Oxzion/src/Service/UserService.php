@@ -157,7 +157,18 @@ class UserService extends AbstractService
                     $data['orgid'] = AuthContext::get(AuthConstants::ORG_ID);
                 }
             }else{
-                $data['orgid'] = $this->getIdFromUuid('ox_organization',$data['orgId']);
+                if ($org = $this->getIdFromUuid('ox_organization', $params['orgId'])) {
+                    $orgId = $org;
+                } else {
+                    if($data['orgId']){
+                        $orgId = $params['orgId'];
+                    } else {
+                        if(AuthContext::get(AuthConstants::ORG_ID) != null){
+                            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+                        }
+                    }
+                }
+                $data['orgid'] = $orgId;
             }
 
         try {
@@ -1202,7 +1213,13 @@ class UserService extends AbstractService
         if ($org = $this->getIdFromUuid('ox_organization', $data['orgId'])) {
             $orgId = $org;
         } else {
-            $orgId = $data['orgId'];
+            if($data['orgId']){
+                $orgId = $data['orgId'];
+            } else {
+                if(AuthContext::get(AuthConstants::ORG_ID) != null){
+                    $orgId = AuthContext::get(AuthConstants::ORG_ID);
+                }
+            }
         }
         if(!isset($data['role'])){
             $query = "SELECT ox_role.uuid from ox_role 

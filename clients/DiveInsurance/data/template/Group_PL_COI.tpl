@@ -228,7 +228,8 @@
 				</p></center>
 			{/if}
 	</div>
-	{if groupPL}
+
+	{if additional_insured == 'yes'}
 		<b><p class ="grp_add">Additional Insured (See Additional Insured Endorsement on Reverse):</p></b>
 		{assign var=list value=$groupPL|json_decode:true}
 		{foreach from=$list item=$additional}
