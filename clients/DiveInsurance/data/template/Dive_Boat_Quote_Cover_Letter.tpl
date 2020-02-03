@@ -32,13 +32,11 @@ a policy will be sent to you.)</p>
 	<p><b>To purchase your insurance coverage, please provide us with the following items prior to {$quote_due_date|date_format:"%m/%d/%Y"}</b></p>
 		{foreach from=$list item=$quoteData}
 				<p class = "ai_list">
-					[X]{if isset($quoteData) || !empty($quoteData)}
-						{if $quoteData['quoteInfoOther'] == ""}
+					[X]{if !isset($quoteData['quoteInfoOther'])}
 	    			 	    {$quoteData['quoteInfo']}
 	    			   	{else}
 	    			   		{$quoteData['quoteInfoOther']}
 	    			   	{/if}
-	    			   {/if}
 	    		</p>
     	{/foreach}
 
