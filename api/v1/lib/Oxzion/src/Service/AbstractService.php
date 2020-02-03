@@ -297,4 +297,16 @@ abstract class AbstractService extends AbstractBaseService
             }
         }
     }
+
+    protected function toArray($result)
+    {
+        $returnArray = array();
+        if($result->count() > 0){
+            while ($result->next()) {
+                $returnArray[] = $result->current();
+            }
+        }
+        return $returnArray;
+    }
+
 }

@@ -206,7 +206,7 @@ class DashboardControllerTest extends ControllerTest
     public function testGetListWithSort()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/dashboard?sort=[{"field":"name","dir":"desc"}]', 'GET');
+        $this->dispatch('/analytics/dashboard?filter=[{"sort":[{"field":"name","dir":"desc"}]}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -222,7 +222,7 @@ class DashboardControllerTest extends ControllerTest
      public function testGetListSortWithPageSize()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/dashboard?skip=1&limit=10&sort=[{"field":"name","dir":"asc"}]', 'GET');
+        $this->dispatch('/analytics/dashboard?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -237,7 +237,7 @@ class DashboardControllerTest extends ControllerTest
     public function testGetListwithQueryParameters()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/dashboard?limit=10&sort=[{"field":"name","dir":"desc"}]&filter=[{"logic":"and"},{"filters":[{"field":"name","operator":"endswith","value":"2"},{"field":"name","operator":"startswith","value":"D"}]}]', 'GET');
+        $this->dispatch('/analytics/dashboard?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"endswith","value":"2"},{"field":"name","operator":"startswith","value":"D"}]},"sort":[{"field":"name","dir":"desc"}],"skip":0,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);

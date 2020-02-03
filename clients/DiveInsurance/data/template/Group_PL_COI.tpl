@@ -228,12 +228,13 @@
 				</p></center>
 			{/if}
 	</div>
-	{if groupAdditionalInsured}
+
+	{if additional_insured == 'yes'}
 		<b><p class ="grp_add">Additional Insured (See Additional Insured Endorsement on Reverse):</p></b>
-		{assign var=list value=$groupAdditionalInsured|json_decode:true}
+		{assign var=list value=$groupPL|json_decode:true}
 		{foreach from=$list item=$additional}
 	    		<p class = "ai_list">
-	    			&nbsp&nbsp&nbsp{$additional.name}
+	    			&nbsp&nbsp&nbsp{$additional.firstname}
 	    		</p>
     		{/foreach}
 	{/if}

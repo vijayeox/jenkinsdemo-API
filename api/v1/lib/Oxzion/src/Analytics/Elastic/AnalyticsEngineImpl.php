@@ -8,16 +8,23 @@ use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Analytics;
 use Oxzion\Analytics\AnalyticsPostProcessing;
+use Logger;
 
 class AnalyticsEngineImpl implements AnalyticsEngine {
 	private $config;
 	private $hasGroup;
     public function __construct($config) {
         $this->config = $config;
+        $this->logger = Logger::getLogger(get_class($this));
     }
 
     public function runQuery($app_name,$entity_name,$parameters)
     {
+        $this->logger->debug('Run query parameters:');
+        $this->logger->debug(
+            ['app_name'=>$app_name, 
+            'entity_name'=>$entity_name, 
+            'parameters'=>$parameters]);
         try {
 			$orgId = AuthContext::get(AuthConstants::ORG_ID);
 			$query = $this->formatQuery($parameters);

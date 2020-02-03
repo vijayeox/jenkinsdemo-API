@@ -53,7 +53,7 @@
 		<hr class="hrtag"></hr>
     	<div class="i_type">
       		<div class="i_type1">
-        		<div class = "in-type">
+        		<div class = "in-type" style="width: 40%">
 		           <b class = "ins_type">Type of Insurance</b>
 		           <div class = "ins_data" style="margin-top: 10px;">
 			           <p class = "ins_font"><b>COMBINED SINGLE LIMIT:</b></p>
