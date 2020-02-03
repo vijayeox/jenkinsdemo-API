@@ -139,20 +139,20 @@ class PaymentService extends AbstractService
         return $count;
     }
 
-    public function initiatePaymentProcess($appUuid,$data)
+    public function initiatePaymentProcess($appUuid,&$data)
     {
         $paymentInfo = $this->getPaymentInfoBasedOnGatewayType($appUuid);
         if(count($paymentInfo)>0){
             try {
+                $data['config'] = $paymentInfo;
                 $paymentEngine = $this->getPaymentEngine($paymentInfo);
                 $initiatePaymentResult = $paymentEngine->initiatePaymentProcess($data);
                 $transaction['token'] = $initiatePaymentResult;
                 $transaction['data'] = json_encode($data);
                 $transactionDetails = $this->createTransactionRecord($paymentInfo['id'],$transaction);
-                $return['transaction'] = $transactionDetails;
-                $return['config'] = $paymentInfo;
-                $return['token'] = $initiatePaymentResult;
-                return $return;
+                $data['transaction'] = $transactionDetails;
+                $data['token'] = $initiatePaymentResult;
+                return $data;
             } catch (Exception $e){
                 $this->logger->error("Payment Initialization has Failed ".$paymentInfo['payment_client']." missing!");
                 throw (new ServiceException("Payment Initialization has Failed ".$paymentInfo['payment_client']." missing!", 1));

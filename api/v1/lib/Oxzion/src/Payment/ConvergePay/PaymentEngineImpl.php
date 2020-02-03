@@ -8,7 +8,7 @@ class PaymentEngineImpl implements PaymentEngine
     public function __construct($paymentConfig){
         $this->paymentConfig = $paymentConfig;
     }
-    public function initiatePaymentProcess($data)
+    public function initiatePaymentProcess(&$data)
     {
         $paymentConfigInfo = json_decode($this->paymentConfig['payment_config']);
         $ch = curl_init();
@@ -40,7 +40,7 @@ class PaymentEngineImpl implements PaymentEngine
         curl_close($ch);
         return $result;
     }
-    public function handleTransaction($data){
+    public function handleTransaction(&$data){
         if(isset($data['ssl_token_response'])){
             $return['transaction_id'] = $data['ssl_txn_id'];
             $return['transaction_status'] = $data['ssl_token_response']; 
