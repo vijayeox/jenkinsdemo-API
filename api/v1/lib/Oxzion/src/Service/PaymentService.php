@@ -154,6 +154,9 @@ class PaymentService extends AbstractService
                 $data['token'] = $initiatePaymentResult;
                 return $data;
             } catch (Exception $e){
+                $this->logger->error("Payment Initialization has Failed ".$e->getMessage());
+                throw new ServiceException("Payment Initialization has Failed, ".$e->getMessage(), 1);
+            }catch (ServiceException $e){
                 $this->logger->error("Payment Initialization has Failed ".$paymentInfo['payment_client']." missing!");
                 throw (new ServiceException("Payment Initialization has Failed ".$paymentInfo['payment_client']." missing!", 1));
             }
