@@ -7,7 +7,6 @@
 </head>
 <body>
 	<div class ="body_div_lp">
-		<p>{$namedInsureds}</p>
 		{foreach from=$list item=$value}
 			<div class = "named_div">
 			      <div class = "named_div1"><p class ="t_title">{$value.padi}</p></div>
