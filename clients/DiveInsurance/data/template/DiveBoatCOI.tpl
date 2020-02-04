@@ -94,7 +94,7 @@
                       <div class="sec4">
                           <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
                     </div>
-                     <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset(TrailerPremium)}
+                     <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($TrailerPremium)}
         Included
         {else}
         N/A
@@ -123,7 +123,7 @@
 
 <p class = "sec_title"><b>SECTION B - LIABILITY INSURANCE </b>(Including Defense Costs) </p>
 <div class ="secB">
-<p class = "sec_titl"><span>Maximum Number:       &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    </span><span>Passengers:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$passengers}</span><span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspCrew on Boat:   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {$crew_on_boat}</span><span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspCrew in Water:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$crew_in_water}</span></p>  
+<p class = "sec_titl"><span>Maximum Number:       &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    </span><span>Passengers:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$certified_for_max_number_of_passengers}</span><span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($crew_on_boat)}Crew on Boat:   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {$crew_on_boat}</span><span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{/if}{if isset($crew_in_water)}Crew in Water:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$crew_in_water}{/if}</span></p>  
       <div class = "section_divi">
           <div class = "div_section">
                   <div class="sec1">
@@ -165,7 +165,7 @@
 <div>&nbsp</div>
     <hr></hr>
     <div class = "total">
-      <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$total_premium}</span></p>
+      <p class="hull_title"><span>TOTAL PREMIUM&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp" >${$total}</span></p>
       <hr class="total_hr"></hr>
       <p class="hull_title"><span>PADI Administrative Fee&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span><span>US</span><span class="totalp">${$padiFee}</span></p>
     </div>

@@ -6,7 +6,7 @@
 
 </head>
 <body onload = "agentInfo()">
-  <div class = "m_div">
+ <div class = "m_div">
     <div class = "agent">
       <div class = "agent_info">
         <b class = "agent_info_title">Agent Information</b>
@@ -125,7 +125,7 @@
       <div class="sec4">
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
       </div>
-      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset(TrailerPremium)}
+      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($TrailerPremium)}
         Included
         {else}
         N/A
