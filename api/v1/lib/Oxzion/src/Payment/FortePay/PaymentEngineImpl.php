@@ -24,9 +24,9 @@ class PaymentEngineImpl implements PaymentEngine
     {
         $this->logger->info("Entered ");
         try {
-        //unset config 
             //validate expected input
             $this->validateParameters($data);
+            //unset config 
             unset($data['config']);
             $total_amount = $data['amount'];
             $method = $data['method'];
@@ -55,17 +55,20 @@ class PaymentEngineImpl implements PaymentEngine
         return $returnArray;
     }
     public function handleTransaction(&$data){
-        if(isset($data['ssl_token_response'])){
-            $return['transaction_id'] = $data['ssl_txn_id'];
-            $return['transaction_status'] = $data['ssl_token_response']; 
-            $return['data'] = json_encode($data);
-        } else {
-            if(isset($data['errorCode'])){
-                $return['transaction_id'] = null;
-                $return['transaction_status'] = $data['errorName']; 
-                $return['data'] = json_encode($data);
-            }  
+        $this->logger->info("Entered ");
+        $return = array();
+        if(!isset($data['event'])) {
+            $this->logger->info("Exit, event field is missing");
+            throw new ServiceException("event field is required", "event.required");
         }
+        $return['transaction_status'] = $data['event'];
+        $return['data'] = json_encode($data);
+        if($data['event'] == "success" || $data['event'] == "failure"){
+            $return['transaction_id'] = $data['trace_number']; 
+        } else {
+            $return['data'] = json_encode($data);
+        }
+        $this->logger->info("Exit ");
         return $return;
     }
     
@@ -83,40 +86,4 @@ class PaymentEngineImpl implements PaymentEngine
         $this->logger->info("Exit ");
         return;
     }
-    // private function registerCustomer(&$data) {
-    //     try {
-    //         $url = $this->api_url."/organizations/org_".$this->org_id."/locations/loc_".$this->location_id."/customers";
-    //         $curl = curl_init();
-    //         $payloadarr = array(
-    //             'first_name' => $data['firstname'],
-    //             'last_name' => $data['lastname'],
-    //             'company_name' => 'Bridgemed',
-    //             'customer_id' => '1234'
-    //         );
-             
-    //         $payload = json_encode($payloadarr);
-    //         curl_setopt_array($curl, array(
-    //           CURLOPT_URL => $url,
-    //           CURLOPT_RETURNTRANSFER => true,
-    //           CURLOPT_ENCODING => "",
-    //           CURLOPT_MAXREDIRS => 10,
-    //           CURLOPT_TIMEOUT => 0,
-    //           CURLOPT_FOLLOWLOCATION => true,
-    //           CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    //           CURLOPT_CUSTOMREQUEST => "POST",
-    //           CURLOPT_POSTFIELDS => $payload,
-    //           CURLOPT_HTTPHEADER => array(
-    //             "Content-Type: application/json",
-    //             "X-Forte-Auth-Organization-Id: org_".$this->org_id,
-    //             "Authorization: Basic ".base64_encode($this->api_access_id.":".$this->api_secure_key)
-    //           ),
-    //         ));
-            
-    //         $response = json_decode(curl_exec($curl));  
-    //         curl_close($curl);
-    //         return (explode('cst_',$response->customer_token))[1];
-    //     } catch(Exception $e){
-    //         throw new ServiceException($e->getMessage(), "could.not.register.to.forte");
-    //     } 
-    // }
 }
