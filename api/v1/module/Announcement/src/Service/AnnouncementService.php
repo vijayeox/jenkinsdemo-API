@@ -129,7 +129,6 @@ class AnnouncementService extends AbstractService
                 throw new AccessDeniedException("You do not have permissions to update announcement");
             } else {
                 $orgId = $this->getIdFromUuid('ox_organization', $orgId);
-                $this->logger->info('Update Annoucement using new UUID- ' . print_r($orgId, true));
             }
         }
         $obj = $this->table->getByUuid($uuid, array());

@@ -303,13 +303,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
 
             if(isset($this->template[$temp['product']]['slWording'])){        
-                if($temp['product'] == 'Dive Boat' || $temp['Dive Store']){
+                if($temp['product'] == 'Dive Boat' || $temp['product'] == 'Dive Store'){
                     if($temp['business_state'] == 'California'){
+                        $this->logger->info("SL Wording - DiveBoat||DiveStore");
                             $documents['slWording'] = $this->copyDocuments($temp,$dest['relativePath'],'slWording');
-                        }
                     }
+                }
                 else{
                     if($temp['state'] == 'California'){
+                        $this->logger->info("SL Wording - ");
                             $documents['slWording'] = $this->copyDocuments($temp,$dest['relativePath'],'slWording');
                     }
                 }

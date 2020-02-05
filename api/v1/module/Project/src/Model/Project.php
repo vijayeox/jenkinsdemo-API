@@ -3,14 +3,13 @@
 namespace Project\Model;
 
 use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
 
 class Project extends Entity
 {
     protected $data = array(
         'id' => 0,
         'uuid' => 0,
-        'name'=> 0,
+        'name' => 0,
         'org_id' => 0,
         'manager_id' => 0,
         'description' => 0,
@@ -18,12 +17,12 @@ class Project extends Entity
         'modified_by' => 0,
         'date_created' => 0,
         'date_modified' => 0,
-        'isdeleted'=>0
+        'isdeleted' => 0,
     );
 
     public function validate()
     {
-        $dataArray = array("name","description","manager_id");
+        $dataArray = array("name", "description", "manager_id");
         $this->validateWithParams($dataArray);
     }
 }

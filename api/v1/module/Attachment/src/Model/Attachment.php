@@ -16,7 +16,7 @@ class Attachment extends Entity
         'path' => null,
         'created_id' => null,
         'created_date' => null,
-        'org_id' => null
+        'org_id' => null,
     );
 
     public function validate()
