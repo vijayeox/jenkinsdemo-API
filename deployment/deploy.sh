@@ -1,7 +1,7 @@
 #!/bin/bash
 #This script is used to deploy build.zip to respective folders
 # exit when any command fails
-set -e
+#set -e
 #trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
 #going back to oxzion3.0 root directory
 cd ../
