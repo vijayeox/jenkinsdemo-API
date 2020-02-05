@@ -88,7 +88,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'aifooter' => 'EFR_AI_footer.html')
         );
             
-        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement','endorsementCylinder','endorsementCoverage','upgradeExcessLiability','upgradeCareerCoverage','upgradecylinder','endorsementExcessLiability','previous_careerCoverage','dataGrid');
+        $this->jsonOptions = array('endorsement_options','additionalInsured','namedInsured','additionalNamedInsured','lossPayees','groupAdditionalInsured','layup_period','documents','stateTaxData', 'countrylist', 'start_date_range','quoteRequirement','endorsementCylinder','endorsementCoverage','upgradeExcessLiability','upgradeCareerCoverage','upgradecylinder','endorsementExcessLiability','previous_careerCoverage','dataGrid','attachmentsFieldNames','dsPropCentralFirePL','commands','dsglClaimAmountpaidanyamountsoutstanding','additionalLocations','dsPropCentralFireAL','groupPL','receipts');
     }
         
         public function execute(array $data,Persistence $persistenceService) 
@@ -239,7 +239,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 }
             }
             else if($data['product'] == "Dive Store"){
-                if(isset($temp['additionalInsured']) && $temp['additionalInsuredSelect']=="yes"){
+                if(isset($temp['additionalInsured']) && (isset($temp['additionalInsuredSelect']) && $temp['additionalInsuredSelect']=="yes")){
                     $this->logger->info("DOCUMENT additionalInsured");
                     $documents['additionalInsured_document'] = $this->generateDocuments($temp,$dest,$options,'aiTemplate','aiheader','aifooter');
                 }
@@ -249,12 +249,12 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                     $documents['loss_payee_document'] = $this->generateDocuments($temp,$dest,$options,'lpTemplate','lpheader','lpfooter');
                 }
                 
-                if(isset($temp['additionalLocations']) && $temp['additionalLocationsSelect']=="yes"){
+                if(isset($temp['additionalLocations']) && $temp['additionalLocations']=="yes"){
                     $this->logger->info("DOCUMENT additionalLocations (additional named insuredes");
                     $documents['additionalLocations_document'] = $this->generateDocuments($temp,$dest,$options,'aniTemplate','aniheader','anifooter');
                 }
 
-                if(isset($temp['groupPL']) && $temp['groupProfessionalLiabilitySelect']=='yes'){
+                if(isset($data['groupPL']) && $temp['groupProfessionalLiabilitySelect']=='yes'){
                     $this->logger->info("DOCUMENT groupPL");
                     $document['group_coi_document'] = $this->generateDocuments($temp,$dest,$options,'gtemplate','gheader','gfooter');
                 }
@@ -305,13 +305,11 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             if(isset($this->template[$temp['product']]['slWording'])){        
                 if($temp['product'] == 'Dive Boat' || $temp['product'] == 'Dive Store'){
                     if($temp['business_state'] == 'California'){
-                        $this->logger->info("SL Wording - DiveBoat||DiveStore");
                             $documents['slWording'] = $this->copyDocuments($temp,$dest['relativePath'],'slWording');
+                        }
                     }
-                }
                 else{
                     if($temp['state'] == 'California'){
-                        $this->logger->info("SL Wording - ");
                             $documents['slWording'] = $this->copyDocuments($temp,$dest['relativePath'],'slWording');
                     }
                 }
