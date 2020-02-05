@@ -5,14 +5,12 @@ namespace App\Controller;
 use App\Model\App;
 use App\Model\AppTable;
 use App\Service\AppService;
-use Oxzion\Auth\AuthConstants;
-use Oxzion\Auth\AuthContext;
-use Oxzion\ValidationException;
-use Oxzion\Controller\AbstractApiController;
-use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\ServiceException;
 use Exception;
+use Oxzion\Controller\AbstractApiController;
+use Oxzion\ServiceException;
 use Oxzion\Service\WorkflowService;
+use Oxzion\ValidationException;
+use Zend\Db\Adapter\AdapterInterface;
 
 class AppController extends AbstractApiController
 {
@@ -24,12 +22,13 @@ class AppController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter,WorkflowService $workflowService)
+    public function __construct(AppTable $table, AppService $appService, AdapterInterface $dbAdapter, WorkflowService $workflowService)
     {
         parent::__construct($table, App::class);
         $this->setIdentifierName('appId');
         $this->appService = $appService;
         $this->workflowService = $workflowService;
+        $this->log = $this->getLogger();
     }
     public function setParams($params)
     {
@@ -64,14 +63,15 @@ class AppController extends AbstractApiController
      */
     public function create($data)
     {
+        $this->log->info(__CLASS__ . "-> \n Create App - " . print_r($data, true));
         try {
             $count = $this->appService->createApp($data);
+            if ($count == 0) {
+                return $this->getFailureResponse("Failed to create a new entity", $data);
+            }
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
@@ -102,6 +102,7 @@ class AppController extends AbstractApiController
      */
     public function getList()
     {
+        $this->log->info(__CLASS__ . "-> \n Get App List Begin **********");
         $result = $this->appService->getApps();
         if ($result == 0 || empty($result)) {
             return $this->getErrorResponse("No App found", 404);
@@ -136,14 +137,15 @@ class AppController extends AbstractApiController
      */
     public function update($id, $data)
     {
+        $this->log->info(__CLASS__ . "-> \n Update App - " . print_r($data, true));
         try {
             $count = $this->appService->updateApp($id, $data);
+            if ($count == 0) {
+                return $this->getErrorResponse("App not found for id - $id", 404);
+            }
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getErrorResponse("App not found for id - $id", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -158,6 +160,7 @@ class AppController extends AbstractApiController
      */
     public function delete($id)
     {
+        $this->log->info(__CLASS__ . "-> \n Delete App for ID- " . print_r($id, true));
         $response = $this->appService->deleteApp($id);
         if ($response == 0) {
             return $this->getErrorResponse("App not found", 404, ['id' => $id]);
@@ -191,6 +194,7 @@ class AppController extends AbstractApiController
      */
     public function get($id)
     {
+        $this->log->info(__CLASS__ . "-> \n Get App for ID- " . print_r($id, true));
         $response = $this->appService->getApp($id);
         if ($response == 0 || empty($response)) {
             return $this->getErrorResponse("App not found", 404, ['id' => $id]);
@@ -208,13 +212,28 @@ class AppController extends AbstractApiController
     public function applistAction()
     {
         $filterParams = $this->params()->fromQuery(); // empty method call
-        $response = $this->appService->getAppList($filterParams);
-        if ($response == 0 || empty($response)) {
-            return $this->getErrorResponse("No Apps to display", 404);
+        $this->log->info(__CLASS__ . "-> \n Get App List - " . print_r($filterParams, true));
+        try {
+            $response = $this->appService->getAppList($filterParams);
+            if ($response == 0 || empty($response)) {
+                return $this->getErrorResponse("No Apps to display", 404);
+            }
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 400);
         }
         return $this->getSuccessResponseDataWithPagination($response['data'], $response['total']);
     }
 
+    /**
+     * POST App Install API
+     * @api
+     * @link /app/:appId/appinstall
+     * @method POST
+     * ! Deprecated - Does not look like this api is being used any more, the method that calls the service isnt available.
+     * ? Need to check if this can be removed
+     * @return array of Apps
+     */
     public function appInstallAction($data)
     {
         $data = $this->extractPostData();
@@ -229,21 +248,28 @@ class AppController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
-    
 
+    /**
+     * POST Assignment API
+     * @api
+     * @link /app/:appId/assignments
+     * @method POST
+     * ! Deprecated - This function does not have a test cases to it, not sure if we are using this api
+     * ? Need to check if this needs to be removed. We have the new getFileList api that can be used to get the list of all the assignments.
+     * @return array of Apps
+     */
     public function assignmentsAction()
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $filterParams = $this->params()->fromQuery();
         try {
-            $assignments = $this->workflowService->getAssignments($params['appId'],$filterParams);
-        }catch (ValidationException $e) {
+            $assignments = $this->workflowService->getAssignments($params['appId'], $filterParams);
+        } catch (ValidationException $e) {
             $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
-        }
-        catch(AccessDeniedException $e) {
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
             $response = ['errors' => $e->getErrors()];
-            return $this->getErrorResponse($e->getMessage(),403, $response);
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
         }
         return $this->getSuccessResponseDataWithPagination($assignments['data'], $assignments['total']);
     }
@@ -259,40 +285,31 @@ class AppController extends AbstractApiController
      * @return array Returns a JSON Response with Status Code.</br>
      * <code> status : "success|error"
      * </code>
-    */
-    public function deployAppAction() {
+     */
+    public function deployAppAction()
+    {
         $params = $this->extractPostData();
-        if(isset($params['path']))
-        {
+        $this->log->info(__CLASS__ . "-> \n Deploy App - " . print_r($params, true));
+        if (isset($params['path'])) {
             try {
                 $path = $params['path'];
                 $path .= substr($path, -1) == '/' ? '' : '/';
                 $this->appService->deployApp($path);
                 return $this->getSuccessResponse(200);
-            }
-            catch (ValidationException $e) {
-                // print_r($e->getMessage());
+            } catch (ValidationException $e) {
                 $this->log->error($e->getMessage(), $e);
-                // print_r($e->getTraceAsString());exit;
                 $response = ['data' => $data, 'errors' => $e->getErrors()];
                 return $this->getErrorResponse("Validation Errors", 406, $response);
-            }
-            catch (ServiceException $e){
-                // print_r($e->getMessage());
+            } catch (ServiceException $e) {
                 $this->log->error($e->getMessage(), $e);
-                // print_r($e->getTraceAsString());exit;
-                return $this->getErrorResponse($e->getMessage(),406);
-            }catch(Exception $e){
-                // print_r($e->getMessage());
+                return $this->getErrorResponse($e->getMessage(), 406);
+            } catch (Exception $e) {
                 $this->log->error($e->getMessage(), $e);
-                // print_r($e->getTraceAsString());exit;
-                return $this->getErrorResponse($e->getMessage(),500);
+                return $this->getErrorResponse($e->getMessage(), 500);
             }
-        }else{
-            // print_r($e->getMessage());
+        } else {
             $this->log->error("Path not provided");
-            // print_r($e->getTraceAsString());exit;
-            return $this->getErrorResponse("Invalid parameters",400);
+            return $this->getErrorResponse("Invalid parameters", 400);
         }
     }
 }

@@ -134,14 +134,18 @@ class AppService extends AbstractService
     private function updateymlforapp(&$yamldata, $modifieddata, $path)
     {
         $filename = "application.yml";
-        if (!(array_key_exists('uuid', $yamldata['app'][0]))) {
-            $yamldata['app'][0]['uuid'] = $modifieddata['uuid'];
+        try {
+            if (!(array_key_exists('uuid', $yamldata['app'][0]))) {
+                $yamldata['app'][0]['uuid'] = $modifieddata['uuid'];
+            }
+            if (!(array_key_exists('category', $yamldata['app'][0]))) {
+                $yamldata['app'][0]['category'] = $modifieddata['category'];
+            }
+            $new_yaml = Yaml::dump($yamldata, 20);
+            file_put_contents($path . $filename, $new_yaml);
+        } catch (ServiceException $e) {
+            throw $e;
         }
-        if (!(array_key_exists('category', $yamldata['app'][0]))) {
-            $yamldata['app'][0]['category'] = $modifieddata['category'];
-        }
-        $new_yaml = Yaml::dump($yamldata, 20);
-        file_put_contents($path . $filename, $new_yaml);
     }
 
     private function collectappfieldsdata(&$data)
@@ -165,9 +169,7 @@ class AppService extends AbstractService
         $filename = "application.yml";
         if (!(file_exists($path))) {
             throw new ServiceException("Directory not found", "directory.required");
-        }
-        //check if filename exists
-        else {
+        } else { //check if filename exists
             if (!(file_exists($path . $filename))) {
                 throw new ServiceException("File not found", "file.required");
             } else {
@@ -192,6 +194,7 @@ class AppService extends AbstractService
         try {
             $appUuid = $this->checkAppExists($ymlData['app'][0]);
             $appData['uuid'] = $ymlData['app'][0]['uuid'];
+            $this->logger->info("App Data from Yaml before its update - ", print_r($appData, true));
             $this->updateymlforapp($ymlData, $appData, $path);
             $orgUuid = null;
             if (isset($ymlData['org'])) {
@@ -216,6 +219,7 @@ class AppService extends AbstractService
             $this->updateyml($ymlData, $path);
             //Move the app folder from given path to clients folder
             $appData['status'] = App::PUBLISHED;
+            $this->logger->info("\n App Data before app update - ", print_r($appData, true));
             $this->updateApp($appData['uuid'], $appData);
         } catch (Exception $e) {
             throw $e;
@@ -405,6 +409,7 @@ class AppService extends AbstractService
             }
             if ($folderCount == 1) {
                 foreach ($files as $file) {
+                    $this->logger->info("\n Symlinking files" . print_r($file, true));
                     if ($file->isDir()) {
                         $target = $file->getPathName();
                         $link = $this->config['APPS_FOLDER'] . $file->getFilename();
@@ -532,12 +537,10 @@ class AppService extends AbstractService
         try {
             $queryString = "Select ap.uuid,ap.name as name from ox_app as ap where ap.name = :appName";
             $params = array("appName" => $appdata['name']);
-
             if (isset($appdata['uuid'])) {
                 $queryString .= " OR ap.uuid = :appId";
                 $params['appId'] = $appdata['uuid'];
             }
-
             $result = $this->executeQueryWithBindParameters($queryString, $params)->toArray();
             if (count($result) == 0) {
                 $data = $this->createApp($appdata, true);
@@ -559,7 +562,6 @@ class AppService extends AbstractService
             }
             return $appdata['uuid'];
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
     }
@@ -568,7 +570,6 @@ class AppService extends AbstractService
     {
         $privilegearray = array_unique(array_column($privilegedata, 'name'));
         $list = "'" . implode("', '", $privilegearray) . "'";
-
         $appId = $this->getIdFromUuid('ox_app', $appUuid);
         $this->privilegeService->saveAppPrivileges($appId, $privilegedata);
     }
@@ -579,34 +580,38 @@ class AppService extends AbstractService
         $offset = 0;
         $where = "";
         $sort = "name";
-        $cntQuery = "SELECT count(id) FROM `ox_app`";
-        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
-            $filterArray = json_decode($filterParams['filter'], true);
-            if (isset($filterArray[0]['filter'])) {
-                $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND";
-                $filterList = $filterArray[0]['filter']['filters'];
-                $where = " WHERE " . FilterUtils::filterArray($filterList, $filterlogic);
+        try {
+            $cntQuery = "SELECT count(id) FROM `ox_app`";
+            if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
+                $filterArray = json_decode($filterParams['filter'], true);
+                if (isset($filterArray[0]['filter'])) {
+                    $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND";
+                    $filterList = $filterArray[0]['filter']['filters'];
+                    $where = " WHERE " . FilterUtils::filterArray($filterList, $filterlogic);
+                }
+                if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
+                    $sort = $filterArray[0]['sort'];
+                    $sort = FilterUtils::sortArray($sort);
+                }
+                $pageSize = $filterArray[0]['take'];
+                $offset = $filterArray[0]['skip'];
             }
-            if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
-                $sort = $filterArray[0]['sort'];
-                $sort = FilterUtils::sortArray($sort);
+            $where .= strlen($where) > 0 ? " AND status!=1" : "WHERE status!=1";
+            $sort = " ORDER BY " . $sort;
+            $limit = " LIMIT " . $pageSize . " offset " . $offset;
+            $resultSet = $this->executeQuerywithParams($cntQuery . $where);
+            $count = $resultSet->toArray()[0]['count(id)'];
+            $query = "SELECT * FROM `ox_app` " . $where . " " . $sort . " " . $limit;
+            $resultSet = $this->executeQuerywithParams($query);
+            $result = $resultSet->toArray();
+            for ($x = 0; $x < sizeof($result); $x++) {
+                $result[$x]['start_options'] = json_decode($result[$x]['start_options'], true);
             }
-            $pageSize = $filterArray[0]['take'];
-            $offset = $filterArray[0]['skip'];
+        } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), $e);
+            throw $e;
         }
-        $where .= strlen($where) > 0 ? " AND status!=1" : "WHERE status!=1";
-        $sort = " ORDER BY " . $sort;
-        $limit = " LIMIT " . $pageSize . " offset " . $offset;
-        $resultSet = $this->executeQuerywithParams($cntQuery . $where);
-        $count = $resultSet->toArray()[0]['count(id)'];
-        $query = "SELECT * FROM `ox_app` " . $where . " " . $sort . " " . $limit;
-        $resultSet = $this->executeQuerywithParams($query);
-        $result = $resultSet->toArray();
-        for ($x = 0; $x < sizeof($result); $x++) {
-            $result[$x]['start_options'] = json_decode($result[$x]['start_options'], true);
-        }
-        return array('data' => $result,
-            'total' => $count);
+        return array('data' => $result, 'total' => $count);
     }
 
     public function updateApp($id, &$data)
@@ -621,6 +626,7 @@ class AppService extends AbstractService
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['status'] = isset($data['status']) ? $data['status'] : App::IN_DRAFT;
+        $this->logger->info("Modified data before the transaction - " . print_r($data, true));
         $form->exchangeArray($data);
         $form->validate();
         $count = 0;
@@ -633,7 +639,6 @@ class AppService extends AbstractService
             }
             $this->commit();
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(), $e);
             $this->rollback();
             throw $e;
         }
@@ -652,6 +657,7 @@ class AppService extends AbstractService
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['status'] = App::DELETED;
+        $this->logger->info("Modified data before the transaction - " . print_r($data, true));
         $form->exchangeArray($data);
         $count = 0;
         $this->beginTransaction();
@@ -861,5 +867,17 @@ class AppService extends AbstractService
                 }
             }
         }
+    }
+
+    /**
+     * installAppForOrg
+     *
+     * ! Deprecated - Method is not from /app/:appId/appinstall api. But not used anywhere in the application
+     * ? Need to check if this can be removed
+     * @return null
+     */
+    public function installAppForOrg()
+    {
+        return null;
     }
 }
