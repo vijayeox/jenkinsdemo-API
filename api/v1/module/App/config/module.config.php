@@ -609,7 +609,7 @@ return [
             'file_document_get' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/:appId/:orgId/:fileId/:document',
+                    'route' => '/:appId/:orgId/:fileId[/:folder]/:document',
                     'constraints' => [
                         'appId' => UuidUtil::UUID_PATTERN,
                         'orgId' => UuidUtil::UUID_PATTERN,
