@@ -2,8 +2,8 @@
 
 namespace Oxzion\Security;
 
-use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
 use Oxzion\Error\ErrorHandler;
 
 class SecurityManager
@@ -50,9 +50,9 @@ class SecurityManager
         return;
     }
     /**
-    * @param: privilege Array|String
-    * Return : Boolean 0|1 for Granted
-    */
+     * @param: privilege Array|String
+     * Return : Boolean 0|1 for Granted
+     */
     public static function isGranted($privilege)
     {
         $roles = AuthContext::get(AuthConstants::PRIVILEGES);
