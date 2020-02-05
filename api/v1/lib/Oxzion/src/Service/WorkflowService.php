@@ -29,6 +29,7 @@ class WorkflowService extends AbstractService
      * @ignore table
      */
     private $table;
+    private $fileExt = ".json";
     protected $config;
     protected $processManager;
     protected $fileService;
@@ -107,6 +108,7 @@ class WorkflowService extends AbstractService
             $workFlowId = $data['id'];
             $workflowDeploymentId = $data['workflow_deployment_id'];
             $processes = $this->getProcessManager()->parseBPMN($file, $appId);
+            $path = dirname($file)."/../../forms/";
             $startFormId = null;
             $workFlowList = array();
             $workFlowFormIds = array();
@@ -128,8 +130,14 @@ class WorkflowService extends AbstractService
                     }
                     $formData = $oxForm->toArray();
                     $formData['entity_id'] = $entityId;
-                    if (isset($formData['template'])) {
-                        $formResult = $this->formService->createForm($appUuid, $formData);
+                    $this->logger->info("File Templates------ ".print_r($formData['template'],true));
+                    if(isset($formData['template'])){
+                        $filePath = $path.$formData['template'].$this->fileExt;
+                        $this->logger->info("File Path ------ ".print_r($filePath,true));
+                        if(file_exists($filePath)){
+                            $formData['template'] = file_get_contents($filePath);
+                            $formResult = $this->formService->createForm($appUuid, $formData);
+                        }
                     }
                     $startFormId = $formData['id'];
                     if (isset($process['activity'])) {
@@ -146,9 +154,12 @@ class WorkflowService extends AbstractService
                             }
                             $activityData = $oxActivity->toArray();
                             try {
-                                if (isset($activity['form'])) {
-                                    $formTemplate = json_decode($activity['form'], true);
-                                    $activityData['template'] = $formTemplate['template'];
+                                if(isset($activity['form'])){
+                                    $formTemplate = json_decode($activity['form'],true);
+                                    $activityFilePath = $path.$formTemplate['template'].$this->fileExt;
+                                    if(file_exists($activityFilePath)){
+                                         $activityData['template'] = file_get_contents($activityFilePath);
+                                     }
                                 }
                                 $activityData['entity_id'] = $entityId;
                                 $activityData['workflow_deployment_id'] = $workflowDeploymentId;
