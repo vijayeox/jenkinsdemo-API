@@ -9,6 +9,7 @@ use Oxzion\Service\ActivityInstanceService;
 use Oxzion\Service\WorkflowInstanceService;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\ValidationException;
+use Oxzion\Service\CommandService;
 use Oxzion\EntityNotFoundException;
 use Logger;
 
@@ -21,10 +22,11 @@ class ActivityInstanceController extends AbstractApiControllerHelper
     * @ignore __construct
     */
     public function __construct(ActivityInstanceService $activityInstanceService,
-        WorkflowInstanceService $workflowInstanceService)
+        WorkflowInstanceService $workflowInstanceService,CommandService $commandService)
     {
         $this->activityInstanceService = $activityInstanceService;
         $this->workflowInstanceService = $workflowInstanceService;
+        $this->commandService = $commandService;
         $this->log = Logger::getLogger(__CLASS__);
     }
     /**
@@ -56,9 +58,8 @@ class ActivityInstanceController extends AbstractApiControllerHelper
     private function createActivityInstanceEntry($data){
         $this->log->info("CREATE ACTIVITY INSTANCE ENTRY - Activity INstance");
         try{
-            $response = $this->activityInstanceService->createActivityInstanceEntry($data);
+            $response = $this->activityInstanceService->createActivityInstanceEntry($data,$this->commandService);
             $this->log->info(ActivityInstanceController::class.":Add Activity Instance Successful");
-
         }catch(EntityNotFoundException $e){
             $this->log->info("Entity Not FOund Instance");
             if(isset($data['processVariables'])){
@@ -70,7 +71,7 @@ class ActivityInstanceController extends AbstractApiControllerHelper
                 }
                 $workflowInstance = $this->workflowInstanceService->setupWorkflowInstance($workflowId,$data['processInstanceId'],$variables);
                 if($workflowInstance){
-                    return $this->createActivityInstanceEntry($data);
+                    return $this->createActivityInstanceEntry($data,$this->commandService);
                 }
             }
         }
