@@ -824,6 +824,7 @@ class UserService extends AbstractService
             $result['preferences']['timezone'] = $result['timezone'];
         }
         $result['orgid'] = $this->getUuidFromId('ox_organization',$result['orgid']);
+        $result['role'] = $this->getRolesofUser($result['orgid'],$id);
         $result['managerid'] = $this->getUuidFromId('ox_user',$result['managerid']);
         if (isset($result)) {
             return $result;
