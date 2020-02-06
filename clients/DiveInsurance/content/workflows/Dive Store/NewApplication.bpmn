@@ -19,7 +19,7 @@
     <bpmn:endEvent id="EndEvent_103enoz" name="Insurance Application Completed">
       <bpmn:incoming>SequenceFlow_17dyxqd</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:startEvent id="StartEvent_1wi0e7k" name="Dive Store Application">
+    <bpmn:startEvent id="StartEvent_1wi0e7k" name="Dive Store Application" camunda:asyncAfter="true">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveStoreNewApplication" />
@@ -32,7 +32,7 @@
       <bpmn:outgoing>SequenceFlow_1lnz46n</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0am14xf</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:userTask id="UserTask_0ak903b" name="Customer Approval and payment" camunda:asyncAfter="true">
+    <bpmn:userTask id="UserTask_0ak903b" name="Send Customer to Customer and Accept" camunda:asyncAfter="true" camunda:assignee="owner">
       <bpmn:extensionElements>
         <camunda:properties>
           <camunda:property name="template" value="diveStoreUserApprovalForm" />
@@ -43,18 +43,24 @@
         <camunda:executionListener event="start">
           <camunda:script scriptFormat="groovy">def assignee = execution.getVariable('email');</camunda:script>
         </camunda:executionListener>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="postCreate">
+            <camunda:list>
+              <camunda:value>{"command" : "delegate", "delegate" : "DispatchProposalDocument"}</camunda:value>
+            </camunda:list>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1niav2g</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_12dghqu</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="ServiceTask_0xam12g" name="Send Mail to Customer regarding Quote" camunda:expression="0">
+    <bpmn:serviceTask id="ServiceTask_0xam12g" name="Generate Quote Document" camunda:expression="0">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="commands">
             <camunda:list>
               <camunda:value>{"command" : "delegate", "delegate":"QuoteDocument"}</camunda:value>
               <camunda:value>{"command" : "fileSave"}</camunda:value>
-              <camunda:value>{"command" : "delegate", "delegate" : "DispatchProposalDocument"}</camunda:value>
             </camunda:list>
           </camunda:inputParameter>
         </camunda:inputOutput>
