@@ -20,6 +20,7 @@ class ActivityInstanceService extends AbstractService
     /**
     * @var ActivityInstanceService Instance of Task Service
     */
+    private $fileExt = ".json";
     protected $workflowFactory;
     protected $activityEngine;
     /**
@@ -30,6 +31,7 @@ class ActivityInstanceService extends AbstractService
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->formsFolder = $this->config['FORM_FOLDER'];
         $this->workFlowFactory = $workflowFactory;
         $this->activityEngine = $this->workFlowFactory->getActivity();
     }
@@ -45,7 +47,7 @@ class ActivityInstanceService extends AbstractService
         ox_activity_instance.status as status,
         ox_file.data,ox_app.uuid as app_id,ox_file.uuid,
         ox_activity_instance.org_id,ox_activity_instance.activity_id,ox_form.uuid as form_id,ox_activity.task_id as task_id,
-        ox_form.template as template FROM `ox_activity_instance` 
+        ox_form.name as formName FROM `ox_activity_instance` 
         LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id 
         LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id 
         LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id         
@@ -59,6 +61,11 @@ class ActivityInstanceService extends AbstractService
         $activityInstance = $this->executeQuerywithBindParameters($activityQuery,$activityParams)->toArray();
         if (count($activityInstance)==0) {
             return 0;
+        }
+
+        $filePath = $this->formsFolder.$data['appId']."/".$activityInstance[0]['formName'].$this->fileExt;
+        if(file_exists($filePath)){
+           $activityInstance[0]['template'] = file_get_contents($filePath);
         }
 
         $activityform = $activityInstance[0];
