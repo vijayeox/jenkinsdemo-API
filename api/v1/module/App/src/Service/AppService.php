@@ -387,6 +387,14 @@ class AppService extends AbstractService
         if (file_exists($target)) {
             $this->setupLink($target, $link);
         }
+        $formlink = $this->config['FORM_FOLDER'] . $appId;
+        $formsTarget = $path . "content/forms";
+        if (is_link($formlink)) {
+            FileUtils::unlink($formlink);
+        }
+        if (file_exists($formsTarget)) {
+            $this->setupLink($formsTarget, $formlink);
+        }
         if ($orgId) {
             $link = $this->config['TEMPLATE_FOLDER'] . $orgId;
             $target = $path . "data/template";

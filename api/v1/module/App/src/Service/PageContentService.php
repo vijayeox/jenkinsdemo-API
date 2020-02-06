@@ -13,10 +13,12 @@ use Exception;
 
 class PageContentService extends AbstractService
 {
+    private $fileExt = ".json";
     public function __construct($config, $dbAdapter, PageContentTable $table)
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->formsFolder = $this->config['FORM_FOLDER'];
     }
 
     public function getPageContent($appUuid, $pageUuid)
@@ -27,8 +29,7 @@ class PageContentService extends AbstractService
         $selectQuery = array($pageUuid,$appUuid);
         $selectResult = $this->executeQueryWithBindParameters($select,$selectQuery)->toArray();
         if(count($selectResult)>0){
-            $queryString = " SELECT ox_app_page.name, ox_page_content.type,ox_form.uuid as form_id, 
-            COALESCE(ox_page_content.content,ox_form.template) as content 
+            $queryString = " SELECT ox_app_page.name, ox_page_content.type,ox_form.uuid as form_id, ox_form.name as formName, ox_page_content.content as pageContent
             FROM ox_page_content 
             LEFT JOIN ox_app_page on ox_app_page.id = ox_page_content.page_id
             LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id
@@ -42,8 +43,16 @@ class PageContentService extends AbstractService
             return 0;
         }
 
-        $result = array();
+        $result = array();       
         foreach($selectResult as $resultArray){
+            if(isset($resultArray['formName'])){
+                $filePath = $this->formsFolder.$appUuid."/".$resultArray['formName'].$this->fileExt;
+                if(file_exists($filePath)){
+                    $resultArray['content'] = file_get_contents($filePath);
+                }
+            }else{
+                $resultArray['content'] = $resultArray['pageContent'];
+            }
             if($resultArray['type'] == 'List' || $resultArray['type'] == 'Form' || $resultArray['type'] == 'DocumentViewer'){ 
                 $resultArray['content'] = json_decode($resultArray['content']);
             }else{

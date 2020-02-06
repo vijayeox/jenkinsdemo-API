@@ -152,7 +152,7 @@ class FormService extends AbstractService
                 $params['appId'] = $appUuid;
             }
             //TODO handle the $filterArray using FilterUtils
-            $query = "select f.name, f.template, e.uuid as entity_id, f.uuid as form_id from 
+            $query = "select f.name, e.uuid as entity_id, f.uuid as form_id from 
                       ox_form as f inner join ox_app_entity as e on e.id = f.entity_id
                       inner join ox_app as app on app.id = f.app_id
                       $where";

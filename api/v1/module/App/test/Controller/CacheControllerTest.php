@@ -2,24 +2,20 @@
 namespace App;
 
 use App\Controller\CacheController;
-use Cache\Model;
 use Oxzion\Test\ControllerTest;
-use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
-use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
-use Oxzion\Utils\CacheUtils;
 
 class CacheControllerTest extends ControllerTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->loadConfig();
         parent::setUp();
     }
+
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Workflow.yml");
         return $dataset;
     }
 
@@ -42,6 +38,7 @@ class CacheControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['content'], "Some Content");
     }
+
     public function testGetNotFound()
     {
         $this->initAuthToken($this->adminUser);
@@ -64,6 +61,7 @@ class CacheControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['message'], "The cache has been successfully deleted");
     }
+    
     public function testDeleteWithIncorrectAppId()
     {
         $this->initAuthToken($this->adminUser);

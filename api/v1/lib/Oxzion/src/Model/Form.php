@@ -13,7 +13,6 @@ class Form extends Entity
         'uuid' => null,
         'description'=>null,
         'entity_id'=>null,
-        'template'=>null,
         'created_by'=>null,
         'modified_by'=>null,
         'date_created'=>null,
@@ -21,7 +20,7 @@ class Form extends Entity
     );
     public function validate()
     {
-        $required = array('app_id','name', 'uuid', 'template', 'created_by', 'entity_id');
+        $required = array('app_id','name', 'uuid', 'created_by', 'entity_id');
         $this->validateWithParams($required);
     }
 }
