@@ -12,13 +12,13 @@
  */
 use Doctrine\DBAL\Driver\PDOMySql\Driver as PDOMySqlDriver;
 
-$host = 'localhost';
+$host = '172.16.1.147';
 $db = 'oxzionapi';
 $username = 'user';
 $password = 'password';
 
 if(isset($_ENV['ENV']) && $_ENV['ENV'] == 'test'){
-    $host = 'localhost';
+    $host = '172.16.1.147';
     $db = "oxzionapi_test";
     $username = "user";
     $password = "password";
@@ -57,9 +57,9 @@ return [
         'authToken' => ''
     ],
     'task' => [
-        'taskServerUrl' => 'http://localhost:3000/api/v3/',
+        'taskServerUrl' => 'http://'.$host.':3000/api/v3/',
         'username' => 'apikey',
-        'authToken' => ''
+        'authToken' => '385d7ef06801aefb719c99c4d4b7640fa7bba013f3d470d537b4660fc9be1c2e'
     ],
     'calendar' => [
         'calendarServerUrl' => 'http://localhost:8075/calendar',
