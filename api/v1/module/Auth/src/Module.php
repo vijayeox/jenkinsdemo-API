@@ -2,19 +2,16 @@
 
 namespace Auth;
 
-use Zend\Db\Adapter\AdapterInterface;
-use Zend\Db\ResultSet\ResultSet;
 use Auth\Service\AuthService;
+use Oxzion\Error\ErrorHandler;
+use Oxzion\Service\UserCacheService;
+use Oxzion\Service\UserService;
+use Oxzion\Service\UserTokenService;
+use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as ApiAdapter;
+use Zend\Db\Adapter\AdapterInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Zend\View\Model\JsonModel;
-use Oxzion\Error\ErrorHandler;
-use Oxzion\Service\UserService;
-use Oxzion\Service\UserCacheService;
-use Oxzion\Service\UserTokenService;
-use Auth\Adapter\LoginAdapter as AuthAdapter;
-use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as ApiAdapter;
 
 class Module implements ConfigProviderInterface
 {
@@ -46,7 +43,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\AuthService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\AuthService($container->get('config'), $dbAdapter,$container->get(UserService::class),$container->get(UserCacheService::class));
+                    return new Service\AuthService($container->get('config'), $dbAdapter, $container->get(UserService::class), $container->get(UserCacheService::class));
                 },
             ],
         ];

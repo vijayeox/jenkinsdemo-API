@@ -56,19 +56,23 @@ class AttachmentController extends AbstractApiController
     public function create($data)
     {
         $this->log->info(__CLASS__ . "->create attachment - " . print_r($data, true));
-        $files = $this->params()->fromFiles('files');
         $filesList = array();
+        $dataArray = array();
+        $dataArray = $data;
         try {
-            if (!isset($files)) {
-                return $this->getErrorResponse("File Not found", 400, $data);
+            if (!isset($_FILES['file'])) {
+                return $this->getErrorResponse("File Not attached", 201, $data);
+            } else if (!isset($dataArray['type'])) {
+                return $this->getErrorResponse("File type not specified", 400, $data);
             }
+            $files = $_FILES['file'];
             if ($files['name']) {
-                $filesList = $this->attachmentService->upload($data, array($files));
+                $filesList = $this->attachmentService->upload($dataArray, array($files));
             } else {
-                $filesList = $this->attachmentService->upload($data, $files);
+                $filesList = $this->attachmentService->upload($dataArray, $files);
             }
         } catch (ValidationException $e) {
-            $response = ['data' => $data, 'errors' => $e->getErrors()];
+            $response = ['data' => $dataArray, 'errors' => $e->getErrors()];
             $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse("Validation Errors", 404, $response);
         } catch (Exception $e) {

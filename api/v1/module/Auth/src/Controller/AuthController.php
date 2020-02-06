@@ -2,18 +2,17 @@
 
 namespace Auth\Controller;
 
+use Auth\Adapter\LoginAdapter as AuthAdapter;
 use Auth\Service\AuthService;
+use Exception;
+use Firebase\JWT\JWT;
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Encryption\Crypto;
-use Zend\View\Model\JsonModel;
-use Auth\Adapter\LoginAdapter as AuthAdapter;
-use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as ApiAdapter;
-use Firebase\JWT\JWT;
+use Oxzion\ServiceException;
 use Oxzion\Service\UserService;
 use Oxzion\Service\UserTokenService;
-use Exception;
-use Oxzion\ServiceException;
 use Oxzion\ValidationException;
+use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as ApiAdapter;
 
 class AuthController extends AbstractApiControllerHelper
 {
@@ -66,8 +65,8 @@ class AuthController extends AbstractApiControllerHelper
     {
         $data = $this->request->getPost()->toArray();
         $crypto = new Crypto();
-        if (isset($data['username'])&&isset($data['password'])) {
-            $data['username']= trim($data['username']);
+        if (isset($data['username']) && isset($data['password'])) {
+            $data['username'] = trim($data['username']);
             $this->authAdapter->setIdentity($data['username']);
             $this->authAdapter->setCredential($data['password']);
             $result = $this->authAdapter->authenticate();
@@ -83,8 +82,8 @@ class AuthController extends AbstractApiControllerHelper
         }
         if (isset($result)) {
             if ($result->isValid()) {
-                if (isset($data['username'])&&isset($data['password'])) {
-                    return $this->getJwt($data['username'], $this->userService->getUserOrg($data['username']),0);
+                if (isset($data['username']) && isset($data['password'])) {
+                    return $this->getJwt($data['username'], $this->userService->getUserOrg($data['username']), 0);
                 } elseif (isset($data['apikey'])) {
                     return $this->getApiJwt($data['apikey']);
                 }
@@ -100,17 +99,17 @@ class AuthController extends AbstractApiControllerHelper
             if (isset($data['jwt'])) {
                 $tokenPayload = $this->decodeJwtToken($data['jwt']);
                 if (is_array($tokenPayload) || is_object($tokenPayload)) {
-                    $uname = isset($tokenPayload->data->username)? $tokenPayload->data->username:$tokenPayload['username'] ;
-                    $orgId = isset($tokenPayload->data->orgid)? $tokenPayload->data->orgid: $tokenPayload['orgid'];
+                    $uname = isset($tokenPayload->data->username) ? $tokenPayload->data->username : $tokenPayload['username'];
+                    $orgId = isset($tokenPayload->data->orgid) ? $tokenPayload->data->orgid : $tokenPayload['orgid'];
                     $userDetail = $this->userService->getUserDetailsbyUserName($uname);
-                    $userDetail['id'] = isset($userDetail['id']) ? $userDetail['id'] : NULL;
+                    $userDetail['id'] = isset($userDetail['id']) ? $userDetail['id'] : null;
                     $userTokenInfo = $this->userTokenService->checkExpiredTokenInfo($userDetail['id']);
                     if (!empty($userTokenInfo)) {
                         $data = ['username' => $uname, 'orgid' => $orgId];
                         $dataJwt = $this->getTokenPayload($data);
                         $jwt = $this->generateJwtToken($dataJwt);
                         $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
-                        return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken]);
+                        return $this->getSuccessResponseWithData(['jwt' => $jwt, 'refresh_token' => $refreshToken]);
                     } else {
                         return $this->getErrorResponse("Refresh Token Expired", 404);
                     }
@@ -131,29 +130,29 @@ class AuthController extends AbstractApiControllerHelper
         $data = $this->extractPostData();
         try {
             $result = $this->authService->executeActions($data);
-            if($result ==0){
+            if ($result == 0) {
                 return $this->getErrorResponse("There was an error while executing", 404);
             }
-        }catch(ServiceException $e){
-            $this->log->error("Error".$e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(),404);
-        }catch (ValidationException $e){
-            $this->log->error("Error".$e->getMessage().json_encode($e->getErrors()), $e);
+        } catch (ServiceException $e) {
+            $this->log->error("Error" . $e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 404);
+        } catch (ValidationException $e) {
+            $this->log->error("Error" . $e->getMessage() . json_encode($e->getErrors()), $e);
             return $this->getErrorResponse($e->getMessage(), 417, $e->getErrors());
-        }catch (Exception $e){
-            $this->log->error("Error".$e->getMessage(), $e);
+        } catch (Exception $e) {
+            $this->log->error("Error" . $e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 404);
         }
         if (isset($result['auto_login'])) {
-            $result = $this->getJwt($result['user']['username'], $this->userService->getUserOrg($result['user']['username']),1);
-        } 
+            $result = $this->getJwt($result['user']['username'], $this->userService->getUserOrg($result['user']['username']), 1);
+        }
         return $this->getSuccessResponseWithData($result);
     }
 
     /**
      * @ignore getJwt
      */
-    private function getJwt($userName, $orgId,$raw=0)
+    private function getJwt($userName, $orgId, $raw = 0)
     {
         $data = ['username' => $userName, 'orgid' => $orgId];
         $dataJwt = $this->getTokenPayload($data);
@@ -161,12 +160,12 @@ class AuthController extends AbstractApiControllerHelper
         $refreshToken = $this->userTokenService->generateRefreshToken($userDetail);
         $jwt = $this->generateJwtToken($dataJwt);
         if ($refreshToken != 0) {
-            if($raw){
-                return ['jwt' => $jwt,'refresh_token'=>$refreshToken,'username'=>$userName];
+            if ($raw) {
+                return ['jwt' => $jwt, 'refresh_token' => $refreshToken, 'username' => $userName];
             }
-            return $this->getSuccessResponseWithData(['jwt' => $jwt,'refresh_token'=>$refreshToken,'username'=>$userName]);
+            return $this->getSuccessResponseWithData(['jwt' => $jwt, 'refresh_token' => $refreshToken, 'username' => $userName]);
         } else {
-            if($raw){
+            if ($raw) {
                 return array();
             }
             return $this->getErrorResponse("Login Error", 405, array());
@@ -202,7 +201,7 @@ class AuthController extends AbstractApiControllerHelper
         $dataJwt = $this->getTokenPayload($data);
         $jwt = $this->generateJwtToken($dataJwt);
         if ($jwt) {
-            return $this->getSuccessResponseWithData(['jwt'=>$jwt]);
+            return $this->getSuccessResponseWithData(['jwt' => $jwt]);
         } else {
             return $this->getErrorResponse("Invalid JWT Token", 404, array());
         }
@@ -220,13 +219,13 @@ class AuthController extends AbstractApiControllerHelper
         try {
             if (isset($data["username"])) {
                 $username = $data["username"];
-                $res =$this->userService->getUserBaseProfile($username);
+                $res = $this->userService->getUserBaseProfile($username);
 
                 if ($res == 0) {
                     return $this->getErrorResponse("Invalid User", 404);
                 } else {
                     $profilePicUrl = $this->getBaseUrl() . "/user/profile/" . $res["uuid"];
-                    return $this->getSuccessResponseWithData(['username'=> $res["name"],'profileUrl'=>$profilePicUrl]);
+                    return $this->getSuccessResponseWithData(['username' => $res["name"], 'profileUrl' => $profilePicUrl]);
                 }
             } else {
                 return $this->getErrorResponse("Invalid Request", 404);

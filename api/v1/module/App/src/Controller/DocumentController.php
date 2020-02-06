@@ -61,6 +61,9 @@ class DocumentController extends AbstractApiControllerHelper
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         $attachment_location = $this->config['APP_DOCUMENT_FOLDER'].$params['orgId']."/".$params['fileId']."/".$params['document'];
+        if(isset($params['folder'])){
+            $attachment_location = $this->config['APP_DOCUMENT_FOLDER'].$params['orgId']."/".$params['fileId']."/".$params['folder']."/".$params['document'];
+        }
         if (file_exists($attachment_location)) {
             header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
             header("Cache-Control: public"); // needed for internet explorer

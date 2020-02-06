@@ -2,30 +2,29 @@
 
 namespace App;
 
+use App\Service\MenuItemService;
+use App\Service\PageService;
+use Group\Service\GroupService;
+use Oxzion\Error\ErrorHandler;
+use Oxzion\Model\FieldTable;
+use Oxzion\Model\FileTable;
+use Oxzion\Model\FormTable;
+use Oxzion\Model\WorkflowTable;
+use Oxzion\Service\CommandService;
+use Oxzion\Service\ErrorLogService;
+use Oxzion\Service\FieldService;
+use Oxzion\Service\FileService;
+use Oxzion\Service\FormService;
+use Oxzion\Service\RoleService;
+use Oxzion\Service\UserCacheService;
+use Oxzion\Service\UserService;
+use Oxzion\Service\WorkflowService;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Zend\View\Model\JsonModel;
-use Oxzion\Error\ErrorHandler;
-use Oxzion\Model\FormTable;
-use Oxzion\Model\FieldTable;
-use Oxzion\Model\FileTable;
-use Oxzion\Model\WorkflowTable;
-use Oxzion\Service\FieldService;
-use Oxzion\Service\FileService;
-use Oxzion\Service\FormService;
-use Oxzion\Service\WorkflowService;
-use Group\Service\GroupService;
-use Oxzion\Service\UserCacheService;
-use Oxzion\Service\RoleService;
-use App\Service\MenuItemService;
-use App\Service\PageService;
-use Oxzion\Service\ErrorLogService;
-use Oxzion\Service\UserService;
-use Oxzion\Service\CommandService;
 
 class Module implements ConfigProviderInterface
 {
@@ -78,7 +77,7 @@ class Module implements ConfigProviderInterface
                 },
                 Service\PageService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PageService($container->get('config'),$container->get(Service\PageContentService::class), $dbAdapter, $container->get(Model\PageTable::class));
+                    return new Service\PageService($container->get('config'), $container->get(Service\PageContentService::class), $dbAdapter, $container->get(Model\PageTable::class));
                 },
                 Model\PageTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PageTableGateway::class);
@@ -106,8 +105,8 @@ class Module implements ConfigProviderInterface
                 },
                 Service\PageContentService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new Service\PageContentService($container->get('config'), 
-                    $dbAdapter, $container->get(Model\PageContentTable::class));
+                    return new Service\PageContentService($container->get('config'),
+                        $dbAdapter, $container->get(Model\PageContentTable::class));
                 },
                 Model\PageContentTable::class => function ($container) {
                     $tableGateway = $container->get(Model\PageContentTableGateway::class);
@@ -118,7 +117,7 @@ class Module implements ConfigProviderInterface
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\PageContent());
                     return new TableGateway('ox_page_content', $dbAdapter, null, $resultSetPrototype);
-                },                
+                },
             ],
         ];
     }

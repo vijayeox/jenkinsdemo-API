@@ -153,7 +153,10 @@ class PaymentService extends AbstractService
                 $data['transaction'] = $transactionDetails;
                 $data['token'] = $initiatePaymentResult;
                 return $data;
-            } catch (Exception $e){
+            } catch (ServiceException $e){
+                $this->logger->error("Payment Initialization has Failed ".$e->getMessage());
+                throw new ServiceException("Payment Initialization has Failed, ".$e->getMessage(), 1);
+            }catch (Exception $e){
                 $this->logger->error("Payment Initialization has Failed ".$paymentInfo['payment_client']." missing!");
                 throw (new ServiceException("Payment Initialization has Failed ".$paymentInfo['payment_client']." missing!", 1));
             }
@@ -265,7 +268,10 @@ class PaymentService extends AbstractService
                     $this->logger->error($e->getMessage()."-".$e->getTraceAsString());
                     throw $e;
                 }
-            } catch (Exception $e){
+            } catch(ServiceException $e) {
+                $this->logger->error("Payment Gateway has not been implement ".$e->getMessage());
+                throw (new ServiceException($e->getMessage(), 1));
+            }catch (Exception $e){
                 $this->logger->error("Payment Gateway has not been implement ".$paymentInfo['payment_client']." missing!");
                 throw (new ServiceException("Payment Gateway has not been implement ".$paymentInfo['payment_client']." missing!", 1));
             }

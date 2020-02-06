@@ -29,7 +29,7 @@ class AttachmentService extends AbstractService
      *  @param files Array of files to upload
      *  @return JSON array of filenames
      */
-    public function upload($data, $files)
+    public function upload(array $data, $files)
     {
         $fileArray = array();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
