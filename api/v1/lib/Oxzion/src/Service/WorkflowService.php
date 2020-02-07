@@ -57,18 +57,22 @@ class WorkflowService extends AbstractService
         $this->activityEngine = $this->workFlowFactory->getActivity();
         $this->activityService = $activityService;
     }
+
     public function setProcessEngine($processEngine)
     {
         $this->processEngine = $processEngine;
     }
+
     public function setProcessManager($processManager)
     {
         $this->processManager = $processManager;
     }
+
     public function getProcessManager()
     {
         return $this->processManager;
     }
+
     public function deploy($file, $appUuid, $data, $entityId)
     {
         $this->logger->info("Executing deploy for entity id -> $entityId");
@@ -82,7 +86,6 @@ class WorkflowService extends AbstractService
             return 0;
         }
         $data['entity_id'] = $entityId;
-
         try {
             $this->logger->info("Executing deploy of workflow : $workflowName");
             $processIds = $this->getProcessManager()->deploy($workflowName, array($file));
@@ -109,7 +112,7 @@ class WorkflowService extends AbstractService
             $workFlowId = $data['id'];
             $workflowDeploymentId = $data['workflow_deployment_id'];
             $processes = $this->getProcessManager()->parseBPMN($file, $appId);
-            $path = dirname($file)."/../../forms/";
+            $path = dirname($file) . "/../../forms/";
             $startFormId = null;
             $workFlowList = array();
             $workFlowFormIds = array();
@@ -131,10 +134,11 @@ class WorkflowService extends AbstractService
                     }
                     $formData = $oxForm->toArray();
                     $formData['entity_id'] = $entityId;
-                    if(isset($formProperties['template'])){
-                        $filePath = $path.$formProperties['template'].$this->fileExt;
-                        $this->logger->info("File Path ------ ".print_r($filePath,true));
-                        if(file_exists($filePath)){
+                    $this->logger->info("File Templates------ " . print_r($formData['template'], true));
+                    if (isset($formData['template'])) {
+                        $filePath = $path . $formData['template'] . $this->fileExt;
+                        $this->logger->info("File Path ------ " . print_r($filePath, true));
+                        if (file_exists($filePath)) {
                             $formData['template'] = file_get_contents($filePath);
                             $formResult = $this->formService->createForm($appUuid, $formData);
                         }
@@ -154,12 +158,12 @@ class WorkflowService extends AbstractService
                             }
                             $activityData = $oxActivity->toArray();
                             try {
-                                if(isset($activity['form'])){
-                                    $formTemplate = json_decode($activity['form'],true);
-                                    $activityFilePath = $path.$formTemplate['template'].$this->fileExt;
-                                    if(file_exists($activityFilePath)){
-                                         $activityData['template'] = file_get_contents($activityFilePath);
-                                     }
+                                if (isset($activity['form'])) {
+                                    $formTemplate = json_decode($activity['form'], true);
+                                    $activityFilePath = $path . $formTemplate['template'] . $this->fileExt;
+                                    if (file_exists($activityFilePath)) {
+                                        $activityData['template'] = file_get_contents($activityFilePath);
+                                    }
                                 }
                                 $activityData['entity_id'] = $entityId;
                                 $activityData['workflow_deployment_id'] = $workflowDeploymentId;
@@ -189,6 +193,7 @@ class WorkflowService extends AbstractService
         }
         return $deployedData ? $deployedData : 0;
     }
+
     public function saveWorkflow($appId, &$data)
     {
         if (isset($appId)) {
@@ -252,6 +257,12 @@ class WorkflowService extends AbstractService
         return $count;
     }
 
+
+    /**
+     * Create Fomr Field Entry
+     * @param array $data Array of elements as shown
+     * ! Deprecated - This private function is not being called in this Class, we need to remove this
+     */
     private function createFormFieldEntry($formId, $fieldId)
     {
         $this->beginTransaction();
