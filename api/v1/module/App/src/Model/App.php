@@ -3,7 +3,6 @@
 namespace App\Model;
 
 use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
 
 class App extends Entity
 {
@@ -19,12 +18,12 @@ class App extends Entity
     const MY_APP = 2;
 
     protected $data = array(
-        'id' => 0,
+        'id' => null,
         'name' => null,
         'uuid' => 0,
         'description' => null,
         'type' => null,
-        'isdefault' => null,
+        'isdefault' => 0,
         'logo' => "default_app.png",
         'category' => null,
         'date_created' => null,
@@ -32,12 +31,12 @@ class App extends Entity
         'created_by' => null,
         'modified_by' => null,
         'status' => 1,
-        'start_options' => null
+        'start_options' => null,
     );
-    
+
     public function validate()
     {
-        $dataArray = array("name", "type", "category","uuid","date_created","created_by","status");
+        $dataArray = array("name", "type", "category", "uuid", "date_created", "created_by", "status");
         $this->validateWithParams($dataArray);
     }
 }

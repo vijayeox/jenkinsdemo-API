@@ -4,7 +4,6 @@
  */
 namespace Alert\Controller;
 
-use Zend\Log\Logger;
 use Alert\Model\AlertTable;
 use Alert\Model\Alert;
 use Alert\Service\AlertService;
@@ -22,9 +21,9 @@ class AlertController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(AlertTable $table, AlertService $alertService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(AlertTable $table, AlertService $alertService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Alert::class);
+        parent::__construct($table, Alert::class);
         $this->setIdentifierName('alertId');
         $this->alertService = $alertService;
     }

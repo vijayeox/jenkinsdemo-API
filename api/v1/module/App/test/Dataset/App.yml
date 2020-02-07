@@ -1,0 +1,17 @@
+ox_app:
+    - id: 100
+      name: "SampleApp"
+      uuid: "debf3d35-a0ee-49d3-a8ac-8e480be9dac7"
+      category: "OTHERS"
+      type: 2
+      status: 1
+    - id: 200
+      name: "ox_client_app"
+      uuid: "8765765"
+      category: "OTHERS"
+      type: 2
+      status: 1
+
+ox_app_registry:
+    - org_id: 1
+      app_id: 100

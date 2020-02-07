@@ -5,17 +5,15 @@
 
 namespace Announcement\Controller;
 
-use Zend\Log\Logger;
-use Announcement\Model\AnnouncementTable;
 use Announcement\Model\Announcement;
+use Announcement\Model\AnnouncementTable;
 use Announcement\Service\AnnouncementService;
-use Zend\Db\Adapter\AdapterInterface;
-use Oxzion\Controller\AbstractApiController;
-use Oxzion\ValidationException;
-use Zend\InputFilter\Input;
 use Oxzion\AccessDeniedException;
+use Oxzion\Controller\AbstractApiController;
 use Oxzion\ServiceException;
-
+use Oxzion\ValidationException;
+use Zend\Db\Adapter\AdapterInterface;
+use Exception;
 
 /**
  * Announcement Controller
@@ -23,185 +21,195 @@ use Oxzion\ServiceException;
 class AnnouncementController extends AbstractApiController
 {
     /**
-    * @var AnnouncementService Instance of Announcement Service
-    */
+     * @var AnnouncementService Instance of Announcement Service
+     */
     private $announcementService;
     /**
-    * @ignore __construct
-    */
-    public function __construct(AnnouncementTable $table, AnnouncementService $announcementService, Logger $log, AdapterInterface $dbAdapter)
+     * @ignore __construct
+     */
+    public function __construct(AnnouncementTable $table, AnnouncementService $announcementService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Announcement::class);
+        parent::__construct($table, Announcement::class);
         $this->setIdentifierName('announcementId');
         $this->announcementService = $announcementService;
+        $this->log = $this->getLogger();
     }
     /**
-    * Create Announcement API
-    * @api
-    * @link /announcement
-    * @method POST
-    * @param array $data Array of elements as shown</br>
-    * <code> name : string,
-    *        status : string,
-    *        description : string,
-    *        start_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss),
-    *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
-    *        media_type : string,
-    *        media_location : string,
-    *        groups : [{'id' : integer}.....multiple*],
-    * </code>
-    * @return array Returns a JSON Response with Status Code and Created Announcement.</br>
-    * <code> status : "success|error",
-    *        data : array Created Announcement Object
-    * </code>
-    */
-    public function create($data) {
-        $params=$this->params()->fromRoute();
-       
-        try{
-            $count = $this->announcementService->createAnnouncement($data,$params);
-        }catch(ValidationException $e){
+     * Create Announcement API
+     * @api
+     * @link /announcement
+     * @method POST
+     * @param array $data Array of elements as shown</br>
+     * <code> name : string,
+     *        status : string,
+     *        description : string,
+     *        start_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss),
+     *        end_date : dateTime (ISO8601 format yyyy-mm-ddThh:mm:ss)
+     *        media_type : string,
+     *        media_location : string,
+     *        groups : [{'id' : integer}.....multiple*],
+     * </code>
+     * @return array Returns a JSON Response with Status Code and Created Announcement.</br>
+     * <code> status : "success|error",
+     *        data : array Created Announcement Object
+     * </code>
+     */
+    public function create($data)
+    {
+        $params = $this->params()->fromRoute();
+        $this->log->info(__CLASS__ . "-> \nCreate announcement - " . print_r($data, true) . "Parameters - " . print_r($params, true));
+        try {
+            $count = $this->announcementService->createAnnouncement($data, $params);
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
+        } catch (Exception $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
         }
-        catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),404);
-        }
-        return $this->getSuccessResponseWithData($data,201);
+        return $this->getSuccessResponseWithData($data, 201);
     }
     /**
-    * GET List Announcement API
-    * @api
-    * @link /announcement
-    * @method GET
-    * @return array $dataget list of Announcements by User
-    * <code>
-    * {
-    *  string name,
-    *  string status,
-    *  string description,
-    *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
-    *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
-    *  string media_type,
-    *  string media_location,
-    *  groups : [{'id' : integer}.....multiple]
-    * }
-    * </code>
-    */
+     * GET List Announcement API
+     * @api
+     * @link /announcement
+     * @method GET
+     * @return array $dataget list of Announcements by User
+     * <code>
+     * {
+     *  string name,
+     *  string status,
+     *  string description,
+     *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
+     *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
+     *  string media_type,
+     *  string media_location,
+     *  groups : [{'id' : integer}.....multiple]
+     * }
+     * </code>
+     */
     public function getList()
     {
         $params = $this->params()->fromRoute();
-        try{
-             $result = $this->announcementService->getAnnouncements($params);
-        }
-        catch (AccessDeniedException $e) {
+        $this->log->info(__CLASS__ . "-> Get announcement list- " . print_r($params, true));
+        try {
+            $result = $this->announcementService->getAnnouncements($params);
+        } catch (AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(), 403);
         }
         return $this->getSuccessResponseWithData($result);
     }
+
     /**
-    * Update Announcement API
-    * @api
-    * @link /announcement[/:announcementId]
-    * @method PUT
-    * @param array $id ID of Announcement to update
-    * @param array $data
-    * <code>
-    * {
-    *  integer id,
-    *  string name,
-    *  string status,
-    *  string description,
-    *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
-    *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
-    *  string media_type,
-    *  string media_location,
-    *  groups : [{'id' : integer}.....multiple]
-    * }
-    * </code>
-    * @return array Returns a JSON Response with Status Code and Created Announcement.
-    */
-    public function update($id, $data) {
-        try{
-            $params = $this->params()->fromRoute();
-            $orgId = isset($params['orgId']) ? $params['orgId'] : NULL; 
-            $count = $this->announcementService->updateAnnouncement($id,$data,$orgId);
-        }catch(ValidationException $e){
+     * Update Announcement API
+     * @api
+     * @link /announcement[/:announcementId]
+     * @method PUT
+     * @param array $id ID of Announcement to update
+     * @param array $data
+     * <code>
+     * {
+     *  integer id,
+     *  string name,
+     *  string status,
+     *  string description,
+     *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
+     *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
+     *  string media_type,
+     *  string media_location,
+     *  groups : [{'id' : integer}.....multiple]
+     * }
+     * </code>
+     * @return array Returns a JSON Response with Status Code and Created Announcement.
+     */
+    public function update($id, $data)
+    {
+        $params = $this->params()->fromRoute();
+        $this->log->info(__CLASS__ . "-> \nUpdate announcement - " . print_r($data, true) . "Parameters - " . print_r($params, true));
+        try {
+            $orgId = isset($params['orgId']) ? $params['orgId'] : null;
+            $count = $this->announcementService->updateAnnouncement($id, $data, $orgId);
+        } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
-            return $this->getErrorResponse("Validation Errors",404, $response);
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
+        } catch (Exception $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
         }
-         catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),404);
-        }
-        return $this->getSuccessResponseWithData($data,200);
+        return $this->getSuccessResponseWithData($data, 200);
     }
     /**
-    * Delete Announcement API
-    * @api
-    * @link /announcement[/:announcementId]
-    * @method DELETE
-    * @param $id ID of Announcement to Delete
-    * @return array success|failure response
-    */
-    public function delete($id) {
-        try{
-            $params = $this->params()->fromRoute();
-            $response = $this->announcementService->deleteAnnouncement($id,$params);
-        }
-        catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),404);
+     * Delete Announcement API
+     * @api
+     * @link /announcement[/:announcementId]
+     * @method DELETE
+     * @param $id ID of Announcement to Delete
+     * @return array success|failure response
+     */
+    public function delete($id)
+    {
+        $params = $this->params()->fromRoute();
+        $this->log->info(__CLASS__ . "-> \nDelete announcement - " . print_r($id, true) . "Parameters - " . print_r($params, true));
+        try {
+            $response = $this->announcementService->deleteAnnouncement($id, $params);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
         }
         return $this->getSuccessResponse();
     }
     /**
-    * GET Announcement API
-    * @api
-    * @link /announcement[/:announcementId]
-    * @method GET
-    * @param $id ID of Announcement to Delete
-    * @return array $data
-    * <code>
-    * {
-    *  integer id,
-    *  string name,
-    *  integer org_id,
-    *  string status,
-    *  string description,
-    *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
-    *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
-    *  string media_type,
-    *  string media_location
-    * }
-    * </code>
-    * @return array Returns a JSON Response with Status Code and Created Announcement.
-    */
+     * GET Announcement API
+     * @api
+     * @link /announcement[/:announcementId]
+     * @method GET
+     * @param $id ID of Announcement to Delete
+     * @return array $data
+     * <code>
+     * {
+     *  integer id,
+     *  string name,
+     *  integer org_id,
+     *  string status,
+     *  string description,
+     *  dateTime start_date (ISO8601 format yyyy-mm-ddThh:mm:ss),
+     *  dateTime end_date (ISO8601 format yyyy-mm-ddThh:mm:ss)
+     *  string media_type,
+     *  string media_location
+     * }
+     * </code>
+     * @return array Returns a JSON Response with Status Code and Created Announcement.
+     */
     public function get($id)
     {
         $params = $this->params()->fromRoute();
-        try{
-            $result = $this->announcementService->getAnnouncement($id,$params);
-        }
-        catch (AccessDeniedException $e) {
+        $this->log->info(__CLASS__ . "-> \nGet announcement - " . print_r($id, true) . "Parameters - " . print_r($params, true));
+        try {
+            $result = $this->announcementService->getAnnouncement($id, $params);
+        } catch (AccessDeniedException $e) {
+            $this->logger->error('Error occured during get announcement for ID - ' . print_r($id, true));
             return $this->getErrorResponse($e->getMessage(), 403);
         }
         return $this->getSuccessResponseWithData($result);
     }
     /**
-    * GET List of All Announcement API
-    * @api
-    * @link /announcement
-    * @method GET
-    * @return array $dataget list of Announcements
-    */
+     * GET List of All Announcement API
+     * @api
+     * @link /announcement
+     * @method GET
+     * @return array $dataget list of Announcements
+     */
     public function announcementListAction()
     {
         $filterParams = $this->params()->fromQuery();
         $params = $this->params()->fromRoute();
-        try{
-             $result = $this->announcementService->getAnnouncementsList($filterParams,$params); 
-        }
-        catch (AccessDeniedException $e) {
+        try {
+            $result = $this->announcementService->getAnnouncementsList($filterParams, $params);
+        } catch (AccessDeniedException $e) {
             return $this->getErrorResponse($e->getMessage(), 403);
+        } catch (Exception $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
         }
         return $this->getSuccessResponseDataWithPagination($result['data'], $result['total']);
     }
@@ -210,14 +218,13 @@ class AnnouncementController extends AbstractApiController
     {
         $params = $this->params()->fromRoute();
         $data = $this->extractPostData();
-        try{
-            $count = $this->announcementService->saveGroup($params,$data);
+        try {
+            $count = $this->announcementService->saveGroup($params, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        catch(ServiceException $e){
-            return $this->getErrorResponse($e->getMessage(),404);
+        } catch (ServiceException $e) {
+            return $this->getErrorResponse($e->getMessage(), 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }

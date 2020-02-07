@@ -1,0 +1,15 @@
+ox_error_log:
+-
+    id: 1
+    error_type: 'amqp'
+    error_trace: "Unable to connect to MQ"
+    payload: '{"to":"testhub07@gmail.com","subject":"Your login details for OX Zion!!","body":"Your Login details are here"}'
+    date_created: 2019-11-11 12:30:44
+    params: "{\"queue\":\"mail\"}"
+-
+    id: 2
+    error_type: 'form'
+    error_trace: 'Curl Error 28'
+    payload: '{"cache_id":"1","app_id":"d77ea120-b028-479b-8c6e-60476b6a4456"}'
+    date_created: 2019-11-11 12:30:44
+    params: "{}"

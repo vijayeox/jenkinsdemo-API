@@ -58,7 +58,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\AlertController(
                         $container->get(Model\AlertTable::class),
                         $container->get(Service\AlertService::class),
-                        $container->get('AlertLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

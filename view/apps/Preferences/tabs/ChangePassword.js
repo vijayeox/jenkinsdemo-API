@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import Notification from "../components/Notification";
+import Notification from "OxzionGUI/Notification"
+import { Form, InputGroup, Button, Col, Row } from 'react-bootstrap'
+import { Tooltip } from 'reactstrap'
 
 class ChangePassword extends Component {
   constructor(props) {
@@ -9,6 +11,12 @@ class ChangePassword extends Component {
       type: "password",
       type1: "password",
       type2: "password",
+      tooltipOpen: false,
+      pass_length: "black",
+      pass_lowcase: "black",
+      pass_upcase: "black",
+      pass_num: "black",
+      pass_spl: "black",
       fields: {},
       errors: {}
     };
@@ -31,13 +39,39 @@ class ChangePassword extends Component {
     );
     return response;
   }
+  valid_pass() {
+    if (this.state.pass_length === "green" && this.state.pass_num === "green" && this.state.pass_lowcase === "green" && this.state.pass_upcase === "green" && this.state.pass_spl === "green") {
+      
+      let errors={}
+      errors["new_password"]=""
+      this.setState({ tooltipOpen: false,errors:errors })
 
+    }
+    else {
+      this.setState({ tooltipOpen: true })
+    }
+  }
   handleChange(e) {
     let fields = this.state.fields;
     fields[e.target.name] = e.target.value;
     this.setState({
       fields
     });
+    //tool tip functionality
+    if (e.target.name === "new_password") {
+
+      (fields["new_password"].length < 8) ? this.setState({ pass_length: "red" }, () => { this.valid_pass() }) : this.setState({ pass_length: "green" }, () => { this.valid_pass() })
+      var re = /[0-9]/;
+      !re.test(fields["new_password"]) ? this.setState({ pass_num: "red" }, () => { this.valid_pass() }) : this.setState({ pass_num: "green" }, () => { this.valid_pass() })
+      re = /[a-z]/;
+      !re.test(fields["new_password"]) ? this.setState({ pass_lowcase: "red" }, () => { this.valid_pass() }) : this.setState({ pass_lowcase: "green" }, () => { this.valid_pass() })
+      re = /[A-Z]/;
+      !re.test(fields["new_password"]) ? this.setState({ pass_upcase: "red" }, () => { this.valid_pass() }) : this.setState({ pass_upcase: "green" }, () => { this.valid_pass() })
+      re = /[$ & + , : ; = ? @ # | ' < > . - ^ * ( ) % !]/;
+      !re.test(fields["new_password"]) ? this.setState({ pass_spl: "red" }, () => { this.valid_pass() }) : this.setState({ pass_spl: "green" }, () => { this.valid_pass() })
+
+
+    }
   }
 
   handleSubmit(event) {
@@ -50,11 +84,27 @@ class ChangePassword extends Component {
 
       this.changePassword(formData).then(response => {
         if (response.status == "error") {
-          this.notif.current.failNotification(response.message);
+          this.notif.current.notify(
+            "Error",
+            response.message,
+            "danger"
+          )
         } else {
-          this.notif.current.successNotification(
-            "Password updated successfully."
-          );
+          this.notif.current.notify(
+            "Success",
+            "Password updated successfully.",
+            "success"
+            )
+          let fields = this.state.fields;
+          fields['old_password'] = '';
+          fields['new_password'] = '';
+          fields['confirm_password'] = '';
+          this.setState({
+            fields
+          });
+          for(var i=0; i<document.getElementsByClassName("passwordField").length; i++){
+            document.getElementsByClassName("passwordField")[i].value = '';
+          }
         }
       });
     }
@@ -63,7 +113,8 @@ class ChangePassword extends Component {
     e.preventDefault();
     e.stopPropagation();
     this.setState({
-      type: this.state.type === "text" ? "password" : "text"
+      type: this.state.type === "text" ? "password" : "text",
+      showPassText: this.state.showPassText === "Show" ? "Hide" : "Show"
     });
   }
   showHide1(e) {
@@ -79,6 +130,10 @@ class ChangePassword extends Component {
     this.setState({
       type2: this.state.type2 === "text" ? "password" : "text"
     });
+  }
+
+  toggleToolTip(bool_value) {
+    this.setState({ tooltipOpen: bool_value })
   }
 
   validateForm() {
@@ -144,100 +199,89 @@ class ChangePassword extends Component {
     return formIsValid;
   }
 
-  init() {}
+  init() { }
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <Form onSubmit={this.handleSubmit} className="confirm-password-form preferenceForm">
         <Notification ref={this.notif} />
-        <div className="form">
           <div className="row">
-            <div className="col s12">
-              <div className="password input-field">
-                <label className="mandatory">Old Password</label>
-                <input
-                  type={this.state.type}
-                  name="old_password"
-                  onChange={this.handleChange}
-                />
-                <span
-                  style={{ height: "25px" }}
-                  className="password__show"
-                  onClick={this.showHide}
-                >
-                  {this.state.type === "text" ? "Hide" : "Show"}
-                </span>
-                <div className="errorMsg">{this.state.errors.old_password}</div>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col s12">
-              <div className="password input-field">
-                <label className="mandatory">New Password</label>
-                <input
-                  type={this.state.type1}
-                  name="new_password"
-                  onChange={this.handleChange}
-                />
-                <span
-                  style={{ height: "25px" }}
-                  className="password__show"
-                  onClick={this.showHide1}
-                >
-                  {this.state.type1 === "text" ? "Hide" : "Show"}
-                </span>
-                <div className="errorMsg">{this.state.errors.new_password}</div>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col s12">
-              <div className="password input-field">
-                <label className="mandatory">Confirm Password</label>
-                <input
-                  type={this.state.type2}
-                  name="confirm_password"
-                  onChange={this.handleChange}
-                />
+          <div className="col-md-12">
+        <Form.Group>
+          <Form.Label>Old Password</Form.Label>
+          <InputGroup>
+            <Form.Control
+              type={this.state.type}
+              name="old_password"
+              className="passwordField"
+              onChange={this.handleChange}
+            />
+            <InputGroup.Append>
+              <Button className="preferenceForm-showbtn" onClick={this.showHide}>{this.state.type === "text" ? "Hide" : "Show"}</Button>
+            </InputGroup.Append>
+          </InputGroup>
+          <Form.Text className="text-muted errorMsg">
+            {this.state.errors.old_password}
+          </Form.Text>
+        </Form.Group>
+      </div>
+      </div>
 
-                <span
-                  style={{ height: "25px" }}
-                  className="password__show"
-                  onClick={this.showHide2}
-                >
-                  {this.state.type2 === "text" ? "Hide" : "Show"}
-                </span>
-                <div className="errorMsg">
-                  {this.state.errors.confirm_password}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row" id="info">
-            <div className="col s2 input-field">
-              <button className="k-button k-primary" type="submit">
-                Submit
-              </button>
-            </div>
-            <div className="input-field col s2 click-to-top">
-              <i className="material-icons">info_outline</i>
-              <span className="infoDiv">
-                Password must contain:
-                <br />
-                at least 8 characters
-                <br />
-                at least one number (0-9)
-                <br />
-                at least one lowercase letter (a-z)
-                <br />
-                at least one uppercase letter (A-Z)
-                <br />
-                at least one Special Character($&+,:;=?@#|'>.-^*()%!)
-              </span>
-            </div>
-          </div>
+          <div className="row">
+          <div className="col-md-12">
+        <Form.Group>
+          <Form.Label>New Password</Form.Label>
+          <InputGroup>
+            <Form.Control
+              type={this.state.type1}
+              name="new_password"
+              onClick={() => this.toggleToolTip(this.state.tooltipOpen)}
+              onChange={this.handleChange}
+              id="newPassword"
+              className="passwordField"
+              onBlur={() => this.toggleToolTip(false)}
+            />
+            <InputGroup.Append>
+              <Button className="preferenceForm-showbtn" onClick={this.showHide1}>{this.state.type1 === "text" ? "Hide" : "Show"}</Button>
+            </InputGroup.Append>
+          </InputGroup>
+          <Tooltip target="newPassword" isOpen={this.state.tooltipOpen} placement="bottom-end" style={{ background: "rgb(231, 222, 234)", color: "black", fontSize: ".675rem", width: "200px" }}>
+            <Row style={{ marginLeft: "2px" }}>Password Must Contain</Row>
+            <Row style={{ color: this.state.pass_length, marginLeft: "2px" }} > at least 8 characters</Row>
+            <Row style={{ color: this.state.pass_num, marginLeft: "2px" }}> at least one number (0-9)</Row>
+            <Row style={{ color: this.state.pass_lowcase, marginLeft: "2px" }}> at least one lowercase letter (a-z)</Row>
+            <Row style={{ color: this.state.pass_upcase, marginLeft: "2px" }}> at least one uppercase letter (A-Z)</Row>
+            <Row style={{ color: this.state.pass_spl, marginLeft: "2px" }}>at least one special character</Row>
+          </Tooltip>
+          <Form.Text className="text-muted errorMsg">
+            {this.state.errors.new_password}
+          </Form.Text>
+        </Form.Group>
         </div>
-      </form>
+        </div>
+
+          <div className="row">
+          <div className="col-md-12">
+        <Form.Group>
+          <Form.Label>Confirm Password</Form.Label>
+          <InputGroup>
+            <Form.Control
+              type={this.state.type2}
+              name="confirm_password"
+              className="passwordField"
+              onChange={this.handleChange}
+            />
+            <InputGroup.Append>
+              <Button className="preferenceForm-showbtn" onClick={this.showHide2}>{this.state.type2 === "text" ? "Hide" : "Show"}</Button>
+            </InputGroup.Append>
+          </InputGroup>
+          <Form.Text className="text-muted errorMsg">
+            {this.state.errors.confirm_password}
+          </Form.Text>
+            </Form.Group>
+      </div>
+      </div>
+        <Button type="submit" className="pull-right preferenceForm-btn">Save</Button>
+      </Form>
     );
   }
 }

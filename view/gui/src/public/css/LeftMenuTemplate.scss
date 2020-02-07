@@ -1,0 +1,20 @@
+.sidenav---sidenav---_2tBP{
+	position:relative;
+    background: #275362;
+
+}
+.LeftMenuTemplate{
+	height: 100%;
+	overflow: auto;
+	display:flex;
+	flex-direction: row;
+}
+.PageRender{
+	padding: 0px 20px;
+    height: 100%;
+    width: 100%;
+    overflow: scroll;
+}
+.AppBuilderPage{
+	height: -webkit-fill-available;
+}

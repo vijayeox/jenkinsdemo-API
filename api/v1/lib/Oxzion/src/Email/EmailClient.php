@@ -1,24 +1,22 @@
 <?php
 namespace Oxzion\Email;
 
-use Horde_Mail_Rfc822_List;
+use DOMXPath;
+use Horde_Domhtml;
 use Horde_Exception;
-use Horde_Mime_Headers;
-use Horde_Mime_Headers_Date;
-use Horde_Mime_Headers_MessageId;
-use Horde_Mime_Mdn;
-use Horde_Text_Filter;
-use Horde_Mime_Part;
-use Horde_Text_Flowed;
-use Horde_Mime_Magic;
-use Horde_Mime_Headers_ContentParam;
-use Horde_Url_Data;
-use Horde_Mail_Transport_Smtphorde;
-use Horde_Mime_Headers_UserAgent;
 use Horde_Injector;
 use Horde_Injector_TopLevel;
-use Horde_Domhtml;
-use DOMXPath;
+use Horde_Mail_Rfc822_List;
+use Horde_Mail_Transport_Smtphorde;
+use Horde_Mime_Headers;
+use Horde_Mime_Headers_ContentParam;
+use Horde_Mime_Headers_Date;
+use Horde_Mime_Headers_MessageId;
+use Horde_Mime_Headers_UserAgent;
+use Horde_Mime_Magic;
+use Horde_Mime_Part;
+use Horde_Text_Filter;
+use Horde_Url_Data;
 
 class EmailClient
 {
@@ -26,13 +24,13 @@ class EmailClient
      * Builds and sends a MIME message.
      *
      * @param string $body                  The message body.
-     * @param array attDetails			    array of items with following properties
-     * 	- file :  Temporary file containing attachment contents
+     * @param array attDetails                array of items with following properties
+     *     - file :  Temporary file containing attachment contents
      *  - bytes : Size of data, in bytes.
      *  - filename : Filename of data
      *  - type : Mime type of data
      * @param array $header                 List of message headers.
-     * @param array $smtpConfig				Config values for smtp
+     * @param array $smtpConfig                Config values for smtp
      *     - host: [*] (string) SMTP server host.
      *     - password: (string) Password to use for SMTP server authentication.
      *     - port: [*] (integer) SMTP server port.
@@ -46,7 +44,7 @@ class EmailClient
      *                 - 'tlsv1' (TLS direct version 1.x connection to server)
      *                 - true (Use TLS, if available)
      *     - username: (string) Username to use for SMTP server authentication.
-     *		- token: (string) If set, will authenticate via the XOAUTH2
+     *        - token: (string) If set, will authenticate via the XOAUTH2
      * @param array $opts                   An array of options w/the
      *                                      following keys:
      *  - html: (boolean) Whether this is an HTML message.
@@ -56,17 +54,17 @@ class EmailClient
      *  - sent_mail: The sent-mail mailbox name (UTF-8). DEFAULT 'sent'
      *  - strip_attachments: (bool) Strip attachments from the message?
      *  - useragent: (string) The User-Agent string to use.
-      *
+     *
      * @throws Horde_Exception
      * @throws MailException
      */
-    public function buildAndSendMessage($body, $attDetails, $header, $smtpConfig, array $opts = array(), $draftid=null)
+    public function buildAndSendMessage($body, $attDetails, $header, $smtpConfig, array $opts = array(), $draftid = null)
     {
         /* Set up defaults. */
         $opts = array_merge(array(
-                'save_sent' => true,
-                'sent_mail' => 'sent'
-            ), $opts);
+            'save_sent' => true,
+            'sent_mail' => 'sent',
+        ), $opts);
         /* We need at least one recipient. */
         $recip = $this->recipientList($header);
         if (!count($recip['list'])) {
@@ -80,16 +78,16 @@ class EmailClient
         $headers = $this->_prepareHeaders($header, $opts);
         /* Add the 'User-Agent' header. */
         $headers->addHeaderOb(new Horde_Mime_Headers_UserAgent(
-                null,
-                empty($opts['useragent'])
-                ? 'Oxzion Email Client'
-                : $opts['useragent']
-            ));
+            null,
+            empty($opts['useragent'])
+            ? 'Oxzion Email Client'
+            : $opts['useragent']
+        ));
 
         $message = $this->_createMimeMessage($body, $attDetails, array(
-                'html' => !empty($opts['html']),
-                'recip' => $recip['list'],
-            ));
+            'html' => !empty($opts['html']),
+            'recip' => $recip['list'],
+        ));
 
         /* Send the messages out now. */
         $this->sendMessage($recip['list'], $headers, $message, $smtpConfig);
@@ -103,7 +101,7 @@ class EmailClient
      *                                       headers.
      * @param Horde_Mime_Part $message       The object that contains the text
      *                                       to send.
-     * @param array $smtpConfig				Config values for smtp
+     * @param array $smtpConfig                Config values for smtp
      *     - host: [*] (string) SMTP server host.
      *     - password: (string) Password to use for SMTP server authentication.
      *     - port: [*] (integer) SMTP server port.
@@ -121,16 +119,16 @@ class EmailClient
      * @throws MailException
      */
     public function sendMessage(
-            Horde_Mail_Rfc822_List $email,
-            Horde_Mime_Headers $headers,
-            Horde_Mime_Part $message,
-            $smtpConfig
-        ) {
+        Horde_Mail_Rfc822_List $email,
+        Horde_Mime_Headers $headers,
+        Horde_Mime_Part $message,
+        $smtpConfig
+    ) {
         $smtpConfig = array_merge(
-                array('timeout' => 30,
-                'debug' => __DIR__.'/../../../../logs/smtp.log'),
-                $smtpConfig
-            );
+            array('timeout' => 30,
+                'debug' => __DIR__ . '/../../../../logs/smtp.log'),
+            $smtpConfig
+        );
         if ($smtpConfig['secure'] == 2) {
             $smtpConfig['secure'] = true;
         } elseif ($smtpConfig['secure'] == 1) {
@@ -157,7 +155,7 @@ class EmailClient
      *
      * @param string $body                Message body.
      * @param array attDetails
-     * 	- file :  Temporary file containing attachment contents
+     *     - file :  Temporary file containing attachment contents
      *  - bytes : Size of data, in bytes.
      *  - filename : Filename of data
      *  - type : Mime type of data
@@ -180,22 +178,22 @@ class EmailClient
             $tfilter = new Horde_Text_Filter(new Horde_Injector(new Horde_Injector_TopLevel()));
 
             $body_html = $tfilter->filter(
-                        $body,
-                        'Xss',
-                        array(
-                            'return_dom' => true,
-                            'strip_style_attributes' => false
-                            )
-                    );
+                $body,
+                'Xss',
+                array(
+                    'return_dom' => true,
+                    'strip_style_attributes' => false,
+                )
+            );
             $body_html_body = $body_html->getBody();
 
             $body = $tfilter->filter(
-                        $body_html->returnHtml(),
-                        'Html2text',
-                        array(
-                            'width' => 0
-                            )
-                    );
+                $body_html->returnHtml(),
+                'Html2text',
+                array(
+                    'width' => 0,
+                )
+            );
         }
 
         /* Set up the body part now. */
@@ -227,28 +225,28 @@ class EmailClient
              * this is the case. Exception: if text representation is empty,
              * just send HTML part. */
             // if (strlen(trim($text_contents))) {
-            // 	$textpart = new Horde_Mime_Part();
-            // 	$textpart->setType('multipart/alternative');
-            // 	$textpart[] = $textBody;
-            // 	$textpart[] = $to_add;
-            // 	$textpart->setHeaderCharset('utf-8');
-            // 	$textBody->setDescription("Plaintext Message");
+            //     $textpart = new Horde_Mime_Part();
+            //     $textpart->setType('multipart/alternative');
+            //     $textpart[] = $textBody;
+            //     $textpart[] = $to_add;
+            //     $textpart->setHeaderCharset('utf-8');
+            //     $textBody->setDescription("Plaintext Message");
             // } else {
             $textpart = $to_add;
             // }
 
             $htmlBody->setContents(
-                    $tfilter->filter(
-                        $body_html->returnHtml(array(
-                            'charset' => 'utf-8',
-                            'metacharset' => true
-                            )),
-                        'Cleanhtml',
-                        array(
-                            'charset' => 'utf-8'
-                            )
+                $tfilter->filter(
+                    $body_html->returnHtml(array(
+                        'charset' => 'utf-8',
+                        'metacharset' => true,
+                    )),
+                    'Cleanhtml',
+                    array(
+                        'charset' => 'utf-8',
                     )
-                );
+                )
+            );
             $base = $textpart;
         } else {
             $base = $textpart = $textBody;
@@ -335,17 +333,17 @@ class EmailClient
         }
         $apart->setType($type);
         if (($apart->getType() == 'application/octet-stream') ||
-                ($apart->getPrimaryType() == 'text')) {
+            ($apart->getPrimaryType() == 'text')) {
             $analyze = Horde_Mime_Magic::analyzeFile($atc_file, null, array(
-                    'nostrip' => true
-                    ));
+                'nostrip' => true,
+            ));
             $apart->setCharset('UTF-8');
 
             if ($analyze) {
                 $ctype = new Horde_Mime_Headers_ContentParam(
-                        'Content-Type',
-                        $analyze
-                    );
+                    'Content-Type',
+                    $analyze
+                );
                 $apart->setType($ctype->value);
                 if (isset($ctype->params['charset'])) {
                     $apart->setCharset($ctype->params['charset']);
@@ -393,10 +391,10 @@ class EmailClient
         }
 
         return array(
-                'has_input' => $has_input,
-                'header' => $header,
-                'list' => $addrlist
-                );
+            'has_input' => $has_input,
+            'header' => $header,
+            'list' => $addrlist,
+        );
     }
 
     /**
@@ -419,18 +417,18 @@ class EmailClient
         $ob->addHeaderOb(Horde_Mime_Headers_MessageId::create());
 
         $hdrs = array(
-                'From' => 'from',
-                'To' => 'to',
-                'Cc' => 'cc',
-                'Bcc' => 'bcc',
-                'In-Reply-To' => 'in_reply_to',
-                'References' => 'conversation_id',
-                'Subject' => 'subject'
-                );
+            'From' => 'from',
+            'To' => 'to',
+            'Cc' => 'cc',
+            'Bcc' => 'bcc',
+            'In-Reply-To' => 'in_reply_to',
+            'References' => 'conversation_id',
+            'Subject' => 'subject',
+        );
         foreach ($hdrs as $key => $val) {
             if (isset($headers[$val]) && (is_object($headers[$val]) || strlen($headers[$val]))) {
-                if ($key=='In-Reply-To'||$key=='References') {
-                    $ob->addHeader($key, "<".$headers[$val].">");
+                if ($key == 'In-Reply-To' || $key == 'References') {
+                    $ob->addHeader($key, "<" . $headers[$val] . ">");
                 } else {
                     $ob->addHeader($key, $headers[$val]);
                 }
@@ -443,23 +441,23 @@ class EmailClient
         /* Add Reply-To header. Done after pre_sent hook since from address
          * could be change by hook and/or Reply-To was set by hook. */
         if (!empty($headers['replyto']) &&
-                ($headers['replyto'] != $from->bare_address) &&
-                !isset($ob['reply-to'])) {
+            ($headers['replyto'] != $from->bare_address) &&
+            !isset($ob['reply-to'])) {
             $ob->addHeader('Reply-To', $headers['replyto']);
         }
         /* Add priority header, if requested. */
         if (!empty($opts['priority'])) {
             switch ($opts['priority']) {
-                    case 'high':
+                case 'high':
                     $ob->addHeader('Importance', 'High');
                     $ob->addHeader('X-Priority', '1 (Highest)');
                     break;
 
-                    case 'low':
+                case 'low':
                     $ob->addHeader('Importance', 'Low');
                     $ob->addHeader('X-Priority', '5 (Lowest)');
                     break;
-                }
+            }
         }
 
         return $ob;
@@ -467,7 +465,7 @@ class EmailClient
 
     private function getOAuth64($email, $accessToken)
     {
-        return base64_encode("user=".$email."\001auth=Bearer ".$accessToken. "\001\001");
+        return base64_encode("user=" . $email . "\001auth=Bearer " . $accessToken . "\001\001");
     }
     private function getsmtpTransport($smtpConfig)
     {

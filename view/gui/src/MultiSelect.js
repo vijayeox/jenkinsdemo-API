@@ -1,5 +1,4 @@
 import React from "react";
-import { ExcludeUsers, ExistingUsers } from "./components/MultiSelect/Requests";
 import { MultiSelect as MSelect } from "@progress/kendo-react-dropdowns";
 import Notification from "./Notification";
 import { Dialog, DialogActionsBar } from "@progress/kendo-react-dialogs";
@@ -16,10 +15,45 @@ class MultiSelect extends React.Component {
       selectedUsers: [],
       filterValue: false
     };
+    this.helper = this.core.make("oxzion/restClient");
     this.notif = React.createRef();
     this.handleChange = this.handleChange.bind(this);
     this.getMainList = this.getMainList.bind(this);
   }
+  async ExcludeUsers(api, excludeList, term, size) {
+  if (term) {
+    var query = {
+      filter: {
+        logic: "and",
+        filters: [{ field: "name", operator: "contains", value: term }]
+      },
+      skip: 0,
+      take: size
+    };
+  } else {
+    var query = {
+      skip: 0,
+      take: size
+    };
+  }
+
+  let response = await this.helper.request(
+    "v1",
+    "/" + api,
+    { exclude: excludeList, filter: "[" + JSON.stringify(query) + "]" },
+    "post"
+  );
+  return response;
+}
+async ExistingUsers(api, selectedEntity) {
+  let response = await this.helper.request(
+    "v1",
+    "/" + api + "/" + selectedEntity + "/users",
+    {},
+    "get"
+  );
+  return response;
+}
 
   componentDidMount() {
     let loader = this.core.make("oxzion/splash");
@@ -32,7 +66,7 @@ class MultiSelect extends React.Component {
       let loader = this.core.make("oxzion/splash");
       loader.destroy();
     } else {
-      ExistingUsers(
+      this.ExistingUsers(
         this.props.config.subList,
         this.props.config.dataItem.uuid
       ).then(response => {
@@ -62,7 +96,7 @@ class MultiSelect extends React.Component {
     this.state.selectedUsers.map(dataItem => {
       excludeUsersList.push(dataItem.uuid);
     });
-    ExcludeUsers(
+    this.ExcludeUsers(
       this.props.config.mainList,
       excludeUsersList,
       query,
@@ -101,10 +135,11 @@ class MultiSelect extends React.Component {
 
   handleChange(e) {
     if (this.state.filterValue) {
-      this.notif.current.customSuccessNotification(
-        "Success",
-        e.target.value[e.target.value.length - 1].name + " Added"
-      );
+      // this.notif.current.notify(
+      //   "Success",
+      //   e.target.value[e.target.value.length - 1].name + " Added",
+      //   "success"
+      // )
       this.setState({
         selectedUsers: e.target.value
       });
@@ -115,7 +150,7 @@ class MultiSelect extends React.Component {
     const noData = (
       <h4 style={{ fontSize: "1em" }}>
         <span style={{ fontSize: "2.5em" }}>
-          <i className="fas fa-search"></i>
+          <i className="fa fa-search"></i>
         </span>
         <br />
         <br />
@@ -157,7 +192,7 @@ class MultiSelect extends React.Component {
             <h6 style={{ color: "white", paddingTop: "3px" }}>
               {this.props.config.title} &nbsp; -&nbsp;&nbsp;
               {this.props.config.dataItem.name}
-              &nbsp;&nbsp; <i className="fas fa-arrow-right"></i> &nbsp; Manage
+              &nbsp;&nbsp; <i className="fa fa-arrow-right"></i> &nbsp; Manage
               {" " + this.props.config.members}
             </h6>
           </nav>
@@ -174,7 +209,7 @@ class MultiSelect extends React.Component {
                 onFilterChange={this.filterChange}
                 onOpen={this.tagRender}
                 onClose={this.tagRender}
-                autoClose={false}
+                autoClose={true}
                 clearButton={false}
                 textField="name"
                 dataItemKey="uuid"

@@ -2,10 +2,10 @@
 
 APPS="apps"
 BOS="bos"
+GUI="gui"
 ICON_PACKS="iconpacks"
 THEMES="themes"
-GUI="gui"
-BUILD_GUI=false
+BUID_GUI=false
 BUILD_ICON_PACKS=false
 BUILD_THEMES=false
 BUILD_BOS=false
@@ -58,10 +58,10 @@ usage() {
 
 while [ "$1" != "" ]; do
     case $1 in
-        bos )           BUILD_BOS=true
+        gui )           BUILD_GUI=true
                         BUILD_ALL=false
                         ;;
-        gui )           BUILD_GUI=true
+        bos )           BUILD_BOS=true
                         BUILD_ALL=false
                         ;;
         iconpacks )     BUILD_ICON_PACKS=true
@@ -85,16 +85,16 @@ while [ "$1" != "" ]; do
     esac
     shift
 done
-
-if [ "$BUILD_GUI" = true ] || [ "$BUILD_ALL" = true ] ; then
-    build_project $GUI
-fi
+npm install
 if [ "$BUILD_APPS" = true ] || [ "$BUILD_ALL" = true ] ; then
     if [ ${#APPS_TO_BUILD[@]} -eq 0 ]; then
         build_projects $APPS
     else    
         build_projects $APPS "${APPS_TO_BUILD[@]}"
     fi
+fi
+if [ "$BUILD_GUI" = true ] || [ "$BUILD_ALL" = true ] ; then
+    build_project $GUI
 fi
 if [ "$BUILD_ICON_PACKS" = true ] || [ "$BUILD_ALL" = true ] ; then
     build_projects $ICON_PACKS

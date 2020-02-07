@@ -1,0 +1,438 @@
+{
+	"_id": "5e1568f91411ab41cbd81450",
+	"type": "form",
+	"tags": [],
+	"owner": "5ddfaa682859774314661851",
+	"components": [{
+		"autofocus": false,
+		"input": true,
+		"tableView": true,
+		"label": "Reason for Cancellation:",
+		"key": "csrCancellationReason",
+		"placeholder": "--Select one--",
+		"data": {
+			"values": [{
+				"value": "",
+				"label": ""
+			}],
+			"json": "",
+			"url": "",
+			"resource": "",
+			"custom": "var list = [{\"label\": \"Non-payment of Premium\",\"value\" : \"nonPaymentOfPremium\"},{\"label\": \"PADI Membership not current\",\"value\" : \"padiMembershipNotCurrent\"},{\"label\": \"Non-Sufficient Funds\",\"value\" : \"nonSufficientFunds\"},{\"label\": \"Others\",\"value\" : \"others\"}]\nif(data['product'] == 'Dive Boat'){\nlist.push({\"label\": \"Boat Sold\",\"value\" : \"boatSold\"})\n}\nif(data['product'] == 'Dive Store'){\nlist.push({\"label\": \"Store Sold\",\"value\" : \"storeSold\"})\n}\nconsole.log(list)\nvalues = list"
+		},
+		"dataSrc": "custom",
+		"valueProperty": "",
+		"defaultValue": "",
+		"refreshOn": "",
+		"filter": "",
+		"authenticate": false,
+		"template": "<span>{{ item.label }}</span>",
+		"multiple": false,
+		"protected": false,
+		"unique": false,
+		"persistent": true,
+		"hidden": false,
+		"clearOnHide": true,
+		"validate": {
+			"required": true
+		},
+		"type": "select",
+		"labelPosition": "top",
+		"tags": [],
+		"conditional": {
+			"show": "",
+			"when": null,
+			"eq": ""
+		},
+		"properties": {},
+		"lockKey": true,
+		"dataGridLabel": false,
+		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] != null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] ? true: false;\n}\nelse {\n  show = false;\n}"
+	}, {
+		"input": true,
+		"tableView": true,
+		"key": "reasonforCsrCancellation",
+		"label": "Reason for Cancellation",
+		"protected": false,
+		"unique": false,
+		"persistent": true,
+		"type": "hidden",
+		"tags": [],
+		"conditional": {
+			"show": "",
+			"when": "",
+			"eq": ""
+		},
+		"properties": {},
+		"lockKey": true,
+		"calculateValue": "value = data['csrCancellationReason'].value;",
+		"customDefaultValue": "value = data['csrCancellationReason'].value",
+		"isNew": false
+	}, {
+		"autofocus": false,
+		"input": true,
+		"tableView": true,
+		"inputType": "number",
+		"label": "Amount to be paid to Reinstate Policy:",
+		"key": "reinstateAmount",
+		"placeholder": "",
+		"prefix": "$",
+		"suffix": "",
+		"defaultValue": "",
+		"protected": false,
+		"persistent": true,
+		"hidden": false,
+		"clearOnHide": true,
+		"validate": {
+			"required": true,
+			"min": "",
+			"max": "",
+			"step": "any",
+			"integer": "",
+			"multiple": "",
+			"custom": ""
+		},
+		"type": "number",
+		"labelPosition": "left-left",
+		"tags": [],
+		"conditional": {
+			"show": "true",
+			"when": "reasonforCsrCancellation",
+			"eq": "padiMembershipNotCurrent"
+		},
+		"properties": {},
+		"lockKey": true,
+		"labelWidth": 30,
+		"labelMargin": 3,
+		"customConditional": "show = (data['reasonforCsrCancellation']=='nonSufficientFunds' || data['reasonforCsrCancellation']=='nonPaymentOfPremium')",
+		"decimalLimit": 2,
+		"delimiter": true,
+		"requireDecimal": false,
+		"isNew": false
+	}, {
+		"autofocus": false,
+		"input": true,
+		"tableView": true,
+		"label": "Others",
+		"key": "othersCsr",
+		"placeholder": "",
+		"prefix": "",
+		"suffix": "",
+		"rows": 3,
+		"multiple": false,
+		"defaultValue": "",
+		"protected": false,
+		"persistent": true,
+		"hidden": false,
+		"wysiwyg": false,
+		"clearOnHide": true,
+		"spellcheck": true,
+		"validate": {
+			"required": true,
+			"minLength": "",
+			"maxLength": "",
+			"pattern": "",
+			"custom": ""
+		},
+		"type": "textarea",
+		"labelPosition": "top",
+		"inputFormat": "plain",
+		"tags": [],
+		"conditional": {
+			"show": "true",
+			"when": "reasonforCsrCancellation",
+			"eq": "others"
+		},
+		"properties": {},
+		"lockKey": true,
+		"customConditional": "if (data.privileges){\n  show = (data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] != null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] && (data['reasonforCsrCancellation']=='others')) ? true: false;\n}\nelse{\n  show = false;\n}",
+		"customClass": "others"
+	}, {
+		"autofocus": false,
+		"input": true,
+		"tableView": true,
+		"inputType": "radio",
+		"label": "Cancellation Status:",
+		"key": "cancellationStatus",
+		"values": [{
+			"value": "approved",
+			"label": "Approved",
+			"shortcut": ""
+		}, {
+			"value": "notApproved",
+			"label": "Not Approved",
+			"shortcut": ""
+		}],
+		"defaultValue": "",
+		"protected": false,
+		"fieldSet": false,
+		"persistent": true,
+		"hidden": false,
+		"clearOnHide": true,
+		"validate": {
+			"required": true,
+			"custom": "",
+			"customPrivate": false
+		},
+		"type": "radio",
+		"labelPosition": "top",
+		"optionsLabelPosition": "right",
+		"tags": [],
+		"conditional": {
+			"show": "",
+			"when": null,
+			"eq": ""
+		},
+		"properties": {},
+		"inline": false,
+		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] != null && data.privileges['MANAGE_POLICY_APPROVAL_WRITE'] ? true: false;\n}\nelse{\n  show = false;\n}",
+		"labelWidth": 30,
+		"labelMargin": 3,
+		"lockKey": true
+	}, {
+		"autofocus": false,
+		"input": true,
+		"tableView": true,
+		"label": "Reason for Cancel Policy Not Approved:",
+		"key": "reasonforRejection",
+		"placeholder": "",
+		"prefix": "",
+		"suffix": "",
+		"rows": 3,
+		"multiple": false,
+		"defaultValue": "",
+		"protected": false,
+		"persistent": true,
+		"hidden": false,
+		"wysiwyg": false,
+		"clearOnHide": true,
+		"spellcheck": true,
+		"validate": {
+			"required": true,
+			"minLength": "",
+			"maxLength": "",
+			"pattern": "",
+			"custom": ""
+		},
+		"type": "textarea",
+		"labelPosition": "top",
+		"inputFormat": "plain",
+		"tags": [],
+		"conditional": {
+			"show": "true",
+			"when": "cancellationStatus",
+			"eq": "notApproved"
+		},
+		"properties": {},
+		"lockKey": true,
+		"isNew": false
+	}, {
+		"autofocus": false,
+		"input": true,
+		"tableView": true,
+		"label": "Reason for Cancellation",
+		"key": "userCancellationReason",
+		"placeholder": "",
+		"data": {
+			"values": [{
+				"value": "",
+				"label": ""
+			}],
+			"json": "",
+			"url": "",
+			"resource": "",
+			"custom": "var list = [{\"label\": \"PADI Membership not current\",\"value\" : \"padiMembershipNotCurrent\"},{\"label\": \"Others\",\"value\" : \"others\"}\n]\nif(data['product'] == 'Dive Boat'){\nlist.push({\"label\": \"Boat Sold\",\"value\" : \"boatSold\"})\n}\nelse if(data['product'] == 'Dive Store'){\nlist.push({\"label\": \"Store Sold\",\"value\" : \"storeSold\"})\n}\nvalues = list"
+		},
+		"dataSrc": "custom",
+		"valueProperty": "",
+		"defaultValue": "",
+		"refreshOn": "",
+		"filter": "",
+		"authenticate": false,
+		"template": "<span>{{ item.label }}</span>",
+		"multiple": false,
+		"protected": false,
+		"unique": false,
+		"persistent": true,
+		"hidden": false,
+		"clearOnHide": true,
+		"validate": {
+			"required": true
+		},
+		"type": "select",
+		"labelPosition": "top",
+		"tags": [],
+		"conditional": {
+			"show": "",
+			"when": null,
+			"eq": ""
+		},
+		"properties": {},
+		"lockKey": true,
+		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_MY_POLICY_READ']? true : false;\n}\nelse{\n  show = false;\n}",
+		"isNew": false
+	}, {
+		"input": true,
+		"tableView": true,
+		"key": "reasonforUserCancellation",
+		"label": "Reason for Cancellation:",
+		"protected": false,
+		"unique": false,
+		"persistent": true,
+		"type": "hidden",
+		"tags": [],
+		"conditional": {
+			"show": "",
+			"when": null,
+			"eq": ""
+		},
+		"properties": {},
+		"lockKey": true,
+		"calculateValue": "value = data['userCancellationReason'].value;"
+	}, {
+		"autofocus": false,
+		"input": true,
+		"tableView": true,
+		"label": "Others",
+		"key": "othersUser",
+		"placeholder": "",
+		"prefix": "",
+		"suffix": "",
+		"rows": 3,
+		"multiple": false,
+		"defaultValue": "",
+		"protected": false,
+		"persistent": true,
+		"hidden": false,
+		"wysiwyg": false,
+		"clearOnHide": true,
+		"spellcheck": true,
+		"validate": {
+			"required": true,
+			"minLength": "",
+			"maxLength": "",
+			"pattern": "",
+			"custom": ""
+		},
+		"type": "textarea",
+		"labelPosition": "top",
+		"inputFormat": "plain",
+		"tags": [],
+		"conditional": {
+			"show": "true",
+			"when": "reasonforUserCancellation",
+			"eq": "others"
+		},
+		"properties": {},
+		"lockKey": true,
+		"customClass": "others",
+		"isNew": false
+	}, {
+		"type": "panel",
+		"title": "Cancel Confirmation",
+		"components": [{
+			"key": "page7Content2",
+			"label": "Content",
+			"input": false,
+			"tag": "p",
+			"attrs": [{
+				"value": "",
+				"attr": ""
+			}],
+			"className": "",
+			"content": "This is not a binder of insurance coverage, and does not bind the insurer or Vicencia Buckley, a division of HUB International, until approved by the insurer and a premium is paid by the applicant and all required documents are received. We (I) acknowledge that this policy does not cover in water accidents and that we (I) have or require Professional Liability in place for in water accidents. No coverage is provided under this policy for Liquor Liability. It is your duty to correct any wrong information and to complete any omitted information on this application. Concealment, misrepresenting, or stating falsely on this application may result in your policy being voided or rescinded at any time, even after a loss",
+			"type": "htmlelement",
+			"hideLabel": true,
+			"tags": [],
+			"conditional": {
+				"show": "",
+				"when": null,
+				"eq": ""
+			},
+			"properties": {}
+		}, {
+			"autofocus": false,
+			"input": true,
+			"inputType": "checkbox",
+			"tableView": true,
+			"label": "I have read and agree to Terms of Service, Cancellation Policy and Privacy Policy.",
+			"dataGridLabel": false,
+			"key": "page7IhavereadandagreetoTermsofServiceCancellationPolicyandPrivacyPolicy",
+			"defaultValue": false,
+			"protected": false,
+			"persistent": true,
+			"hidden": false,
+			"name": "",
+			"value": "",
+			"clearOnHide": true,
+			"validate": {
+				"required": true
+			},
+			"type": "checkbox",
+			"labelPosition": "right",
+			"hideLabel": false,
+			"tags": [],
+			"conditional": {
+				"show": "",
+				"when": null,
+				"eq": ""
+			},
+			"properties": {}
+		}],
+		"input": false,
+		"key": "cancelConfirmation",
+		"clearOnHide": false,
+		"theme": "primary",
+		"tableView": false,
+		"hideLabel": false,
+		"breadcrumb": "default",
+		"tags": [],
+		"conditional": {
+			"show": "",
+			"when": null,
+			"eq": ""
+		},
+		"properties": {},
+		"customConditional": "if (data.privileges){\n  show = data.privileges['MANAGE_MY_POLICY_READ']? true : false;\n}\nelse{\n  show = false;\n}",
+		"lockKey": true
+	}, {
+		"autofocus": false,
+		"input": true,
+		"label": "Submit",
+		"tableView": false,
+		"key": "submit",
+		"size": "md",
+		"leftIcon": "",
+		"rightIcon": "",
+		"block": false,
+		"action": "submit",
+		"disableOnInvalid": false,
+		"theme": "primary",
+		"type": "button",
+		"tags": [],
+		"conditional": {
+			"show": "",
+			"when": null,
+			"eq": ""
+		},
+		"properties": {}
+	}],
+	"revisions": "",
+	"_vid": 0,
+	"title": "Cancel Policy Generic",
+	"display": "form",
+	"access": [{
+		"roles": ["5ce43aa430776b950569301d", "5ce43aa430776b4a5969301e", "5ce43aa430776bdfb569301f"],
+		"type": "read_all"
+	}],
+	"submissionAccess": [],
+	"settings": {},
+	"properties": {},
+	"name": "cancelPolicyGeneric",
+	"path": "cancelpolicygeneric",
+	"project": "5ce43aa430776b2aff69301c",
+	"created": "2020-01-08T05:30:33.387Z",
+	"modified": "2020-02-03T11:45:37.174Z",
+	"machineName": "testdivehub:cancelPolicyGeneric",
+	"controller": ""
+}

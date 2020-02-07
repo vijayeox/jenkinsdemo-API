@@ -3,25 +3,22 @@ namespace User\Controller;
 
 use Oxzion\Controller\AbstractApiControllerHelper;
 use Oxzion\Service\UserService;
-use Zend\Log\Logger;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Auth\AuthConstants;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Adapter\AdapterInterface;
+use Oxzion\ValidationException;
 use Oxzion\ServiceException;
-
 
 
 class ForgotPasswordController extends AbstractAPIControllerHelper
 {
 
     private $userService;
-    protected $log;
     
-    public function __construct(Logger $log,UserService $userService)
+    public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-        $this->log = $log;
     }
 
     public function forgotPasswordAction()

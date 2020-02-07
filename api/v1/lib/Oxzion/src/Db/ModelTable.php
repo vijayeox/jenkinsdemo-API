@@ -6,6 +6,9 @@ use Zend\Db\TableGateway\TableGatewayInterface;
 use Oxzion\Model\Entity;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
+use Oxzion\VersionMismatchException;
+use Oxzion\ServiceException;
+use Exception;
 
 abstract class ModelTable
 {
@@ -28,7 +31,7 @@ abstract class ModelTable
         return $this->tableGateway->select($filter);
     }
 
-    private function init()
+    protected function init()
     {
         $this->lastInsertValue = null;
     }
@@ -56,7 +59,6 @@ abstract class ModelTable
         }
 
         $filter['uuid'] = $uuid;
-
         $rowset = $this->tableGateway->select($filter);
 
         $row = $rowset->current();
@@ -133,7 +135,50 @@ abstract class ModelTable
             }
             return $this->tableGateway->update($data, ['id' => $id]);
         } catch (Exception $e) {
-            return $e->getMessage();
+            throw new ServiceException($e->getMessage(),'save.error');
+        }
+    }
+
+    protected function internalSave2(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if(isset($value['value'])){
+                $data[$key] = $value['value'];
+            }
+            else{
+                unset($data[$key]);
+            }
+        }
+        $this->init();
+        $id = null;
+        if ((!empty($data['id']))&&(isset($data['version']))) {
+            $id = $data['id'];
+            $version = $data['version'];
+        }
+        try {
+            if (is_null($id) || $id === 0 || empty($id)){
+                $rows = $this->tableGateway->insert($data);
+                if (!isset($rows)) {
+                    return 0;
+                }
+                $this->lastInsertValue = $this->tableGateway->getLastInsertValue();
+                return $rows;
+            }else {
+                $record = $this->get($id, array())->toArray();
+                if(isset($data['version'])){
+                    if($record['version'] == $version){
+                        $data['version'] = $data['version'] + 1;
+                        return $this->tableGateway->update($data, ['id' => $id, 'version' => $version]);
+                    }
+                    else{
+                        throw new \Oxzion\VersionMismatchException($record);
+                    }
+                }
+                else
+                    throw new \Oxzion\VersionMismatchException($record);
+            }
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 }

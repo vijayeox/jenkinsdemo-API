@@ -1,12 +1,13 @@
 package com.oxzion.routes
 
-
+import groovy.json.JsonBuilder
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.impl.DefaultCamelContext
 import org.springframework.stereotype.Component
+
 
 @Component
 class RoutesLoader extends RouteBuilder{
@@ -30,22 +31,19 @@ class RoutesLoader extends RouteBuilder{
                         exchange.getIn().setHeader(Exchange.HTTP_METHOD, "POST")
                         println("payload - ${exchange.getMessage().getBody()}")
                     }
-                })
-                // .setHeader(Exchange.CONTENT_TYPE, constant("application/json")).setHeader(Exchange.HTTP_METHOD, constant("POST"))
-                    // .process(new Processor() {
-                    //     public void process(Exchange exchange) throws Exception {
-                    //         exchange.getIn().setHeader(Exchange.CONTENT_TYPE, "text/html")
-                    //         exchange.getIn().setHeader(Exchange.HTTP_METHOD, "POST")
-                    //         exchange.getIn().setBody(exchange.getMessage().getBody() as String)
-                    //         println("payload - ${exchange.getMessage().getBody()}")
-                    //     }
-                    // })
-                    // .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                    // .setHeader(Exchange.HTTP_METHOD,constant("POST"))
-                   // .to("log:DEBUG?showBody=true&showHeaders=true")
+                }).doTry()
                     route.to.each{
                         try{
-                            definition.to(it).to("log:DEBUG?showBody=true&showHeaders=true")
+                            definition.to(it).to("log:DEBUG?showBody=true&showHeaders=true").doCatch(Exception.class).process(new Processor() {
+                                void process(Exchange exchange) throws Exception {
+                                    Exception exception = (Exception) exchange.getProperty(Exchange.EXCEPTION_CAUGHT)
+                                    def params = [to: it]
+                                    def jsonparams = new JsonBuilder(params).toPrettyString()
+                                    def stackTrace = new JsonBuilder(exception).toPrettyString()
+                                    ErrorLog.log('activemq_topic',stackTrace,exchange.getMessage().getBody().toString(),jsonparams);
+                                    System.out.println("handling ex")
+                                }
+                            }).log("Received body ")
                         }catch(Exception e){
                             println "Error when invoking ${it} - ${e.printStackTrace()}"
                         }

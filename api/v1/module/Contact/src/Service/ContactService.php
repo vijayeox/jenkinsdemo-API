@@ -141,11 +141,14 @@ class ContactService extends AbstractService
         $userId = AuthContext::get(AuthConstants::USER_ID);
         $orgId = AuthContext::get(AuthConstants::ORG_ID);
 
+        $queryString1 = "SELECT * from (";
+
         if ($column == ContactService::ALL_FIELDS) {
-            $queryString1 = "SELECT * from (SELECT oxc.uuid as uuid, user_id, oxc.first_name, oxc.last_name, oxc.phone_1, oxc.phone_list, oxc.email, oxc.email_list, oxc.company_name, oxc.icon_type,oxc.designation,oxc.address_1,oxc.country, '1' as contact_type from ox_contact as oxc WHERE oxc.owner_id = " . $userId . " ";
+            $queryString2 = "SELECT oxc.uuid as uuid, user_id, oxc.first_name, oxc.last_name, oxc.phone_1, oxc.phone_list, oxc.email, oxc.email_list, oxc.company_name, oxc.icon_type,oxc.designation, oxc.address_1,oxc.address_2,oxc.city,oxc.state,oxc.country,oxc.zip, '1' as contact_type from ox_contact as oxc";
         } else {
-            $queryString1 = "SELECT oxc.uuid as uuid,user_id, oxc.first_name, oxc.last_name, oxc.icon_type, '1' as contact_type  from ox_contact as oxc WHERE oxc.owner_id = " . $userId . " ";
+            $queryString2 = "SELECT oxc.uuid as uuid,user_id, oxc.first_name, oxc.last_name, oxc.icon_type, '1' as contact_type  from ox_contact as oxc";
         }
+        $where1 = " WHERE oxc.owner_id = " . $userId . " ";
 
         if ($filter == null) {
             $and1  = '';
@@ -155,12 +158,16 @@ class ContactService extends AbstractService
 
         $union = " UNION ";
 
+        $union = " UNION ";
+
         if ($column == "-1") {
-            $queryString2 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name, ou.phone as phone_1, null as phone_list, ou.email, null as email_list, org.name as company_name, null as icon_type,ou.designation,ou.address,ou.country, '2' as contact_type  from ox_user as ou inner join ox_organization as org on ou.orgid = org.id WHERE ou.orgid = " . $orgId . " AND ou.status = 'Active' and org.status = 'Active' ";
+            $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name, ou.phone as phone_1, null as phone_list, ou.email, null as email_list, org.name as company_name, null as icon_type,ou.designation,oa.address1,oa.address2,oa.city,oa.state,oa.country, oa.zip,'2' as contact_type from ox_user as ou inner join ox_organization as org on ou.orgid = org.id inner join ox_address as oa on ou.address_id = oa.id";
         } else {
-            $queryString2 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name,null as icon_type, '2' as contact_type from ox_user as ou inner join ox_organization as org on ou.orgid = org.id WHERE ou.orgid = " . $orgId . " AND ou.status = 'Active' and org.status = 'Active' ";
+            $queryString3 = "SELECT ou.uuid as uuid, ou.id as user_id, ou.firstname as first_name, ou.lastname as last_name,null as icon_type, '2' as contact_type  from ox_user as ou inner join ox_organization as org on ou.orgid = org.id";
         }
-;
+
+
+        $where2 = " WHERE ou.orgid = " . $orgId . " AND ou.status = 'Active' and org.status = 'Active' ";
 
         if ($filter == null) {
             $and2 = '';
@@ -168,9 +175,8 @@ class ContactService extends AbstractService
             $and2 = " AND (LOWER(ou.firstname) like '%".$filter."%' OR LOWER(ou.lastname) like '%".$filter."%' OR LOWER(ou.email) like '%".$filter."%')";
         }
 
-        $queryString3 = ") as a ORDER BY a.first_name, a.last_name";
-
-        $finalQueryString = $queryString1.$and1.$union.$queryString2.$and2.$queryString3;
+        $queryString4 = ") as a ORDER BY a.first_name, a.last_name";
+        $finalQueryString = $queryString1.$queryString2.$where1.$and1.$union.$queryString3.$where2.$and2.$queryString4;
         $resultSet = $this->executeQuerywithParams($finalQueryString);
         $resultSet = $resultSet->toArray();
         $myContacts = array();
@@ -432,10 +438,11 @@ class ContactService extends AbstractService
         $error_list = array();
         $error = array();
         $contact = array();
-               
+        
+        $addressJson = file_get_contents(__DIR__.'/../countryCode.json');
+        $addressJson = json_decode($addressJson,true);
+
         $file = FileUtils::storeFile($files, '/tmp/oxzion/');
-
-
         $file_handle = fopen('/tmp/oxzion/'.$file, 'r');
         $line = 1;
         $data = array();
@@ -444,9 +451,9 @@ class ContactService extends AbstractService
                 $line_of_text = fgetcsv($file_handle);
                 if ($line == 1) {
                     $columns = $line_of_text;
-                    $requiredHeaders = array('Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type','Phone 1 - Value','Organization 1 - Name','Organization 2 - Title','Location');
+                    $requiredHeaders = array('Given Name','Family Name','E-mail 1 - Type','E-mail 1 - Value','Phone 1 - Type','Phone 1 - Value','Organization 1 - Name','Organization 2 - Title','Address 1 - Street','Address 1 - Extended Address','Address 1 - City','Address 1 - Region','Address 1 - Country','Address 1 - Postal Code');
                     $result = array_intersect($requiredHeaders, $columns);
-                    if (count($result) != 8) {
+                    if (count($result) != 13) {
                         return 3;
                     }
                     $line++;
@@ -475,10 +482,11 @@ class ContactService extends AbstractService
                         || (empty($data['Phone 1 - Value']) && empty($data['E-mail 1 - Value']))
                         || ($data['Phone 1 - Value'] == "null" && empty($data['E-mail 1 - Value']))
                         || ($data['E-mail 1 - Value'] == "null" && empty($data['Phone 1 - Value']))) {
-                        $data['Comments'] = "Given Name and Phone 1 - Value or E-mail 1 - Value Fields are required";
+                        $data['Comments'] = "Given Name and Phone 1 - Value or Email 1 - Value Fields are required";
                         array_push($error_list, $data);
                         continue;
-                    } else {
+                    }
+                    else {
                         if (isset($data['E-mail 1 - Value']) && $data['E-mail 1 - Value'] != "null" && !empty($data['E-mail 1 - Value'])) {
                             if (!preg_match('/[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z0-9]{2,5})/', $data['E-mail 1 - Value'])) {
                                 $data['Comments'] = "Invalid Email ID";
@@ -506,7 +514,6 @@ class ContactService extends AbstractService
                             }
                         }
                         unset($email,$phone);
-                        $data['Additional Name'] = isset($data['Additional Name']) ? $data['Additional Name'] : ' ';
                         $finalArray['uuid'] = UuidUtil::uuid();
                         $finalArray['first_name'] = $data['Given Name'] ." ".$data['Additional Name'];
                         $finalArray['last_name'] = $data['Family Name'];
@@ -521,7 +528,15 @@ class ContactService extends AbstractService
                         }
                         $finalArray['company_name'] = $data['Organization 1 - Name'];
                         $finalArray['designation'] = $data['Organization 1 - Title'];
-                        $finalArray['country'] = $data['Location'];
+                        $finalArray['address_1'] = $data['Address 1 - Street'];
+                        $finalArray['address_2'] = $data['Address 1 - Extended Address'];
+                        $finalArray['city'] = $data['Address 1 - City'];
+                        $finalArray['state'] = $data['Address 1 - Region'];
+
+
+                        $finalArray['country'] = isset($addressJson[$data['Address 1 - Country']]) ? $addressJson[$data['Address 1 - Country']] : $data['Address 1 - Country'];
+
+                        $finalArray['zip'] = $data['Address 1 - Postal Code'];
                         $finalArray['icon_type'] = 0;
                         $finalArray['owner_id'] = AuthContext::get(AuthConstants::USER_ID);
                         $finalArray['date_created'] = date('Y-m-d H:i:s');
@@ -538,7 +553,7 @@ class ContactService extends AbstractService
                 $this->persistContacts($contact, $error_list);
             }
         } catch (Exception $e) {
-            print_r($e->getMessage());
+            
         } finally {
             fclose($file_handle);
         }
@@ -547,6 +562,7 @@ class ContactService extends AbstractService
         }
         return 1;
     }
+
 
 
 

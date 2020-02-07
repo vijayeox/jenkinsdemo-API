@@ -81,7 +81,7 @@ export default class GridTemplate extends React.Component {
         table.push(
           <GridColumn
             key={i}
-            width="150px"
+            width="90px"
             title={this.props.config.column[i].title}
             filterCell={this.emptyCell}
             sortable={false}
@@ -119,11 +119,16 @@ export default class GridTemplate extends React.Component {
 
   refreshHandler = serverResponse => {
     if (serverResponse.status == "success") {
-      this.notif.current.successNotification();
+      this.notif.current.notify(
+        "Success",
+        "Operation succesfully completed",
+        "success"
+      );
     } else {
-      this.notif.current.failNotification(
+      this.notif.current.notify(
         "Error",
-        serverResponse.message ? serverResponse.message : null
+        serverResponse.message ? serverResponse.message : null,
+        "danger"
       );
     }
     this.child.current.refresh();
@@ -169,7 +174,7 @@ export default class GridTemplate extends React.Component {
                   }}
                 >
                   <div style={{ marginLeft: "10px" }}>
-                    <i className="fas fa-info-circle"></i>
+                    <i className="fa fa-info-circle"></i>
                   </div>
                   <div
                     style={{ fontSize: "medium", paddingLeft: "30px" }}
@@ -225,9 +230,9 @@ class AddButton extends React.Component {
       <button
         onClick={this.props.args}
         className="k-button"
-        style={{ position: "absolute", top: "-1px", right: "3px" }}
+        style={{ position: "absolute", top: "7px", right: "10px" }}
       >
-        <i className="fas fa-plus-circle" style={{ fontSize: "20px" }}></i>
+        <i className="fa fa-plus-circle" style={{ fontSize: "20px" }}></i>
 
         <p style={{ margin: "0px", paddingLeft: "10px" }}>
           Add {this.props.label}
@@ -333,7 +338,7 @@ function CellWithEditing(title, edit, remove, addUsers, permission) {
               });
             }}
           >
-            <i className="fas fa-trash-alt manageIcons"></i>
+            <i className="fa fa-trash manageIcons"></i>
           </button>
         </abbr>
       ) : null;
@@ -353,7 +358,7 @@ function CellWithEditing(title, edit, remove, addUsers, permission) {
                       edit(this.props.dataItem, { diableField: false });
                     }}
                   >
-                    <i className="fas fa-pencil-alt manageIcons"></i>
+                    <i className="fa fa-pencil manageIcons"></i>
                   </button>
                 </abbr>
                 {addUsers && (
@@ -375,9 +380,9 @@ function CellWithEditing(title, edit, remove, addUsers, permission) {
                         }}
                       >
                         {title == "Announcement" ? (
-                          <i className="fas fa-users manageIcons"></i>
+                          <i className="fa fa-users manageIcons"></i>
                         ) : (
-                          <i className="fas fa-user-plus manageIcons"></i>
+                          <i className="fa fa-user-plus manageIcons"></i>
                         )}
                       </button>
                     </abbr>

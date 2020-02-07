@@ -1,15 +1,13 @@
 version: '2'
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
-    container_name: elasticsearch_654
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.1
+    container_name: elasticsearch_701
     environment:
+      - discovery.type=single-node
       - http.host=0.0.0.0
       - transport.host=0.0.0.0
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
-      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
       - 9200:9200
       - 9300:9300
@@ -17,15 +15,9 @@ services:
       memlock:
         soft: -1
         hard: -1
-      nofile:
-        soft: 65536
-        hard: 65536
-    mem_limit: 2g
-    cap_add:
-      - IPC_LOCK
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.5.4
-    container_name: kibana_654
+    image: docker.elastic.co/kibana/kibana:7.0.1
+    container_name: kibana_701
     environment:
       - SERVER_HOST=0.0.0.0
     volumes:
@@ -34,7 +26,7 @@ services:
       - 5601:5601
   headPlugin:
     image: mobz/elasticsearch-head:5
-    container_name: head_654
+    container_name: head_701
     ports:
       - 9100:9100
 

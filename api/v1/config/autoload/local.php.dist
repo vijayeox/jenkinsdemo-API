@@ -38,4 +38,5 @@ return [
         'username' => 'apikey',
         'authToken' => 'Provide the apikey of openproject'
     ],
+    'APPS_FOLDER' => __DIR__."/../../../../view/apps"
 ];

@@ -2,94 +2,142 @@
 namespace Workflow\Controller;
 
 /**
-* Workflow Api
-*/
-use Zend\Log\Logger;
-use Workflow\Model\WorkflowInstanceTable;
-use Workflow\Model\WorkflowInstance;
-use Workflow\Service\WorkflowInstanceService;
-use Zend\Db\Adapter\AdapterInterface;
+ * Workflow Api
+ */
+use Exception;
 use Oxzion\Controller\AbstractApiController;
-use Oxzion\ValidationException;
+use Oxzion\EntityNotFoundException;
 use Oxzion\Service\WorkflowService;
+use Oxzion\ValidationException;
+use Oxzion\Workflow\Camunda\WorkflowException;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
+use Oxzion\Model\WorkflowInstance;
+use Oxzion\Model\WorkflowInstanceTable;
+use Oxzion\Service\ActivityInstanceService;
+use Oxzion\Service\WorkflowInstanceService;
+use Zend\Db\Adapter\AdapterInterface;
 
 class WorkflowInstanceController extends AbstractApiController
 {
     private $workflowInstanceService;
     private $workflowService;
+    private $activityInstanceService;
     /**
-    * @ignore __construct
-    */
-    public function __construct(WorkflowInstanceTable $table, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, Logger $log, AdapterInterface $dbAdapter)
+     * @ignore __construct
+     */
+    public function __construct(WorkflowInstanceTable $table, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, ActivityInstanceService $activityInstanceService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, WorkflowInstance::class);
+        parent::__construct($table, WorkflowInstance::class);
         $this->setIdentifierName('activityId');
         $this->workflowInstanceService = $workflowInstanceService;
         $this->workflowService = $workflowService;
+        $this->activityInstanceService = $activityInstanceService;
     }
-    public function activityAction()
+
+    public function startWorkflowAction()
     {
         $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
-        switch ($this->request->getMethod()) {
-            case 'POST':
-                unset($params['controller']);
-                unset($params['action']);
-                unset($params['access']);
-                if (isset($params['instanceId'])) {
-                    return $this->executeWorkflow($params, $params['instanceId']);
-                } else {
-                    return $this->executeWorkflow($params);
-                }
-                break;
-            case 'GET':
-                return $this->getFieldData($params);
-                break;
-            case 'DELETE':
-                return $this->deleteFieldData($params);
-                break;
-            default:
-                return $this->getErrorResponse("Not Sure what you are upto");
-                break;
-        }
-    }
-    private function executeWorkflow($params, $id = null)
-    {
+        $this->log->info(print_r($params, true));
+        $this->log->info("executeWorkflow");
+        $this->workflowInstanceService->updateOrganizationContext($params);
         try {
-            $count = $this->workflowInstanceService->executeWorkflow($params, $id);
+            $count = $this->workflowInstanceService->startWorkflow($params);
+            $this->log->info(WorkflowInstanceController::class . "ExecuteWorkflow Response  - " . print_r($count, true));
         } catch (ValidationException $e) {
-            $response = ['data' => $params, 'errors' => $e->getErrors()];
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        } catch (EntityNotFoundException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Entity Not Found", 404, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Errors", 500, $response);
+        }
+        return $this->getSuccessResponseWithData($params, 200);
+    }
+
+    public function submitAction()
+    {
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $this->log->info(print_r($params, true));
+        $this->workflowInstanceService->updateOrganizationContext($params);
+        try {
+            $count = $this->workflowInstanceService->submitActivity($params);
+            $this->log->info(WorkflowInstanceController::class . "SubmitActivity Response  - " . print_r($count, true));
+        } catch (ValidationException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Validation Errors", 406, $response);
+        } catch (InvalidParameterException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Invalid Parameter", 406, $response);
+        } catch (EntityNotFoundException $e) {
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Entity Not Found", 404, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            $response = ['data' => $params, 'errors' => $e->getMessage()];
+            return $this->getErrorResponse("Errors", 500, $response);
+        }
+        return $this->getSuccessResponseWithData($params, 200);
+    }
+
+    public function claimActivityInstanceAction()
+    {
+        $data = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        $this->log->info("Post Data- " . print_r(json_encode($data), true));
+        try {
+            $response = $this->activityInstanceService->claimActivityInstance($data);
+            $this->log->info("Claim Activity Instance Successful");
+            if ($response == 0) {
+                return $this->getErrorResponse("Entity not found", 404);
+            }
+            return $this->getSuccessResponse();
+        } catch (ValidationException $e) {
+            $this->log->info("Exception at claim Activity Instance-" . $e->getMessage());
+            $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity Not Found Errors", 404, $params);
-        }
-        if (isset($id)) {
-            return $this->getSuccessResponseWithData($params, 200);
-        } else {
-            return $this->getSuccessResponseWithData($params, 201);
+        } catch (WorkflowException $e) {
+            $this->log->info("-Error while claiming - " . $e->getReason() . ": " . $e->getMessage());
+            if ($e->getReason() == 'TaskAlreadyClaimedException') {
+                return $this->getErrorResponse("Task is already claimed", 409);
+            }
+            return $this->getErrorResponse($e->getMessage(), 409);
         }
     }
-    private function getFieldData($params)
+
+    public function activityInstanceFormAction()
     {
-        if (isset($params['instanceId'])) {
-            $result = $this->workflowService->getFile($params);
+        $data = array_merge($this->extractPostData(), $this->params()->fromRoute());
+        if (isset($data['activityInstanceId'])) {
+            try {
+                $response = $this->activityInstanceService->getActivityInstanceForm($data);
+                if ($response == 0) {
+                    return $this->getErrorResponse("Entity not found", 404);
+                }
+                return $this->getSuccessResponseWithData($response);
+            } catch (ValidationException $e) {
+                $this->log->info("Exception while getting Activity Instance form-" . $e->getMessage());
+                $response = ['data' => $data, 'errors' => $e->getErrors()];
+                return $this->getErrorResponse("Validation Errors", 404, $response);
+            }
         } else {
-            return $this->getInvalidMethod();
+            return $this->getErrorResponse("Entity not found", 404);
         }
-        if ($result == 0) {
-            return $this->getErrorResponse("File not found", 404);
-        }
-        return $this->getSuccessResponseWithData($result);
     }
-    private function deleteFieldData($params)
+
+    public function getFileDocumentListAction()
     {
-        if (!isset($params['workflowId'])) {
-            return $this->getInvalidMethod();
+        $params = $this->params()->fromRoute();
+        try {
+            $result = $this->workflowInstanceService->getFileDocumentList($params);
+        } catch (ValidationException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (AccessDeniedException $e) {
+            $response = ['errors' => $e->getErrors()];
+            return $this->getErrorResponse($e->getMessage(), 403, $response);
         }
-        $response = $this->workflowService->deleteFile($params);
-        if ($response == 0) {
-            return $this->getErrorResponse("File not found", 404);
-        }
-        return $this->getSuccessResponse();
+        return $this->getSuccessResponseWithData($result, 200);
     }
 }

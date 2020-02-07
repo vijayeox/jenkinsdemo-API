@@ -33,4 +33,8 @@ class BosUtils
         }
         return implode($pass); //turn the array into a string
     }
+
+    public static function execCommand($command){
+        return exec($command, $output, $return);
+    }
 }

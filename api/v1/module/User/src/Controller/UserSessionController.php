@@ -1,7 +1,6 @@
 <?php
 namespace User\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
 use Exception;
 use Zend\Db\Adapter\AdapterInterface;
@@ -15,7 +14,7 @@ class UserSessionController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(UserSessionService $sessionService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(UserSessionService $sessionService, AdapterInterface $dbAdapter)
     {
         $this->setIdentifierName('userId');
         $this->sessionService = $sessionService;

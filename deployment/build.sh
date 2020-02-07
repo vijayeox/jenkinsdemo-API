@@ -38,7 +38,7 @@ buildhelp()
     echo -e "10. mail            -${YELLOW}For packaging Rainloop Mail.${RESET}"
     echo -e "11. openproject     -${YELLOW}For packaging Openproject.${RESET}"
     echo -e "12. helpapp         -${YELLOW}For packaging HelpApp.${RESET}"
-    echo -e "13. edms         -${YELLOW}For packaging EDMS.${RESET}"
+    echo -e "13. edms            -${YELLOW}For packaging EDMS.${RESET}"
     echo -e "14. --help or -h    -${YELLOW}For help.${RESET}"
     echo -e "15. list            -${YELLOW}For list of options.${RESET}"
     echo -e "16. deploy          -${YELLOW}For deploying to production${RESET}"
@@ -101,7 +101,7 @@ api()
     #building API
     cd api/v1
     echo -e "${YELLOW}Building API....${RESET}"
-    docker run -t -v ${PWD}:/var/www v1_zf composer install
+    docker run -t -v ${PWD}:/var/www v1_zf composer install -n
     cd ${OXHOME}
     mkdir -p build/api/v1
     #copy contents of ap1v1 to build
@@ -117,6 +117,8 @@ camel()
     #building camel
     cd ${OXHOME}/integrations/camel
     echo -e "${YELLOW}Building Camel${RESET}"
+    echo -e "${YELLOW}Setting up env files${RESET}"
+    scp -i ${PEM} -r ${SERVER}:env/integrations/camel/src/main/resources/* src/main/resources/
     #building camel
     docker run --network="host" -t -v ${PWD}:/workspace/app --entrypoint ./docker-build.sh camel
     echo -e "${GREEN}Building Camel Completed!${RESET}"
@@ -210,11 +212,15 @@ workflow()
 {
     cd ${OXHOME}
     echo -e "${YELLOW}Creating directory build/integrations/workflow...${RESET}"
-    mkdir -p build/integrations/workflow/IdentityService/dist
+    mkdir -p build/integrations/workflow
+    cd ${OXHOME}/integrations/workflow
+    echo -e "${YELLOW}Building workflow....${RESET}"
+    docker run -it -v ${PWD}:/camunda --entrypoint ./dockerbuild.sh workflow_build
+    echo -e "${YELLOW}Building workflow completed....${RESET}"
     echo -e "${YELLOW}Copying workflow to build folder....${RESET}"
-    echo -e "${YELLOW}Setting up env files${RESET}"
-    scp -i ${PEM} -r ${SERVER}:env/integrations/workflow/.env ./build/integrations/workflow/
-    cp integrations/workflow/bpm-platform.xml integrations/workflow/Dockerfile integrations/workflow/camunda-tomcat.sh ./build/integrations/workflow/ && cp integrations/workflow/IdentityService/dist/identity_plugin.jar ./build/integrations/workflow/IdentityService/dist/
+    cp ${OXHOME}/integrations/workflow/IdentityService/build/libs/identity_plugin-1.0.jar ${OXHOME}/build/integrations/workflow 
+    cp ${OXHOME}/integrations/workflow/ProcessEngine/build/libs/processengine_plugin-1.0.jar ${OXHOME}/build/integrations/workflow 
+    cp ${OXHOME}/integrations/workflow/bpm-platform.xml ${OXHOME}/build/integrations/workflow 
     echo -e "${GREEN}Copying workflow Completed!${RESET}"
 }
 openproject()

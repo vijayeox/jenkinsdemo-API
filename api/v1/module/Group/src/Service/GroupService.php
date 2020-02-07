@@ -11,7 +11,6 @@ use Zend\Db\Sql\Expression;
 use Exception;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\OrganizationService;
-use Zend\Log\Logger;
 use Oxzion\Utils\FileUtils;
 use Oxzion\Utils\UuidUtil;
 use Oxzion\Utils\FilterUtils;
@@ -24,18 +23,15 @@ class GroupService extends AbstractService
 {
     private $table;
     private $organizationService;
-    protected $logger;
     public static $fieldName = array('name' => 'ox_user.name','id' => 'ox_user.id');
 
 
-    public function __construct($config, $dbAdapter, GroupTable $table, $organizationService, Logger $log)
+    public function __construct($config, $dbAdapter, GroupTable $table, $organizationService,$messageProducer)
     {
         parent::__construct($config, $dbAdapter);
-        parent::initLogger(__DIR__ . '/../../../../logs/group.log');
         $this->table = $table;
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
         $this->organizationService = $organizationService;
-        $this->logger = $log;
     }
 
     public function setMessageProducer($messageProducer)
@@ -144,9 +140,10 @@ class GroupService extends AbstractService
             $data['created_id'] = AuthContext::get(AuthConstants::USER_ID);
             $data['date_created'] = date('Y-m-d H:i:s');
             $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
+            $user_manager_uuid = $data['manager_id'];
             $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
             $result = $this->executeQueryWithParams($select)->toArray();
-            if($result){
+            if ($result){
                 $data['manager_id']=$result[0]["id"];
             }
             if(isset($data['parent_id'])){
@@ -168,17 +165,17 @@ class GroupService extends AbstractService
             }
             $id = $this->table->getLastInsertValue();
             $data['id'] = $id;
-
+        
             $insert = $sql->insert('ox_user_group');
             $insert_data = array('avatar_id' => $data['manager_id'], 'group_id' => $data['id']);
             $insert->values($insert_data);
             $result = $this->executeUpdate($insert);
 
             $this->commit();
-
+        
         }
         catch(Exception $e) {
-            $this->logger->err(__CLASS__.$e->getMessage());
+            $this->logger->error($e->getMessage(), $e);
             $this->rollback();
             throw $e;
         }
@@ -332,6 +329,7 @@ class GroupService extends AbstractService
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
         $data['manager_id'] = isset($data['manager_id']) ? $data['manager_id'] : NULL;
+        $user_manager_uuid = $data['manager_id'];
         $select ="SELECT id from ox_user where uuid = '".$data['manager_id']."'";
         $result = $this->executeQueryWithParams($select)->toArray();
         if($result){
@@ -349,23 +347,19 @@ class GroupService extends AbstractService
             if(isset($files)){
                 $this->uploadGroupLogo($org['uuid'],$id,$files);
             }
+            $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])), 'GROUP_UPDATED');
             if($count === 1) {
                 $select = "SELECT count(id) as users from ox_user_group where avatar_id =".$data['manager_id']." AND group_id = (SELECT id from ox_group where uuid = '".$id."')";
                 $query=$this->executeQuerywithParams($select)->toArray();
-                if($query[0]['users'] === '0'){
-                    $insert = "INSERT INTO ox_user_group (`avatar_id`,`group_id`) VALUES (".$data['manager_id'].",(SELECT id from ox_group where uuid = '".$id."'))";
-                    $query1 = $this->executeQuerywithParams($insert);
-                }
+                if($query[0]['users'] === '0')
+                    $this->saveUser(["orgId"=>$orgId, "groupId"=>$id], ["userid"=>[["uuid"=>$user_manager_uuid]]], true);
             } else {
                 throw new ServiceException("Failed to Update","failed.update.group");
             }
         } catch (Exception $e) {
-            print("Exception");
-            print_r($e->getMessage());exit;
             $this->rollback();
             throw $e;
         }
-        $this->messageProducer->sendTopic(json_encode(array('old_groupname' => $obj->name, 'orgname'=> $org['name'], 'new_groupname'=>$data['name'])), 'GROUP_UPDATED');
         return $count;
     }
 
@@ -467,7 +461,7 @@ class GroupService extends AbstractService
            'total' => $count);
     }
 
-    public function saveUser($params,$data) {
+    public function saveUser($params,$data, $addUsers = false) {
         if(isset($params['orgId'])){
             if(!SecurityManager::isGranted('MANAGE_ORGANIZATION_WRITE') && ($params['orgId'] != AuthContext::get(AuthConstants::ORG_UUID))) {
                 throw new AccessDeniedException("You do not have permissions to add users to group");
@@ -479,8 +473,8 @@ class GroupService extends AbstractService
         $obj = $this->table->getByUuid($params['groupId'],array());
 
         if (is_null($obj)) {
-            $this->logger->log(Logger::INFO, "Invalid group id - ".$params['groupId']);
-            throw new ServiceException("Entity not found","group.not.found");
+            $this->logger->info("Invalid group id - ".$params['groupId']);
+            throw new ServiceException("Entity not found","group.not.found");   
         }
 
         if(isset($params['orgId'])){
@@ -494,6 +488,17 @@ class GroupService extends AbstractService
         if(!isset($data['userid']) || empty($data['userid'])) {
             throw new ServiceException("Enter User Ids","select.user");
         }
+        if ($addUsers) {
+            $query = "SELECT ox_user.uuid FROM ox_user_group " .
+            "inner join ox_user on ox_user.id = ox_user_group.avatar_id ".
+            "where ox_user_group.id = ".$obj->id;
+            $groupUsers = $this->executeQuerywithParams($query)->toArray();
+            foreach (array_diff(array_column($data['userid'], 'uuid'), array_column($groupUsers, 'uuid')) as $userUuid){
+                $groupUsers[] = array('uuid' => $userUuid);
+            }
+            
+            $data['userid'] = $groupUsers;
+        }
 
         $userArray = $this->organizationService->getUserIdList($data['userid']);
 
@@ -506,8 +511,6 @@ class GroupService extends AbstractService
             "where ox_user_group.id = ".$group_id.
             " and ox_user_group.avatar_id not in (".implode(',', $userSingleArray).")";
             $deletedUser = $this->executeQuerywithParams($queryString)->toArray();
-            $query = "select avatar_id, group_id from ox_user_group";
-            $userGroup = $this->executeQuerywithParams($query)->toArray();
             $query = "SELECT u.id, u.username FROM ox_user_group ug ".
             "right join ox_user u on u.id = ug.avatar_id and ug.group_id = ".$group_id.
             " where u.id in (".implode(',', $userSingleArray).") and ug.avatar_id is null";
@@ -531,12 +534,13 @@ class GroupService extends AbstractService
             foreach ($insertedUser as $key => $value) {
                 $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name , 'orgname'=> $org['name'], 'username' => $value['username'] )), 'USERTOGROUP_ADDED');
             }
-            $queryString = "SELECT ox_user.id, ox_user.username FROM ox_user_group " .
+            $queryString = "SELECT ox_user.username, ox_user.firstname, ox_user.lastname, ox_user.email FROM ox_user_group " .
             "inner join ox_user on ox_user.id = ox_user_group.avatar_id ".
-            "where ox_user_group.id = ".$group_id;
+            "where ox_user_group.group_id = ".$group_id;
             $groupUsers = $this->executeQuerywithParams($queryString)->toArray();
-            // echo "<pre>";print_r($groupUsers);exit();
-            $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name, 'usernames' => array_column($groupUsers, 'username'))), 'USERTOGROUP_UPDATED');
+            if(count($groupUsers) > 0){
+                $this->messageProducer->sendTopic(json_encode(array('groupname' => $obj->name, 'usernames' => array_column($groupUsers, 'username'))), 'USERTOGROUP_UPDATED');
+            }
             return 1;
         }
         throw new ServiceException("Entity not found","group.not.found");

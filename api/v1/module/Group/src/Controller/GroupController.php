@@ -2,7 +2,6 @@
 
 namespace Group\Controller;
 
-use Zend\Log\Logger;
 use Group\Model\GroupTable;
 use Group\Model\Group;
 use Group\Service\GroupService;
@@ -23,9 +22,9 @@ class GroupController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(GroupTable $table, GroupService $groupService, Logger $log, AdapterInterface $dbAdapter, OrganizationService $orgService)
+    public function __construct(GroupTable $table, GroupService $groupService, AdapterInterface $dbAdapter, OrganizationService $orgService)
     {
-        parent::__construct($table, $log, __CLASS__, Group::class);
+        parent::__construct($table, Group::class);
         $this->setIdentifierName('groupId');
         $this->groupService = $groupService;
         $this->orgService = $orgService;

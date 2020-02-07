@@ -2,7 +2,6 @@
 
 namespace Email\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Model\EmailTable;
 use Oxzion\Model\Email;
@@ -22,9 +21,9 @@ class EmailController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(EmailTable $table, EmailService $emailService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(EmailTable $table, EmailService $emailService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Email::class);
+        parent::__construct($table, Email::class);
         $this->setIdentifierName('emailId');
         $this->emailService = $emailService;
     }

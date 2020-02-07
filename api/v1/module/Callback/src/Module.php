@@ -13,6 +13,8 @@ use Oxzion\Service\UserService;
 use Oxzion\Service\EmailService;
 use Oxzion\Model\EmailTable;
 use Oxzion\Service\TemplateService;
+use Oxzion\Service\AddressService;
+use Oxzion\Messaging\MessageProducer;
 
 class Module implements ConfigProviderInterface
 {
@@ -36,20 +38,20 @@ class Module implements ConfigProviderInterface
         return [
             'factories' => [
                 Service\ChatService::class => function ($container) {
-                    return new Service\ChatService($container->get('config'), $container->get('CallbackLogger'));
+                    return new Service\ChatService($container->get('config'));
                 },
                 Service\CRMService::class => function ($container) {
-                    return new Service\CRMService($container->get('config'), $container->get('CallbackLogger'));
+                    return new Service\CRMService($container->get('config'), $container->get(\Contact\Service\ContactService::class), $container->get(UserService::class));
                 },
                 Service\CalendarService::class => function ($container) {
-                    return new Service\CalendarService($container->get('config'), $container->get('CallbackLogger'));
+                    return new Service\CalendarService($container->get('config'));
                 },
                 Service\TaskService::class => function ($container) {
-                    return new Service\TaskService($container->get('config'), $container->get('CallbackLogger'));
+                    return new Service\TaskService($container->get('config'));
                 },
                 \Contact\Service\ContactService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
-                    return new \Contact\Service\ContactService($container->get('config'), $dbAdapter, $container->get(\Contact\Model\ContactTable::class));
+                    return new \Contact\Service\ContactService($container->get('config'), $dbAdapter, $container->get(\Contact\Model\ContactTable::class),$container->get(AddressService::class));
                 },
                 \Contact\Model\ContactTable::class => function ($container) {
                     $tableGateway = $container->get(\Contact\Model\ContactTableGateway::class);
@@ -65,7 +67,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\EmailController(
                         $container->get(EmailTable::class),
                         $container->get(EmailService::class),
-                        $container->get('EmailLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },
@@ -78,19 +79,19 @@ class Module implements ConfigProviderInterface
         return [
             'factories' => [
                 Controller\ChatCallbackController::class => function ($container) {
-                    return new Controller\ChatCallbackController($container->get(Service\ChatService::class), $container->get('CallbackLogger'));
+                    return new Controller\ChatCallbackController($container->get(Service\ChatService::class));
                 },
                 Controller\CRMCallbackController::class => function ($container) {
-                    return new Controller\CRMCallbackController($container->get(Service\CRMService::class), $container->get(\Contact\Service\ContactService::class), $container->get(UserService::class), $container->get('CallbackLogger'));
+                    return new Controller\CRMCallbackController($container->get(Service\CRMService::class));
                 },
                 Controller\TaskCallbackController::class => function ($container) {
-                    return new Controller\TaskCallbackController($container->get(Service\TaskService::class), $container->get('CallbackLogger'));
+                    return new Controller\TaskCallbackController($container->get(Service\TaskService::class));
                 },
                 Controller\OXCallbackController::class => function ($container) {
-                    return new Controller\OXCallbackController($container->get(TemplateService::class), $container->get('config'), $container->get('CallbackLogger'));
+                    return new Controller\OXCallbackController($container->get(TemplateService::class), $container->get('config'), $container->get(MessageProducer::class));
                 },
                 Controller\CalendarCallbackController::class => function ($container) {
-                    return new Controller\CalendarCallbackController($container->get(Service\CalendarService::class), $container->get(EmailService::class), $container->get('CallbackLogger'), $container->get('config'));
+                    return new Controller\CalendarCallbackController($container->get(Service\CalendarService::class), $container->get(EmailService::class), $container->get('config'));
                 },
             ],
         ];

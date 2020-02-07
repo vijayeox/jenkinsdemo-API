@@ -53,36 +53,36 @@ $ docker-compose run zf composer install
 To run tests using the mysql database running on your machine run the following command
 ```bash
 For Linux
-$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf ./phpunit
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./phpunit
 For Windows
-$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf ./phpunit
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf ./phpunit
 ```
 To run Documentation Generator on your machine run the following command
 This will create the Documentation in a new folder "Doc" which will have an index.html file which contains the list of subpages across the features
 ```bash
 For Linux
-$ docker run --network="host" -it -v $(pwd):/var/www v1_zf phpdoc
+$ docker run --network="host" -it -v $(pwd)/../..:/app v1_zf phpdoc
 For Windows
-$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf phpdoc
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf phpdoc
 ```
 To run php code Fixer use the following command
 This will auto indent and pretify php code
 ```bash
 For Linux
-$ docker run --network="host" -it -v $(pwd):/var/www v1_zf vendor/bin/php-cs-fixer fix ./module
-$ docker run --network="host" -it -v $(pwd):/var/www v1_zf vendor/bin/php-cs-fixer fix ./lib
+$ docker run --network="host" -it -v $(pwd)/../..:/app v1_zf vendor/bin/php-cs-fixer fix ./module
+$ docker run --network="host" -it -v $(pwd)/../..:/app v1_zf vendor/bin/php-cs-fixer fix ./lib
 For Windows
-$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf vendor/bin/php-cs-fixer fix ./module
-$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf vendor/bin/php-cs-fixer fix ./lib
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf vendor/bin/php-cs-fixer fix ./module
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf vendor/bin/php-cs-fixer fix ./lib
 ```
 
 
 To connect to the container shell you can run the following command
 ```bash
 For Linux
-$ docker run --network="host" -it -v $(pwd):/var/www v1_zf bash
+$ docker run --network="host" -it -v $(pwd)/../..:/app v1_zf bash
 For Windows
-$ docker run --network="host" -it -v ${PWD}:/var/www v1_zf bash
+$ docker run --network="host" -it -v ${PWD}/../..:/app v1_zf bash
 ```
 
 ## Web server setup
@@ -148,3 +148,18 @@ server {
 Restart the nginx, now you should be ready to go!
 
 
+### MySQL Setup
+
+1) Change bind address in /etc/mysql/my.cnf
+
+Add the following lines:
+
+[mysqld]
+bind-address=0.0.0.0
+
+2) Grant priveleges through mysql command line
+
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'password';
+mysql> flush privileges;
+
+3) Restart mysql service

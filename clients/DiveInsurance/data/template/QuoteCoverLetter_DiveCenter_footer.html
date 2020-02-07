@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<link href= "./css/card_css.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="./AgentInfo.js"></script>
+<script>
+  function subst() {
+        var vars = {};
+        var css_selector_classes = [];
+        var query_strings_from_url = document.location.search.substring(1).split('&');
+        for (var query_string in query_strings_from_url) {
+            if (query_strings_from_url.hasOwnProperty(query_string)) {
+                var temp_var = query_strings_from_url[query_string].split('=', 2);
+                vars[temp_var[0]] = decodeURI(temp_var[1]);
+                css_selector_classes.push(temp_var[0]);
+            }
+        }
+
+        //var css_selector_classes = ['page', 'producerWeb', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages', 'reference','start_date'];
+        for (var css_class in css_selector_classes) {
+            if (css_selector_classes.hasOwnProperty(css_class)) {
+                var element = document.getElementsByClassName(css_selector_classes[css_class]);
+                for (var j = 0; j < element.length; ++j) {
+                    element[j].textContent = vars[css_selector_classes[css_class]];
+                }
+            }
+        }
+    }
+  </script>
+</head>
+<body onload="subst()">
+  <center><div class ="lapse_div">
+	 <p class = "info">6 Centerpointe Drive, #350,La Palma, CA 90623-2538</p>
+	 <p class = "info">(714) 739-3177 * FAX (714) 739-3188</p>
+     <p class = "info">(800) 223-9998</p>
+     <p class="info" id="producerWeb">www.diveinsurance.com</p>
+	 <p class = "info">License#:&nbsp&nbsp<span class = "license_number"></span></p>
+  </div></center>
+</body>
+</html>
+

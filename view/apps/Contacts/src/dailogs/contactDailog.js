@@ -1,15 +1,18 @@
 import React from "react";
 import { Window } from "@progress/kendo-react-dialogs";
-import { ContactTypes, CountryList } from "../data";
+import { ContactTypes } from "../data";
+import Countries from "../data/Countries";
 import { ProfilePictureWidget } from "../widgets";
 import { SaveContact } from "../services/services";
-import { Notification } from "../components";
+import Notification from "OxzionGUI/Notification";
+
 import { ContactTypeEnum, IconTypeEnum } from "../enums";
 import PhoneInput from "react-phone-number-input";
 
 class ContactDailog extends React.Component {
   constructor(props) {
     super(props);
+    
     this.core = this.props.args;
     this.state = {
       contactDetails: {},
@@ -18,7 +21,8 @@ class ContactDailog extends React.Component {
       icon: null,
       errors: {
         first_name: true
-      }
+      },
+      countryWiseStates:Countries
     };
     this.notif = React.createRef();
     this.loader = this.core.make("oxzion/splash");
@@ -174,9 +178,12 @@ class ContactDailog extends React.Component {
         this.setState({ contactDetails: {} }, () => this.props.success());
         //close on success
       } else {
-        this.notif.current.failNotification(
-          "Operation failed." + response.message
-        );
+        this.notif.current.notify(
+          "Error",
+          "Operation failed" + response.message,
+          "danger"
+        )
+        
       }
       this.loader.destroy();
     });
@@ -185,20 +192,30 @@ class ContactDailog extends React.Component {
   saveContact = () => {
     const { contactDetails, errors } = this.state;
     if (errors.first_name) {
-      this.notif.current.failNotification("Please fill required fields.");
+      this.notif.current.notify(
+        "Error",
+        "Please fill required fields.",
+        "danger"
+      )
       return;
     }
     let data = {};
     if (contactDetails.phone_1 || contactDetails.email) {
       var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (contactDetails.email && !re.test(contactDetails.email)) {
-        this.notif.current.failNotification("Primary email is not valid.");
+        this.notif.current.notify(
+          "Error",
+          "Primary email is not valid.",
+          "danger"
+        )
         return;
       }
     } else {
-      this.notif.current.failNotification(
-        "Either primary phone or email is mandatory."
-      );
+      this.notif.current.notify(
+        "Error",
+        "Either primary phone or email is mandatory.",
+        "danger"
+      )
       return;
     }
     if (Object.keys(contactDetails).length != 0) {
@@ -365,6 +382,7 @@ class ContactDailog extends React.Component {
   render() {
     return (
       <Window onClose={this.props.cancel}>
+        
         <Notification ref={this.notif} />
         <div className="contactPanel addEditPanel">
           <div className="contactForm">
@@ -420,12 +438,15 @@ class ContactDailog extends React.Component {
                           ? this.state.contactDetails.country
                           : ""
                       }
-                      onChange={this.handleUserInput}
+                      onChange={this.handleCountryChange}
                     >
-                      {CountryList.map((country, key) => {
+                      <option disabled value="">
+                        Select country
+                      </option>
+                      {Countries.map((country, key) => {
                         return (
-                          <option key={key} value={country}>
-                            {country}
+                          <option key={key} value={country.name}>
+                            {country.name}
                           </option>
                         );
                       })}
@@ -441,6 +462,104 @@ class ContactDailog extends React.Component {
                       args={this.core}
                       contactDetails={this.state.contactDetails}
                       handleProfilePic={this.handleProfilePic}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-12">
+                <div className="row">
+                  <div className="col-4 form-group">
+                    <label htmlFor="state">State</label>
+                    <select
+                      className="form-control inputHeight"
+                      name="state"
+                      placeholder="Select state."
+                      value={
+                        this.state.contactDetails.state
+                          ? this.state.contactDetails.state
+                          : ""
+                      }
+                      onChange={this.handleUserInput}
+                    >
+                      <option disabled value="">
+                        Select city
+                      </option>
+                      {this.state.countryWiseStates.map((state, key) => {
+                        return (
+                          <option key={key} value={state.name}>
+                            {state.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+
+                  <div className="col-4 form-group">
+                    <label htmlFor="city">City</label>
+                    <input
+                      type="text"
+                      className="form-control inputHeight"
+                      name="city"
+                      placeholder="Enter city."
+                      value={
+                        this.state.contactDetails.city
+                          ? this.state.contactDetails.city
+                          : ""
+                      }
+                      onChange={this.handleUserInput}
+                    />
+                  </div>
+
+                  <div className="col-4 form-group">
+                    <label htmlFor="zip">Zip</label>
+                    <input
+                      type="text"
+                      className="form-control inputHeight"
+                      name="zip"
+                      placeholder="Enter zip."
+                      value={
+                        this.state.contactDetails.zip
+                          ? this.state.contactDetails.zip
+                          : ""
+                      }
+                      onChange={this.handleUserInput}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-12">
+                <div className="row">
+                  <div className="col-6 form-group">
+                    <label htmlFor="phone_1">Address line 1</label>
+                    <textarea
+                      row={4}
+                      className="form-control"
+                      name="address_1"
+                      placeholder="Enter address."
+                      value={
+                        this.state.contactDetails.address_1
+                          ? this.state.contactDetails.address_1
+                          : ""
+                      }
+                      onChange={this.handleUserInput}
+                    />
+                  </div>
+
+                  <div className="col-6 form-group">
+                    <label htmlFor="phone_1">Address line 2</label>
+                    <textarea
+                      row={4}
+                      className="form-control"
+                      name="address_2"
+                      placeholder="Enter address."
+                      value={
+                        this.state.contactDetails.address_2
+                          ? this.state.contactDetails.address_2
+                          : ""
+                      }
+                      onChange={this.handleUserInput}
                     />
                   </div>
                 </div>

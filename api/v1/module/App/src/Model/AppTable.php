@@ -17,4 +17,19 @@ class AppTable extends ModelTable
     {
         return $this->internalSave($data->toArray());
     }
+
+    public function getByName($name)
+    {
+        $this->init();
+        $filter = array();
+        
+        $filter['name'] = $name;
+
+        $rowset = $this->tableGateway->select($filter);
+
+        $row = $rowset->current();
+
+        return $row;
+    }
+
 }

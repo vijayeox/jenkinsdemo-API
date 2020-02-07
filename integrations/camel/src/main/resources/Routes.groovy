@@ -1,4 +1,4 @@
-callback.URL = 'http4://localhost:80'
+callback.URL = 'http4://localhost:8080'
 
 routes {
     route = [
@@ -35,8 +35,10 @@ routes {
         ['from':'activemq:topic:USERTOGROUP_UPDATED', 'to':["${callback.URL}/callback/task/updategroupusers"]],
 
         ['from':'activemq:topic:ADD_CALENDAR_EVENT', 'to':["${callback.URL}/callback/calendar/addevent"]],
-        ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}/callback/ox/createuser"]]
-
+        ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}/callback/ox/createuser"]],
+        ['from':'activemq:topic:FILE_ADDED', 'to':["${callback.URL}/fileindexer"]],
+        ['from':'activemq:topic:FILE_UPDATED', 'to':["${callback.URL}/fileindexer"]],
+        ['from':'activemq:topic:FILE_DELETED', 'to':["${callback.URL}/fileindexer"]]
         // ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}"]],
         // ['from':'activemq:topic:USER_DELETED', 'to':["${callback.URL}"]]
     ]

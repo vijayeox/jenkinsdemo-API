@@ -1,16 +1,14 @@
 <?php
 namespace Messaging\Service;
 
-use Exception;
 use Oxzion\Messaging\MessageProducer;
 
 class MessagingService
 {
-    public function __construct()
+    public function __construct(MessageProducer $messageProducer)
     {
-        $this->messageProducer = MessageProducer::getInstance();
+        $this->messageProducer = $messageProducer;
     }
-
 
     public function setMessageProducer($messageProducer)
     {
@@ -20,24 +18,14 @@ class MessagingService
     public function send($data)
     {
         if (isset($data['topic'])) {
-            try {
-                $this->messageProducer->sendTopic(json_encode($data), $data['topic']);
-                $result = $data;
-            } catch (Exception $e) {
-                return 0;
-            }
+            $response = $this->messageProducer->sendTopic(json_encode($data), $data['topic']);
         } else {
             if (isset($data['queue'])) {
-                try {
-                    $this->messageProducer->sendQueue(json_encode($data), $data['queue']);
-                    $result = $data;
-                } catch (Exception $e) {
-                    return 0;
-                }
+                $response = $this->messageProducer->sendQueue(json_encode($data), $data['queue']);
             } else {
-                return 0;
+                return false;
             }
         }
-        return $result;
+        return $response;
     }
 }

@@ -7,10 +7,12 @@ use Oxzion\Model\Entity;
 class Activity extends Entity
 {
     protected $data = array(
-        'id'=>0,
+        'id'=>null,
         'name'=>null,
-        'app_id'=>0,
-        'workflow_id'=>0,
+        'app_id'=>null,
+        'task_id'=>null,
+        'workflow_deployment_id'=>null,
+        'entity_id'=>null,
         'created_by'=>null,
         'modified_by'=>null,
         'date_created'=>null,

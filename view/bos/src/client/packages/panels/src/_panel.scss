@@ -39,7 +39,10 @@
   line-height: normal;
 
   &[data-ontop=true] {
-    z-index: 16777271;
+    /* Begin Oxzion customization. */
+    /* z-index: 16777271; */
+    z-index: 10009;
+    /* End Oxzion customization. */
   }
 
   &[data-position=top] {
@@ -111,7 +114,8 @@
   align-items: stretch;
   flex-direction: column;
   width: 0;
-  position: relative;
+  position: absolute;
+  top: 0;
   margin-top: 3.5em;
   margin-bottom: 3.5em;
   background-color: rgb(0, 0, 1);

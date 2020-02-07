@@ -17,7 +17,11 @@ class EngineImpl implements Engine
             $oxFieldArray = array();
             if ($fieldList) {
                 foreach ($fieldList as $field) {
-                    $oxFieldArray[] = $this->generateField($field);
+                    $generatedField = $this->generateField($field);
+                    if(isset($generatedField)){
+                        $oxFieldArray[] = $generatedField;
+                    }
+                    unset($generatedField);
                 }
                 $formTemplate['fields'] = $oxFieldArray;
             } else {

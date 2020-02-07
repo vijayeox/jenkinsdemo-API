@@ -1,11 +1,8 @@
 {* New Admin User Template *}
 
-<p>Hello Admin,</p>
+<p>Hello {$company_name} Admin,</p>
 
-<p> Organization {$company_name} has been created successfully. Please find the admin credentials below:</p>
-
-<p>     Username: {$username}</p>
-<p>     Password: {$password}</p>
+<p> An Account for your organization {$company_name} has been created successfully. Your login credentials will be sent shortly.</p>
 
 Thank you
-Team VA
+Team EOX Vantage

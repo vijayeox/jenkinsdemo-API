@@ -66,10 +66,10 @@ import { WebSocketAdapter } from './adapters/WebSocketAdapter.js';
 import { SplashServiceProvider } from './adapters/SplashAdapter.js';
 import {UserSessionServiceProvider} from './adapters/UserSessionAdapter.js';
 import { BosAdapter } from './adapters/BosAdapter.js';
+import {ScriptLoaderServiceProvider} from './adapters/ScriptLoader.js';
 /*import {MyApiServiceProvider} from './testProvider.js';
 import announcementWidget from './customWidget.js';
 import customPanelItem from './customPanel.js'*/
-
 
 const init = () => {
   let mergedConfig = merge(config, localConfig);
@@ -98,7 +98,24 @@ const init = () => {
   osjs.register(SplashServiceProvider, {before: true});
   osjs.register(UserSessionServiceProvider, {before: true});
   osjs.register(WebSocketAdapter);
+  osjs.register(ScriptLoaderServiceProvider,{before: true});
   osjs.boot();
 };
+
+function CheckAuthToken() {
+  var AuthToken = localStorage.getItem("AUTH_token");
+  if(!AuthToken)
+  {
+    alert("Your session has expired!.");
+    location.reload();
+  }
+}
+
+var AuthToken = localStorage.getItem("AUTH_token");
+if(AuthToken)
+{
+  var temp = AuthToken;
+  setInterval(CheckAuthToken, 10000);
+}
 
 window.addEventListener('DOMContentLoaded', () => init());

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import merge from "deepmerge";
 import osjs from "osjs";
-import Notification from "../components/Notification";
-
+import Notification from "OxzionGUI/Notification"
+import { Form, Button } from 'react-bootstrap'
 class Background extends Component {
   constructor(props) {
     super(props);
@@ -51,12 +51,20 @@ class Background extends Component {
           .then(() => {
             this.actions.setLoading(false);
             this.desktopService.applySettings();
-            this.notif.current.successNotification("Updated successfully.");
+            this.notif.current.notify(
+              "Success",
+              "Updated successfully.",
+              "success"
+            )
           })
           .catch(error => {
             this.actions.setLoading(false);
             console.error(error); // FIXME
-            this.notif.current.failNotification("Update failed.");
+            this.notif.current.notify(
+              "Error",
+              "Update failed.",
+              "danger"
+            )
           });
       },
 
@@ -174,22 +182,22 @@ class Background extends Component {
       mime: [/^image/]
     };
 
-    this.createDialog("file", args,{
-      attributes: {modal: true},
+    this.createDialog("file", args, {
+      attributes: { modal: true },
       parent: this.win
     }, this.callback);
   };
-
   render() {
     return (
       <div className="componentDiv">
         <Notification ref={this.notif} />
-        <form className="formmargin" onSubmit={this.handleSubmit}>
+        <Form className="formmargin preferenceForm" onSubmit={this.handleSubmit}>
           <div className="row marginsize">
-            <div className="col-4">
-              <label id="imageLabel">Image:</label>
+            <div className="col-md-4">
+              <Form.Label>Image:</Form.Label>
+              {/* <label id="imageLabel">Image:</label> */}
             </div>
-            <div className="col-4 imagediv">
+            <div className="col-md-4 imagediv">
               <div className="image" id="image">
                 {this.state.imageSrc}{" "}
                 <button
@@ -203,10 +211,24 @@ class Background extends Component {
           </div>
 
           <div className="row marginsize">
-            <div className="col-4">
-              <label id="styleLabel">Style:</label>
+            <div className="col-md-4">
+              <Form.Label>Color:</Form.Label>
             </div>
-            <div className="col-4 backgroundStylediv">
+            <div className="col-md-4 colordiv">
+              <input
+                type="color"
+                value={this.state.colorCode}
+                onChange={this.handleChange}
+                name="desktop.background.color"
+                className="colorPicker"
+              />
+            </div>
+          </div>
+          <div className="row marginsize">
+            <div className="col-md-4">
+              <Form.Label>Style:</Form.Label>
+            </div>
+            <div className="col-md-8 backgroundStylediv">
               <select
                 value={this.state.styleName}
                 onChange={this.handleChange}
@@ -221,29 +243,14 @@ class Background extends Component {
             </div>
           </div>
 
-          <div className="row marginsize">
-            <div className="col-4">
-              <label id="colorLabel">Color:</label>
-            </div>
-            <div className="col-4 colordiv">
-              <input
-                type="color"
-                value={this.state.colorCode}
-                onChange={this.handleChange}
-                name="desktop.background.color"
-                className="colorPicker"
-              />
-            </div>
-          </div>
+         
 
           <div className="row">
             <div className="col-12 input-field">
-              <button className="k-button k-primary" type="submit">
-                Save
-              </button>
+              <Button className="pull-right preferenceForm-btn" type="submit">Save</Button>
             </div>
           </div>
-        </form>
+        </Form>
       </div>
     );
   }

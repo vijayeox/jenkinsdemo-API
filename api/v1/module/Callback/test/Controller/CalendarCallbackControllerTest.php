@@ -42,6 +42,13 @@ class CalendarCallbackControllerTest extends ControllerTest
         $calendarService->setEmailService($mockEmailService);
         return $mockEmailService;
     }
+     private function getMockEmailClientForCalendarService()
+    {
+        $calendarService = $this->getApplicationServiceLocator()->get(Service\CalendarService::class);
+        $mockEmailClient = Mockery::mock('Oxzion\Email\EmailClient');
+        $calendarService->setEmailClient($mockEmailClient);
+        return $mockEmailClient;
+    }
     public function testSendMail()
     {
         $data = ['to' => 'bharatg@myvamla.com','from' => 'bharatg@myvamla.com','subject'=>'test case for email','body'=>'test body for email'];
@@ -55,11 +62,12 @@ class CalendarCallbackControllerTest extends ControllerTest
         $smtpConfig = array('host' => 'box3053.bluehost.com',
                         'password' => 'password',
                         'port' => '465',
+                        'username' => 'bharatg@myvamla.com',
                         'secure' => 'ssl');
         $smtpDetails = $mockemailService->expects('getEmailAccountsByEmailId')->with($data['from'], true)->once()->andReturn($smtpConfig);
 
-        $mockemailClient = Mockery::mock('Oxzion\Email\EmailClient');
-        $mockemailClient->expects('buildAndSendMessage')->with($data['body'], $_FILES['attachment'], $headers, $smtpDetails)->once()->andReturn(null);
+        $mockemailClient = $this->getMockEmailClientForCalendarService();
+        $mockemailClient->expects('buildAndSendMessage')->withAnyArgs()->once()->andReturn(null);
         $this->dispatch('/callback/calendar/sendmail', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);
@@ -79,13 +87,13 @@ class CalendarCallbackControllerTest extends ControllerTest
 
         $mockemailService = $this->getMockEmailServiceForCalendarService();
         $smtpConfig = array('host' => 'box3053.bluehost.com',
+                        'username' => 'bharatg@myvamla.com',
                         'password' => 'password',
                         'port' => '465',
                         'secure' => 'ssl');
         $smtpDetails = $mockemailService->expects('getEmailAccountsByEmailId')->with($data['from'], true)->once()->andReturn($smtpConfig);
-
-        $mockemailClient = Mockery::mock('Oxzion\Email\EmailClient');
-        $mockemailClient->expects('buildAndSendMessage')->with($data['body'], array(), $headers, $smtpDetails)->once()->andReturn(null);
+        $mockemailClient = $this->getMockEmailClientForCalendarService();
+        $mockemailClient->expects('buildAndSendMessage')->withAnyArgs()->once()->andReturn(null);
         $this->dispatch('/callback/calendar/sendmail', 'POST', $data);
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertResponseStatusCode(201);

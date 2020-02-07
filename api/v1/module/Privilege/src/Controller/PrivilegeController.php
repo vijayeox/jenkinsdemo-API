@@ -10,7 +10,6 @@ use Oxzion\Model\Privilege;
 use Oxzion\Model\PrivilegeTable;
 use Oxzion\Service\PrivilegeService;
 use Zend\Db\Adapter\AdapterInterface;
-use Zend\Log\Logger;
 
 /**
  * Privilege Controller
@@ -25,9 +24,9 @@ class PrivilegeController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(PrivilegeTable $table, PrivilegeService $privilegeService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(PrivilegeTable $table, PrivilegeService $privilegeService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __class__, Privilege::class);
+        parent::__construct($table, Privilege::class);
         $this->setIdentifierName('privilegeId');
         $this->privilegeService = $privilegeService;
     }

@@ -52,7 +52,7 @@ class ForgotPasswordControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         if(enableCamel == 0){
             $mockMessageProducer = $this->getMockMessageProducer();
-            $mockMessageProducer->expects('sendTopic')->with(Mockery::any(),'mail')->once()->andReturn();
+            $mockMessageProducer->expects('sendQueue')->with(Mockery::any(),'mail')->once()->andReturn();
         }
         $this->dispatch('/user/me/forgotpassword', 'POST', $data);
         $this->assertResponseStatusCode(200);

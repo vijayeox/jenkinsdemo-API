@@ -4,7 +4,6 @@ namespace App\Controller;
 /**
 * Field Api
 */
-use Zend\Log\Logger;
 use Oxzion\Model\Field;
 use Oxzion\Model\FieldTable;
 use Oxzion\Service\FieldService;
@@ -12,6 +11,7 @@ use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\View\Model\JsonModel;
+use Oxzion\ServiceException;
 
 /**
  * Field Controller
@@ -25,9 +25,9 @@ class FieldController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(FieldTable $table, FieldService $fieldService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(FieldTable $table, FieldService $fieldService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Field::class);
+        parent::__construct($table, Field::class);
         $this->setIdentifierName('id');
         $this->fieldService = $fieldService;
     }
@@ -103,9 +103,13 @@ class FieldController extends AbstractApiController
     * @return array success|failure response
     */
     public function delete($id)
-    {
+    {  
         $appId = $this->params()->fromRoute()['appId'];
-        $response = $this->fieldService->deleteField($appId, $id);
+        try{
+            $response = $this->fieldService->deleteField($appId, $id);
+        } catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
+        }
         if ($response == 0) {
             return $this->getErrorResponse("Field not found", 404, ['id' => $id]);
         }
@@ -121,7 +125,7 @@ class FieldController extends AbstractApiController
     * @return array Returns a JSON Response with Status Code and Created Field.
     */
     public function get($id)
-    {
+    {  
         $appId = $this->params()->fromRoute()['appId'];
         $result = $this->fieldService->getField($appId, $id);
         if ($result == 0) {

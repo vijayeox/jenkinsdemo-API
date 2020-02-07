@@ -131,9 +131,10 @@ export default class DialogContainer extends React.Component {
   validateEmail(emailText) {
     var pattern = /^[a-zA-Z0-9\-_]+(\.[a-zA-Z0-9\-_]+)*@[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*\.[a-z]{2,4}$/;
     if (!pattern.test(emailText)) {
-      this.notif.current.customWarningNotification(
+      this.notif.current.notify(
         "Invalid Email ID",
-        "Please enter a valid email address."
+        "Please enter a valid email address.",
+        "warning"
       );
       return true;
     }
@@ -164,9 +165,10 @@ export default class DialogContainer extends React.Component {
             this.props.action(response);
             this.props.cancel();
           } else {
-            this.notif.current.failNotification(
+            this.notif.current.notify(
               "Error",
-              response.message ? response.message : null
+              response.message ? response.message : null,
+              "danger"
             );
           }
         });
@@ -179,9 +181,10 @@ export default class DialogContainer extends React.Component {
       document.getElementById("select-currency").value !==
       this.state.orgInEdit.preferences.currency
     ) {
-      this.notif.current.customWarningNotification(
+      this.notif.current.notify(
         "Invalid Currency",
-        "Please choose a valid currency from the list."
+        "Please choose a valid currency from the list.",
+        "warning"
       );
       return;
     }
@@ -197,7 +200,11 @@ export default class DialogContainer extends React.Component {
       }
     }
 
-    this.notif.current.uploadingData();
+    this.notif.current.notify(
+      "Uploading Data",
+      "Please wait for a few seconds.",
+      "default"
+    );
     if (this.props.formAction == "post") {
       var contactData = JSON.stringify({
         firstname: this.state.orgInEdit.contact.firstname,
@@ -217,7 +224,7 @@ export default class DialogContainer extends React.Component {
 
     let tempData = {
       name: this.state.orgInEdit.name,
-      address: this.state.orgInEdit.address,
+      address1: this.state.orgInEdit.address1,
       city: this.state.orgInEdit.city,
       state: this.state.orgInEdit.state,
       country: this.state.orgInEdit.country,
@@ -255,9 +262,10 @@ export default class DialogContainer extends React.Component {
       ) {
         this.activateOrganization(tempData);
       } else {
-        this.notif.current.failNotification(
+        this.notif.current.notify(
           "Error",
-          response.message ? response.message : null
+          response.message ? response.message : null,
+          "danger"
         );
       }
     });
@@ -276,9 +284,10 @@ export default class DialogContainer extends React.Component {
           behavior: "smooth",
           inline: "nearest"
         });
-        this.notif.current.customWarningNotification(
+        this.notif.current.notify(
           "No image selected",
-          "Please choose a logo for the Organization."
+          "Please choose a logo for the Organization.",
+          "warning"
         );
       } else {
         this.pushData();
@@ -302,7 +311,7 @@ export default class DialogContainer extends React.Component {
             {this.props.diableField ? (
               <div className="read-only-mode">
                 <h5>(READ ONLY MODE)</h5>
-                <i class="fas fa-user-lock"></i>
+                <i class="fa fa-lock"></i>
               </div>
             ) : null}
             <div className="form-group">
@@ -325,8 +334,8 @@ export default class DialogContainer extends React.Component {
               <TextareaAutosize
                 type="text"
                 className="form-control"
-                value={this.state.orgInEdit.address || ""}
-                name="address"
+                value={this.state.orgInEdit.address1 || ""}
+                name="address1"
                 onChange={this.onDialogInputChange}
                 placeholder="Enter Organization Address"
                 maxLength="250"
@@ -381,6 +390,7 @@ export default class DialogContainer extends React.Component {
                   <label className="required-label">Zip Code</label>
                   <Input
                     type="text"
+                    className="form-control"
                     value={this.state.orgInEdit.zip || ""}
                     name="zip"
                     pattern="[0-9]+"
@@ -439,6 +449,7 @@ export default class DialogContainer extends React.Component {
                 <div className="form-row">
                   <div className="col">
                     <Input
+                      className="form-control"
                       type="text"
                       name="firstname"
                       value={
@@ -455,6 +466,7 @@ export default class DialogContainer extends React.Component {
                   </div>
                   <div className="col">
                     <Input
+                      className="form-control"
                       type="text"
                       name="lastname"
                       value={
@@ -473,6 +485,7 @@ export default class DialogContainer extends React.Component {
                 <div className="form-row" style={{ marginTop: "10px" }}>
                   <div className="col">
                     <Input
+                      className="form-control"
                       type="text"
                       name="username"
                       value={
@@ -504,6 +517,7 @@ export default class DialogContainer extends React.Component {
                   </div>
                   <div className="col">
                     <Input
+                      className="form-control"
                       type="email"
                       name="email"
                       id="email-id"

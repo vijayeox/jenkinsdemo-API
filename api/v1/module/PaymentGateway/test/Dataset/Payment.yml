@@ -1,0 +1,39 @@
+ox_app:
+  -
+    id: 99
+    uuid: "aff3ddd4-e411-11e9-a359-2a2ae2dbcce4"
+    name: "Sample App"
+    category: "OTHERS"
+    type: 2
+    status: 4
+  -
+    id: 100
+    uuid: "aff3e23e-e411-11e9-a359-2a2ae2dbcce4"
+    name: "Test App"
+    category: "OTHERS"
+    type: 2
+    status: 4
+ox_payment:
+  -
+    id: 1
+    app_id: 99
+    org_id: 1
+    payment_client: "ConvergePay"
+    js_url: "https://demo.convergepay.com/hosted-payments/Checkout.js"
+    api_url: "https://demo.convergepay.com/hosted-payments/transaction_token"
+    server_instance_name: "DEMO"
+    payment_config: '{"merchant_id": "011454","user_id": "webpage","pincode": "DT808D" }'
+  -
+    id: 2
+    app_id: 100
+    org_id: 1
+    payment_client: "SomePay"
+    js_url: "https://demo.convergepay.com/hosted-payments/Checkout.js"
+    api_url: "https://demo.convergepay.com/hosted-payments/transaction_token"
+    server_instance_name: "DEMO"
+    payment_config: '{"merchant_id": "011454","user_id": "webpage","pincode": "DT808D" }'
+ox_payment_transaction:
+  -
+    id: 1
+    payment_id: 1
+    data: "{'something':'cool'}"

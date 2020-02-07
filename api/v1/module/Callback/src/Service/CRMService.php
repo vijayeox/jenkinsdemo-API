@@ -4,20 +4,26 @@ namespace Callback\Service;
     use Oxzion\Auth\AuthConstants;
     use Oxzion\Auth\AuthContext;
     use Oxzion\Service\AbstractService;
+    use Oxzion\Service\UserService;
     use Oxzion\ValidationException;
     use Oxzion\Utils\RestClient;
-    use Zend\Log\Logger;
+    use Contact\Service\ContactService;
+
     use Exception;
 
     class CRMService extends AbstractService
     {
         protected $dbAdapter;
+        protected $contactService;
+        protected $userService;
 
-        public function __construct($config, Logger $log)
+        public function __construct($config, ContactService $contactService, UserService $userService)
         {
-            parent::__construct($config, null, $log);
+            parent::__construct($config, null);
+            $this->contactService = $contactService;
+            $this->userService = $userService;
         }
-        public function addContact($data, $contactService, $userService)
+        public function addContact($data)
         {
             $params = array();
             $params['first_name'] = isset($data['firstName']) ? $data['firstName'] : null;
@@ -30,20 +36,21 @@ namespace Callback\Service;
                 $params['company_name'] = $data['accounts']['name'];
             }
             if (isset($data['addresses']) && !empty($data['addresses'])) {
-                $params['address_1'] = $data['addresses'][0]['name'];
-                $params['address_2'] = isset($data['addresses'][1]['name']) ? $data['addresses'][1]['name'] : null;
+                $params['address1'] = $data['addresses'][0]['name'];
+                $params['address2'] = isset($data['addresses'][1]['name']) ? $data['addresses'][1]['name'] : null;
             }
             $data['owner']['username'] = isset($data['owner']['username']) ? $data['owner']['username'] : null;
             $data['assignedTo']['username'] = isset($data['assignedTo']['username']) ? $data['assignedTo']['username'] : null;
-            $assignedTo = $userService->getUserDetailsbyUserName($data['owner']['username'], array('uuid'));
-            $owner = $userService->getUserDetailsbyUserName($data['assignedTo']['username'], array('id'));
+            $assignedTo = $this->userService->getUserDetailsbyUserName($data['owner']['username'], array('uuid'));
+            $owner = $this->userService->getUserDetailsbyUserName($data['assignedTo']['username'], array('id'));
             $assignedTo['uuid'] = isset($assignedTo['uuid']) ? $assignedTo['uuid'] : null;
             $params['owner_id'] = isset($owner['id']) ? $owner['id'] : null;
             $params['created_id'] = isset($owner['id']) ? $owner['id'] : null;
             $params['uuid'] = $assignedTo['uuid'];
             try {
-                $result = $contactService->createContact($params);
+                $result = $this->contactService->createContact($params);
             } catch (Exception $e) {
+                $this->logger->error($e->getMessage(), $e);
                 return 0;
             }
             if ($result) {

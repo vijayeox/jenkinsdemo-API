@@ -51,6 +51,7 @@ module.exports = {
     enabled: false
   },
   desktop: {
+    contextmenu: false,
     settings: {
       theme: "Vision",
       icons: "oxzioniconpack",
@@ -88,7 +89,7 @@ module.exports = {
       organization:{
         label: 'LBL_APP_CAT_ORGANIZATION',
         icon: 'applications-development'
-      },
+      }
     }
   }
 };

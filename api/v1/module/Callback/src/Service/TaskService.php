@@ -19,9 +19,9 @@ class TaskService extends AbstractService
     }
 
 
-    public function __construct($config, Logger $log)
+    public function __construct($config)
     {
-        parent::__construct($config, null, $log);
+        parent::__construct($config, null);
         $this->restClient = new RestClient($this->config['task']['taskServerUrl'], array('auth'=>array($this->config['task']['username'],$this->config['task']['authToken'])));
     }
 
@@ -33,7 +33,7 @@ class TaskService extends AbstractService
             $projectData = json_decode($response['body'], true);
             return $projectData;
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            $this->logger->info(TaskService::class."Failed to create new entity".$e);
+            $this->logger->info("Failed to create new entity".$e);
         }
     }
 
@@ -44,7 +44,7 @@ class TaskService extends AbstractService
             $projectData = json_decode($response['body'], true);
             return $projectData;
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            $this->logger->info(TaskService::class."Failed to Delete entity".$e);
+            $this->logger->info("Failed to Delete entity".$e);
         }
     }
 
@@ -55,7 +55,7 @@ class TaskService extends AbstractService
             $projectData = json_decode($response['body'], true);
             return $projectData;
         } catch (\GuzzleHttp\Exception\ClientException $e) {
-            $this->logger->info(TaskService::class."Failed to Update entity".$e);
+            $this->logger->info("Failed to Update entity".$e);
         }
     }
 
@@ -68,20 +68,9 @@ class TaskService extends AbstractService
                 return $projectData;
             }
         } catch (Exception $e) {
-            $this->logger->info(TaskService::class."Failed to create new entity".$e);
+            $this->logger->info("Failed to create new entity".$e);
         }
         return 0;
-    }
-
-    public function deleteUserFromTask($projectUuid, $username)
-    {
-        try {
-            $response = $this->restClient->deleteWithHeader('oxusers', array('username' => $username, 'projectUuid' => $projectUuid));
-            $projectData = json_decode($response['body'], true);
-            return $projectData;
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-            $this->logger->info(TaskService::class."Failed to create new entity".$e);
-        }
     }
 
     public function addGroupToTask($groupname) {
@@ -108,6 +97,17 @@ class TaskService extends AbstractService
             return json_decode($response, true);
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $this->logger->info(TaskService::class."Failed to create new entity".$e);
+        }
+    }
+
+    public function deleteUserFromTask($projectUuid, $username)
+    {
+        try {
+            $response = $this->restClient->deleteWithHeader('oxusers', array('username' => $username, 'projectUuid' => $projectUuid));
+            $projectData = json_decode($response['body'], true);
+            return $projectData;
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $this->logger->error("Failed to create new entity", $e);
         }
     }
 

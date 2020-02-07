@@ -8,6 +8,10 @@
             <directory>./module/Attachment/test</directory>
             <directory>./module/Resource/test</directory>
         </testsuite>
+        <testsuite name="Analytics Fixtures">
+            <directory>./module/Analytics/test</directory>
+            <directory>./module/FileIndexer/test</directory>
+        </testsuite>
         <testsuite name="Home Page Fixtures">
             <directory>./module/Auth/test</directory>
             <directory>./module/Screen/test</directory>
@@ -23,7 +27,7 @@
             <directory>./module/Workflow/test</directory>
         </testsuite>
         <testsuite name="Core Fixtures">
-            <directory>./lpib/Oxzion/test</directory>
+            <directory>./lib/Oxzion/test</directory>
             <directory>./module/Mlet/test</directory>
         </testsuite>
         <testsuite name="Callback Fixtures">
@@ -39,14 +43,21 @@
             <directory>./module/Privilege/test</directory>
             <directory>./module/Search/test</directory>
             <directory>./module/ProspectResearch/test</directory>
-        </testsuite>
-       <testsuite name="Form File Fixtures">
+            <directory>./module/PaymentGateway/test</directory>
+        </testsuite> 
+        <testsuite name="Form File Fixtures">
             <directory>./module/File/test</directory>
             <directory>./module/Form/test</directory>
         </testsuite>
-    </testsuites>
+        <testsuite name="Dive Insurance Fixtures">
+            <directory>../../clients/DiveInsurance/test/</directory>
+        </testsuite>
+        <testsuite name="BridgeMed Fixtures">
+            <directory>../../clients/BridgeMed/test/</directory>
+        </testsuite>
+    </testsuites> 
     <php>
-        <ini name="memory_limit" value="250M" />
+        <ini name="memory_limit" value="500M" />
         <const name="enableNLP" value="0"/>
         <const name="enableCamunda" value="0"/>
         <const name="enableElastic" value="0"/>
@@ -54,6 +65,8 @@
         <const name="enableActiveMQ" value="0"/>
         <const name="enableCamel" value="0"/>
         <const name="enableProspectResearch" value="0"/>
+        <const name="enableCamundaForDeployApp" value="0"/>
+        <const name="enableExecUtils" value="0"/>
     </php>
     <listeners>
         <listener class="\MyBuilder\PhpunitAccelerator\TestListener"/>

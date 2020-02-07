@@ -33,7 +33,7 @@ class OXCallbackControllerTest extends ControllerTest
 
     public function testCreatedUser()
     {
-        $data = array('email'=>'bharat@goku.com','firstname'=>'bharat','username'=>'bharat','password'=>'password');
+        $data = array('email'=>'bharat@goku.com','firstname'=>'bharat','username'=>'bharat','password'=>'password','orgid' => '53012471-2863-4949-afb1-e69b0891c98a');
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/ox/createuser', 'POST', $data);
         $this->assertResponseStatusCode(200);

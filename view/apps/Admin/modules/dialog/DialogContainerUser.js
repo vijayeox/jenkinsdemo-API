@@ -135,10 +135,11 @@ export default class DialogContainer extends React.Component {
   validateEmail(emailText) {
     var pattern = /^[a-zA-Z0-9\-_]+(\.[a-zA-Z0-9\-_]+)*@[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*\.[a-z]{2,4}$/;
     if (!pattern.test(emailText)) {
-      this.notif.current.customWarningNotification(
+      this.notif.current.notify(
         "Invalid Email ID",
-        "Please enter a valid email address."
-      );
+        "Please enter a valid email address.",
+        "warning"
+      )
       return true;
     }
   }
@@ -146,10 +147,11 @@ export default class DialogContainer extends React.Component {
   validateUserName(username) {
     var pattern = /^[a-zA-Z0-9\-_]+(\.[a-zA-Z0-9\-_]+)*@[a-z0-9]+(\-[a-z0-9]+)*(\.[a-z0-9]+(\-[a-z0-9]+)*)*\.[a-z]{2,4}$/;
     if (!pattern.test(username)) {
-      this.notif.current.customWarningNotification(
+      this.notif.current.notify(
         "Invalid Email ID",
-        "Please enter a valid email address."
-      );
+        "Please enter a valid email address.",
+        "warning"
+      )
       return true;
     }
   }
@@ -171,7 +173,6 @@ export default class DialogContainer extends React.Component {
         this.props.dataItem.uuid,
         {
           username: this.state.userInEdit.username,
-          password: this.state.userInEdit.password,
           firstname: this.state.userInEdit.firstname,
           lastname: this.state.userInEdit.lastname,
           email: this.state.userInEdit.email,
@@ -185,6 +186,10 @@ export default class DialogContainer extends React.Component {
           date_of_join: new Moment(this.state.userInEdit.date_of_join).format(
             "YYYY-MM-DD"
           ),
+          address1:" ",
+          city:" ",
+          state:" ",
+          zip:" ",
           country: this.state.userInEdit.country
         }
       ).then(response => {
@@ -192,17 +197,18 @@ export default class DialogContainer extends React.Component {
           this.props.action(response);
           this.props.cancel();
         } else {
-          this.notif.current.failNotification(
+          this.notif.current.notify(
             "Error",
-            response.message ? response.message : "Operation failed."
-          );
+            response.message ? response.message : null,
+            "danger"
+          )
         }
       });
     } else if (this.props.formAction == "put") {
       PushData("user", this.props.formAction, this.props.dataItem.uuid, {
-        password: this.state.userInEdit.password,
         firstname: this.state.userInEdit.firstname,
         lastname: this.state.userInEdit.lastname,
+        username: this.state.userInEdit.username,
         email: this.state.userInEdit.email,
         date_of_birth: new Moment(this.state.userInEdit.date_of_birth).format(
           "YYYY-MM-DD"
@@ -214,16 +220,21 @@ export default class DialogContainer extends React.Component {
         date_of_join: new Moment(this.state.userInEdit.date_of_join).format(
           "YYYY-MM-DD"
         ),
+        address1:"",
+        city:"",
+        state:"",
+        zip:"",
         country: this.state.userInEdit.country
       }).then(response => {
         if (response.status == "success") {
           this.props.action(response);
           this.props.cancel();
         } else {
-          this.notif.current.failNotification(
+          this.notif.current.notify(
             "Error",
-            response.message ? response.message : null
-          );
+            response.message ? response.message : null,
+            "danger"
+          )
         }
       });
     }
@@ -239,7 +250,7 @@ export default class DialogContainer extends React.Component {
             {this.props.diableField ? (
               <div className="read-only-mode">
                 <h5>(READ ONLY MODE)</h5>
-                <i class="fas fa-user-lock"></i>
+                <i class="fa fa-lock"></i>
               </div>
             ) : null}
 

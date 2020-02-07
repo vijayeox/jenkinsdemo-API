@@ -2,7 +2,6 @@
 
 namespace File\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Model\CommentTable;
 use Oxzion\Model\Comment;
 use Oxzion\Service\CommentService;
@@ -20,9 +19,9 @@ class CommentController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(CommentTable $table, CommentService $commentService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(CommentTable $table, CommentService $commentService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Comment::class);
+        parent::__construct($table, Comment::class);
         $this->setIdentifierName('id');
         $this->commentService = $commentService;
     }

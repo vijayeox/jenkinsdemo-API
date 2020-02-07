@@ -1,7 +1,6 @@
 <?php
 namespace Callback\Controller;
 
-    use Zend\Log\Logger;
     use Oxzion\Controller\AbstractApiControllerHelper;
     use Oxzion\ValidationException;
     use Zend\Db\Adapter\AdapterInterface;
@@ -15,10 +14,10 @@ namespace Callback\Controller;
         // /**
         // * @ignore __construct
         // */
-        public function __construct(ChatService $chatService, Logger $log)
+        public function __construct(ChatService $chatService)
         {
             $this->chatService = $chatService;
-            $this->log = $log;
+            $this->log = $this->getLogger();
         }
         
         public function setChatService($chatService)
@@ -29,7 +28,7 @@ namespace Callback\Controller;
         public function addOrgAction()
         {
             $params = $this->extractPostData();
-            $this->log->info(ChatCallbackController::class.":Organization Add Params- ".json_encode($params));
+            $this->log->info("Organization Add Params- ".json_encode($params));
             $params['orgname'] = isset($params['orgname']) ? $params['orgname'] : null;
             $response = $this->chatService->createTeam($params['orgname']);
             if ($response) {
@@ -46,7 +45,7 @@ namespace Callback\Controller;
             $params['new_orgname'] = isset($params['new_orgname']) ? $params['new_orgname'] : null;
             $response = $this->chatService->updateTeam($params['old_orgname'], $params['new_orgname']);
             if ($response) {
-                $this->log->info(ChatCallbackController::class.":Organization Updated");
+                $this->log->info("Organization Updated");
                 return $this->getSuccessResponseWithData(json_decode($response, true));
             }
             return $this->getErrorResponse("Org Update Failure", 404);
@@ -57,7 +56,7 @@ namespace Callback\Controller;
             $params = $this->extractPostData();
             $response = $this->chatService->deleteOrg($params['orgname']);
             if ($response) {
-                $this->log->info(ChatCallbackController::class.":Organization Deleted");
+                $this->log->info("Organization Deleted");
                 return $this->getSuccessResponseWithData(json_decode($response, true));
             }
             return $this->getErrorResponse("Org Deletion Failed", 400);
@@ -70,7 +69,7 @@ namespace Callback\Controller;
             $params['orgname'] = isset($params['orgname']) ? $params['orgname'] : null;
             $response = $this->chatService->addUserToTeam($params['username'], $params['orgname']);
             if ($response) {
-                $this->log->info(ChatCallbackController::class.":Added user to organization");
+                $this->log->info("Added user to organization");
                 return $this->getSuccessResponseWithData($response);
             }
             return $this->getErrorResponse("Adding User To Team Failure ", 400);
@@ -84,7 +83,7 @@ namespace Callback\Controller;
            
             $response = $this->chatService->removeUserFromTeam($params['username'], $params['orgname']);
             if ($response) {
-                $this->log->info(ChatCallbackController::class.":Removed user from organization");
+                $this->log->info("Removed user from organization");
                 return $this->getSuccessResponseWithData(json_decode($response, true));
             }
             return $this->getErrorResponse("Remove User From Team Failure ", 404);
@@ -96,7 +95,7 @@ namespace Callback\Controller;
             $params['groupname'] = isset($params['groupname']) ? $params['groupname'] : null;
             $params['orgname'] = isset($params['orgname']) ? $params['orgname'] : null;
             $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) :($params['groupname']);
-            $this->log->info(ChatCallbackController::class.":Channel Name- ".$params['channelname']);
+            $this->log->info(":Channel Name- ".$params['channelname']);
             $response = $this->chatService->createChannel($params['channelname'], $params['orgname']);
             if ($response) {
                 $this->log->info(ChatCallbackController::class.":Project/Group Creation Successful");
@@ -113,7 +112,7 @@ namespace Callback\Controller;
             $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) :($params['groupname']);
             $response = $this->chatService->deleteChannel($params['channelname'], $params['orgname']);
             if ($response) {
-                $this->log->info(ChatCallbackController::class.":Project/Group Deleted");
+                $this->log->info(":Project/Group Deleted");
                 return $this->getSuccessResponseWithData(json_decode($response, true));
             }
             return $this->getErrorResponse("Channel Deletion Failed", 400);
@@ -129,7 +128,7 @@ namespace Callback\Controller;
             $params['new_channelname'] = isset($params['new_projectname']) ? ($params['new_projectname']) :($params['new_groupname']);
             $response = $this->chatService->updateChannel($params['old_channelname'], $params['new_channelname'], $params['orgname']);
             if ($response) {
-                $this->log->info(ChatCallbackController::class.":Project/Group Updated Successful");
+                $this->log->info(":Project/Group Updated Successful");
                 return $this->getSuccessResponseWithData(json_decode($response, true));
             }
             return $this->getErrorResponse("Update to Channel Failed", 404);
@@ -142,7 +141,7 @@ namespace Callback\Controller;
             $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) :($params['groupname']);
             $response = $this->chatService->addUserToChannel($params['username'], $params['channelname'], $params['orgname']);
             if ($response) {
-                $this->log->info(ChatCallbackController::class.":User to Project/Group added successfully");
+                $this->log->info("User to Project/Group added successfully");
                 return $this->getSuccessResponseWithData(json_decode($response['body'], true));
             }
             return $this->getErrorResponse("Add User to Channel Failed", 400);
@@ -155,7 +154,7 @@ namespace Callback\Controller;
             $params['channelname'] = isset($params['projectname']) ? ($params['projectname']) :($params['groupname']);
             $response = $this->chatService->removeUserFromChannel($params['username'], $params['channelname'], $params['orgname']);
             if ($response) {
-                $this->log->info(ChatCallbackController::class.":User from Project/Group removed successfully");
+                $this->log->info("User from Project/Group removed successfully");
                 return $this->getSuccessResponseWithData(json_decode($response, true));
             }
             return $this->getErrorResponse("Removing User from Channel Failed", 400);

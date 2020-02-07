@@ -4,7 +4,6 @@ namespace App\Controller;
 /**
 * Page Api
 */
-use Zend\Log\Logger;
 use App\Model\Page;
 use App\Model\PageTable;
 use App\Service\PageService;
@@ -12,6 +11,7 @@ use App\Service\PageContentService;
 use Zend\Db\Adapter\AdapterInterface;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
+use Oxzion\ServiceException;
 
 class PageController extends AbstractApiController
 {
@@ -20,9 +20,9 @@ class PageController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(PageTable $table, PageService $pageService, PageContentService $pageContentService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(PageTable $table, PageService $pageService, PageContentService $pageContentService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Page::class);
+        parent::__construct($table, Page::class);
         $this->setIdentifierName('pageId');
         $this->pageService = $pageService;
         $this->pageContentService = $pageContentService;
@@ -42,9 +42,9 @@ class PageController extends AbstractApiController
     */
     public function create($data)
     {
-        $appId = $this->params()->fromRoute()['appId'];
+        $routeData = $this->params()->fromRoute();
         try {
-            $count = $this->pageService->savePage($appId, $data);
+            $count = $this->pageService->savePage($routeData, $data);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
@@ -64,8 +64,8 @@ class PageController extends AbstractApiController
     */
     public function getList()
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->pageService->getPages($appId);
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $result = $this->pageService->getPages($appUuid);
         return $this->getSuccessResponseWithData($result);
     }
     /**
@@ -77,17 +77,17 @@ class PageController extends AbstractApiController
     * @param array $data
     * @return array Returns a JSON Response with Status Code and Created Page.
     */
-    public function update($id, $data)
+    public function update($pageUuid, $data)
     {
-        $appId = $this->params()->fromRoute()['appId'];
+        $params = array_merge($this->extractPostData(), $this->params()->fromRoute());
         try {
-            $count = $this->pageService->updatePage($id, $data);
+            $count = $this->pageService->savePage($params, $data, $pageUuid);
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+            return $this->getErrorResponse("Entity not found for id - $pageUuid", 404);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -101,10 +101,11 @@ class PageController extends AbstractApiController
     */
     public function delete($id)
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $response = $this->pageService->deletePage($appId, $id);
-        if ($response == 0) {
-            return $this->getErrorResponse("Page not found", 404, ['id' => $id]);
+        $appUuid = $this->params()->fromRoute()['appId'];
+        try{
+        $response = $this->pageService->deletePage($appUuid, $id);
+        } catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponse();
     }
@@ -117,12 +118,13 @@ class PageController extends AbstractApiController
     * @return array $data
     * @return array Returns a JSON Response with Status Code and Created Page.
     */
-    public function get($pageId)
+    public function get($pageUuid)
     {
-        $appId = $this->params()->fromRoute()['appId'];
-        $result = $this->pageContentService->getPageContent($appId, $pageId);
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $result = $this->pageContentService->getPageContent($appUuid, $pageUuid);
+        // print_r($result);exit;
         if ($result == 0) {
-            return $this->getErrorResponse("Page not found", 404, ['id' => $pageId]);
+            return $this->getErrorResponse("Page not found", 404, ['id' => $pageUuid]);
         }
         return $this->getSuccessResponseWithData($result);
     }

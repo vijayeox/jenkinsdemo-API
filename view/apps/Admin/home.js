@@ -7,6 +7,7 @@ import User from "./modules/User";
 import Group from "./modules/Group";
 import Role from "./modules/Roles";
 import Announcement from "./modules/Announcement";
+import Errorlog from "./modules/Errorlog";
 import { slide as Menu } from "react-burger-menu";
 
 class Home extends React.Component {
@@ -138,7 +139,13 @@ class Home extends React.Component {
     });
     table.push(
       <React.Fragment key={15}>
-        {this.userProfile.privileges.MANAGE_EMAIL_READ ? (
+        <div onClick={this.errorLogAdminClick} className="moduleBtn">
+          <div className="block d1">
+            <img src="apps/Admin/org.svg" />
+          </div>
+          <div className="titles">Errorlog</div>
+        </div>
+        {this.userProfile.privileges.MANAGE_ERROR_WRITE ? (
           <div key={10} onClick={this.mailAdminClick}>
             <div className="block d1">
               <img src="apps/Admin/091-email-1.svg" />
@@ -147,7 +154,7 @@ class Home extends React.Component {
           </div>
         ) : null}
 
-        {this.userProfile.privileges.MANAGE_CRM_WRITE ? (
+        {this.userProfile.privileges.MANAGE_CRMADMIN_WRITE ? (
           <div onClick={this.crmAdminClick}>
             <div className="block d1">
               <img src="apps/Admin/crm-icon.svg" />
@@ -168,6 +175,18 @@ class Home extends React.Component {
   crmAdminClick = e => {
     this.hideMenu();
     this.core.run("CRMAdmin");
+  };
+
+  errorLogAdminClick = e => {
+    this.hideMenu();
+    ReactDOM.render(
+      React.createElement(Errorlog, {
+        args: this.core,
+        userProfile: this.userProfile,
+        menu: this.showMenu
+      }),
+      document.getElementById("componentsBox")
+    );
   };
 
   render() {

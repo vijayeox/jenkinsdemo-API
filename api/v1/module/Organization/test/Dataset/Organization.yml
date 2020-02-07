@@ -1,3 +1,21 @@
+ox_address:
+  -
+    id: 8
+    address1: 'HSR'
+    address2: 'HSR'
+    city: 'Bangalore'
+    state: 'KARNATAKA'
+    country: 'India'
+    zip: 560080
+  - 
+    id: 9
+    address1: 'Ariyalur'
+    address2: 'Coimbatore'
+    city: 'Chennai'
+    state: 'Tamil Nadu'
+    country: 'India'
+    zip: 560079
+
 ox_organization:
   -
         id: 3
@@ -6,6 +24,7 @@ ox_organization:
         status: 'Active'
         preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
         contactid: 2
+        address_id: 8
 
   -
         id: 4
@@ -14,6 +33,7 @@ ox_organization:
         status: 'Inactive'
         preferences: '{"currency":"INR","timezone":"Asia/Calcutta","dateformat":"dd/mm/yyyy"}'
         contactid: 2
+        address_id: 9
 
 ox_user:
   -
@@ -26,7 +46,6 @@ ox_user:
         name: 'Deepa Shree'
         email: 'deepa@gmail.com'
         orgid: 3
-        country: 'India'
         date_of_birth: '1990-11-11'
         date_of_join: '2018-11-11'
         designation: 'IT ANALYST'
@@ -47,7 +66,6 @@ ox_user:
         name: 'Deepa Kumar'
         email: 'deepakum@gmail.com'
         orgid: 3
-        country: 'India'
         date_of_birth: '1990-11-11'
         date_of_join: '2018-11-11'
         designation: 'IT ANALYST'
@@ -72,13 +90,13 @@ ox_role:
     id: 10
     name: 'ADMIN-2'
     description: 'Must have read,write,create and delete control'
-    org_id: 3 
+    org_id: 3
     is_system_role: 1
     uuid: "9e249236-9f3b-11e9-a730-308d99c9146c"
 
 ox_role_privilege:
   -
-    id: 101
+    id: 190
     role_id: 10
     privilege_name: 'MANAGE_MYORG'
     permission: 3
@@ -87,6 +105,6 @@ ox_user_role:
   -
     user_id: 6
     role_id: 10
-  - 
+  -
     user_id: 7
-    role_id: 10   
+    role_id: 10

@@ -37,21 +37,24 @@ class MletService extends AbstractService
 
     public function getResult($id, $para)
     {
+        $entity_name = null;
         $parameters = array();
         $obj = $this->table->get($id, array());
         if (is_null($obj)) {
             return 0;
         }
         $mlet = $obj->toArray();
-        $appId = $mlet['appid'];
+        $app_name = $mlet['appuuid']; // This is temporary. Should be app_name
         if ($mlet['parameters']) {
             $parameters = json_decode($mlet['parameters'], true);
         }
         if ($para) {
             $parameters = array_replace($parameters, $para);
         }
-        $type = ($mlet['doctype'])?$mlet['doctype']:null;
-        $result = $this->analyticsEngine->runQuery($appId, $type, $parameters);
+        if (isset($parameters['entity_name'])) {
+            $entity_name = $parameters['entity_name'];
+        }
+        $result = $this->analyticsEngine->runQuery($app_name, $entity_name, $parameters);
         return $result;
     }
 }

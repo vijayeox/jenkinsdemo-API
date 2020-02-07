@@ -24,7 +24,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
 
     @Override
     org.camunda.bpm.engine.identity.User findUserById(String userId) {Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
+        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         String statement = 'select username,firstname,lastname,email,password from ox_user where username="'+userId+'"'
         ResultSet rs = st.executeQuery(statement)
@@ -59,7 +59,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
 
     List<Group> findGroupByQueryCriteria(GroupQueryImpl query) {
         Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
+        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         String statement = "select id,name,status from ox_group"
         String orderByPart = ""
@@ -83,7 +83,6 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
             statement = "select id,name,status from ox_group where orgid = '${query.getTenantId()}' ${orderByPart}"
         if(query.getUserId() !=null)
             statement = "select ox_group.id,ox_group.name,ox_group.status FROM ox_group LEFT JOIN ox_user_group ON ox_group.id=ox_user_group.group_id WHERE ox_user_group.avatar_id='"+query.getUserId()+"' "+orderByPart
-        print statement
         ResultSet rs = st.executeQuery(statement)
         ArrayList<Group> groups =  new ArrayList<Group>()
         while (rs.next()) {
@@ -107,14 +106,17 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
         if(userId == null || userId.isEmpty()) {
             return false
         }
-        return true
+        if(password == "eoxcamunda"){
+            return true
+        }
+        return false
     }
 
 
     @Override
     org.camunda.bpm.engine.identity.Group findGroupById(String groupId) {
         Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
+        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         String statement = "select id,name,status from ox_group"
         ResultSet rs = st.executeQuery(statement)
@@ -127,7 +129,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
 
     @Override
     GroupQuery createGroupQuery() {
-        return new GroupQueryImpl(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired());
+        return new GroupQueryImpl(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired())
     }
 
     @Override
@@ -136,7 +138,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
     }
     List<User> findUserByQueryCriteria(UserQueryImpl query) {
         Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
+        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         try {
             String statement = "select username,firstname,lastname,email,password from ox_user"
@@ -184,7 +186,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
     }
     List<Tenant> findTenantByQueryCriteria(TenantQueryImpl query) {
         Class.forName(DB_DRIVER).newInstance()
-        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD);
+        Connection con = DriverManager.getConnection(BASE_DB_URL, DB_USERNAME, DB_PASSWORD)
         Statement st = con.createStatement()
         String orderByPart = "ORDER BY ox_organization.id"
         if(query.orderByTenantId())
@@ -222,7 +224,7 @@ class IdentityProvider implements ReadOnlyIdentityProvider  {
 
     @Override
     TenantQuery createTenantQuery() {
-        return new TenantQueryImpl(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired());
+        return new TenantQueryImpl(Context.getProcessEngineConfiguration().getCommandExecutorTxRequired())
     }
 
     @Override

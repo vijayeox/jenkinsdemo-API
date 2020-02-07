@@ -1,8 +1,9 @@
 
 @import 'variables';
-@import 'common.css';
 
-* { font-family: $font, sans-serif;}
+* { box-sizing: border-box;
+    font-family: $font, sans-serif;
+  }
 
 // Osjs Window
     .osjs-window            {   

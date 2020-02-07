@@ -2,7 +2,6 @@
 
 namespace File\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Model\SubscriberTable;
 use Oxzion\Model\Subscriber;
 use Oxzion\Service\SubscriberService;
@@ -20,9 +19,9 @@ class SubscriberController extends AbstractApiController
     /**
     * @ignore __construct
     */
-    public function __construct(SubscriberTable $table, SubscriberService $subscriberService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(SubscriberTable $table, SubscriberService $subscriberService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Comment::class);
+        parent::__construct($table, Comment::class);
         $this->setIdentifierName('id');
         $this->subscriberService = $subscriberService;
     }

@@ -3,13 +3,16 @@ package org.oxzion.processengine
 import groovy.json.JsonBuilder
 import org.camunda.bpm.engine.delegate.DelegateTask
 import org.camunda.bpm.engine.delegate.TaskListener
+import org.camunda.bpm.engine.task.IdentityLink
 
 import java.text.SimpleDateFormat
-import java.util.logging.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+  
 
 
 class CustomTaskListener implements TaskListener {
-  private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+  private static final Logger logger = LoggerFactory.getLogger(CustomTaskListener.class);
 
   private static CustomTaskListener instance = null
 
@@ -24,28 +27,45 @@ class CustomTaskListener implements TaskListener {
   def getConnection(){
     String url = getConfig()
     def baseUrl = new URL("${url}/callback/workflow/activityinstance")
-    println baseUrl
+    logger.info("Opening connection to ${baseUrl}")
     return baseUrl.openConnection()
   }
 
   void notify(DelegateTask delegateTask) {
-    String assignee = delegateTask.getAssignee()
-    LOGGER.info("Hello " + assignee + "! Please start to work on your task " + delegateTask.getDescription())
     Map taskDetails = [:]
     taskDetails.name = delegateTask.name
-    taskDetails.assignee = delegateTask.assignee
+    def candidatesArray = []
+    def i=0
+    for (IdentityLink item : delegateTask.getCandidates()){
+      Map candidateList = [:]
+      candidateList.groupid = item.getGroupId()
+      candidateList.type = item.getType()
+      candidateList.userid = item.getUserId()
+      candidatesArray[i] = candidateList
+      i++
+    }
+    taskDetails.candidates = candidatesArray
+    taskDetails.owner = delegateTask.getOwner()
+    taskDetails.assignee = delegateTask.getAssignee()
+    taskDetails.status = "in_progress"
+    taskDetails.taskId = delegateTask.getTaskDefinitionKey()
     String pattern = "dd-MM-yyyy"
     SimpleDateFormat simpleCreateDateFormat = new SimpleDateFormat(pattern)
     taskDetails.createTime = simpleCreateDateFormat.format(delegateTask.createTime)
     taskDetails.dueDate = delegateTask.dueDate ? simpleCreateDateFormat.format(delegateTask.dueDate) : delegateTask.dueDate
+    taskDetails.executionId = delegateTask.getExecutionId()
     def execution = delegateTask.execution
-    taskDetails.activityInstanceId = execution.activityInstanceId
+    def processInstance = execution.getProcessInstance()
+    taskDetails.processVariables = processInstance.getVariables()
+    taskDetails.activityInstanceId = delegateTask.getId()
+    taskDetails.executionActivityinstanceId = execution.activityInstanceId
     taskDetails.processInstanceId = execution.processInstanceId
     taskDetails.variables = execution.getVariables()
+    taskDetails.parentActivity = execution.getParentActivityInstanceId()
+    taskDetails.currentActivity = execution.getCurrentActivityId()
+    taskDetails.parent = execution.getParentId()
     String json = new JsonBuilder(taskDetails ).toPrettyString()
-    println json
-    //TODO http callback using the base url above
-
+    logger.info("Posting data - ${json}")
     def connection = getConnection()
     String response
     connection.with {
@@ -57,7 +77,7 @@ class CustomTaskListener implements TaskListener {
       response = inputStream.withReader{ reader ->
         reader.text
       }
-      println response
+      logger.info("Response received - ${response}")
     }
   }
   private def getConfig(){

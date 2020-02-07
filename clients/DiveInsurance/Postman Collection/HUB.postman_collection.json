@@ -1,0 +1,1372 @@
+{
+	"info": {
+		"_postman_id": "e5986174-8826-450d-b95b-8b1178427b0e",
+		"name": "HUB",
+		"description": "Hub specific data setup for developers",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Automated",
+			"item": [
+				{
+					"name": "Get Auth Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "27eb4c9d-383f-433e-a7c3-4af9dc46a9c9",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"auth_token\", jsonData.data.jwt);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "bharatgtest",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/auth",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Organization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d2dc3dd8-21eb-4b4c-ab01-53d4887a1388",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"org_id\", jsonData.data.uuid);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Vincencia & Buckley",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "United States",
+									"type": "text"
+								},
+								{
+									"key": "contact",
+									"value": "{\"username\":\"hubadmin\",\"firstname\":\"hub\",\"lastname\":\"admin\",\"email\":\"testhub07@gmail.com\",\"phone\":8746828990}",
+									"type": "text"
+								},
+								{
+									"key": "preferences",
+									"value": "{\"currency\":\"INR\",\"timezone\":\"Asia/Calcutta\",\"dateformat\":\"dd/mm/yyy\"}",
+									"type": "text"
+								},
+								{
+									"key": "address1",
+									"value": "Cleveland",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "Cleveland",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "Ohio",
+									"type": "text"
+								},
+								{
+									"key": "zip",
+									"value": "560194",
+									"type": "text"
+								},
+								{
+									"key": "country",
+									"value": "USA",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/organization",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"organization"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET App UUID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7d4281c6-bf21-4193-a7a6-30cefdbbcc2b",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var data = jsonData.data;",
+									"",
+									"    for (var i=0; i < data.length; i++) {",
+									"        if (data[i].name === \"DiveInsurance\") {",
+									"            postman.setEnvironmentVariable(\"app_id\", data[i].uuid);",
+									"        }",
+									"    }"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/app/a",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ORG & Manager UUID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7d4281c6-bf21-4193-a7a6-30cefdbbcc2b",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var data = jsonData.data;",
+									"",
+									"    for (var i=0; i < data.length; i++) {",
+									"        if (data[i].name === \"Vincencia & Buckley\") {",
+									"            postman.setEnvironmentVariable(\"org_id\", data[i].uuid);",
+									"            postman.setEnvironmentVariable(\"manager_id\", data[i].contactid);",
+									"        }",
+									"    }"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/organization",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"organization"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Role for users(Policy Holder)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Policy Holder",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/organization/{{org_id}}/role",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"organization",
+								"{{org_id}}",
+								"role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Role for CSR",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "CSR",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/organization/{{org_id}}/role",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"organization",
+								"{{org_id}}",
+								"role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"page_id\", jsonData.data.uuid);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"My Policies\",\n    \"description\": \"Page Description\",\n    \"content\": [\n        {\n            \"content\": \"<p>Hi There!!!!!!!!</p><div>Have a Good Day</div>\",\n            \"type\": \"Document\"\n        },\n        {\n            \"form_id\": 1,\n            \"type\": \"Form\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/page",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"page"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Menu",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Home",
+									"type": "text"
+								},
+								{
+									"key": "page_id",
+									"value": "{{page_id}}",
+									"type": "text"
+								},
+								{
+									"key": "icon",
+									"value": "fa fa-user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/menu",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"menu"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Deploy App",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "path",
+									"value": "/app/api/v1/module/App/test/Controller/../../../../../../clients/DiveInsurance/",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/app/deployapp",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"deployapp"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Add ORG UUID to {{org_id}} variable\nAdd App UUID to {{app_id}} variable",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Page",
+			"item": [
+				{
+					"name": "GET Page List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/page",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"page"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Page - List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"My List\",\n    \"description\": \"Listing Page\",\n    \"content\": [\n        {\n            \"type\": \"List\",\n            \"content\": {\n                \"data\": \"organization\",\n                \"filterable\": true,\n                \"reorderable\": true,\n                \"pageable\": {\n                    \"buttonCount\": 3,\n                    \"pageSizes\": [\n                        10,\n                        20,\n                        50\n                    ],\n                    \"info\": true\n                },\n                \"actions\": [\n                    {\n                        \"name\": \"View\",\n                        \"page_id\": 1,\n                        \"icon\": \"fas fa-user\"\n                    }\n                ],\n                \"columnConfig\": [\n                    {\n                        \"title\": \"Name\",\n                        \"field\": \"name\"\n                    },\n                    {\n                        \"title\": \"City\",\n                        \"field\": \"city\"\n                    }\n                ]\n            }\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/page",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"page"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Page - Document",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"My Policies\",\n    \"description\": \"Page Description\",\n    \"icon\": \"fa fa-user\",\n    \"content\": [\n        {\n            \"content\": \"<p>Welcome to Oxzion</p>\",\n            \"type\": \"Document\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/page",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"page"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Page - DocumentViewer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Page Name\",\n    \"description\": \"Page Description\",\n    \"content\": [\n        {\n            \"content\": {\n            \t\"fileId\":\"5c5b2544-a501-416c-98da-38af2cf3ff1d\"\n            },\n            \"type\": \"DocumentViewer\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/page",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"page"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Page - List - Action Content",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"My List\",\n    \"description\": \"Listing Page\",\n    \"content\": [\n        {\n            \"type\": \"List\",\n            \"content\": {\n                \"data\": \"organization\",\n                \"filterable\": true,\n                \"reorderable\": true,\n                \"pageable\": {\n                    \"buttonCount\": 3,\n                    \"pageSizes\": [\n                        10,\n                        20,\n                        50\n                    ],\n                    \"info\": true\n                },\n                \"actions\": [\n                    {\n                        \"name\": \"view\",\n                        \"icon\": \"fas fa-user\",\n                        \"content\": [\n                            {\n                                \"content\": \"<p>Welcome to Oxzion</p>\",\n                                \"type\": \"Document\"\n                            }\n                        ]\n                    },\n                     {\n                        \"name\": \"Open Form\",\n                        \"icon\": \"fas fa-contact\",\n                        \"content\": [\n                            {\n                                \"form_id\": \"1\",\n                                \"type\": \"Form\"\n                            }\n                        ]\n                    }\n                ],\n                \"columnConfig\": [\n                    {\n                        \"title\": \"Name\",\n                        \"field\": \"name\"\n                    },\n                    {\n                        \"title\": \"City\",\n                        \"field\": \"city\"\n                    }\n                ]\n            }\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/page",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"page"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/page/{{page_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"page",
+								"{{page_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Menu",
+			"item": [
+				{
+					"name": "GET Menu List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/menu",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"menu"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Menu",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/menu/{{menu_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"menu",
+								"{{menu_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Menu",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Listing",
+									"type": "text"
+								},
+								{
+									"key": "page_id",
+									"value": "30",
+									"type": "text"
+								},
+								{
+									"key": "icon",
+									"value": "fas fa-table",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/app/{{app_id}}/menu",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"app",
+								"{{app_id}}",
+								"menu"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Dive Insurance ",
+			"item": [
+				{
+					"name": "Users Policy Listing",
+					"item": [
+						{
+							"name": "Create Page",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"My Policies List\",\n    \"icon\": \"far fa-file-alt\",\n    \"description\": \"Shows a complete list of users policies\",\n    \"content\": [\n        {\n            \"type\": \"Document\",\n            \"content\": \"<p><h2>Personal Policies</h2></p><p></p>\"\n        },\n        {\n            \"type\": \"List\",\n            \"content\": {\n                \"data\": \"file\",\n                \"filterable\": true,\n                \"reorderable\": true,\n                \"resizable\": true,\n                \"pageable\": {\n                    \"buttonCount\": 3,\n                    \"pageSizes\": [\n                        10,\n                        20,\n                        50\n                    ],\n                    \"info\": true\n                },\n                \"actions\": [\n                    {\n                        \"name\": \"View\",\n                        \"page_id\": 1,\n                        \"icon\": \"fas fa-envelope-open-text\"\n                    },\n                    {\n                        \"name\": \"Claim\",\n                        \"page_id\": 2,\n                        \"icon\": \"fas fa-plus-circle\"\n                    },\n                    {\n                        \"name\": \"Cancel\",\n                        \"page_id\": 3,\n                        \"icon\": \"far fa-window-close\"\n                    }\n                ],\n                \"columnConfig\": [\n                    {\n                        \"title\": \"Name\",\n                        \"field\": \"name\"\n                    },\n                    {\n                        \"title\": \"Status\",\n                        \"field\": \"status\"\n                    },\n                    {\n                        \"title\": \"Data\",\n                        \"field\": \"data\"\n                    }\n                ]\n            }\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/page",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"page"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Menu",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "My Policies",
+											"type": "text"
+										},
+										{
+											"key": "page_id",
+											"value": "54",
+											"type": "text"
+										},
+										{
+											"key": "icon",
+											"value": "far fa-file-alt",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/menu",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"menu"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Files List",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/file",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"file"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0d7d63e6-8da3-4489-8e10-5406f06e140d",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "aa3d319a-d8ef-41de-acee-b361762e9338",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "CSR Assignment Listing",
+					"item": [
+						{
+							"name": "Create Page",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "950daa6b-4474-440e-bc4b-cbdbd4c1f12d",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"CSR Assignments\",\n    \"icon\": \"far fa-file-alt\",\n    \"description\": \"Shows a complete list policies to be approved for CSR\",\n    \"content\": [\n        {\n            \"type\": \"Document\",\n            \"content\": \"<p><h2>Assignments Listing</h2></p><p></p>\"\n        },\n        {\n            \"type\": \"List\",\n            \"content\": {\n                \"route\": \"assignments\",\n                \"filterable\": true,\n                \"reorderable\": true,\n                \"resizable\": true,\n                \"sortable\": true,\n                \"pageable\": {\n                    \"buttonCount\": 3,\n                    \"pageSizes\": [\n                        10,\n                        20,\n                        50\n                    ],\n                    \"info\": true\n                },\n                \"actions\": [\n                    {\n                        \"name\": \"Claim\",\n                        \"rule\": \"true\",\n                        \"details\": [\n                            {\n                                \"type\": \"Update\",\n                                \"params\": {\n                                    \"url\": \"workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/claim\"\n                                }\n                            },\n                            {\n                                \"type\": \"Form\",\n                                \"url\": \"workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form\"\n                            }\n                        ],\n                        \"icon\": \"fas fa-plus-circle\"\n                    },\n                    {\n                        \"name\": \"Form\",\n                        \"rule\": \"true\",\n                        \"details\": [\n                            {\n                                \"type\": \"Form\",\n                                \"url\": \"workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form\"\n                            }\n                        ]\n                    }\n                ],\n                \"columnConfig\": [\n                    {\n                        \"title\": \"Process\",\n                        \"field\": \"workflow_name\"\n                    },\n                    {\n                        \"title\": \"Activity\",\n                        \"field\": \"activityName\"\n                    }\n                ]\n            }\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/page",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"page"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Menu",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "My Policies",
+											"type": "text"
+										},
+										{
+											"key": "page_id",
+											"value": "54",
+											"type": "text"
+										},
+										{
+											"key": "icon",
+											"value": "far fa-file-alt",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/menu",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"menu"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Assignments",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/assignments",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"assignments"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0d7d63e6-8da3-4489-8e10-5406f06e140d",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "aa3d319a-d8ef-41de-acee-b361762e9338",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Entity IPL",
+					"item": [
+						{
+							"name": "Create Entity",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Individual Professional Liability",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/entity",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"entity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Workflow",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "IPL Registration",
+											"type": "text"
+										},
+										{
+											"key": "files",
+											"type": "file",
+											"src": "/home/prajwal/Drive D/AppBuilder Branch/clients/Dive Insurance/content/workflows/Individual Professional Liability/NewUserApplicationSubmission.bpmn"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/entity/{{entity_id}}/deployworkflow",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"entity",
+										"{{entity_id}}",
+										"deployworkflow"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Entity EmergencyFirstResponse",
+					"item": [
+						{
+							"name": "Create Entity",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Emergency First Response",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/entity",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"entity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Workflow",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Emergency First Response",
+											"type": "text"
+										},
+										{
+											"key": "files",
+											"type": "file",
+											"src": "/home/prajwal/Drive D/AppBuilder Branch/clients/Dive Insurance/content/workflows/Individual Professional Liability/NewUserApplicationSubmission.bpmn"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/entity/{{entity_id}}/deployworkflow",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"entity",
+										"{{entity_id}}",
+										"deployworkflow"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Entity DiveBoat",
+					"item": [
+						{
+							"name": "Create Entity",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Dive Boat",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/entity",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"entity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Workflow",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Dive Boat",
+											"type": "text"
+										},
+										{
+											"key": "files",
+											"type": "file",
+											"src": "/home/prajwal/Drive D/AppBuilder Branch/clients/Dive Insurance/content/workflows/Individual Professional Liability/NewUserApplicationSubmission.bpmn"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/entity/{{entity_id}}/deployworkflow",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"entity",
+										"{{entity_id}}",
+										"deployworkflow"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Entity DIveStore",
+					"item": [
+						{
+							"name": "Create Entity",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Dive Store",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/entity",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"entity"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Workflow",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Dive Store",
+											"type": "text"
+										},
+										{
+											"key": "files",
+											"type": "file",
+											"src": "/home/prajwal/Drive D/AppBuilder Branch/clients/Dive Insurance/content/workflows/Individual Professional Liability/NewUserApplicationSubmission.bpmn"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{URL}}/app/{{app_id}}/entity/{{entity_id}}/deployworkflow",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"app",
+										"{{app_id}}",
+										"entity",
+										"{{entity_id}}",
+										"deployworkflow"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bd0bacd0-ea18-41b0-9d73-e20a05249674",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d92d9b35-fdd1-4dce-bd1c-2d7e73e43391",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "2bb444fc-41f6-4701-9b88-c8b9490438e6",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b796719a-55d6-4397-80f7-29f97bec85e1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

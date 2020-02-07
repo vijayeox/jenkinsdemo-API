@@ -1,7 +1,6 @@
 <?php
 namespace Organization\Controller;
 
-use Zend\Log\Logger;
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
 use Zend\Db\Adapter\AdapterInterface;
@@ -19,9 +18,9 @@ class OrganizationController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(OrganizationTable $table, OrganizationService $orgService, Logger $log, AdapterInterface $dbAdapter)
+    public function __construct(OrganizationTable $table, OrganizationService $orgService, AdapterInterface $dbAdapter)
     {
-        parent::__construct($table, $log, __CLASS__, Organization::class);
+        parent::__construct($table, Organization::class);
         $this->setIdentifierName('orgId');
         $this->orgService = $orgService;
     }
@@ -42,7 +41,7 @@ class OrganizationController extends AbstractApiController
      */
     public function create($data)
     {
-        $files = $this->params()->fromFiles('logo');
+        $files = $this->params()->fromFiles('logo')?$this->params()->fromFiles('logo'):NULL;
         $id=$this->params()->fromRoute();
         try {
             if (!isset($id['orgId'])) {
@@ -74,7 +73,6 @@ class OrganizationController extends AbstractApiController
         if ($result) {
             for ($x=0;$x<sizeof($result['data']);$x++) {
                 $baseUrl =$this->getBaseUrl();
-                $logo = $result['data'][$x]['logo'];
                 $result['data'][$x]['logo'] = $baseUrl . "/organization/logo/" . $result['data'][$x]['uuid'];
                 $result['data'][$x]['preferences'] = json_decode($result['data'][$x]['preferences'], true);
             }
@@ -146,7 +144,6 @@ class OrganizationController extends AbstractApiController
             return $this->getErrorResponse("Organization not found", 404, ['id' => $id]);
         } else {
             $baseUrl =$this->getBaseUrl();
-            $logo = $result['logo'];
             $result['logo'] = $baseUrl . "/organization/logo/" . $result["uuid"];
             $result['preferences'] = json_decode($result['preferences'], true);
         }

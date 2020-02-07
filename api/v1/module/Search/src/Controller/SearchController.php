@@ -3,7 +3,6 @@ namespace Search\Controller;
 
 use Oxzion\Controller\AbstractApiController;
 use Oxzion\Search\SearchEngine;
-use Zend\Log\Logger;
 
 class SearchController extends AbstractApiController
 {
@@ -12,9 +11,9 @@ class SearchController extends AbstractApiController
     /**
      * @ignore __construct
      */
-    public function __construct(SearchEngine $searchEngine, Logger $log)
+    public function __construct(SearchEngine $searchEngine)
     {
-        parent::__construct(null, $log, __CLASS__, null);
+        parent::__construct(null, null);
         $this->searchEngine = $searchEngine;
     }
 

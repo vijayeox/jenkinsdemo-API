@@ -11,14 +11,14 @@ use Callback\Service\TaskService;
 class TaskCallbackController extends AbstractApiControllerHelper
 {
     private $taskService;
-    protected $log;
+    private $log;
         // /**
         // * @ignore __construct
         // */
-    public function __construct(TaskService $taskService, Logger $log)
+    public function __construct(TaskService $taskService)
     {
         $this->taskService = $taskService;
-        $this->log = $log;
+        $this->log = $this->getLogger();
     }
 
 
@@ -153,9 +153,9 @@ class TaskCallbackController extends AbstractApiControllerHelper
 
     public function updateGroupUsersAction() {
         $params = $this->extractPostData();
-        $params['userData'] = isset($params['usernames']) ? ($params['usernames']) : "No User to ADD";
+        $params['userData'] = isset($params['users']) ? ($params['users']) : "No User to ADD";
         $this->log->info(TaskCallbackController::class.":Users to group Data- ".json_encode($params['userData']));
-        $response = $this->taskService->addUsersToGroup($params['groupname'],$params['usernames']);
+        $response = $this->taskService->addUsersToGroup($params['groupname'],$params['users']);
         if($response['success']){
             $this->log->info(TaskCallbackController::class.":Added users to group");
             return $this->getSuccessResponseWithData($response['result']);

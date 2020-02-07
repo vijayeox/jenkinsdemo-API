@@ -7,11 +7,12 @@ use Oxzion\Model\Entity;
 class Form extends Entity
 {
     protected $data = array(
-        'id'=>0,
-        'app_id'=>0,
+        'id'=>null,
+        'app_id'=>null,
         'name'=>null,
+        'uuid' => null,
         'description'=>null,
-        'template'=>null,
+        'entity_id'=>null,
         'created_by'=>null,
         'modified_by'=>null,
         'date_created'=>null,
@@ -19,7 +20,7 @@ class Form extends Entity
     );
     public function validate()
     {
-        $required = array('app_id','name');
+        $required = array('app_id','name', 'uuid', 'created_by', 'entity_id');
         $this->validateWithParams($required);
     }
 }

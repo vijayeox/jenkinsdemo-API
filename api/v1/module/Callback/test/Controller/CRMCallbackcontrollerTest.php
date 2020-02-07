@@ -37,7 +37,7 @@ class CRMCallbackControllerTest extends ControllerTest
         $this->assertEquals($content['data']['last_name'], $data['lastName']);
         $this->assertEquals($content['data']['phone_1'], $data['phones'][0]);
         $this->assertEquals($content['data']['email'], $data['email']);
-        $this->assertEquals($content['data']['address_1'], $data['addresses'][0]['name']);
+        $this->assertEquals($content['data']['address1'], $data['addresses'][0]['name']);
         $this->assertEquals($content['data']['owner_id'], 1);
     }
 

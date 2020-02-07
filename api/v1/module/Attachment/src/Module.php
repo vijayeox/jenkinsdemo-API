@@ -58,7 +58,6 @@ class Module implements ConfigProviderInterface
                     return new Controller\AttachmentController(
                         $container->get(Model\AttachmentTable::class),
                         $container->get(Service\AttachmentService::class),
-                        $container->get('AttachmentLogger'),
                         $container->get(AdapterInterface::class)
                     );
                 },

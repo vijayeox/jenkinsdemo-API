@@ -30,10 +30,11 @@ class FileUploader extends React.Component {
 
   fileSelectedEvent = e => {
     if (e.affectedFiles[0].validationErrors) {
-      this.notif.current.customWarningNotification(
+      this.notif.current.notify(
         "Invalid File",
-        "Please check the selected file"
-      );
+        "Please check the selected file",
+        "warning"
+      )
     } else {
       e.affectedFiles
         .filter(file => !file.validationErrors)
@@ -156,7 +157,7 @@ class FileUploader extends React.Component {
                  {this.props.media_type !== "image" ? (
                 <li className="pt-3 pr-4">Video Format supported: MP4</li>
               ) : null}
-                <li className="pt-3 pr-4">Max file size allowed: 20 MB</li>
+                <li className="pt-3 pr-4">Max file size allowed less than: 20 MB</li>
               </ul>
             </div>
           </div>

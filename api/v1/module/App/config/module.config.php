@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Oxzion\Utils\UuidUtil;
 use Zend\Router\Http\Segment;
 
 return [
@@ -11,6 +12,9 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app[/:appId]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'access' => [
@@ -23,14 +27,28 @@ return [
                     ],
                 ],
             ],
+            'deployapp' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/deployapp',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'deployApp',
+                        'method' => 'post',
+                    ],
+                ],
+            ],
             'appinstall' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/appinstall',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'installAppForOrg',
-                        'method' => 'post'
+                        'method' => 'post',
                         // 'access' => [
                         //     // SET ACCESS CONTROL
                         //     'put'=> 'MANAGE_APP_WRITE',
@@ -48,29 +66,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'applist',
-                        'method' => 'GET'
-                    ],
-                ],
-            ],
-            'appdeployxml' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/appdeployxml',
-                    'defaults' => [
-                        'controller' => Controller\AppController::class,
-                        'action' => 'getDataFromDeploymentDescriptorUsingXML',
-                        'method' => 'get'
-                    ],
-                ],
-            ],
-            'appdeployyml' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/appdeployyml',
-                    'defaults' => [
-                        'controller' => Controller\AppController::class,
-                        'action' => 'getDataFromDeploymentDescriptorUsingYML',
-                        'method' => 'get'
+                        'method' => 'GET',
                     ],
                 ],
             ],
@@ -81,18 +77,21 @@ return [
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'appUpload',
-                        'method' => 'post'
+                        'method' => 'post',
                     ],
                 ],
             ],
             'appupload' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/deployworkflow[/:workflowId]',
+                    'route' => '/app/:appId/entity/:entityId/deployworkflow[/:workflowId]',
+                    'constraints' => [
+                        'workflowId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
-                        'controller' => Controller\AppController::class,
+                        'controller' => Controller\EntityController::class,
                         'action' => 'workflowDeploy',
-                        'method' => 'post'
+                        'method' => 'post',
                     ],
                 ],
             ],
@@ -103,65 +102,123 @@ return [
                     'defaults' => [
                         'controller' => Controller\AppRegisterController::class,
                         'action' => 'appregister',
-                        'method' => 'POST'
+                        'method' => 'POST',
+                    ],
+                ],
+            ],
+            'addtoappregistry' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/org/:orgId/addtoappregistry',
+                    'constraints' => [
+                        'orgId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppRegisterController::class,
+                        'action' => 'addToAppregistry',
+                        'method' => 'POST',
+                    ],
+                ],
+            ],
+            'appQuery' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/query/:queryId',
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                        'action' => 'appQuery',
+                        'method' => 'GET',
                     ],
                 ],
             ],
             'appform' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/app/:appId/form[/:id]',
+                    'route' => '/app/:appId/form[/:id]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'id' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\FormController::class,
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_FORM_WRITE',
-                            'post'=> 'MANAGE_FORM_WRITE',
-                            'delete'=> 'MANAGE_FORM_WRITE',
-                            'get'=> 'MANAGE_FORM_READ',
+                            'put' => 'MANAGE_FORM_WRITE',
+                            'post' => 'MANAGE_FORM_WRITE',
+                            'delete' => 'MANAGE_FORM_WRITE',
+                            // 'get'=> 'MANAGE_FORM_READ',
+                            // fix to get form template available for csr
                         ],
                     ],
                 ],
             ],
             'appfile' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/app/:appId/form/:formId/file[/:id]',
+                    'route' => '/app/:appId/form/:formId/file[/:id]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'formId' => UuidUtil::UUID_PATTERN,
+                        'id' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\FileController::class,
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_FILE_WRITE',
-                            'post'=> 'MANAGE_FILE_WRITE',
-                            'delete'=> 'MANAGE_FILE_WRITE',
-                            'get'=> 'MANAGE_FILE_READ',
+                            'put' => 'MANAGE_FILE_WRITE',
+                            'post' => 'MANAGE_FILE_WRITE',
+                            'delete' => 'MANAGE_FILE_WRITE',
+                            'get' => 'MANAGE_FILE_READ',
                         ],
                     ],
                 ],
             ],
             'appfield' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/field[/:id]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'id' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\FieldController::class,
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_FIELD_WRITE',
-                            'post'=> 'MANAGE_FIELD_WRITE',
-                            'delete'=> 'MANAGE_FIELD_WRITE',
-                            'get'=> 'MANAGE_FIELD_READ',
+                            'put' => 'MANAGE_FIELD_WRITE',
+                            'post' => 'MANAGE_FIELD_WRITE',
+                            'delete' => 'MANAGE_FIELD_WRITE',
+                            'get' => 'MANAGE_FIELD_READ',
                         ],
                     ],
                 ],
             ],
-            'appworkflow' => [
-                'type'    => Segment::class,
+            'appDelegate' => [
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/app/:appId/workflow[/:workflowId]',
+                    'route' => '/app/:appId/delegate/:delegate',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'delegate' => '[A-Za-z0-9]*',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppDelegateController::class,
+                        'action' => 'delegate',
+                        'method' => 'POST',
+                    ],
+                ],
+            ],
+            'appworkflow' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflow[/:workflowId]',
+                    'constraints' => [
+                        'workflowId' => UuidUtil::UUID_PATTERN,
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\WorkflowController::class,
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
                             // 'put'=> 'MANAGE_FORM_WRITE',
                             // 'post'=> 'MANAGE_FORM_WRITE',
@@ -172,12 +229,16 @@ return [
                 ],
             ],
             'appmenu' => [
-                'type'    => Segment::class,
+                'type' => Segment::class,
                 'options' => [
-                    'route'    => '/app/:appId/menu[/:menuId]',
+                    'route' => '/app/:appId/menu[/:menuId]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'menuId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\MenuItemController::class,
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
                             // 'put'=> 'MANAGE_MENU_WRITE',
                             // 'post'=> 'MANAGE_MENU_WRITE',
@@ -190,57 +251,39 @@ return [
             'apppage' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/page[/:pageId]',
+                    'route' => '/app/:appId[/org/:orgId]/page[/:pageId]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'orgId' => UuidUtil::UUID_PATTERN,
+                        'pageId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\PageController::class,
-                        'access' =>[
+                        'access' => [
                             // SET ACCESS CONTROL
                             // 'put'=> 'MANAGE_PAGE_WRITE',
                             // 'post'=> 'MANAGE_PAGE_WRITE',
                             // 'delete'=> 'MANAGE_PAGE_WRITE',
                             // 'get'=> 'MANAGE_PAGE_READ',
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             'apppagecontent' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/pagecontent[/:pageContentId]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\PageContentController::class,
-                        'access' =>[
+                        'access' => [
                             // SET ACCESS CONTROL
                             // 'put'=> 'MANAGE_PAGE_WRITE',
                             // 'post'=> 'MANAGE_PAGE_WRITE',
                             // 'delete'=> 'MANAGE_PAGE_WRITE',
                             // 'get'=> 'MANAGE_PAGE_READ',
-                        ]
-                    ]
-                ]
-            ],
-            'workflowfields' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/workflow/:workflowId/fields',
-                    'defaults' => [
-                        'controller' => Controller\WorkflowController::class,
-                        'action' => 'workflowFields',
-                        'method' => 'GET',
-                        'access'=>[
-                        ],
-                    ],
-                ],
-            ],
-            'workflowform' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/app/:appId/workflow/:workflowId/forms',
-                    'defaults' => [
-                        'controller' => Controller\WorkflowController::class,
-                        'action' => 'workflowForms',
-                        'method' => 'GET',
-                        'access'=>[
                         ],
                     ],
                 ],
@@ -249,11 +292,29 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/assignments',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\AppController::class,
                         'action' => 'assignments',
-                        'access'=>[
+                        'access' => [
                         ],
+                    ],
+                ],
+            ],
+            'form_workflow' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/form/:formId/workflow',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'formId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FormController::class,
+                        'action' => 'getWorkflow',
+                        'method' => 'GET',
                     ],
                 ],
             ],
@@ -261,43 +322,347 @@ return [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/app/:appId/importcsv',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
                     'defaults' => [
                         'controller' => Controller\ImportController::class,
                         'action' => 'importCSV',
-                        'method' => 'POST'
+                        'method' => 'POST',
                     ],
                 ],
             ],
-        ],
-    ],
-    'log' => [
-        'AppLogger' => [
-            'writers' => [
-                'stream' => [
-                    'name' => 'stream',
-                    'priority' => \Zend\Log\Logger::ALERT,
-                    'options' => [
-                        'stream' => __DIR__ . '/../../../logs/app.log',
-                        'formatter' => [
-                            'name' => \Zend\Log\Formatter\Simple::class,
-                            'options' => [
-                                'format' => '%timestamp% %priorityName% (%priority%): %message% %extra%', 'dateTimeFormat' => 'c',
-                            ],
+            'startform' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflow/:workflowId/startform',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'workflowId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\WorkflowController::class,
+                        'action' => 'startform',
+                        'method' => 'POST',
+                    ],
+                ],
+            ],
+            'storecache' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/storecache[/:cacheId]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\CacheController::class,
+                        'action' => 'store',
+                    ],
+                ],
+            ],
+            'app_cache' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/cache',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\CacheController::class,
+                        'action' => 'cache',
+                    ],
+                ],
+            ],
+            'remove_app_cache' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/deletecache[/:cacheId]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\CacheController::class,
+                        'action' => 'cacheDelete',
+                        'method' => 'DELETE',
+                    ],
+                ],
+            ],
+            'getdocument' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/document/:documentName',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'action' => 'getDocument',
+                        'method' => 'GET',
+                    ],
+                ],
+            ],
+            'fileData' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/workflowInstance/:workflowInstanceId',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'workflowId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'action' => 'getFileData',
+                        'method' => 'GET',
+                    ],
+                ],
+            ],
+            'appentity' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/entity[/:entityId]',
+                    'defaults' => [
+                        'controller' => Controller\EntityController::class,
+                        'access' => [
+                            // SET ACCESS CONTROL
+                            // 'put'=> 'MANAGE_PAGE_WRITE',
+                            // 'post'=> 'MANAGE_PAGE_WRITE',
+                            // 'delete'=> 'MANAGE_PAGE_WRITE',
+                            // 'get'=> 'MANAGE_PAGE_READ',
                         ],
-                        'filters' => [
-                            'priority' => \Zend\Log\Logger::INFO,],
                     ],
                 ],
             ],
-            'processors' => [
-                'requestid' => [
-                    'name' => \Zend\Log\Processor\RequestId::class,],
+            'fileremainder' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/remainder',
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'action' => 'sendReminder',
+                        'method' => 'POST',
+                        'access' => [
+                        ],
+                    ],
+                ],
+            ],
+            'filelisting' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId[/workflow/:workflowId][/:userId]/file',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'workflowId' => UuidUtil::UUID_PATTERN,
+                        'userId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'filelistingstatus' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/status/:workflowStatus',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'filelistingcommand' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/command/:commands',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileListCommand',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'filelistinguser' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/user/:userId[/status/:workflowStatus]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'filelistfilter' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName][/created[/gt/:gtCreatedDate][/lt/:ltCreatedDate]]',
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'app_error_log' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/errorlog',
+                    'defaults' => [
+                        'controller' => Controller\ErrorLogController::class,
+                        'method' => 'GET',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'app_error_retry' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/errorlog/:errorId/retry',
+                    'defaults' => [
+                        'controller' => Controller\ErrorLogController::class,
+                        'method' => 'GET',
+                        'action' => 'retry',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'app_userlist' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/org/:orgId/userlist',
+                    'defaults' => [
+                        'controller' => Controller\AppDelegateController::class,
+                        'method' => 'GET',
+                        'action' => 'userlist',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'fileCRUD' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:id/data',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'filedocumentlisting' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/file/:fileId/document',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\FileController::class,
+                        'method' => 'GET',
+                        'action' => 'getFileDocumentList',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'file_document_get' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/:appId/:orgId/:fileId[/:folder]/:document',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                        'orgId' => UuidUtil::UUID_PATTERN,
+                        'fileId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\DocumentController::class,
+                        'method' => 'GET',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'pipeline_execute' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/pipeline[/commands/:commands]',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\PipelineController::class,
+                        'method' => 'GET',
+                        'action' => 'executePipeline',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
+            ],
+            'commands_execute' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/app/:appId/commands',
+                    'constraints' => [
+                        'appId' => UuidUtil::UUID_PATTERN,
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\CommandController::class,
+                        'method' => 'POST',
+                        'action' => 'executeCommands',
+                        'access' => [
+                            // SET ACCESS CONTROL
+                        ],
+                    ],
+                ],
             ],
         ],
     ],
     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];
