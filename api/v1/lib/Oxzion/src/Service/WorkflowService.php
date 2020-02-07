@@ -44,6 +44,7 @@ class WorkflowService extends AbstractService
     {
         parent::__construct($config, $dbAdapter);
         $this->baseFolder = $this->config['UPLOAD_FOLDER'];
+        $this->formsFolder = $this->config['FORM_FOLDER'];
         $this->table = $table;
         $this->workflowDeploymentTable = $workflowDeploymentTable;
         $this->config = $config;
@@ -130,9 +131,8 @@ class WorkflowService extends AbstractService
                     }
                     $formData = $oxForm->toArray();
                     $formData['entity_id'] = $entityId;
-                    $this->logger->info("File Templates------ ".print_r($formData['template'],true));
-                    if(isset($formData['template'])){
-                        $filePath = $path.$formData['template'].$this->fileExt;
+                    if(isset($formProperties['template'])){
+                        $filePath = $path.$formProperties['template'].$this->fileExt;
                         $this->logger->info("File Path ------ ".print_r($filePath,true));
                         if(file_exists($filePath)){
                             $formData['template'] = file_get_contents($filePath);
@@ -374,7 +374,7 @@ class WorkflowService extends AbstractService
         } else {
             $workflowId = $workflowId;
         }
-        $select = "select ox_form.template as template,ox_form.uuid as id
+        $select = "select ox_form.name as formName,ox_form.uuid as id
         from ox_form
         left join ox_workflow_deployment on ox_workflow_deployment.form_id = ox_form.id and ox_workflow_deployment.latest=1
         left join ox_workflow on ox_workflow.id=ox_workflow_deployment.workflow_id
@@ -382,6 +382,10 @@ class WorkflowService extends AbstractService
         where ox_workflow.id=:workflowId and ox_app.id=:appId;";
         $queryParams = array("workflowId" => $workflowId, "appId" => $appId);
         $response = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
+        $filePath = $this->formsFolder.$this->getUuidFromId('ox_app', $appId)."/".$response[0]['formName'].$this->fileExt;
+        if(file_exists($filePath)){
+           $response[0]['template'] = file_get_contents($filePath);
+        }
         if (isset($response[0])) {
             $response[0]['workflow_uuid'] = $workflowUuid;
             return $response[0];

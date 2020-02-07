@@ -51,6 +51,7 @@ class QuoteDocument extends PolicyDocument
                      'template' => 'DiveCenterProposal_Template',
                      'header' => 'DiveCenterProposal_header.html',
                      'footer' => 'DiveCenterProposal_footer.html',
+                     'slWording' => 'SL Wording.pdf',
                      'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'
             )));
         

@@ -70,10 +70,10 @@ class UserService extends AbstractService
         return $response[0]['orgid'];
     }
 
-    public function getRolesofUser($orgId, $id)
-    {
-        $orgId = $this->getIdFromUuid('ox_organization', $orgId);
-        $select = "SELECT oro.uuid, oro.name from ox_user_role as ouo inner join ox_role as oro on ouo.role_id = oro.id where ouo.user_id = (SELECT ou.id from ox_user as ou where ou.id ='" . $id . "') and oro.org_id = " . $orgId;
+    public function getRolesofUser($orgId,$id){
+        $user_id = $this->getIdFromUuid('ox_user',$id);
+        $orgId = $this->getIdFromUuid('ox_organization',$orgId);
+        $select = "SELECT oro.uuid, oro.name from ox_user_role as ouo inner join ox_role as oro on ouo.role_id = oro.id where ouo.user_id = (SELECT ou.id from ox_user as ou where ou.id ='".$user_id."') and oro.org_id = ".$orgId;
         $resultSet = $this->executeQueryWithParams($select)->toArray();
         return $resultSet;
     }
@@ -759,7 +759,6 @@ class UserService extends AbstractService
             $result['preferences']['timezone'] = $result['timezone'];
         }
         $result['orgid'] = $this->getUuidFromId('ox_organization',$result['orgid']);
-        $result['role'] = $this->getRolesofUser($result['orgid'],$id);
         $result['managerid'] = $this->getUuidFromId('ox_user',$result['managerid']);
         if (isset($result)) {
             return $result;
@@ -1118,22 +1117,45 @@ class UserService extends AbstractService
         return $result->toArray();
     }
 
-    public function userProfile($params)
-    {
-        $userData = $this->table->getByUuid($params['userId'], array());
-        if (is_null($userData)) {
-            return array('data' => array(), 'role' => array());
+    public function userProfile($params){
+        $select = "SELECT
+        user.about,
+        user.username,
+        user.firstname,
+        user.lastname,
+        user.name,
+        user.email,
+        user.date_of_birth,
+        user.designation,
+        user.gender,
+        user.managerid,
+        user.date_of_join,
+        user.phone,
+        user.preferences,
+        user.timezone,
+        addr.address1,
+        addr.address2,
+        addr.city,
+        addr.state,
+        addr.country,
+        addr.zip
+    FROM
+        ox_user as user
+        JOIN ox_address as addr ON user.address_id = addr.id
+        LEFT JOIN ox_user_org ON user.id = ox_user_org.user_id
+        JOIN ox_organization as org ON ox_user_org.org_id = org.id
+    WHERE
+        user.uuid = '".$params['userId']."' 
+        AND org.uuid = '".$params['orgId']."'";
+        $userData = $this->executeQuerywithParams($select)->toArray();
+        if(count($userData) == 0){
+            return array('data' => array() ,'role' => array()); 
         }
-        $select = "SELECT org_id from ox_user_org where org_id = (SELECT id from ox_organization where uuid = '" . $params['orgId'] . "') and user_id = " . $userData->id;
-        $result = $this->executeQuerywithParams($select)->toArray();
-        if (count($result) == 0) {
-            return array('data' => array(), 'role' => array());
-        }
-        $userData = $userData->toArray();
-        $userData['preferences'] = json_decode($userData['preferences'], true);
-        $userData['orgid'] = $this->getUuidFromId('ox_organization', $userData['orgid']);
-        $userData['managerid'] = $this->getUuidFromId('ox_user', $userData['managerid']);
-        $userData['role'] = $this->getRolesofUser($params['orgId'], $userData['id']);
+        $userData = $userData[0];
+        $userData['preferences'] = json_decode($userData['preferences'],true);
+        $userData['orgid'] = $this->getUuidFromId('ox_organization',$params['orgId']);
+        $userData['managerid'] = $this->getUuidFromId('ox_user',$userData['managerid']);
+        $userData['role'] = $this->getRolesofUser($params['orgId'],$params['userId']);
         return $userData;
     }
 
