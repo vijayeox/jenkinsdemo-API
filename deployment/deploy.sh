@@ -297,7 +297,7 @@ openproject()
         echo -e "${YELLOW}Running db migrate now...${RESET}"
         bundle exec rake db:migrate RAILS_ENV=production
         cd /var/www/task
-        bundle exec rake jobs:work RAILS_ENV=production
+        #bundle exec rake jobs:work RAILS_ENV=production
         echo -e "${YELLOW}Copying codebase now...${RESET}"
         rsync -rl --delete ${TEMP}/integrations/openproject/ /var/www/task/
         echo -e "${YELLOW}Copying openproject Completed...${RESET}"
