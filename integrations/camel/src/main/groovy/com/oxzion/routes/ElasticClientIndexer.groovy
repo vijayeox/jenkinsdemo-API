@@ -38,10 +38,14 @@ class ElasticClientIndexer extends RouteBuilder {
                         def jsonSlurper = new JsonSlurper()
                         def object = jsonSlurper.parseText(exchange.getMessage().getBody())
                         def HOST = env.getProperty("elastic.host")
+                        def CORE = env.getProperty("elastic.core")
                         int PORT = env.getProperty("elastic.port").toInteger()
                         def idList,deleteList
                         String ID;
                         String indexName = object.index.toString().toLowerCase()
+                        if (CORE != '' && CORE != null) {
+                            indexName = CORE.toString() + '_' + indexName;
+                        }
                         String type = object.type.toString()
                         if(object.containsKey('id')){
                             ID = object.id.toString()
