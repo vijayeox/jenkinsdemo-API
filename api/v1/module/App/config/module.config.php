@@ -519,7 +519,7 @@ return [
             'filelistfilter' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/app/:appId/file/search[/status/:workflowStatus]',
+                    'route' => '/app/:appId/file/search[/status/:workflowStatus][/entity/:entityName][/created[/gt/:gtCreatedDate][/lt/:ltCreatedDate]]',
                     'defaults' => [
                         'controller' => Controller\FileController::class,
                         'method' => 'GET',

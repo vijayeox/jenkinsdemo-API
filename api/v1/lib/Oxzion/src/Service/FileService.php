@@ -65,6 +65,14 @@ class FileService extends AbstractService
         $data['uuid'] = $uuid = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
 
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
+        if(!$entityId && isset($data['entity_name'])){
+            $select = "select id from ox_app_entity where name = :entityName";
+            $params = array('entityName' => $data['entity_name']);
+            $result = $this->executeQuerywithBindParameters($select, $params)->toArray();
+            if(count($result)>0){
+                $entityId = $result[0]['id'];
+            }            
+        }
         unset($data['uuid']);
         $fields = $data = $this->cleanData($data);
         $this->logger->info("Data From Fileservice before encoding - " . print_r($data, true));
@@ -176,7 +184,7 @@ class FileService extends AbstractService
         } else {
             $obj = $this->table->getByUuid($id);
             if (is_null($obj)) {
-                throw new EntityNotFoundException("File Id not found -- " . $id);
+                return $this->createFile($data);
             }
             $obj = $obj->toArray();
 
@@ -507,8 +515,13 @@ class FileService extends AbstractService
             $appFilter = "f.id = :appId";
             $queryParams['appId'] = $appId;
             $statusFilter = "";
+            $createdFilter = "";
+            $entityFilter = "";
             if (isset($params['workflowStatus'])) {
                 $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
+            }
+            if(isset($params['entityName'])){
+                $entityFilter = " AND en.name = '" . $params['entityName'] . "'";
             }
             if (isset($params['workflowId'])) {
 
@@ -525,7 +538,15 @@ class FileService extends AbstractService
                     $queryParams['workflowId'] = $workflowId;
                 }
             }
-            $where = " $appFilter $statusFilter and a.latest=1";
+            if(isset($params['gtCreatedDate'])){
+                $createdFilter .= " AND a.date_created > :gtCreatedDate";
+                $queryParams['gtCreatedDate'] = $params['gtCreatedDate'];
+            }
+            if(isset($params['ltCreatedDate'])){
+                $createdFilter .= " AND a.date_created < :ltCreatedDate";
+                $queryParams['ltCreatedDate'] = $params['ltCreatedDate'];
+            }
+            $where = " $appFilter $statusFilter $entityFilter $createdFilter and a.latest=1";
             $fromQuery = " from ox_file as a
             inner join ox_app_entity en on en.id = a.entity_id
             inner join ox_app as f on (f.id = en.app_id)";
@@ -666,6 +687,7 @@ class FileService extends AbstractService
             'appUuid' => $params['appId'],
             'fileUuid' => $params['fileId'],
             'dataType' => 'document');
+        $this->logger->info("Executing query $selectQuery with params - ".json_encode($selectQueryParams));
         try {
             $selectResultSet = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
             if (count($selectResultSet) > 0 && isset($selectResultSet[0])) {

@@ -29,7 +29,7 @@ class PageContentService extends AbstractService
         $selectQuery = array($pageUuid,$appUuid);
         $selectResult = $this->executeQueryWithBindParameters($select,$selectQuery)->toArray();
         if(count($selectResult)>0){
-            $queryString = " SELECT ox_app_page.name, ox_page_content.type,ox_form.uuid as form_id, ox_form.name as formName, ox_page_content.content as pageContent
+            $queryString = " SELECT ox_app_page.name, ox_page_content.type,ox_form.uuid as form_id, ox_form.name as formName, ox_page_content.content
             FROM ox_page_content 
             LEFT JOIN ox_app_page on ox_app_page.id = ox_page_content.page_id
             LEFT OUTER JOIN ox_form on ox_page_content.form_id = ox_form.id
@@ -50,8 +50,6 @@ class PageContentService extends AbstractService
                 if(file_exists($filePath)){
                     $resultArray['content'] = file_get_contents($filePath);
                 }
-            }else{
-                $resultArray['content'] = $resultArray['pageContent'];
             }
             if($resultArray['type'] == 'List' || $resultArray['type'] == 'Form' || $resultArray['type'] == 'DocumentViewer'){ 
                 $resultArray['content'] = json_decode($resultArray['content']);

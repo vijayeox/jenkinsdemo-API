@@ -7,7 +7,7 @@
 				</p>
 			 <br/>
 
-			  <p>Please Accept the Quote at <a href = '{$url}'' rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>www.diveinsurance.com</u></a> or contact us at 1.800.223.9998 or 1.714.739.3177 for any modifications.</p><br/>
+			  <p>Please Accept the Quote at <a href = '{$url}' rel="noopener noreferrer" target="_blank" style = "color:blue;"><u>www.diveinsurance.com</u></a> or contact us at 1.800.223.9998 or 1.714.739.3177 for any modifications.</p><br/>
 
             </div>
 

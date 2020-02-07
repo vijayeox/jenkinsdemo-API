@@ -196,6 +196,28 @@ class CommandService extends AbstractService
         };
     }
 
+    private function enqueue($data,$topic, $queue = null){
+        $this->logger->info("ENQUEUE ------ DATA IS:  " . print_r($data, true));
+        $this->logger->info("ENQUEUE ------ TOPIC IS:  " . print_r($topic, true));
+        $orgId = AuthContext::get(AuthConstants::ORG_UUID);
+        $orgIdAdded = false;
+        if(isset($orgId)){
+            $data['orgId'] = $orgId;
+            $orgIdAdded = true;
+        }
+        if($topic){
+            $this->logger->info("ENQUEUE ------ send topic ");
+            $this->messageProducer->sendTopic(json_encode($data), $topic);
+        }else if($queue){
+            $this->logger->info("ENQUEUE ------ sendqueue ");
+            $this->messageProducer->sendQueue(json_encode($data), $queue);
+        }
+        if($orgIdAdded){
+            unset($data['orgId']);
+        }
+        return $data;
+    }
+
     protected function getRouteData(&$data, $request)
     {
         $this->logger->info("EXECUTE DELEGATE ---- " . print_r($data, true));
@@ -295,14 +317,20 @@ class CommandService extends AbstractService
     {
         try {
             $this->logger->info("File Save Service Start" . print_r($data, true));
-            $select = "Select uuid from ox_file where workflow_instance_id=:workflowInstanceId;";
-            $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
-            $result = $this->executeQueryWithBindParameters($select, $selectParams)->toArray();
-            if (count($result) == 0) {
-                $this->logger->info("File Save ---- Workflow Instance Id Not Found");
-                throw new EntityNotFoundException("Workflow Instance Id Not Found");
+            if(isset($data['workflow_instance_id'])){
+                $select = "Select uuid from ox_file where workflow_instance_id=:workflowInstanceId;";
+                $selectParams = array("workflowInstanceId" => $data['workflow_instance_id']);
+                $result = $this->executeQueryWithBindParameters($select, $selectParams)->toArray();
+                if (count($result) == 0) {
+                    $this->logger->info("File Save ---- Workflow Instance Id Not Found");
+                    throw new EntityNotFoundException("Workflow Instance Id Not Found");
+                }
+                $file = $this->fileService->updateFile($data, $result[0]['uuid']);
+            }else if(isset($data['uuid'])){
+                $file = $this->fileService->updateFile($data, $data['uuid']);
+            }else{
+                $file = $this->fileService->createFile($data);
             }
-            $file = $this->fileService->updateFile($data, $result[0]['uuid']);
             return $data;
         } catch (Exception $e) {
 
@@ -325,8 +353,16 @@ class CommandService extends AbstractService
             $this->logger->info("App Id or Delegate Not Specified");
             throw new EntityNotFoundException("App Id or Delegate Not Specified");
         }
+        if(isset($data['async']) && $data['async'] == 'true'){            
+            unset($data['async']);
+            $temp = $data;
+            $temp['commands'] = array('command' => 'delegate', 'delegate' => $delegate);
+            $this->logger->info("EXECUTE DELEGATE ---- enqueue");
+            $this->enqueue($temp, 'COMMANDS');
+        }
         $this->logger->info("DELEGATE ---- " . print_r($delegate, true));
         $this->logger->info("DELEGATE APP ID---- " . print_r($app_id, true));
+        $this->logger->info("DELEGATE DATA ---- " . print_r($data, true));
         $response = $this->appDelegateService->execute($app_id, $delegate, $data);
         return $response;
     }
@@ -574,4 +610,3 @@ class CommandService extends AbstractService
         }
     }
 }
-    
