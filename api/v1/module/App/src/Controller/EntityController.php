@@ -2,100 +2,86 @@
 namespace App\Controller;
 
 /**
- * Entity Api
- */
+* Entity Api
+*/
 use App\Model\Entity;
 use App\Model\EntityTable;
 use App\Service\EntityService;
-use Exception;
-use Oxzion\Controller\AbstractApiController;
-use Oxzion\EntityNotFoundException;
-use Oxzion\ServiceException;
-use Oxzion\ValidationException;
+use App\Service\EntityContentService;
 use Zend\Db\Adapter\AdapterInterface;
+use Oxzion\Controller\AbstractApiController;
+use Oxzion\ValidationException;
+use Oxzion\ServiceException;
+use Oxzion\EntityNotFoundException;
+use Exception;
 
 class EntityController extends AbstractApiController
 {
     private $entityService;
     private $entityContentService;
     /**
-     * @ignore __construct
-     */
-    public function __construct(EntityTable $table, EntityService $entityService, AdapterInterface $dbAdapter)
+    * @ignore __construct
+    */
+    public function __construct(EntityTable $table, EntityService $entityService,  AdapterInterface $dbAdapter)
     {
         parent::__construct($table, Entity::class);
         $this->setIdentifierName('entityId');
         $this->entityService = $entityService;
-        $this->log = $this->getLogger();
     }
-
     /**
-     * Create Entity API
-     * @api
-     * @link /app/appId/entity
-     * @method POST
-     * @param array $data Array of elements as shown
-     * <code> {
-     *      id : integer,
-     *      name : string,
-     *      Fields from Entity
-     *   } </code>
-     * @return array Returns a JSON Response with Status Code and Created Entity.
-     */
+    * Create Entity API
+    * @api
+    * @link /app/appId/entity
+    * @method POST
+    * @param array $data Array of elements as shown
+    * <code> {
+    *               id : integer,
+    *               name : string,
+    *               Fields from Entity
+    *   } </code>
+    * @return array Returns a JSON Response with Status Code and Created Entity.
+    */
     public function create($data)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        $this->log->info(__CLASS__ . "-> \n Create Entity - " . print_r($data, true));
         try {
             $count = $this->entityService->saveEntity($appUuid, $data);
-            if ($count == 0) {
-                return $this->getFailureResponse("Failed to create a new entity", $data);
-            }
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (Exception $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+        }
+        if ($count == 0) {
+            return $this->getFailureResponse("Failed to create a new entity", $data);
         }
         return $this->getSuccessResponseWithData($data, 201);
     }
-
+    
     /**
-     * GET List Entitys API
-     * @api
-     * @link /app/appId/entity
-     * @method GET
-     * @return array Returns a JSON Response list of Entitys based on Access.
-     */
+    * GET List Entitys API
+    * @api
+    * @link /app/appId/entity
+    * @method GET
+    * @return array Returns a JSON Response list of Entitys based on Access.
+    */
     public function getList()
     {
-        $data = $this->params()->fromRoute();
-        $this->log->info(__CLASS__ . "-> \n Get Entity List- " . print_r($data, true));
-        try {
-            $appUuid = $this->params()->fromRoute()['appId'];
-            $result = $this->entityService->getEntitys($appUuid);
-        } catch (Exception $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
-        }
+        $appUuid = $this->params()->fromRoute()['appId'];
+        $result = $this->entityService->getEntitys($appUuid);
         return $this->getSuccessResponseWithData($result);
     }
-
     /**
-     * Update Entity API
-     * @api
-     * @link /app/appId/entity[/:id]
-     * @method PUT
-     * @param array $id ID of Entity to update
-     * @param array $data
-     * @return array Returns a JSON Response with Status Code and Created Entity.
-     */
+    * Update Entity API
+    * @api
+    * @link /app/appId/entity[/:id]
+    * @method PUT
+    * @param array $id ID of Entity to update
+    * @param array $data
+    * @return array Returns a JSON Response with Status Code and Created Entity.
+    */
     public function update($id, $data)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        $this->log->info(__CLASS__ . "-> \n Update- " . print_r($data, true) . "AppUUID - " . $appUuid);
-        if ($id) {
+        if($id){
             $data['id'] = $id;
         }
         try {
@@ -103,7 +89,8 @@ class EntityController extends AbstractApiController
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        } catch (EntityNotFoundException $e) {
+        }
+        catch (EntityNotFoundException $e) {
             $response = ['data' => $data, 'errors' => $e->getMessage()];
             return $this->getErrorResponse("Entity Not Found", 404, $response);
         }
@@ -112,39 +99,33 @@ class EntityController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
-
     /**
-     * Delete Entity API
-     * @api
-     * @link /app/appId/entity[/:id]
-     * @method DELETE
-     * @param $id ID of Entity to Delete
-     * @return array success|failure response
-     */
+    * Delete Entity API
+    * @api
+    * @link /app/appId/entity[/:id]
+    * @method DELETE
+    * @param $id ID of Entity to Delete
+    * @return array success|failure response
+    */
     public function delete($id)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
-        $this->log->info(__CLASS__ . "-> \n Delete Entity - " . print_r($id, true) . "AppUUID - " . $appUuid);
-        try {
-            $response = $this->entityService->deleteEntity($appUuid, $id);
-        } catch (ServiceException $e) {
-            return $this->getErrorResponse($e->getMessage(), 404);
-        } catch (Exception $e) {
-            $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 500);
+        try{
+        $response = $this->entityService->deleteEntity($appUuid, $id);
+        } catch(ServiceException $e){
+            return $this->getErrorResponse($e->getMessage(),404);
         }
         return $this->getSuccessResponse();
     }
-
     /**
-     * GET Entity API
-     * @api
-     * @link /app/appId/entity[/:id]
-     * @method GET
-     * @param $id ID of Entity
-     * @return array $data
-     * @return array Returns a JSON Response with Status Code and Created Entity.
-     */
+    * GET Entity API
+    * @api
+    * @link /app/appId/entity[/:id]
+    * @method GET
+    * @param $id ID of Entity
+    * @return array $data
+    * @return array Returns a JSON Response with Status Code and Created Entity.
+    */
     public function get($entityId)
     {
         $appUuid = $this->params()->fromRoute()['appId'];
@@ -154,7 +135,6 @@ class EntityController extends AbstractApiController
         }
         return $this->getSuccessResponseWithData($result);
     }
-
     /**
      * Upload the app from the UI and extracting the zip file in a folder that will start the installation of app.
      * @api
@@ -169,13 +149,12 @@ class EntityController extends AbstractApiController
      */
     public function workflowDeployAction()
     {
-        $data = $this->extractPostData();
+        $data=$this->extractPostData();
         $params = array_merge($data, $this->params()->fromRoute());
-        $this->log->info(__CLASS__ . "-> \n Deploy Workflow - " . print_r($params, true));
         $files = isset($_FILES['files']) ? $_FILES['files'] : null;
         try {
-            if ($files && isset($params['name'])) {
-                $response = $this->entityService->deployWorkflow($params['appId'], $params['entityId'], $params, $files);
+            if ($files&&isset($params['name'])) {
+                $response = $this->entityService->deployWorkflow($params['appId'],$params['entityId'], $params, $files);
                 if ($response == 0) {
                     return $this->getErrorResponse("Error Creating workflow");
                 }
@@ -189,9 +168,9 @@ class EntityController extends AbstractApiController
             } else {
                 return $this->getErrorResponse("Files cannot be uploaded");
             }
-        } catch (Exception $e) {
+        }catch (Exception $e) {
             $this->log->error($e->getMessage(), $e);
-            return $this->getErrorResponse($e->getMessage(), 417);
+            return $this->getErrorResponse($e->getMessage(),417);
         }
     }
 }
