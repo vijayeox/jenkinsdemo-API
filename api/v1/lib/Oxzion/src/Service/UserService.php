@@ -1156,6 +1156,7 @@ class UserService extends AbstractService
         $userData['orgid'] = $this->getUuidFromId('ox_organization',$params['orgId']);
         $userData['managerid'] = $this->getUuidFromId('ox_user',$userData['managerid']);
         $userData['role'] = $this->getRolesofUser($params['orgId'],$params['userId']);
+        return $userData;
     }
 
     public function checkAndCreateUser($params, &$data, $register = false)
