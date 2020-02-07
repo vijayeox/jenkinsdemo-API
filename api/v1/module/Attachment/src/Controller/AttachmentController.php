@@ -60,12 +60,12 @@ class AttachmentController extends AbstractApiController
         $dataArray = array();
         $dataArray = $data;
         try {
-            if (!isset($_FILES['file'])) {
-                return $this->getErrorResponse("File Not attached", 201, $data);
+            if (!isset($_FILES['file']) && !isset($this->params()->fromFiles('files'))) {
+                return $this->getErrorResponse("File Not attached", 400, $data);
             } else if (!isset($dataArray['type'])) {
                 return $this->getErrorResponse("File type not specified", 400, $data);
             }
-            $files = $_FILES['file'];
+            $files = $_FILES['file']?$_FILES['file']:$this->params()->fromFiles('files');
             if ($files['name']) {
                 $filesList = $this->attachmentService->upload($dataArray, array($files));
             } else {

@@ -631,13 +631,8 @@ class FileService extends AbstractService
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $this->logger->info("Executing COUNT query - $select with params - " . json_encode($queryParams));
                 $select = "SELECT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
-                
-                // print_r($select);exit;
-                
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
-
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
-                // print_r($resultSet);exit;
                 if ($resultSet) {
                     $i = 0;
                     foreach ($resultSet as $file) {
