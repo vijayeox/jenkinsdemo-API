@@ -163,9 +163,10 @@ class Persistence extends AbstractService
 
     /**
      * @param $sqlQuery
+     * @param $returnArray
      * @return array
      */
-    public function selectQuery($sqlQuery)
+    public function selectQuery($sqlQuery, $returnArray = false)
     {
         $parsedData = new PHPSQLParser($sqlQuery);
         $parsedArray = $parsedData->parsed;
@@ -189,7 +190,12 @@ class Persistence extends AbstractService
         } catch (Exception $e) {
             return 0;
         }
-        return $queryExecute = $this->generateSQLFromArray($parsedArray);
+        $queryExecute = $this->generateSQLFromArray($parsedArray);
+        if ($returnArray === true) {
+            return $this->toArray($queryExecute);
+        } else {
+            return $queryExecute;
+        }
     }
 
     /**
@@ -325,4 +331,5 @@ class Persistence extends AbstractService
         $statementContainer->setSql($query);
         return $statementContainer->execute();
     }
+
 }

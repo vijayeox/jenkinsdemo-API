@@ -1,17 +1,17 @@
 <?php
 namespace Oxzion\Service;
 
-use Zend\Db\Sql\Expression;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\Adapter\ParameterContainer;
-use Oxzion\Utils\StringUtils;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
 use Exception;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
+use Oxzion\Utils\StringUtils;
+use Zend\Db\Adapter\ParameterContainer;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Sql\Expression;
 
 abstract class AbstractService extends AbstractBaseService
 {
-    
+
     protected function __construct($config, $dbAdapter)
     {
         parent::__construct($config, $dbAdapter);
@@ -21,33 +21,34 @@ abstract class AbstractService extends AbstractBaseService
     {
         return $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . ":" . $_SERVER['SERVER_PORT'];
     }
-    
+
     protected function getIdFromUuid($table, $uuid, $filter = array())
     {
         $filter['uuid'] = $uuid;
         $sql = $this->getSqlObject();
-        $getID= $sql->select();
+        $getID = $sql->select();
         $getID->from($table)
-        ->columns(array("id"))
-        ->where($filter);
+            ->columns(array("id"))
+            ->where($filter);
         $responseID = $this->executeQuery($getID)->toArray();
-        if($responseID){
+        if ($responseID) {
             return $responseID[0]['id'];
-        }else{
+        } else {
             return 0;
         }
     }
 
-    protected function getUuidFromId($table, $id){
+    protected function getUuidFromId($table, $id)
+    {
         $sql = $this->getSqlObject();
-        $getID= $sql->select();
+        $getID = $sql->select();
         $getID->from($table)
-        ->columns(array("uuid"))
-        ->where(array('id' => $id));
+            ->columns(array("uuid"))
+            ->where(array('id' => $id));
         $responseID = $this->executeQuery($getID)->toArray();
-        if($responseID){
+        if ($responseID) {
             return $responseID[0]['uuid'];
-        }else{
+        } else {
             return 0;
         }
     }
@@ -75,9 +76,9 @@ abstract class AbstractService extends AbstractBaseService
 
     protected function executeInsert($query)
     {
-        if(StringUtils::startsWith($query, 'INSERT')){
+        if (StringUtils::startsWith($query, 'INSERT')) {
             $result = $this->executeQueryInternal($query);
-            if($result->getAffectedRows() > 0){
+            if ($result->getAffectedRows() > 0) {
                 return $result->getGeneratedValue();
             }
         }
@@ -85,20 +86,21 @@ abstract class AbstractService extends AbstractBaseService
     }
 
     /**
-        Query builder: Code that combines the required parameter to build the query.
-        Author: Rakshith
-        Function Name: executeQuerywithParams()
-    */
-        public function executeQuerywithParams($queryString, $where = null, $group = null, $order = null, $limit = null)
-        {
-            $result = $this->executeQueryInternal($queryString, $where, $group, $order, $limit);
-            $resultSet = new ResultSet();
-            return $resultSet->initialize($result);
-        }
+     * Query builder: Code that combines the required parameter to build the query.
+     * Author: Rakshith
+     * Function Name: executeQuerywithParams()
+     */
+    public function executeQuerywithParams($queryString, $where = null, $group = null, $order = null, $limit = null)
+    {
+        $result = $this->executeQueryInternal($queryString, $where, $group, $order, $limit);
+        $resultSet = new ResultSet();
+        return $resultSet->initialize($result);
+    }
 
-        private function executeQueryInternal($queryString, $where = null, $group = null, $order = null, $limit = null){
+    private function executeQueryInternal($queryString, $where = null, $group = null, $order = null, $limit = null)
+    {
         //Passing the required parameter to the query statement
-            $adapter = $this->getAdapter();
+        $adapter = $this->getAdapter();
         $query_string = $queryString . " " . $where . " " . $group . " " . $order . " " . $limit; //Combining all the parameters required to build the query statement. We will add more fields to this in the future if required.
         //        echo $query_string;exit;
         $statement = $adapter->query($query_string);
@@ -106,17 +108,20 @@ abstract class AbstractService extends AbstractBaseService
         return $result;
     }
 
-    protected function executeUpdateWithBindParameters($queryString, $parameters = null){
+    protected function executeUpdateWithBindParameters($queryString, $parameters = null)
+    {
         return $this->executeQueryWithBindParametersInternal($queryString, $parameters);
     }
 
-    protected function executeQueryWithBindParameters($queryString, $parameters = null) {
+    protected function executeQueryWithBindParameters($queryString, $parameters = null)
+    {
         $result = $this->executeQueryWithBindParametersInternal($queryString, $parameters);
         $resultSet = new ResultSet();
         return $resultSet->initialize($result);
     }
 
-    private function executeQueryWithBindParametersInternal($queryString, $parameters){
+    private function executeQueryWithBindParametersInternal($queryString, $parameters)
+    {
         $adapter = $this->getAdapter();
         $statement = $adapter->query($queryString);
         $result = $statement->execute($parameters ? $parameters : array());
@@ -164,11 +169,9 @@ abstract class AbstractService extends AbstractBaseService
     protected function getDataByParams($tableName, $fieldArray = array(), $where = array(), $joins = array(), $sortby = null, $groupby = array(), $limit = null, $offset = 0, $debug = false)
     {
         $select = $this->sql->select($tableName);
-
         if ($fieldArray) {
             $select->columns($fieldArray);
         }
-
         if ($where) {
             if (is_array($where) && array_intersect(array('OR', 'AND', 'or', 'and'), array_keys($where))) {
                 foreach ($where as $op => $cond) {
@@ -210,25 +213,23 @@ abstract class AbstractService extends AbstractBaseService
         if ($offset) {
             $select->offset($offset);
         }
-
         if ($debug) {
             echo "<pre>";
             print_r($this->sql->buildSqlString($select));
             exit();
         }
-
         $returnArray = $this->executeQuery($select);
         // if (!$returnArray) return array();
         return $returnArray;
     }
 
     /**
-    * multiInsertOrUpdate: Insert or update Multiple rows as one query
-    * @param array $tableName Table name to Insert fields into
-    * @param array $data Insert array(array('field_name' => 'field_value'), array('field_name' => 'field_value_new'))
-    * @param array $excludedColumns For excluding update columns array('field_name1', 'field_name2')
-    * @return bool
-    */
+     * multiInsertOrUpdate: Insert or update Multiple rows as one query
+     * @param array $tableName Table name to Insert fields into
+     * @param array $data Insert array(array('field_name' => 'field_value'), array('field_name' => 'field_value_new'))
+     * @param array $excludedColumns For excluding update columns array('field_name1', 'field_name2')
+     * @return bool
+     */
 
     public function multiInsertOrUpdate($tableName, array $data, array $excludedColumns = array())
     {
@@ -246,7 +247,7 @@ abstract class AbstractService extends AbstractBaseService
                 $updateQuotedValue[] = ($platform->quoteIdentifier($column)) . '=' . ('VALUES(' . ($platform->quoteIdentifier($column)) . ')');
             }
         }
-        $this->logger->info("Update quted val -".print_r($updateQuotedValue,true));
+        $this->logger->info("Update quted val -" . print_r($updateQuotedValue, true));
         /* Preparation insert data */
         $insertQuotedValue = [];
         $insertQuotedColumns = [];
@@ -281,20 +282,35 @@ abstract class AbstractService extends AbstractBaseService
         return $statementContainer->execute();
     }
 
-    public function updateOrganizationContext($data){
-        $orgId = AuthContext::get(AuthConstants::ORG_ID);            
-        if(!isset($orgId) && isset($data['orgId'])){
-            AuthContext::put(AuthConstants::ORG_UUID, $data['orgId']);
-            $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
-            AuthContext::put(AuthConstants::ORG_ID, $orgId);
-            $select  = "SELECT ou.id,ou.uuid from ox_user as ou join ox_organization as org on org.contactid = ou.id where org.id = :orgId";
-            $params = array("orgId" => $orgId);
-            $result = $this->executeQueryWithBindParameters($select,$params)->toArray();
-            if(isset($result[0]))
-            {
-                AuthContext::put(AuthConstants::USER_ID, $result[0]['id']);
-                AuthContext::put(AuthConstants::USER_UUID, $result[0]['uuid']);
+    public function updateOrganizationContext($data)
+    {
+        try {
+            $orgId = AuthContext::get(AuthConstants::ORG_ID);
+            if (!isset($orgId) && isset($data['orgId'])) {
+                AuthContext::put(AuthConstants::ORG_UUID, $data['orgId']);
+                $orgId = $this->getIdFromUuid('ox_organization', $data['orgId']);
+                AuthContext::put(AuthConstants::ORG_ID, $orgId);
+                $select = "SELECT ou.id,ou.uuid from ox_user as ou join ox_organization as org on org.contactid = ou.id where org.id = :orgId";
+                $params = array("orgId" => $orgId);
+                $result = $this->executeQueryWithBindParameters($select, $params)->toArray();
+                if (isset($result[0])) {
+                    AuthContext::put(AuthConstants::USER_ID, $result[0]['id']);
+                    AuthContext::put(AuthConstants::USER_UUID, $result[0]['uuid']);
+                }
+            }
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    protected function toArray($result)
+    {
+        $returnArray = array();
+        if ($result->count() > 0) {
+            while ($result->next()) {
+                $returnArray[] = $result->current();
             }
         }
+        return $returnArray;
     }
 }

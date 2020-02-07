@@ -34,10 +34,10 @@ application.</li>
 </div>
 		<p>Sincerely,</p>
 		<p>Vicencia & Buckley A Division of HUB International</p>
-		<p class="acc_name">{$user_name},CISR, Account Manager</p>
+		<p class="acc_name">{$approverName},CISR, Account Manager</p>
 		<p class ="footer_line">Vicencia & Buckley A Division of HUB International</p>
 		<p class ="footer_line"><span id="phone1Val"></span> or <span id="phone2Val"></span></p>
-		<p class ="footer_line">{$user_email}</p>
+		<p class ="footer_line">{$approverEmailId}</p>
 
 	</div>
 </body>

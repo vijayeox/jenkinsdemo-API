@@ -67,7 +67,8 @@ class Module implements ConfigProviderInterface
                 Controller\ActivityInstanceController::class => function ($container) {
                     return new Controller\ActivityInstanceController(
                         $container->get(ActivityInstanceService::class),
-                        $container->get(WorkflowInstanceService::class)
+                        $container->get(WorkflowInstanceService::class),
+                        $container->get(CommandService::class)
                     );
                 },
                 Controller\ServiceTaskController::class => function ($container) {

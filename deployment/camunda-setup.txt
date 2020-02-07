@@ -29,7 +29,7 @@ sudo tar xzf /home/ubuntu/camunda-setup/camunda.tar.gz -C /opt/oxzion/camunda se
 
 #then download the mysql connector library for camunda from maven repo
 
-wget -O /home/ubuntu/camunda-setup/mysql-connector-java-5.1.21.jar "http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.21/mysql-connector-java-5.1.21.jar"
+wget -O /home/ubuntu/camunda-setup/mysql-connector-java-5.1.21.jar "https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.21/mysql-connector-java-5.1.21.jar"
 
 #copy the downloaded mysql library to camunda library
 sudo cp /home/ubuntu/camunda-setup/mysql-connector-java-5.1.21.jar /opt/oxzion/camunda/lib
@@ -90,8 +90,8 @@ create database for camel quartz and camunda as process-engine with camunda user
 create database quartz_db;
 create database `process-engine`;
 
-grant all privileges on `quartzdb` to 'quartzuser'@'%' identified by 'password';
-grant all privileges on `process-engine` to 'camunda'@'	%' identified by 'password';
+grant all privileges on `quartzdb`.* to 'quartzuser'@'%' identified by 'password';
+grant all privileges on `process-engine`.* to 'camunda'@'	%' identified by 'password';
 
 
 #run these two privileges as root for deploy api to work
@@ -119,5 +119,6 @@ chown www-data:www-data /var/www/.config
 
 for deploy app api to work make sure you give following permission
 
+mkdir /opt/oxzion/eoxapps
 chmod 777 -R /opt/oxzion/eoxapps
 

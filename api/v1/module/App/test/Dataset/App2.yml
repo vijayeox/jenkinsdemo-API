@@ -1,69 +1,60 @@
 ox_app:
--
-    id: 240
+  - id: 240
     name: DummyDive
     uuid: "6f6c35fe-2e3e-4c6f-ad15-a61d98e8d641"
     category: "EXAMPLE_CATEGORY"
     type: 2
     status: 1
 ox_privilege:
--
-    id: 300
+  - id: 300
     name: MANAGE_POLICY_APPROVAL
     permission_allowed: 3
     app_id: 240
--
-    id: 301
+  - id: 301
     name: MANAGE_MY_POLICY
     permission_allowed: 3
     app_id: 240
--
-    id: 302
+  - id: 302
     name: MANAGE
     permission_allowed: 3
     app_id: 240
 ox_app_menu:
--
-    id: 10
+  - id: 10
     uuid: null
-    name: 'dive'
-    icon: 'icon'
+    name: "dive"
+    icon: "icon"
     sequence: 6
     created_by: 1
     app_id: 240
     privilege_id: 302
-    date_created: '2019-10-04 18:10:47'
--
-    id: 11
+    date_created: "2019-10-04 18:10:47"
+  - id: 11
     uuid: null
-    name: 'dive'
-    icon: 'icon'
+    name: "dive"
+    icon: "icon"
     sequence: 7
     created_by: 1
     app_id: 240
     privilege_id: 301
-    date_created: '2019-10-04 18:10:47'
--
-    id: 12
+    date_created: "2019-10-04 18:10:47"
+  - id: 12
     uuid: null
-    name: 'dive'
-    icon: 'icon'
+    name: "dive"
+    icon: "icon"
     sequence: 6
     created_by: 1
     app_id: 240
     parent_id: 12
     privilege_id: 300
-    date_created: '2019-10-04 18:10:47'
+    date_created: "2019-10-04 18:10:47"
 ox_role_privilege:
--
-    id: 200
+  - id: 200
     role_id: 1
-    privilege_name: 'MANAGE_POLICY_APPROVAL'
+    privilege_name: "MANAGE_POLICY_APPROVAL"
     permission: 3
     app_id: 240
 ox_app_entity:
--
-    name: 'Individual Liability'
+  - name: "Individual Liability"
     app_id: 240
     created_by: 1
-    date_created: '2019-10-04 18:10:47'
+    date_created: "2019-10-04 18:10:47"

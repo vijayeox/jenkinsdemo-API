@@ -111,9 +111,9 @@ class PaymentGatewayController extends AbstractApiController
             }
             $response = $response;
         } catch(Exception $e){
-            return $this->getErrorResponse("Payment Initialization Failed", 400, ['id' => $appId]);
+            return $this->getErrorResponse($e->getMessage(), 400, ['id' => $appId]);
         } catch(ServiceException $e){
-            return $this->getErrorResponse("Payment Initialization Failed", 400, ['id' => $appId]);
+            return $this->getErrorResponse($e->getMessage(), 400, ['id' => $appId]);
         }
         return $this->getSuccessResponseWithData($response, 201);
     }

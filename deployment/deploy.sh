@@ -1,7 +1,7 @@
 #!/bin/bash
 #This script is used to deploy build.zip to respective folders
 # exit when any command fails
-set -e
+#set -e
 #trap 'echo "\"${BASH_COMMAND}\" command failed with exit code $?."' EXIT
 #going back to oxzion3.0 root directory
 cd ../
@@ -296,6 +296,8 @@ openproject()
         ln -nfs /var/lib/oxzion/task ./files
         echo -e "${YELLOW}Running db migrate now...${RESET}"
         bundle exec rake db:migrate RAILS_ENV=production
+        cd /var/www/task
+        bundle exec rake jobs:work RAILS_ENV=production
         echo -e "${YELLOW}Copying codebase now...${RESET}"
         rsync -rl --delete ${TEMP}/integrations/openproject/ /var/www/task/
         echo -e "${YELLOW}Copying openproject Completed...${RESET}"

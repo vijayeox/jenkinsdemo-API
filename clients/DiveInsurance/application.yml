@@ -176,13 +176,13 @@ menu:
                             -
                                 title: Name
                                 field: entity_name
-                                cell: '{item.firstname}&nbsp;{item.lastname} - &nbsp; {item.entity_name}'
+                                cell: '<td>{item.firstname}&nbsp;{item.lastname} - &nbsp; {item.entity_name}</td>'
                             -
                                 title: 'Policy Status'
                                 field: policyStatus
                             -
                                 title: 'Policy Effective Period'
-                                cell: '{item.start_date}&nbsp;-&nbsp;{item.end_date}'
+                                cell: '<td>{item.start_date}&nbsp;-&nbsp;{item.end_date}</td>'
                                 field: start_date
     -
         name: 'My History'
@@ -215,7 +215,7 @@ menu:
                             -
                                 title: Name
                                 field: firstname
-                                cell: '{item.firstname}&nbsp;{item.lastname}'
+                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
                                 field: entity_name
@@ -323,7 +323,7 @@ menu:
                             -
                                 title: Name
                                 field: firstname
-                                cell: '{item.firstname}&nbsp;{item.lastname}'
+                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
                                 field: entity_name
@@ -475,7 +475,7 @@ menu:
                             -
                                 title: Name
                                 field: firstname
-                                cell: '{item.firstname}&nbsp;{item.lastname}'
+                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
                                 field: entity_name
@@ -555,7 +555,7 @@ menu:
                             -
                                 title: Name
                                 field: firstname
-                                cell: '{item.firstname}&nbsp;{item.lastname}'
+                                cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
                                 field: entity_name
@@ -610,6 +610,11 @@ workflow:
         uuid: 35139ac6-3229-11ea-aec2-2e728ce88125
         bpmn_file: 'Emergency First Response/EFREndorsement.bpmn'
         entity: 'Emergency First Response'
+    -
+        name: 'Reinstate Policy'
+        uuid: 81cb9e10-5845-4379-97c9-f9486b702bdb
+        bpmn_file: 'Cancel Policy/ReinstatePolicy.bpmn'
+        entity: 'Individual Professional Liability'
 form:
     -
         name: 'PADI Verification'
