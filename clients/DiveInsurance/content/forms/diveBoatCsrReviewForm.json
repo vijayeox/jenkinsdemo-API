@@ -721,7 +721,6 @@
 				"components": [{
 					"label": "Policy Period",
 					"format": "MM-dd-yyyy",
-					"disabled": true,
 					"tableView": false,
 					"datePicker": {
 						"datepickerMode": "day"
@@ -738,7 +737,7 @@
 					"key": "policyPeriod",
 					"properties": {
 						"delegate": "RateCard",
-						"target": "ExcessLiabilityPremium"
+						"target": "excess_liability_coverage"
 					},
 					"type": "datetime",
 					"input": true,
@@ -768,7 +767,7 @@
 			}, {
 				"components": [{
 					"label": "start_date",
-					"calculateValue": "var startRange = moment(data['policyPeriod'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");",
+					"calculateValue": "value = moment(data['policyPeriod']).format(\"YYYY-MM-DD\");",
 					"key": "start_date",
 					"type": "hidden",
 					"input": true,
@@ -1256,11 +1255,11 @@
 			"theme": "primary",
 			"tableView": false,
 			"components": [{
-				"input": true,
-				"tableView": true,
 				"label": "Excess Liability Coverage",
-				"key": "excess_liability_coverage",
+				"widget": "choicesjs",
 				"placeholder": "Excess Liability Coverage",
+				"tooltip": "Primary limit $1,000,000",
+				"tableView": true,
 				"data": {
 					"values": [{
 						"value": "excessLiabilityCoverageDeclined",
@@ -1282,17 +1281,19 @@
 						"label": "9M"
 					}]
 				},
+				"selectThreshold": 0.3,
 				"clearOnHide": false,
 				"validate": {
 					"unique": false,
 					"multiple": false
 				},
-				"type": "select",
+				"errorLabel": "Primary limit $1,000,000",
+				"key": "excess_liability_coverage",
 				"properties": {
 					"target": "ExcessLiabilityPremium"
 				},
-				"tooltip": "Primary limit $1,000,000",
-				"errorLabel": "Primary limit $1,000,000",
+				"type": "select",
+				"input": true,
 				"lockKey": true
 			}, {
 				"input": true,
@@ -6500,7 +6501,7 @@
 						"delimiter": false,
 						"requireDecimal": false,
 						"inputFormat": "plain",
-						"redrawOn": "data",
+						"redrawOn": "excess_liability_coverage",
 						"validate": {
 							"multiple": false,
 							"unique": false
@@ -6696,7 +6697,7 @@
 						"requireDecimal": false,
 						"inputFormat": "plain",
 						"redrawOn": "data",
-						"calculateValue": "value = ((parseFloat(data['FlHiSurchargePremium']) || 0) + (parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) | 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0))",
+						"calculateValue": "console.log('ExcessLiabilityPremium ==== '+data['ExcessLiabilityPremium']);\nvalue = ((parseFloat(data['FlHiSurchargePremium']) || 0) + (parseFloat(data['CrewMembersinWaterPremium']) || 0) + (parseFloat(data['CrewOnBoatPremium']) || 0) + (parseFloat(data['PassengerPremiumCost']) || 0) + (parseFloat(data['DingyLiability']) | 0) + (parseFloat(data['ExcessLiabilityPremium']) || 0) + (parseFloat(data['LiabilityPremiumCost']) || 0))",
 						"validate": {
 							"multiple": false,
 							"unique": false
@@ -7495,7 +7496,8 @@
 			"validate": {
 				"unique": false,
 				"multiple": false
-			}
+			},
+			"path": "page5Panel"
 		}, {
 			"key": "page5Panel4",
 			"input": false,
@@ -7814,7 +7816,8 @@
 		"validate": {
 			"unique": false,
 			"multiple": false
-		}
+		},
+		"path": "page5"
 	}, {
 		"input": true,
 		"label": "Submit",
@@ -7901,13 +7904,14 @@
 	"settings": {},
 	"properties": {
 		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"},{\"command\" : \"delegate\",\"delegate\":\"RateCard\"}]",
-		"submission_commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitActivity\"}]"
+		"submission_commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"submitActivity\"}]",
+		"target": "excess_liability_coverage"
 	},
 	"name": "diveBoatCsrReviewForm",
 	"path": "diveboatcsrreviewform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-10-23T15:04:58.563Z",
-	"modified": "2020-02-04T13:03:21.857Z",
+	"modified": "2020-02-07T08:42:08.258Z",
 	"machineName": "testdivehub:diveBoatCsrReviewForm",
 	"controller": ""
 }
