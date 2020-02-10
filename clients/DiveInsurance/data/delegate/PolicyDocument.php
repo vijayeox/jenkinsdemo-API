@@ -20,7 +20,6 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'footer' => 'COIfooter.html',
                 'slWording' => 'SL Wording.pdf',
                 'policy' => 'Individual_Professional_Liability_Policy.pdf',
-                'card' => 'PocketCard',
                 'aiTemplate' => 'Individual_PL_AI',
                 'blanketForm' => 'Individual_AI_Blanket_Endorsement.pdf',
                 'aiheader' => 'IPL_AI_header.html',

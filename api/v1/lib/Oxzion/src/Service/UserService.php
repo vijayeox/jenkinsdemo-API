@@ -1083,7 +1083,7 @@ class UserService extends AbstractService
             if ($userUpdate) {
                 $this->messageProducer->sendQueue(json_encode(array(
                     'to' => $userReset['email'],
-                    'subject' => $userReset['firstname'] . ', You login details for OX Zion!',
+                    'subject' => $userReset['firstname'] . ', You login details for EOX vantage!',
                     'body' => $this->templateService->getContent('resetPassword', $userReset),
                 )), 'mail');
                 return $userReset;

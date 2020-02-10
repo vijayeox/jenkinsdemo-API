@@ -3245,6 +3245,52 @@
 					"unique": false,
 					"multiple": false
 				}
+			}, {
+				"key": "page3PanelPanel",
+				"input": false,
+				"title": "Attachments",
+				"theme": "primary",
+				"tableView": false,
+				"components": [{
+					"label": "Attachments",
+					"hideLabel": true,
+					"tableView": true,
+					"storage": "base64",
+					"webcam": true,
+					"fileTypes": [{
+						"label": "",
+						"value": ""
+					}],
+					"filePattern": ".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
+					"fileMaxSize": "10MB",
+					"multiple": true,
+					"calculateValue": "if(data.attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+					"validate": {
+						"unique": false,
+						"multiple": true
+					},
+					"key": "attachments",
+					"type": "file",
+					"input": true
+				}, {
+					"label": "attachmentFields",
+					"customDefaultValue": "value = [\"attachments\"];",
+					"key": "attachmentsFieldnames",
+					"type": "hidden",
+					"input": true,
+					"tableView": false,
+					"validate": {
+						"unique": false,
+						"multiple": false
+					}
+				}],
+				"type": "panel",
+				"label": "Panel",
+				"validate": {
+					"unique": false,
+					"multiple": false
+				},
+				"path": "page3PanelPanel"
 			}],
 			"type": "panel",
 			"breadcrumb": "none",
@@ -4465,7 +4511,7 @@
 			"tableView": false,
 			"components": [{
 				"label": "amountPayable",
-				"calculateValue": "value = ('$'+ data['amount'])",
+				"calculateValue": "value = (data['amount'])",
 				"key": "page6Panel2AmountPayable",
 				"type": "hidden",
 				"input": true,
@@ -4553,10 +4599,11 @@
 		"validate": {
 			"unique": false,
 			"multiple": false
-		}
+		},
+		"isNew": false
 	}],
 	"revisions": "original",
-	"_vid": 485,
+	"_vid": 493,
 	"title": "Bharat - IPL",
 	"display": "wizard",
 	"access": [{
@@ -4569,13 +4616,14 @@
 		"showCancel": "false",
 		"showNext": "true",
 		"showPrevious": "false",
-		"clickable": "false"
+		"clickable": "false",
+		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"},{\"command\" : \"startWorkflow\"}]"
 	},
 	"name": "bharatIpl",
 	"path": "bharatipl",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-08-30T14:46:47.529Z",
-	"modified": "2020-01-31T06:12:36.134Z",
+	"modified": "2020-02-07T13:02:41.744Z",
 	"machineName": "testdivehub:bharatIpl",
 	"controller": ""
 }

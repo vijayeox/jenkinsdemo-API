@@ -24,14 +24,20 @@ class AnalyticsTest extends MainControllerTest
     private $dataset;
     private $searchFactory;
     private $analyticsFactory;
+    private $index_pre;
 
     public function setUp() : void
     {
         $this->loadConfig();
         parent::setUp();
+        $config = $this->getApplicationConfig();
+        if (isset($config['elasticsearch']['core'])) {
+            $this->index_pre = $config['elasticsearch']['core'].'_';
+        } else {
+            $this->index_pre = '';
+        }
         if(enableElastic!=0){
             $this->setSearchData();
-            $config = $this->getApplicationConfig();
             $this->setupData();
             sleep (1) ;
         }
@@ -77,7 +83,7 @@ class AnalyticsTest extends MainControllerTest
     public function testGrouping() {
         if(enableElastic==0){
           //  $this->markTestSkipped('Only Integration Test');
-          $input = '{"index":"11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"value":{"sum":{"field":"amount"}}}}},"explain":true},"_source":["*","created_by"],"from":0,"size":0}';
+          $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"value":{"sum":{"field":"amount"}}}}},"explain":true},"_source":["*","created_by"],"from":0,"size":0}';
           $output = '{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"John Doe","doc_count":2,"value":{"value":800}},{"key":"Mike Price","doc_count":1,"value":{"value":50.5}}]}}}';
           $this->setMockData($input,$output);  
         }
@@ -94,7 +100,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testDoubleGrouping() {
         if(enableElastic==0){
-            $input = '{"index":"11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","category","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"groupdata0":{"terms":{"field":"category.keyword","size":10000},"aggs":{"value":{"sum":{"field":"amount"}}}}}}},"explain":true},"_source":["*","category","created_by"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","category","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"groupdata0":{"terms":{"field":"category.keyword","size":10000},"aggs":{"value":{"sum":{"field":"amount"}}}}}}},"explain":true},"_source":["*","category","created_by"],"from":0,"size":0}';
             $output = '{"took":7,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"John Doe","doc_count":2,"groupdata0":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"A","doc_count":1,"value":{"value":200}},{"key":"B","doc_count":1,"value":{"value":600}}]}},{"key":"Mike Price","doc_count":1,"groupdata0":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"A","doc_count":1,"value":{"value":50.5}}]}}]}}}';
             $this->setMockData($input,$output);  
         }
@@ -116,7 +122,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testTripleGroupingCount() {
         if(enableElastic==0){
-            $input = '{"index":"11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","modified_by","category","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"groupdata0":{"terms":{"field":"category.keyword","size":10000},"aggs":{"groupdata1":{"terms":{"field":"modified_by.keyword","size":10000}}}}}}},"explain":true},"_source":["*","modified_by","category","created_by"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","modified_by","category","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"groupdata0":{"terms":{"field":"category.keyword","size":10000},"aggs":{"groupdata1":{"terms":{"field":"modified_by.keyword","size":10000}}}}}}},"explain":true},"_source":["*","modified_by","category","created_by"],"from":0,"size":0}';
             $output = '{"took":9,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"John Doe","doc_count":2,"groupdata0":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"A","doc_count":1,"groupdata1":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"Jane Doe","doc_count":1}]}},{"key":"B","doc_count":1,"groupdata1":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"Jane Doe","doc_count":1}]}}]}},{"key":"Mike Price","doc_count":1,"groupdata0":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"A","doc_count":1,"groupdata1":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"Mark Doe","doc_count":1}]}}]}}]}}}';
             $this->setMockData($input,$output);  
               
@@ -145,7 +151,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testLists() {
         if(enableElastic==0){
-            $input = '{"index":"11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["name","created_by","category"],"explain":true},"_source":["name","created_by","category"],"from":0,"size":10000}';
+            $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["name","created_by","category"],"explain":true},"_source":["name","created_by","category"],"from":0,"size":10000}';
             $output = '{"took":12,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":4,"relation":"eq"},"max_score":3,"hits":[{"_shard":"[11_test_index][0]","_node":"jDmSXFh4Qni0KdDbDecfKw","_index":"11_test_index","_type":"_doc","_id":"1","_score":3,"_source":{"name":"test document","category":"A","created_by":"John Doe"},"_explanation":{"value":3,"description":"sum of:","details":[{"value":1,"description":"org_id:[1 TO 1]","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=amount])","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=date_created])","details":[]}]}},{"_shard":"[11_test_index][0]","_node":"jDmSXFh4Qni0KdDbDecfKw","_index":"11_test_index","_type":"_doc","_id":"2","_score":3,"_source":{"name":"testing document","category":"A","created_by":"Mike Price"},"_explanation":{"value":3,"description":"sum of:","details":[{"value":1,"description":"org_id:[1 TO 1]","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=amount])","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=date_created])","details":[]}]}},{"_shard":"[11_test_index][0]","_node":"jDmSXFh4Qni0KdDbDecfKw","_index":"11_test_index","_type":"_doc","_id":"3","_score":3,"_source":{"name":"different document","category":"A","created_by":"John Doe"},"_explanation":{"value":3,"description":"sum of:","details":[{"value":1,"description":"org_id:[1 TO 1]","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=amount])","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=date_created])","details":[]}]}},{"_shard":"[11_test_index][0]","_node":"jDmSXFh4Qni0KdDbDecfKw","_index":"11_test_index","_type":"_doc","_id":"6","_score":3,"_source":{"name":"New document","category":"B","created_by":"John Doe"},"_explanation":{"value":3,"description":"sum of:","details":[{"value":1,"description":"org_id:[1 TO 1]","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=amount])","details":[]},{"value":1,"description":"ConstantScore(DocValuesFieldExistsQuery [field=date_created])","details":[]}]}}]}}';
             $this->setMockData($input,$output);  
         }
@@ -161,7 +167,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testAggregatesNoGroups() {
         if(enableElastic==0){
-            $input = '{"index":"11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"aggs":{"value":{"sum":{"field":"amount"}}},"explain":true},"_source":["*"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"aggs":{"value":{"sum":{"field":"amount"}}},"explain":true},"_source":["*"],"from":0,"size":0}';
             $output = '{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":4,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"value":{"value":950.5}}}';
             $this->setMockData($input,$output);  
         }
@@ -176,7 +182,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testOnlyFilters() {
         if(enableElastic==0){
-            $input = '{"index":"11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
             $output = '{"took":4,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":4,"relation":"eq"},"max_score":null,"hits":[]}}';
             $this->setMockData($input,$output);  
         }
@@ -190,7 +196,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testDefaultField() {
         if(enableElastic==0){
-            $input = '{"index":"11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"created_by"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000}}},"explain":true},"_source":["*","created_by"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"created_by"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000}}},"explain":true},"_source":["*","created_by"],"from":0,"size":0}';
             $output = '{"took":7,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":4,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"John Doe","doc_count":3},{"key":"Mike Price","doc_count":1}]}}}';
             $this->setMockData($input,$output);  
         }
@@ -207,7 +213,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testWorkflowData() {
         if(enableElastic==0){
-            $input = '{"index":"sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"field5"}},{"match":{"entity_name":{"query":"TaskSystem","operator":"and"}}}]}},"_source":["*","field3"],"aggs":{"groupdata":{"terms":{"field":"field3.keyword","size":10000},"aggs":{"value":{"avg":{"field":"field5"}}}}},"explain":true},"_source":["*","field3"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'sampleapp_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"field5"}},{"match":{"entity_name":{"query":"TaskSystem","operator":"and"}}}]}},"_source":["*","field3"],"aggs":{"groupdata":{"terms":{"field":"field3.keyword","size":10000},"aggs":{"value":{"avg":{"field":"field5"}}}}},"explain":true},"_source":["*","field3"],"from":0,"size":0}';
             $output = '{"took":7,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"field3text","doc_count":2,"value":{"value":15}},{"key":"cfield3text","doc_count":1,"value":{"value":30}}]}}}';
             $this->setMockData($input,$output);  
         }
@@ -224,7 +230,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testCrmDataWithFilter() {
         if(enableElastic==0){
-            $input = '{"index":"crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"bool":{"must":[{"range":{"numberOfEmployees":{"lte":5}}},{"bool":{"should":[{"match":{"owner_username":{"query":"bharatg","operator":"and"}}},{"match":{"owner_username":{"query":"mehul","operator":"and"}}}]}}]}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"bool":{"must":[{"range":{"numberOfEmployees":{"lte":5}}},{"bool":{"should":[{"match":{"owner_username":{"query":"bharatg","operator":"and"}}},{"match":{"owner_username":{"query":"mehul","operator":"and"}}}]}}]}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
             $output = '{"took":803,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":2,"relation":"eq"},"max_score":null,"hits":[]}}';
             $this->setMockData($input,$output);  
         }
@@ -246,7 +252,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testCrmComplexFilterNot() {
         if(enableElastic==0){
-            $input = '{"index":"crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"numberOfEmployees":{"lt":5}}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"numberOfEmployees":{"lt":5}}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
             $output = '{"took":1,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":1,"relation":"eq"},"max_score":null,"hits":[]}}';
             $this->setMockData($input,$output);  
         }
@@ -262,7 +268,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testCrmComplexFilterSymbols() {
         if(enableElastic==0){
-            $input = '{"index":"crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"numberOfEmployees"}},{"bool":{"must":[{"range":{"numberOfEmployees":{"gt":4}}},{"range":{"numberOfEmployees":{"lt":10}}}]}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"aggs":{"value":{"sum":{"field":"numberOfEmployees"}}},"explain":true},"_source":["*"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"numberOfEmployees"}},{"bool":{"must":[{"range":{"numberOfEmployees":{"gt":4}}},{"range":{"numberOfEmployees":{"lt":10}}}]}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"aggs":{"value":{"sum":{"field":"numberOfEmployees"}}},"explain":true},"_source":["*"],"from":0,"size":0}';
             $output = '{"took":11,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":2,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"value":{"value":13}}}';
             $this->setMockData($input,$output);  
         }
@@ -280,7 +286,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testCrmComplexFilterNotNoArray() {
         if(enableElastic==0){
-            $input = '{"index":"crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"bool":{"must_not":[{"term":{"owner_username":"bharatg"}}]}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"bool":{"must_not":[{"term":{"owner_username":"bharatg"}}]}},{"match":{"entity_name":{"query":"Lead","operator":"and"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
             $output = '{"took":7,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":1,"relation":"eq"},"max_score":null,"hits":[]}}';
             $this->setMockData($input,$output);  
         }
@@ -296,7 +302,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testExpressionWithGrouping() {
         if(enableElastic==0){
-            $input = '{"index":"11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"value":{"sum":{"field":"amount"}}}}},"explain":true},"_source":["*","created_by"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"value":{"sum":{"field":"amount"}}}}},"explain":true},"_source":["*","created_by"],"from":0,"size":0}';
             $output = '{"took":2,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"John Doe","doc_count":2,"value":{"value":800}},{"key":"Mike Price","doc_count":1,"value":{"value":50.5}}]}}}';
             $this->setMockData($input,$output);  
         }
@@ -313,7 +319,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testRoundingWithGrouping() {
         if(enableElastic==0){
-            $input = '{"index":"11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"value":{"sum":{"field":"amount"}}}}},"explain":true},"_source":["*","created_by"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2018-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*","created_by"],"aggs":{"groupdata":{"terms":{"field":"created_by.keyword","size":10000},"aggs":{"value":{"sum":{"field":"amount"}}}}},"explain":true},"_source":["*","created_by"],"from":0,"size":0}';
             $output = '{"took":7,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[{"key":"John Doe","doc_count":2,"value":{"value":800}},{"key":"Mike Price","doc_count":1,"value":{"value":50.5}}]}}}';
             $this->setMockData($input,$output);  
         }
@@ -330,7 +336,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testExpressionsNoGroups() {
         if(enableElastic==0){
-            $input = '{"index":"11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"aggs":{"value":{"sum":{"field":"amount"}}},"explain":true},"_source":["*"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'11_test_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"amount"}},{"range":{"date_created":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"aggs":{"value":{"sum":{"field":"amount"}}},"explain":true},"_source":["*"],"from":0,"size":0}';
             $output = '{"took":2,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":4,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"value":{"value":950.5}}}';
             $this->setMockData($input,$output);  
         }
@@ -346,7 +352,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testHubSubmissions() {
         if(enableElastic==0){
-            $input = '{"index":"diveinsurance_index","body":{"query":{"bool":{"must":[{"term":{"org_id":3}},{"exists":{"field":"workflow_name"}},{"bool":{"must":[{"match":{"workflow_name":{"query":"New Policy","operator":"and"}}},{"range":{"end_date":{"gt":"'.date("Y/m/d h:i:s").'"}}}]}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'diveinsurance_index","body":{"query":{"bool":{"must":[{"term":{"org_id":3}},{"exists":{"field":"workflow_name"}},{"bool":{"must":[{"match":{"workflow_name":{"query":"New Policy","operator":"and"}}},{"range":{"end_date":{"gt":"'.date("Y/m/d h:i:s").'"}}}]}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
             $output = '{"took":721,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":1,"relation":"eq"},"max_score":null,"hits":[]}}';
             $this->setMockData($input,$output);  
         }
@@ -363,7 +369,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testHubPolicies() {
         if(enableElastic==0){
-            $input = '{"index":"diveinsurance_index","body":{"query":{"bool":{"must":[{"term":{"org_id":3}},{"exists":{"field":"entity_id"}},{"range":{"end_date":{"gt":"'.date("Y/m/d h:i:s").'"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'diveinsurance_index","body":{"query":{"bool":{"must":[{"term":{"org_id":3}},{"exists":{"field":"entity_id"}},{"range":{"end_date":{"gt":"'.date("Y/m/d h:i:s").'"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}';
             $output = '{"took":7,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":1,"relation":"eq"},"max_score":null,"hits":[]}}';
             $this->setMockData($input,$output);  
         }
@@ -379,7 +385,7 @@ class AnalyticsTest extends MainControllerTest
 
     public function testHubWrittenPremium() {
         if(enableElastic==0){
-            $input = '{"index":"diveinsurance_index","body":{"query":{"bool":{"must":[{"term":{"org_id":3}},{"exists":{"field":"total"}}]}},"_source":["*"],"aggs":{"value":{"sum":{"field":"total"}}},"explain":true},"_source":["*"],"from":0,"size":0}';
+            $input = '{"index":"'.$this->index_pre.'diveinsurance_index","body":{"query":{"bool":{"must":[{"term":{"org_id":3}},{"exists":{"field":"total"}}]}},"_source":["*"],"aggs":{"value":{"sum":{"field":"total"}}},"explain":true},"_source":["*"],"from":0,"size":0}';
             $output = '{"took":7,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":2,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"value":{"value":1887.5600280761719}}}';
             $this->setMockData($input,$output);  
         }
