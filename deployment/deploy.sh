@@ -59,6 +59,7 @@ api()
         rm -Rf api/v1/data/uploads
         rm -Rf api/v1/data/cache
         rm -Rf api/v1/data/delegate
+        rm -Rf api/v1/data/forms
         rm -Rf api/v1/data/eoxapps
         rm -Rf api/v1/data/import
         rm -Rf api/v1/data/migrations
@@ -68,6 +69,7 @@ api()
         ln -nfs /var/lib/oxzion/api/cache /var/www/api/data/cache
         ln -nfs /var/lib/oxzion/api/uploads /var/www/api/data/uploads
         ln -nfs /var/lib/oxzion/api/delegate /var/www/api/data/delegate
+        ln -nfs /var/lib/oxzion/api/forms /var/www/api/data/forms
         ln -nfs /var/lib/oxzion/api/eoxapps /var/www/api/data/eoxapps
         ln -nfs /var/lib/oxzion/api/file_docs /var/www/api/data/file_docs
         ln -nfs /var/lib/oxzion/api/import /var/www/api/data/import
