@@ -267,7 +267,7 @@ class UserControllerTest extends ControllerTest
         $content = (array)json_decode($this->getResponse()->getContent(), true);
 
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Username or Email ID Exist in other Organization');
+        $this->assertEquals($content['message'], 'Username or Email Exists in other Organization');
     }
 
     public function testCreateExistingUsername()
@@ -281,7 +281,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Username Exist');
+        $this->assertEquals($content['message'], 'Username/Email Exists');
     }
 
     public function testCreateExistingEmailId()
@@ -296,7 +296,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Email ID Exist');
+        $this->assertEquals($content['message'], 'Email Exists');
     }
     
     public function testCreateExistingEmailIdInDifferentOrg()
@@ -311,7 +311,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Username or Email ID Exist in other Organization');
+        $this->assertEquals($content['message'], 'Username or Email Exists in other Organization');
     }
 
     
@@ -434,7 +434,7 @@ class UserControllerTest extends ControllerTest
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Username or Email ID Exist in other Organization');
+        $this->assertEquals($content['message'], 'Username or Email Exists in other Organization');
     }
 
 

@@ -96,7 +96,7 @@ ox_role:
 
 ox_role_privilege:
   -
-    id: 190
+    id: 260
     role_id: 10
     privilege_name: 'MANAGE_MYORG'
     permission: 3
