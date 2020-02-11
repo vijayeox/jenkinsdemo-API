@@ -232,7 +232,7 @@ class ActivityInstanceService extends AbstractService
                                 $userId = $manager[0]['manager_id'];
                             }
                         }
-                        if($userId){
+                        if(isset($userId)){
                             $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`)
                             VALUES (:activityInstanceId,:userId,:assignee)";
                             $insertParams = array("activityInstanceId" => $activityInstance['id'],"userId" => $userId,"assignee" => $assignee);
