@@ -13,11 +13,18 @@ use Mockery;
 
 class QueryControllerTest extends ControllerTest
 {
+    private $index_pre;
 
     public function setUp() : void
     {
         $this->loadConfig();
         parent::setUp();
+        $config = $this->getApplicationConfig();
+        if (isset($config['elasticsearch']['core'])) {
+            $this->index_pre = $config['elasticsearch']['core'].'_';
+        } else {
+            $this->index_pre = '';
+        }
     }
 
     public function getDataSet()
@@ -50,7 +57,7 @@ class QueryControllerTest extends ControllerTest
             ->andReturn(0);
             $mock->shouldReceive('search')
             ->once()
-   //         ->with($input)
+            ->with($input)
             ->andReturn($output);
     }
 
@@ -199,7 +206,7 @@ class QueryControllerTest extends ControllerTest
         if (enableElastic!=0) {
             $this->setElasticData();
         } else {
-            $input = json_decode('{"index":"diveinsurance_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"total"}},{"range":{"start_date":{"gte":"2018-01-01","lte":"2019-12-27","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"aggs":{"groupdata":{"date_histogram":{"field":"start_date","interval":"month","format":"MMM-yyyy"},"aggs":{"value":{"sum":{"field":"total"}}}}},"explain":true},"_source":["*"],"from":0,"size":0}',true);
+            $input = json_decode('{"index":"'.$this->index_pre.'diveinsurance_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"total"}},{"range":{"start_date":{"gte":"2018-01-01","lte":"'.date("Y-m-d").'","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"aggs":{"groupdata":{"date_histogram":{"field":"start_date","interval":"month","format":"MMM-yyyy"},"aggs":{"value":{"sum":{"field":"total"}}}}},"explain":true},"_source":["*"],"from":0,"size":0}',true);
             $output = json_decode('{"took":2,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":4,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"buckets":[{"key_as_string":"Apr-2019","key":1554076800000,"doc_count":1,"value":{"value":890}},{"key_as_string":"May-2019","key":1556668800000,"doc_count":1,"value":{"value":400.7799987792969}},{"key_as_string":"Jun-2019","key":1559347200000,"doc_count":0,"value":{"value":0}},{"key_as_string":"Jul-2019","key":1561939200000,"doc_count":0,"value":{"value":0}},{"key_as_string":"Aug-2019","key":1564617600000,"doc_count":1,"value":{"value":1486.780029296875}},{"key_as_string":"Sep-2019","key":1567296000000,"doc_count":1,"value":{"value":600.780029296875}}]}}}',true);
             $this->setMockData($input,$output);
         }

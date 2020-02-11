@@ -170,9 +170,8 @@ class ServiceTaskControllerTest extends ControllerTest
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertResponseStatusCode(404);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Job Name Not Specified');
+        $this->assertResponseStatusCode(200);
+        $this->assertEquals($content['status'], 'success');
     }
 
     public function testServiceTaskCancelJobWithoutJobID()
@@ -181,10 +180,9 @@ class ServiceTaskControllerTest extends ControllerTest
 
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Job Id or Job Group Not Specified');
+        $this->assertEquals($content['status'], 'success');
     }
 
     public function testServiceTaskCancelJobEmpty()
@@ -193,10 +191,9 @@ class ServiceTaskControllerTest extends ControllerTest
 
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/callback/workflow/servicetask', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(200);
         $content = json_decode($this->getResponse()->getContent(), true);
-        $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Job autoRenewalJob Not Specified');
+        $this->assertEquals($content['status'], 'success');
     }
 
     public function testServiceTaskCancelInvalidJob()
