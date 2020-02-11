@@ -63,10 +63,11 @@ class CommandService extends AbstractService
         $this->logger->info("RUN COMMAND  ------" . json_encode($data));
         //TODO Execute Command Service Methods
         if (isset($data['appId'])) {
-            $orgId = isset($data['orgId']) ? $this->getIdFromUuid('ox_organization', $data['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
+            $orgId = isset($data['orgId']) && !empty($data['orgId']) ? $this->getIdFromUuid('ox_organization', $data['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
             $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
             $appId = $this->getIdFromUuid('ox_app', $data['appId']);
             $selectQuery = array("orgId" => $orgId, "appId" => $appId);
+            $this->logger->info("Executing query $select with params - ".json_encode($selectQuery));
             $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
             if (count($result) == 0) {
                 throw new ServiceException("App Does not belong to the org", "app.fororgnot.found");
