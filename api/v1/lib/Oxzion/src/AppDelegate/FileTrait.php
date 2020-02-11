@@ -22,6 +22,12 @@ trait FileTrait
         $this->logger->info("SET APP ID");
         $this->appId = $appId;
     }
+
+    protected function getFile($id){
+        $this->logger->info("GET FILE");
+        return $this->fileService->getFile($id);
+    }
+
     protected function getFileList($params,$filterparams = null){
         $this->logger->info("SET FILE LIST");
         return $this->fileService->getFileList($this->appId,$params,$filterparams);
