@@ -6,7 +6,7 @@
     "components": [{
         "key": "panelPanel2",
         "input": false,
-        "title": "Padi Validation",
+        "title": "PADI Validation",
         "theme": "primary",
         "tableView": false,
         "components": [{
@@ -52,7 +52,6 @@
                     "hidden": false,
                     "clearOnHide": true,
                     "labelPosition": "top",
-                    "isNew": false,
                     "tags": [],
                     "conditional": {
                         "show": "",
@@ -108,7 +107,6 @@
                     "rightIcon": "",
                     "block": false,
                     "disableOnInvalid": false,
-                    "isNew": false,
                     "tags": [],
                     "conditional": {
                         "show": "",
@@ -216,7 +214,6 @@
                     "protected": false,
                     "unique": false,
                     "persistent": true,
-                    "isNew": false,
                     "tags": [],
                     "conditional": {
                         "show": "",
@@ -379,7 +376,14 @@
             "multiple": false
         },
         "clearOnHide": false,
-        "hideLabel": false
+        "hideLabel": false,
+        "tags": [],
+        "conditional": {
+            "show": "",
+            "when": null,
+            "eq": ""
+        },
+        "properties": {}
     }, {
         "key": "panel",
         "input": false,
@@ -1278,7 +1282,6 @@
                     },
                     "labelPosition": "top",
                     "inputFormat": "plain",
-                    "isNew": false,
                     "tags": [],
                     "conditional": {
                         "show": "",
@@ -1334,7 +1337,7 @@
         "theme": "primary"
     }],
     "revisions": "current",
-    "_vid": 165,
+    "_vid": 166,
     "title": "Padi Verification Form - IPL",
     "display": "form",
     "access": [{
@@ -1348,7 +1351,7 @@
     "path": "padiverificationformipl",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-08-10T15:46:39.851Z",
-    "modified": "2020-01-29T12:19:40.532Z",
+    "modified": "2020-02-07T06:28:17.597Z",
     "machineName": "testdivehub:padiVerificationForm",
     "controller": ""
 }

@@ -38,7 +38,6 @@ export default class Register extends React.Component {
               </ul>
               <div className="tab-content">
                 <div id="signup">
-                  <h1>Register</h1>
                   <div id="formio"></div>
                 </div>
                 <div id="login">
