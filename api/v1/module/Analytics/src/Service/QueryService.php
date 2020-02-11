@@ -167,10 +167,10 @@ class QueryService extends AbstractService
         $count=$resultSet->toArray()[0]['count'];
 
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
-            $query ="SELECT q.uuid,q.name,d.uuid as datasource_uuid,q.configuration,q.ispublic,IF(q.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,q.version,q.org_id,q.isdeleted FROM `ox_query` as q inner join ox_dashboard as d on q.datasource_id = d.id ".$where." ".$sort." ".$limit;
+            $query ="SELECT q.uuid,q.name,d.uuid as datasource_uuid,q.configuration,q.ispublic,IF(q.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,q.version,q.org_id,q.isdeleted FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id ".$where." ".$sort." ".$limit;
         }
         else{
-            $query ="SELECT q.uuid,q.name,datasource_id,q.configuration,q.ispublic,IF(q.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,q.version,q.org_id FROM `ox_query` as q inner join ox_dashboard as d on q.datasource_id = d.id ".$where." ".$sort." ".$limit;
+            $query ="SELECT q.uuid,q.name,datasource_id,q.configuration,q.ispublic,IF(q.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,q.version,q.org_id FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id ".$where." ".$sort." ".$limit;
         }
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
