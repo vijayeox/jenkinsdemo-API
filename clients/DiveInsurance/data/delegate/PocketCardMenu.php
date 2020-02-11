@@ -31,20 +31,28 @@ class PocketCardMenu extends AbstractAppDelegate
             $this->logger->info("key is : ".$key);
             $this->logger->info("value is : ".print_r($value, true));
             unset($value['data']);
-            $time = strtotime($value['pocketCardStartDate']);
-            $value['pocketCardStartDate'] = date('Y-m-d', $time);
-            $time = strtotime($value['pocketCardEndDate']);
-            unset($value['pocketCardEndDate']);
-            $value['pocketCardEndDate'] = date('Y-m-d', $time);
-            if(isset($value['pocketCardProductType'])){
-                $productName = json_decode($value['pocketCardProductType'], true);
-                unset($value['pocketCardProductType']);
-                $value['pocketCardProductType'] = '';
-                if(isset($productName['individualProfessionalLiability']) && ($productName['individualProfessionalLiability'] == 1)){
-                    $value['pocketCardProductType'] .= 'Individual Professional Liability';
-                }
-                if(isset($productName['emergencyFirstResponse']) && ($productName['emergencyFirstResponse'] == 1)){
-                    $value['pocketCardProductType'] .= 'Emergency First Response';
+            if(isset($value['padiNumber'])){
+                $value['generationType'] = $value['padiNumber'];
+                $value['pocketCardProductType'] = isset($value['product']) ? $value['product'] : "";
+            }
+            else {
+                $time = strtotime($value['pocketCardStartDate']);
+                $value['pocketCardStartDate'] = date('Y-m-d', $time);
+                $time = strtotime($value['pocketCardEndDate']);
+                unset($value['pocketCardEndDate']);
+                $value['pocketCardEndDate'] = date('Y-m-d', $time);
+                $value['generationType'] = $value['pocketCardStartDate'].' to '.$value['pocketCardEndDate'];
+
+                if(isset($value['pocketCardProductType'])){
+                    $productName = json_decode($value['pocketCardProductType'], true);
+                    unset($value['pocketCardProductType']);
+                    $value['pocketCardProductType'] = '';
+                    if(isset($productName['individualProfessionalLiability']) && ($productName['individualProfessionalLiability'] == 1)){
+                        $value['pocketCardProductType'] .= 'Individual Professional Liability';
+                    }
+                    if(isset($productName['emergencyFirstResponse']) && ($productName['emergencyFirstResponse'] == 1)){
+                        $value['pocketCardProductType'] .= 'Emergency First Response';
+                    }
                 }
             }
             
