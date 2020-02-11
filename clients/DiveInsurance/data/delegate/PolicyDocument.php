@@ -81,7 +81,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'header' => 'EFR_header.html',
                 'footer' => 'EFR_footer.html',
                 'slWording' => 'SL Wording.pdf',
-                'policy' => 'Individual_Professional_Liability_Policy.pdf',
+                'policy' => 'Policy.pdf',
                 'aiTemplate' => 'EFR_AI',
                 'aiheader' => 'EFR_AI_header.html',
                 'aifooter' => 'EFR_AI_footer.html')

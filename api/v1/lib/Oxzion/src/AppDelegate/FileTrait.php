@@ -29,7 +29,7 @@ trait FileTrait
     }
 
     protected function getFileList($params,$filterparams = null){
-        $this->logger->info("SET FILE LIST");
+        $this->logger->info("GET FILE LIST");
         return $this->fileService->getFileList($this->appId,$params,$filterparams);
     }
 

@@ -567,7 +567,7 @@ menu:
                                             page_id: c9714cfd-2ae5-4f13-83eb-7d925c3b660d
                                 icon: 'fa fa-envelope-open'
                         operations:
-                            title: 'Pocket Cards'
+                            title: 'Pocket Card'
                             actions:
                                 -
                                     name: 'Generate Pocket Card'
@@ -578,11 +578,8 @@ menu:
                                             form_id: e2ed4200-9131-4671-b0e0-de3e27c3f611
                         columnConfig:
                             -
-                                title: 'Start Date'
-                                field: pocketCardStartDate
-                            -
-                                title: 'End Date'
-                                field: pocketCardEndDate
+                                title: 'Filters Used'
+                                field: generationType
                             -
                                 title: Product
                                 field: pocketCardProductType
@@ -728,7 +725,7 @@ form:
         name: 'Pocket Card'
         uuid: e2ed4200-9131-4671-b0e0-de3e27c3f611
         description: 'Lets CSR generate and view Pocket Cards'
-        template_file: pocket_card.json
+        template_file: pocketCard.json
         entity: 'Pocket Card Job'
 job:
     -
