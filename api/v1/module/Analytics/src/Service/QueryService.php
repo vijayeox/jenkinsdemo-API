@@ -162,7 +162,7 @@ class QueryService extends AbstractService
         $sort = $paginateOptions['sort'] ? " ORDER BY ".$paginateOptions['sort'] : '';
         $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
-        $cntQuery ="SELECT count(id) as 'count' FROM `ox_query` as q";
+        $cntQuery ="SELECT count(id) as 'count' FROM `ox_query` as q ";
         $resultSet = $this->executeQuerywithParams($cntQuery.$where);
         $count=$resultSet->toArray()[0]['count'];
 
