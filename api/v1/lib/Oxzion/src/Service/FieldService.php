@@ -33,6 +33,7 @@ class FieldService extends AbstractService
         }
         $data['modified_by'] = AuthContext::get(AuthConstants::USER_ID);
         $data['date_modified'] = date('Y-m-d H:i:s');
+        $this->logger->info(__CLASS__ . "-> Data modified before create - " . print_r($data, true));
         $field->exchangeArray($data);
         $field->validate();
         $this->beginTransaction();
@@ -48,13 +49,14 @@ class FieldService extends AbstractService
                 $data['id'] = $id;
             }
             $this->commit();
+            $this->logger->info(__CLASS__ . "-> Field Created - " . print_r($count, true));
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(), $e);
             $this->rollback();
             throw $e;
         }
         return $count;
     }
+
     public function updateField($id, &$data)
     {
         $this->logger->info("Entering to updateField method in FieldService ");
@@ -67,6 +69,7 @@ class FieldService extends AbstractService
         $data['date_modified'] = date('Y-m-d H:i:s');
         $file = $obj->toArray();
         $changedArray = array_merge($obj->toArray(), $data);
+        $this->logger->info(__CLASS__ . "-> Data modified before Update - " . print_r($changedArray, true));
         $field = new Field();
         $field->exchangeArray($changedArray);
         $field->validate();
@@ -112,7 +115,6 @@ class FieldService extends AbstractService
             $this->logger->error($e->getMessage(), $e);
             throw $e;
         }
-
         return $count;
     }
 
@@ -152,14 +154,14 @@ class FieldService extends AbstractService
         }
     }
 
-    public function getFieldByName($entityId,$fieldName)
+    public function getFieldByName($entityId, $fieldName)
     {
         $this->logger->info("EntityId = $entityId, FieldName = $fieldName");
         try {
             $queryString = "Select oxf.* from ox_field as oxf
                             inner join ox_app_entity as en on oxf.entity_id = en.id
             where en.uuid=? and oxf.name=?";
-            $queryParams = array($entityId,$fieldName);
+            $queryParams = array($entityId, $fieldName);
             $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
             if (count($resultSet) == 0) {
                 return 0;
