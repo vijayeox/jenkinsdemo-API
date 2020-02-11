@@ -40,3 +40,5 @@ INSERT INTO ox_dashboard (uuid,name,ispublic,description,dashboard_type,created_
 </div>
 ',1)
 ;
+
+update ox_datasource set configuration = '{"data": {"user": "elastic","password": "changeme","serveraddress": "13.52.224.89","port": "9200", "core":"oxzion", "type":"type", "scheme":"http"}}' where name LIKE 'OxzionElasticDs';
