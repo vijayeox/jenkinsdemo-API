@@ -16,7 +16,7 @@ class EndorsementRatecard extends AbstractAppDelegate
         $endorsementExcessLiability = array();
         $endorsementCylinder = array();
         
-        if(!isset($data['update_date'])){
+        if(!isset($data['update_date']) || empty($data['update_date']) ){
             $data['update_date'] =  date("Y-m-d H:i:s");
         }
         $data['careerCoverage']= isset($data['careerCoverage']) ? $data['careerCoverage']: $data['liabilityCoverageName'];

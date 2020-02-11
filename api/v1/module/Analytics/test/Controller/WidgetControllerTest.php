@@ -15,11 +15,17 @@ use Oxzion\Auth\AuthConstants;
 class WidgetControllerTest extends ControllerTest
 {
     private $mock;
+    private $index_pre;
     public function setUp() : void
     {
         $this->loadConfig();
         parent::setUp();
-
+        $config = $this->getApplicationConfig();
+        if (isset($config['elasticsearch']['core'])) {
+            $this->index_pre = $config['elasticsearch']['core'].'_';
+        } else {
+            $this->index_pre = '';
+        }
     }
 
     public function tearDown()  : void {
@@ -261,7 +267,7 @@ class WidgetControllerTest extends ControllerTest
         if (enableElastic!=0) {
             $this->setElasticData();
         } else {
-           $input =  json_decode('{"index":"crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"createdAt":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}',true);
+           $input =  json_decode('{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"createdAt":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}',true);
            $output = json_decode('{"took":0,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]}}',true);
            $this->setMockData($input,$output);
         }

@@ -3,16 +3,16 @@
     return [ 
         'logger' => [
                 'rootLogger' => [
-                    'level' => 'INFO',
+                    'level' => 'DEBUG',
                     'appenders' => ['default']
                 ],
                 'loggers' => [
                     'ControllerLogger' => [
-                        'level' => 'INFO',
+                        'level' => 'DEBUG',
                         'appenders' => ['default']
                     ],
                     'OxzionLogger' => [
-                        'level' => 'INFO',
+                        'level' => 'DEBUG',
                         'appenders' => ['default']
                     ]
                 ],

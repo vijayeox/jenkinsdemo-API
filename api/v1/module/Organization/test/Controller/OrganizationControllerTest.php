@@ -240,7 +240,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertMatchedRouteName('organization');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Username or Email ID Exist in other Organization');
+        $this->assertEquals($content['message'], 'Username or Email Exists in other Organization');
     }
 
 
@@ -262,7 +262,7 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertMatchedRouteName('organization');
         $content = (array)json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
-        $this->assertEquals($content['message'], 'Username or Email ID Exist in other Organization');
+        $this->assertEquals($content['message'], 'Username or Email Exists in other Organization');
     }
 
     public function testCreateWithExistingActiveOrg()

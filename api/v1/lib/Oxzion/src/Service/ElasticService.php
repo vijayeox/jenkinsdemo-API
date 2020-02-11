@@ -350,6 +350,9 @@ class ElasticService
 
     public function search($q)
     {
+       if  ($this->core) {
+           $q['index'] = $this->core.'_'.$q['index'];
+       }
        $this->logger->debug('Elastic query:');
        $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
       //  print_r(json_encode($q));echo "\n";
@@ -363,6 +366,7 @@ class ElasticService
 
     public function index($index, $id, $body)
     {
+        $index = ($this->core) ? $this->core.'_'.$index:$index;
         $params['index'] = $index;
         $params['id'] = $id;
     //    $params['type'] = $this->type;
@@ -372,6 +376,7 @@ class ElasticService
 
     public function delete($index, $id)
     {
+        $index = ($this->core) ? $this->core.'_'.$index:$index;
         if ($id == 'all') {
             return $this->client->indices()->delete(['index' => $index]);
         } else {

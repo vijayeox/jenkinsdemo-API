@@ -31,7 +31,7 @@ class FilterUtils
         return $paginate = array('pageSize' => $pageSize, 'offset' => $offset, 'sort' => $sort, 'where' => $where);
     }
 
-    static public function paginateLikeKendo($params)
+    static public function paginateLikeKendo($params,$fieldMap = array())
     {
         $pageSize = 20;
         $offset = 0;
@@ -48,12 +48,12 @@ class FilterUtils
                     if(isset($filterArray[0]['skip']))
                         $offset = $filterArray[0]['skip'];
                     if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
-                        $sort = FilterUtils::sortArray($filterArray[0]['sort']);
+                        $sort = FilterUtils::sortArray($filterArray[0]['sort'],$fieldMap);
                     }
                     if(isset($filterArray[0]['filter'])){
                         $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
                         $filterList = $filterArray[0]['filter']['filters'];
-                        $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic);
+                        $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,$fieldMap);
                     }
                 }
             }
