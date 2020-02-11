@@ -521,15 +521,6 @@ class CommandService extends AbstractService
 
     protected function verifyUser(&$data)
     {
-        if (isset($data['email'])) {
-            $select = "SELECT * from ox_user where email = :email";
-            $selectQuery = array("email" => $data['email']);
-            $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
-            if (count($result) > 0) {
-                $data['user_exists'] = '1';
-                return $data;
-            }
-        }
         if (isset($data['identifier_field']) && isset($data['appId']) && isset($data[$data['identifier_field']])) {
             $appId = UuidUtil::isValidUuid($data['appId'])?$this->getIdFromUuid('ox_app',$data['appId']):$data['appId'];
             $select = "SELECT * from ox_wf_user_identifier where identifier_name = :identityField AND app_id = :appId AND identifier = :identifier";
@@ -540,6 +531,15 @@ class CommandService extends AbstractService
                 return $data;
             } else {
                 $data['user_exists'] = '0';
+                return $data;
+            }
+        }
+        if (isset($data['email'])) {
+            $select = "SELECT * from ox_user where email = :email";
+            $selectQuery = array("email" => $data['email']);
+            $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+            if (count($result) > 0) {
+                $data['user_exists'] = '1';
                 return $data;
             }
         }
