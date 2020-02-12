@@ -23,7 +23,6 @@ class OrganizationController extends AbstractApiController
         parent::__construct($table, Organization::class);
         $this->setIdentifierName('orgId');
         $this->orgService = $orgService;
-        $this->log = $this->getLogger();
     }
 
     /**
@@ -44,7 +43,7 @@ class OrganizationController extends AbstractApiController
     {
         $files = $this->params()->fromFiles('logo') ? $this->params()->fromFiles('logo') : null;
         $id = $this->params()->fromRoute();
-        $this->log->info(__CLASS__ . "-> \n Create Organization - " . print_r($data, true) . "\n Files - " . print_r($files, true));
+        $this->log->info("Create Organization - " . print_r($data, true) . "\n Files - " . print_r($files, true));
         try {
             if (!isset($id['orgId'])) {
                 $count = $this->orgService->createOrganization($data, $files);
@@ -75,7 +74,7 @@ class OrganizationController extends AbstractApiController
     public function getList()
     {
         $filterParams = $this->params()->fromQuery(); // empty method call
-        $this->log->info(__CLASS__ . "-> \n Get Oranization List - " . print_r($filterParams, true));
+        $this->log->info("Get Oranization List - " . print_r($filterParams, true));
         try {
             $result = $this->orgService->getOrganizations($filterParams);
             if ($result) {

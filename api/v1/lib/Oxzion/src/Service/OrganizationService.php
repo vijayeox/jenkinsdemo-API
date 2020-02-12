@@ -89,7 +89,7 @@ class OrganizationService extends AbstractService
                     $data['reactivate'] = isset($data['reactivate']) ? $data['reactivate'] : 0;
                     if ($data['reactivate'] == 1) {
                         $data['status'] = 'Active';
-                        $this->log->info(__CLASS__ . "-> \n Data modified before Organization Update - " . print_r($data, true));
+                        $this->logger->info("Data modified before Organization Update - " . print_r($data, true));
                         $count = $this->updateOrganization($result[0]['uuid'], $data, $files);
                         $this->uploadOrgLogo($result[0]['uuid'], $files);
                         if ($count == 1) {
@@ -108,7 +108,7 @@ class OrganizationService extends AbstractService
             $form->validate();
             $this->beginTransaction();
             $count = 0;
-            $this->log->info(__CLASS__ . "-> \n Data modified before Organization Create - " . print_r($data, true));
+            $this->logger->info("Data modified before Organization Create - " . print_r($data, true));
             $count = $this->table->save($form);
             if ($count == 0) {
                 throw new ServiceException("Failed to create new entity", "failed.create.org");
@@ -283,20 +283,16 @@ class OrganizationService extends AbstractService
      */
     public function deleteOrganization($id)
     {
-        try {
-            $obj = $this->table->getByUuid($id, array());
-            if (is_null($obj)) {
-                return 0;
-            }
-            $originalArray = $obj->toArray();
-            $form = new Organization();
-            $originalArray['status'] = 'Inactive';
-            $form->exchangeArray($originalArray);
-            $result = $this->table->save($form);
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $originalArray['name'], 'status' => $originalArray['status'])), 'ORGANIZATION_DELETED');
-        } catch (Exception $e) {
-            throw $e;
+        $obj = $this->table->getByUuid($id, array());
+        if (is_null($obj)) {
+            return 0;
         }
+        $originalArray = $obj->toArray();
+        $form = new Organization();
+        $originalArray['status'] = 'Inactive';
+        $form->exchangeArray($originalArray);
+        $result = $this->table->save($form);
+        $this->messageProducer->sendTopic(json_encode(array('orgname' => $originalArray['name'], 'status' => $originalArray['status'])), 'ORGANIZATION_DELETED');
         return $result;
     }
 
@@ -354,16 +350,12 @@ class OrganizationService extends AbstractService
      */
     public function getOrganizationByUuid($id)
     {
-        try {
-            $select = "SELECT og.uuid,og.name,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid from ox_organization as og join ox_address as oa on og.address_id = oa.id WHERE og.uuid = '" . $id . "' AND og.status = 'Active'";
-            $response = $this->executeQuerywithParams($select)->toArray();
-            if (count($response) == 0) {
-                return 0;
-            } else {
-                $response[0]['contactid'] = $this->getOrgContactPersonDetails($id);
-            }
-        } catch (Exception $e) {
-            throw $e;
+        $select = "SELECT og.uuid,og.name,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid from ox_organization as og join ox_address as oa on og.address_id = oa.id WHERE og.uuid = '" . $id . "' AND og.status = 'Active'";
+        $response = $this->executeQuerywithParams($select)->toArray();
+        if (count($response) == 0) {
+            return 0;
+        } else {
+            $response[0]['contactid'] = $this->getOrgContactPersonDetails($id);
         }
         return $response[0];
     }
@@ -394,32 +386,29 @@ class OrganizationService extends AbstractService
         $pageSize = 20;
         $offset = 0;
         $sort = "name";
-        try {
-            $select = "SELECT og.uuid,og.name,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid";
-            $from = " from ox_organization as og join ox_address as oa on og.address_id = oa.id";
-            $cntQuery = "SELECT count(og.id) " . $from;
-            if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
-                $filterArray = json_decode($filterParams['filter'], true);
-                $where = $this->createWhereClause($filterArray, self::$orgField);
-                if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
-                    $sort = $this->createSortClause($filterArray[0]['sort'], self::$orgField);
-                }
-                $pageSize = $filterArray[0]['take'];
-                $offset = $filterArray[0]['skip'];
+        $select = "SELECT og.uuid,og.name,oa.address1,oa.address2,oa.city,oa.state,oa.country,oa.zip,og.preferences,og.contactid";
+        $from = " from ox_organization as og join ox_address as oa on og.address_id = oa.id";
+        $cntQuery = "SELECT count(og.id) " . $from;
+        if (count($filterParams) > 0 || sizeof($filterParams) > 0) {
+            $filterArray = json_decode($filterParams['filter'], true);
+            $where = $this->createWhereClause($filterArray, self::$orgField);
+            if (isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0) {
+                $sort = $this->createSortClause($filterArray[0]['sort'], self::$orgField);
             }
-            $where .= strlen($where) > 0 ? " AND og.status = 'Active'" : " WHERE og.status = 'Active'";
-            $sort = " ORDER BY " . $sort;
-            $limit = " LIMIT " . $pageSize . " offset " . $offset;
-            $resultSet = $this->executeQuerywithParams($cntQuery . $where);
-            $count = $resultSet->toArray();
-            $query = $select . " " . $from . " " . $where . " " . $sort . " " . $limit;
-            $resultSet = $this->executeQuerywithParams($query)->toArray();
-            for ($x = 0; $x < sizeof($resultSet); $x++) {
-                $resultSet[$x]['contactid'] = $this->getOrgContactPersonDetails($resultSet[$x]['uuid']);
-            }
-        } catch (Exception $e) {
-            throw $e;
+            $pageSize = $filterArray[0]['take'];
+            $offset = $filterArray[0]['skip'];
         }
+        $where .= strlen($where) > 0 ? " AND og.status = 'Active'" : " WHERE og.status = 'Active'";
+        $sort = " ORDER BY " . $sort;
+        $limit = " LIMIT " . $pageSize . " offset " . $offset;
+        $resultSet = $this->executeQuerywithParams($cntQuery . $where);
+        $count = $resultSet->toArray();
+        $query = $select . " " . $from . " " . $where . " " . $sort . " " . $limit;
+        $resultSet = $this->executeQuerywithParams($query)->toArray();
+        for ($x = 0; $x < sizeof($resultSet); $x++) {
+            $resultSet[$x]['contactid'] = $this->getOrgContactPersonDetails($resultSet[$x]['uuid']);
+        }
+        
         return array('data' => $resultSet, 'total' => $count[0]['count(og.id)']);
     }
 

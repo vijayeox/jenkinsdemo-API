@@ -23,7 +23,7 @@ class AddressService extends AbstractService
 
     public function addAddress($data)
     {
-        $this->log->info(__CLASS__ . "-> \n Create new Address for the Organization - " . print_r($data, true));
+        $this->logger->info("Create new Address for the Organization - " . print_r($data, true));
         $form = new Address($data);
         $form->validate();
         $this->beginTransaction();
