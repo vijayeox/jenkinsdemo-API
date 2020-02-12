@@ -148,9 +148,10 @@ class ProjectService extends AbstractService
             $data['date_created'] = date('Y-m-d H:i:s');
             $data['date_modified'] = date('Y-m-d H:i:s');
             $data['isdeleted'] = false;
-            $select = "SELECT id from ox_user where uuid = '" . $data['manager_id'] . "'";
+            $select = "SELECT id,username from ox_user where uuid = '" . $data['manager_id'] . "'";
             $result = $this->executeQueryWithParams($select)->toArray();
             $data['manager_id'] = $result[0]["id"];
+            $data['manager_login'] = $result[0]["username"];
             $org = $this->organizationService->getOrganization($data['org_id']);
             $form->exchangeArray($data);
             $form->validate();
@@ -173,7 +174,7 @@ class ProjectService extends AbstractService
         $insert->values($insert_data);
         $result = $this->executeUpdate($insert);
         if (isset($data['name'])) {
-            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'])), 'PROJECT_ADDED');
+            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'], 'manager_login' => $data['manager_login'])), 'PROJECT_ADDED');
         }
         return $count;
     }
@@ -199,7 +200,10 @@ class ProjectService extends AbstractService
         }
         $form = new Project();
         if (isset($data['manager_id'])) {
-            $data['manager_id'] = $this->getIdFromUuid('ox_user', $data['manager_id']);
+            $select = "SELECT id,username from ox_user where uuid = '" . $data['manager_id'] . "'";
+            $result = $this->executeQueryWithParams($select)->toArray();
+            $data['manager_id'] = $result[0]["id"];
+            $data['manager_login'] = $result[0]["username"];
         }
         $data = array_merge($obj->toArray(), $data); //Merging the data from the db for the ID
         $data['modified_id'] = AuthContext::get(AuthConstants::USER_ID);
@@ -224,7 +228,12 @@ class ProjectService extends AbstractService
             $this->rollback();
             throw $e;
         }
-        $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'])), 'PROJECT_UPDATED');
+        if(isset($data['manager_login'])){
+            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'], 'manager_login' => $data['manager_login'])), 'PROJECT_UPDATED');
+        }
+        else {
+            $this->messageProducer->sendTopic(json_encode(array('orgname' => $org['name'], 'old_projectname' => $obj->name, 'new_projectname' => $data['name'], 'description' => $data['description'], 'uuid' => $data['uuid'])), 'PROJECT_UPDATED');
+        }
         return $count;
     }
 
