@@ -120,47 +120,47 @@ class FieldControllerTest extends ControllerTest
         $this->assertEquals($content['data']['sequence'], $data['sequence']);
     }
 
-    // public function testUpdateNotFound()
-    // {
-    //     $this->initAuthToken($this->adminUser);
-    //     $data = ['name' => 'Sample2', 'text' => 'Sample 2 Description'];
-    //     $this->setJsonContent(json_encode($data));
-    //     $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/465c8710-df82-11e9-8a34-2a2ae2dbccb6', 'PUT', null);
-    //     $this->assertResponseStatusCode(404);
-    //     $this->setDefaultAsserts();
-    //     $content = (array) json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error');
-    // }
+    public function testUpdateNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Sample2', 'text' => 'Sample 2 Description'];
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/465c8710-df82-11e9-8a34-2a2ae2dbccb6', 'PUT', null);
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 
-    // public function testDelete()
-    // {
-    //     $this->initAuthToken($this->adminUser);
-    //     $selectResult = $this->getFieldUuid();
-    //     $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/' . $selectResult[0]['uuid'], 'DELETE');
-    //     $this->assertResponseStatusCode(404);
-    //     $this->setDefaultAsserts();
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error');
-    // }
+    public function testDelete()
+    {
+        $this->initAuthToken($this->adminUser);
+        $selectResult = $this->getFieldUuid();
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/' . $selectResult[0]['uuid'], 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 
-    // public function testDeleteNotPossible()
-    // {
-    //     $this->initAuthToken($this->adminUser);
-    //     $selectResult = $this->getFieldUuid();
-    //     $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/' . $selectResult[0]['uuid'], 'DELETE');
-    //     $this->assertResponseStatusCode(404);
-    //     $this->setDefaultAsserts();
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error');
-    // }
+    public function testDeleteNotPossible()
+    {
+        $this->initAuthToken($this->adminUser);
+        $selectResult = $this->getFieldUuid();
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/' . $selectResult[0]['uuid'], 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 
-    // public function testDeleteNotFound()
-    // {
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/465c8710-df82-11e9-8a34-2a2ae2dbccb8', 'DELETE');
-    //     $this->assertResponseStatusCode(404);
-    //     $this->setDefaultAsserts();
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'error');
-    // }
+    public function testDeleteNotFound()
+    {
+        $this->initAuthToken($this->adminUser);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/465c8710-df82-11e9-8a34-2a2ae2dbccb8', 'DELETE');
+        $this->assertResponseStatusCode(404);
+        $this->setDefaultAsserts();
+        $content = json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'error');
+    }
 }
