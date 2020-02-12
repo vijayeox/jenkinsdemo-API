@@ -1,28 +1,3 @@
-**********************************************
-Step to run the Camel
-**********************************************
-
-Before we run the Docker, we need to make some changes to some configuration files in the resource folder.
-The below lines needs to be changed when we the host IP changes (When there is a network switch)
-
-Goto {root_folder}/integrations/camel/src/main/resources
-
-Open the application.yml and 
-    • change “localhost” to <Your IP> and 
-    • change the user and password to your mysql username and password and 
-    • create all the databases that are mentioned in the yml file 
-
-Open oxzion.properties and 
-    • change “localhost” to <Your IP> and 
-    • change the username and password to your mysql username and password 
-
-Open Routes.groovy 
-    • change the callbackUrl IP to <your IP> 
-
-We do not need to make any changes to the mail.properties for the development purpose, we can leave it as it is. 
-
-********************************************************************************************
-
 This dockerfile builds activemq and camel together
 
 +++++++++++++++++++++++++++++++

@@ -1,15 +1,3 @@
-
-**********************************************
-Step to run the worflow
-
-Before we run the Docker, we need to make some changes to some configuration files in the resource folder
-
-Goto /integrations/workflow/ProcessEngine/src/main/resources
-
-Open application.properties
-    • change applicationurl IP to <your IP> 
-********************************************************************************************
-
 Build all the child projects first
 
 $ docker build -t workflow_build docker_build
