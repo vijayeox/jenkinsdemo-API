@@ -36,7 +36,7 @@
 						"key": "padi",
 						"placeholder": "Enter your PADI Number",
 						"validate": {
-							"required": true,
+							"required": false,
 							"max": null,
 							"multiple": false,
 							"customMessage": "Max Length is 6",
@@ -55,7 +55,16 @@
 						"protected": false,
 						"persistent": true,
 						"hidden": false,
-						"clearOnHide": true
+						"clearOnHide": true,
+						"labelPosition": "top",
+						"tags": [],
+						"conditional": {
+							"show": "",
+							"when": null,
+							"eq": ""
+						},
+						"properties": {},
+						"disabled": true
 					}],
 					"width": 4,
 					"offset": 0,
@@ -2793,9 +2802,9 @@
 			},
 			"components": [{
 				"label": "Aprove/Reject the Application",
-				"optionsLabelPosition": "right",
-				"inline": false,
-				"tableView": false,
+				"optionsLabelPosition": "top",
+				"inline": true,
+				"tableView": true,
 				"values": [{
 					"label": "Approved",
 					"value": "true",
@@ -2823,7 +2832,7 @@
 				"fieldSet": false,
 				"persistent": true,
 				"hidden": false,
-				"clearOnHide": true,
+				"clearOnHide": false,
 				"labelPosition": "top",
 				"tags": [],
 				"conditional": {
@@ -2832,7 +2841,10 @@
 					"eq": ""
 				},
 				"properties": {},
-				"lockKey": true
+				"lockKey": true,
+				"labelWidth": 30,
+				"labelMargin": 3,
+				"hideLabel": true
 			}],
 			"path": "approveReject",
 			"clearOnHide": false,
@@ -2842,6 +2854,42 @@
 				"show": "",
 				"when": null,
 				"eq": ""
+			},
+			"properties": {},
+			"lockKey": true
+		}, {
+			"autofocus": false,
+			"input": true,
+			"tableView": true,
+			"label": "Rejection Reason",
+			"key": "rejectionReason",
+			"placeholder": "Please enter the reason for Rejection",
+			"prefix": "",
+			"suffix": "",
+			"rows": 3,
+			"multiple": false,
+			"defaultValue": "",
+			"protected": false,
+			"persistent": true,
+			"hidden": false,
+			"wysiwyg": false,
+			"clearOnHide": true,
+			"spellcheck": true,
+			"validate": {
+				"required": true,
+				"minLength": "",
+				"maxLength": "",
+				"pattern": "",
+				"custom": ""
+			},
+			"type": "textarea",
+			"labelPosition": "top",
+			"inputFormat": "plain",
+			"tags": [],
+			"conditional": {
+				"show": "true",
+				"when": "approved",
+				"eq": "false"
 			},
 			"properties": {},
 			"lockKey": true
@@ -2879,7 +2927,7 @@
 	}],
 	"controller": "",
 	"revisions": "current",
-	"_vid": 9,
+	"_vid": 11,
 	"title": "EFR CSR Review",
 	"display": "form",
 	"access": [{
@@ -2900,6 +2948,6 @@
 	"path": "efrcsrreview",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-02T14:54:05.531Z",
-	"modified": "2020-02-11T15:13:22.859Z",
+	"modified": "2020-02-12T07:53:53.464Z",
 	"machineName": "testdivehub:efrCsr222"
 }
