@@ -1375,8 +1375,7 @@
 					"type": "textfield",
 					"inDataGrid": true,
 					"hideLabel": true,
-					"lockKey": true,
-					"isNew": false
+					"lockKey": true
 				}, {
 					"input": true,
 					"tableView": true,
@@ -1698,8 +1697,7 @@
 									"time_24hr": true,
 									"minDate": null,
 									"maxDate": null
-								},
-								"isNew": false
+								}
 							}],
 							"width": 6,
 							"offset": 0,
@@ -3078,16 +3076,13 @@
 					"multiple": false
 				}
 			}, {
-				"input": true,
-				"tableView": true,
 				"label": "Select",
-				"key": "additional_insured_select",
 				"placeholder": "Select according to your preference",
+				"hideLabel": true,
+				"tableView": true,
+				"defaultValue": "noAdditionalInsureds",
 				"data": {
 					"values": [{
-						"value": "asPerExistingPolicyIfRenewing",
-						"label": "As per existing policy (if renewing)"
-					}, {
 						"value": "newListOfAdditionalInsureds",
 						"label": "New list of Additional Insureds"
 					}, {
@@ -3095,13 +3090,14 @@
 						"label": "No Additional Insureds"
 					}]
 				},
-				"defaultValue": "noAdditionalInsureds",
+				"selectThreshold": 0.3,
 				"validate": {
 					"unique": false,
 					"multiple": false
 				},
+				"key": "additional_insured_select",
 				"type": "select",
-				"hideLabel": true,
+				"input": true,
 				"lockKey": true
 			}, {
 				"key": "page4PanelPanel2",
@@ -5215,8 +5211,7 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						},
-						"isNew": false
+						}
 					}, {
 						"input": true,
 						"tableView": true,
@@ -5862,8 +5857,7 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				},
-				"isNew": false
+				}
 			}, {
 				"label": "layupDeductible",
 				"persistent": false,
@@ -5878,8 +5872,7 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				},
-				"isNew": false
+				}
 			}, {
 				"input": true,
 				"tableView": true,
@@ -5892,8 +5885,7 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				},
-				"isNew": false
+				}
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -5947,8 +5939,7 @@
 								"input": true,
 								"inputType": "number",
 								"lockKey": true,
-								"hideOnChildrenHidden": false,
-								"isNew": false
+								"hideOnChildrenHidden": false
 							}],
 							"width": 4,
 							"offset": 0,
@@ -6062,8 +6053,7 @@
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"isNew": false
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Age > 25 Surcharge",
 						"prefix": "$",
@@ -6433,8 +6423,7 @@
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"isNew": false
+						"hideOnChildrenHidden": false
 					}, {
 						"key": "page5PanelColumnsContent2",
 						"label": "Content",
@@ -6512,6 +6501,42 @@
 						"input": true,
 						"inputType": "number",
 						"lockKey": true,
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "primaryLimit",
+						"calculateValue": "value = '1,000,000.00';",
+						"key": "primaryLimit",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						},
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "excessLiabilityLimit",
+						"calculateValue": "if(data['excess_liability_coverage'] == 'excessLiabilityCoverageDeclined'){\n   value = '0.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage1000000'){\n   value = '1,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage2000000'){\n    value = '2,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage3000000'){\n    value = '3,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage4000000'){\n    value = '4,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage9000000'){\n    value = '9,000,000.00';\n}",
+						"key": "excessLiabilityLimit",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						},
+						"hideOnChildrenHidden": false
+					}, {
+						"label": "totalLiabilityLimit",
+						"calculateValue": "value = (parseFloat(data['primaryLimit']) + parseFloat(data['excessLiabilityLimit']));",
+						"key": "totalLiabilityLimit",
+						"type": "hidden",
+						"input": true,
+						"tableView": false,
+						"validate": {
+							"unique": false,
+							"multiple": false
+						},
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "Dingy Liability Coverage",
@@ -6743,7 +6768,8 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				}
+				},
+				"path": "page5PanelColumns"
 			}, {
 				"clearOnHide": false,
 				"input": false,
@@ -6793,8 +6819,7 @@
 							"decimalLimit": 2,
 							"input": true,
 							"inputType": "number",
-							"lockKey": true,
-							"isNew": false
+							"lockKey": true
 						}]
 					}],
 					[{
@@ -6964,8 +6989,7 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						},
-						"isNew": false
+						}
 					}, {
 						"input": true,
 						"tableView": true,
@@ -7035,8 +7059,7 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						},
-						"isNew": false
+						}
 					}, {
 						"input": true,
 						"tableView": true,
@@ -7476,8 +7499,7 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				},
-				"isNew": false
+				}
 			}, {
 				"input": true,
 				"tableView": true,
@@ -7534,24 +7556,25 @@
 					"pull": 0
 				}, {
 					"components": [{
-						"input": true,
-						"tableView": true,
 						"label": "Date Time",
-						"key": "quote_due_date",
 						"format": "MM-dd-yyyy",
-						"enableTime": false,
+						"hideLabel": true,
+						"tableView": true,
 						"datePicker": {
 							"datepickerMode": "day"
 						},
+						"enableTime": false,
 						"timePicker": {
 							"showMeridian": false
 						},
 						"validate": {
+							"required": true,
 							"unique": false,
 							"multiple": false
 						},
+						"key": "quote_due_date",
 						"type": "datetime",
-						"hideLabel": true,
+						"input": true,
 						"lockKey": true,
 						"hideOnChildrenHidden": false,
 						"suffix": "<i ref=\"icon\" class=\"fa fa-calendar\" style=\"\"></i>",
@@ -7680,6 +7703,7 @@
 								},
 								"selectThreshold": 0.3,
 								"validate": {
+									"required": true,
 									"unique": false,
 									"multiple": false
 								},
@@ -7689,19 +7713,24 @@
 								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}, {
-								"input": true,
-								"tableView": true,
 								"label": "Other",
-								"key": "quoteInfoOther",
 								"placeholder": "Please Mention",
+								"hideLabel": true,
 								"spellcheck": true,
+								"tableView": true,
+								"validate": {
+									"required": true,
+									"unique": false,
+									"multiple": false
+								},
+								"key": "quoteInfoOther",
 								"conditional": {
-									"show": "true",
+									"show": true,
 									"when": "quoteInfo",
 									"eq": "Other"
 								},
 								"type": "textfield",
-								"hideLabel": true,
+								"input": true,
 								"lockKey": true,
 								"hideOnChildrenHidden": false
 							}],
@@ -7770,7 +7799,6 @@
 					"type": "radio",
 					"input": true,
 					"lockKey": true,
-					"defaultValue": "true",
 					"hideLabel": true
 				}, {
 					"input": true,
@@ -7911,7 +7939,7 @@
 	"path": "diveboatcsrreviewform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-10-23T15:04:58.563Z",
-	"modified": "2020-02-07T08:42:08.258Z",
+	"modified": "2020-02-11T06:11:15.564Z",
 	"machineName": "testdivehub:diveBoatCsrReviewForm",
 	"controller": ""
 }

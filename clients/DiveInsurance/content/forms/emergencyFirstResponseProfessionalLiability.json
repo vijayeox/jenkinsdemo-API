@@ -33,10 +33,7 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						},
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						}
 					}, {
 						"label": "verified",
 						"defaultValue": "false",
@@ -49,10 +46,7 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						},
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						}
 					}, {
 						"label": "product",
 						"customDefaultValue": "value = \"Emergency First Response\";",
@@ -64,10 +58,7 @@
 							"unique": false,
 							"multiple": false
 						},
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "padiVerified",
 						"defaultValue": "false",
@@ -80,10 +71,7 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						},
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						}
 					}, {
 						"label": "policy_exists",
 						"defaultValue": "false",
@@ -96,10 +84,7 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						},
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						}
 					}],
 					"width": 4,
 					"offset": 0,
@@ -127,14 +112,7 @@
 						"lockKey": true,
 						"decimalLimit": 0,
 						"hideLabel": true,
-						"hideOnChildrenHidden": false,
-						"prefix": "",
-						"suffix": "",
-						"defaultValue": "",
-						"protected": false,
-						"persistent": true,
-						"hidden": false,
-						"clearOnHide": true
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -152,9 +130,7 @@
 							"multiple": false
 						},
 						"hideOnChildrenHidden": false,
-						"hideLabel": true,
-						"tag": "p",
-						"className": ""
+						"hideLabel": true
 					}, {
 						"label": "Validate PADI Membership",
 						"action": "event",
@@ -177,13 +153,7 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						},
-						"autofocus": false,
-						"size": "md",
-						"leftIcon": "",
-						"rightIcon": "",
-						"block": false,
-						"disableOnInvalid": false
+						}
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -202,9 +172,7 @@
 							"multiple": false
 						},
 						"hideOnChildrenHidden": false,
-						"hideLabel": true,
-						"tag": "p",
-						"className": ""
+						"hideLabel": true
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -223,9 +191,7 @@
 							"multiple": false
 						},
 						"hideOnChildrenHidden": false,
-						"hideLabel": true,
-						"tag": "p",
-						"className": ""
+						"hideLabel": true
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -244,9 +210,7 @@
 							"multiple": false
 						},
 						"hideOnChildrenHidden": false,
-						"hideLabel": true,
-						"tag": "p",
-						"className": ""
+						"hideLabel": true
 					}, {
 						"label": "HTML",
 						"attrs": [{
@@ -265,9 +229,7 @@
 							"multiple": false
 						},
 						"hideOnChildrenHidden": false,
-						"hideLabel": true,
-						"tag": "p",
-						"className": ""
+						"hideLabel": true
 					}],
 					"width": 4,
 					"offset": 0,
@@ -286,10 +248,7 @@
 						"validate": {
 							"unique": false,
 							"multiple": false
-						},
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						}
 					}, {
 						"label": "orgId",
 						"customDefaultValue": "value = \"f0033dc0-126b-40ba-89e0-d3061bdeda4c\";",
@@ -301,10 +260,7 @@
 							"unique": false,
 							"multiple": false
 						},
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "workflow_uuid",
 						"customDefaultValue": "value=\"cb74d176-225a-11ea-978f-2e728ce88125\"",
@@ -316,10 +272,7 @@
 							"unique": false,
 							"multiple": false
 						},
-						"hideOnChildrenHidden": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -332,8 +285,7 @@
 					"unique": false,
 					"multiple": false
 				},
-				"path": "panelPanel2Columns",
-				"clearOnHide": false
+				"path": "panelPanel2Columns"
 			}],
 			"type": "panel",
 			"label": "Panel",
@@ -341,9 +293,7 @@
 				"unique": false,
 				"multiple": false
 			},
-			"path": "panelPanel2",
-			"clearOnHide": false,
-			"hideLabel": false
+			"path": "panelPanel2"
 		}, {
 			"title": "Personal Information",
 			"theme": "primary",
@@ -390,19 +340,7 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "text",
-						"inputMask": "",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"defaultValue": "",
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"clearOnHide": true
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -430,18 +368,7 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "text",
-						"inputMask": "",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"defaultValue": "",
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -469,18 +396,7 @@
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "text",
-						"inputMask": "",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"defaultValue": "",
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false
+						"hideOnChildrenHidden": false
 					}],
 					"width": 4,
 					"offset": 0,
@@ -492,8 +408,7 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				},
-				"clearOnHide": false
+				}
 			}, {
 				"title": "Mailing Address",
 				"theme": "primary",
@@ -534,24 +449,7 @@
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							}
+							"hideOnChildrenHidden": false
 						}, {
 							"input": true,
 							"tableView": true,
@@ -566,24 +464,7 @@
 							"type": "textfield",
 							"lockKey": true,
 							"hideLabel": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							}
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -606,24 +487,7 @@
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							}
+							"hideOnChildrenHidden": false
 						}, {
 							"label": "Zip Code",
 							"placeholder": "Zip Code",
@@ -640,24 +504,7 @@
 							"type": "textfield",
 							"input": true,
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							}
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -699,17 +546,7 @@
 							"lockKey": true,
 							"hideOnChildrenHidden": false,
 							"lazyLoad": false,
-							"disableLimit": false,
-							"autofocus": false,
-							"defaultValue": "",
-							"refreshOn": "",
-							"authenticate": false,
-							"multiple": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true
+							"disableLimit": false
 						}, {
 							"label": "Select",
 							"widget": "choicesjs",
@@ -739,17 +576,7 @@
 							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false,
-							"clearOnRefresh": true,
-							"autofocus": false,
-							"defaultValue": "",
-							"filter": "",
-							"authenticate": false,
-							"multiple": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true
+							"clearOnRefresh": true
 						}],
 						"width": 4,
 						"offset": 0,
@@ -762,15 +589,12 @@
 						"unique": false,
 						"multiple": false
 					},
-					"path": "panelPanelColumns",
-					"clearOnHide": false
+					"path": "panelPanelColumns"
 				}],
 				"validate": {
 					"unique": false,
 					"multiple": false
-				},
-				"clearOnHide": false,
-				"hideLabel": false
+				}
 			}, {
 				"title": "Physical Address",
 				"theme": "primary",
@@ -803,16 +627,7 @@
 					"type": "checkbox",
 					"input": true,
 					"dataGridLabel": false,
-					"lockKey": true,
-					"autofocus": false,
-					"inputType": "checkbox",
-					"hideLabel": false,
-					"protected": false,
-					"persistent": true,
-					"hidden": false,
-					"name": "",
-					"value": "",
-					"clearOnHide": true
+					"lockKey": true
 				}, {
 					"label": "Columns",
 					"input": false,
@@ -840,19 +655,7 @@
 							"lockKey": true,
 							"hideLabel": true,
 							"calculateValue": "if(data['sameasmailingaddress'] == true){\n   value = ' ';\n}",
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true
+							"hideOnChildrenHidden": false
 						}, {
 							"input": true,
 							"tableView": true,
@@ -869,24 +672,7 @@
 							"hideLabel": true,
 							"lockKey": true,
 							"calculateValue": "if(data['sameasmailingaddress'] == true){\n   value = ' ';\n}",
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							}
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -909,24 +695,7 @@
 							"hideLabel": true,
 							"calculateValue": "if(data['sameasmailingaddress'] == true){\n   value = ' ';\n}",
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							}
+							"hideOnChildrenHidden": false
 						}, {
 							"input": true,
 							"tableView": true,
@@ -943,24 +712,7 @@
 							"hideLabel": true,
 							"calculateValue": "if(data['sameasmailingaddress'] == true){\n   value = ' ';\n}",
 							"lockKey": true,
-							"hideOnChildrenHidden": false,
-							"autofocus": false,
-							"inputType": "text",
-							"inputMask": "",
-							"prefix": "",
-							"suffix": "",
-							"multiple": false,
-							"defaultValue": "",
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true,
-							"conditional": {
-								"show": null,
-								"when": null,
-								"eq": ""
-							}
+							"hideOnChildrenHidden": false
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1002,17 +754,7 @@
 							"lockKey": true,
 							"hideOnChildrenHidden": false,
 							"lazyLoad": false,
-							"disableLimit": false,
-							"autofocus": false,
-							"defaultValue": "",
-							"refreshOn": "",
-							"authenticate": false,
-							"multiple": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true
+							"disableLimit": false
 						}, {
 							"label": "Select",
 							"widget": "choicesjs",
@@ -1042,17 +784,7 @@
 							"input": true,
 							"lockKey": true,
 							"hideOnChildrenHidden": false,
-							"clearOnRefresh": true,
-							"autofocus": false,
-							"defaultValue": "",
-							"filter": "",
-							"authenticate": false,
-							"multiple": false,
-							"protected": false,
-							"unique": false,
-							"persistent": true,
-							"hidden": false,
-							"clearOnHide": true
+							"clearOnRefresh": true
 						}],
 						"width": 4,
 						"offset": 0,
@@ -1066,15 +798,12 @@
 						"unique": false,
 						"multiple": false
 					},
-					"path": "panelPanel3Columns",
-					"clearOnHide": false
+					"path": "panelPanel3Columns"
 				}],
 				"validate": {
 					"unique": false,
 					"multiple": false
-				},
-				"clearOnHide": false,
-				"hideLabel": false
+				}
 			}, {
 				"label": "Columns",
 				"input": false,
@@ -1096,19 +825,7 @@
 						"type": "phoneNumber",
 						"lockKey": true,
 						"hideLabel": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "tel",
-						"inputMask": "(999) 999-9999",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"defaultValue": "",
-						"clearOnHide": true
+						"hideOnChildrenHidden": false
 					}, {
 						"label": "Mobile Phone",
 						"placeholder": "Mobile Phone",
@@ -1125,19 +842,7 @@
 						"type": "phoneNumber",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "tel",
-						"inputMask": "(999) 999-9999",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"defaultValue": "",
-						"clearOnHide": true
+						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
 						"tableView": true,
@@ -1151,19 +856,7 @@
 						"type": "phoneNumber",
 						"lockKey": true,
 						"hideLabel": true,
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "tel",
-						"inputMask": "(999) 999-9999",
-						"prefix": "",
-						"suffix": "",
-						"multiple": false,
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"defaultValue": "",
-						"clearOnHide": true
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -1186,20 +879,7 @@
 						"lockKey": true,
 						"hideLabel": true,
 						"description": "Your certificate may be e-mailed to you from padi-professional@hubinternational.com. Please make sure you add this to your safe senders list.",
-						"hideOnChildrenHidden": false,
-						"autofocus": false,
-						"inputType": "email",
-						"prefix": "",
-						"suffix": "",
-						"defaultValue": "",
-						"protected": false,
-						"unique": false,
-						"persistent": true,
-						"hidden": false,
-						"clearOnHide": true,
-						"kickbox": {
-							"enabled": false
-						}
+						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -1211,26 +891,21 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				},
-				"clearOnHide": false
+				}
 			}],
 			"lockKey": true,
 			"source": "5d4ee6df800c612c49e802d3",
 			"validate": {
 				"unique": false,
 				"multiple": false
-			},
-			"clearOnHide": false,
-			"hideLabel": false
+			}
 		}],
 		"type": "panel",
 		"label": "Panel",
 		"validate": {
 			"unique": false,
 			"multiple": false
-		},
-		"clearOnHide": false,
-		"hideLabel": false
+		}
 	}, {
 		"type": "panel",
 		"title": "Coverage",
@@ -1274,7 +949,7 @@
 				"dataSrc": "custom",
 				"data": {
 					"values": [{}],
-					"custom": "var currentDate = moment()\ncurrentDate.date(1)\nvar presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nendDate.year(endYear)\nendDate.date(30)\nvar month = 3*(currentDate.quarter() - 1)\ncurrentDate.month(month)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nvar quarterDiff = monthDifference/3\nfor(i = 0;i < quarterDiff;i++){\n\tvar monthName = moment().month(i).format('MMMM');\n  if((quarterDiff -i) > 4){\n   \t\t\tvalues[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n    }\n    currentDate.add(3,'months')\n}"
+					"custom": "var currentDate = moment()\ncurrentDate.date(1)\nvar presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nendDate.year(endYear)\nendDate.date(30)\nvar month = 3*(currentDate.quarter() - 1)\ncurrentDate.month(month)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nvar quarterDiff = monthDifference/3\nfor(i = 0;i < quarterDiff;i++){\n\tvar monthName = moment().month(i).format('MMMM');\n  if((quarterDiff -i) > 4){\n   \t\t\tvalues[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n      if(currentDate.month() == 6){\n               var val = currentDate.format(\"YYYY-MM-DD\")\n\t       currentDate.date(30)\n\t       currentDate.month(5)\n               values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : val}\ncurrentDate.date(1)\ncurrentDate.month(6)\n       }\n    }\n    currentDate.add(3,'months')\n}"
 				},
 				"selectThreshold": 0.3,
 				"persistent": false,
@@ -1317,7 +992,7 @@
 				"properties": {
 					"data_type": "Date"
 				},
-				"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-6-30\";\n}else{\nvalue = (year)+ \"-6-30\";\n}",
+				"calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}",
 				"lockKey": true,
 				"validate": {
 					"unique": false,
@@ -1377,15 +1052,18 @@
 						"validate": {
 							"required": true,
 							"unique": false,
-							"multiple": false
+							"multiple": false,
+							"customMessage": "Please choose one of these options."
 						},
 						"type": "radio",
 						"optionsLabelPosition": "right",
 						"properties": {
-							"target": "CoverageAmount"
+							"target": "coverageAmount"
 						},
 						"lockKey": true,
-						"hideOnChildrenHidden": false
+						"hideOnChildrenHidden": false,
+						"hideLabel": true,
+						"isNew": false
 					}],
 					"width": 6,
 					"offset": 0,
@@ -1396,20 +1074,21 @@
 						"label": "Text",
 						"prefix": "$",
 						"hideLabel": true,
-						"spellcheck": true,
+						"spellcheck": false,
 						"disabled": true,
 						"tableView": true,
+						"defaultValue": "0.00",
+						"clearOnHide": false,
 						"calculateValue": "var a = data['liabilityCoverageName'];\nvalue = data[a];",
 						"validate": {
 							"unique": false,
 							"multiple": false
 						},
-						"key": "CoverageAmount",
+						"key": "coverageAmount",
 						"type": "textfield",
 						"input": true,
 						"lockKey": true,
-						"hideOnChildrenHidden": false,
-						"defaultValue": "0.00"
+						"hideOnChildrenHidden": false
 					}, {
 						"input": true,
 						"tableView": true,
@@ -1532,7 +1211,7 @@
 								"disabled": true,
 								"tableView": true,
 								"clearOnHide": false,
-								"calculateValue": "value = data['CoverageAmount'];",
+								"calculateValue": "value = data['coverageAmount'];",
 								"validate": {
 									"unique": false,
 									"multiple": false
@@ -1872,7 +1551,7 @@
 								"hideLabel": true,
 								"tableView": true,
 								"datePicker": {
-									"maxDate": "moment()",
+									"maxDate": "2020-02-11T13:15:50.000Z",
 									"datepickerMode": "day"
 								},
 								"enableTime": false,
@@ -1900,7 +1579,7 @@
 									"minuteIncrement": 1,
 									"time_24hr": false,
 									"minDate": null,
-									"maxDate": "moment()"
+									"maxDate": "2020-02-11T13:15:50.000Z"
 								}
 							}, {
 								"label": "Explain how the report can be obtained",
@@ -2221,9 +1900,7 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				},
-				"tag": "p",
-				"className": ""
+				}
 			}, {
 				"clearOnHide": false,
 				"key": "page4PanelWell",
@@ -2253,14 +1930,7 @@
 					},
 					"type": "radio",
 					"optionsLabelPosition": "right",
-					"lockKey": true,
-					"autofocus": false,
-					"inputType": "radio",
-					"protected": false,
-					"fieldSet": false,
-					"persistent": true,
-					"hidden": false,
-					"clearOnHide": true
+					"lockKey": true
 				}],
 				"tableView": false,
 				"type": "well",
@@ -2320,24 +1990,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -2358,24 +2011,7 @@
 									"key": "address",
 									"type": "textfield",
 									"input": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -2396,24 +2032,7 @@
 									"key": "city",
 									"type": "textfield",
 									"input": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"width": 4,
 								"offset": 0,
@@ -2426,8 +2045,7 @@
 							"validate": {
 								"unique": false,
 								"multiple": false
-							},
-							"clearOnHide": false
+							}
 						}, {
 							"label": "Columns",
 							"input": false,
@@ -2461,18 +2079,7 @@
 									"type": "select",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"defaultValue": "",
-									"refreshOn": "",
-									"filter": "",
-									"authenticate": false,
-									"multiple": false,
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true
+									"hideOnChildrenHidden": false
 								}],
 								"width": 3,
 								"offset": 0,
@@ -2480,7 +2087,6 @@
 								"pull": 0
 							}, {
 								"components": [{
-									"autofocus": false,
 									"input": true,
 									"tableView": true,
 									"label": "Select",
@@ -2491,39 +2097,21 @@
 											"value": "",
 											"label": ""
 										}],
-										"json": "",
-										"url": "",
-										"resource": "",
 										"custom": "if(data['countryList']){\nlet obj = data['countryList'].find(o => o.country === row.country);\nif (obj) {\n  values = obj.states;\n} else {\n  values = data['countryList'].find(o => o.country === \"United States of America\")\n    .states;\n}\n}"
 									},
 									"dataSrc": "custom",
-									"valueProperty": "",
-									"defaultValue": "",
 									"refreshOn": "country",
-									"filter": "",
-									"authenticate": false,
 									"template": "<span>{{ item }}</span>",
-									"multiple": false,
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true,
 									"validate": {
-										"required": true
+										"required": true,
+										"unique": false,
+										"multiple": false
 									},
 									"type": "select",
-									"labelPosition": "top",
-									"tags": [],
-									"conditional": {
-										"show": "",
-										"when": null,
-										"eq": ""
-									},
-									"properties": {},
 									"hideLabel": true,
 									"clearOnRefresh": true,
-									"lockKey": true
+									"lockKey": true,
+									"hideOnChildrenHidden": false
 								}],
 								"width": 3,
 								"offset": 0,
@@ -2545,24 +2133,7 @@
 									"type": "textfield",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true,
-									"conditional": {
-										"show": null,
-										"when": null,
-										"eq": ""
-									}
+									"hideOnChildrenHidden": false
 								}],
 								"width": 3,
 								"offset": 0,
@@ -2599,21 +2170,7 @@
 									"type": "select",
 									"input": true,
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"dataSrc": "values",
-									"valueProperty": "",
-									"defaultValue": "",
-									"refreshOn": "",
-									"filter": "",
-									"authenticate": false,
-									"template": "<span>{{ item.label }}</span>",
-									"multiple": false,
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true
+									"hideOnChildrenHidden": false
 								}, {
 									"input": true,
 									"tableView": true,
@@ -2630,20 +2187,7 @@
 									},
 									"type": "textfield",
 									"lockKey": true,
-									"hideOnChildrenHidden": false,
-									"autofocus": false,
-									"inputType": "text",
-									"inputMask": "",
-									"placeholder": "",
-									"prefix": "",
-									"suffix": "",
-									"multiple": false,
-									"defaultValue": "",
-									"protected": false,
-									"unique": false,
-									"persistent": true,
-									"hidden": false,
-									"clearOnHide": true
+									"hideOnChildrenHidden": false
 								}],
 								"width": 3,
 								"offset": 0,
@@ -2655,8 +2199,7 @@
 							"validate": {
 								"unique": false,
 								"multiple": false
-							},
-							"clearOnHide": false
+							}
 						}],
 						"tableView": false,
 						"type": "well",
@@ -2668,13 +2211,7 @@
 							"multiple": false
 						}
 					}],
-					"lockKey": true,
-					"autofocus": false,
-					"tree": true,
-					"protected": false,
-					"persistent": true,
-					"hidden": false,
-					"clearOnHide": true
+					"lockKey": true
 				}],
 				"type": "panel",
 				"conditional": {
@@ -2682,18 +2219,14 @@
 					"when": "AdditionalInsuredOption",
 					"eq": "newListOfAdditionalInsureds"
 				},
-				"label": "Panel",
-				"clearOnHide": false,
-				"hideLabel": false
+				"label": "Panel"
 			}],
 			"type": "panel",
 			"label": "Panel",
 			"validate": {
 				"unique": false,
 				"multiple": false
-			},
-			"clearOnHide": false,
-			"hideLabel": false
+			}
 		}],
 		"input": false,
 		"key": "page4",
@@ -2703,9 +2236,7 @@
 		"validate": {
 			"unique": false,
 			"multiple": false
-		},
-		"clearOnHide": false,
-		"hideLabel": false
+		}
 	}, {
 		"type": "panel",
 		"title": "Payment Information",
@@ -2744,27 +2275,28 @@
 				},
 				"type": "checkbox",
 				"lockKey": true
-			}, {
-				"key": "pageNaNPanel3Content2",
-				"label": "Content",
-				"input": false,
-				"tag": "a",
-				"attrs": [{
-					"value": "",
-					"attr": ""
-				}],
-				"content": "</br><href=\"https://www.diveinsurance.com/pop_automatic_renewal.htm\">Click here for more information</a>",
-				"type": "htmlelement",
-				"hideLabel": true,
-				"tableView": false,
-				"validate": {
-					"unique": false,
-					"multiple": false
-				}
 			}],
 			"type": "panel",
 			"breadcrumb": "none",
 			"label": "Panel",
+			"validate": {
+				"unique": false,
+				"multiple": false
+			},
+			"lockKey": true
+		}, {
+			"type": "document",
+			"key": "documents",
+			"dtype": "document",
+			"datype": "document",
+			"dattype": "document",
+			"datatype": "document",
+			"data_type": "document",
+			"label": "Documents",
+			"hideLabel": true,
+			"inputType": "document",
+			"input": 1,
+			"tableView": false,
 			"validate": {
 				"unique": false,
 				"multiple": false
@@ -2840,7 +2372,8 @@
 			"validate": {
 				"unique": false,
 				"multiple": false
-			}
+			},
+			"path": "pageNaNPanel2"
 		}],
 		"input": false,
 		"key": "pageNaN",
@@ -2864,7 +2397,7 @@
 		}
 	}],
 	"revisions": "current",
-	"_vid": 249,
+	"_vid": 271,
 	"title": "Emergency First Response Professional Liability",
 	"display": "wizard",
 	"access": [{
@@ -2947,7 +2480,7 @@
 	"path": "emergencyfirstresponseprofessionalliability",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-07-11T13:08:59.838Z",
-	"modified": "2020-02-07T08:16:22.004Z",
+	"modified": "2020-02-11T15:48:19.008Z",
 	"machineName": "testdivehub:emergencyFirstResponseProfessionalLiabilityApplication",
 	"controller": ""
 }

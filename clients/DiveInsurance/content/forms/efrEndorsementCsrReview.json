@@ -1136,8 +1136,7 @@
 								"when": null,
 								"eq": ""
 							},
-							"properties": {},
-							"isNew": false
+							"properties": {}
 						}, {
 							"input": true,
 							"tableView": true,
@@ -2269,14 +2268,22 @@
 			},
 			"protected": false,
 			"unique": false,
-			"persistent": true
+			"persistent": true,
+			"isNew": false,
+			"tags": [],
+			"conditional": {
+				"show": "",
+				"when": null,
+				"eq": ""
+			},
+			"properties": {}
 		}, {
 			"input": true,
 			"tableView": true,
 			"key": "update_date",
 			"label": "Update Date",
 			"type": "hidden",
-			"calculateValue": "value = new Date();",
+			"calculateValue": "",
 			"lockKey": true,
 			"validate": {
 				"unique": false,
@@ -2284,7 +2291,14 @@
 			},
 			"protected": false,
 			"unique": false,
-			"persistent": true
+			"persistent": true,
+			"tags": [],
+			"conditional": {
+				"show": "",
+				"when": null,
+				"eq": ""
+			},
+			"properties": {}
 		}, {
 			"key": "pageNaNPanel",
 			"input": false,
@@ -4027,7 +4041,7 @@
 	"path": "efrendorsementcsrreview",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-06T11:18:27.838Z",
-	"modified": "2020-02-11T08:21:55.284Z",
+	"modified": "2020-02-11T13:32:17.904Z",
 	"machineName": "testdivehub:efrEndorsementCsrReview",
 	"controller": ""
 }

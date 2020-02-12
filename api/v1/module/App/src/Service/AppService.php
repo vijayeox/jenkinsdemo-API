@@ -849,29 +849,34 @@ class AppService extends AbstractService
 
     }
 
-    private function processEntity(&$yamlData)
+    private function processEntity(&$yamlData, $assoc_id = null)
     {
         if (isset($yamlData['entity'])) {
             $appId = $yamlData['app'][0]['uuid'];
             $sequence = 0;
             foreach ($yamlData['entity'] as &$entityData) {
                 $entity = $entityData;
-                $entity['uuid'] = isset($entity['uuid']) ? $entity['uuid'] : UuidUtil::uuid();
+                $entity['assoc_id'] = $assoc_id;
                 $entityRec = $this->entityService->getEntityByName($appId, $entity['name']);
-                if (!$entityRec) {
+                if (!$entityRec || $entityRec['assoc_id'] != $assoc_id) {
                     $result = $this->entityService->saveEntity($appId, $entity);
                 } else {
                     $entity['id'] = $entityRec['id'];
+                    $entity['uuid'] = $entityRec['uuid'];
                 }
-                $fields = $entity['field'];
-                foreach ($fields as $field) {
-                    $result = $this->fieldService->getFieldByName($entityRec['uuid'], $field['name']);
+                foreach ($entity['field'] as $field) {
+                    $result = $this->fieldService->getFieldByName($entity['uuid'], $field['name']);
                     if ($result == 0) {
                         $field['entity_id'] = $entity['id'];
                         $this->fieldService->saveField($appId, $field);
                     } else {
                         $this->fieldService->updateField($result['id'], $field);
                     }
+                }
+                if (isset($entity['child']) && $entity['child']) {
+                    $childEntityData = ['entity' => $entityData['child'], 'app' => [['uuid' => $appId]]];
+                    $this->processEntity($childEntityData, $entity['id']);
+                    $entityData['child'] = $childEntityData['entity'];
                 }
             }
         }
