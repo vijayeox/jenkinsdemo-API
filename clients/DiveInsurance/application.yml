@@ -48,9 +48,6 @@ role:
             -
                 privilege_name: MANAGE_POLICY_APPROVAL
                 permission: 3
-            -
-                privilege_name: MANAGE_DASHBOARD
-                permission: 1
         uuid: ef71307c-7bdc-4dd3-bc75-afdc0ab2790a
 entity:
     -
