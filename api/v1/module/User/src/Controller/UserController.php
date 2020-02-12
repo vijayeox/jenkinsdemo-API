@@ -383,29 +383,29 @@ class UserController extends AbstractApiController
             foreach ($options as $key => $value) {
                 switch($value) {
                     case "p":
-                    $userInfo['privileges'] = $this->userService->getPrivileges($id);
-                    break;
+                        $userInfo['privileges'] = $this->userService->getPrivileges($id);
+                        break;
                     case "e":
-                    $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId($id);
-                    break;
+                        $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId($id);
+                        break;
                     case "ewp":
-                    $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId($id,true);
-                    break;
+                        $userInfo['emails'] = $this->emailService->getEmailAccountsByUserId($id,true);
+                        break;
                     case "o":
-                    $userInfo['organization'] = $this->userService->getOrganizationByUserId($id);
-                    break;
+                        $userInfo['organization'] = $this->userService->getOrganizationByUserId($id);
+                        break;
                     case "ap":
-                    $userInfo['apps'] = $this->userService->getAppsByUserId($id);
-                    break;
+                        $userInfo['apps'] = $this->userService->getAppsByUserId($id);
+                        break;
                     case "bapp":
-                    $userInfo['blackListedApps'] = $this->userService->getAppsWithoutAccessForUser();
-                    break;
+                        $userInfo['blackListedApps'] = $this->userService->getAppsWithoutAccessForUser();
+                        break;
                     case "pr":
-                    $userInfo['projects'] = $this->projectService->getProjectsOfUserById($id);
-                    break;
+                        $userInfo['projects'] = $this->projectService->getProjectsOfUserById($id);
+                        break;
                     case "role":
-                    $userInfo['role']= $this->userService->getRolesofUser($userInfo['orgid'],$id);
-                    break; 
+                        $userInfo['role']= $this->userService->getRolesofUser($userInfo['orgid'],$id);
+                        break; 
                 }
             }
             if ($userInfo) {
@@ -419,7 +419,7 @@ class UserController extends AbstractApiController
             return $this->getErrorResponse("Validation Errors", 404, $response);
         }
         if (($userInfo == 0) || (empty($userInfo))) {
-            return $this->getErrorResponse("User Doesnot Exist", 404);
+            return $this->getErrorResponse("User Does not Exist", 404);
         }
         return $this->getSuccessResponseWithData($userInfo);
     }

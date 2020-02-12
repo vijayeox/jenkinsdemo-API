@@ -23,9 +23,9 @@ class DocumentFetchDelegate extends AbstractDocumentAppDelegate
                 } else if (sizeof($fieldNamesArray) == 2) {
                     $gridFieldName = $fieldNamesArray[0];
                     $fieldName = $fieldNamesArray[1];
-                    for ($i = 0;$i < sizeof($data[$gridFieldName]);$i++) {
-                        if (isset($data[$gridFieldName][$i][$fieldName])) {
-                            $data[$gridFieldName][$i][$fieldName] = $this->getFileData($data[$gridFieldName][$i][$fieldName]);
+                    for ($j = 0;$j < sizeof($data[$gridFieldName]);$j++) {
+                        if (isset($data[$gridFieldName][$j][$fieldName])) {
+                            $data[$gridFieldName][$j][$fieldName] = $this->getFileData($data[$gridFieldName][$j][$fieldName]);
                         }
                     }
                 }

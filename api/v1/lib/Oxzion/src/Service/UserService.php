@@ -1242,7 +1242,7 @@ class UserService extends AbstractService
                 throw $e;
             }
         }
-        if (($data['email'] == $result[0]['email']) && $data['username'] == $result[0]['username']) {
+        if ($data['username'] == $result[0]['username']) {
             $data['username'] = $result[0]['username'];
             $data['id'] = $result[0]['id'];
             $data['uuid'] = $result[0]['uuid'];

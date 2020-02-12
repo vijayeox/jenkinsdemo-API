@@ -2351,3 +2351,15 @@ INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_da
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'liabilityCoverage2000000', 'liabilityCoverage2000000', '2021-04-01 00:00:00', '2021-06-30 00:00:00', 108.00);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'liabilityCoverage1000000', 'liabilityCoverage1000000', '2021-04-01 00:00:00', '2021-06-30 00:00:00', 91.00);
 INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'notSelected', 'notSelected', '2021-04-01 00:00:00', '2021-06-30 00:00:00', 0.00);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'liabilityCoverage5000000', 'liabilityCoverage5000000', '2020-01-01 00:00:00', '2021-06-30 00:00:00', 531.00);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'liabilityCoverage4000000', 'liabilityCoverage4000000', '2020-01-01 00:00:00', '2021-06-30 00:00:00', 434.00);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'liabilityCoverage2000000', 'liabilityCoverage2000000', '2020-01-01 00:00:00', '2021-06-30 00:00:00', 396.00);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'liabilityCoverage1000000', 'liabilityCoverage1000000', '2020-01-01 00:00:00', '2021-06-30 00:00:00', 332.00);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'notSelected', 'notSelected', '2020-01-01 00:00:00', '2021-06-30 00:00:00', 0.00);
+
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'liabilityCoverage5000000', 'liabilityCoverage5000000', '2020-04-01 00:00:00', '2021-06-30 00:00:00', 531.00);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'liabilityCoverage4000000', 'liabilityCoverage4000000', '2020-04-01 00:00:00', '2021-06-30 00:00:00', 434.00);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'liabilityCoverage2000000', 'liabilityCoverage2000000', '2020-04-01 00:00:00', '2021-06-30 00:00:00', 396.00);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'liabilityCoverage1000000', 'liabilityCoverage1000000', '2020-04-01 00:00:00', '2021-06-30 00:00:00', 332.00);
+INSERT INTO `premium_rate_card` (`product`,`coverage`,`key`,`start_date`,`end_date`,`premium`) VALUES ('Emergency First Response', 'notSelected', 'notSelected', '2020-04-01 00:00:00', '2021-06-30 00:00:00', 0.00);
