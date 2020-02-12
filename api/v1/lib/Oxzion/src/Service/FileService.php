@@ -577,7 +577,7 @@ class FileService extends AbstractService
                     }
                 }
                 $fromQuery .= " inner join ox_field as d on (en.id = d.entity_id) inner join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=oa.id
-                INNER JOIN ox_file_attribute ofa on ofa.file_id = oa.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
+                INNER JOIN ox_file_attribute ofa on ofa.file_id = of.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
                 $userWhere = " and owufi.user_id = :userId and owufi.org_id = :orgId";
                 $queryParams['userId'] = $userId;
                 $queryParams['orgId'] = $orgId;
