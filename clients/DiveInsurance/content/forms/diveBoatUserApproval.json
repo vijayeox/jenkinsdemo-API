@@ -29,16 +29,6 @@
 				"unique": false,
 				"multiple": false
 			},
-			"protected": false,
-			"unique": false,
-			"persistent": true,
-			"tags": [],
-			"conditional": {
-				"show": "",
-				"when": null,
-				"eq": ""
-			},
-			"properties": {},
 			"defaultValue": "f0033dc0-126b-40ba-89e0-d3061bdeda4c"
 		}, {
 			"type": "documentviewer",
@@ -95,15 +85,7 @@
 					"key": "userApproved",
 					"type": "radio",
 					"input": true,
-					"lockKey": true,
-					"autofocus": false,
-					"inputType": "radio",
-					"defaultValue": "",
-					"protected": false,
-					"fieldSet": false,
-					"persistent": true,
-					"hidden": false,
-					"clearOnHide": true
+					"lockKey": true
 				}, {
 					"label": "Could you let us know the Reason for Rejecting the Quote?",
 					"autoExpand": false,
@@ -120,19 +102,7 @@
 						"eq": "false"
 					},
 					"type": "textarea",
-					"input": true,
-					"autofocus": false,
-					"placeholder": "",
-					"prefix": "",
-					"suffix": "",
-					"rows": 3,
-					"multiple": false,
-					"defaultValue": "",
-					"protected": false,
-					"persistent": true,
-					"hidden": false,
-					"wysiwyg": false,
-					"clearOnHide": true
+					"input": true
 				}],
 				"path": "well4",
 				"clearOnHide": false,
@@ -145,9 +115,18 @@
 				"unique": false,
 				"multiple": false
 			},
-			"path": "page5Panel2",
-			"clearOnHide": false,
-			"hideLabel": false
+			"path": "page5Panel2"
+		}, {
+			"label": "amount",
+			"calculateValue": "value = data['total']",
+			"key": "amount",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}, {
 			"title": "Payment Information",
 			"theme": "primary",
@@ -186,10 +165,7 @@
 					"validate": {
 						"unique": false,
 						"multiple": false
-					},
-					"protected": false,
-					"unique": false,
-					"persistent": true
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -200,10 +176,7 @@
 					"validate": {
 						"unique": false,
 						"multiple": false
-					},
-					"protected": false,
-					"unique": false,
-					"persistent": true
+					}
 				}, {
 					"input": true,
 					"tableView": true,
@@ -214,10 +187,7 @@
 					"validate": {
 						"unique": false,
 						"multiple": false
-					},
-					"protected": false,
-					"unique": false,
-					"persistent": true
+					}
 				}, {
 					"type": "convergepay",
 					"key": "custom",
@@ -234,9 +204,7 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				},
-				"clearOnHide": false,
-				"hideLabel": false
+				}
 			}, {
 				"key": "page7Content",
 				"label": "Content",
@@ -252,9 +220,7 @@
 				"validate": {
 					"unique": false,
 					"multiple": false
-				},
-				"tag": "p",
-				"className": ""
+				}
 			}],
 			"input": false,
 			"lockKey": true,
@@ -262,17 +228,13 @@
 				"unique": false,
 				"multiple": false
 			},
-			"breadcrumbClickable": true,
-			"clearOnHide": false,
-			"hideLabel": false
+			"breadcrumbClickable": true
 		}],
 		"validate": {
 			"unique": false,
 			"multiple": false
 		},
-		"path": "page5Panel",
-		"clearOnHide": false,
-		"hideLabel": false
+		"path": "page5Panel"
 	}, {
 		"label": "Submit",
 		"showValidations": false,
@@ -288,15 +250,18 @@
 		"validate": {
 			"unique": false,
 			"multiple": false
-		},
-		"autofocus": false,
-		"size": "md",
-		"leftIcon": "",
-		"rightIcon": "",
-		"block": false,
-		"action": "submit",
-		"disableOnInvalid": false,
-		"theme": "primary"
+		}
+	}, {
+		"label": "Submit",
+		"showValidations": false,
+		"tableView": false,
+		"key": "submit1",
+		"type": "button",
+		"input": true,
+		"validate": {
+			"unique": false,
+			"multiple": false
+		}
 	}],
 	"controller": "",
 	"revisions": "",
@@ -314,6 +279,6 @@
 	"path": "diveboatuserapproval",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-06T08:02:09.559Z",
-	"modified": "2020-02-06T10:48:49.404Z",
+	"modified": "2020-02-10T04:37:09.948Z",
 	"machineName": "testdivehub:diveBoatUserApproval"
 }

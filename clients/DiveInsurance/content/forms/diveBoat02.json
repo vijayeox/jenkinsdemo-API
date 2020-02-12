@@ -3379,16 +3379,14 @@
 					"multiple": false
 				}
 			}, {
-				"input": true,
-				"tableView": true,
 				"label": "Select",
-				"key": "additional_insured_select",
+				"widget": "choicesjs",
 				"placeholder": "Select according to your preference",
+				"hideLabel": true,
+				"tableView": true,
+				"defaultValue": "noAdditionalInsureds",
 				"data": {
 					"values": [{
-						"value": "asPerExistingPolicyIfRenewing",
-						"label": "As per existing policy (if renewing)"
-					}, {
 						"value": "newListOfAdditionalInsureds",
 						"label": "New list of Additional Insureds"
 					}, {
@@ -3396,15 +3394,16 @@
 						"label": "No Additional Insureds"
 					}]
 				},
-				"defaultValue": "noAdditionalInsureds",
+				"selectThreshold": 0.3,
 				"clearOnHide": false,
 				"validate": {
 					"required": true,
 					"unique": false,
 					"multiple": false
 				},
+				"key": "additional_insured_select",
 				"type": "select",
-				"hideLabel": true,
+				"input": true,
 				"lockKey": true
 			}, {
 				"key": "page4PanelPanel2",
@@ -5341,6 +5340,6 @@
 	"path": "diveboat02",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-23T10:59:00.323Z",
-	"modified": "2020-02-06T08:26:34.435Z",
+	"modified": "2020-02-10T05:24:39.244Z",
 	"machineName": "testdivehub:diveBoat02"
 }
