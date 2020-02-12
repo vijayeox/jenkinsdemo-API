@@ -862,9 +862,10 @@ class AppService extends AbstractService
                     $result = $this->entityService->saveEntity($appId, $entity);
                 } else {
                     $entity['id'] = $entityRec['id'];
+                    $entity['uuid'] = $entityRec['uuid'];
                 }
                 foreach ($entity['field'] as $field) {
-                    $result = $this->fieldService->getFieldByName($entityRec['uuid'], $field['name']);
+                    $result = $this->fieldService->getFieldByName($entity['uuid'], $field['name']);
                     if ($result == 0) {
                         $field['entity_id'] = $entity['id'];
                         $this->fieldService->saveField($appId, $field);
@@ -875,6 +876,7 @@ class AppService extends AbstractService
                 if (isset($entity['child']) && $entity['child']) {
                     $childEntityData = ['entity' => $entityData['child'], 'app' => [['uuid' => $appId]]];
                     $this->processEntity($childEntityData, $entity['id']);
+                    $entityData['child'] = $childEntityData['entity'];
                 }
             }
         }
