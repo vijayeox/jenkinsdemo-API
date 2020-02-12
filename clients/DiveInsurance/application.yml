@@ -41,13 +41,14 @@ role:
             -
                 privilege_name: MANAGE_MY_POLICY
                 permission: 3
-        uuid: 38880e3a-6bee-43c1-bd4d-9431d78a084b
+        uuid: 09ac8949-ecba-4226-a83e-abf1240a491c
     -
         name: CSR
         privileges:
             -
                 privilege_name: MANAGE_POLICY_APPROVAL
                 permission: 3
+                uuid: e29459d3-1a29-4d30-85f9-1ea921b9e25f
             -
                 privilege_name: MANAGE_DASHBOARD
                 permission: 1
