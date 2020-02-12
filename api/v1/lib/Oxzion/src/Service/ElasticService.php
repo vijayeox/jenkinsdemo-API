@@ -21,6 +21,7 @@ class ElasticService
     public function __construct($config)
     {
         $this->config = $config;
+        $this->logger = Logger::getLogger(get_class($this));
         $clientsettings = array();
         $clientsettings['host'] = $config['elasticsearch']['serveraddress'];
         $clientsettings['user'] = $config['elasticsearch']['user'];
@@ -29,6 +30,7 @@ class ElasticService
         $clientsettings['port'] = $config['elasticsearch']['port'];
         $clientsettings['scheme'] = $config['elasticsearch']['scheme'];
         $this->core = $config['elasticsearch']['core'];
+        $this->logger->info("core to be used - ".$this->core);
         $this->type = $config['elasticsearch']['type'];
         $clientbuilder = ClientBuilder::create(); 
         if ($clientbuilder) { 
@@ -36,7 +38,6 @@ class ElasticService
         } else {
             $this->client = new ClientBuilder(); //This is for Mocking in the test case
         }
-        $this->logger = Logger::getLogger(get_class($this));
     }
 
     public function setElasticClient($client){

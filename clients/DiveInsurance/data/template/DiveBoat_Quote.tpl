@@ -154,7 +154,7 @@
 <hr class = "hr_db"></hr>
 <p class = "sec_title"><b>LIABILITY INSURANCE </b><span style = "font-size:13px;">(Including Defense Costs)</span></p>
 <div class ="secB">
-  <p class = "sec_titl"><span>Maximum Number:       &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    </span><span>Passengers:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$certified_for_max_number_of_passengers}</span><span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($crew_on_boat)}Crew on Boat:   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {$crew_on_boat}</span><span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{/if}{if isset($crew_in_water)}Crew in Water:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$crew_in_water}{/if}</span></p>    
+  <p class = "sec_titl"><span>Maximum Number:       &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    </span><span>Passengers:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$certified_for_max_number_of_passengers}</span><span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewInBoatCount)}Crew on Boat:   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {$CrewInBoatCount}</span><span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{/if}{if isset($CrewInWaterCount)}Crew in Water:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{$CrewInWaterCount}{/if}</span></p>    
   <div class = "section_divi">
     <div class = "div_section">
       <div class="sec1">
@@ -163,9 +163,18 @@
         <p class="hull_title">Limit of Insurance - Crew in the Water:</p>
       </div>
       <div class="sec2"><p class="hull_title">US</p><p class="hull_title">US</p><p class="hull_title">US</p></div>
-      <div class="sec3"><p class="value_align">$1,000,000.00</p>
-      <p class="value_align">$1,000,000.00</p>
-      <p class="value_align">$1,000,000.00</p></div>
+      <div class="sec3"><p class="value_align">{$totalLiabilityLimit}</p>
+      <p class="value_align">{if isset($CrewOnBoatPremium)}
+                                {$totalLiabilityLimit}
+                             {else}
+                                NotCovered
+                            {/if}
+                             </p>
+      <p class="value_align">{if isset($CrewMembersinWaterPremium)}
+                                {$totalLiabilityLimit}
+                             {else}
+                                NotCovered
+                             {/if}</p></div>
     </div>
     <div class = "div_section1">
       <div class="sec4">
@@ -173,11 +182,11 @@
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
         <p class="hull_title">Premium:&nbsp&nbsp&nbsp&nbspUS</p>
       </div>
-      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if crew_liability_premium}
+      <div class="sec5"><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbspIncluded</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewOnBoatPremium)}
         Included
         {else}
         N/A
-      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if water_crew_premium}
+      {/if}</p><p class="value_align">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{if isset($CrewMembersinWaterPremium)}
         Included
         {else}
         N/A
@@ -225,8 +234,16 @@
         <p class =" deduct">Personal Effects:</p>
       </div>
       <div class ="sector2">
-        <p  class="value_align">N/A</p>
-        <p class="value_align">N/A</p>
+        <p  class="value_align">{if isset($DingyTenderPremium)}
+        $1000.00
+        {else}
+        N/A
+      {/if}</p>
+        <p class="value_align">{if isset($TrailerPremium)}
+        $1000.00
+        {else}
+        N/A
+      {/if}</p>
         <p class="value_align">$500.00</p>
       </div>
     </div>
