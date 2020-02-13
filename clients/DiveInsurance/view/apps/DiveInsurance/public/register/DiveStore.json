@@ -692,7 +692,7 @@
             "clearOnHide": true,
             "spellcheck": true,
             "validate": {
-              "required": false,
+              "required": true,
               "minLength": "",
               "maxLength": "",
               "pattern": "",
@@ -1220,8 +1220,7 @@
             "properties": {},
             "lockKey": true,
             "hideLabel": true,
-            "clearOnRefresh": true,
-            "isNew": false
+            "clearOnRefresh": true
           }, {
             "autofocus": false,
             "input": true,
@@ -1280,8 +1279,7 @@
           "when": null,
           "eq": ""
         },
-        "properties": {},
-        "isNew": false
+        "properties": {}
       }],
       "type": "panel",
       "breadcrumb": "default",
@@ -1490,7 +1488,7 @@
     "customConditional": ""
   }],
   "revisions": "current",
-  "_vid": 6,
+  "_vid": 7,
   "title": "Registration Dive Store Copy",
   "display": "form",
   "access": [{
@@ -1504,7 +1502,7 @@
   "path": "registrationdivestorecopy",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2019-10-08T14:11:51.133Z",
-  "modified": "2020-02-07T06:53:56.826Z",
+  "modified": "2020-02-13T09:38:20.986Z",
   "machineName": "testdivehub:registrationDiveStoreCopy",
   "controller": ""
 }

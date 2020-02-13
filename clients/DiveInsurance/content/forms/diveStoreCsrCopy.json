@@ -9255,7 +9255,8 @@
               "hidden": false,
               "labelPosition": "top",
               "tags": [],
-              "properties": {}
+              "properties": {},
+              "isNew": false
             }],
             "width": 6,
             "offset": 0,
@@ -12723,7 +12724,7 @@
             "clearOnHide": false,
             "type": "number",
             "requireDecimal": true,
-            "calculateValue": "if(data[\"page4PanelPanelPanelColumnsSelect2\"]==\"no\"){\nvalue=0\n}\nelse if(data[\"page4PanelPanelPanelColumnsSelect2\"]==\"1M\"){\nvalue=(data[\"excessLiabilityCoverage1M\"]||0)\n}\nelse if(data[\"page4PanelPanelPanelColumnsSelect2\"]==\"2M\"){\nvalue=(data[\"excessLiabilityCoverage2M\"]||0)\n}\nelse if(data[\"page4PanelPanelPanelColumnsSelect2\"]==\"3M\"){\nvalue=(data[\"excessLiabilityCoverage3M\"]||0)\n}\nelse if(data[\"page4PanelPanelPanelColumnsSelect2\"]==\"4M\"){\nvalue=(data[\"excessLiabilityCoverage4M\"]||0)\n}\nelse if(data[\"page4PanelPanelPanelColumnsSelect2\"]==\"9M\"){\nvalue=(data[\"excessLiabilityCoverage9M\"]||0)\n}",
+            "calculateValue": "if(data[\"excessLiabilityCoverage\"]==\"no\"){\nvalue=0\n}\nelse if(data[\"excessLiabilityCoverage\"]==\"1M\"){\nvalue=(data[\"excessLiabilityCoverage1M\"]||0)\n}\nelse if(data[\"excessLiabilityCoverage\"]==\"2M\"){\nvalue=(data[\"excessLiabilityCoverage2M\"]||0)\n}\nelse if(data[\"excessLiabilityCoverage\"]==\"3M\"){\nvalue=(data[\"excessLiabilityCoverage3M\"]||0)\n}\nelse if(data[\"excessLiabilityCoverage\"]==\"4M\"){\nvalue=(data[\"excessLiabilityCoverage4M\"]||0)\n}\nelse if(data[\"excessLiabilityCoverage\"]==\"9M\"){\nvalue=(data[\"excessLiabilityCoverage9M\"]||0)\n}",
             "delimiter": false,
             "decimalLimit": 2,
             "disabled": true,
@@ -12738,7 +12739,15 @@
             "suffix": "",
             "protected": false,
             "persistent": true,
-            "hidden": false
+            "hidden": false,
+            "labelPosition": "top",
+            "tags": [],
+            "conditional": {
+              "show": "",
+              "when": null,
+              "eq": ""
+            },
+            "properties": {}
           }, {
             "input": true,
             "tableView": true,
@@ -13950,7 +13959,7 @@
     "theme": "primary"
   }],
   "revisions": "original",
-  "_vid": 129,
+  "_vid": 130,
   "title": "Dive Store CSR Copy",
   "display": "form",
   "access": [{
@@ -13967,7 +13976,7 @@
   "path": "divestorecsrcopy",
   "project": "5ce43aa430776b2aff69301c",
   "created": "2019-10-25T06:20:36.507Z",
-  "modified": "2020-02-12T13:58:58.654Z",
+  "modified": "2020-02-13T06:49:31.552Z",
   "machineName": "testdivehub:diveStoreCsrCopy",
   "controller": ""
 }
