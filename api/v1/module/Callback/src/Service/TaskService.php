@@ -26,7 +26,7 @@ class TaskService extends AbstractService
     }
 
 
-    public function addProjectToTask($name, $description, $uuid)
+    public function addProjectToTask($name, $description, $uuid, $manager_login = null)
     {
         try {
             $response = $this->restClient->postWithHeader('projects', array('name' => $name,'description' => $description,'uuid' => $uuid, 'manager_login' => $manager_login));
