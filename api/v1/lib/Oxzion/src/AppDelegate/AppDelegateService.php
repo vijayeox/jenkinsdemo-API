@@ -3,7 +3,7 @@ namespace Oxzion\AppDelegate;
 
 use Exception;
 use Oxzion\AppDelegate\DocumentAppDelegate;
-use Oxzion\AppDelegate\MailDelegate;
+use Oxzion\AppDelegate\CommunicationDelegate;
 use Oxzion\Auth\AuthConstants;
 use Oxzion\Auth\AuthContext;
 use Oxzion\Db\Persistence\Persistence;
@@ -61,7 +61,7 @@ class AppDelegateService extends AbstractService
                     }
                     $this->logger->info("Document template location - $destination");
                     $obj->setTemplatePath($destination);
-                } else if (is_a($obj, MailDelegate::class)) {
+                } else if (is_a($obj, CommunicationDelegate::class)) {
                     $this->logger->info(AppDelegateService::class . "MAIL DELEGATE ---");
                     $destination = $this->config['APP_DOCUMENT_FOLDER'];
                     $obj->setTemplateService($this->templateService);
