@@ -13,13 +13,13 @@ return [
                     'route' => '/alert[/:alertId]',
                     'defaults' => [
                         'controller' => Controller\AlertController::class,
-                        'access'=>[
+                        'access' => [
                             // SET ACCESS CONTROL
-                            'put'=> 'MANAGE_ALERT_WRITE',
-                            'post'=> 'MANAGE_ALERT_WRITE',
-                            'delete'=> 'MANAGE_ALERT_WRITE',
-                            'get'=> 'MANAGE_ALERT_READ',
-                            'decline'=>'MANAGE_ALERT_READ',
+                            'put' => 'MANAGE_ALERT_WRITE',
+                            'post' => 'MANAGE_ALERT_WRITE',
+                            'delete' => 'MANAGE_ALERT_WRITE',
+                            'get' => 'MANAGE_ALERT_READ',
+                            'decline' => 'MANAGE_ALERT_READ',
                         ],
                     ],
                 ],
@@ -31,10 +31,10 @@ return [
                     'defaults' => [
                         'controller' => Controller\AlertController::class,
                         'action' => 'accept',
-                        'method'=>'post',
-                        'access'=>[
+                        'method' => 'post',
+                        'access' => [
                             // SET ACCESS CONTROL
-                            'accept'=>'MANAGE_ALERT_READ',
+                            'accept' => 'MANAGE_ALERT_READ',
                         ],
                     ],
                 ],
@@ -46,10 +46,10 @@ return [
                     'defaults' => [
                         'controller' => Controller\AlertController::class,
                         'action' => 'decline',
-                        'method'=>'post',
-                        'access'=>[
+                        'method' => 'post',
+                        'access' => [
                             // SET ACCESS CONTROL
-                            'decline'=>'MANAGE_ALERT_READ',
+                            'decline' => 'MANAGE_ALERT_READ',
                         ],
                     ],
                 ],
@@ -59,6 +59,6 @@ return [
     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];
