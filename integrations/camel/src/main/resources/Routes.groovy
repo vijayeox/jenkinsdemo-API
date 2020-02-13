@@ -3,12 +3,9 @@ callback.URL = 'http4://localhost:8080'
 routes {
     route = [
         ['from':'activemq:topic:ORGANIZATION_ADDED', 'to':["${callback.URL}/callback/chat/addorg"]],
-        ['from':'activemq:topic:ORGANIZATION_UPDATED', 'to':["${callback.URL}/callback/chat/updateorg",
-                                                             "${callback.URL}/callback/crm/updateorg"]],
-        ['from':'activemq:topic:ORGANIZATION_DELETED', 'to':["${callback.URL}/callback/chat/deleteorg",
-                                                             "${callback.URL}/callback/crm/deleteorg"]],
-        ['from':'activemq:topic:USERTOORGANIZATION_ADDED', 'to':["${callback.URL}/callback/chat/adduser",
-                                                                 "${callback.URL}/callback/crm/adduser"]],
+        ['from':'activemq:topic:ORGANIZATION_UPDATED', 'to':["${callback.URL}/callback/chat/updateorg"]],
+        ['from':'activemq:topic:ORGANIZATION_DELETED', 'to':["${callback.URL}/callback/chat/deleteorg"]],
+        ['from':'activemq:topic:USERTOORGANIZATION_ADDED', 'to':["${callback.URL}/callback/chat/adduser"]],
         // ['from':'activemq:topic:USERTOORGANIZATION_ALREADYEXISTS', 'to':'"callback.URL" + '],
 
         ['from':'activemq:topic:PROJECT_ADDED', 'to':["${callback.URL}/callback/task/addproject",
