@@ -17,6 +17,7 @@ class ElasticService
     private $onlyaggs;
     private $config;
     private $client;
+    private $logger;
 
     public function __construct($config)
     {
@@ -209,6 +210,9 @@ class ElasticService
                     $subQuery['bool']['must_not'][] =  ["term"=>[ $column=>$value ]];
                 }
                 else {
+                    if (strtolower(substr($value,0,5))=="date:") {
+                        $value = date("Y-m-d",strtotime(substr($value,5)));
+                    }
                     $subQuery['range'] = array($column => array($symMapping[$condition] => $value));
                 }
          }
@@ -356,7 +360,7 @@ class ElasticService
        }
        $this->logger->debug('Elastic query:');
        $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
-      //  print_r(json_encode($q));echo "\n";
+   //     print_r(json_encode($q));echo "\n";
         $data = $this->client->search($q);
        $this->logger->debug('Data from elastic:');
        $this->logger->debug(json_encode($data, JSON_PRETTY_PRINT));
