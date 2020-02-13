@@ -210,7 +210,6 @@
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
-							"required": true,
 							"customMessage": "Please enter your initial.",
 							"unique": false,
 							"multiple": false
@@ -233,7 +232,6 @@
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
-							"required": true,
 							"customMessage": "Please enter your first name.",
 							"unique": false,
 							"multiple": false
@@ -256,7 +254,6 @@
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
-							"required": true,
 							"customMessage": "Please enter your last name.",
 							"unique": false,
 							"multiple": false
@@ -296,6 +293,7 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -6504,7 +6502,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "primaryLimit",
-						"calculateValue": "value = '1,000,000.00';",
+						"calculateValue": "value = '1000000.00';",
 						"key": "primaryLimit",
 						"type": "hidden",
 						"input": true,
@@ -6516,7 +6514,7 @@
 						"hideOnChildrenHidden": false
 					}, {
 						"label": "excessLiabilityLimit",
-						"calculateValue": "if(data['excess_liability_coverage'] == 'excessLiabilityCoverageDeclined'){\n   value = '0.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage1000000'){\n   value = '1,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage2000000'){\n    value = '2,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage3000000'){\n    value = '3,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage4000000'){\n    value = '4,000,000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage9000000'){\n    value = '9,000,000.00';\n}",
+						"calculateValue": "if(data['excess_liability_coverage'] == 'excessLiabilityCoverageDeclined'){\n   value = '0.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage1000000'){\n   value = '1000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage2000000'){\n    value = '2000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage3000000'){\n    value = '3000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage4000000'){\n    value = '4000000.00';\n}else if(data['excess_liability_coverage'] == 'excessLiabilityCoverage9000000'){\n    value = '9000000.00';\n}",
 						"key": "excessLiabilityLimit",
 						"type": "hidden",
 						"input": true,
@@ -7939,7 +7937,7 @@
 	"path": "diveboatcsrreviewform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-10-23T15:04:58.563Z",
-	"modified": "2020-02-11T06:11:15.564Z",
+	"modified": "2020-02-13T05:04:41.773Z",
 	"machineName": "testdivehub:diveBoatCsrReviewForm",
 	"controller": ""
 }
