@@ -46,7 +46,27 @@ $(".tab a").on("click", function(e) {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
+  $("#username_field").keyup(function(e) {
+    if (e.keyCode === 13) {
+      loginAction();
+    }
+  });
+
+  $("#password_field").keyup(function(e) {
+    if (e.keyCode === 13) {
+      loginAction();
+    }
+  });
+
   $(".loginButton").on("click", function(e) {
+    loginAction();
+  });
+
+  $(".resetPassword").on("click", function(e) {
+    forgotPassword();
+  });
+
+  function loginAction() {
     var username = document.getElementById("username_field").value;
     var password = document.getElementById("password_field").value;
     if (username && password) {
@@ -88,11 +108,8 @@ document.addEventListener("DOMContentLoaded", function() {
         timer: 2200
       });
     }
-  });
+  }
 
-  $(".resetPassword").on("click", function(e) {
-    forgotPassword();
-  });
 
   function forgotPassword() {
     Swal.fire({
@@ -140,8 +157,8 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
   }
-
-  function autoLogin(data) {
+  
+    function autoLogin(data) {
     localStorage.clear();
     localStorage.setItem(
       "User",
@@ -159,7 +176,8 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   Formio.createForm(
     document.getElementById("formio"),
-    JSON.parse(formContent),{noAlerts:true}
+    JSON.parse(formContent),
+    { noAlerts: true }
   ).then(function(form) {
     // Prevent the submission from going to the form.io server.
     form.nosubmit = true;

@@ -415,22 +415,21 @@
                 "key": "panelPanel4Columns",
                 "columns": [{
                     "components": [{
-                        "input": true,
-                        "tableView": true,
                         "label": "Initial",
-                        "key": "initial",
                         "placeholder": "Initial",
-                        "clearOnHide": false,
+                        "hideLabel": true,
                         "spellcheck": true,
+                        "disabled": true,
+                        "tableView": true,
+                        "clearOnHide": false,
                         "validate": {
-                            "required": true,
                             "unique": false,
                             "multiple": false
                         },
+                        "key": "initial",
                         "type": "textfield",
+                        "input": true,
                         "lockKey": true,
-                        "hideLabel": true,
-                        "disabled": true,
                         "hideOnChildrenHidden": false
                     }],
                     "width": 4,
@@ -439,22 +438,21 @@
                     "pull": 0
                 }, {
                     "components": [{
-                        "input": true,
-                        "tableView": true,
                         "label": "First Name",
-                        "key": "firstname",
                         "placeholder": "First Name",
-                        "clearOnHide": false,
+                        "hideLabel": true,
                         "spellcheck": true,
+                        "disabled": true,
+                        "tableView": true,
+                        "clearOnHide": false,
                         "validate": {
-                            "required": true,
                             "unique": false,
                             "multiple": false
                         },
+                        "key": "firstname",
                         "type": "textfield",
+                        "input": true,
                         "lockKey": true,
-                        "hideLabel": true,
-                        "disabled": true,
                         "hideOnChildrenHidden": false
                     }],
                     "width": 4,
@@ -463,22 +461,21 @@
                     "pull": 0
                 }, {
                     "components": [{
-                        "input": true,
-                        "tableView": true,
                         "label": "Last Name",
-                        "key": "lastname",
                         "placeholder": "Last Name",
-                        "clearOnHide": false,
+                        "hideLabel": true,
                         "spellcheck": true,
+                        "disabled": true,
+                        "tableView": true,
+                        "clearOnHide": false,
                         "validate": {
-                            "required": true,
                             "unique": false,
                             "multiple": false
                         },
+                        "key": "lastname",
                         "type": "textfield",
+                        "input": true,
                         "lockKey": true,
-                        "hideLabel": true,
-                        "disabled": true,
                         "hideOnChildrenHidden": false
                     }],
                     "width": 4,
@@ -961,7 +958,7 @@
     "path": "padiverificationformdiveboat",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-10-05T12:23:24.281Z",
-    "modified": "2020-02-10T06:16:33.861Z",
+    "modified": "2020-02-13T05:03:45.707Z",
     "machineName": "testdivehub:padiVerificationFormDiveBoat",
     "controller": ""
 }

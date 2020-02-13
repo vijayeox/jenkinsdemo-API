@@ -45,8 +45,8 @@
 				<p class = "efr_title"><b>Named Insured</b></p>
 					<p class ="efr_bold"><b>EFR</b></p>
 					<p class ="efr_title2">Emergency First Response Corporation</p>
-					<p class ="efr_title2">{$address1},{$address2}</p>
-					<p class ="efr_title2">{$city},{$state},{$country},{$zip}</p>
+					<p class ="efr_title2">30151 Tomas Street</p>
+					<p class ="efr_title2">Rancho Santa Margarita, CA 92688</p>
 			</div>
 		</div>
 		<div class="spacing_efr">&nbsp</div>
