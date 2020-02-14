@@ -89,11 +89,12 @@
         }
         ,
         {
+            "label":"Previous Scuba fit",
+            "calculateValue":"value = data.previous_scuba?data.previous_scuba:previousScubafit",
+            "key":"previousScubafit",
+            "type":"hidden",
             "input":true,
             "tableView":true,
-            "key":"previousScubafit",
-            "label":"Previous Scuba fit",
-            "type":"hidden",
             "lockKey":true,
             "validate": {
                 "unique": false, "multiple": false
@@ -2777,7 +2778,7 @@
     "path":"iplendorcover",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2020-01-08T15:16:11.935Z",
-    "modified":"2020-02-14T13:14:34.113Z",
+    "modified":"2020-02-14T15:04:58.639Z",
     "machineName":"testdivehub:iplEndorCover",
     "controller":""
 }
