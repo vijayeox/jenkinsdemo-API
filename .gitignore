@@ -15,3 +15,7 @@
 /.project
 /api/v1/composer/
 /.history/
+api/v1/.vscode/launch.json
+.vscode/launch.json
+integrations/smtp/smtp-server/outbox/
+integrations/smtp/smtp-server/smtp.log

@@ -8,11 +8,11 @@
 	<div class ="div_cover">
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
-			<p class="name">{$storeName}</p>
-			<p class="name">{$address1}</p>
-			<p class="name">{$address2}</p>
-			<p class="name">{$city},{$state}</p>
-			<p class="name">{$country},{$zip}</p>
+			<p class="name">{$business_name}</p>
+			<p class="name">{$business_address1}</p>
+			<p class="name">{$business_address2}</p>
+			<p class="name">{$business_city},{$business_state}</p>
+			<p class="name">{$business_country},{$business_zip}</p>
 		</div>
 
 		<p class = "rgard">RE: PADI SPONSORED DIVE CENTER INSURANCE</p>
@@ -33,10 +33,10 @@ This can only be covered by an individual or group professional liability policy
 questions.</p>
 </div>
 		<p>Sincerely,</p>
-		<p class="acc_name">{$manager_name},CISR, Account Manager</p>
+		<p class="acc_name">{$approverName},CISR, Account Manager</p>
 		<p class ="footer_line">Vicencia & Buckley A Division of HUB International</p>
 		<p class ="footer_line">(800) 223-9998 or (714) 739-3176</p>
-		<p class ="footer_line">{$manager_email}</p>
+		<p class ="footer_line">{$approverEmailId}</p>
 
 	</div>
 </body>

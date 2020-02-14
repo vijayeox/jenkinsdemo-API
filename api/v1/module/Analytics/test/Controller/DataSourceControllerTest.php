@@ -201,7 +201,7 @@ class DataSourceControllerTest extends ControllerTest
     public function testGetListWithSort()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/datasource?sort=[{"field":"id","dir":"desc"}]', 'GET');
+        $this->dispatch('/analytics/datasource?filter=[{"sort":[{"field":"id","dir":"desc"}]}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -214,10 +214,10 @@ class DataSourceControllerTest extends ControllerTest
         $this->assertEquals($content['total'],3);
     }
 
-     public function testGetListSortWithPageSize()
+    public function testGetListSortWithPageSize()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/datasource?skip=1&limit=10&sort=[{"field":"id","dir":"asc"}]', 'GET');
+        $this->dispatch('/analytics/datasource?filter=[{"sort":[{"field":"id","dir":"asc"}],"skip":1,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -232,7 +232,7 @@ class DataSourceControllerTest extends ControllerTest
     public function testGetListwithQueryParameters()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/datasource?limit=10&sort=[{"field":"id","dir":"desc"}]&filter=[{"logic":"and"},{"filters":[{"field":"name","operator":"endswith","value":"t"},{"field":"name","operator":"startswith","value":"m"}]}]', 'GET');
+        $this->dispatch('/analytics/datasource?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"endswith","value":"t"},{"field":"name","operator":"startswith","value":"m"}]},"sort":[{"field":"id","dir":"desc"}],"skip":0,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);

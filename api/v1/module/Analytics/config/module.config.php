@@ -41,7 +41,7 @@ return [
             'previewQuery' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/analytics/query/:queryUuid/preview',
+                    'route'    => '/analytics/query/preview',
                     'defaults' => [
                         'controller' => Controller\QueryController::class,
                         'method' => 'POST',
@@ -81,8 +81,7 @@ return [
                             // - BRIAN
                             // 'put'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
                             'post'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
-                            'delete'=> 'MANAGE_ANALYTICS_WIDGET_WRITE',
-                            'get'=> 'MANAGE_ANALYTICS_WIDGET_READ',
+                            'delete'=> 'MANAGE_ANALYTICS_WIDGET_WRITE'
                         ],
                     ],
                 ],
@@ -111,8 +110,7 @@ return [
                             // SET ACCESS CONTROL
                             'put'=> 'MANAGE_DASHBOARD_WRITE',
                             'post'=> 'MANAGE_DASHBOARD_WRITE',
-                            'delete'=> 'MANAGE_DASHBOARD_WRITE',
-                            'get'=> 'MANAGE_DASHBOARD_READ',
+                            'delete'=> 'MANAGE_DASHBOARD_WRITE'
                         ],
                     ],
                 ],

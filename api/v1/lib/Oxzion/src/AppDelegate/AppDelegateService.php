@@ -3,17 +3,16 @@ namespace Oxzion\AppDelegate;
 
 use Exception;
 use Oxzion\AppDelegate\DocumentAppDelegate;
-use Oxzion\AppDelegate\MailDelegate;
+use Oxzion\AppDelegate\CommunicationDelegate;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
 use Oxzion\Db\Persistence\Persistence;
 use Oxzion\Document\DocumentBuilder;
 use Oxzion\Messaging\MessageProducer;
 use Oxzion\Service\AbstractService;
-use Oxzion\Service\TemplateService;
 use Oxzion\Service\FileService;
+use Oxzion\Service\TemplateService;
 use Oxzion\Utils\FileUtils;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
-
 
 class AppDelegateService extends AbstractService
 {
@@ -24,7 +23,7 @@ class AppDelegateService extends AbstractService
     private $templateService;
     private $organizationService;
 
-    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null, MessageProducer $messageProducer,FileService $fileService)
+    public function __construct($config, $dbAdapter, DocumentBuilder $documentBuilder = null, TemplateService $templateService = null, MessageProducer $messageProducer, FileService $fileService)
     {
         $this->templateService = $templateService;
         $this->fileService = $fileService;
@@ -54,7 +53,6 @@ class AppDelegateService extends AbstractService
             $result = $this->delegateFile($appId, $delegate);
             if ($result) {
                 $obj = new $delegate;
-                // $obj->setLogger($this->logger);
                 if (is_a($obj, DocumentAppDelegate::class)) {
                     $obj->setDocumentBuilder($this->documentBuilder);
                     $destination = $this->config['APP_DOCUMENT_FOLDER'];
@@ -63,24 +61,24 @@ class AppDelegateService extends AbstractService
                     }
                     $this->logger->info("Document template location - $destination");
                     $obj->setTemplatePath($destination);
-                } else if (is_a($obj, MailDelegate::class)) {
+                } else if (is_a($obj, CommunicationDelegate::class)) {
                     $this->logger->info(AppDelegateService::class . "MAIL DELEGATE ---");
                     $destination = $this->config['APP_DOCUMENT_FOLDER'];
                     $obj->setTemplateService($this->templateService);
                     $obj->setMessageProducer($this->messageProducer);
                     $obj->setDocumentPath($destination);
                     $obj->setBaseUrl($this->config['applicationUrl']);
-                } 
-                if(method_exists($obj, "setFileService")){
+                }
+                if (method_exists($obj, "setFileService")) {
                     $obj->setFileService($this->fileService);
                 }
-                if(method_exists($obj, "setAppId")){
-                    $obj->setAppId($appId);                
+                if (method_exists($obj, "setAppId")) {
+                    $obj->setAppId($appId);
                 }
-                if(method_exists($obj, "setUserContext")){
+                if (method_exists($obj, "setUserContext")) {
                     $obj->setUserContext(AuthContext::get(AuthConstants::USER_UUID),
-                                         AuthContext::get(AuthConstants::NAME),
-                                         AuthContext::get(AuthConstants::ORG_UUID));
+                        AuthContext::get(AuthConstants::NAME),
+                        AuthContext::get(AuthConstants::ORG_UUID));
                 }
                 $persistenceService = $this->getPersistence($appId);
 
@@ -102,7 +100,7 @@ class AppDelegateService extends AbstractService
     {
         $file = $className . $this->fileExt;
         $path = $this->delegateDir . $appId . "/" . $file;
-        $this->logger->info(AppDelegateService::class."Delegate File Path ---\n".$path);
+        $this->logger->info(AppDelegateService::class . "Delegate File Path ---\n" . $path);
         if ((file_exists($path))) {
             // include $path;
             $this->logger->info("Loading Delegate");

@@ -14,7 +14,8 @@ class CsrRejection extends DispatchNotification {
         $this->template = array(
             'Individual Professional Liability' => 'CsrRejectionTemplate',
             'Dive Boat' => 'CsrRejectionTemplate',
-            'Dive Store' => 'CsrRejectionTemplate');
+            'Dive Store' => 'CsrRejectionTemplate',
+            'Emergency First Response' => 'CsrRejectionTemplate');
         parent::__construct();
     }
 

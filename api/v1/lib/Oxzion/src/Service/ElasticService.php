@@ -3,6 +3,7 @@ namespace Oxzion\Service;
 
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
+use Logger;
 
 use function GuzzleHttp\json_encode;
 
@@ -16,10 +17,12 @@ class ElasticService
     private $onlyaggs;
     private $config;
     private $client;
+    private $logger;
 
     public function __construct($config)
     {
         $this->config = $config;
+        $this->logger = Logger::getLogger(get_class($this));
         $clientsettings = array();
         $clientsettings['host'] = $config['elasticsearch']['serveraddress'];
         $clientsettings['user'] = $config['elasticsearch']['user'];
@@ -28,6 +31,7 @@ class ElasticService
         $clientsettings['port'] = $config['elasticsearch']['port'];
         $clientsettings['scheme'] = $config['elasticsearch']['scheme'];
         $this->core = $config['elasticsearch']['core'];
+        $this->logger->info("core to be used - ".$this->core);
         $this->type = $config['elasticsearch']['type'];
         $clientbuilder = ClientBuilder::create(); 
         if ($clientbuilder) { 
@@ -36,6 +40,7 @@ class ElasticService
             $this->client = new ClientBuilder(); //This is for Mocking in the test case
         }
     }
+
     public function setElasticClient($client){
         $this->client = $client;
     }
@@ -205,6 +210,9 @@ class ElasticService
                     $subQuery['bool']['must_not'][] =  ["term"=>[ $column=>$value ]];
                 }
                 else {
+                    if (strtolower(substr($value,0,5))=="date:") {
+                        $value = date("Y-m-d",strtotime(substr($value,5)));
+                    }
                     $subQuery['range'] = array($column => array($symMapping[$condition] => $value));
                 }
          }
@@ -347,8 +355,15 @@ class ElasticService
 
     public function search($q)
     {
-      //  print_r(json_encode($q));echo "\n";
+       if  ($this->core) {
+           $q['index'] = $this->core.'_'.$q['index'];
+       }
+       $this->logger->debug('Elastic query:');
+       $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
+   //     print_r(json_encode($q));echo "\n";
         $data = $this->client->search($q);
+       $this->logger->debug('Data from elastic:');
+       $this->logger->debug(json_encode($data, JSON_PRETTY_PRINT));
      //    print_r(json_encode($data));echo "\n";
         return $data;
 
@@ -356,6 +371,7 @@ class ElasticService
 
     public function index($index, $id, $body)
     {
+        $index = ($this->core) ? $this->core.'_'.$index:$index;
         $params['index'] = $index;
         $params['id'] = $id;
     //    $params['type'] = $this->type;
@@ -365,6 +381,7 @@ class ElasticService
 
     public function delete($index, $id)
     {
+        $index = ($this->core) ? $this->core.'_'.$index:$index;
         if ($id == 'all') {
             return $this->client->indices()->delete(['index' => $index]);
         } else {

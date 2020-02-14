@@ -1,21 +1,20 @@
 <?php
+
 namespace Attachment\Service;
 
+use Attachment\Model\Attachment;
+use Attachment\Model\AttachmentTable;
+use Oxzion\Auth\AuthConstants;
+use Oxzion\Auth\AuthContext;
 use Oxzion\Service\AbstractService;
 use Oxzion\Utils\FileUtils;
-use Oxzion\ValidationException;
-use Attachment\Model\AttachmentTable;
-use Attachment\Model\Attachment;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
-use Exception;
 
 class AttachmentService extends AbstractService
 {
     private $table;
     /**
-    * @ignore __construct
-    */
+     * @ignore __construct
+     */
     public function __construct($config, $dbAdapter, AttachmentTable $table)
     {
         parent::__construct($config, $dbAdapter);
@@ -30,7 +29,7 @@ class AttachmentService extends AbstractService
      *  @param files Array of files to upload
      *  @return JSON array of filenames
      */
-    public function upload($data, $files)
+    public function upload(array $data, $files)
     {
         $fileArray = array();
         $data['org_id'] = AuthContext::get(AuthConstants::ORG_ID);
@@ -38,7 +37,7 @@ class AttachmentService extends AbstractService
         if (isset($data['type'])) {
             $fileArray = array();
             if (isset($files)) {
-                foreach ($files as  $file) {
+                foreach ($files as $file) {
                     $fileArray[] = $this->constructAttachment($data, $file);
                 }
             } else {
@@ -51,9 +50,10 @@ class AttachmentService extends AbstractService
         }
         return $fileArray;
     }
+
     /**
-    * @ignore constructAttachment
-    */
+     * @ignore constructAttachment
+     */
     protected function constructAttachment($data, $file)
     {
         if (isset($file['name'])) {
@@ -70,8 +70,8 @@ class AttachmentService extends AbstractService
         }
         $folderPath = $this->constructPath($data['type']);
         $form = new Attachment();
-        $data['created_date'] = isset($data['start_date'])?$data['start_date']:date('Y-m-d H:i:s');
-        $path = realpath($folderPath.$data['file_name'])?realpath($folderPath.$data['file_name']):FileUtils::truepath($folderPath.$data['file_name']);
+        $data['created_date'] = isset($data['start_date']) ? $data['start_date'] : date('Y-m-d H:i:s');
+        $path = realpath($folderPath . $data['file_name']) ? realpath($folderPath . $data['file_name']) : FileUtils::truepath($folderPath . $data['file_name']);
         $data['path'] = $path;
         $form->exchangeArray($data);
         $form->validate();
@@ -80,42 +80,44 @@ class AttachmentService extends AbstractService
         FileUtils::storeFile($file, $folderPath);
         return $data['uuid'];
     }
+
     /**
-    * GET Attachment Service
-    * @method GET
-    * @param $id ID of Attachment to Delete
-    * @return array $data
-    * <code>
-    * {
-    *  integer id,
-    *  string file_name,
-    *  integer extension,
-    *  string uuid,
-    *  string type,
-    *  dateTime path Full Path of File,
-    * }
-    * </code>
-    * @return array Returns a JSON Response with Status Code and Created Attachment.
-    */
+     * GET Attachment Service
+     * @method GET
+     * @param $id ID of Attachment to Delete
+     * @return array $data
+     * <code>
+     * {
+     *  integer id,
+     *  string file_name,
+     *  integer extension,
+     *  string uuid,
+     *  string type,
+     *  dateTime path Full Path of File,
+     * }
+     * </code>
+     * @return array Returns a JSON Response with Status Code and Created Attachment.
+     */
     public function getAttachment($id)
     {
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_attachment')
-        ->columns(array("path"))
-        ->where(array('uuid' => $id));
+            ->columns(array("path"))
+            ->where(array('uuid' => $id));
         $result = $this->executeQuery($select)->toArray();
         return $result;
     }
+
     /**
-    * @ignore constructPath
-    */
+     * @ignore constructPath
+     */
     private function constructPath($type)
     {
         $baseFolder = $this->config['UPLOAD_FOLDER'];
         switch ($type) {
             case 'ANNOUNCEMENT':
-                return $baseFolder."organization/".AuthContext::get(AuthConstants::ORG_ID)."/announcements/";
+                return $baseFolder . "organization/" . AuthContext::get(AuthConstants::ORG_ID) . "/announcements/";
             default:
                 return $baseFolder;
         }

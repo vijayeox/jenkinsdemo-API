@@ -342,6 +342,7 @@ body {
   margin-bottom: 0px;
   height: 0.5px;
   background-color: black;
+  clear: both;
 }
 .i_type2_efr {
   display: inline-block;

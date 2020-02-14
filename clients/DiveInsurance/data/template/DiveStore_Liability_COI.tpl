@@ -1,8 +1,3 @@
-{assign var=medical_expense value=$MedicalExpenseFP}
-{assign var=owned_auto value=$Non-OwnedAutoFP}
-{assign var=diving_pool_use value=$nonDivingPoolAmount}
-{assign var=travel_agent value=$TravelAgentEOFP}
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -38,34 +33,102 @@
 					<p class = "sec_title">&nbsp&nbsp&nbsp&nbsp(Claims made form)</p>
 				</div>
 				<b><div class = "sec4">
-					<p class = "sec_title2">$1,000,000</p>
-					<p class = "sec_title2">$1,000,000</p>
-					<p class = "sec_title2">$2,000,000</p>
-					<p class = "sec_title2">$2,000,000</p>
-					<p class = "sec_title2">$1,000,000</p>
-					<p class = "sec_title2">{if medical_expense}
-							Included
-					   {else}
-					   		Not Included
-					   {/if}
+					<p class = "sec_title2">
+						{if $excessLiabilityCoverage == "no"}
+                            $1,000,000
+                        {elseif $excessLiabilityCoverage == "1M"}
+                            $2,000,000
+                        {elseif $excessLiabilityCoverage == "2M"}
+                            $3,000,000
+                        {elseif $excessLiabilityCoverage == "3M"}
+                            $4,000,000
+                        {elseif $excessLiabilityCoverage == "4M"}
+                            $5,000,000
+                        {elseif $excessLiabilityCoverage == "9M"}
+                            $10,000,000
+                        {/if}
 					</p>
-					<p class = "sec_title2">{if owned_auto}
-							Included
-					   {else}
-					   		Not Included
-					   {/if}
+					<p class = "sec_title2">
+						{if $excessLiabilityCoverage == "no"}
+                            $1,000,000
+                        {elseif $excessLiabilityCoverage == "1M"}
+                            $2,000,000
+                        {elseif $excessLiabilityCoverage == "2M"}
+                            $3,000,000
+                        {elseif $excessLiabilityCoverage == "3M"}
+                        	$4,000,000
+                        {elseif $excessLiabilityCoverage == "4M"}
+                            $5,000,000
+                        {elseif $excessLiabilityCoverage == "9M"}
+                            $10,000,000
+                        {/if}
 					</p>
-					<p class = "sec_title2">{if diving_pool_use}
-							Included
-					   {else}
-					   		Not Included
-					   {/if}
+					<p class = "sec_title2">
+						{if $excessLiabilityCoverage == "no"}
+                            $2,000,000
+                        {elseif $excessLiabilityCoverage == "1M"}
+                            $3,000,000
+                        {elseif $excessLiabilityCoverage == "2M"}
+                            $4,000,000
+                        {elseif $excessLiabilityCoverage == "3M"}
+                            $5,000,000
+                        {elseif $excessLiabilityCoverage == "4M"}
+                            $6,000,000
+                        {elseif $excessLiabilityCoverage == "9M"}
+                            $11,000,000
+                        {/if}
 					</p>
-					<p class = "sec_title2">{if travel_agent}
-							Included
-					   {else}
-					   		Not Included
-					   {/if}
+					<p class = "sec_title2">
+						{if $excessLiabilityCoverage == "no"}
+                            $2,000,000
+                        {elseif $excessLiabilityCoverage == "1M"}
+                            $3,000,000
+                        {elseif $excessLiabilityCoverage == "2M"}
+                            $4,000,000
+                        {elseif $excessLiabilityCoverage == "3M"}
+                            $5,000,000
+                        {elseif $excessLiabilityCoverage == "4M"}
+                            $6,000,000
+                        {elseif $excessLiabilityCoverage == "9M"}
+                            $11,000,000
+                        {/if}
+					</p>
+					<p class = "sec_title2">
+						{if $excessLiabilityCoverage == "no"}
+                            $1,000,000
+                        {elseif $excessLiabilityCoverage == "1M"}
+                            $2,000,000
+                        {elseif $excessLiabilityCoverage == "2M"}
+                            $3,000,000
+                        {elseif $excessLiabilityCoverage == "3M"}
+                            $4,000,000
+                        {elseif $excessLiabilityCoverage == "4M"}
+                            $5,000,000
+                        {elseif $excessLiabilityCoverage == "9M"}
+                            $10,000,000
+                        {/if}
+					</p>
+					<p class = "sec_title2">$5,000</p>
+					<p class = "sec_title2">                        
+                        {if $nonOwnedAutoLiabilityPL == "no"}
+                            <td>Not Included</td>
+                        {else}
+                            <td>Included</td>
+                        {/if}
+					</p>
+					<p class = "sec_title2">
+					    {if $poolLiability && (int)$poolLiability > 0}
+                            <td>$1,000,000</td>
+                        {else}
+                            <td>Not Included</td>
+                        {/if}
+					</p>
+					<p class = "sec_title2">
+					    {if $travelAgentEOReceiptsPL && (int)$travelAgentEOReceiptsPL > 0}
+                            <td>$1,000,000</td>
+                        {else}
+                            <td>Not Included</td>
+                        {/if}
 					</p>
 				</div></b>
 			</div>

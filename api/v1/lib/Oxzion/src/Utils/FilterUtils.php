@@ -31,6 +31,36 @@ class FilterUtils
         return $paginate = array('pageSize' => $pageSize, 'offset' => $offset, 'sort' => $sort, 'where' => $where);
     }
 
+    static public function paginateLikeKendo($params,$fieldMap = array())
+    {
+        $pageSize = 20;
+        $offset = 0;
+        $sort = NULL;
+        $where = "";
+
+        if(!empty($params))
+        {
+            if(!empty($params['filter'])){
+                $filterArray = json_decode($params['filter'],true);
+                if(count($filterArray) > 0 || sizeof($filterArray) > 0){
+                    if(isset($filterArray[0]['take']))
+                        $pageSize = $filterArray[0]['take'];
+                    if(isset($filterArray[0]['skip']))
+                        $offset = $filterArray[0]['skip'];
+                    if(isset($filterArray[0]['sort']) && count($filterArray[0]['sort']) > 0){
+                        $sort = FilterUtils::sortArray($filterArray[0]['sort'],$fieldMap);
+                    }
+                    if(isset($filterArray[0]['filter'])){
+                        $filterlogic = isset($filterArray[0]['filter']['logic']) ? $filterArray[0]['filter']['logic'] : "AND" ;
+                        $filterList = $filterArray[0]['filter']['filters'];
+                        $where = " WHERE ".FilterUtils::filterArray($filterList,$filterlogic,$fieldMap);
+                    }
+                }
+            }
+        }
+        return $paginate = array('pageSize' => $pageSize, 'offset' => $offset, 'sort' => $sort, 'where' => $where);
+    }
+
     public static function filterArray($filterList, $filterlogic, $fieldMap = array())
     {
         $where = "";

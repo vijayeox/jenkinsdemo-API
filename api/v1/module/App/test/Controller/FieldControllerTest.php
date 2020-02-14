@@ -2,29 +2,24 @@
 namespace App;
 
 use App\Controller\FieldController;
-use Zend\Stdlib\ArrayUtils;
-use Form\Model\Field;
 use Oxzion\Test\ControllerTest;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\Adapter\Platform\Mysql;
-use Zend\Db\Adapter\Adapter;
-use PHPUnit\DbUnit\TestCaseTrait;
 use PHPUnit\DbUnit\DataSet\YamlDataSet;
 
 class FieldControllerTest extends ControllerTest
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->loadConfig();
         parent::setUp();
     }
     public function getDataSet()
     {
-        $dataset = new YamlDataSet(dirname(__FILE__)."/../Dataset/Workflow.yml");
+        $dataset = new YamlDataSet(dirname(__FILE__) . "/../Dataset/Workflow.yml");
         return $dataset;
     }
 
-    private function getFieldUuid(){
+    private function getFieldUuid()
+    {
         $selctQuery = "SELECT * from ox_field where id=1";
         $selectResult = $this->executeQueryTest($selctQuery);
         return $selectResult;
@@ -45,14 +40,14 @@ class FieldControllerTest extends ControllerTest
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals(count($content['data']), 6);
-        $this->assertEquals($content['data'][0]['id']>0, true);
+        $this->assertEquals($content['data'][0]['id'] > 0, true);
         $this->assertEquals($content['data'][0]['name'], 'field1');
-        $this->assertEquals($content['data'][1]['id']>1, true);
+        $this->assertEquals($content['data'][1]['id'] > 1, true);
         $this->assertEquals($content['data'][1]['name'], 'field2');
-        $this->assertEquals($content['data'][2]['id']>2, true);
+        $this->assertEquals($content['data'][2]['id'] > 2, true);
         $this->assertEquals($content['data'][2]['name'], 'expiry_date');
     }
 
@@ -60,12 +55,12 @@ class FieldControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $selectResult = $this->getFieldUuid();
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/'.$selectResult[0]['uuid'], 'GET');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/' . $selectResult[0]['uuid'], 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
-        $this->assertEquals($content['data']['id']>0, true);
+        $this->assertEquals($content['data']['id'] > 0, true);
         $this->assertEquals($content['data']['name'], 'field1');
     }
 
@@ -79,16 +74,15 @@ class FieldControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'error');
     }
 
-
     public function testCreate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'field3','entity_id'=>1,'app_id'=>1,'required'=>1,'data_type'=>'text'];
+        $data = ['name' => 'field3', 'entity_id' => 1, 'app_id' => 1, 'required' => 1, 'data_type' => 'text'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field', 'POST', null);
         $this->assertResponseStatusCode(201);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'] > 2, true);
         $this->assertEquals($content['data']['name'], $data['name']);
@@ -99,12 +93,12 @@ class FieldControllerTest extends ControllerTest
     public function testCreateFailure()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['required'=>1,'sequence'=>1,'data_type'=>'text'];
+        $data = ['required' => 1, 'sequence' => 1, 'data_type' => 'text'];
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field', 'POST', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
         $this->assertEquals($content['message'], 'Validation Errors');
         $this->assertEquals($content['data']['errors']['name'], 'required');
@@ -113,13 +107,13 @@ class FieldControllerTest extends ControllerTest
     public function testUpdate()
     {
         $this->initAuthToken($this->adminUser);
-        $data = ['name' => 'Sample2','app_id' => 1,'required'=> 0, 'sequence' => 1];
+        $data = ['name' => 'Sample2', 'app_id' => 1, 'required' => 0, 'sequence' => 1];
         $this->setJsonContent(json_encode($data));
         $selectResult = $this->getFieldUuid();
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/'.$selectResult[0]['uuid'], 'PUT', null);
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/' . $selectResult[0]['uuid'], 'PUT', null);
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['id'], 1);
         $this->assertEquals($content['data']['name'], $data['name']);
@@ -134,7 +128,7 @@ class FieldControllerTest extends ControllerTest
         $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/465c8710-df82-11e9-8a34-2a2ae2dbccb6', 'PUT', null);
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
-        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $content = (array) json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
 
@@ -142,18 +136,18 @@ class FieldControllerTest extends ControllerTest
     {
         $this->initAuthToken($this->adminUser);
         $selectResult = $this->getFieldUuid();
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/'.$selectResult[0]['uuid'], 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/' . $selectResult[0]['uuid'], 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);
         $this->assertEquals($content['status'], 'error');
     }
 
-     public function testDeleteNotPossible()
+    public function testDeleteNotPossible()
     {
         $this->initAuthToken($this->adminUser);
         $selectResult = $this->getFieldUuid();
-        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/'.$selectResult[0]['uuid'], 'DELETE');
+        $this->dispatch('/app/1c0f0bc6-df6a-11e9-8a34-2a2ae2dbcce4/field/' . $selectResult[0]['uuid'], 'DELETE');
         $this->assertResponseStatusCode(404);
         $this->setDefaultAsserts();
         $content = json_decode($this->getResponse()->getContent(), true);

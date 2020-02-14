@@ -15,11 +15,17 @@ use Oxzion\Auth\AuthConstants;
 class WidgetControllerTest extends ControllerTest
 {
     private $mock;
+    private $index_pre;
     public function setUp() : void
     {
         $this->loadConfig();
         parent::setUp();
-
+        $config = $this->getApplicationConfig();
+        if (isset($config['elasticsearch']['core'])) {
+            $this->index_pre = $config['elasticsearch']['core'].'_';
+        } else {
+            $this->index_pre = '';
+        }
     }
 
     public function tearDown()  : void {
@@ -261,7 +267,7 @@ class WidgetControllerTest extends ControllerTest
         if (enableElastic!=0) {
             $this->setElasticData();
         } else {
-           $input =  json_decode('{"index":"crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"createdAt":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}',true);
+           $input =  json_decode('{"index":"'.$this->index_pre.'crm_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"_id"}},{"range":{"createdAt":{"gte":"2018-01-01","lte":"2019-12-12","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"explain":true},"_source":["*"],"from":0,"size":0}',true);
            $output = json_decode('{"took":0,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":3,"relation":"eq"},"max_score":null,"hits":[]}}',true);
            $this->setMockData($input,$output);
         }
@@ -356,7 +362,7 @@ class WidgetControllerTest extends ControllerTest
     public function testGetListWithDeleted()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget', 'GET');
+        $this->dispatch('/analytics/widget?show_deleted=true', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -375,7 +381,7 @@ class WidgetControllerTest extends ControllerTest
     public function testGetListWithSort()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget?sort=[{"field":"visualization_id","dir":"asc"}]', 'GET');
+        $this->dispatch('/analytics/widget?filter=[{"sort":[{"field":"visualization_id","dir":"asc"}]}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -391,7 +397,7 @@ class WidgetControllerTest extends ControllerTest
     public function testGetListSortWithPageSize()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget?skip=1&limit=10&sort=[{"field":"visualization_id","dir":"asc"}]', 'GET');
+        $this->dispatch('/analytics/widget?filter=[{"sort":[{"field":"visualization_id","dir":"asc"}],"skip":1,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -406,7 +412,7 @@ class WidgetControllerTest extends ControllerTest
     public function testGetListwithQueryParameters()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/widget?limit=10&sort=[{"field":"id","dir":"desc"}]&filter=[{"logic":"and"},{"filters":[{"field":"visualization_id","operator":"neq","value":"2"}]}]', 'GET');
+        $this->dispatch('/analytics/widget?filter=[{"filter":{"logic":"and","filters":[{"field":"visualization_id","operator":"neq","value":"2"}]},"sort":[{"field":"id","dir":"desc"}],"skip":0,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);

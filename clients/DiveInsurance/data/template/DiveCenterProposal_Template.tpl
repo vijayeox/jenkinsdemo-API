@@ -20,55 +20,67 @@
                     </tr>
                     <tr>
                         <td>Contents Limit:</td>
-                        <td>${$dspropTotal}</td>
+                        <td>${$dspropTotal|number_format:2:".":","}</td>
                     </tr>
                     <tr>
-                        <td id="space_left">(Sign limited to : $25000)</td>
+                        <td id="space_left">(Sign limited to : $25,000)</td>
                         <td></td>
                     </tr>
                     <tr>
                         <td>Business Income:</td>
-                        <td>${$lossOfBusIncome}</td>
+                        {if $additionalLossofBusinessIncomePL != "false"}
+                            <td>${$lossOfBusIncome|number_format:2:".":","}</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Building Coverage:</td>
-                        <td>${$dspropreplacementvalue}</td>
+                        {if $dspropownbuilding != "no"}
+                            <td>${$dspropreplacementvalue|number_format:2:".":","}</td>
+                        {else}
+                            <td>$0</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Equipment Breakdown:</td>
-                        <td>${$dspropreplacementvalue}</td>
+                        {if (int)$dspropFurniturefixturesandequip != 0}
+                            <td>Included</td>
+                        {else}
+                            <td>Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Business Income from dependant properties:</td>
-                        <td>$5000</td>
+                        <td>$5,000</td>
                     </tr>
                     <tr>
                         <td>Robbery (per Occurrence - Inside):</td>
-                        <td>$2500</td>
+                        <td>$2,500</td>
                     </tr>
                     <tr>
                         <td>Robbery (per Occurrence - Outside):</td>
-                        <td>$2500</td>
+                        <td>$2,500</td>
                     </tr>
                     <tr>
                         <td>Transit Coverage (Locked Vehicle):</td>
-                        <td>$10000</td>
+                        <td>$10,000</td>
                     </tr>
                     <tr>
                         <td>EmployeeTheft Limit:</td>
-                        <td>$5000</td>
+                        <td>$5,000</td>
                     </tr>
                     <tr>
                         <td>Property of Others:</td>
-                        <td>$25000</td>
+                        <td>$25,000</td>
                     </tr>
                     <tr>
                         <td>Off premises:</td>
-                        <td>$10000</td>
+                        <td>$10,000</td>
                     </tr>
                     <tr>
                         <td>Glass:</td>
-                        <td>$5000</td>
+                        <td>$5,000</td>
                     </tr>
                 </tbody>
             </table>
@@ -81,49 +93,129 @@
                     </tr>
                     <tr>
                         <td>Commercial General Liability (Each Occurrence Limit):</td>
-                        <td>$1000000</td>
+                        {if $excessLiabilityCoverage == "no"}
+                            <td>$1,000,000</td>
+                        {elseif $excessLiabilityCoverage == "1M"}
+                            <td>$2,000,000</td>
+                        {elseif $excessLiabilityCoverage == "2M"}
+                            <td>$3,000,000</td>
+                        {elseif $excessLiabilityCoverage == "3M"}
+                            <td>$4,000,000</td>
+                        {elseif $excessLiabilityCoverage == "4M"}
+                            <td>$5,000,000</td>
+                        {elseif $excessLiabilityCoverage == "9M"}
+                            <td>$10,000,000</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Personal Injury (per Occurence):</td>
-                        <td>$1000000</td>
+                        {if $excessLiabilityCoverage == "no"}
+                            <td>$1,000,000</td>
+                        {elseif $excessLiabilityCoverage == "1M"}
+                            <td>$2,000,000</td>
+                        {elseif $excessLiabilityCoverage == "2M"}
+                            <td>$3,000,000</td>
+                        {elseif $excessLiabilityCoverage == "3M"}
+                            <td>$4,000,000</td>
+                        {elseif $excessLiabilityCoverage == "4M"}
+                            <td>$5,000,000</td>
+                        {elseif $excessLiabilityCoverage == "9M"}
+                            <td>$10,000,000</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>General Liability Aggregate:</td>
-                        <td>$2000000</td>
+                        {if $excessLiabilityCoverage == "no"}
+                            <td>$2,000,000</td>
+                        {elseif $excessLiabilityCoverage == "1M"}
+                            <td>$3,000,000</td>
+                        {elseif $excessLiabilityCoverage == "2M"}
+                            <td>$4,000,000</td>
+                        {elseif $excessLiabilityCoverage == "3M"}
+                            <td>$5,000,000</td>
+                        {elseif $excessLiabilityCoverage == "4M"}
+                            <td>$6,000,000</td>
+                        {elseif $excessLiabilityCoverage == "9M"}
+                            <td>$11,000,000</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Products and Completed Operations Aggregate:</td>
-                        <td>$2000000</td>
+                        {if $excessLiabilityCoverage == "no"}
+                            <td>$2,000,000</td>
+                        {elseif $excessLiabilityCoverage == "1M"}
+                            <td>$3,000,000</td>
+                        {elseif $excessLiabilityCoverage == "2M"}
+                            <td>$4,000,000</td>
+                        {elseif $excessLiabilityCoverage == "3M"}
+                            <td>$5,000,000</td>
+                        {elseif $excessLiabilityCoverage == "4M"}
+                            <td>$6,000,000</td>
+                        {elseif $excessLiabilityCoverage == "9M"}
+                            <td>$11,000,000</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Damage to premises rented to you:</td>
-                        <td>$1000000</td>
+                        {if $excessLiabilityCoverage == "no"}
+                            <td>$1,000,000</td>
+                        {elseif $excessLiabilityCoverage == "1M"}
+                            <td>$2,000,000</td>
+                        {elseif $excessLiabilityCoverage == "2M"}
+                            <td>$3,000,000</td>
+                        {elseif $excessLiabilityCoverage == "3M"}
+                            <td>$4,000,000</td>
+                        {elseif $excessLiabilityCoverage == "4M"}
+                            <td>$5,000,000</td>
+                        {elseif $excessLiabilityCoverage == "9M"}
+                            <td>$10,000,000</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Medical Expense:</td>
-                        <td>${$MedicalExpenseFP}</td>
+                        <td>$5,000</td>
                     </tr>
                     <tr>
                         <td>NON-Owned Auto:</td>
-                        <td>${$nonOwnedAutoLiabilityPL}</td>
+                        {if $nonOwnedAutoLiabilityPL == "no"}
+                            <td>Not Included</td>
+                        {else}
+                            <td>Included</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>NON-Diving Pool Use:</td>
-                        <td>${$poolLiability}</td>
+                        {if $poolLiability && (int)$poolLiability > 0}
+                            <td>$1,000,000</td>
+                        {else}
+                            <td>Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Travel Agent E&O (Each wrongful act & Aggregate):
                             <p class="info">(Claims made form)</p>
                         </td>
-                        <td>$1000000</td>
+                        {if $travelAgentEOReceiptsPL && (int)$travelAgentEOReceiptsPL > 0}
+                            <td>$1,000,000</td>
+                        {else}
+                            <td>Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Group Professional Liability:</td>
-                        <td>$1000000</td>
+                        {if $groupProfessionalLiability && (int)$groupProfessionalLiability > 0}
+                            <td>$1,000,000</td>
+                        {else}
+                            <td>Not Included</td>
+                        {/if}
                     </tr>
                     <tr>
                         <td>Group Professional Liability Aggregate:</td>
-                        <td>$2000000</td>
+                        {if $groupProfessionalLiability && (int)$groupProfessionalLiability > 0}
+                            <td>$2,000,000</td>
+                        {else}
+                            <td>Not Included</td>
+                        {/if}
                     </tr>
                 </tbody>
             </table>
@@ -486,19 +578,21 @@
 
         <!-- Second Page -->
 
-        <div class="main" style="margin-top: 1%;">
+        <div class="main" style="margin-top: 10%;">
             <div class="value_main">
-                <p>${$liabilityCoveragesTotalPL}</p>
+                <p>${$liabilityProRataPremium|number_format:2:".":","}</p>
                 <p>&nbsp;</p>
-                <p>${$propertyCoveragesTotalPL}</p>
-                <p>${$PropTax+$LiaTax}</p>
-                <p>${$padiFee}</p>
+                <p>${$propertyProRataPremium|number_format:2:".":","}</p>
+                <p>${((float)$PropTax+$LiaTax+$AddILocTax)|number_format:2:".":","}</p>
+                <p>${(float)$AddILocPremium|number_format:2:".":","}</p>
+                <p>${(float)$padiFee|number_format:2:".":","}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center General Liability Premium:</p>
-                <p>(Based on estimated annual receipts of ${$dsglestmonthretailreceipt})</p>
+                <p>(Based on estimated annual receipts of ${if $estimatedAnnualReceipts}{(float)$estimatedAnnualReceipts|number_format:2:".":","}{else}0{/if})</p>
                 <p>Dive Center Property Premium</p>
                 <p>Dive Center Surplus Lines Tax:</p>
+                <p>Dive Center Additional Location Premium:</p>
                 <p>Dive Center PADI Administration Fee:</p>
             </div>
             <div class="clearfix"></div>
@@ -507,7 +601,7 @@
         <div class="clearfix"></div>
         <div class="total_main">
             <div class="value_main">
-                <p>${$ProRataPremium+$PropTax+$LiaTax+$AddILocPremium+$AddILocTax+$padiFee-$PropDeductibleCredit+$PAORFee}</p>
+                <p>${((float)$ProRataPremium+(float)$PropTax+(float)$LiaTax+(float)$AddILocPremium+(float)$AddILocTax+(float)$padiFee)|number_format:2:".":","}</p>
             </div>
             <div class="sub_main">
                 <p>Total Store Premium:</p>
@@ -520,10 +614,10 @@
         <!-- second section -->
         <div class="main">
             <div class="value_main">
-                <p>${$groupCoverage+$groupExcessLiability}</p>
+                <p>${((float)$groupCoverage+(float)$groupExcessLiability)|number_format:2:".":","}</p>
                 <p>&nbsp;</p>
-                <p>${$groupTaxAmount}</p>
-                <p>${$groupPadiFeeAmount}</p>
+                <p>${(float)$groupTaxAmount|number_format:2:".":","}</p>
+                <p>${(float)$groupPadiFeeAmount|number_format:2:".":","}</p>
             </div>
             <div class="sub_main">
                 <p>Dive Center Group Instructional Program Premium:</p>
@@ -537,7 +631,7 @@
         </div>
         <div class="total_main">
             <div class="value_main">
-                <p>${$groupTotalAmount}</p>
+                <p>${$groupTotalAmount|number_format:2:".":","}</p>
             </div>
             <div class="sub_main">
                 <p>Total Group Premium:</p>
@@ -547,7 +641,7 @@
         <p class="hrtag" style="margin-top: 2px;"></p>
         <div class="total_main">
             <div class="value_main">
-                <p>${$totalAmount}</p>
+                <p>${$totalAmount|number_format:2:".":","}</p>
             </div>
             <div class="sub_main">
                 <p>Amount due in full:</p>

@@ -114,7 +114,7 @@ class DataSourceService extends AbstractService
         $sql = $this->getSqlObject();
         $select = $sql->select();
         $select->from('ox_datasource')
-            ->columns(array('name','type','configuration', 'is_owner' => (new Expression('IF(created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'org_id','isdeleted','uuid'))
+            ->columns(array('name','type','configuration', 'is_owner' => (new Expression('IF(created_by = '.AuthContext::get(AuthConstants::USER_ID).', "true", "false")')),'org_id','version','isdeleted','uuid'))
             ->where(array('ox_datasource.uuid' => $uuid,'org_id' => AuthContext::get(AuthConstants::ORG_ID),'isdeleted' => 0));
         $response = $this->executeQuery($select)->toArray();
         if (count($response) == 0) {
@@ -125,7 +125,7 @@ class DataSourceService extends AbstractService
 
     public function getDataSourceList($params = null)
     {
-        $paginateOptions = FilterUtils::paginate($params);
+        $paginateOptions = FilterUtils::paginateLikeKendo($params);
         $where = $paginateOptions['where'];
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
             $where .= empty($where) ? "WHERE org_id =".AuthContext::get(AuthConstants::ORG_ID) : " AND org_id =".AuthContext::get(AuthConstants::ORG_ID);
@@ -141,10 +141,10 @@ class DataSourceService extends AbstractService
         $count=$resultSet->toArray()[0]['count'];
 
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
-            $query ="SELECT name,type,configuration,version,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted,uuid FROM `ox_datasource`".$where." ".$sort." ".$limit;
+            $query ="SELECT name,type,configuration,version,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,org_id,isdeleted,uuid FROM `ox_datasource`".$where." ".$sort." ".$limit;
         }
         else{
-            $query ="SELECT name,type,configuration,version,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,uuid FROM `ox_datasource`".$where." ".$sort." ".$limit;
+            $query ="SELECT name,type,configuration,version,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,version,org_id,uuid FROM `ox_datasource`".$where." ".$sort." ".$limit;
         }
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();
@@ -178,12 +178,16 @@ class DataSourceService extends AbstractService
                 case 'ElasticSearch':
                     $elasticConfig['elasticsearch'] = $config['data'];
                     $analyticsObject = new  \Oxzion\Analytics\Elastic\AnalyticsEngineImpl($elasticConfig);
-                    return $analyticsObject;
-                break;
+                    break;
+                case 'MySQL':
+                    $config = $config['data'];
+                    $analyticsObject = new  \Oxzion\Analytics\MySQL\AnalyticsEngineMySQLImpl($config);
+                    break;
             }
         }
         catch(Exception $e){
             throw $e;
         }
+        return $analyticsObject;
     }
 }

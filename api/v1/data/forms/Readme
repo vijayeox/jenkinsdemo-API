@@ -1,0 +1,6 @@
+Place for Forms
+
+cd to data/forms folder from API docker bash and run
+ln -s ../../../../clients/Dive\ Insurance/content/forms/ ./{{APP_ID}}
+
+Get APP_ID from your database, ox_app table

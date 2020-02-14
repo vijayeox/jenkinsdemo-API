@@ -14,7 +14,7 @@ class Alert extends Entity
         'status' => null,
         'description' => null,
         'created_date' => 0,
-        'created_id' => 0
+        'created_id' => 0,
     );
     public function validate()
     {

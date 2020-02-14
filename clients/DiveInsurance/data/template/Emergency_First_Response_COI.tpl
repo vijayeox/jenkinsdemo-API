@@ -45,15 +45,15 @@
 				<p class = "efr_title"><b>Named Insured</b></p>
 					<p class ="efr_bold"><b>EFR</b></p>
 					<p class ="efr_title2">Emergency First Response Corporation</p>
-					<p class ="efr_title2">{$address1},{$address2}</p>
-					<p class ="efr_title2">{$city},{$state},{$country},{$zip}</p>
+					<p class ="efr_title2">30151 Tomas Street</p>
+					<p class ="efr_title2">Rancho Santa Margarita, CA 92688</p>
 			</div>
 		</div>
 		<div class="spacing_efr">&nbsp</div>
 		<hr class="hrtag"></hr>
     	<div class="i_type">
       		<div class="i_type1">
-        		<div class = "in-type">
+        		<div class = "in-type" style="width: 40%">
 		           <b class = "ins_type">Type of Insurance</b>
 		           <div class = "ins_data" style="margin-top: 10px;">
 			           <p class = "ins_font"><b>COMBINED SINGLE LIMIT:</b></p>
@@ -70,6 +70,7 @@
 		       &nbsp
      		</div>
     	</div>
+		<br/>
     	
     	<hr class="hrtag_efr"></hr>
     	<center><p class = "policy_notice1">Retro Date: {$start_date}, or the first day 		of uninterrupted coverage,whichever is earlier (refer to section VI of the 			   policy). However, in the event of a claim which invokes a Retroactive Date prior 	   to {$start_date}, the Certificate Holder must submit proof of uninterrupted 		   insurance coverage dating prior

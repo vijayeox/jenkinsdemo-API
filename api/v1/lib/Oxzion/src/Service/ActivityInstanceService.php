@@ -20,6 +20,7 @@ class ActivityInstanceService extends AbstractService
     /**
     * @var ActivityInstanceService Instance of Task Service
     */
+    private $fileExt = ".json";
     protected $workflowFactory;
     protected $activityEngine;
     /**
@@ -30,6 +31,7 @@ class ActivityInstanceService extends AbstractService
     {
         parent::__construct($config, $dbAdapter);
         $this->table = $table;
+        $this->formsFolder = $this->config['FORM_FOLDER'];
         $this->workFlowFactory = $workflowFactory;
         $this->activityEngine = $this->workFlowFactory->getActivity();
     }
@@ -45,7 +47,7 @@ class ActivityInstanceService extends AbstractService
         ox_activity_instance.status as status,
         ox_file.data,ox_app.uuid as app_id,ox_file.uuid,
         ox_activity_instance.org_id,ox_activity_instance.activity_id,ox_form.uuid as form_id,ox_activity.task_id as task_id,
-        ox_form.template as template FROM `ox_activity_instance` 
+        ox_form.name as formName FROM `ox_activity_instance` 
         LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id 
         LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id 
         LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id         
@@ -59,6 +61,11 @@ class ActivityInstanceService extends AbstractService
         $activityInstance = $this->executeQuerywithBindParameters($activityQuery,$activityParams)->toArray();
         if (count($activityInstance)==0) {
             return 0;
+        }
+
+        $filePath = $this->formsFolder.$data['appId']."/".$activityInstance[0]['formName'].$this->fileExt;
+        if(file_exists($filePath)){
+           $activityInstance[0]['template'] = file_get_contents($filePath);
         }
 
         $activityform = $activityInstance[0];
@@ -156,7 +163,7 @@ class ActivityInstanceService extends AbstractService
         }
         return 1;
     }
-    public function createActivityInstanceEntry(&$data)
+    public function createActivityInstanceEntry(&$data,$commandService)
     {
         if(!isset($data['processInstanceId'])){
             return;
@@ -210,15 +217,43 @@ class ActivityInstanceService extends AbstractService
                             $assignee = 1;
                         }
                         $userQuery = $this->executeQuerywithParams("SELECT * FROM `ox_user` WHERE `username` = '".$candidate['userid']."';")->toArray();
-                        if($userQuery){
+                        if(isset($userQuery) && count($userQuery)>0){
+                            $userId = $userQuery[0]['id'];
+                        }
+                        if($candidate['userid'] == 'owner') {
+                            $getOwner = $this->executeQuerywithParams("SELECT created_by FROM `ox_file` WHERE `workflow_instance_id` = '".$workflowInstanceId."';")->toArray();
+                            if(isset($getOwner) && count($getOwner) > 0){
+                                $userId = $getOwner[0]['created_by'];
+                            }
+                        }
+                        if($candidate['userid'] == 'manager') {
+                            $manager = $this->executeQuerywithParams("SELECT manager_id FROM `ox_user_manager` inner join ox_user on ox_user_manager.user_id=ox_user.id inner join ox_file on ox_user.id=ox_file.created_by WHERE `user_id` = '".$workflowInstanceId."';")->toArray();
+                            if(isset($manager) && count($manager) > 0){
+                                $userId = $manager[0]['manager_id'];
+                            }
+                        }
+                        if(isset($userId)){
                             $insert = "INSERT INTO `ox_activity_instance_assignee` (`activity_instance_id`,`user_id`,`assignee`)
                             VALUES (:activityInstanceId,:userId,:assignee)";
-                            $insertParams = array("activityInstanceId" => $activityInstance['id'],"userId" => $userQuery[0]['id'],"assignee" => $assignee);
+                            $insertParams = array("activityInstanceId" => $activityInstance['id'],"userId" => $userId,"assignee" => $assignee);
                             $resultSet = $this->executeQuerywithBindParameters($insert,$insertParams);
                             unset($resultSet);
                             unset($insert);
                         }
                     }
+                }
+            }
+            if(isset($data['variables']) && isset($data['variables']['postCreate'])){
+                $commandData = $data['variables'];
+                $fileQuery = "SELECT data FROM `ox_file` WHERE workflow_instance_id = :workflow_instance_id;";
+                $resultSet = $this->executeQuerywithBindParameters($fileQuery,array("workflow_instance_id" => $commandData['workflow_instance_id']))->toArray();
+                if(count($resultSet) > 0){
+                    $fileData = json_decode($resultSet[0]['data'],true);
+                    $commandData = array_merge($commandData,$fileData);
+                    $commandData['activityInstanceId'] = $activity_instance_id;
+                    $commandData['workflowInstanceId'] = $data['processInstanceId'];
+                    $commandData['commands'] = $data['variables']['postCreate'];
+                    $data['variables'] = $commandService->runCommand($commandData,null);
                 }
             }
             $this->commit();

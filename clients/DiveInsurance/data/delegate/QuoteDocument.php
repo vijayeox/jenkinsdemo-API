@@ -50,7 +50,11 @@ class QuoteDocument extends PolicyDocument
                      'lpTemplate' => 'DS_Quote_LP',
                      'lpheader' => 'DS_LP_header.html',
                      'lpfooter' => null,
-                     'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf')));
+                     'policy' => array('liability' => 'Dive_Store_Liability_Policy.pdf','property' => 'Dive_Store_Property_Policy.pdf'),
+                     'gtemplate' => 'Group_PL_COI',
+                     'gheader' => 'Group_header.html',
+                     'gfooter' => 'Group_footer.html',
+                    ));
         
     }
 }

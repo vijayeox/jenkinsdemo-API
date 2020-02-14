@@ -10,7 +10,7 @@
 	<div class ="div_cover">
 		<p>{$smarty.now|date_format:"%m/%d/%Y"}</p>
 		<div class ="info_cover">
-			<p class="name1"><span>#{$business_padi}</span><span>{$business_name}</span></p>
+			<p class="name1"><span>#{$business_padi}</span>&nbsp&nbsp&nbsp&nbsp&nbsp<span>{$business_name}</span></p>
 		</div>
 		<div class = "line_space">
 		<p>We are pleased to enclose your PADI Endorsed Dive Boat insurance proposal. The coverage includes:</p>
@@ -32,11 +32,11 @@ a policy will be sent to you.)</p>
 	<p><b>To purchase your insurance coverage, please provide us with the following items prior to {$quote_due_date|date_format:"%m/%d/%Y"}</b></p>
 		{foreach from=$list item=$quoteData}
 				<p class = "ai_list">
-					[X]{if $quoteData['quoteInfoOther'] == ""}
+					[X]{if !isset($quoteData['quoteInfoOther'])}
 	    			 	    {$quoteData['quoteInfo']}
-	    			   {else}
+	    			   	{else}
 	    			   		{$quoteData['quoteInfoOther']}
-	    			   {/if}
+	    			   	{/if}
 	    		</p>
     	{/foreach}
 

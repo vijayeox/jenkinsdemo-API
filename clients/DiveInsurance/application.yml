@@ -78,6 +78,17 @@ entity:
                 name: policyStatus
                 text: 'Policy Status'
                 data_type: text
+    -
+        name: 'Pocket Card Job'
+        field:
+            -
+                name: jobStatus
+                text: 'Job Status'
+                data_type: text
+            -
+                name: documents
+                text: pocketCard
+                data_type: document
 menu:
     -
         name: Home
@@ -115,7 +126,7 @@ menu:
                                 icon: 'fa fa-envelope-open'
                             -
                                 name: Endorsement
-                                rule: 'true'
+                                rule: '''{{entity_name}}'' == ''Individual Professional Liability'''
                                 details:
                                     -
                                         type: Form
@@ -123,13 +134,31 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
                             -
+                                name: Endorsement
+                                rule: '''{{entity_name}}'' == ''Emergency First Response'''
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
                                 name: 'Cancel Policy'
+                                rule: '(''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
                                 details:
                                     -
                                         type: Form
                                         url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'''
+                                icon: 'fa fa-window-close'
+                            -
+                                name: 'Cancel Policy'
+                                rule: '(''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/81cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-window-close'
                         toolbarTemplate: '<h4>List of all policies</h4>'
                         operations:
@@ -229,7 +258,8 @@ menu:
             content:
                 -
                     type: Dashboard
-                    dashboard: Dashboard
+                    content:
+                        uuid: 4796e7fe-50b5-469c-9737-35f3921891ba
         uuid: 24176975-8f4d-499d-8b2d-86902de26c14
     -
         name: Requests
@@ -287,7 +317,7 @@ menu:
                                             url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
                         actions:
                             -
-                                name: Approve
+                                name: Review
                                 rule: '{{to_be_claimed}} == 1'
                                 details:
                                     -
@@ -299,7 +329,7 @@ menu:
                                         url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
                                 icon: 'fa fa-check-circle'
                             -
-                                name: Approve
+                                name: Review
                                 rule: '{{to_be_claimed}} == 0'
                                 details:
                                     -
@@ -316,7 +346,7 @@ menu:
                                 cell: '<td>{item.firstname}&nbsp;{item.lastname}</td>'
                             -
                                 title: Product
-                                field: entityName
+                                field: entity_name
                             -
                                 title: 'Policy Start Date'
                                 field: start_date
@@ -387,11 +417,20 @@ menu:
                         actions:
                             -
                                 name: Endorsement
-                                rule: '''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'''
+                                rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
                                 details:
                                     -
                                         type: Form
                                         url: workflow/7d302209-667d-46e4-80f0-3dd1a4079509/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
+                                name: Endorsement
+                                rule: '(''{{policyStatus}}'' == ''Rejected'' || ''{{policyStatus}}'' == ''In Force'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/35139ac6-3229-11ea-aec2-2e728ce88125/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
                             -
@@ -406,13 +445,22 @@ menu:
                                             page_id: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
                             -
                                 name: 'Cancel Policy'
+                                icon: 'fa fa-window-close'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
                                 details:
                                     -
                                         type: Form
                                         url: workflow/71cb9e10-5845-4379-97c9-f9486b702bda/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'''
+                            -
+                                name: 'Cancel Policy'
                                 icon: 'fa fa-window-close'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/81cb9e10-5845-4379-97c9-f9486b702bda/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
                             -
                                 name: 'Reinstate Policy'
                                 details:
@@ -420,7 +468,7 @@ menu:
                                         type: Form
                                         url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{policyStatus}}'' == ''Cancelled'''
+                                rule: '''{{policyStatus}}'' == ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'''
                                 icon: 'fa fa-repeat'
                         filterColumns:
                             - name
@@ -492,6 +540,53 @@ menu:
                     type: Form
         uuid: 9bf92403-2111-4d05-9d89-01a609ed4b83
     -
+        name: 'Pocket Card'
+        uuid: 7794c91e-b708-41be-83e1-cc0bb6cd669a
+        privilege: MANAGE_POLICY_APPROVAL_WRITE
+        icon: 'fa fa-address-card'
+        page:
+            name: 'Pocket Card'
+            description: 'Lets CSR generate Pocket Cards'
+            content:
+                -
+                    type: List
+                    content:
+                        route: 'pipeline/commands/[{"command" : "delegate", "delegate":"PocketCardMenu"}]'
+                        filterable: true
+                        reorderable: true
+                        resizable: true
+                        actions:
+                            -
+                                name: View
+                                rule: '''{{jobStatus}}'' == ''Completed'''
+                                details:
+                                    -
+                                        type: View
+                                        params:
+                                            uuid: '{{uuid}}'
+                                            page_id: c9714cfd-2ae5-4f13-83eb-7d925c3b660d
+                                icon: 'fa fa-envelope-open'
+                        operations:
+                            title: 'Pocket Card'
+                            actions:
+                                -
+                                    name: 'Generate Pocket Card'
+                                    rule: true
+                                    details:
+                                        -
+                                            type: Form
+                                            form_id: e2ed4200-9131-4671-b0e0-de3e27c3f611
+                        columnConfig:
+                            -
+                                title: 'Filters Used'
+                                field: generationType
+                            -
+                                title: Product
+                                field: pocketCardProductType
+                            -
+                                title: 'Job Status'
+                                field: jobStatus
+    -
         name: MyAssignments
         privilege: HIDE_FOR_NOW
         icon: 'fa fa-list'
@@ -519,7 +614,7 @@ menu:
                             info: true
                         actions:
                             -
-                                name: Approve
+                                name: Review
                                 rule: '{{to_be_claimed}} == 1'
                                 details:
                                     -
@@ -531,7 +626,7 @@ menu:
                                         url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
                                 icon: 'fa fa-check-circle'
                             -
-                                name: Approve
+                                name: Review
                                 rule: '{{to_be_claimed}} == 0'
                                 details:
                                     -
@@ -569,6 +664,15 @@ pages:
                 -
                     type: DocumentViewer
         uuid: b9714cfd-2ae5-4f13-83eb-7d925c3b660c
+    -
+        page:
+            name: 'View Pocket Card'
+            description: 'View Pocket Card'
+            page_id: c9714cfd-2ae5-4f13-83eb-7d925c3b660d
+            content:
+                -
+                    type: DocumentViewer
+        uuid: c9714cfd-2ae5-4f13-83eb-7d925c3b660d
 workflow:
     -
         name: 'Individual Liability'
@@ -591,11 +695,6 @@ workflow:
         bpmn_file: 'Emergency First Response/NewApplication.bpmn'
         entity: 'Emergency First Response'
     -
-        name: 'Cancel Policy'
-        uuid: 71cb9e10-5845-4379-97c9-f9486b702bda
-        bpmn_file: 'Cancel Policy/CancelPolicy.bpmn'
-        entity: 'Individual Professional Liability'
-    -
         name: 'Emergency First Response Endorsement'
         uuid: 35139ac6-3229-11ea-aec2-2e728ce88125
         bpmn_file: 'Emergency First Response/EFREndorsement.bpmn'
@@ -605,6 +704,16 @@ workflow:
         uuid: 81cb9e10-5845-4379-97c9-f9486b702bdb
         bpmn_file: 'Cancel Policy/ReinstatePolicy.bpmn'
         entity: 'Individual Professional Liability'
+    -
+        bpmn_file: 'Cancel Policy/CancelPolicyIPL.bpmn'
+        entity: 'Individual Professional Liability'
+        name: 'Cancel Policy'
+        uuid: 71cb9e10-5845-4379-97c9-f9486b702bda
+    -
+        bpmn_file: 'Cancel Policy/CancelPolicyEFR.bpmn'
+        entity: 'Emergency First Response'
+        name: 'Cancel Policy'
+        uuid: 81cb9e10-5845-4379-97c9-f9486b702bda
 form:
     -
         name: 'PADI Verification'
@@ -612,6 +721,12 @@ form:
         description: 'Page for CSR to verify PADI details'
         template_file: padi_validation.json
         entity: Padi
+    -
+        name: 'Pocket Card'
+        uuid: e2ed4200-9131-4671-b0e0-de3e27c3f611
+        description: 'Lets CSR generate and view Pocket Cards'
+        template_file: pocketCard.json
+        entity: 'Pocket Card Job'
 job:
     -
         import_padi:
@@ -620,3 +735,7 @@ job:
                 upload_host_name: 206.107.76.164
                 upload_host_user: vbinsurance
                 upload_user_password: '<<InsureName>>'
+    -
+        autorenewal:
+            -
+                stored_procedure_name: ox_padi_verification

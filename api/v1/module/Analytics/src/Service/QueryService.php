@@ -20,6 +20,7 @@ class QueryService extends AbstractService
 
     private $table;
     private $datasourceService;
+    static $queryFields = array('uuid' => 'q.uuid','name' => 'q.name', 'datasource_uuid' => 'd.uuid', 'configuration' => 'q.configuration', 'ispublic' => 'q.ispublic', 'created_by' => 'q.created_by', 'version' => 'q.version', 'org_id' => 'q.org_id' );
 
     public function __construct($config, $dbAdapter, QueryTable $table, $datasourceService)
     {
@@ -118,7 +119,7 @@ class QueryService extends AbstractService
 
     public function getQuery($uuid, $params)
     {
-        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, if(q.created_by=:created_by, true, false) as is_owner, q.isdeleted, d.uuid as datasource_uuid from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.uuid=:uuid and (q.ispublic=true or q.created_by=:created_by)';
+        $query = 'select q.uuid, q.name, q.configuration, q.ispublic, if(q.created_by=:created_by, true, false) as is_owner, q.isdeleted, q.version, d.uuid as datasource_uuid, d.name as datasource_name from ox_query q join ox_datasource d on d.id=q.datasource_id where q.isdeleted=false and q.org_id=:org_id and q.uuid=:uuid and (q.ispublic=true or q.created_by=:created_by)';
         $queryParams = [
             'created_by' => AuthContext::get(AuthConstants::USER_ID),
             'org_id' => AuthContext::get(AuthConstants::ORG_ID),
@@ -150,26 +151,26 @@ class QueryService extends AbstractService
 
     public function getQueryList($params = null)
     {
-        $paginateOptions = FilterUtils::paginate($params);
+        $paginateOptions = FilterUtils::paginateLikeKendo($params,self::$queryFields);
         $where = $paginateOptions['where'];
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
-            $where .= empty($where) ? "WHERE (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND(org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
+            $where .= empty($where) ? "WHERE (q.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (q.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR q.ispublic = 1)" : " AND(q.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (q.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR q.ispublic = 1)";
         }
         else{
-            $where .= empty($where) ? "WHERE ox_query.isdeleted <> 1 AND (org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)" : " AND ox_query.isdeleted <> 1 AND(org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR ispublic = 1)";
+            $where .= empty($where) ? "WHERE q.isdeleted <> 1 AND (q.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (q.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR q.ispublic = 1)" : " AND q.isdeleted <> 1 AND(q.org_id =".AuthContext::get(AuthConstants::ORG_ID).") and (q.created_by = ".AuthContext::get(AuthConstants::USER_ID)." OR q.ispublic = 1)";
         }
         $sort = $paginateOptions['sort'] ? " ORDER BY ".$paginateOptions['sort'] : '';
         $limit = " LIMIT ".$paginateOptions['pageSize']." offset ".$paginateOptions['offset'];
 
-        $cntQuery ="SELECT count(id) as 'count' FROM `ox_query` ";
+        $cntQuery ="SELECT count(id) as 'count' FROM `ox_query` as q ";
         $resultSet = $this->executeQuerywithParams($cntQuery.$where);
         $count=$resultSet->toArray()[0]['count'];
 
         if(isset($params['show_deleted']) && $params['show_deleted']==true){
-            $query ="SELECT uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id,isdeleted FROM `ox_query`".$where." ".$sort." ".$limit;
+            $query ="SELECT q.uuid,q.name,d.uuid as datasource_uuid,q.configuration,q.ispublic,IF(q.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,q.version,q.org_id,q.isdeleted FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id ".$where." ".$sort." ".$limit;
         }
         else{
-            $query ="SELECT uuid,name,datasource_id,configuration,ispublic,IF(created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,org_id FROM `ox_query`".$where." ".$sort." ".$limit;
+            $query ="SELECT q.uuid,q.name,datasource_id,q.configuration,q.ispublic,IF(q.created_by = ".AuthContext::get(AuthConstants::USER_ID).", 'true', 'false') as is_owner,q.version,q.org_id FROM `ox_query` as q inner join ox_datasource as d on q.datasource_id = d.id ".$where." ".$sort." ".$limit;
         }
         $resultSet = $this->executeQuerywithParams($query);
         $result = $resultSet->toArray();

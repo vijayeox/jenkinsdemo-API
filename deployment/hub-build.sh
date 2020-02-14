@@ -23,19 +23,22 @@ RESET="\e[0m"
 #help function to print help message
 buildhelp()
 {
-    echo -e "1.  all             -${YELLOW}For packaging complete Oxzion-3.0.${RESET}"
+    echo -e "1.  all             -${YELLOW}For packaging everything.${RESET}"
     echo -e "2.  api             -${YELLOW}For packaging API.${RESET}"
     echo -e "3.  view            -${YELLOW}For packaging UI/View.${RESET}"
     echo -e "4.  workflow        -${YELLOW}For packaging workflow.${RESET}"
     echo -e "5.  camel           -${YELLOW}For packaging Apache Camel.${RESET}"
-    echo -e "6.  clients         -${YELLOW}For packaging Clients directory.${RESET}"
-    echo -e "6.  integrations    -${YELLOW}For packaging all Oxzion-3.0 integrations.${RESET}"
-    echo -e "7. --help or -h     -${YELLOW}For help.${RESET}"
-    echo -e "8. list             -${YELLOW}For list of options.${RESET}"
-    echo -e "9. deploy           -${YELLOW}For deploying to production${RESET}"
-    echo -e "10. clean           -${YELLOW}For cleaning the production server${RESET}"
-    echo -e "11. setup           -${YELLOW}For fresh setup of the production server${RESET}"
-    echo -e "12. package         -${YELLOW}For packaging existing build${RESET}"
+    echo -e "6.  diveinsurance   -${YELLOW}For packaging diveinsurance app.${RESET}"
+    echo -e "7.  task            -${YELLOW}For packaging task app.${RESET}"
+    echo -e "8.  bridgemed       -${YELLOW}For packaging bridgemed app.${RESET}"
+    echo -e "9.  integrations    -${YELLOW}For packaging all integrations.${RESET}"
+    echo -e "10. --help or -h    -${YELLOW}For help.${RESET}"
+    echo -e "11. list            -${YELLOW}For list of options.${RESET}"
+    echo -e "12. deploy          -${YELLOW}For deploying to production${RESET}"
+    echo -e "13. clean           -${YELLOW}For cleaning the production server${RESET}"
+    echo -e "14. setup           -${YELLOW}For fresh setup of the production server${RESET}"
+    echo -e "15. package         -${YELLOW}For packaging existing build${RESET}"
+    echo -e "16.  insurancemanagement   -${YELLOW}For packaging insurancemanagement app.${RESET}"
 }
 #checking if no arguments passed. Give error and exit.
 if [ $# -eq 0 ] ;
@@ -157,14 +160,44 @@ view()
     #building UI/view folder
     
 }
-clients()
+diveinsurance()
 {
     cd ${OXHOME}
-    echo -e "${YELLOW}Creating directory /build/view...${RESET}"
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
     mkdir -p build/clients
     echo -e "${YELLOW}Copying clients DiveInsurance to build folder.${RESET}"
     rsync -rl clients/DiveInsurance/ ./build/clients/DiveInsurance/
     echo -e "${YELLOW}Copying clients DiveInsurance Completed.${RESET}"
+
+}
+insurancemanagement()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients InsuranceManagement to build folder.${RESET}"
+    rsync -rl clients/InsuranceManagement/ ./build/clients/InsuranceManagement/
+    echo -e "${YELLOW}Copying clients InsuranceManagement Completed.${RESET}"
+
+}
+task()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients Task to build folder.${RESET}"
+    rsync -rl clients/Task/ ./build/clients/Task/
+    echo -e "${YELLOW}Copying clients Task Completed.${RESET}"
+
+}
+bridgemed()
+{
+    cd ${OXHOME}
+    echo -e "${YELLOW}Creating directory /build/clients...${RESET}"
+    mkdir -p build/clients
+    echo -e "${YELLOW}Copying clients BridgeMed to build folder.${RESET}"
+    rsync -rl clients/BridgeMed/ ./build/clients/BridgeMed/
+    echo -e "${YELLOW}Copying clients BridgeMed Completed.${RESET}"
 
 }
 integrations()
@@ -177,7 +210,9 @@ all()
    integrations
    api
    view 
-   clients
+   diveinsurance
+   task
+   bridgemed
 }
 
 #looping through case from arguments passed
@@ -196,10 +231,28 @@ do
                 view
                 package
                 break ;;
-        clients)
+        diveinsurance)
                 echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
                 check_dir
-                clients
+                diveinsurance
+                package
+                break;;
+        insurancemanagement)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                insurancemanagement
+                package
+                break;;
+        task)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                task
+                package
+                break;;
+        bridgemed)
+                echo -e "Starting script ${INVERT}$0${RESET}...with ${MAGENTA}$@${RESET} as parameters"                
+                check_dir
+                bridgemed
                 package
                 break;;
         camel)

@@ -70,6 +70,7 @@ return [
         'authToken' => ''
     ],
     'DELEGATE_FOLDER'=>__DIR__.'/../../data/delegate/',
+    'FORM_FOLDER'=>__DIR__.'/../../data/forms/',
     'applicationUrl' => 'http://localhost:8081',
     'RULE_FOLDER'=>__DIR__.'/../../data/rules/',
     'DATA_FOLDER'=>__DIR__.'/../../data/',
@@ -81,6 +82,7 @@ return [
     'APPS_FOLDER' => __DIR__."/../../../../view/apps/",
     'internalBaseUrl' => 'http://localhost:8080',
     'baseUrl' => 'http://localhost:8080',
+    'batch_size' => 100,
     'salt' => 'arogAegatnaVOfficeBack123',
     'jwtKey' => 'l7Hnf6TGMYTy6eP7oyyWNG1MGay1T39/If495vwYBhS2j6OOHlMKhSf3qADPlWwkHQ6h3tjP2klI0kvKPltvVA==',
     'jwtAlgo' => 'HS512',

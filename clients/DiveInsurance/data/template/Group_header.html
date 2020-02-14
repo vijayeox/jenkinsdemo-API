@@ -16,7 +16,7 @@
               vars[temp_var[0]] = decodeURI(temp_var[1]);
           }
       }
-       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','businessPadi','end_date','policy_id','business_address1','business_address2','single_limit','annual_aggregate'];
+       var css_selector_classes = ['page', 'frompage', 'topage', 'webpage', 'section', 'subsection', 'date', 'isodate', 'time', 'title', 'doctitle', 'sitepage', 'sitepages','start_date','license_number','business_name','business_city','business_state','business_country','business_zip','certificate_no','business_padi','end_date','policy_id','business_address1','business_address2','single_limit','annual_aggregate'];
       for (var css_class in css_selector_classes) {
           if (css_selector_classes.hasOwnProperty(css_class)) {
               var element = document.getElementsByClassName(css_selector_classes[css_class]);
@@ -74,7 +74,7 @@
         </div>
         <div class = "certificate_data1">
           <p class = "p_margin">S<span class ="certificate_no"></span></p>
-          <p class = "p_margin"><span class ="businessPadi"></span></p>
+          <p class = "p_margin"><span class ="business_padi"></span></p>
           <p class = "p_margin"><span class ="start_date"></span></p>
           <p class = "p_margin"><span class ="end_date"></span></p>
         </div>

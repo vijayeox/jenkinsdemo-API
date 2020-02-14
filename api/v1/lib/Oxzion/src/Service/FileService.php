@@ -65,6 +65,14 @@ class FileService extends AbstractService
         $data['uuid'] = $uuid = isset($data['uuid']) ? $data['uuid'] : UuidUtil::uuid();
 
         $entityId = isset($data['entity_id']) ? $data['entity_id'] : null;
+        if(!$entityId && isset($data['entity_name'])){
+            $select = "select id from ox_app_entity where name = :entityName";
+            $params = array('entityName' => $data['entity_name']);
+            $result = $this->executeQuerywithBindParameters($select, $params)->toArray();
+            if(count($result)>0){
+                $entityId = $result[0]['id'];
+            }            
+        }
         unset($data['uuid']);
         $fields = $data = $this->cleanData($data);
         $this->logger->info("Data From Fileservice before encoding - " . print_r($data, true));
@@ -176,10 +184,15 @@ class FileService extends AbstractService
         } else {
             $obj = $this->table->getByUuid($id);
             if (is_null($obj)) {
-                throw new EntityNotFoundException("File Id not found -- " . $id);
+                return $this->createFile($data);
             }
             $obj = $obj->toArray();
 
+        }
+        $latestcheck = 0;
+        if(isset($data['islatest']) && $data['islatest']==0)
+        {
+            $latestcheck = 1;
         }
         if (isset($data['form_uuid'])) {
             $data['form_id'] = $this->getIdFromUuid('ox_form', $data['form_uuid']);
@@ -244,8 +257,14 @@ class FileService extends AbstractService
             $this->logger->info("Leaving the updateFile method \n");
             $this->commit();
             // IF YOU DELETE THE BELOW TWO LINES MAKE SURE YOU ARE PREPARED TO CHECK THE ENTIRE INDEXER FLOW
-            if (isset($id)) {
-                $this->messageProducer->sendTopic(json_encode(array('id' => $id)), 'FILE_UPDATED');
+            if(($latestcheck == 1) && isset($id))
+            {
+                $this->messageProducer->sendTopic(json_encode(array('id' => $id)), 'FILE_DELETED');
+            }
+            else {
+                if (isset($id)) {
+                    $this->messageProducer->sendTopic(json_encode(array('id' => $id)), 'FILE_UPDATED');
+                }
             }
 
         } catch (Exception $e) {
@@ -493,11 +512,21 @@ class FileService extends AbstractService
         $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
         if (count($result) > 0) {
             $queryParams = array();
-            $appFilter = "f.id = :appId";
+            $appFilter = "oa.id = :appId";
             $queryParams['appId'] = $appId;
             $statusFilter = "";
+            $createdFilter = "";
+            $entityFilter = "";
             if (isset($params['workflowStatus'])) {
-                $statusFilter = " AND g.status = '" . $params['workflowStatus'] . "'";
+                $statusFilter = " AND wi.status = '" . $params['workflowStatus'] . "'";
+            }
+            if(isset($params['entityName'])){
+                $entityFilter = " AND en.name = :entityName";
+                $queryParams['entityName'] = $params['entityName'];
+                if(isset($params['assocId'])) {
+                    if ($queryParams['assocId'] = $this->getIdFromUuid('ox_file', $params['assocId']))
+                        $entityFilter .= " AND of.assoc_id = :assocId";
+                }
             }
             if (isset($params['workflowId'])) {
 
@@ -510,14 +539,34 @@ class FileService extends AbstractService
                 if (!$workflowId) {
                     throw new ServiceException("Workflow Does not Exist", "app.forworkflownot.found");
                 } else {
-                    $appFilter .= " AND h.id = :workflowId";
+                    $appFilter .= " AND ow.id = :workflowId";
                     $queryParams['workflowId'] = $workflowId;
                 }
             }
-            $where = " $appFilter $statusFilter and a.latest=1";
-            $fromQuery = " from ox_file as a
-            inner join ox_app_entity en on en.id = a.entity_id
-            inner join ox_app as f on (f.id = en.app_id)";
+            if(isset($params['gtCreatedDate'])){
+                $createdFilter .= " AND of.date_created >= :gtCreatedDate";
+                $params['gtCreatedDate'] = str_replace('-', '/', $params['gtCreatedDate']);
+                // strtotime converts the date given in the UI to -1 day. 
+                // UI Date: 2020-02-11 00:00:00 hours , strtotime function result is: 2020-02-10 12:59:59 hours
+                // +1 converts the date to 2020-02-11 00:00:00 hours so the date in Y-m-d format uses the 
+                // right date selected in the UI. 
+                $queryParams['gtCreatedDate'] = date('Y-m-d', strtotime($params['gtCreatedDate']. "+1 days"));
+            }
+            if(isset($params['ltCreatedDate'])){
+                $createdFilter .= " AND of.date_created <= :ltCreatedDate";
+                $params['ltCreatedDate'] = str_replace('-', '/', $params['ltCreatedDate']);
+                // strtotime converts the date given in the UI to -1 day. 
+                // UI Date: 2020-02-11 00:00:00 hours , strtotime function result is: 2020-02-10 12:59:59 hours
+                // +1 results in modified date: 2020-02-11 00:00:00 hours
+                // Then, modified date: 2020-02-11, today's date: 2020-02-11, if we use the '<=' operator then 
+                // the modified date converts to 2020-02-11 00:00:00 hours. Inorder to get all the records 
+                // till EOD of 2020-02-11, we need to use 2020-02-12 hence [+2] added to the date.
+                $queryParams['ltCreatedDate'] = date('Y-m-d', strtotime($params['ltCreatedDate']. "+2 days"));
+            }
+            $where = " $appFilter $statusFilter $entityFilter $createdFilter and of.latest=1";
+            $fromQuery = " from ox_file as of
+            inner join ox_app_entity as en on en.id = of.entity_id
+            inner join ox_app as oa on (oa.id = en.app_id)";
             if (isset($params['userId'])) {
                 if ($params['userId'] == 'me') {
                     $userId = AuthContext::get(AuthConstants::USER_ID);
@@ -527,8 +576,8 @@ class FileService extends AbstractService
                         throw new ServiceException("User Does not Exist", "app.forusernot.found");
                     }
                 }
-                $fromQuery .= " inner join ox_field as d on (en.id = d.entity_id) inner join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=f.id
-                INNER JOIN ox_file_attribute ofa on ofa.file_id = a.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
+                $fromQuery .= " inner join ox_field as d on (en.id = d.entity_id) inner join (select * from ox_wf_user_identifier where ox_wf_user_identifier.user_id = :userId) as owufi ON owufi.identifier_name=d.name AND owufi.app_id=oa.id
+                INNER JOIN ox_file_attribute ofa on ofa.file_id = of.id and ofa.field_id = d.id and ofa.field_value = owufi.identifier ";
                 $userWhere = " and owufi.user_id = :userId and owufi.org_id = :orgId";
                 $queryParams['userId'] = $userId;
                 $queryParams['orgId'] = $orgId;
@@ -536,9 +585,9 @@ class FileService extends AbstractService
                 $userWhere = "";
             }
 
-            $fromQuery .= " left join ox_workflow_instance as g on a.workflow_instance_id = g.id
-            left join ox_workflow_deployment as wd on wd.id = g.workflow_deployment_id
-            left join ox_workflow as h on h.id = wd.workflow_id";
+            $fromQuery .= " left join ox_workflow_instance as wi on of.workflow_instance_id = wi.id
+            left join ox_workflow_deployment as wd on wd.id = wi.workflow_deployment_id
+            left join ox_workflow as ow on ow.id = wd.workflow_id";
             $prefix = 1;
             $whereQuery = "";
             $joinQuery = "";
@@ -578,16 +627,15 @@ class FileService extends AbstractService
                         $tablePrefix = "tblf" . $prefix;
                         if (!empty($val)) {
                             if($subQuery != ''){
-                                $subQuery .= " ".$filterlogic." a.id in ";
+                                $subQuery .= " ".$filterlogic." of.id in ";
                             } else {
-                                $subQuery = " a.id in ";
+                                $subQuery = " of.id in ";
                             }
                             $subQuery .= " (select distinct ox_file.id from ox_file inner join ox_file_attribute as " . $tablePrefix . " on (ox_file.id =" . $tablePrefix . ".file_id) inner join ox_field as ".$val['field'].$tablePrefix." on( ".$val['field'].$tablePrefix.".id = " . $tablePrefix . ".field_id )";
                             $filterOperator = $this->processFilters($val);
                             $queryString = $filterOperator["operation"]."'".$filterOperator["operator1"]."".$val['value']."".$filterOperator["operator2"]."'";
                             $subQuery .= " WHERE ";
                             $subQuery .= " (".$val['field'].$tablePrefix.".entity_id = ox_file.entity_id and ".$val['field'].$tablePrefix.".name ='".$val['field']."' and (CASE WHEN (".$val['field'].$tablePrefix.".data_type='date') THEN CAST(".$tablePrefix.".field_value AS DATETIME) $queryString WHEN (".$val['field'].$tablePrefix.".data_type='int') THEN ".$tablePrefix.".field_value ".(($filterOperator['integerOperation']))." '".$val['value']."' ELSE (".$tablePrefix.".field_value $queryString) END )))";
-                            
                         }
                         $prefix += 1;
                     }
@@ -601,7 +649,7 @@ class FileService extends AbstractService
                             } else {
                                 $sort .= ",".$value['field']." ".$value['dir'];
                             }
-                            $field .= " , (select ".$sortTable.".field_value from ox_file_attribute as ".$sortTable." inner join ox_field as ".$value['field'].$sortTable." on( ".$value['field'].$sortTable.".id = " . $sortTable . ".field_id)  WHERE ".$value['field'].$sortTable.".name='".$value['field']."' AND ".$sortTable.".file_id=a.id) as ".$value['field'];
+                            $field .= " , (select ".$sortTable.".field_value from ox_file_attribute as ".$sortTable." inner join ox_field as ".$value['field'].$sortTable." on( ".$value['field'].$sortTable.".id = " . $sortTable . ".field_id)  WHERE ".$value['field'].$sortTable.".name='".$value['field']."' AND ".$sortTable.".file_id=of.id) as ".$value['field'];
                             $sortCount += 1;
                         }
                     }
@@ -615,11 +663,11 @@ class FileService extends AbstractService
             $where .= " " . $whereQuery . "";
             $fromQuery .= " " . $joinQuery." ".$sortjoinQuery;
             try {
-                $countQuery = "select DISTINCT count(a.uuid) as `count` $fromQuery  WHERE ($where) $userWhere";
+                $countQuery = "select DISTINCT count(of.uuid) as `count` $fromQuery  WHERE ($where) $userWhere";
                 $this->logger->info("Executing query - $countQuery with params - " . json_encode($queryParams));
                 $countResultSet = $this->executeQueryWithBindParameters($countQuery, $queryParams)->toArray();
                 $this->logger->info("Executing COUNT query - $select with params - " . json_encode($queryParams));
-                $select = "SELECT a.data, a.uuid, g.status, g.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
+                $select = "SELECT of.data, of.uuid, wi.status, wi.process_instance_id as workflowInstanceId, en.name as entity_name $field $fromQuery WHERE $where $userWhere $sort $pageSize $offset";
                 $this->logger->info("Executing query - $select with params - " . json_encode($queryParams));
                 $resultSet = $this->executeQueryWithBindParameters($select, $queryParams)->toArray();
                 if ($resultSet) {
@@ -655,6 +703,7 @@ class FileService extends AbstractService
             'appUuid' => $params['appId'],
             'fileUuid' => $params['fileId'],
             'dataType' => 'document');
+        $this->logger->info("Executing query $selectQuery with params - ".json_encode($selectQueryParams));
         try {
             $selectResultSet = $this->executeQueryWithBindParameters($selectQuery, $selectQueryParams)->toArray();
             if (count($selectResultSet) > 0 && isset($selectResultSet[0])) {

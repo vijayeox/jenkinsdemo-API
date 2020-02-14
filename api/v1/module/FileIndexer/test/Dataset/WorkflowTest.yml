@@ -77,28 +77,24 @@ ox_form:
 -
     id: 1
     app_id: 99
-    template: '{"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":{}},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":{},"properties":{},"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleForm2ForTests"}'
     name: "Task"
     description: "Form Description"
     entity_id: 1
 -
     id: 2
     app_id: 99
-    template: '{"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":{}},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":{},"properties":{},"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleForm1ForTests"}'
     name: "Test Form 2"
     description: "Form Description"
     entity_id: 1
 -
     id: 3
     app_id: 99
-    template: '{"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":{}},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":{},"properties":{},"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleForm1ForTests"}'
     name: "Test Form 3"
     description: "Form Description"
     entity_id: 1
 -
     id: 4
     app_id: 98
-    template: '{"_id":"5d3afa5ccc5f75b982967721","type":"form","tags":[],"owner":"5cd2e0d62363f67ddc9489c6","components":[{"autofocus":false,"input":true,"tableView":true,"inputType":"text","inputMask":"","label":"Name","key":"name","placeholder":"","prefix":"","suffix":"","multiple":false,"defaultValue":"","protected":false,"unique":false,"persistent":true,"hidden":false,"clearOnHide":true,"spellcheck":true,"validate":{"required":false,"minLength":"","maxLength":"","pattern":"","custom":"","customPrivate":false},"conditional":{"show":"","when":null,"eq":""},"type":"textfield","labelPosition":"top","inputFormat":"plain","tags":[],"properties":{}},{"autofocus":false,"input":true,"label":"Submit","tableView":false,"key":"submit","size":"md","leftIcon":"","rightIcon":"","block":false,"action":"submit","disableOnInvalid":false,"theme":"primary","type":"button"}],"revisions":"","_vid":0,"title":"SampleFormForTests","display":"form","access":[{"roles":["5ce43aa430776b950569301d","5ce43aa430776b4a5969301e","5ce43aa430776bdfb569301f"],"type":"read_all"}],"submissionAccess":[],"settings":{},"properties":{},"name":"sampleFormForTests","path":"sampleformfortests","project":"5ce43aa430776b2aff69301c","created":"2019-07-26T13:04:28.211Z","modified":"2019-07-26T13:04:28.214Z","machineName":"testdivehub:sampleForm1ForTests"}'
     name: "Test Form X"
     description: "Form Description"
     entity_id: 2
@@ -288,7 +284,9 @@ ox_file:
     data: "{\"field1\":3,\"field2\":4}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145b"
     form_id: 1
+    date_created: '2019-12-19 11:03:08'
     entity_id: 1
+    latest: 1
 -
     id: 102
     workflow_instance_id: 1
@@ -297,18 +295,31 @@ ox_file:
     data: "{\"field3\":3,\"field4\":4}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145c"
     form_id: 2
+    date_created: '2020-01-19 11:03:08'
     entity_id: 1
+    latest: 1
 -
     id: 103
     org_id: 1
-    data: "new data"
+    data: "{\"some key\" : \"some value \"}"
     uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145d"
     form_id: 3
+    date_created: '2020-02-19 11:03:08'
     entity_id: 1
+    latest: 1
+-
+    id: 104
+    org_id: 1
+    data: "{\"some key2\" : \"some value2\"}"
+    uuid: "d13d0c68-98c9-11e9-adc5-308d99c9145e"
+    form_id: 3
+    date_created: '2020-03-19 11:03:08'
+    entity_id: 1
+    latest: 0
 ox_file_attribute:
 -
     id: 1
-    file_id: 101
+    file_id: 102
     org_id: 1
     field_value: 1
     field_id: 1
@@ -320,13 +331,13 @@ ox_file_attribute:
     field_id: 2
 -
     id: 3
-    file_id: 102
+    file_id: 101
     org_id: 1
     field_value: 2
     field_id: 3
 -
     id: 4
-    file_id: 102
+    file_id: 101
     org_id: 1
     field_value: 2
     field_id: 4
@@ -342,3 +353,18 @@ ox_file_attribute:
     org_id: 1
     field_value: 1
     field_id: 4
+ox_wf_user_identifier:
+-
+    id: 1
+    user_id: 1
+    identifier_name: 'field1'
+    identifier: 1
+    app_id: 99
+    org_id: 1
+-
+    id: 2
+    user_id: 1
+    identifier_name: 'field2'
+    identifier: 1
+    app_id: 99
+    org_id: 1

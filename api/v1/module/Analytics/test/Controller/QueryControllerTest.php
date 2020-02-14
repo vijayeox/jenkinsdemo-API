@@ -13,11 +13,18 @@ use Mockery;
 
 class QueryControllerTest extends ControllerTest
 {
+    private $index_pre;
 
     public function setUp() : void
     {
         $this->loadConfig();
         parent::setUp();
+        $config = $this->getApplicationConfig();
+        if (isset($config['elasticsearch']['core'])) {
+            $this->index_pre = $config['elasticsearch']['core'].'_';
+        } else {
+            $this->index_pre = '';
+        }
     }
 
     public function getDataSet()
@@ -50,7 +57,7 @@ class QueryControllerTest extends ControllerTest
             ->andReturn(0);
             $mock->shouldReceive('search')
             ->once()
-   //         ->with($input)
+            ->with($input)
             ->andReturn($output);
     }
 
@@ -110,7 +117,7 @@ class QueryControllerTest extends ControllerTest
 
     public function testUpdate()
     {
-        $data = ['name' => "querytest", 'datasource_id' => 2, 'version' => 1];
+        $data = ['name' => "querytest", 'datasource_id' => '7700c623-1361-4c85-8203-e255ac995c4a', 'version' => 1];
         $this->initAuthToken($this->adminUser);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/analytics/query/8f1d2819-c5ff-4426-bc40-f7a20704a738', 'PUT', null);
@@ -195,22 +202,11 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['data']['query']['name'], 'query1');
     }
 
-    // public function testGetHub() {
-    //     $this->initAuthToken($this->adminUser);
-    //     $this->dispatch('/analytics/query/e6de79cb-3148-11ea-98ba-283a4d5d1bdb?data=true', 'GET');
-    //     $this->assertResponseStatusCode(200);
-    //     $this->setDefaultAsserts();
-    //     $content = json_decode($this->getResponse()->getContent(), true);
-    //     $this->assertEquals($content['status'], 'success');
-    //     $this->assertEquals($content['data']['query']['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
-    //     $this->assertEquals($content['data']['query']['name'], 'query1');
-    // }
-
     public function testGetWithResults() {
         if (enableElastic!=0) {
             $this->setElasticData();
         } else {
-            $input = json_decode('{"index":"diveinsurance_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"total"}},{"range":{"start_date":{"gte":"2018-01-01","lte":"2019-12-27","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"aggs":{"groupdata":{"date_histogram":{"field":"start_date","interval":"month","format":"MMM-yyyy"},"aggs":{"value":{"sum":{"field":"total"}}}}},"explain":true},"_source":["*"],"from":0,"size":0}',true);
+            $input = json_decode('{"index":"'.$this->index_pre.'diveinsurance_index","body":{"query":{"bool":{"must":[{"term":{"org_id":1}},{"exists":{"field":"total"}},{"range":{"start_date":{"gte":"2018-01-01","lte":"'.date("Y-m-d").'","format":"yyyy-MM-dd"}}}]}},"_source":["*"],"aggs":{"groupdata":{"date_histogram":{"field":"start_date","interval":"month","format":"MMM-yyyy"},"aggs":{"value":{"sum":{"field":"total"}}}}},"explain":true},"_source":["*"],"from":0,"size":0}',true);
             $output = json_decode('{"took":2,"timed_out":false,"_shards":{"total":1,"successful":1,"skipped":0,"failed":0},"hits":{"total":{"value":4,"relation":"eq"},"max_score":null,"hits":[]},"aggregations":{"groupdata":{"buckets":[{"key_as_string":"Apr-2019","key":1554076800000,"doc_count":1,"value":{"value":890}},{"key_as_string":"May-2019","key":1556668800000,"doc_count":1,"value":{"value":400.7799987792969}},{"key_as_string":"Jun-2019","key":1559347200000,"doc_count":0,"value":{"value":0}},{"key_as_string":"Jul-2019","key":1561939200000,"doc_count":0,"value":{"value":0}},{"key_as_string":"Aug-2019","key":1564617600000,"doc_count":1,"value":{"value":1486.780029296875}},{"key_as_string":"Sep-2019","key":1567296000000,"doc_count":1,"value":{"value":600.780029296875}}]}}}',true);
             $this->setMockData($input,$output);
         }
@@ -269,7 +265,7 @@ class QueryControllerTest extends ControllerTest
     public function testGetListWithSort()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/query?sort=[{"field":"name","dir":"desc"}]', 'GET');
+        $this->dispatch('/analytics/query?filter=[{"sort":[{"field":"name","dir":"desc"}]}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -285,7 +281,7 @@ class QueryControllerTest extends ControllerTest
      public function testGetListSortWithPageSize()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/query?skip=1&limit=10&sort=[{"field":"name","dir":"asc"}]', 'GET');
+        $this->dispatch('/analytics/query?filter=[{"sort":[{"field":"name","dir":"asc"}],"skip":1,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
@@ -300,7 +296,7 @@ class QueryControllerTest extends ControllerTest
     public function testGetListwithQueryParameters()
     {
         $this->initAuthToken($this->adminUser);
-        $this->dispatch('/analytics/query?limit=10&sort=[{"field":"name","dir":"desc"}]&filter=[{"logic":"and"},{"filters":[{"field":"name","operator":"endswith","value":"3"},{"field":"name","operator":"startswith","value":"q"}]}]', 'GET');
+        $this->dispatch('/analytics/query?filter=[{"filter":{"logic":"and","filters":[{"field":"name","operator":"endswith","value":"3"},{"field":"name","operator":"startswith","value":"q"}]},"sort":[{"field":"name","dir":"desc"}],"skip":0,"take":10}]', 'GET');
         $this->assertResponseStatusCode(200);
         $this->setDefaultAsserts();
         $content = (array)json_decode($this->getResponse()->getContent(), true);
