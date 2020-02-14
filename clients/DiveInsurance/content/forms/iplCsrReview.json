@@ -678,25 +678,27 @@
             "theme":"primary",
             "tableView":false,
             "components":[ {
-                "input":true,
-                "tableView":true,
-                "label":"Policy Period",
-                "key":"startDateRange",
+                "label":"Select a Policy Period",
+                "widget":"choicesjs",
                 "placeholder":"Select a Policy Period",
-                "protected":true,
-                "persistent":false,
+                "hideLabel":true,
+                "tableView":true,
+                "dataSrc":"custom",
+                "data": {
+                    "values":[ {}
+                    ],
+                    "custom": "var currentDate = moment()\ncurrentDate.date(1)\n//var presentMonth = moment().month()\nvar endYear = moment().year()+1\nvar endDate = moment()\nendDate.month('June')\nvar tempMonth = -1;\nendDate.year(endYear)\nendDate.date(30)\nvar monthDifference = endDate.diff(currentDate,'months')+1\nfor (var i = 0; i < monthDifference; i++) {\n\tif(tempMonth != -1){\n\t\tcurrentDate.date(1)\n     currentDate.month(tempMonth+1)\n     tempMonth = -1;\n\t}else if(currentDate.month() == 6){\n\t  currentDate.date(30)\n    tempMonth = currentDate.month()\n\t currentDate.month(5)\n\t}\n    if((monthDifference - i) > 12 ){\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - June 30, ' +(endYear - 1),\"value\": currentDate.format(\"YYYY-MM-DD\")}\n    }else{\n        values[i] = {\"label\":currentDate.format(\"MMMM DD, YYYY\") + ' - ' +endDate.format(\"MMMM DD, YYYY\"),\"value\" : currentDate.format(\"YYYY-MM-DD\")}\n    }\n    currentDate.add(1,'months')\n}"
+                }
+                ,
+                "selectThreshold":0.3,
                 "clearOnHide":false,
-                "spellcheck":false,
                 "validate": {
                     "unique": false, "multiple": false
                 }
                 ,
-                "type":"textfield",
-                "hideLabel":true,
-                "disabled":true,
-                "calculateValue":"value=data['start_date_range'].label;",
-                "lockKey":true,
-                "errorLabel":"Please select a policy period from the list"
+                "key":"start_date_range",
+                "type":"select",
+                "input":true
             }
             ],
             "type":"panel",
@@ -705,6 +707,8 @@
             "validate": {
                 "unique": false, "multiple": false
             }
+            ,
+            "path":"page3Panel3"
         }
         ,
         {
@@ -3153,7 +3157,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":137,
+    "_vid":138,
     "title":"IPL - CSR Review",
     "display":"form",
     "access":[ {
@@ -3172,7 +3176,7 @@
     "path":"iplcsrreview",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-10-01T11:17:41.957Z",
-    "modified":"2020-02-14T12:13:03.731Z",
+    "modified":"2020-02-14T12:46:38.627Z",
     "machineName":"testdivehub:iplCsrReview",
     "controller":""
 }
