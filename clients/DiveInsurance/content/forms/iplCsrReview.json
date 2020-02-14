@@ -1925,6 +1925,12 @@
             }
             ,
             "components":[ {
+                "label": "attachmentFields", "customDefaultValue": "value = [\"attachments\"];", "key":"attachmentFields", "type":"hidden", "input":true, "tableView":false, "validate": {
+                    "unique": false, "multiple": false
+                }
+            }
+            ,
+            {
                 "label":"Attachments",
                 "hideLabel":true,
                 "tableView":true,
@@ -1937,7 +1943,7 @@
                 "filePattern":".pdf,.png,.jpeg,.jpg,.gif,.doc,.docx,.xlsx,.xls",
                 "fileMaxSize":"10MB",
                 "multiple":true,
-                "calculateValue":"if(data.attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
+                "calculateValue":"if((data.attachments || data.attachments !== undefined) && data.attachments.length >= 10 ){\n  component.multiple = false\n} else {\n  component.multiple = true\n}",
                 "validate": {
                     "unique": false, "multiple": true
                 }
@@ -1947,7 +1953,7 @@
                 "input":true
             }
             ],
-            "path":"attachments"
+            "path":"attachments1"
         }
         ,
         {
@@ -3162,7 +3168,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":141,
+    "_vid":142,
     "title":"IPL - CSR Review",
     "display":"form",
     "access":[ {
@@ -3181,7 +3187,7 @@
     "path":"iplcsrreview",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-10-01T11:17:41.957Z",
-    "modified":"2020-02-14T13:15:21.111Z",
+    "modified":"2020-02-14T14:52:12.266Z",
     "machineName":"testdivehub:iplCsrReview",
     "controller":""
 }
