@@ -91,7 +91,7 @@ namespace Callback\Service;
                 $userData = json_decode($response['body'], true);
                 return $userData;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info("Username doesn't exist/Username validation failure");
+                $this->logger->error("Username doesn't exist/Username validation failure", $e);
             }
         }
 
@@ -115,7 +115,7 @@ namespace Callback\Service;
                     $channelData = json_decode($channelData['body'], true);
                     return $channelData;
                 }
-                $this->logger->info("Channel does not exist");
+                $this->logger->error("Channel does not exist", $e);
             }
         }
 
@@ -127,7 +127,7 @@ namespace Callback\Service;
                 $teamMember = json_decode($response, true);
                 return json_decode($response, true);
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info("User not in Team");
+                $this->logger->error("User not in Team", $e);
             }
         }
 
@@ -144,8 +144,7 @@ namespace Callback\Service;
                 $response = $this->restClient->postWithHeader('api/v4/teams', array('name' => $orgName,'display_name' => $orgName,'type' => 'O'), $headers);
                 return $response;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info("A team with that name already exists");
-                $this->logger->error($e->getMessage(), $e);
+                $this->logger->error("A team with that name already exists", $e);
             }
         }
 
@@ -167,7 +166,7 @@ namespace Callback\Service;
                 $response = $this->restClient->put('api/v4/teams/'.$json['id'], array('name'=> $newName,'display_name' => $newName,'id'=> $json['id']), $headers);
                 return $response;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info("Org Does not exist");
+                $this->logger->error("Org Does not exist", $e);
             }
         }
 
@@ -184,7 +183,7 @@ namespace Callback\Service;
                 $response = $this->restClient->delete('api/v4/teams/'.$json[0]['id'], array('permanent' => 'false'), $headers);
                 return $response;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info("Org Deletion Failed");
+                $this->logger->error("Org Deletion Failed", $e);
             }
         }
 
@@ -211,7 +210,7 @@ namespace Callback\Service;
                 $response = json_decode($response['body'], true);
                 return $response;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info("User Already in team");
+                $this->logger->error("User Already in team", $e);
             }
         }
         
@@ -234,7 +233,7 @@ namespace Callback\Service;
                 $response = $this->restClient->delete('api/v4/teams/'.$team['id'].'/members/'.$userData['id'], array(), $headers);
                 return $response;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info("User is not in the Team/User Or Team name is missing");
+                $this->logger->error("User is not in the Team/User Or Team name is missing", $e);
             }
         }
 
@@ -259,7 +258,7 @@ namespace Callback\Service;
                 $response = $this->restClient->postWithHeader('api/v4/channels', array('team_id'=>$team['id'],'name'=>$channel,'display_name'=>$channel,'type'=>'P'), $headers);
                 return $response;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info("Create Channel Failed");
+                $this->logger->error("Create Channel Failed", $e);
             }
         }
 
@@ -281,7 +280,7 @@ namespace Callback\Service;
                 $response = $this->restClient->delete('api/v4/channels/'.$channelData['id'], array(), $headers);
                 return $response;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info("Channel/Team Doesn't exist");
+                $this->logger->error("Channel/Team Doesn't exist", $e);
             }
         }
 
@@ -304,7 +303,7 @@ namespace Callback\Service;
                 $response = $this->restClient->put('api/v4/channels/'.$channelData['id'], array('id'=>$channelData['id'],'name'=> $newChannel,'display_name' => $newChannel), $headers);
                 return $response;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info("Update Channel Failed");
+                $this->logger->error("Update Channel Failed", $e);
             }
         }
         
@@ -331,7 +330,7 @@ namespace Callback\Service;
                 $response = $this->restClient->postWithHeader('api/v4/channels/'.$channelData['id'].'/members', array('user_id' => $userData['id']), $headers);
                 return $response;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info("Adding User to channel Failed");
+                $this->logger->error("Adding User to channel Failed", $e);
             }
         }
 
@@ -363,7 +362,7 @@ namespace Callback\Service;
                 $response = $this->restClient->delete('api/v4/channels/'.$channelData['id'].'/members/'.$userData['id'], array(), $headers);
                 return $response;
             } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $this->logger->info($e->getMessage());
+                $this->logger->error($e->getMessage(), $e);
                 $this->logger->info("Removing User from channel Failed");
             }
         }
