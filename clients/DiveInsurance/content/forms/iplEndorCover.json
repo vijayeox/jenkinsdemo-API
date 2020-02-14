@@ -2059,18 +2059,18 @@
             "theme":"primary",
             "tableView":false,
             "components":[ {
-                "input":true,
-                "tableView":true,
                 "label":"By checking this box",
-                "dataGridLabel":false,
-                "key":"page3Panel4Bycheckingthisbox",
+                "tableView":true,
+                "defaultValue":false,
+                "clearOnHide":false,
                 "validate": {
-                    "required": true, "unique": false, "multiple": false
+                    "required": true, "customMessage": "Please accept these declarations", "unique": false, "multiple": false
                 }
                 ,
+                "key":"page3Panel4Bycheckingthisbox",
                 "type":"checkbox",
-                "defaultValue":false,
-                "clearOnHide":false
+                "input":true,
+                "dataGridLabel":false
             }
             ,
             {
@@ -2196,9 +2196,15 @@
                         "components":[ {
                             "input":true,
                             "components":[ {
-                                "key":"additionalInsuredPanel",
-                                "input":false,
+                                "title":" ",
+                                "collapsible":false,
+                                "dataGridLabel":false,
                                 "tableView":false,
+                                "key":"additionalInsuredPanel",
+                                "type":"panel",
+                                "label":" ",
+                                "breadcrumb":"none",
+                                "input":false,
                                 "components":[ {
                                     "label":"Columns",
                                     "input":false,
@@ -2521,12 +2527,9 @@
                                     }
                                 }
                                 ],
-                                "type":"panel",
-                                "breadcrumb":"none",
                                 "inDataGrid":true,
                                 "hideLabel":true,
                                 "lockKey":true,
-                                "label":"Panel",
                                 "validate": {
                                     "unique": false, "multiple": false
                                 }
@@ -2774,7 +2777,7 @@
     "path":"iplendorcover",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2020-01-08T15:16:11.935Z",
-    "modified":"2020-02-14T12:17:31.512Z",
+    "modified":"2020-02-14T13:14:34.113Z",
     "machineName":"testdivehub:iplEndorCover",
     "controller":""
 }

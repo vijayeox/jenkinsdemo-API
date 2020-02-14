@@ -787,7 +787,7 @@
                             ,
                             "valueProperty":"country",
                             "dataType":"auto",
-                            "template":"<span>{{ item }}</span>",
+                            "template":"<span>{{ item.country }}</span>",
                             "selectThreshold":0.3,
                             "clearOnHide":false,
                             "validate": {
@@ -3025,6 +3025,7 @@
                         "components":[ {
                             "input":true,
                             "components":[ {
+                                "title":"  ",
                                 "breadcrumb":"none",
                                 "breadcrumbClickable":true,
                                 "buttonSettings": {
@@ -3036,7 +3037,7 @@
                                 "tableView":false,
                                 "key":"additionalInsuredPanel",
                                 "type":"panel",
-                                "label":"",
+                                "label":" ",
                                 "input":false,
                                 "components":[ {
                                     "label":"Columns",
@@ -3147,6 +3148,7 @@
                                             }
                                             ,
                                             "valueProperty":"country",
+                                            "template":"<span>{{ item.country }}</span>",
                                             "selectThreshold":0.3,
                                             "clearOnHide":false,
                                             "validate": {
@@ -3627,7 +3629,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":513,
+    "_vid":516,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3649,7 +3651,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-02-14T12:14:45.347Z",
+    "modified":"2020-02-14T13:56:28.083Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }

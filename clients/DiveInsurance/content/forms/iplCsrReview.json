@@ -1957,18 +1957,18 @@
             "theme":"primary",
             "tableView":false,
             "components":[ {
-                "input":true,
-                "tableView":true,
                 "label":"By checking this box",
-                "dataGridLabel":false,
-                "key":"page3Panel4Bycheckingthisbox",
+                "disabled":true,
+                "tableView":true,
                 "defaultValue":false,
                 "validate": {
-                    "required": true, "unique": false, "multiple": false
+                    "required": true, "customMessage": "Please accept these declarations", "unique": false, "multiple": false
                 }
                 ,
+                "key":"page3Panel4Bycheckingthisbox",
                 "type":"checkbox",
-                "disabled":true
+                "input":true,
+                "dataGridLabel":false
             }
             ,
             {
@@ -2671,9 +2671,14 @@
                     "components":[ {
                         "input":true,
                         "components":[ {
-                            "key":"additionalInsuredPanel",
-                            "input":false,
+                            "title":" ",
+                            "collapsible":false,
+                            "dataGridLabel":false,
                             "tableView":false,
+                            "key":"additionalInsuredPanel",
+                            "type":"panel",
+                            "label":" ",
+                            "input":false,
                             "components":[ {
                                 "label":"Columns",
                                 "input":false,
@@ -2960,10 +2965,8 @@
                                 "hideLabel":true
                             }
                             ],
-                            "type":"panel",
                             "inDataGrid":true,
                             "hideLabel":true,
-                            "label":"Panel",
                             "validate": {
                                 "unique": false, "multiple": false
                             }
@@ -3069,9 +3072,14 @@
         }
         ,
         {
-            "key":"page6Panel",
-            "input":false,
+            "title":" ",
+            "collapsible":false,
             "tableView":false,
+            "key":"page6Panel",
+            "type":"panel",
+            "label":" ",
+            "breadcrumb":"none",
+            "input":false,
             "components":[ {
                 "label":"Approve/Reject the Application",
                 "optionsLabelPosition":"top",
@@ -3101,10 +3109,7 @@
                 "labelMargin":3
             }
             ],
-            "type":"panel",
-            "breadcrumb":"none",
             "hideLabel":true,
-            "label":"Panel",
             "validate": {
                 "unique": false, "multiple": false
             }
@@ -3157,7 +3162,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":138,
+    "_vid":141,
     "title":"IPL - CSR Review",
     "display":"form",
     "access":[ {
@@ -3176,7 +3181,7 @@
     "path":"iplcsrreview",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-10-01T11:17:41.957Z",
-    "modified":"2020-02-14T12:46:38.627Z",
+    "modified":"2020-02-14T13:15:21.111Z",
     "machineName":"testdivehub:iplCsrReview",
     "controller":""
 }
