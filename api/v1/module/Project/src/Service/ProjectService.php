@@ -303,7 +303,7 @@ class ProjectService extends AbstractService
     {
         $errorMessage = "You do not have permissions to get the user list of project";
         $orgId = $this->checkProjectOrganization($params, $errorMessage);
-        $pageSize = 20;
+        $pageSize = 200;
         $offset = 0;
         $where = "";
         $sort = "ox_user.name";
