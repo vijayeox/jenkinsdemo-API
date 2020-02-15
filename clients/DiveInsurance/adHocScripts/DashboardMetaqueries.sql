@@ -17,13 +17,13 @@ INSERT INTO ox_widget (uuid,visualization_id,ispublic,created_by,date_created,or
 INSERT INTO ox_widget_query (ox_widget_id,ox_query_id,sequence,configuration) VALUES ((SELECT id from ox_widget where name LIKE 'Hub Written Premium'),(SELECT id from ox_query where name LIKE 'Hub Written Premium'),0,'{"filter":null, "grouping":null, "sort":null}');
 
 INSERT INTO ox_dashboard (uuid,name,ispublic,description,dashboard_type,created_by,date_created,org_id,isdeleted,content,version) VALUES 
-('4796e7fe-50b5-469c-9737-35f3921891ba','Vicencia and Buckley',0,'CSR Dashboard','html',(SELECT id from ox_user where username like 'testhub07.gmail.com'),NOW(),(SELECT id from ox_organization where name LIKE 'Vincencia & Buckley'),0,'<h3 style="color: rgb(170, 170, 170); font-style: italic; text-align: center;"><span style="font-family:Tahoma,Geneva,sans-serif;"></span></h3>
+('4796e7fe-50b5-469c-9737-35f3921891ba','Vicencia and Buckley',1,'CSR Dashboard','html',(SELECT id from ox_user where username like 'testhub07.gmail.com'),NOW(),(SELECT id from ox_organization where name LIKE 'Vincencia & Buckley'),0,'<h3 style="color: rgb(170, 170, 170); font-style: italic; text-align: center;"><span style="font-family:Tahoma,Geneva,sans-serif;"></span></h3>
 
 <div style="display: flex;flex-direction: row;/* margin: auto; */justify-content: space-around;">
 <div style="background-color: #275362;color:$fff;padding: 10px;border: 1px solid black;width: 20%;border-radius:10px;">
 <h3 style="color: rgb(170, 170, 170); font-style: italic; text-align: center;"><span style="color:#ffffff;"><span style="font-family:Tahoma,Geneva,sans-serif;"><span style="font-size:16px;"><strong>Total Submissions</strong></span></span></span></h3>
 
-<h3 style="color: rgb(170, 170, 170); font-style: italic; text-align: center;"><span style="color:#ffffff;"><span style="font-family:Tahoma,Geneva,sans-serif;"><span style="font-size:26px;"><span class="oxzion-widget" data-oxzion-widget-id="d2434992-e6a4-4fc6-9dde-d35e4da58b19" id="id_19b60c81-b652-4089-8ce9-45a97d2e08c6">1</span></span></span></span></h3>
+<h3 style="color: rgb(170, 170, 170); font-style: italic; text-align: center;"><span style="color:#ffffff;"><span style="font-family:Tahoma,Geneva,sans-serif;"><span style="font-size:26px;"><span class="oxzion-widget" data-oxzion-widget-id="d2434992-e6a4-4fc6-9dde-d35e4da58b19" id="id_19b60c81-b652-4089-8ce9-45a97d2e08c6">0</span></span></span></span></h3>
 </div>
 
 <div style="background-color: #275362;color:$fff;padding: 10px;border: 1px solid black;width: 20%;border-radius:10px;">
@@ -35,8 +35,11 @@ INSERT INTO ox_dashboard (uuid,name,ispublic,description,dashboard_type,created_
 <div style="background-color: #275362;color:$fff;padding: 10px;border: 1px solid black;width: 20%;border-radius:10px;">
 <h3 style="color: rgb(170, 170, 170); font-style: italic; text-align: center;"><span style="color:#ffffff;"><span style="font-family:Tahoma,Geneva,sans-serif;"><span style="font-size:16px;"><strong>Total Written Premium</strong></span></span></span></h3>
 
-<h3 style="color: rgb(170, 170, 170); font-style: italic; text-align: center;"><span style="color:#ffffff;"><span style="font-family:Tahoma,Geneva,sans-serif;"><span style="font-size:26px;"><span class="oxzion-widget" data-oxzion-widget-id="1f8fc873-b729-41b6-9c2f-bed07db8f70a" id="id_774eab82-74a4-480f-bd5f-549e04dcddf9">$ 990.00 </span></span></span></span></h3>
+<h3 style="color: rgb(170, 170, 170); font-style: italic; text-align: center;"><span style="color:#ffffff;"><span style="font-family:Tahoma,Geneva,sans-serif;"><span style="font-size:26px;"><span class="oxzion-widget" data-oxzion-widget-id="1f8fc873-b729-41b6-9c2f-bed07db8f70a" id="id_774eab82-74a4-480f-bd5f-549e04dcddf9">$ 0.00 </span></span></span></span></h3>
 </div>
 </div>
 ',1)
 ;
+
+--This is to be modified to properly point to the right end point and use the right core based on environment and right org_id
+update ox_datasource set configuration = '{"data": {"user": "elastic","password": "changeme","serveraddress": "13.52.224.89","port": "9200", "core":"oxzion", "type":"type", "scheme":"http"}}', org_id = 1835 where name LIKE 'OxzionElasticDs';

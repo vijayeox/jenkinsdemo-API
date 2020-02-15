@@ -19,6 +19,8 @@ use Oxzion\Utils\UuidUtil;
 
 class FormService extends AbstractService
 {
+    private $formFileExt = ".json";
+    
     public function __construct($config, $dbAdapter, FormTable $table, FormFactory $formEngineFactory, FieldService $fieldService)
     {
         parent::__construct($config, $dbAdapter);
@@ -169,13 +171,21 @@ class FormService extends AbstractService
     {
         $this->logger->info("EXECUTING GET FORM");
         try{
-            $queryString = "Select * from ox_form where uuid=?";
+            $queryString = "Select name, app_id, uuid from ox_form where uuid=?";
             $queryParams = array($uuid);
             $resultSet = $this->executeQueryWithBindParameters($queryString, $queryParams)->toArray();
             if (count($resultSet)==0) {
                 return 0;
             }
-            return $resultSet[0];
+            $data = $resultSet[0];
+            $appId = $this->getUuidFromId("ox_app", $data['app_id']);
+            $path = $this->config['FORM_FOLDER'].$appId."/".$data['name'].$this->formFileExt;
+            $this->logger->info("Form template - $path");
+            if(file_exists($path)){
+               $data['template'] = file_get_contents($path);
+            }
+            unset($data['app_id']);
+            return $data;
         }catch(Exception $e){
             $this->logger->error($e->getMessage(), $e);
             throw $e;

@@ -152,6 +152,7 @@
 						"mask": false,
 						"autofocus": true,
 						"spellcheck": true,
+						"disabled": true,
 						"tableView": false,
 						"delimiter": false,
 						"requireDecimal": false,
@@ -764,6 +765,7 @@
 				"components": [{
 					"label": "Policy period",
 					"format": "MM-dd-yyyy",
+					"disabled": true,
 					"tableView": true,
 					"datePicker": {
 						"datepickerMode": "day"
@@ -915,6 +917,7 @@
 					"label": "Legal Business Name",
 					"placeholder": "Legal Business Name",
 					"spellcheck": true,
+					"disabled": true,
 					"tableView": true,
 					"clearOnHide": false,
 					"validate": {
@@ -3134,9 +3137,6 @@
 				"defaultValue": "noAdditionalInsureds",
 				"data": {
 					"values": [{
-						"value": "asPerExistingPolicyIfRenewing",
-						"label": "As per existing policy (if renewing)"
-					}, {
 						"value": "newListOfAdditionalInsureds",
 						"label": "New list of Additional Insureds"
 					}, {
@@ -3840,6 +3840,7 @@
 		"components": [{
 			"label": "Loss Payees",
 			"widget": "choicesjs",
+			"hideLabel": true,
 			"tableView": true,
 			"data": {
 				"values": [{
@@ -5080,12 +5081,12 @@
 	"settings": {},
 	"properties": {
 		"submission_commands": "[{\"command\" : \"delegate\", \"delegate\" : \"DocumentSaveDelegate\"}, {\"command\" : \"startWorkflow\"}]",
-		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"DocumentFetchDelegate\"}]"
+		"commands": "[{\"command\" : \"delegate\" ,\"delegate\" : \"SetupEndorsementDiveBoat\"},{\"command\":\"delegate\",\"delegate\":\"DocumentFetchDelegate\"}]"
 	},
 	"name": "endorsementDiveBoat",
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-02-06T05:55:40.061Z",
+	"modified": "2020-02-12T08:28:21.128Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }

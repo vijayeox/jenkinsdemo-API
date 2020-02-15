@@ -375,7 +375,6 @@
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
-							"required": true,
 							"customMessage": "Please enter your initial.",
 							"unique": false,
 							"multiple": false
@@ -400,7 +399,6 @@
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
-							"required": true,
 							"customMessage": "Please enter your first name.",
 							"unique": false,
 							"multiple": false
@@ -425,7 +423,6 @@
 						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
-							"required": true,
 							"customMessage": "Please enter your last name.",
 							"unique": false,
 							"multiple": false
@@ -467,6 +464,7 @@
 							"tableView": true,
 							"clearOnHide": false,
 							"validate": {
+								"required": true,
 								"unique": false,
 								"multiple": false
 							},
@@ -815,22 +813,20 @@
 						"hideLabel": true,
 						"hideOnChildrenHidden": false
 					}, {
-						"input": true,
-						"tableView": true,
 						"label": "Fax",
-						"key": "fax_value",
 						"placeholder": "Fax",
+						"hideLabel": true,
+						"spellcheck": true,
+						"tableView": true,
 						"clearOnHide": false,
 						"validate": {
 							"unique": false,
 							"multiple": false
 						},
+						"key": "fax",
 						"type": "phoneNumber",
-						"properties": {
-							"target": "fax_calculated"
-						},
+						"input": true,
 						"lockKey": true,
-						"hideLabel": true,
 						"hideOnChildrenHidden": false
 					}],
 					"width": 6,
@@ -2062,20 +2058,22 @@
 						}]
 					}, {
 						"components": [{
-							"input": true,
-							"tableView": true,
-							"label": "How man Crew Members would you like to Cover ?",
-							"key": "CrewInWaterCount",
+							"label": "How many Crew Members would you like to Cover ?",
 							"spellcheck": true,
+							"tableView": true,
 							"validate": {
-								"required": true
+								"required": true,
+								"unique": false,
+								"multiple": false
 							},
+							"key": "CrewInWaterCount",
 							"conditional": {
-								"show": "true",
+								"show": true,
 								"when": "CrewInWaterYN",
 								"eq": "true"
 							},
 							"type": "textfield",
+							"input": true,
 							"lockKey": true
 						}]
 					}]
@@ -3379,16 +3377,14 @@
 					"multiple": false
 				}
 			}, {
-				"input": true,
-				"tableView": true,
 				"label": "Select",
-				"key": "additional_insured_select",
+				"widget": "choicesjs",
 				"placeholder": "Select according to your preference",
+				"hideLabel": true,
+				"tableView": true,
+				"defaultValue": "noAdditionalInsureds",
 				"data": {
 					"values": [{
-						"value": "asPerExistingPolicyIfRenewing",
-						"label": "As per existing policy (if renewing)"
-					}, {
 						"value": "newListOfAdditionalInsureds",
 						"label": "New list of Additional Insureds"
 					}, {
@@ -3396,15 +3392,16 @@
 						"label": "No Additional Insureds"
 					}]
 				},
-				"defaultValue": "noAdditionalInsureds",
+				"selectThreshold": 0.3,
 				"clearOnHide": false,
 				"validate": {
 					"required": true,
 					"unique": false,
 					"multiple": false
 				},
+				"key": "additional_insured_select",
 				"type": "select",
-				"hideLabel": true,
+				"input": true,
 				"lockKey": true
 			}, {
 				"key": "page4PanelPanel2",
@@ -5341,6 +5338,6 @@
 	"path": "diveboat02",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-01-23T10:59:00.323Z",
-	"modified": "2020-02-06T08:26:34.435Z",
+	"modified": "2020-02-13T05:04:29.803Z",
 	"machineName": "testdivehub:diveBoat02"
 }

@@ -64,10 +64,14 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
     private function formatQuery($parameters) {
 		$range=null;
 		$field = null;
+		$dateperiod = null;
 		$filter =array();
 		$datetype = (!empty($parameters['date_type']))?$parameters['date_type']:null;
-		if (!empty($parameters['date-period'])) {
-			$period = explode('/', $parameters['date-period']);
+		if (!empty($parameters['date-period'])) $dateperiod = $parameters['date-period'];
+		if (!empty($parameters['date_period'])) $dateperiod =  $parameters['date_period'];
+
+		if ($dateperiod) {
+			$period = explode('/', $dateperiod);
 			$startdate = date('Y-m-d', strtotime($period[0]));
 			$enddate =  date('Y-m-d', strtotime($period[1]));
 		} else {

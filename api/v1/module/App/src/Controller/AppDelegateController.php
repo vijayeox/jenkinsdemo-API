@@ -50,7 +50,7 @@ class AppDelegateController extends AbstractApiControllerHelper
                 return $this->getErrorResponse("Error while executing the delegate", 400);
             }
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage(), $e);
+            $this->log->error($e->getMessage(), $e);
             return $this->getErrorResponse($e->getMessage(), 400);
         }
         $this->log->info(__CLASS__ . "-> \n End of Delegate");

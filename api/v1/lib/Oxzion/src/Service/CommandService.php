@@ -63,10 +63,11 @@ class CommandService extends AbstractService
         $this->logger->info("RUN COMMAND  ------" . json_encode($data));
         //TODO Execute Command Service Methods
         if (isset($data['appId'])) {
-            $orgId = isset($data['orgId']) ? $this->getIdFromUuid('ox_organization', $data['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
+            $orgId = isset($data['orgId']) && !empty($data['orgId']) ? $this->getIdFromUuid('ox_organization', $data['orgId']) : AuthContext::get(AuthConstants::ORG_ID);
             $select = "SELECT * from ox_app_registry where org_id = :orgId AND app_id = :appId";
             $appId = $this->getIdFromUuid('ox_app', $data['appId']);
             $selectQuery = array("orgId" => $orgId, "appId" => $appId);
+            $this->logger->info("Executing query $select with params - ".json_encode($selectQuery));
             $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
             if (count($result) == 0) {
                 throw new ServiceException("App Does not belong to the org", "app.fororgnot.found");
@@ -521,15 +522,6 @@ class CommandService extends AbstractService
 
     protected function verifyUser(&$data)
     {
-        if (isset($data['email'])) {
-            $select = "SELECT * from ox_user where email = :email";
-            $selectQuery = array("email" => $data['email']);
-            $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
-            if (count($result) > 0) {
-                $data['user_exists'] = '1';
-                return $data;
-            }
-        }
         if (isset($data['identifier_field']) && isset($data['appId']) && isset($data[$data['identifier_field']])) {
             $appId = UuidUtil::isValidUuid($data['appId'])?$this->getIdFromUuid('ox_app',$data['appId']):$data['appId'];
             $select = "SELECT * from ox_wf_user_identifier where identifier_name = :identityField AND app_id = :appId AND identifier = :identifier";
@@ -540,6 +532,15 @@ class CommandService extends AbstractService
                 return $data;
             } else {
                 $data['user_exists'] = '0';
+                return $data;
+            }
+        }
+        if (isset($data['email'])) {
+            $select = "SELECT * from ox_user where email = :email";
+            $selectQuery = array("email" => $data['email']);
+            $result = $this->executeQuerywithBindParameters($select, $selectQuery)->toArray();
+            if (count($result) > 0) {
+                $data['user_exists'] = '1';
                 return $data;
             }
         }

@@ -55,7 +55,7 @@ return [
                         'method' => 'GET',
                         'action' => 'getListOfOrgUsers',
                         'access' => [
-                            'getListOfOrgUsers'=> ['MANAGE_ORGANIZATION_READ','MANAGE_GROUP_READ']
+                            'getListOfOrgUsers'=> ['MANAGE_USER_READ']
                         ],
                     ],
                 ],

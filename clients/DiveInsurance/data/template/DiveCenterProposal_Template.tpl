@@ -93,81 +93,81 @@
                     </tr>
                     <tr>
                         <td>Commercial General Liability (Each Occurrence Limit):</td>
-                        {if $page4PanelPanelPanelColumnsSelect2 == "no"}
+                        {if $excessLiabilityCoverage == "no"}
                             <td>$1,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "1M"}
                             <td>$2,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "2M"}
                             <td>$3,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "3M"}
                             <td>$4,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "4M"}
                             <td>$5,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "9M"}
                             <td>$10,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Personal Injury (per Occurence):</td>
-                        {if $page4PanelPanelPanelColumnsSelect2 == "no"}
+                        {if $excessLiabilityCoverage == "no"}
                             <td>$1,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "1M"}
                             <td>$2,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "2M"}
                             <td>$3,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "3M"}
                             <td>$4,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "4M"}
                             <td>$5,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "9M"}
                             <td>$10,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>General Liability Aggregate:</td>
-                        {if $page4PanelPanelPanelColumnsSelect2 == "no"}
+                        {if $excessLiabilityCoverage == "no"}
                             <td>$2,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "1M"}
                             <td>$3,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "2M"}
                             <td>$4,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "3M"}
                             <td>$5,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "4M"}
                             <td>$6,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "9M"}
                             <td>$11,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Products and Completed Operations Aggregate:</td>
-                        {if $page4PanelPanelPanelColumnsSelect2 == "no"}
+                        {if $excessLiabilityCoverage == "no"}
                             <td>$2,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "1M"}
                             <td>$3,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "2M"}
                             <td>$4,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "3M"}
                             <td>$5,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "4M"}
                             <td>$6,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "9M"}
                             <td>$11,000,000</td>
                         {/if}
                     </tr>
                     <tr>
                         <td>Damage to premises rented to you:</td>
-                        {if $page4PanelPanelPanelColumnsSelect2 == "no"}
+                        {if $excessLiabilityCoverage == "no"}
                             <td>$1,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "1M"}
                             <td>$2,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "2M"}
                             <td>$3,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "3M"}
                             <td>$4,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "4M"}
                             <td>$5,000,000</td>
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "9M"}
                             <td>$10,000,000</td>
                         {/if}
                     </tr>

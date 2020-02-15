@@ -12,6 +12,7 @@ class Entity extends OxzionEntity
         'uuid' => 0,
         'name' => null,
         'app_id' => 0,
+        'assoc_id' => null,
         'description'=> null,
         'date_created' => null,
         'date_modified' => null,

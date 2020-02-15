@@ -2,39 +2,23 @@
 namespace Oxzion\Communication\Twillio;
 use Twilio\Rest\Client;
 use Twilio\TwiML\VoiceResponse;
-use Oxzion\Communication\Communication;
+use Oxzion\Communication\CommunicationEngine;
 use Oxzion\ServiceException;
 use Logger;
 // use Zend\Hydrator\ReflectionHydrator;
 
-class TwillioCommunication implements Communication
+class CommunicationEngineImpl implements CommunicationEngine
 {
     private $logger;
     private $twilio_phone_number; //valid and verified twillio number from www.twilio.com/console
     private $client;
-    private static $instance;
-    private function __construct(array $config) {
+
+    public function __construct(array $config) {
         $this->logger = Logger::getLogger(__CLASS__);
         $this->twilio_phone_number = $config['twilio_phone_number'];
-        $this->loadConfiguration($config);
-    }
-
-    public static function getInstance($config)
-    {
-        try { 
-               self::$instance = new TwillioCommunication($config);
-        } catch (Exception $e) {
-            throw new ServiceException($e->getMessage(), "could.not.coonect.to.ftp");
-        }    
-        return self::$instance;
-    }
-
-    public function loadConfiguration($config) {
-        $this->logger->info("Entered ");
         // $config['account_sid'] Your Account SID from www.twilio.com/console
         // $config['auth_token'] Your Auth Token from www.twilio.com/console
         $this->client = new Client($config['account_sid'], $config['auth_token']);
-        $this->logger->info("Exit ");
     }
 
     //

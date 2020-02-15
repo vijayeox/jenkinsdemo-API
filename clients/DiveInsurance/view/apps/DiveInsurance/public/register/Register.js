@@ -38,7 +38,6 @@ export default class Register extends React.Component {
               </ul>
               <div className="tab-content">
                 <div id="signup">
-                  <h1>Register</h1>
                   <div id="formio"></div>
                 </div>
                 <div id="login">
@@ -48,23 +47,23 @@ export default class Register extends React.Component {
                       <div className="floating-label">
                         <input
                           required
-                          id="username"
+                          id="username_field"
                           name="username"
                           autoComplete="off"
                           placeholder="Username"
                         />
-                        <label htmlFor="username">Username:</label>
+                        <label htmlFor="username_field">Username:</label>
                       </div>
                       <div className="floating-label">
                         <input
                           type="password"
-                          id="password"
+                          id="password_field"
                           name="password"
                           placeholder="Password"
                           required
                           autoComplete="off"
                         />
-                        <label htmlFor="password">Password:</label>
+                        <label htmlFor="password_field">Password:</label>
                       </div>
                       <button className="button button-block loginButton">
                         Log In

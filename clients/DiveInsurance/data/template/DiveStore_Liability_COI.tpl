@@ -34,77 +34,77 @@
 				</div>
 				<b><div class = "sec4">
 					<p class = "sec_title2">
-						{if $page4PanelPanelPanelColumnsSelect2 == "no"}
+						{if $excessLiabilityCoverage == "no"}
                             $1,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "1M"}
                             $2,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "2M"}
                             $3,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "3M"}
                             $4,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "4M"}
                             $5,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "9M"}
                             $10,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $page4PanelPanelPanelColumnsSelect2 == "no"}
+						{if $excessLiabilityCoverage == "no"}
                             $1,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "1M"}
                             $2,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "2M"}
                             $3,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "3M"}
                         	$4,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "4M"}
                             $5,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "9M"}
                             $10,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $page4PanelPanelPanelColumnsSelect2 == "no"}
+						{if $excessLiabilityCoverage == "no"}
                             $2,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "1M"}
                             $3,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "2M"}
                             $4,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "3M"}
                             $5,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "4M"}
                             $6,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "9M"}
                             $11,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $page4PanelPanelPanelColumnsSelect2 == "no"}
+						{if $excessLiabilityCoverage == "no"}
                             $2,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "1M"}
                             $3,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "2M"}
                             $4,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "3M"}
                             $5,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "4M"}
                             $6,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "9M"}
                             $11,000,000
                         {/if}
 					</p>
 					<p class = "sec_title2">
-						{if $page4PanelPanelPanelColumnsSelect2 == "no"}
+						{if $excessLiabilityCoverage == "no"}
                             $1,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "1M"}
+                        {elseif $excessLiabilityCoverage == "1M"}
                             $2,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "2M"}
+                        {elseif $excessLiabilityCoverage == "2M"}
                             $3,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "3M"}
+                        {elseif $excessLiabilityCoverage == "3M"}
                             $4,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "4M"}
+                        {elseif $excessLiabilityCoverage == "4M"}
                             $5,000,000
-                        {elseif $page4PanelPanelPanelColumnsSelect2 == "9M"}
+                        {elseif $excessLiabilityCoverage == "9M"}
                             $10,000,000
                         {/if}
 					</p>

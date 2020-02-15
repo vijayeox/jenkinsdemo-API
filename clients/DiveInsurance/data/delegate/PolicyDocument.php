@@ -81,7 +81,7 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 'header' => 'EFR_header.html',
                 'footer' => 'EFR_footer.html',
                 'slWording' => 'SL Wording.pdf',
-                'policy' => 'Individual_Professional_Liability_Policy.pdf',
+                'policy' => 'Policy.pdf',
                 'aiTemplate' => 'EFR_AI',
                 'aiheader' => 'EFR_AI_header.html',
                 'aifooter' => 'EFR_AI_footer.html')
@@ -108,14 +108,15 @@ class PolicyDocument extends AbstractDocumentAppDelegate
                 $dest['relativePath'] = $dest['relativePath'].'Quote/';
                 $dest['absolutePath'] = $dest['absolutePath'].'Quote/';
             }
-
+            $state = "";
             if(isset($data['state'])){
               $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$data['state']."'";
-
+              $state = $data['state'];
             } 
 
             if(isset($data['business_state'])){
                  $selectQuery = "Select state_in_short FROM state_license WHERE state ='".$data['business_state']."'";
+                 $state = $data['business_state'];
             }
             $resultSet = $persistenceService->selectQuery($selectQuery);
             $stateDetails = array();
@@ -124,6 +125,8 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }       
             if(isset($stateDetails) && count($stateDetails)>0){                
                     $data['state_in_short'] = $stateDetails[0]['state_in_short'];                
+            }else{
+                $data['state_in_short'] = isset($state) ? $state : "";
             }
             $this->logger->info("Data------------------ ".print_r($data,true));
             unset($data['dest']);
