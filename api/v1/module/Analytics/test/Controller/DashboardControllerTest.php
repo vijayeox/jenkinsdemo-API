@@ -58,6 +58,44 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals(4, $this->getConnection()->getRowCount('ox_dashboard'));
     }
 
+    public function testCreateWithDefault()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Dashboard4', 'dashboard_type' => 'DocumentDashboard', 'description' => 'description', 'content' => 'Content 1', 'isdefault' => 1];
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_dashboard'));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/dashboard', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('dashboard');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['dashboard_type'], $data['dashboard_type']);
+        $this->assertEquals($content['data']['description'], $data['description']);
+        $this->assertEquals($content['data']['isdefault'], $data['isdefault']);
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_dashboard'));
+    }
+
+    public function testCreateWithDefaultFalse()
+    {
+        $this->initAuthToken($this->adminUser);
+        $data = ['name' => 'Dashboard4', 'dashboard_type' => 'DocumentDashboard', 'description' => 'description', 'content' => 'Content 1', 'isdefault' => 0];
+        $this->assertEquals(3, $this->getConnection()->getRowCount('ox_dashboard'));
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/dashboard', 'POST', $data);
+        $this->assertResponseStatusCode(201);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('dashboard');
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['dashboard_type'], $data['dashboard_type']);
+        $this->assertEquals($content['data']['description'], $data['description']);
+        $this->assertEquals($content['data']['isdefault'], $data['isdefault']);
+        $this->assertEquals(4, $this->getConnection()->getRowCount('ox_dashboard'));
+    }
+
     public function testCreateWithoutRequiredField()
     {
         $this->initAuthToken($this->adminUser);
@@ -87,6 +125,23 @@ class DashboardControllerTest extends ControllerTest
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['dashboard']['version'], 2);
         $this->assertEquals($content['data']['dashboard']['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['dashboard']['data']['description'], $data['description']);
+    }
+
+    public function testUpdateWithDefault()
+    {
+        $data = ['name' => "dashboardtest", 'description' => 'descriptiontest', 'version'=>1, 'isdefault' => 1];
+        $this->initAuthToken($this->adminUser);
+        $this->setJsonContent(json_encode($data));
+        $this->dispatch('/analytics/dashboard/fc67ceb2-4b6f-4a33-8527-5fc6b0822988', 'PUT', null);
+        $content = (array)json_decode($this->getResponse()->getContent(), true);
+        $this->assertResponseStatusCode(200);
+        $this->setDefaultAsserts();
+        $this->assertMatchedRouteName('dashboard');
+        $this->assertEquals($content['status'], 'success');
+        $this->assertEquals($content['data']['dashboard']['version'], 2);
+        $this->assertEquals($content['data']['dashboard']['data']['name'], $data['name']);
+        $this->assertEquals($content['data']['dashboard']['data']['isdefault'], $data['isdefault']);
         $this->assertEquals($content['data']['dashboard']['data']['description'], $data['description']);
     }
 
