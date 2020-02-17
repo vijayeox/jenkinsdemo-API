@@ -120,6 +120,9 @@ class PolicyDocument extends AbstractDocumentAppDelegate
             }
             $resultSet = $persistenceService->selectQuery($selectQuery);
             $stateDetails = array();
+            if($resultSet->count() == 0){
+                $data['state_in_short'] = $data['state']; 
+            }
             while ($resultSet->next()) {
                 $stateDetails[] = $resultSet->current();
             }       
