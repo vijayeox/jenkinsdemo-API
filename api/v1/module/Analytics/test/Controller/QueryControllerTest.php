@@ -257,7 +257,7 @@ class QueryControllerTest extends ControllerTest
         $this->assertEquals($content['data']['data'][6]['uuid'], '8f1d2819-c5ff-4426-bc40-f7a20704a738');
         $this->assertEquals($content['data']['data'][6]['name'], 'query1');
         $this->assertEquals($content['data']['data'][6]['isdeleted'], 0);
-        $this->assertEquals($content['data']['data'][7]['datasource_id'], 3);
+        $this->assertEquals($content['data']['data'][7]['datasource_uuid'], 'cb1bebce-df33-4266-bbd6-d8da5571b10a');
         $this->assertEquals($content['data']['data'][7]['name'], 'query2');
         $this->assertEquals($content['data']['total'],15);
     }
