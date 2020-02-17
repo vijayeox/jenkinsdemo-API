@@ -42,38 +42,44 @@ class ActivityInstanceService extends AbstractService
     }
     public function getActivityInstanceForm($data)
     {
-        $activityQuery = "SELECT ox_workflow_instance.process_instance_id as workflow_instance_id,
-        ox_activity_instance.activity_instance_id,
-        ox_activity_instance.status as status,
-        ox_file.data,ox_app.uuid as app_id,ox_file.uuid,
-        ox_activity_instance.org_id,ox_activity_instance.activity_id,ox_form.uuid as form_id,ox_activity.task_id as task_id,
-        ox_form.name as formName FROM `ox_activity_instance` 
-        LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id 
-        LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id 
-        LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id         
-        LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
-        LEFT JOIN ox_file on ox_file.workflow_instance_id=ox_workflow_instance.id
-        LEFT JOIN ox_app on ox_app.id = ox_form.app_id
-        WHERE ox_activity_instance.org_id =:orgId AND ox_workflow_instance.app_id=:appId AND
-        ox_activity_instance.activity_instance_id=:activityInstanceId;";
-        $activityParams = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),"appId" => $this->getIdFromUuid('ox_app', $data['appId']),"activityInstanceId" => $data['activityInstanceId']);
-        // print_r(array($activityQuery,$activityParams));exit;
-        $activityInstance = $this->executeQuerywithBindParameters($activityQuery,$activityParams)->toArray();
-        if (count($activityInstance)==0) {
-            return 0;
-        }
+        $selectQuery  = "SELECT oxa.* from ox_activity_instance_assignee as oxa join ox_activity_instance as oxi on oxa.activity_instance_id = oxi.id Left JOIN ox_user_group as oug on oxa.group_id = oug.group_id WHERE oxi.status = 'In Progress' and oxi.activity_instance_id =:activityInstanceId AND (oxa.user_id =:userId OR oug.avatar_id =:userId)";
+        $queryParams = array("activityInstanceId" =>$data['activityInstanceId'],'userId' => AuthContext::get(AuthConstants::USER_ID));
+        $result = $this->executeQuerywithBindParameters($selectQuery,$queryParams)->toArray();
+        if(isset($result[0])){
+            $activityQuery = "SELECT ox_workflow_instance.process_instance_id as workflow_instance_id,
+            ox_activity_instance.activity_instance_id,
+            ox_activity_instance.status as status,
+            ox_file.data,ox_app.uuid as app_id,ox_file.uuid,
+            ox_activity_instance.org_id,ox_activity_instance.activity_id,ox_form.uuid as form_id,ox_activity.task_id as task_id,
+            ox_form.name as formName FROM `ox_activity_instance` 
+            LEFT JOIN ox_activity on ox_activity.id = ox_activity_instance.activity_id 
+            LEFT JOIN ox_activity_form on ox_activity.id=ox_activity_form.activity_id 
+            LEFT JOIN ox_form on ox_form.id=ox_activity_form.form_id         
+            LEFT JOIN ox_workflow_instance on ox_workflow_instance.id = ox_activity_instance.workflow_instance_id
+            LEFT JOIN ox_file on ox_file.workflow_instance_id=ox_workflow_instance.id
+            LEFT JOIN ox_app on ox_app.id = ox_form.app_id
+            WHERE ox_activity_instance.org_id =:orgId AND ox_workflow_instance.app_id=:appId AND
+            ox_activity_instance.activity_instance_id=:activityInstanceId;";
+            $activityParams = array("orgId" => AuthContext::get(AuthConstants::ORG_ID),"appId" => $this->getIdFromUuid('ox_app', $data['appId']),"activityInstanceId" => $data['activityInstanceId']);
+            $activityInstance = $this->executeQuerywithBindParameters($activityQuery,$activityParams)->toArray();
+            if (count($activityInstance)==0) {
+                return 0;
+            }
 
-        $filePath = $this->formsFolder.$data['appId']."/".$activityInstance[0]['formName'].$this->fileExt;
-        if(file_exists($filePath)){
-           $activityInstance[0]['template'] = file_get_contents($filePath);
-        }
+            $filePath = $this->formsFolder.$data['appId']."/".$activityInstance[0]['formName'].$this->fileExt;
+            if(file_exists($filePath)){
+               $activityInstance[0]['template'] = file_get_contents($filePath);
+            }
 
-        $activityform = $activityInstance[0];
-        $data = json_decode($activityform['data'],true);
-        $data['fileId'] = $activityform['uuid'];
-        unset($activityform['uuid']);
-        $activityform['data'] = json_encode($data);
-        return $activityform;
+            $activityform = $activityInstance[0];
+            $data = json_decode($activityform['data'],true);
+            $data['fileId'] = $activityform['uuid'];
+            unset($activityform['uuid']);
+            $activityform['data'] = json_encode($data);
+            return $activityform;
+        }else{
+            throw new EntityNotFoundException("Do not have access to this form");
+        }
     }
     public function createActivityInstance(&$data)
     {
@@ -195,6 +201,12 @@ class ActivityInstanceService extends AbstractService
             }
             $activityInstance = array('workflow_instance_id'=>$workflowInstanceId,'activity_id'=>$activityId,'activity_instance_id'=>$activity_instance_id,'status'=>'In Progress','org_id'=>$orgId,'data'=>json_encode($data['processVariables']));
             $activityCreated = $this->createActivityInstance($activityInstance);
+            if(isset($data['assignee'])){
+                if(!isset($data['candidates'])){
+                    $data['candidates'] = array();
+                }
+                $data['candidates'][] = array('type' => 'assignee', 'userid' => $data['assignee']);
+            }
             if (isset($data['candidates'])) {
                 foreach ($data['candidates'] as $candidate) {
                     $assignee = 0;

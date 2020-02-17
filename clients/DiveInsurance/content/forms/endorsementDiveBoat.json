@@ -4940,6 +4940,7 @@
 						"row": "<div class=\"row\">\n  {% util.eachComponent(components, function(component) { %}\n  {% if(component.type ==\"textfield\" && component.type != \"hidden\") { %}\n    <div class=\"col-sm-3\">\n      {{ getView(component, row[component.key]) }}\n    </div>\n  {% } %}\n  {% }) %}\n  {% if (!instance.options.readOnly && !instance.originalComponent.disabled) { %}\n    <div class=\"col-sm-2\">\n      <div class=\"btn-group pull-right\">\n        <button class=\"btn btn-info btn-sm editRow\"><i class=\"{{ iconClass('pencil') }}\"></i></button>\n          <button class=\"btn btn-danger btn-sm removeRow\"><i class=\"{{ iconClass('trash') }}\"></i></button>\n      </div>\n    </div>\n  {% } %}\n</div>"
 					},
 					"modal": false,
+					"clearOnHide": false,
 					"validate": {
 						"unique": false,
 						"multiple": false
@@ -5087,6 +5088,6 @@
 	"path": "endorsementdiveboat",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2020-02-05T05:16:24.210Z",
-	"modified": "2020-02-12T08:28:21.128Z",
+	"modified": "2020-02-13T06:57:50.467Z",
 	"machineName": "testdivehub:endorsementDiveBoat"
 }

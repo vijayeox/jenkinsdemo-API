@@ -8,7 +8,7 @@ import org.camunda.bpm.engine.task.IdentityLink
 import java.text.SimpleDateFormat
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-  
+import java.util.regex.Matcher
 
 
 class CustomTaskListener implements TaskListener {
@@ -34,6 +34,7 @@ class CustomTaskListener implements TaskListener {
   void notify(DelegateTask delegateTask) {
     Map taskDetails = [:]
     taskDetails.name = delegateTask.name
+    def execution = delegateTask.execution
     def candidatesArray = []
     def i=0
     for (IdentityLink item : delegateTask.getCandidates()){
@@ -46,7 +47,22 @@ class CustomTaskListener implements TaskListener {
     }
     taskDetails.candidates = candidatesArray
     taskDetails.owner = delegateTask.getOwner()
+    taskDetails.variables = execution.getVariables()
     taskDetails.assignee = delegateTask.getAssignee()
+    logger.info("Task Data")
+    def reg = /\{\{[A-Za-z0-9]*\}\}/
+    println "Task Assignee - ${taskDetails.assignee}"
+    println "Task Assignee match - ${taskDetails.assignee ==~ reg}"
+    if(taskDetails.assignee ==~ reg){
+      logger.info("TaskAssigneeList")
+      println "TaskAssigneeList"
+      def val = taskDetails.assignee.substring(2, taskDetails.assignee.length()-2)
+      taskDetails.assignee = taskDetails.variables[val] ? taskDetails.variables[val] : taskDetails.assignee
+      logger.info("Task Assignee List End")
+      println "Task Assignee List End"
+    }
+    logger.info("Task Assignee - ${taskDetails.assignee}")
+    println "Task Assignee - ${taskDetails.assignee}"
     taskDetails.status = "in_progress"
     taskDetails.taskId = delegateTask.getTaskDefinitionKey()
     String pattern = "dd-MM-yyyy"
@@ -54,18 +70,17 @@ class CustomTaskListener implements TaskListener {
     taskDetails.createTime = simpleCreateDateFormat.format(delegateTask.createTime)
     taskDetails.dueDate = delegateTask.dueDate ? simpleCreateDateFormat.format(delegateTask.dueDate) : delegateTask.dueDate
     taskDetails.executionId = delegateTask.getExecutionId()
-    def execution = delegateTask.execution
     def processInstance = execution.getProcessInstance()
     taskDetails.processVariables = processInstance.getVariables()
     taskDetails.activityInstanceId = delegateTask.getId()
     taskDetails.executionActivityinstanceId = execution.activityInstanceId
     taskDetails.processInstanceId = execution.processInstanceId
-    taskDetails.variables = execution.getVariables()
     taskDetails.parentActivity = execution.getParentActivityInstanceId()
     taskDetails.currentActivity = execution.getCurrentActivityId()
     taskDetails.parent = execution.getParentId()
     String json = new JsonBuilder(taskDetails ).toPrettyString()
     logger.info("Posting data - ${json}")
+    println "Posting data - ${json}"
     def connection = getConnection()
     String response
     connection.with {
@@ -78,6 +93,7 @@ class CustomTaskListener implements TaskListener {
         reader.text
       }
       logger.info("Response received - ${response}")
+      println "Response received - ${response}"
     }
   }
   private def getConfig(){

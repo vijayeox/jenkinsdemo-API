@@ -196,7 +196,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
         <dc:Bounds x="1590" y="178" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_1e9s1xq_di" bpmnElement="ServiceTask_1e9s1xq">
-        <dc:Bounds x="1410" y="360" width="100" height="80" />
+        <dc:Bounds x="1470" y="410" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_0wnid44_di" bpmnElement="EndEvent_0wnid44">
         <dc:Bounds x="1782" y="200" width="36" height="36" />
@@ -212,8 +212,8 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
         <di:waypoint x="378" y="218" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_11rkvpz_di" bpmnElement="SequenceFlow_11rkvpz">
-        <di:waypoint x="1510" y="400" />
-        <di:waypoint x="1622" y="400" />
+        <di:waypoint x="1570" y="450" />
+        <di:waypoint x="1622" y="450" />
         <di:waypoint x="1622" y="258" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0191gsl_di" bpmnElement="SequenceFlow_0191gsl">
@@ -275,10 +275,10 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0rubg7g_di" bpmnElement="SequenceFlow_0rubg7g">
         <di:waypoint x="1350" y="243" />
-        <di:waypoint x="1350" y="400" />
-        <di:waypoint x="1410" y="400" />
+        <di:waypoint x="1350" y="450" />
+        <di:waypoint x="1470" y="450" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1357" y="378" width="19" height="14" />
+          <dc:Bounds x="1370" y="423" width="19" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ExclusiveGateway_055v5fg_di" bpmnElement="ExclusiveGateway_055v5fg" isMarkerVisible="true">

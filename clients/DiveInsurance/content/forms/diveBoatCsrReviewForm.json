@@ -7832,6 +7832,17 @@
 				"unique": false,
 				"multiple": false
 			}
+		}, {
+			"label": "amount",
+			"calculateValue": "value = parseFloat(data['total']).toFixed(2);",
+			"key": "amount",
+			"type": "hidden",
+			"input": true,
+			"tableView": false,
+			"validate": {
+				"unique": false,
+				"multiple": false
+			}
 		}],
 		"input": false,
 		"key": "page5",
@@ -7937,7 +7948,7 @@
 	"path": "diveboatcsrreviewform",
 	"project": "5ce43aa430776b2aff69301c",
 	"created": "2019-10-23T15:04:58.563Z",
-	"modified": "2020-02-13T05:04:41.773Z",
+	"modified": "2020-02-14T05:58:00.341Z",
 	"machineName": "testdivehub:diveBoatCsrReviewForm",
 	"controller": ""
 }
