@@ -232,6 +232,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:outgoing>SequenceFlow_0jxg5mu</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_03j42j8</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0dcdc0j</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_04lfhtm</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="Task_1vk8q6k" name="EFR CSR Review">
       <bpmn:extensionElements>
@@ -266,6 +267,7 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
       <bpmn:incoming>SequenceFlow_0g4fm7i</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1t7gunt</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1h6dx2e</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0lp16rd</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0u4hmu8</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:userTask id="Task_07nprhc" name="Dive Boat CSR Review">
@@ -289,6 +291,28 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_10eg5wo" name="Not Approved" sourceRef="Task_07nprhc" targetRef="EndEvent_0cah3te">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==false || csrApproved == "false"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:userTask id="Task_0jy4bra" name="Dive Store CSR Review">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="template" value="diveStoreCsrCopy" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_04lfhtm</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1yvu8ml</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0lp16rd</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_04lfhtm" name="Dive Store" sourceRef="ExclusiveGateway_1ws02td" targetRef="Task_0jy4bra">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${product == "Dive Store"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="EndEvent_02govye">
+      <bpmn:incoming>SequenceFlow_1yvu8ml</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_1yvu8ml" name="Not Approved" sourceRef="Task_0jy4bra" targetRef="EndEvent_02govye">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==false || csrApproved == "false"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0lp16rd" name="Approved" sourceRef="Task_0jy4bra" targetRef="Task_1l0mwe2">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${csrApproved==true || csrApproved == "true"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -518,6 +542,35 @@ execution.removeVariable("parentWorkflowInstanceId")</camunda:script>
         <di:waypoint x="1062" y="117" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1074" y="173" width="68" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1uw76u2_di" bpmnElement="Task_0jy4bra">
+        <dc:Bounds x="1020" y="874" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_04lfhtm_di" bpmnElement="SequenceFlow_04lfhtm">
+        <di:waypoint x="810" y="626" />
+        <di:waypoint x="810" y="914" />
+        <di:waypoint x="1020" y="914" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="814" y="833" width="52" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_02govye_di" bpmnElement="EndEvent_02govye">
+        <dc:Bounds x="1052" y="1056" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1yvu8ml_di" bpmnElement="SequenceFlow_1yvu8ml">
+        <di:waypoint x="1070" y="954" />
+        <di:waypoint x="1070" y="1056" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1082" y="1009" width="68" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0lp16rd_di" bpmnElement="SequenceFlow_0lp16rd">
+        <di:waypoint x="1120" y="914" />
+        <di:waypoint x="1410" y="914" />
+        <di:waypoint x="1410" y="634" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1242" y="896" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
