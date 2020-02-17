@@ -31,11 +31,4 @@ abstract class CommunicationDelegate extends AbstractAppDelegate
         $response = $this->messageProducer->sendQueue(json_encode($options), $queue);
 		return $response;
     }
-	public function sendSms($dest_phone_number, $body) {
-        // $messageReturn = $this->communicationService->sendSms($dest_phone_number, $body);
-        $this->messageProducer->sendQueue(json_encode(array("communication_client" => 
-         $this->serviceName, "dest_phone_number" => $dest_phone_number, "body" => $body)),
-          'SEND_SMS');
-        return "";
-	}
 }
