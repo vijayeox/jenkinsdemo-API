@@ -26,10 +26,10 @@ class TaskService extends AbstractService
     }
 
 
-    public function addProjectToTask($name, $description, $uuid)
+    public function addProjectToTask($name, $description, $uuid, $manager_login = null)
     {
         try {
-            $response = $this->restClient->postWithHeader('projects', array('name' => $name,'description' => $description,'uuid' => $uuid));
+            $response = $this->restClient->postWithHeader('projects', array('name' => $name,'description' => $description,'uuid' => $uuid, 'manager_login' => $manager_login));
             $projectData = json_decode($response['body'], true);
             return $projectData;
         } catch (\GuzzleHttp\Exception\ClientException $e) {
@@ -48,10 +48,13 @@ class TaskService extends AbstractService
         }
     }
 
-    public function updateProjectInTask($name, $description, $uuid)
+    public function updateProjectInTask($name, $description, $uuid, $manager_login = null)
     {
         try {
-            $response = $this->restClient->updateWithHeader('projects/'.$uuid, array('name' => $name,'description' => $description));
+            if($manager_login)
+                $response = $this->restClient->updateWithHeader('projects/'.$uuid, array('name' => $name,'description' => $description));
+            else
+                $response = $this->restClient->updateWithHeader('projects/'.$uuid, array('name' => $name,'description' => $description, 'manager_login' => $manager_login));
             $projectData = json_decode($response['body'], true);
             return $projectData;
         } catch (\GuzzleHttp\Exception\ClientException $e) {
