@@ -317,7 +317,7 @@ menu:
                                             url: workflow/cb74d176-225a-11ea-978f-2e728ce88125/startform
                         actions:
                             -
-                                name: Approve
+                                name: Review
                                 rule: '{{to_be_claimed}} == 1'
                                 details:
                                     -
@@ -329,7 +329,7 @@ menu:
                                         url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
                                 icon: 'fa fa-check-circle'
                             -
-                                name: Approve
+                                name: Review
                                 rule: '{{to_be_claimed}} == 0'
                                 details:
                                     -
@@ -614,7 +614,7 @@ menu:
                             info: true
                         actions:
                             -
-                                name: Approve
+                                name: Review
                                 rule: '{{to_be_claimed}} == 1'
                                 details:
                                     -
@@ -626,7 +626,7 @@ menu:
                                         url: 'workflowinstance/{{workflowInstanceId}}/activityinstance/{{activityInstanceId}}/form'
                                 icon: 'fa fa-check-circle'
                             -
-                                name: Approve
+                                name: Review
                                 rule: '{{to_be_claimed}} == 0'
                                 details:
                                     -

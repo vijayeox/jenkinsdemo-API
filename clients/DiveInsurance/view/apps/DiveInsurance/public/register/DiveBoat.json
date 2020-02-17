@@ -136,11 +136,14 @@
                 "multiple": false
             }
         }, {
-            "key": "panelPanel2",
-            "input": false,
-            "title": "Padi Validation",
+            "title": "PADI Validation",
             "theme": "primary",
+            "collapsible": false,
             "tableView": false,
+            "key": "panelPanel2",
+            "type": "panel",
+            "label": "Pa Validation",
+            "input": false,
             "components": [{
                 "label": "Columns",
                 "input": false,
@@ -396,8 +399,6 @@
                 },
                 "path": "panelColumns"
             }],
-            "type": "panel",
-            "label": "Panel",
             "validate": {
                 "unique": false,
                 "multiple": false
@@ -958,7 +959,7 @@
     "path": "padiverificationformdiveboat",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-10-05T12:23:24.281Z",
-    "modified": "2020-02-13T05:03:45.707Z",
+    "modified": "2020-02-14T05:07:26.885Z",
     "machineName": "testdivehub:padiVerificationFormDiveBoat",
     "controller": ""
 }

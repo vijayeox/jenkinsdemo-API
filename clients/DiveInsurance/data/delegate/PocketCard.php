@@ -37,7 +37,7 @@ class PocketCard extends PolicyDocument
             $params['workflowStatus'] = 'Completed';
             $files = $this->getFileList($params, $filterParams);
             $data['product'] = implode(", ", array_column($files, 'product'));
-            print_r($data);exit;
+            // print_r($data);exit;
             $this->logger->info("the product is: ", print_r($data['product'], true));
         }
         else
@@ -78,6 +78,11 @@ class PocketCard extends PolicyDocument
             $newData[$key]['end_date'] = $value['end_date'];
             $newData[$key]['firstname'] = $value['firstname'];
             $newData[$key]['lastname'] = $value['lastname'];
+            $newData[$key]['address1'] = $value['address1'];
+            $newData[$key]['address2'] = isset($value['address2']) ? $value['address2'] : '';
+            $newData[$key]['city'] = $value['city'];
+            $newData[$key]['state'] = $value['state'];
+            $newData[$key]['zip'] = $value['zip'];
             $newData[$key]['entity_name'] = 'Pocket Card Job';
         }
         $this->logger->info("New array data is : ".print_r($newData,true));

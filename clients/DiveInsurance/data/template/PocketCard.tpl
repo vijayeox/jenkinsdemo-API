@@ -13,8 +13,12 @@
 		{/if}
 		<div class="main_div">
 			<div class = "details">
-				<p class = "email"><b>Your certificate and insurance policy <br>were mailed to :</b></p><br>
-				<p class = "email"><u><b>{$individual.email}</b></u></p>
+				<p class = "email"><b>Your certificate and insurance policy <br>were emailed to :<br><u>{$individual.email}</u></b></p><br>
+				<p class = "email" align="left"><b>Address:{$individual.address1}<br>
+					{if isset($individual.address2)}
+						{$individual.address2}<br>
+					{/if}
+					{$individual.city}, {$individual.state},{$individual.zip} </b></p>
 			</div>
 			<div class = "insure">
 				<div class = "header">
@@ -107,4 +111,3 @@
 	{/foreach}
 </body>
 </html>
-
