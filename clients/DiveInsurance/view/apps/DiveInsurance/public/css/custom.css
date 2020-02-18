@@ -9,8 +9,7 @@ html {
 }
 
 body {
-  background: #c1bdba;
-  font-family: "Titillium Web", sans-serif;
+  font-family: "Lato Sans", sans-serif;
 }
 
 a {
@@ -20,6 +19,11 @@ a {
 }
 a:hover {
   color: #275362;
+}
+.btn-default:hover {
+    color: #275362;
+    background-color: #ffffff;
+    border-color: #275262;
 }
 
 .form {
@@ -362,4 +366,9 @@ input:focus {
 
 .resetPassword {
   cursor: pointer;
+}
+.btn-default {
+    color: #fff;
+    background-color: #275362;
+    border-color: #275362;
 }
