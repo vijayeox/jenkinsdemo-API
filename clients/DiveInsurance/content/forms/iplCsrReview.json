@@ -10,11 +10,14 @@
         "theme":"primary",
         "tableView":false,
         "components":[ {
-            "key":"panelPanel2",
-            "input":false,
-            "title":"Padi Validation",
+            "title":"PADI Validation",
             "theme":"primary",
+            "collapsible":false,
             "tableView":false,
+            "key":"panelPanel2",
+            "type":"panel",
+            "label":"PADI Validation",
+            "input":false,
             "components":[ {
                 "label":"Columns",
                 "input":false,
@@ -165,8 +168,6 @@
                 "hideLabel":true
             }
             ],
-            "type":"panel",
-            "label":"Panel",
             "validate": {
                 "unique": false, "multiple": false
             }
@@ -474,7 +475,7 @@
                             }
                             ,
                             "valueProperty":"country",
-                            "template":"<span>{{ item }}</span>",
+                            "template":"<span>{{ item.country }}</span>",
                             "selectThreshold":0.3,
                             "validate": {
                                 "required": true, "unique": false, "multiple": false
@@ -697,8 +698,38 @@
                 }
                 ,
                 "key":"start_date_range",
+                "properties": {
+                    "delegate": "RateCard"
+                }
+                ,
                 "type":"select",
                 "input":true
+            }
+            ,
+            {
+                "label": "start_date", "calculateValue": "var startRange = moment(data['start_date_range'].value);\nvar today = moment();\nvalue = moment.max(today,startRange).format(\"YYYY-MM-DD\");", "key":"startDate", "properties": {
+                    "data_type": "Date"
+                }
+                ,
+                "type":"hidden",
+                "input":true,
+                "tableView":false,
+                "validate": {
+                    "unique": false, "multiple": false
+                }
+            }
+            ,
+            {
+                "label": "end_date", "calculateValue": "var today = moment(data['start_date']);\nvar month = today.month();\nvar year = today.year();\nif(month > 5){\nvalue = (year + 1) + \"-06-30\";\n}else{\nvalue = (year)+ \"-06-30\";\n}", "key":"end_date", "properties": {
+                    "data_type": "Date"
+                }
+                ,
+                "type":"hidden",
+                "input":true,
+                "tableView":false,
+                "validate": {
+                    "unique": false, "multiple": false
+                }
             }
             ],
             "type":"panel",
@@ -1925,7 +1956,7 @@
             }
             ,
             "components":[ {
-                "label": "attachmentFields", "customDefaultValue": "value = [\"attachments\"];", "key":"attachmentFields", "type":"hidden", "input":true, "tableView":false, "validate": {
+                "label": "attachmentFields", "customDefaultValue": "value = [\"attachments\"];", "key":"attachmentsFieldnames", "type":"hidden", "input":true, "tableView":false, "validate": {
                     "unique": false, "multiple": false
                 }
             }
@@ -3103,7 +3134,7 @@
                 ],
                 "clearOnHide":false,
                 "validate": {
-                    "required": true, "customMessage": "Please Approve/Reject the Application", "custom": "valid =(data['approved'] !=' ')", "unique": false, "multiple": false
+                    "required": true, "customMessage": "Please Approve/Reject the Application", "unique": false, "multiple": false
                 }
                 ,
                 "key":"approved",
@@ -3122,22 +3153,23 @@
         }
         ,
         {
-            "input":true,
-            "tableView":true,
             "label":"Rejection Reason",
-            "key":"rejectionReason",
             "placeholder":"Please enter the reason for Rejection",
+            "autoExpand":false,
             "spellcheck":true,
+            "tableView":true,
+            "inputFormat":"plain",
             "validate": {
-                "required": true
+                "required": true, "customMessage": "Please Provide the reason for Rejecting the Policy", "unique": false, "multiple": false
+            }
+            ,
+            "key":"rejectionReason",
+            "conditional": {
+                "show": true, "when": "approved", "eq": "false"
             }
             ,
             "type":"textarea",
-            "inputFormat":"plain",
-            "conditional": {
-                "show": "true", "when": "approved", "eq": "false"
-            }
-            ,
+            "input":true,
             "lockKey":true
         }
         ],
@@ -3168,7 +3200,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":142,
+    "_vid":147,
     "title":"IPL - CSR Review",
     "display":"form",
     "access":[ {
@@ -3187,7 +3219,7 @@
     "path":"iplcsrreview",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-10-01T11:17:41.957Z",
-    "modified":"2020-02-14T14:52:12.266Z",
+    "modified":"2020-02-18T10:33:33.768Z",
     "machineName":"testdivehub:iplCsrReview",
     "controller":""
 }

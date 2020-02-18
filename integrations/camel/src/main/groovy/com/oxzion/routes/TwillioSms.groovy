@@ -9,9 +9,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component
 import org.springframework.core.env.Environment
 import org.springframework.beans.factory.annotation.Autowired
-
+import javax.annotation.PostConstruct
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
 import com.twilio.Twilio
 import com.twilio.rest.api.v2010.account.Message
 import com.twilio.type.PhoneNumber
@@ -28,12 +29,18 @@ public class TwillioSms extends RouteBuilder {
 
 	@Autowired
 	private Environment env
+
+    @PostConstruct
+	public void init() {
+		Twilio.init(env.getProperty("twillio.accountSid"), env.getProperty("twillio.authToken"))
+	}
+	
 	@Override
 	public void configure() {
-		Twilio.init(env.getProperty("twillio.accountSid"), env.getProperty("twillio.authToken"))
-		from("activemq:queue:twillio_sms").doTry().process(new Processor() {
+		
+				from("activemq:queue:twillio_sms").doTry().process(new Processor() {
 					public void process(Exchange exchange) throws Exception {
-
+                        logger.info("Sending twillio sms")
 						def jsonSlurper = new JsonSlurper()
 						def messageIn  = exchange.getIn()
 						def object = jsonSlurper.parseText(exchange.getMessage().getBody() as String)

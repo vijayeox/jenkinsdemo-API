@@ -3,12 +3,9 @@ callback.URL = 'http4://localhost:8080'
 routes {
     route = [
         ['from':'activemq:topic:ORGANIZATION_ADDED', 'to':["${callback.URL}/callback/chat/addorg"]],
-        ['from':'activemq:topic:ORGANIZATION_UPDATED', 'to':["${callback.URL}/callback/chat/updateorg",
-                                                             "${callback.URL}/callback/crm/updateorg"]],
-        ['from':'activemq:topic:ORGANIZATION_DELETED', 'to':["${callback.URL}/callback/chat/deleteorg",
-                                                             "${callback.URL}/callback/crm/deleteorg"]],
-        ['from':'activemq:topic:USERTOORGANIZATION_ADDED', 'to':["${callback.URL}/callback/chat/adduser",
-                                                                 "${callback.URL}/callback/crm/adduser"]],
+        ['from':'activemq:topic:ORGANIZATION_UPDATED', 'to':["${callback.URL}/callback/chat/updateorg"]],
+        ['from':'activemq:topic:ORGANIZATION_DELETED', 'to':["${callback.URL}/callback/chat/deleteorg"]],
+        ['from':'activemq:topic:USERTOORGANIZATION_ADDED', 'to':["${callback.URL}/callback/chat/adduser"]],
         // ['from':'activemq:topic:USERTOORGANIZATION_ALREADYEXISTS', 'to':'"callback.URL" + '],
 
         ['from':'activemq:topic:PROJECT_ADDED', 'to':["${callback.URL}/callback/task/addproject",
@@ -35,12 +32,14 @@ routes {
         ['from':'activemq:topic:USERTOGROUP_UPDATED', 'to':["${callback.URL}/callback/task/updategroupusers"]],
 
         ['from':'activemq:topic:ADD_CALENDAR_EVENT', 'to':["${callback.URL}/callback/calendar/addevent"]],
-        ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}/callback/ox/createuser"]],
+        ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}/callback/ox/createuser",
+                                                    "${callback.URL}/callback/chat/adduser"]],
         ['from':'activemq:topic:FILE_ADDED', 'to':["${callback.URL}/fileindexer"]],
         ['from':'activemq:topic:FILE_UPDATED', 'to':["${callback.URL}/fileindexer"]],
         ['from':'activemq:topic:FILE_DELETED', 'to':["${callback.URL}/fileindexer"]],
         ['from':'activemq:topic:SEND_SMS', 'to':["${callback.URL}/callback/communication/sendsms"]],
-        ['from':'activemq:topic:MAKE_CALL', 'to':["${callback.URL}/callback/communication/makecall"]]
+        ['from':'activemq:topic:MAKE_CALL', 'to':["${callback.URL}/callback/communication/makecall"]],
+        ['from':'activemq:topic:COMMANDS', 'to':["${callback.URL}/callback/workflow/servicetask"]]
         // ['from':'activemq:topic:USER_ADDED', 'to':["${callback.URL}"]],
         // ['from':'activemq:topic:USER_DELETED', 'to':["${callback.URL}"]]
     ]

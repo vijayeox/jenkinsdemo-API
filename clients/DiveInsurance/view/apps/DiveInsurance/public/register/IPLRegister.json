@@ -136,6 +136,39 @@
                     "hideOnChildrenHidden": false,
                     "tableView": false
                 }, {
+                    "label": "HTML",
+                    "attrs": [{
+                        "attr": "style",
+                        "value": "text-align: center;background-color: #a94442;color: white;border-radius: 10px;line-height: 30px;"
+                    }],
+                    "content": "PADI Number cannot be blank",
+                    "refreshOnChange": false,
+                    "tableView": false,
+                    "key": "html",
+                    "conditional": {
+                        "show": true,
+                        "when": "padi_empty",
+                        "eq": "true"
+                    },
+                    "type": "htmlelement",
+                    "input": false,
+                    "validate": {
+                        "unique": false,
+                        "multiple": false
+                    },
+                    "hideOnChildrenHidden": false
+                }, {
+                    "label": "padiEmpty",
+                    "key": "padi_empty",
+                    "type": "hidden",
+                    "input": true,
+                    "tableView": false,
+                    "validate": {
+                        "unique": false,
+                        "multiple": false
+                    },
+                    "hideOnChildrenHidden": false
+                }, {
                     "input": true,
                     "tableView": true,
                     "key": "padiNotFound",
@@ -259,7 +292,8 @@
             "validate": {
                 "unique": false,
                 "multiple": false
-            }
+            },
+            "path": "panelColumns"
         }, {
             "input": true,
             "tableView": true,
@@ -909,7 +943,7 @@
         "customConditional": "show = (data['padiVerified'] == true && (data['user_exists']==0||data['user_exists']=='0'))"
     }],
     "revisions": "current",
-    "_vid": 176,
+    "_vid": 178,
     "title": "Padi Verification Form - IPL",
     "display": "form",
     "access": [{
@@ -923,7 +957,7 @@
     "path": "padiverificationformipl",
     "project": "5ce43aa430776b2aff69301c",
     "created": "2019-08-10T15:46:39.851Z",
-    "modified": "2020-02-14T16:13:13.097Z",
+    "modified": "2020-02-18T05:28:42.163Z",
     "machineName": "testdivehub:padiVerificationForm",
     "controller": ""
 }

@@ -14,9 +14,8 @@ abstract class SmsDelegate extends CommunicationDelegate
     	$orgUuid = isset($data['orgUuid']) ? $data['orgUuid'] : ( isset($data['orgId']) ? $data['orgId'] : AuthContext::get(AuthConstants::ORG_UUID));
     	$data['orgUuid'] = $orgUuid;
 
-		// $smsOptions['body'] = $this->templateService->getContent($template,$data);
-		$smsOptions['body'] = "Hi GUddu";
-		$smsOptions['to'] = "+919110201213";
+		$smsOptions['body'] = $this->templateService->getContent($template,$data);
+		$smsOptions['to'] = $data['phone'];
 		$response = $this->sendMessage($smsOptions, 'twillio_sms');
 		return $response;
     }
