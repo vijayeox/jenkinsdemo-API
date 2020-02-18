@@ -14,7 +14,6 @@ use Oxzion\Messaging\MessageProducer;
 use Oxzion\ServiceException;
 use Oxzion\Service\AbstractService;
 use Oxzion\Service\FileService;
-use Oxzion\Service\JobService;
 use Oxzion\Service\TemplateService;
 use Oxzion\Service\UserService;
 use Oxzion\Service\WorkflowInstanceService;
@@ -30,7 +29,6 @@ class CommandService extends AbstractService
     protected $fileService;
     private $workflowInstanceService;
     private $userService;
-    private $jobService;
     /**
      * @ignore __construct
      */
@@ -41,7 +39,7 @@ class CommandService extends AbstractService
 
     }
 
-    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, JobService $jobService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService)
+    public function __construct($config, $dbAdapter, TemplateService $templateService, AppDelegateService $appDelegateService, FileService $fileService, MessageProducer $messageProducer, WorkflowInstanceService $workflowInstanceService, WorkflowService $workflowService, UserService $userService)
     {
         $this->messageProducer = $messageProducer;
         $this->templateService = $templateService;
@@ -53,7 +51,6 @@ class CommandService extends AbstractService
         $this->workflowService = $workflowService;
         $this->restClient = new RestClient($this->config['job']['jobUrl'], array());
         $this->userService = $userService;
-        $this->jobService = $jobService;
     }
 
     public function setMessageProducer($messageProducer)
@@ -249,28 +246,24 @@ class CommandService extends AbstractService
     {
         $this->logger->info("DATA  ------" . json_encode($data));
         if (!isset($data['jobUrl']) || !isset($data['cron']) || !isset($data['jobName'])) {
-            $this->logger->info("jobUrl/Cron/JobName Not Specified");
-            throw new EntityNotFoundException("JobUrl or Cron Expression or JobName Not Specified");
+            $this->logger->info("jobUrl/Cron/Url/JobName Not Specified");
+            throw new EntityNotFoundException("JobUrl or Cron Expression or URL or JobName Not Specified");
         }
         $jobUrl = $data['jobUrl'];
         $cron = $data['cron'];
-        $jobGroup = $data['jobName'];
-        $jobName = $data['uuid'];
-        $appId = $data['app_id'];
-        $orgId = isset($data['org_id']) ? $data['org_id'] : AuthContext::get(AuthConstants::ORG_ID);
-        // $this->logger->info("jobUrl - $jobUrl, url - $url");
+        $url = 'setupjob';
+
+        $this->logger->info("jobUrl - $jobUrl, url -$url");
         unset($data['jobUrl'], $data['cron'], $data['command'], $data['url']);
         $this->logger->info("JOB DATA ------" . json_encode($data));
         $jobPayload = array("job" => array("url" => $this->config['internalBaseUrl'] . $jobUrl, "data" => $data), "schedule" => array("cron" => $cron));
         $this->logger->info("JOB PAYLOAD ------" . print_r($jobPayload, true));
-        try {
-            $response = $this->jobService->scheduleNewJob($jobName, $jobGroup, $jobPayload, $cron, $appId, $orgId);
-        } catch (Exception $e) {
-            $this->logger->warn("Job Schedule ---- Exception" . print_r($e->getMessage(), true));
-        };
+        $response = $this->restClient->postWithHeader($url, $jobPayload);
         $this->logger->info("Response - " . print_r($response, true));
         if (isset($response['body'])) {
             $response = json_decode($response['body'], true);
+            $jobName = $data['jobName'];
+            unset($data['jobName']);
             $jobData = array("jobId" => $response['JobId'], "jobGroup" => $response['JobGroup']);
             $data[$jobName] = json_encode($jobData);
         }
@@ -284,9 +277,9 @@ class CommandService extends AbstractService
 
     protected function canceljob(&$data)
     {
-        try 
-        {
+        try {
             $this->logger->info("DATA  ------" . json_encode($data));
+            $url = 'canceljob';
             if (!isset($data['jobName'])) {
                 $this->logger->warn("Job Name not specified, so job not cancelled");
                 return $data;
@@ -301,13 +294,10 @@ class CommandService extends AbstractService
                 $this->logger->warn("Job Id or Job Group Not Specified, so job not cancelled");
                 return $data;
             }
-            $appId = $data['app_id'];
-            $groupName = $JobData['jobGroup'];
             $jobPayload = array('jobid' => $JobData['jobId'], 'jobgroup' => $JobData['jobGroup']);
             unset($data[$jobName]);
-            $response = $this->jobService->cancelJob($JobData['jobId'], $appId, $groupName);
-        } 
-        catch (Exception $e) {
+            $response = $this->restClient->postWithHeader($url, $jobPayload);
+        } catch (Exception $e) {
             $this->logger->info("CLEAR JOB RESPONSE ---- " . print_r($e->getMessage(), true));
             if (strpos($e->getMessage(), 'response') !== false) {
                 $res = explode('response:', $e->getMessage())[1];
