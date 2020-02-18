@@ -44,6 +44,7 @@ module.exports = function(core, proc) {
             <body>
               <div id="root">${component}</div>
               <script src="../js/country.js"></script>
+              <script src="../js/phonelist.js"></script>
               <script src="../js/jquery.min.js"></script>
               <script src="../js/formio.full.min.js"></script>
               <script src="../js/custom.js"></script>
