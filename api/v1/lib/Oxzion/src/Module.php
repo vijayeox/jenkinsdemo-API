@@ -461,6 +461,25 @@ class Module
                         $container->get(Workflow\WorkflowFactory::class)
                     );
                 },
+                //  Model\JobTable::class => function ($container) {
+                //     $tableGateway = $container->get(Model\JobTableGateway::class);
+                //     return new Model\JobTable($tableGateway);
+                // },
+                // Model\JobTableGateway::class => function ($container) {
+                //     $dbAdapter = $container->get(AdapterInterface::class);
+                //     $resultSetPrototype = new ResultSet();
+                //     $resultSetPrototype->setArrayObjectPrototype(new Model\Job());
+                //     return new TableGateway('ox_job', $dbAdapter, null, $resultSetPrototype);
+                // },
+                Service\JobService::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    return new Service\JobService(
+                        $container->get('config'),
+                        $dbAdapter,
+                        $container->get(Messaging\MessageProducer::class),
+                        // $container->get(Model\JobTable::class)
+                    );
+                },
                 Service\CommandService::class => function ($container) {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     return new Service\CommandService($container->get('config'),
@@ -468,6 +487,7 @@ class Module
                         $container->get(Service\TemplateService::class),
                         $container->get(AppDelegate\AppDelegateService::class),
                         $container->get(Service\FileService::class),
+                        $container->get(Service\JobService::class),
                         $container->get(Messaging\MessageProducer::class),
                         $container->get(Service\WorkflowInstanceService::class),
                         $container->get(Service\WorkflowService::class),
