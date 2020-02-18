@@ -35,6 +35,7 @@ class AnalyticsEngineImpl implements AnalyticsEngine {
 			$result = $elasticService->getQueryResults($orgId,$app_name,$query);
 			$finalResult['meta'] = $query;
 			$finalResult['meta']['type'] = $result['type'];
+			$finalResult['meta']['query'] = $result['query'];
 			if ($result['type']=='group') {
 				$finalResult['data'] = $this->flattenResult($result['data'],$query);
 			} else {

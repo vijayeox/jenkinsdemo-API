@@ -8,6 +8,7 @@ use Logger;
 use function GuzzleHttp\json_encode;
 
 ini_set("memory_limit", -1);
+
 class ElasticService
 {
     private $avatarobj;
@@ -100,7 +101,8 @@ class ElasticService
     {
         $body = json_decode($bodyjson, true);
         $params = array('index' => $this->core . '_' . $entity, 'type' => $this->type, 'body' => $body, "size" => 0);
-        $result_obj = $this->search($params);
+        $result = $this->search($params);
+        $result_obj = $result['data'];
         if (isset($body['aggs']) && isset($result_obj['aggregations']['groupdata']['buckets'])) {
             $results = array('data' => $result_obj['aggregations']['groupdata']['buckets']);
         } else if (isset($result_obj['aggregations'])) {
@@ -117,7 +119,7 @@ class ElasticService
         // print_r($body);exit;
         $params = ['index' => $index, 'body' => $body, "_source" => $source, 'from' => $start ? $start : 0, "size" => $pagesize];
         $result = $this->search($params);
-        return $result;
+        return $result['data'];
     }
 
     public function getQueryResults($orgId, $app_name, $params)
@@ -155,22 +157,23 @@ class ElasticService
 		$params = array('index'=>$app_name.'_index','body'=>$boolfilterquery,"_source"=>$boolfilterquery['_source'],'from'=>(!empty($searchconfig['start']))?$searchconfig['start']:0,"size"=>$pagesize);
 		$result_obj = $this->search($params);
 		if ($searchconfig['group'] && !isset($searchconfig['select'])) {
-			$results = array('data'=>$result_obj['aggregations']['groupdata']['buckets']);
+			$results = array('data'=>$result_obj['data']['aggregations']['groupdata']['buckets']);
 			$results['type']='group';
 		} else if(key($searchconfig['aggregates'])=='count' && !isset($searchconfig['select'])){
-			$results = array('data'=>$result_obj['hits']['total']);
+			$results = array('data'=>$result_obj['data']['hits']['total']);
 			$results['type']='value';
-		} else if (isset($result_obj['aggregations'])){
-			$results = array('data'=>$result_obj['aggregations']['value']['value']);
+		} else if (isset($result_obj['data']['aggregations'])){
+			$results = array('data'=>$result_obj['data']['aggregations']['value']['value']);
 			$results['type']='value';
 		}  else {
 			$results = array();
-			foreach($result_obj['hits']['hits'] as $key=>$value){
+			foreach($result_obj['data']['hits']['hits'] as $key=>$value){
 				$results['data'][$key] = $value['_source'];
 			//	$results['data'][$key]['id'] = $value['_source']['_id'];
 			}
 			$results['type']='list';
-		}
+        }
+        $results['query']=$result_obj['query'];
 		return $results;
     }
     
@@ -212,8 +215,11 @@ class ElasticService
                 else {
                     if (strtolower(substr($value,0,5))=="date:") {
                         $value = date("Y-m-d",strtotime(substr($value,5)));
+                        $subQuery['range'] = array($column => array($symMapping[$condition] => $value,"format" => "yyyy-MM-dd"));
+                    } else {
+                        $subQuery['range'] = array($column => array($symMapping[$condition] => $value));
                     }
-                    $subQuery['range'] = array($column => array($symMapping[$condition] => $value));
+                    
                 }
          }
         return $subQuery;
@@ -360,11 +366,12 @@ class ElasticService
        }
        $this->logger->debug('Elastic query:');
        $this->logger->debug(json_encode($q, JSON_PRETTY_PRINT));
-   //     print_r(json_encode($q));echo "\n";
-        $data = $this->client->search($q);
+       $data['query'] = json_encode($q);
+  //      print_r(json_encode($q));echo "\n";
+       $data["data"] = $this->client->search($q);
        $this->logger->debug('Data from elastic:');
        $this->logger->debug(json_encode($data, JSON_PRETTY_PRINT));
-     //    print_r(json_encode($data));echo "\n";
+  //       print_r(json_encode($data['data']));echo "\n";
         return $data;
 
     }

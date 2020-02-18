@@ -37,8 +37,12 @@ class PaymentEngineImpl implements PaymentEngine
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         $result = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        return $result;
+        if($httpcode == 200){
+            return $result;
+        }
+        return false;
     }
     public function handleTransaction(&$data){
         if(isset($data['ssl_token_response'])){

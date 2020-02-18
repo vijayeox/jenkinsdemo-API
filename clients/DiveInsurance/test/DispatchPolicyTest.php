@@ -159,7 +159,7 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['boat_name'] = 'Orion';
+        $data['vessel_name'] = 'Orion';
         $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Boat';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
@@ -221,8 +221,9 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
-        $data['documents'] = array('policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document'=>'53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
+        $data['documents'] = array('property_coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','liability_coi_document'=>'53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','property_policy_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','liability_policy_document'=>'53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf','cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Store';
+        
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
         if (enableCamel == 0) {
             $mockMessageProducer = $this->getMockMessageProducer();
@@ -248,7 +249,7 @@ class DispatchPolicyTest extends DelegateTest
         $delegateService = $this->getApplicationServiceLocator()->get(AppDelegateService::class);
         $delegateService->setPersistence($appId, $this->persistence);
         $exception = $this->expectException(DelegateException::class);
-        $this->expectExceptionMessage("Documents Not Found");
+        $this->expectExceptionMessage("Required Documents are not Found");
         $content = $delegateService->execute($appId, 'DispatchNewPolicy', $data);
         $this->assertEquals($content, array());
     }
@@ -333,9 +334,13 @@ class DispatchPolicyTest extends DelegateTest
         $data['zip'] = '12345';
         $data['coverage'] = '437653';
         $data['isequipmentliability'] = 1;
+        $data['equipment'] = 'Equipment';
+        $data['careerCoverage'] = 'Instructor';
         $data['isexcessliability'] = 0;
+        $data['excessLiability'] = 'excessLiabilityCoverageDeclined';
         $data['credit_card_type'] = 'credit';
         $data['card_no'] = '0000';
+        $data['amount'] = "500";
         $data['card_expiry_date'] = '01/10';
         $data['policy_period'] = 3;
         $data['expiry_year'] = '2019';
@@ -386,6 +391,8 @@ class DispatchPolicyTest extends DelegateTest
         $data['documents'] = array('cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Boat';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
+        $data['activityInstanceId'] = '512311-2863-4949-afb1-e69b0891c98a';
+        $data['workflowInstanceId'] = '212311-2863-4949-afb1-e69b0891c98a';
         $data['vessel_name'] = 'HUB';
         if (enableCamel == 0) {
                     $mockMessageProducer = $this->getMockMessageProducer();
@@ -405,6 +412,8 @@ class DispatchPolicyTest extends DelegateTest
         $data['email'] = 'neha@myvamla.com';
         $data['firstname'] = 'Neha';
         $data['lastname'] = 'Rai';
+        $data['activityInstanceId'] = '512311-2863-4949-afb1-e69b0891c98a';
+        $data['workflowInstanceId'] = '212311-2863-4949-afb1-e69b0891c98a';
         $data['documents'] = array('cover_letter' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/certificate.pdf','coi_document' => '53012471-2863-4949-afb1-e69b0891c98a/53012471-2863-4949-afb1-e69b0891cabt/dummy.pdf');
         $data['product'] = 'Dive Store';
         $data['orgUuid'] = '53012471-2863-4949-afb1-e69b0891c98a';
