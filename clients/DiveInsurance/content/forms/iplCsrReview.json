@@ -565,6 +565,7 @@
                                     "custom": "values = data['phoneList']"
                                 }
                                 ,
+                                "valueProperty":"dial_code",
                                 "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
@@ -650,6 +651,7 @@
                                     "custom": "values = data['phoneList']"
                                 }
                                 ,
+                                "valueProperty":"dial_code",
                                 "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
                                 "selectThreshold":0.3,
                                 "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
@@ -3341,7 +3343,7 @@
     }
     ],
     "revisions":"current",
-    "_vid":150,
+    "_vid":151,
     "title":"IPL - CSR Review",
     "display":"form",
     "access":[ {
@@ -3360,7 +3362,7 @@
     "path":"iplcsrreview",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-10-01T11:17:41.957Z",
-    "modified":"2020-02-18T15:44:56.507Z",
+    "modified":"2020-02-19T11:45:38.650Z",
     "machineName":"testdivehub:iplCsrReview",
     "controller":""
 }
