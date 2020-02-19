@@ -168,9 +168,9 @@ class OrganizationControllerTest extends ControllerTest
         $this->assertEquals($usrResult[0]['firstname'], $contact['firstname']);
         $this->assertEquals($usrResult[0]['lastname'], $contact['lastname']);
         $this->assertEquals($usrResult[0]['designation'], 'Admin');
-        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 28);
-        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 11);
-        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 6);
+        $this->assertEquals($rolePrivilegeResult[0][0]['count(id)'], 34);
+        $this->assertEquals($rolePrivilegeResult[1][0]['count(id)'], 10);
+        $this->assertEquals($rolePrivilegeResult[2][0]['count(id)'], 8);
         $this->assertEquals($content['status'], 'success');
         $this->assertEquals($content['data']['name'], $data['name']);
         $this->assertEquals(isset($usrResult[0]['address_id']), true);
@@ -210,7 +210,7 @@ class OrganizationControllerTest extends ControllerTest
         $data = array('name' => 'ORGANIZATION', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -230,7 +230,7 @@ class OrganizationControllerTest extends ControllerTest
         $data = array('name' => 'ORGANIZATION', 'address1' => 'Banshankari', 'city' => 'Bangalore', 'state' => 'Karnataka', 'country' => 'India', 'zip' => '23456', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -250,7 +250,7 @@ class OrganizationControllerTest extends ControllerTest
         $data = array('name' => 'Sample Organization', 'address' => 'Bangalore', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -270,7 +270,7 @@ class OrganizationControllerTest extends ControllerTest
         $data = array('name' => 'Test Organization', 'address' => 'Bangalore', 'contact' => json_encode($contact), 'preferences' => json_encode($preferences));
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
@@ -309,7 +309,7 @@ class OrganizationControllerTest extends ControllerTest
         $data = array('name' => 'Test Organization', 'address' => 'Bangalore', 'preferences' => json_encode($preferences), 'reactivate' => 1);
         $this->setJsonContent(json_encode($data));
         $this->dispatch('/organization', 'POST', $data);
-        $this->assertResponseStatusCode(404);
+        $this->assertResponseStatusCode(500);
         $this->setDefaultAsserts();
         $this->assertMatchedRouteName('organization');
         $content = (array) json_decode($this->getResponse()->getContent(), true);
