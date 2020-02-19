@@ -981,7 +981,7 @@
                                 "valueProperty":"dial_code",
                                 "template":"<span>{{item.name}} - {{ item.dial_code }}</span>",
                                 "selectThreshold":0.3,
-                                "calculateValue":"if(data.country){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
+                                "calculateValue":"if(data.country && data['phoneList']){\n  let obj = data['phoneList'].find(o => o.name === data.country);\nif (obj) {\n  value = obj.dial_code;\n}\n}",
                                 "allowCalculateOverride":true,
                                 "validate": {
                                     "unique": false, "multiple": false
@@ -1175,7 +1175,7 @@
                 "errorLabel":"Please select a policy period from the list",
                 "key":"start_date_range",
                 "properties": {
-                    "delegate": "RateCard"
+                    "delegate": "RateCard", "redraw": "careerCoverage,tecRecEndorsment,scubaFit,cylinder,equipment,excessLiability"
                 }
                 ,
                 "type":"select",
@@ -1304,12 +1304,13 @@
                             }
                             ],
                             "dataType":"auto",
-                            "redrawOn":"start_date",
+                            "redrawOn":"start_date_range",
                             "clearOnHide":false,
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
                             ,
+                            "errorLabel":"Please choose one of these options.",
                             "key":"careerCoverage",
                             "properties": {
                                 "target": "careerCoveragePrice"
@@ -1333,14 +1334,14 @@
                     ,
                     {
                         "components":[ {
-                            "label":"Number",
+                            "label":"Career Coverage Price",
                             "placeholder":"0.00",
                             "prefix":"$",
                             "hideLabel":true,
                             "mask":false,
                             "spellcheck":true,
                             "disabled":true,
-                            "tableView":true,
+                            "tableView":false,
                             "defaultValue":"0.00",
                             "delimiter":false,
                             "requireDecimal":true,
@@ -1590,6 +1591,7 @@
                                 "value": "declined", "label": "With TecRec Endorsement for selection above - Declined", "shortcut": ""
                             }
                             ],
+                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -1610,7 +1612,7 @@
                     ,
                     {
                         "components":[ {
-                            "label":"Number",
+                            "label":"TecRech Price",
                             "placeholder":"0.00",
                             "prefix":"$",
                             "hideLabel":true,
@@ -1624,6 +1626,7 @@
                             "requireDecimal":false,
                             "inputFormat":"plain",
                             "protected":true,
+                            "redrawOn":"tecRecEndorsment",
                             "clearOnHide":false,
                             "customDefaultValue":"value = 0.00",
                             "validate": {
@@ -1717,6 +1720,7 @@
                                 "value": "scubaFitInstructorDeclined", "label": "ScubaFit Instructor - Declined", "shortcut": ""
                             }
                             ],
+                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -1740,7 +1744,7 @@
                     ,
                     {
                         "components":[ {
-                            "label":"Number",
+                            "label":"ScubaFit Price",
                             "placeholder":"0.00",
                             "prefix":"$",
                             "hideLabel":true,
@@ -1752,6 +1756,7 @@
                             "delimiter":false,
                             "requireDecimal":true,
                             "inputFormat":"plain",
+                            "redrawOn":"scubaFit",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
@@ -1848,7 +1853,7 @@
                                 "value": "cylinderInspectorOrInstructorDeclined", "label": "Cylinder Inspector Or Instructor - Declined", "shortcut": ""
                             }
                             ],
-                            "redrawOn":"start_date",
+                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -1873,7 +1878,7 @@
                     ,
                     {
                         "components":[ {
-                            "label":"Number",
+                            "label":"Cylinder Price",
                             "placeholder":"0.00",
                             "prefix":"$",
                             "hideLabel":true,
@@ -1885,6 +1890,7 @@
                             "delimiter":false,
                             "requireDecimal":true,
                             "inputFormat":"plain",
+                            "redrawOn":"cylinder",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
@@ -2000,6 +2006,7 @@
                                 "value": "equipmentLiabilityCoverageDeclined", "label": "Equipment Liability Coverage - Declined", "shortcut": ""
                             }
                             ],
+                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -2024,7 +2031,7 @@
                     ,
                     {
                         "components":[ {
-                            "label":"Number",
+                            "label":"Equipment Price",
                             "placeholder":"0.00",
                             "prefix":"$",
                             "hideLabel":true,
@@ -2036,6 +2043,7 @@
                             "delimiter":false,
                             "requireDecimal":true,
                             "inputFormat":"plain",
+                            "redrawOn":"equipment",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
@@ -2115,7 +2123,7 @@
                             "optionsLabelPosition":"right",
                             "inline":false,
                             "hideLabel":true,
-                            "tableView":true,
+                            "tableView":false,
                             "values":[ {
                                 "value": "excessLiabilityCoverage9000000", "label": "Excess Liability Coverage ($9,000,000)", "shortcut": ""
                             }
@@ -2140,6 +2148,7 @@
                                 "value": "excessLiabilityCoverageDeclined", "label": "Excess Liability Coverage - Declined", "shortcut": ""
                             }
                             ],
+                            "redrawOn":"start_date_range",
                             "validate": {
                                 "required": true, "customMessage": "Please choose one of these options.", "unique": false, "multiple": false
                             }
@@ -2163,7 +2172,7 @@
                     ,
                     {
                         "components":[ {
-                            "label":"Number",
+                            "label":"Excess Liability",
                             "placeholder":"0.00",
                             "prefix":"$",
                             "hideLabel":true,
@@ -2175,6 +2184,7 @@
                             "delimiter":false,
                             "requireDecimal":true,
                             "inputFormat":"plain",
+                            "redrawOn":"excessLiability",
                             "clearOnHide":false,
                             "validate": {
                                 "multiple": false, "unique": false
@@ -2341,7 +2351,7 @@
                             ,
                             {
                                 "components":[ {
-                                    "label": "Number", "placeholder": "0.00", "prefix": "$", "hideLabel": true, "mask": false, "spellcheck": true, "tableView": true, "defaultValue": "0.00", "delimiter": false, "requireDecimal": true, "inputFormat": "plain", "clearOnHide": false, "calculateValue": "value = (parseFloat(data['careerCoveragePrice']) || 0)+(parseFloat(data['scubaFitPrice']) || 0)+ (parseFloat(data['equipmentPrice']) || 0) +  (parseFloat(data['cylinderPrice']) || 0) +(parseFloat(data['excessLiabilityPrice']) || 0);", "validate": {
+                                    "label": "Total Price", "placeholder": "0.00", "prefix": "$", "hideLabel": true, "mask": false, "spellcheck": true, "tableView": true, "defaultValue": "0.00", "delimiter": false, "requireDecimal": true, "inputFormat": "plain", "clearOnHide": false, "calculateValue": "value = (parseFloat(data['careerCoveragePrice']) || 0)+(parseFloat(data['scubaFitPrice']) || 0)+ (parseFloat(data['equipmentPrice']) || 0) +  (parseFloat(data['cylinderPrice']) || 0) +(parseFloat(data['excessLiabilityPrice']) || 0);", "validate": {
                                         "multiple": false, "unique": false
                                     }
                                     ,
@@ -3822,7 +3832,7 @@
     }
     ],
     "revisions":"original",
-    "_vid":542,
+    "_vid":546,
     "title":"Bharat - IPL",
     "display":"wizard",
     "access":[ {
@@ -3844,7 +3854,7 @@
     "path":"bharatipl",
     "project":"5ce43aa430776b2aff69301c",
     "created":"2019-08-30T14:46:47.529Z",
-    "modified":"2020-02-18T15:45:37.774Z",
+    "modified":"2020-02-19T11:00:47.186Z",
     "machineName":"testdivehub:bharatIpl",
     "controller":""
 }

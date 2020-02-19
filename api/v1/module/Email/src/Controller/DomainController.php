@@ -2,14 +2,13 @@
 
 namespace Email\Controller;
 
-use Oxzion\Controller\AbstractApiController;
-use Email\Model\DomainTable;
 use Email\Model\Domain;
+use Email\Model\DomainTable;
 use Email\Service\DomainService;
-use Zend\Db\Adapter\AdapterInterface;
+use Exception;
+use Oxzion\Controller\AbstractApiController;
 use Oxzion\ValidationException;
-use Oxzion\Auth\AuthContext;
-use Oxzion\Auth\AuthConstants;
+use Zend\Db\Adapter\AdapterInterface;
 
 class DomainController extends AbstractApiController
 {
@@ -30,19 +29,22 @@ class DomainController extends AbstractApiController
 
     public function create($data)
     {
+        $this->log->info(__CLASS__ . "->create new Domain - " . json_encode($data, true));
         try {
             $count = $this->domainService->createDomain($data);
+            if ($count == 0) {
+                return $this->getFailureResponse("Failed to create a new entity", $data);
+            }
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getFailureResponse("Failed to create a new entity", $data);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
         unset($data['password']);
         return $this->getSuccessResponseWithData($data, 201);
     }
-
 
     /**
      * Update Domain API
@@ -55,14 +57,18 @@ class DomainController extends AbstractApiController
      */
     public function update($id, $data)
     {
+        $this->log->info(__CLASS__ . "-> Update Domain - " . json_encode($data, true));
         try {
             $count = $this->domainService->updateDomain($id, $data);
+            if ($count == 0) {
+                return $this->getErrorResponse("Entity not found for id - $id", 404);
+            }
         } catch (ValidationException $e) {
             $response = ['data' => $data, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
-        }
-        if ($count == 0) {
-            return $this->getErrorResponse("Entity not found for id - $id", 404);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
         return $this->getSuccessResponseWithData($data, 200);
     }
@@ -78,11 +84,15 @@ class DomainController extends AbstractApiController
     public function deleteDomainAction()
     {
         $domain = $this->params()->fromRoute()['name'];
+        $this->log->info(__CLASS__ . "-> Update Domain - " . json_encode($domain, true));
         try {
             $responseData = $this->domainService->deleteDomain($domain);
         } catch (ValidationException $e) {
             $response = ['data' => $domain, 'errors' => $e->getErrors()];
             return $this->getErrorResponse("Validation Errors", 404, $response);
+        } catch (Exception $e) {
+            $this->log->error($e->getMessage(), $e);
+            return $this->getErrorResponse($e->getMessage(), 500);
         }
         if ($responseData == 0) {
             return $this->getErrorResponse("Entity not found", 404);

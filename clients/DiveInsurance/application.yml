@@ -143,8 +143,17 @@ menu:
                                         workflowInstanceId: '{{workflowInstanceId}}'
                                 icon: 'fa fa-pencil'
                             -
+                                name: Endorsement
+                                rule: '''{{entity_name}}'' == ''Dive Boat'''
+                                details:
+                                    -
+                                        type: Form
+                                        url: workflow/2bc1caaa-9628-486d-8b42-104534625993/startform
+                                        workflowInstanceId: '{{workflowInstanceId}}'
+                                icon: 'fa fa-pencil'
+                            -
                                 name: 'Cancel Policy'
-                                rule: '(''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                                rule: '(''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -153,7 +162,7 @@ menu:
                                 icon: 'fa fa-window-close'
                             -
                                 name: 'Cancel Policy'
-                                rule: '(''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                                rule: '(''{{entity_name}}'' == ''Dive Boat'' || ''{{entity_name}}'' == ''Dive Store'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -446,7 +455,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-window-close'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Individual Professional Liability'')'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Individual Professional Liability'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -455,7 +464,7 @@ menu:
                             -
                                 name: 'Cancel Policy'
                                 icon: 'fa fa-window-close'
-                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Emergency First Response'')'
+                                rule: '(''{{policyStatus}}'' != ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'') && (''{{entity_name}}'' == ''Emergency First Response'') && (''{{end_date}}'' <= ''{{current_date}}'')'
                                 details:
                                     -
                                         type: Form
@@ -468,7 +477,7 @@ menu:
                                         type: Form
                                         url: workflow/81cb9e10-5845-4379-97c9-f9486b702bdb/startform
                                         workflowInstanceId: '{{workflowInstanceId}}'
-                                rule: '''{{policyStatus}}'' == ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'''
+                                rule: '''{{policyStatus}}'' == ''Cancelled'' && ''{{policyStatus}}'' != ''Rejected'' && ''{{end_date}}'' <= ''{{current_date}}'''
                                 icon: 'fa fa-repeat'
                         filterColumns:
                             - name
@@ -714,6 +723,16 @@ workflow:
         entity: 'Emergency First Response'
         name: 'Cancel Policy'
         uuid: 81cb9e10-5845-4379-97c9-f9486b702bda
+    -
+        name: 'Dive Boat'
+        uuid: bb15e393-11b9-48ea-bc5a-5b7616047cb1
+        bpmn_file: 'Dive Boat/NewApplicationSubmission.bpmn'
+        entity: 'Dive Boat'
+    -
+        name: 'Dive Boat Endorsement'
+        uuid: 2bc1caaa-9628-486d-8b42-104534625993
+        bpmn_file: 'Dive Boat/DiveBoatEndorsement.bpmn'
+        entity: 'Dive Boat'
 form:
     -
         name: 'PADI Verification'
