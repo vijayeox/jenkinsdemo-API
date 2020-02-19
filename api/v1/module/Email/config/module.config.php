@@ -3,7 +3,6 @@
 namespace Email;
 
 use Zend\Router\Http\Segment;
-use Zend\Router\Http\Method;
 
 return [
     'router' => [
@@ -33,7 +32,7 @@ return [
                         'method' => 'GET',
                         'action' => 'emailDefault',
                         'access' => [
-                            'emailDefault' => 'MANAGE_PROJECT_WRITE'
+                            'emailDefault' => 'MANAGE_PROJECT_WRITE',
                         ],
                     ],
                 ],
@@ -47,7 +46,7 @@ return [
                         'method' => 'DELETE',
                         'action' => 'deleteEmail',
                         'access' => [
-                            'deleteEmail' => 'MANAGE_PROJECT_WRITE'
+                            'deleteEmail' => 'MANAGE_PROJECT_WRITE',
                         ],
                     ],
                 ],
@@ -61,7 +60,7 @@ return [
                         'method' => 'PUT',
                         'action' => 'updateEmail',
                         'access' => [
-                            'updateEmail' => 'MANAGE_PROJECT_WRITE'
+                            'updateEmail' => 'MANAGE_PROJECT_WRITE',
                         ],
                     ],
                 ],
@@ -91,8 +90,8 @@ return [
                         'method' => 'DELETE',
                         'action' => 'deleteDomain',
 //                        'access' => [
-//                            'deleteEmail' => 'MANAGE_DOMAIN_CREATE'
-//                        ],
+                        //                            'deleteEmail' => 'MANAGE_DOMAIN_CREATE'
+                        //                        ],
                     ],
                 ],
             ],
@@ -101,6 +100,6 @@ return [
     'view_manager' => [
         // We need to set this up so that we're allowed to return JSON
         // responses from our controller.
-        'strategies' => ['ViewJsonStrategy',],
+        'strategies' => ['ViewJsonStrategy'],
     ],
 ];

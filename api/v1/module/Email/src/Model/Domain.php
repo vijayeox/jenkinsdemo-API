@@ -2,7 +2,6 @@
 namespace Email\Model;
 
 use Oxzion\Model\Entity;
-use Oxzion\ValidationException;
 
 class Domain extends Entity
 {
