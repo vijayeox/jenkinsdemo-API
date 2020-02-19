@@ -228,6 +228,8 @@ class Persistence extends AbstractService
         if (!empty($data['ref_clause'])) {
             $expAndOperator = array("expr_type" => "operator", "base_expr" => "and", "sub_tree" => "");
             array_push($parsedArray[$queryStatement][$key]['ref_clause'], $expAndOperator);
+            if (count($tableArrayList) > 2)
+                $tableArrayList = array(current($tableArrayList), end($tableArrayList));
             $arrayKeys = array_keys($tableArrayList);
             $lastElementInTableList = end($arrayKeys);
             foreach ($tableArrayList as $fromkey => $tableList) {
