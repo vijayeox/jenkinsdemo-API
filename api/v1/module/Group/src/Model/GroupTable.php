@@ -2,8 +2,8 @@
 namespace Group\Model;
 
 use Oxzion\Db\ModelTable;
-use Zend\Db\TableGateway\TableGatewayInterface;
 use Oxzion\Model\Entity;
+use Zend\Db\TableGateway\TableGatewayInterface;
 
 class GroupTable extends ModelTable
 {
